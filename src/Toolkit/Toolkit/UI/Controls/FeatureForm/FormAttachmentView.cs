@@ -14,8 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
-#if WPF || MAUI
 using System.ComponentModel;
 using System.Diagnostics;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
@@ -23,9 +21,12 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 #if WPF
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
-#elif MAUI
+#endif
+
+#if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 #if MAUI
@@ -58,6 +59,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #else
             DefaultStyleKey = typeof(FormAttachmentView);
+#endif
+#if WINDOWS_XAML
+            this.Click += OnClick;
 #endif
         }
 
@@ -214,6 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     System.Diagnostics.Trace.WriteLine($"Failed to open attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                 }
 #else
+#if WPF
                 var saveFileDialog = new SaveFileDialog();
                 var fileInfo = new System.IO.FileInfo(attachment.FilePath);
                 saveFileDialog.FileName = fileInfo.Name;
@@ -231,9 +236,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         System.Diagnostics.Trace.WriteLine($"Failed to save file to disk: " + ex.Message);
                     }
                 }
+#elif WINDOWS_XAML
+                // TODO
+#endif
 #endif
             }
         }
     }
 }
-#endif

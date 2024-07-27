@@ -14,8 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
-#if WPF
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -23,7 +22,9 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
+#if WPF
 using System.Windows.Controls.Primitives;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -50,10 +51,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _addAttachmentButton.Click += AddAttachmentButton_Click;
             }
+#if WPF
             if(GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
                 scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
+#endif
         }
 
+#if WPF
         private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if(_scrollToEnd)
@@ -62,12 +66,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _scrollToEnd = false;
             }
         }
+#endif
 
         private void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
             if (Element is null || !Element.IsEditable) return;
             try
             {
+#if WPF
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 if (openFileDialog.ShowDialog() == true)
                 {
@@ -79,6 +85,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         EvaluateExpressions();
                     }
                 }
+#else
+                // TODO WinUI/UWP
+#endif
             }
             catch(System.Exception ex)
             {

@@ -14,8 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
-#if WPF
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -24,8 +23,17 @@ using Esri.ArcGISRuntime.UI;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
+#if WPF
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+#elif WINDOWS_XAML
+using Windows.Foundation;
+#endif
+#if WINUI
+using Microsoft.UI;
+#elif WINDOWS_UWP
+using Windows.UI;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -41,6 +49,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             base.OnApplyTemplate();
             UpdateLoadedState(true);
             UpdateThumbnail();
+#if WINDOWS_XAML
+            this.SizeChanged += OnSizeChanged;
+#endif
         }
 
         private void UpdateLoadedState(bool useTransitions)
@@ -56,11 +67,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 VisualStateManager.GoToState(this, "NotLoaded", useTransitions);
         }
 
+#if WINDOWS_XAML
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+#else
         /// <inheritdoc/>
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
-
+#endif
             if (Attachment != null && (Attachment.LoadStatus == LoadStatus.Loaded && Attachment.Type == FormAttachmentType.Image || 
                 (GetTemplateChild("ThumbnailImage") as Image)?.Source is null))
             {
@@ -70,6 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnAttachmentContextMenu()
         {
+#if WPF
             ContextMenu? contextMenu = new ContextMenu();
             contextMenu.Items.Add(new MenuItem()
             {
@@ -125,8 +141,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             };
             contextMenu.PlacementTarget = this;
             contextMenu.IsOpen = true;
+#elif WINDOWS_XAML
+            //TODO
+#endif
         }
 
+#if WPF
         /// <inheritdoc />
         protected override void OnStylusSystemGesture(StylusSystemGestureEventArgs e)
         {
@@ -136,11 +156,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 OnAttachmentContextMenu();
             }
         }
+#endif
 
         /// <inheritdoc />
+#if WINDOWS_XAML
+        protected override void OnRightTapped(RightTappedRoutedEventArgs e)
+        {
+            base.OnRightTapped(e);
+#elif WPF
         protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseRightButtonDown(e);
+#endif
             if (Element is not null && Element.IsEditable)
             {
                 e.Handled = true;
@@ -148,10 +175,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+#if WINDOWS_XAML
+        private void OnClick(object sender, RoutedEventArgs e)
+        {
+#elif WPF
         /// <inheritdoc />
         protected override void OnClick()
         {
             base.OnClick();
+#endif
             OnAttachmentClicked();
         }
 
@@ -172,11 +204,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     if (_thumbnailSize.Width == this.ActualWidth || _thumbnailSize.Height == this.ActualHeight)
                         return;
-                    var source = PresentationSource.FromVisual(this);
-                    if (source is null)
-                        return;
+#if WINUI
+                    var scale = XamlRoot?.RasterizationScale ?? 1;
+#elif WINDOWS_UWP
+                    var scale = Windows.Graphics.Display.DisplayInformation.GetForCurrentView()?.RawPixelsPerViewPixel ?? 1;
+#elif WPF
+                    var scale = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+#endif
                     _thumbnailSize = new Size(this.ActualWidth, this.ActualHeight);
-                    var thumb = await Attachment.CreateThumbnailAsync((int)(this.ActualWidth * source.CompositionTarget.TransformToDevice.M11), (int)(this.ActualHeight * source.CompositionTarget.TransformToDevice.M22));
+                    var thumb = await Attachment.CreateThumbnailAsync((int)(this.ActualWidth * scale), (int)(this.ActualHeight * scale));
                     image.Source = await thumb.ToImageSourceAsync();
                     image.Stretch = Stretch.UniformToFill;
                     return;
@@ -205,6 +241,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Foreground = (Attachment.LoadStatus == LoadStatus.FailedToLoad) ? new SolidColorBrush(Colors.Red) : Foreground,
                 FontSize = 32, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center
             };
+#if WPF
             var geometryDrawing = new GeometryDrawing
             {
                 Brush = new VisualBrush
@@ -216,6 +253,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             };
             image.Source = new DrawingImage(geometryDrawing);
             image.Stretch = Stretch.None;
+#endif
+            
         }
     }
 }

@@ -1,4 +1,19 @@
-﻿#if WPF || MAUI
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -192,7 +207,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             get
             {
-#if MAUI
+#if MAUI || WINDOWS_XAML
                 return _showCharacterCount;
 #else
                return (bool)GetValue(ShowCharacterCountPropertyKey.DependencyProperty); 
@@ -200,19 +215,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             private set
             {
-#if MAUI
+#if MAUI || WINDOWS_XAML
                 if (_showCharacterCount != value)
                 {
                     _showCharacterCount = value;
+#if MAUI
                     OnPropertyChanged(nameof(ShowCharacterCount));
+#endif
                 }
+#if WINDOWS_XAML
+                VisualStateManager.GoToState(this, value ? "ShowCharacterCount" : "HideCharacterCount", true);
+#endif
 #else
                 SetValue(ShowCharacterCountPropertyKey, value); 
 #endif
             }
         }
 
-#if MAUI
+#if MAUI || WINDOWS_XAML
         private bool _showCharacterCount = false;
 #else
         private static readonly DependencyPropertyKey ShowCharacterCountPropertyKey =
@@ -226,7 +246,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             get
             {
-#if MAUI
+#if MAUI || WINDOWS_XAML
                 return _ShowBarcodeScanner;
 #else
                 return (bool)GetValue(ShowBarcodeScannerPropertyKey.DependencyProperty);
@@ -234,19 +254,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             private set
             {
-#if MAUI
+#if MAUI || WINDOWS_XAML
                 if (_ShowBarcodeScanner != value)
                 {
                     _ShowBarcodeScanner = value;
+#if MAUI
                     OnPropertyChanged(nameof(ShowBarcodeScanner));
+#endif
                 }
+#if WINDOWS_XAML
+                VisualStateManager.GoToState(this, value ? "ShowBarcode" : "HideBarcode", true);
+#endif
 #else
                 SetValue(ShowBarcodeScannerPropertyKey, value);
 #endif
             }
         }
 
-#if MAUI
+#if MAUI || WINDOWS_XAML
         private bool _ShowBarcodeScanner = false;
 #else
         private static readonly DependencyPropertyKey ShowBarcodeScannerPropertyKey =
@@ -336,4 +361,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
-#endif

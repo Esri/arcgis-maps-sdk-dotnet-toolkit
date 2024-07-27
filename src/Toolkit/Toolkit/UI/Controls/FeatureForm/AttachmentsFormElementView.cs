@@ -15,12 +15,11 @@
 //  ******************************************************************************/
 
 
-#if WPF || MAUI
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
-#if WPF
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #elif MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
@@ -123,4 +122,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
-#endif

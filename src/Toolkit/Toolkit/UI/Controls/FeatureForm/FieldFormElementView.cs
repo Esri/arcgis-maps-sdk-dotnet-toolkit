@@ -14,17 +14,16 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
 using TextBlock = Microsoft.Maui.Controls.Label;
 #else
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Windows.Devices.SmartCards;
 #endif
 
 #if MAUI
@@ -59,7 +58,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DefaultStyleKey = typeof(FieldFormElementView);
 #endif
         }
-        
+
+#if WINDOWS_XAML
+        internal FeatureForm? FeatureForm => FeatureFormView.GetFeatureFormViewParent(this)?.FeatureForm;
+#else
         /// <summary>
         /// Gets or sets the FeatureForm that the <see cref="Element"/> belongs to.
         /// </summary>
@@ -79,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty FeatureFormProperty =
             DependencyProperty.Register(nameof(FeatureForm), typeof(FeatureForm), typeof(FieldFormElementView), new PropertyMetadata(null));
 #endif
-
+#endif
         /// <summary>
         /// Gets or sets the FieldFormElement.
         /// </summary>
@@ -314,4 +316,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
     }
 }
-#endif

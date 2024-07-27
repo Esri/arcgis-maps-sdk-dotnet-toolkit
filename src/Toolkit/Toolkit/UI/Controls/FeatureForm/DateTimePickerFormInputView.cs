@@ -1,4 +1,19 @@
-﻿#if WPF || MAUI
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
@@ -56,6 +71,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     date = _datePicker.Date.ToUniversalTime();
                 }
 #endif
+#elif WINDOWS_XAML
+                var doffset = _datePicker.SelectedDate?.ToUniversalTime();
+                if (doffset.HasValue)
+                    date = new DateTime(doffset.Value.Ticks, DateTimeKind.Utc);
 #else
                 date = _datePicker.SelectedDate?.ToUniversalTime();
 #endif
@@ -183,8 +202,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #else
                     _datePicker.SelectedDate = selectedDate;
+#if WINDOWS_XAML
+                    _datePicker.MinYear = input.Min?.ToLocalTime() ?? DateTimeOffset.MinValue;
+                    _datePicker.MaxYear = input.Max?.ToLocalTime() ?? DateTimeOffset.MaxValue;
+#else
                     _datePicker.DisplayDateStart = input.Min?.ToLocalTime().Date;
                     _datePicker.DisplayDateEnd = input.Max?.ToLocalTime().Date;
+#endif
 #endif
                 }
                 if (_timePicker != null)
@@ -194,7 +218,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     _timePicker.Time = selectedDate?.TimeOfDay ?? TimeSpan.Zero;
 #else
                     _timePicker.Visibility = input.IncludeTime ? Visibility.Visible : Visibility.Collapsed;
+#if WINDOWS_XAML
+                    _timePicker.SelectedTime = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : null;
+#else
                     _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : null;
+#endif
 #endif
                 }
                 ConfigurePickerIsEditable();
@@ -225,4 +253,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
-#endif

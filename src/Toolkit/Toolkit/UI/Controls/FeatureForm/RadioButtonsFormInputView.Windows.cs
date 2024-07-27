@@ -1,29 +1,64 @@
-﻿#if WPF
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+#if WPF
+using System.Windows.Controls.Primitives;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    [TemplatePart(Name ="Selector", Type = typeof(System.Windows.Controls.Primitives.Selector))]
-    public partial class RadioButtonsFormInputView : System.Windows.Controls.Primitives.Selector
+    [TemplatePart(Name ="Selector", Type = typeof(Selector))]
+    public partial class RadioButtonsFormInputView :
+#if WPF
+        Selector
+#else
+        ItemsControl
+#endif
     {
 
         /// <inheritdoc />
+#if WPF
         public override void OnApplyTemplate()
+#else
+        protected override void OnApplyTemplate()
+#endif
         {
             base.OnApplyTemplate();
             UpdateItems();
         }
 
-        private class RadioButtonItem : RadioButton
+        public class RadioButtonItem : RadioButton
         {
+#if WINDOWS_XAML
+            public RadioButtonItem()
+            {
+                this.Checked += (s,e) => ParentSelector?.RaiseCheckedEvent(this, true);
+            }
+#else
             protected override void OnChecked(RoutedEventArgs e)
             {
                 base.OnChecked(e);
                 ParentSelector?.RaiseCheckedEvent(this, true);
             }
+#endif
             internal RadioButtonsFormInputView? ParentSelector => ItemsControl.ItemsControlFromItemContainer(this) as RadioButtonsFormInputView;
         }
 
@@ -45,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
-            if(element is RadioButtonItem radio)
+            if (element is RadioButtonItem radio)
             {
                 bool isChecked = false;
                 if(item is CodedValue cv)
@@ -59,7 +94,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
                 radio.IsChecked = isChecked;
             }
+#if WPF
             base.PrepareContainerForItemOverride(element, item);
+#endif
         }
 
         private static IEnumerable<RadioButtonItem> GetItemContainers(DependencyObject depObj)
@@ -78,9 +115,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <inheritdoc />
+#if WINDOWS_XAML
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+#else
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
+#endif
             if (Element is null) return;
             var value = (SelectedItem as CodedValue);
             foreach(var item in GetItemContainers(this))
@@ -88,6 +130,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 item.IsChecked = (item.DataContext == SelectedItem);
             }
         }
+
+#if WINDOWS_XAML
+
+
+        public object? SelectedItem
+        {
+            get { return (object?)GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedItemProperty =
+            DependencyProperty.Register("SelectedItem", typeof(object), typeof(RadioButtonsFormInputView), new PropertyMetadata(null));
+
+
+#endif
+
     }
 }
 #endif
