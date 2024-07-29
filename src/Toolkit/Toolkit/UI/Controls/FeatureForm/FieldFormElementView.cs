@@ -23,7 +23,6 @@ using Esri.ArcGISRuntime.Toolkit.Maui;
 using TextBlock = Microsoft.Maui.Controls.Label;
 #else
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
-using Windows.Devices.SmartCards;
 #endif
 
 #if MAUI

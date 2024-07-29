@@ -18,8 +18,6 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
-using Microsoft.UI.Xaml.Markup;
-
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
