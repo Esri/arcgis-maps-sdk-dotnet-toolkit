@@ -118,7 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="FeatureForm"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty IsCheckedProperty =
-            PropertyHelper.CreateProperty<bool, SwitchFormInputView>(nameof(Element), false, (s, oldValue, newValue) => s.OnIsCheckedPropertyChanged(newValue));
+            PropertyHelper.CreateProperty<bool, SwitchFormInputView>(nameof(IsChecked), false, (s, oldValue, newValue) => s.OnIsCheckedPropertyChanged(newValue));
 
         private void OnIsCheckedPropertyChanged(bool newValue)
         {

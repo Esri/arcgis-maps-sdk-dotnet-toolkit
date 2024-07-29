@@ -28,8 +28,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:DateTimePickerFormInputView">
                     <StackPanel>
-                        <DatePicker x:Name="DatePicker" IsEnabled="{TemplateBinding IsEnabled}" />
-                        <TimePicker x:Name="TimePicker" IsEnabled="{TemplateBinding IsEnabled}" />
+                        <DatePicker x:Name="DatePicker" IsEnabled="{TemplateBinding IsEnabled}" HorizontalAlignment="Stretch" />
+                        <TimePicker x:Name="TimePicker" IsEnabled="{TemplateBinding IsEnabled}" HorizontalAlignment="Stretch" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -41,7 +41,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:SwitchFormInputView">
-                    <ToggleSwitch IsOn="{TemplateBinding IsChecked}" OnContent="{Binding Input.OnValue.Name}" OffContent="{Binding Input.OffValue.Name}" />
+                    <ToggleSwitch IsOn="{TemplateBinding IsChecked}" OnContent="{Binding Input.OnValue.Name}" OffContent="{Binding Input.OffValue.Name}" IsEnabled="{TemplateBinding IsEnabled}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -101,13 +101,16 @@
                             <VisualStateGroup x:Name="EnabledStates">
                                 <VisualState x:Name="Disabled">
                                     <VisualState.Setters>
-                                        <Setter Target="TextInput.Visibility" Value="Collapsed" />
+                                        <Setter Target="TextInputArea.BorderThickness" Value="0" />
                                         <Setter Target="ReadOnlyText.Visibility" Value="Visible" />
+                                        <Setter Target="TextInput.IsReadOnly" Value="False" />
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Enabled">
                                     <VisualState.Setters>
-                                        <Setter Target="TextInput.Visibility" Value="Visible" />
+                                        <Setter Target="TextInput.IsReadOnly" Value="True" />
+                                        <Setter Target="TextInputArea.Visibility" Value="Visible" />
+                                        <Setter Target="ReadOnlyText.Visibility" Value="Collapsed" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -123,15 +126,30 @@
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
-                            <VisualStateGroup x:Name="CharacterCountStates">
-                                <VisualState x:Name="ShowCharacterCount">
+                            <VisualStateGroup x:Name="TextAreaStates">
+                                <VisualState x:Name="MultiLineText">
                                     <VisualState.Setters>
                                         <Setter Target="CharacterCountPanel.Visibility" Value="Visible" />
+                                        <Setter Target="TextInput.AcceptsReturn" Value="True" />
+                                        <Setter Target="TextInput.Height" Value="100" />
                                     </VisualState.Setters>
                                 </VisualState>
-                                <VisualState x:Name="HideCharacterCount">
+                                <VisualState x:Name="SingleLineText">
                                     <VisualState.Setters>
                                         <Setter Target="CharacterCountPanel.Visibility" Value="Collapsed" />
+                                        <Setter Target="TextInput.AcceptsReturn" Value="False" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="InputScope">
+                                <VisualState x:Name="Text">
+                                    <VisualState.Setters>
+                                        <Setter Target="TextInput.InputScope" Value="Text" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Numeric">
+                                    <VisualState.Setters>
+                                        <Setter Target="TextInput.InputScope" Value="Numeric" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -141,11 +159,11 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-17,0,0" x:Name="CharacterCountPanel">
-                            <TextBlock Text="{Binding Text.Length, ElementName=TextInput}" />
+                            <TextBlock Text="{Binding Text.Length, ElementName=TextInput}" /> <!-- TODO: Fix length binding -->
                             <TextBlock Text="/" />
                             <TextBlock Text="{Binding MaxLength, ElementName=TextInput}" />
                         </StackPanel>
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" x:Name="TextInputArea">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -172,49 +190,49 @@
         <Setter Property="ComboBoxFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:ComboBoxFormInputView Element="{Binding}" />
+                    <primitives:ComboBoxFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="RadioButtonsFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:RadioButtonsFormInputView Element="{Binding}" />
+                    <primitives:RadioButtonsFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="SwitchFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:SwitchFormInputView Element="{Binding}" />
+                    <primitives:SwitchFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="TextAreaFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:TextFormInputView Element="{Binding}" MaxLines="4" MinLines="4"/>
+                    <primitives:TextFormInputView Element="{Binding}" MaxLines="4" MinLines="4" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="TextBoxFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:TextFormInputView Element="{Binding}" />
+                    <primitives:TextFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="BarcodeScannerFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:TextFormInputView Element="{Binding}" />
+                    <primitives:TextFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="DateTimePickerFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:DateTimePickerFormInputView Element="{Binding}" />
+                    <primitives:DateTimePickerFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -355,7 +373,7 @@
                                         <primitives:FormElementItemsControl.GroupFormElementTemplate>
                                             <DataTemplate>
                                                 <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
-                                                    <Expander> <!-- TODO: Bind IsExpanded=InitialState==Expanded-->
+                                                    <Expander HorizontalAlignment="Stretch"> <!-- TODO: Bind IsExpanded=InitialState==Expanded-->
                                                         <Expander.Header>
                                                             <StackPanel VerticalAlignment="Center">
                                                                 <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
