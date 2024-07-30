@@ -119,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         /// <inheritdoc />
 #if WINDOWS_XAML
-        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnSelectionChanged()
         {
 #else
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
@@ -135,13 +135,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
 #if WINDOWS_XAML
+        private object? _selectedItem;
 
         /// <summary>
         /// Gets or sets the currently selected item
         /// </summary>
-        private object? SelectedItem { get; set; }
+        private object? SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (_selectedItem != value)
+                {
+                    _selectedItem = value; OnSelectionChanged();
+                }
+            }
+        }
 #endif
-
     }
 }
 #endif
