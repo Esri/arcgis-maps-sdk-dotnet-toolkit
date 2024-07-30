@@ -209,6 +209,14 @@
     <value>Remove</value>
     <comment>The remove attachment context menu text</comment>
   </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Cancel button for the Feature Form attachment rename-file dialog</comment>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>OK</value>
+    <comment>OK button for the Feature Form attachment rename-file dialog</comment>
+  </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
     <value>Rename</value>
     <comment>The rename attachment context menu text</comment>

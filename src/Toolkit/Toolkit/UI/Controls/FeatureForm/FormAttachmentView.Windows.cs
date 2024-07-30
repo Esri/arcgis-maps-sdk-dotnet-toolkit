@@ -121,9 +121,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     panel.Children.Add(textBox);
 
                     StackPanel panel2 = new StackPanel() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 10, 0, 0) };
-                    Button okButton = new Button() { Content = "OK", MinWidth = 75, IsDefault = true, Margin = new Thickness(0, 0, 10, 0), IsEnabled = false };
+                    Button okButton = new Button() { Content = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK"), MinWidth = 75, IsDefault = true, Margin = new Thickness(0, 0, 10, 0), IsEnabled = false };
                     okButton.Click += (s,e) => renameDialog.DialogResult = true;
-                    Button cancelButton = new Button() { Content = "Cancel", MinWidth = 75, IsCancel = true };
+                    Button cancelButton = new Button() { Content = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"), MinWidth = 75, IsCancel = true };
                     panel2.Children.Add(okButton);
                     panel2.Children.Add(cancelButton);
                     panel.Children.Add(panel2);
@@ -164,8 +164,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     var dialog = new ContentDialog()
                     {
                         Title = Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle"),
-                        PrimaryButtonText = "OK", // Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK"),
-                        SecondaryButtonText = "Cancel", // Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"),
+                        PrimaryButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK"),
+                        SecondaryButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"),
                         DefaultButton = ContentDialogButton.Primary,
                         Content = new TextBox() { Text = Attachment.Name },
 #if WINDOWS_XAML
