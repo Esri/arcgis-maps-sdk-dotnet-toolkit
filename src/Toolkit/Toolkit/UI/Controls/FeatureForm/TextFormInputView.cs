@@ -100,7 +100,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                 _textInput.Keyboard = isNumericInput ? Keyboard.Numeric : Keyboard.Default;
 #else
-                VisualStateManager.GoToState(this, isNumericInput ? "Numeric" : "Text", true);
+                _textInput.InputScope = new InputScope()
+                {
+                    Names = { new InputScopeName() { NameValue = isNumericInput ? InputScopeNameValue.Number : InputScopeNameValue.Text } }
+                };
 #endif
 #endif
             }

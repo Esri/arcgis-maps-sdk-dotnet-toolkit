@@ -87,23 +87,16 @@
                             <VisualStateGroup x:Name="ErrorStates">
                                 <VisualState x:Name="InputError">
                                     <VisualState.Setters>
-                                        <Setter Target="ErrorInfo.Visibility" Value="Visible" />
-                                        <Setter Target="ErrorBorder.Visibility" Value="Visible" />
+                                        <Setter Target="TextInputArea.BorderBrush" Value="Red" />
                                     </VisualState.Setters>
                                 </VisualState>
-                                <VisualState x:Name="InputValid">
-                                    <VisualState.Setters>
-                                        <Setter Target="ErrorInfo.Visibility" Value="Collapsed" />
-                                        <Setter Target="ErrorBorder.Visibility" Value="Collapsed" />
-                                    </VisualState.Setters>
-                                </VisualState>
+                                <VisualState x:Name="InputValid" />
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="EnabledStates">
                                 <VisualState x:Name="Disabled">
                                     <VisualState.Setters>
-                                        <Setter Target="TextInputArea.BorderThickness" Value="0" />
+                                        <Setter Target="TextInputArea.Visibility" Value="Collapsed" />
                                         <Setter Target="ReadOnlyText.Visibility" Value="Visible" />
-                                        <Setter Target="TextInput.IsReadOnly" Value="False" />
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Enabled">
@@ -141,25 +134,13 @@
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
-                            <VisualStateGroup x:Name="InputScope">
-                                <VisualState x:Name="Text">
-                                    <VisualState.Setters>
-                                        <Setter Target="TextInput.InputScope" Value="Text" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState x:Name="Numeric">
-                                    <VisualState.Setters>
-                                        <Setter Target="TextInput.InputScope" Value="Numeric" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-17,0,0" x:Name="CharacterCountPanel">
-                            <TextBlock Text="{Binding Text.Length, ElementName=TextInput}" /> <!-- TODO: Fix length binding -->
+                            <TextBlock Text="{Binding Text.Value.Length, ElementName=TextInput}" /> <!-- TODO: Fix length binding -->
                             <TextBlock Text="/" />
                             <TextBlock Text="{Binding MaxLength, ElementName=TextInput}" />
                         </StackPanel>
@@ -171,7 +152,6 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBox x:Name="TextInput" BorderThickness="0" />
-                                <TextBlock Text="!" Width="10" Foreground="Red" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="ErrorInfo" Grid.Column="1" />
                                 <Button Content="&#xED14;" FontFamily="Segoe MDL2 Assets" Background="Transparent" Grid.Column="2"
                      Padding="8" Margin="-8,-8,-5,-7" BorderThickness="0" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="BarcodeButton" />
                             </Grid>
