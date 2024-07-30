@@ -24,7 +24,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:TextPopupElementView">
-                    <RichTextBlock x:Name="TextArea" Visibility="{Binding Text, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                    <ContentControl x:Name="TextArea" Visibility="{Binding Text, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
