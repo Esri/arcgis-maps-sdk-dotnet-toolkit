@@ -102,7 +102,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 DeleteAttachment();
             };
+            
             ((MenuItem)contextMenu.Items[1]).Click += (s, e) =>
+            rename.Click += (s, e) =>
             {
                 if (Attachment is not null && Element is not null)
                 {
@@ -142,7 +144,48 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             contextMenu.PlacementTarget = this;
             contextMenu.IsOpen = true;
 #elif WINDOWS_XAML
-            //TODO
+            MenuFlyout contextMenu = new();
+            var delete = new MenuFlyoutItem()
+            {
+                Text = Properties.Resources.GetString("FeatureFormRemoveAttachmentMenuItem"),
+                Icon = new SymbolIcon(Symbol.Delete),
+            };
+            delete.Click += (s, e) => DeleteAttachment();
+            contextMenu.Items.Add(delete);
+            var rename = new MenuFlyoutItem()
+            {
+                Text = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem"),
+                Icon = new SymbolIcon(Symbol.Rename),
+            };
+            contextMenu.Items.Add(rename);
+            rename.Click += (s,e) => {
+                if (Attachment is not null && Element is not null)
+                {
+                    var dialog = new ContentDialog()
+                    {
+                        Title = Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle"),
+                        PrimaryButtonText = "OK", // Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK"),
+                        SecondaryButtonText = "Cancel", // Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"),
+                        DefaultButton = ContentDialogButton.Primary,
+                        Content = new TextBox() { Text = Attachment.Name },
+#if WINDOWS_XAML
+                        XamlRoot = this.XamlRoot
+#endif
+                    };
+                    var textBox = (TextBox)dialog.Content;
+                    textBox.TextChanged += (s, e) =>
+                    {
+                        dialog.IsPrimaryButtonEnabled = !string.IsNullOrEmpty(textBox.Text.Trim()) && textBox.Text.Trim() != Attachment.Name;
+                    };
+                    dialog.PrimaryButtonClick += (s, e) =>
+                    {
+                        RenameAttachment(textBox.Text.Trim());
+                    };
+                    _ = dialog.ShowAsync();
+                }
+            };
+
+            contextMenu.ShowAt(this);
 #endif
         }
 

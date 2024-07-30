@@ -51,11 +51,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _addAttachmentButton.Click += AddAttachmentButton_Click;
             }
+            if (GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
+            {
 #if WPF
-            if(GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
                 scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
+#elif WINDOWS_XAML
+                if(scrollViewer.Content is FrameworkElement element)
+                {
+                    element.SizeChanged += AttachmentsFormElementView_SizeChanged;
+                }
 #endif
+            }
         }
+
 
 #if WPF
         private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -66,9 +74,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _scrollToEnd = false;
             }
         }
+#elif WINDOWS_XAML
+
+        private void AttachmentsFormElementView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+            if (_scrollToEnd && GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
+            {
+                scrollViewer.ChangeView(scrollViewer.ScrollableWidth, null, null);
+            }
+        }
 #endif
 
-        private void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
+        private
+#if WINDOWS_XAML
+            async
+#endif
+            void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
             if (Element is null || !Element.IsEditable) return;
             try
@@ -85,11 +107,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         EvaluateExpressions();
                     }
                 }
-#else
-                // TODO WinUI/UWP
+#elif WINDOWS_XAML
+#if WINUI
+                var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
+                if (hwnd == 0)
+                    return; // Can't show dialog without a root window
+#endif
+                var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
+#if WINUI
+                WinRT.Interop.InitializeWithWindow.Initialize(openPicker, (nint)hwnd);
+#endif
+                openPicker.FileTypeFilter.Add("*");
+                var file = await openPicker.PickSingleFileAsync();
+                if (file != null)
+                {
+
+                    var fileInfo = new FileInfo(file.Path);
+                    if (fileInfo.Exists)
+                    {
+                        _scrollToEnd = true;
+                        Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                        EvaluateExpressions();
+                    }
+                }
 #endif
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
             }

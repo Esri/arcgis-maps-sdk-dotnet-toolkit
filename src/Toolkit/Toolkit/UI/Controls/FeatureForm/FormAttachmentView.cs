@@ -237,7 +237,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     }
                 }
 #elif WINDOWS_XAML
-                // TODO
+                Windows.Storage.StorageFile? file = null;
+#if WINUI
+                var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
+                if (hwnd == 0)
+                    return; // Can't show dialog without a root window
+#endif
+                var fileInfo = new FileInfo(attachment.FilePath);
+                var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+#if WINUI
+                WinRT.Interop.InitializeWithWindow.Initialize(savePicker, (nint)hwnd);
+#endif
+                var ext = fileInfo.Extension;
+                savePicker.FileTypeChoices.Add("*" + ext, new List<string>() { ext });
+                savePicker.SuggestedFileName = fileInfo.Name;
+                file = await savePicker.PickSaveFileAsync();
+                if (file != null)
+                {
+                    Windows.Storage.CachedFileManager.DeferUpdates(file);
+                    using var stream = await attachment.Attachment!.GetDataAsync();
+                    using var filestream = await file.OpenStreamForWriteAsync();
+                    await stream.CopyToAsync(filestream);
+                }
 #endif
 #endif
             }
