@@ -104,7 +104,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             };
             
             ((MenuItem)contextMenu.Items[1]).Click += (s, e) =>
-            rename.Click += (s, e) =>
             {
                 if (Attachment is not null && Element is not null)
                 {
