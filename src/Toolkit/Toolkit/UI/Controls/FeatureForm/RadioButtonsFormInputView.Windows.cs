@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateItems();
         }
 
-        public class RadioButtonItem : RadioButton
+        private class RadioButtonItem : RadioButton
         {
 #if WINDOWS_XAML
             public RadioButtonItem()
@@ -136,17 +136,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
 #if WINDOWS_XAML
 
-
-        public object? SelectedItem
-        {
-            get { return (object?)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
-        }
-
-        public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(object), typeof(RadioButtonsFormInputView), new PropertyMetadata(null));
-
-
+        /// <summary>
+        /// Gets or sets the currently selected item
+        /// </summary>
+        private object? SelectedItem { get; set; }
 #endif
 
     }
