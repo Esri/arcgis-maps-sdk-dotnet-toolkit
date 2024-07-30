@@ -108,7 +108,6 @@
                                 </VisualState>
                                 <VisualState x:Name="Enabled">
                                     <VisualState.Setters>
-                                        <Setter Target="TextInput.IsReadOnly" Value="True" />
                                         <Setter Target="TextInputArea.Visibility" Value="Visible" />
                                         <Setter Target="ReadOnlyText.Visibility" Value="Collapsed" />
                                     </VisualState.Setters>
@@ -131,7 +130,8 @@
                                     <VisualState.Setters>
                                         <Setter Target="CharacterCountPanel.Visibility" Value="Visible" />
                                         <Setter Target="TextInput.AcceptsReturn" Value="True" />
-                                        <Setter Target="TextInput.Height" Value="100" />
+                                        <Setter Target="TextInput.Height" Value="120" />
+                                        <Setter Target="TextInput.TextWrapping" Value="Wrap" />
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="SingleLineText">
@@ -392,7 +392,7 @@
                                             </DataTemplate>
                                         </primitives:FormElementItemsControl.GroupFormElementTemplate>
                                     </primitives:FormElementItemsControl>
-                                    <primitives:AttachmentsFormElementView Element="{Binding DefaultAttachmentsElement}" />
+                                    <primitives:AttachmentsFormElementView Element="{Binding DefaultAttachmentsElement}" Visibility="{Binding DefaultAttachmentsElement, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                                 </StackPanel>
                             </ScrollViewer>
                         </Grid>

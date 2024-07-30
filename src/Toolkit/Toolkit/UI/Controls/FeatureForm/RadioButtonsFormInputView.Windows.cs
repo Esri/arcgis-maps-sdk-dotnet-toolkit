@@ -93,6 +93,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     isChecked = true;
                 }
                 radio.IsChecked = isChecked;
+#if WINDOWS_XAML
+                radio.ContentTemplate = ItemTemplate;
+#endif
             }
 #if WPF
             base.PrepareContainerForItemOverride(element, item);
