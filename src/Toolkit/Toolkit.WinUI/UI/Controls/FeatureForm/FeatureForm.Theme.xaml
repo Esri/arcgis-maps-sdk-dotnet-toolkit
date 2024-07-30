@@ -284,7 +284,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:AttachmentsFormElementView">
-                    <StackPanel DataContext="{TemplateBinding Element}">
+                    <StackPanel DataContext="{TemplateBinding Element}" x:Name="RootPanel">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -310,7 +310,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <primitives:FormAttachmentView Attachment="{Binding}" Element="{Binding Element, RelativeSource={RelativeSource TemplatedParent}}" /> <!-- TODO This binding might not work -->
+                                        <primitives:FormAttachmentView Attachment="{Binding}" Element="{Binding DataContext, ElementName=RootPanel}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
