@@ -60,17 +60,27 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Forms
 
         private async void DiscardButton_Click(object sender, RoutedEventArgs e)
         {
-            // var result = MessageBox.Show("Discard edits?", "Confirm", MessageBoxButton.YesNo);
-            // if (result == MessageBoxResult.Yes)
-            // {
-            //     ((Button)sender).IsEnabled = false;
-            //     try
-            //     {
-            //         await formViewer.DiscardEditsAsync();
-            //     }
-            //     catch { }
-            //     ((Button)sender).IsEnabled = true;
-            // }
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Discard edits?",
+                Content = "Are you sure you want to discard edits?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
+#if !WINDOWS_UWP
+                XamlRoot = this.XamlRoot
+#endif
+            };
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                ((Button)sender).IsEnabled = false;
+                try
+                {
+                    await formViewer.DiscardEditsAsync();
+                }
+                catch { }
+                 ((Button)sender).IsEnabled = true;
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -86,7 +96,15 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Forms
                 var errorsMessages = formViewer.FeatureForm.Elements.OfType<FieldFormElement>().Where(e => e.ValidationErrors.Any()).Select(s => s.FieldName + ": " + string.Join(",", s.ValidationErrors.Select(e => e.Message)));
                 if (errorsMessages.Any())
                 {
-                    //MessageBox.Show("Form has errors:\n" + string.Join("\n", errorsMessages), "Can't apply");
+                    await new ContentDialog
+                    {
+                        Title = "Can't apply",
+                        Content = "Form has errors:\n" + string.Join("\n", errorsMessages),
+                        PrimaryButtonText = "OK",
+#if !WINDOWS_UWP
+                        XamlRoot = this.XamlRoot
+#endif
+                    }.ShowAsync();
                     return;
                 }
             }
@@ -96,7 +114,15 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Forms
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("Failed to apply edits:\n" + ex.Message, "Error");
+                await new ContentDialog
+                {
+                    Title = "Error",
+                    Content = "Failed to apply edits:\n" + ex.Message,
+                    PrimaryButtonText = "OK",
+#if !WINDOWS_UWP
+                    XamlRoot = this.XamlRoot
+#endif
+                }.ShowAsync();
             }
         }
     }
