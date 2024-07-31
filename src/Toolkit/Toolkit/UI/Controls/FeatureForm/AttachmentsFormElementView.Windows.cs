@@ -121,14 +121,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var file = await openPicker.PickSingleFileAsync();
                 if (file != null)
                 {
-
                     var fileInfo = new FileInfo(file.Path);
-                    if (fileInfo.Exists)
-                    {
-                        _scrollToEnd = true;
-                        Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
-                        EvaluateExpressions();
-                    }
+                    _scrollToEnd = true;
+#if WINDOWS_UWP
+                    using var ms = new MemoryStream();
+                    using var filestream = await file.OpenStreamForReadAsync();
+                    await filestream.CopyToAsync(ms);
+                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
+#else
+                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+#endif
+                    EvaluateExpressions();
                 }
 #endif
             }

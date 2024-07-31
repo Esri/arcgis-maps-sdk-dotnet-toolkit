@@ -90,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                     _textInput.MaxLength = maxLength == 0 ? int.MaxValue : maxLength;
                 }
-                _textInput.Text = Element?.Value?.ToString();
+                _textInput.Text = Element?.Value?.ToString() ?? string.Empty;
 #if MAUI || WINDOWS_XAML
                 bool isNumericInput = Element?.FieldType == FieldType.Int32 ||
                     Element?.FieldType == FieldType.Int64 ||

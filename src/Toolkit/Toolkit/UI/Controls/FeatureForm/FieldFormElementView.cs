@@ -177,7 +177,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             if (GetTemplateChild("ErrorLabel") is TextBlock tb)
             {
-                tb.Text = errMessage;
+                tb.Text = errMessage ?? string.Empty;
             }
         }
 
