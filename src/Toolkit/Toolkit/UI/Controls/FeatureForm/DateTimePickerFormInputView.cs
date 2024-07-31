@@ -72,13 +72,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
 #endif
 #elif WINDOWS_XAML
-                var doffset = _datePicker.SelectedDate?.ToUniversalTime();
+                var doffset = _datePicker.SelectedDate?.Date;
                 if (doffset.HasValue)
-                    date = new DateTime(doffset.Value.Ticks, DateTimeKind.Utc);
+                    date = new DateTime(doffset.Value.Ticks, DateTimeKind.Local);
 #else
                 date = _datePicker.SelectedDate?.ToUniversalTime();
 #endif
-                if (date is DateTime newDate && input.IncludeTime && _timePicker?.Time is TimeSpan time)
+                if (date is DateTime newDate && input.IncludeTime && _timePicker?.Time is TimeSpan time
+#if WINDOWS_XAML
+                    && time.Ticks != -1 // TimePicker.SelectedTime is Ticks=-1 when the time is empty
+#endif
+                    )
                 {
                     // User specified both date and time, combine them.
                     date = newDate.Add(time);
