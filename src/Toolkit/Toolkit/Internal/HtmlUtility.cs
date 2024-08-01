@@ -301,7 +301,7 @@ internal class HtmlUtility
                     {
                         if (attr.TryGetValue("color", out var fontColor))
 #if WINDOWS_UWP
-                            throw new NotImplementedException("TODO: ColorTranslator.FromHtml(fontColor)");
+                            newNode.FontColor = ParseCssColor(fontColor);
 #else
                             newNode.FontColor = ColorTranslator.FromHtml(fontColor);
 #endif
@@ -330,7 +330,7 @@ internal class HtmlUtility
                     newNode.Type = MarkupType.TableRow;
                     if (attr.TryGetValue("bgcolor", out var backColor))
 #if WINDOWS_UWP
-                        throw new NotImplementedException("TODO: ColorTranslator.FromHtml(fontColor)");
+                        newNode.BackColor = ParseCssColor(backColor);
 #else
                         newNode.BackColor = ColorTranslator.FromHtml(backColor);
 #endif

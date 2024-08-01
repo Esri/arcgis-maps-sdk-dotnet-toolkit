@@ -52,7 +52,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 StackPanel container = new StackPanel();
                 try
                 {
-                    //TODO. See https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.documents?view=windows-app-sdk-1.5
                     var htmlRoot = HtmlUtility.BuildDocumentTree(Element.Text);
                     var blocks = VisitChildren(htmlRoot);
                     foreach (var block in blocks)
