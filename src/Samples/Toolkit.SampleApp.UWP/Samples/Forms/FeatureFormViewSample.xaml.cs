@@ -36,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Forms
             }
             catch (Exception ex)
             {
-               // MessageBox.Show(ex.Message, ex.GetType().Name);
+                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
             }
         }
 
