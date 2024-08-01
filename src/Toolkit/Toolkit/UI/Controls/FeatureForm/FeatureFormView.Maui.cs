@@ -22,6 +22,30 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
+    /// <summary>
+    /// A visual feature editor form controlled by a <see cref="FeatureForm"/> definition.
+    /// </summary>
+    /// <remarks>
+    /// <para>To use the camera to capture images for attachments, the corerct permissions must be set on your application.</para>
+    /// <para><b>Android:</b><br/>Add the following to Android's AndroidManifest.xml:</para>
+    /// <code>
+    /// &lt;uses-permission android:name="android.permission.CAMERA" />
+    /// &lt;queries>
+    ///     &lt;intent>
+    ///         &lt;action android:name="android.media.action.IMAGE_CAPTURE" />
+    ///     &lt;/intent>
+    /// &lt;/queries>
+    /// </code>
+    /// <para><b>iOS:</b><br/>Add the following to iOS's Info.plist:</para>
+    /// <code>
+    /// &lt;key>NSCameraUsageDescription&lt;/key>
+    /// &lt;string>Adding attachments&lt;/string>
+    /// </code>
+    /// <para>If these settings are not added, only file browsing will be enabled.</para>
+    /// </remarks>
+    /// <seealso href="https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/device-media/picker?#get-started">MAUI: Media picker for photos and videos</seealso>
+    /// <seealso cref="Esri.ArcGISRuntime.Data.ArcGISFeatureTable.FeatureFormDefinition"/>
+    /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     public partial class FeatureFormView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
@@ -64,6 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Title), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.DefaultAttachmentsElement), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             Grid root = new Grid();
@@ -79,12 +104,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             scrollView.Padding = new Thickness(0, 0, 10, 0);
 #endif
             scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
+            var scrollableContent = new VerticalStackLayout();
+            scrollView.Content = scrollableContent;
             Grid.SetRow(scrollView, 1);
             root.Add(scrollView);
-            VerticalStackLayout itemsView = new VerticalStackLayout();            
+            VerticalStackLayout itemsView = new VerticalStackLayout();
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
             itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent));
-            scrollView.Content = itemsView;
+            scrollableContent.Add(itemsView);
+
+            AttachmentsFormElementView attachmentsView = new AttachmentsFormElementView();
+            attachmentsView.SetBinding(AttachmentsFormElementView.ElementProperty, new Binding("FeatureForm.DefaultAttachmentsElement", source: RelativeBindingSource.TemplatedParent));
+            scrollableContent.Add(attachmentsView);
+
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(FeatureFormContentScrollViewerName, scrollView);
@@ -125,6 +157,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         internal static Style GetFeatureFormTitleStyle() => GetStyle(FeatureFormTitleStyleName, DefaultFeatureFormTitleStyle);
 
         internal static Style GetFeatureFormCaptionStyle() => GetStyle(FeatureFormCaptionStyleName, DefaultFeatureFormCaptionStyle);
+
+        internal static FeatureFormView? GetFeatureFormViewParent(Element child) => GetParent<FeatureFormView>(child);
+
+        private static T? GetParent<T>(Element child) where T : Element
+        {
+            var parent = child?.Parent;
+            while (parent is not null && parent is not T page)
+            {
+                parent = parent.Parent;
+            }
+            return parent as T;
+        }
     }
 }
 #endif

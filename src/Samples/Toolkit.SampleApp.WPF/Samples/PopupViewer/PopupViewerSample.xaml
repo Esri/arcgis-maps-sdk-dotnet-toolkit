@@ -14,7 +14,7 @@
 
         <Grid Background="#AA333333" Visibility="Collapsed" x:Name="PopupBackground" MouseDown="PopupBackground_MouseDown">
             <Border  BorderBrush="Black" BorderThickness="1" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                    <esri:PopupViewer x:Name="popupViewer" Margin="5" Width="400" MaxHeight="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" />
+                    <esri:PopupViewer x:Name="popupViewer" Margin="5" Width="400" MaxHeight="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" HyperlinkClicked="popupViewer_LinkClicked" />
             </Border>
         </Grid>
     </Grid>

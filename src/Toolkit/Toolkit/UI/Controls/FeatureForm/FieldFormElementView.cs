@@ -54,6 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             RadioButtonsFormInputTemplate = DefaultRadioButtonsFormInputTemplate;
             TextAreaFormInputTemplate = DefaultTextAreaFormInputTemplate;
             TextBoxFormInputTemplate = DefaultTextBoxFormInputTemplate;
+            BarcodeScannerFormInputTemplate = DefaultBarcodeScannerFormInputTemplate;
 #else
             DefaultStyleKey = typeof(FieldFormElementView);
 #endif
@@ -120,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnValuePropertyChanged()
         {
-            _ = FeatureFormView.EvaluateExpressions(FeatureForm);
+            _ = FeatureFormView.GetFeatureFormViewParent(this)?.EvaluateExpressions(FeatureForm);
         }
         
         private void FieldFormElement_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -148,7 +149,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Element.Input is DateTimePickerFormInput ||
                 Element.Input is RadioButtonsFormInput ||
                 Element.Input is TextAreaFormInput ||
-                Element.Input is TextBoxFormInput);
+                Element.Input is TextBoxFormInput ||
+                Element.Input is BarcodeScannerFormInput);
 #if MAUI
             this.IsVisible = isVisible;
 #else
@@ -290,6 +292,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             BindableProperty.Create(nameof(TextBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
 #else
             DependencyProperty.Register(nameof(TextBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="BarcodeScannerFormInputTemplate"/> element.
+        /// </summary>
+        public DataTemplate? BarcodeScannerFormInputTemplate
+        {
+            get { return (DataTemplate)GetValue(BarcodeScannerFormInputTemplateProperty); }
+            set { SetValue(BarcodeScannerFormInputTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="BarcodeScannerFormInputTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty BarcodeScannerFormInputTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(BarcodeScannerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(BarcodeScannerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 #endif
     }
 }

@@ -17,6 +17,7 @@
 #if WPF
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -287,9 +288,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             _ => TextAlignment.Left,
         };
 
-        private static async void NavigateToUri(object sender, RequestNavigateEventArgs ea)
+        private static void NavigateToUri(object sender, RequestNavigateEventArgs ea)
         {
-            await Launcher.LaunchUriAsync(ea.Uri);
+            PopupViewer.GetPopupViewerParent(sender as DependencyObject)?.OnHyperlinkClicked(ea.Uri);
         }
     }
 }

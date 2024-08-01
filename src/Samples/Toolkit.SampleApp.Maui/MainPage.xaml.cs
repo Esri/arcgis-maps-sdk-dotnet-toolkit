@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime;
 using Esri.ArcGISRuntime.Mapping;
+using Microsoft.Maui.ApplicationModel;
 
 namespace Toolkit.SampleApp.Maui;
 
@@ -8,6 +9,13 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
+        ToolbarItems.Add(new ToolbarItem("Toggle Theme", null, () =>
+        {
+            if (App.Current!.RequestedTheme == AppTheme.Dark)
+                App.Current.UserAppTheme = AppTheme.Light;
+            else
+                App.Current.UserAppTheme = AppTheme.Dark;
+        }));
         SamplesList.ItemsSource = SampleDatasource.Current.Samples;
         CheckAPIKey();
     }

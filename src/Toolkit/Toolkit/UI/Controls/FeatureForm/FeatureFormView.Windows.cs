@@ -22,6 +22,11 @@ using System.Diagnostics;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+    /// <summary>
+    /// A visual feature editor form controlled by a <see cref="FeatureForm"/> definition.
+    /// </summary>
+    /// <seealso cref="Esri.ArcGISRuntime.Data.ArcGISFeatureTable.FeatureFormDefinition"/>
+    /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     [TemplatePart(Name = FeatureFormContentScrollViewerName, Type = typeof(ScrollViewer))]
     [TemplatePart(Name = ItemsViewName, Type = typeof(ItemsControl))]
     public partial class FeatureFormView : Control
@@ -45,6 +50,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get { return (bool)GetValue(IsValidProperty); }
             private set { SetValue(IsValidPropertyKey, value); }
+        }
+
+        internal static UI.Controls.FeatureFormView? GetFeatureFormViewParent(DependencyObject child)
+        {
+            var parent = VisualTreeHelper.GetParent(child);
+            while (parent is not null && parent is not UI.Controls.FeatureFormView view)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return parent as UI.Controls.FeatureFormView;
         }
     }
 }

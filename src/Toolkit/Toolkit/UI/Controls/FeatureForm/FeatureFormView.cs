@@ -35,11 +35,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
-    /// <summary>
-    /// A visual feature editor form controlled by a <see cref="FeatureForm"/> definition.
-    /// </summary>
-    /// <seealso cref="Esri.ArcGISRuntime.Data.ArcGISFeatureTable.FeatureFormDefinition"/>
-    /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     public partial class FeatureFormView
     {
         private WeakEventListener<FeatureFormView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
@@ -119,10 +114,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static object pendingExpressionsLock = new object();
         private static List<FeatureForm> pendingExpressions = new List<FeatureForm>();
+        private bool _isDiscarding = false;
 
-        internal static async Task EvaluateExpressions(FeatureForm? form)
+        internal async Task EvaluateExpressions(FeatureForm? form)
         {
-            if (form is null)
+            if (form is null || _isDiscarding)
                 return;
             // Don't evaluate expressions if we're already in the process of evaluating
             // If that's the case, the value changed event triggering this code was
@@ -162,17 +158,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
 #if MAUI
         public static readonly BindableProperty FeatureFormProperty =
-            BindableProperty.Create(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView), null, propertyChanged: (s, oldValue, newValue) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(oldValue, newValue));
+            BindableProperty.Create(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView), null, propertyChanged: (s, oldValue, newValue) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(oldValue as FeatureForm, newValue as FeatureForm));
 #else
         public static readonly DependencyProperty FeatureFormProperty =
             DependencyProperty.Register(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView),
-                new PropertyMetadata(null, (s, e) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(e.OldValue, e.NewValue)));
+                new PropertyMetadata(null, (s, e) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(e.OldValue as FeatureForm, e.NewValue as FeatureForm)));
 #endif
 
-        private void OnFeatureFormPropertyChanged(object oldValue, object newValue)
+        private void OnFeatureFormPropertyChanged(FeatureForm? oldForm, FeatureForm? newForm)
         {
-            var oldForm = oldValue as FeatureForm;
-            var newForm = newValue as FeatureForm;
             if (newForm is not null)
             {
                 InvalidateForm();
@@ -184,12 +178,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
 #endif
 
-            if (oldValue is INotifyPropertyChanged inpcOld)
+            if (oldForm is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
                 _elementPropertyChangedListener = null;
             }
-            if (newValue is INotifyPropertyChanged inpcNew)
+            if (newForm is INotifyPropertyChanged inpcNew)
             {
                 _elementPropertyChangedListener = new WeakEventListener<FeatureFormView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
                 {
@@ -212,6 +206,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void UpdateIsValidProperty()
         {
             IsValid = FeatureForm?.ValidationErrors?.Any() != true;
+        }
+
+        /// <summary>
+        /// Discards edits to all elements, refreshes any pending expressions and restores attachment list.
+        /// </summary>
+        /// <seealso cref="FeatureForm.DiscardEdits"/>
+        /// <seealso cref="FeatureForm.EvaluateExpressionsAsync"/>
+        public async Task DiscardEditsAsync()
+        {
+            var form = FeatureForm;
+            if (form is not null)
+            {
+                _isDiscarding = true;
+                form.DiscardEdits();
+                _isDiscarding = false;
+                if (form.DefaultAttachmentsElement is not null)
+                    await form.DefaultAttachmentsElement.FetchAttachmentsAsync();
+                await EvaluateExpressions(form).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        ///  Saves edits made using the <see cref="FeatureForm"/> to the database.
+        /// </summary>
+        /// <seealso cref="FeatureForm.FinishEditingAsync"/>
+        public async Task FinishEditingAsync()
+        {
+            if (FeatureForm is not null)
+            {
+                await FeatureForm.FinishEditingAsync().ConfigureAwait(false);
+            }
         }
 
         /// <summary>
@@ -279,6 +304,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 uint min = 0;
                 if (element.Input is TextAreaFormInput area) { max = area.MaxLength; min = area.MinLength; }
                 else if (element.Input is TextBoxFormInput tb) { max = tb.MaxLength; min = tb.MinLength; }
+                else if (element.Input is BarcodeScannerFormInput bar) { max = bar.MaxLength; min = bar.MinLength; }
                 if (max > 0 && min > 0)
                     return string.Format(Properties.Resources.GetString("FeatureFormOutsideLengthRange")!, min, max);
                 if (max > 0)
@@ -332,6 +358,102 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return Properties.Resources.GetString("FeatureFormFieldIsRequired");
             return exception.Message;
         }
+
+        /// <summary>
+        /// Raised when a feature form attachment is clicked
+        /// </summary>
+        /// <remarks>
+        /// <para>By default, when an attachment is clicked, the default application for the file type (if any) is launched. To override this,
+        /// listen to this event, set the <see cref="FormAttachmentClickedEventArgs.Handled"/> property to <c>true</c> and perform
+        /// your own logic. </para>
+        /// <example>
+        /// Example: Use the .NET MAUI share API for the attachment:
+        /// <code language="csharp">
+        /// private async void FormAttachmentClicked(object sender, FormAttachmentClickedEventArgs e)
+        /// {
+        ///     e.Handled = true; // Prevent default launch action
+        ///     await Share.Default.RequestAsync(new ShareFileRequest(new ReadOnlyFile(e.FilePath!, e.ContentType)));
+        /// }
+        /// </code>
+        /// </example>
+        /// </remarks>
+        public event EventHandler<FormAttachmentClickedEventArgs>? FormAttachmentClicked;
+
+        internal bool OnFormAttachmentClicked(FormAttachment attachment)
+        {
+            var handler = FormAttachmentClicked;
+            if (handler is not null)
+            {
+                var args = new FormAttachmentClickedEventArgs(attachment);
+                FormAttachmentClicked?.Invoke(this, args);
+                return args.Handled;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Raised when the Barcode Icon in a barcode element is clicked.
+        /// </summary>
+        /// <remarks>
+        /// <para>Set the <see cref="BarcodeButtonClickedEventArgs.Handled"/> property to <c>true</c> to prevent
+        /// any default code and perform your own logic.</para>
+        /// </remarks>
+        public event EventHandler<BarcodeButtonClickedEventArgs>? BarcodeButtonClicked;
+
+        internal bool OnBarcodeButtonClicked(FieldFormElement element)
+        {
+            var handler = BarcodeButtonClicked;
+            if (handler is not null)
+            {
+                var args = new BarcodeButtonClickedEventArgs(element);
+                
+                handler.Invoke(this, args);
+                return args.Handled;
+            }
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Event argument for the <see cref="FeatureFormView.FormAttachmentClicked"/> event.
+    /// </summary>
+    public class FormAttachmentClickedEventArgs : EventArgs
+    {
+        internal FormAttachmentClickedEventArgs(FormAttachment attachment)
+        {
+            Attachment = attachment;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the event handler has handled the event and the default action should be prevented.
+        /// </summary>
+        public bool Handled { get; set; }
+
+        /// <summary>
+        /// Gets the attachment that was clicked.
+        /// </summary>
+        public FormAttachment Attachment { get; }
+    }
+
+    /// <summary>
+    /// Event argument for the <see cref="FeatureFormView.BarcodeButtonClicked"/> event.
+    /// </summary>
+    public class BarcodeButtonClickedEventArgs : EventArgs
+    {
+        internal BarcodeButtonClickedEventArgs(FieldFormElement element)
+        {
+            FormElement = element;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the event handler has handled the event and the default action should be prevented.
+        /// </summary>
+        public bool Handled { get; set; }
+
+        /// <summary>
+        /// Gets the element that was clicked.
+        /// </summary>
+        public FieldFormElement FormElement { get; }
     }
 }
 #endif

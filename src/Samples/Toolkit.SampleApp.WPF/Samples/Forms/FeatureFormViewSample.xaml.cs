@@ -55,12 +55,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Forms
             return null;
         }
 
-        private void DiscardButton_Click(object sender, RoutedEventArgs e)
+        private async void DiscardButton_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("Discard edits?", "Confirm", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                formViewer.FeatureForm.DiscardEdits();
+                ((Button)sender).IsEnabled = false;
+                try
+                {
+                    await formViewer.DiscardEditsAsync();
+                }
+                catch { }
+                ((Button)sender).IsEnabled = true;
             }
         }
 
@@ -83,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Forms
             }
             try
             {
-                await formViewer.FeatureForm.Feature.FeatureTable.UpdateFeatureAsync(formViewer.FeatureForm.Feature);
+                await formViewer.FinishEditingAsync();
             }
             catch (Exception ex)
             {

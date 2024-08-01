@@ -47,10 +47,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     RadioButtonsFormInput => _parent.RadioButtonsFormInputTemplate,
                     TextAreaFormInput => _parent.TextAreaFormInputTemplate,
                     TextBoxFormInput => _parent.TextBoxFormInputTemplate,
+                    BarcodeScannerFormInput => _parent.BarcodeScannerFormInputTemplate,
+#if MAUI
+                    _ => null
+#else
                     _ => base.SelectTemplate(item, container)
+#endif
                 };
             }
+#if MAUI
+            return null;
+#else
             return base.SelectTemplate(item, container);
+#endif
         }
     }
 }
