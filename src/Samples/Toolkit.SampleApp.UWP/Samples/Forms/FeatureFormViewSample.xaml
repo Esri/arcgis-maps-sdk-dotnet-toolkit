@@ -22,7 +22,7 @@
         </Border>
 
         <Grid Background="White" Visibility="Collapsed" x:Name="SidePanel" Grid.Column="1">
-            <Border BorderBrush="Black" BorderThickness="1,0,0,0" Background="White" HorizontalAlignment="Center" Width="500" >
+            <Border BorderBrush="Black" BorderThickness="1,0,0,0" Background="White" HorizontalAlignment="Center" Width="300" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
