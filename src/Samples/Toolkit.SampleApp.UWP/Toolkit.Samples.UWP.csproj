@@ -134,6 +134,12 @@
     <Compile Include="Samples\FloorFilter\FloorFilterSample.xaml.cs">
       <DependentUpon>FloorFilterSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\Forms\FeatureFormViewSample.xaml.cs">
+      <DependentUpon>FeatureFormViewSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\Forms\FeatureFormViewTests.xaml.cs">
+      <DependentUpon>FeatureFormViewTests.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\GeoViewController\GeoViewControllerSample.xaml.cs">
       <DependentUpon>GeoViewControllerSample.xaml</DependentUpon>
     </Compile>
@@ -228,6 +234,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\FloorFilter\FloorFilterSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\Forms\FeatureFormViewSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\Forms\FeatureFormViewTests.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

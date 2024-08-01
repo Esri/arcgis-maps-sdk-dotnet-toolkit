@@ -62,6 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
 #endif
             }
+            UpdateVisibility();
         }
 
 
