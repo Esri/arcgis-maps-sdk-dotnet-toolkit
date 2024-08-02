@@ -130,7 +130,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var selection = input.CodedValues.Where(a => object.Equals(a.Code, Element?.Value)).FirstOrDefault();
                 if (selection is null && input.NoValueOption == FormInputNoValueOption.Show)
                 {
-#if MAUI || WINDOWS_XAML
+#if WINDOWS_XAML
+                    if (Items.FirstOrDefault() is RadioButtonNullValue nullValue)
+                        SelectedItem = nullValue;
+                    else
+                        SelectedItem = null;
+#elif MAUI
                     SelectedItem = null;
 #else
                     SelectedIndex = 0;
