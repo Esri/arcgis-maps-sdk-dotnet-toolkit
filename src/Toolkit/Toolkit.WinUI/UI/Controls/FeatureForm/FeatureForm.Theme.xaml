@@ -158,7 +158,7 @@
                      Padding="8" Margin="-8,-8,-5,-7" BorderThickness="0" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="BarcodeButton" />
                             </Grid>
                         </Border>
-                        <TextBlock x:Name="ReadOnlyText" Visibility="Collapsed" />
+                        <TextBlock x:Name="ReadOnlyText" Visibility="Collapsed" TextWrapping="Wrap" />
                         <Border x:Name="ErrorBorder" BorderThickness="1" BorderBrush="Red" Visibility="Collapsed" />
                     </Grid>
                 </ControlTemplate>
