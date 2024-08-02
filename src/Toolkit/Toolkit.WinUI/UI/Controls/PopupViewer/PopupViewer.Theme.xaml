@@ -158,7 +158,6 @@
                     <Border Background="{TemplateBinding Background}"
                    BorderBrush="{TemplateBinding BorderBrush}"
                    BorderThickness="{TemplateBinding BorderThickness}"
-                   Padding="{TemplateBinding Padding}"
                    Margin="{TemplateBinding Margin}"
                    MinWidth="{TemplateBinding MinWidth}"
                    MaxWidth="{TemplateBinding MaxWidth}">
@@ -167,9 +166,10 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
-                         Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                            <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="PopupContentScrollViewer">
+                            <TextBlock Margin="{TemplateBinding Padding}" Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
+                                       Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                            <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="PopupContentScrollViewer"
+                                          IsVerticalRailEnabled="True" Padding="{TemplateBinding Padding}">
                                 <primitives:PopupElementItemsControl ItemsSource="{Binding EvaluatedElements}" Margin="0,10" x:Name="ItemsView">
                                     <primitives:PopupElementItemsControl.TextPopupElementTemplate>
                                         <DataTemplate>
