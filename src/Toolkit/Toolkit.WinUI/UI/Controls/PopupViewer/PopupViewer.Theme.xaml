@@ -121,30 +121,36 @@
     </Style>
 
     <Style TargetType="primitives:MediaPopupElementView" >
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Grid.Row="2" Margin="0,0,0,0" >
+                        <primitives:PopupMediaView PopupMedia="{Binding}" Margin="0,5" />
+                        <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:MediaPopupElementView">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="25" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="25" />
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-
-                        <StackPanel Grid.Row="2" Margin="0,0,0,20" DataContext="{TemplateBinding CurrentItem}" Grid.Column="1">
-                            <primitives:PopupMediaView PopupMedia="{Binding}" Margin="0,5" />
-                            <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                            <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="2"  Content="" Background="Transparent" Height="40" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="PreviousButton" />
-                        <Button Grid.Column="2" Grid.Row="2"  Content="" Background="Transparent" Height="40" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="NextButton" />
+                        <TextBlock Grid.Row="0" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Grid.Row="1" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <FlipView MaxHeight="200" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" DataContext="{TemplateBinding Element}" ItemsSource="{Binding Media}" Grid.Row="2"/>
+                        <ContentControl x:Name="PipsPagerContainer" Grid.Row="3" Visibility="Collapsed" HorizontalAlignment="Center" />
+                        <!-- Without UWP support we could have used PipsPager directly here: <PipsPager x:Name="PipsPager"
+                            HorizontalAlignment="Center"
+                            Grid.Row="3"
+                            NumberOfPages="{Binding Media.Count}"
+                            SelectedPageIndex="{Binding SelectedIndex, ElementName=FlipView, Mode=TwoWay}" /> -->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

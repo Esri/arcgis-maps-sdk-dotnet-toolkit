@@ -29,18 +29,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     [TemplatePart(Name = "PreviousButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "NextButton", Type = typeof(ButtonBase))]
     public partial class MediaPopupElementView : Control
-    {    
+    {
+#if WPF
         private ButtonBase? _previousButton;
         private ButtonBase? _nextButton;
         private int selectedIndex = 0;
+#endif
 
         /// <inheritdoc />
 #if WPF
         public override void OnApplyTemplate()
-#else
+#elif WINDOWS_XAML
         protected override void OnApplyTemplate()
 #endif
         {
+#if WPF
             if (_previousButton != null)
             {
                 _previousButton.Click -= OnPreviousButtonClicked;
@@ -60,9 +63,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _nextButton.Click += OnNextButtonClicked;
             }
             UpdateContent();
+#elif WINUI
+            CreatePipsPager();
+#endif
             base.OnApplyTemplate();
         }
 
+#if WPF
         /// <summary>
         /// Gets or sets the currently display <see cref="PopupMedia"/>.
         /// </summary>
@@ -116,12 +123,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateContent();
         }
 
+#endif
         private void OnElementPropertyChanged()
         {
+#if WPF
             selectedIndex = 0;
             UpdateContent();
+#elif WinUI
+            UpdatePipsVisibility();
+#endif
         }
-        
+
+#if WINUI
+        private void CreatePipsPager()
+        {
+            // Instead of creating Pips in XAML which UWP doesn't support, we create it in code here instead of having to maintain two sets of control templates
+            if (GetTemplateChild("PipsPagerContainer") is ContentControl contentControl && GetTemplateChild("FlipView") is FlipView flipView)
+            {
+                PipsPager p = new PipsPager() { HorizontalAlignment = HorizontalAlignment.Center };
+                p.SetBinding(PipsPager.NumberOfPagesProperty, new Binding() { Path = new PropertyPath("Element.Media.Count"), Source = this });
+                p.SetBinding(PipsPager.SelectedPageIndexProperty, new Binding() { Path = new PropertyPath(nameof(FlipView.SelectedIndex)), Mode = BindingMode.TwoWay, Source = flipView });
+                contentControl.Content = p;
+            }
+            UpdatePipsVisibility();
+        }
+        private void UpdatePipsVisibility()
+        {
+            if (GetTemplateChild("PipsPagerContainer") is ContentControl cc)
+            {
+                cc.Visibility = (Element?.Media?.Count ?? 0) > 1 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+#endif
 
         /// <summary>
         /// Gets or sets the template for popup media items.
