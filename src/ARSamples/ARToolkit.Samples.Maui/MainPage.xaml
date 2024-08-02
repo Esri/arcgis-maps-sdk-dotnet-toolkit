@@ -2,27 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ARToolkit.Samples.Maui.MainPage">
-
     <Grid>
-
-        <ListView x:Name="samples" ItemSelected="Samples_ItemSelected" Margin="20" RowHeight="100">
+        <ListView x:Name="samples" ItemSelected="Samples_ItemSelected">
             <ListView.ItemTemplate>
-                <DataTemplate >
-                    <ViewCell>
-                        <StackLayout Margin="0,5,0,0">
-                            <Label Text="{Binding Name}" FontSize="16" TextColor="Black" FontAttributes="Bold" />
-                            <Label Text="{Binding Description}" TextColor="Black" />
-                        </StackLayout>
-                    </ViewCell>
+                <DataTemplate>
+                    <TextCell Text="{Binding Name}" Detail="{Binding Description}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
         <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="20" BackgroundColor="White" x:Name="dataDialog" IsVisible="False">
             <Label Text="Downloading data..." />
             <Label x:Name="status" />
         </StackLayout>
-
     </Grid>
-
 </ContentPage>
