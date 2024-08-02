@@ -223,7 +223,11 @@
                 <ControlTemplate TargetType="primitives:FieldFormElementView">
                     <StackPanel>
                         <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
-                        <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" IsTabStop="False" ToolTipService.ToolTip="{Binding Hint}" HorizontalContentAlignment="Stretch" />
+                        <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" IsTabStop="False" HorizontalContentAlignment="Stretch">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Content="{Binding Hint}" Visibility="{Binding Hint, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                            </ToolTipService.ToolTip>
+                        </ContentControl>
                         <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                         <TextBlock Foreground="Red" x:Name="ErrorLabel" Visibility="{Binding Text, ElementName=ErrorLabel, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                     </StackPanel>
