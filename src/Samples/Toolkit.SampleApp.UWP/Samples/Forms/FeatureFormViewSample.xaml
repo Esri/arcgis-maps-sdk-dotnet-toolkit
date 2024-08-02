@@ -17,9 +17,10 @@
                Map="{x:Bind Map}"
                GeoViewTapped="mapView_GeoViewTapped"/>
 
-        <Border HorizontalAlignment="Center" VerticalAlignment="Top" Background="#99ffffff" Padding="5" Margin="10" BorderThickness="1" BorderBrush="Black">
-            <TextBlock Text="Click a feature to open its FeatureFormView" FontSize="18" />
-        </Border>
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" BorderThickness="1" BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}">
+            <Border Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity=".8" />
+            <TextBlock Text="Click a feature to open its FeatureFormView" FontSize="18" Margin="5" />
+        </Grid>
 
         <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Visibility="Collapsed" x:Name="SidePanel" Grid.Column="1">
             <Border BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}" BorderThickness="1,0,0,0" HorizontalAlignment="Center" Width="300" >
