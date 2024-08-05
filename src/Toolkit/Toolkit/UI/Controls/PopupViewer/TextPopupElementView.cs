@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
@@ -48,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <inheritdoc />
 #if WINDOWS_XAML || MAUI
         protected override void OnApplyTemplate()
-#else
+#elif WPF
         public override void OnApplyTemplate()
 #endif
         {
@@ -72,4 +71,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             PropertyHelper.CreateProperty<TextPopupElement, TextPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.OnElementPropertyChanged());
     }
 }
-#endif

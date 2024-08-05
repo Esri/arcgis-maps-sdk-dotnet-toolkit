@@ -14,13 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Microsoft.Win32;
 #if WPF
 using System.Windows.Controls.Primitives;
-#else
+#elif MAUI
 using ListBox = Microsoft.Maui.Controls.CollectionView;
 using Selector = Microsoft.Maui.Controls.SelectableItemsView;
 #endif
@@ -46,9 +45,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <inheritdoc />
-#if MAUI
+#if WINDOWS_XAML || MAUI
         protected override void OnApplyTemplate()
-#else
+#elif WPF
         public override void OnApplyTemplate()
 #endif
         {
@@ -157,7 +156,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     System.Diagnostics.Trace.WriteLine($"Failed to open attachment: " + ex.Message);
                 }
-#else
+#elif WPF
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.FileName = attachment.Name;
                 if (saveFileDialog.ShowDialog() == true)
@@ -173,9 +172,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         System.Diagnostics.Trace.WriteLine($"Failed to save file to disk: " + ex.Message);
                     }
                 }
+#elif WINDOWS_XAML
+                Windows.Storage.StorageFile? file = null;
+#if WINUI
+                var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
+                if (hwnd == 0)
+                    return; // Can't show dialog without a root window
+#endif
+                try
+                {
+                    if (attachment.LoadStatus == LoadStatus.NotLoaded)
+                        await attachment.LoadAsync();
+                    var fileInfo = new FileInfo(attachment.Filename!);
+                    var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+#if WINUI
+                    WinRT.Interop.InitializeWithWindow.Initialize(savePicker, (nint)hwnd);
+#endif
+                    var ext = fileInfo.Extension;
+                    savePicker.FileTypeChoices.Add("*" + ext, new List<string>() { ext });
+                    savePicker.SuggestedFileName = fileInfo.Name;
+                    file = await savePicker.PickSaveFileAsync();
+                    if (file != null)
+                    {
+                        Windows.Storage.CachedFileManager.DeferUpdates(file);
+                        using var stream = await attachment.Attachment!.GetDataAsync();
+                        using var filestream= await file.OpenStreamForWriteAsync();
+                        await stream.CopyToAsync(filestream);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Failed to open attachment: " + ex.Message);
+                }
+                finally
+                {
+                    if (file != null)
+                        _ = Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                }
 #endif
             }
         }
     }
 }
-#endif

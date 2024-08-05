@@ -52,7 +52,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             if(GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
                 scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
-            UpdateVisibility();
         }
 
         private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)

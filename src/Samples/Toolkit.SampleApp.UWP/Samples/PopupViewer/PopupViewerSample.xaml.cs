@@ -6,6 +6,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Popups;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -20,14 +21,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
         public PopupViewerSample()
         {
             this.InitializeComponent();
-            Map.Loaded += (s, e) =>
-            {
-                Map.OperationalLayers.RemoveAt(0); // Remove secured layer
-            };
         }
 
         // Webmap configured with Popup
-        public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
+        public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=9f3a674e998f461580006e626611f9ad"));
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
@@ -43,11 +40,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
                 if (popup != null)
                 {
                     popupViewer.Visibility = Visibility.Visible;
-                    popupViewer.PopupManager = new PopupManager(popup);
+                    popupViewer.Popup = popup;
                 }
                 else
                 {
-                    popupViewer.PopupManager = null;
+                    popupViewer.Popup = null;
                     popupViewer.Visibility = Visibility.Collapsed;
                 }
             }
@@ -115,6 +112,46 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
             }
 
             return null;
+        }
+        private async void popupViewer_PopupAttachmentClicked(object sender, UI.Controls.PopupAttachmentClickedEventArgs e)
+        {
+            // Override the default attachment click behavior (which will download and save attachment)
+            if (!e.Attachment.IsLocal) // Attachment hasn't been downloaded
+            {
+                try
+                {
+                    // Make first click just load the attachment (or cancel a loading operation). Otherwise fallback to default behavior
+                    if (e.Attachment.LoadStatus == LoadStatus.NotLoaded)
+                    {
+                        e.Handled = true;
+                        await e.Attachment.LoadAsync();
+                    }
+                    else if (e.Attachment.LoadStatus == LoadStatus.FailedToLoad)
+                    {
+                        e.Handled = true;
+                        await e.Attachment.RetryLoadAsync();
+                    }
+                    else if (e.Attachment.LoadStatus == LoadStatus.Loading)
+                    {
+                        e.Handled = true;
+                        e.Attachment.CancelLoad();
+                    }
+                }
+                catch (OperationCanceledException) { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Failed to download attachment", ex.Message);
+                }
+            }
+        }
+
+        private void popupViewer_LinkClicked(object sender, UI.Controls.HyperlinkClickedEventArgs e)
+        {
+            // Include below line if you want to prevent the default action
+            // e.Handled = true;
+
+            // Perform custom action when a link is clicked
+            System.Diagnostics.Debug.WriteLine(e.Uri);
         }
     }
 }
