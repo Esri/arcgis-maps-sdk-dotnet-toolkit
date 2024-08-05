@@ -13,8 +13,6 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-#if WPF || MAUI
-
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Collections;
@@ -55,4 +53,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             PropertyHelper.CreateProperty<MediaPopupElement, MediaPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.OnElementPropertyChanged());
     }
 }
-#endif

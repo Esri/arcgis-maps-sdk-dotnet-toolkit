@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -24,11 +23,17 @@ using Esri.ArcGISRuntime.Toolkit.Maui;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
+
 #if MAUI
 using TextBlock = Microsoft.Maui.Controls.Label;
-#else
+#elif WPF
 using System.Windows.Documents;
+#elif WINUI
+using Microsoft.UI.Xaml.Documents;
+#elif WINDOWS_UWP
+using Windows.UI.Xaml.Documents;
 #endif
+
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #else
@@ -56,9 +61,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <inheritdoc />
 #if WINDOWS_XAML || MAUI
         protected override void OnApplyTemplate()
-#else
+#elif WPF
         public override void OnApplyTemplate()
-# endif
+#endif
         {
             base.OnApplyTemplate();
             RefreshTable();
@@ -77,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ElementProperty =
-            PropertyHelper.CreateProperty<AttachmentsPopupElement, FieldsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.RefreshTable());
+            PropertyHelper.CreateProperty<FieldsPopupElement, FieldsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.RefreshTable());
 
         private void RefreshTable()
         {
@@ -152,7 +157,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         if (uri is not null)
                             PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri);
                     };
+#if WINDOWS_XAML
+                    hl.Inlines.Add(new Run() {  Text = "View" });
+#else
                     hl.Inlines.Add("View");
+#endif
                     t.Inlines.Add(hl);
 #endif
                 }
@@ -240,4 +249,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             PropertyHelper.CreateProperty<Style, FieldsPopupElementView>(nameof(FieldTextStyle));
     }
 }
-#endif

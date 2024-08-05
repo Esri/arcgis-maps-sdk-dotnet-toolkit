@@ -1,4 +1,3 @@
-#if WPF || MAUI
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -301,7 +300,11 @@ internal class HtmlUtility
                     else if (name == "font")
                     {
                         if (attr.TryGetValue("color", out var fontColor))
+#if WINDOWS_UWP
+                            newNode.FontColor = ParseCssColor(fontColor);
+#else
                             newNode.FontColor = ColorTranslator.FromHtml(fontColor);
+#endif
                         if (attr.TryGetValue("size", out var fontSizeStr) && Int32.TryParse(fontSizeStr, out var fontSize))
                             newNode.FontSize = ParseHtmlFontSize(fontSize);
                     }
@@ -326,7 +329,11 @@ internal class HtmlUtility
                 case "tr":
                     newNode.Type = MarkupType.TableRow;
                     if (attr.TryGetValue("bgcolor", out var backColor))
+#if WINDOWS_UWP
+                        newNode.BackColor = ParseCssColor(backColor);
+#else
                         newNode.BackColor = ColorTranslator.FromHtml(backColor);
+#endif
                     // TODO valign
                     break;
                 case "td":
@@ -1142,4 +1149,3 @@ internal enum HtmlAlignment
     Center,
     Justify,
 }
-#endif

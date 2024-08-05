@@ -14,10 +14,15 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Microsoft.Win32;
-using System.Windows.Controls.Primitives;
+using Esri.ArcGISRuntime.UI;
+using System.IO;
+
+#if NET6_0_OR_GREATER
+using System.Runtime.InteropServices.WindowsRuntime;
+
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
