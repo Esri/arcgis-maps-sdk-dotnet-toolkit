@@ -92,30 +92,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 #endif
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this switch is checked or not.
-        /// </summary>
-        public bool IsChecked
-        {
-            get { return (bool)GetValue(IsCheckedProperty); }
-            set { SetValue(IsCheckedProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="FeatureForm"/> dependency property.
-        /// </summary>
-        public static readonly BindableProperty IsCheckedProperty =
-            BindableProperty.Create(nameof(IsChecked), typeof(bool), typeof(SwitchFormInputView), propertyChanged: (s, oldValue, newValue) => ((SwitchFormInputView)s).OnIsCheckedPropertyChanged(oldValue, newValue));
-
-        private void OnIsCheckedPropertyChanged(object oldValue, object newValue)
-        {
-            var state = (newValue is bool b && b);
-            if (state)
-                OnChecked();
-            else
-                OnUnchecked();
-        }
     }
 }
 #endif

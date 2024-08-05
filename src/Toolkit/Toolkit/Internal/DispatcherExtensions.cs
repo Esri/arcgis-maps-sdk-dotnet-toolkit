@@ -37,6 +37,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             else
                 dObject.Dispatcher.Invoke(action);
         }
+#elif WINUI
+        internal static void Dispatch(this DependencyObject dObject, Action action)
+        {
+            if (dObject.DispatcherQueue.HasThreadAccess)
+                action();
+            else
+                dObject.DispatcherQueue.TryEnqueue(() => action());
+        }
+#elif WINDOWS_UWP
+        internal static void Dispatch(this DependencyObject dObject, Action action)
+        {
+            if (dObject.Dispatcher.HasThreadAccess)
+                action();
+            else
+                _ = dObject.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => action());
+        }
 #endif
     }
 }

@@ -17,6 +17,7 @@
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/UtilityNetworkTraceTool/StartingPointListView.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/FeatureForm/FeatureForm.Theme.WinUI.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

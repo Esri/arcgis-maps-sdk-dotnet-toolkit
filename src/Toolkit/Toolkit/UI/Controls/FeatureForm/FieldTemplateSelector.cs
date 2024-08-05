@@ -14,8 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
-
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 
 #if MAUI
@@ -31,8 +29,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             _parent = parent;
         }
+
 #if MAUI
         protected override DataTemplate? OnSelectTemplate(object item, BindableObject container)
+#elif WINDOWS_XAML
+        protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
 #else
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
 #endif
@@ -50,17 +51,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     BarcodeScannerFormInput => _parent.BarcodeScannerFormInputTemplate,
 #if MAUI
                     _ => null
+#elif WINDOWS_XAML
+                    _ => base.SelectTemplateCore(item, container)
 #else
                     _ => base.SelectTemplate(item, container)
 #endif
-                };
+            };
             }
 #if MAUI
             return null;
+#elif WINDOWS_XAML
+            return base.SelectTemplateCore(item, container);
 #else
             return base.SelectTemplate(item, container);
 #endif
         }
     }
 }
-#endif
