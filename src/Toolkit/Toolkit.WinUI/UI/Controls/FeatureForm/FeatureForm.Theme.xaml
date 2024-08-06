@@ -53,7 +53,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:ComboBoxFormInputView">
-                    <ComboBox x:Name="Selector" IsEnabled="{TemplateBinding IsEnabled}" />
+                    <ComboBox x:Name="Selector" IsEnabled="{TemplateBinding IsEnabled}" HorizontalAlignment="Stretch" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -36,14 +36,14 @@
                                         <primitives:FormElementItemsControl.GroupFormElementTemplate>
                                             <DataTemplate>
                                                 <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
-                                                    <Expander HorizontalAlignment="Stretch" IsExpanded="{Binding InitialState, Converter={StaticResource ExpandStateConverter}, Mode=OneTime}">
+                                                    <Expander HorizontalAlignment="Stretch" IsExpanded="{Binding InitialState, Converter={StaticResource ExpandStateConverter}, Mode=OneTime}" HorizontalContentAlignment="Stretch">
                                                         <Expander.Header>
                                                             <StackPanel VerticalAlignment="Center">
                                                                 <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
                                                                 <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                                                             </StackPanel>
                                                         </Expander.Header>
-                                                        <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" IsTabStop="False">
+                                                        <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" IsTabStop="False">
                                                             <primitives:FormElementItemsControl.FieldFormElementTemplate>
                                                                 <DataTemplate>
                                                                     <primitives:FieldFormElementView Element="{Binding}" />
