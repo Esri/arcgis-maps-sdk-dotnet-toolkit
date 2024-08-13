@@ -5,6 +5,21 @@
                     xmlns:primitives="using:Esri.ArcGISRuntime.Toolkit.Primitives"
                     xmlns:popup="using:Esri.ArcGISRuntime.Mapping.Popups">
 
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowOddBrush">#FF121212</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowEvenBrush">#FF040404</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush">#11CCCCCC</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush">#FFCDCDCD</SolidColorBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowOddBrush">#FFEDEDED</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowEvenBrush">#FFFBFBFB</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush">#11333333</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush">#FF323232</SolidColorBrush>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+    
     <internal:VisibilityConverter x:Key="PopupViewerVisibilityConverter"/>
     <internal:HtmlToPlainTextConverter x:Key="PopupViewerHtmlToPlainTextConverter"/>
     <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
@@ -32,12 +47,12 @@
     <Style TargetType="TextBlock" x:Key="FieldsPopupElementViewTextStyle">
         <Setter Property="Margin" Value="7" />
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="Foreground" Value="#FF323232" />
+        <Setter Property="Foreground" Value="{ThemeResource FieldsPopupElementViewForegroundBrush}" />
     </Style>
     <Style TargetType="primitives:FieldsPopupElementView" >
-        <Setter Property="RowOddBackground" Value="#FFEDEDED" />
-        <Setter Property="RowEvenBackground" Value="#FFFBFBFB" />
-        <Setter Property="DividerBrush" Value="#11333333" />
+        <Setter Property="RowOddBackground" Value="{ThemeResource FieldsPopupElementViewBackgroundRowOddBrush}" />
+        <Setter Property="RowEvenBackground" Value="{ThemeResource FieldsPopupElementViewBackgroundRowEvenBrush}" />
+        <Setter Property="DividerBrush" Value="{ThemeResource FieldsPopupElementViewDividerBrush}" />
         <Setter Property="FieldTextStyle" Value="{StaticResource FieldsPopupElementViewTextStyle}" />
         <Setter Property="Template">
             <Setter.Value>
