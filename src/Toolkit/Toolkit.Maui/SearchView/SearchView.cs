@@ -71,7 +71,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
         if (GetTemplateChild(nameof(PART_CancelButton)) is ImageButton cancelButton)
         {
-            cancelButton.Source = ImageSource.FromResource($"Esri.ArcGISRuntime.Toolkit.Maui.Assets.x{suffix}.png", Assembly.GetAssembly(typeof(SearchView)));
+            cancelButton.Source = new FontImageSource { Glyph = "\ue30a", FontFamily = "calcite-ui-icons-24", Color = Colors.Gray };
         }
 
         BindingContext = this;
