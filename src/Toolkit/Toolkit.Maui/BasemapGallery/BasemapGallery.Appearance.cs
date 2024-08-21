@@ -293,28 +293,41 @@ public partial class BasemapGallery : TemplatedView
             if (styleAfterUpdate == BasemapGalleryViewStyle.List)
             {
                 ListView.ItemTemplate = ListItemTemplate;
-                if (ListView.ItemsLayout is GridItemsLayout layout)
-                {
-                    layout.Span = 1;
-                    layout.VerticalItemSpacing = 0;
-                    layout.HorizontalItemSpacing = 0;
-                };
+                ReassignItemsLayout(1, 0, 0);
                 ListView.Margin = new Thickness(0);
             }
             else
             {
                 ListView.ItemTemplate = DefaultGridDataTemplate;
-                if (ListView.ItemsLayout is GridItemsLayout layout)
-                {
-                    layout.Span = gridSpanAfterUpdate;
-                    layout.VerticalItemSpacing = 4;
-                    layout.HorizontalItemSpacing = 4;
-                }
+                ReassignItemsLayout(gridSpanAfterUpdate, 4, 4);
                 ListView.Margin = new Thickness(4, 4, 0, 0);
             }
 
             _currentSelectedSpan = gridSpanAfterUpdate;
             _currentlyAppliedViewStyle = styleAfterUpdate;
+        }
+    }
+
+    private void ReassignItemsLayout(int span, double verticalSpacing, double horizontalSpacing)
+    {
+        if (ListView is not null)
+        {
+#if __IOS__
+            // This is a workaround for a bug in the current version of the iOS renderer for CollectionView
+            // where CollectionView throws `NullReferneceException` on changing span of GridItemsLayout.
+            ListView.ItemsLayout = new GridItemsLayout(span, ItemsLayoutOrientation.Vertical)
+            {
+                VerticalItemSpacing = verticalSpacing,
+                HorizontalItemSpacing = horizontalSpacing,
+            }; 
+#else
+            if (ListView.ItemsLayout is GridItemsLayout layout)
+            {
+                layout.Span = span;
+                layout.VerticalItemSpacing = verticalSpacing;
+                layout.HorizontalItemSpacing = horizontalSpacing;
+            }
+#endif
         }
     }
 
