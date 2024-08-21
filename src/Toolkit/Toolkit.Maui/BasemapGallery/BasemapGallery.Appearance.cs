@@ -293,13 +293,13 @@ public partial class BasemapGallery : TemplatedView
             if (styleAfterUpdate == BasemapGalleryViewStyle.List)
             {
                 ListView.ItemTemplate = ListItemTemplate;
-                ReassignItemsLayout(1, 0, 0);
+                UpdateItemsLayout(1, 0, 0);
                 ListView.Margin = new Thickness(0);
             }
             else
             {
                 ListView.ItemTemplate = DefaultGridDataTemplate;
-                ReassignItemsLayout(gridSpanAfterUpdate, 4, 4);
+                UpdateItemsLayout(gridSpanAfterUpdate, 4, 4);
                 ListView.Margin = new Thickness(4, 4, 0, 0);
             }
 
@@ -308,7 +308,7 @@ public partial class BasemapGallery : TemplatedView
         }
     }
 
-    private void ReassignItemsLayout(int span, double verticalSpacing, double horizontalSpacing)
+    private void UpdateItemsLayout(int span, double verticalSpacing, double horizontalSpacing)
     {
         if (ListView is not null)
         {
