@@ -310,24 +310,11 @@ public partial class BasemapGallery : TemplatedView
 
     private void UpdateItemsLayout(int span, double verticalSpacing, double horizontalSpacing)
     {
-        if (ListView is not null)
+        if (ListView?.ItemsLayout is GridItemsLayout layout)
         {
-#if __IOS__
-            // This is a workaround for a bug in the current version of the iOS renderer for CollectionView
-            // where CollectionView throws `NullReferneceException` on changing span of GridItemsLayout.
-            ListView.ItemsLayout = new GridItemsLayout(span, ItemsLayoutOrientation.Vertical)
-            {
-                VerticalItemSpacing = verticalSpacing,
-                HorizontalItemSpacing = horizontalSpacing,
-            }; 
-#else
-            if (ListView.ItemsLayout is GridItemsLayout layout)
-            {
-                layout.Span = span;
-                layout.VerticalItemSpacing = verticalSpacing;
-                layout.HorizontalItemSpacing = horizontalSpacing;
-            }
-#endif
+            layout.Span = span;
+            layout.VerticalItemSpacing = verticalSpacing;
+            layout.HorizontalItemSpacing = horizontalSpacing;
         }
     }
 
