@@ -45,7 +45,7 @@ public partial class BasemapGallery : TemplatedView
             Border border = new Border { Padding = 4, StrokeThickness = 1, StrokeShape = new Rectangle() };
             Grid outerScrimContainer = new Grid();
             outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(86) });
-            outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40)});
+            outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
             outerScrimContainer.RowSpacing = 4;
 
             Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
@@ -62,7 +62,7 @@ public partial class BasemapGallery : TemplatedView
             scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
             outerScrimContainer.Children.Add(scrimGrid);
             Grid.SetRowSpan(scrimGrid, 2);
-            
+
 
             thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
             nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
@@ -195,6 +195,7 @@ public partial class BasemapGallery : TemplatedView
         if (ListView != null)
         {
             ListView.BindingContext = _controller;
+            ListView.ItemsLayout = new GridItemsLayout(ItemsLayoutOrientation.Vertical);
         }
     }
 
@@ -282,12 +283,6 @@ public partial class BasemapGallery : TemplatedView
                 break;
         }
 
-        // This check may be removable once UWP collectionview supports dynamic item sizing: https://gist.github.com/hartez/7d0edd4182dbc7de65cebc6c67f72e14
-        if (DeviceInfo.Platform == DevicePlatform.WinUI)
-        {
-            styleAfterUpdate = BasemapGalleryViewStyle.List;
-        }
-
         if (styleAfterUpdate == BasemapGalleryViewStyle.Grid)
         {
             gridSpanAfterUpdate = System.Math.Max((int)(currentWidth / 128), 1);
@@ -298,18 +293,43 @@ public partial class BasemapGallery : TemplatedView
             if (styleAfterUpdate == BasemapGalleryViewStyle.List)
             {
                 ListView.ItemTemplate = ListItemTemplate;
-                ListView.ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical) { ItemSpacing = 0 };
+                UpdateItemsLayout(1, 0, 0);
                 ListView.Margin = new Thickness(0);
             }
             else
             {
-                ListView.ItemTemplate = GridItemTemplate;
-                ListView.ItemsLayout = new GridItemsLayout(gridSpanAfterUpdate, ItemsLayoutOrientation.Vertical) { HorizontalItemSpacing = 4, VerticalItemSpacing = 4 };
+                ListView.ItemTemplate = DefaultGridDataTemplate;
+                UpdateItemsLayout(gridSpanAfterUpdate, 4, 4);
                 ListView.Margin = new Thickness(4, 4, 0, 0);
             }
 
             _currentSelectedSpan = gridSpanAfterUpdate;
             _currentlyAppliedViewStyle = styleAfterUpdate;
+        }
+    }
+
+    private void UpdateItemsLayout(int span, double verticalSpacing, double horizontalSpacing)
+    {
+        if (ListView is not null)
+        {
+#if __IOS__
+            // This is a workaround for a bug in the current version of the iOS renderer for CollectionView
+            // where CollectionView throws `NullReferneceException` on changing span of GridItemsLayout.
+            // It won't be needed once we move MAUI version up to 8.0.10+.
+            // Will have to consider if toolkit can require a newer version (currently it's fixed to API).
+            ListView.ItemsLayout = new GridItemsLayout(span, ItemsLayoutOrientation.Vertical)
+            {
+                VerticalItemSpacing = verticalSpacing,
+                HorizontalItemSpacing = horizontalSpacing,
+            }; 
+#else
+            if (ListView.ItemsLayout is GridItemsLayout layout)
+            {
+                layout.Span = span;
+                layout.VerticalItemSpacing = verticalSpacing;
+                layout.HorizontalItemSpacing = horizontalSpacing;
+            }
+#endif
         }
     }
 
