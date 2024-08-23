@@ -7,6 +7,7 @@ using Esri.ArcGISRuntime.Toolkit.Maui;
 
 namespace Toolkit.SampleApp.Maui.Samples;
 
+[SampleInfo(Category = "GeoViewController", Description = "A helper class to enable easy adoption of MVVM patterns in an ArcGIS Maps SDK for .NET application.")]
 public partial class GeoViewControllerSample : ContentPage
 {
     public GeoViewControllerSample()

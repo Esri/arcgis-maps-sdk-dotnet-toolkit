@@ -41,7 +41,7 @@ The ArcGIS Maps SDK for .NET Toolkit contains controls and components to acceler
 The simplest way to get started is to add the platform-specific NuGet package(s) to your projects:
 
 - WPF: `Esri.ArcGISRuntime.Toolkit.WPF`
-- UWP: `Esri.ArcGISRuntime.Toolkit.WinUI`
+- WinUI: `Esri.ArcGISRuntime.Toolkit.WinUI`
 - UWP: `Esri.ArcGISRuntime.Toolkit.UWP`
 - MAUI: `Esri.ArcGISRuntime.Toolkit.Maui`
 
