@@ -4,7 +4,7 @@ using Esri.ArcGISRuntime.Security;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfo(Category = "UtilityNetworkTraceTool", Description = "UtilityNetworkTraceTool")]
+    [SampleInfo(Category = "UtilityNetworkTraceTool", Description = "Use named trace configurations defined in a web map to perform connected trace operations and compare results.")]
     public partial class UtilityNetworkTraceToolSample : ContentPage
     {
         private const string WebmapURL = "https://www.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310";
