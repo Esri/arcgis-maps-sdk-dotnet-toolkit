@@ -156,6 +156,9 @@ public class BookmarksView : TemplatedView
     /// </summary>
     private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
     {
+        // MAUI Bug: Custom Control ItemTemplate fails to change at runtime in MAUI iOS
+        // GitHub Issue: #24492 (https://github.com/dotnet/maui/issues/24492)
+
         BookmarksView bookmarkView = (BookmarksView)sender;
 
         if (bookmarkView._presentingView != null)
