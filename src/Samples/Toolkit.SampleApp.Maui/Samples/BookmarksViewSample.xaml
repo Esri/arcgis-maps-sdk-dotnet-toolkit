@@ -10,12 +10,10 @@
              x:Class="Toolkit.SampleApp.Maui.Samples.BookmarksViewSample">
     <ContentPage.Resources>
         <DataTemplate x:Key="ItemTemplateOne">
-            <TextCell Text="{Binding Name}" TextColor="Red" />
+            <Label Text="{Binding Name}" TextColor="Red" />
         </DataTemplate>
         <DataTemplate x:Key="ItemTemplateTwo">
-            <ViewCell>
-                <Label BackgroundColor="Red" TextColor="White" Text="{Binding Name}" />
-            </ViewCell>
+            <Label BackgroundColor="Red" TextColor="White" Text="{Binding Name}" />
         </DataTemplate>
     </ContentPage.Resources>
     <ContentPage.Content>

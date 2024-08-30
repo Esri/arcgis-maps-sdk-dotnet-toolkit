@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// </summary>
 public class BookmarksView : TemplatedView
 {
-    private ListView? _presentingView;
+    private CollectionView? _presentingView;
     private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
 
     private static readonly DataTemplate DefaultDataTemplate;
@@ -35,18 +35,17 @@ public class BookmarksView : TemplatedView
     {
         DefaultDataTemplate = new DataTemplate(() =>
         {
-            var defaultCell = new TextCell();
-            defaultCell.SetBinding(TextCell.TextProperty, nameof(Bookmark.Name));
-            return defaultCell;
+            var defaultLabel = new Label();
+            defaultLabel.SetBinding(Label.TextProperty, nameof(Bookmark.Name));
+            return defaultLabel;
         });
 
-        string template = @"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
-                                    <ListView x:Name=""PresentingView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"">
-                                        <x:Arguments>
-                                            <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
-                                        </x:Arguments>
-                                    </ListView>
-                                </ControlTemplate>";
+        string template =
+            @"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui""
+                               xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
+                               xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
+                <CollectionView x:Name=""PresentingView"" SelectionMode=""Single"" />
+             </ControlTemplate>";
         DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
     }
 
@@ -69,14 +68,14 @@ public class BookmarksView : TemplatedView
 
         if (_presentingView != null)
         {
-            _presentingView.ItemSelected -= Internal_bookmarkSelected;
+            _presentingView.SelectionChanged -= Internal_bookmarkSelected;
         }
 
-        _presentingView = GetTemplateChild("PresentingView") as ListView;
+        _presentingView = GetTemplateChild("PresentingView") as CollectionView;
 
         if (_presentingView != null)
         {
-            _presentingView.ItemSelected += Internal_bookmarkSelected;
+            _presentingView.SelectionChanged += Internal_bookmarkSelected;
             _presentingView.ItemTemplate = ItemTemplate;
             _presentingView.ItemsSource = _dataSource;
         }
@@ -156,9 +155,6 @@ public class BookmarksView : TemplatedView
     /// </summary>
     private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
     {
-        // MAUI Bug: Custom Control ItemTemplate fails to change at runtime in MAUI iOS
-        // GitHub Issue: #24492 (https://github.com/dotnet/maui/issues/24492)
-
         BookmarksView bookmarkView = (BookmarksView)sender;
 
         if (bookmarkView._presentingView != null)
@@ -195,16 +191,15 @@ public class BookmarksView : TemplatedView
     /// <summary>
     /// Handles selection on the underlying list view.
     /// </summary>
-    private void Internal_bookmarkSelected(object? sender, SelectedItemChangedEventArgs e)
+    private void Internal_bookmarkSelected(object? sender, SelectionChangedEventArgs e)
     {
-        if (e.SelectedItem is Bookmark bm)
+        if (sender is CollectionView cv)
         {
-            SelectAndNavigateToBookmark(bm);
-        }
-
-        if (e.SelectedItem != null && sender is ListView lv)
-        {
-            lv.SelectedItem = null;
+            if (cv.SelectedItem is Bookmark item)
+            {
+                SelectAndNavigateToBookmark(item);
+            }
+            cv.ClearValue(CollectionView.SelectedItemProperty);
         }
     }
 
