@@ -392,7 +392,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             get
             {
-                return _nameOverride ?? (string.IsNullOrEmpty(Basemap.Name) ? Basemap.Item?.Name ?? string.Empty : Basemap.Name);
+                return _nameOverride ?? (string.IsNullOrEmpty(Basemap.Name) ? (Basemap.Item?.Title ?? Basemap.Item?.Name ?? string.Empty) : Basemap.Name);
             }
 
             set
