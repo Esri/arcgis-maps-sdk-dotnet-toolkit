@@ -324,20 +324,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 listOfBasemaps.Add(new BasemapGalleryItem(basemap));
             }
 
-#if !WINDOWS_XAML && !NETCOREAPP
-            await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
-#else
             foreach (var item in listOfBasemaps)
             {
-                try
-                {
-                    await item.LoadAsync();
-                }
-                catch (Exception)
-                {
-                }
+                _ = item.LoadAsync();
             }
-#endif
             return new ObservableCollection<BasemapGalleryItem>(listOfBasemaps);
         }
 
