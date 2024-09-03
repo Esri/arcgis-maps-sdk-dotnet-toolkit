@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 using Esri.ArcGISRuntime.Mapping;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -24,7 +25,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// </summary>
 public class BookmarksView : TemplatedView
 {
-    private CollectionView? _presentingView;
     private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
 
     private static readonly DataTemplate DefaultDataTemplate;
@@ -55,8 +55,11 @@ public class BookmarksView : TemplatedView
     public BookmarksView()
     {
         ItemTemplate = DefaultDataTemplate;
-
         ControlTemplate = DefaultControlTemplate;
+#if ANDROID
+        // This Fixes a bug with Android adding item couple of times when new Bookmark is added to BookmarkCollection.
+        _dataSource.CollectionChanged += OnBookmarksCollectionChanged; 
+#endif
     }
 
     /// <summary>
@@ -65,20 +68,7 @@ public class BookmarksView : TemplatedView
     protected override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-
-        if (_presentingView != null)
-        {
-            _presentingView.SelectionChanged -= Internal_bookmarkSelected;
-        }
-
-        _presentingView = GetTemplateChild("PresentingView") as CollectionView;
-
-        if (_presentingView != null)
-        {
-            _presentingView.SelectionChanged += Internal_bookmarkSelected;
-            _presentingView.ItemTemplate = ItemTemplate;
-            _presentingView.ItemsSource = _dataSource;
-        }
+        UpdateListView();
     }
 
     /// <summary>
@@ -156,19 +146,7 @@ public class BookmarksView : TemplatedView
     private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
     {
         BookmarksView bookmarkView = (BookmarksView)sender;
-
-        if (bookmarkView._presentingView != null)
-        {
-            bookmarkView._presentingView.ItemTemplate = newValue as DataTemplate;
-
-#if WINDOWS
-            // This workaround addresses an issue with MAUI WinUI. 
-            // Without refreshing the items source of the BookmarksView ListView the change is not reflected in the UI.
-            var existingItems = bookmarkView._presentingView.ItemsSource;
-            bookmarkView._presentingView.ItemsSource = null;
-            bookmarkView._presentingView.ItemsSource = existingItems;
-#endif
-        }
+        bookmarkView.UpdateListView();
     }
 
     /// <summary>
@@ -200,6 +178,27 @@ public class BookmarksView : TemplatedView
                 SelectAndNavigateToBookmark(item);
             }
             cv.ClearValue(CollectionView.SelectedItemProperty);
+        }
+    }
+
+    private void UpdateListView()
+    {
+        var collection = (CollectionView)GetTemplateChild("PresentingView");
+        if (collection != null)
+        {
+            collection.SelectionChanged -= Internal_bookmarkSelected;
+            collection.SelectionChanged += Internal_bookmarkSelected;
+            collection.ItemTemplate = null;
+            collection.ItemTemplate = ItemTemplate;
+            collection.ItemsSource = _dataSource;
+        }
+    }
+
+    private void OnBookmarksCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action is NotifyCollectionChangedAction.Add)
+        {
+            UpdateListView();
         }
     }
 
