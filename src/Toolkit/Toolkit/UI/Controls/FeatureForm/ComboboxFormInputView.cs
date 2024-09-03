@@ -2,6 +2,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 #if MAUI
