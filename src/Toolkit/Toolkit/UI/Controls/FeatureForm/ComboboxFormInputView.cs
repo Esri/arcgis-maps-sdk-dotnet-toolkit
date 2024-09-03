@@ -114,7 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         _selector.SelectedIndex = 0;
                     else if (selection is null && Element?.Value is not null) // Attribute value not available in the domain
                     {
-                        var missingValue = new ComboBoxPlaceHolderValue() { Name = Element?.Value?.ToString() };
+                        var missingValue = new ComboBoxPlaceHolderValue() { Name = Element.Value.ToString() };
                         var items = (IList<object>)_selector.ItemsSource;
                         items.Add(missingValue);
                         _selector.SelectedItem = missingValue;
