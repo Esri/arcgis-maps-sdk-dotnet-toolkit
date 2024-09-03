@@ -26,6 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 public class BookmarksView : TemplatedView
 {
     private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
+    private const string _presentingViewName = "PresentingView";
 
     private static readonly DataTemplate DefaultDataTemplate;
     private static readonly ControlTemplate DefaultControlTemplate;
@@ -41,10 +42,10 @@ public class BookmarksView : TemplatedView
         });
 
         string template =
-            @"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui""
+            $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui""
                                xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
                                xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
-                <CollectionView x:Name=""PresentingView"" SelectionMode=""Single"" />
+                <CollectionView x:Name=""{_presentingViewName}"" SelectionMode=""Single"" />
              </ControlTemplate>";
         DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
     }
@@ -183,7 +184,7 @@ public class BookmarksView : TemplatedView
 
     private void UpdateListView()
     {
-        var collection = (CollectionView)GetTemplateChild("PresentingView");
+        var collection = (CollectionView)GetTemplateChild(_presentingViewName);
         if (collection != null)
         {
             collection.SelectionChanged -= Internal_bookmarkSelected;
