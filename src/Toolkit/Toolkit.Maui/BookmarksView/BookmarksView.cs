@@ -69,7 +69,7 @@ public class BookmarksView : TemplatedView
     protected override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        UpdateListView();
+        UpdatePresentingView();
     }
 
     /// <summary>
@@ -147,7 +147,7 @@ public class BookmarksView : TemplatedView
     private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
     {
         BookmarksView bookmarkView = (BookmarksView)sender;
-        bookmarkView.UpdateListView();
+        bookmarkView.UpdatePresentingView();
     }
 
     /// <summary>
@@ -182,7 +182,7 @@ public class BookmarksView : TemplatedView
         }
     }
 
-    private void UpdateListView()
+    private void UpdatePresentingView()
     {
         var collection = (CollectionView)GetTemplateChild(_presentingViewName);
         if (collection != null)
@@ -199,7 +199,7 @@ public class BookmarksView : TemplatedView
     {
         if (e.Action is NotifyCollectionChangedAction.Add)
         {
-            UpdateListView();
+            UpdatePresentingView();
         }
     }
 
