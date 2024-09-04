@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// </summary>
 public class BookmarksView : TemplatedView
 {
-    private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
+    private readonly BookmarksViewDataSource _dataSource = new();
     private const string _presentingViewName = "PresentingView";
 
     private static readonly DataTemplate DefaultDataTemplate;
@@ -33,18 +33,17 @@ public class BookmarksView : TemplatedView
     [DynamicDependency(nameof(Bookmark.Name), "Esri.ArcGISRuntime.Mapping.Bookmark", "Esri.ArcGISRuntime")]
     static BookmarksView()
     {
-        DefaultDataTemplate = new DataTemplate(() =>
-        {
-            var defaultLabel = new Label();
-            defaultLabel.SetBinding(Label.TextProperty, nameof(Bookmark.Name));
-            return defaultLabel;
-        });
+        string dataTemplate =
+            @"<DataTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"">
+                <Label Text=""{Binding Name}"" />
+              </DataTemplate>";
+        DefaultDataTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new DataTemplate(), dataTemplate);
 
         string template =
             $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui""
-                               xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
-                               xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
-                <CollectionView x:Name=""{_presentingViewName}"" SelectionMode=""Single"" />
+                                xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
+                                xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
+                <CollectionView x:Name=""{_presentingViewName}"" SelectionMode=""Single"" ItemTemplate=""{{TemplateBinding ItemTemplate}}"" />
              </ControlTemplate>";
         DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
     }
@@ -70,8 +69,8 @@ public class BookmarksView : TemplatedView
         {
             view.SelectionChanged -= Internal_bookmarkSelected;
             view.SelectionChanged += Internal_bookmarkSelected;
+            view.ItemsSource = _dataSource;
         }
-        UpdatePresentingView();
     }
 
     /// <summary>
@@ -123,7 +122,7 @@ public class BookmarksView : TemplatedView
     /// Identifies the <see cref="ItemTemplate" /> bindable property.
     /// </summary>
     public static readonly BindableProperty ItemTemplateProperty =
-        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(BookmarksView), DefaultDataTemplate, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
+        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(BookmarksView), DefaultDataTemplate, BindingMode.OneWay, null);
 
     /// <summary>
     /// Handles property changes for the <see cref="BookmarksOverride" /> bindable property.
@@ -141,15 +140,6 @@ public class BookmarksView : TemplatedView
         BookmarksView bookmarkView = (BookmarksView)sender;
 
         bookmarkView._dataSource.SetGeoView(newValue as GeoView);
-    }
-
-    /// <summary>
-    /// Handles property changes for the <see cref="ItemTemplate" /> bindable property.
-    /// </summary>
-    private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
-    {
-        BookmarksView bookmarksView = (BookmarksView)sender;
-        bookmarksView.UpdatePresentingView();
     }
 
     /// <summary>
@@ -181,16 +171,6 @@ public class BookmarksView : TemplatedView
                 SelectAndNavigateToBookmark(item);
             }
             cv.ClearValue(CollectionView.SelectedItemProperty);
-        }
-    }
-
-    private void UpdatePresentingView()
-    {
-        var collectionView = (CollectionView)GetTemplateChild(_presentingViewName);
-        if (collectionView is CollectionView view)
-        {
-            view.ItemTemplate = ItemTemplate;
-            view.ItemsSource = _dataSource;
         }
     }
 
