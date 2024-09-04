@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeoView? _geoView;
         private WeakEventListener<BookmarksViewDataSource, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _geoViewBookmarksListener;
         private WeakEventListener<BookmarksViewDataSource, ILoadable, object?, EventArgs>? _geoViewLoadListener;
-        private new WeakEventListener<BookmarksViewDataSource, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _overrideListListener;
+        private WeakEventListener<BookmarksViewDataSource, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _overrideListListener;
         private IList<Bookmark>? _overrideList;
 
         private IList<Bookmark> ActiveBookmarkList
