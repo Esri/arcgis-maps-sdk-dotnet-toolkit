@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 using Esri.ArcGISRuntime.Mapping;
-using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -57,10 +56,6 @@ public class BookmarksView : TemplatedView
     {
         ItemTemplate = DefaultDataTemplate;
         ControlTemplate = DefaultControlTemplate;
-#if ANDROID
-        // This Fixes a bug with Android adding item couple of times when new Bookmark is added to BookmarkCollection.
-        _dataSource.CollectionChanged += OnBookmarksCollectionChanged; 
-#endif
     }
 
     /// <summary>
@@ -69,6 +64,13 @@ public class BookmarksView : TemplatedView
     protected override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
+
+        var collectionView = (CollectionView)GetTemplateChild(_presentingViewName);
+        if (collectionView is CollectionView view)
+        {
+            view.SelectionChanged -= Internal_bookmarkSelected;
+            view.SelectionChanged += Internal_bookmarkSelected;
+        }
         UpdatePresentingView();
     }
 
@@ -146,8 +148,8 @@ public class BookmarksView : TemplatedView
     /// </summary>
     private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
     {
-        BookmarksView bookmarkView = (BookmarksView)sender;
-        bookmarkView.UpdatePresentingView();
+        BookmarksView bookmarksView = (BookmarksView)sender;
+        bookmarksView.UpdatePresentingView();
     }
 
     /// <summary>
@@ -184,22 +186,11 @@ public class BookmarksView : TemplatedView
 
     private void UpdatePresentingView()
     {
-        var collection = (CollectionView)GetTemplateChild(_presentingViewName);
-        if (collection != null)
+        var collectionView = (CollectionView)GetTemplateChild(_presentingViewName);
+        if (collectionView is CollectionView view)
         {
-            collection.SelectionChanged -= Internal_bookmarkSelected;
-            collection.SelectionChanged += Internal_bookmarkSelected;
-            collection.ItemTemplate = null;
-            collection.ItemTemplate = ItemTemplate;
-            collection.ItemsSource = _dataSource;
-        }
-    }
-
-    private void OnBookmarksCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action is NotifyCollectionChangedAction.Add)
-        {
-            UpdatePresentingView();
+            view.ItemTemplate = ItemTemplate;
+            view.ItemsSource = _dataSource;
         }
     }
 
