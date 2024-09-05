@@ -135,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private class ComboBoxPlaceHolderValue : ComboBoxNullValue
         {
-		}
+        }
     }
 }
 #endif
