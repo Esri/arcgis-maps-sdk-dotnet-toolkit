@@ -26,6 +26,7 @@ public class BookmarksView : TemplatedView
 {
     private readonly BookmarksViewDataSource _dataSource = new();
     private const string _presentingViewName = "PresentingView";
+    CollectionView? _presentingView;
 
     private static readonly DataTemplate DefaultDataTemplate;
     private static readonly ControlTemplate DefaultControlTemplate;
@@ -64,12 +65,16 @@ public class BookmarksView : TemplatedView
     {
         base.OnApplyTemplate();
 
-        var collectionView = (CollectionView)GetTemplateChild(_presentingViewName);
-        if (collectionView is CollectionView view)
+        if (_presentingView is not null)
         {
-            view.SelectionChanged -= Internal_bookmarkSelected;
-            view.SelectionChanged += Internal_bookmarkSelected;
-            view.ItemsSource = _dataSource;
+            _presentingView.SelectionChanged -= Internal_bookmarkSelected;
+        }
+
+        if (GetTemplateChild(_presentingViewName) is CollectionView view)
+        {
+            _presentingView = view;
+            _presentingView.SelectionChanged += Internal_bookmarkSelected;
+            _presentingView.ItemsSource = _dataSource;
         }
     }
 
