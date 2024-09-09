@@ -2,6 +2,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 #if MAUI
@@ -85,12 +86,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if !MAUI
                     _selector.DisplayMemberPath = nameof(CodedValue.Name);
 #endif
-                    List<object> items = new List<object>();
+                    var items = new ObservableCollection<object>();
                     if (input.NoValueOption == FormInputNoValueOption.Show)
                     {
                         items.Add(new ComboBoxNullValue() { Name = input.NoValueLabel });
                     }
-                    items.AddRange(input.CodedValues);
+                    foreach (var value in input.CodedValues)
+                        items.Add(value);
                     _selector.ItemsSource = items;
                     UpdateSelection();
                 }
@@ -111,6 +113,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     var selection = input.CodedValues.Where(a => object.Equals(a.Code, Element?.Value)).FirstOrDefault();
                     if (selection is null && input.NoValueOption == FormInputNoValueOption.Show)
                         _selector.SelectedIndex = 0;
+                    else if (selection is null && Element?.Value is not null) // Attribute value not available in the domain
+                    {
+                        var missingValue = new ComboBoxPlaceHolderValue() { Name = Element.Value.ToString() };
+                        var items = (IList<object>)_selector.ItemsSource;
+                        items.Add(missingValue);
+                        _selector.SelectedItem = missingValue;
+                    }
                     else
                         _selector.SelectedItem = selection;
                 }
@@ -122,6 +131,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             public object? Code { get; set; }
             public string? Name { get; set; }
             public override string ToString() => Name!;
+        }
+
+        private class ComboBoxPlaceHolderValue : ComboBoxNullValue
+        {
         }
     }
 }
