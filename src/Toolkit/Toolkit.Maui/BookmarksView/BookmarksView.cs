@@ -24,8 +24,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// </summary>
 public class BookmarksView : TemplatedView
 {
-    private ListView? _presentingView;
-    private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
+    private readonly BookmarksViewDataSource _dataSource = new();
+    private const string _presentingViewName = "PresentingView";
+    private CollectionView? _presentingView;
 
     private static readonly DataTemplate DefaultDataTemplate;
     private static readonly ControlTemplate DefaultControlTemplate;
@@ -33,20 +34,18 @@ public class BookmarksView : TemplatedView
     [DynamicDependency(nameof(Bookmark.Name), "Esri.ArcGISRuntime.Mapping.Bookmark", "Esri.ArcGISRuntime")]
     static BookmarksView()
     {
-        DefaultDataTemplate = new DataTemplate(() =>
-        {
-            var defaultCell = new TextCell();
-            defaultCell.SetBinding(TextCell.TextProperty, nameof(Bookmark.Name));
-            return defaultCell;
-        });
+        string dataTemplate =
+            @"<DataTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"">
+                <Label Text=""{Binding Name}"" />
+              </DataTemplate>";
+        DefaultDataTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new DataTemplate(), dataTemplate);
 
-        string template = @"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
-                                    <ListView x:Name=""PresentingView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"">
-                                        <x:Arguments>
-                                            <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
-                                        </x:Arguments>
-                                    </ListView>
-                                </ControlTemplate>";
+        string template =
+            $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui""
+                                xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
+                                xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
+                <CollectionView x:Name=""{_presentingViewName}"" SelectionMode=""Single"" ItemTemplate=""{{TemplateBinding ItemTemplate}}"" />
+             </ControlTemplate>";
         DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
     }
 
@@ -56,7 +55,6 @@ public class BookmarksView : TemplatedView
     public BookmarksView()
     {
         ItemTemplate = DefaultDataTemplate;
-
         ControlTemplate = DefaultControlTemplate;
     }
 
@@ -67,17 +65,14 @@ public class BookmarksView : TemplatedView
     {
         base.OnApplyTemplate();
 
-        if (_presentingView != null)
+        if (_presentingView is not null)
         {
-            _presentingView.ItemSelected -= Internal_bookmarkSelected;
+            _presentingView.SelectionChanged -= Internal_bookmarkSelected;
         }
-
-        _presentingView = GetTemplateChild("PresentingView") as ListView;
-
-        if (_presentingView != null)
+        _presentingView = GetTemplateChild(_presentingViewName) as CollectionView;
+        if (_presentingView is not null)
         {
-            _presentingView.ItemSelected += Internal_bookmarkSelected;
-            _presentingView.ItemTemplate = ItemTemplate;
+            _presentingView.SelectionChanged += Internal_bookmarkSelected;
             _presentingView.ItemsSource = _dataSource;
         }
     }
@@ -131,7 +126,7 @@ public class BookmarksView : TemplatedView
     /// Identifies the <see cref="ItemTemplate" /> bindable property.
     /// </summary>
     public static readonly BindableProperty ItemTemplateProperty =
-        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(BookmarksView), DefaultDataTemplate, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
+        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(BookmarksView), DefaultDataTemplate, BindingMode.OneWay, null);
 
     /// <summary>
     /// Handles property changes for the <see cref="BookmarksOverride" /> bindable property.
@@ -149,27 +144,6 @@ public class BookmarksView : TemplatedView
         BookmarksView bookmarkView = (BookmarksView)sender;
 
         bookmarkView._dataSource.SetGeoView(newValue as GeoView);
-    }
-
-    /// <summary>
-    /// Handles property changes for the <see cref="ItemTemplate" /> bindable property.
-    /// </summary>
-    private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
-    {
-        BookmarksView bookmarkView = (BookmarksView)sender;
-
-        if (bookmarkView._presentingView != null)
-        {
-            bookmarkView._presentingView.ItemTemplate = newValue as DataTemplate;
-
-#if WINDOWS
-            // This workaround addresses an issue with MAUI WinUI. 
-            // Without refreshing the items source of the BookmarksView ListView the change is not reflected in the UI.
-            var existingItems = bookmarkView._presentingView.ItemsSource;
-            bookmarkView._presentingView.ItemsSource = null;
-            bookmarkView._presentingView.ItemsSource = existingItems;
-#endif
-        }
     }
 
     /// <summary>
@@ -192,16 +166,15 @@ public class BookmarksView : TemplatedView
     /// <summary>
     /// Handles selection on the underlying list view.
     /// </summary>
-    private void Internal_bookmarkSelected(object? sender, SelectedItemChangedEventArgs e)
+    private void Internal_bookmarkSelected(object? sender, SelectionChangedEventArgs e)
     {
-        if (e.SelectedItem is Bookmark bm)
+        if (sender is CollectionView cv)
         {
-            SelectAndNavigateToBookmark(bm);
-        }
-
-        if (e.SelectedItem != null && sender is ListView lv)
-        {
-            lv.SelectedItem = null;
+            if (cv.SelectedItem is Bookmark item)
+            {
+                SelectAndNavigateToBookmark(item);
+            }
+            cv.ClearValue(CollectionView.SelectedItemProperty);
         }
     }
 
