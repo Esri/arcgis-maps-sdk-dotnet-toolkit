@@ -277,6 +277,10 @@
     <value>Zoom To</value>
     <comment>Text and Tooltip on button for zooming to a selected facility or site</comment>
   </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>View</value>
+    <comment>The text displayed for a hyperlink, that when clicked will view that webpage/link</comment>
+  </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
     <comment>Abbreviation of "Feet" displayed in the scale bar</comment>
