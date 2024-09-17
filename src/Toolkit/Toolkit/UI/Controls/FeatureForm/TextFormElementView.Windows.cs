@@ -46,6 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             base.OnApplyTemplate();
             _readonlyLabel = GetTemplateChild("ReadOnlyText") as TextBlock;
             UpdateText();
+            UpdateVisibility();
         }
     }
 }

@@ -20,8 +20,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextFormElement.Text), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
-            Label readonlyText = new Label() { IsVisible = false, LineBreakMode = LineBreakMode.WordWrap };
-            readonlyText.SetBinding(Label.TextProperty, new Binding("Element.Text",source:RelativeBindingSource.TemplatedParent));
+            Label readonlyText = new Label() { LineBreakMode = LineBreakMode.WordWrap };
+            readonlyText.SetBinding(View.IsVisibleProperty, new Binding("Element.IsVisible", source: RelativeBindingSource.Self));
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(readonlyText, nameScope);
             nameScope.RegisterName("ReadOnlyText", readonlyText);
@@ -34,7 +34,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             base.OnApplyTemplate();
             _readonlyLabel = GetTemplateChild("ReadOnlyText") as Label;
             UpdateText();
+            UpdateVisibility();
         }
+
+        
     }
 }
 #endif

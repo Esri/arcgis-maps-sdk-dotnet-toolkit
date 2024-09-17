@@ -7,18 +7,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/FeatureForm/FeatureForm.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    <Style TargetType="controls:TextFormElementView">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="controls:TextFormElementView">
-                    <Grid DataContext="{TemplateBinding Element}">
-                        <TextBlock x:Name="ReadOnlyText" /> <!-- TODO: Markdown support https://learn.microsoft.com/en-us/windows/communitytoolkit/controls/markdowntextblock -->
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
     
     <Style TargetType="controls:FeatureFormView">
     <Setter Property="Template">

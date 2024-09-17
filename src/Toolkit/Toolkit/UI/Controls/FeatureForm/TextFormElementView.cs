@@ -72,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             BindableProperty.Create(nameof(Element), typeof(TextFormElement), typeof(TextFormElementView), null, propertyChanged: (s, oldValue, newValue) => ((TextFormElementView)s).OnElementPropertyChanged(oldValue as TextFormElement, newValue as TextFormElement));
 #else
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(TextFormInputView), new PropertyMetadata(null, (s,e) => ((TextFormElementView)s).OnElementPropertyChanged(e.OldValue as TextFormElement, e.NewValue as TextFormElement)));
+            DependencyProperty.Register(nameof(Element), typeof(TextFormElement), typeof(TextFormElementView), new PropertyMetadata(null, (s,e) => ((TextFormElementView)s).OnElementPropertyChanged(e.OldValue as TextFormElement, e.NewValue as TextFormElement)));
 #endif
 
         private void OnElementPropertyChanged(TextFormElement? oldValue, TextFormElement? newValue)
@@ -92,6 +92,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateText();
+            UpdateVisibility();
+        }
+
+        private void UpdateVisibility()
+        {
+            if (_readonlyLabel != null)
+            {
+#if MAUI
+                _readonlyLabel.IsVisible = Element?.IsVisible == true;
+#else
+                _readonlyLabel.Visibility = Element?.IsVisible == true ? Visibility.Visible : Visibility.Collapsed;
+#endif
+            }
         }
 
         private void UpdateText()
@@ -114,6 +127,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         .Replace("_", "")
                         .Replace("`", "")
                         .Replace("~", "")
+                        .Replace("<br>", "\n")
+                        .Replace("<br/>", "\n")
                         .Replace("\n", Environment.NewLine);
         }
 
@@ -126,6 +141,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             else if (e.PropertyName == nameof(TextFormElement.Format))
             {
                 this.Dispatch(UpdateText);
+            }
+            else if(e.PropertyName == nameof(TextFormElement.IsVisible))
+            {
+                this.Dispatch(UpdateVisibility);
             }
         }
     }
