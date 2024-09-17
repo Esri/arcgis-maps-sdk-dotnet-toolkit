@@ -313,5 +313,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
             DependencyProperty.Register(nameof(BarcodeScannerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 #endif
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="TextFormElementTemplate"/> element.
+        /// </summary>
+        public DataTemplate? TextFormElementTemplate
+        {
+            get { return (DataTemplate)GetValue(TextFormElementTemplateProperty); }
+            set { SetValue(TextFormElementTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="TextFormElementTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TextFormElementTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(TextFormElementTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(TextFormElementTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
+        
     }
 }

@@ -36,6 +36,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     presenter.ContentTemplate = FieldFormElementTemplate;
                 }
+                if (item is TextFormElement)
+                {
+                    presenter.ContentTemplate = TextFormElementTemplate;
+                }
                 else if (item is GroupFormElement)
                 {
                     presenter.ContentTemplate = GroupFormElementTemplate;
@@ -59,6 +63,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty FieldFormElementTemplateProperty =
             DependencyProperty.Register(nameof(FieldFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Template used for rendering a <see cref="TextFormElement"/>.
+        /// </summary>
+        /// <seealso cref="TextFormElement"/>
+        /// <seealso cref="TextFormElementView"/>
+        public DataTemplate TextFormElementTemplate
+        {
+            get { return (DataTemplate)GetValue(TextFormElementTemplateProperty); }
+            set { SetValue(TextFormElementTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="TextFormElementTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TextFormElementTemplateProperty =
+            DependencyProperty.Register(nameof(TextFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
+
 
         /// <summary>
         /// Template used for rendering a <see cref="GroupFormElement"/>.
