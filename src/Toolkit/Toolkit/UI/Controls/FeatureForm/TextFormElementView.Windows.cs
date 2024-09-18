@@ -69,27 +69,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 var text = Element?.Text ?? string.Empty;
 #if WPF
-                var doc = new System.Windows.Documents.FlowDocument { FontSize = 14d }; // match the default "content" font size on AGOL
                 if (Element?.Format == FormTextFormat.Markdown)
                 {
-                    try
-                    {
-                        var pipeline = new Markdig.MarkdownPipelineBuilder().Build();
-                        var result = Markdig.Markdown.ToHtml(text ?? string.Empty, pipeline);
-
-                        var htmlRoot = HtmlUtility.BuildDocumentTree(result);
-                        var blocks = TextPopupElementView.VisitAndAddBlocks(htmlRoot.Children).ToList();
-                        doc.Blocks.AddRange(blocks);
-                        _textContainer.Document = doc;
-                        return;
-                    }
-                    catch
-                    {
-                        text = RemoveMarkdown(text); // Fallback
-                    }
+                    var pipeline = new Markdig.MarkdownPipelineBuilder().Build();
+                    var result = Markdig.Markdown.ToHtml(text ?? string.Empty, pipeline);
+                    _textContainer.Document = HtmlToView.ToFlowDocument(result, (s,e) => FeatureFormView.GetFeatureFormViewParent(s as DependencyObject)?.OnHyperlinkClicked(e.Uri));
                 }
-                doc.Blocks.Add(new System.Windows.Documents.Paragraph(new System.Windows.Documents.Run(text)));
-                _textContainer.Document = doc;
+                else 
+                {
+                    var doc = new System.Windows.Documents.FlowDocument { FontSize = 14d }; // match the default "content" font size on AGOL
+                    doc.Blocks.Add(new System.Windows.Documents.Paragraph(new System.Windows.Documents.Run(text)));
+                    _textContainer.Document = doc;
+                }
 #elif WINDOWS_XAML
                 if (Element?.Format == FormTextFormat.Markdown)
                 {
@@ -98,11 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         var pipeline = new Markdig.MarkdownPipelineBuilder().Build();
                         var result = Markdig.Markdown.ToHtml(text ?? string.Empty, pipeline);
-                        var htmlRoot = HtmlUtility.BuildDocumentTree(result);
-                        var blocks = TextPopupElementView.VisitChildren(htmlRoot);
-                        foreach (var block in blocks)
-                            container.Children.Add(block);
-                        _textContainer.Content = container;
+                        _textContainer.Content = HtmlToView.ToUIElement(result, (s, e) => FeatureFormView.GetFeatureFormViewParent(s as DependencyObject)?.OnHyperlinkClicked(s.NavigateUri));
                         return;
                     }
                     catch

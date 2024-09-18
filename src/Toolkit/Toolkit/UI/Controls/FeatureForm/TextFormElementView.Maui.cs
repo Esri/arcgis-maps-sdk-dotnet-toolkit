@@ -43,11 +43,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     var pipeline = new Markdig.MarkdownPipelineBuilder().Build();
                     var result = Markdig.Markdown.ToHtml(text ?? string.Empty, pipeline);
-
-                    var htmlRoot = HtmlUtility.BuildDocumentTree(result);
-                    var blocks = TextPopupElementView.VisitChildren(htmlRoot);
-                    foreach (var block in blocks)
+                    foreach (var block in HtmlToView.ToView(result, (s, e) => FeatureFormView.GetFeatureFormViewParent(this)?.OnHyperlinkClicked(e)))
                         container.Children.Add(block);
+
                     return;
                 }
                 catch
