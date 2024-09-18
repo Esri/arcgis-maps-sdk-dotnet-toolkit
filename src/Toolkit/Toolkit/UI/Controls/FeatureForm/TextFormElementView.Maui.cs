@@ -36,8 +36,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             UpdateText();
             UpdateVisibility();
         }
-
-        
     }
 }
 #endif
