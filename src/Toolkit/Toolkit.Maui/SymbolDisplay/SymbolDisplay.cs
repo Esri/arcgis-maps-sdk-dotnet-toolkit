@@ -163,6 +163,10 @@ public partial class SymbolDisplay : TemplatedView
                 image.Source = await imageData.ToImageSourceAsync();
                 SourceUpdated?.Invoke(this, EventArgs.Empty);
 #pragma warning restore ESRI1800
+#if ANDROID
+                this.MinimumWidthRequest = imageData.Width / scale;
+                this.MinimumHeightRequest = imageData.Height / scale;
+#endif
             }
             catch
             {
