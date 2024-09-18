@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private static IEnumerable<Block> VisitAndAddBlocks(IEnumerable<MarkupNode> nodes)
+        internal static IEnumerable<Block> VisitAndAddBlocks(IEnumerable<MarkupNode> nodes)
         {
             Paragraph? inlineHolder = null;
             foreach (var node in nodes)

@@ -41,6 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public partial class TextFormElementView
     {
+        private const string TextAreaName = "TextArea";
         private WeakEventListener<TextFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
 
         /// <summary>
@@ -97,26 +98,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateVisibility()
         {
-            if (_readonlyLabel != null)
+            if (_textContainer != null)
             {
 #if MAUI
-                _readonlyLabel.IsVisible = Element?.IsVisible == true;
+                _textContainer.IsVisible = Element?.IsVisible == true;
 #else
-                _readonlyLabel.Visibility = Element?.IsVisible == true ? Visibility.Visible : Visibility.Collapsed;
+                _textContainer.Visibility = Element?.IsVisible == true ? Visibility.Visible : Visibility.Collapsed;
 #endif
-            }
-        }
-
-        private void UpdateText()
-        {
-            if (_readonlyLabel is not null)
-            {
-                string text = "";
-                if (Element is not null)
-                {
-                    text = Element.Format == FormTextFormat.PlainText ? Element.Text : RemoveMarkdown(Element.Text);
-                }
-                _readonlyLabel.Text = text;
             }
         }
 

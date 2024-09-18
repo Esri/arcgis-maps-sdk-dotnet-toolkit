@@ -4,13 +4,15 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using Markdig;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
     public partial class TextFormElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        private Label? _readonlyLabel;
+        private View? _textContainer;
 
         static TextFormElementView()
         {
@@ -20,19 +22,51 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextFormElement.Text), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
-            Label readonlyText = new Label() { LineBreakMode = LineBreakMode.WordWrap };
-            readonlyText.SetBinding(View.IsVisibleProperty, new Binding("Element.IsVisible", source: RelativeBindingSource.Self));
+            var textArea = new StackLayout();
             INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(readonlyText, nameScope);
-            nameScope.RegisterName("ReadOnlyText", readonlyText);
-            return readonlyText;
+            NameScope.SetNameScope(textArea, nameScope);
+            nameScope.RegisterName(TextAreaName, textArea);
+            return textArea;
+        }
+
+        private void UpdateText()
+        {
+            var container = _textContainer as StackLayout;
+            if (container is null)
+                return;
+            var text = Element?.Text ?? string.Empty;
+
+            container.Children.Clear();
+            if (Element?.Format == FormTextFormat.Markdown)
+            {
+                try
+                {
+                    var pipeline = new Markdig.MarkdownPipelineBuilder().Build();
+                    var result = Markdig.Markdown.ToHtml(text ?? string.Empty, pipeline);
+
+                    var htmlRoot = HtmlUtility.BuildDocumentTree(result);
+                    var blocks = TextPopupElementView.VisitChildren(htmlRoot);
+                    foreach (var block in blocks)
+                        container.Children.Add(block);
+                    return;
+                }
+                catch
+                {
+                    text = RemoveMarkdown(text); // Fallback
+                }
+            }
+            var label = new Label() { Text = text };
+            if (text != null)
+                text = StringExtensions.ToPlainText(text);
+            label.Text = text;
+            container.Children.Add(label);
         }
 
         /// <inheritdoc />
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            _readonlyLabel = GetTemplateChild("ReadOnlyText") as Label;
+            _textContainer = GetTemplateChild(TextAreaName) as StackLayout;
             UpdateText();
             UpdateVisibility();
         }

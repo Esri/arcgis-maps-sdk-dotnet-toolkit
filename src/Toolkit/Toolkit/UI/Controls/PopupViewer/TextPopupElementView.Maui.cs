@@ -83,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private static IEnumerable<View> VisitChildren(MarkupNode parent)
+        internal static IEnumerable<View> VisitChildren(MarkupNode parent)
         {
             // Create views for all the children of a given node.
             // Nodes with blocks are converted individually, but consecutive inline-only nodes are grouped into labels.

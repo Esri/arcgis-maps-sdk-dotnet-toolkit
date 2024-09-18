@@ -30,6 +30,7 @@
 
   <ItemGroup>
      <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'" />
+      <PackageReference Include="Markdig" Version="0.31.0" />
   </ItemGroup>
 
   <ItemGroup>

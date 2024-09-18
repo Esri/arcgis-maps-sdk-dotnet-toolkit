@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="TextPopupElement"/>.
     /// </summary>
-    [TemplatePart(Name = TextAreaName, Type = typeof(RichTextBlock))]
+    [TemplatePart(Name = TextAreaName, Type = typeof(ContentControl))]
     public partial class TextPopupElementView : Control
     {
         private static Thickness ParagraphMargin = new(0, 0, 0, 16);
@@ -69,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private static IEnumerable<UIElement> VisitChildren(MarkupNode parent)
+        internal static IEnumerable<UIElement> VisitChildren(MarkupNode parent)
         {
             // Create views for all the children of a given node.
             // Nodes with blocks are converted individually, but consecutive inline-only nodes are grouped into textblockss.
