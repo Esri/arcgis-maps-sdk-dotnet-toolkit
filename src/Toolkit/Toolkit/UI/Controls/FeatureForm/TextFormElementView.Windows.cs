@@ -89,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         var pipeline = new Markdig.MarkdownPipelineBuilder().Build();
                         var result = Markdig.Markdown.ToHtml(text ?? string.Empty, pipeline);
-                        _textContainer.Content = HtmlToView.ToUIElement(result, (s, e) => FeatureFormView.GetFeatureFormViewParent(s as DependencyObject)?.OnHyperlinkClicked(s.NavigateUri));
+                        _textContainer.Content = HtmlToView.ToUIElement(result, (s, e) => FeatureFormView.GetFeatureFormViewParent(s as DependencyObject)?.OnHyperlinkClicked(e));
                         return;
                     }
                     catch

@@ -49,7 +49,7 @@ internal static class HtmlToView
     }
 
 
-    internal static IEnumerable<View> VisitChildren(MarkupNode parent, EventHandler<Uri> urlClickHandler)
+    internal static IEnumerable<View> VisitChildren(MarkupNode parent, EventHandler<Uri>? urlClickHandler)
     {
         // Create views for all the children of a given node.
         // Nodes with blocks are converted individually, but consecutive inline-only nodes are grouped into labels.
@@ -82,7 +82,7 @@ internal static class HtmlToView
         }
     }
 
-    private static View CreateBlock(MarkupNode node, EventHandler<Uri> urlClickHandler)
+    private static View CreateBlock(MarkupNode node, EventHandler<Uri>? urlClickHandler)
     {
         // Create a view for a single block node.
         switch (node.Type)
@@ -184,7 +184,7 @@ internal static class HtmlToView
         }
     }
 
-    private static Label CreateFormattedText(IEnumerable<MarkupNode> nodes, EventHandler<Uri> urlClickHandler)
+    private static Label CreateFormattedText(IEnumerable<MarkupNode> nodes, EventHandler<Uri>? urlClickHandler)
     {
         // Flattens given tree of inline nodes into a single label.
         var str = new FormattedString();
@@ -198,7 +198,7 @@ internal static class HtmlToView
         return new Label { FormattedText = str, LineBreakMode = LineBreakMode.WordWrap };
     }
 
-    private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri> urlClickHandler)
+    private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri>? urlClickHandler)
     {
         // Converts a single inline node into a sequence of spans.
         // The whole tree is expected to only contain inline nodes. Other nodes are handled by VisitBlock.
@@ -267,7 +267,7 @@ internal static class HtmlToView
         }
     }
 
-    private static Grid ConvertTableToGrid(MarkupNode table, EventHandler<Uri> urlClickHandler)
+    private static Grid ConvertTableToGrid(MarkupNode table, EventHandler<Uri>? urlClickHandler)
     {
         // Determines the dimensions of a grid necessary to hold a given table.
         // Utilizes a dynamically-sized 2D bitmap (`gridMap`) to mark occupied cells while iterating over the table.
@@ -374,7 +374,7 @@ internal static class HtmlToView
             el.FontSize = 16d * node.FontSize.Value; // based on AGOL's default font size
 
         if (node.IsMonospace.HasValue && node.IsMonospace.Value)
-            el.FontFamily = new FontFamily("Courier New");
+            el.FontFamily = "Courier New";
     }
 
     private static void ApplyStyle(Label el, MarkupNode node)

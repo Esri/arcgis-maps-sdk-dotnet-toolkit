@@ -33,7 +33,7 @@ internal static class HtmlToView
 {
     private static Thickness ParagraphMargin = new(0, 0, 0, 16);
 
-    internal static UIElement ToUIElement(string html, TypedEventHandler<Hyperlink, HyperlinkClickEventArgs>? urlClickHandler)
+    internal static UIElement ToUIElement(string html, EventHandler<Uri>? urlClickHandler)
     {
         var container = new StackPanel();
         try
@@ -51,7 +51,7 @@ internal static class HtmlToView
         }
     }
 
-    internal static IEnumerable<UIElement> VisitChildren(MarkupNode parent, TypedEventHandler<Hyperlink, HyperlinkClickEventArgs>? urlClickHandler)
+    internal static IEnumerable<UIElement> VisitChildren(MarkupNode parent, EventHandler<Uri>? urlClickHandler)
     {
         // Create views for all the children of a given node.
         // Nodes with blocks are converted individually, but consecutive inline-only nodes are grouped into textblockss.
@@ -84,7 +84,7 @@ internal static class HtmlToView
         }
     }
 
-    private static FrameworkElement CreateBlock(MarkupNode node, TypedEventHandler<Hyperlink, HyperlinkClickEventArgs>? urlClickHandler)
+    private static FrameworkElement CreateBlock(MarkupNode node, EventHandler<Uri>? urlClickHandler)
     {
         // Create a view for a single block node.
         switch (node.Type)
@@ -191,7 +191,7 @@ internal static class HtmlToView
         }
     }
 
-    private static TextBlock CreateFormattedText(IEnumerable<MarkupNode> nodes, TypedEventHandler<Hyperlink, HyperlinkClickEventArgs>? urlClickHandler)
+    private static TextBlock CreateFormattedText(IEnumerable<MarkupNode> nodes, EventHandler<Uri>? urlClickHandler)
     {
         // Flattens given tree of inline nodes into a single label.
         var tb = new TextBlock() { TextWrapping = TextWrapping.WrapWholeWords };
@@ -205,7 +205,7 @@ internal static class HtmlToView
         return tb;
     }
 
-    private static IEnumerable<Span> VisitInline(MarkupNode node, TypedEventHandler<Hyperlink, HyperlinkClickEventArgs>? urlClickHandler)
+    private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri>? urlClickHandler)
     {
         // Converts a single inline node into a sequence of spans.
         // The whole tree is expected to only contain inline nodes. Other nodes are handled by VisitBlock.
@@ -217,7 +217,7 @@ internal static class HtmlToView
                     // The gesture recognizer will be shared by all the individual spans
                     var link = new Hyperlink();
                     if (urlClickHandler != null)
-                        link.Click += urlClickHandler;
+                        link.Click += (s, e) => urlClickHandler(s, linkUri);
                     foreach (var subNode in node.Children)
                     {
                         subNode.InheritAttributes(node);
@@ -266,7 +266,7 @@ internal static class HtmlToView
         }
     }
 
-    private static Grid ConvertTableToGrid(MarkupNode table, TypedEventHandler<Hyperlink, HyperlinkClickEventArgs>? urlClickHandler)
+    private static Grid ConvertTableToGrid(MarkupNode table, EventHandler<Uri>? urlClickHandler)
     {
         // Determines the dimensions of a grid necessary to hold a given table.
         // Utilizes a dynamically-sized 2D bitmap (`gridMap`) to mark occupied cells while iterating over the table.

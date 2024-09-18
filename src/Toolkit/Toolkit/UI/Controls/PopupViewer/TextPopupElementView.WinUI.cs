@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             // Full list of supported tags and attributes here: https://doc.arcgis.com/en/arcgis-online/reference/supported-html.htm
             if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is ContentControl rtb)
             {
-                rtb.Content = HtmlToView.ToUIElement(Element.Text, (s, e) => PopupViewer.GetPopupViewerParent(s as DependencyObject)?.OnHyperlinkClicked(s.NavigateUri));
+                rtb.Content = HtmlToView.ToUIElement(Element.Text, (s, e) => PopupViewer.GetPopupViewerParent(s as DependencyObject)?.OnHyperlinkClicked(e));
             }
         }
     }
