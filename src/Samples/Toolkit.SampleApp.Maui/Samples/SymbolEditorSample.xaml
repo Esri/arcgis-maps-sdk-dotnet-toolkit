@@ -22,11 +22,7 @@
 
             </StackLayout>
 
-            <Border Stroke="LightGray" Grid.Row="1" Margin="0" HorizontalOptions="Center" VerticalOptions="Center" Padding="0" >
-                <esri:SymbolDisplay x:Name="symbolDisplay" Symbol="{Binding Symbol}" />
-
-            </Border>
-            
+            <esri:SymbolDisplay x:Name="symbolDisplay" Grid.Row="1" Symbol="{Binding Symbol}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>
