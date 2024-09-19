@@ -94,6 +94,10 @@
       <Link>icon.png</Link>
       <Visible>false</Visible>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)\THIRD-PARTY-NOTICES.TXT" Pack="true" PackagePath="\">
+      <Link>THIRD-PARTY-NOTICES.TXT</Link>
+      <Visible>false</Visible>
+    </None>
   </ItemGroup>
 
     <!--
