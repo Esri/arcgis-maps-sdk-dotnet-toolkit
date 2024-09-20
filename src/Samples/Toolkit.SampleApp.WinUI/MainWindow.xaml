@@ -37,7 +37,7 @@
                 </ListView>
             </SplitView.Pane>
             <Grid>
-                <Frame x:Name="rootFrame" Background="{ThemeResource ApplicationForegroundThemeBrush}" >
+                <Frame x:Name="rootFrame" >
                     <local:WelcomePage />
                 </Frame>
 

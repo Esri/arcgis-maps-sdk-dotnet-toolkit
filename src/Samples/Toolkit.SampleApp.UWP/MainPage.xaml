@@ -45,7 +45,7 @@
                 </ListView>
             </SplitView.Pane>
             <Grid>
-                <Frame x:Name="rootFrame" Background="{ThemeResource ApplicationForegroundThemeBrush}" />
+                <Frame x:Name="rootFrame" />
 
 
                 <Border  x:Name="ApiKeyWindow" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:Visibility="Visible" Visibility="Collapsed">
