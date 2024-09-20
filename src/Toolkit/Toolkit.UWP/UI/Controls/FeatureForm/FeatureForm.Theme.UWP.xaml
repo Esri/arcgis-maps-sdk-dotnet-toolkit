@@ -156,6 +156,11 @@
                                                 <primitives:FieldFormElementView Element="{Binding}" />
                                             </DataTemplate>
                                         </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                        <primitives:FormElementItemsControl.TextFormElementTemplate>
+                                            <DataTemplate>
+                                                <primitives:TextFormElementView Element="{Binding}" />
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.TextFormElementTemplate>
                                         <primitives:FormElementItemsControl.GroupFormElementTemplate>
                                             <DataTemplate>
                                                 <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >

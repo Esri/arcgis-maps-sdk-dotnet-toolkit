@@ -58,6 +58,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             };
             }
+            else if(item is TextFormElement tfe)
+            {
+                return _parent.TextFormElementTemplate;
+            }
 #if MAUI
             return null;
 #elif WINDOWS_XAML

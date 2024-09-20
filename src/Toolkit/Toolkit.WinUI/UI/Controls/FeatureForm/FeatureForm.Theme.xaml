@@ -327,4 +327,14 @@
         </Setter>
         <Setter Property="IsTabStop" Value="False" />
     </Style>
+
+    <Style TargetType="primitives:TextFormElementView">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="primitives:TextFormElementView">
+                    <TextBlock x:Name="ReadOnlyText" TextWrapping="Wrap" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

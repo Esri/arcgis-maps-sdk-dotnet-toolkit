@@ -482,6 +482,17 @@
         </Setter>
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
     </Style>
+
+    <Style TargetType="primitives:TextFormElementView">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="primitives:TextFormElementView">
+                    <TextBlock x:Name="ReadOnlyText" TextWrapping="Wrap" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="{x:Type controls:FeatureFormView}" >
     <Setter Property="Template">
       <Setter.Value>
@@ -526,6 +537,11 @@
                         <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
                       </DataTemplate>
                     </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                    <primitives:FormElementItemsControl.TextFormElementTemplate>
+                      <DataTemplate>
+                        <primitives:TextFormElementView Element="{Binding}" />
+                      </DataTemplate>
+                    </primitives:FormElementItemsControl.TextFormElementTemplate>
                     <primitives:FormElementItemsControl.GroupFormElementTemplate>
                       <DataTemplate>
                         <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >

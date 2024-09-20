@@ -7,6 +7,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/FeatureForm/FeatureForm.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
+    
     <Style TargetType="controls:FeatureFormView">
     <Setter Property="Template">
       <Setter.Value>
@@ -33,6 +34,11 @@
                                                 <primitives:FieldFormElementView Element="{Binding}" />
                                             </DataTemplate>
                                         </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                        <primitives:FormElementItemsControl.TextFormElementTemplate>
+                                            <DataTemplate>
+                                                <primitives:TextFormElementView Element="{Binding}" />
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.TextFormElementTemplate>
                                         <primitives:FormElementItemsControl.GroupFormElementTemplate>
                                             <DataTemplate>
                                                 <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >

@@ -26,6 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
     {
         private static DataTemplate DefaultFieldFormElementTemplate;
         private static DataTemplate DefaultGroupElementTemplate;
+        private static DataTemplate DefaultTextFormElementTemplate;
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
@@ -46,17 +47,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 view.SetBinding(GroupFormElementView.ElementProperty, Binding.SelfPath);
                 return view;
             });
+            DefaultTextFormElementTemplate = new DataTemplate(() =>
+            {
+                var view = new TextFormElementView() { Margin = new Thickness(0, 0, 0, 10) };
+                view.SetBinding(TextFormElementView.ElementProperty, Binding.SelfPath);
+                return view;
+            });
         }
 
         public FeatureFormElementTemplateSelector()
         {
             FieldFormElementTemplate = DefaultFieldFormElementTemplate;
             GroupFormElementTemplate = DefaultGroupElementTemplate;
+            TextFormElementTemplate = DefaultTextFormElementTemplate;
         }
 
         public DataTemplate FieldFormElementTemplate { get; set; }
 
         public DataTemplate GroupFormElementTemplate { get; set; }
+
+        public DataTemplate TextFormElementTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
@@ -67,6 +77,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             else if(item is GroupFormElement)
             {
                 return GroupFormElementTemplate;
+            }
+            else if (item is TextFormElement)
+            {
+                return TextFormElementTemplate;
             }
             return null!;
         }
