@@ -78,7 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 return GroupFormElementTemplate;
             }
-            else if(item is TextFormElement)
+            else if (item is TextFormElement)
             {
                 return TextFormElementTemplate;
             }
