@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The FeatureDataField control is used to display or edit a single field attribute of an <see cref="Feature"/>.
     /// </summary>
-    public class FeatureDataField : Control
+    public partial class FeatureDataField : Control
     {
         private ContentControl? _contentControl;
         private Field? _field;

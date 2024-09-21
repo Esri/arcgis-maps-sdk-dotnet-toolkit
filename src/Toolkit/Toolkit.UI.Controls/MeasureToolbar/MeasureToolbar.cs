@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "MeasureLength", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "MeasureArea", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "MeasureResult", Type = typeof(TextBlock))]
-    public class MeasureToolbar : Control
+    public partial class MeasureToolbar : Control
     {
         // Supported measure mode
         private enum MeasureToolbarMode

@@ -28,7 +28,7 @@ using MediaColor = System.Windows.Media.Color;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
-    internal class ColorToColorConverter : IValueConverter
+    internal partial class ColorToColorConverter : IValueConverter
     {
         object? IValueConverter.Convert(object? value, Type targetType, object? parameter,
 #if WINDOWS_XAML

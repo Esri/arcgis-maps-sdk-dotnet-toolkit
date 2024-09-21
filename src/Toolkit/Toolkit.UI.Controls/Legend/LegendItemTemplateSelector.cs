@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Determines which DataTemplate to use for a given layer content item in a Legend control.
     /// </summary>
-    internal class LegendItemTemplateSelector : DataTemplateSelector
+    internal partial class LegendItemTemplateSelector : DataTemplateSelector
     {
         private Legend _owner;
 

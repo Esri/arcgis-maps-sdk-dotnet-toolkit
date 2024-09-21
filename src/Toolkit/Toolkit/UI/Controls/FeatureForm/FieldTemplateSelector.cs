@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
-    internal class FieldTemplateSelector : DataTemplateSelector
+    internal partial class FieldTemplateSelector : DataTemplateSelector
     {
         private FieldFormElementView _parent;
         public FieldTemplateSelector(FieldFormElementView parent)
