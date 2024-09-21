@@ -23,7 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     [TemplatePart(Name = "PART_NoResultsLabel", Type = typeof(TextBlock))]
     [TemplatePart(Name = "PART_FilteredListView", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_UnfilteredListView", Type = typeof(ListView))]
-    internal class FilteringListView : ListView
+    internal partial class FilteringListView : ListView
     {
         private TextBlock? _placeholder;
         private TextBox? _searchBox;

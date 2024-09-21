@@ -54,8 +54,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #endif
 
-        internal static UI.Controls.FeatureFormView? GetFeatureFormViewParent(DependencyObject child)
+        internal static UI.Controls.FeatureFormView? GetFeatureFormViewParent(DependencyObject? child)
         {
+            if (child is null) return null;
             var parent = VisualTreeHelper.GetParent(child);
             while (parent is not null && parent is not UI.Controls.FeatureFormView view)
             {

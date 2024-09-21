@@ -19,7 +19,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// Control for selecting a single color from a short list of colors.
     /// </summary>
-    internal class Expander : GroupBox
+    internal partial class Expander : GroupBox
     {
         public Expander()
         {

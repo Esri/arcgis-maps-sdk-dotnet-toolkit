@@ -23,7 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// *FOR INTERNAL USE* Returns visibility for the given load status.
     /// </summary>
-    internal sealed class LoadStatusToVisibilityConverter : IValueConverter
+    internal sealed partial class LoadStatusToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc />
         object IValueConverter.Convert(object? value, Type targetType, object? parameter,

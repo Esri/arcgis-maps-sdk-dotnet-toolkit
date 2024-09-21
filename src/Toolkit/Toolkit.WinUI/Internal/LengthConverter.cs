@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Converts the length to a string.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class LengthFormatConverter : IValueConverter
+    public partial class LengthFormatConverter : IValueConverter
     {
         /// <inheritdoc />
 #pragma warning disable CA1033 // Interface methods should be callable by child types: Solution is to seal the class, but this would be a binary breaking change, so disabling warning instead

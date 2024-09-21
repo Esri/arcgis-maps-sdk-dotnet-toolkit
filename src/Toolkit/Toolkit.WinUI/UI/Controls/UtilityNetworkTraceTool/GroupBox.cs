@@ -19,7 +19,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// Control for selecting a single color from a short list of colors.
     /// </summary>
-    internal class GroupBox : ContentControl
+    internal partial class GroupBox : ContentControl
     {
         public GroupBox()
         {

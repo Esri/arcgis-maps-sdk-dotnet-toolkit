@@ -37,6 +37,7 @@
     <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">
       <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
       <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+      <PackageReference Include="Markdig" Version="0.31.0" />
     </ItemGroup>
 
     <Import Project="..\..\CommonProperties.targets" />

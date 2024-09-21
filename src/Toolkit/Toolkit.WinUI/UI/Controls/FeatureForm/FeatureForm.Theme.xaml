@@ -332,7 +332,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:TextFormElementView">
-                    <TextBlock x:Name="ReadOnlyText" TextWrapping="Wrap" />
+                    <ContentControl x:Name="TextArea" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

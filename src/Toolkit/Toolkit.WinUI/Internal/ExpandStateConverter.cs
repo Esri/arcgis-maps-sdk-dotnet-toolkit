@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Converts the <see cref="Esri.ArcGISRuntime.Mapping.FeatureForms.FormGroupState"/> to a boolean where <c>true</c> is expanded.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class ExpandStateConverter : IValueConverter
+    public partial class ExpandStateConverter : IValueConverter
     {
         /// <inheritdoc />
 #pragma warning disable CA1033 // Interface methods should be callable by child types: Solution is to seal the class, but this would be a binary breaking change, so disabling warning instead

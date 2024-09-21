@@ -434,6 +434,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             return false;
         }
+
+        // Called when clicking links in markdown
+        internal void OnHyperlinkClicked(Uri uri)
+        {
+            Launcher.LaunchUriAsync(uri);
+        }
     }
 
     /// <summary>

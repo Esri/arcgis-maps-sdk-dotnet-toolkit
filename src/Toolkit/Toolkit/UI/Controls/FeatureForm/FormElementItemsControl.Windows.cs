@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView"/> control,
     /// used for rendering a set of popup elements responsible for rendering <see cref="FieldFormElement"/> and <see cref="GroupFormElement"/>.
     /// </summary>
-    public class FormElementItemsControl : ItemsControl
+    public partial class FormElementItemsControl : ItemsControl
     {
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
