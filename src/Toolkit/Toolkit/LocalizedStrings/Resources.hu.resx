@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>í_Add Attachment_______________ő</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>í_Take Photo_____________________ő</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>A dátumnak a következő időpontra vagy azelőttre kell esnie: {0}</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Kisebb, mint a minimális érték</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>í_No attachments_______________ő</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Az értéknek a tartományon belül kell lennie</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>Az érték nem lehet üres</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>í_Open_________ő</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Adjon meg {0}–{1} karaktert</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>í_Remove_____________ő</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>í_Cancel_____________ő</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>í_OK_____ő</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>í_Rename_____________ő</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>í_Rename Attachment__________________ő</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Szükséges karakterek száma: {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>Nagyítás/kicsinyítés:</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>í_View_________ő</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>láb</value>

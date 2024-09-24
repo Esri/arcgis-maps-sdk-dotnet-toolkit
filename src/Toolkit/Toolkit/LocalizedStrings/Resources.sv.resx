@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>Å_Add Attachment_______________ö</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>Å_Take Photo_____________________ö</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Datum måste vara på eller efter {0}</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Mindre än minimivärdet</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>Å_No attachments_______________ö</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Värdet måste vara inom domänen</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>Värdet får inte vara tomt</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>Å_Open_________ö</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Ange {0} till {1} tecken</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>Å_Remove_____________ö</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>Å_Cancel_____________ö</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>Å_OK_____ö</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>Å_Rename_____________ö</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>Å_Rename Attachment__________________ö</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Antal tecken som krävs: {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>Zooma till</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>Å_View_________ö</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>fot</value>

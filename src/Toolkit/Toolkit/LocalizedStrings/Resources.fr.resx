@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>æ_Add Attachment_______________Â</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>æ_Take Photo_____________________Â</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>La date doit être le ou avant le {0}</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Inférieur à la valeur minimale</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>æ_No attachments_______________Â</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>La valeur doit être comprise dans le domaine</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>La valeur ne doit pas être vide</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>æ_Open_________Â</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Saisir {0} à {1} caractères</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>æ_Remove_____________Â</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>æ_Cancel_____________Â</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>æ_OK_____Â</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>æ_Rename_____________Â</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>æ_Rename Attachment__________________Â</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Nombre de caractères requis : {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>Zoom sur</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>æ_View_________Â</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>pi</value>

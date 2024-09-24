@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>π_Add Attachment_______________Ω</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>π_Take Photo_____________________Ω</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Η ημερομηνία πρέπει να είναι στις ή πριν από τις {0}</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Μικρότερο από την ελάχιστη τιμή</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>π_No attachments_______________Ω</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Η τιμή πρέπει να εμπίπτει στον τομεά</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>Η τιμή δεν πρέπει να είναι άδεια</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>π_Open_________Ω</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Καταχωρίστε από {0} έως {1} χαρακτήρες</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>π_Remove_____________Ω</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>π_Cancel_____________Ω</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>π_OK_____Ω</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>π_Rename_____________Ω</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>π_Rename Attachment__________________Ω</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Αριθμός απαιτούμενων χαρακτήρων: {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>Εστίαση σε</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>π_View_________Ω</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ποδ.</value>
