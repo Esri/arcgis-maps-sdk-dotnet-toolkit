@@ -127,7 +127,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// Call <see cref="UpdateSuggestions"/> to refresh suggestions after updating the query.
         /// </remarks>
-        public string? CurrentQuery { get => _currentQuery; set => SetPropertyChanged(value, ref _currentQuery); }
+        public string? CurrentQuery
+        {
+            get => _currentQuery;
+            set
+            {
+                if (_currentQuery != value)
+                {
+                    IsEligibleForRequery = false;
+                    Results = null;
+                    SetPropertyChanged(value, ref _currentQuery);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the default placeholder to use when there is no <see cref="ActiveSource"/> or the <see cref="ActiveSource"/> does not have a placeholder defined.
