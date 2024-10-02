@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>כן_Add Attachment_______________ש</value>
+    <value>הוסף צורפה</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>כן_Take Photo_____________________ש</value>
+    <value>צלם תמונה</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>התאריך חייב להיות {0} או לפני</value>
@@ -169,7 +169,7 @@
     <value>פחות מהערך המינימלי</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>כן_No attachments_______________ש</value>
+    <value>אין צורפות</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>הערך חייב להיות בתוך הדומיין</value>
@@ -178,25 +178,25 @@
     <value>הערך לא יכול להיות ריק</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>כן_Open_________ש</value>
+    <value>פתוח</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>הזן בין {0} ל-{1} תווים</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>כן_Remove_____________ש</value>
+    <value>הסר</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>כן_Cancel_____________ש</value>
+    <value>ביטול</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>כן_OK_____ש</value>
+    <value>אישור</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>כן_Rename_____________ש</value>
+    <value>שנה שם</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>כן_Rename Attachment__________________ש</value>
+    <value>שנה שם קובץ מצורף</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>מספר התווים הנדרש: {0}</value>
@@ -238,7 +238,7 @@
     <value>בצע זום אל</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>כן_View_________ש</value>
+    <value>הצג</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>רגל</value>

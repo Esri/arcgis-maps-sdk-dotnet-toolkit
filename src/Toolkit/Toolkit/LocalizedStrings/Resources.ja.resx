@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>須_Add Attachment_______________鷗</value>
+    <value>アタッチメントの追加</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>須_Take Photo_____________________鷗</value>
+    <value>写真の撮影</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>日付は {0} かそれ以前にする必要があります</value>
@@ -169,7 +169,7 @@
     <value>最小値未満です</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>須_No attachments_______________鷗</value>
+    <value>アタッチメントなし</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>値はドメイン内である必要があります</value>
@@ -178,25 +178,25 @@
     <value>値は空にしてはなりません</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>須_Open_________鷗</value>
+    <value>開く</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>{0} ～ {1} 文字で入力してください</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>須_Remove_____________鷗</value>
+    <value>削除</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>須_Cancel_____________鷗</value>
+    <value>キャンセル</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>須_OK_____鷗</value>
+    <value>OK</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>須_Rename_____________鷗</value>
+    <value>名前の変更</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>須_Rename Attachment__________________鷗</value>
+    <value>アタッチメント名の変更</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>必要な文字数: {0}</value>
@@ -238,7 +238,7 @@
     <value>ズーム</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>須_View_________鷗</value>
+    <value>ビュー</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>

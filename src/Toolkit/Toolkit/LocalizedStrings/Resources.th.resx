@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>ก้_Add Attachment_______________ษฺ</value>
+    <value>เพิ่มไฟล์แนบ</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>ก้_Take Photo_____________________ษฺ</value>
+    <value>ถ่ายภาพ</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>วันที่ต้องเท่ากับหรืออยู่ก่อนหน้า {0}</value>
@@ -169,7 +169,7 @@
     <value>น้อยกว่าค่าขั้นต่ำ</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>ก้_No attachments_______________ษฺ</value>
+    <value>ไม่มีไฟล์แนบ</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>ค่าต้องอยู่ภายในโดเมน</value>
@@ -178,25 +178,25 @@
     <value>ค่าต้องไม่ว่างเปล่า</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>ก้_Open_________ษฺ</value>
+    <value>เปิด</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>ป้อนอักขระ {0} ถึง {1} ตัว</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>ก้_Remove_____________ษฺ</value>
+    <value>ลบทิ้ง</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>ก้_Cancel_____________ษฺ</value>
+    <value>ยกเลิก</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>ก้_OK_____ษฺ</value>
+    <value>ตกลง</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>ก้_Rename_____________ษฺ</value>
+    <value>เปลี่ยนชื่อ</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>ก้_Rename Attachment__________________ษฺ</value>
+    <value>เปลี่ยนชื่อไฟล์แนบ</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>จำนวนอักขระที่ต้องการ: {0}</value>
@@ -238,7 +238,7 @@
     <value>ซูมไปยัง</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>ก้_View_________ษฺ</value>
+    <value>วิว</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ฟุต</value>

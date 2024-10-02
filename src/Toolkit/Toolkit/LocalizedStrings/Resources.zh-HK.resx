@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>試_Add Attachment_______________驗</value>
+    <value>新增附件</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>試_Take Photo_____________________驗</value>
+    <value>拍照</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>日期必須等於或早於 {0}</value>
@@ -169,7 +169,7 @@
     <value>小於最小值</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>試_No attachments_______________驗</value>
+    <value>無附件</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>值必須位於網域中</value>
@@ -178,25 +178,25 @@
     <value>值不得空白</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>試_Open_________驗</value>
+    <value>開啟</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>輸入 {0} 到 {1} 個字元</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>試_Remove_____________驗</value>
+    <value>移除</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>試_Cancel_____________驗</value>
+    <value>取消</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>試_OK_____驗</value>
+    <value>確定</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>試_Rename_____________驗</value>
+    <value>重新命名</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>試_Rename Attachment__________________驗</value>
+    <value>重新命名附件</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>必要的字元數: {0}</value>
@@ -238,7 +238,7 @@
     <value>縮放至</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>試_View_________驗</value>
+    <value>查看</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>

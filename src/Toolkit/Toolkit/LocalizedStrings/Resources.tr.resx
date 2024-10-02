@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>ı_Add Attachment_______________İ</value>
+    <value>Ek Ekle</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>ı_Take Photo_____________________İ</value>
+    <value>Fotoğraf Çek</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Tarih {0} veya daha önce olmalıdır</value>
@@ -169,7 +169,7 @@
     <value>Minimum değerden daha küçük</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>ı_No attachments_______________İ</value>
+    <value>Ek yok</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Değer, domain içinde olmalıdır</value>
@@ -178,25 +178,25 @@
     <value>Değer boş olmamalıdır</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>ı_Open_________İ</value>
+    <value>Açık</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>{0} - {1} karakter girin</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>ı_Remove_____________İ</value>
+    <value>Kaldır</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>ı_Cancel_____________İ</value>
+    <value>İptal</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>ı_OK_____İ</value>
+    <value>Tamam</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>ı_Rename_____________İ</value>
+    <value>Yeniden Adlandır</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>ı_Rename Attachment__________________İ</value>
+    <value>Eki Yeniden Adlandır</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Gereken karakter sayısı: {0}</value>
@@ -238,7 +238,7 @@
     <value>Yakınlaştır</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>ı_View_________İ</value>
+    <value>Görünüm</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>

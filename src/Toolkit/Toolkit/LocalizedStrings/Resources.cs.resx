@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>Ř_Add Attachment_______________ů</value>
+    <value>Připojit přílohu</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>Ř_Take Photo_____________________ů</value>
+    <value>Vyfotografovat</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Datum musí být {0} nebo dřívější</value>
@@ -169,7 +169,7 @@
     <value>Nižší než minimální hodnota</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>Ř_No attachments_______________ů</value>
+    <value>Žádné přílohy</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Hodnota musí být v doméně</value>
@@ -178,25 +178,25 @@
     <value>Hodnota nesmí být prázdná</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>Ř_Open_________ů</value>
+    <value>Otevřít</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Zadejte {0} až {1} znaků</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>Ř_Remove_____________ů</value>
+    <value>Odebrat</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>Ř_Cancel_____________ů</value>
+    <value>Storno</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>Ř_OK_____ů</value>
+    <value>OK</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>Ř_Rename_____________ů</value>
+    <value>Přejmenovat</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>Ř_Rename Attachment__________________ů</value>
+    <value>Přejmenovat přílohu</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Požadovaný počet znaků: {0}</value>
@@ -238,7 +238,7 @@
     <value>Přiblížit na</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>Ř_View_________ů</value>
+    <value>Zobrazení</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>

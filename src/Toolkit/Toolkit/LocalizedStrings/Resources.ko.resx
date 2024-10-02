@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>한_Add Attachment_______________빠</value>
+    <value>첨부 파일 추가</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>한_Take Photo_____________________빠</value>
+    <value>사진 촬영</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>날짜는 {0} 또는 그 이전이어야 함</value>
@@ -169,7 +169,7 @@
     <value>최소값보다 작음</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>한_No attachments_______________빠</value>
+    <value>첨부 파일 없음</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>값은 도메인 내에 있어야 함</value>
@@ -178,25 +178,25 @@
     <value>값은 비워 둘 수 없음</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>한_Open_________빠</value>
+    <value>열기</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>{0}~{1}자 입력</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>한_Remove_____________빠</value>
+    <value>제거</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>한_Cancel_____________빠</value>
+    <value>취소</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>한_OK_____빠</value>
+    <value>확인</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>한_Rename_____________빠</value>
+    <value>이름 바꾸기</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>한_Rename Attachment__________________빠</value>
+    <value>첨부 파일 이름 바꾸기</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>필요한 문자 수: {0}</value>
@@ -238,7 +238,7 @@
     <value>확대</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>한_View_________빠</value>
+    <value>뷰</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>試_Add Attachment_______________驗</value>
+    <value>إضافة مرفق</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>試_Take Photo_____________________驗</value>
+    <value>التقاط صورة</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>يجب أن يكون التاريخ في {0} أو قبله</value>
@@ -169,7 +169,7 @@
     <value>أقل من أدنى قيمة</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>試_No attachments_______________驗</value>
+    <value>لا توجد مرفقات</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>يجب أن تكون القيمة ضمن النطاق</value>
@@ -178,25 +178,25 @@
     <value>يجب ألا تكون القيمة فارغة</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>試_Open_________驗</value>
+    <value>فتح</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>إدخال {0} إلى {1} من الرموز</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>試_Remove_____________驗</value>
+    <value>إزالة</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>試_Cancel_____________驗</value>
+    <value>إلغاء الأمر</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>試_OK_____驗</value>
+    <value>موافق</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>試_Rename_____________驗</value>
+    <value>إعادة تسمية</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>試_Rename Attachment__________________驗</value>
+    <value>إعادة تسمية المرفق</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>العدد المطلوب للرموز: {0}</value>
@@ -238,7 +238,7 @@
     <value>تكبير/تصغير إلى</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>試_View_________驗</value>
+    <value>عرض</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>قدم</value>

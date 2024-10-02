@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>Đ_Add Attachment_______________ớ</value>
+    <value>Thêm Tệp đính kèm</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>Đ_Take Photo_____________________ớ</value>
+    <value>Chụp Ảnh</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Ngày phải vào hoặc trước {0}</value>
@@ -169,7 +169,7 @@
     <value>Dưới giá trị tối thiểu</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>Đ_No attachments_______________ớ</value>
+    <value>Không có tệp đính kèm</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Giá trị phải nằm trong miền</value>
@@ -178,25 +178,25 @@
     <value>Giá trị không được trống</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>Đ_Open_________ớ</value>
+    <value>Mở</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Nhập {0} đến {1} ký tự</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>Đ_Remove_____________ớ</value>
+    <value>Gỡ bỏ</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>Đ_Cancel_____________ớ</value>
+    <value>Hủy</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>Đ_OK_____ớ</value>
+    <value>OK</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>Đ_Rename_____________ớ</value>
+    <value>Đổi tên</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>Đ_Rename Attachment__________________ớ</value>
+    <value>Đổi tên Tệp đính kèm</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Số ký tự bắt buộc: {0}</value>
@@ -238,7 +238,7 @@
     <value>Phóng tới</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>Đ_View_________ớ</value>
+    <value>Xem</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>

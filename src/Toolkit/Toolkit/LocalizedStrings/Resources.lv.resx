@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>ķ_Add Attachment_______________ū</value>
+    <value>Pievienot pielikumu</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>ķ_Take Photo_____________________ū</value>
+    <value>Uzņemt fotoattēlu</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Datumam jāsakrīt vai jābūt pirms {0}</value>
@@ -169,7 +169,7 @@
     <value>Mazāk par minimālo vērtību</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>ķ_No attachments_______________ū</value>
+    <value>Pielikumu nav</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Vērtībai ir jābūt domēnā</value>
@@ -178,25 +178,25 @@
     <value>Vērtība nedrīkst būt tukša</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>ķ_Open_________ū</value>
+    <value>Atvērt</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Ievadiet {0} līdz {1} rakstzīmēm</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>ķ_Remove_____________ū</value>
+    <value>Noņemt</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>ķ_Cancel_____________ū</value>
+    <value>Atcelt</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>ķ_OK_____ū</value>
+    <value>Labi</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>ķ_Rename_____________ū</value>
+    <value>Pārdēvēt</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>ķ_Rename Attachment__________________ū</value>
+    <value>Pārdēvēt pielikumu</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Nepieciešamo rakstzīmju skaits: {0}</value>
@@ -238,7 +238,7 @@
     <value>Tālummaiņa</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>ķ_View_________ū</value>
+    <value>Skatīt</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>pēdas</value>

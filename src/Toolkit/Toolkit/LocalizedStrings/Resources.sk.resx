@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>ĺ_Add Attachment_______________ľ</value>
+    <value>Pridať prílohu</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>ĺ_Take Photo_____________________ľ</value>
+    <value>Odfotiť</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Dátum musí byť v deň alebo pred {0}</value>
@@ -169,7 +169,7 @@
     <value>Menej ako minimálna hodnota</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>ĺ_No attachments_______________ľ</value>
+    <value>Žiadne prílohy</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Hodnota musí byť v rámci domény</value>
@@ -178,25 +178,25 @@
     <value>Hodnota nesmie byť prázdna</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>ĺ_Open_________ľ</value>
+    <value>Otvoriť</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Zadajte {0} až {1} znakov</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>ĺ_Remove_____________ľ</value>
+    <value>Odstrániť</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>ĺ_Cancel_____________ľ</value>
+    <value>Zrušiť</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>ĺ_OK_____ľ</value>
+    <value>OK</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>ĺ_Rename_____________ľ</value>
+    <value>Premenovať</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>ĺ_Rename Attachment__________________ľ</value>
+    <value>Premenovať prílohu</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Počet požadovaných znakov: {0}</value>
@@ -238,7 +238,7 @@
     <value>Priblížiť na</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>ĺ_View_________ľ</value>
+    <value>Zobraziť</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>stopy</value>

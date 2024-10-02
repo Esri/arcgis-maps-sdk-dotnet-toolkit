@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>Å_Add Attachment_______________ö</value>
+    <value>Lisää liite</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>Å_Take Photo_____________________ö</value>
+    <value>Ota valokuva</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Päivämäärän on oltava {0} tai sitä ennen</value>
@@ -169,7 +169,7 @@
     <value>Pienempi kuin vähimmäisarvo</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>Å_No attachments_______________ö</value>
+    <value>Ei liitteitä</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Arvon on oltava arvoalueella</value>
@@ -178,25 +178,25 @@
     <value>Arvo ei saa olla tyhjä</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>Å_Open_________ö</value>
+    <value>Avaa</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Anna {0}–{1} merkkiä</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>Å_Remove_____________ö</value>
+    <value>Poista</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>Å_Cancel_____________ö</value>
+    <value>Peruuta</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>Å_OK_____ö</value>
+    <value>OK</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>Å_Rename_____________ö</value>
+    <value>Nimeä uudelleen</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>Å_Rename Attachment__________________ö</value>
+    <value>Nimeä liite uudelleen</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Vaadittu merkkien määrä: {0}</value>
@@ -238,7 +238,7 @@
     <value>Tarkenna kohteeseen</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>Å_View_________ö</value>
+    <value>Näytä</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>é_Add Attachment_______________È</value>
+    <value>Aggiungi allegato</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>é_Take Photo_____________________È</value>
+    <value>Scatta una foto</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>La data deve corrispondere o essere antecedente a {0}</value>
@@ -169,7 +169,7 @@
     <value>Meno del valore minimo</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>é_No attachments_______________È</value>
+    <value>Nessun allegato</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Il valore deve rientrare nel dominio</value>
@@ -178,25 +178,25 @@
     <value>Il valore non deve essere vuoto</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>é_Open_________È</value>
+    <value>Apri</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Digitare{0} a{1} caratteri</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>é_Remove_____________È</value>
+    <value>Rimuovi</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>é_Cancel_____________È</value>
+    <value>Annulla</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>é_OK_____È</value>
+    <value>OK</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>é_Rename_____________È</value>
+    <value>Rinomina</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>é_Rename Attachment__________________È</value>
+    <value>Rinomina allegato</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Numero di caratteri richiesti: {0}</value>
@@ -238,7 +238,7 @@
     <value>Zoom a</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>é_View_________È</value>
+    <value>Visualizza</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>piedi</value>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
-    <value>Č_Add Attachment_______________ž</value>
+    <value>Dodaj privitak</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
-    <value>Č_Take Photo_____________________ž</value>
+    <value>Snimi fotografiju</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Datum početka mora biti na ili prije datuma {0}.</value>
@@ -169,7 +169,7 @@
     <value>Manje od minimalne vrijednosti</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
-    <value>Č_No attachments_______________ž</value>
+    <value>Nema privitaka</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Vrijednost mora biti unutar domene</value>
@@ -178,25 +178,25 @@
     <value>Vrijednost ne smije biti prazna</value>
   </data>
   <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
-    <value>Č_Open_________ž</value>
+    <value>Otvori</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Unesite {0} do {1} znaka/znakova</value>
   </data>
   <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
-    <value>Č_Remove_____________ž</value>
+    <value>Ukloni</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
-    <value>Č_Cancel_____________ž</value>
+    <value>Odustani</value>
   </data>
   <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
-    <value>Č_OK_____ž</value>
+    <value>U redu</value>
   </data>
   <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
-    <value>Č_Rename_____________ž</value>
+    <value>Preimenuj</value>
   </data>
   <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
-    <value>Č_Rename Attachment__________________ž</value>
+    <value>Preimenuj privitak</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Minimalno znakova potrebno: {0}</value>
@@ -238,7 +238,7 @@
     <value>Povećaj na</value>
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
-    <value>Č_View_________ž</value>
+    <value>Prikaži</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
