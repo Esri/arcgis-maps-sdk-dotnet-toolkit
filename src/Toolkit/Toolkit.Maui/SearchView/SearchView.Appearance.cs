@@ -193,10 +193,12 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" TextColor=""{{AppThemeBinding Light={FOREGROUND_LIGHT}, Dark={FOREGROUND_DARK}}}"" />
     <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
     <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
-    <CollectionView x:Name=""{nameof(PART_SuggestionsView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2""  HeightRequest=""175"" />
-    <CollectionView x:Name=""{nameof(PART_ResultView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""1"" HeightRequest=""200"" />
-    <CollectionView x:Name=""{nameof(PART_SourcesView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" HeightRequest=""150"" />
+<Grid Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" >
+    <CollectionView x:Name=""{nameof(PART_SuggestionsView)}"" SelectionMode=""Single"" Grid.RowSpan=""2""  HeightRequest=""175"" />
+    <CollectionView x:Name=""{nameof(PART_ResultView)}"" SelectionMode=""Single"" Grid.RowSpan=""1"" HeightRequest=""200"" />
+    <CollectionView x:Name=""{nameof(PART_SourcesView)}"" SelectionMode=""Single"" HeightRequest=""150"" />
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""  Style=""{{StaticResource SVDefaultGridStyle}}""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
+</Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2""  Style=""{{StaticResource SVDefaultGridStyle}}"">
         <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""{{AppThemeBinding Light=#007AC2, Dark=#00619B}}"" TextColor=""White"" CornerRadius=""0"" />
     </Grid>
