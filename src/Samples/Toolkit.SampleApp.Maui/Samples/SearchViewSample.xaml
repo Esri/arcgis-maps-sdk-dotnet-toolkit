@@ -12,7 +12,7 @@
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="32" />
-                <RowDefinition Height="{OnPlatform WinUI=400, Default=Auto}" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <esri:MapView x:Name="MyMapView" Grid.Row="1" Grid.RowSpan="2" />
