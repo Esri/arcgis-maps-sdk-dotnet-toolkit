@@ -54,7 +54,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             // Create popup if possible.
             if (feature is ArcGISFeature arcFeature && arcFeature.FeatureTable?.PopupDefinition is PopupDefinition featurePopupDef)
             {
-                PopupManager = new PopupManager(new Popup(feature, featurePopupDef));
+                Popup = new Popup(feature, featurePopupDef);
+#pragma warning disable CS0618 // Type or member is obsolete
+                PopupManager = new PopupManager(Popup);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
 
             // Get symbol if possible
@@ -95,7 +98,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <remarks>
         /// The popup can be used to inspect and differentiate starting points.
         /// </remarks>
+        [Obsolete("Use Popup property")]
         public PopupManager? PopupManager { get; }
+
+        /// <summary>
+        /// Gets the popup for the starting point.
+        /// </summary>
+        /// <remarks>
+        /// The popup can be used to inspect and differentiate starting points.
+        /// </remarks>
+        public Popup? Popup { get; }
 
         /// <summary>
         /// Gets or sets the starting point's location along a line element. Setting this value will update the geometry of <see cref="SelectionGraphic"/>.
