@@ -362,7 +362,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets or sets the tooltip to display for this basemap item.
         /// </summary>
+#pragma warning disable CS0436 // Type conflicts with imported type from Markdig
         [AllowNull]
+#pragma warning restore CS0436 // Type conflicts with imported type from Markdig
         public string Tooltip
         {
             get
