@@ -147,13 +147,7 @@
                             BorderBrush="#4d6e6e6e"
                             BorderThickness="1">
                             <Grid>
-
-                                <Image
-                                    Width="32"
-                                    Height="32"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Source="{ThemeResource BasemapPlaceholder}" />
+                                <FontIcon FontFamily="calcite-ui-icons-24" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE032;" />
                                 <Image
                                     Width="62"
                                     Height="62"
@@ -193,13 +187,7 @@
                             BorderBrush="#4d6e6e6e"
                             BorderThickness="1">
                             <Grid>
-
-                                <Image
-                                    Width="32"
-                                    Height="32"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Source="{ThemeResource BasemapPlaceholder}" />
+                                <FontIcon FontFamily="calcite-ui-icons-24" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE032;" />
                                 <Image
                                     Width="62"
                                     Height="62"
