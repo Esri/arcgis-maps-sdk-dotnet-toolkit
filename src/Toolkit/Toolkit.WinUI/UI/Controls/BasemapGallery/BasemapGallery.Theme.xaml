@@ -3,9 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:basemapgallery="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="BasemapGallery.Resources.xaml" />
-    </ResourceDictionary.MergedDictionaries>
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="ItemTextForegroundUnselected" Color="#6a6a6a" />
