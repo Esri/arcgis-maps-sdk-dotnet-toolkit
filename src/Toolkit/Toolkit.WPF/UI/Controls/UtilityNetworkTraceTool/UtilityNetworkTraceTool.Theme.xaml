@@ -624,7 +624,7 @@
                                                                                 BorderThickness="0,1,0,0"
                                                                                 Header="{internal:LocalizedString Key=UtilityNetworkTraceToolAssetDetails}"
                                                                                 Style="{StaticResource UNTraceGroupBox}">
-                                                                                <controls:PopupViewer PopupManager="{Binding PopupManager}">
+                                                                                <controls:PopupViewer Popup="{Binding Popup}">
                                                                                     <controls:PopupViewer.Template>
                                                                                         <ControlTemplate TargetType="{x:Type controls:PopupViewer}">
                                                                                             <Border
