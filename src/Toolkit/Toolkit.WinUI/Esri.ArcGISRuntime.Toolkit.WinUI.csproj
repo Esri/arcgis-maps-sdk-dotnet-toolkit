@@ -15,6 +15,7 @@
     <UseWinUI>true</UseWinUI>
     <IncludeXamlFilesInNugetPackage>False</IncludeXamlFilesInNugetPackage>
     <DisableEmbeddedXbf>false</DisableEmbeddedXbf>
+    <WindowsSdkPackageVersion>10.0.19041.34</WindowsSdkPackageVersion> <!-- Workaround regression in latest .NET SDK. Remove when moving to WinAppSDK v1.6+  -->
   </PropertyGroup>
 
   <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">
