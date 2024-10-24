@@ -45,7 +45,7 @@
     <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 
     <!-- Analyzers -->
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)'=='$(NETMauiTarget)'">
         <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
     </PropertyGroup>
     <ItemGroup>
