@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Forms
                 var feature = GetFeature(result, out var def);
                 if (feature != null)
                 {
-                    formViewer.FeatureForm = new FeatureForm(feature, def);
+                    formViewer.FeatureForm = new FeatureForm(feature);
                     SidePanel.Visibility = Visibility.Visible;
                 }
             }
