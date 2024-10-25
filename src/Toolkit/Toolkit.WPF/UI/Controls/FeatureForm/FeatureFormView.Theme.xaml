@@ -558,6 +558,11 @@
                                   <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
                                 </DataTemplate>
                               </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                              <primitives:FormElementItemsControl.TextFormElementTemplate>
+                                <DataTemplate>
+                                   <primitives:TextFormElementView Element="{Binding}" />
+                                </DataTemplate>
+                              </primitives:FormElementItemsControl.TextFormElementTemplate>
                             </primitives:FormElementItemsControl>
                           </Expander>
                         </StackPanel>
