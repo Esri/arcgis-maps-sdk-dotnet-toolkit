@@ -31,7 +31,7 @@ jobs:
 #       msbuild /restore /t:Build src/Esri.ArcGISRuntime.ARToolkit.sln /p:Configuration=Release
       
     - name: Upload artfacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: NuGet Packages
         path: Output/NuGet/Release
