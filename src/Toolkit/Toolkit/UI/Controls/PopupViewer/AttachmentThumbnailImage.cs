@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="PopupAttachment"/>.
     /// </summary>
-    public class AttachmentThumbnailImage : Control
+    public partial class AttachmentThumbnailImage : Control
     {
 
         /// <summary>

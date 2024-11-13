@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a set of popup elements.
     /// </summary>
-    public class PopupElementItemsControl : ItemsControl
+    public partial class PopupElementItemsControl : ItemsControl
     {
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)

@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// Defines a small "overview" (or "inset") map displaying a representation of the attached <see cref="GeoView"/>'s current viewpoint.
     /// </summary>
     [TemplatePart(Name = "PART_MapView", Type = typeof(MapView))]
-    public class OverviewMap : Control
+    public partial class OverviewMap : Control
     {
         private OverviewMapController? _controller;
         private MapView? _overviewMapView;

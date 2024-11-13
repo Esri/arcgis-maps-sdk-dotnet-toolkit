@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateItems();
         }
 
-        private class RadioButtonItem : RadioButton
+        private partial class RadioButtonItem : RadioButton
         {
 #if WINDOWS_XAML
             public RadioButtonItem()

@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// Control for selecting a single color from a short list of colors.
     /// </summary>
-    internal class ToolkitColorPalette : Control
+    internal partial class ToolkitColorPalette : Control
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolkitColorPalette"/> class.

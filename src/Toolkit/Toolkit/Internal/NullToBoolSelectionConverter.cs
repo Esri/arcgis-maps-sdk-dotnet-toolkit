@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 #if WINDOWS_XAML
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Alias used to support UWP/WPF differences.")]
     #endif
-    public class NullToBoolSelectionConverter : IValueConverter
+    public partial class NullToBoolSelectionConverter : IValueConverter
     {
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, Culture culture)

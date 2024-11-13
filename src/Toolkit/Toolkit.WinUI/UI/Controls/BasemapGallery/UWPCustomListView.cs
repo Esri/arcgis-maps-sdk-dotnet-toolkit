@@ -19,7 +19,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Custom ListView implementation disables listview selection for disabled items.
     /// </summary>
-    internal class UWPCustomListView : ListView
+    internal partial class UWPCustomListView : ListView
     {
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
