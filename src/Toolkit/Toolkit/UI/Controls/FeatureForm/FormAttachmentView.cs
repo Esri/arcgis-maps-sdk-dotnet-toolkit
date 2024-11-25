@@ -14,8 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
-#if WPF || MAUI
 using System.ComponentModel;
 using System.Diagnostics;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
@@ -23,9 +21,12 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 #if WPF
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
-#elif MAUI
+#endif
+
+#if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 #if MAUI
@@ -58,6 +59,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #else
             DefaultStyleKey = typeof(FormAttachmentView);
+#endif
+#if WINDOWS_XAML
+            this.Click += OnClick;
 #endif
         }
 
@@ -214,6 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     System.Diagnostics.Trace.WriteLine($"Failed to open attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                 }
 #else
+#if WPF
                 var saveFileDialog = new SaveFileDialog();
                 var fileInfo = new System.IO.FileInfo(attachment.FilePath);
                 saveFileDialog.FileName = fileInfo.Name;
@@ -231,9 +236,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         System.Diagnostics.Trace.WriteLine($"Failed to save file to disk: " + ex.Message);
                     }
                 }
+#elif WINDOWS_XAML
+                Windows.Storage.StorageFile? file = null;
+#if WINUI
+                var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
+                if (hwnd == 0)
+                    return; // Can't show dialog without a root window
+#endif
+                var fileInfo = new FileInfo(attachment.FilePath);
+                var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+#if WINUI
+                WinRT.Interop.InitializeWithWindow.Initialize(savePicker, (nint)hwnd);
+#endif
+                var ext = fileInfo.Extension;
+                savePicker.FileTypeChoices.Add("*" + ext, new List<string>() { ext });
+                savePicker.SuggestedFileName = fileInfo.Name;
+                file = await savePicker.PickSaveFileAsync();
+                if (file != null)
+                {
+                    Windows.Storage.CachedFileManager.DeferUpdates(file);
+                    using var stream = await attachment.Attachment!.GetDataAsync();
+                    using var filestream = await file.OpenStreamForWriteAsync();
+                    await stream.CopyToAsync(filestream);
+                }
+#endif
 #endif
             }
         }
     }
 }
-#endif

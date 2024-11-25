@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>Pridėti priedą</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>Fotografuoti</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Data turi būti {0} arba ankstesnė</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Mažiau negu minimali reikšmė</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>Nėra priedų</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Reikšmė turi patekti į srities aprėptį</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>Reikšmė negali būti tuščia</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>Atverti</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Įveskite {0} iki {1} simbolių</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>Pašalinti</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>Atšaukti</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>Gerai</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>Pervardinti</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>Pervardinti priedą</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Būtinas simbolių skaičius: {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>Priartinti</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>Peržiūrėkite</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>pėd.</value>

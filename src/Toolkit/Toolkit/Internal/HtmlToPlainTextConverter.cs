@@ -23,7 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Strips out html-code to return plain text.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public sealed class HtmlToPlainTextConverter : IValueConverter
+    public sealed partial class HtmlToPlainTextConverter : IValueConverter
     {
         /// <inheritdoc />
         object? IValueConverter.Convert(object? value, Type targetType, object parameter,

@@ -1,26 +1,32 @@
-﻿#if WPF
+﻿#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+#if WPF
+using System.Windows.Controls.Primitives;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    [TemplatePart(Name ="Selector", Type = typeof(System.Windows.Controls.Primitives.Selector))]
+    [TemplatePart(Name ="Selector", Type = typeof(Selector))]
     public partial class ComboBoxFormInputView : Control
     {
-        private System.Windows.Controls.Primitives.Selector? _selector;
-
+        private Selector? _selector;
 
         /// <inheritdoc />
+#if WPF
         public override void OnApplyTemplate()
+#else
+        protected override void OnApplyTemplate()
+#endif
         {
             base.OnApplyTemplate();
             if (_selector != null)
             {
                 _selector.SelectionChanged -= Selector_SelectionChanged;
             }
-            _selector = GetTemplateChild("Selector") as System.Windows.Controls.Primitives.Selector;
+            _selector = GetTemplateChild("Selector") as Selector;
             if(_selector != null)
             {
                 _selector.SelectionChanged += Selector_SelectionChanged;

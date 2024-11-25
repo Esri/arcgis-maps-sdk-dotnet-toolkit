@@ -14,8 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
-#if WPF
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -23,7 +22,9 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
+#if WPF
 using System.Windows.Controls.Primitives;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -50,10 +51,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _addAttachmentButton.Click += AddAttachmentButton_Click;
             }
-            if(GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
+            if (GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
+            {
+#if WPF
                 scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
+#elif WINDOWS_XAML
+                if(scrollViewer.Content is FrameworkElement element)
+                {
+                    element.SizeChanged += AttachmentsFormElementView_SizeChanged;
+                }
+#endif
+            }
+            UpdateVisibility();
         }
 
+
+#if WPF
         private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if(_scrollToEnd)
@@ -62,12 +75,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _scrollToEnd = false;
             }
         }
+#elif WINDOWS_XAML
 
-        private void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
+        private void AttachmentsFormElementView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+            if (_scrollToEnd && GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
+            {
+                scrollViewer.ChangeView(scrollViewer.ScrollableWidth, null, null);
+            }
+        }
+#endif
+
+        private
+#if WINDOWS_XAML
+            async
+#endif
+            void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
             if (Element is null || !Element.IsEditable) return;
             try
             {
+#if WPF
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 if (openFileDialog.ShowDialog() == true)
                 {
@@ -79,8 +108,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         EvaluateExpressions();
                     }
                 }
+#elif WINDOWS_XAML
+#if WINUI
+                var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
+                if (hwnd == 0)
+                    return; // Can't show dialog without a root window
+#endif
+                var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
+#if WINUI
+                WinRT.Interop.InitializeWithWindow.Initialize(openPicker, (nint)hwnd);
+#endif
+                openPicker.FileTypeFilter.Add("*");
+                var file = await openPicker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    var fileInfo = new FileInfo(file.Path);
+                    _scrollToEnd = true;
+#if WINDOWS_UWP
+                    using var ms = new MemoryStream();
+                    using var filestream = await file.OpenStreamForReadAsync();
+                    await filestream.CopyToAsync(ms);
+                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
+#else
+                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+#endif
+                    EvaluateExpressions();
+                }
+#endif
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
             }

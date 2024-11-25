@@ -14,11 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
@@ -59,7 +57,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DefaultStyleKey = typeof(FieldFormElementView);
 #endif
         }
-        
+
+#if WINDOWS_XAML
+        internal FeatureForm? FeatureForm => FeatureFormView.GetFeatureFormViewParent(this)?.FeatureForm;
+#else
         /// <summary>
         /// Gets or sets the FeatureForm that the <see cref="Element"/> belongs to.
         /// </summary>
@@ -79,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty FeatureFormProperty =
             DependencyProperty.Register(nameof(FeatureForm), typeof(FeatureForm), typeof(FieldFormElementView), new PropertyMetadata(null));
 #endif
-
+#endif
         /// <summary>
         /// Gets or sets the FieldFormElement.
         /// </summary>
@@ -176,7 +177,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             if (GetTemplateChild("ErrorLabel") is TextBlock tb)
             {
-                tb.Text = errMessage;
+                tb.Text = errMessage ?? string.Empty;
             }
         }
 
@@ -312,6 +313,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
             DependencyProperty.Register(nameof(BarcodeScannerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 #endif
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="TextFormElementTemplate"/> element.
+        /// </summary>
+        public DataTemplate? TextFormElementTemplate
+        {
+            get { return (DataTemplate)GetValue(TextFormElementTemplateProperty); }
+            set { SetValue(TextFormElementTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="TextFormElementTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TextFormElementTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(TextFormElementTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(TextFormElementTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
+        
     }
 }
-#endif

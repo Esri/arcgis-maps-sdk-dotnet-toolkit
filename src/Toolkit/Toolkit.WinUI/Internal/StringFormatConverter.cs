@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Allows converting an object to a formatted string representation.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class StringFormatConverter : IValueConverter
+    public partial class StringFormatConverter : IValueConverter
     {
         /// <inheritdoc />
 #pragma warning disable CA1033 // Interface methods should be callable by child types: Solution is to seal the class, but this would be a binary breaking change, so disabling warning instead

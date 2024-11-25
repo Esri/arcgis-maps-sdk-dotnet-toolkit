@@ -4,7 +4,7 @@
     xmlns:basemapgallery="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="BasemapGallery.Resources.xaml" />
+        <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
@@ -147,13 +147,7 @@
                             BorderBrush="#4d6e6e6e"
                             BorderThickness="1">
                             <Grid>
-
-                                <Image
-                                    Width="32"
-                                    Height="32"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Source="{ThemeResource BasemapPlaceholder}" />
+                                <FontIcon FontFamily="{StaticResource calcite-ui-icons-24}" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE032;" />
                                 <Image
                                     Width="62"
                                     Height="62"
@@ -193,13 +187,7 @@
                             BorderBrush="#4d6e6e6e"
                             BorderThickness="1">
                             <Grid>
-
-                                <Image
-                                    Width="32"
-                                    Height="32"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Source="{ThemeResource BasemapPlaceholder}" />
+                                <FontIcon FontFamily="{StaticResource calcite-ui-icons-24}" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE032;" />
                                 <Image
                                     Width="62"
                                     Height="62"

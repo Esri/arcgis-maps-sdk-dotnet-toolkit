@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>إضافة مرفق</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>التقاط صورة</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>يجب أن يكون التاريخ في {0} أو قبله</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>أقل من أدنى قيمة</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>لا توجد مرفقات</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>يجب أن تكون القيمة ضمن النطاق</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>يجب ألا تكون القيمة فارغة</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>فتح</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>إدخال {0} إلى {1} من الرموز</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>إزالة</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>إلغاء الأمر</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>موافق</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>إعادة تسمية</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>إعادة تسمية المرفق</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>العدد المطلوب للرموز: {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>تكبير/تصغير إلى</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>عرض</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>قدم</value>

@@ -1,0 +1,216 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal"
+                    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+                    xmlns:primitives="using:Esri.ArcGISRuntime.Toolkit.Primitives"
+                    >
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/FeatureForm/FeatureForm.Theme.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <Color x:Key="CardStrokeColorDefault">#19000000</Color>
+            <Color x:Key="SubtleFillColorTransparent">#00FFFFFF</Color>
+            <Color x:Key="SubtleFillColorSecondary">#0FFFFFFF</Color>
+            <Color x:Key="TextFillColorPrimary">#FFFFFF</Color>
+            <Color x:Key="CardBackgroundFillColorDefault">#0DFFFFFF</Color>
+            <Color x:Key="CardBackgroundFillColorSecondary">#08FFFFFF</Color>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <Color x:Key="TextFillColorPrimary">#E4000000</Color>
+            <Color x:Key="CardStrokeColorDefault">#0F000000</Color>
+            <Color x:Key="SubtleFillColorTransparent">#00FFFFFF</Color>
+            <Color x:Key="SubtleFillColorSecondary">#09000000</Color>
+            <Color x:Key="CardBackgroundFillColorDefault">#B3FFFFFF</Color>
+            <Color x:Key="CardBackgroundFillColorSecondary">#80F6F6F6</Color>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="{ThemeResource CardStrokeColorDefault}" />
+    <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="{StaticResource CardBackgroundFillColorDefault}" />
+    <SolidColorBrush x:Key="CardBackgroundFillColorSecondaryBrush" Color="{ThemeResource CardBackgroundFillColorSecondary}" />
+    <SolidColorBrush x:Key="SubtleFillColorTransparentBrush" Color="{ThemeResource SubtleFillColorTransparent}"/>
+    <SolidColorBrush x:Key="SubtleFillColorSecondaryBrush" Color="{StaticResource SubtleFillColorSecondary}" />
+
+    <x:Double x:Key="ExpanderPopinVerticalOffset">1</x:Double>
+    <x:Double x:Key="ExpanderChevronWidth">1</x:Double>
+    <x:String x:Key="ExpanderChevronUpGlyph">&#xE70E;</x:String>
+    <x:String x:Key="ExpanderChevronDownGlyph">&#xE70D;</x:String>
+    <x:Double x:Key="ExpanderMinHeight">48</x:Double>
+    <Thickness x:Key="ExpanderContentPadding">16</Thickness>
+    <Thickness x:Key="ExpanderHeaderPadding">16,0,0,0</Thickness>
+    <Thickness x:Key="ExpanderDropdownDownBorderThickness">1,0,1,1</Thickness>
+    <Thickness x:Key="ExpanderDropdownUpBorderThickness">1,1,1,0</Thickness>
+    <Thickness x:Key="ExpanderContentDownBorderThickness">1,0,1,1</Thickness>
+    
+    <Thickness x:Key="ExpanderHeaderBorderThickness">1</Thickness>
+    <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="{StaticResource TextFillColorPrimary}" />
+
+    <StaticResource x:Key="ExpanderHeaderBackground" ResourceKey="CardBackgroundFillColorDefaultBrush" />
+    <StaticResource x:Key="ExpanderHeaderForeground" ResourceKey="TextFillColorPrimaryBrush" />
+    <StaticResource x:Key="ExpanderChevronForeground" ResourceKey="TextFillColorPrimaryBrush" />
+    
+    <StaticResource x:Key="ExpanderChevronBackground" ResourceKey="SubtleFillColorTransparentBrush" />
+    <StaticResource x:Key="ExpanderChevronBorderPointerOverBrush" ResourceKey="SubtleFillColorTransparentBrush" />
+    <StaticResource x:Key="ExpanderHeaderBorderBrush" ResourceKey="CardStrokeColorDefaultBrush" />
+    <StaticResource x:Key="ExpanderChevronPointerOverBackground" ResourceKey="SubtleFillColorSecondaryBrush" />
+    <StaticResource x:Key="ExpanderChevronBorderBrush" ResourceKey="SubtleFillColorTransparentBrush" />
+    <StaticResource x:Key="ExpanderContentBorderBrush" ResourceKey="CardStrokeColorDefaultBrush" />
+    <StaticResource x:Key="ExpanderContentBackground" ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+    
+    <Style TargetType="ToggleButton" x:Key="ExpanderHeaderDownStyle">
+        <Setter Property="Padding" Value="{StaticResource ExpanderHeaderPadding}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="BorderThickness" Value="{StaticResource ExpanderContentDownBorderThickness}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ExpanderContentBorderBrush}" />
+        <Setter Property="Padding" Value="{StaticResource ExpanderContentPadding}" />
+        <Setter Property="Background" Value="{StaticResource ExpanderContentBackground}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid x:Name="ToggleButtonGrid" 
+                          CornerRadius="{TemplateBinding CornerRadius}" BackgroundSizing="{TemplateBinding BackgroundSizing}" Background="{TemplateBinding Background}"
+                          MinHeight="{TemplateBinding MinHeight}" MinWidth="{TemplateBinding MinWidth}" MaxWidth="{TemplateBinding MaxWidth}" Width="{TemplateBinding Width}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                          BorderBrush="{ThemeResource ExpanderHeaderBorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExpanderHeaderForeground}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ToggleButtonGrid" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExpanderHeaderBorderBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExpanderGlyph" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExpanderChevronForeground}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExpandCollapseChevronBorder" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExpanderChevronBorderBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExpandCollapseChevronBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExpanderChevronBackground}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter Target="ExpanderGlyph.Glyph" Value="{StaticResource ExpanderChevronUpGlyph}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExpandCollapseChevronBorder" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExpanderChevronBorderPointerOverBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExpandCollapseChevronBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExpanderChevronPointerOverBackground}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" Foreground="{TemplateBinding Foreground}" />
+                        <Border x:Name="ExpandCollapseChevronBorder" Grid.Column="1" Width="32" Height="32" Margin="20,0,8,0" BorderBrush="{StaticResource ExpanderChevronBorderBrush}" BorderThickness="0" Background="{StaticResource ExpanderChevronBackground}">
+                            <FontIcon x:Name="ExpanderGlyph" Glyph="{StaticResource ExpanderChevronDownGlyph}" FontFamily="Segoe Fluent Icons,Segoe MDL2 Assets"
+                                      Foreground="{StaticResource ExpanderChevronForeground}" 
+                                      FontSize="12" IsTextScaleFactorEnabled="False" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="controls:FeatureFormView">
+    <Setter Property="Template">
+      <Setter.Value>
+                <ControlTemplate TargetType="controls:FeatureFormView">
+                    <Border Background="{TemplateBinding Background}"
+          BorderBrush="{TemplateBinding BorderBrush}"
+          BorderThickness="{TemplateBinding BorderThickness}"
+          Padding="{TemplateBinding Padding}"
+          Margin="{TemplateBinding Margin}"
+          MinWidth="{TemplateBinding MinWidth}"
+          MaxWidth="{TemplateBinding MaxWidth}">
+                        <Grid DataContext="{TemplateBinding FeatureForm}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewHeaderStyle}"
+                 Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                            <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="FeatureFormContentScrollViewer">
+                                <StackPanel>
+                                    <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView" IsTabStop="False">
+                                        <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                            <DataTemplate>
+                                                <primitives:FieldFormElementView Element="{Binding}" />
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                        <primitives:FormElementItemsControl.TextFormElementTemplate>
+                                            <DataTemplate>
+                                                <primitives:TextFormElementView Element="{Binding}" />
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.TextFormElementTemplate>
+                                        <primitives:FormElementItemsControl.GroupFormElementTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition x:Name="Row0" Height="Auto" />
+                                                            <RowDefinition x:Name="Row1" Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <ToggleButton IsChecked="{Binding InitialState, Converter={StaticResource ExpandStateConverter}, Mode=OneTime}"
+                                                                      HorizontalAlignment="Stretch" Background="{StaticResource ExpanderHeaderBackground}" 
+                                                                      BorderBrush="{StaticResource ExpanderHeaderBorderBrush}" BorderThickness="{StaticResource ExpanderHeaderBorderThickness}" 
+                                                                  HorizontalContentAlignment="Stretch" x:Name="ExpanderToggle" Style="{StaticResource ExpanderHeaderDownStyle}">
+                                                            <StackPanel VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                                                                <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                                                            </StackPanel>
+                                                        </ToggleButton>
+                                                        <Grid HorizontalAlignment="Stretch" Visibility="{Binding IsChecked, ElementName=ExpanderToggle, Mode=OneWay}" Grid.Row="1"
+                                                              BorderBrush="{StaticResource ExpanderContentBorderBrush}" BorderThickness="{StaticResource ExpanderContentDownBorderThickness}"
+                                                              Padding="{StaticResource ExpanderContentPadding}">
+                                                            <Grid.Transitions>
+                                                                <TransitionCollection>
+                                                                    <RepositionThemeTransition />
+                                                                </TransitionCollection>
+                                                            </Grid.Transitions>
+                                                            <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" IsTabStop="False">
+                                                                <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                                                    <DataTemplate>
+                                                                        <primitives:FieldFormElementView Element="{Binding}" />
+                                                                    </DataTemplate>
+                                                                </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                                                <primitives:FormElementItemsControl.TextFormElementTemplate>
+                                                                    <DataTemplate>
+                                                                        <primitives:TextFormElementView Element="{Binding}" />
+                                                                    </DataTemplate>
+                                                                </primitives:FormElementItemsControl.TextFormElementTemplate>
+                                                            </primitives:FormElementItemsControl>
+                                                        </Grid>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.GroupFormElementTemplate>
+                                    </primitives:FormElementItemsControl>
+                                    <primitives:AttachmentsFormElementView Element="{Binding DefaultAttachmentsElement}" Visibility="{Binding DefaultAttachmentsElement, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

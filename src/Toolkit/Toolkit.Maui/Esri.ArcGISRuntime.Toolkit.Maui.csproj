@@ -37,6 +37,7 @@
     <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">
       <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
       <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+      <PackageReference Include="Markdig" Version="0.31.0" />
     </ItemGroup>
 
     <Import Project="..\..\CommonProperties.targets" />
@@ -44,18 +45,11 @@
     <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 
     <!-- Analyzers -->
-    <PropertyGroup>
-        <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
-    </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Analyzers\Toolkit.Maui.Analyzers.CodeFixes\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.csproj" PrivateAssets="all" />
-        <ProjectReference Include="..\..\Analyzers\Toolkit.Maui.Analyzers\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.csproj" PrivateAssets="all" />
+        <ProjectReference Include="..\..\Analyzers\Toolkit.Maui.Analyzers.CodeFixes\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.csproj" PrivateAssets="all"  OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\..\Analyzers\Toolkit.Maui.Analyzers\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.csproj" PrivateAssets="all"  OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <None Include="..\..\Analyzers\Toolkit.Maui.Analyzers\bin\$(Configuration)\netstandard2.0\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.dll"  Pack="true" PackagePath="analyzers/dotnet/cs" Link="analyzers\dotnet\cs\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.dll" />
+        <None Include="..\..\Analyzers\Toolkit.Maui.Analyzers.CodeFixes\bin\$(Configuration)\netstandard2.0\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.dll"  Pack="true" PackagePath="analyzers/dotnet/cs" Link="analyzers\dotnet\cs\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.dll" />
         <None Include="tools\*.ps1" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="tools" />
     </ItemGroup>
-    <Target Name="_AddAnalyzersToOutput">
-        <ItemGroup>
-            <TfmSpecificPackageFile Include="$(OutputPath)\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
-            <TfmSpecificPackageFile Include="$(OutputPath)\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
-        </ItemGroup>
-    </Target>
 </Project>

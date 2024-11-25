@@ -36,6 +36,7 @@ internal class MarkupNode
     public HtmlToken? Token { get; set; }
     public MarkupType Type { get; set; }
     public bool? IsBold { get; set; }
+    public bool? IsMonospace { get; set; }
     public bool? IsItalic { get; set; }
     public bool? IsUnderline { get; set; }
     public double? FontSize { get; set; } // em
@@ -290,6 +291,7 @@ internal class HtmlUtility
                 case "em":
                 case "u":
                 case "abbr":
+                case "code":
                     newNode.Type = MarkupType.Span;
                     if (name == "b" || name == "strong")
                         newNode.IsBold = true;
@@ -297,6 +299,8 @@ internal class HtmlUtility
                         newNode.IsItalic = true;
                     else if (name == "u")
                         newNode.IsUnderline = true;
+                    else if (name == "code")
+                        newNode.IsMonospace = true;
                     else if (name == "font")
                     {
                         if (attr.TryGetValue("color", out var fontColor))
@@ -701,6 +705,7 @@ internal class HtmlUtility
             FontColor = child.FontColor ?? parent.FontColor,
             BackColor = child.BackColor ?? parent.BackColor,
             Alignment = child.Alignment ?? parent.Alignment,
+            IsMonospace = child.IsMonospace ?? parent.IsMonospace,
             Content = child.Content,
         };
         newNode.Children.AddRange(child.Children);

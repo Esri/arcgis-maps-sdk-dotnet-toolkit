@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Converts an integer number to a readable filesize string.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    internal sealed class FileSizeConverter : IValueConverter
+    internal sealed partial class FileSizeConverter : IValueConverter
     {
         /// <inheritdoc />
         object IValueConverter.Convert(object? value, Type targetType, object? parameter,

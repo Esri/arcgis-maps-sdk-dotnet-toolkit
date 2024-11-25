@@ -122,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var items = new List<LegendEntry>();
             if (GeoView != null)
             {
-                items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 1" }));
+                items.Add(new LegendEntry(new ArcGISTiledLayer(new Uri("https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer")) { Name = "Layer 1" }));
                 items.Add(new LegendEntry(new DesigntimeSublayer("Sublayer A")));
                 items.Add(new LegendEntry(new DesignLegendInfo("Symbol 1", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Red })));
                 items.Add(new LegendEntry(new DesignLegendInfo("Symbol 2", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Green })));
@@ -133,8 +133,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 items.Add(new LegendEntry(new DesignLegendInfo("Large", new Symbology.SimpleMarkerSymbol() { Size = 15 })));
                 if (!FilterEmptyLayers)
                 {
-                    items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 2" }));
-                    items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 3" }));
+                    items.Add(new LegendEntry(new ArcGISTiledLayer(new Uri("https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer")) { Name = "Layer 2" }));
+                    items.Add(new LegendEntry(new ArcGISTiledLayer(new Uri("https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer")) { Name = "Layer 3" }));
                 }
             }
 

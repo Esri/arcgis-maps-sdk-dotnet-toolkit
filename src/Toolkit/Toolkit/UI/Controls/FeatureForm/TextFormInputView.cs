@@ -1,4 +1,19 @@
-﻿#if WPF || MAUI
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -41,6 +56,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void ConfigureTextBox()
         {
+#if WINDOWS_XAML
+            VisualStateManager.GoToState(this, Element?.IsEditable == false ? "Disabled" : "Enabled", true);
+            VisualStateManager.GoToState(this, Element?.Input is BarcodeScannerFormInput && Element.IsEditable ? "ShowBarcode" : "HideBarcode", true);
+            VisualStateManager.GoToState(this, Element?.IsEditable == true && Element?.Input is TextAreaFormInput ? "MultiLineText" : "SingleLineText", true);
+            VisualStateManager.GoToState(this, Element?.IsEditable == true && Element?.Input is TextAreaFormInput ? "ShowCharacterCount" : "HideCharacterCount", true);
+#endif
             if (_textInput != null)
             {
                 if (Element?.Input is TextAreaFormInput area)
@@ -48,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                     if (_textLineInput != null) _textLineInput.IsVisible = false;
                     if (_textAreaInput != null) _textAreaInput.IsVisible = Element.IsEditable;
-#else
+#elif WPF
                     _textInput.AcceptsReturn = true;
 #endif
                     _textInput.MaxLength = (int)area.MaxLength;
@@ -58,7 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                     if (_textAreaInput != null) _textAreaInput.IsVisible = false;
                     if (_textLineInput != null) _textLineInput.IsVisible = Element.IsEditable;
-#else
+#elif WPF
                     _textInput.AcceptsReturn = false;
 #endif
                     int maxLength = 0;
@@ -69,33 +90,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                     _textInput.MaxLength = maxLength == 0 ? int.MaxValue : maxLength;
                 }
-                _textInput.Text = Element?.Value?.ToString();
-#if MAUI
+                _textInput.Text = Element?.Value?.ToString() ?? string.Empty;
+#if MAUI || WINDOWS_XAML
                 bool isNumericInput = Element?.FieldType == FieldType.Int32 ||
                     Element?.FieldType == FieldType.Int64 ||
                     Element?.FieldType == FieldType.Int16 ||
                     Element?.FieldType == FieldType.Float64 ||
                     Element?.FieldType == FieldType.Float32;
+#if MAUI
                 _textInput.Keyboard = isNumericInput ? Keyboard.Numeric : Keyboard.Default;
+#else
+                _textInput.InputScope = new InputScope()
+                {
+                    Names = { new InputScopeName() { NameValue = isNumericInput ? InputScopeNameValue.Number : InputScopeNameValue.Text } }
+                };
+#endif
 #endif
             }
+#if !WINDOWS_XAML
             ShowCharacterCount = Element?.IsEditable == true && Element?.Input is TextAreaFormInput;
+#endif
             if (_readonlyLabel is not null)
             {
 #if MAUI
                 _readonlyLabel.IsVisible = Element?.IsEditable == false;
-#else
+#elif WPF
                 _readonlyLabel.Visibility = Element?.IsEditable == false ? Visibility.Visible : Visibility.Collapsed;
 #endif
                 _readonlyLabel.Text = Element?.FormattedValue;
             }
 
+#if !WINDOWS_XAML
             ShowBarcodeScanner = Element?.Input is BarcodeScannerFormInput && Element.IsEditable;
+#endif
 
 #if !MAUI
             if (_textInput != null)
                 _textInput.Visibility = Element?.IsEditable == false ? Visibility.Collapsed : Visibility.Visible;
 #endif
+
         }
 
         private void TextInput_TextChanged(object? sender, TextChangedEventArgs e)
@@ -185,6 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #endif
 
+#if !WINDOWS_XAML
         /// <summary>
         /// Gets a value indicating whether the character count is visible.
         /// </summary>
@@ -204,7 +238,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (_showCharacterCount != value)
                 {
                     _showCharacterCount = value;
+#if MAUI
                     OnPropertyChanged(nameof(ShowCharacterCount));
+#endif
                 }
 #else
                 SetValue(ShowCharacterCountPropertyKey, value); 
@@ -234,11 +270,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             private set
             {
-#if MAUI
+#if MAUI || WINDOWS_XAML
                 if (_ShowBarcodeScanner != value)
                 {
                     _ShowBarcodeScanner = value;
+#if MAUI
                     OnPropertyChanged(nameof(ShowBarcodeScanner));
+#endif
                 }
 #else
                 SetValue(ShowBarcodeScannerPropertyKey, value);
@@ -246,11 +284,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+
 #if MAUI
         private bool _ShowBarcodeScanner = false;
 #else
         private static readonly DependencyPropertyKey ShowBarcodeScannerPropertyKey =
             DependencyProperty.RegisterReadOnly(nameof(ShowBarcodeScanner), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
+#endif
 #endif
 
         /// <summary>
@@ -336,4 +376,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
-#endif

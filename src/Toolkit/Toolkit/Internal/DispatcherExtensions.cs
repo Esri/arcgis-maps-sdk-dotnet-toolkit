@@ -45,7 +45,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             else
                 dObject.DispatcherQueue.TryEnqueue(() => action());
         }
-        
 #elif WINDOWS_UWP
         internal static void Dispatch(this DependencyObject dObject, Action action)
         {

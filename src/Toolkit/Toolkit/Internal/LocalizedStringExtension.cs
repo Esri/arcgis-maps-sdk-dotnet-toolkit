@@ -17,7 +17,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// Markup extension for providing localized Toolkit strings
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public sealed class LocalizedStringExtension : MarkupExtension
+    public sealed partial class LocalizedStringExtension : MarkupExtension
     {
         /// <inheritdoc />
 #if WPF

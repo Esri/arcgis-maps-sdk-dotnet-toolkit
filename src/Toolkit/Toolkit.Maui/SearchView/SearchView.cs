@@ -394,7 +394,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     private bool ResultLabelVisibility => (SearchViewModel?.Suggestions != null && SearchViewModel?.Suggestions?.Count == 0) ||
         (SearchViewModel?.Results != null && SearchViewModel?.Results?.Count == 0);
 
-    private bool RepeatSearchButtonVisibility => EnableRepeatSearchHereButton && (SearchViewModel?.IsEligibleForRequery ?? false);
+    private bool RepeatSearchButtonVisibility => EnableRepeatSearchHereButton && (SearchViewModel?.IsEligibleForRequery ?? false) && !SuggestionsViewVisibility;
 
     private bool SourcePopupVisibility => _sourceSelectToggled && SearchViewModel?.Sources.Count > 1;
 

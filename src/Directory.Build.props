@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.5.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.5.0</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.6.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.6.0</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -92,6 +92,10 @@
   <ItemGroup Condition="$(IsToolkitLibrary)">
     <None Include="$(MSBuildThisFileDirectory)..\build\icon.png" Pack="true" PackagePath="\">
       <Link>icon.png</Link>
+      <Visible>false</Visible>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)\THIRD-PARTY-NOTICES.TXT" Pack="true" PackagePath="\">
+      <Link>THIRD-PARTY-NOTICES.TXT</Link>
       <Visible>false</Visible>
     </None>
   </ItemGroup>

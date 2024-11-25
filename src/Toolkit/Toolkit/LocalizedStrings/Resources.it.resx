@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>Aggiungi allegato</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>Scatta una foto</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>La data deve corrispondere o essere antecedente a {0}</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Meno del valore minimo</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>Nessun allegato</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Il valore deve rientrare nel dominio</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>Il valore non deve essere vuoto</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>Apri</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Digitare{0} a{1} caratteri</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>Rimuovi</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>Rinomina</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>Rinomina allegato</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Numero di caratteri richiesti: {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>Zoom a</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>Visualizza</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>piedi</value>

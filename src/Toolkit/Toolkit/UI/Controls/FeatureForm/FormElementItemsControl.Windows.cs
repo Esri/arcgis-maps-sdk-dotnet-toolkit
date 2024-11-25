@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF
+#if WPF || WINDOWS_XAML
 using System.Diagnostics;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 
@@ -24,23 +24,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView"/> control,
     /// used for rendering a set of popup elements responsible for rendering <see cref="FieldFormElement"/> and <see cref="GroupFormElement"/>.
     /// </summary>
-    public class FormElementItemsControl : ItemsControl
+    public partial class FormElementItemsControl : ItemsControl
     {
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
+            base.PrepareContainerForItemOverride(element, item);
             if (element is ContentPresenter presenter)
             {
                 if (item is FieldFormElement)
                 {
                     presenter.ContentTemplate = FieldFormElementTemplate;
                 }
+                if (item is TextFormElement)
+                {
+                    presenter.ContentTemplate = TextFormElementTemplate;
+                }
                 else if (item is GroupFormElement)
                 {
                     presenter.ContentTemplate = GroupFormElementTemplate;
                 }
             }
-            base.PrepareContainerForItemOverride(element, item);
         }
 
         /// <summary>
@@ -59,6 +63,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty FieldFormElementTemplateProperty =
             DependencyProperty.Register(nameof(FieldFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Template used for rendering a <see cref="TextFormElement"/>.
+        /// </summary>
+        /// <seealso cref="TextFormElement"/>
+        /// <seealso cref="TextFormElementView"/>
+        public DataTemplate TextFormElementTemplate
+        {
+            get { return (DataTemplate)GetValue(TextFormElementTemplateProperty); }
+            set { SetValue(TextFormElementTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="TextFormElementTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TextFormElementTemplateProperty =
+            DependencyProperty.Register(nameof(TextFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
+
 
         /// <summary>
         /// Template used for rendering a <see cref="GroupFormElement"/>.

@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
@@ -34,6 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private const string ItemsViewName = "ItemsView";
         private const string FeatureFormContentScrollViewerName = "FeatureFormContentScrollViewer";
 
+#if WPF
         private static readonly DependencyPropertyKey IsValidPropertyKey
           = DependencyProperty.RegisterReadOnly(nameof(IsValid), typeof(bool), typeof(FeatureFormView), new FrameworkPropertyMetadata(false));
 
@@ -51,9 +52,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get { return (bool)GetValue(IsValidProperty); }
             private set { SetValue(IsValidPropertyKey, value); }
         }
+#endif
 
-        internal static UI.Controls.FeatureFormView? GetFeatureFormViewParent(DependencyObject child)
+        internal static UI.Controls.FeatureFormView? GetFeatureFormViewParent(DependencyObject? child)
         {
+            if (child is null) return null;
             var parent = VisualTreeHelper.GetParent(child);
             while (parent is not null && parent is not UI.Controls.FeatureFormView view)
             {

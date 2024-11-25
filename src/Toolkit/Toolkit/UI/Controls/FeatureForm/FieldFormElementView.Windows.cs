@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives

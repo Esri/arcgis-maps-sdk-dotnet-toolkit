@@ -14,12 +14,10 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
-
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
@@ -78,11 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 _isDirty = true;
             }
-#if MAUI
-            Dispatcher.Dispatch(async () =>
-#else
-            _ = Dispatcher.InvokeAsync(async () =>
-#endif
+            this.Dispatch(async () =>
             {
                 try
                 {
@@ -99,10 +93,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         {
                             bo.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent)); // TODO: Should update binding instead
                         }
-#else
+#elif WPF
                         var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
                         var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
                         binding?.UpdateTarget();
+#elif WINDOWS_XAML
+                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
+                        ctrl?.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Path = new PropertyPath("FeatureForm.Elements"), Source = this });
 #endif
                     }
                 }
@@ -174,8 +171,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
 #if MAUI
             (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
-#else
+#elif WPF
             (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
+#elif WINDOWS_XAML
+            (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ChangeView(null, 0, null, disableAnimation: true);
 #endif
 
             if (oldForm is INotifyPropertyChanged inpcOld)
@@ -202,6 +201,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 this.Dispatch(UpdateIsValidProperty);
             }
         }
+
+#if !WPF
+        private bool _isValid = false;
+
+        /// <summary>
+        /// Gets a value indicating whether this form has any validation errors.
+        /// </summary>
+        /// <seealso cref="FeatureForm.ValidationErrors"/>
+        public bool IsValid
+        {
+            get => _isValid;
+            private set
+            {
+                if (_isValid != value)
+                {
+                    _isValid = value;
+#if MAUI
+                    base.OnPropertyChanged(nameof(IsValid));
+#endif
+                }
+            }
+        }
+#endif
 
         private void UpdateIsValidProperty()
         {
@@ -412,6 +434,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             return false;
         }
+
+        // Called when clicking links in markdown
+        internal void OnHyperlinkClicked(Uri uri)
+        {
+            Launcher.LaunchUriAsync(uri);
+        }
     }
 
     /// <summary>
@@ -456,4 +484,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public FieldFormElement FormElement { get; }
     }
 }
-#endif

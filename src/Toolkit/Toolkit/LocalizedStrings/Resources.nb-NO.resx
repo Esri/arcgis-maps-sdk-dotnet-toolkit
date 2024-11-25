@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>Legg til vedlegg</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>Ta bilde</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Datoen må være den eller før {0}</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Mindre enn minimumsverdi</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>Ingen vedlegg</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Verdien må være innenfor domenet</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>Verdien kan ikke være tom</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>Åpne</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Skriv inn fra {0} til {1} tegn</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>Fjern</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>Gi nytt navn</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>Endre navn på vedlegg</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Antall obligatoriske tegn: {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>Zoom til</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>Vis</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>

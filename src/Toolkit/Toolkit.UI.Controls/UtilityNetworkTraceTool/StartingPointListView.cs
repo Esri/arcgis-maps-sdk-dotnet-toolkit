@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// Special listview that facilitates inspecting individual items. Created for use with <see cref="UtilityNetworkTraceTool"/>.
     /// </summary>
     [TemplatePart(Name = "PART_InnerListView", Type = typeof(ListView))]
-    internal class StartingPointListView : ListView
+    internal partial class StartingPointListView : ListView
     {
         private ListView? _innerListView;
 

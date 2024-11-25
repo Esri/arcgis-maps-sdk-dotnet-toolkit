@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
+    <value>Pievienot pielikumu</value>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
+    <value>Uzņemt fotoattēlu</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Datumam jāsakrīt vai jābūt pirms {0}</value>
   </data>
@@ -162,14 +168,35 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Mazāk par minimālo vērtību</value>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>Pielikumu nav</value>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Vērtībai ir jābūt domēnā</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>Vērtība nedrīkst būt tukša</value>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>Atvērt</value>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Ievadiet {0} līdz {1} rakstzīmēm</value>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>Noņemt</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogCancel" xml:space="preserve">
+    <value>Atcelt</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentDialogOK" xml:space="preserve">
+    <value>Labi</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>Pārdēvēt</value>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>Pārdēvēt pielikumu</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Nepieciešamo rakstzīmju skaits: {0}</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
     <value>Tālummaiņa</value>
+  </data>
+  <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
+    <value>Skatīt</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>pēdas</value>

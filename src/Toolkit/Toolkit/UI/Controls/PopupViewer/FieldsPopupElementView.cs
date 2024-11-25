@@ -140,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (isUrl)
                 {
 #if MAUI
-                    var hl = new Span() { Text = "View", TextDecorations = TextDecorations.Underline };
+                    var hl = new Span() { Text = Properties.Resources.GetString("PopupViewerViewHyperlinkText"), TextDecorations = TextDecorations.Underline };
                     var gestureRecognizer = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
                     gestureRecognizer.Tapped += (s, e) =>
                     {
@@ -158,9 +158,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                             PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri);
                     };
 #if WINDOWS_XAML
-                    hl.Inlines.Add(new Run() {  Text = "View" });
+                    hl.Inlines.Add(new Run() {  Text = Properties.Resources.GetString("PopupViewerViewHyperlinkText") });
 #else
-                    hl.Inlines.Add("View");
+                    hl.Inlines.Add(Properties.Resources.GetString("PopupViewerViewHyperlinkText"));
 #endif
                     t.Inlines.Add(hl);
 #endif
