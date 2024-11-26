@@ -12,11 +12,16 @@ namespace ARToolkit.SampleApp.Samples
     [SampleInfo(DisplayName = "Earth", Description = "Shows the entire earth hovering in front of you allowing you to walk around it")]
     public partial class EarthViewController : UIViewController
     {
-        ARSceneView ARView;
+        ARSceneView? ARView;
 
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            if (View == null)
+            {
+                throw new InvalidOperationException("View was unexpectedly null");
+            }
 
             ARView = new ARSceneView { TranslatesAutoresizingMaskIntoConstraints = false };
 
@@ -30,7 +35,10 @@ namespace ARToolkit.SampleApp.Samples
                 ARView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor)
             });
 
-            var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
+            var basemap = new Basemap(new ArcGISTiledLayer(new Uri("https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9")));
+            await basemap.LoadAsync();
+            var scene = new Scene(basemap);
+
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
             scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
@@ -44,24 +52,37 @@ namespace ARToolkit.SampleApp.Samples
             ARView.Scene = scene;
         }
 
-        public override void ViewDidAppear(bool animated)
+        public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
 
             if (ARView != null)
             {
-                ARView.LocationDataSource = new SystemLocationDataSource();
-                ARView.StartTrackingAsync();
+                try
+                {
+                    await ARView.StartTrackingAsync();
+                }
+                catch(Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex);
+                }
             }
         }
 
-        public override void ViewDidDisappear(bool animated)
+        public override async void ViewDidDisappear(bool animated)
         {
             base.ViewDidDisappear(animated);
 
             if (ARView != null)
             {
-                ARView.StopTrackingAsync();
+                try
+                {
+                    await ARView.StopTrackingAsync();
+                }
+                catch(Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex);
+                }
             }
         }
     }
