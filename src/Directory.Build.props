@@ -48,6 +48,7 @@
     <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst17.0</NetCatalystTargetFramework>
     <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios17.0</NetiOSTargetFramework>  
     <MauiVersion Condition="'$(MauiVersion)'==''">8.0.3</MauiVersion>
+	<WinAppSDKVersion Condition="'$(WinAppSDKVersion)'==''">1.4.230822000</WinAppSDKVersion>
   </PropertyGroup>
   <PropertyGroup>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
