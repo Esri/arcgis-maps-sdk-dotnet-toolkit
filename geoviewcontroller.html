@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>GeoViewController </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="GeoViewController ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="geoviewcontroller">GeoViewController</h1>
+
+<p>GeoViewController is a helper class for enabling easy adoption of <a href="https://learn.microsoft.com/en-us/dotnet/architecture/maui/mvvm">Model-View-ViewModel (MVVM)</a> patterns in ArcGIS Maps SDK for .NET applications.
+The helper class allows you to perform view operations on the MapView from your ViewModel, through an attached proxy-object that ensures you keep ViewModel and View separated.</p>
+<p><img src="https://user-images.githubusercontent.com/1378165/73389839-d9c8f500-4289-11ea-923c-18232489b3e0.png" alt="geoviewcontroller"></p>
+<h2 id="features">Features</h2>
+<ul>
+<li>GeoViewController class can manage most common <code>GeoView</code> operations like setting viewpoint, performing identify and showing callouts. Any specific <code>MapView</code> or <code>SceneView</code> operations are not accessible via this helper class.</li>
+<li>The helper class is extensible. You can add your own custom map and scene operations, or interface to enable testing (see WPF sample).</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-xml">&lt;esri:MapView x:Name=&quot;MyMapView&quot;
+              Map=&quot;{Binding Map, Source={StaticResource VM}}&quot;
+              esri:GeoViewController.GeoViewController=&quot;{Binding Controller, Source={StaticResource VM}}&quot;&gt;
+            &lt;Behaviors:Interaction.Triggers&gt;
+                &lt;Behaviors:EventTrigger EventName=&quot;GeoViewTapped&quot; &gt;
+                    &lt;Behaviors:InvokeCommandAction Command=&quot;{Binding GeoViewTappedCommand, Source={StaticResource VM}}&quot; PassEventArgsToCommand=&quot;True&quot; /&gt;
+                &lt;/Behaviors:EventTrigger&gt;
+            &lt;/Behaviors:Interaction.Triggers&gt;
+        &lt;/esri:MapView&gt;
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/geoviewcontroller.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>
