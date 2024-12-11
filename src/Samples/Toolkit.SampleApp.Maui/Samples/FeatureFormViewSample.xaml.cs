@@ -57,7 +57,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private async void BarcodeButtonClicked(object sender, Esri.ArcGISRuntime.Toolkit.Maui.BarcodeButtonClickedEventArgs e)
         {
-#if !__IOS__ // iOS has this built-in
+#if !__IOS__ && !WINDOWS // iOS and Windows has this built-in
             // If user clicks the barcode button in a barcode input element, use ZXing library (https://github.com/Redth/ZXing.Net.Maui)
             // to scan a barcode using the device camera
             e.Handled = true;
