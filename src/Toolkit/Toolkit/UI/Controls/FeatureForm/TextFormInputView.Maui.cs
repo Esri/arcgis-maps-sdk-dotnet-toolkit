@@ -124,7 +124,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private void BarcodeButton_Clicked(object? sender, EventArgs e)
         {
             if (Element != null)
-                FeatureFormView.GetFeatureFormViewParent(this)?.OnBarcodeButtonClicked(Element);
+            {
+                bool handled = FeatureFormView.GetFeatureFormViewParent(this)?.OnBarcodeButtonClicked(Element) == true;
+                if(!handled)
+                {
+                    LaunchBarcodeScanner(Element);
+                }
+            }
+        }
+
+        private
+#if __IOS__
+            async
+#endif
+            void LaunchBarcodeScanner(FieldFormElement element)
+        {
+
+            try
+            {
+                string? barcode = null;
+#if __IOS__
+                barcode = await ScannerViewController.ScanAsync();
+#else
+                // TODO...
+#endif
+                if (!string.IsNullOrWhiteSpace(barcode))
+                {
+                    element.UpdateValue(barcode);
+                }
+            }
+            catch
+            {
+
+            }
         }
     }
 }

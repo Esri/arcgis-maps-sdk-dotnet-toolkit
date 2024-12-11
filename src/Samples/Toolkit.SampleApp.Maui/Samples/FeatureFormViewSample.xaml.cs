@@ -57,8 +57,10 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private async void BarcodeButtonClicked(object sender, Esri.ArcGISRuntime.Toolkit.Maui.BarcodeButtonClickedEventArgs e)
         {
+#if !__IOS__ // iOS has this built-in
             // If user clicks the barcode button in a barcode input element, use ZXing library (https://github.com/Redth/ZXing.Net.Maui)
             // to scan a barcode using the device camera
+            e.Handled = true;
             ZXing.Net.Maui.Controls.CameraBarcodeReaderView view = new ZXing.Net.Maui.Controls.CameraBarcodeReaderView();
             TaskCompletionSource<string?> tcs = new TaskCompletionSource<string?>();
             view.BarcodesDetected += (s, e) =>
@@ -72,6 +74,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             var barcode = await tcs.Task;
             if (!string.IsNullOrEmpty(barcode))
                 e.FormElement.UpdateValue(barcode);
+#endif
         }
 
         private void FormAttachmentClicked(object sender, Esri.ArcGISRuntime.Toolkit.Maui.FormAttachmentClickedEventArgs e)
