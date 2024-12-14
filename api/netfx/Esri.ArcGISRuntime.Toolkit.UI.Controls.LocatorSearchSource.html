@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class LocatorSearchSource
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class LocatorSearchSource
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource">
+  
+  
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource" class="text-break">Class LocatorSearchSource
+  </h1>
+  <div class="markdown level0 summary"><p>Basic search source implementation for generic locators.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Object</a></div>
+    <div class="level1"><span class="xref">LocatorSearchSource</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.html">ISearchSource</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Esri.ArcGISRuntime.Toolkit.UI.Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WPF.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class LocatorSearchSource : ISearchSource</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource__ctor_LocatorTask_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.%23ctor(LocatorTask)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L145">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource__ctor_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.#ctor*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource__ctor_LocatorTask_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.#ctor(LocatorTask)">LocatorSearchSource(LocatorTask)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html">LocatorSearchSource</a> class.
+<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_CreateDefaultSourceAsync_System_Threading_CancellationToken_">CreateDefaultSourceAsync(CancellationToken)</a> to create a source configured for use with the Esri World Geocoder.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LocatorSearchSource(LocatorTask locator)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">LocatorTask</a></td>
+        <td><span class="parametername">locator</span></td>
+        <td><p>Locator to be used.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultCalloutDefinition.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultCalloutDefinition%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L119">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultCalloutDefinition_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultCalloutDefinition*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultCalloutDefinition" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultCalloutDefinition">DefaultCalloutDefinition</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the default callout definition to use with results.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CalloutDefinition? DefaultCalloutDefinition { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CalloutDefinition</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultSymbol.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultSymbol%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L124">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultSymbol_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultSymbol*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultSymbol" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultSymbol">DefaultSymbol</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the default symbol to use when displaying results.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Symbology.Symbol? DefaultSymbol { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Symbology.Symbol</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultZoomScale.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultZoomScale%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L127">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultZoomScale_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultZoomScale*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultZoomScale" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DefaultZoomScale">DefaultZoomScale</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the default zoom scale to be used for results from this source.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double DefaultZoomScale { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DefaultZoomScale_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This value should be ignored when the underlying provider (e.g. LocatorTask) provides a viewpoint.
+Otherwise this zoom scale should be used to create the viewpoint for point results.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DisplayName.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DisplayName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L75">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DisplayName_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DisplayName*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_DisplayName" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.DisplayName">DisplayName</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the name of the locator. Defaults to the locator's name, or &quot;locator&quot; if not set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string DisplayName { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_GeocodeParameters.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.GeocodeParameters%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L95">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_GeocodeParameters_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.GeocodeParameters*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_GeocodeParameters" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.GeocodeParameters">GeocodeParameters</h4>
+  <div class="markdown level1 summary"><p>Gets the geocode parameters, which can be used to configure search behavior.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GeocodeParameters GeocodeParameters { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">GeocodeParameters</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_GeocodeParameters_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p><see cref="!:GeocodeParameters.MaxResults"></see>, <see cref="!:GeocodeParameters.PreferredSearchLocation"></see>,
+and <see cref="!:GeocodeParameters.SearchArea"></see> are set by <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html">LocatorSearchSource</a> automatically on search.
+<see cref="!:GeocodeParameters.Categories"></see> is set to <code>&quot;*&quot;</code> when the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_Locator">Locator</a> is loaded for the first time.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_LoadTask.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.LoadTask%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L70">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_LoadTask_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.LoadTask*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_LoadTask" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.LoadTask">LoadTask</h4>
+  <div class="markdown level1 summary"><p>Gets the task used to perform initial locator setup.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Task LoadTask { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_Locator.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.Locator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L109">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_Locator_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.Locator*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_Locator" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.Locator">Locator</h4>
+  <div class="markdown level1 summary"><p>Gets the underlying locator.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LocatorTask Locator { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">LocatorTask</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_MaximumResults.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.MaximumResults%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L80">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_MaximumResults_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.MaximumResults*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_MaximumResults" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.MaximumResults">MaximumResults</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the maximum number of results to return for a search. Default is 6.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MaximumResults { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_MaximumSuggestions.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.MaximumSuggestions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L85">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_MaximumSuggestions_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.MaximumSuggestions*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_MaximumSuggestions" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.MaximumSuggestions">MaximumSuggestions</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the maximum number of suggestions to return. Default is 6.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MaximumSuggestions { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_Placeholder.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.Placeholder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L114">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_Placeholder_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.Placeholder*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_Placeholder" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.Placeholder">Placeholder</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the placeholder to show when this search source is selected for use.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Placeholder { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_PreferredSearchLocation.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.PreferredSearchLocation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L133">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_PreferredSearchLocation_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.PreferredSearchLocation*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_PreferredSearchLocation" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.PreferredSearchLocation">PreferredSearchLocation</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MapPoint? PreferredSearchLocation { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">MapPoint</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchArea.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchArea%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L130">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchArea_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchArea*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchArea" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchArea">SearchArea</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the area to be used as a constraint for searches and suggestions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Geometry.Geometry? SearchArea { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Geometry.Geometry</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SubtitleAttributeKey.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SubtitleAttributeKey%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L138">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SubtitleAttributeKey_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SubtitleAttributeKey*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SubtitleAttributeKey" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SubtitleAttributeKey">SubtitleAttributeKey</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the attribute key to use as the subtitle when returning results. Key must be included in <see cref="!:GeocodeParameters.ResultAttributeNames"></see>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string SubtitleAttributeKey { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SuggestParameters.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SuggestParameters%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L104">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SuggestParameters_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SuggestParameters*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SuggestParameters" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SuggestParameters">SuggestParameters</h4>
+  <div class="markdown level1 summary"><p>Gets the suggestion parameters, which can be used to configure suggestion behavior.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SuggestParameters SuggestParameters { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">SuggestParameters</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SuggestParameters_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p><see cref="!:SuggestParameters.MaxResults"></see> and <see cref="!:SuggestParameters.PreferredSearchLocation"></see> are
+set automatically on search.</p>
+</div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_CreateDefaultSourceAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.CreateDefaultSourceAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L50">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_CreateDefaultSourceAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.CreateDefaultSourceAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_CreateDefaultSourceAsync_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.CreateDefaultSourceAsync(System.Threading.CancellationToken)">CreateDefaultSourceAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html">LocatorSearchSource</a> configured for use with the Esri World Geocoder service.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static async Task&lt;LocatorSearchSource&gt; CreateDefaultSourceAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CancellationToken</a></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Token used for cancellation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a>&lt;<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html">LocatorSearchSource</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_CreateDefaultSourceAsync_System_Threading_CancellationToken__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method will re-use a static LocatorTask instance to improve performance.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_NotifyDeselected_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResult_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.NotifyDeselected(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L192">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_NotifyDeselected_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.NotifyDeselected*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_NotifyDeselected_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResult_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.NotifyDeselected(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult)">NotifyDeselected(SearchResult)</h4>
+  <div class="markdown level1 summary"><p>This search source does not track selection state.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void NotifyDeselected(SearchResult result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html">SearchResult</a></td>
+        <td><span class="parametername">result</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_NotifySelected_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResult_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.NotifySelected(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L184">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_NotifySelected_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.NotifySelected*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_NotifySelected_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResult_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.NotifySelected(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult)">NotifySelected(SearchResult)</h4>
+  <div class="markdown level1 summary"><p>This search source does not track selection state.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void NotifySelected(SearchResult result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html">SearchResult</a></td>
+        <td><span class="parametername">result</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_RepeatSearchAsync_System_String_Envelope_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.RepeatSearchAsync(System.String%2CEnvelope%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L247">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_RepeatSearchAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.RepeatSearchAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_RepeatSearchAsync_System_String_Envelope_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.RepeatSearchAsync(System.String,Envelope,System.Threading.CancellationToken)">RepeatSearchAsync(String, Envelope, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Repeats the last search, with results restricted to the current visible area.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual async Task&lt;IList&lt;SearchResult&gt;&gt; RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td><span class="parametername">queryString</span></td>
+        <td><p>Text to be used for the query.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Envelope</a></td>
+        <td><span class="parametername">queryExtent</span></td>
+        <td><p>Extent used to limit the results.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CancellationToken</a></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Token used to cancel search.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IList</a>&lt;<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html">SearchResult</a>&gt;&gt;</td>
+        <td><p>Task returning a list of results.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchAsync_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchSuggestion_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchAsync(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L215">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchAsync_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchSuggestion_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchAsync(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion,System.Threading.CancellationToken)">SearchAsync(SearchSuggestion, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Gets a list of search results for the given suggestions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual async Task&lt;IList&lt;SearchResult&gt;&gt; SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.html">SearchSuggestion</a></td>
+        <td><span class="parametername">suggestion</span></td>
+        <td><p>Suggestion to use for the search.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CancellationToken</a></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Token used to cancel searches.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IList</a>&lt;<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html">SearchResult</a>&gt;&gt;</td>
+        <td><p>Task returning a list of results.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchAsync_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchAsync(System.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L229">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SearchAsync_System_String_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SearchAsync(System.String,System.Threading.CancellationToken)">SearchAsync(String, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Gets a list of search results for the given query.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual async Task&lt;IList&lt;SearchResult&gt;&gt; SearchAsync(string queryString, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td><span class="parametername">queryString</span></td>
+        <td><p>Text of the query.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CancellationToken</a></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Token used to cancel requests (e.g. because the search was changed or canceled).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IList</a>&lt;<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html">SearchResult</a>&gt;&gt;</td>
+        <td><p>Task returning list of search results.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SuggestAsync_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SuggestAsync(System.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L198">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SuggestAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SuggestAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource_SuggestAsync_System_String_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.SuggestAsync(System.String,System.Threading.CancellationToken)">SuggestAsync(String, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Gets a list of suggestions for the given query.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual async Task&lt;IList&lt;SearchSuggestion&gt;&gt; SuggestAsync(string queryString, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td><span class="parametername">queryString</span></td>
+        <td><p>Text of the query.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CancellationToken</a></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Token used to cancel requests (e.g. because the search text has changed).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IList</a>&lt;<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.html">SearchSuggestion</a>&gt;&gt;</td>
+        <td><p>Task returning a list of suggestions.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.html">ISearchSource</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_LocatorSearchSource.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/LocatorSearchSource.cs/#L39" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
