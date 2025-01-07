@@ -108,7 +108,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     var stream = await Thumbnail.GetEncodedBufferAsync();
                     var buffer = new byte[stream.Length];
+#if NET8_0_OR_GREATER
+                    await stream.ReadExactlyAsync(buffer);
+#else
                     await stream.ReadAsync(buffer, 0, (int)stream.Length);
+#endif
                     ThumbnailData = buffer;
 #if WINDOWS_XAML
                     ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();

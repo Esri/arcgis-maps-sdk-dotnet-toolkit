@@ -189,7 +189,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             #endif
             var markerDataStream = await MarkerImage.GetEncodedBufferAsync();
             var buffer = new byte[markerDataStream.Length];
+#if NET8_0_OR_GREATER
+            await markerDataStream.ReadExactlyAsync(buffer);
+#else
             await markerDataStream.ReadAsync(buffer, 0, (int)markerDataStream.Length);
+#endif
             MarkerImageData = buffer;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MarkerImage)));
             }
