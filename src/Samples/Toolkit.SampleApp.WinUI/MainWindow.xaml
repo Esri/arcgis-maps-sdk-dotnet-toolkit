@@ -19,21 +19,16 @@
                          ItemClick="sampleView_ItemClick"
                          ItemsSource="{x:Bind Samples}" >
                     <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ToolTipService.ToolTip="{Binding Description}">
-                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" />
+                        <DataTemplate x:DataType="local:Sample">
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="{x:Bind Name}" HorizontalAlignment="Left" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                                    <TextBlock Text="{x:Bind Description}" HorizontalAlignment="Left" Style="{StaticResource CaptionTextBlockStyle}" />
+                                </StackPanel>
+                                <TextBlock Text="{x:Bind Category}" FontSize="10" Foreground="CornflowerBlue" HorizontalAlignment="Right" />
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                    <ListView.GroupStyle>
-                        <GroupStyle HidesIfEmpty="True">
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Key}" FontSize="18" FontWeight="Bold"/>
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ListView.GroupStyle>
                 </ListView>
             </SplitView.Pane>
             <Grid>

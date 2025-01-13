@@ -80,8 +80,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             get { return rootFrame; }
         }
 
-        public ICollectionView Samples => SampleDatasource.Current.CollectionViewSource.View;
-
+        public List<Sample> Samples => SampleDatasource.Current.Samples;
+       
         private TaskCompletionSource<bool> ApiKeyTask;
         private Task<bool> ShowApiKeyWindow()
         {
