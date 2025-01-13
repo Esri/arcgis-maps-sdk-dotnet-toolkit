@@ -36,7 +36,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// Backing controller for a search experience, intended for use with SearchView.
     /// SearchView supports searching, with search-as-you-type for multiple search providers via <see cref="ISearchSource"/>.
     /// </summary>
-    public class SearchViewModel : INotifyPropertyChanged
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    public partial class SearchViewModel : INotifyPropertyChanged
     {
         private const int QueryTimeoutMilliseconds = 2000;
         private ISearchSource? _activeSource;
