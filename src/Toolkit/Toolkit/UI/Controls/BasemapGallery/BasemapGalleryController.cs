@@ -30,7 +30,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #endif
 {
 #pragma warning disable CA1001 // Types that own disposable fields should be disposable
-    internal class BasemapGalleryController : INotifyPropertyChanged
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    internal partial class BasemapGalleryController : INotifyPropertyChanged
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         private ArcGISPortal? _portal;
