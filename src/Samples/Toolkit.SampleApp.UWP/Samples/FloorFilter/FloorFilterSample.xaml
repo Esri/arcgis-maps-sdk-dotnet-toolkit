@@ -11,6 +11,6 @@
     mc:Ignorable="d">
     <Grid>
         <esri:MapView x:Name="MyMapView" />
-        <toolkit:FloorFilter GeoView="{Binding ElementName=MyMapView}" />
+        <toolkit:FloorFilter GeoView="{x:Bind MyMapView}" />
     </Grid>
 </Page>
