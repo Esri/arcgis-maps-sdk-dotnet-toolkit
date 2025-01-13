@@ -29,8 +29,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 where t.GetTypeInfo().IsSubclassOf(typeof(Page)) && t.FullName.Contains(".Samples.")
                 select t;
 
-            Samples = (from p in pages select new Sample() { Page = p }).ToList();
-            foreach(var sample in Samples)
+            var samples = (from p in pages select new Sample() { Page = p }).ToList();
+            foreach(var sample in samples)
             {
                 var attr = sample.Page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttribute)) as SampleInfoAttribute;
                 if (attr != null)
@@ -54,6 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                     }
                 }
             }
+            Samples = samples.OrderBy(s => s.Category + s.Name).ToList();
         }
 
         public List<Sample> Samples { get; }
