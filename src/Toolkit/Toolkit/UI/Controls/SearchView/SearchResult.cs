@@ -33,7 +33,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Wraps a search result for display.
     /// </summary>
-    public class SearchResult : INotifyPropertyChanged
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    public partial class SearchResult : INotifyPropertyChanged
     {
 #pragma warning disable SA1011 // Closing square brackets should be spaced correctly - catch-22
         private byte[]? _markerData;

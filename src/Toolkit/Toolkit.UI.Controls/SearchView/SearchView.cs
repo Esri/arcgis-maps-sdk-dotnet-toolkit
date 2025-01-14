@@ -35,7 +35,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 #pragma warning disable IDE0079
 #pragma warning disable CA1001
-    public partial class SearchView : Control, INotifyPropertyChanged
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    public partial class SearchView : Control
 #pragma warning restore CA1001
 #pragma warning restore IDE0079
     {
@@ -43,7 +46,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private const int TypingDelayMilliseconds = 75;
         private GeoModel? _lastUsedGeomodel;
         private readonly GraphicsOverlay _resultOverlay;
-        private bool _isSourceSelectOpen;
         private CancellationTokenSource? _configurationCancellationToken;
 
         // Flag indicates whether control is waiting after user finished typing.
@@ -61,9 +63,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DataContext = this;
             SearchViewModel = new SearchViewModel();
             _resultOverlay = new GraphicsOverlay { Id = "SearchView_Result_Overlay" };
-            ClearCommand = new DelegateCommand(HandleClearSearchCommand);
-            SearchCommand = new DelegateCommand(HandleSearchCommand);
-            RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
+#if WINDOWS_XAML
+            SetValue(TemplateSettingsProperty, new SearchViewTemplateSettings(this));
+#elif WPF
+            SetValue(TemplateSettingsPropertyKey, new SearchViewTemplateSettings(this));
+#endif
+            TemplateSettings.ClearCommand = new DelegateCommand(HandleClearSearchCommand);
+            TemplateSettings.SearchCommand = new DelegateCommand(HandleSearchCommand);
+            TemplateSettings.RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
             InitializeLocalizedStrings();
         }
 
@@ -179,84 +186,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets the visibility for the result list view.
-        /// </summary>
-        public Visibility ResultViewVisibility
-        {
-            get
-            {
-                if (!EnableResultListView)
-                {
-                    return Visibility.Collapsed;
-                }
-
-                // Ensure no result message is visible
-                if ((SearchViewModel?.Results != null && SearchViewModel.Results.Count == 0) || (SearchViewModel?.Suggestions != null && SearchViewModel.Suggestions.Count == 0))
-                {
-                    return Visibility.Visible;
-                }
-
-                if (!EnableIndividualResultDisplay && (SearchViewModel?.SearchMode == SearchResultMode.Single || SearchViewModel?.SelectedResult != null))
-                {
-                    return Visibility.Collapsed;
-                }
-
-                if (SearchViewModel?.Results?.Any() == true)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
-            }
-        }
-
-        /// <summary>
-        /// Gets the visibility for the source selection button.
-        /// </summary>
-        public Visibility SourceSelectVisibility
-        {
-            get
-            {
-                if (SearchViewModel?.Sources.Count > 1)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
-            }
-        }
-
-        /// <summary>
-        /// Gets the visibility for the presentation of the <see cref="NoResultMessage"/>.
-        /// </summary>
-        public Visibility ResultMessageVisibility
-        {
-            get
-            {
-                if (SearchViewModel?.Suggestions?.Count == 0 || SearchViewModel?.Results?.Count == 0)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the source selection view is being displayed.
         /// </summary>
         public bool IsSourceSelectOpen
         {
-            get => _isSourceSelectOpen;
-            set
-            {
-                if (value != _isSourceSelectOpen)
-                {
-                    _isSourceSelectOpen = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSourceSelectOpen)));
-                }
-            }
+            get => (bool)GetValue(IsSourceSelectOpenProperty);
+            set => SetValue(IsSourceSelectOpenProperty, value);
         }
+
+        /// <summary>
+        /// Identifies the <see cref="IsSourceSelectOpen"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsSourceSelectOpenProperty =
+            PropertyHelper.CreateProperty<bool, SearchView>(nameof(IsSourceSelectOpen), false);
 
         #endregion binding support
 
@@ -327,7 +269,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleSourcesChange()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SourceSelectVisibility)));
+            TemplateSettings.OnSourceSelectVisibilityChanged();
             IsSourceSelectOpen = false;
         }
 
@@ -355,7 +297,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private static void OnEnableResultListViewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => (d as SearchView)?.NotifyPropertyChange(nameof(ResultViewVisibility));
+        private static void OnEnableResultListViewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => (d as SearchView)?.TemplateSettings.OnResultViewVisibilityChanged();
 
         private void SearchViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -431,7 +373,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async Task HandleSelectedResultChanged()
         {
-            NotifyPropertyChange(nameof(ResultViewVisibility));
+            TemplateSettings.OnResultViewVisibilityChanged();
 
             if (SearchViewModel?.SelectedResult is SearchResult selectedResult)
             {
@@ -465,8 +407,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            NotifyPropertyChange(nameof(ResultViewVisibility));
-            NotifyPropertyChange(nameof(ResultMessageVisibility));
+            TemplateSettings.OnResultViewVisibilityChanged();
+            TemplateSettings.OnResultMessageVisibilityChanged();
 
             if (SearchViewModel.Results == null)
             {
@@ -504,28 +446,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleSearchModeChanged()
         {
-            NotifyPropertyChange(nameof(ResultViewVisibility));
+            TemplateSettings.OnResultViewVisibilityChanged();
         }
 
         #endregion events
 
         #region commands
-
-        /// <summary>
-        /// Gets a command that clears the current search.
-        /// </summary>
-        public ICommand ClearCommand { get; private set; }
-
-        /// <summary>
-        /// Gets a command that starts a search with current parameters.
-        /// </summary>
-        public ICommand SearchCommand { get; private set; }
-
-        /// <summary>
-        ///  Gets a command that repeats the last search with new geometry.
-        /// </summary>
-        public ICommand RepeatSearchHereCommand { get; private set; }
-
         private void HandleClearSearchCommand()
         {
             SearchViewModel?.CancelSearch();
@@ -541,7 +467,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             SearchViewModel?.RepeatSearchHere();
         }
-        #endregion commands
+#endregion commands
 
         #region properties
 
@@ -591,7 +517,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// Some consumer applications will display this button in a separate area of the UI from the search bar, often centered over the map.
         /// This property is intended to allow hiding the default button if using a custom 'Repeat Search' implementation.
-        /// See <see cref="RepeatSearchHereCommand"/> and <see cref="SearchViewModel.IsEligibleForRequery"/> to enable a custom button implementation.
+        /// See <see cref="TemplateSettings.RepeatSearchHereCommand"/> and <see cref="SearchViewModel.IsEligibleForRequery"/> to enable a custom button implementation.
         /// </remarks>
         public bool EnableRepeatSearchHereButton
         {
@@ -746,18 +672,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(RepeatSearchButtonText), typeof(string), typeof(SearchView), null);
         #endregion dependency properties
 
-        /// <inheritdoc/>
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void NotifyPropertyChange(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
         private void HandleSuggestionsChanged()
         {
-            NotifyPropertyChange(nameof(ResultViewVisibility));
-            NotifyPropertyChange(nameof(ResultMessageVisibility));
-            #if WINDOWS_XAML
+            TemplateSettings.OnResultViewVisibilityChanged();
+            TemplateSettings.OnResultMessageVisibilityChanged();
+#if WINDOWS_XAML
             UpdateGroupingForUWP();
-            #endif
+#endif
         }
 
 #if WINDOWS_XAML
@@ -776,28 +697,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _groupListSelectionFlag = false;
         }
 
-        private List<SuggestionsGrouped>? _groupedSuggestions;
+        // private List<SuggestionsGrouped>? _groupedSuggestions;
 
         /// <summary>
         /// Gets the grouped list of suggestions.
         /// </summary>
         public List<SuggestionsGrouped>? GroupedSuggestions
         {
-            get => _groupedSuggestions;
+            get => GetValue(GroupedSuggestionsProperty) as List<SuggestionsGrouped>;
             private set
             {
-                if (value != _groupedSuggestions)
-                {
-                    _groupedSuggestions = value;
-                    NotifyPropertyChange(nameof(GroupedSuggestions));
-                }
+                SetValue(GroupedSuggestionsProperty, value);
             }
         }
+        /// <summary>
+        /// Identifies the <see cref="TemplateSettings"/> dependency property.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static readonly DependencyProperty GroupedSuggestionsProperty =
+            DependencyProperty.Register(nameof(GroupedSuggestions), typeof(List<SuggestionsGrouped>), typeof(SearchView), new PropertyMetadata(null));
 
         /// <summary>
         /// Class to support grouping suggestions on UWP.
         /// </summary>
-        public class SuggestionsGrouped : IGrouping<ISearchSource, SearchSuggestion>
+#if WINUI
+        [WinRT.GeneratedBindableCustomProperty]
+#endif
+        public partial class SuggestionsGrouped : IGrouping<ISearchSource, SearchSuggestion>
         {
             private readonly List<SearchSuggestion> _suggestions;
 
@@ -820,6 +746,135 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _suggestions.GetEnumerator();
         }
 #endif
+
+        /// <summary>
+        /// SearchViewTemplateSettings provides a set of properties that are used when you define a new control template for a control that derives from <see cref="SearchView"/>.
+        /// </summary>
+        public SearchViewTemplateSettings TemplateSettings
+        {
+#if WINDOWS_XAML
+            get => (SearchViewTemplateSettings)GetValue(TemplateSettingsProperty);
+#elif WPF
+            get => (SearchViewTemplateSettings)GetValue(TemplateSettingsPropertyKey.DependencyProperty);
+#endif
+        }
+
+#if WINDOWS_XAML
+        /// <summary>
+        /// Identifies the <see cref="TemplateSettings"/> dependency property.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static readonly DependencyProperty TemplateSettingsProperty =
+            DependencyProperty.Register(nameof(TemplateSettings), typeof(SearchViewTemplateSettings), typeof(SearchView), new PropertyMetadata(null));
+#elif WPF
+        internal static readonly DependencyPropertyKey TemplateSettingsPropertyKey =
+            DependencyProperty.RegisterReadOnly(nameof(TemplateSettings), typeof(SearchViewTemplateSettings), typeof(SearchView), new FrameworkPropertyMetadata());
+#endif
+    }
+
+    /// <summary>
+    /// SearchViewTemplateSettings provides a set of properties that are used when you define a new control template for a control that derives from <see cref="SearchView"/>.
+    /// </summary>
+    /// <remarks>
+    /// TemplateSettings properties are always intended to be used in XAML, not code. They are read-only sub-properties of a read-only TemplateSettings property of a parent control.
+    /// </remarks>
+    /// <seealso cref="SearchView.TemplateSettings"/>
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    public partial class SearchViewTemplateSettings : INotifyPropertyChanged
+    {
+        private SearchView _owner;
+        internal SearchViewTemplateSettings(SearchView owner)
+        {
+            _owner = owner;
+        }
+
+        /// <summary>
+        /// Gets the visibility for the presentation of the <see cref="SearchView.NoResultMessage"/>.
+        /// </summary>
+        public Visibility ResultMessageVisibility
+        {
+            get
+            {
+                if (_owner.SearchViewModel?.Suggestions?.Count == 0 || _owner.SearchViewModel?.Results?.Count == 0)
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        internal void OnResultMessageVisibilityChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultMessageVisibility)));
+
+        /// <summary>
+        /// Gets the visibility for the source selection button.
+        /// </summary>
+        public Visibility SourceSelectVisibility
+        {
+            get
+            {
+                if (_owner.SearchViewModel?.Sources.Count > 1)
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        internal void OnSourceSelectVisibilityChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SourceSelectVisibility)));
+
+        /// <summary>
+        /// Gets the visibility for the result list view.
+        /// </summary>
+        public Visibility ResultViewVisibility
+        {
+            get
+            {
+                if (!_owner.EnableResultListView)
+                {
+                    return Visibility.Collapsed;
+                }
+
+                // Ensure no result message is visible
+                if ((_owner.SearchViewModel?.Results != null && _owner.SearchViewModel.Results.Count == 0) || (_owner.SearchViewModel?.Suggestions != null && _owner.SearchViewModel.Suggestions.Count == 0))
+                {
+                    return Visibility.Visible;
+                }
+
+                if (!_owner.EnableIndividualResultDisplay && (_owner.SearchViewModel?.SearchMode == SearchResultMode.Single || _owner.SearchViewModel?.SelectedResult != null))
+                {
+                    return Visibility.Collapsed;
+                }
+
+                if (_owner.SearchViewModel?.Results?.Any() == true)
+                {
+                    return Visibility.Visible;
+                }
+
+                return Visibility.Collapsed;
+            }
+        }
+
+        internal void OnResultViewVisibilityChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultViewVisibility)));
+
+        /// <summary>
+        /// Gets a command that clears the current search.
+        /// </summary>
+        public ICommand ClearCommand { get; internal set; }
+
+        /// <summary>
+        /// Gets a command that starts a search with current parameters.
+        /// </summary>
+        public ICommand SearchCommand { get; internal set; }
+
+        /// <summary>
+        ///  Gets a command that repeats the last search with new geometry.
+        /// </summary>
+        public ICommand RepeatSearchHereCommand { get; internal set; }
+
+        /// <inheritdoc />
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
 #endif

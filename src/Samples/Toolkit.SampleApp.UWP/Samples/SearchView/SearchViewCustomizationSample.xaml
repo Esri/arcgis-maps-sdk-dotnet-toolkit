@@ -48,12 +48,12 @@
                 <TextBox Header="Repeat search button text" Text="{x:Bind MySearchView.RepeatSearchButtonText, Mode=TwoWay}" />
                 <Button
                     HorizontalAlignment="Stretch"
-                    Command="{x:Bind MySearchView.RepeatSearchHereCommand, Mode=OneWay}"
+                    Command="{x:Bind MySearchView.TemplateSettings.RepeatSearchHereCommand, Mode=OneWay}"
                     Content="Repeat Search"
                     IsEnabled="{x:Bind MySearchView.SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
                 <Button
                     HorizontalAlignment="Stretch"
-                    Command="{x:Bind MySearchView.ClearCommand, Mode=OneWay}"
+                    Command="{x:Bind MySearchView.TemplateSettings.ClearCommand, Mode=OneWay}"
                     Content="Clear Search" />
                 <ListView
                     DisplayMemberPath="DisplayTitle"

@@ -22,7 +22,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// Simple command implementation.
     /// </summary>
-    internal class DelegateCommand : ICommand
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    internal partial class DelegateCommand : ICommand
     {
         private bool _canExecute = true;
         private readonly Action<object?>? _onExecute;
