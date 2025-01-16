@@ -254,7 +254,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the list of search suggestions. This value is set after calls to <see cref="UpdateSuggestions"/>.
         /// </summary>
-        public IList<SearchSuggestion>? Suggestions { get => _suggestions; } //private set => SetPropertyChanged(value, ref _suggestions); }
+        public IList<SearchSuggestion>? Suggestions { get => _suggestions; }
 
         private void SetSuggestions(IEnumerable<SearchSuggestion>? suggestions)
         {

@@ -746,7 +746,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// SearchViewTemplateSettings provides a set of properties that are used when you define a new control template for a control that derives from <see cref="SearchView"/>.
+        /// <see cref="SearchViewTemplateSettings"/> provides a set of properties that are used when you define a new control template for a control that derives from <see cref="SearchView"/>.
         /// </summary>
         public SearchViewTemplateSettings TemplateSettings
         {
@@ -771,7 +771,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     }
 
     /// <summary>
-    /// SearchViewTemplateSettings provides a set of properties that are used when you define a new control template for a control that derives from <see cref="SearchView"/>.
+    /// <see cref="SearchViewTemplateSettings"/> provides a set of properties that are used when you define a new control template for a control that derives from <see cref="SearchView"/>.
     /// </summary>
     /// <remarks>
     /// TemplateSettings properties are always intended to be used in XAML, not code. They are read-only sub-properties of a read-only TemplateSettings property of a parent control.
