@@ -697,8 +697,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _groupListSelectionFlag = false;
         }
 
-        // private List<SuggestionsGrouped>? _groupedSuggestions;
-
         /// <summary>
         /// Gets the grouped list of suggestions.
         /// </summary>

@@ -238,7 +238,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the list of available search sources, which can be updated dynamically.
         /// </summary>
         /// <remarks>See <see cref="ConfigureDefaultWorldGeocoder(CancellationToken)"/> for a convenient method to populate this collection automatically.</remarks>
-        public IList<ISearchSource> Sources { get; set; } = new SourceSourceCollection();
+        public IList<ISearchSource> Sources { get; set; } = new SearchSourceCollection();
 
         /// <summary>
         /// Gets the list of search results for the most-recently completed query.
@@ -598,7 +598,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WINUI
         [WinRT.GeneratedBindableCustomProperty]
 #endif
-        private partial class SourceSourceCollection : ObservableCollection<ISearchSource>
+        private partial class SearchSourceCollection : ObservableCollection<ISearchSource>
         {
         }
 

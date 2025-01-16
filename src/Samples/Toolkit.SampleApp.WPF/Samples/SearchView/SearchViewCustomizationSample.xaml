@@ -58,10 +58,10 @@
                     <TextBox Text="{Binding ElementName=MySearchView, Path=RepeatSearchButtonText, Mode=TwoWay}" />
                 </GroupBox>
                 <Button
-                    Command="{Binding ElementName=MySearchView, Path=RepeatSearchHereCommand, Mode=OneWay}"
+                    Command="{Binding ElementName=MySearchView, Path=TemplateSettings.RepeatSearchHereCommand, Mode=OneWay}"
                     Content="Repeat Search"
                     IsEnabled="{Binding ElementName=MySearchView, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
-                <Button Command="{Binding ElementName=MySearchView, Path=ClearCommand, Mode=OneWay}" Content="Clear Search" />
+                <Button Command="{Binding ElementName=MySearchView, Path=TemplateSettings.ClearCommand, Mode=OneWay}" Content="Clear Search" />
                 <Label Content="Results:" />
                 <ListView
                     DisplayMemberPath="DisplayTitle"
