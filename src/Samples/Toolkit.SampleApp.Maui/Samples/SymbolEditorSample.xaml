@@ -2,10 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:sym="clr-namespace:Esri.ArcGISRuntime.Symbology;assembly=Esri.ArcGISRuntime"
              x:Class="Toolkit.SampleApp.Maui.Samples.SymbolEditorSample"
              Title="SymbolDisplay - dynamic">
     <ContentPage.Content>
-        <Grid >
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
@@ -18,7 +19,10 @@
                 <Label Text="Style" />
                 <Picker ItemsSource="{Binding SimpleMarkerSymbolStyles}" SelectedItem="{Binding Symbol.Style, Source={x:Reference symbolDisplay}, Mode=TwoWay}"/>
                 <Label Text="Angle" />
-                <Slider Minimum="0" Maximum="360" Value="{Binding Symbol.Angle, Source={x:Reference symbolDisplay}, Mode=TwoWay}" />
+                <Slider Minimum="0" Maximum="360"
+                        BindingContext="{Binding Symbol, Source={x:Reference symbolDisplay}}"
+                        x:DataType="sym:SimpleMarkerSymbol"
+                        Value="{Binding Angle, Mode=TwoWay}" />
 
             </StackLayout>
 
