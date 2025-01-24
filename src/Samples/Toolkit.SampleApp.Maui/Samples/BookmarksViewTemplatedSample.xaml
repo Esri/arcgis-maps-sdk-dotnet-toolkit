@@ -23,7 +23,10 @@
                                    GeoView="{x:Reference MyMapView}">
                 <toolkit:BookmarksView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Name}" Detail="Custom bookmark template" />
+                        <StackLayout>
+                            <Label Text="{Binding Name}" />
+                            <Label Text="Custom bookmark template" FontSize="Caption" TextColor="Gray" />
+                        </StackLayout>
                     </DataTemplate>
                 </toolkit:BookmarksView.ItemTemplate>
             </toolkit:BookmarksView>
