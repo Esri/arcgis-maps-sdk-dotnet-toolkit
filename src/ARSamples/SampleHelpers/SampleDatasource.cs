@@ -31,7 +31,7 @@ namespace ARToolkit.SampleApp
         public SampleDatasource(Type subclass, string nameFilter = ".Samples.")
         {
             var pages = from t in typeof(SampleDatasource).Assembly.ExportedTypes
-                        where !t.IsAbstract && t.GetTypeInfo().IsSubclassOf(subclass) && t.FullName.Contains(nameFilter)
+                        where !t.IsAbstract && t.GetTypeInfo().IsSubclassOf(subclass) && t.FullName.Replace("Samples.Maui", "").Contains(nameFilter)
                         select t;
 
 

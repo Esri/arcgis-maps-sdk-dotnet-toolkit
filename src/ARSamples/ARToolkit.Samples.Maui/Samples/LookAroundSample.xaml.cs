@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using System;
 using System.Threading.Tasks;
@@ -20,16 +21,17 @@ public partial class LookAroundSample : ContentPage
     {
         try
         {
-            ARView.OriginCamera = new Camera(new MapPoint(-119.622075, 37.720650, 2105), 0, 90, 0); //Yosemite
-
-            Surface sceneSurface = new Surface();
-            sceneSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
-            Scene scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")))
-            {
-                BaseSurface = sceneSurface
-            };
+            var layer = new ArcGISTiledLayer(new Uri("https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"));
+            await layer.LoadAsync();
+            var basemap = new Basemap(layer);
+            var scene = new Scene(basemap);
+            scene.BaseSurface = new Surface();
+            scene.BaseSurface.BackgroundGrid.IsVisible = false;
+            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+            scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
             ARView.Scene = scene;
             await scene.LoadAsync();
+            ARView.OriginCamera = new Camera(new MapPoint(-119.622075, 37.720650, 2105), 0, 90, 0); //Yosemite
         }
         catch (Exception ex)
         {
@@ -38,10 +40,29 @@ public partial class LookAroundSample : ContentPage
         }
     }
 
-    protected override void OnAppearing()
+    private async Task LoadWhenReady()
+    {
+        bool hasLoaded = false;
+        do
+        {
+            try
+            {
+                await ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
+                hasLoaded = true;
+            }
+            catch (Exception)
+            {
+                await Task.Delay(300);
+            }
+        } while (!hasLoaded);
+
+    }
+
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        ARView.StartTrackingAsync();
+
+        await LoadWhenReady();
     }
 
     protected override void OnDisappearing()
