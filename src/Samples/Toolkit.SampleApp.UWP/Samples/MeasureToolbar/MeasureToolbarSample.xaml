@@ -23,6 +23,6 @@
         </esri:MapView>
         <toolkit:MeasureToolbar VerticalAlignment="Top" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                                 HorizontalAlignment="Right"
-                                MapView="{Binding ElementName=mapView}" />
+                                MapView="{x:Bind mapView}" />
     </Grid>
 </Page>

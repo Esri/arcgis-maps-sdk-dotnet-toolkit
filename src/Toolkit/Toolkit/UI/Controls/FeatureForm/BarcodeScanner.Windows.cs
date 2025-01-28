@@ -9,7 +9,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 {
     internal sealed partial class BarcodeScanner : IDisposable
     {
-        private ClaimedBarcodeScanner claimedScanner;
+        private ClaimedBarcodeScanner? claimedScanner;
         private TaskCompletionSource<string?>? TaskCompletionSource;
 
         private BarcodeScanner()
@@ -58,7 +58,8 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
             finally
             {
-                await claimedScanner.DisableAsync();
+                if (claimedScanner != null)
+                    await claimedScanner.DisableAsync();
             }
         }
 

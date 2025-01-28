@@ -44,7 +44,7 @@
                     Margin="2"
                     Maximum="100"
                     Minimum="1"
-                    Value="{Binding ElementName=SampleOverview, Path=ScaleFactor, Mode=TwoWay}" />
+                    Value="{x:Bind SampleOverview.ScaleFactor, Mode=TwoWay}" />
             </StackPanel>
         </Border>
         <toolkit:OverviewMap x:Name="SampleOverview" Margin="4" />

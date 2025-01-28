@@ -25,7 +25,7 @@ using Microsoft.UI;
 using Microsoft.UI.Text;
 using Microsoft.UI.Xaml.Documents;
 using Windows.UI.Text;
-#elif WINDOWS_UWP
+#elif WINDOWS_UWP   
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Documents;
@@ -49,6 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is ContentControl rtb)
             {
                 rtb.Content = HtmlToView.ToUIElement(Element.Text, (s, e) => PopupViewer.GetPopupViewerParent(s as DependencyObject)?.OnHyperlinkClicked(e));
+                rtb.Visibility = string.IsNullOrEmpty(Element?.Text) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
     }

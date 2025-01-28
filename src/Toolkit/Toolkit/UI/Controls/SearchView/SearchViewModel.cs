@@ -36,7 +36,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// Backing controller for a search experience, intended for use with SearchView.
     /// SearchView supports searching, with search-as-you-type for multiple search providers via <see cref="ISearchSource"/>.
     /// </summary>
-    public class SearchViewModel : INotifyPropertyChanged
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    public partial class SearchViewModel : INotifyPropertyChanged
     {
         private const int QueryTimeoutMilliseconds = 2000;
         private ISearchSource? _activeSource;
@@ -135,7 +138,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_currentQuery != value)
                 {
                     IsEligibleForRequery = false;
-                    Results = null;
+                    SetResults(null);
                     SetPropertyChanged(value, ref _currentQuery);
                 }
             }
@@ -235,18 +238,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the list of available search sources, which can be updated dynamically.
         /// </summary>
         /// <remarks>See <see cref="ConfigureDefaultWorldGeocoder(CancellationToken)"/> for a convenient method to populate this collection automatically.</remarks>
-        public IList<ISearchSource> Sources { get; set; } = new ObservableCollection<ISearchSource>();
+        public IList<ISearchSource> Sources { get; set; } = new SearchSourceCollection();
 
         /// <summary>
         /// Gets the list of search results for the most-recently completed query.
         /// Clearing a search via <see cref="ClearSearch"/> will set this collection to <c>null</c>.
         /// </summary>
-        public IList<SearchResult>? Results { get => _results; private set => SetPropertyChanged(value, ref _results); }
+        public IList<SearchResult>? Results { get => _results; }
+
+        private void SetResults(IEnumerable<SearchResult>? results)
+        {
+            SetPropertyChanged<IList<SearchResult>?>(results is null ? null : new SearchResultList(results), ref _results, nameof(Results));
+        }
 
         /// <summary>
         /// Gets the list of search suggestions. This value is set after calls to <see cref="UpdateSuggestions"/>.
         /// </summary>
-        public IList<SearchSuggestion>? Suggestions { get => _suggestions; private set => SetPropertyChanged(value, ref _suggestions); }
+        public IList<SearchSuggestion>? Suggestions { get => _suggestions; }
+
+        private void SetSuggestions(IEnumerable<SearchSuggestion>? suggestions)
+        {
+            SetPropertyChanged<IList<SearchSuggestion>?>(suggestions is null ? null : new SearchSuggestionList(suggestions), ref _suggestions, nameof(Suggestions));
+        }
+
 
         private bool _viewpointChangedSinceResultReturned;
 
@@ -368,7 +382,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (string.IsNullOrWhiteSpace(CurrentQuery))
             {
-                Suggestions = null;
+                SetSuggestions(null);
                 return;
             }
 
@@ -377,7 +391,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 IsSuggestInProgress = true;
                 _activeSuggestCancellation = suggestCancellation;
-                Suggestions = null;
+                SetSuggestions(null);
 
                 var sourcesToSearch = SourcesToSearch();
                 foreach (var source in sourcesToSearch)
@@ -388,11 +402,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 var allSuggestions = await Task.WhenAll(sourcesToSearch.Select(s => s.SuggestAsync(CurrentQuery!, suggestCancellation.Token)));
 
-                Suggestions = allSuggestions.SelectMany(l => l).ToList();
+                SetSuggestions(allSuggestions.SelectMany(l => l));
             }
             catch (TaskCanceledException)
             {
-                Suggestions = new List<SearchSuggestion>(0);
+                SetSuggestions(Enumerable.Empty<SearchSuggestion>());
             }
             finally
             {
@@ -446,8 +460,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void PrepareForNewSearch()
         {
             SelectedResult = null;
-            Suggestions = null;
-            Results = null;
+            SetSuggestions(null);
+            SetResults(null);
             IsEligibleForRequery = false;
             IsSearchInProgress = true;
         }
@@ -456,13 +470,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (!results.Any())
             {
-                Results = new List<SearchResult>();
+                SetResults(Enumerable.Empty<SearchResult>());
                 return;
             }
 
             if (results.Count == 1)
             {
-                Results = results.ToList();
+                SetResults(results);
                 SelectedResult = results.First();
                 return;
             }
@@ -470,20 +484,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             switch (SearchMode)
             {
                 case SearchResultMode.Single:
-                    Results = new List<SearchResult> { results.First() };
-                    SelectedResult = Results.First();
+                    SetResults(results.Take(1));
+                    SelectedResult = Results!.First();
                     break;
                 case SearchResultMode.Multiple:
-                    Results = results.ToList();
+                    SetResults(results);
                     break;
                 case SearchResultMode.Automatic:
                     if (originatingSuggestion?.IsCollection ?? false)
                     {
-                        Results = results.ToList();
+                        SetResults(results);
                     }
                     else
                     {
-                        Results = new List<SearchResult>() { results.First() };
+                        SetResults(results.Take(1));
                     }
 
                     break;
@@ -503,8 +517,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _activeSearchCancellation?.Cancel();
             _activeSuggestCancellation?.Cancel();
             SelectedResult = null;
-            Results = null;
-            Suggestions = null;
+            SetResults(null);
+            SetSuggestions(null);
             CurrentQuery = null;
             IsEligibleForRequery = false;
             _lastSuggestion = null;
@@ -577,5 +591,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        #region Collection Types
+        // These types are here to support WinUI's code-generator to support bindings.
+
+#if WINUI
+        [WinRT.GeneratedBindableCustomProperty]
+#endif
+        private partial class SearchSourceCollection : ObservableCollection<ISearchSource>
+        {
+        }
+
+#if WINUI
+        [WinRT.GeneratedBindableCustomProperty]
+#endif
+        private partial class SearchResultList : List<SearchResult>
+        {
+            public SearchResultList(IEnumerable<SearchResult> list)
+            {
+                AddRange(list);
+            }
+        }
+
+#if WINUI
+        [WinRT.GeneratedBindableCustomProperty]
+#endif
+        private partial class SearchSuggestionList : List<SearchSuggestion>
+        {
+            public SearchSuggestionList(IEnumerable<SearchSuggestion> list)
+            {
+                AddRange(list);
+            }
+        }
+        #endregion Collection Types
     }
 }

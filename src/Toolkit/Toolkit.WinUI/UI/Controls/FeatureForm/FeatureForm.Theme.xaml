@@ -43,7 +43,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:SwitchFormInputView">
-                    <ToggleSwitch IsOn="{TemplateBinding IsChecked}" OnContent="{Binding Input.OnValue.Name}" OffContent="{Binding Input.OffValue.Name}" IsEnabled="{TemplateBinding IsEnabled}" />
+                    <ToggleSwitch IsOn="{TemplateBinding IsChecked}" OnContent="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Input.OnValue.Name}" OffContent="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Input.OffValue.Name}" IsEnabled="{TemplateBinding IsEnabled}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -223,12 +223,12 @@
                 <ControlTemplate TargetType="primitives:FieldFormElementView">
                     <StackPanel>
                         <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
-                        <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" IsTabStop="False" HorizontalContentAlignment="Stretch">
+                        <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element}" x:Name="FieldInput" IsTabStop="False" HorizontalContentAlignment="Stretch">
                             <ToolTipService.ToolTip>
-                                <ToolTip Content="{Binding Hint}" Visibility="{Binding Hint, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                <ToolTip Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Hint}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Hint, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                             </ToolTipService.ToolTip>
                         </ContentControl>
-                        <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                         <TextBlock Foreground="Red" x:Name="ErrorLabel" Visibility="{Binding Text, ElementName=ErrorLabel, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                     </StackPanel>
                 </ControlTemplate>
@@ -247,8 +247,8 @@
                     <Border CornerRadius="4" Background="{TemplateBinding Background}" Margin="4">
                         <ToolTipService.ToolTip>
                             <StackPanel>
-                                <TextBlock Text="{Binding Name}" />
-                                <TextBlock Text="{Binding Size, Converter={StaticResource FeatureFormFileSizeConverter}}" />
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Attachment.Name}" />
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Attachment.Size, Converter={StaticResource FeatureFormFileSizeConverter}}" />
                             </StackPanel>
                         </ToolTipService.ToolTip>
                         <VisualStateManager.VisualStateGroups>
@@ -274,9 +274,9 @@
                         <Grid>
                             <Image x:Name="ThumbnailImage" />
                             <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2">
-                                <TextBlock x:Name="AttachmentName" Text="{Binding Name}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" TextTrimming="CharacterEllipsis" />
+                                <TextBlock x:Name="AttachmentName" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Attachment.Name}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" TextTrimming="CharacterEllipsis" />
                             </Border>
-                            <TextBlock x:Name="FileSizeText" Text="{Binding Size, Converter={StaticResource FeatureFormFileSizeConverter}}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="10" />
+                            <TextBlock x:Name="FileSizeText" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Attachment.Size, Converter={StaticResource FeatureFormFileSizeConverter}}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="10" />
                             <TextBlock x:Name="DownloadIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE896;" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="2" />
                             <ProgressBar x:Name="LoadingBar" IsIndeterminate="True" Visibility="Collapsed" VerticalAlignment="Center" />
                         </Grid>
@@ -300,15 +300,15 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
-                            <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Label}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                             <Button x:Name="AddAttachmentButton" BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
-                                 Visibility="{Binding IsEditable, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Padding="5" Grid.Column="1" Grid.RowSpan="2">
+                                 Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Padding="5" Grid.Column="1" Grid.RowSpan="2">
                                 <TextBlock Text="" FontFamily="Segoe MDL2 Assets" />
                             </Button>
                         </Grid>
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" x:Name="ItemsScrollView">
-                            <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}">
+                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Attachments}" IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
@@ -316,7 +316,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <primitives:FormAttachmentView Attachment="{Binding}" Element="{Binding DataContext, ElementName=RootPanel}" />
+                                        <primitives:FormAttachmentView Attachment="{Binding}" Element="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
