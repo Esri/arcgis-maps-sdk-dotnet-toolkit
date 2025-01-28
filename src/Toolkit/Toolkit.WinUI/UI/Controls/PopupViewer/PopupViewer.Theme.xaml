@@ -39,7 +39,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:TextPopupElementView">
-                    <ContentControl x:Name="TextArea" Visibility="{Binding Text, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                    <ContentControl x:Name="TextArea" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -58,8 +58,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:FieldsPopupElementView">
                     <StackPanel>
-                        <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <ContentPresenter x:Name="TableAreaContent" />
                     </StackPanel>
                 </ControlTemplate>
@@ -108,7 +108,7 @@
                             <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             <ProgressRing Visibility="Collapsed" x:Name="DownloadSpinner" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
-                        <TextBlock Text="{Binding Name, Mode=OneTime}" Margin="5" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Attachment.Name, Mode=OneTime}" Margin="5" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -120,8 +120,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:AttachmentsPopupElementView">
                     <StackPanel>
-                        <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -162,9 +162,9 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Grid.Row="1" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <FlipView Background="Transparent" MaxHeight="200" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" DataContext="{TemplateBinding Element}" ItemsSource="{Binding Media}" Grid.Row="2"/>
+                        <TextBlock Grid.Row="0" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <FlipView Background="Transparent" MaxHeight="200" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Media}" Grid.Row="2"/>
                         <ContentControl x:Name="PipsPagerContainer" Grid.Row="3" Visibility="Collapsed" HorizontalAlignment="Center" />
                         <!-- Without UWP support we could have used PipsPager directly here: <PipsPager x:Name="PipsPager"
                             HorizontalAlignment="Center"
@@ -192,11 +192,11 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Margin="{TemplateBinding Padding}" Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
-                                       Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                            <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="PopupContentScrollViewer"
+                            <TextBlock Margin="{TemplateBinding Padding}" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Popup.Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
+                                       Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Popup.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                            <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1" x:Name="PopupContentScrollViewer"
                                           IsVerticalRailEnabled="True" Padding="{TemplateBinding Padding}">
-                                <primitives:PopupElementItemsControl ItemsSource="{Binding EvaluatedElements}" Margin="0,10" x:Name="ItemsView">
+                                <primitives:PopupElementItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Popup.EvaluatedElements}" Margin="0,10" x:Name="ItemsView">
                                     <primitives:PopupElementItemsControl.TextPopupElementTemplate>
                                         <DataTemplate>
                                             <primitives:TextPopupElementView Element="{Binding}" Margin="0,10" />

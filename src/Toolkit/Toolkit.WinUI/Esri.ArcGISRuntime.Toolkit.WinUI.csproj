@@ -15,13 +15,10 @@
     <UseWinUI>true</UseWinUI>
     <IncludeXamlFilesInNugetPackage>False</IncludeXamlFilesInNugetPackage>
     <DisableEmbeddedXbf>false</DisableEmbeddedXbf>
-    <WindowsSdkPackageVersion Condition="$([MSBuild]::VersionLessThan('$(WinAppSDKVersion)','1.6.240923002'))">10.0.19041.34</WindowsSdkPackageVersion> <!-- Workaround regression in latest .NET SDK. Remove when moving to WinAppSDK v1.6+  -->
-    <WindowsSdkPackageVersion Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(WinAppSDKVersion)','1.6.240923002'))">10.0.19041.38</WindowsSdkPackageVersion> <!-- Workaround regression in latest .NET SDK. Remove when moving to WinAppSDK v1.6+  -->
-  </PropertyGroup>
-
-  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">
-    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-    <UseRidGraph>true</UseRidGraph>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <PublishAot>True</PublishAot>
+    <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
 
   <Import Project="..\..\CommonProperties.targets" />

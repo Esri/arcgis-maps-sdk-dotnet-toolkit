@@ -54,7 +54,7 @@
                     Content="Add WGS84 basemap" />
                 <Button Click="Button_Remove_Last" Content="Remove last item" />
                 <TextBlock Text="Currently selected Basemap:" />
-                <TextBlock Text="{Binding ElementName=Gallery, Path=SelectedBasemap.Name, Mode=OneWay}" />
+                <TextBlock Text="{x:Bind Gallery.SelectedBasemap.Name, Mode=OneWay}" />
                 <TextBlock Text="Basemap selection event last raised:" />
                 <TextBlock x:Name="LastSelectedDateLabel" Text="Never" />
             </StackPanel>

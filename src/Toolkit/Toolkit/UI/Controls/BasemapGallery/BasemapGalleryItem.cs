@@ -31,7 +31,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Encompasses an element in a basemap gallery.
     /// </summary>
-    public class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    public partial class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
     {
 #pragma warning disable SA1011 // Closing square brackets should be spaced correctly
         private byte[]? _thumbnailData;
@@ -108,7 +111,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     var stream = await Thumbnail.GetEncodedBufferAsync();
                     var buffer = new byte[stream.Length];
+#if NET8_0_OR_GREATER
+                    await stream.ReadExactlyAsync(buffer);
+#else
                     await stream.ReadAsync(buffer, 0, (int)stream.Length);
+#endif
                     ThumbnailData = buffer;
 #if WINDOWS_XAML
                     ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();

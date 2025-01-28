@@ -50,8 +50,8 @@
             Background="White">
             <toolkit:BasemapGallery
                 x:Name="Gallery"
-                Width="{Binding ElementName=WidthSlider, Path=Value}"
-                GeoModel="{Binding ElementName=MyMapView, Path=Map, Mode=OneWay}" />
+                Width="{x:Bind WidthSlider.Value}"
+                GeoModel="{x:Bind MyMapView.Map, Mode=OneWay}" />
         </Border>
     </Grid>
 </Page>
