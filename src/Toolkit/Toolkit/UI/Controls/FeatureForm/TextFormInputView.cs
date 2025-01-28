@@ -374,5 +374,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
         }
+        
+
+        private
+#if __IOS__ || WINDOWS && NETCOREAPP || NETFX_CORE
+            async
+#endif
+            void LaunchBarcodeScanner(FieldFormElement element)
+        {
+
+            try
+            {
+                string? barcode = null;
+#if __IOS__
+                barcode = await ScannerViewController.ScanAsync();
+#elif WINDOWS && NETCOREAPP || NETFX_CORE
+                barcode = await BarcodeScanner.ScanAsync(); 
+#else
+                // TODO
+#endif
+                if (!string.IsNullOrWhiteSpace(barcode))
+                {
+                    element.UpdateValue(barcode);
+                }
+            }
+            catch
+            {
+
+            }
+        }
     }
 }
