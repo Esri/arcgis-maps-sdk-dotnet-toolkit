@@ -69,7 +69,6 @@
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>
-        <ProjectReference Include="..\..\Toolkit\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
         <ProjectReference Include="..\..\Toolkit\Toolkit.Maui\Esri.ArcGISRuntime.Toolkit.Maui.csproj" />
       </ItemGroup>
     </When>
