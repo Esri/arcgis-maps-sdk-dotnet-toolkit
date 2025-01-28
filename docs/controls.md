@@ -112,7 +112,7 @@ Use named trace configurations defined in a web map to perform connected trace o
 |[ScaleLine](scale-line.md)   | ✔ | ✔ | ✔ | ✔ |
 |[SearchView](search-view.md) | ✔ | ✔ | ✔ | ✔ |
 |[SymbolDisplay](symbol-display.md)   | ✔ | ✔ | ✔ | ✔ |
-|TableOfContents   | N/A | Preview | N/A  | ❌ |
+|TableOfContents   | N/A | ✔ | N/A  | - |
 |[TimeSlider](time-slider.md)   | ✔ | ✔ | ❌ | ❌ |
 |[UtilityNetworkTraceTool](un-trace.md) | ✔ | ✔ | ✔ | ❌ |
 
