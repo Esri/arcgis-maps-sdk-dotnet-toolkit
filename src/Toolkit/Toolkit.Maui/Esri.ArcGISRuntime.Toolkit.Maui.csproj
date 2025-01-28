@@ -16,6 +16,7 @@
         <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
         <Nullable>annotations</Nullable>
         <WindowsSdkPackageVersion Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(WinAppSDKVersion)','1.6.240923002'))">10.0.19041.38</WindowsSdkPackageVersion> <!-- Workaround for older .NET SDKs. Not needed with VS17.12+  -->
+        <NoWarn>$(NoWarn);NU1608</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -37,7 +38,6 @@
 
     <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">
       <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-      <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
       <PackageReference Include="Markdig" Version="0.31.0" />
     </ItemGroup>
     <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
