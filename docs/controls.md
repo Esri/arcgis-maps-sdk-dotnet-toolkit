@@ -97,22 +97,22 @@ Use named trace configurations defined in a web map to perform connected trace o
 
 ## Feature availability by platform/API
 
-|Component |UWP and WinUI |WPF  |MAUI |
-|---|---|---|---|
-|[BasemapGallery](basemap-gallery.md) | ✔ | ✔ |  ✔ |
-|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ |
-|[Compass](compass.md)   | ✔ | ✔ | ✔ |
-|[FeatureDataField](feature-data-field.md)   | ✔ | ✔ | ❌ |
-|[FloorFilter](floor-filter.md) | ✔  | ✔ | ✔ |
-|[GeoViewController](geoviewcontroller.md) | ✔  | ✔ | ✔ |
-|[Legend](legend.md)   | ✔ | ✔ | ✔ |
-|[MeasureToolbar](measure-toolbar.md)   | ✔ | ✔ | ❌ |
-|[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ |
-|[PopupViewer](popup-viewer.md) | ✔ | ✔ | ❌ |
-|[ScaleLine](scale-line.md)   | ✔ | ✔ | ✔ |
-|[SearchView](search-view.md) | ✔ | ✔ | ✔ |
-|[SymbolDisplay](symbol-display.md)   | ✔ | ✔ | ✔ |
-|TableOfContents   | N/A | Preview | N/A  |
-|[TimeSlider](time-slider.md)   | ✔ | ✔ | ❌ |
-|[UtilityNetworkTraceTool](un-trace.md) | ✔ | ✔ | ✔ |
+|Component |UWP and WinUI |WPF  |MAUI | WinUI AoT Compatible|
+|---|---|---|---|---|
+|[BasemapGallery](basemap-gallery.md) | ✔ | ✔ |  ✔ | ✔ |
+|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ❌ |
+|[Compass](compass.md)   | ✔ | ✔ | ✔ | ✔ |
+|[FeatureDataField](feature-data-field.md)   | ✔ | ✔ | ❌ | ❌ |
+|[FloorFilter](floor-filter.md) | ✔  | ✔ | ✔ | ❌ |
+|[GeoViewController](geoviewcontroller.md) | ✔  | ✔ | ✔ | ✔ |
+|[Legend](legend.md)   | ✔ | ✔ | ✔ | ❌ |
+|[MeasureToolbar](measure-toolbar.md)   | ✔ | ✔ | ❌ | ❌ |
+|[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ | ❌ |
+|[PopupViewer](popup-viewer.md) | ✔ | ✔ | ❌ | ❌ |
+|[ScaleLine](scale-line.md)   | ✔ | ✔ | ✔ | ✔ |
+|[SearchView](search-view.md) | ✔ | ✔ | ✔ | ✔ |
+|[SymbolDisplay](symbol-display.md)   | ✔ | ✔ | ✔ | ✔ |
+|TableOfContents   | N/A | Preview | N/A  | ❌ |
+|[TimeSlider](time-slider.md)   | ✔ | ✔ | ❌ | ❌ |
+|[UtilityNetworkTraceTool](un-trace.md) | ✔ | ✔ | ✔ | ❌ |
 
