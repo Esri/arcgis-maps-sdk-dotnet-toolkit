@@ -21,9 +21,12 @@ namespace Esri.ArcGISRuntime.Toolkit
         {
             try
             {
+                Windows.Devices.PointOfService.BarcodeScanner? scanner = null;
+                // We currently skip searching for barcode scanners, but just pick the default because the FindAllAsync query takes almost 40 seconds
+                // to complete on most devices, especially if they have bluetooth
+                /*
                 var selector = Windows.Devices.PointOfService.BarcodeScanner.GetDeviceSelector();
                 var deviceCollection = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(selector);
-                Windows.Devices.PointOfService.BarcodeScanner? scanner = null;
                 foreach (var device in deviceCollection)
                 {
                     var candidate = await Windows.Devices.PointOfService.BarcodeScanner.FromIdAsync(device.Id);
@@ -35,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                     var videoDevice = await Windows.Devices.Enumeration.DeviceInformation.CreateFromIdAsync(candidate.VideoDeviceId);
                     if (videoDevice.EnclosureLocation?.Panel == Windows.Devices.Enumeration.Panel.Back) // prefer back panel camera
                         scanner = candidate;
-                }
+                }*/
                 scanner = scanner ?? await Windows.Devices.PointOfService.BarcodeScanner.GetDefaultAsync();
                 if (scanner is null || scanner.VideoDeviceId is null)
                     throw new NotSupportedException();
