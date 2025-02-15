@@ -145,6 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 _addAttachmentButton.Clicked += AddAttachmentButton_Click;
             }
+            UpdateVisibility();
         }
 
         private async void AddAttachmentButton_Click(object? sender, EventArgs e)
