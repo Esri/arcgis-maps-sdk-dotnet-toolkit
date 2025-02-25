@@ -52,12 +52,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async void BasemapGallery_Loaded(object? sender, RoutedEventArgs e)
         {
-            // Unsubscribe from the Loaded event to ensure this only runs once.
-            Loaded -= BasemapGallery_Loaded;
-
-            if ((AvailableBasemaps is null || !AvailableBasemaps.Any()) && isAvailableBasemapCollectionInitialized)
+            try
             {
-                await _controller.LoadFromDefaultPortal();
+                // Unsubscribe from the Loaded event to ensure this only runs once.
+                Loaded -= BasemapGallery_Loaded;
+
+                if ((AvailableBasemaps is null || !AvailableBasemaps.Any()) && isAvailableBasemapCollectionInitialized)
+                {
+                    await _controller.LoadFromDefaultPortal();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading basemaps: {ex.Message}");
             }
         }
 

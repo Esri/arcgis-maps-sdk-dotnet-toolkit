@@ -46,12 +46,19 @@ public partial class BasemapGallery
 
     private async void BasemapGallery_Loaded(object? sender, EventArgs e)
     {
-        // Unsubscribe from the Loaded event to ensure this only runs once.
-        Loaded -= BasemapGallery_Loaded;
-
-        if (AvailableBasemaps is null)
+        try
         {
-            await _controller.LoadFromDefaultPortal();
+            // Unsubscribe from the Loaded event to ensure this only runs once.
+            Loaded -= BasemapGallery_Loaded;
+
+            if (AvailableBasemaps is null)
+            {
+                await _controller.LoadFromDefaultPortal();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading basemaps: {ex.Message}");
         }
     }
 
