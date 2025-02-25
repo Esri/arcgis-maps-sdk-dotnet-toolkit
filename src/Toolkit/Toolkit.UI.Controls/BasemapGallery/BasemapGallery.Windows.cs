@@ -52,11 +52,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async void BasemapGallery_Loaded(object? sender, RoutedEventArgs e)
         {
+            // Unsubscribe from the Loaded event to ensure this only runs once.
+            Loaded -= BasemapGallery_Loaded;
+
             try
             {
-                // Unsubscribe from the Loaded event to ensure this only runs once.
-                Loaded -= BasemapGallery_Loaded;
-
                 if ((AvailableBasemaps is null || !AvailableBasemaps.Any()) && isAvailableBasemapCollectionInitialized)
                 {
                     await _controller.LoadFromDefaultPortal();
@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading basemaps: {ex.Message}");
+                System.Diagnostics.Trace.WriteLine("Failed to load basemaps: " + ex.Message, "ArcGIS Maps SDK Toolkit");
             }
         }
 
