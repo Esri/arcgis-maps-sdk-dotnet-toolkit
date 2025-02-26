@@ -55,9 +55,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Unsubscribe from the Loaded event to ensure this only runs once.
             Loaded -= BasemapGallery_Loaded;
 
-            if ((AvailableBasemaps is null || !AvailableBasemaps.Any()) && isAvailableBasemapCollectionInitialized)
+            try
             {
-                await _controller.LoadFromDefaultPortal();
+                if ((AvailableBasemaps is null || !AvailableBasemaps.Any()) && isAvailableBasemapCollectionInitialized)
+                {
+                    await _controller.LoadFromDefaultPortal();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Failed to load basemaps", "ArcGIS Maps SDK Toolkit");
             }
         }
 

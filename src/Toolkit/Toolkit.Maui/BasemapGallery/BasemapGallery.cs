@@ -49,9 +49,16 @@ public partial class BasemapGallery
         // Unsubscribe from the Loaded event to ensure this only runs once.
         Loaded -= BasemapGallery_Loaded;
 
-        if (AvailableBasemaps is null)
+        try
         {
-            await _controller.LoadFromDefaultPortal();
+            if (AvailableBasemaps is null)
+            {
+                await _controller.LoadFromDefaultPortal();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.WriteLine("Failed to load basemaps", "ArcGIS Maps SDK Toolkit");
         }
     }
 
