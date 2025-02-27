@@ -53,19 +53,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Initializes a new instance of the <see cref="BasemapGalleryItem"/> class.
         /// </summary>
         /// <param name="basemap">Basemap for this gallery item. Must be not null and loaded.</param>
-        /// <param name="itemType">The type of the Basemap to use for this item.</param>
-        internal BasemapGalleryItem(Basemap basemap, BasemapGalleryItemType itemType)
+        /// <param name="is3D">Indicates if this basemap is a 3D basemap.</param>
+        internal BasemapGalleryItem(Basemap basemap, bool is3D)
         {
             Basemap = basemap;
-            BasemapType = itemType;
+            Is3D = is3D;
         }
 
         /// <summary>
         /// Creates an item to represent the given basemap.
         /// </summary>
-        public static async Task<BasemapGalleryItem> CreateAsync(Basemap basemap, BasemapGalleryItemType galleryItemType = default)
+        public static async Task<BasemapGalleryItem> CreateAsync(Basemap basemap, bool is3D = default)
         {
-            var bmgi = new BasemapGalleryItem(basemap, galleryItemType);
+            var bmgi = new BasemapGalleryItem(basemap, is3D);
             await bmgi.LoadAsync().ConfigureAwait(false);
             return bmgi;
         }
@@ -449,14 +449,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Gets the Type of the basemap.
+        /// Gets a value indicating whether this basemap is a 3D basemap.
         /// </summary>
-        public BasemapGalleryItemType BasemapType { get; private set; }
-
-        /// <summary>
-        /// Gets the type of the basemap as a string.
-        /// </summary>
-        public string BasemapTypeString => BasemapType.ToString().Replace("_", "");
+        public bool Is3D { get; private set; }
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;

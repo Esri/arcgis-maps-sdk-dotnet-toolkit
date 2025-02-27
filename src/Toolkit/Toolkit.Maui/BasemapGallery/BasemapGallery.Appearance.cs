@@ -57,12 +57,33 @@ public partial class BasemapGallery : TemplatedView
             Grid.SetRow(thumbnail, 0);
             Grid.SetRow(nameLabel, 1);
 
-
             Grid scrimGrid = new Grid();
             scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
             outerScrimContainer.Children.Add(scrimGrid);
             Grid.SetRowSpan(scrimGrid, 2);
 
+            Border itemTypeBorder = new Border
+            {
+                BackgroundColor = Colors.LightGray,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
+                Padding = new Thickness(5, 2),
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.End,
+            };
+            Grid.SetRow(itemTypeBorder, 1);
+
+            Label itemTypeLabel = new Label
+            {
+                Text = "3D",
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = 9,
+                TextColor = Colors.Black,
+                FontAttributes = FontAttributes.Bold
+            };
+            itemTypeBorder.Content = itemTypeLabel;
+            itemTypeBorder.SetBinding(Border.IsVisibleProperty, new Binding(nameof(BasemapGalleryItem.Is3D), BindingMode.OneWay));
+
+            outerScrimContainer.Children.Add(itemTypeBorder);
 
             thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
             nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
@@ -74,71 +95,89 @@ public partial class BasemapGallery : TemplatedView
 
         DefaultListDataTemplate = new DataTemplate(() =>
         {
-            // Special template to take advantate of negative margin support on iOS, Mac
+            // Special template to take advantage of negative margin support on iOS, Mac
+
+            Border border = new Border
+            {
+                Padding = new Thickness(0),
 #if __IOS__
-            Border border = new Border { Padding = new Thickness(0), StrokeThickness = 8, StrokeShape = new Rectangle() };
+                StrokeThickness = 8,
+#else
+                StrokeThickness = 1,
+#endif
+                StrokeShape = new Rectangle(),
+            };
             Grid outerScrimContainer = new Grid();
             outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(64) });
             outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
             outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
             outerScrimContainer.ColumnSpacing = 0;
+#if __IOS__
             outerScrimContainer.Margin = new Thickness(-4, -8, -8, -8);
             outerScrimContainer.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
-
-            Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
-            Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Start, VerticalTextAlignment = TextAlignment.Center };
-            thumbnail.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
-
-            outerScrimContainer.Children.Add(thumbnail);
-            outerScrimContainer.Children.Add(nameLabel);
-
-            Grid.SetColumn(thumbnail, 0);
-            Grid.SetColumn(nameLabel, 2);
-
-
-            Grid scrimGrid = new Grid();
-            scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
-            outerScrimContainer.Children.Add(scrimGrid);
-            Grid.SetColumnSpan(scrimGrid, 3);
-
-
-            thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
-            nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
-            scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
-
-            border.Content = outerScrimContainer;
-            return border;
-#else
-            Border border = new Border { Padding = new Thickness(0), StrokeThickness = 1, StrokeShape = new Rectangle() };
-            Grid outerScrimContainer = new Grid();
-            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(64) });
-            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
-            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-            outerScrimContainer.ColumnSpacing = 0;
-
-            Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
-            Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Start, VerticalTextAlignment = TextAlignment.Center };
-
-            outerScrimContainer.Children.Add(thumbnail);
-            outerScrimContainer.Children.Add(nameLabel);
-
-            Grid.SetColumn(thumbnail, 0);
-            Grid.SetColumn(nameLabel, 2);
-
-
-            Grid scrimGrid = new Grid();
-            scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
-            outerScrimContainer.Children.Add(scrimGrid);
-            Grid.SetColumnSpan(scrimGrid, 3);
-
-
-            thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
-            nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
-            scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
-
-            border.Content = outerScrimContainer;
-            return border;
 #endif
+
+            Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
+#if __IOS__
+            thumbnail.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
+#endif
+
+            outerScrimContainer.Children.Add(thumbnail);
+
+            Grid.SetColumn(thumbnail, 0);
+
+            Grid newGrid = new Grid
+            {
+                Margin = new Thickness(0, 6, 6, 6)
+            };
+            newGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+            newGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+            Label itemTextLabel = new Label
+            {
+                FontSize = 12,
+                HorizontalTextAlignment = TextAlignment.Start,
+                VerticalTextAlignment = TextAlignment.Center
+            };
+            itemTextLabel.SetBinding(Label.TextProperty, new Binding("Name", BindingMode.OneWay));
+            Grid.SetRow(itemTextLabel, 0);
+
+            Border itemTypeBorder = new Border
+            {
+                BackgroundColor = Colors.LightGray,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
+                Padding = new Thickness(5, 2),
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.End,
+            };
+            itemTypeBorder.SetBinding(Border.IsVisibleProperty, new Binding("Is3D", BindingMode.OneWay));
+
+            Label itemTypeLabel = new Label
+            {
+                Text = "3D",
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = 9,
+                TextColor = Colors.Black,
+                FontAttributes = FontAttributes.Bold,
+            };
+            itemTypeBorder.Content = itemTypeLabel;
+            Grid.SetRow(itemTypeBorder, 1);
+
+            newGrid.Children.Add(itemTextLabel);
+            newGrid.Children.Add(itemTypeBorder);
+            outerScrimContainer.Children.Add(newGrid);
+            Grid.SetColumn(newGrid, 2);
+
+            Grid scrimGrid = new Grid();
+            scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
+            outerScrimContainer.Children.Add(scrimGrid);
+            Grid.SetColumnSpan(scrimGrid, 3);
+
+            thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
+            scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
+
+            border.Content = outerScrimContainer;
+            return border;
         });
 
         string template = $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">

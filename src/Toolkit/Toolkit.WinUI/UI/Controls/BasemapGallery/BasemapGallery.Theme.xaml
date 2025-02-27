@@ -136,6 +136,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel
+                        Margin="5"
                         MaxWidth="128"
                         Background="Transparent"
                         Orientation="Vertical"
@@ -159,11 +160,24 @@
                         <TextBlock
                             x:Name="ItemTextBlock"
                             MinHeight="32"
-                            Margin="8,0,8,8"
                             FontSize="11"
                             Text="{Binding Name}"
                             TextAlignment="Center"
                             TextWrapping="Wrap" />
+                        <Border
+                            Background="LightGray"
+                            CornerRadius="7"
+                            Padding="5,2"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            Visibility="{Binding Is3D}">
+                            <TextBlock
+                                Text="3D"
+                                TextAlignment="Center"
+                                FontSize="9"
+                                Foreground="Black"
+                                FontWeight="Bold" />
+                        </Border>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
@@ -195,12 +209,36 @@
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>
-                        <TextBlock
-                            x:Name="ItemTextBlock"
+                        <Grid
                             Grid.Column="1"
-                            VerticalAlignment="Center"
-                            Text="{Binding Name, Mode=OneWay}"
-                            TextWrapping="Wrap" />
+                            Margin="0,6,6,6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                x:Name="ItemTextBlock"
+                                Grid.Row="0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                            <Border
+                                Visibility="{Binding Is3D}"
+                                Background="LightGray"
+                                CornerRadius="7"
+                                Grid.Row="1"
+                                Padding="5,2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom">
+                                <TextBlock
+                                    x:Name="ItemTypeBlock"
+                                    Text="3D"
+                                    TextAlignment="Center"
+                                    FontSize="9"
+                                    Foreground="Black"
+                                    FontWeight="Bold" />
+                            </Border>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>

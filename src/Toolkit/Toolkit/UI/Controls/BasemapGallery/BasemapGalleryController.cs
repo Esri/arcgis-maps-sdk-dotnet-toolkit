@@ -294,21 +294,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                                         ? await portal.GetVectorBasemapsAsync()
                                         : await portal.GetBasemapsAsync();
 
-            var basemapGalleryItems = basemaps.Select(basemap => new BasemapGalleryItem(basemap, BasemapGalleryItemType._2D)).ToList();
+            var basemapGalleryItems = basemaps.Select(basemap => new BasemapGalleryItem(basemap, false)).ToList();
 
             if (portal.PortalInfo?.Use3DBasemaps ?? false)
             {
                 var basemaps3D = await portal.Get3DBasemapsAsync();
                 basemapGalleryItems = basemaps3D
-                                        .Select(basemap => new BasemapGalleryItem(basemap, BasemapGalleryItemType._3D))
+                                        .Select(basemap => new BasemapGalleryItem(basemap, true))
                                         .Concat(basemapGalleryItems)
                                         .ToList();
             }
 
-            Parallel.ForEach(basemapGalleryItems, async item =>
+            foreach (var item in basemapGalleryItems)
             {
-                await item.LoadAsync();
-            });
+                _ = item.LoadAsync();
+            }
 
             return basemapGalleryItems;
         }
@@ -319,21 +319,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             var results = await defaultPortal.GetDeveloperBasemapsAsync(cancellationToken);
 
-            var basemapGalleryItems = results.Select(basemap => new BasemapGalleryItem(basemap, BasemapGalleryItemType._2D)).ToList();
+            var basemapGalleryItems = results.Select(basemap => new BasemapGalleryItem(basemap, false)).ToList();
 
             if (defaultPortal.PortalInfo?.Use3DBasemaps ?? false)
             {
                 var basemaps3D = await defaultPortal.Get3DBasemapsAsync(cancellationToken);
                 basemapGalleryItems = basemaps3D
-                                        .Select(basemap => new BasemapGalleryItem(basemap, BasemapGalleryItemType._3D))
+                                        .Select(basemap => new BasemapGalleryItem(basemap, true))
                                         .Concat(basemapGalleryItems)
                                         .ToList();
             }
 
-            Parallel.ForEach(basemapGalleryItems, async item =>
+            foreach (var item in basemapGalleryItems)
             {
-                await item.LoadAsync();
-            });
+                _ = item.LoadAsync();
+            }
 
             return new ObservableCollection<BasemapGalleryItem>(basemapGalleryItems);
         }

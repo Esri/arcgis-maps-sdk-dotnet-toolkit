@@ -119,6 +119,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleDatasource.cs" />
+    <Compile Include="Samples\BasemapGallery\BasemapGallery3DAppearanceSample.xaml.cs">
+      <DependentUpon>BasemapGallery3DAppearanceSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\BasemapGallery\BasemapGalleryAppearanceSample.xaml.cs">
       <DependentUpon>BasemapGalleryAppearanceSample.xaml</DependentUpon>
     </Compile>
@@ -215,6 +218,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\BasemapGallery\BasemapGallery3DAppearanceSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -322,9 +329,9 @@
           <Project>{a6431f30-a608-4c78-80be-548c322cbe75}</Project>
           <Name>Esri.ArcGISRuntime.Toolkit.UWP</Name>
         </ProjectReference>
-       <PackageReference Include="Esri.ArcGISRuntime.UWP">
-         <Version>$(ArcGISRuntimePackageVersion)</Version>
-       </PackageReference>
+        <PackageReference Include="Esri.ArcGISRuntime.UWP">
+          <Version>$(ArcGISRuntimePackageVersion)</Version>
+        </PackageReference>
       </ItemGroup>
     </When>
     <Otherwise>

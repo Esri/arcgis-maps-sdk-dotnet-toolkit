@@ -110,6 +110,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel
+                        Margin="5"
                         Width="128"
                         Background="Transparent"
                         Orientation="Vertical">
@@ -144,11 +145,33 @@
                         </Border>
                         <TextBlock
                             x:Name="ItemTextBlock"
-                            Margin="8,0,8,8"
                             FontSize="11"
                             Text="{Binding Name}"
                             TextAlignment="Center"
                             TextWrapping="Wrap" />
+                        <Border
+                            Background="LightGray"
+                            CornerRadius="7"
+                            Padding="5,2"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Is3D}" Value="false">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock
+                                x:Name="ItemTypeBlock"
+                                Text="3D"
+                                TextAlignment="Center"
+                                FontSize="9"
+                                Foreground="Black"
+                                FontWeight="Bold" />
+                        </Border>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
@@ -217,20 +240,19 @@
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding BasemapTypeString}" Value="2D">
+                                            <DataTrigger Binding="{Binding Is3D}" Value="false">
                                                 <Setter Property="Visibility" Value="Hidden" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <Border.Child>
-                                    <TextBlock
-                                        x:Name="ItemTypeBlock"
-                                        Text="{Binding BasemapTypeString, Mode=OneWay}"
-                                        TextAlignment="Center"
-                                        FontSize="9"
-                                        FontWeight="Bold" />
-                                </Border.Child>
+                                <TextBlock
+                                    x:Name="ItemTypeBlock"
+                                    Text="3D"
+                                    TextAlignment="Center"
+                                    FontSize="9"
+                                    Foreground="Black"
+                                    FontWeight="Bold" />
                             </Border>
                         </Grid>
                     </Grid>
