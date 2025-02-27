@@ -170,6 +170,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Border
+                            Grid.Column="0"
                             Width="64"
                             Height="64"
                             Margin="6"
@@ -193,13 +194,45 @@
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>
-                        <TextBlock
-                            x:Name="ItemTextBlock"
+                        <Grid
                             Grid.Column="1"
-                            Margin="0,6,6,6"
-                            VerticalAlignment="Center"
-                            Text="{Binding Name, Mode=OneWay}"
-                            TextWrapping="Wrap" />
+                            Margin="0,6,6,6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                x:Name="ItemTextBlock"
+                                Grid.Row="0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                            <Border
+                                Background="LightGray"
+                                CornerRadius="7"
+                                Grid.Row="1"
+                                Padding="5,2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding BasemapTypeString}" Value="2D">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Border.Child>
+                                    <TextBlock
+                                        x:Name="ItemTypeBlock"
+                                        Text="{Binding BasemapTypeString, Mode=OneWay}"
+                                        TextAlignment="Center"
+                                        FontSize="9"
+                                        FontWeight="Bold" />
+                                </Border.Child>
+                            </Border>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>

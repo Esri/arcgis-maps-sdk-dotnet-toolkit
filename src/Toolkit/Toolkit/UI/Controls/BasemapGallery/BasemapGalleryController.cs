@@ -290,28 +290,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 return null;
             }
 
-            Task<IEnumerable<Basemap>> getBasemapsTask;
-            if (portal.PortalInfo?.UseVectorBasemaps ?? false)
-            {
-                getBasemapsTask = portal.GetVectorBasemapsAsync();
-            }
-            else
-            {
-                getBasemapsTask = portal.GetBasemapsAsync();
-            }
+            var basemaps = portal.PortalInfo?.UseVectorBasemaps ?? false
+                                        ? await portal.GetVectorBasemapsAsync()
+                                        : await portal.GetBasemapsAsync();
 
-            var basemaps = await getBasemapsTask;
+            var basemapGalleryItems = basemaps.Select(basemap => new BasemapGalleryItem(basemap, BasemapGalleryItemType._2D)).ToList();
 
-            IList<BasemapGalleryItem> listOfBasemaps = new List<BasemapGalleryItem>();
-
-            foreach (var item in basemaps)
+            if (portal.PortalInfo?.Use3DBasemaps ?? false)
             {
-                listOfBasemaps.Add(new BasemapGalleryItem(item));
+                var basemaps3D = await portal.Get3DBasemapsAsync();
+                basemapGalleryItems = basemaps3D
+                                        .Select(basemap => new BasemapGalleryItem(basemap, BasemapGalleryItemType._3D))
+                                        .Concat(basemapGalleryItems)
+                                        .ToList();
             }
 
-            await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
+            Parallel.ForEach(basemapGalleryItems, async item =>
+            {
+                await item.LoadAsync();
+            });
 
-            return listOfBasemaps;
+            return basemapGalleryItems;
         }
 
         private static async Task<IList<BasemapGalleryItem>> PopulateFromDefaultList(CancellationToken cancellationToken = default)
@@ -320,18 +319,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             var results = await defaultPortal.GetDeveloperBasemapsAsync(cancellationToken);
 
-            var listOfBasemaps = new List<BasemapGalleryItem>();
+            var basemapGalleryItems = results.Select(basemap => new BasemapGalleryItem(basemap, BasemapGalleryItemType._2D)).ToList();
 
-            foreach (var basemap in results)
+            if (defaultPortal.PortalInfo?.Use3DBasemaps ?? false)
             {
-                listOfBasemaps.Add(new BasemapGalleryItem(basemap));
+                var basemaps3D = await defaultPortal.Get3DBasemapsAsync(cancellationToken);
+                basemapGalleryItems = basemaps3D
+                                        .Select(basemap => new BasemapGalleryItem(basemap, BasemapGalleryItemType._3D))
+                                        .Concat(basemapGalleryItems)
+                                        .ToList();
             }
 
-            foreach (var item in listOfBasemaps)
+            Parallel.ForEach(basemapGalleryItems, async item =>
             {
-                _ = item.LoadAsync();
-            }
-            return new ObservableCollection<BasemapGalleryItem>(listOfBasemaps);
+                await item.LoadAsync();
+            });
+
+            return new ObservableCollection<BasemapGalleryItem>(basemapGalleryItems);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

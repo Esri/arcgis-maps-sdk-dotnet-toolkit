@@ -53,17 +53,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Initializes a new instance of the <see cref="BasemapGalleryItem"/> class.
         /// </summary>
         /// <param name="basemap">Basemap for this gallery item. Must be not null and loaded.</param>
-        internal BasemapGalleryItem(Basemap basemap)
+        /// <param name="itemType">The type of the Basemap to use for this item.</param>
+        internal BasemapGalleryItem(Basemap basemap, BasemapGalleryItemType itemType)
         {
             Basemap = basemap;
+            BasemapType = itemType;
         }
 
         /// <summary>
         /// Creates an item to represent the given basemap.
         /// </summary>
-        public static async Task<BasemapGalleryItem> CreateAsync(Basemap basemap)
+        public static async Task<BasemapGalleryItem> CreateAsync(Basemap basemap, BasemapGalleryItemType galleryItemType = default)
         {
-            var bmgi = new BasemapGalleryItem(basemap);
+            var bmgi = new BasemapGalleryItem(basemap, galleryItemType);
             await bmgi.LoadAsync().ConfigureAwait(false);
             return bmgi;
         }
@@ -445,6 +447,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the Type of the basemap.
+        /// </summary>
+        public BasemapGalleryItemType BasemapType { get; private set; }
+
+        /// <summary>
+        /// Gets the type of the basemap as a string.
+        /// </summary>
+        public string BasemapTypeString => BasemapType.ToString().Replace("_", "");
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
