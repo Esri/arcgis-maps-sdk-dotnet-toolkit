@@ -1,40 +1,32 @@
-﻿<Page
-    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery.BasemapGallery3DAppearanceSample"
+﻿<UserControl
+    x:Class="Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery.BasemapGallerySceneViewAppearanceSample"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
     mc:Ignorable="d">
-    <Page.Resources>
-        <Style TargetType="Button">
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-        </Style>
-    </Page.Resources>
     <Grid>
         <esri:SceneView x:Name="MySceneView" />
-
         <Border
             Width="200"
             Margin="8"
             Padding="8"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            Background="White">
             <StackPanel>
-                <TextBlock Text="Control Width:" />
+                <Label Content="Control Width:" />
                 <Slider
                     x:Name="WidthSlider"
                     Maximum="1000"
                     Minimum="0"
                     Value="200" />
-                <TextBlock Text="Gallery View Style: " />
-                <ComboBox
-                    x:Name="ViewStyleCombobox"
-                    HorizontalAlignment="Stretch"
-                    SelectionChanged="ViewStyleCombobox_SelectionChanged" />
+                <Label Content="Gallery View Style: " />
+                <ComboBox x:Name="ViewStyleCombobox" SelectionChanged="ViewStyleCombobox_SelectionChanged" />
                 <Button
                     Margin="0,4,0,4"
                     Click="Button_Add_Last"
@@ -48,10 +40,10 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Background="White">
-            <toolkit:BasemapGallery
+            <esri:BasemapGallery
                 x:Name="Gallery"
-                Width="{x:Bind WidthSlider.Value}"
-                GeoModel="{x:Bind MySceneView.Scene, Mode=OneWay}" />
+                Width="{Binding ElementName=WidthSlider, Path=Value}"
+                GeoModel="{Binding ElementName=MySceneView, Path=Scene, Mode=OneWay}" />
         </Border>
     </Grid>
-</Page>
+</UserControl>

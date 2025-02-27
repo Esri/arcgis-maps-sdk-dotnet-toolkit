@@ -2,13 +2,15 @@
 using Esri.ArcGISRuntime.Toolkit.UI;
 using System;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
-namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
+namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
 {
-    [SampleInfo(ApiKeyRequired = true)]
-    public sealed partial class BasemapGallery3DAppearanceSample : Page
+    [SampleInfo(Category = "BasemapGallery", DisplayName = "Sceneview BasemapGallery - Appearance", Description = "Sample showing customization options related to appearance for a Sceneview Basemap Gallery", ApiKeyRequired = true)]
+    public partial class BasemapGallerySceneViewAppearanceSample : UserControl
     {
-        public BasemapGallery3DAppearanceSample()
+        public BasemapGallerySceneViewAppearanceSample()
         {
             InitializeComponent();
             MySceneView.Scene = new Scene(BasemapStyle.ArcGISImagery);

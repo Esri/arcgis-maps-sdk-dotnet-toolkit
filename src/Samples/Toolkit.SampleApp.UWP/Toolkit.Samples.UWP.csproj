@@ -119,8 +119,8 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleDatasource.cs" />
-    <Compile Include="Samples\BasemapGallery\BasemapGallery3DAppearanceSample.xaml.cs">
-      <DependentUpon>BasemapGallery3DAppearanceSample.xaml</DependentUpon>
+    <Compile Include="Samples\BasemapGallery\BasemapGallerySceneViewAppearanceSample.xaml.cs">
+      <DependentUpon>BasemapGallerySceneViewAppearanceSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="Samples\BasemapGallery\BasemapGalleryAppearanceSample.xaml.cs">
       <DependentUpon>BasemapGalleryAppearanceSample.xaml</DependentUpon>
@@ -221,7 +221,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Samples\BasemapGallery\BasemapGallery3DAppearanceSample.xaml">
+    <Page Include="Samples\BasemapGallery\BasemapGallerySceneViewAppearanceSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
