@@ -16,6 +16,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -53,19 +54,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Initializes a new instance of the <see cref="BasemapGalleryItem"/> class.
         /// </summary>
         /// <param name="basemap">Basemap for this gallery item. Must be not null and loaded.</param>
-        /// <param name="is3D">Indicates if this basemap is a 3D basemap.</param>
-        internal BasemapGalleryItem(Basemap basemap, bool is3D)
+        internal BasemapGalleryItem(Basemap basemap)
         {
             Basemap = basemap;
-            Is3D = is3D;
         }
 
         /// <summary>
         /// Creates an item to represent the given basemap.
         /// </summary>
-        public static async Task<BasemapGalleryItem> CreateAsync(Basemap basemap, bool is3D = default)
+        public static async Task<BasemapGalleryItem> CreateAsync(Basemap basemap)
         {
-            var bmgi = new BasemapGalleryItem(basemap, is3D);
+            var bmgi = new BasemapGalleryItem(basemap);
             await bmgi.LoadAsync().ConfigureAwait(false);
             return bmgi;
         }
@@ -90,6 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Tooltip)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Is3D)));
                 _ = LoadImage();
             }
             catch (Exception)
@@ -451,7 +451,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets a value indicating whether this basemap is a 3D basemap.
         /// </summary>
-        public bool Is3D { get; private set; }
+        public bool Is3D => this.Basemap?.BaseLayers?.OfType<ArcGISSceneLayer>()?.Any() ?? false;
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;

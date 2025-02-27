@@ -302,13 +302,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                                         ? await portal.GetVectorBasemapsAsync(cancellationToken)
                                         : await portal.GetBasemapsAsync(cancellationToken);
 
-            var basemapGalleryItems = basemaps.Select(basemap => new BasemapGalleryItem(basemap, false)).ToList();
+            var basemapGalleryItems = basemaps.Select(basemap => new BasemapGalleryItem(basemap)).ToList();
 
             if (GeoModel is Scene && use3DBasemaps)
             {
                 var basemaps3D = await portal.Get3DBasemapsAsync(cancellationToken);
                 basemapGalleryItems = basemaps3D
-                                        .Select(basemap => new BasemapGalleryItem(basemap, true))
+                                        .Select(basemap => new BasemapGalleryItem(basemap))
                                         .Concat(basemapGalleryItems)
                                         .ToList();
             }
