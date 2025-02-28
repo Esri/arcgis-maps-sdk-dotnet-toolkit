@@ -155,6 +155,22 @@
                                     Opacity="1"
                                     Source="{Binding ThumbnailBitmap, Mode=OneWay}"
                                     Stretch="UniformToFill" />
+                                <Border
+                                    Background="LightGray"
+                                    CornerRadius="7"
+                                    Padding="4,0"
+                                    Margin="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Visibility="{Binding Is3D}">
+                                    <TextBlock
+                                        Text="3D"
+                                        Margin="1"
+                                        TextAlignment="Center"
+                                        FontSize="9"
+                                        Foreground="Black"
+                                        FontWeight="Bold" />
+                                </Border>
                             </Grid>
                         </Border>
                         <TextBlock
@@ -164,20 +180,6 @@
                             Text="{Binding Name}"
                             TextAlignment="Center"
                             TextWrapping="Wrap" />
-                        <Border
-                            Background="LightGray"
-                            CornerRadius="7"
-                            Padding="5,2"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Visibility="{Binding Is3D}">
-                            <TextBlock
-                                Text="3D"
-                                TextAlignment="Center"
-                                FontSize="9"
-                                Foreground="Black"
-                                FontWeight="Bold" />
-                        </Border>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
@@ -227,12 +229,12 @@
                                 Background="LightGray"
                                 CornerRadius="7"
                                 Grid.Row="1"
-                                Padding="5,2"
+                                Padding="4,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Bottom">
                                 <TextBlock
-                                    x:Name="ItemTypeBlock"
                                     Text="3D"
+                                    Margin="1"
                                     TextAlignment="Center"
                                     FontSize="9"
                                     Foreground="Black"

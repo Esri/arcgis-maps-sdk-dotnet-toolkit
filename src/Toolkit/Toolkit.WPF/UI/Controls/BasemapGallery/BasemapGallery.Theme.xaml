@@ -141,6 +141,30 @@
                                     Height="62"
                                     Source="{Binding ThumbnailData, Mode=OneWay}"
                                     Stretch="UniformToFill" />
+                                <Border
+                                    Background="LightGray"
+                                    CornerRadius="7"
+                                    Padding="4,0"
+                                    Margin="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Is3D}" Value="false">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock
+                                        Text="3D"
+                                        Margin="1"
+                                        TextAlignment="Center"
+                                        FontSize="9"
+                                        Foreground="Black"
+                                        FontWeight="Bold" />
+                                </Border>
                             </Grid>
                         </Border>
                         <TextBlock
@@ -149,29 +173,6 @@
                             Text="{Binding Name}"
                             TextAlignment="Center"
                             TextWrapping="Wrap" />
-                        <Border
-                            Background="LightGray"
-                            CornerRadius="7"
-                            Padding="5,2"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Is3D}" Value="false">
-                                            <Setter Property="Visibility" Value="Hidden" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <TextBlock
-                                x:Name="ItemTypeBlock"
-                                Text="3D"
-                                TextAlignment="Center"
-                                FontSize="9"
-                                Foreground="Black"
-                                FontWeight="Bold" />
-                        </Border>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
@@ -234,7 +235,7 @@
                                 Background="LightGray"
                                 CornerRadius="7"
                                 Grid.Row="1"
-                                Padding="5,2"
+                                Padding="4,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Bottom">
                                 <Border.Style>
@@ -247,8 +248,8 @@
                                     </Style>
                                 </Border.Style>
                                 <TextBlock
-                                    x:Name="ItemTypeBlock"
                                     Text="3D"
+                                    Margin="1"
                                     TextAlignment="Center"
                                     FontSize="9"
                                     Foreground="Black"

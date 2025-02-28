@@ -48,33 +48,23 @@ public partial class BasemapGallery : TemplatedView
             outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
             outerScrimContainer.RowSpacing = 4;
 
-            Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
-            Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Start };
-
-            outerScrimContainer.Children.Add(thumbnail);
-            outerScrimContainer.Children.Add(nameLabel);
-
-            Grid.SetRow(thumbnail, 0);
-            Grid.SetRow(nameLabel, 1);
-
-            Grid scrimGrid = new Grid();
-            scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
-            outerScrimContainer.Children.Add(scrimGrid);
-            Grid.SetRowSpan(scrimGrid, 2);
-
+            Grid thumbnailGrid = new Grid() { WidthRequest = 64, HeightRequest = 64 };
+            Image thumbnail = new Image { Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
             Border itemTypeBorder = new Border
             {
                 BackgroundColor = Colors.LightGray,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
-                Padding = new Thickness(5, 2),
-                HorizontalOptions = LayoutOptions.Start,
-                VerticalOptions = LayoutOptions.End,
+                Padding = new Thickness(4, 0),
+                Margin = new Thickness(2),
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.Start,
             };
             Grid.SetRow(itemTypeBorder, 1);
 
             Label itemTypeLabel = new Label
             {
                 Text = "3D",
+                Margin = new Thickness(1),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 9,
                 TextColor = Colors.Black,
@@ -83,7 +73,21 @@ public partial class BasemapGallery : TemplatedView
             itemTypeBorder.Content = itemTypeLabel;
             itemTypeBorder.SetBinding(Border.IsVisibleProperty, new Binding(nameof(BasemapGalleryItem.Is3D), BindingMode.OneWay));
 
-            outerScrimContainer.Children.Add(itemTypeBorder);
+            thumbnailGrid.Children.Add(thumbnail);
+            thumbnailGrid.Children.Add(itemTypeBorder);
+
+            Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Start };
+
+            outerScrimContainer.Children.Add(thumbnailGrid);
+            outerScrimContainer.Children.Add(nameLabel);
+
+            Grid.SetRow(thumbnailGrid, 0);
+            Grid.SetRow(nameLabel, 1);
+
+            Grid scrimGrid = new Grid();
+            scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
+            outerScrimContainer.Children.Add(scrimGrid);
+            Grid.SetRowSpan(scrimGrid, 2);
 
             thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
             nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
@@ -146,7 +150,7 @@ public partial class BasemapGallery : TemplatedView
             {
                 BackgroundColor = Colors.LightGray,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
-                Padding = new Thickness(5, 2),
+                Padding = new Thickness(4, 0),
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.End,
             };
@@ -155,6 +159,7 @@ public partial class BasemapGallery : TemplatedView
             Label itemTypeLabel = new Label
             {
                 Text = "3D",
+                Margin = new Thickness(1),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 9,
                 TextColor = Colors.Black,
