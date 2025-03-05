@@ -175,7 +175,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void HandleGeoModelChanged()
         {
-            AvailableBasemaps = GetBasemapGalleryItems();
+            if (_cached2DBasemaps is not null || _cached3DBasemaps is not null)
+            {
+                AvailableBasemaps = GetBasemapGalleryItems();
+            }
             AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
             UpdateSelectionForGeoModelBasemap();
         }
