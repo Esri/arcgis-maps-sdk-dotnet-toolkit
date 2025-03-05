@@ -110,7 +110,6 @@
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel
-                        Margin="5"
                         Width="128"
                         Background="Transparent"
                         Orientation="Vertical">
