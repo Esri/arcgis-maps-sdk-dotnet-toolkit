@@ -136,7 +136,6 @@
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel
-                        Margin="5"
                         MaxWidth="128"
                         Background="Transparent"
                         Orientation="Vertical"
@@ -176,6 +175,7 @@
                         <TextBlock
                             x:Name="ItemTextBlock"
                             MinHeight="32"
+                            Margin="8,0,8,8"
                             FontSize="11"
                             Text="{Binding Name}"
                             TextAlignment="Center"
