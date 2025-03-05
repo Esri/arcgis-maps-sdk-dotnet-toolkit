@@ -89,9 +89,9 @@ public partial class BasemapGallery : TemplatedView
             outerScrimContainer.Children.Add(scrimGrid);
             Grid.SetRowSpan(scrimGrid, 2);
 
-            thumbnail.SetBinding(Image.SourceProperty, static (BasemapGalleryItem item) => item.ThumbnailData, converter: ImageSourceConverter);
+            thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
             nameLabel.SetBinding(Label.TextProperty, static (BasemapGalleryItem item) => item.Name);
-            scrimGrid.SetBinding(OpacityProperty, static (BasemapGalleryItem item) => item.IsValid, mode: BindingMode.OneWay, converter: OpacityConverter);
+            scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
 
             border.Content = outerScrimContainer;
             return border;
@@ -178,8 +178,8 @@ public partial class BasemapGallery : TemplatedView
             outerScrimContainer.Children.Add(scrimGrid);
             Grid.SetColumnSpan(scrimGrid, 3);
 
-            thumbnail.SetBinding(Image.SourceProperty, static (BasemapGalleryItem item) => item.ThumbnailData, converter: ImageSourceConverter);
-            scrimGrid.SetBinding(OpacityProperty, static (BasemapGalleryItem item) => item.IsValid, mode: BindingMode.OneWay, converter: OpacityConverter);
+            thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
+            scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
 
             border.Content = outerScrimContainer;
             return border;
