@@ -312,28 +312,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
                 return basemapItems;
             }
-
-            if (_cached2DBasemaps is null)
-            {
-                _cached2DBasemaps = await LoadBasemapsAsync(portal.PortalInfo?.UseVectorBasemaps ?? false
-                    ? portal.GetVectorBasemapsAsync
-                    : portal.GetBasemapsAsync);
-            }
-
-            if (portal.PortalInfo?.Use3DBasemaps is true && _cached3DBasemaps is null)
-            {
-                _cached3DBasemaps = await LoadBasemapsAsync(portal.Get3DBasemapsAsync);
-            }
-
             var basemapGalleryItems = new List<BasemapGalleryItem>();
-            if (GeoModel is Scene && _cached3DBasemaps is not null)
+
+            if (portal.PortalInfo?.Use3DBasemaps is true && GeoModel is Scene)
             {
+                _cached3DBasemaps ??= await LoadBasemapsAsync(portal.Get3DBasemapsAsync);
                 basemapGalleryItems.AddRange(_cached3DBasemaps);
             }
-            if (_cached2DBasemaps is not null)
-            {
-                basemapGalleryItems.AddRange(_cached2DBasemaps);
-            }
+
+            _cached2DBasemaps ??= await LoadBasemapsAsync(portal.PortalInfo?.UseVectorBasemaps ?? false
+                    ? portal.GetVectorBasemapsAsync
+                    : portal.GetBasemapsAsync);
+            basemapGalleryItems.AddRange(_cached2DBasemaps);
+
             return new ObservableCollection<BasemapGalleryItem>(basemapGalleryItems);
         }
 
