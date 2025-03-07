@@ -148,7 +148,9 @@ public partial class BasemapGallery : TemplatedView
 
             Border itemTypeBorder = new Border
             {
-                BackgroundColor = Colors.LightGray,
+                BackgroundColor = Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Light ?
+                                    Colors.LightGray :
+                                    Colors.DarkGray,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
                 Padding = new Thickness(4, 0),
                 HorizontalOptions = LayoutOptions.Start,
