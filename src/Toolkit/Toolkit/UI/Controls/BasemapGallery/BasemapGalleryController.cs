@@ -173,19 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private async Task HandleGeoModelChanged()
-        {
-            try
-            {
-                AvailableBasemaps = await PopulateFromDefaultList();
-                AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
-                UpdateSelectionForGeoModelBasemap();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
-            }
-        }
+        private async Task HandleGeoModelChanged() => await UpdateBasemaps();
 
         private void HandleGeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -201,23 +189,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private async Task HandlePortalChanged()
         {
+            // Clear caches when the portal changes
+            _cached2DBasemaps = null;
+            _cached3DBasemaps = null;
+            await UpdateBasemaps();
+        }
+
+        public async Task UpdateBasemaps()
+        {
             IsLoading = true;
+            _loadCancellationTokenSource = new CancellationTokenSource();
             try
             {
-                if (Portal is ArcGISPortal portal)
-                {
-                    // Clear caches when the portal changes
-                    _cached2DBasemaps = null;
-                    _cached3DBasemaps = null;
-
-                    AvailableBasemaps = await PopulateBasemapsForPortal(portal);
-                }
+                AvailableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
+                AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
+                UpdateSelectionForGeoModelBasemap();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex.Message);
             }
-            IsLoading = false;
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private void HandleSelectedBasemapChanged()
@@ -240,22 +235,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 // restore events
                 _ignoreEventsFlag = false;
-            }
-        }
-
-        public async Task LoadFromDefaultPortal()
-        {
-            IsLoading = true;
-            _loadCancellationTokenSource = new CancellationTokenSource();
-            try
-            {
-                AvailableBasemaps = await PopulateFromDefaultList(_loadCancellationTokenSource.Token);
-            }
-            catch (OperationCanceledException)
-            { }
-            finally
-            {
-                IsLoading = false;
             }
         }
 
@@ -295,17 +274,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return false;
         }
 
-        private async Task<IList<BasemapGalleryItem>?> PopulateBasemapsForPortal(ArcGISPortal? portal)
+        private async Task<IList<BasemapGalleryItem>?> PopulateBasemaps(CancellationToken cancellationToken)
         {
-            if (portal == null) return null;
+            Portal ??= await ArcGISPortal.CreateAsync(cancellationToken);
 
-            return await LoadBasemapGalleryItems(portal);
-        }
-
-        private async Task<IList<BasemapGalleryItem>> PopulateFromDefaultList(CancellationToken cancellationToken = default)
-        {
-            ArcGISPortal defaultPortal = await ArcGISPortal.CreateAsync(cancellationToken);
-            return await LoadBasemapGalleryItems(defaultPortal, cancellationToken);
+            return await LoadBasemapGalleryItems(Portal, cancellationToken);
         }
 
         private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)

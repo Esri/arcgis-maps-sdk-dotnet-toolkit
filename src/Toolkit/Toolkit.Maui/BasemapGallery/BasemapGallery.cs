@@ -53,7 +53,7 @@ public partial class BasemapGallery
         {
             if (AvailableBasemaps is null)
             {
-                await _controller.LoadFromDefaultPortal();
+                await _controller.UpdateBasemaps();
             }
         }
         catch (Exception ex)
