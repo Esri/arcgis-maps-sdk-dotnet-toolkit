@@ -175,9 +175,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private async Task HandleGeoModelChanged()
         {
+            try
+            {
             AvailableBasemaps = await PopulateFromDefaultList();
             AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
             UpdateSelectionForGeoModelBasemap();
+        }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex.Message);
+            }
         }
 
         private void HandleGeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -205,6 +212,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                     AvailableBasemaps = await PopulateBasemapsForPortal(portal);
                 }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex.Message);
             }
             finally
             {

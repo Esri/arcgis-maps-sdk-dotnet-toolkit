@@ -50,7 +50,7 @@
             Background="White">
             <toolkit:BasemapGallery
                 x:Name="Gallery"
-                Width="{x:Bind WidthSlider.Value}"
+                Width="{x:Bind WidthSlider.Value, Mode=OneWay}"
                 GeoModel="{x:Bind MySceneView.Scene, Mode=OneWay}" />
         </Border>
     </Grid>
