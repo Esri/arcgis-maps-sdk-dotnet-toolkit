@@ -177,10 +177,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             try
             {
-            AvailableBasemaps = await PopulateFromDefaultList();
-            AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
-            UpdateSelectionForGeoModelBasemap();
-        }
+                AvailableBasemaps = await PopulateFromDefaultList();
+                AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
+                UpdateSelectionForGeoModelBasemap();
+            }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex.Message);
@@ -217,10 +217,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 System.Diagnostics.Trace.WriteLine(ex.Message);
             }
-            finally
-            {
-                IsLoading = false;
-            }
+            IsLoading = false;
         }
 
         private void HandleSelectedBasemapChanged()
