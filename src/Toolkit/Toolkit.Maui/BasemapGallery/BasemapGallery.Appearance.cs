@@ -52,13 +52,13 @@ public partial class BasemapGallery : TemplatedView
             Image thumbnail = new Image { Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
             Border itemTypeBorder = new Border
             {
-                BackgroundColor = Colors.LightGray,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
                 Padding = new Thickness(4, 0),
                 Margin = new Thickness(2),
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Start,
             };
+            itemTypeBorder.SetAppThemeColor(BackgroundColorProperty, Colors.LightGray, Colors.DarkGray);
             Grid.SetRow(itemTypeBorder, 1);
 
             Label itemTypeLabel = new Label
@@ -67,9 +67,9 @@ public partial class BasemapGallery : TemplatedView
                 Margin = new Thickness(1),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 9,
-                TextColor = Colors.Black,
                 FontAttributes = FontAttributes.Bold
             };
+            itemTypeLabel.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
             itemTypeBorder.Content = itemTypeLabel;
             itemTypeBorder.SetBinding(Border.IsVisibleProperty, static (BasemapGalleryItem item) => item.Is3D, BindingMode.OneWay);
 
@@ -148,14 +148,12 @@ public partial class BasemapGallery : TemplatedView
 
             Border itemTypeBorder = new Border
             {
-                BackgroundColor = Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Light ?
-                                    Colors.LightGray :
-                                    Colors.DarkGray,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
                 Padding = new Thickness(4, 0),
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.End,
             };
+            itemTypeBorder.SetAppThemeColor(BackgroundColorProperty, Colors.LightGray, Colors.DarkGray);
             itemTypeBorder.SetBinding(Border.IsVisibleProperty, static (BasemapGalleryItem item) => item.Is3D, BindingMode.OneWay);
 
             Label itemTypeLabel = new Label
@@ -164,9 +162,9 @@ public partial class BasemapGallery : TemplatedView
                 Margin = new Thickness(1),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 9,
-                TextColor = Colors.Black,
                 FontAttributes = FontAttributes.Bold,
             };
+            itemTypeLabel.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
             itemTypeBorder.Content = itemTypeLabel;
             Grid.SetRow(itemTypeBorder, 1);
 
