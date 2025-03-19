@@ -140,11 +140,34 @@
                                     Height="62"
                                     Source="{Binding ThumbnailData, Mode=OneWay}"
                                     Stretch="UniformToFill" />
+                                <Border
+                                    Background="LightGray"
+                                    CornerRadius="7"
+                                    Padding="4,0"
+                                    Margin="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Is3D}" Value="false">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock
+                                        Text="3D"
+                                        Margin="1"
+                                        TextAlignment="Center"
+                                        FontSize="9"
+                                        Foreground="Black"
+                                        FontWeight="Bold" />
+                                </Border>
                             </Grid>
                         </Border>
                         <TextBlock
                             x:Name="ItemTextBlock"
-                            Margin="8,0,8,8"
                             FontSize="11"
                             Text="{Binding Name}"
                             TextAlignment="Center"
@@ -170,6 +193,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Border
+                            Grid.Column="0"
                             Width="64"
                             Height="64"
                             Margin="6"
@@ -193,13 +217,44 @@
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>
-                        <TextBlock
-                            x:Name="ItemTextBlock"
+                        <Grid
                             Grid.Column="1"
-                            Margin="0,6,6,6"
-                            VerticalAlignment="Center"
-                            Text="{Binding Name, Mode=OneWay}"
-                            TextWrapping="Wrap" />
+                            Margin="0,6,6,6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                x:Name="ItemTextBlock"
+                                Grid.Row="0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                            <Border
+                                Background="LightGray"
+                                CornerRadius="7"
+                                Grid.Row="1"
+                                Padding="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Is3D}" Value="false">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock
+                                    Text="3D"
+                                    Margin="1"
+                                    TextAlignment="Center"
+                                    FontSize="9"
+                                    Foreground="Black"
+                                    FontWeight="Bold" />
+                            </Border>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>

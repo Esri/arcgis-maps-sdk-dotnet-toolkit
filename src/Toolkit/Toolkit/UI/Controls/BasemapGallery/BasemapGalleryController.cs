@@ -43,6 +43,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private BasemapGalleryItem? _selectedBasemap;
         private bool _isLoading;
         private CancellationTokenSource? _loadCancellationTokenSource;
+        private IList<BasemapGalleryItem>? _cached2DBasemaps;
+        private IList<BasemapGalleryItem>? _cached3DBasemaps;
 
         public bool IsLoading
         {
@@ -116,7 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         newGeoModel.PropertyChanged += HandleGeoModelPropertyChanged;
                     }
 
-                    HandleGeoModelChanged();
+                    _ = HandleGeoModelChanged();
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GeoModel)));
                 }
             }
@@ -171,11 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private void HandleGeoModelChanged()
-        {
-            AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
-            UpdateSelectionForGeoModelBasemap();
-        }
+        private async Task HandleGeoModelChanged() => await UpdateBasemaps();
 
         private void HandleGeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -191,16 +189,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private async Task HandlePortalChanged()
         {
+            // Clear caches when the portal changes
+            _cached2DBasemaps = null;
+            _cached3DBasemaps = null;
+            await UpdateBasemaps();
+        }
+
+        public async Task UpdateBasemaps()
+        {
             IsLoading = true;
+            _loadCancellationTokenSource = new CancellationTokenSource();
             try
             {
-                if (Portal is ArcGISPortal portal)
-                {
-                    if (await PopulateBasemapsForPortal(portal) is List<BasemapGalleryItem> portalItems)
-                    {
-                        AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>(portalItems);
-                    }
-                }
+                AvailableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
+                AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
+                UpdateSelectionForGeoModelBasemap();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex.Message);
             }
             finally
             {
@@ -228,22 +235,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 // restore events
                 _ignoreEventsFlag = false;
-            }
-        }
-
-        public async Task LoadFromDefaultPortal()
-        {
-            IsLoading = true;
-            _loadCancellationTokenSource = new CancellationTokenSource();
-            try
-            {
-                AvailableBasemaps = await PopulateFromDefaultList(_loadCancellationTokenSource.Token);
-            }
-            catch (OperationCanceledException)
-            { }
-            finally
-            {
-                IsLoading = false;
             }
         }
 
@@ -283,55 +274,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return false;
         }
 
-        private static async Task<IList<BasemapGalleryItem>?> PopulateBasemapsForPortal(ArcGISPortal? portal)
+        private async Task<IList<BasemapGalleryItem>?> PopulateBasemaps(CancellationToken cancellationToken)
         {
-            if (portal == null)
-            {
-                return null;
-            }
+            Portal ??= await ArcGISPortal.CreateAsync(cancellationToken);
 
-            Task<IEnumerable<Basemap>> getBasemapsTask;
-            if (portal.PortalInfo?.UseVectorBasemaps ?? false)
-            {
-                getBasemapsTask = portal.GetVectorBasemapsAsync();
-            }
-            else
-            {
-                getBasemapsTask = portal.GetBasemapsAsync();
-            }
-
-            var basemaps = await getBasemapsTask;
-
-            IList<BasemapGalleryItem> listOfBasemaps = new List<BasemapGalleryItem>();
-
-            foreach (var item in basemaps)
-            {
-                listOfBasemaps.Add(new BasemapGalleryItem(item));
-            }
-
-            await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
-
-            return listOfBasemaps;
+            return await LoadBasemapGalleryItems(Portal, cancellationToken);
         }
 
-        private static async Task<IList<BasemapGalleryItem>> PopulateFromDefaultList(CancellationToken cancellationToken = default)
+        private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
         {
-            ArcGISPortal defaultPortal = await ArcGISPortal.CreateAsync(cancellationToken);
-
-            var results = await defaultPortal.GetDeveloperBasemapsAsync(cancellationToken);
-
-            var listOfBasemaps = new List<BasemapGalleryItem>();
-
-            foreach (var basemap in results)
+            async Task<List<BasemapGalleryItem>> LoadBasemapsAsync(Func<CancellationToken, Task<IEnumerable<Basemap>>> getBasemapsFunc)
             {
-                listOfBasemaps.Add(new BasemapGalleryItem(basemap));
+                var basemaps = await getBasemapsFunc(cancellationToken);
+                var basemapItems = basemaps.Select(basemap => new BasemapGalleryItem(basemap)).ToList();
+                foreach (var item in basemapItems)
+                {
+                    _ = item.LoadAsync();
+                }
+                return basemapItems;
+            }
+            var basemapGalleryItems = new List<BasemapGalleryItem>();
+
+            if (portal.PortalInfo?.Use3DBasemaps is true && GeoModel is Scene)
+            {
+                _cached3DBasemaps ??= await LoadBasemapsAsync(portal.Get3DBasemapsAsync);
+                basemapGalleryItems.AddRange(_cached3DBasemaps);
             }
 
-            foreach (var item in listOfBasemaps)
-            {
-                _ = item.LoadAsync();
-            }
-            return new ObservableCollection<BasemapGalleryItem>(listOfBasemaps);
+            _cached2DBasemaps ??= await LoadBasemapsAsync(portal.PortalInfo?.UseVectorBasemaps ?? false
+                    ? portal.GetVectorBasemapsAsync
+                    : portal.GetBasemapsAsync);
+            basemapGalleryItems.AddRange(_cached2DBasemaps);
+
+            return new ObservableCollection<BasemapGalleryItem>(basemapGalleryItems);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

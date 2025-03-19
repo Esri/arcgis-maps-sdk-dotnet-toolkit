@@ -15,6 +15,8 @@
             <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#f3f3f3" />
             <SolidColorBrush x:Key="ControlBackground" Color="#fff" />
             <SolidColorBrush x:Key="ControlBorder" Color="#cacaca" />
+            <SolidColorBrush x:Key="BorderBackground" Color="LightGray" />
+            <SolidColorBrush x:Key="BorderForeground" Color="Black" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="ItemTextForegroundUnselected" Color="#ffffff" />
@@ -24,6 +26,8 @@
             <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#2B2B2B" />
             <SolidColorBrush x:Key="ControlBackground" Color="#353535" />
             <SolidColorBrush x:Key="ControlBorder" Color="#555555" />
+            <SolidColorBrush x:Key="BorderBackground" Color="DarkGray" />
+            <SolidColorBrush x:Key="BorderForeground" Color="White" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
     <Style x:Key="BaseContainerStyle" TargetType="ListViewItem">
@@ -154,6 +158,22 @@
                                     Opacity="1"
                                     Source="{Binding ThumbnailBitmap, Mode=OneWay}"
                                     Stretch="UniformToFill" />
+                                <Border
+                                    Background="{ThemeResource BorderBackground}"
+                                    CornerRadius="7"
+                                    Padding="4,0"
+                                    Margin="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Visibility="{Binding Is3D}">
+                                    <TextBlock
+                                        Text="3D"
+                                        Margin="1"
+                                        TextAlignment="Center"
+                                        FontSize="9"
+                                        Foreground="{ThemeResource BorderForeground}"
+                                        FontWeight="Bold" />
+                                </Border>
                             </Grid>
                         </Border>
                         <TextBlock
@@ -195,12 +215,36 @@
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>
-                        <TextBlock
-                            x:Name="ItemTextBlock"
+                        <Grid
                             Grid.Column="1"
-                            VerticalAlignment="Center"
-                            Text="{Binding Name, Mode=OneWay}"
-                            TextWrapping="Wrap" />
+                            Margin="0,6,6,6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                x:Name="ItemTextBlock"
+                                Grid.Row="0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                            <Border
+                                Visibility="{Binding Is3D}"
+                                Background="{ThemeResource BorderBackground}"
+                                CornerRadius="7"
+                                Grid.Row="1"
+                                Padding="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom">
+                                <TextBlock
+                                    Text="3D"
+                                    Margin="1"
+                                    TextAlignment="Center"
+                                    FontSize="9"
+                                    Foreground="{ThemeResource BorderForeground}"
+                                    FontWeight="Bold" />
+                            </Border>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
