@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             horizontalStackLayout.Margin = new Thickness(0, -17, 0, 0);
             horizontalStackLayout.SetBinding(View.IsVisibleProperty, new Binding(nameof(TextFormInputView.ShowCharacterCount), source: RelativeBindingSource.TemplatedParent));
             Label characterCountLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
-            characterCountLabel.SetBinding(Label.TextProperty, new Binding("Element.Value", source: RelativeBindingSource.TemplatedParent, converter: StringLengthConverter.Instance));
+            characterCountLabel.SetBinding(Label.TextProperty, static (FieldFormElement element) => element.Value, source: RelativeBindingSource.TemplatedParent, converter: StringLengthConverter.Instance);
             horizontalStackLayout.Children.Add(characterCountLabel);
             horizontalStackLayout.Children.Add(new Label() { Text = "/", Style = FeatureFormView.GetFeatureFormCaptionStyle() });
             Label maxCountLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
@@ -58,13 +58,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Entry textInput = new Entry();
             Grid.SetColumnSpan(textInput, 2);
             root.Add(textInput);
-            textInput.SetBinding(Entry.IsEnabledProperty, "Element.IsEditable");
+            textInput.SetBinding(Entry.IsEnabledProperty, static (FieldFormElement element) => element.IsEditable);
             Editor textArea = new Editor() { IsVisible = false, HeightRequest = 100, AutoSize = EditorAutoSizeOption.Disabled };
             Grid.SetColumnSpan(textArea, 2);
-            textArea.SetBinding(Editor.IsEnabledProperty, "Element.IsEditable");
+            textArea.SetBinding(Editor.IsEnabledProperty, static (FieldFormElement element) => element.IsEditable);
             root.Add(textArea);
             Label readonlyText = new Label() { IsVisible = false, LineBreakMode = LineBreakMode.WordWrap };
-            readonlyText.SetBinding(Label.TextProperty, new Binding("Element.Value",source:RelativeBindingSource.TemplatedParent));
+            readonlyText.SetBinding(Label.TextProperty, static (FieldFormElement element) => element.Value, source: RelativeBindingSource.TemplatedParent);
             Grid.SetColumnSpan(readonlyText, 2);
             root.Add(readonlyText);
             Internal.CalciteImageButton barcodeButton = new Internal.CalciteImageButton("\uE22F") { IsVisible = false, BorderWidth = 0 };

@@ -45,14 +45,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             background.Content = root;
             Image image = new Image();
             root.Children.Add(image);
-            root.SetBinding(VerticalStackLayout.IsVisibleProperty, nameof(FormElement.IsVisible));
+            root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (FormElement element) => element.IsVisible);
             Border nameBackground = new Border() { BackgroundColor = Colors.Transparent, Padding = new Thickness(2), VerticalOptions = LayoutOptions.End, StrokeThickness = 0 };
             var nameLabel = new Label() { HorizontalOptions = LayoutOptions.Center, FontSize = 10, MaxLines = 1, LineBreakMode = LineBreakMode.TailTruncation };
             nameBackground.Content = nameLabel;
-            nameLabel.SetBinding(Label.TextProperty, new Binding("Attachment.Name", source: RelativeBindingSource.TemplatedParent));
+            nameLabel.SetBinding(Label.TextProperty, static (Attachment attachment) => attachment.Name, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(nameBackground);
             var sizeLabel = new Label() { VerticalOptions = LayoutOptions.Start, HorizontalOptions = LayoutOptions.Center, FontSize = 10, MaxLines = 1 };
-            sizeLabel.SetBinding(Label.TextProperty, new Binding("Attachment.Size", source: RelativeBindingSource.TemplatedParent, converter: new FileSizeConverter()));
+            sizeLabel.SetBinding(Label.TextProperty, static (Attachment attachment) => attachment.Size, source: RelativeBindingSource.TemplatedParent, converter: new FileSizeConverter());
             root.Children.Add(sizeLabel);
             var downloadIcon = new Label() { VerticalOptions = LayoutOptions.Start, HorizontalOptions = LayoutOptions.End, FontFamily = "calcite-ui-icons-24", Text = "\uE0CB", Margin = new Thickness(2) };
             root.Children.Add(downloadIcon);

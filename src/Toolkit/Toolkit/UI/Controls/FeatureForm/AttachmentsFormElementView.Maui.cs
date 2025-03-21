@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             var root = new VerticalStackLayout();
-            root.SetBinding(VerticalStackLayout.IsVisibleProperty, nameof(FormElement.IsVisible));
+            root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (FormElement element) => element.IsVisible);
 
             Grid header = new Grid();
             header.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
@@ -68,13 +68,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             header.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
             var label = new Label();
-            label.SetBinding(Label.TextProperty, new Binding("Element.Label", source: RelativeBindingSource.TemplatedParent));
-            label.SetBinding(View.IsVisibleProperty, new Binding("Element.Label", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            label.SetBinding(Label.TextProperty, static (FormElement element) => element.Label, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(View.IsVisibleProperty, static (FormElement element) => element.Label, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             header.Children.Add(label);
             label = new Label();
-            label.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
-            label.SetBinding(Label.IsVisibleProperty, new Binding("Element.Description", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            label.SetBinding(Label.TextProperty, static (FormElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(Label.IsVisibleProperty, static (FormElement element) => element.Description, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             Grid.SetRow(label, 1);
             header.Children.Add(label);
@@ -95,7 +95,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             
             Grid.SetColumn(addButton, 1);
             Grid.SetRowSpan(addButton, 2);
-            addButton.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.IsEditable", source: RelativeBindingSource.TemplatedParent));
+            addButton.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsFormElement element) => element.IsEditable, source: RelativeBindingSource.TemplatedParent);
             header.Children.Add(addButton);
 
             root.Children.Add(header);
@@ -108,10 +108,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 ItemTemplate = new DataTemplate(() =>
                 {
                     var view = new FormAttachmentView();
-                    view.SetBinding(FormAttachmentView.AttachmentProperty, new Binding());
-                    view.SetBinding(FormAttachmentView.ElementProperty, new Binding("Element", source: RelativeBindingSource.TemplatedParent));
+                    view.SetBinding(FormAttachmentView.AttachmentProperty, static (FormAttachmentView view) => view.Attachment);
+                    view.SetBinding(FormAttachmentView.ElementProperty, static (FormAttachmentView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
                     view.SetAppThemeColor(FormAttachmentView.IconColorProperty, Colors.Black, Colors.White);
-                    view.SetBinding(ToolTipProperties.TextProperty, new Binding("Attachment.Name"));
+                    view.SetBinding(ToolTipProperties.TextProperty, static (FormAttachmentView view) => view.Attachment?.Name);
                     return view;
                 }),
 #if IOS
@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 MinimumHeightRequest = 75,
 #endif
             };
-            itemsView.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));
+            itemsView.SetBinding(CollectionView.ItemsSourceProperty, static (FormAttachmentView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(itemsView);
             
             INameScope nameScope = new NameScope();

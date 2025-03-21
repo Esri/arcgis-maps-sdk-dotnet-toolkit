@@ -56,7 +56,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#4e4e4e"), Color.FromArgb("#151515"));
 
             Label textLabel = new Label();
-            textLabel.SetBinding(Label.TextProperty, "Key.DisplayName");
+            textLabel.SetBinding(Label.TextProperty, static (ISearchSource key) => key.DisplayName);
             textLabel.Margin = new Thickness(4);
             textLabel.TextColor = Colors.White;
             textLabel.FontSize = 14;
@@ -79,21 +79,21 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
             Image imageView = new Image();
-            imageView.SetBinding(Image.SourceProperty, nameof(SearchSuggestion.IsCollection), converter: CollectionIconConverter);
+            imageView.SetBinding(Image.SourceProperty, static (SearchSuggestion suggestion) => suggestion.IsCollection, converter: CollectionIconConverter);
             imageView.WidthRequest = 16;
             imageView.HeightRequest = 16;
             imageView.Margin = new Thickness(4);
             imageView.VerticalOptions = LayoutOptions.Center;
 
             Label titleLabel = new Label();
-            titleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplayTitle));
+            titleLabel.SetBinding(Label.TextProperty, static (SearchSuggestion suggestion) => suggestion.DisplayTitle);
             titleLabel.VerticalOptions = LayoutOptions.End;
             titleLabel.VerticalTextAlignment = TextAlignment.End;
             titleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb(FOREGROUND_LIGHT), Color.FromArgb(FOREGROUND_DARK));
 
             Label subtitleLabel = new Label();
-            subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplaySubtitle));
-            subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchSuggestion.DisplaySubtitle), converter: EmptyStringConverter);
+            subtitleLabel.SetBinding(Label.TextProperty, static (SearchSuggestion suggestion) => suggestion.DisplaySubtitle);
+            subtitleLabel.SetBinding(Label.IsVisibleProperty, static (SearchSuggestion suggestion) => suggestion.DisplaySubtitle, converter: EmptyStringConverter);
             subtitleLabel.VerticalOptions = LayoutOptions.Start;
             subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
             subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb(FOREGROUND_LIGHT), Color.FromArgb(FOREGROUND_DARK));
@@ -128,22 +128,22 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
             Image imageView = new Image();
-            imageView.SetBinding(Image.SourceProperty, nameof(SearchResult.MarkerImageData), converter: ImageSourceConverter);
+            imageView.SetBinding(Image.SourceProperty, static (SearchResult result) => result.MarkerImageData, converter: ImageSourceConverter);
             imageView.WidthRequest = 24;
             imageView.HeightRequest = 24;
             imageView.Margin = new Thickness(4);
             imageView.VerticalOptions = LayoutOptions.Center;
 
             Label titleLabel = new Label();
-            titleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplayTitle));
+            titleLabel.SetBinding(Label.TextProperty, static (SearchResult result) => result.DisplayTitle);
             titleLabel.FontAttributes = FontAttributes.Bold;
             titleLabel.VerticalOptions = LayoutOptions.End;
             titleLabel.VerticalTextAlignment = TextAlignment.End;
             titleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb(FOREGROUND_LIGHT), Color.FromArgb(FOREGROUND_DARK));
 
             Label subtitleLabel = new Label();
-            subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplaySubtitle));
-            subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchResult.DisplaySubtitle), converter: EmptyStringConverter);
+            subtitleLabel.SetBinding(Label.TextProperty, static (SearchResult result) => result.DisplaySubtitle);
+            subtitleLabel.SetBinding(Label.IsVisibleProperty, static (SearchResult result) => result.DisplaySubtitle, converter: EmptyStringConverter);
             subtitleLabel.VerticalOptions = LayoutOptions.Start;
             subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
             subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb(FOREGROUND_LIGHT), Color.FromArgb(FOREGROUND_DARK));

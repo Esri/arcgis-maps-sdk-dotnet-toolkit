@@ -50,15 +50,15 @@ public class OverviewMap : TemplatedView
                 IsAttributionTextVisible = false
             };
             ActivityIndicator activity = new ActivityIndicator();
-            activity.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("Map.LoadStatus", converter: converter, converterParameter: "Loading", source : mapView));
+            activity.SetBinding(ActivityIndicator.IsRunningProperty, static (Map map) => map.LoadStatus, converter: converter, converterParameter: "Loading", source: mapView);
             root.Add(activity);
             Label label = new Label()
             {
                 TextColor = Colors.Black, Text = "Map failed to load. Did you forget an API key?"
             };
-            label.SetBinding(VisualElement.IsVisibleProperty, new Binding("Map.LoadStatus", converter: converter, converterParameter: "FailedToLoad", source: mapView));
+            label.SetBinding(VisualElement.IsVisibleProperty, static (Map map) => map.LoadStatus, converter: converter, converterParameter: "FailedToLoad", source: mapView);
             root.Add(label);
-            mapView.SetBinding(VisualElement.IsVisibleProperty, new Binding("Map.LoadStatus", converter: converter, converterParameter: "Loaded", source: mapView));
+            mapView.SetBinding(VisualElement.IsVisibleProperty, static (Map map) => map.LoadStatus, converter: converter, converterParameter: "Loaded", source: mapView);
             root.Add(mapView);
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(rootFrame, nameScope);

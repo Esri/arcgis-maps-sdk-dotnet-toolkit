@@ -42,9 +42,7 @@ namespace Toolkit.SampleApp.Maui.Samples
                 _viewContainer.Children.Add(MyMapView);
             if (_viewContainer.Children.Contains(MySceneView))
                 _viewContainer.Children.Remove(MySceneView);
-            Binding geoviewBinding = new Binding();
-            geoviewBinding.Source = MyMapView;
-            BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.GeoViewProperty, geoviewBinding);
+            BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.GeoViewProperty, static (MapView mapView) => mapView, source: MyMapView);
         }
 
         // Note that the Web Scene Specification does not use bookmarks.
@@ -55,9 +53,7 @@ namespace Toolkit.SampleApp.Maui.Samples
                 _viewContainer.Children.Add(MySceneView);
             if (_viewContainer.Children.Contains(MyMapView))
                 _viewContainer.Children.Remove(MyMapView);
-            Binding geoviewBinding = new Binding();
-            geoviewBinding.Source = MySceneView;
-            BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.GeoViewProperty, geoviewBinding);
+            BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.GeoViewProperty, static (SceneView sceneView) => sceneView, source: MySceneView);
         }
 
         private void SetDocumentOne_Click(object? sender, EventArgs e)

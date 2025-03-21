@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     public partial class MediaPopupElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        
+
         /// <summary>
         /// Name of the carousel control in the template.
         /// </summary>
@@ -46,21 +46,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             StackLayout root = new StackLayout();
             Label roottitle = new Label();
-            roottitle.SetBinding(Label.TextProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent));
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            roottitle.SetBinding(Label.TextProperty, static (MediaPopupElement element) => element.Title, source: RelativeBindingSource.TemplatedParent);
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElement element) => element.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             roottitle.Style = PopupViewer.GetPopupViewerTitleStyle();
             root.Add(roottitle);
             Label rootcaption = new Label();
-            rootcaption.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
-            rootcaption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            rootcaption.SetBinding(Label.TextProperty, static (MediaPopupElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
+            rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElement element) => element.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(rootcaption);
 #if WINDOWS
             CarouselView2 cv = new CarouselView2();
-            cv.SetBinding(CarouselView2.ItemsSourceProperty, new Binding("Element.Media", source: RelativeBindingSource.TemplatedParent));
+            cv.SetBinding(CarouselView2.ItemsSourceProperty, static (MediaPopupElement element) => element.Media, source: RelativeBindingSource.TemplatedParent);
 #else
             CarouselView cv = new CarouselView();
-            cv.SetBinding(CarouselView.ItemsSourceProperty, new Binding("Element.Media", source: RelativeBindingSource.TemplatedParent));
+            cv.SetBinding(CarouselView.ItemsSourceProperty, static (MediaPopupElement element) => element.Media, source: RelativeBindingSource.TemplatedParent);
 #endif
 #if __IOS__ // Workaround for https://github.com/dotnet/maui/issues/12911
             cv.HeightRequest = 300;
@@ -88,17 +88,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            pm.SetBinding(PopupMediaView.PopupMediaProperty, ".");
+            pm.SetBinding(PopupMediaView.PopupMediaProperty, Binding.SelfPath);
             layout.Add(pm);
             Label title = new Label();
-            title.SetBinding(Label.TextProperty, "Title");
-            title.SetBinding(VisualElement.IsVisibleProperty, new Binding("Title", converter: Internal.EmptyToFalseConverter.Instance));
+            title.SetBinding(Label.TextProperty, static (PopupMedia media) => media.Title);
+            title.SetBinding(VisualElement.IsVisibleProperty, static (PopupMedia media) => media.Title, converter: Internal.EmptyToFalseConverter.Instance);
             title.Style = PopupViewer.GetPopupViewerTitleStyle();
             layout.Add(title);
             Grid.SetRow(title, 1);
             Label caption = new Label();
-            caption.SetBinding(Label.TextProperty, "Caption");
-            caption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Caption", converter: Internal.EmptyToFalseConverter.Instance));
+            caption.SetBinding(Label.TextProperty, static (PopupMedia media) => media.Caption);
+            caption.SetBinding(VisualElement.IsVisibleProperty, static (PopupMedia media) => media.Caption, converter: Internal.EmptyToFalseConverter.Instance);
             caption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             Grid.SetRow(caption, 2);
             layout.Add(caption);

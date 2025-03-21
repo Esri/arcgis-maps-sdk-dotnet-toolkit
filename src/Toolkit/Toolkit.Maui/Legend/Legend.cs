@@ -40,14 +40,14 @@ public class Legend : TemplatedView
         s_DefaultLayerItemTemplate = new DataTemplate(() =>
         {
             var nameLabel = new Label { FontSize = 18, VerticalOptions = LayoutOptions.Center };
-            nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(Layer.Name)}");
+            nameLabel.SetBinding(Label.TextProperty, static (Layer layer) => layer.Name);
             return nameLabel;
         });
 
         s_DefaultSublayerItemTemplate = new DataTemplate(() =>
         {
             var nameLabel = new Label { FontSize = 14, VerticalOptions = LayoutOptions.Center };
-            nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(ILayerContent.Name)}");
+            nameLabel.SetBinding(Label.TextProperty, static (ILayerContent content) => content.Name);
             return nameLabel;
         });
 
@@ -55,10 +55,10 @@ public class Legend : TemplatedView
         {
             StackLayout sl = new StackLayout() { Orientation = StackOrientation.Horizontal };
             var symbol = new SymbolDisplay { WidthRequest = 40, HeightRequest = 40, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 5, 0) };
-            symbol.SetBinding(SymbolDisplay.SymbolProperty, $"{nameof(LegendEntry.Content)}.{nameof(LegendInfo.Symbol)}");
+            symbol.SetBinding(SymbolDisplay.SymbolProperty, static (LegendInfo info) => info.Symbol);
             sl.Children.Add(symbol);
             var nameLabel = new Label { FontSize = 12, VerticalOptions = LayoutOptions.Center };
-            nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(LegendInfo.Name)}");
+            nameLabel.SetBinding(Label.TextProperty, static (LegendInfo info) => info.Name);
             sl.Children.Add(nameLabel);
             return sl;
         });

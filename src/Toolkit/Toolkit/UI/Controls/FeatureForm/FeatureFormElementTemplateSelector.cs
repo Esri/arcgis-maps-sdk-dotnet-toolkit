@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 var view = new FieldFormElementView() { Margin = new Thickness(0, 0, 0, 10) };
                 view.SetBinding(FieldFormElementView.ElementProperty, Binding.SelfPath);
-                view.SetBinding(FieldFormElementView.FeatureFormProperty, new Binding(nameof(FeatureFormView.FeatureForm), source: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestor, typeof(FeatureFormView))));
+                view.SetBinding(FieldFormElementView.FeatureFormProperty, static (FeatureFormView view) => view.FeatureForm, source: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestor, typeof(FeatureFormView)));
                 return view;
             });
             DefaultGroupElementTemplate = new DataTemplate(() =>

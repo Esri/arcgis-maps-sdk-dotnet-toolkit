@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             Switch toggleSwitch = new Switch();
-            toggleSwitch.SetBinding(Switch.IsToggledProperty, new Binding(nameof(IsChecked), source: RelativeBindingSource.TemplatedParent));
+            toggleSwitch.SetBinding(Switch.IsToggledProperty, static (SwitchFormInputView view) => view.IsChecked, source: RelativeBindingSource.TemplatedParent);
             INameScope nameScope = new NameScope();
             nameScope.RegisterName(SwitchViewName, toggleSwitch);
 #if WINDOWS
@@ -40,13 +40,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
             Grid.SetColumn(toggleSwitch, 1);
             Label onText = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, false) };
-            onText.SetBinding(Label.TextProperty, new Binding("Element.Input.OnValue.Name", source: RelativeBindingSource.TemplatedParent));
-            onText.SetBinding(Label.IsVisibleProperty, new Binding(nameof(IsChecked), source: RelativeBindingSource.TemplatedParent));
+            onText.SetBinding(Label.TextProperty, static (SwitchFormInput input) => input.OnValue.Name, source: RelativeBindingSource.TemplatedParent);
+            onText.SetBinding(Label.IsVisibleProperty, static (SwitchFormInputView view) => view.IsChecked, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(onText);
 
             Label offText = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, false) };
-            offText.SetBinding(Label.TextProperty, new Binding("Element.Input.OffValue.Name", source: RelativeBindingSource.TemplatedParent));
-            offText.SetBinding(Label.IsVisibleProperty, new Binding(nameof(IsChecked), source: RelativeBindingSource.TemplatedParent, converter: Internal.InvertBoolConverter.Instance));
+            offText.SetBinding(Label.TextProperty, static (SwitchFormInput input) => input.OffValue.Name, source: RelativeBindingSource.TemplatedParent);
+            offText.SetBinding(Label.IsVisibleProperty, static (SwitchFormInputView view) => view.IsChecked, source: RelativeBindingSource.TemplatedParent, converter: Internal.InvertBoolConverter.Instance);
             root.Children.Add(offText);
 
             root.Children.Add(toggleSwitch);

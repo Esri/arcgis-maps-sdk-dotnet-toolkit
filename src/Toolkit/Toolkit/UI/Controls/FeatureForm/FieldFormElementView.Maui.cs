@@ -101,23 +101,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             var root = new VerticalStackLayout();
-            root.SetBinding(VerticalStackLayout.IsVisibleProperty, nameof(FormElement.IsVisible));
+            root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (FormElement element) => element.IsVisible);
             var label = new Label();
-            label.SetBinding(Label.TextProperty, new Binding("Element.Label", source: RelativeBindingSource.TemplatedParent));
-            label.SetBinding(View.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            label.SetBinding(Label.TextProperty, static (FormElement element) => element.Label, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(View.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             root.Children.Add(label);
             label = new Label();
-            label.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
-            label.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            label.SetBinding(Label.TextProperty, static (FormElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             root.Children.Add(label);
             var content = new DataTemplatedContentPresenter();
-            content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, new Binding(nameof(Element), source: RelativeBindingSource.TemplatedParent));
+            content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, static (FormElement element) => element, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(content);
             var errorLabel = new Label() { Margin = new Thickness(0, 2), TextColor = Colors.Red };
             root.Children.Add(errorLabel);
-            errorLabel.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            errorLabel.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);

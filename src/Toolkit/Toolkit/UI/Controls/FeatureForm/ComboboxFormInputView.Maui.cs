@@ -23,8 +23,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             Picker view = new Picker();
-            view.SetBinding(Picker.IsEnabledProperty, "Element.IsEditable");
-            view.ItemDisplayBinding = new Binding(nameof(CodedValue.Name));
+            view.SetBinding(Picker.IsEnabledProperty, static (FieldFormElement element) => element.IsEditable);
+            view.ItemDisplayBinding = Binding.Create(static (CodedValue codedValue) => codedValue.Name);
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(view, nameScope);
             nameScope.RegisterName("Picker", view);

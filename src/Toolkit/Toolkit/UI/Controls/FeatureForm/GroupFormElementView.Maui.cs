@@ -57,22 +57,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             Border root = new Border() { StrokeShape = new RoundRectangle() { CornerRadius = 2 } };
-            root.SetBinding(Border.StrokeProperty, new Binding(nameof(BorderStroke), source: RelativeBindingSource.TemplatedParent));
-            root.SetBinding(Border.StrokeThicknessProperty, new Binding(nameof(BorderStrokeThickness), source: RelativeBindingSource.TemplatedParent));
+            root.SetBinding(Border.StrokeProperty, static (GroupFormElementView view) => view.BorderStroke, source: RelativeBindingSource.TemplatedParent);
+            root.SetBinding(Border.StrokeThicknessProperty, static (GroupFormElementView view) => view.BorderStrokeThickness, source: RelativeBindingSource.TemplatedParent);
 
             var layout = new VerticalStackLayout();
             var clickAreaContent = new Grid() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true) };
-            clickAreaContent.SetBinding(Grid.BackgroundProperty, new Binding(nameof(HeaderBackground), source: RelativeBindingSource.TemplatedParent));
-            clickAreaContent.SetBinding(Grid.PaddingProperty, new Binding(nameof(ContentPadding), source: RelativeBindingSource.TemplatedParent));
+            clickAreaContent.SetBinding(Grid.BackgroundProperty, static (GroupFormElementView view) => view.HeaderBackground, source: RelativeBindingSource.TemplatedParent);
+            clickAreaContent.SetBinding(Grid.PaddingProperty, static (GroupFormElementView view) => view.ContentPadding, source: RelativeBindingSource.TemplatedParent);
             clickAreaContent.RowDefinitions.Add(new RowDefinition());
             clickAreaContent.RowDefinitions.Add(new RowDefinition());
             clickAreaContent.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             clickAreaContent.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             var label = new Label() { Style = FeatureFormView.GetFeatureFormTitleStyle() };
-            label.SetBinding(Label.TextProperty, new Binding("Element.Label", source: RelativeBindingSource.TemplatedParent));
+            label.SetBinding(Label.TextProperty, static (GroupFormElement element) => element.Label, source: RelativeBindingSource.TemplatedParent);
             clickAreaContent.Children.Add(label);
             label = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
-            label.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
+            label.SetBinding(Label.TextProperty, static (GroupFormElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(label, 1);
             clickAreaContent.Children.Add(label);
 
@@ -82,22 +82,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #else
             collapsedChevron.Text = "\uE076";
 #endif
-            collapsedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), converter: Internal.InvertBoolConverter.Instance, source: RelativeBindingSource.TemplatedParent));
+            collapsedChevron.SetBinding(VisualElement.IsVisibleProperty, static (GroupFormElementView view) => view.IsExpanded, converter: Internal.InvertBoolConverter.Instance, source: RelativeBindingSource.TemplatedParent);
+
             Grid.SetRowSpan(collapsedChevron, 2);
             Grid.SetColumn(collapsedChevron, 1);
             clickAreaContent.Children.Add(collapsedChevron);
             
             Label expandedChevron = new Label() { Text = "\uE079", VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = "calcite-ui-icons-24" };
-            expandedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), source: RelativeBindingSource.TemplatedParent));
+            expandedChevron.SetBinding(VisualElement.IsVisibleProperty, static (GroupFormElementView view) => view.IsExpanded, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRowSpan(expandedChevron, 2);
             Grid.SetColumn(expandedChevron, 1);
             clickAreaContent.Children.Add(expandedChevron);
 
             layout.Children.Add(clickAreaContent);
             VerticalStackLayout itemsView = new VerticalStackLayout();
-            itemsView.SetBinding(VerticalStackLayout.MarginProperty, new Binding(nameof(ContentPadding), source: RelativeBindingSource.TemplatedParent));
+            itemsView.SetBinding(VerticalStackLayout.MarginProperty, static (GroupFormElementView view) => view.ContentPadding, source: RelativeBindingSource.TemplatedParent);
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Element.Elements", source: RelativeBindingSource.TemplatedParent));
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (GroupFormElement element) => element.Elements, source: RelativeBindingSource.TemplatedParent);
             layout.Children.Add(itemsView);
             root.Content = layout;
             INameScope nameScope = new NameScope();

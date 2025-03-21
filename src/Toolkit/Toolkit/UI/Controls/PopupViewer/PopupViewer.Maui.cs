@@ -69,14 +69,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             Label roottitle = new Label();
             roottitle.Style = GetPopupViewerHeaderStyle();
-            roottitle.SetBinding(Label.TextProperty, new Binding("Popup.Title", source: RelativeBindingSource.TemplatedParent));
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Popup.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup.Title, source: RelativeBindingSource.TemplatedParent);
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             root.Add(roottitle);
             ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never };
 #if WINDOWS
             scrollView.Padding = new Thickness(0, 0, 10, 0);
 #endif
-            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
+            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (PopupViewer viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(scrollView, 1);
             root.Add(scrollView);
             VerticalStackLayout itemsView = new VerticalStackLayout()
@@ -84,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 Margin = new Thickness(0, 10),
             };
             BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Popup.EvaluatedElements", source: RelativeBindingSource.TemplatedParent));
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (Popup popup) => popup.EvaluatedElements, source: RelativeBindingSource.TemplatedParent);
             scrollView.Content = itemsView;
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
