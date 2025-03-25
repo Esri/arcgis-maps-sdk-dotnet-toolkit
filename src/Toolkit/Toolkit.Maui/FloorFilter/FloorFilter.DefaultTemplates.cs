@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Floor;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -27,11 +26,6 @@ public partial class FloorFilter
     private static readonly DataTemplate DefaultDifferentiatingFacilityDataTemplate;
     private static readonly ControlTemplate DefaultControlTemplate;
 
-
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Floor.FloorLevel.ShortName), "Esri.ArcGISRuntime.Mapping.Floor.FloorLevel", "Esri.ArcGISRuntime")]
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Floor.FloorFacility.Name), "Esri.ArcGISRuntime.Mapping.Floor.FloorFacility", "Esri.ArcGISRuntime")]
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Floor.FloorFacility.Site), "Esri.ArcGISRuntime.Mapping.Floor.FloorFacility", "Esri.ArcGISRuntime")]
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Floor.FloorSite.Name), "Esri.ArcGISRuntime.Mapping.Floor.FloorSite", "Esri.ArcGISRuntime")]
     static FloorFilter()
     {
         DefaultLevelDataTemplate = new DataTemplate(() =>
