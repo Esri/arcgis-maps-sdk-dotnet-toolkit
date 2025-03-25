@@ -18,7 +18,6 @@
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -60,8 +59,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Popups.Popup.Title), "Esri.ArcGISRuntime.Mapping.Popups.Popup", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Popups.Popup.EvaluatedElements), "Esri.ArcGISRuntime.Mapping.Popups.Popup", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             Grid root = new Grid();
@@ -69,8 +66,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             Label roottitle = new Label();
             roottitle.Style = GetPopupViewerHeaderStyle();
-            roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup.Title, source: RelativeBindingSource.TemplatedParent);
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            roottitle.SetBinding(Label.TextProperty, static (PopupViewer viewer) => viewer.Popup?.Title, source: RelativeBindingSource.TemplatedParent);
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (PopupViewer viewer) => viewer.Popup?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             root.Add(roottitle);
             ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never };
 #if WINDOWS
@@ -84,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 Margin = new Thickness(0, 10),
             };
             BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (Popup popup) => popup.EvaluatedElements, source: RelativeBindingSource.TemplatedParent);
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (PopupViewer viewer) => viewer.Popup?.EvaluatedElements, source: RelativeBindingSource.TemplatedParent);
             scrollView.Content = itemsView;
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);

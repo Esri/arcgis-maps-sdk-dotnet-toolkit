@@ -17,7 +17,6 @@
 
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -39,28 +38,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
-        [DynamicDependency(nameof(MediaPopupElement.Title), "Esri.ArcGISRuntime.Mapping.Popups.MediaPopupElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(MediaPopupElement.Description), "Esri.ArcGISRuntime.Mapping.Popups.MediaPopupElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(MediaPopupElement.Media), "Esri.ArcGISRuntime.Mapping.Popups.MediaPopupElement","Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             StackLayout root = new StackLayout();
             Label roottitle = new Label();
-            roottitle.SetBinding(Label.TextProperty, static (MediaPopupElement element) => element.Title, source: RelativeBindingSource.TemplatedParent);
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElement element) => element.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            roottitle.SetBinding(Label.TextProperty, static (MediaPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             roottitle.Style = PopupViewer.GetPopupViewerTitleStyle();
             root.Add(roottitle);
             Label rootcaption = new Label();
-            rootcaption.SetBinding(Label.TextProperty, static (MediaPopupElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
-            rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElement element) => element.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            rootcaption.SetBinding(Label.TextProperty, static (MediaPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
+            rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(rootcaption);
 #if WINDOWS
             CarouselView2 cv = new CarouselView2();
-            cv.SetBinding(CarouselView2.ItemsSourceProperty, static (MediaPopupElement element) => element.Media, source: RelativeBindingSource.TemplatedParent);
+            cv.SetBinding(CarouselView2.ItemsSourceProperty, static (MediaPopupElementView view) => view.Element?.Media, source: RelativeBindingSource.TemplatedParent);
 #else
             CarouselView cv = new CarouselView();
-            cv.SetBinding(CarouselView.ItemsSourceProperty, static (MediaPopupElement element) => element.Media, source: RelativeBindingSource.TemplatedParent);
+            cv.SetBinding(CarouselView.ItemsSourceProperty, static (MediaPopupElementView view) => view.Element?.Media, source: RelativeBindingSource.TemplatedParent);
 #endif
 #if __IOS__ // Workaround for https://github.com/dotnet/maui/issues/12911
             cv.HeightRequest = 300;
@@ -76,8 +72,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return root;
         }
 
-        [DynamicDependency(nameof(PopupMedia.Title), "Esri.ArcGISRuntime.Mapping.Popups.PopupMedia", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(PopupMedia.Caption), "Esri.ArcGISRuntime.Mapping.Popups.PopupMedia", "Esri.ArcGISRuntime")]
         private static object BuildDefaultItemTemplate()
         {
             var pm = new PopupMediaView();

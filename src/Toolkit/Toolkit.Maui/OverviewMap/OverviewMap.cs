@@ -17,7 +17,6 @@
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Microsoft.Maui.Controls.Internals;
-using System.Diagnostics.CodeAnalysis;
 using Map = Esri.ArcGISRuntime.Mapping.Map;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -32,8 +31,6 @@ public class OverviewMap : TemplatedView
 
     private MapView? _overviewMapView;
 
-
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.GeoModel.LoadStatus), "Esri.ArcGISRuntime.Mapping.GeoModel", "Esri.ArcGISRuntime")]
     static OverviewMap()
     {
         DefaultControlTemplate = new ControlTemplate(() =>
@@ -50,15 +47,15 @@ public class OverviewMap : TemplatedView
                 IsAttributionTextVisible = false
             };
             ActivityIndicator activity = new ActivityIndicator();
-            activity.SetBinding(ActivityIndicator.IsRunningProperty, static (Map map) => map.LoadStatus, converter: converter, converterParameter: "Loading", source: mapView);
+            activity.SetBinding(ActivityIndicator.IsRunningProperty, static (MapView mapView) => mapView.Map?.LoadStatus, converter: converter, converterParameter: "Loading", source: mapView);
             root.Add(activity);
             Label label = new Label()
             {
                 TextColor = Colors.Black, Text = "Map failed to load. Did you forget an API key?"
             };
-            label.SetBinding(VisualElement.IsVisibleProperty, static (Map map) => map.LoadStatus, converter: converter, converterParameter: "FailedToLoad", source: mapView);
+            label.SetBinding(VisualElement.IsVisibleProperty, static (MapView mapView) => mapView.Map?.LoadStatus, converter: converter, converterParameter: "FailedToLoad", source: mapView);
             root.Add(label);
-            mapView.SetBinding(VisualElement.IsVisibleProperty, static (Map map) => map.LoadStatus, converter: converter, converterParameter: "Loaded", source: mapView);
+            mapView.SetBinding(VisualElement.IsVisibleProperty, static (MapView mapView) => mapView.Map?.LoadStatus, converter: converter, converterParameter: "Loaded", source: mapView);
             root.Add(mapView);
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(rootFrame, nameScope);

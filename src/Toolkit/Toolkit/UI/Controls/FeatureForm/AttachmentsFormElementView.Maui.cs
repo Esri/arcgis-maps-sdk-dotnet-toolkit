@@ -21,7 +21,6 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.ApplicationModel;
@@ -51,11 +50,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return parent as T;
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement.Attachments), "Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             var root = new VerticalStackLayout();
@@ -68,13 +62,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             header.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
             var label = new Label();
-            label.SetBinding(Label.TextProperty, static (FormElement element) => element.Label, source: RelativeBindingSource.TemplatedParent);
-            label.SetBinding(View.IsVisibleProperty, static (FormElement element) => element.Label, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
+            label.SetBinding(Label.TextProperty, static (AttachmentsFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(View.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             header.Children.Add(label);
             label = new Label();
-            label.SetBinding(Label.TextProperty, static (FormElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
-            label.SetBinding(Label.IsVisibleProperty, static (FormElement element) => element.Description, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
+            label.SetBinding(Label.TextProperty, static (AttachmentsFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(Label.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             Grid.SetRow(label, 1);
             header.Children.Add(label);
@@ -95,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             
             Grid.SetColumn(addButton, 1);
             Grid.SetRowSpan(addButton, 2);
-            addButton.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsFormElement element) => element.IsEditable, source: RelativeBindingSource.TemplatedParent);
+            addButton.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsFormElementView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent);
             header.Children.Add(addButton);
 
             root.Children.Add(header);
@@ -109,7 +103,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     var view = new FormAttachmentView();
                     view.SetBinding(FormAttachmentView.AttachmentProperty, static (FormAttachmentView view) => view.Attachment);
-                    view.SetBinding(FormAttachmentView.ElementProperty, static (FormAttachmentView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
+                    view.SetBinding(FormAttachmentView.ElementProperty, static (AttachmentsFormElementView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
                     view.SetAppThemeColor(FormAttachmentView.IconColorProperty, Colors.Black, Colors.White);
                     view.SetBinding(ToolTipProperties.TextProperty, static (FormAttachmentView view) => view.Attachment?.Name);
                     return view;
@@ -121,7 +115,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 MinimumHeightRequest = 75,
 #endif
             };
-            itemsView.SetBinding(CollectionView.ItemsSourceProperty, static (FormAttachmentView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
+            itemsView.SetBinding(CollectionView.ItemsSourceProperty, static (AttachmentsFormElementView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(itemsView);
             
             INameScope nameScope = new NameScope();

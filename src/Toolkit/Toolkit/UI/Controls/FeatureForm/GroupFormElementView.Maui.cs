@@ -17,7 +17,6 @@
 
 #if MAUI
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -51,9 +50,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             ControlTemplate = DefaultControlTemplate;
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             Border root = new Border() { StrokeShape = new RoundRectangle() { CornerRadius = 2 } };
@@ -69,10 +65,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             clickAreaContent.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             clickAreaContent.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             var label = new Label() { Style = FeatureFormView.GetFeatureFormTitleStyle() };
-            label.SetBinding(Label.TextProperty, static (GroupFormElement element) => element.Label, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(Label.TextProperty, static (GroupFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent);
             clickAreaContent.Children.Add(label);
             label = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
-            label.SetBinding(Label.TextProperty, static (GroupFormElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(Label.TextProperty, static (GroupFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(label, 1);
             clickAreaContent.Children.Add(label);
 
@@ -98,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             VerticalStackLayout itemsView = new VerticalStackLayout();
             itemsView.SetBinding(VerticalStackLayout.MarginProperty, static (GroupFormElementView view) => view.ContentPadding, source: RelativeBindingSource.TemplatedParent);
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (GroupFormElement element) => element.Elements, source: RelativeBindingSource.TemplatedParent);
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (GroupFormElementView view) => view.Element?.Elements, source: RelativeBindingSource.TemplatedParent);
             layout.Children.Add(itemsView);
             root.Content = layout;
             INameScope nameScope = new NameScope();

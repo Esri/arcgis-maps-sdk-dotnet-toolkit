@@ -17,7 +17,6 @@
 #if MAUI
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -95,25 +94,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
             return input;
         }
-
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
+        
         private static object BuildDefaultTemplate()
         {
             var root = new VerticalStackLayout();
             root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (FormElement element) => element.IsVisible);
             var label = new Label();
-            label.SetBinding(Label.TextProperty, static (FormElement element) => element.Label, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(Label.TextProperty, static (FieldFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent);
             label.SetBinding(View.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             root.Children.Add(label);
             label = new Label();
-            label.SetBinding(Label.TextProperty, static (FormElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(Label.TextProperty, static (FieldFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             label.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             root.Children.Add(label);
             var content = new DataTemplatedContentPresenter();
-            content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, static (FormElement element) => element, source: RelativeBindingSource.TemplatedParent);
+            content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, static (FieldFormElementView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(content);
             var errorLabel = new Label() { Margin = new Thickness(0, 2), TextColor = Colors.Red };
             root.Children.Add(errorLabel);

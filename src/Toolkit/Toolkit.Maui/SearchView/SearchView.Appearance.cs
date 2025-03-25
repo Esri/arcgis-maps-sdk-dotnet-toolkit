@@ -56,7 +56,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#4e4e4e"), Color.FromArgb("#151515"));
 
             Label textLabel = new Label();
-            textLabel.SetBinding(Label.TextProperty, static (ISearchSource key) => key.DisplayName);
+            textLabel.SetBinding(Label.TextProperty, static (IGrouping<ISearchSource, SearchSuggestion> group) => group.Key.DisplayName);
             textLabel.Margin = new Thickness(4);
             textLabel.TextColor = Colors.White;
             textLabel.FontSize = 14;
