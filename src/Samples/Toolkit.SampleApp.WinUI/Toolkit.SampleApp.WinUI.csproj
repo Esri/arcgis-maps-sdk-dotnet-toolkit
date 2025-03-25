@@ -12,7 +12,8 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <DefineConstants>$(DefineConstants);WINUI</DefineConstants>
     <UseRidGraph>true</UseRidGraph>
-    <PublishAot>True</PublishAot>
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>
