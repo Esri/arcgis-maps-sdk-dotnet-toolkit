@@ -133,7 +133,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 if (value != _portal)
                 {
                     _portal = value;
-                    _ = HandlePortalChanged();
+                    InvalidateBasemapCache();
+                    _ = UpdateBasemaps();
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Portal)));
                 }
             }
@@ -188,12 +189,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private async Task HandlePortalChanged()
+        private void InvalidateBasemapCache()
         {
+            // Cancel any pending load
+            _loadCancellationTokenSource?.Cancel();
             // Clear caches when the portal changes
             _cached2DBasemaps = null;
             _cached3DBasemaps = null;
-            await UpdateBasemaps();
         }
 
         public async Task UpdateBasemaps()
@@ -282,15 +284,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return await LoadBasemapGalleryItems(Portal, cancellationToken);
         }
 
-        private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
+        private Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
         {
-            if (_loadBasemapGalleryItemsTask != null && !_loadBasemapGalleryItemsTask.IsCompleted)
+            if (_loadBasemapGalleryItemsTask is null || _loadBasemapGalleryItemsTask.IsCompleted)
             {
-                return await _loadBasemapGalleryItemsTask;
+                _loadBasemapGalleryItemsTask = LoadBasemapGalleryItemsInternal(portal, cancellationToken);
+                return _loadBasemapGalleryItemsTask;
             }
 
-            _loadBasemapGalleryItemsTask = LoadBasemapGalleryItemsInternal(portal, cancellationToken);
-            return await _loadBasemapGalleryItemsTask;
+            return _loadBasemapGalleryItemsTask;
         }
 
         private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItemsInternal(ArcGISPortal portal, CancellationToken cancellationToken = default)
