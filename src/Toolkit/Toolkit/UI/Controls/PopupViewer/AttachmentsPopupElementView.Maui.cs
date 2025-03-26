@@ -20,7 +20,6 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Globalization;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Diagnostics.CodeAnalysis;
 #if WINDOWS
 using WinRT;
 #endif
@@ -45,25 +44,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
-        [DynamicDependency(nameof(AttachmentsPopupElement.Title), "Esri.ArcGISRuntime.Mapping.Popups.AttachmentsPopupElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(AttachmentsPopupElement.Description),"Esri.ArcGISRuntime.Mapping.Popups.AttachmentsPopupElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(AttachmentsPopupElement.Attachments), "Esri.ArcGISRuntime.Mapping.Popups.AttachmentsPopupElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             StackLayout root = new StackLayout();
             Label roottitle = new Label();
-            roottitle.SetBinding(Label.TextProperty, static (AttachmentsPopupElement element) => element.Title, source: RelativeBindingSource.TemplatedParent);
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElement element) => element.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            roottitle.SetBinding(Label.TextProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             roottitle.Style = PopupViewer.GetPopupViewerTitleStyle();
             root.Add(roottitle);
             Label rootcaption = new Label();
-            rootcaption.SetBinding(Label.TextProperty, static (AttachmentsPopupElement element) => element.Description, source: RelativeBindingSource.TemplatedParent);
-            rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElement element) => element.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            rootcaption.SetBinding(Label.TextProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
+            rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(rootcaption);
             root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0,5) });
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
-            cv.SetBinding(CollectionView.ItemsSourceProperty, static (AttachmentsPopupElement element) => element.Attachments, source: RelativeBindingSource.TemplatedParent);
+            cv.SetBinding(CollectionView.ItemsSourceProperty, static (AttachmentsPopupElementView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             root.Add(cv);
             INameScope nameScope = new NameScope();
@@ -72,12 +68,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return root;
         }
 
-
-        [DynamicDependency(nameof(AttachmentViewModel.Thumbnail), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
-        [DynamicDependency(nameof(AttachmentViewModel.Name), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
-        [DynamicDependency(nameof(AttachmentViewModel.Size), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
-        [DynamicDependency(nameof(AttachmentViewModel.IsDownloadButtonVisible), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
-        [DynamicDependency(nameof(AttachmentViewModel.IsDownloading), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
         private static object BuildDefaultItemTemplate()
         {
             Grid layout = new Grid();

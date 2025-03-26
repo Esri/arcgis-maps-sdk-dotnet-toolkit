@@ -1,9 +1,7 @@
 ﻿#if MAUI
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -27,11 +25,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.Value), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.BarcodeScannerFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.BarcodeScannerFormInput", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             
@@ -43,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             horizontalStackLayout.Margin = new Thickness(0, -17, 0, 0);
             horizontalStackLayout.SetBinding(View.IsVisibleProperty, new Binding(nameof(TextFormInputView.ShowCharacterCount), source: RelativeBindingSource.TemplatedParent));
             Label characterCountLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
-            characterCountLabel.SetBinding(Label.TextProperty, static (FieldFormElement element) => element.Value, source: RelativeBindingSource.TemplatedParent, converter: StringLengthConverter.Instance);
+            characterCountLabel.SetBinding(Label.TextProperty, static (TextFormInputView view) => view.Element?.Value, source: RelativeBindingSource.TemplatedParent, converter: StringLengthConverter.Instance);
             horizontalStackLayout.Children.Add(characterCountLabel);
             horizontalStackLayout.Children.Add(new Label() { Text = "/", Style = FeatureFormView.GetFeatureFormCaptionStyle() });
             Label maxCountLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
@@ -58,13 +51,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Entry textInput = new Entry();
             Grid.SetColumnSpan(textInput, 2);
             root.Add(textInput);
-            textInput.SetBinding(Entry.IsEnabledProperty, static (FieldFormElement element) => element.IsEditable);
+            textInput.SetBinding(Entry.IsEnabledProperty, static (TextFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent);
             Editor textArea = new Editor() { IsVisible = false, HeightRequest = 100, AutoSize = EditorAutoSizeOption.Disabled };
             Grid.SetColumnSpan(textArea, 2);
-            textArea.SetBinding(Editor.IsEnabledProperty, static (FieldFormElement element) => element.IsEditable);
+            textArea.SetBinding(Editor.IsEnabledProperty, static (TextFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent);
             root.Add(textArea);
             Label readonlyText = new Label() { IsVisible = false, LineBreakMode = LineBreakMode.WordWrap };
-            readonlyText.SetBinding(Label.TextProperty, static (FieldFormElement element) => element.Value, source: RelativeBindingSource.TemplatedParent);
+            readonlyText.SetBinding(Label.TextProperty, static (TextFormInputView view) => view.Element?.Value, source: RelativeBindingSource.TemplatedParent);
             Grid.SetColumnSpan(readonlyText, 2);
             root.Add(readonlyText);
             Internal.CalciteImageButton barcodeButton = new Internal.CalciteImageButton("\uE22F") { IsVisible = false, BorderWidth = 0 };
