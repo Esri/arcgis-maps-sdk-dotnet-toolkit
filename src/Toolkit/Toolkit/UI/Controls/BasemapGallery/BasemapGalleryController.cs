@@ -45,6 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private CancellationTokenSource? _loadCancellationTokenSource;
         private IList<BasemapGalleryItem>? _cached2DBasemaps;
         private IList<BasemapGalleryItem>? _cached3DBasemaps;
+        private Task<ObservableCollection<BasemapGalleryItem>>? _loadBasemapGalleryItemsTask;
 
         public bool IsLoading
         {
@@ -282,6 +283,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
+        {
+            if (_loadBasemapGalleryItemsTask != null && !_loadBasemapGalleryItemsTask.IsCompleted)
+            {
+                return await _loadBasemapGalleryItemsTask;
+            }
+
+            _loadBasemapGalleryItemsTask = LoadBasemapGalleryItemsInternal(portal, cancellationToken);
+            return await _loadBasemapGalleryItemsTask;
+        }
+
+        private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItemsInternal(ArcGISPortal portal, CancellationToken cancellationToken = default)
         {
             async Task<List<BasemapGalleryItem>> LoadBasemapsAsync(Func<CancellationToken, Task<IEnumerable<Basemap>>> getBasemapsFunc)
             {
