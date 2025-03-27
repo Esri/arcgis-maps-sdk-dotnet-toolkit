@@ -78,9 +78,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     {
                         newIncc.CollectionChanged += HandleAvailableBasemapsCollectionChanged;
                     }
-
+                    InvalidateBasemapCache();
                     HandleAvailableBasemapsChanged();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AvailableBasemaps)));
                     _loadCancellationTokenSource?.Cancel();
                 }
             }
@@ -133,8 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 if (value != _portal)
                 {
                     _portal = value;
-                    InvalidateBasemapCache();
-                    _ = UpdateBasemaps();
+                    _ = HandlePortalChanged();
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Portal)));
                 }
             }
@@ -142,10 +140,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void HandleAvailableBasemapsChanged()
         {
-            _ignoreEventsFlag = true;
-
             try
             {
+                // Stop listening to list events
+                _ignoreEventsFlag = true;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AvailableBasemaps)));
+
                 // Update validity
                 AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(GeoModel));
 
@@ -154,6 +155,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             finally
             {
+                // restore events
                 _ignoreEventsFlag = false;
             }
         }
@@ -189,24 +191,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private void InvalidateBasemapCache()
+        private async Task HandlePortalChanged()
         {
-            // Cancel any pending load
-            _loadCancellationTokenSource?.Cancel();
-            // Clear caches when the portal changes
-            _cached2DBasemaps = null;
-            _cached3DBasemaps = null;
+            InvalidateBasemapCache();
+            await UpdateBasemaps();
         }
 
         public async Task UpdateBasemaps()
         {
             IsLoading = true;
+            // Cancel any pending load before starting a new one
+            _loadCancellationTokenSource?.Cancel();
             _loadCancellationTokenSource = new CancellationTokenSource();
             try
             {
-                AvailableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
-                AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
-                UpdateSelectionForGeoModelBasemap();
+                _availableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
+                HandleAvailableBasemapsChanged();
             }
             catch (Exception ex)
             {
@@ -321,6 +321,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             basemapGalleryItems.AddRange(_cached2DBasemaps);
 
             return new ObservableCollection<BasemapGalleryItem>(basemapGalleryItems);
+        }
+
+        private void InvalidateBasemapCache()
+        {
+            // Clear caches when the portal changes
+            _cached2DBasemaps = null;
+            _cached3DBasemaps = null;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
