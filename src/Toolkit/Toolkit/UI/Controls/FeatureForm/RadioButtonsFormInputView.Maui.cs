@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         foreach (var item in _itemsSource)
                         {
                             var button = new RadioButton();
-                            button.SetBinding(RadioButton.ContentProperty, "Name");
+                            button.SetBinding(RadioButton.ContentProperty, static (CodedValue item) => item.Name);
                             button.BindingContext = item;
                             button.IsChecked = item == SelectedItem;
                             button.IsEnabled = Element?.IsEditable == true;

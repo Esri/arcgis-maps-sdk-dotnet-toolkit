@@ -102,17 +102,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (indicatorView == null)
                 return;
 
-            indicatorView.SetBinding(IndicatorView.PositionProperty, new Binding
-            {
-                Path = nameof(CarouselView2.Position),
-                Source = carouselView
-            });
-
-            indicatorView.SetBinding(IndicatorView.ItemsSourceProperty, new Binding
-            {
-                Path = nameof(CarouselView2.ItemsSource),
-                Source = carouselView
-            });
+            indicatorView.SetBinding(IndicatorView.PositionProperty, static (CarouselView2 cv) => cv.Position, source: carouselView);
+            indicatorView.SetBinding(IndicatorView.ItemsSourceProperty, static (CarouselView2 cv) => cv.ItemsSource, source: carouselView);
         }
 
         private void UpdateBindingContext()
