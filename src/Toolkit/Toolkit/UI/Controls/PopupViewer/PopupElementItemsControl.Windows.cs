@@ -26,6 +26,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public partial class PopupElementItemsControl : ItemsControl
     {
+        private static DataTemplate UnsupportedPopupElementTemplate = new DataTemplate();
+
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
@@ -58,6 +60,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // This shouldn't happen since the evaluated elements are
                     // always returned as TextPopupElement.
                     Debug.Assert(false);
+                }
+                else
+                {
+                    presenter.ContentTemplate = UnsupportedPopupElementTemplate; // Renders empty / skips
                 }
             }
         }
