@@ -11,7 +11,7 @@
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
-        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />
+        <local:OverviewMapResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
