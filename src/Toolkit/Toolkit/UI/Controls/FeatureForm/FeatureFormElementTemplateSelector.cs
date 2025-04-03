@@ -27,6 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private static DataTemplate DefaultFieldFormElementTemplate;
         private static DataTemplate DefaultGroupElementTemplate;
         private static DataTemplate DefaultTextFormElementTemplate;
+        private static DataTemplate UnsupportedFormElementTemplate;
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
@@ -53,6 +54,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 view.SetBinding(TextFormElementView.ElementProperty, Binding.SelfPath);
                 return view;
             });
+            UnsupportedFormElementTemplate = new DataTemplate(() =>
+            {
+                return new Grid() { IsVisible = false };
+            });
         }
 
         public FeatureFormElementTemplateSelector()
@@ -70,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if(item is FieldFormElement)
+            if (item is FieldFormElement)
             {
                 return FieldFormElementTemplate;
             }
@@ -82,7 +87,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 return TextFormElementTemplate;
             }
-            return null!;
+            return UnsupportedFormElementTemplate; // Renders empty / skips
         }
     }
 }
