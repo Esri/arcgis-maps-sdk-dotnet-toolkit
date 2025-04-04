@@ -14,7 +14,7 @@
         <local:OverviewMapResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
-        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
+        <local:FloorFilterResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/UtilityNetworkTraceTool/StartingPointListView.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />
