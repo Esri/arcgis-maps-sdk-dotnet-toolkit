@@ -4,7 +4,7 @@
         <local:BasemapGalleryResources />
         <local:BookmarksViewResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/LayerLegend/LayerLegend.Theme.xaml" />
-        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/Legend/Legend.Theme.xaml" />
+        <local:LegendResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/SearchView/SearchView.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/Compass/Compass.Theme.xaml" />
