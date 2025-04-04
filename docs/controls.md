@@ -100,7 +100,7 @@ Use named trace configurations defined in a web map to perform connected trace o
 |Component |UWP and WinUI |WPF  |MAUI | WinUI AoT Compatible|
 |---|---|---|---|---|
 |[BasemapGallery](basemap-gallery.md) | ✔ | ✔ |  ✔ | ✔ |
-|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ❌ |
+|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ |
 |[Compass](compass.md)   | ✔ | ✔ | ✔ | ✔ |
 |[FeatureDataField](feature-data-field.md)   | ✔ | ✔ | ❌ | ❌ |
 |[FloorFilter](floor-filter.md) | ✔  | ✔ | ✔ | ❌ |
