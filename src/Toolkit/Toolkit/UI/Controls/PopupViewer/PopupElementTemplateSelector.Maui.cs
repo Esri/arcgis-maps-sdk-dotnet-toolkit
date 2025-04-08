@@ -33,7 +33,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static DataTemplate DefaultMediaPopupElementTemplate;
         private static DataTemplate DefaultFieldsPopupElementTemplate;
         private static DataTemplate DefaultAttachmentsPopupElementTemplate;
-        
+        private static DataTemplate UnsupportedPopupElementTemplate;
+
         static PopupElementTemplateSelector()
         {
             DefaultTextPopupElementTemplate = new DataTemplate(() =>
@@ -60,6 +61,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 var view = new AttachmentsPopupElementView() { Margin = new Thickness(0, 10) };
                 view.SetBinding(AttachmentsPopupElementView.ElementProperty, Binding.SelfPath);
                 return view;
+            });
+            UnsupportedPopupElementTemplate = new DataTemplate(() =>
+            {
+                return new Grid() { IsVisible = false };
             });
         }
 
@@ -104,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 // always returned as TextPopupElement.
                 Debug.Assert(false);
             }
-            return new DataTemplate();
+            return UnsupportedPopupElementTemplate;
         }
 
         /// <summary>

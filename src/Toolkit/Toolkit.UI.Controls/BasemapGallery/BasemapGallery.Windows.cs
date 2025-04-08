@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if ((AvailableBasemaps is null || !AvailableBasemaps.Any()) && isAvailableBasemapCollectionInitialized)
                 {
-                    await _controller.LoadFromDefaultPortal();
+                    await _controller.UpdateBasemaps();
                 }
             }
             catch (Exception ex)

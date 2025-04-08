@@ -29,8 +29,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 where t.GetTypeInfo().IsSubclassOf(typeof(Page)) && t.FullName.Contains(".Samples.")
                 select t;
 
-            Samples = (from p in pages select new Sample() { Page = p }).ToArray();
-            foreach(var sample in Samples)
+            var samples = (from p in pages select new Sample() { Page = p }).ToList();
+            foreach(var sample in samples)
             {
                 var attr = sample.Page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttribute)) as SampleInfoAttribute;
                 if (attr != null)
@@ -54,9 +54,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                     }
                 }
             }
+            Samples = samples.OrderBy(s => s.Category + s.Name).ToList();
         }
 
-        public IEnumerable<Sample> Samples { get; private set; }
+        public List<Sample> Samples { get; }
 
         private static SampleDatasource m_Current;
         public static SampleDatasource Current
@@ -69,23 +70,24 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             }
         }
 
-        public IEnumerable<SampleGroup> SamplesByCategory
+        public List<SampleGroup> SamplesByCategory
         {
             get
             {
                 var groups = (from item in Samples
-                             orderby item.Category
-                             group item by item.Category into g
-                             select new SampleGroup(g) { Key = g.Key ?? "Misc" });
-                return groups;
+                              orderby item.Category
+                              group item by item.Category into g
+                              select new SampleGroup(g) { Key = g.Key ?? "Misc" });
+                return groups.ToList();
             }
         }
+
         CollectionViewSource m_CollectionViewSource;
         public CollectionViewSource CollectionViewSource
         {
             get
             {
-                if(m_CollectionViewSource == null)
+                if (m_CollectionViewSource == null)
                 {
                     m_CollectionViewSource = new CollectionViewSource()
                     {
@@ -98,8 +100,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             }
         }
     }
-    [Bindable]
-    public class SampleGroup
+
+    public sealed partial class SampleGroup
     {
         public SampleGroup(IEnumerable<Sample> samples)
         {
@@ -110,8 +112,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public IEnumerable<Sample> Items { get; private set; }
     }
 
-    [Bindable]
-    public class Sample
+    public sealed partial class Sample
     {
         public Type Page { get; set; }
         
@@ -131,5 +132,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         }
         public int Order { get; set; }
         public bool ApiKeyRequired { get; set; }
+        public override string ToString() => Name;
     }
 }

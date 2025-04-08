@@ -500,9 +500,9 @@
                         x:Name="SourceSelectToggle"
                         Grid.Column="0"
                         BorderThickness="0,0,1,0"
-                        IsChecked="{Binding IsSourceSelectOpen, Mode=TwoWay}"
+                        IsChecked="{TemplateBinding IsSourceSelectOpen}"
                         Style="{StaticResource BarActionButtonStyle}"
-                        Visibility="{Binding SourceSelectVisibility, Mode=OneWay}">
+                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility}">
                         <Path
                             Data="M13.1 6L8 11.1 2.9 6z"
                             Fill="Transparent"
@@ -514,17 +514,17 @@
                         x:Name="QueryEntry"
                         Grid.Column="1"
                         Style="{StaticResource QueryEntryStyle}"
-                        Text="{Binding SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock
                         Grid.Column="1"
                         VerticalAlignment="Center"
                         Style="{StaticResource QueryPlaceholderStyle}"
-                        Text="{Binding SearchViewModel.ActivePlaceholder, Mode=OneWay}"
+                        Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActivePlaceholder, Mode=OneWay}"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
                     <Button
                         Grid.Column="2"
                         BorderThickness="0"
-                        Command="{Binding ClearCommand, Mode=OneTime}"
+                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ClearCommand}"
                         Style="{StaticResource BarActionButtonStyle}"
                         ToolTipService.ToolTip="{TemplateBinding ClearSearchTooltipText}"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}">
@@ -533,7 +533,7 @@
                     <Button
                         Grid.Column="3"
                         BorderThickness="1,0,0,0"
-                        Command="{Binding SearchCommand, Mode=OneTime}"
+                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SearchCommand, Mode=OneTime}"
                         Style="{StaticResource BarActionButtonStyle}"
                         ToolTipService.ToolTip="{TemplateBinding SearchTooltipText}">
                         <Path Data="M13.936 13.24L9.708 9.01a4.8 4.8 0 1 0-.69.69l4.228 4.228a.488.488 0 0 0 .69-.69zM6.002 9.8A3.8 3.8 0 1 1 8.69 8.686a3.778 3.778 0 0 1-2.687 1.112z" Style="{StaticResource ActionButtonPathStyle}" />
@@ -542,34 +542,34 @@
                         Grid.Row="0"
                         Grid.ColumnSpan="4"
                         Style="{StaticResource ProgressIndicatorStyle}"
-                        Visibility="{Binding SearchViewModel.IsWaiting, Mode=OneWay}" />
+                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.IsWaiting, Mode=OneWay}" />
                 </Grid>
             </Border>
-            <Popup IsOpen="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}" VerticalOffset="34">
+            <Popup IsOpen="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}" VerticalOffset="34">
                 <Popup.Resources>
                     <CollectionViewSource
                         x:Key="GroupedSuggestionsEx"
                         IsSourceGrouped="True"
-                        Source="{Binding GroupedSuggestions, Mode=OneWay}" />
+                        Source="{TemplateBinding GroupedSuggestions}" />
                 </Popup.Resources>
                 <Border
                     Width="{TemplateBinding Width}"
                     BorderThickness="1,0,1,1"
                     Style="{StaticResource ResultAreaBorderStyle}"
-                    Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty'}">
+                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty'}">
                     <Grid>
                         <ListView
                             ItemTemplate="{StaticResource SuggestionTemplate}"
-                            ItemsSource="{Binding SearchViewModel.Suggestions, Mode=OneWay}"
-                            SelectedItem="{Binding SelectedSuggestion, Mode=TwoWay}"
+                            ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Suggestions, Mode=OneWay}"
+                            SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedSuggestion, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
-                            Visibility="{Binding SearchViewModel.Sources.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}}" />
+                            Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}}" />
                         <ListView
                             x:Name="PART_SuggestionList"
                             ItemTemplate="{StaticResource SuggestionTemplate}"
                             ItemsSource="{Binding Source={StaticResource GroupedSuggestionsEx}, Mode=OneWay}"
                             Style="{StaticResource ListStyle}"
-                            Visibility="{Binding SourceSelectVisibility, Mode=OneWay}">
+                            Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}">
                             <ListView.GroupStyle>
                                 <GroupStyle>
                                     <GroupStyle.HeaderTemplate>
@@ -601,35 +601,35 @@
             <Border
                 Grid.Row="1"
                 Style="{StaticResource ResultAreaBorderStyle}"
-                Visibility="{Binding ResultViewVisibility, Mode=OneWay}">
+                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ResultViewVisibility, Mode=OneWay}">
                 <Grid>
                     <ListView
                         MaxHeight="300"
-                        IsEnabled="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
+                        IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
                         ItemTemplate="{StaticResource ResultTemplate}"
-                        ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
-                        SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=TwoWay}"
+                        ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Results, Mode=OneWay}"
+                        SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.SelectedResult, Mode=TwoWay}"
                         Style="{StaticResource ListStyle}" />
                     <TextBlock
                         Style="{StaticResource ResultMessageStyle}"
                         Text="{TemplateBinding NoResultMessage}"
-                        Visibility="{Binding ResultMessageVisibility, Mode=OneWay}" />
+                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ResultMessageVisibility, Mode=OneWay}" />
                 </Grid>
             </Border>
             <Popup
                 IsLightDismissEnabled="True"
-                IsOpen="{Binding IsSourceSelectOpen, Mode=TwoWay}"
+                IsOpen="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
                 VerticalOffset="34">
                 <Border Width="{TemplateBinding Width}" Style="{StaticResource ResultAreaBorderStyle}">
                     <StackPanel>
                         <ToggleButton
                             Content="{TemplateBinding AllSourceSelectText}"
-                            IsChecked="{Binding SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
+                            IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
                             Style="{StaticResource AllSourceButtonStyle}" />
                         <ListView
                             ItemTemplate="{StaticResource SourceTemplate}"
-                            ItemsSource="{Binding SearchViewModel.Sources, Mode=OneWay}"
-                            SelectedItem="{Binding SearchViewModel.ActiveSource, Mode=TwoWay}"
+                            ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"
+                            SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}" />
                     </StackPanel>
                 </Border>
@@ -637,12 +637,12 @@
             <StackPanel
                 Grid.Row="2"
                 Margin="0,8,0,0"
-                Visibility="{Binding EnableRepeatSearchHereButton, Mode=OneWay}">
+                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=EnableRepeatSearchHereButton, Mode=OneWay}">
                 <Button
-                    Command="{Binding RepeatSearchHereCommand, Mode=OneTime}"
+                    Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.RepeatSearchHereCommand, Mode=OneTime}"
                     Content="{TemplateBinding RepeatSearchButtonText}"
                     Style="{StaticResource FloatingButtonStyle}"
-                    Visibility="{Binding SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
+                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
             </StackPanel>
         </Grid>
     </ControlTemplate>

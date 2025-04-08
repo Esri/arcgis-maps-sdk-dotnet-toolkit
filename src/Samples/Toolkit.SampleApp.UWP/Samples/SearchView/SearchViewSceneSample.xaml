@@ -10,6 +10,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
         <esri:SceneView x:Name="MySceneView" />
-        <toolkit:SearchView GeoView="{Binding ElementName=MySceneView}" />
+        <toolkit:SearchView GeoView="{x:Bind MySceneView}" />
     </Grid>
 </Page>

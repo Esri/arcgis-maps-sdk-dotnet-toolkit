@@ -124,7 +124,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private void BarcodeButton_Clicked(object? sender, EventArgs e)
         {
             if (Element != null)
-                FeatureFormView.GetFeatureFormViewParent(this)?.OnBarcodeButtonClicked(Element);
+            {
+                bool handled = FeatureFormView.GetFeatureFormViewParent(this)?.OnBarcodeButtonClicked(Element) == true;
+                if(!handled)
+                {
+                    LaunchBarcodeScanner(Element);
+                }
+            }
         }
     }
 }

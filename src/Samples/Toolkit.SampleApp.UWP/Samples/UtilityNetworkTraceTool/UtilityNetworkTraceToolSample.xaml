@@ -15,6 +15,6 @@
 			<ColumnDefinition Width="300" />
 		</Grid.ColumnDefinitions>
         <esri:MapView x:Name="MyMapView" />
-        <toolkit:UtilityNetworkTraceTool Grid.Column="1" GeoView="{Binding ElementName=MyMapView}" />
+        <toolkit:UtilityNetworkTraceTool Grid.Column="1" GeoView="{x:Bind MyMapView}" />
     </Grid>
 </Page>

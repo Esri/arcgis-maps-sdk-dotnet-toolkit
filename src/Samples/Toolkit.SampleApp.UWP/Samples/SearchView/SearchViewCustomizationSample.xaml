@@ -25,9 +25,9 @@
                     Content="Enable Binding to GeoView"
                     IsChecked="True"
                     Unchecked="GeoViewConnection_Checked" />
-                <CheckBox Content="Enable individual result display" IsChecked="{Binding ElementName=MySearchView, Path=EnableIndividualResultDisplay, Mode=TwoWay}" />
-                <CheckBox Content="Enable built-in repeat button" IsChecked="{Binding ElementName=MySearchView, Path=EnableRepeatSearchHereButton, Mode=TwoWay}" />
-                <CheckBox Content="Enable built-in result list" IsChecked="{Binding ElementName=MySearchView, Path=EnableResultListView, Mode=TwoWay}" />
+                <CheckBox Content="Enable individual result display" IsChecked="{x:Bind MySearchView.EnableIndividualResultDisplay, Mode=TwoWay}" />
+                <CheckBox Content="Enable built-in repeat button" IsChecked="{x:Bind MySearchView.EnableRepeatSearchHereButton, Mode=TwoWay}" />
+                <CheckBox Content="Enable built-in result list" IsChecked="{x:Bind MySearchView.EnableResultListView, Mode=TwoWay}" />
                 <ComboBox
                     x:Name="SearchModeCombo"
                     HorizontalAlignment="Stretch"
@@ -40,31 +40,31 @@
                     <ComboBoxItem Content="Multiple" />
                 </ComboBox>
                 <TextBlock FontWeight="SemiBold" Text="Text customization:" />
-                <TextBox Header="Search Tooltip" Text="{Binding ElementName=MySearchView, Path=SearchTooltipText, Mode=TwoWay}" />
-                <TextBox Header="Clear Tooltip" Text="{Binding ElementName=MySearchView, Path=ClearSearchTooltipText, Mode=TwoWay}" />
-                <TextBox Header="All Sources button text" Text="{Binding ElementName=MySearchView, Path=AllSourceSelectText, Mode=TwoWay}" />
-                <TextBox Header="Default Placeholder" Text="{Binding ElementName=MySearchView, Path=SearchViewModel.DefaultPlaceholder, Mode=TwoWay}" />
-                <TextBox Header="No result message" Text="{Binding ElementName=MySearchView, Path=NoResultMessage, Mode=TwoWay}" />
-                <TextBox Header="Repeat search button text" Text="{Binding ElementName=MySearchView, Path=RepeatSearchButtonText, Mode=TwoWay}" />
+                <TextBox Header="Search Tooltip" Text="{x:Bind MySearchView.SearchTooltipText, Mode=TwoWay}" />
+                <TextBox Header="Clear Tooltip" Text="{x:Bind MySearchView.ClearSearchTooltipText, Mode=TwoWay}" />
+                <TextBox Header="All Sources button text" Text="{x:Bind MySearchView.AllSourceSelectText, Mode=TwoWay}" />
+                <TextBox Header="Default Placeholder" Text="{x:Bind MySearchView.SearchViewModel.DefaultPlaceholder, Mode=TwoWay}" />
+                <TextBox Header="No result message" Text="{x:Bind MySearchView.NoResultMessage, Mode=TwoWay}" />
+                <TextBox Header="Repeat search button text" Text="{x:Bind MySearchView.RepeatSearchButtonText, Mode=TwoWay}" />
                 <Button
                     HorizontalAlignment="Stretch"
-                    Command="{Binding ElementName=MySearchView, Path=RepeatSearchHereCommand, Mode=OneWay}"
+                    Command="{x:Bind MySearchView.TemplateSettings.RepeatSearchHereCommand, Mode=OneWay}"
                     Content="Repeat Search"
-                    IsEnabled="{Binding ElementName=MySearchView, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
+                    IsEnabled="{x:Bind MySearchView.SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
                 <Button
                     HorizontalAlignment="Stretch"
-                    Command="{Binding ElementName=MySearchView, Path=ClearCommand, Mode=OneWay}"
+                    Command="{x:Bind MySearchView.TemplateSettings.ClearCommand, Mode=OneWay}"
                     Content="Clear Search" />
                 <ListView
                     DisplayMemberPath="DisplayTitle"
                     Header="Results:"
-                    ItemsSource="{Binding ElementName=MySearchView, Path=SearchViewModel.Results, Mode=OneWay}"
-                    SelectedItem="{Binding ElementName=MySearchView, Path=SearchViewModel.SelectedResult, Mode=TwoWay}" />
+                    ItemsSource="{x:Bind MySearchView.SearchViewModel.Results, Mode=OneWay}"
+                    SelectedItem="{x:Bind MySearchView.SearchViewModel.SelectedResult, Mode=TwoWay}" />
                 <ListView
                     DisplayMemberPath="DisplayName"
                     Header="Sources:"
-                    ItemsSource="{Binding ElementName=MySearchView, Path=SearchViewModel.Sources, Mode=OneWay}"
-                    SelectedItem="{Binding ElementName=MySearchView, Path=SearchViewModel.ActiveSource, Mode=TwoWay}" />
+                    ItemsSource="{x:Bind MySearchView.SearchViewModel.Sources, Mode=OneWay}"
+                    SelectedItem="{x:Bind MySearchView.SearchViewModel.ActiveSource, Mode=TwoWay}" />
                 <Button
                     HorizontalAlignment="Stretch"
                     Click="AddDefaultLocator_Click"

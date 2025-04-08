@@ -74,7 +74,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void BarcodeButton_Click(object sender, RoutedEventArgs e)
         {
             if (Element != null)
-                FeatureFormView.GetFeatureFormViewParent(this)?.OnBarcodeButtonClicked(Element);
+            {
+                bool handled = FeatureFormView.GetFeatureFormViewParent(this)?.OnBarcodeButtonClicked(Element) == true;
+                if(!handled)
+                {
+                    LaunchBarcodeScanner(Element);
+                }
+            }
         }
     }
 }

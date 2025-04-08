@@ -16,6 +16,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -31,7 +32,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Encompasses an element in a basemap gallery.
     /// </summary>
-    public class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
+#if WINUI
+    [WinRT.GeneratedBindableCustomProperty]
+#endif
+    public partial class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
     {
 #pragma warning disable SA1011 // Closing square brackets should be spaced correctly
         private byte[]? _thumbnailData;
@@ -85,6 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Tooltip)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Is3D)));
                 _ = LoadImage();
             }
             catch (Exception)
@@ -442,6 +447,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
             }
         }
+
+        /// <summary>
+        /// Gets a value indicating whether this basemap is a 3D basemap.
+        /// </summary>
+        public bool Is3D => this.Basemap?.BaseLayers?.OfType<ArcGISSceneLayer>()?.Any() ?? false;
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
