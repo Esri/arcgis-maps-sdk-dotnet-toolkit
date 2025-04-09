@@ -32,7 +32,7 @@
           WorkingDirectory="$(ProjectDir)" EchoOff="true" />
   </Target>
   
-  <Target Name="SignNuGet" Condition="'$(SignNugetCommand)' != '' AND '$(IsPackable)'=='true'" AfterTargets="Pack">
+  <Target Name="SignNuGet" Condition="'$(SignOutput)' == 'true' AND '$(IsPackable)'=='true'" AfterTargets="Pack">
    <PropertyGroup>
       <NugetPackageFileName>$(PackageOutputPath)\$(PackageId).$(PackageVersion).nupkg</NugetPackageFileName>
       <SNugetPackageFileName>$(PackageOutputPath)\$(PackageId).$(PackageVersion).snupkg</SNugetPackageFileName>
