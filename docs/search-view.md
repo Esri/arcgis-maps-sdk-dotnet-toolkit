@@ -21,7 +21,6 @@ Search View enables searching using one or more locators, with support for sugge
 
 The following properties enable customization of the view:
 
-- `EnableAutomaticConfiguration` - Controls whether view is automatically configured for the attached GeoView's map or scene. By default, this will set up a single World Geocoder search source. In future releases, this behavior may be extended to support other web map configuration options.
 - `EnableRepeatSearchHereButton` - Controls whether a 'Repeat Search Here' button is shown when the user navigates the attached GeoView after a search is completed.
 - `EnableResultListView` - Controls whether a result list is displayed.
 - `EnableIndividualResultDisplay` - Controls whether the result list is shown when there is only one result.
