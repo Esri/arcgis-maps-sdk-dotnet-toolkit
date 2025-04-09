@@ -140,7 +140,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WPF
                         binding?.UpdateTarget();
 #elif WINDOWS_XAML
-                        ctrl?.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Path = new PropertyPath("Popup.EvaluatedElements"), Source = this });
+#warning WE CAN'T DO THIS WITH AOT
+                        ctrl.ItemsSource = Popup.EvaluatedElements;
+                        // ctrl?.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Path = new PropertyPath("Popup.EvaluatedElements"), Source = this });
 #endif
 #endif
                     }
