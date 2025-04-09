@@ -15,7 +15,7 @@
     <SignOutput Condition="'$(THUMBPRINT)'!=''">true</SignOutput>    
     <SignAssemblyCommand Condition="'$(SignOutput)' == 'true'">"$(SignToolPath)" sign /fd SHA256 /sha1 $(THUMBPRINT) /sm /tr $(CertificateTimeStampService) /td SHA256</SignAssemblyCommand>
     <NuGetExePath>$(MSBuildThisFileDirectory)..\.tools\NuGet.exe</NuGetExePath>
-    <SignNugetCommand>--certificate-fingerprint $(THUMBPRINT) --certificate-store-name My --certificate-store-location ;$(CodeSignCertificateStore) --timestamper $(CertificateTimeStampService) --overwrite</SignNugetCommand>
+    <SignNugetCommand>--certificate-fingerprint $(THUMBPRINT) --certificate-store-name My --certificate-store-location $(CodeSignCertificateStore) --timestamper $(CertificateTimeStampService) --overwrite</SignNugetCommand>
   </PropertyGroup>
   
   <Target Name="SignAssembly" Condition="'$(SignOutput)' == 'true'" BeforeTargets="CopyFilesToOutputDirectory" DependsOnTargets="ComputeIntermediateSatelliteAssemblies"> 
