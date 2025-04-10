@@ -1,19 +1,20 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="using:Esri.ArcGISRuntime.Toolkit">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/BasemapGallery/BasemapGallery.Theme.xaml" />
-        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/BookmarksView/BookmarksView.Theme.xaml" />
+        <local:BasemapGalleryResources />
+        <local:BookmarksViewResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/LayerLegend/LayerLegend.Theme.xaml" />
-        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/Legend/Legend.Theme.xaml" />
+        <local:LegendResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/SearchView/SearchView.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/Compass/Compass.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
-        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />
+        <local:OverviewMapResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
-        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
+        <local:FloorFilterResources />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/UtilityNetworkTraceTool/StartingPointListView.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />

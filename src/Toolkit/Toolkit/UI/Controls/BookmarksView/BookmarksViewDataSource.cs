@@ -35,7 +35,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
-    internal class BookmarksViewDataSource : IList<Bookmark>, INotifyCollectionChanged, INotifyPropertyChanged, IList
+#if WINUI
+    [Microsoft.UI.Xaml.Data.Bindable]
+#endif
+    internal partial class BookmarksViewDataSource : IList<Bookmark>, INotifyCollectionChanged, INotifyPropertyChanged, IList
     {
         private GeoView? _geoView;
         private WeakEventListener<BookmarksViewDataSource, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _geoViewBookmarksListener;

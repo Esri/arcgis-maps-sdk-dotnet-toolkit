@@ -100,12 +100,12 @@ Use named trace configurations defined in a web map to perform connected trace o
 |Component |UWP and WinUI |WPF  |MAUI | WinUI AoT Compatible|
 |---|---|---|---|---|
 |[BasemapGallery](basemap-gallery.md) | ✔ | ✔ |  ✔ | ✔ |
-|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ❌ |
+|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ |
 |[Compass](compass.md)   | ✔ | ✔ | ✔ | ✔ |
 |[FeatureDataField](feature-data-field.md)   | ✔ | ✔ | ❌ | ❌ |
-|[FloorFilter](floor-filter.md) | ✔  | ✔ | ✔ | ❌ |
+|[FloorFilter](floor-filter.md) | ✔  | ✔ | ✔ | ✔ |
 |[GeoViewController](geoviewcontroller.md) | ✔  | ✔ | ✔ | ✔ |
-|[Legend](legend.md)   | ✔ | ✔ | ✔ | ❌ |
+|[Legend](legend.md)   | ✔ | ✔ | ✔ | ✔ |
 |[MeasureToolbar](measure-toolbar.md)   | ✔ | ✔ | ❌ | ❌ |
 |[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ | ❌ |
 |[PopupViewer](popup-viewer.md) | ✔ | ✔ | ❌ | ❌ |
