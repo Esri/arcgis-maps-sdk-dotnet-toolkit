@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Maui;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace Toolkit.SampleApp.Maui.Samples
@@ -80,11 +81,22 @@ namespace Toolkit.SampleApp.Maui.Samples
             item.Name = "With Thumbnail";
             item.Tooltip = Guid.NewGuid().ToString();
             item.Thumbnail = new Esri.ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
-            Gallery.AvailableBasemaps.Add(item);
+            Gallery.AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>
+            {
+                item
+            };
 
             BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
             item2.Name = "Without Thumbnail";
             Gallery.AvailableBasemaps.Add(item2);
+
+            Basemap basemap = new();
+            basemap.BaseLayers.Add(new ArcGISSceneLayer());
+            BasemapGalleryItem item3 = await BasemapGalleryItem.CreateAsync(basemap);
+            item3.Name = "With Thumbnail 3D";
+            item3.Tooltip = Guid.NewGuid().ToString();
+            item3.Thumbnail = new Esri.ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
+            Gallery.AvailableBasemaps.Add(item3);
         }
 
         private async void Button_Add_WGS84(object? sender, EventArgs e)

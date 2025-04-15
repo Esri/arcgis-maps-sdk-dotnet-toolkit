@@ -45,6 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private CancellationTokenSource? _loadCancellationTokenSource;
         private IList<BasemapGalleryItem>? _cached2DBasemaps;
         private IList<BasemapGalleryItem>? _cached3DBasemaps;
+        private IList<BasemapGalleryItem>? _cachedBasemaps;
         private Task<ObservableCollection<BasemapGalleryItem>>? _loadBasemapGalleryItemsTask;
 
         public bool IsLoading
@@ -73,6 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     }
 
                     _availableBasemaps = value;
+                    _cachedBasemaps = value;
 
                     if (_availableBasemaps is INotifyCollectionChanged newIncc)
                     {
@@ -311,13 +313,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (portal.PortalInfo?.Use3DBasemaps is true && GeoModel is Scene)
             {
-                _cached3DBasemaps ??= await LoadBasemapsAsync(portal.Get3DBasemapsAsync);
+                if (_cached3DBasemaps is null || !_cached3DBasemaps.Any())
+                {
+                    if (_cachedBasemaps is not null)
+                    {
+                        _cached3DBasemaps = _cachedBasemaps.Where(bmgi => bmgi.Is3D).ToList();
+                    }
+                    else
+                    {
+                        _cached3DBasemaps = await LoadBasemapsAsync(portal.Get3DBasemapsAsync);
+                    }
+                }
                 basemapGalleryItems.AddRange(_cached3DBasemaps);
             }
 
-            _cached2DBasemaps ??= await LoadBasemapsAsync(portal.PortalInfo?.UseVectorBasemaps ?? false
-                    ? portal.GetVectorBasemapsAsync
-                    : portal.GetBasemapsAsync);
+            if (_cached2DBasemaps is null || !_cached2DBasemaps.Any())
+            {
+                if (_cachedBasemaps is not null)
+                {
+                    _cached2DBasemaps = _cachedBasemaps.Where(bmgi => !bmgi.Is3D).ToList();
+                }
+                else
+                {
+                    _cached2DBasemaps = await LoadBasemapsAsync(portal.PortalInfo?.UseVectorBasemaps ?? false
+                        ? portal.GetVectorBasemapsAsync
+                        : portal.GetBasemapsAsync);
+                }
+            }
             basemapGalleryItems.AddRange(_cached2DBasemaps);
 
             return new ObservableCollection<BasemapGalleryItem>(basemapGalleryItems);
