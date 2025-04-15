@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <PackageCertificateKeyFile>Toolkit.Samples.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>27DB1585993252FC4A866B07D20B377D98D3A397</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>3DD4E6DFCDF1636749FAB1538D905D476D5CF176</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <SuppressXamlWarnings>1500</SuppressXamlWarnings>
     <NoWarn>$(NoWarn);2008;APPX4001</NoWarn>

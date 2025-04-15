@@ -26,6 +26,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public partial class FormElementItemsControl : ItemsControl
     {
+        private static DataTemplate UnsupportedFormElementTemplate = new DataTemplate();
+
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
@@ -36,13 +38,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     presenter.ContentTemplate = FieldFormElementTemplate;
                 }
-                if (item is TextFormElement)
+                else if (item is TextFormElement)
                 {
                     presenter.ContentTemplate = TextFormElementTemplate;
                 }
                 else if (item is GroupFormElement)
                 {
                     presenter.ContentTemplate = GroupFormElementTemplate;
+                }
+                else
+                {
+                    presenter.ContentTemplate = UnsupportedFormElementTemplate; // Renders empty / skips
                 }
             }
         }
