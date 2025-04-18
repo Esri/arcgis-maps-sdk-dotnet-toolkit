@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || WINDOWS_XAML
+#if WPF
 using System.Globalization;
 using Esri.ArcGISRuntime.Toolkit.UI;
 

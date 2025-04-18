@@ -1,8 +1,10 @@
 ﻿<ResourceDictionary
+    x:Class="Esri.ArcGISRuntime.Toolkit.BasemapGalleryResources"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:basemapgallery="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:ui="using:Esri.ArcGISRuntime.Toolkit.UI">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -138,12 +140,12 @@
         <Setter Property="Background" Value="{ThemeResource ControlBackground}" />
         <Setter Property="GridItemTemplate">
             <Setter.Value>
-                <DataTemplate>
+                <DataTemplate x:DataType="ui:BasemapGalleryItem">
                     <StackPanel
                         MaxWidth="128"
                         Background="Transparent"
                         Orientation="Vertical"
-                        ToolTipService.ToolTip="{Binding Tooltip}">
+                        ToolTipService.ToolTip="{x:Bind Tooltip, Mode=OneWay}">
                         <Border
                             Width="64"
                             Height="64"
@@ -156,7 +158,7 @@
                                     Width="62"
                                     Height="62"
                                     Opacity="1"
-                                    Source="{Binding ThumbnailBitmap, Mode=OneWay}"
+                                    Source="{x:Bind ThumbnailBitmap, Mode=OneWay}"
                                     Stretch="UniformToFill" />
                                 <Border
                                     Background="{ThemeResource BorderBackground}"
@@ -165,7 +167,7 @@
                                     Margin="2"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
-                                    Visibility="{Binding Is3D}">
+                                    Visibility="{x:Bind Is3D, Mode=OneWay}">
                                     <TextBlock
                                         Text="3D"
                                         Margin="1"
@@ -181,7 +183,7 @@
                             MinHeight="32"
                             Margin="8,0,8,8"
                             FontSize="11"
-                            Text="{Binding Name}"
+                            Text="{x:Bind Name, Mode=OneWay}"
                             TextAlignment="Center"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -190,12 +192,12 @@
         </Setter>
         <Setter Property="ListItemTemplate">
             <Setter.Value>
-                <DataTemplate>
+                <DataTemplate x:DataType="ui:BasemapGalleryItem">
                     <Grid
                         Padding="6"
                         HorizontalAlignment="Stretch"
                         Background="Transparent"
-                        ToolTipService.ToolTip="{Binding Tooltip}">
+                        ToolTipService.ToolTip="{x:Bind Tooltip, Mode=OneWay}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -211,7 +213,7 @@
                                 <Image
                                     Width="62"
                                     Height="62"
-                                    Source="{Binding ThumbnailBitmap, Mode=OneWay}"
+                                    Source="{x:Bind ThumbnailBitmap, Mode=OneWay}"
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>
@@ -226,10 +228,10 @@
                                 x:Name="ItemTextBlock"
                                 Grid.Row="0"
                                 VerticalAlignment="Center"
-                                Text="{Binding Name, Mode=OneWay}"
+                                Text="{x:Bind Name, Mode=OneWay}"
                                 TextWrapping="Wrap" />
                             <Border
-                                Visibility="{Binding Is3D}"
+                                Visibility="{x:Bind Is3D, Mode=OneWay}"
                                 Background="{ThemeResource BorderBackground}"
                                 CornerRadius="7"
                                 Grid.Row="1"

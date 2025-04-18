@@ -39,8 +39,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
+#elif WINUI
+    [Microsoft.UI.Xaml.Data.Bindable]
+    [WinRT.GeneratedBindableCustomProperty]
 #endif
-    internal class LegendDataSource : LayerContentDataSource<LegendEntry>
+    internal partial class LegendDataSource : LayerContentDataSource<LegendEntry>
     {
         private readonly ConcurrentDictionary<ILayerContent, Task<IReadOnlyList<LegendInfo>>> _legendInfoTasks = new ConcurrentDictionary<ILayerContent, Task<IReadOnlyList<LegendInfo>>>();
 
