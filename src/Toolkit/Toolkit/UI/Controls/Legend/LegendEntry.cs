@@ -62,9 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private void Content_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ILayerContent.Name) || e.PropertyName == nameof(LegendInfo.Symbol))
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Content)));
-            else if (e.PropertyName == nameof(LegendInfo.Symbol))
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Symbol)));
+                PropertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
