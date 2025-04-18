@@ -102,16 +102,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
 
             // Update selection
-            if (_unfilteredList?.FirstOrDefault(item => item == SelectedItem) is object item)
+            if (_unfilteredListView is not null && _unfilteredList?.FirstOrDefault(item => item == SelectedItem) is object item)
             {
-                _unfilteredListView?.SetValue(SelectedItemProperty, item);
-                _unfilteredListView?.ScrollIntoView(item);
+                _unfilteredListView.SetValue(SelectedItemProperty, item);
+                _unfilteredListView.ScrollIntoView(item);
             }
 
-            if (_filteredList?.FirstOrDefault(item => item == SelectedItem) is object filteredItem)
+            if (_filteredListView is not null && _filteredList?.FirstOrDefault(item => item == SelectedItem) is object filteredItem)
             {
-                _filteredListView?.SetValue(SelectedItemProperty, filteredItem);
-                _filteredListView?.ScrollIntoView(filteredItem);
+                _filteredListView.SetValue(SelectedItemProperty, filteredItem);
+                _filteredListView.ScrollIntoView(filteredItem);
             }
         }
 

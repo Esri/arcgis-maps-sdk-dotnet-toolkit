@@ -14,7 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
+#if !MAUI
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
@@ -28,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <remarks>
     /// The <see cref="Content"/> property will contain the actual object it represents, mainly <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.
     /// </remarks>
-    public class LegendEntry : object, ILayerContentItem
+    public class LegendEntry : object, ILayerContentItem, INotifyPropertyChanged
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LegendEntry"/> class.
@@ -37,12 +41,72 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public LegendEntry(object content)
         {
             Content = content;
+            if (content is INotifyPropertyChanged inpc)
+            {
+                inpc.PropertyChanged += Content_PropertyChanged;
+            }
+        }
+
+        /// <inheritdoc />
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="propertyName">name of the property changing</param>
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void Content_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ILayerContent.Name) || e.PropertyName == nameof(LegendInfo.Symbol))
+                PropertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
         /// Gets the content that this entry represents, usually a <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.
         /// </summary>
         public object Content { get; }
+
+        /// <summary>
+        /// Gets the display name of the content
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                if (Content is Layer l)
+                    return l.Name;
+                if (Content is ILayerContent lc)
+                    return lc.Name;
+                if (Content is LegendInfo li)
+                    return li.Name;
+#if !MAUI
+                if (Content is DesignLegendInfo dli)
+                    return dli.Name;
+#endif
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets the symbol of the content if it's a LegendInfo
+        /// </summary>
+        public Symbology.Symbol? Symbol
+        {
+            get
+            {
+                if (Content is LegendInfo li)
+                    return li.Symbol;
+#if !MAUI
+                if (Content is DesignLegendInfo dli)
+                    return dli.Symbol;
+#endif
+                return null;
+            }
+        }
 
         /// <inheritdoc />
         public override int GetHashCode()
