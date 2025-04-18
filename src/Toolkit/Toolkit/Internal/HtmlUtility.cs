@@ -1,5 +1,20 @@
-using System;
-using System.Collections.Generic;
+// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
@@ -188,7 +203,7 @@ internal class HtmlUtility
         {
             var parts = declaration.Split(':');
             if (parts.Length == 2)
-                styles[parts[0].Trim().ToLower()] = parts[1].Trim(); // store all keys in lowercase
+                styles[parts[0].Trim().ToLowerInvariant()] = parts[1].Trim(); // store all keys in lowercase
         }
         return styles;
     }
@@ -240,6 +255,16 @@ internal class HtmlUtility
             }
             // TODO handle unclosed elements other than "p"
             // static bool IsClosingOptional(string tagName) => tagName is "p" or "dt" or "dd" or "li" or "th" or "tbody" or "tr" or "td";
+
+            if (name is "script" or "style")
+            {
+                // Skip unsupported tags
+                if (tokenType == HtmlTokenType.OpenTag)
+                {
+                    while (tokenator.NextToken(out t) && t.Type != HtmlTokenType.CloseTag) { }
+                }
+                continue;
+            }
 
             var newNode = new MarkupNode { Token = t };
             var attr = ParseAttributes(t.Attributes);
@@ -420,13 +445,17 @@ internal class HtmlUtility
                 }
                 if (!stack.Any())
                 {
-                    // We walked all the way up to root, no more nodes left to close. Give up and return what we have so far.
-                    SimplifySubtree(root);
-                    return root;
-                }
-                var openTag = stack.Pop();
-                if (openTag.Token?.Name == "p")
+                    // We walked all the way up to root, no more nodes left to close.
+                    // It's possible that HTML had mismatched closing tags.
                     isInParagraph = false;
+                    stack.Push(root);
+                }
+                else
+                {
+                    var openTag = stack.Pop();
+                    if (openTag.Token?.Name == "p")
+                        isInParagraph = false;
+                }
             }
             else
             {
@@ -498,7 +527,7 @@ internal class HtmlUtility
         parent.Children.Clear();
         parent.Children.AddRange(optimizedChildren);
     }
-    
+
     // Trims leading whitespace, trailing whitespace, and the last trailing break from blocky elements.
     private static List<MarkupNode> FixWhitespace(List<MarkupNode> optimizedChildren)
     {
@@ -595,7 +624,7 @@ internal class HtmlUtility
         }
         return false;
     }
-    
+
     // Recursively counts the number of descendant nodes of Type Break
     private static int CountBreaks(List<MarkupNode> group)
     {
@@ -630,7 +659,7 @@ internal class HtmlUtility
         }
         return false;
     }
-    
+
     // True if the last leaf node in this subtree is a Text node that ends with a space.
     // Stops search and returns false if we encounter a non-inline node.
     private static bool EndsWithSpace(MarkupNode node)
@@ -641,7 +670,7 @@ internal class HtmlUtility
             return node.Children.Count > 0 && EndsWithSpace(node.Children.Last());
         return false;
     }
-    
+
     // True if the first leaf node in this subtree is a Text node that ends with a space.
     // Stops search and returns false if we encounter a non-inline node.
     private static bool StartsWithSpace(MarkupNode node)
@@ -773,7 +802,7 @@ internal class HtmlUtility
     }
 
     // Parses the value of CSS font-weight into a boolean. Returns null for invalid values.
-    private static bool? ParseCssFontWeight(string rawValue)
+    internal static bool? ParseCssFontWeight(string rawValue)
     {
         if (string.IsNullOrEmpty(rawValue))
             return null;
@@ -1018,83 +1047,268 @@ internal class HtmlTokenParser
     private readonly string _html;
     private int _idx = 0;
 
+    // RawText parsing is needed to skip elements like script or style.
+    private bool _rawParsingMode = false;
+
+    // When in RawText mode, stores the tag name we need to find the end for (e.g., "script")
+    private string? _endTagExpected = null;
+
     public HtmlTokenParser(string html)
     {
-        _html = html;
+        _html = html ?? throw new ArgumentNullException(nameof(html));
     }
 
+    /// <summary>
+    /// Attempts to retrieve the next token from the HTML stream.
+    /// </summary>
+    /// <param name="token">The output token, if one is found.</param>
+    /// <returns>True if a token was found, false otherwise.</returns>
     public bool NextToken([NotNullWhen(true)] out HtmlToken? token)
     {
         token = null;
-        if (_idx < _html.Length && _html[_idx] == '>')
-            _idx++;
-        if (_idx >= _html.Length)
-            return false;
-
-        var nextTokenIdx = _html.IndexOf('<', _idx) + 1;
-        if (nextTokenIdx > _idx + 1)
+        while (_idx < _html.Length) // Loop to skip comments or handle empty text results
         {
-            var text = ProcessText(_html.Substring(_idx, nextTokenIdx - _idx - 1));
-            token = new HtmlToken(text, null, HtmlTokenType.PlainText);
-            _idx = nextTokenIdx - 1;
-        }
-        else if (nextTokenIdx < 1)
-        {
-            // no more tokens
-            if (_idx < _html.Length)
+            // Skip over HTML comments <!-- ... --> before deciding mode
+            if (_html[_idx] == '<' && _idx + 3 < _html.Length && _html[_idx + 1] == '!' && _html[_idx + 2] == '-' && _html[_idx + 3] == '-')
             {
-                var text = ProcessText(_html.Substring(_idx));
-                token = new HtmlToken(text, null, HtmlTokenType.PlainText);
-                _idx = _html.Length;
+                int endCommentIdx = _html.IndexOf("-->", _idx + 4, StringComparison.Ordinal);
+                if (endCommentIdx != -1)
+                {
+                    _idx = endCommentIdx + 3;
+                    continue; // Skip comment and restart loop
+                }
+                else
+                {
+                    // Unclosed comment, treat rest as comment and stop
+                    _idx = _html.Length;
+                    return false;
+                }
+            }
+
+            if (_rawParsingMode && TryParseRawText(out token))
+                return true;
+            if (!_rawParsingMode && TryParseNormal(out token))
+                return true;
+
+            // If TryParse was false, it might have skipped something (like empty text after processing)
+            // or reached the end. Loop will continue unless we reached the end.
+        }
+        return false; // End of string reached
+    }
+
+    /// <summary>
+    /// Parses the next token when in Normal mode (tags or text).
+    /// </summary>
+    private bool TryParseNormal([NotNullWhen(true)] out HtmlToken? token)
+    {
+        token = null;
+        if (_idx >= _html.Length) return false;
+
+        // Check if we have a '<' that is actually the start/end of a tag.
+        if (_html[_idx] == '<' && LooksLikeTag(_idx))
+            return TryParseTag(out token);
+
+        // Otherwise, scan forward to the next real tag-start.
+        int endOfText;
+        int searchPos = _idx;
+        while (true)
+        {
+            int nextLt = _html.IndexOf('<', searchPos);
+            if (nextLt == -1)
+            {
+                endOfText = _html.Length;
+                break;
+            }
+            if (LooksLikeTag(nextLt))
+            {
+                endOfText = nextLt;
+                break;
+            }
+            // stray '<', skip it
+            searchPos = nextLt + 1;
+        }
+
+        // Extract and process the text run
+        string rawText = _html.Substring(_idx, endOfText - _idx);
+        _idx = endOfText;
+        string processedText = ProcessNormalText(rawText);
+
+        if (!string.IsNullOrEmpty(processedText))
+        {
+            token = new HtmlToken(processedText, null, HtmlTokenType.PlainText);
+            return true;
+        }
+
+        // collapsed to whitespace only, loop again
+        return false;
+    }
+
+    private bool LooksLikeTag(int pos)
+    {
+        // must have at least one character after '<'
+        if (pos + 1 >= _html.Length) return false;
+
+        char after = _html[pos + 1];
+
+        if (char.IsLetter(after) || after == '!')
+            return true; // open tag: <letter or comment
+
+        if (after == '/' && pos + 2 < _html.Length && char.IsLetter(_html[pos + 2]))
+            return true; // close tag: </letter
+
+        // else it's "< " or "<2" or "<%", etc.  not a real tag, treat as text.
+        return false;
+    }
+
+    /// <summary>
+    /// Attempts to parse a tag (open, close, self-closing) starting at the current index.
+    /// Also handles state transitions into RawText mode.
+    /// </summary>
+    private bool TryParseTag([NotNullWhen(true)] out HtmlToken? token)
+    {
+        token = null;
+        int startTagContentIdx = _idx + 1;
+        if (startTagContentIdx >= _html.Length)
+        {
+            // Dangling '<' at end. Consume it and stop
+            _idx++;
+            return false;
+        }
+
+        // Find the end of the tag
+        int endTagCloseIdx = _html.IndexOf('>', startTagContentIdx);
+        if (endTagCloseIdx == -1)
+        {
+            // Unclosed tag. Consume the rest of the string and stop
+            _idx = _html.Length;
+            return false;
+        }
+
+        HtmlTokenType type;
+        bool isSelfClosing = false;
+        int nameEndIdx = endTagCloseIdx; // End boundary for name/attributes
+
+        // Check for closing tag: </tag>
+        if (_html[startTagContentIdx] == '/')
+        {
+            startTagContentIdx++; // Skip '/'
+            if (startTagContentIdx >= endTagCloseIdx) // Handles </>
+            {
+                _idx = endTagCloseIdx + 1; // Skip invalid tag
+                return false; // Let main loop continue
+            }
+            type = HtmlTokenType.CloseTag;
+        }
+        // Check for self-closing tag: <tag/> or <tag />
+        else if (_html[endTagCloseIdx - 1] == '/')
+        {
+            nameEndIdx--; // Exclude the '/' from name/attribute processing
+            type = HtmlTokenType.SelfClosingTag;
+            isSelfClosing = true;
+            // Trim trailing whitespace before the '/' e.g. <br />
+            while (nameEndIdx > startTagContentIdx && char.IsWhiteSpace(_html[nameEndIdx - 1]))
+            {
+                nameEndIdx--;
             }
         }
         else
         {
-            var endTokenIdx = _html.IndexOf('>', nextTokenIdx);
-            if (endTokenIdx == -1)
-                return false; // Stop parsing if we encountered a syntax error
-            HtmlTokenType type = HtmlTokenType.OpenTag;
-            string? attributes = null;
-            string name;
-
-            if (_html[nextTokenIdx] == '/')
-            {
-                nextTokenIdx++;
-                type = HtmlTokenType.CloseTag;
-            }
-            else if (_html[endTokenIdx - 1] == '/')
-            {
-                endTokenIdx--; // trim the slash
-                type = HtmlTokenType.SelfClosingTag;
-            }
-
-            var space = _html.IndexOfAny(new[] { ' ', '\t', '\r', '\n', '\v' }, nextTokenIdx, endTokenIdx - nextTokenIdx) + 1;
-            if (space > nextTokenIdx)
-            {
-                attributes = _html.Substring(space, endTokenIdx - space).Trim();
-                if (string.IsNullOrEmpty(attributes))
-                    attributes = null;
-                name = _html.Substring(nextTokenIdx, space - nextTokenIdx - 1);
-            }
-            else
-            {
-                name = _html.Substring(nextTokenIdx, endTokenIdx - nextTokenIdx);
-            }
-            _idx = endTokenIdx;
-            if (type == HtmlTokenType.SelfClosingTag)
-                _idx++; // consume the slash
-            token = new HtmlToken(name.Trim().ToLowerInvariant(), attributes, type);
+            type = HtmlTokenType.OpenTag;
         }
-        return token != null;
+
+        // Extract tag name (first word)
+        int nameLength = 0;
+        while (startTagContentIdx + nameLength < nameEndIdx &&
+               !char.IsWhiteSpace(_html[startTagContentIdx + nameLength]) &&
+               _html[startTagContentIdx + nameLength] != '/') // Stop name at '/' for <tag/> case without space
+        {
+            nameLength++;
+        }
+
+        if (nameLength == 0) // Handles <> or < > or < /> etc.
+        {
+            _idx = endTagCloseIdx + 1; // Skip invalid tag
+            return false; // Let main loop continue
+        }
+
+        string name = _html.Substring(startTagContentIdx, nameLength);
+
+        // Extract attributes
+        int attributeStartIdx = startTagContentIdx + nameLength;
+        while (attributeStartIdx < nameEndIdx && char.IsWhiteSpace(_html[attributeStartIdx]))
+        {
+            attributeStartIdx++; // Skip whitespace after name
+        }
+
+        string? attributes = null;
+        if (attributeStartIdx < nameEndIdx)
+        {
+            attributes = _html.Substring(attributeStartIdx, nameEndIdx - attributeStartIdx).Trim();
+            if (string.IsNullOrEmpty(attributes))
+                attributes = null;
+        }
+
+        _idx = endTagCloseIdx + 1; // Update index past the '>'
+
+        string lowerName = name.ToLowerInvariant();
+        token = new HtmlToken(lowerName, attributes, type);
+
+        if (type == HtmlTokenType.OpenTag && !isSelfClosing) // Only non-self-closing tags can contain content
+        {
+            if (lowerName is "script" or "style")
+            {
+                _rawParsingMode = true;
+                _endTagExpected = lowerName;
+            }
+        }
+        // If it was a closing tag, assume that TryParseRawText already reset _rawParsingMode
+        // *before* TryParseTag got called for the closing tag.
+        return true;
     }
 
-    private static string ProcessText(string rawText)
+    // Parses content when in RawText mode, that treats content as literal characters until the specific end tag,
+    // and does not interpret entities. Returns the content as a single PlainText token.
+    // See https://www.w3.org/TR/2010/WD-html5-20101019/syntax.html#raw-text-elements
+    private bool TryParseRawText([NotNullWhen(true)] out HtmlToken? token)
+    {
+        Debug.Assert(_endTagExpected != null, "Raw parsing mode should have an expected end tag.");
+
+        string endTag = $"</{_endTagExpected}>";
+        // Find the end tag using case-insensitive search
+        int endTagIdx = _html.IndexOf(endTag, _idx, StringComparison.OrdinalIgnoreCase);
+
+        string rawText;
+        if (endTagIdx == -1)
+        {
+            // End tag not found, consume the rest of the string
+            rawText = _html.Substring(_idx);
+            _idx = _html.Length;
+            _rawParsingMode = false; // Reset state as we hit the end
+            _endTagExpected = null;
+        }
+        else
+        {
+            // End tag found, extract text before it
+            rawText = _html.Substring(_idx, endTagIdx - _idx);
+            _idx = endTagIdx; // Position index at the START of the end tag
+            _rawParsingMode = false; // Reset state BEFORE parsing the end tag next
+            _endTagExpected = null;
+        }
+
+        // Return the raw text, even if empty (e.g., <script></script>)
+        // Do NOT process entities or whitespace for RAWTEXT.
+        token = new HtmlToken(rawText, null, HtmlTokenType.PlainText);
+        return true;
+    }
+    
+    private static readonly Regex WhitespaceRegex = new Regex(@"[^\S\u00A0]+", RegexOptions.Compiled);
+
+    private static string ProcessNormalText(string rawText)
     {
         // Replace HTML entities with their equivalent symbols.
         var unescaped = HtmlUtility.UnescapeHtml(rawText);
-        // Trim newlines and collapse remaining whitespace,
-        // but leave unbreakable spaces (nbsp / 0x00A0) untouched.
-        return Regex.Replace(unescaped, @"[^\S\u00A0]+", " ");
+        // Collapse internal whitespace sequences to a single space, preserving nbsp
+        return WhitespaceRegex.Replace(unescaped, " ");
     }
 }
 
