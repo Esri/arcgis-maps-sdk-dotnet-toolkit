@@ -1049,9 +1049,8 @@ internal class HtmlTokenParser
 
     // RawText parsing is needed to skip elements like script or style.
     private bool _rawParsingMode = false;
-
-    // When in RawText mode, stores the tag name we need to find the end for (e.g., "script")
-    private string? _endTagExpected = null;
+    // When in RawText mode, we need to remember which end-tag we are looking for (e.g. "script")
+    private string? _expectedEndTag = null;
 
     public HtmlTokenParser(string html)
     {
@@ -1068,7 +1067,7 @@ internal class HtmlTokenParser
         token = null;
         while (_idx < _html.Length) // Loop to skip comments or handle empty text results
         {
-            // Skip over HTML comments <!-- ... --> before deciding mode
+            // Comments start with <!-- and end with -->
             if (_html[_idx] == '<' && _idx + 3 < _html.Length && _html[_idx + 1] == '!' && _html[_idx + 2] == '-' && _html[_idx + 3] == '-')
             {
                 int endCommentIdx = _html.IndexOf("-->", _idx + 4, StringComparison.Ordinal);
@@ -1079,7 +1078,7 @@ internal class HtmlTokenParser
                 }
                 else
                 {
-                    // Unclosed comment, treat rest as comment and stop
+                    // Unclosed comment (i.e. the rest of HTML is commented out), stop parsing
                     _idx = _html.Length;
                     return false;
                 }
@@ -1090,15 +1089,13 @@ internal class HtmlTokenParser
             if (!_rawParsingMode && TryParseNormal(out token))
                 return true;
 
-            // If TryParse was false, it might have skipped something (like empty text after processing)
-            // or reached the end. Loop will continue unless we reached the end.
+            // If TryParse returned false, it either skipped something (like empty text after processing)
+            // or reached the end. Loop will continue unless we actually reached the end.
         }
         return false; // End of string reached
     }
 
-    /// <summary>
-    /// Parses the next token when in Normal mode (tags or text).
-    /// </summary>
+    // Parses the next token when in Normal mode (tags or text).
     private bool TryParseNormal([NotNullWhen(true)] out HtmlToken? token)
     {
         token = null;
@@ -1139,10 +1136,12 @@ internal class HtmlTokenParser
             return true;
         }
 
-        // collapsed to whitespace only, loop again
+        // collapsed to empty text, go back to looping
         return false;
     }
 
+    // Checks if a '<' at the given position is actually the start of a tag/comment,
+    // or just a stray character that should be treated as text.
     private bool LooksLikeTag(int pos)
     {
         // must have at least one character after '<'
@@ -1156,14 +1155,11 @@ internal class HtmlTokenParser
         if (after == '/' && pos + 2 < _html.Length && char.IsLetter(_html[pos + 2]))
             return true; // close tag: </letter
 
-        // else it's "< " or "<2" or "<%", etc.  not a real tag, treat as text.
         return false;
     }
 
-    /// <summary>
-    /// Attempts to parse a tag (open, close, self-closing) starting at the current index.
-    /// Also handles state transitions into RawText mode.
-    /// </summary>
+    // Attempts to parse a tag (open, close, or self-closing) starting at the current index.
+    // Also handles state transitions into RawText mode.
     private bool TryParseTag([NotNullWhen(true)] out HtmlToken? token)
     {
         token = null;
@@ -1258,11 +1254,10 @@ internal class HtmlTokenParser
             if (lowerName is "script" or "style")
             {
                 _rawParsingMode = true;
-                _endTagExpected = lowerName;
+                _expectedEndTag = lowerName;
+                // TryParseRawText will reset the mode just before the end tag
             }
         }
-        // If it was a closing tag, assume that TryParseRawText already reset _rawParsingMode
-        // *before* TryParseTag got called for the closing tag.
         return true;
     }
 
@@ -1271,9 +1266,9 @@ internal class HtmlTokenParser
     // See https://www.w3.org/TR/2010/WD-html5-20101019/syntax.html#raw-text-elements
     private bool TryParseRawText([NotNullWhen(true)] out HtmlToken? token)
     {
-        Debug.Assert(_endTagExpected != null, "Raw parsing mode should have an expected end tag.");
+        Debug.Assert(_expectedEndTag != null, "Raw parsing mode should have an expected end tag.");
 
-        string endTag = $"</{_endTagExpected}>";
+        string endTag = $"</{_expectedEndTag}>";
         // Find the end tag using case-insensitive search
         int endTagIdx = _html.IndexOf(endTag, _idx, StringComparison.OrdinalIgnoreCase);
 
@@ -1284,7 +1279,7 @@ internal class HtmlTokenParser
             rawText = _html.Substring(_idx);
             _idx = _html.Length;
             _rawParsingMode = false; // Reset state as we hit the end
-            _endTagExpected = null;
+            _expectedEndTag = null;
         }
         else
         {
@@ -1292,10 +1287,9 @@ internal class HtmlTokenParser
             rawText = _html.Substring(_idx, endTagIdx - _idx);
             _idx = endTagIdx; // Position index at the START of the end tag
             _rawParsingMode = false; // Reset state BEFORE parsing the end tag next
-            _endTagExpected = null;
+            _expectedEndTag = null;
         }
 
-        // Return the raw text, even if empty (e.g., <script></script>)
         // Do NOT process entities or whitespace for RAWTEXT.
         token = new HtmlToken(rawText, null, HtmlTokenType.PlainText);
         return true;
