@@ -197,7 +197,7 @@
                         Padding="6"
                         HorizontalAlignment="Stretch"
                         Background="Transparent"
-                        ToolTipService.ToolTip="{x:Bind Tooltip,Mode=OneWay}">
+                        ToolTipService.ToolTip="{x:Bind Tooltip, Mode=OneWay}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />

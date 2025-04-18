@@ -107,7 +107,7 @@ Use named trace configurations defined in a web map to perform connected trace o
 |[GeoViewController](geoviewcontroller.md) | ✔  | ✔ | ✔ | ✔ |
 |[Legend](legend.md)   | ✔ | ✔ | ✔ | ✔ |
 |[MeasureToolbar](measure-toolbar.md)   | ✔ | ✔ | ❌ | ❌ |
-|[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ | ❌ |
+|[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ | ✔ |
 |[PopupViewer](popup-viewer.md) | ✔ | ✔ | ❌ | ❌ |
 |[ScaleLine](scale-line.md)   | ✔ | ✔ | ✔ | ✔ |
 |[SearchView](search-view.md) | ✔ | ✔ | ✔ | ✔ |

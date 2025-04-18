@@ -7,7 +7,7 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate x:DataType="mapping:Bookmark">
-            <TextBlock Text="{x:Bind Name}" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Bind Name, Mode=OneWay}" VerticalAlignment="Center" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
