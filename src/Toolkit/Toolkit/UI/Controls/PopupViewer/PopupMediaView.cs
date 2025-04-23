@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Timer = System.Timers.Timer;
 
 #if WPF
 using Esri.ArcGISRuntime.UI;
@@ -43,6 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private double _lastChartSize = 0;
         private const double MaxChartSize = 1024;
+        private Timer? _refreshTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupMediaView"/> class.
@@ -214,11 +216,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnPopupMediaPropertyChanged()
         {
-            // TODO: Handle PopupMedia.ImageRefreshInterval - Start/Stop/Reset refresh timer if "interval > 0 && IsLoaded==true" + start/stop on load/unload
+            // Stop any existing timer
+            StopRefreshTimer();
             _lastChartSize = 0;
             if (PopupMedia?.Type == PopupMediaType.Image)
             {
                 UpdateImage();
+                // Start the refresh timer if the interval is greater than zero
+                if (PopupMedia.ImageRefreshInterval > TimeSpan.Zero && IsLoaded)
+                {
+                    StartRefreshTimer(PopupMedia.ImageRefreshInterval);
+                }
             }
             else
             {
@@ -267,6 +275,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             source = null;
             return false;
+        }
+
+        private void StartRefreshTimer(TimeSpan interval)
+        {
+            _refreshTimer = new Timer(interval.TotalMilliseconds);
+            _refreshTimer.Elapsed += OnRefreshTimerElapsed;
+            _refreshTimer.AutoReset = true;
+            _refreshTimer.Start();
+        }
+
+        private void StopRefreshTimer()
+        {
+            if (_refreshTimer != null)
+            {
+                _refreshTimer.Stop();
+                _refreshTimer.Elapsed -= OnRefreshTimerElapsed;
+                _refreshTimer.Dispose();
+                _refreshTimer = null;
+            }
+        }
+
+        private void OnRefreshTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            // Ensure this runs on the UI thread
+            this.Dispatch(UpdateImage);
         }
     }
 }
