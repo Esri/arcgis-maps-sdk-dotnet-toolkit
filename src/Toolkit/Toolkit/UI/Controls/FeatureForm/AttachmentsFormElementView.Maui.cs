@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 ItemTemplate = new DataTemplate(() =>
                 {
                     var view = new FormAttachmentView();
-                    view.SetBinding(FormAttachmentView.AttachmentProperty, static (FormAttachment formAttachment) => formAttachment.Attachment);
+                    view.SetBinding(FormAttachmentView.AttachmentProperty, static (FormAttachment formAttachment) => formAttachment);
                     view.SetBinding(FormAttachmentView.ElementProperty, static (AttachmentsFormElementView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
                     view.SetAppThemeColor(FormAttachmentView.IconColorProperty, Colors.Black, Colors.White);
                     view.SetBinding(ToolTipProperties.TextProperty, static (FormAttachment formAttachment) => formAttachment.Attachment?.Name);
