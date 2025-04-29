@@ -238,7 +238,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (PopupMedia?.Type == PopupMediaType.Image)
             {
                 UpdateImage();
-                // Start the refresh timer if the interval is greater than zero
                 if (IsLoaded)
                     InitializeImageRefreshTimer();
             }
@@ -335,6 +334,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void InitializeImageRefreshTimer()
         {
+            // Start the refresh timer if the interval is greater than zero
             if (PopupMedia?.ImageRefreshInterval > TimeSpan.Zero)
             {
                 StartRefreshTimer(PopupMedia.ImageRefreshInterval);
