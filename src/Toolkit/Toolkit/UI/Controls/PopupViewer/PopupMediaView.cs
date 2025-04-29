@@ -58,6 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             HorizontalOptions = LayoutOptions.Fill;
             VerticalOptions = LayoutOptions.Fill;
 #endif
+            Unloaded += OnViewUnloaded;
         }
 
         private void UpdateMedia(Size desiredSize)
@@ -285,6 +286,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             source = null;
             return false;
+        }
+
+        private void OnViewUnloaded(object? sender,
+#if WINDOWS_XAML
+            RoutedEventArgs
+#else
+            EventArgs
+#endif
+            e)
+        {
+            StopRefreshTimer();
         }
 
         private void StartRefreshTimer(TimeSpan interval)
