@@ -77,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private void UpdateImage()
+        private void UpdateImage(bool isTimerTriggeredUpdate = false)
         {
             if (PopupMedia is null)
             {
@@ -91,9 +91,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
 #if MAUI
-                    if (img.Source is not RuntimeStreamImageSource rsis || rsis.Source?.OriginalString != sourceUrl)
+                    if (isTimerTriggeredUpdate || img.Source is not RuntimeStreamImageSource rsis || rsis.Source?.OriginalString != sourceUrl)
 #else
-                    if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
+                    if (isTimerTriggeredUpdate || img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
 #endif
                     {
                         if (TryCreateImageSource(sourceUrl, out var source))
@@ -113,13 +113,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
                     img.Tag = linkUrl;
 #if WPF
-                    if(img.Cursor != Cursors.Hand)
+                    if (img.Cursor != Cursors.Hand)
                     {
                         img.Cursor = Cursors.Hand;
                         img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
                     }
 #elif WINDOWS_XAML
-                        img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
 #endif
 #endif
                 }
@@ -269,7 +269,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                 source = new RuntimeStreamImageSource(result);
 #else
-                source = new BitmapImage(result);
+                var newSource = new BitmapImage();
+#if WPF
+                newSource.BeginInit();
+                newSource.CacheOption = BitmapCacheOption.OnLoad; // Load the image into memory
+#endif
+                newSource.UriSource = result;
+                newSource.CreateOptions = BitmapCreateOptions.IgnoreImageCache; // Disable caching
+#if WPF
+                newSource.EndInit(); 
+#endif
+                source = newSource;
 #endif
                 return true;
             }
@@ -299,7 +309,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void OnRefreshTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             // Ensure this runs on the UI thread
-            this.Dispatch(UpdateImage);
+            this.Dispatch(() => UpdateImage(true));
         }
     }
 }
