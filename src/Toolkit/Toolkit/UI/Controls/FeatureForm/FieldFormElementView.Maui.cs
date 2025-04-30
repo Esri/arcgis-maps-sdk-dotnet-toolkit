@@ -49,49 +49,49 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultComboBoxFormInputTemplate()
         {
             var input = new ComboBoxFormInputView();
-            input.SetBinding(ComboBoxFormInputView.ElementProperty, static (FieldFormElement element) => element);
+            input.SetBinding(ComboBoxFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultSwitchFormInputTemplate()
         {
             var input = new SwitchFormInputView();
-            input.SetBinding(SwitchFormInputView.ElementProperty, static (FieldFormElement element) => element);
+            input.SetBinding(SwitchFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultDateTimePickerFormInputTemplate()
         {
             var input = new DateTimePickerFormInputView();
-            input.SetBinding(DateTimePickerFormInputView.ElementProperty, static (FieldFormElement element) => element);
+            input.SetBinding(DateTimePickerFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultRadioButtonsFormInputTemplate()
         {
             var input = new RadioButtonsFormInputView();
-            input.SetBinding(RadioButtonsFormInputView.ElementProperty, static (FieldFormElement element) => element);
+            input.SetBinding(RadioButtonsFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultTextAreaFormInputTemplate()
         {
             var input = new TextFormInputView();
-            input.SetBinding(TextFormInputView.ElementProperty, static (FieldFormElement element) => element);
+            input.SetBinding(TextFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultTextBoxFormInputTemplate()
         {
             var input = new TextFormInputView();
-            input.SetBinding(TextFormInputView.ElementProperty, static (FieldFormElement element) => element);
+            input.SetBinding(TextFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultBarcodeScannerFormInputTemplate()
         {
             var input = new TextFormInputView();
-            input.SetBinding(TextFormInputView.ElementProperty, static (FieldFormElement element) => element);
+            input.SetBinding(TextFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
         

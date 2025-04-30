@@ -80,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            layout.SetBinding(Grid.BindingContextProperty, Binding.SelfPath, converter: AttachmentViewModelConverter.Instance);
+            layout.SetBinding(Grid.BindingContextProperty, static (PopupAttachment attachment) => attachment, converter: AttachmentViewModelConverter.Instance);
             Image image = new Image() { WidthRequest = 24, HeightRequest = 24, HorizontalOptions = LayoutOptions.Start, Aspect = Aspect.Fill };
             layout.Add(image);
             image.SetBinding(Image.SourceProperty, static (AttachmentViewModel vm) => vm.Thumbnail);
