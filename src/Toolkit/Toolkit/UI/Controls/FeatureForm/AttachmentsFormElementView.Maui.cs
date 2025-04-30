@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             var root = new VerticalStackLayout();
-            root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (FormElement element) => element.IsVisible);
+            root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (AttachmentsFormElementView view) => view.Element?.IsVisible, source: RelativeBindingSource.TemplatedParent);
 
             Grid header = new Grid();
             header.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));

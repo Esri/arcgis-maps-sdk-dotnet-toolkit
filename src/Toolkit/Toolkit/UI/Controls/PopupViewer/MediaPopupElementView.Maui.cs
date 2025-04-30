@@ -82,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            pm.SetBinding(PopupMediaView.PopupMediaProperty, Binding.SelfPath);
+            pm.SetBinding(PopupMediaView.PopupMediaProperty, static (PopupMedia media) => media);
             layout.Add(pm);
             Label title = new Label();
             title.SetBinding(Label.TextProperty, static (PopupMedia media) => media.Title);
