@@ -98,7 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl || _refreshTimer?.Enabled == true)
 #endif
                     {
-                        if (TryCreateImageSource(sourceUrl, out var source, this))
+                        if (TryCreateImageSource(sourceUrl, out var source, _refreshTimer?.Enabled == true))
                         {
 #if WPF
                             // This code ensures that the height of the MediaView in the Popup Viewer for WPF is maintained
@@ -248,7 +248,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         // Also used for embedded images in TextPopupElement views
-        internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source, PopupMediaView? instance = null)
+        internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source, bool ignoreImageCache = false)
         {
             if (sourceUri != null && sourceUri.StartsWith("data:image/"))
             {
@@ -282,7 +282,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                 source = new RuntimeStreamImageSource(result);
 #else
-                if (instance?._refreshTimer?.Enabled == true)
+                if (ignoreImageCache)
                 {
                     var newSource = new BitmapImage();
 #if WPF
