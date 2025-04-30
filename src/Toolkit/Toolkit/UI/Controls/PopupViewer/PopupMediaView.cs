@@ -343,6 +343,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void StartRefreshTimer(TimeSpan interval)
         {
+            // Stop any existing timer to avoid double-instantiation
+            StopRefreshTimer();
+
+            // Initialize and start a new timer
             _refreshTimer = new Timer(interval.TotalMilliseconds);
             _refreshTimer.Elapsed += OnRefreshTimerElapsed;
             _refreshTimer.AutoReset = true;
