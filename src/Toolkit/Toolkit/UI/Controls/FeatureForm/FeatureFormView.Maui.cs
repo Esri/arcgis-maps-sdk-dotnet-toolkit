@@ -18,7 +18,6 @@
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -86,9 +85,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             DefaultFeatureFormCaptionStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Title), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.DefaultAttachmentsElement), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             Grid root = new Grid();
@@ -96,25 +92,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             Label roottitle = new Label();
             roottitle.Style = GetFeatureFormHeaderStyle();
-            roottitle.SetBinding(Label.TextProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent));
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            roottitle.SetBinding(Label.TextProperty, static (FeatureFormView view) => view.FeatureForm?.Title, source: RelativeBindingSource.TemplatedParent);
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (FeatureFormView view) => view.FeatureForm?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             root.Add(roottitle);
             ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never, Margin = new Thickness(0, 5, 0, 0) };
 #if WINDOWS
             scrollView.Padding = new Thickness(0, 0, 10, 0);
 #endif
-            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
+            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (FeatureFormView view) => view.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             var scrollableContent = new VerticalStackLayout();
             scrollView.Content = scrollableContent;
             Grid.SetRow(scrollView, 1);
             root.Add(scrollView);
             VerticalStackLayout itemsView = new VerticalStackLayout();
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent));
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (FeatureFormView view) => view.FeatureForm?.Elements, source: RelativeBindingSource.TemplatedParent);
             scrollableContent.Add(itemsView);
 
             AttachmentsFormElementView attachmentsView = new AttachmentsFormElementView();
-            attachmentsView.SetBinding(AttachmentsFormElementView.ElementProperty, new Binding("FeatureForm.DefaultAttachmentsElement", source: RelativeBindingSource.TemplatedParent));
+            attachmentsView.SetBinding(AttachmentsFormElementView.ElementProperty, static (FeatureFormView view) => view.FeatureForm?.DefaultAttachmentsElement, source: RelativeBindingSource.TemplatedParent);
             scrollableContent.Add(attachmentsView);
 
             INameScope nameScope = new NameScope();

@@ -40,26 +40,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultTextPopupElementTemplate = new DataTemplate(() =>
             {
                 var view = new TextPopupElementView() { Margin = new Thickness(0, 10) };
-                view.SetBinding(TextPopupElementView.ElementProperty, Binding.SelfPath);
+                view.SetBinding(TextPopupElementView.ElementProperty, static (PopupElement element) => element);
                 return view;
             });
             DefaultMediaPopupElementTemplate = new DataTemplate(() =>
             {
                 var view = new MediaPopupElementView() { Margin = new Thickness(0, 10) };
-                view.SetBinding(MediaPopupElementView.ElementProperty, Binding.SelfPath);
+                view.SetBinding(MediaPopupElementView.ElementProperty, static (PopupElement element) => element);
                 return view;
             });
             DefaultFieldsPopupElementTemplate = new DataTemplate(() =>
             {
                 var view = new FieldsPopupElementView() { Margin = new Thickness(0, 10) };
-                view.SetBinding(FieldsPopupElementView.ElementProperty, Binding.SelfPath);
+                view.SetBinding(FieldsPopupElementView.ElementProperty, static (PopupElement element) => element);
                 return view;
             });
             
             DefaultAttachmentsPopupElementTemplate = new DataTemplate(() =>
             {
                 var view = new AttachmentsPopupElementView() { Margin = new Thickness(0, 10) };
-                view.SetBinding(AttachmentsPopupElementView.ElementProperty, Binding.SelfPath);
+                view.SetBinding(AttachmentsPopupElementView.ElementProperty, static (PopupElement element) => element);
                 return view;
             });
             UnsupportedPopupElementTemplate = new DataTemplate(() =>

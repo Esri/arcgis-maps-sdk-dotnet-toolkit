@@ -12,6 +12,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <DefineConstants>$(DefineConstants);WINUI</DefineConstants>
     <UseRidGraph>true</UseRidGraph>
+    <PublishAot>True</PublishAot>
   </PropertyGroup>
 
   <ItemGroup>

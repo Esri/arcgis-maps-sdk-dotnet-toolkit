@@ -91,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
                         if (ctrl != null && ctrl is BindableObject bo)
                         {
-                            bo.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent)); // TODO: Should update binding instead
+                            bo.SetBinding(BindableLayout.ItemsSourceProperty, static (FeatureFormView view) => view.FeatureForm?.Elements, source: RelativeBindingSource.TemplatedParent);
                         }
 #elif WPF
                         var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
