@@ -239,7 +239,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 UpdateImage();
                 if (IsLoaded)
-                    InitializeImageRefreshTimer();
+                    StartRefreshTimer(PopupMedia.ImageRefreshInterval);
             }
             else
             {
@@ -317,7 +317,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (PopupMedia?.Type == PopupMediaType.Image)
             {
-                InitializeImageRefreshTimer();
+                StartRefreshTimer(PopupMedia.ImageRefreshInterval);
             }
         }
 
@@ -332,17 +332,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             StopRefreshTimer();
         }
 
-        private void InitializeImageRefreshTimer()
-        {
-            // Start the refresh timer if the interval is greater than zero
-            if (PopupMedia?.ImageRefreshInterval > TimeSpan.Zero)
-            {
-                StartRefreshTimer(PopupMedia.ImageRefreshInterval);
-            }
-        }
-
         private void StartRefreshTimer(TimeSpan interval)
         {
+            if (interval <= TimeSpan.Zero)
+                return;
+
             // Stop any existing timer to avoid double-instantiation
             StopRefreshTimer();
 
