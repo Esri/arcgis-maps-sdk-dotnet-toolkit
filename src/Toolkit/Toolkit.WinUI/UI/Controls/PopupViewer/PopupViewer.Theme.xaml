@@ -177,6 +177,40 @@
         </Setter>
     </Style>
 
+    <Style TargetType="primitives:UtilityAssociationsPopupElementView" >
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid Margin="10,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="20" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Filter.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Grid.Row="1" Text="{Binding Filter.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Filter.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <FontIcon Glyph="&#xE76C;" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="primitives:UtilityAssociationsPopupElementView">
+                    <StackPanel>
+                        <!-- TODO: Title needs to fall back to localized text "Associations" if empty -->
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <ListView ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}"
+                                  x:Name="AssociationsList" SelectionMode="None" IsItemClickEnabled="True" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="controls:PopupViewer" >
         <Setter Property="Template">
             <Setter.Value>
@@ -217,6 +251,11 @@
                                             <primitives:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />
                                         </DataTemplate>
                                     </primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
+                                    <primitives:PopupElementItemsControl.UtilityAssociationsPopupElementTemplate>
+                                        <DataTemplate>  <!--x:DataType="popup:UtilityAssociationsPopupElement"-->
+                                            <primitives:UtilityAssociationsPopupElementView Element="{Binding}" Margin="0,10" />
+                                        </DataTemplate>
+                                    </primitives:PopupElementItemsControl.UtilityAssociationsPopupElementTemplate>
                                 </primitives:PopupElementItemsControl>
                             </ScrollViewer>
                         </Grid>

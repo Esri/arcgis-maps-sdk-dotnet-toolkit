@@ -282,6 +282,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             Launcher.LaunchUriAsync(uri);
         }
+
+        internal void NavigateToItem(Esri.ArcGISRuntime.UtilityNetworks.UtilityAssociationsFilterResult item)
+        {
+            // TODO
+        }
     }
 
     /// <summary>
