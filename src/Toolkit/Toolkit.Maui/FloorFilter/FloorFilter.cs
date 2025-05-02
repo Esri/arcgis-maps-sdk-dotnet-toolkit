@@ -125,8 +125,8 @@ public partial class FloorFilter : TemplatedView
         {
             PART_LevelListView.ItemTemplate = LevelDataTemplate;
             PART_LevelListView.BindingContext = this;
-            PART_LevelListView.SetBinding(CollectionView.ItemsSourceProperty, new Binding(nameof(DisplayLevels), BindingMode.OneWay));
-            PART_LevelListView.SetBinding(CollectionView.SelectedItemProperty, new Binding(nameof(SelectedLevel), BindingMode.TwoWay));
+            PART_LevelListView.SetBinding(CollectionView.ItemsSourceProperty, nameof(DisplayLevels), BindingMode.OneWay);
+            PART_LevelListView.SetBinding(CollectionView.SelectedItemProperty, static (FloorFilter filter) => filter.SelectedLevel, BindingMode.TwoWay);
         }
     }
 

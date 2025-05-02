@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Floor;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -27,11 +26,6 @@ public partial class FloorFilter
     private static readonly DataTemplate DefaultDifferentiatingFacilityDataTemplate;
     private static readonly ControlTemplate DefaultControlTemplate;
 
-
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Floor.FloorLevel.ShortName), "Esri.ArcGISRuntime.Mapping.Floor.FloorLevel", "Esri.ArcGISRuntime")]
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Floor.FloorFacility.Name), "Esri.ArcGISRuntime.Mapping.Floor.FloorFacility", "Esri.ArcGISRuntime")]
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Floor.FloorFacility.Site), "Esri.ArcGISRuntime.Mapping.Floor.FloorFacility", "Esri.ArcGISRuntime")]
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Floor.FloorSite.Name), "Esri.ArcGISRuntime.Mapping.Floor.FloorSite", "Esri.ArcGISRuntime")]
     static FloorFilter()
     {
         DefaultLevelDataTemplate = new DataTemplate(() =>
@@ -56,7 +50,7 @@ public partial class FloorFilter
                 VerticalOptions = LayoutOptions.Fill,
                 InputTransparent = false,
             };
-            textLabel.SetBinding(Label.TextProperty, "ShortName");
+            textLabel.SetBinding(Label.TextProperty, static (FloorLevel level) => level.ShortName);
             containingGrid.Children.Add(textLabel);
             return containingGrid;
         });
@@ -73,7 +67,7 @@ public partial class FloorFilter
                 Margin = new Thickness(8),
                 HorizontalOptions = LayoutOptions.Fill
             };
-            textLabel.SetBinding(Label.TextProperty, "Name");
+            textLabel.SetBinding(Label.TextProperty, static (FloorFacility facility) => facility.Name);
             textLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
 
             containingGrid.Children.Add(textLabel);
@@ -111,7 +105,7 @@ public partial class FloorFilter
                 FontSize = 14,
             };
             titleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
-            titleLabel.SetBinding(Label.TextProperty, "Name");
+            titleLabel.SetBinding(Label.TextProperty, static (FloorFacility facility) => facility.Name);
 
             Label subtitleLabel = new Label
             {
@@ -120,7 +114,7 @@ public partial class FloorFilter
                 VerticalOptions = LayoutOptions.Start,
             };
             subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#2e2e2e"), Color.FromArgb("#aaa"));
-            subtitleLabel.SetBinding(Label.TextProperty, "Site.Name");
+            subtitleLabel.SetBinding(Label.TextProperty, static (FloorFacility facility) => facility.Site?.Name);
             textStack.Children.Add(titleLabel);
             textStack.Children.Add(subtitleLabel);
             Grid.SetRow(titleLabel, 0);
