@@ -32,7 +32,6 @@ public partial class FloorFilter
         {
             Grid containingGrid = new Grid
             {
-                WidthRequest = 48,
                 HeightRequest = 48,
                 InputTransparent = false,
                 CascadeInputTransparent = false,
