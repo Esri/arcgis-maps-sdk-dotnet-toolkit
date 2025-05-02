@@ -79,6 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             var parent = UI.Controls.PopupViewer.GetPopupViewerParent(this);
             parent?.NavigateToItem(item);
+        }
 #endif
 
         /// <summary>
