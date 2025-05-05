@@ -51,7 +51,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <inheritdoc />
+#if WINDOWS_XAML || MAUI
         protected override void OnApplyTemplate()
+#elif WPF
+        public override void OnApplyTemplate()
+#endif
         {
             base.OnApplyTemplate();
             if (_associationsListView is not null)

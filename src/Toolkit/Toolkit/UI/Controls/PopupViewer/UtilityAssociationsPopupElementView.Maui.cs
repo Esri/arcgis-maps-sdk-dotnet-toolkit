@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -43,7 +44,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             // TODO: Build UI
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
-            nameScope.RegisterName(CarouselName, cv);
             return root;
         }
     }
