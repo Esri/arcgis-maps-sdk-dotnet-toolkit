@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Timer = System.Timers.Timer;
 
 #if WPF
 using Esri.ArcGISRuntime.UI;
@@ -43,6 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private double _lastChartSize = 0;
         private const double MaxChartSize = 1024;
+        private Timer? _refreshTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupMediaView"/> class.
@@ -56,6 +58,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             HorizontalOptions = LayoutOptions.Fill;
             VerticalOptions = LayoutOptions.Fill;
 #endif
+            Loaded += OnViewLoaded;
+            Unloaded += OnViewUnloaded;
         }
 
         private void UpdateMedia(Size desiredSize)
@@ -89,13 +93,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
 #if MAUI
-                    if (img.Source is not RuntimeStreamImageSource rsis || rsis.Source?.OriginalString != sourceUrl)
+                    if (img.Source is not RuntimeStreamImageSource rsis || rsis.Source?.OriginalString != sourceUrl || _refreshTimer?.Enabled == true)
 #else
-                    if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
+                    if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl || _refreshTimer?.Enabled == true)
 #endif
                     {
-                        if (TryCreateImageSource(sourceUrl, out var source))
+                        if (TryCreateImageSource(sourceUrl, out var source, _refreshTimer?.Enabled == true))
                         {
+#if WPF
+                            // This code ensures that the height of the MediaView in the Popup Viewer for WPF is maintained
+                            // during refreshes of a dynamic image source for a smooth visual experience. It temporarily sets the height to the current
+                            // actual height of the image while the new image is being downloaded, and resets it to auto once the download is complete.
+                            if (double.IsNaN(img.Height))
+                                img.Height = img.ActualHeight;
+                            if (source is BitmapImage bitmapImage)
+                            {
+                                bitmapImage.DownloadCompleted += (s, e) =>
+                                {
+                                    img.Height = double.NaN;
+                                };
+                            }
+#endif
                             img.Source = source;
                         }
                     }
@@ -111,13 +129,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
                     img.Tag = linkUrl;
 #if WPF
-                    if(img.Cursor != Cursors.Hand)
+                    if (img.Cursor != Cursors.Hand)
                     {
                         img.Cursor = Cursors.Hand;
                         img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
                     }
 #elif WINDOWS_XAML
-                        img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
 #endif
 #endif
                 }
@@ -214,11 +232,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnPopupMediaPropertyChanged()
         {
-            // TODO: Handle PopupMedia.ImageRefreshInterval - Start/Stop/Reset refresh timer if "interval > 0 && IsLoaded==true" + start/stop on load/unload
+            // Stop any existing timer
+            StopRefreshTimer();
             _lastChartSize = 0;
             if (PopupMedia?.Type == PopupMediaType.Image)
             {
                 UpdateImage();
+                if (IsLoaded)
+                    StartRefreshTimer(PopupMedia.ImageRefreshInterval);
             }
             else
             {
@@ -227,7 +248,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         // Also used for embedded images in TextPopupElement views
-        internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source)
+        internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source, bool ignoreImageCache = false)
         {
             if (sourceUri != null && sourceUri.StartsWith("data:image/"))
             {
@@ -261,12 +282,86 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                 source = new RuntimeStreamImageSource(result);
 #else
-                source = new BitmapImage(result);
+                if (ignoreImageCache)
+                {
+                    var newSource = new BitmapImage();
+#if WPF
+                    newSource.BeginInit();
+                    newSource.CacheOption = BitmapCacheOption.OnLoad; // Load the image into memory
+#endif
+                    newSource.CreateOptions = BitmapCreateOptions.IgnoreImageCache; // Disable caching
+                    newSource.UriSource = result;
+#if WPF
+                    newSource.EndInit();
+#endif
+                    source = newSource;
+                }
+                else
+                {
+                    source = new BitmapImage(result);
+                }
 #endif
                 return true;
             }
             source = null;
             return false;
+        }
+
+        private void OnViewLoaded(object? sender,
+#if WINDOWS_XAML
+            RoutedEventArgs
+#else
+            EventArgs
+#endif
+            e)
+        {
+            if (PopupMedia?.Type == PopupMediaType.Image)
+            {
+                StartRefreshTimer(PopupMedia.ImageRefreshInterval);
+            }
+        }
+
+        private void OnViewUnloaded(object? sender,
+#if WINDOWS_XAML
+            RoutedEventArgs
+#else
+            EventArgs
+#endif
+            e)
+        {
+            StopRefreshTimer();
+        }
+
+        private void StartRefreshTimer(TimeSpan interval)
+        {
+            if (interval <= TimeSpan.Zero)
+                return;
+
+            // Stop any existing timer to avoid double-instantiation
+            StopRefreshTimer();
+
+            // Initialize and start a new timer
+            _refreshTimer = new Timer(interval.TotalMilliseconds);
+            _refreshTimer.Elapsed += OnRefreshTimerElapsed;
+            _refreshTimer.AutoReset = true;
+            _refreshTimer.Start();
+        }
+
+        private void StopRefreshTimer()
+        {
+            if (_refreshTimer != null)
+            {
+                _refreshTimer.Stop();
+                _refreshTimer.Elapsed -= OnRefreshTimerElapsed;
+                _refreshTimer.Dispose();
+                _refreshTimer = null;
+            }
+        }
+
+        private void OnRefreshTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            // Ensure this runs on the UI thread
+            this.Dispatch(UpdateImage);
         }
     }
 }

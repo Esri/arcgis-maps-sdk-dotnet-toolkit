@@ -11,7 +11,7 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Border  x:Name="ApiKeyWindow" Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" IsVisible="false">
+        <Grid x:Name="ApiKeyWindow" Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" IsVisible="false">
             <Grid HorizontalOptions="Center" VerticalOptions="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -49,6 +49,6 @@
                     </VerticalStackLayout>
                 </Border>
             </Grid>
-        </Border>
+        </Grid>
     </Grid>
 </ContentPage>
