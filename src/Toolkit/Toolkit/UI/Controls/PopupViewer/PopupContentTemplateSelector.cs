@@ -9,16 +9,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
+    /// <summary>
+    /// Template selector for selecting the correct datatemplate for each datatype displayed on each page.
+    /// </summary>
     public partial class PopupContentTemplateSelector : DataTemplateSelector
     {
+        /// <summary>
+        /// Initializes an instance of the <see cref="PopupContentTemplateSelector"/> class.
+        /// </summary>
         public PopupContentTemplateSelector()
         {
         }
 
+        /// <inheritdoc />
 #if WINDOWS_XAML
-        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+        protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
 #else
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
 #endif
         {
             if (item is Esri.ArcGISRuntime.Mapping.Popups.Popup)
@@ -32,9 +39,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         }
 
-        public DataTemplate PopupTemplate { get; set; }
+        /// <summary>
+        /// Gets or sets the template used for rendering a <see cref="Mapping.Popups.Popup"/>
+        /// </summary>
+        public DataTemplate? PopupTemplate { get; set; }
 
-        public DataTemplate UtilityAssociationsFilterResultTemplate { get; set; }
+        /// <summary>
+        /// Gets or sets the template used for rendering a <see cref="UtilityNetworks.UtilityAssociationsFilterResult"/>
+        /// </summary>
+        public DataTemplate? UtilityAssociationsFilterResultTemplate { get; set; }
     }
 }
 #endif

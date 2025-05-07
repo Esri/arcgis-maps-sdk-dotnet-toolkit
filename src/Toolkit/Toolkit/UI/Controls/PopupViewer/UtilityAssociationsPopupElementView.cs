@@ -21,6 +21,7 @@ using Esri.ArcGISRuntime.UtilityNetworks;
 
 #if WPF
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xaml;
@@ -69,14 +70,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _associationsListView = listView;
 #if WINDOWS_XAML
                 _associationsListView.ItemClick += AssociationsListView_ItemClick;
+#elif WPF
+                _associationsListView.SelectionChanged += AssociationsListView_SelectionChanged;
 #endif
             }
         }
 
-#if WINDOWS_XAML
+#if !MAUI
+#if WPF
+        private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = ((ListView)sender).SelectedItem;
+            ((ListView)sender).SelectedItem = null; // Clear selection
+#elif WINDOWS_XAML
         private void AssociationsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as UtilityAssociationsFilterResult;
+#endif
             if (item is null)
             {
                 return;

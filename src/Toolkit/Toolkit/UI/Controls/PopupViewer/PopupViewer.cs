@@ -100,9 +100,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isDirty = false;
         private object _isDirtyLock = new object();
 
-#if MAUI
-        [System.Diagnostics.CodeAnalysis.DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Popups.Popup.EvaluatedElements), "Esri.ArcGISRuntime.Mapping.Popups.Popup", "Esri.ArcGISRuntime")]
-#endif
         private void InvalidatePopup()
         {
             lock (_isDirtyLock)
@@ -131,23 +128,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     if (Popup != null)
                     {
-                        // TODO: This should be done via INPC instead
-                        var expressions = await Popup.EvaluateExpressionsAsync();
-#if MAUI
-                        var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
-                        if (ctrl != null && ctrl is BindableObject bo)
-                        {
-                            bo.SetBinding(BindableLayout.ItemsSourceProperty, static (PopupViewer viewer) => viewer.Popup?.EvaluatedElements, source: RelativeBindingSource.TemplatedParent);
-                        }
-#else
-                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
-                        var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
-#if WPF
-                        binding?.UpdateTarget();
-#elif WINDOWS_XAML
-                        ctrl?.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Path = new PropertyPath("Popup.EvaluatedElements"), Source = this });
-#endif
-#endif
+                        _ = await Popup.EvaluateExpressionsAsync();
                     }
                 }
                 catch

@@ -23,8 +23,12 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 #elif WINUI
 using Microsoft.UI.Xaml.Media.Animation;
+using Key = Windows.System.VirtualKey;
 #elif WINDOWS_UWP
 using Windows.UI.Xaml.Media.Animation;
+using Key = Windows.System.VirtualKey;
+#elif MAUI
+using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 #endif
 
 
@@ -48,8 +52,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             //ControlTemplate = DefaultControlTemplate;
 #else
             DefaultStyleKey = typeof(NavigationSubView);
+            //this.KeyDown += NavigationSubView_KeyDown;
 #endif
         }
+
+//#if !MAUI
+//#if WINDOWS_XAML
+//        private void NavigationSubView_KeyDown(object sender, KeyRoutedEventArgs e)
+//#elif WPF
+//        private void NavigationSubView_KeyDown(object sender, KeyEventArgs e)
+//#endif
+//        {
+//            if (e.Key == Key.Back)
+//            {
+//                GoBack();
+//            }
+//            else if (e.Key == Key.Home)
+//            {
+//                GoUp();
+//            }
+//        }
+//#endif
 
         private void UpdateView()
         {
@@ -57,6 +80,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("NavigateBack") is FrameworkElement back)
             {
                 back.Visibility = NavigationStack.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+#if WPF
+                back.Margin = NavigationStack.Count > 1 ? new Thickness() : new Thickness(0, 0, 10, 0);
+#endif
             }
             if (GetTemplateChild("NavigateUp") is FrameworkElement up)
             {
@@ -105,7 +131,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateView();
         }
 
-        private async void GoBack()
+        private void GoBack()
         {
             if (NavigationStack.Count == 0)
                 return;
@@ -128,6 +154,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     sv.ChangeView(null, lastOffset, null, true);
                 };
                 sv.LayoutUpdated += handler;
+#elif WPF
+                ScrollChangedEventHandler? handler = null;
+                handler = (s, e) =>
+                {
+                    if (e.ExtentHeight >= lastOffset)
+                    {
+                        sv.ScrollChanged -= handler;
+                        sv.ScrollToVerticalOffset(lastOffset);
+                    }
+                };
+                sv.ScrollChanged += handler; 
 #endif
             }
             SetContent(content);
