@@ -90,6 +90,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.OnApplyTemplate();
             InvalidatePopup();
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: Popup, true);
+            }
         }
 
 
@@ -127,6 +131,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     if (Popup != null)
                     {
+                        // TODO: This should be done via INPC instead
                         var expressions = await Popup.EvaluateExpressionsAsync();
 #if MAUI
                         var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
@@ -197,14 +202,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 }
             }
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: Popup, true);
+            }
             InvalidatePopup();
-#if MAUI
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
-#elif WPF
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
-#elif WINDOWS_XAML
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ChangeView(null, 0, null, disableAnimation: true);
-#endif
         }
 
         /// <summary>
@@ -283,9 +285,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Launcher.LaunchUriAsync(uri);
         }
 
-        internal void NavigateToItem(Esri.ArcGISRuntime.UtilityNetworks.UtilityAssociationsFilterResult item)
+        internal void NavigateToItem(object item)
         {
-            // TODO
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: item);
+            }
         }
     }
 
