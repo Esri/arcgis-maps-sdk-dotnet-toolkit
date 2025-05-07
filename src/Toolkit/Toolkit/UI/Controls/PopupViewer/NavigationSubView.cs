@@ -29,6 +29,8 @@ using Windows.UI.Xaml.Media.Animation;
 using Key = Windows.System.VirtualKey;
 #elif MAUI
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
+using ContentControl = Microsoft.Maui.Controls.ContentView;
+using FrameworkElement = Microsoft.Maui.Controls.View;
 #endif
 
 
@@ -49,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public NavigationSubView()
         {
 #if MAUI
-            //ControlTemplate = DefaultControlTemplate;
+            ControlTemplate = DefaultControlTemplate;
 #else
             DefaultStyleKey = typeof(NavigationSubView);
             //this.KeyDown += NavigationSubView_KeyDown;
@@ -76,19 +78,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateView()
         {
-#if !MAUI
             if (GetTemplateChild("NavigateBack") is FrameworkElement back)
             {
+#if MAUI
+                back.IsVisible = NavigationStack.Count > 0;
+#else
                 back.Visibility = NavigationStack.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+#endif
 #if WPF
                 back.Margin = NavigationStack.Count > 1 ? new Thickness() : new Thickness(0, 0, 10, 0);
 #endif
             }
             if (GetTemplateChild("NavigateUp") is FrameworkElement up)
             {
+#if MAUI
+                up.IsVisible = NavigationStack.Count > 1;
+#else
                 up.Visibility = NavigationStack.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
-            }
 #endif
+            }
         }
 
         private Stack<object> NavigationStack = new Stack<object>();
@@ -103,7 +111,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 NavigationStack.Push(Content);
             if (GetTemplateChild("ScrollViewer") is ScrollViewer sv)
             {
+#if MAUI
+                lastOffset = sv.ScrollY;
+#else
                 lastOffset = sv.VerticalOffset;
+#endif
             }
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection();
@@ -193,20 +205,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
-#if !MAUI
             if (GetTemplateChild("NavigateBack") is Button backButton)
             {
+#if MAUI
+                backButton.Clicked += (s, e) => GoBack();
+#else
                 backButton.Click += (s, e) => GoBack();
+#endif
             }
             if (GetTemplateChild("NavigateUp") is Button upButton)
             {
+#if MAUI
+                upButton.Clicked += (s, e) => GoUp();
+#else
                 upButton.Click += (s, e) => GoUp();
+#endif
             }
             if (GetTemplateChild("Header") is ContentControl cc1)
                 cc1.Content = Content;
             if (GetTemplateChild("Content") is ContentControl cc2)
                 cc2.Content = Content;
-#endif
             UpdateView();
         }
 

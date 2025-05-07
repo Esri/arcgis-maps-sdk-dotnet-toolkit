@@ -1,5 +1,4 @@
-﻿#if !MAUI
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,6 +23,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
+#elif MAUI
+        protected override DataTemplate? OnSelectTemplate(object item, BindableObject container)
 #else
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
 #endif
@@ -34,6 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return UtilityAssociationsFilterResultTemplate;
 #if WINDOWS_XAML
             return base.SelectTemplateCore(item, container);
+#elif MAUI
+            return null;
 #else
             return base.SelectTemplate(item, container);
 #endif
@@ -50,4 +53,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public DataTemplate? UtilityAssociationsFilterResultTemplate { get; set; }
     }
 }
-#endif

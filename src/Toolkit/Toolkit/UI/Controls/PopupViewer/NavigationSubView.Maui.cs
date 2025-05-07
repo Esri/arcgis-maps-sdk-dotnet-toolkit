@@ -15,11 +15,50 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
     public partial class NavigationSubView : TemplatedView
     {
+        private static readonly ControlTemplate DefaultControlTemplate;
+        private ContentPresenter? _contentView;
+
+        static NavigationSubView()
+        {
+            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+        }
+
+        private static object BuildDefaultTemplate()
+        {
+            var root = new Grid();
+            root.SetBinding(Grid.BackgroundProperty, static (NavigationSubView view) => view.Background, source: RelativeBindingSource.TemplatedParent);
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+            HorizontalStackLayout topheader = new HorizontalStackLayout();
+            var navigateBack = new Button() { Text = "Back" };
+            var navigateUp = new Button() { Text = "Back" };
+            topheader.Children.Add(navigateBack);
+            topheader.Children.Add(navigateUp);
+            ContentControl header = new ContentControl() { VerticalOptions = new LayoutOptions(LayoutAlignment.Fill, true) };
+            header.SetBinding(ContentControl.ContentTemplateSelectorProperty, static (NavigationSubView view) => view.HeaderTemplateSelector, source: RelativeBindingSource.TemplatedParent);
+            topheader.Children.Add(header);
+            root.Children.Add(topheader);
+            ScrollView scrollview = new ScrollView();
+            scrollview.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (NavigationSubView viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
+            Grid.SetRow(scrollview, 1);
+            ContentControl content = new ContentControl() { VerticalOptions = new LayoutOptions(LayoutAlignment.Fill, true) };
+            content.SetBinding(ContentControl.ContentTemplateSelectorProperty, static (NavigationSubView view) => view.ContentTemplateSelector, source: RelativeBindingSource.TemplatedParent);
+            scrollview.Content = content;
+            root.Children.Add(scrollview);
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName("NavigateBack", navigateBack);
+            nameScope.RegisterName("NavigateUp", navigateUp);
+            nameScope.RegisterName("Header", header);
+            nameScope.RegisterName("Content", content);
+            return root;
+        }
     }
 }
 #endif
