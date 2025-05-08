@@ -82,7 +82,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 roottitle.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 return roottitle;
             });
-            //TODO: selector.UtilityAssociationsFilterResultTemplate
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                VerticalStackLayout root = new VerticalStackLayout();
+                Label title = new Label();
+                title.Style = GetPopupViewerHeaderStyle();
+                title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
+                title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(title);
+                Label desc = new Label();
+                desc.Style = GetPopupViewerCaptionStyle();
+                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
+                desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(desc);
+                return root;
+            });
             return selector;
         }
 
@@ -98,10 +112,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 };
                 BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
                 itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (Popup popup) => popup?.EvaluatedElements);
-                //TODO: Click to navigate here
                 return itemsView;
             });
-            //TODO: selector.UtilityAssociationsFilterResultTemplate
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                CollectionView itemsView = new CollectionView()
+                {
+                    Margin = new Thickness(0, 10),
+                    ItemTemplate = new DataTemplate(() =>
+                    {
+                        var grid = new Grid();
+                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+                        Label name = new Label();
+                        name.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name);
+                        grid.Children.Add(name);
+                        //TODO: Put count inside a circle
+                        Label count = new Label();
+                        count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count);
+                        Grid.SetColumn(count, 1);
+                        grid.Children.Add(count);
+                        return grid;
+                    })
+                };
+                itemsView.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.GroupResults);
+                return itemsView;
+            });
             return selector;
         }
 

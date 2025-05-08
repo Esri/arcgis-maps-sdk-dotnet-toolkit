@@ -33,6 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static DataTemplate DefaultMediaPopupElementTemplate;
         private static DataTemplate DefaultFieldsPopupElementTemplate;
         private static DataTemplate DefaultAttachmentsPopupElementTemplate;
+        private static DataTemplate DefaultUtilityAssociationsPopupElementTemplate;
         private static DataTemplate UnsupportedPopupElementTemplate;
 
         static PopupElementTemplateSelector()
@@ -62,6 +63,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 view.SetBinding(AttachmentsPopupElementView.ElementProperty, static (PopupElement element) => element);
                 return view;
             });
+
+            DefaultUtilityAssociationsPopupElementTemplate = new DataTemplate(() =>
+            {
+                var view = new UtilityAssociationsPopupElementView() { Margin = new Thickness(0, 10) };
+                view.SetBinding(UtilityAssociationsPopupElementView.ElementProperty, static (PopupElement element) => element);
+                return view;
+            });
             UnsupportedPopupElementTemplate = new DataTemplate(() =>
             {
                 return new Grid() { IsVisible = false };
@@ -77,6 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             MediaPopupElementTemplate = DefaultMediaPopupElementTemplate;
             FieldsPopupElementTemplate = DefaultFieldsPopupElementTemplate;
             AttachmentsPopupElementTemplate = DefaultAttachmentsPopupElementTemplate;
+            UtilityAssociationsPopupElementTemplate = DefaultUtilityAssociationsPopupElementTemplate;
         }
 
         /// <inheritdoc />
@@ -97,6 +106,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             else if (item is AttachmentsPopupElement)
             {
                 return AttachmentsPopupElementTemplate;
+            }
+            else if (item is UtilityAssociationsPopupElement)
+            {
+                return UtilityAssociationsPopupElementTemplate;
             }
             /* Excluded for now - Pending UI Experience design
             else if(item is RelationshipPopupElement)
@@ -135,6 +148,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         /// </summary>
         /// <seealso cref="AttachmentsPopupElementView"/>
         public DataTemplate AttachmentsPopupElementTemplate { get; set; }
+
+        /// <summary>
+        /// Template used for rendering a <see cref="UtilityAssociationsPopupElement"/>.
+        /// </summary>
+        /// <seealso cref="UtilityAssociationsPopupElement"/>
+        public DataTemplate UtilityAssociationsPopupElementTemplate { get; set; }
 
         /* Excluded for now - Pending UI Experience design
         /// <summary>

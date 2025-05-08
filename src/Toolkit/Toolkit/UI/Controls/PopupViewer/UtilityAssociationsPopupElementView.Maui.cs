@@ -40,11 +40,85 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
-            StackLayout root = new StackLayout();
-            // TODO: Build UI
+            VerticalStackLayout root = new VerticalStackLayout();
+            Label roottitle = new Label();
+            roottitle.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            roottitle.Style = PopupViewer.GetPopupViewerTitleStyle();
+            root.Add(roottitle);
+            Label rootcaption = new Label();
+            rootcaption.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
+            rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
+            root.Add(rootcaption);
+            root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0, 5) });
+            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
+            cv.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.AssociationsFilterResults, source: RelativeBindingSource.TemplatedParent);
+            cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
+            root.Add(cv);
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName("AssociationsList", cv);
             return root;
+        }
+
+
+        private static object BuildDefaultItemTemplate()
+        {
+            Grid layout = new Grid() { Padding = new Thickness(10, 0, 0, 0) };
+            TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
+            itemTapGesture.Tapped += Result_Tapped;
+            layout.GestureRecognizers.Add(itemTapGesture);
+            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            layout.RowDefinitions.Add(new RowDefinition(20));
+            layout.RowDefinitions.Add(new RowDefinition(20));
+
+            Label title = new Label();
+            title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title);
+            title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title, converter: Internal.EmptyToFalseConverter.Instance);
+            title.Style = PopupViewer.GetPopupViewerTitleStyle();
+            layout.Add(title);
+            Label description = new Label();
+            description.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Description);
+            description.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Description, converter: Internal.EmptyToFalseConverter.Instance);
+            description.Style = PopupViewer.GetPopupViewerCaptionStyle();
+
+            Grid.SetRow(description, 1);
+            layout.Add(description);
+            Image image = new Image() { WidthRequest = 18, HeightRequest = 18 };
+            image.Source = new FontImageSource() { Glyph = ((char)0xE078).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
+            Grid.SetColumn(image, 1);
+            Grid.SetRowSpan(image, 2);
+            layout.Add(image);
+
+            Border root = new Border() { StrokeThickness = 0, Content = layout };
+            return root;
+        }
+
+
+        private PopupViewer? GetPopupViewerParent()
+        {
+            var parent = this.Parent;
+            while (parent is not null && parent is not PopupViewer popup)
+            {
+                parent = parent.Parent;
+            }
+            return parent as PopupViewer;
+        }
+
+        private static void Result_Tapped(object? sender, EventArgs e)
+        {
+            var cell = sender as View;
+            Element? parent = cell?.Parent;
+            while (parent is View && parent is not UtilityAssociationsPopupElementView)
+            {
+                parent = parent.Parent;
+            }
+            if (parent is UtilityAssociationsPopupElementView a && cell?.BindingContext is UtilityNetworks.UtilityAssociationsFilterResult result)
+            {
+                a.GetPopupViewerParent()?.NavigateToItem(result);
+            }
         }
     }
 }

@@ -27,6 +27,8 @@ using System.Windows.Media.Imaging;
 using System.Xaml;
 #elif WINDOWS_XAML
 using Windows.Foundation;
+#elif MAUI
+using ItemsControl = Microsoft.Maui.Controls.CollectionView;
 #endif
 
 #if MAUI
@@ -118,12 +120,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if(Element.AssociationsFilterResults.Count == 0)
                 {
                     await Element.FetchAssociationsFilterResultsAsync();
-#if !MAUI
                     if (GetTemplateChild("AssociationsList") is ItemsControl itemsView)
                     {
                         itemsView.ItemsSource = Element.AssociationsFilterResults; // Refresh the collection
                     }
-#endif
                 }
             }
         }
