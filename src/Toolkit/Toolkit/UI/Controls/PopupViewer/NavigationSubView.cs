@@ -54,27 +54,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             ControlTemplate = DefaultControlTemplate;
 #else
             DefaultStyleKey = typeof(NavigationSubView);
-            //this.KeyDown += NavigationSubView_KeyDown;
 #endif
         }
-
-//#if !MAUI
-//#if WINDOWS_XAML
-//        private void NavigationSubView_KeyDown(object sender, KeyRoutedEventArgs e)
-//#elif WPF
-//        private void NavigationSubView_KeyDown(object sender, KeyEventArgs e)
-//#endif
-//        {
-//            if (e.Key == Key.Back)
-//            {
-//                GoBack();
-//            }
-//            else if (e.Key == Key.Home)
-//            {
-//                GoUp();
-//            }
-//        }
-//#endif
 
         private void UpdateView()
         {
@@ -99,24 +80,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Stack<object> NavigationStack = new Stack<object>();
-        double lastOffset; // TODO: Should be in a stack too
+        private Stack<Tuple<object,double>> NavigationStack = new Stack<Tuple<object, double>>();
+        
         internal void Navigate(object? content, bool clearNavigationStack = false)
         {
             if (content is null && !clearNavigationStack)
                 throw new ArgumentNullException(nameof(content));
-            if (clearNavigationStack)
-                NavigationStack.Clear();
-            else if (Content is not null) // Move current content into the stack
-                NavigationStack.Push(Content);
+
+            double offset = 0;
             if (GetTemplateChild("ScrollViewer") is ScrollViewer sv)
             {
 #if MAUI
-                lastOffset = sv.ScrollY;
+                offset = sv.ScrollY;
 #else
-                lastOffset = sv.VerticalOffset;
+                offset = sv.VerticalOffset;
 #endif
             }
+
+
+            if (clearNavigationStack)
+                NavigationStack.Clear();
+            else if (Content is not null) // Move current content into the stack
+                NavigationStack.Push(new Tuple<object, double>(Content, offset));
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection();
             if (NavigationStack.Count > 0)
@@ -147,7 +132,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (NavigationStack.Count == 0)
                 return;
-            var content = NavigationStack.Pop();
+            var previousPage = NavigationStack.Pop();
+            var content = previousPage.Item1;
+            var lastOffset = previousPage.Item2;
 
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection
