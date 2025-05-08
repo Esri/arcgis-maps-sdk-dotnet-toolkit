@@ -118,6 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
                 UpdateVisibility();
             }
+            ResetValidationState();
         }
 
         private void OnValuePropertyChanged()
@@ -178,7 +179,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("ErrorLabel") is TextBlock tb)
             {
                 tb.Text = errMessage ?? string.Empty;
+#if MAUI
+                tb.IsVisible = !string.IsNullOrEmpty(errMessage) && _hadFocus;
+#else
+                tb.Visibility = !string.IsNullOrEmpty(errMessage) && _hadFocus ? Visibility.Visible : Visibility.Collapsed;
+#endif
             }
+        }
+
+        private bool _hadFocus = false;
+
+        internal void OnGotFocus()
+        {
+            if (!_hadFocus)
+            {
+                _hadFocus = true;
+                UpdateErrorMessages();
+            }
+        }
+
+        internal void ResetValidationState()
+        {
+            _hadFocus = false;
+            UpdateErrorMessages();
+            foreach (var child in FeatureFormView.GetDescendentsOfType<IInputViewFocusable>(this))
+                child.ResetFocusState();
         }
 
         /// <summary>
@@ -332,6 +357,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
             DependencyProperty.Register(nameof(TextFormElementTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 #endif
-        
+    }
+
+    internal interface IInputViewFocusable
+    {
+        void ResetFocusState();
     }
 }
