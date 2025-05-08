@@ -22,7 +22,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     public partial class NavigationSubView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        private ContentPresenter? _contentView;
 
         static NavigationSubView()
         {
