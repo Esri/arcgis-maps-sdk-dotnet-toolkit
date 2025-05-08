@@ -25,14 +25,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (_selector != null)
             {
                 _selector.SelectionChanged -= Selector_SelectionChanged;
+                _selector.GotFocus -= Selector_GotFocus;
             }
             _selector = GetTemplateChild("Selector") as Selector;
             if(_selector != null)
             {
                 _selector.SelectionChanged += Selector_SelectionChanged;
+                _selector.GotFocus += Selector_GotFocus;
             }
             UpdateItems();
         }
+
+        private void Selector_GotFocus(object sender, RoutedEventArgs e) => UI.Controls.FeatureFormView.GetParent<FieldFormElementView>(this)?.OnGotFocus();
 
         private void Selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

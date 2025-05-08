@@ -23,6 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             Switch toggleSwitch = new Switch();
             toggleSwitch.SetBinding(Switch.IsToggledProperty, static (SwitchFormInputView view) => view.IsChecked, source: RelativeBindingSource.TemplatedParent);
+            toggleSwitch.Focused += static (s,e) => FeatureFormView.GetParent<FieldFormElementView>(s as Element)?.OnGotFocus();
             INameScope nameScope = new NameScope();
             nameScope.RegisterName(SwitchViewName, toggleSwitch);
 #if WINDOWS

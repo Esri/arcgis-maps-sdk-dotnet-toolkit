@@ -54,15 +54,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #endif
 
-        internal static UI.Controls.FeatureFormView? GetFeatureFormViewParent(DependencyObject? child)
+        internal static UI.Controls.FeatureFormView? GetFeatureFormViewParent(DependencyObject? child) => GetParent<FeatureFormView>(child);
+
+        internal static T? GetParent<T>(DependencyObject? child) where T : FrameworkElement
         {
-            if (child is null) return null;
+            if (child is null) return default(T);
             var parent = VisualTreeHelper.GetParent(child);
-            while (parent is not null && parent is not UI.Controls.FeatureFormView view)
+            while (parent is not null && parent is not T view)
             {
                 parent = VisualTreeHelper.GetParent(parent);
             }
-            return parent as UI.Controls.FeatureFormView;
+            return parent as T;
+        }
+
+        internal static IEnumerable<T> GetDescendentsOfType<T>(FrameworkElement root)
+        {
+            if (root is null)
+                yield break;
+
+            for(int i = 0; i<VisualTreeHelper.GetChildrenCount(root);i++)
+            {
+                var child = VisualTreeHelper.GetChild(root, i);
+                if (child is FrameworkElement frameworkElement)
+                {
+                    if (frameworkElement is T targetElement)
+                        yield return targetElement;
+
+                    foreach (var descendant in GetDescendentsOfType<T>(frameworkElement))
+                        yield return descendant;
+                }
+            }
         }
     }
 }

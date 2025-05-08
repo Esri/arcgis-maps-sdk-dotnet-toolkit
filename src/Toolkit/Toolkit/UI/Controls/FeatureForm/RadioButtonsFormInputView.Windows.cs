@@ -59,6 +59,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 ParentSelector?.RaiseCheckedEvent(this, true);
             }
 #endif
+
+            protected override void OnGotFocus(RoutedEventArgs e)
+                => UI.Controls.FeatureFormView.GetParent<FieldFormElementView>(this)?.OnGotFocus();
+
             internal RadioButtonsFormInputView? ParentSelector => ItemsControl.ItemsControlFromItemContainer(this) as RadioButtonsFormInputView;
         }
 
