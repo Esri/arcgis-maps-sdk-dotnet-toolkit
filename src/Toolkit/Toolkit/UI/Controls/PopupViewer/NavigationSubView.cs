@@ -177,6 +177,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     }
                 };
                 sv.ScrollChanged += handler; 
+#elif MAUI
+                EventHandler? handler = null;
+                handler = (s, e) =>
+                {
+                    sv.Content.SizeChanged -= handler;
+                    _ = sv.ScrollToAsync(0, lastOffset, false);
+                };
+                sv.Content.SizeChanged += handler;
 #endif
             }
             SetContent(content);

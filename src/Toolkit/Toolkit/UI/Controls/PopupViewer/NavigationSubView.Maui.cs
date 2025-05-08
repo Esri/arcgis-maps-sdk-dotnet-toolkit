@@ -36,8 +36,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             HorizontalStackLayout topheader = new HorizontalStackLayout();
-            var navigateBack = new Button() { Text = "Back" };
-            var navigateUp = new Button() { Text = "Back" };
+            var navigateBack = new Button() { Text = ((char)0xE077).ToString(), FontFamily = "calcite-ui-icons-24", BackgroundColor = Colors.Transparent, BorderWidth = 0 };
+            navigateBack.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
+            var navigateUp = new Button() { Text = ((char)0xE079).ToString(), FontFamily = "calcite-ui-icons-24", BackgroundColor = Colors.Transparent, BorderWidth = 0 };
+            navigateUp.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
             topheader.Children.Add(navigateBack);
             topheader.Children.Add(navigateUp);
             ContentControl header = new ContentControl() { VerticalOptions = new LayoutOptions(LayoutAlignment.Fill, true) };
@@ -57,6 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("NavigateUp", navigateUp);
             nameScope.RegisterName("Header", header);
             nameScope.RegisterName("Content", content);
+            nameScope.RegisterName("ScrollViewer", scrollview);
             return root;
         }
     }
