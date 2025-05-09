@@ -90,15 +90,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.OnApplyTemplate();
             InvalidatePopup();
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: Popup, true);
+            }
         }
 
 
         private bool _isDirty = false;
         private object _isDirtyLock = new object();
 
-#if MAUI
-        [System.Diagnostics.CodeAnalysis.DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Popups.Popup.EvaluatedElements), "Esri.ArcGISRuntime.Mapping.Popups.Popup", "Esri.ArcGISRuntime")]
-#endif
         private void InvalidatePopup()
         {
             lock (_isDirtyLock)
@@ -127,22 +128,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     if (Popup != null)
                     {
-                        var expressions = await Popup.EvaluateExpressionsAsync();
-#if MAUI
-                        var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
-                        if (ctrl != null && ctrl is BindableObject bo)
-                        {
-                            bo.SetBinding(BindableLayout.ItemsSourceProperty, static (PopupViewer viewer) => viewer.Popup?.EvaluatedElements, source: RelativeBindingSource.TemplatedParent);
-                        }
-#else
-                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
-                        var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
-#if WPF
-                        binding?.UpdateTarget();
-#elif WINDOWS_XAML
-                        ctrl?.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Path = new PropertyPath("Popup.EvaluatedElements"), Source = this });
-#endif
-#endif
+                        _ = await Popup.EvaluateExpressionsAsync();
                     }
                 }
                 catch
@@ -197,14 +183,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 }
             }
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: Popup, true);
+            }
             InvalidatePopup();
-#if MAUI
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
-#elif WPF
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
-#elif WINDOWS_XAML
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ChangeView(null, 0, null, disableAnimation: true);
-#endif
         }
 
         /// <summary>
@@ -281,6 +264,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     return;
             }
             Launcher.LaunchUriAsync(uri);
+        }
+
+        internal void NavigateToItem(object item)
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: item);
+            }
         }
     }
 
