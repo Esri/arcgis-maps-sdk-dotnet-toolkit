@@ -25,6 +25,11 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
+    [TemplatePart(Name = "NavigateBack", Type = typeof(Button))]
+    [TemplatePart(Name = "NavigateUp", Type = typeof(Button))]
+    [TemplatePart(Name = "Header", Type = typeof(ContentControl))]
+    [TemplatePart(Name = "Content", Type = typeof(ContentControl))]
+    [TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
     public partial class NavigationSubView : Control
     {
 #if WINDOWS_XAML
