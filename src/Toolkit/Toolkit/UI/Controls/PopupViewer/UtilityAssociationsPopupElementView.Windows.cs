@@ -15,18 +15,7 @@
 //  ******************************************************************************/
 
 #if WPF || WINDOWS_XAML
-using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
-using System.IO;
-#if WPF
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Xaml;
-#elif WINDOWS_XAML
-using Windows.Foundation;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -38,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
 
         /// <summary>
-        /// Gets or sets the template for popup media items.
+        /// Gets or sets the template for UtilityAssociationsFilterResult items.
         /// </summary>
         public DataTemplate ItemTemplate
         {

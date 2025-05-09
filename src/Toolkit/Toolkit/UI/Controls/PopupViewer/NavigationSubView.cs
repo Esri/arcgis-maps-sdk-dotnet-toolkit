@@ -14,13 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
 #if WPF
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Navigation;
 #elif WINUI
 using Microsoft.UI.Xaml.Media.Animation;
 using Key = Windows.System.VirtualKey;

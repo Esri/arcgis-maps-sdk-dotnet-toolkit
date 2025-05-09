@@ -16,7 +16,6 @@
 
 #if MAUI
 using Microsoft.Maui.Controls.Internals;
-using Esri.ArcGISRuntime.Mapping.Popups;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -41,16 +40,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             VerticalStackLayout root = new VerticalStackLayout();
-            Label roottitle = new Label();
-            roottitle.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
-            roottitle.Style = PopupViewer.GetPopupViewerTitleStyle();
-            root.Add(roottitle);
-            Label rootcaption = new Label();
-            rootcaption.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
-            rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
-            rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
-            root.Add(rootcaption);
+            Label title = new Label();
+            title.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
+            title.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            title.Style = PopupViewer.GetPopupViewerTitleStyle();
+            root.Add(title);
+            Label description = new Label();
+            description.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
+            description.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            description.Style = PopupViewer.GetPopupViewerCaptionStyle();
+            root.Add(description);
             root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0, 5) });
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.AssociationsFilterResults, source: RelativeBindingSource.TemplatedParent);
@@ -61,7 +60,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("AssociationsList", cv);
             return root;
         }
-
 
         private static object BuildDefaultItemTemplate()
         {

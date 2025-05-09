@@ -15,14 +15,8 @@
 //  ******************************************************************************/
 #if WPF || WINDOWS_XAML
 
-using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
-#if WPF
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Navigation;
-#elif WINUI
+#if WINUI
 using Microsoft.UI.Xaml.Media.Animation;
 #elif WINDOWS_UWP
 using Windows.UI.Xaml.Media.Animation;

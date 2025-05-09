@@ -16,18 +16,9 @@
 
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UtilityNetworks;
 
-#if WPF
-using System.IO;
-using System.Linq;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Xaml;
-#elif WINDOWS_XAML
-using Windows.Foundation;
-#elif MAUI
+#if MAUI
 using ItemsControl = Microsoft.Maui.Controls.CollectionView;
 #endif
 
@@ -99,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 
         /// <summary>
-        /// Gets or sets the MediaPopupElement.
+        /// Gets or sets the UtilityAssociationsPopupElement.
         /// </summary>
         public UtilityAssociationsPopupElement? Element
         {

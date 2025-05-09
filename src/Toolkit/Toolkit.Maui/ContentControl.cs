@@ -1,8 +1,4 @@
 ﻿#if MAUI
-using System;
-using System.ComponentModel;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Layouts;
 using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
