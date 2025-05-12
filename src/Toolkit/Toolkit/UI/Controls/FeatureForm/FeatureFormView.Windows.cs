@@ -72,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (root is null)
                 yield break;
 
-            for(int i = 0; i<VisualTreeHelper.GetChildrenCount(root);i++)
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
             {
                 var child = VisualTreeHelper.GetChild(root, i);
                 if (child is FrameworkElement frameworkElement)
