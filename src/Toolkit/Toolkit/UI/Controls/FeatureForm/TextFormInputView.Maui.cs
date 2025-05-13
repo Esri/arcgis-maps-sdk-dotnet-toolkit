@@ -46,6 +46,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(horizontalStackLayout, 2);
             root.Add(horizontalStackLayout);
             Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
+#if __IOS__
+            errorBorder.Stroke = new SolidColorBrush(Colors.Gray);
+            errorBorder.IsVisible = true;
+#endif
             Grid.SetColumnSpan(errorBorder, 2);
             root.Add(errorBorder);
             Entry textInput = new Entry();
@@ -81,23 +85,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             base.OnApplyTemplate();
             if (_textLineInput != null)
             {
+                _textLineInput.Focused -= TextInput_Focused;
                 _textLineInput.Unfocused -= TextInput_Unfocused;
                 _textLineInput.TextChanged -= TextInput_TextChanged;
             }
             if (_textAreaInput != null)
             {
+                _textAreaInput.Focused -= TextInput_Focused;
                 _textAreaInput.Unfocused -= TextInput_Unfocused;
                 _textAreaInput.TextChanged -= TextInput_TextChanged;
             }
             _textLineInput = GetTemplateChild("TextInput") as Entry;
             if (_textLineInput != null)
             {
+                _textLineInput.Focused += TextInput_Focused;
                 _textLineInput.Unfocused += TextInput_Unfocused;
                 _textLineInput.TextChanged += TextInput_TextChanged;
             }
             _textAreaInput = GetTemplateChild("TextAreaInput") as Editor;
             if (_textAreaInput != null)
             {
+                _textAreaInput.Focused += TextInput_Focused;
                 _textAreaInput.Unfocused += TextInput_Unfocused;
                 _textAreaInput.TextChanged += TextInput_TextChanged;
             }
@@ -112,6 +120,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             ConfigureTextBox();
             UpdateValidationState();
+        }
+
+        private void TextInput_Focused(object? sender, FocusEventArgs e)
+        {
+            OnFocused();
         }
 
         private void BarcodeButton_Clicked(object? sender, EventArgs e)

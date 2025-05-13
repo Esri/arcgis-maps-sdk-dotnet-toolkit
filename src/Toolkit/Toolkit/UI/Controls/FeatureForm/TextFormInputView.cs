@@ -22,6 +22,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
+#if !MAUI
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 #if MAUI
 using TextBox = Microsoft.Maui.Controls.InputView;
 #elif WPF
@@ -38,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// <summary>
     /// Text input for the <see cref="TextAreaFormInput"/> and <see cref="TextBoxFormInput"/> inputs.
     /// </summary>
-    public partial class TextFormInputView
+    public partial class TextFormInputView : IInputViewFocusable
     {
         private WeakEventListener<TextFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
 
@@ -308,6 +311,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
         public static readonly BindableProperty ElementProperty =
             BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(TextFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((TextFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
+
 #else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(TextFormInputView), new PropertyMetadata(null, (s,e) => ((TextFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
@@ -351,12 +355,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void UpdateValidationState()
         {
             var err = Element?.ValidationErrors;
-            if (err != null && err.Any() && Element?.IsEditable == true)
+            if (err != null && err.Any() && Element?.IsEditable == true && _hadFocus)
             {
 #if MAUI
                 if (GetTemplateChild("ErrorBorder") is Border border)
                 {
+
+#if __IOS__
+                    border.Stroke = new SolidColorBrush(Colors.Red);
+#else
                     border.IsVisible = true;
+#endif
                 }
 #else
                 VisualStateManager.GoToState(this, "InputError", true);
@@ -367,7 +376,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                 if (GetTemplateChild("ErrorBorder") is Border border)
                 {
+#if __IOS__
+                    border.Stroke = new SolidColorBrush(Colors.Gray);
+#else
                     border.IsVisible = false;
+#endif
                 }
 #else
                 VisualStateManager.GoToState(this, "InputValid", true);
@@ -405,5 +418,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             }
         }
+
+        #region IInputViewFocusable
+
+        private bool _hadFocus = false;
+
+        private void OnFocused()
+        {
+            if (!_hadFocus)
+            {
+                _hadFocus = true;
+                UpdateValidationState();
+            }
+            // Propagate focus state to parent so it can show error text
+            FeatureFormView.GetParent<FieldFormElementView>(this)?.OnGotFocus();
+        }
+
+        void IInputViewFocusable.ResetFocusState()
+        {
+            if (_hadFocus)
+            {
+                _hadFocus = false;
+                UpdateValidationState();
+            }
+        }
+        #endregion IInputViewFocusable
     }
 }
