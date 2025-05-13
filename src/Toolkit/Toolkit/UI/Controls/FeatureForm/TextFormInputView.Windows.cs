@@ -48,12 +48,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             base.OnApplyTemplate();
             if (_textInput != null)
             {
+                _textInput.GotFocus -= TextInput_GotFocus;
                 _textInput.LostFocus -= TextInput_LostFocus;
                 _textInput.TextChanged -= TextInput_TextChanged;
             }
             _textInput = GetTemplateChild("TextInput") as TextBox;
             if (_textInput != null)
             {
+                _textInput.GotFocus += TextInput_GotFocus;
                 _textInput.LostFocus += TextInput_LostFocus;
                 _textInput.TextChanged += TextInput_TextChanged;
             }
@@ -69,6 +71,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             ConfigureTextBox();
             UpdateValidationState();
+        }
+
+        private void TextInput_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (!_hadFocus)
+            {
+                _hadFocus = true;
+                UpdateValidationState();
+            }
+            // Propagate focus state to parent
+            FeatureFormView.GetParent<FieldFormElementView>(this)?.OnGotFocus();
         }
 
         private void BarcodeButton_Click(object sender, RoutedEventArgs e)

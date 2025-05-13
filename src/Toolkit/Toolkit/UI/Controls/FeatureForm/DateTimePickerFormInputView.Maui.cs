@@ -36,6 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             var datePicker = new DatePicker();
             datePicker.HorizontalOptions = LayoutOptions.Fill;
+            datePicker.Focused += static (s, e) => FeatureFormView.GetParent<FieldFormElementView>(s as Element)?.OnGotFocus();
             container.Children.Add(datePicker);
             nameScope.RegisterName("DatePickerInput", datePicker);
 
@@ -54,6 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #endif
 
             var timePicker = new TimePicker();
+            timePicker.Focused += static (s, e) => FeatureFormView.GetParent<FieldFormElementView>(s as Element)?.OnGotFocus();
             container.Children.Add(timePicker);
             Grid.SetRow(timePicker, 1);
             nameScope.RegisterName("TimePickerInput", timePicker);

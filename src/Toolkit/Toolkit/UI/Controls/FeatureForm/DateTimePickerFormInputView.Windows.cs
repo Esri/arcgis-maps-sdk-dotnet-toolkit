@@ -20,14 +20,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
+            if (_datePicker != null)
+            {
+                _datePicker.GotFocus -= Picker_GotFocus;
+                _datePicker.SelectedDateChanged -= DatePicker_SelectedDateChanged;
+            }
+            if (_timePicker != null)
+            {
+                _timePicker.GotFocus -= Picker_GotFocus;
+#if WINDOWS_XAML
+                _timePicker.SelectedTimeChanged -= TimePicker_SelectedTimeChanged;
+#else
+                _timePicker.TimeChanged -= TimePicker_TimeChanged;
+#endif
+            }
             _datePicker = GetTemplateChild("DatePicker") as DatePicker;
             _timePicker = GetTemplateChild("TimePicker") as TimePicker;
             if (_datePicker != null)
             {
+                _datePicker.GotFocus += Picker_GotFocus;
                 _datePicker.SelectedDateChanged += DatePicker_SelectedDateChanged;
             }
             if (_timePicker != null)
             {
+                _timePicker.GotFocus += Picker_GotFocus;
 #if WINDOWS_XAML
                 _timePicker.SelectedTimeChanged += TimePicker_SelectedTimeChanged;
 #else
@@ -36,6 +52,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             ConfigurePickers();
         }
+
+        private void Picker_GotFocus(object sender, RoutedEventArgs e) => UI.Controls.FeatureFormView.GetParent<FieldFormElementView>(this)?.OnGotFocus();
 
 #if WINDOWS_XAML
         private void TimePicker_SelectedTimeChanged(object? sender, TimePickerSelectedValueChangedEventArgs e) => UpdateValue();

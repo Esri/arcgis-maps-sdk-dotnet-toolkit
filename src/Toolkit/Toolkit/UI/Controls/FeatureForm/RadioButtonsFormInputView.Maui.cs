@@ -54,6 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                             button.IsEnabled = Element?.IsEditable == true;
                             button.GroupName = Element?.FieldName + "_" + _formid.ToString();
                             button.CheckedChanged += Button_CheckedChanged;
+                            button.Focused += static (s, e) => FeatureFormView.GetParent<FieldFormElementView>(s as Element)?.OnGotFocus();
                             layout.Children.Add(button);
                         }
                     }
