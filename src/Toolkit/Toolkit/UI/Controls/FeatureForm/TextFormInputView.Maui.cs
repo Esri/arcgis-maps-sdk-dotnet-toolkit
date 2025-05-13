@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
 #if __IOS__
             errorBorder.Stroke = new SolidColorBrush(Colors.Gray);
-            errorBorder.IsVisible=true;
+            errorBorder.IsVisible = true;
 #endif
             Grid.SetColumnSpan(errorBorder, 2);
             root.Add(errorBorder);
