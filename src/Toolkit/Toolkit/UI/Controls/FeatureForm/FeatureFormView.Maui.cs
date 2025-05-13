@@ -149,22 +149,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         internal static IEnumerable<T> GetDescendentsOfType<T>(Element root)
         {
-            if (root is null)
-                yield break;
-
-            
-            foreach (var child in root.GetVisualTreeDescendants())
-            {
-                if (child == root) continue;
-                if (child is Element frameworkElement)
-                {
-                    if (frameworkElement is T targetElement)
-                        yield return targetElement;
-
-                    foreach (var descendant in GetDescendentsOfType<T>(frameworkElement))
-                        yield return descendant;
-                }
-            }
+            return root.GetVisualTreeDescendants().OfType<T>();
         }
     }
 }
