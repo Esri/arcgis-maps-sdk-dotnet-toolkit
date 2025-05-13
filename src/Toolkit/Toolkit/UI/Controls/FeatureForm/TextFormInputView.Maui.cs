@@ -46,6 +46,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(horizontalStackLayout, 2);
             root.Add(horizontalStackLayout);
             Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
+#if __IOS__
+            errorBorder.Stroke = new SolidColorBrush(Colors.Gray);
+            errorBorder.IsVisible = true;
+#endif
             Grid.SetColumnSpan(errorBorder, 2);
             root.Add(errorBorder);
             Entry textInput = new Entry();
