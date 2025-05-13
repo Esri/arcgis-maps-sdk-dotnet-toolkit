@@ -360,7 +360,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                 if (GetTemplateChild("ErrorBorder") is Border border)
                 {
+
+#if __IOS__
+                    border.Stroke = new SolidColorBrush(Colors.Red);
+#else
                     border.IsVisible = true;
+#endif
                 }
 #else
                 VisualStateManager.GoToState(this, "InputError", true);
@@ -371,7 +376,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                 if (GetTemplateChild("ErrorBorder") is Border border)
                 {
+#if __IOS__
+                    border.Stroke = new SolidColorBrush(Colors.Gray);
+#else
                     border.IsVisible = false;
+#endif
                 }
 #else
                 VisualStateManager.GoToState(this, "InputValid", true);
