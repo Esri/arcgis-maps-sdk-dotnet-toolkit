@@ -24,10 +24,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class SwitchFormInputView :
 #if WPF
         CheckBox
-#else 
+#else
         Control
 #endif
     {
+        /// <inheritdoc/>
+        protected override void OnGotFocus(RoutedEventArgs e) => Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView.GetParent<FieldFormElementView>(this)?.OnGotFocus();
+
 #if WPF
         /// <inheritdoc/>
         protected override void OnChecked(RoutedEventArgs e)

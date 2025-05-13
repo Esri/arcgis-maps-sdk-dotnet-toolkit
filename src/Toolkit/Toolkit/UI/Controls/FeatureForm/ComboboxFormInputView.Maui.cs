@@ -23,6 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Picker view = new Picker();
             view.SetBinding(Picker.IsEnabledProperty, static (ComboBoxFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent);
             view.ItemDisplayBinding = new Binding(nameof(CodedValue.Name));
+            view.Focused += static (s, e) => FeatureFormView.GetParent<FieldFormElementView>(s as Element)?.OnGotFocus();
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(view, nameScope);
             nameScope.RegisterName("Picker", view);

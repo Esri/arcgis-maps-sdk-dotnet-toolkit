@@ -137,7 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         internal static FeatureFormView? GetFeatureFormViewParent(Element child) => GetParent<FeatureFormView>(child);
 
-        private static T? GetParent<T>(Element child) where T : Element
+        internal static T? GetParent<T>(Element? child) where T : Element
         {
             var parent = child?.Parent;
             while (parent is not null && parent is not T page)
@@ -145,6 +145,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 parent = parent.Parent;
             }
             return parent as T;
+        }
+
+        internal static IEnumerable<T> GetDescendentsOfType<T>(Element root)
+        {
+            return root.GetVisualTreeDescendants().OfType<T>();
         }
     }
 }
