@@ -28,8 +28,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         protected override void OnApplyTemplate()
         {
-            UpdateData();
             base.OnApplyTemplate();
+            UpdateData();
         }
 
         private void UpdateData()
