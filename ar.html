@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>AR Toolkit </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="AR Toolkit ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="ar-toolkit">AR Toolkit</h1>
+
+<p><a href="https://developers.arcgis.com/net/latest/ios/sample-code/collect-data-in-ar/"><img src="https://img.shields.io/badge/World_Scale-Sample-blue" alt="world-scale sample"></a> <a href="https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/"><img src="https://img.shields.io/badge/Tabletop-Sample-blue" alt="Tabletop sample"></a> <a href="https://developers.arcgis.com/net/latest/ios/sample-code/explore-scenes-in-flyover-ar/"><img src="https://img.shields.io/badge/Flyover-Sample-blue" alt="Flyover sample"></a></p>
+<p>Augmented reality experiences are designed to &quot;augment&quot; the physical world with virtual content that respects real world scale, position, and orientation of a device. In this toolkit SDK, <code>ARSceneView</code> extends <code>SceneView</code> to display GIS data on top of a camera feed showing the physical world.</p>
+<h2 id="ar-patterns">AR patterns</h2>
+<p>The Augmented Reality (AR) toolkit component allows quick and easy integration of AR into your application for a wide variety of scenarios. The toolkit recognizes the following common patterns for AR:</p>
+<ul>
+<li><strong>Flyover</strong>: Flyover AR allows you to explore a scene using your device as a window into the virtual world. A typical flyover AR scenario will start with the scene’s virtual camera positioned over an area of interest. You can walk around and reorient the device to focus on specific content in the scene. You can this demonstrated in the <a href="https://developers.arcgis.com/net/latest/ios/sample-code/explore-scenes-in-flyover-ar/">Explore scenes in flyover AR</a> sample.</li>
+<li><strong>Tabletop</strong>: Scene content is anchored to a physical surface, as if it were a 3D-printed model. You can see this demonstrated in the <a href="https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/">Display scenes in tabletop AR</a> sample.</li>
+<li><strong>World-scale</strong>: Scene content is rendered exactly where it would be in the physical world. A camera feed is shown and GIS content is rendered on top of that feed. This is used in scenarios ranging from viewing hidden infrastructure to displaying waypoints for navigation. You can see this demonstrated in the <a href="https://developers.arcgis.com/net/latest/ios/sample-code/navigate-in-ar/">Navigate in AR</a> sample.</li>
+</ul>
+<p>The AR toolkit component is comprised of one class: <code>ARSceneView</code>. This is a subclass of <code>SceneView</code> that contains the functionality needed to display an AR experience in your application. It uses the native platform's augmented reality framework to display the live camera feed and handle real world tracking and synchronization with the ArcGIS Maps SDK for .NET's <code>SceneView</code>. <code>ARSceneView</code> is responsible for starting and managing an ARCore/ARKit session. <code>ARSceneView</code> uses a user-provided <code>LocationDataSource</code> for getting an initial GPS location and when continuous GPS tracking is required.</p>
+<h2 id="features-of-the-ar-component">Features of the AR component</h2>
+<ul>
+<li>Allows display of the live camera feed</li>
+<li>Supports both ARKit on iOS and ARCore on Android</li>
+<li>Tracks user location and device orientation through ARKit/ARCore</li>
+<li>Provides access to an <code>SceneView</code> to display your GIS 3D data over the live camera feed</li>
+<li>Provides <code>ARScreenToLocation</code> method to convert a screen point to a real-world coordinate, taking into consideration real-world physical surfaces</li>
+</ul>
+<h2 id="visual-studio-templates">Visual Studio Templates</h2>
+<p>There is a significant amount of configuration needed to get iOS and Android projects ready for AR. The full details are covered below.</p>
+<p>The ArcGIS Maps SDK for .NET AR templates provide project templates that are usable out-of-the-box. You can download the templates from <a href="https://marketplace.visualstudio.com/items?itemName=Esri.EsriArcGISRuntimeARTemplates">Visual Studio Marketplace</a>.</p>
+<blockquote>
+<p><strong>NOTE</strong>: These templates are completely optional for using AR. See steps below if you're working with an existing project or prefer manual configuration.</p>
+</blockquote>
+<h2 id="configure-your-project-for-ar">Configure your project for AR</h2>
+<p>The first step is to install the toolkit package from <a href="https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit/">Nuget</a>. Next, configure your app projects:</p>
+<h3 id="configuration-for-ios">Configuration for iOS</h3>
+<ol>
+<li>Ensure that the camera and location strings are set in <strong>Info.plist</strong>. You must provide values for <em>Privacy - Camera Usage Description</em> and <em>Privacy - Location When In Use Usage Description</em>.</li>
+<li>If you want your app to only be available on devices supporting ARKit, add <code>arkit</code> to the required device capabilities section of <strong>Info.plist</strong>:</li>
+</ol>
+<pre><code class="lang-xml">&lt;key&gt;UIRequiredDeviceCapabilities&lt;/key&gt;
+&lt;array&gt;
+    &lt;string&gt;arkit&lt;/string&gt;
+&lt;/array&gt;
+</code></pre>
+<h3 id="configuration-for-android">Configuration for Android</h3>
+<blockquote>
+<p><strong>NOTE</strong>: The device must support ARCore for <code>ARSceneView</code> to work on Android. Google maintains a <a href="https://developers.google.com/ar/discover/supported-devices">list of supported devices</a>. ARCore is a separate installable component delivered via Google Play.</p>
+</blockquote>
+<ol>
+<li>Ensure that <code>android.permission.CAMERA</code> and <code>android.permission.ACCESS_FINE_LOCATION</code> are specified in <strong>AndroidManifest.xml</strong>.</li>
+<li>Specify that ARCore is a required or optional component of the app in <strong>AndroidManifest.xml</strong>. This will cause Google Play to download ARCore alongside your app automatically.
+<pre><code class="lang-xml">&lt;!-- Indicates that app requires ARCore (&quot;AR Required&quot;). Causes Google
+        Play Store to download and install ARCore along with the app.
+        For an &quot;AR Optional&quot; app, specify &quot;optional&quot; instead of &quot;required&quot;.
+    --&gt;
+&lt;application ...&gt;
+    &lt;meta-data android:name=&quot;com.google.ar.core&quot; android:value=&quot;required&quot; /&gt;
+&lt;/application&gt;
+</code></pre>
+</li>
+<li>If you want your app to only be available on devices supporting ARCore, specify that the feature is required in <strong>AndroidManifest.xml</strong>:
+<pre><code class="lang-xml">&lt;!-- Indicates that app requires ARCore (&quot;AR Required&quot;). Ensures app is only
+         visible in the Google Play Store on devices that support ARCore.
+         For &quot;AR Optional&quot; apps remove this line.
+    --&gt;
+&lt;application ...&gt;
+    ...
+&lt;/application&gt;
+&lt;uses-feature android:name=&quot;android.hardware.camera.ar&quot; android:required=&quot;true&quot; /&gt;
+</code></pre>
+</li>
+</ol>
+<h2 id="usage">Usage</h2>
+<p>The first step to using AR is to enable and disable AR tracking with the appropriate lifecycle methods.</p>
+<ul>
+<li>Forms:
+<pre><code class="lang-csharp">public partial class BasicAR : ContentPage
+{
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        await ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        ARView.StopTrackingAsync();
+    }
+}
+</code></pre>
+</li>
+<li>iOS:
+<pre><code class="lang-csharp">public class BasicARExample : UIViewController
+{
+    private ARSceneView _arSceneView;
+
+    public override void LoadView()
+    {
+        // Create the views.
+        View = new UIView();
+
+        _arSceneView = new ARSceneView();
+        _arSceneView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+        // Add the views.
+        View.AddSubviews(_arSceneView);
+
+        // Lay out the views.
+        NSLayoutConstraint.ActivateConstraints(new[]{
+            _arSceneView.TopAnchor.ConstraintEqualTo(View.TopAnchor),
+            _arSceneView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
+            _arSceneView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor),
+            _arSceneView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor)
+        });
+    }
+
+    public override void ViewDidLoad()
+    {
+        base.ViewDidLoad();
+        Initialize();
+    }
+
+    public override async void ViewDidAppear(bool animated)
+    {
+        base.ViewDidAppear(animated);
+        await _arSceneView.StartTrackingAsync();
+    }
+
+    public override async void ViewDidDisappear(bool animated)
+    {
+        base.ViewDidDisappear(animated);
+        if (_arSceneView != null)
+        {
+            await _arView.StopTrackingAsync()
+        }
+    }
+}
+</code></pre>
+</li>
+<li>Android
+<pre><code class="lang-csharp">public class BasicARExample : AppCompatActivity
+{
+    // Hold references to the UI controls.
+    private ARSceneView _arSceneView;
+
+    protected override void OnCreate(Bundle bundle)
+    {
+        base.OnCreate(bundle);
+        CreateLayout();
+    }
+
+    private void CreateLayout()
+    {
+        SetContentView(MyArApp.Resource.Layout.BasicARExample);
+        _arSceneView = FindViewById&lt;ARSceneView&gt;(ArcGISRuntime.Resource.Id.arSceneView);
+    }
+
+    protected override async void OnPause()
+    {
+        base.OnPause();
+        await _arSceneView.StopTrackingAsync();
+
+    }
+
+    protected override async void OnResume()
+    {
+        base.OnResume();
+        await _arSceneView.StartTrackingAsync(ARLocationTrackingMode.Ignore);
+    }
+}
+</code></pre>
+</li>
+</ul>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li>See the samples for working examples you can try today:
+<ul>
+<li><a href="https://developers.arcgis.com/net/latest/ios/sample-code/collect-data-in-ar/">Collect data in AR</a></li>
+<li><a href="https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/">Display scenes in tabletop AR</a></li>
+<li><a href="https://developers.arcgis.com/net/latest/ios/sample-code/explore-scenes-in-flyover-ar/">Explore scenes in flyover AR</a></li>
+<li><a href="https://developers.arcgis.com/net/latest/ios/sample-code/navigate-in-ar/">Navigate in AR</a></li>
+<li><a href="https://developers.arcgis.com/net/latest/ios/sample-code/view-hidden-infrastructure-in-ar/">View hidden infrastructure in AR</a></li>
+</ul>
+</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/ar.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>
