@@ -170,8 +170,8 @@ public partial class FloorFilter : TemplatedView
             finally
             {
                 _navigationStackCounter--;
+            }
         }
-    }
     }
 
     internal async void GoBack()
@@ -636,5 +636,5 @@ public partial class FloorFilter : TemplatedView
     /// </summary>
     /// <remarks>The 'All Floors' button is useful in 3D.</remarks>
     public bool ShowAllFloorsButton => GeoView is SceneView sv && sv.Scene is not null && SelectedFacility != null && SelectedFacility.Levels.Count > 1;
-#endregion UI State Management
+    #endregion UI State Management
 }
