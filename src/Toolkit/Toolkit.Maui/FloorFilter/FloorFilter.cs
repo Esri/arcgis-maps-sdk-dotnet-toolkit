@@ -146,7 +146,7 @@ public partial class FloorFilter : TemplatedView
     {
         try
         {
-            await Navigation.PushModalAsync(page);
+            await Navigation.PushAsync(page);
             _navigationStackCounter++;
         }
         catch (Exception ex)
@@ -161,7 +161,7 @@ public partial class FloorFilter : TemplatedView
         {
             try
             {
-                await Navigation.PopModalAsync();
+                await Navigation.PopAsync();
             }
             catch (Exception ex)
             {
@@ -170,15 +170,15 @@ public partial class FloorFilter : TemplatedView
             finally
             {
                 _navigationStackCounter--;
-            }
         }
+    }
     }
 
     internal async void GoBack()
     {
         try
         {
-            await Navigation.PopModalAsync();
+            await Navigation.PopAsync();
         }
         catch (Exception ex)
         {
