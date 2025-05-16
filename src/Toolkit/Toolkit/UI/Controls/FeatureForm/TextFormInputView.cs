@@ -93,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                     _textInput.MaxLength = maxLength == 0 ? int.MaxValue : maxLength;
                 }
-                _textInput.Text = Element?.Value?.ToString() ?? string.Empty;
+                UpdateText();
 #if MAUI || WINDOWS_XAML
                 bool isNumericInput = Element?.FieldType == FieldType.Int32 ||
                     Element?.FieldType == FieldType.Int64 ||
@@ -131,7 +131,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (_textInput != null)
                 _textInput.Visibility = Element?.IsEditable == false ? Visibility.Collapsed : Visibility.Visible;
 #endif
+        }
 
+        private void UpdateText()
+        {
+            if (_textInput != null)
+            {
+                string newValue = Element?.Value?.ToString() ?? string.Empty;
+                if (_textInput.Text != newValue)
+                    _textInput.Text = newValue;
+            }
         }
 
         private void TextInput_TextChanged(object? sender, TextChangedEventArgs e)
@@ -340,7 +349,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                this.Dispatch(ConfigureTextBox);
+                this.Dispatch(UpdateText);
             }
             else if (e.PropertyName == nameof(FieldFormElement.IsEditable))
             {
