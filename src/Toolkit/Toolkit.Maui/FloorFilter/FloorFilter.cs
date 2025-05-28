@@ -146,6 +146,11 @@ public partial class FloorFilter : TemplatedView
     {
         try
         {
+            // See: https://github.com/dotnet/maui/issues/29512
+            // Explanation: Due to a bug in .NET MAUI 9, navigating from a CollectionView selection using PushAsync avoids a crash that occurs when using PushModalAsync.
+            // The crash is caused by the CollectionView's VirtualView not being null during navigation, leading to an unhandled exception.
+            // This workaround uses PushAsync on Windows/Android platforms to prevent the crash. When the bug is fixed in MAUI, this conditional can be revisited.
+
 #if WINDOWS && ANDROID
             await Navigation.PushAsync(page); 
 #else
@@ -165,6 +170,7 @@ public partial class FloorFilter : TemplatedView
         {
             try
             {
+                // Workaround for .NET MAUI issue: https://github.com/dotnet/maui/issues/29512
 #if WINDOWS && ANDROID
                 await Navigation.PopAsync(); 
 #else
@@ -186,6 +192,7 @@ public partial class FloorFilter : TemplatedView
     {
         try
         {
+            // Workaround for .NET MAUI issue: https://github.com/dotnet/maui/issues/29512
 #if WINDOWS && ANDROID
             await Navigation.PopAsync(); 
 #else
