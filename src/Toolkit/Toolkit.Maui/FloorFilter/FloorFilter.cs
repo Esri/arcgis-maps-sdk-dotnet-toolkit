@@ -146,7 +146,11 @@ public partial class FloorFilter : TemplatedView
     {
         try
         {
-            await Navigation.PushAsync(page);
+#if WINDOWS && ANDROID
+            await Navigation.PushAsync(page); 
+#else
+            await Navigation.PushModalAsync(page);
+#endif
             _navigationStackCounter++;
         }
         catch (Exception ex)
@@ -161,7 +165,11 @@ public partial class FloorFilter : TemplatedView
         {
             try
             {
-                await Navigation.PopAsync();
+#if WINDOWS && ANDROID
+                await Navigation.PopAsync(); 
+#else
+                await Navigation.PopModalAsync();
+#endif
             }
             catch (Exception ex)
             {
@@ -178,7 +186,11 @@ public partial class FloorFilter : TemplatedView
     {
         try
         {
-            await Navigation.PopAsync();
+#if WINDOWS && ANDROID
+            await Navigation.PopAsync(); 
+#else
+            await Navigation.PopModalAsync();
+#endif
         }
         catch (Exception ex)
         {
