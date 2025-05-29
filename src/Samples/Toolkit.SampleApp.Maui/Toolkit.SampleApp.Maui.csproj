@@ -9,6 +9,7 @@
     <SingleProject>true</SingleProject>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
 
     <WarningsAsErrors>$(WarningsAsErrors);IL2036;IL2037</WarningsAsErrors>
 
@@ -53,6 +54,10 @@
     <Compile Remove="Samples\TimeSliderSample.xaml.cs" />
     <MauiXaml Remove="Samples\LayerLegendSample.xaml" />
     <MauiXaml Remove="Samples\TimeSliderSample.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Toolkit.SampleApp.WPF\Samples\Downloading\DownloadItemVM.cs" Link="Samples\DownloadItemVM.cs" />
   </ItemGroup>
 
   <ItemGroup>
