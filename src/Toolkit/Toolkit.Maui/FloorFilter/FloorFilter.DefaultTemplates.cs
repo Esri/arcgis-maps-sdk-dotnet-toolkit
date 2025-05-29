@@ -73,7 +73,24 @@ public partial class FloorFilter
             return containingGrid;
         });
 
-        DefaultSiteDataTemplate = DefaultFacilityDataTemplate;
+        DefaultSiteDataTemplate = new DataTemplate(() =>
+        {
+            Grid containingGrid = new Grid();
+            containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#FFF"), Color.FromArgb("#353535"));
+
+            Label textLabel = new Label
+            {
+                FontSize = 14,
+                VerticalTextAlignment = TextAlignment.Center,
+                Margin = new Thickness(8),
+                HorizontalOptions = LayoutOptions.Fill
+            };
+            textLabel.SetBinding(Label.TextProperty, static (FloorSite site) => site.Name);
+            textLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
+
+            containingGrid.Children.Add(textLabel);
+            return containingGrid;
+        });
 
         DefaultDifferentiatingFacilityDataTemplate = new DataTemplate(() =>
         {
