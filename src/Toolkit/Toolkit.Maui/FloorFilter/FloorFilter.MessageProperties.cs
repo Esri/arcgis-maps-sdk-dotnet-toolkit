@@ -31,7 +31,7 @@ public partial class FloorFilter
     /// Identifies the <see cref="SearchPlaceholder"/> bindable property.
     /// </summary>
     public static readonly BindableProperty SearchPlaceholderProperty =
-        BindableProperty.Create(nameof(SearchPlaceholder), typeof(string), typeof(FloorFilter), Properties.Resources.GetString("FloorFilterFilter"));
+        BindableProperty.Create(nameof(SearchPlaceholder), typeof(string), typeof(FloorFilter), Properties.Resources.GetString("FloorFilterFilterSearchPlaceholder"));
 
     /// <summary>
     /// Gets or sets the message shown to the user when a list or filtered list is empty.
