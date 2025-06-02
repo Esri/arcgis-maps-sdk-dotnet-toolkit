@@ -132,7 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
                         if (ctrl != null && ctrl is BindableObject bo)
                         {
-                            bo.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Popup.EvaluatedElements", source: RelativeBindingSource.TemplatedParent)); // TODO: Should update binding instead
+                            bo.SetBinding(BindableLayout.ItemsSourceProperty, static (PopupViewer viewer) => viewer.Popup?.EvaluatedElements, source: RelativeBindingSource.TemplatedParent);
                         }
 #else
                         var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;

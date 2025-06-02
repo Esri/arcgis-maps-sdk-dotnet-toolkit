@@ -16,10 +16,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SymbolDisplay
 
         private void LoadSymbols()
         {
-            AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.White, 10));
-            AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.White, 20));
-            AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.White, 30));
-            AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.White, 40));
+            AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Gray, 10));
+            AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Gray, 20));
+            AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Gray, 30));
+            AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Gray, 40));
 
             AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 10));
             AddSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Green, 20));
@@ -43,11 +43,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SymbolDisplay
 #if NETFX_CORE
                 HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Center,
                 VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center,
-                BorderBrush = new SolidColorBrush(Windows.UI.Colors.Black),
+                BorderBrush = new SolidColorBrush(Windows.UI.Colors.Gray),
 #else
                 HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
                 VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center,
-                BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Black),
+                BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Gray),
 #endif
                 BorderThickness = new Thickness(1),
                 Padding = new Thickness(0)

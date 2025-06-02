@@ -17,7 +17,6 @@
 #if MAUI
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -50,74 +49,72 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultComboBoxFormInputTemplate()
         {
             var input = new ComboBoxFormInputView();
-            input.SetBinding(ComboBoxFormInputView.ElementProperty, Binding.SelfPath);
+            input.SetBinding(ComboBoxFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultSwitchFormInputTemplate()
         {
             var input = new SwitchFormInputView();
-            input.SetBinding(SwitchFormInputView.ElementProperty, Binding.SelfPath);
+            input.SetBinding(SwitchFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultDateTimePickerFormInputTemplate()
         {
             var input = new DateTimePickerFormInputView();
-            input.SetBinding(DateTimePickerFormInputView.ElementProperty, Binding.SelfPath);
+            input.SetBinding(DateTimePickerFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultRadioButtonsFormInputTemplate()
         {
             var input = new RadioButtonsFormInputView();
-            input.SetBinding(RadioButtonsFormInputView.ElementProperty, Binding.SelfPath);
+            input.SetBinding(RadioButtonsFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultTextAreaFormInputTemplate()
         {
             var input = new TextFormInputView();
-            input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
+            input.SetBinding(TextFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultTextBoxFormInputTemplate()
         {
             var input = new TextFormInputView();
-            input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
+            input.SetBinding(TextFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
 
         private static object BuildDefaultBarcodeScannerFormInputTemplate()
         {
             var input = new TextFormInputView();
-            input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
+            input.SetBinding(TextFormInputView.ElementProperty, static (FormElement element) => element);
             return input;
         }
-
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
+        
         private static object BuildDefaultTemplate()
         {
             var root = new VerticalStackLayout();
-            root.SetBinding(VerticalStackLayout.IsVisibleProperty, nameof(FormElement.IsVisible));
+            root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (FieldFormElementView view) => view.Element?.IsVisible);
             var label = new Label();
-            label.SetBinding(Label.TextProperty, new Binding("Element.Label", source: RelativeBindingSource.TemplatedParent));
-            label.SetBinding(View.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            label.SetBinding(Label.TextProperty, static (FieldFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(View.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             root.Children.Add(label);
             label = new Label();
-            label.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
-            label.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            label.SetBinding(Label.TextProperty, static (FieldFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
+            label.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             root.Children.Add(label);
             var content = new DataTemplatedContentPresenter();
-            content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, new Binding(nameof(Element), source: RelativeBindingSource.TemplatedParent));
+            content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, static (FieldFormElementView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(content);
             var errorLabel = new Label() { Margin = new Thickness(0, 2), TextColor = Colors.Red };
             root.Children.Add(errorLabel);
-            errorLabel.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            errorLabel.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);

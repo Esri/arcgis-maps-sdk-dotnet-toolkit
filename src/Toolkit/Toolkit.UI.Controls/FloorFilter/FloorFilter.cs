@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AllFacilitiesLabel = Properties.Resources.GetString("FloorFilterAllFacilities");
             BackButtonLabel = Properties.Resources.GetString("FloorFilterBackButton");
             AllFloorsLabel = Properties.Resources.GetString("FloorFilterAllFloors");
-            SearchPlaceholder = Properties.Resources.GetString("FloorFilterFilter");
+            SearchPlaceholder = Properties.Resources.GetString("FloorFilterFilterSearchPlaceholder");
         }
 
         /// <inheritdoc/>

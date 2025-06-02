@@ -91,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
                         if (ctrl != null && ctrl is BindableObject bo)
                         {
-                            bo.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent)); // TODO: Should update binding instead
+                            bo.SetBinding(BindableLayout.ItemsSourceProperty, static (FeatureFormView view) => view.FeatureForm?.Elements, source: RelativeBindingSource.TemplatedParent);
                         }
 #elif WPF
                         var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
@@ -246,6 +246,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (form.DefaultAttachmentsElement is not null)
                     await form.DefaultAttachmentsElement.FetchAttachmentsAsync();
                 await EvaluateExpressions(form).ConfigureAwait(false);
+                Esri.ArcGISRuntime.Toolkit.Internal.DispatcherExtensions.Dispatch(this, ResetValidationStates);
+            }
+        }
+
+        private void ResetValidationStates()
+        {
+            foreach (var item in GetDescendentsOfType<FieldFormElementView>(this))
+            {
+                item.ResetValidationState();
             }
         }
 
@@ -258,6 +267,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (FeatureForm is not null)
             {
                 await FeatureForm.FinishEditingAsync().ConfigureAwait(false);
+                Esri.ArcGISRuntime.Toolkit.Internal.DispatcherExtensions.Dispatch(this, ResetValidationStates);
             }
         }
 

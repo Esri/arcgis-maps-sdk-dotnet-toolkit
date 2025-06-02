@@ -168,31 +168,29 @@ internal class FloorFilterBrowseSitesPage : ContentPage
 
     private void HandleSearchText_Changed(object? sender, TextChangedEventArgs e)
     {
-        if (!string.IsNullOrWhiteSpace(_searchBar.Text))
+        var searchText = _searchBar.Text;
+        if (!string.IsNullOrWhiteSpace(searchText))
         {
-            var simplified = _searchBar.Text.ToLower();
-            var results = _ff?.AllSites?.Where(site => site.Name.ToLower().Contains(simplified));
+            var results = _ff?.AllSites?.Where(site =>
+                site.Name.Contains(searchText, StringComparison.CurrentCultureIgnoreCase));
+
+            bool hasResults = results?.Any() ?? false;
 
             _filteredListView.ItemsSource = results;
+            _filteredListView.SelectedItem = null;
 
-            if (results != null)
-            {
-                if (_ff?.SelectedSite != null && results.Contains(_ff.SelectedSite))
-                {
-                    _filteredListView.SelectedItem = _ff.SelectedSite;
-                }
-
-                _unfilteredListView.IsVisible = false;
-                _filteredListView.IsVisible = results.Any();
-            }
-            _noResultLabel.IsVisible = !(results?.Any() == true);
+            _unfilteredListView.IsVisible = false;
+            _filteredListView.IsVisible = hasResults;
+            _noResultLabel.IsVisible = !hasResults;
         }
         else
         {
+            bool hasItems = _itemsSource?.Any() ?? false;
+
             _filteredListView.ItemsSource = null;
             _filteredListView.IsVisible = false;
-            _unfilteredListView.IsVisible = _itemsSource?.Any() == true;
-            _noResultLabel.IsVisible = !(_itemsSource?.Any() == true);
+            _unfilteredListView.IsVisible = hasItems;
+            _noResultLabel.IsVisible = !hasItems;
         }
     }
 

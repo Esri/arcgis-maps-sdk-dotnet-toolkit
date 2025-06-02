@@ -72,16 +72,6 @@ public partial class FloorFilter : TemplatedView
         _controller.PropertyChanged += HandleControllerPropertyChanges;
     }
 
-    private void InitializeLocalizedStrings()
-    {
-        BrowseLabel = Properties.Resources.GetString("FloorFilterBrowse");
-        BrowseSitesLabel = Properties.Resources.GetString("FloorFilterBrowseSites");
-        BrowseFacilitiesLabel = Properties.Resources.GetString("FloorFilterBrowseFacilities");
-        NoResultsMessage = Properties.Resources.GetString("FloorFilterNoResultsFound");
-        AllFacilitiesLabel = Properties.Resources.GetString("FloorFilterAllFacilities");
-        SearchPlaceholder = Properties.Resources.GetString("FloorFilterFilter");
-    }
-
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
     {
@@ -125,8 +115,8 @@ public partial class FloorFilter : TemplatedView
         {
             PART_LevelListView.ItemTemplate = LevelDataTemplate;
             PART_LevelListView.BindingContext = this;
-            PART_LevelListView.SetBinding(CollectionView.ItemsSourceProperty, new Binding(nameof(DisplayLevels), BindingMode.OneWay));
-            PART_LevelListView.SetBinding(CollectionView.SelectedItemProperty, new Binding(nameof(SelectedLevel), BindingMode.TwoWay));
+            PART_LevelListView.SetBinding(CollectionView.ItemsSourceProperty, nameof(DisplayLevels), BindingMode.OneWay);
+            PART_LevelListView.SetBinding(CollectionView.SelectedItemProperty, static (FloorFilter filter) => filter.SelectedLevel, BindingMode.TwoWay);
         }
     }
 
@@ -146,7 +136,16 @@ public partial class FloorFilter : TemplatedView
     {
         try
         {
+            // See: https://github.com/dotnet/maui/issues/29512
+            // Explanation: Due to a bug in .NET MAUI 9, navigating from a CollectionView selection using PushAsync avoids a crash that occurs when using PushModalAsync.
+            // The crash is caused by the CollectionView's VirtualView not being null during navigation, leading to an unhandled exception.
+            // This workaround uses PushAsync on Windows/Android platforms to prevent the crash. When the bug is fixed in MAUI, this conditional can be revisited.
+            // TODO: Remove this conditional when the MAUI bug is fixed.
+#if WINDOWS || ANDROID
+            await Navigation.PushAsync(page); 
+#else
             await Navigation.PushModalAsync(page);
+#endif
             _navigationStackCounter++;
         }
         catch (Exception ex)
@@ -161,7 +160,14 @@ public partial class FloorFilter : TemplatedView
         {
             try
             {
+                // Workaround for .NET MAUI issue: https://github.com/dotnet/maui/issues/29512
+                // Use PushAsync on Windows/Android platforms to avoid the crash.
+                // TODO: Remove this conditional when the MAUI bug is fixed.
+#if WINDOWS || ANDROID
+                await Navigation.PopAsync(); 
+#else
                 await Navigation.PopModalAsync();
+#endif
             }
             catch (Exception ex)
             {
@@ -178,7 +184,14 @@ public partial class FloorFilter : TemplatedView
     {
         try
         {
+            // Workaround for .NET MAUI issue: https://github.com/dotnet/maui/issues/29512
+            // Use PushAsync on Windows/Android platforms to avoid the crash.
+            // TODO: Remove this conditional when the MAUI bug is fixed.
+#if WINDOWS || ANDROID
+            await Navigation.PopAsync(); 
+#else
             await Navigation.PopModalAsync();
+#endif
         }
         catch (Exception ex)
         {
