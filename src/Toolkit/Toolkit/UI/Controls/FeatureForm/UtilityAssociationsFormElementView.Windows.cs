@@ -16,11 +16,13 @@
 
 #if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
+using Esri.ArcGISRuntime.UtilityNetworks;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class UtilityAssociationsFormElementView : Control
     {
+        private ListView? _associationsListView;
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
@@ -29,7 +31,57 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
+            if (_associationsListView is not null)
+            {
+#if WINDOWS_XAML
+                _associationsListView.ItemClick -= AssociationsListView_ItemClick;
+#endif
+            }
+            if (GetTemplateChild("AssociationsList") is ListView listView)
+            {
+                _associationsListView = listView;
+#if WINDOWS_XAML
+                _associationsListView.ItemClick += AssociationsListView_ItemClick;
+#elif WPF
+                _associationsListView.SelectionChanged += AssociationsListView_SelectionChanged;
+#endif
+            }
         }
+#if WPF
+        private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = ((ListView)sender).SelectedItem;
+            var item = ((ListView)sender).SelectedItem;
+            ((ListView)sender).SelectedItem = null; // Clear selection
+#elif WINDOWS_XAML
+        private void AssociationsListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as UtilityAssociationsFilterResult;
+#endif
+            if (item is null)
+            {
+                return;
+            }
+            var parent = UI.Controls.FeatureFormView.GetFeatureFormViewParent(this);
+            // parent?.NavigateToItem(item); // TODO
+        }
+#endif
+
+
+        /// <summary>
+        /// Gets or sets the template for UtilityAssociationsFilterResult items.
+        /// </summary>
+        public DataTemplate ItemTemplate
+        {
+            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            set { SetValue(ItemTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ItemTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ItemTemplateProperty =
+            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFormElementView), new PropertyMetadata(null));
     }
 }
 #endif
