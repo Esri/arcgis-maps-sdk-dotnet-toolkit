@@ -161,6 +161,11 @@
                                                 <primitives:TextFormElementView Element="{Binding}" />
                                             </DataTemplate>
                                         </primitives:FormElementItemsControl.TextFormElementTemplate>
+                                        <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="UtilityAssociationsFormElement goes here" /> <!-- TODO -->
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                                         <primitives:FormElementItemsControl.GroupFormElementTemplate>
                                             <DataTemplate>
                                                 <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
@@ -197,6 +202,11 @@
                                                                         <primitives:TextFormElementView Element="{Binding}" />
                                                                     </DataTemplate>
                                                                 </primitives:FormElementItemsControl.TextFormElementTemplate>
+                                                                <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                                                    <DataTemplate>
+                                                                        <TextBlock Text="UtilityAssociationsFormElement goes here" /> <!-- TODO -->
+                                                                    </DataTemplate>
+                                                                </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                                                             </primitives:FormElementItemsControl>
                                                         </Grid>
                                                     </Grid>

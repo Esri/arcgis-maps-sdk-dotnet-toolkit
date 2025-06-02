@@ -46,6 +46,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     presenter.ContentTemplate = GroupFormElementTemplate;
                 }
+                else if (item is UtilityAssociationsFormElement)
+                {
+                    presenter.ContentTemplate = UtilityAssociationsFormElementTemplate;
+                }
                 else
                 {
                     presenter.ContentTemplate = UnsupportedFormElementTemplate; // Renders empty / skips
@@ -87,7 +91,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty TextFormElementTemplateProperty =
             DependencyProperty.Register(nameof(TextFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
 
-
         /// <summary>
         /// Template used for rendering a <see cref="GroupFormElement"/>.
         /// </summary>
@@ -103,6 +106,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty GroupFormElementTemplateProperty =
             DependencyProperty.Register(nameof(GroupFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Template used for rendering a <see cref="GroupFormElement"/>.
+        /// </summary>
+        /// <seealso cref="GroupFormElement"/>
+        public DataTemplate UtilityAssociationsFormElementTemplate
+        {
+            get { return (DataTemplate)GetValue(UtilityAssociationsFormElementTemplateProperty); }
+            set { SetValue(UtilityAssociationsFormElementTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="UtilityAssociationsFormElementTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UtilityAssociationsFormElementTemplateProperty =
+            DependencyProperty.Register(nameof(UtilityAssociationsFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
     }
 }
 #endif
