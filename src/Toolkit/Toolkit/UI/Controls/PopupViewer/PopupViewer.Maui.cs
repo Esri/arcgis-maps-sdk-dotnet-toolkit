@@ -61,33 +61,84 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private static object BuildDefaultTemplate()
         {
-            Grid root = new Grid();
-            root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
-            Label roottitle = new Label();
-            roottitle.Style = GetPopupViewerHeaderStyle();
-            roottitle.SetBinding(Label.TextProperty, static (PopupViewer viewer) => viewer.Popup?.Title, source: RelativeBindingSource.TemplatedParent);
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (PopupViewer viewer) => viewer.Popup?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
-            root.Add(roottitle);
-            ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never };
-#if WINDOWS
-            scrollView.Padding = new Thickness(0, 0, 10, 0);
-#endif
-            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (PopupViewer viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
-            Grid.SetRow(scrollView, 1);
-            root.Add(scrollView);
-            VerticalStackLayout itemsView = new VerticalStackLayout()
-            {
-                Margin = new Thickness(0, 10),
-            };
-            BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (PopupViewer viewer) => viewer.Popup?.EvaluatedElements, source: RelativeBindingSource.TemplatedParent);
-            scrollView.Content = itemsView;
+            NavigationSubView root = new NavigationSubView();
+            root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (PopupViewer viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
+            root.HeaderTemplateSelector = BuildHeaderTemplateSelector();
+            root.ContentTemplateSelector = BuildContentTemplateSelector();
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
-            nameScope.RegisterName(PopupContentScrollViewerName, scrollView);
-            nameScope.RegisterName(ItemsViewName, itemsView);
+            nameScope.RegisterName("SubFrameView", root);
             return root;
+        }
+
+        private static DataTemplateSelector BuildHeaderTemplateSelector()
+        {
+            PopupContentTemplateSelector selector = new PopupContentTemplateSelector();
+            selector.PopupTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label();
+                roottitle.Style = GetPopupViewerHeaderStyle();
+                roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup?.Title);
+                roottitle.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.Title, converter: Internal.EmptyToFalseConverter.Instance);
+                return roottitle;
+            });
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                VerticalStackLayout root = new VerticalStackLayout();
+                Label title = new Label();
+                title.Style = GetPopupViewerHeaderStyle();
+                title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
+                title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(title);
+                Label desc = new Label();
+                desc.Style = GetPopupViewerCaptionStyle();
+                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
+                desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(desc);
+                return root;
+            });
+            return selector;
+        }
+
+        private static DataTemplateSelector BuildContentTemplateSelector()
+        {
+            PopupContentTemplateSelector selector = new PopupContentTemplateSelector();
+
+            selector.PopupTemplate = new DataTemplate(() =>
+            {
+                VerticalStackLayout itemsView = new VerticalStackLayout()
+                {
+                    Margin = new Thickness(0, 10),
+                };
+                BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
+                itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (Popup popup) => popup?.EvaluatedElements);
+                return itemsView;
+            });
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                CollectionView itemsView = new CollectionView()
+                {
+                    Margin = new Thickness(0, 10),
+                    ItemTemplate = new DataTemplate(() =>
+                    {
+                        var grid = new Grid();
+                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+                        Label name = new Label();
+                        name.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name);
+                        grid.Children.Add(name);
+                        //TODO: Put count inside a circle
+                        Label count = new Label();
+                        count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count);
+                        Grid.SetColumn(count, 1);
+                        grid.Children.Add(count);
+                        return grid;
+                    })
+                };
+                itemsView.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.GroupResults);
+                return itemsView;
+            });
+            return selector;
         }
 
         internal static Style GetStyle(string resourceKey, Style defaultStyle)
