@@ -163,7 +163,7 @@
                                         </primitives:FormElementItemsControl.TextFormElementTemplate>
                                         <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="UtilityAssociationsFormElement goes here" /> <!-- TODO -->
+                                                <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                             </DataTemplate>
                                         </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                                         <primitives:FormElementItemsControl.GroupFormElementTemplate>
@@ -204,7 +204,7 @@
                                                                 </primitives:FormElementItemsControl.TextFormElementTemplate>
                                                                 <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                                                                     <DataTemplate>
-                                                                        <TextBlock Text="UtilityAssociationsFormElement goes here" /> <!-- TODO -->
+                                                                        <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                                                     </DataTemplate>
                                                                 </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                                                             </primitives:FormElementItemsControl>

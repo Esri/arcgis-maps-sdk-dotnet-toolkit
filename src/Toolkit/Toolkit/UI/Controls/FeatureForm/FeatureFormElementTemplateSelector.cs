@@ -58,7 +58,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             DefaultUtilityAssociationsFormElementTemplate = new DataTemplate(() =>
             {
-                var view = new Label() { Text = "UtilityAssociationsFormElement goes here" }; // TODO
+                var view = new UtilityAssociationsFormElementView() { Margin = new Thickness(0, 0, 0, 10) };
+                view.SetBinding(UtilityAssociationsFormElementView.ElementProperty, Binding.SelfPath);
                 return view;
             });
             UnsupportedFormElementTemplate = new DataTemplate(() =>

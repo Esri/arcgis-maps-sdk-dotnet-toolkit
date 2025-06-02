@@ -493,6 +493,22 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type primitives:UtilityAssociationsFormElementView}" >
+        <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationsFormElementView}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Element.Label, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
+                        <TextBlock Text="UtilityAssociationsFormElement content goes here" /> <!-- TODO -->
+                        <TextBlock Text="{Binding Element.Description, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+    </Style>
+
     <Style TargetType="{x:Type controls:FeatureFormView}" >
     <Setter Property="Template">
       <Setter.Value>
@@ -544,7 +560,7 @@
                     </primitives:FormElementItemsControl.TextFormElementTemplate>
                     <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                         <DataTemplate>
-                            <TextBlock Text="UtilityAssociationsFormElement goes here" /> <!-- TODO -->
+                            <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                         </DataTemplate>
                     </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                     <primitives:FormElementItemsControl.GroupFormElementTemplate>
@@ -570,7 +586,7 @@
                               </primitives:FormElementItemsControl.TextFormElementTemplate>
                               <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                                   <DataTemplate>
-                                      <TextBlock Text="UtilityAssociationsFormElement goes here" /> <!-- TODO -->
+                                    <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                   </DataTemplate>
                               </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
                             </primitives:FormElementItemsControl>

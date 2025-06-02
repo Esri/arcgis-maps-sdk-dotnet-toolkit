@@ -337,4 +337,20 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="primitives:UtilityAssociationsFormElementView" >
+        <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="primitives:UtilityAssociationsFormElementView">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Element.Label, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
+                        <TextBlock Text="UtilityAssociationsFormElement content goes here" /> <!-- TODO -->
+                        <TextBlock Text="{Binding Element.Description, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsTabStop" Value="False" />
+    </Style>
 </ResourceDictionary>
