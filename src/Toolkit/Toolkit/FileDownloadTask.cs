@@ -235,7 +235,6 @@ public sealed class FileDownloadTask : IDisposable
 #else
         this.TempFile = Path.Combine(ArcGISRuntimeEnvironment.TempPath, Path.GetRandomFileName());
 #endif
-        this.TempFile = Path.GetTempFileName();
         if (content is not null)
         {
             lock (_queueLock)
