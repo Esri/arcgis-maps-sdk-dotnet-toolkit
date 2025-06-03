@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
-           VerticalStackLayout root = new VerticalStackLayout();
+            VerticalStackLayout root = new VerticalStackLayout();
             Label title = new Label();
             title.SetBinding(Label.TextProperty, static (UtilityAssociationsFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent);
             title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationsFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var border = new Border() { StrokeThickness = 1, Margin = new Thickness(0, 4) };
             border.SetAppThemeColor(Border.StrokeProperty, Colors.Black, Colors.White);
             root.Add(border);
-            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None, MaximumHeightRequest = 200 };
+            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityAssociationsFormElementView view) => view.Element?.AssociationsFilterResults, source: RelativeBindingSource.TemplatedParent);
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             border.Content = cv;
@@ -58,6 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.GestureRecognizers.Add(itemTapGesture);
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
 
             Label title = new Label() { VerticalOptions = LayoutOptions.Center };
             title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title);
@@ -65,9 +66,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             title.Style = FeatureFormView.GetFeatureFormTitleStyle();
             layout.Add(title);
 
+            Label count = new Label() { VerticalOptions = LayoutOptions.Center };
+            count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.ResultCount);
+            count.Style = FeatureFormView.GetFeatureFormCaptionStyle();
+            Grid.SetColumn(count, 1);
+            layout.Add(count);
+            
             Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
             image.Source = new FontImageSource() { Glyph = ((char)0xE078).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
-            Grid.SetColumn(image, 1);
+            Grid.SetColumn(image, 2);
             layout.Add(image);
 
             Border root = new Border() { StrokeThickness = 0, Content = layout };

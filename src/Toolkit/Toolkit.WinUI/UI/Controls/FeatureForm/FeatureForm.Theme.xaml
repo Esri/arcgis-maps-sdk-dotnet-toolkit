@@ -347,9 +347,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" Visibility="{Binding Filter.Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
-                        <FontIcon Glyph="&#xE76C;" Grid.Column="1" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{Binding ResultCount, Mode=OneWay}" Style="{StaticResource FeatureFormViewCaptionStyle}" VerticalAlignment="Center" Grid.Column="1" Margin="4,0" />
+                        <FontIcon Glyph="&#xE76C;" Grid.Column="2" VerticalAlignment="Center" />
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -360,7 +362,9 @@
                     <StackPanel>
                         <TextBlock Text="{Binding Element.Label, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
                         <TextBlock Text="{Binding Element.Description, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
-                        <ListView ItemTemplate="{TemplateBinding ItemTemplate}" MaxHeight="200" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}" BorderBrush="{ThemeResource ControlFillColorInputActiveBrush}" BorderThickness="1" x:Name="AssociationsList" SelectionMode="None" >
+                        <ListView ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}" 
+                                  Background="{ThemeResource SystemChromeAltHighColor}" CornerRadius="4" x:Name="AssociationsList" SelectionMode="None" IsItemClickEnabled="True"
+                                  Margin="0,12,0,8">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

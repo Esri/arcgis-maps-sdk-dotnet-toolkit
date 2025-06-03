@@ -87,37 +87,86 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private static object BuildDefaultTemplate()
         {
-            Grid root = new Grid();
-            root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
-            Label roottitle = new Label();
-            roottitle.Style = GetFeatureFormHeaderStyle();
-            roottitle.SetBinding(Label.TextProperty, static (FeatureFormView view) => view.FeatureForm?.Title, source: RelativeBindingSource.TemplatedParent);
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (FeatureFormView view) => view.FeatureForm?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
-            root.Add(roottitle);
-            ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never, Margin = new Thickness(0, 5, 0, 0) };
-#if WINDOWS
-            scrollView.Padding = new Thickness(0, 0, 10, 0);
-#endif
-            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (FeatureFormView view) => view.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
-            var scrollableContent = new VerticalStackLayout();
-            scrollView.Content = scrollableContent;
-            Grid.SetRow(scrollView, 1);
-            root.Add(scrollView);
-            VerticalStackLayout itemsView = new VerticalStackLayout();
-            BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (FeatureFormView view) => view.FeatureForm?.Elements, source: RelativeBindingSource.TemplatedParent);
-            scrollableContent.Add(itemsView);
-
-            AttachmentsFormElementView attachmentsView = new AttachmentsFormElementView();
-            attachmentsView.SetBinding(AttachmentsFormElementView.ElementProperty, static (FeatureFormView view) => view.FeatureForm?.DefaultAttachmentsElement, source: RelativeBindingSource.TemplatedParent);
-            scrollableContent.Add(attachmentsView);
-
+            NavigationSubView root = new NavigationSubView();
+            root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (PopupViewer viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
+            root.HeaderTemplateSelector = BuildHeaderTemplateSelector();
+            root.ContentTemplateSelector = BuildContentTemplateSelector();
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
-            nameScope.RegisterName(FeatureFormContentScrollViewerName, scrollView);
-            nameScope.RegisterName(ItemsViewName, itemsView);
+            nameScope.RegisterName("SubFrameView", root);
             return root;
+        }
+
+        private static DataTemplateSelector BuildHeaderTemplateSelector()
+        {
+            FeatureFormContentTemplateSelector selector = new FeatureFormContentTemplateSelector();
+            selector.FeatureFormTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label();
+                roottitle.Style = GetFeatureFormHeaderStyle();
+                roottitle.SetBinding(Label.TextProperty, static (FeatureForm form) => form?.Title);
+                roottitle.SetBinding(VisualElement.IsVisibleProperty, static (FeatureForm form) => form?.Title, converter: Internal.EmptyToFalseConverter.Instance);
+                return roottitle;
+            });
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                VerticalStackLayout root = new VerticalStackLayout();
+                Label title = new Label();
+                title.Style = GetFeatureFormHeaderStyle();
+                title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
+                title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(title);
+                Label desc = new Label();
+                desc.Style = GetFeatureFormCaptionStyle();
+                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description); // TODO: This needs to be the FeatureForm.Title
+                desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(desc);
+                return root;
+            });
+            return selector;
+        }
+
+        private static DataTemplateSelector BuildContentTemplateSelector()
+        {
+            FeatureFormContentTemplateSelector selector = new FeatureFormContentTemplateSelector();
+
+            selector.FeatureFormTemplate = new DataTemplate(() =>
+            {
+                var layout = new VerticalStackLayout();
+                VerticalStackLayout itemsView = new VerticalStackLayout();
+                BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
+                itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (FeatureForm form) => form?.Elements);
+                layout.Add(itemsView);
+
+                AttachmentsFormElementView attachmentsView = new AttachmentsFormElementView();
+                attachmentsView.SetBinding(AttachmentsFormElementView.ElementProperty, static (FeatureForm form) => form?.DefaultAttachmentsElement);
+                layout.Add(attachmentsView);
+                return layout;
+            });
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                CollectionView itemsView = new CollectionView()
+                {
+                    Margin = new Thickness(0, 10),
+                    ItemTemplate = new DataTemplate(() =>
+                    {
+                        var grid = new Grid();
+                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+                        Label name = new Label();
+                        name.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name);
+                        grid.Children.Add(name);
+                        Label count = new Label();
+                        count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count);
+                        Grid.SetColumn(count, 1);
+                        grid.Children.Add(count);
+                        return grid;
+                    })
+                };
+                itemsView.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.GroupResults);
+                return itemsView;
+            });
+            return selector;
         }
 
         internal static Style GetStyle(string resourceKey, Style defaultStyle)

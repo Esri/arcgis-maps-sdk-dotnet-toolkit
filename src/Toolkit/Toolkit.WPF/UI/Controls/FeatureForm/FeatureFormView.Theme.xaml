@@ -502,9 +502,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" Visibility="{Binding Filter.Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
-                        <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" Grid.Column="1" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{Binding ResultCount, Mode=OneWay}" Style="{StaticResource FeatureFormViewCaptionStyle}" VerticalAlignment="Center" Grid.Column="1" Margin="4,0" />
+                        <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" Grid.Column="2" VerticalAlignment="Center" />
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -515,15 +517,17 @@
                     <StackPanel>
                         <TextBlock Text="{Binding Element.Label, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
                         <TextBlock Text="{Binding Element.Description, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
-                        <ListView ItemTemplate="{TemplateBinding ItemTemplate}" MaxHeight="200" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrush}}" BorderThickness="1"
-                                  x:Name="AssociationsList" SelectionMode="Single" >
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
+                        <Border CornerRadius="4"  BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrush}}" BorderThickness="1" Margin="0,12,0,8" Background="{x:Static SystemColors.ControlBrush}">
+                            <ListView ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}"
+                                      x:Name="AssociationsList" SelectionMode="Single" >
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Border>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -560,67 +564,104 @@
                 </Style.Triggers>
               </Style>
             </Border.Resources>
-            <Grid DataContext="{TemplateBinding FeatureForm}">
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-              <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewHeaderStyle}"
-                         Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
-              <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="FeatureFormContentScrollViewer">
-                 <StackPanel>
-                  <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView" KeyboardNavigation.IsTabStop="False">
-                    <primitives:FormElementItemsControl.FieldFormElementTemplate>
-                      <DataTemplate>
-                        <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
-                      </DataTemplate>
-                    </primitives:FormElementItemsControl.FieldFormElementTemplate>
-                    <primitives:FormElementItemsControl.TextFormElementTemplate>
-                      <DataTemplate>
-                        <primitives:TextFormElementView Element="{Binding}" />
-                      </DataTemplate>
-                    </primitives:FormElementItemsControl.TextFormElementTemplate>
-                    <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
-                        <DataTemplate>
-                            <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
-                        </DataTemplate>
-                    </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
-                    <primitives:FormElementItemsControl.GroupFormElementTemplate>
-                      <DataTemplate>
-                        <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
-                          <Expander Style="{StaticResource GroupFormElementExpanderStyle}">
-                            <Expander.Header>
-                              <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
-                                <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
-                              </StackPanel>
-                            </Expander.Header>
-                            <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" KeyboardNavigation.IsTabStop="False">
-                              <primitives:FormElementItemsControl.FieldFormElementTemplate>
-                                <DataTemplate>
-                                  <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
-                                </DataTemplate>
-                              </primitives:FormElementItemsControl.FieldFormElementTemplate>
-                              <primitives:FormElementItemsControl.TextFormElementTemplate>
-                                <DataTemplate>
-                                   <primitives:TextFormElementView Element="{Binding}" />
-                                </DataTemplate>
-                              </primitives:FormElementItemsControl.TextFormElementTemplate>
-                              <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
-                                  <DataTemplate>
-                                    <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
-                                  </DataTemplate>
-                              </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
-                            </primitives:FormElementItemsControl>
-                          </Expander>
-                        </StackPanel>
-                      </DataTemplate>
-                    </primitives:FormElementItemsControl.GroupFormElementTemplate>
-                  </primitives:FormElementItemsControl>
-                  <primitives:AttachmentsFormElementView Element="{Binding DefaultAttachmentsElement}" />
-                </StackPanel>
-              </ScrollViewer>
-            </Grid>
+            <primitives:NavigationSubView x:Name="SubFrameView" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Padding="{TemplateBinding Padding}">
+                <primitives:NavigationSubView.HeaderTemplateSelector>
+                    <primitives:FeatureFormContentTemplateSelector>
+                        <primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                            </DataTemplate>
+                        </primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
+                        <primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" Visibility="{Binding Filter.Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                    <TextBlock Text="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" Visibility="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                    </primitives:FeatureFormContentTemplateSelector>
+                </primitives:NavigationSubView.HeaderTemplateSelector>
+                <primitives:NavigationSubView.ContentTemplateSelector>
+                    <primitives:FeatureFormContentTemplateSelector>
+                        <primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView" KeyboardNavigation.IsTabStop="False">
+                                        <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                            <DataTemplate>
+                                                <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                        <primitives:FormElementItemsControl.TextFormElementTemplate>
+                                            <DataTemplate>
+                                                <primitives:TextFormElementView Element="{Binding}" />
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.TextFormElementTemplate>
+                                        <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                            <DataTemplate>
+                                                <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                        <primitives:FormElementItemsControl.GroupFormElementTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
+                                                    <Expander Style="{StaticResource GroupFormElementExpanderStyle}">
+                                                        <Expander.Header>
+                                                            <StackPanel VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                                                                <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                                                            </StackPanel>
+                                                        </Expander.Header>
+                                                        <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" KeyboardNavigation.IsTabStop="False">
+                                                            <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                                                <DataTemplate>
+                                                                    <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
+                                                                </DataTemplate>
+                                                            </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                                            <primitives:FormElementItemsControl.TextFormElementTemplate>
+                                                                <DataTemplate>
+                                                                    <primitives:TextFormElementView Element="{Binding}" />
+                                                                </DataTemplate>
+                                                            </primitives:FormElementItemsControl.TextFormElementTemplate>
+                                                            <primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                                                <DataTemplate>
+                                                                    <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
+                                                                </DataTemplate>
+                                                            </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                                        </primitives:FormElementItemsControl>
+                                                    </Expander>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </primitives:FormElementItemsControl.GroupFormElementTemplate>
+                                    </primitives:FormElementItemsControl>
+                                    <primitives:AttachmentsFormElementView Element="{Binding DefaultAttachmentsElement}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
+                        <primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                            <DataTemplate>
+                                <ItemsControl ItemsSource="{Binding GroupResults}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Name}" />
+                                                <Border Width="20" Height="20" CornerRadius="10" Background="LightGray" Grid.Column="1">
+                                                    <TextBlock Text="{Binding AssociationResults.Count}" HorizontalAlignment="Center" />
+                                                </Border>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                    </primitives:FeatureFormContentTemplateSelector>
+                </primitives:NavigationSubView.ContentTemplateSelector>
+            </primitives:NavigationSubView>
           </Border>
         </ControlTemplate>
       </Setter.Value>

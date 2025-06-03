@@ -58,6 +58,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.OnApplyTemplate();
             InvalidateForm();
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: FeatureForm, true);
+            }
         }
 
         private bool _isDirty = false;
@@ -87,20 +91,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     if (FeatureForm != null)
                     {
                         await EvaluateExpressions(FeatureForm);
-#if MAUI
-                        var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
-                        if (ctrl != null && ctrl is BindableObject bo)
-                        {
-                            bo.SetBinding(BindableLayout.ItemsSourceProperty, static (FeatureFormView view) => view.FeatureForm?.Elements, source: RelativeBindingSource.TemplatedParent);
-                        }
-#elif WPF
-                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
-                        var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
-                        binding?.UpdateTarget();
-#elif WINDOWS_XAML
-                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
-                        ctrl?.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Path = new PropertyPath("FeatureForm.Elements"), Source = this });
-#endif
                     }
                 }
                 catch
@@ -169,14 +159,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 InvalidateForm();
             }
 
-#if MAUI
-            (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
-#elif WPF
-            (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
-#elif WINDOWS_XAML
-            (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ChangeView(null, 0, null, disableAnimation: true);
-#endif
-
             if (oldForm is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
@@ -192,6 +174,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateIsValidProperty();
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: newForm, true);
+            }
         }
 
         private void FeatureForm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -453,8 +439,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal void NavigateToItem(object item)
         {
-            // TODO
-            System.Diagnostics.Debugger.Break();
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.Navigate(content: item);
+            }
         }
     }
 
