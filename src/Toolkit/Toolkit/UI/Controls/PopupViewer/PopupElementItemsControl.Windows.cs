@@ -50,11 +50,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     presenter.ContentTemplate = AttachmentsPopupElementTemplate;
                 }
+                else if (item is UtilityAssociationsPopupElement)
+                {
+                    presenter.ContentTemplate = UtilityAssociationsPopupElementTemplate;
+                }
                 /* Excluded for now - Pending UI Experience design
                 else if(item is RelationshipPopupElement)
                 {
                     presenter.ContentTemplate = RelationshipPopupElementTemplate;
-                } */
+                }*/
                 else if (item is ExpressionPopupElement)
                 {
                     // This shouldn't happen since the evaluated elements are
@@ -131,6 +135,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty AttachmentsPopupElementTemplateProperty =
             DependencyProperty.Register(nameof(AttachmentsPopupElementTemplate), typeof(DataTemplate), typeof(PopupElementItemsControl), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Template used for rendering a <see cref="UtilityAssociationsPopupElement"/>.
+        /// </summary>
+        /// <seealso cref="UtilityAssociationsPopupElementView"/>
+        public DataTemplate UtilityAssociationsPopupElementTemplate
+        {
+            get { return (DataTemplate)GetValue(UtilityAssociationsPopupElementTemplateProperty); }
+            set { SetValue(UtilityAssociationsPopupElementTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="UtilityAssociationsPopupElementTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UtilityAssociationsPopupElementTemplateProperty =
+            DependencyProperty.Register(nameof(UtilityAssociationsPopupElementTemplate), typeof(DataTemplate), typeof(PopupElementItemsControl), new PropertyMetadata(null));
 
         /* Excluded for now - Pending UI Experience design
         /// <summary>
