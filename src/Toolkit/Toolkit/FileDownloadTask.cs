@@ -526,7 +526,7 @@ public sealed class FileDownloadTask : IDisposable
             Status = FileDownloadStatus.Resuming;
             FileInfo f = new FileInfo(TempFile);
             long offset = f.Exists ? f.Length : 0;
-            return BeginDownload(offset);
+            return BeginDownload(Math.Max(0, offset - BufferSize)); // We rewind one buffer-length, just to make sure any last file flushing wasn't interrupted/corrupted.
         }
         return Task.CompletedTask;
     }
