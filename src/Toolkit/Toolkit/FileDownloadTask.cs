@@ -494,6 +494,8 @@ public sealed class FileDownloadTask : IDisposable
     /// <returns></returns>
     public async Task RestartAsync()
     {
+        if (Status == FileDownloadStatus.Cancelled)
+            throw new TaskCanceledException("Download was previously cancelled");
         var task = transferTask;
         if (task != null && cancellationSource != null)
         {
@@ -513,9 +515,12 @@ public sealed class FileDownloadTask : IDisposable
     /// If the task isn't resumable, the download will start over, and if it is already running, this is a no-op.
     /// </remarks>
     /// <returns></returns>
+    /// <exception cref="TaskCanceledException">Thrown if the download has already been cancelled.</exception>
     public Task ResumeAsync()
     {
-        if (Status == FileDownloadStatus.Paused || Status == FileDownloadStatus.Error || Status == FileDownloadStatus.Cancelled || Status == FileDownloadStatus.Queued)
+        if (Status == FileDownloadStatus.Cancelled)
+            throw new TaskCanceledException("Download was previously cancelled");
+        if (Status == FileDownloadStatus.Paused || Status == FileDownloadStatus.Error || Status == FileDownloadStatus.Queued)
         {
             if (!IsResumable)
                 return RestartAsync();
@@ -565,7 +570,7 @@ public sealed class FileDownloadTask : IDisposable
             }
             if (task is not null)
             {
-                return task.ContinueWith(t => { File.Delete(TempFile); BytesDownloaded = 0; Status = FileDownloadStatus.Cancelled; ProcessQueue(); });
+                return task.ContinueWith(t => { File.Delete(TempFile); BytesDownloaded = 0; Status = FileDownloadStatus.Cancelled; });
             }
             else
             {
@@ -583,6 +588,8 @@ public sealed class FileDownloadTask : IDisposable
     /// <returns></returns>
     public Task PauseAsync()
     {
+        if (Status == FileDownloadStatus.Cancelled)
+            throw new TaskCanceledException("Download was previously cancelled");
         lock (_queueLock)
         {
             if (_queuedItems.Contains(this))
@@ -596,22 +603,7 @@ public sealed class FileDownloadTask : IDisposable
             return Task.CompletedTask;
         }
         cancellationSource.Cancel();
-        return task.ContinueWith(t => { Status = FileDownloadStatus.Paused; ProcessQueue(); });
-    }
-
-    /// <summary>
-    /// Returns when the download completed (or failed)
-    /// </summary>
-    /// <returns></returns>
-    public async Task DownloadAsync()
-    {
-        if (Status == FileDownloadStatus.Paused || Status == FileDownloadStatus.Error)
-            await ResumeAsync().ConfigureAwait(false);
-        else if (transferTask == null)
-        {
-            throw new InvalidOperationException();
-        }
-        await transferTask!;
+        return task.ContinueWith(t => { Status = FileDownloadStatus.Paused; });
     }
 
     private async Task BeginDownload(long offset)
