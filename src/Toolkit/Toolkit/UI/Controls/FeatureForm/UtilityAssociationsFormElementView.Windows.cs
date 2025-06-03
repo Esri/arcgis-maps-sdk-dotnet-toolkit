@@ -51,7 +51,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = ((ListView)sender).SelectedItem;
-            var item = ((ListView)sender).SelectedItem;
             ((ListView)sender).SelectedItem = null; // Clear selection
 #elif WINDOWS_XAML
         private void AssociationsListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -63,10 +62,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return;
             }
             var parent = UI.Controls.FeatureFormView.GetFeatureFormViewParent(this);
-            // parent?.NavigateToItem(item); // TODO
+            parent?.NavigateToItem(item); 
         }
-#endif
-
 
         /// <summary>
         /// Gets or sets the template for UtilityAssociationsFilterResult items.

@@ -37,16 +37,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationsFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             title.Style = FeatureFormView.GetFeatureFormTitleStyle();
             root.Add(title);
-            Label description = new Label();
-            description.SetBinding(Label.TextProperty, static (UtilityAssociationsFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
-            description.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationsFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
-            description.Style = FeatureFormView.GetFeatureFormCaptionStyle();
-            root.Add(description);
-            root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0, 5) });
-            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
+            var border = new Border() { StrokeThickness = 1, Margin = new Thickness(0, 4) };
+            border.SetAppThemeColor(Border.StrokeProperty, Colors.Black, Colors.White);
+            root.Add(border);
+            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None, MaximumHeightRequest = 200 };
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityAssociationsFormElementView view) => view.Element?.AssociationsFilterResults, source: RelativeBindingSource.TemplatedParent);
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
-            root.Add(cv);
+            border.Content = cv;
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName("AssociationsList", cv);
@@ -55,31 +52,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultItemTemplate()
         {
-            Grid layout = new Grid() { Padding = new Thickness(10, 0, 0, 0) };
+            Grid layout = new Grid() { Padding = new Thickness(8, 0, 8, 0), MinimumHeightRequest = 40 };
             TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
             itemTapGesture.Tapped += Result_Tapped;
             layout.GestureRecognizers.Add(itemTapGesture);
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            layout.RowDefinitions.Add(new RowDefinition(20));
-            layout.RowDefinitions.Add(new RowDefinition(20));
 
-            Label title = new Label();
+            Label title = new Label() { VerticalOptions = LayoutOptions.Center };
             title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title);
             title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title, converter: Internal.EmptyToFalseConverter.Instance);
             title.Style = FeatureFormView.GetFeatureFormTitleStyle();
             layout.Add(title);
-            Label description = new Label();
-            description.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Description);
-            description.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Description, converter: Internal.EmptyToFalseConverter.Instance);
-            description.Style = FeatureFormView.GetFeatureFormCaptionStyle();
 
-            Grid.SetRow(description, 1);
-            layout.Add(description);
-            Image image = new Image() { WidthRequest = 18, HeightRequest = 18 };
+            Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
             image.Source = new FontImageSource() { Glyph = ((char)0xE078).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
             Grid.SetColumn(image, 1);
-            Grid.SetRowSpan(image, 2);
             layout.Add(image);
 
             Border root = new Border() { StrokeThickness = 0, Content = layout };
@@ -105,15 +93,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static void Result_Tapped(object? sender, EventArgs e)
         {
             var cell = sender as View;
-            Element? parent = cell?.Parent;
-            while (parent is View && parent is not UtilityAssociationsFormElementView)
+            if (cell?.BindingContext is UtilityNetworks.UtilityAssociationsFilterResult result)
             {
-                parent = parent.Parent;
-            }
-            if (parent is UtilityAssociationsFormElementView a && cell?.BindingContext is UtilityNetworks.UtilityAssociationsFilterResult result)
-            {
-                // TODO
-                //a.FeatureFormView()?.NavigateToItem(result);
+                var parent = FeatureFormView.GetFeatureFormViewParent(cell);
+                parent?.NavigateToItem(result); 
             }
         }
     }

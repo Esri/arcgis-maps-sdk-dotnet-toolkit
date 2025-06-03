@@ -450,6 +450,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Launcher.LaunchUriAsync(uri);
         }
+
+        internal void NavigateToItem(object item)
+        {
+            // TODO
+            System.Diagnostics.Debugger.Break();
+        }
     }
 
     /// <summary>
