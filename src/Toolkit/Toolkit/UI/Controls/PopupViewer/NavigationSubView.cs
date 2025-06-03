@@ -99,8 +99,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 NavigationStack.Push(new Tuple<object, double>(Content, offset));
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection();
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("NavigationSubViewForwardAnimation");
+            bool success = false;
+            if (animation != null && GetTemplateChild("Header") is UIElement header)
+            {
+                success = animation.TryStart(header);
+            }
+            if(!success)
+            {
             if (NavigationStack.Count > 0)
                 ContentTransitions.Add(new EntranceThemeTransition() { FromHorizontalOffset = 200, FromVerticalOffset = 0 });
+            }
 #endif
             SetContent(content);
 
@@ -176,15 +185,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (NavigationStack.Count == 0)
                 return;
-            var content = NavigationStack.First();
+            var content = NavigationStack.Last();
             NavigationStack.Clear();
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection
             {
-                new EntranceThemeTransition() { FromHorizontalOffset = -200, FromVerticalOffset = 0 }
+                new EntranceThemeTransition() { FromHorizontalOffset = 0, FromVerticalOffset = -200 }
             };
 #endif
-            SetContent(content);
+            SetContent(content.Item1);
         }
 
         /// <inheritdoc />
