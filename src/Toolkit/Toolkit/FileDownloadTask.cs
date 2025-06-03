@@ -49,7 +49,7 @@ public static class FileDownloadTaskExtensions
     /// <exception cref="IOException">The destination file already exists</exception>.
     public static Task<FileDownloadTask> BeginDownloadAsync(this Portal.PortalItem portalItem, string destinationPath)
     {
-        string requestUri = $"{portalItem.Portal.Uri.OriginalString.TrimEnd('/') + "/sharing/rest/"}/content/items/{portalItem.ItemId}/data";
+        string requestUri = $"{portalItem.Portal.Uri.OriginalString.TrimEnd('/')}/sharing/rest/content/items/{portalItem.ItemId}/data";
         return FileDownloadTask.BeginDownloadAsync(destinationPath, new Uri(requestUri));
     }
 }
