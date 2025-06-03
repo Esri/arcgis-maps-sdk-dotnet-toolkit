@@ -107,7 +107,10 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
         <RowDefinition Height=""Auto"" />
         <RowDefinition Height=""*"" />
     </Grid.RowDefinitions>
-    <Border x:Name=""{nameof(PART_NoNetworksWarning)}"" BorderColor=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" CornerRadius=""4"" Margin=""4"" Grid.RowSpan=""3"" IsVisible=""false"">
+    <Border x:Name=""{nameof(PART_NoNetworksWarning)}"" Stroke=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" Padding=""20"" Margin=""4"" Grid.RowSpan=""3"" IsVisible=""false"">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius=""4""/>
+        </Border.StrokeShape>
         <Label Text=""{noUtilityNetworks}"" />
     </Border>
     <esriTKPrim:SegmentedControl x:Name=""{nameof(PART_NavigationSegment)}"" Grid.Row=""1"" HeightRequest=""30"" />
@@ -154,19 +157,31 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
             <RowDefinition Height=""*"" />
             <RowDefinition Height=""Auto"" />
         </Grid.RowDefinitions>
-        <Border x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+        <Border x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" Stroke=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" Padding=""20"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius=""4""/>
+            </Border.StrokeShape>
             <Label Text=""{notEnoughStartingPoints}"" TextColor=""{foregroundColor}""  />
         </Border>
-        <Border x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+        <Border x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" Stroke=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" Padding=""20"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius=""4""/>
+            </Border.StrokeShape>
             <Label Text=""{moreThanRequiredStartingPoints}"" TextColor=""{foregroundColor}""  />
         </Border>
-        <Border x:Name=""{nameof(PART_DuplicateTraceWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+        <Border x:Name=""{nameof(PART_DuplicateTraceWarning)}"" Stroke=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" Padding=""20"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius=""4""/>
+            </Border.StrokeShape>
             <Label Text=""{duplicateTrace}"" TextColor=""{foregroundColor}""  />
         </Border>
         <Button x:Name=""{nameof(PART_ButtonRunTrace)}"" Text=""{runTrace}"" IsVisible=""false"" Grid.Row=""2"" />
     </Grid>
     <Grid x:Name=""{nameof(PART_ViewContainer)}"" Grid.Row=""2"">
-        <Border x:Name=""{nameof(PART_NoResultsWarning)}"" BorderColor=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"">
+        <Border x:Name=""{nameof(PART_NoResultsWarning)}"" Stroke=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" Padding=""20"" Margin=""4"" IsVisible=""false"">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius=""4""/>
+            </Border.StrokeShape>
             <Label Text=""{noResults}"" TextColor=""{foregroundColor}""  />
         </Border>
         <Grid x:Name=""{nameof(PART_GridResultsDisplay)}"" IsVisible=""false"">
@@ -196,7 +211,10 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                             </BindableLayout.ItemTemplate>
                             <BindableLayout.EmptyViewTemplate>
                                 <DataTemplate>
-                                    <Border BorderColor=""#D83020"" CornerRadius=""4"" Margin=""4"" Grid.RowSpan=""3"">
+                                    <Border Stroke=""#D83020"" Margin=""4"" Grid.RowSpan=""3"">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius=""4""/>
+                                        </Border.StrokeShape>
                                         <Label Text=""{noFunctionResults}"" HorizontalOptions=""Center"" Padding=""16"" TextColor=""{foregroundColor}""  />
                                     </Border> 
                                 </DataTemplate>
@@ -238,7 +256,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
             </BindableLayout.ItemTemplate>
         </Grid>
     </Grid>
-    <Border x:Name=""{nameof(PART_ActivityIndicator)}"" IsVisible=""false"" Grid.RowSpan=""3"" VerticalOptions=""FillAndExpand"" HorizontalOptions=""FillAndExpand"" Background=""{backgroundColor}"" HasShadow=""False"" CornerRadius=""0"" BorderColor=""{backgroundColor}"">
+    <Border x:Name=""{nameof(PART_ActivityIndicator)}"" IsVisible=""false"" Grid.RowSpan=""3"" VerticalOptions=""FillAndExpand"" HorizontalOptions=""FillAndExpand"" Background=""{backgroundColor}"" HasShadow=""False"" Stroke=""{backgroundColor}"">
         <StackLayout Spacing=""8"" VerticalOptions=""Center"" HorizontalOptions=""CenterAndExpand"">
             <ActivityIndicator IsRunning=""True"" Color=""{{AppThemeBinding Light=#007AC2,Dark=#009AF2}}"" />
             <Button x:Name=""{nameof(PART_ButtonCancelActivity)}"" Text=""{cancel}"" />
