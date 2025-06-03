@@ -36,10 +36,13 @@ public class OverviewMap : TemplatedView
         DefaultControlTemplate = new ControlTemplate(() =>
         {
             var converter = new Internal.LoadStatusToVisibilityConverter();
-            Frame rootFrame = new Frame
+            Border rootBorder = new Border
             {
-                Padding = new Thickness(1), HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill,
-                CornerRadius = 0, HasShadow = false, BorderColor = Colors.Black, BackgroundColor = Colors.White
+                Padding = new Thickness(1),
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+                Stroke = Colors.Black,
+                BackgroundColor = Colors.White
             };
             Grid root = new Grid();
             MapView mapView = new MapView()
@@ -51,17 +54,18 @@ public class OverviewMap : TemplatedView
             root.Add(activity);
             Label label = new Label()
             {
-                TextColor = Colors.Black, Text = "Map failed to load. Did you forget an API key?"
+                TextColor = Colors.Black,
+                Text = "Map failed to load. Did you forget an API key?"
             };
             label.SetBinding(VisualElement.IsVisibleProperty, static (MapView mapView) => mapView.Map?.LoadStatus, converter: converter, converterParameter: "FailedToLoad", source: mapView);
             root.Add(label);
             mapView.SetBinding(VisualElement.IsVisibleProperty, static (MapView mapView) => mapView.Map?.LoadStatus, converter: converter, converterParameter: "Loaded", source: mapView);
             root.Add(mapView);
             INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(rootFrame, nameScope);
+            NameScope.SetNameScope(rootBorder, nameScope);
             nameScope.RegisterName("PART_MapView", mapView);
-            rootFrame.Content = root;
-            return rootFrame;
+            rootBorder.Content = root;
+            return rootBorder;
         });
     }
 
