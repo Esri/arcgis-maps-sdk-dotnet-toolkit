@@ -535,6 +535,42 @@
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
     </Style>
 
+    <Style TargetType="{x:Type primitives:UtilityAssociationsFilterResultsView}" >
+        <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid MinHeight="40">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource FeatureFormViewTitleStyle}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding AssociationResults.Count}" Style="{StaticResource FeatureFormViewCaptionStyle}" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center" />
+                        <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" Grid.Column="2" VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationsFilterResultsView}">
+                    <ListView VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding AssociationsFilterResult.GroupResults, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
+                        SelectionMode="Single" x:Name="ResultsList" Margin="0,12,0,8">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsTabStop" Value="False" />
+    </Style>
+
     <Style TargetType="{x:Type controls:FeatureFormView}" >
     <Setter Property="Template">
       <Setter.Value>
@@ -641,22 +677,7 @@
                         </primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
                         <primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
                             <DataTemplate>
-                                <ItemsControl ItemsSource="{Binding GroupResults}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Name}" />
-                                                <Border Width="20" Height="20" CornerRadius="10" Background="LightGray" Grid.Column="1">
-                                                    <TextBlock Text="{Binding AssociationResults.Count}" HorizontalAlignment="Center" />
-                                                </Border>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                 <primitives:UtilityAssociationsFilterResultsView AssociationsFilterResult="{Binding}" />
                             </DataTemplate>
                         </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
                     </primitives:FeatureFormContentTemplateSelector>

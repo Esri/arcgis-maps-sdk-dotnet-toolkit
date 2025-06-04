@@ -234,22 +234,7 @@
                               </primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
                               <primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
                                   <DataTemplate>
-                                      <ItemsControl ItemsSource="{Binding GroupResults}">
-                                          <ItemsControl.ItemTemplate>
-                                              <DataTemplate>
-                                                  <Grid>
-                                                      <Grid.ColumnDefinitions>
-                                                          <ColumnDefinition Width="*" />
-                                                          <ColumnDefinition Width="Auto" />
-                                                      </Grid.ColumnDefinitions>
-                                                      <TextBlock Text="{Binding Name}" />
-                                                      <Border Width="20" Height="20" CornerRadius="10" Background="LightGray" Grid.Column="1">
-                                                          <TextBlock Text="{Binding AssociationResults.Count}" HorizontalAlignment="Center" />
-                                                      </Border>
-                                                   </Grid>
-                                              </DataTemplate>
-                                          </ItemsControl.ItemTemplate>
-                                      </ItemsControl>
+                                      <primitives:UtilityAssociationsFilterResultsView AssociationsFilterResult="{Binding}" />
                                   </DataTemplate>
                               </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
                           </primitives:FeatureFormContentTemplateSelector>

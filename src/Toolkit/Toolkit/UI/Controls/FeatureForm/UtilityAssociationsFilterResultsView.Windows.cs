@@ -17,12 +17,17 @@
 #if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.UtilityNetworks;
+#if WINUI
+using Microsoft.UI.Xaml.Media.Animation;
+#elif WINDOWS_UWP
+using Windows.UI.Xaml.Media.Animation;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    public partial class UtilityAssociationsFormElementView : Control
+    public partial class UtilityAssociationsFilterResultsView : Control
     {
-        private ListView? _associationsListView;
+        private ListView? _resultsListView;
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
@@ -31,31 +36,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
-            if (_associationsListView is not null)
+            if (_resultsListView is not null)
             {
 #if WINDOWS_XAML
-                _associationsListView.ItemClick -= AssociationsListView_ItemClick;
+                _resultsListView.ItemClick -= ResultsListView_ItemClick;
+                _resultsListView.Loaded -= ResultsListView_Loaded;
 #endif
             }
-            if (GetTemplateChild("AssociationsList") is ListView listView)
+            if (GetTemplateChild("ResultsList") is ListView listView)
             {
-                _associationsListView = listView;
+                _resultsListView = listView;
 #if WINDOWS_XAML
-                _associationsListView.ItemClick += AssociationsListView_ItemClick;
+                _resultsListView.ItemClick += ResultsListView_ItemClick;
+                _resultsListView.Loaded += ResultsListView_Loaded;
 #elif WPF
-                _associationsListView.SelectionChanged += AssociationsListView_SelectionChanged;
+                _resultsListView.SelectionChanged += AssociationsListView_SelectionChanged;
 #endif
             }
         }
+
+#if WINDOWS_XAML
+        private void ResultsListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("Item");
+            if (animation != null && AssociationsFilterResult?.GroupResults is not null)
+            {
+                _ = ((ListView)sender).TryStartConnectedAnimationAsync(animation, AssociationsFilterResult.GroupResults, "ItemName");
+            }
+        }
+#endif
 #if WPF
         private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = ((ListView)sender).SelectedItem;
             ((ListView)sender).SelectedItem = null; // Clear selection
 #elif WINDOWS_XAML
-        private void AssociationsListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void ResultsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as UtilityAssociationsFilterResult;
+            var item = e.ClickedItem as UtilityAssociationGroupResult;
 #endif
             if (item is null)
             {
@@ -63,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             var parent = UI.Controls.FeatureFormView.GetFeatureFormViewParent(this);
 #if WINDOWS_XAML
-            (sender as ListView)?.PrepareConnectedAnimation("NavigationSubViewForwardAnimation", item, "Title");
+            _resultsListView?.PrepareConnectedAnimation("NavigationSubViewForwardAnimation", item, "Title");
 #endif
             parent?.NavigateToItem(item); 
         }
@@ -81,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="ItemTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
-            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFormElementView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFilterResultsView), new PropertyMetadata(null));
     }
 }
 #endif

@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             FeatureFormContentTemplateSelector selector = new FeatureFormContentTemplateSelector();
             selector.FeatureFormTemplate = new DataTemplate(() =>
             {
-                Label roottitle = new Label();
+                Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
                 roottitle.Style = GetFeatureFormHeaderStyle();
                 roottitle.SetBinding(Label.TextProperty, static (FeatureForm form) => form?.Title);
                 roottitle.SetBinding(VisualElement.IsVisibleProperty, static (FeatureForm form) => form?.Title, converter: Internal.EmptyToFalseConverter.Instance);
@@ -110,18 +110,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             });
             selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
             {
-                VerticalStackLayout root = new VerticalStackLayout();
-                Label title = new Label();
+                VerticalStackLayout root = new VerticalStackLayout() { VerticalOptions = LayoutOptions.Center };
+                Label title = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
                 title.Style = GetFeatureFormHeaderStyle();
                 title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
                 title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(title);
-                Label desc = new Label();
+                Label desc = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
                 desc.Style = GetFeatureFormCaptionStyle();
                 desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description); // TODO: This needs to be the FeatureForm.Title
                 desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(desc);
                 return root;
+            });
+            selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                roottitle.Style = GetFeatureFormHeaderStyle();
+                roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
+                roottitle.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name, converter: Internal.EmptyToFalseConverter.Instance);
+                return roottitle;
             });
             return selector;
         }
@@ -145,26 +153,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             });
             selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
             {
-                CollectionView itemsView = new CollectionView()
-                {
-                    Margin = new Thickness(0, 10),
-                    ItemTemplate = new DataTemplate(() =>
-                    {
-                        var grid = new Grid();
-                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-                        Label name = new Label();
-                        name.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name);
-                        grid.Children.Add(name);
-                        Label count = new Label();
-                        count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count);
-                        Grid.SetColumn(count, 1);
-                        grid.Children.Add(count);
-                        return grid;
-                    })
-                };
-                itemsView.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.GroupResults);
-                return itemsView;
+                var view = new UtilityAssociationsFilterResultsView();
+                view.SetBinding(UtilityAssociationsFilterResultsView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
+                return view;
+            });
+
+            selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label() { Text = "TODO..." };
+                roottitle.Style = GetFeatureFormHeaderStyle();
+                // roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
+                // roottitle.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name, converter: Internal.EmptyToFalseConverter.Instance);
+                return roottitle;
             });
             return selector;
         }
