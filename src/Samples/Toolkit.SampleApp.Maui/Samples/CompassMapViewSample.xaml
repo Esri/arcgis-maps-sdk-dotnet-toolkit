@@ -11,12 +11,28 @@
                 GeoView="{x:Reference mapView}" WidthRequest="30" HeightRequest="30"
                 AutoHide="False" x:Name="compass" />
 
-        <StackLayout HorizontalOptions="Start" VerticalOptions="End" Margin="20" Padding="20" BackgroundColor="{AppThemeBinding Light=White, Dark=Black}">
-            <Label Text="AutoHide Compass" />
-            <Switch IsToggled="{Binding AutoHide, Source={x:Reference compass}}" />
-            <Label Text="Size" />
-            <Slider Maximum="100" Minimum="10" Value="30" ValueChanged="Slider_ValueChanged"/>
-        </StackLayout>
-
+        <Grid HorizontalOptions="Start"
+              VerticalOptions="End"
+              Margin="20"
+              Padding="20"
+              BackgroundColor="{AppThemeBinding Light=White, Dark=Black}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Text="AutoHide Compass"
+                   Grid.Row="0" />
+            <Switch IsToggled="{Binding AutoHide, Source={x:Reference compass}}"
+                    Grid.Row="1" />
+            <Label Text="Size"
+                   Grid.Row="2" />
+            <Slider Maximum="100"
+                    Minimum="10"
+                    Value="30"
+                    ValueChanged="Slider_ValueChanged"
+                    Grid.Row="3" />
+        </Grid>
     </Grid>
 </ContentPage>
