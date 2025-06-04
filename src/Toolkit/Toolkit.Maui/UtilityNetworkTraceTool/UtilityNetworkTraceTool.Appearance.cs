@@ -107,10 +107,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
         <RowDefinition Height=""Auto"" />
         <RowDefinition Height=""*"" />
     </Grid.RowDefinitions>
-    <Border x:Name=""{nameof(PART_NoNetworksWarning)}"" Stroke=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" Padding=""20"" Margin=""4"" Grid.RowSpan=""3"" IsVisible=""false"">
-        <Border.StrokeShape>
-            <RoundRectangle CornerRadius=""4""/>
-        </Border.StrokeShape>
+    <Border x:Name=""{nameof(PART_NoNetworksWarning)}"" Stroke=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" Grid.RowSpan=""3"" IsVisible=""false"">
         <Label Text=""{noUtilityNetworks}"" />
     </Border>
     <esriTKPrim:SegmentedControl x:Name=""{nameof(PART_NavigationSegment)}"" Grid.Row=""1"" HeightRequest=""30"" />
@@ -157,31 +154,19 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
             <RowDefinition Height=""*"" />
             <RowDefinition Height=""Auto"" />
         </Grid.RowDefinitions>
-        <Border x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" Stroke=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" Padding=""20"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius=""4""/>
-            </Border.StrokeShape>
+        <Border x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" Stroke=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""{notEnoughStartingPoints}"" TextColor=""{foregroundColor}""  />
         </Border>
-        <Border x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" Stroke=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" Padding=""20"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius=""4""/>
-            </Border.StrokeShape>
+        <Border x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" Stroke=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""{moreThanRequiredStartingPoints}"" TextColor=""{foregroundColor}""  />
         </Border>
-        <Border x:Name=""{nameof(PART_DuplicateTraceWarning)}"" Stroke=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" Padding=""20"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius=""4""/>
-            </Border.StrokeShape>
+        <Border x:Name=""{nameof(PART_DuplicateTraceWarning)}"" Stroke=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""{duplicateTrace}"" TextColor=""{foregroundColor}""  />
         </Border>
         <Button x:Name=""{nameof(PART_ButtonRunTrace)}"" Text=""{runTrace}"" IsVisible=""false"" Grid.Row=""2"" />
     </Grid>
     <Grid x:Name=""{nameof(PART_ViewContainer)}"" Grid.Row=""2"">
-        <Border x:Name=""{nameof(PART_NoResultsWarning)}"" Stroke=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" Padding=""20"" Margin=""4"" IsVisible=""false"">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius=""4""/>
-            </Border.StrokeShape>
+        <Border x:Name=""{nameof(PART_NoResultsWarning)}"" Stroke=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" IsVisible=""false"">
             <Label Text=""{noResults}"" TextColor=""{foregroundColor}""  />
         </Border>
         <Grid x:Name=""{nameof(PART_GridResultsDisplay)}"" IsVisible=""false"">
@@ -211,10 +196,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                             </BindableLayout.ItemTemplate>
                             <BindableLayout.EmptyViewTemplate>
                                 <DataTemplate>
-                                    <Border Stroke=""#D83020"" Margin=""4"" Grid.RowSpan=""3"">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius=""4""/>
-                                        </Border.StrokeShape>
+                                    <Border Stroke=""#D83020"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Grid.RowSpan=""3"">
                                         <Label Text=""{noFunctionResults}"" HorizontalOptions=""Center"" Padding=""16"" TextColor=""{foregroundColor}""  />
                                     </Border> 
                                 </DataTemplate>
