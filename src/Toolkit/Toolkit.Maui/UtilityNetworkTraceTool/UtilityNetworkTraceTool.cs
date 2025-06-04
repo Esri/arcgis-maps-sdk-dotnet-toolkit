@@ -187,7 +187,7 @@ public partial class UtilityNetworkTraceTool : TemplatedView
             PART_ListViewTraceTypes.SelectedIndexChanged += OnTraceTypeSelected;
         }
 
-        if (GetTemplateChild(nameof(PART_ActivityIndicator)) is Frame activityIndicator)
+        if (GetTemplateChild(nameof(PART_ActivityIndicator)) is Border activityIndicator)
         {
             PART_ActivityIndicator = activityIndicator;
         }
