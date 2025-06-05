@@ -11,6 +11,7 @@
   <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
   <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
   <internal:FileSizeConverter x:Key="FeatureFormFileSizeConverter" />
+  <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#toolkit-icons</FontFamily>
   <Style TargetType="TextBlock" x:Key="FeatureFormViewHeaderStyle">
      <Setter Property="FontSize" Value="16" />
      <Setter Property="FontWeight" Value="Bold" />
@@ -498,7 +499,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid MinHeight="40">
+                    <Grid MinHeight="40" AutomationProperties.Name="{Binding Filter.Title}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -515,7 +516,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationsFormElementView}">
                     <StackPanel>
-                        <TextBlock Text="{Binding Element.Label, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
+                        <TextBlock Text="{Binding Element.Label, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
                         <TextBlock Text="{Binding Element.Description, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                         <Border CornerRadius="4"  BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrush}}" BorderThickness="1" Margin="0,12,0,8" Background="{x:Static SystemColors.ControlBrush}">
                             <ListView ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}"
@@ -540,13 +541,13 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid MinHeight="40">
+                    <Grid MinHeight="40" AutomationProperties.Name="{Binding Name}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource FeatureFormViewTitleStyle}" VerticalAlignment="Center" />
+                        <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource FeatureFormViewTitleStyle}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
                         <TextBlock Text="{Binding AssociationResults.Count}" Style="{StaticResource FeatureFormViewCaptionStyle}" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center" />
                         <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" Grid.Column="2" VerticalAlignment="Center" />
                     </Grid>
@@ -569,6 +570,63 @@
             </Setter.Value>
         </Setter>
         <Setter Property="IsTabStop" Value="False" />
+    </Style>
+    <Style TargetType="{x:Type primitives:UtilityAssociationGroupResultView}" >
+        <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <!-- x:DataType=UtilityAssociationResult-->
+                    <primitives:UtilityAssociationResultView AssociationResult="{Binding}" x:Name="ResultView" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationGroupResultView}">
+                    <Border CornerRadius="4" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrush}}" BorderThickness="1" Margin="0,12,0,8" Background="{x:Static SystemColors.ControlBrush}">
+                        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding GroupResult.AssociationResults, RelativeSource={RelativeSource Mode=TemplatedParent}}" x:Name="ResultsList" SelectionMode="Single" >
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsTabStop" Value="False" />
+    </Style>
+
+    <Style TargetType="{x:Type primitives:UtilityAssociationResultView}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationResultView}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="Icon" VerticalAlignment="Center" Margin="4,0" FontFamily="{StaticResource ToolkitIconsFontFamily}" Grid.RowSpan="2" />
+                        <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="Binding AssociationResult.Association.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"
+                                   VerticalAlignment="Center" Grid.Column="1" Grid.ColumnSpan="3" TextTrimming="CharacterEllipsis" />
+                        <TextBlock x:Name="FractionText" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" />
+                        <TextBlock x:Name="IsContentVisibleText" Visibility="Collapsed" Grid.Column="2" Grid.Row="1" />
+                        <TextBlock x:Name="TerminalText" Visibility="Collapsed" Grid.Column="3" Grid.Row="1" />
+                        <TextBlock Text="&#xE76C;" Grid.Column="4" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" FontFamily="Segoe MDL2 Assets" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type controls:FeatureFormView}" >
@@ -605,17 +663,24 @@
                     <primitives:FeatureFormContentTemplateSelector>
                         <primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
                         <primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
                             <DataTemplate>
-                                <StackPanel>
+                                <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" Visibility="{Binding Filter.Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
-                                    <TextBlock Text="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" Visibility="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                    <TextBlock Text="{Binding Filter.Description, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" Visibility="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                        <primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
                     </primitives:FeatureFormContentTemplateSelector>
                 </primitives:NavigationSubView.HeaderTemplateSelector>
                 <primitives:NavigationSubView.ContentTemplateSelector>
@@ -680,6 +745,11 @@
                                  <primitives:UtilityAssociationsFilterResultsView AssociationsFilterResult="{Binding}" />
                             </DataTemplate>
                         </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                        <primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                            <DataTemplate>
+                                <primitives:UtilityAssociationGroupResultView GroupResult="{Binding}" />
+                            </DataTemplate>
+                        </primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
                     </primitives:FeatureFormContentTemplateSelector>
                 </primitives:NavigationSubView.ContentTemplateSelector>
             </primitives:NavigationSubView>

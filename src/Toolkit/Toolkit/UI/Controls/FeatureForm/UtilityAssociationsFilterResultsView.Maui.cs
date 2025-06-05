@@ -49,27 +49,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
             itemTapGesture.Tapped += Result_Tapped;
             layout.GestureRecognizers.Add(itemTapGesture);
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-
-            Label title = new Label() { VerticalOptions = LayoutOptions.Center };
-            title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name);
-            title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name, converter: Internal.EmptyToFalseConverter.Instance);
-            title.Style = FeatureFormView.GetFeatureFormTitleStyle();
-            layout.Add(title);
-
-            Label count = new Label() { VerticalOptions = LayoutOptions.Center };
-            count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count);
-            count.Style = FeatureFormView.GetFeatureFormCaptionStyle();
-            Grid.SetColumn(count, 1);
-            layout.Add(count);
-            
-            Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
-            image.Source = new FontImageSource() { Glyph = ((char)0xE078).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
-            Grid.SetColumn(image, 2);
-            layout.Add(image);
-
+            var view = new UtilityAssociationResultView();
+            layout.Add(view);
             return layout;
         }
 

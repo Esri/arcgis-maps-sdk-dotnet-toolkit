@@ -24,18 +24,25 @@
                           <primitives:FeatureFormContentTemplateSelector>
                               <primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
                                   <DataTemplate>
-                                      <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewHeaderStyle}" Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                      <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewHeaderStyle}" VerticalAlignment="Center" />
                                   </DataTemplate>
                               </primitives:FeatureFormContentTemplateSelector.FeatureFormTemplate>
                               <primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
                                   <DataTemplate>
                                       <StackPanel>
                                           <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" Visibility="{Binding Filter.Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
-                                          <TextBlock Text="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" Visibility="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                          <TextBlock Text="{Binding Filter.Description, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" Visibility="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                                       </StackPanel>
                                   </DataTemplate>
                               </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
-                          </primitives:FeatureFormContentTemplateSelector>
+                              <primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                                  <DataTemplate>
+                                      <StackPanel>
+                                          <TextBlock Text="{Binding Name, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" />
+                                      </StackPanel>
+                                  </DataTemplate>
+                               </primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                           </primitives:FeatureFormContentTemplateSelector>
                       </primitives:NavigationSubView.HeaderTemplateSelector>
                       <primitives:NavigationSubView.ContentTemplateSelector>
                           <primitives:FeatureFormContentTemplateSelector>
@@ -84,7 +91,7 @@
                                                                           <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                                                       </DataTemplate>
                                                                   </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
-                                                              </primitives:FormElementItemsControl>
+                                                               </primitives:FormElementItemsControl>
                                                           </Expander>
                                                       </StackPanel>
                                                   </DataTemplate>
@@ -99,6 +106,11 @@
                                       <primitives:UtilityAssociationsFilterResultsView AssociationsFilterResult="{Binding}" />
                                    </DataTemplate>
                               </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                              <primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                                  <DataTemplate>
+                                      <primitives:UtilityAssociationGroupResultView GroupResult="{Binding}" />
+                                  </DataTemplate>
+                              </primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
                           </primitives:FeatureFormContentTemplateSelector>
                       </primitives:NavigationSubView.ContentTemplateSelector>
                   </primitives:NavigationSubView>

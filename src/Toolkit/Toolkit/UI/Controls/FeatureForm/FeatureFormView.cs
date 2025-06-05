@@ -134,6 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the associated FeatureForm which contains the form.
         /// </summary>
+        /// <seealso cref="CurrentFeatureForm"/>
         public FeatureForm? FeatureForm
         {
             get { return GetValue(FeatureFormProperty) as FeatureForm; }
@@ -154,26 +155,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnFeatureFormPropertyChanged(FeatureForm? oldForm, FeatureForm? newForm)
         {
-            if (newForm is not null)
-            {
-                InvalidateForm();
-            }
-
-            if (oldForm is INotifyPropertyChanged inpcOld)
-            {
-                _elementPropertyChangedListener?.Detach();
-                _elementPropertyChangedListener = null;
-            }
-            if (newForm is INotifyPropertyChanged inpcNew)
-            {
-                _elementPropertyChangedListener = new WeakEventListener<FeatureFormView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
-                {
-                    OnEventAction = static (instance, source, eventArgs) => instance.FeatureForm_PropertyChanged(source, eventArgs),
-                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
-                };
-                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
-            }
-            UpdateIsValidProperty();
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
                 subView.Navigate(content: newForm, true);
@@ -192,7 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isValid = false;
 
         /// <summary>
-        /// Gets a value indicating whether this form has any validation errors.
+        /// Gets a value indicating whether the <see cref="CurrentFeatureForm"/> has any validation errors.
         /// </summary>
         /// <seealso cref="FeatureForm.ValidationErrors"/>
         public bool IsValid
@@ -213,17 +194,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void UpdateIsValidProperty()
         {
-            IsValid = FeatureForm?.ValidationErrors?.Any() != true;
+            IsValid = CurrentFeatureForm?.ValidationErrors?.Any() != true;
         }
 
         /// <summary>
-        /// Discards edits to all elements, refreshes any pending expressions and restores attachment list.
+        /// Discards edits to all elements, refreshes any pending expressions and restores attachment list for the <see cref="CurrentFeatureForm"/> .
         /// </summary>
         /// <seealso cref="FeatureForm.DiscardEdits"/>
         /// <seealso cref="FeatureForm.EvaluateExpressionsAsync"/>
         public async Task DiscardEditsAsync()
         {
-            var form = FeatureForm;
+            var form = CurrentFeatureForm;
             if (form is not null)
             {
                 _isDiscarding = true;
@@ -245,14 +226,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        ///  Saves edits made using the <see cref="FeatureForm"/> to the database.
+        ///  Saves edits made using the <see cref="FeatureForm"/> to the database for the <see cref="CurrentFeatureForm"/>.
         /// </summary>
         /// <seealso cref="FeatureForm.FinishEditingAsync"/>
         public async Task FinishEditingAsync()
         {
-            if (FeatureForm is not null)
+            if (CurrentFeatureForm is not null)
             {
-                await FeatureForm.FinishEditingAsync().ConfigureAwait(false);
+                await CurrentFeatureForm.FinishEditingAsync().ConfigureAwait(false);
                 Esri.ArcGISRuntime.Toolkit.Internal.DispatcherExtensions.Dispatch(this, ResetValidationStates);
             }
         }
@@ -442,7 +423,46 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
                 subView.Navigate(content: item);
+                if(item is FeatureForm featureForm)
+                {
+                    SetCurrentFeatureForm(featureForm);
+                }
             }
+        }
+
+        /// <summary>
+        /// Gets the currently active feature form being edited
+        /// </summary>
+        /// <remarks>
+        /// If you are editing related features or utility network associations, this will return the currently active featureform being edited.
+        /// </remarks>
+        public FeatureForm? CurrentFeatureForm
+        {
+            get => GetCurrentFeatureForm();
+        }
+
+        private void OnCurrentFeatureFormPropertyChanged(FeatureForm? oldForm, FeatureForm? newForm)
+        {
+            if (newForm is not null)
+            {
+                InvalidateForm();
+            }
+
+            if (oldForm is INotifyPropertyChanged inpcOld)
+            {
+                _elementPropertyChangedListener?.Detach();
+                _elementPropertyChangedListener = null;
+            }
+            if (newForm is INotifyPropertyChanged inpcNew)
+            {
+                _elementPropertyChangedListener = new WeakEventListener<FeatureFormView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.FeatureForm_PropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
+            }
+            UpdateIsValidProperty();
         }
     }
 

@@ -25,7 +25,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    public partial class UtilityAssociationsFilterResultsView : Control
+    public partial class UtilityAssociationGroupResultView : Control
     {
         private ListView? _resultsListView;
         /// <inheritdoc />
@@ -35,6 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public override void OnApplyTemplate()
 #endif
         {
+            
             base.OnApplyTemplate();
             if (_resultsListView is not null)
             {
@@ -60,31 +61,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         //{
             
         //    ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("Item");
-        //    if (animation != null && AssociationsFilterResult?.GroupResults is not null)
+        //    if (animation != null && GroupResult is not null)
         //    {
-        //        _ = ((ListView)sender).TryStartConnectedAnimationAsync(animation, AssociationsFilterResult.GroupResults, "ItemName");
+        //        _ = ((ListView)sender).TryStartConnectedAnimationAsync(animation, GroupResult, "ItemName");
         //    }
         //}
 #endif
 #if WPF
         private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var item = ((ListView)sender).SelectedItem;
+            var item = ((ListView)sender).SelectedItem as UtilityAssociationResult;
             ((ListView)sender).SelectedItem = null; // Clear selection
 #elif WINDOWS_XAML
         private void ResultsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as UtilityAssociationGroupResult;
+            var item = e.ClickedItem as UtilityAssociationResult;
 #endif
             if (item is null)
             {
                 return;
             }
             var parent = UI.Controls.FeatureFormView.GetFeatureFormViewParent(this);
+            var title = new Mapping.Popups.Popup(item.AssociatedFeature, null).Title;
+            var featureForm = new FeatureForm(item.AssociatedFeature);
 #if WINDOWS_XAML
-            _resultsListView?.PrepareConnectedAnimation("NavigationSubViewForwardAnimation", item, "Title");
+            _resultsListView?.PrepareConnectedAnimation("NavigationSubViewForwardAnimation", item, "ResultView");
 #endif
-            parent?.NavigateToItem(item); 
+            parent?.NavigateToItem(featureForm); 
         }
 
         /// <summary>
@@ -100,7 +103,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="ItemTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
-            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFilterResultsView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationGroupResultView), new PropertyMetadata(null));
     }
 }
 #endif

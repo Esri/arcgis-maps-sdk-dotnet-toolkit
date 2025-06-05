@@ -105,18 +105,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
                 roottitle.Style = GetFeatureFormHeaderStyle();
                 roottitle.SetBinding(Label.TextProperty, static (FeatureForm form) => form?.Title);
-                roottitle.SetBinding(VisualElement.IsVisibleProperty, static (FeatureForm form) => form?.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 return roottitle;
             });
             selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
             {
                 VerticalStackLayout root = new VerticalStackLayout() { VerticalOptions = LayoutOptions.Center };
-                Label title = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                Label title = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 title.Style = GetFeatureFormHeaderStyle();
                 title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
-                title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(title);
-                Label desc = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                Label desc = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 desc.Style = GetFeatureFormCaptionStyle();
                 desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description); // TODO: This needs to be the FeatureForm.Title
                 desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
@@ -128,7 +126,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
                 roottitle.Style = GetFeatureFormHeaderStyle();
                 roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
-                roottitle.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name, converter: Internal.EmptyToFalseConverter.Instance);
                 return roottitle;
             });
             return selector;
@@ -160,11 +157,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
             {
-                Label roottitle = new Label() { Text = "TODO..." };
-                roottitle.Style = GetFeatureFormHeaderStyle();
-                // roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
-                // roottitle.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name, converter: Internal.EmptyToFalseConverter.Instance);
-                return roottitle;
+                var view = new UtilityAssociationGroupResultView();
+                view.SetBinding(UtilityAssociationGroupResultView.GroupResultProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result);
+                return view;
+            });
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                var view = new UtilityAssociationsFilterResultsView();
+                view.SetBinding(UtilityAssociationsFilterResultsView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
+                return view;
             });
             return selector;
         }
@@ -199,6 +200,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         internal static IEnumerable<T> GetDescendentsOfType<T>(Element root)
         {
             return root.GetVisualTreeDescendants().OfType<T>();
+        }
+
+        private FeatureForm? GetCurrentFeatureForm()
+        {
+            return null;
+        }
+        private FeatureForm? _currentFeatureForm;
+        private void SetCurrentFeatureForm(FeatureForm? value)
+        {
+            if(_currentFeatureForm != value)
+            {
+                var oldValue = _currentFeatureForm;
+                _currentFeatureForm = value;
+                OnCurrentFeatureFormPropertyChanged(oldValue, value);
+                OnPropertyChanged(nameof(CurrentFeatureForm));
+            }
         }
     }
 }
