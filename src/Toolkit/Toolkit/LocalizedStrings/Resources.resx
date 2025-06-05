@@ -122,7 +122,7 @@
     <comment>UIA AutomationProperties.Name for the BasemapGallery control, used by screen readers to identify the control</comment>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>Allows selection of different basemap styles for the map</value>
+    <value>Displays a list of available basemaps. Select a basemap to use it for the current map or scene.</value>
     <comment>UIA AutomationProperties.HelpText for the BasemapGallery control, providing context for accessibility tools</comment>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
