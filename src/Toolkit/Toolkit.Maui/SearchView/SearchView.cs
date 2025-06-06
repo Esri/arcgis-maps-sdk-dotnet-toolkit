@@ -81,6 +81,19 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         ClearCommand = new DelegateCommand(HandleClearSearchCommand);
         SearchCommand = new DelegateCommand(HandleSearchCommand);
         RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
+        Loaded += SearchView_Loaded;
+    }
+
+    private void SearchView_Loaded(object? sender, EventArgs e)
+    {
+        // Unsubscribe from the Loaded event to ensure this only runs once.
+        Loaded -= SearchView_Loaded;
+
+        if (GeoView != null)
+        {
+            HandleViewpointChanged();
+        }
+        _ = ConfigureForCurrentConfiguration();
     }
 
     private void InitializeLocalizedStrings()
@@ -450,8 +463,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 newGeoView.ViewpointChanged += sendingView.GeoView_ViewpointChanged;
                 newGeoView.GraphicsOverlays?.Add(sendingView._resultOverlay);
             }
-
-            _ = sendingView.ConfigureForCurrentConfiguration();
         }
     }
 
@@ -531,7 +542,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     {
         if (e.PropertyName == nameof(Mapping.Map) || e.PropertyName == nameof(Scene))
         {
-            _ = ConfigureForCurrentConfiguration();
             return;
         }
 
@@ -545,8 +555,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             {
                 _lastUsedGeomodel = scene;
             }
-
-            _ = ConfigureForCurrentConfiguration();
         }
     }
 
