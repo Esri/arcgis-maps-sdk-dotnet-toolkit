@@ -50,27 +50,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
             itemTapGesture.Tapped += Result_Tapped;
             layout.GestureRecognizers.Add(itemTapGesture);
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-
-            Label title = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
-            title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationResult result) => result.AssociatedFeature, converter: new FeatureDisplayNameConverter());
-            title.Style = FeatureFormView.GetFeatureFormTitleStyle();
-            Grid.SetColumn(title, 1);
-            layout.Add(title);
-
-            //Label count = new Label() { VerticalOptions = LayoutOptions.Center };
-            //count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationResult result) => result.AssociationResults.Count);
-            //count.Style = FeatureFormView.GetFeatureFormCaptionStyle();
-            //layout.Add(count);
-            
-            Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
-            image.Source = new FontImageSource() { Glyph = ((char)0xE7A0).ToString(), Color = Colors.Gray, FontFamily = "toolkit-icons", Size = 18 };
-            Grid.SetColumn(image, 2);
-            layout.Add(image);
-
+            var view = new UtilityAssociationResultView();
+            view.SetBinding(UtilityAssociationResultView.AssociationResultProperty, static (UtilityNetworks.UtilityAssociationResult result) => result);
+            layout.Add(view);
             return layout;
+
+
         }
         private class FeatureDisplayNameConverter : IValueConverter
         {

@@ -76,11 +76,70 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         private Stack<Tuple<object,double>> NavigationStack = new Stack<Tuple<object, double>>();
+
+        internal class NavigationEventArgs : EventArgs
+        {
+            private TaskCompletionSource<bool>? _deferredTaskCompletionSource;
+
+            public NavigationEventArgs(object? from, object? to)
+            {
+                NavigatingFrom = from;
+                NavigatingTo = to;
+            }
+            
+            public object? NavigatingTo { get; }
+            
+            public object? NavigatingFrom { get; }
+            
+            public bool Cancel { get; set; }
+
+            public NavigationDeferral GetDeferral()
+            {
+                if (_deferredTaskCompletionSource is not null)
+                    throw new InvalidOperationException("Deferral has already been requested"); // Only one deferral currently supported
+
+                _deferredTaskCompletionSource = new TaskCompletionSource<bool>();
+
+                return new NavigationDeferral(() => _deferredTaskCompletionSource.TrySetResult(true));
+            }
+            public Task AwaitDeferralAsync()
+            {
+                return _deferredTaskCompletionSource?.Task ?? Task.CompletedTask;
+            }
+        }
+
+        internal class NavigationDeferral
+        {
+            Action? _completed;
+
+            internal NavigationDeferral(Action completed)
+            {
+                _completed = completed;
+            }
+            public void Complete()
+            {
+                var taskToComplete = Interlocked.Exchange(ref _completed, null);
+
+                if (taskToComplete != null)
+                    taskToComplete?.Invoke();
+            }
+        }
+
+        internal event EventHandler<NavigationEventArgs>? OnNavigating;
         
-        internal void Navigate(object? content, bool clearNavigationStack = false)
+        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false)
         {
             if (content is null && !clearNavigationStack)
                 throw new ArgumentNullException(nameof(content));
+            var handler = OnNavigating;
+            if(handler is not null)
+            {
+                var args = new NavigationEventArgs(Content, content);
+                handler.Invoke(this, args);
+                await args.AwaitDeferralAsync();
+                if (args.Cancel)
+                    return false;
+            }
 
             double offset = 0;
             if (GetTemplateChild("ScrollViewer") is ScrollViewer sv)
@@ -120,6 +179,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif WINDOWS_XAML
             (GetTemplateChild("ScrollViewer") as ScrollViewer)?.ChangeView(null, 0, null, disableAnimation: true);
 #endif
+            return true;
         }
 
         private void SetContent(object? content)

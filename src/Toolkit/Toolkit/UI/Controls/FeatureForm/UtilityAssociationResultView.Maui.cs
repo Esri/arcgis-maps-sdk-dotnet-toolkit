@@ -46,8 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(icon);
 
             Label title = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
-            title.Text = "result.AssociationResult.Title";
-            // TODO: title.SetBinding(Label.TextProperty, static (UtilityAssociationResultView result) => result.AssociationResult.Title, source: RelativeBindingSource.TemplatedParent);
+            title.SetBinding(Label.TextProperty, static (UtilityAssociationResultView result) => result.AssociationResult?.Title, source: RelativeBindingSource.TemplatedParent);
             title.Style = FeatureFormView.GetFeatureFormTitleStyle();
             Grid.SetColumn(title, 1);
             Grid.SetColumnSpan(title, 3);

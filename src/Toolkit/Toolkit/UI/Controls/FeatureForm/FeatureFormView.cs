@@ -60,6 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidateForm();
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
+                subView.OnNavigating += SubView_OnNavigating;
                 subView.Navigate(content: FeatureForm, true);
             }
         }
@@ -418,12 +419,60 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Launcher.LaunchUriAsync(uri);
         }
 
+
+
+
+        private async void SubView_OnNavigating(object? sender, NavigationSubView.NavigationEventArgs e)
+        {
+            if (e.NavigatingTo is FeatureForm to && to.HasEdits == true || e.NavigatingFrom is FeatureForm from && from.HasEdits)
+            {
+                // If the current feature form has edits, we need to discard or save them before navigating to a new form.
+                // TODO: Raise alert. For now just return and don't navigate
+#if WINDOWS_XAML
+                var dialog = new ContentDialog
+                {
+                    Title = "Unsaved edits",// Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Title"),
+                    Content = "You need to apply or discard edits of the current feature before moving to another feature", //  Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Content"),
+                    PrimaryButtonText = "Cancel", //Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Save"),
+                    SecondaryButtonText = "Apply edits", //Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Discard"),
+                    CloseButtonText = "Discard edits" // Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Cancel")
+                };
+                dialog.XamlRoot = this.XamlRoot;
+                var deferral = e.GetDeferral();
+                try
+                {
+                    var result = await dialog.ShowAsync();
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        e.Cancel = true;
+                        return;
+
+                    }
+                    else if (result == ContentDialogResult.Secondary)
+                    {
+                        await FinishEditingAsync();
+
+                    }
+                    else if (result == ContentDialogResult.None)
+                        _ = DiscardEditsAsync();
+                }
+                catch { e.Cancel = true; }
+                finally
+                {
+                    deferral.Complete();
+                }
+#else
+                return;
+#endif
+            }
+        }
+
         internal void NavigateToItem(object item)
         {
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
                 subView.Navigate(content: item);
-                if(item is FeatureForm featureForm)
+                if (item is FeatureForm featureForm)
                 {
                     SetCurrentFeatureForm(featureForm);
                 }
