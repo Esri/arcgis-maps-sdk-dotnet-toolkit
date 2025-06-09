@@ -615,7 +615,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="EnableDefaultWorldGeocoder"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty EnableDefaultWorldGeocoderProperty =
-            DependencyProperty.Register(nameof(EnableDefaultWorldGeocoder), typeof(bool), typeof(SearchView), new PropertyMetadata(false, OnEnableDefualtWorldGeocoderPropertyChanged));
+            DependencyProperty.Register(nameof(EnableDefaultWorldGeocoder), typeof(bool), typeof(SearchView), new PropertyMetadata(true, OnEnableDefualtWorldGeocoderPropertyChanged));
 
         /// <summary>
         /// Identifies the <see cref="EnableRepeatSearchHereButton"/> dependency proeprty.
