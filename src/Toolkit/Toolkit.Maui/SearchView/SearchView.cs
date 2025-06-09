@@ -86,9 +86,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     private void SearchView_Loaded(object? sender, EventArgs e)
     {
-        // Unsubscribe from the Loaded event to ensure this only runs once.
-        Loaded -= SearchView_Loaded;
-
         if (GeoView != null)
         {
             HandleViewpointChanged();
@@ -628,7 +625,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     /// </summary>
     private void HandleViewpointChanged()
     {
-        if (SearchViewModel == null)
+        if (!IsLoaded || SearchViewModel == null)
         {
             return;
         }
