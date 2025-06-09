@@ -40,6 +40,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsPopupElementView), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Gets or sets the template for UtilityAssociationGroupResult items.
+        /// </summary>
+        public DataTemplate GroupResultItemTemplate
+        {
+            get { return (DataTemplate)GetValue(GroupResultItemTemplateProperty); }
+            set { SetValue(GroupResultItemTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="GroupResultItemTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty GroupResultItemTemplateProperty =
+            DependencyProperty.Register(nameof(GroupResultItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsPopupElementView), new PropertyMetadata(null));
     }
 }
 #endif

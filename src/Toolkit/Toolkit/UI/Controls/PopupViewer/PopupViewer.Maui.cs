@@ -122,16 +122,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     ItemTemplate = new DataTemplate(() =>
                     {
                         var grid = new Grid();
+                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
                         grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
                         grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+                                                
+                        grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                        grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+
+                        //TODO: Calcite icon
+
                         Label name = new Label();
                         name.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name);
+                        Grid.SetColumn(name, 2); 
                         grid.Children.Add(name);
+
                         //TODO: Put count inside a circle
                         Label count = new Label();
                         count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count);
-                        Grid.SetColumn(count, 1);
+                        Grid.SetColumn(count, 2);
                         grid.Children.Add(count);
+                        
+                        Label property = new Label();
+                        property.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count, converter: Internal.StringConverter.Instance);
+                        Grid.SetRow(property, 1);                        
+                        Grid.SetColumnSpan(property, 3);
+                        grid.Children.Add(property);
+
                         return grid;
                     })
                 };

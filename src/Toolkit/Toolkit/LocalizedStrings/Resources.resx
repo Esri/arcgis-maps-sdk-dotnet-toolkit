@@ -345,6 +345,26 @@
     <value>Search</value>
     <comment>The tooltip text to display for the search button.</comment>
   </data>
+  <data name="UtilityAssociationsPopupElementViewDefaultTitle" xml:space="preserve">
+    <value>Associations</value>
+    <comment>The default title used in the absence of title in the UtilityAssociationsPopupElement object.</comment>
+  </data>
+  <data name="UtilityAssociationsPopupElementViewNoAssociationsFound" xml:space="preserve">
+    <value>No associations were found</value>
+    <comment>The text used when all filters for UtilityAssociationsPopupElement have no associations.</comment>
+  </data>
+  <data name="UtilityAssociationsPopupElementViewShowAll" xml:space="preserve">
+    <value>Show all</value>
+    <comment>The text used to expand a group result view of a UtilityAssociationsPopupElement.</comment>
+  </data>
+  <data name="UtilityAssociationsPopupElementViewTotal" xml:space="preserve">
+    <value>Total</value>
+    <comment>The text used to display the number of associations in a group result of a UtilityAssociationsPopupElement.</comment>
+  </data>
+  <data name="UtilityAssociationsPopupElementViewFilterByTitle" xml:space="preserve">
+    <value>Filter by feature title</value>
+    <comment>The text used to filter the associations of a group result view by the associated feature title in a UtilityAssociationsPopupElement.</comment>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Add starting point</value>
     <comment>The text on button for adding starting points.</comment>
