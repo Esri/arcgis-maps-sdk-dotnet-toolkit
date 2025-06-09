@@ -452,14 +452,15 @@ public sealed class FileDownloadTask : IDisposable
     /// <param name="destinationPath">File where the download should be saved to.</param>
     /// <param name="requestUri">URL to download</param>
     /// <param name="handler">Optional custom HTTP handler to be used.</param>
+    /// <param name="cancellationToken">Cancellation token for starting the download. Note that once download has started, use <see cref="CancelAsync"/> to cancel an active download.</param>
     /// <returns>FileDownloadTask</returns>
     /// <exception cref="IOException">The destination file already exists</exception>.
-    public static Task<FileDownloadTask> BeginDownloadAsync(string destinationPath, Uri requestUri, HttpMessageHandler? handler = null)
+    public static Task<FileDownloadTask> BeginDownloadAsync(string destinationPath, Uri requestUri, HttpMessageHandler? handler = null, CancellationToken cancellationToken = default)
     {
-        return BeginDownloadAsync(requestUri, new HttpRequestMessage(HttpMethod.Get, requestUri), destinationPath, handler);
+        return BeginDownloadAsync(requestUri, new HttpRequestMessage(HttpMethod.Get, requestUri), destinationPath, handler, cancellationToken);
     }
 
-    private static async Task<FileDownloadTask> BeginDownloadAsync(Uri requestUri, HttpRequestMessage request, string filename, HttpMessageHandler? handler = null)
+    private static async Task<FileDownloadTask> BeginDownloadAsync(Uri requestUri, HttpRequestMessage request, string filename, HttpMessageHandler? handler, CancellationToken cancellationToken)
     {
         if(requestUri is null)
             throw new ArgumentNullException(nameof(requestUri));
@@ -480,7 +481,7 @@ public sealed class FileDownloadTask : IDisposable
                 return task;
             }
         }
-        var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+        var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
         var content = response.EnsureSuccessStatusCode();
 
         FileDownloadTask result = new FileDownloadTask(filename, requestUri, content, client);
@@ -490,8 +491,9 @@ public sealed class FileDownloadTask : IDisposable
     /// <summary>
     /// Restarts the download from the beginning.
     /// </summary>
+    /// <param name="cancellationToken">Cancellation token for resuming the download. Note that once download has started, use <see cref="CancelAsync"/> to cancel an active download.</param>
     /// <returns></returns>
-    public async Task RestartAsync()
+    public async Task RestartAsync(CancellationToken cancellationToken = default)
     {
         if (Status == FileDownloadStatus.Cancelled)
             throw new TaskCanceledException("Download was previously cancelled");
@@ -504,7 +506,7 @@ public sealed class FileDownloadTask : IDisposable
             }
             catch { }
         }
-        await BeginDownload(0);
+        await BeginDownload(0, cancellationToken);
     }
 
     /// <summary>
@@ -513,9 +515,10 @@ public sealed class FileDownloadTask : IDisposable
     /// <remarks>
     /// If the task isn't resumable, the download will start over, and if it is already running, this is a no-op.
     /// </remarks>
+    /// <param name="cancellationToken">Cancellation token for resuming the download. Note that once download has started, use <see cref="CancelAsync"/> to cancel an active download.</param>
     /// <returns></returns>
     /// <exception cref="TaskCanceledException">Thrown if the download has already been cancelled.</exception>
-    public Task ResumeAsync()
+    public Task ResumeAsync(CancellationToken cancellationToken = default)
     {
         if (Status == FileDownloadStatus.Cancelled)
             throw new TaskCanceledException("Download was previously cancelled");
@@ -526,7 +529,9 @@ public sealed class FileDownloadTask : IDisposable
             Status = FileDownloadStatus.Resuming;
             FileInfo f = new FileInfo(TempFile);
             long offset = f.Exists ? f.Length : 0;
-            return BeginDownload(Math.Max(0, offset - BufferSize)); // We rewind one buffer-length, just to make sure any last file flushing wasn't interrupted/corrupted.
+            if (offset < TotalLength)
+                Math.Max(0, offset - BufferSize); // We rewind one buffer-length, just to make sure any last file flushing wasn't interrupted/corrupted, unless we already reached the end
+            return BeginDownload(offset, cancellationToken); 
         }
         return Task.CompletedTask;
     }
@@ -605,10 +610,28 @@ public sealed class FileDownloadTask : IDisposable
         return task.ContinueWith(t => { Status = FileDownloadStatus.Paused; });
     }
 
-    private async Task BeginDownload(long offset)
+    /// <summary>
+    /// Initiates the download by downloading the headers, before handing the streaming download off to <see cref="BeginTransfer">the transfer task</see>.
+    /// </summary>
+    /// <param name="offset">Byte offset where the download should start.</param>
+    /// <param name="cancellationToken">Cancellation token for initializing the download request. Note that you will need to use CancelAsync() to cancel the streaming download after it has begun.</param>
+    /// <returns></returns>
+    private async Task BeginDownload(long offset, CancellationToken cancellationToken)
     {
         if (offset == TotalLength)
         {
+            // This should only happen on a call to resume if a move had failed previously
+            try
+            {
+                File.Move(TempFile, Filename);
+            }
+            catch (Exception ex)
+            {
+                Exception = ex;
+                Status = FileDownloadStatus.Error;
+                Error?.Invoke(this, ex);
+                throw;
+            }
             transferTask = Task.CompletedTask;
             Status = FileDownloadStatus.Completed;
             return;
@@ -640,13 +663,22 @@ public sealed class FileDownloadTask : IDisposable
         }
         try
         {
-            var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
             content = response.EnsureSuccessStatusCode();
             transferTask = BeginTransfer(content);
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
-            Status = FileDownloadStatus.Error;
+            if (ex is OperationCanceledException)
+            {
+                Status = FileDownloadStatus.Cancelled;
+            }
+            else
+            {
+                Status = FileDownloadStatus.Error;
+                Exception = ex;
+                Error?.Invoke(this, ex);
+            }
             lock (_queueLock)
             {
                 if (_inProgressItems.Contains(this))

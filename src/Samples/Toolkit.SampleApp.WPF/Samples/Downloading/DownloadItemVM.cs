@@ -163,7 +163,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
                 if (Item is null) return 0;
                 if (System.IO.File.Exists(Filename)) return 1; // Already downloaded
                 if (DownloadTask is null) return 0;
-                if (!DownloadTask.TotalLength.HasValue) return 0; // Unknown size
+                if (!DownloadTask.TotalLength.HasValue) return 0; // Unknown size. You should consider setting the progress bar to indeterminate, and display number of bytes downloaded
+                if (DownloadTask.TotalLength.Value == 0) return 1;
                 return DownloadTask.BytesDownloaded / (double)DownloadTask.TotalLength.Value;
             }
         }
@@ -193,7 +194,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             }
         }
 
-        private string Filename => Item is null ? null : System.IO.Path.Combine(_folder, Item?.Name!); // Where we will save the file
+        private string Filename => Item is null ? "" : System.IO.Path.Combine(_folder, Item?.Name!); // Where we will save the file
         private string JsonFilename => System.IO.Path.Combine(_folder, ItemId + ".json"); // Where we store the JSON for the task
     }
 }
