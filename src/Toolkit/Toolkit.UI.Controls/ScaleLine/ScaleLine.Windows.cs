@@ -16,6 +16,11 @@
 
 #if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.UI.Controls;
+#if WPF
+using System.Windows.Automation;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
+#endif
 #if NETFX_CORE
 using Windows.UI.Xaml.Shapes;
 #elif WINUI
@@ -55,7 +60,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _metricScaleLine = GetTemplateChild("MetricScaleLine") as Rectangle;
             Refresh();
         }
-
+#if WPF
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new ScaleLineAutomationPeer(this);
+        }
+#endif
         /// <summary>
         /// Gets or sets the platform-specific implementation of the <see cref="MapScale"/> property.
         /// </summary>
@@ -141,6 +151,50 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
+#if WPF
+        private class ScaleLineAutomationPeer : FrameworkElementAutomationPeer, IValueProvider
+        {
+            private readonly ScaleLine _owner;
+
+            public ScaleLineAutomationPeer(ScaleLine owner) : base(owner)
+            {
+                _owner = owner;
+            }
+
+            protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("ScaleLineAutomationTypeName");
+
+            protected override AutomationControlType GetAutomationControlTypeCore()
+            {
+                return AutomationControlType.Text;
+            }
+
+
+            protected override AutomationLiveSetting GetLiveSettingCore() => AutomationLiveSetting.Polite;
+
+            public override object GetPattern(PatternInterface patternInterface)
+            {
+                if (patternInterface == PatternInterface.Value)
+                {
+                    return this;
+                }
+                return base.GetPattern(patternInterface);
+            }
+
+            public string Value
+            {
+                get
+                {
+                    return $"1 to {GetRoundedValue(_owner.MapScale).ToString()}";
+                }
+            }
+            public bool IsReadOnly => true;
+
+            public void SetValue(string value)
+            {
+                throw new System.NotSupportedException("ScaleLine value is read-only.");
+            }
+        }
+#endif
     }
 }
 #endif
