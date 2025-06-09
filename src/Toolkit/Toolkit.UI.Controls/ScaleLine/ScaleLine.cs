@@ -171,6 +171,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 return 0;
             }
+            else if(value >= 100000000)
+            {
+                return value - (value % 100000000);
+            }
+            else if(value >= 10000000)
+            {
+                return value - (value % 10000000);
+            }
+            else if(value >= 1000000)
+            {
+                return value - (value % 1000000);
+            }
+            else if (value >= 100000)
+            {
+                return value - (value % 100000);
+            }
+            else if (value >= 10000)
+            {
+                return value - (value % 10000);
+            }
             else if (value >= 1000)
             {
                 return value - (value % 1000);
