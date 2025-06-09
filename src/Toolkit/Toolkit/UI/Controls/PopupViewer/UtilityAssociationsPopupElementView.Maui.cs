@@ -16,6 +16,7 @@
 
 #if MAUI
 using Microsoft.Maui.Controls.Internals;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -41,20 +42,47 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             VerticalStackLayout root = new VerticalStackLayout();
             Label title = new Label();
-            title.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
-            title.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            title.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, fallbackValue: Properties.Resources.GetString("UtilityAssociationsPopupElementViewDefaultTitle"));
+            title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             title.Style = PopupViewer.GetPopupViewerTitleStyle();
             root.Add(title);
             Label description = new Label();
             description.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
-            description.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            description.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             description.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(description);
             root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0, 5) });
+
+            Grid resultGrid = new Grid();
+
+            Grid noAssociationsGrid = new Grid() { Padding = new Thickness(10, 0, 0, 0) };
+            noAssociationsGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            noAssociationsGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            noAssociationsGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            noAssociationsGrid.SetBinding(VisualElement.IsVisibleProperty, static (Mapping.Popups.UtilityAssociationsPopupElement result) => result.AssociationsFilterResults, converter: Internal.EmptyToTrueConverter.Instance);
+
+            Rectangle warningRectangle = new Rectangle() { WidthRequest = 1, Fill = Brush.Red, Margin = 5 };
+            noAssociationsGrid.Add(warningRectangle);
+            Image warningImage = new Image() { WidthRequest = 18, HeightRequest = 18 };
+            warningImage.Source = new FontImageSource() { Glyph = ((char)0xE0EE).ToString(), Color = Colors.Red, FontFamily = "calcite-ui-icons-24", Size = 18 };
+            Grid.SetColumn(warningImage, 1);
+            noAssociationsGrid.Add(warningImage);
+            Label warningText = new Label();
+            warningText.SetBinding(Label.TextProperty, Properties.Resources.GetString("UtilityAssociationsPopupElementViewNoAssociationsFound"));
+            Grid.SetColumn(warningText, 2);
+            noAssociationsGrid.Add(warningText);
+
+            resultGrid.Add(noAssociationsGrid);
+
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.AssociationsFilterResults, source: RelativeBindingSource.TemplatedParent);
+            cv.SetBinding(VisualElement.IsVisibleProperty, static (Mapping.Popups.UtilityAssociationsPopupElement result) => result.AssociationsFilterResults, converter: Internal.EmptyToFalseConverter.Instance);
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
-            root.Add(cv);
+
+            resultGrid.Add(cv);
+
+            root.Add(resultGrid);
+
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName("AssociationsList", cv);
@@ -69,8 +97,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.GestureRecognizers.Add(itemTapGesture);
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            layout.RowDefinitions.Add(new RowDefinition(20));
-            layout.RowDefinitions.Add(new RowDefinition(20));
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            layout.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.ResultCount, converter: Internal.EmptyToFalseConverter.Instance);
 
             Label title = new Label();
             title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title);

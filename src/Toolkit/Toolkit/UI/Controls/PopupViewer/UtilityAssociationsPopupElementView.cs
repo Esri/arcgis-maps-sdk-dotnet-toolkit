@@ -106,15 +106,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async void OnElementPropertyChanged()
         {
-            if(Element is not null)
+            if (Element is not null)
             {
-                if(Element.AssociationsFilterResults.Count == 0)
+                await Element.FetchAssociationsFilterResultsAsync();
+                if (_associationsListView != null)
                 {
-                    await Element.FetchAssociationsFilterResultsAsync();
-                    if (GetTemplateChild("AssociationsList") is ItemsControl itemsView)
-                    {
-                        itemsView.ItemsSource = Element.AssociationsFilterResults; // Refresh the collection
-                    }
+                    _associationsListView.ItemsSource = Element.AssociationsFilterResults; // Refresh the collection
                 }
             }
         }

@@ -18,16 +18,13 @@ using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
 {
-    internal class EmptyToFalseConverter : IValueConverter
+    internal class EmptyToTrueConverter : IValueConverter
     {
-        public static EmptyToFalseConverter Instance { get; } = new EmptyToFalseConverter();
+        public static EmptyToTrueConverter Instance { get; } = new EmptyToTrueConverter();
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is null) return false;
-            if (value is string str) return !string.IsNullOrWhiteSpace(str);
-            if (value is System.Collections.ICollection coll) return coll.Count > 0;
-            if (value is Array arr) return arr.Length > 0;
-            if (value is int count) return count > 0;
+            if (value is System.Collections.Generic.IReadOnlyList<Esri.ArcGISRuntime.UtilityNetworks.UtilityAssociationsFilterResult> filterResults)
+                return filterResults.All(r => r.ResultCount == 0);
             return true;
         }
 

@@ -44,7 +44,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 isVisible = !string.IsNullOrWhiteSpace((string)value);
             }
-
+            else if (value is int count && parameter?.ToString() == "VisibleWhenAny")
+            {
+                isVisible = count > 0;
+            }
+            else if (value is IReadOnlyList<Esri.ArcGISRuntime.UtilityNetworks.UtilityAssociationsFilterResult> filterResults)
+            {
+                if (parameter?.ToString() == "VisibleWhenEmpty")
+                    isVisible = filterResults.All(r => r.ResultCount == 0);
+                else if (parameter?.ToString() == "VisibleWhenAny")
+                    isVisible = filterResults.Any(r => r.ResultCount > 0);
+                else
+                    isVisible = true;
+            }
             isVisible = parameter?.ToString() == "Reverse" ? !isVisible : isVisible;
 
             return isVisible ? Visibility.Visible : Visibility.Collapsed;
