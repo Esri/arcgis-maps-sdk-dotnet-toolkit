@@ -18,6 +18,8 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderThickness" Value="3,0,0,0" />
         <Setter Property="IsEnabled" Value="{Binding IsValid, Mode=OneWay}" />
+        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+        <Setter Property="AutomationProperties.HelpText" Value="{Binding Tooltip}"/> 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListViewItem">
@@ -38,6 +40,7 @@
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 Content="{TemplateBinding Content}"
+                                IsTabStop="False"
                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                 Foreground="{StaticResource ItemTextForegroundUnselected}" />
                         </Grid>
@@ -106,6 +109,7 @@
     </Style>
     <Style TargetType="controls:BasemapGallery">
         <Setter Property="Background" Value="{StaticResource ControlBackground}" />
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="GridItemTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -139,7 +143,8 @@
                                     Width="62"
                                     Height="62"
                                     Source="{Binding ThumbnailData, Mode=OneWay}"
-                                    Stretch="UniformToFill" />
+                                    Stretch="UniformToFill"
+                                    AutomationProperties.Name="{Binding Name}"/>
                                 <Border
                                     Background="LightGray"
                                     CornerRadius="7"
@@ -214,7 +219,8 @@
                                     Width="62"
                                     Height="62"
                                     Source="{Binding ThumbnailData, Mode=OneWay}"
-                                    Stretch="UniformToFill" />
+                                    Stretch="UniformToFill" 
+                                    AutomationProperties.Name="{Binding Name}"/>
                             </Grid>
                         </Border>
                         <Grid
@@ -282,7 +288,10 @@
                                 Background="{TemplateBinding Background}"
                                 SelectionMode="Single"
                                 BorderThickness="0"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                AutomationProperties.Name="{internal:LocalizedString Key=BasemapGalleryAutomationName}"
+                                AutomationProperties.HelpText="{internal:LocalizedString Key=BasemapGalleryAutomationHelpText}"
+                                AutomationProperties.AutomationId="BasemapListView">
                                 <ListView.Resources>
                                     <Style TargetType="ListViewItem">
                                         <Setter Property="VerticalContentAlignment" Value="Top" />
