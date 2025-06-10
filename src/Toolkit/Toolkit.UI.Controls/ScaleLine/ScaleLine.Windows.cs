@@ -160,50 +160,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
-#if WPF || WINDOWS_XAML
-        /// <inheritdoc />
-        public partial class ScaleLineAutomationPeer : FrameworkElementAutomationPeer, IValueProvider
-        {
-            private readonly ScaleLine _owner;
-
-            internal ScaleLineAutomationPeer(ScaleLine owner) : base(owner)
-            {
-                _owner = owner;
-            }
-            /// <inheritdoc />
-            protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("ScaleLineAutomationTypeName")!;
-            /// <inheritdoc />
-            protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Text;
-
-            /// <inheritdoc />
-            protected override AutomationLiveSetting GetLiveSettingCore() => AutomationLiveSetting.Polite;
-
-            /// <inheritdoc />
-        #if WPF
-            public override object GetPattern(PatternInterface patternInterface)
-        #elif WINDOWS_XAML
-            protected override object GetPatternCore(PatternInterface patternInterface)
-        #endif           
-            {
-                if (patternInterface == PatternInterface.Value)
-                {
-                    return this;
-                }
-            #if WPF
-                return base.GetPattern(patternInterface);
-            #elif WINDOWS_XAML
-                return base.GetPatternCore(patternInterface);
-            #endif
-            }
-            /// <inheritdoc />
-            public string Value => String.Format(Properties.Resources.GetString("ScaleLineAutomationValue")!, GetRoundedValue(_owner.MapScale));
-            
-            /// <inheritdoc />
-            public bool IsReadOnly => true;
-            /// <inheritdoc />
-            public void SetValue(string value) => throw new System.NotSupportedException("ScaleLine value is read-only.");
-        }
-#endif
     }
 }
 #endif

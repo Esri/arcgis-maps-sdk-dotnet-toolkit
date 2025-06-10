@@ -165,31 +165,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return MapScale;
         }
 
-        private static double GetRoundedValue(double value)
+        internal static double GetRoundedValue(double value)
         {
             if (double.IsNaN(value))
             {
                 return 0;
-            }
-            else if(value >= 100000000)
-            {
-                return value - (value % 100000000);
-            }
-            else if(value >= 10000000)
-            {
-                return value - (value % 10000000);
-            }
-            else if(value >= 1000000)
-            {
-                return value - (value % 1000000);
-            }
-            else if (value >= 100000)
-            {
-                return value - (value % 100000);
-            }
-            else if (value >= 10000)
-            {
-                return value - (value % 10000);
             }
             else if (value >= 1000)
             {
