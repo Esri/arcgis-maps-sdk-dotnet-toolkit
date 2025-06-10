@@ -173,10 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             /// <inheritdoc />
             protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("ScaleLineAutomationTypeName")!;
             /// <inheritdoc />
-            protected override AutomationControlType GetAutomationControlTypeCore()
-            {
-                return AutomationControlType.Text;
-            }
+            protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Text;
 
             /// <inheritdoc />
             protected override AutomationLiveSetting GetLiveSettingCore() => AutomationLiveSetting.Polite;
