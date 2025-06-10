@@ -313,6 +313,10 @@
     <value>Indicates the current scale for the map</value>
     <comment>UIA AutomationProperties.HelpText for the ScaleLine control, providing context for accessibility tools</comment>
   </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>1 to {0}</value>
+    <comment>UIA ValueProperty.Value for the ScaleLine control, announces the map scale to screen readers</comment>
+  </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
     <comment>Abbreviation of "Miles" displayed in the scale bar</comment>

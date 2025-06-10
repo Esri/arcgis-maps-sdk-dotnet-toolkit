@@ -20,6 +20,14 @@ using Esri.ArcGISRuntime.UI.Controls;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
+#elif WINDOWS_UWP
+using Windows.UI.Xaml.Automation;
+using Windows.UI.Xaml.Automation.Peers;
+using Windows.UI.Xaml.Automation.Provider;
+#elif WINUI
+using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Automation.Peers;
+using Microsoft.UI.Xaml.Automation.Provider;
 #endif
 #if NETFX_CORE
 using Windows.UI.Xaml.Shapes;
@@ -60,7 +68,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _metricScaleLine = GetTemplateChild("MetricScaleLine") as Rectangle;
             Refresh();
         }
-#if WPF
+#if WPF || WINDOWS_XAML
+        /// <inheritdoc />
         protected override AutomationPeer OnCreateAutomationPeer()
         {
             return new ScaleLineAutomationPeer(this);
@@ -151,26 +160,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
-#if WPF
-        private class ScaleLineAutomationPeer : FrameworkElementAutomationPeer, IValueProvider
+#if WPF || WINDOWS_XAML
+        /// <inheritdoc />
+        public partial class ScaleLineAutomationPeer : FrameworkElementAutomationPeer, IValueProvider
         {
             private readonly ScaleLine _owner;
 
-            public ScaleLineAutomationPeer(ScaleLine owner) : base(owner)
+            internal ScaleLineAutomationPeer(ScaleLine owner) : base(owner)
             {
                 _owner = owner;
             }
-
-            protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("ScaleLineAutomationTypeName");
-
+            /// <inheritdoc />
+            protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("ScaleLineAutomationTypeName")!;
+            /// <inheritdoc />
             protected override AutomationControlType GetAutomationControlTypeCore()
             {
                 return AutomationControlType.Text;
             }
 
-
+            /// <inheritdoc />
             protected override AutomationLiveSetting GetLiveSettingCore() => AutomationLiveSetting.Polite;
 
+        #if WPF
+            /// <inheritdoc />
             public override object GetPattern(PatternInterface patternInterface)
             {
                 if (patternInterface == PatternInterface.Value)
@@ -179,16 +191,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 return base.GetPattern(patternInterface);
             }
-
+        #else
+            /// <inheritdoc />
+            protected override object GetPatternCore(PatternInterface patternInterface)
+            {
+                if (patternInterface == PatternInterface.Value)
+                {
+                    return this;
+                }
+                return base.GetPatternCore(patternInterface);
+            }
+        #endif
+            /// <inheritdoc />
             public string Value
             {
                 get
                 {
-                    return $"1 to {GetRoundedValue(_owner.MapScale).ToString()}";
+                    return String.Format(Properties.Resources.GetString("ScaleLineAutomationValue")!, GetRoundedValue(_owner.MapScale));
                 }
             }
+            /// <inheritdoc />
             public bool IsReadOnly => true;
-
+            /// <inheritdoc />
             public void SetValue(string value)
             {
                 throw new System.NotSupportedException("ScaleLine value is read-only.");
