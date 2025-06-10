@@ -130,9 +130,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 terminalText.Text = "Terminal: " + (otherElement?.Terminal?.Name) ?? string.Empty; // TODO: Localize
 #if MAUI
-                terminalText.IsVisible = string.IsNullOrEmpty(terminalText.Text);
+                terminalText.IsVisible = !string.IsNullOrEmpty(otherElement?.Terminal?.Name);
 #else
-                terminalText.Visibility = string.IsNullOrEmpty(terminalText.Text) ? Visibility.Visible : Visibility.Collapsed;
+                terminalText.Visibility = string.IsNullOrEmpty(otherElement?.Terminal?.Name) ? Visibility.Collapsed : Visibility.Visible;
 #endif
             }
 
@@ -151,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                 fractionText.IsVisible = string.IsNullOrEmpty(fractionText.Text);
 #else
-                fractionText.Visibility = string.IsNullOrEmpty(fractionText.Text) ? Visibility.Visible : Visibility.Collapsed;
+                fractionText.Visibility = string.IsNullOrEmpty(fractionText.Text) ? Visibility.Collapsed : Visibility.Visible;
 #endif
             }
 

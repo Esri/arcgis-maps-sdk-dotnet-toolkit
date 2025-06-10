@@ -577,7 +577,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <!-- x:DataType=UtilityAssociationResult-->
-                    <primitives:UtilityAssociationResultView AssociationResult="{Binding}" x:Name="ResultView" />
+                    <primitives:UtilityAssociationResultView AssociationResult="{Binding}" x:Name="ResultView" MinHeight="40" AutomationProperties.Name="{Binding Title}"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -613,7 +613,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <TextBlock x:Name="Icon" VerticalAlignment="Center" Margin="4,0" FontFamily="{StaticResource ToolkitIconsFontFamily}" Grid.RowSpan="2" />

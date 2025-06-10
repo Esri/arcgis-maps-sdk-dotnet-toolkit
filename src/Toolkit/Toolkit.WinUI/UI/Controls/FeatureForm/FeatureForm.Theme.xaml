@@ -421,7 +421,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate> <!-- x:DataType=UtilityAssociationResult-->
-                    <primitives:UtilityAssociationResultView AssociationResult="{Binding}" x:Name="ResultView" />
+                    <primitives:UtilityAssociationResultView AssociationResult="{Binding}" x:Name="ResultView" MinHeight="40" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -455,16 +455,16 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <FontIcon x:Name="Icon" VerticalAlignment="Center" Margin="4,0" FontFamily="/Esri.ArcGISRuntime.Toolkit.WinUI/Assets/toolkit-icons.ttf#toolkit-icons" Grid.RowSpan="2" />
-                        <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="{Binding AssociationResult.Association.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"
+                        <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="{Binding AssociationResult.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"
                                    VerticalAlignment="Center" Grid.Column="1" Grid.ColumnSpan="3" TextTrimming="CharacterEllipsis" />
                         <TextBlock x:Name="FractionText" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" />
                         <TextBlock x:Name="IsContentVisibleText" Visibility="Collapsed" Grid.Column="2" Grid.Row="1" />
                         <TextBlock x:Name="TerminalText" Visibility="Collapsed" Grid.Column="3" Grid.Row="1" />
-                        <FontIcon Glyph="&#xE76C;" Grid.Column="2" VerticalAlignment="Center" Margin="4,0" />
+                        <FontIcon Glyph="&#xE76C;" Grid.Column="4" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
