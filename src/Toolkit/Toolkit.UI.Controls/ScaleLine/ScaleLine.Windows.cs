@@ -189,23 +189,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     return this;
                 }
+            #if WPF
                 return base.GetPattern(patternInterface);
+            #elif WINDOWS_XAML
+                return base.GetPatternCore(patternInterface);
+            #endif
             }
             /// <inheritdoc />
-            public string Value
-            {
-                get
-                {
-                    return String.Format(Properties.Resources.GetString("ScaleLineAutomationValue")!, GetRoundedValue(_owner.MapScale));
-                }
-            }
+            public string Value => String.Format(Properties.Resources.GetString("ScaleLineAutomationValue")!, GetRoundedValue(_owner.MapScale));
+            
             /// <inheritdoc />
             public bool IsReadOnly => true;
             /// <inheritdoc />
-            public void SetValue(string value)
-            {
-                throw new System.NotSupportedException("ScaleLine value is read-only.");
-            }
+            public void SetValue(string value) => throw new System.NotSupportedException("ScaleLine value is read-only.");
         }
 #endif
     }
