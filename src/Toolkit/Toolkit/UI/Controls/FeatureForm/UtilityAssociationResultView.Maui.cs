@@ -72,6 +72,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(image, 4);
             Grid.SetRowSpan(image, 2);
             layout.Add(image);
+            // TODO: Set theme-based background once https://github.com/dotnet/maui/issues/26620 is addressed
+            // var g = new VisualStateGroup();
+            // g.States.Add(new VisualState() { Name = "Normal" });
+            // g.States.Add(new VisualState() { Name = "PointerOver" });
+            // g.States[1].Setters.Add(new Setter() { Property = Grid.BackgroundColorProperty, Value = Colors.LightGray });
+            // VisualStateManager.SetVisualStateGroups(layout, new VisualStateGroupList { g });
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(layout, nameScope);

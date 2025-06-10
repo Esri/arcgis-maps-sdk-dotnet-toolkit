@@ -51,20 +51,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.GestureRecognizers.Add(itemTapGesture);
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
 
             Label title = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
             title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name);
             title.Style = FeatureFormView.GetFeatureFormTitleStyle();
             layout.Add(title);
 
-            Label count = new Label() { VerticalOptions = LayoutOptions.Center };
+            Label count = new Label() { VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.End };
             count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count);
             count.Style = FeatureFormView.GetFeatureFormCaptionStyle();
+            Grid.SetColumn(count, 1);
             layout.Add(count);
 
             Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
             image.Source = new FontImageSource() { Glyph = ((char)0xE7A0).ToString(), Color = Colors.Gray, FontFamily = "toolkit-icons", Size = 18 };
-            Grid.SetColumn(image, 1);
+            Grid.SetColumn(image, 2);
             layout.Add(image);
 
             return layout;

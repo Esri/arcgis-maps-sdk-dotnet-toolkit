@@ -202,11 +202,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return root.GetVisualTreeDescendants().OfType<T>();
         }
 
-        private FeatureForm? GetCurrentFeatureForm()
-        {
-            return null;
-        }
         private FeatureForm? _currentFeatureForm;
+
+        private FeatureForm? GetCurrentFeatureForm() => _currentFeatureForm;
+
         private void SetCurrentFeatureForm(FeatureForm? value)
         {
             if(_currentFeatureForm != value)
