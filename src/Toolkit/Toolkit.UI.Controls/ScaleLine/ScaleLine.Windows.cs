@@ -178,9 +178,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             /// <inheritdoc />
             protected override AutomationLiveSetting GetLiveSettingCore() => AutomationLiveSetting.Polite;
 
-        #if WPF
             /// <inheritdoc />
+        #if WPF
             public override object GetPattern(PatternInterface patternInterface)
+        #elif WINDOWS_XAML
+            protected override object GetPatternCore(PatternInterface patternInterface)
+        #endif           
             {
                 if (patternInterface == PatternInterface.Value)
                 {
@@ -188,17 +191,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 return base.GetPattern(patternInterface);
             }
-        #else
-            /// <inheritdoc />
-            protected override object GetPatternCore(PatternInterface patternInterface)
-            {
-                if (patternInterface == PatternInterface.Value)
-                {
-                    return this;
-                }
-                return base.GetPatternCore(patternInterface);
-            }
-        #endif
             /// <inheritdoc />
             public string Value
             {
