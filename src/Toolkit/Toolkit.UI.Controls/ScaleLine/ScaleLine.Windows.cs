@@ -16,6 +16,19 @@
 
 #if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.UI.Controls;
+#if WPF
+using System.Windows.Automation;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
+#elif WINDOWS_UWP
+using Windows.UI.Xaml.Automation;
+using Windows.UI.Xaml.Automation.Peers;
+using Windows.UI.Xaml.Automation.Provider;
+#elif WINUI
+using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Automation.Peers;
+using Microsoft.UI.Xaml.Automation.Provider;
+#endif
 #if NETFX_CORE
 using Windows.UI.Xaml.Shapes;
 #elif WINUI
@@ -55,7 +68,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _metricScaleLine = GetTemplateChild("MetricScaleLine") as Rectangle;
             Refresh();
         }
-
+#if WPF || WINDOWS_XAML
+        /// <inheritdoc />
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new ScaleLineAutomationPeer(this);
+        }
+#endif
         /// <summary>
         /// Gets or sets the platform-specific implementation of the <see cref="MapScale"/> property.
         /// </summary>
