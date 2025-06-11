@@ -165,7 +165,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return MapScale;
         }
 
-        private static double GetRoundedValue(double value)
+        internal static double GetRoundedValue(double value)
         {
             if (double.IsNaN(value))
             {

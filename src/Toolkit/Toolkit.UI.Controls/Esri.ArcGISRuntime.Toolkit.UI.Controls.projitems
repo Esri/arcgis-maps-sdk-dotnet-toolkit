@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)OverviewMap\OverviewMap.Windows.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLineAutomationPeer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchView\SearchView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolDisplay\SymbolDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolDisplay\SymbolDisplay.Windows.cs" />
