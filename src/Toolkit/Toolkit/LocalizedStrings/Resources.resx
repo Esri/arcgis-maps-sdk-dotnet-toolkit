@@ -533,4 +533,36 @@
     <value>Zoom to result</value>
     <comment>The text on button that zooms to the selected trace result.</comment>
   </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>Apply</value>
+    <comment>The text on the Apply button of the unsaved-edits warning dialog</comment>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The text on the Cancel button of the unsaved-edits warning dialog</comment>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>Discard</value>
+    <comment>The text on the Discard button of the unsaved-edits warning dialog</comment>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes?</value>
+    <comment>The content of the dialog when user is warned about unsaved edits</comment>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>Unsaved edits</value>
+    <comment>The title of the dialog when user is warned about unsaved edits</comment>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>Fraction along edge: {0}</value>
+    <comment>The percentage fraction along an edge of a utility element association</comment>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>Is content visible: {0}</value>
+    <comment>Whether content is visible on a utility element association</comment>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>Terminal: {0}</value>
+    <comment>The terminal name of utility element association</comment>
+  </data>
 </root>
