@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>Basemap Gallery</value>
+    <comment>UIA AutomationProperties.Name for the BasemapGallery control, used by screen readers to identify the control</comment>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>Displays a list of available basemaps. Select a basemap to use it for the current map or scene.</value>
+    <comment>UIA AutomationProperties.HelpText for the BasemapGallery control, providing context for accessibility tools</comment>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Add Attachment</value>
     <comment>Menu text for adding a file attachment</comment>
@@ -292,6 +300,22 @@
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>m</value>
     <comment>Abbreviation of "Meters" displayed in the scale bar</comment>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>Scale</value>
+    <comment>The type name of the ScaleLine control for accessibility uses</comment>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>Map Scale</value>
+    <comment>UIA AutomationProperties.Name for the ScaleLine control, used by screen readers to identify the control</comment>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>Indicates the current scale for the map</value>
+    <comment>UIA AutomationProperties.HelpText for the ScaleLine control, providing context for accessibility tools</comment>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>1 to {0}</value>
+    <comment>UIA ValueProperty.Value for the ScaleLine control, announces the map scale to screen readers</comment>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>

@@ -56,7 +56,7 @@ public partial class UtilityNetworkTraceTool
     private View? PART_NoNetworksWarning;
 
     // Loading indicators and cancel
-    private Frame? PART_ActivityIndicator;
+    private Border? PART_ActivityIndicator;
     private Button? PART_ButtonCancelActivity;
 #pragma warning restore SA1310, SX1309, SA1306
 
@@ -98,7 +98,7 @@ xmlns:esriTKPrim=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives;asse
 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"">
 <Grid RowSpacing=""8"" Padding=""8,0,8,0"">
     <Grid.Resources>
-        <Style TargetType=""Frame"">
+        <Style TargetType=""Border"">
             <Setter Property=""Background"" Value=""{{AppThemeBinding Dark=#2b2b2b,Light=#fff}}"" />
         </Style>
     </Grid.Resources>
@@ -107,9 +107,9 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
         <RowDefinition Height=""Auto"" />
         <RowDefinition Height=""*"" />
     </Grid.RowDefinitions>
-    <Frame x:Name=""{nameof(PART_NoNetworksWarning)}"" BorderColor=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" CornerRadius=""4"" Margin=""4"" Grid.RowSpan=""3"" IsVisible=""false"">
+    <Border x:Name=""{nameof(PART_NoNetworksWarning)}"" Stroke=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" Grid.RowSpan=""3"" IsVisible=""false"">
         <Label Text=""{noUtilityNetworks}"" />
-    </Frame>
+    </Border>
     <esriTKPrim:SegmentedControl x:Name=""{nameof(PART_NavigationSegment)}"" Grid.Row=""1"" HeightRequest=""30"" />
     <VerticalStackLayout x:Name=""{nameof(PART_SelectContainer)}"" Grid.Row=""2"" Spacing=""8"">
         <Label x:Name=""{nameof(PART_LabelNetworks)}"" Text=""{utilityNetworks}"" FontAttributes=""Bold"" IsVisible=""false"" />
@@ -154,21 +154,21 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
             <RowDefinition Height=""*"" />
             <RowDefinition Height=""Auto"" />
         </Grid.RowDefinitions>
-        <Frame x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+        <Border x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" Stroke=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""{notEnoughStartingPoints}"" TextColor=""{foregroundColor}""  />
-        </Frame>
-        <Frame x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+        </Border>
+        <Border x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" Stroke=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""{moreThanRequiredStartingPoints}"" TextColor=""{foregroundColor}""  />
-        </Frame>
-        <Frame x:Name=""{nameof(PART_DuplicateTraceWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
+        </Border>
+        <Border x:Name=""{nameof(PART_DuplicateTraceWarning)}"" Stroke=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""{duplicateTrace}"" TextColor=""{foregroundColor}""  />
-        </Frame>
+        </Border>
         <Button x:Name=""{nameof(PART_ButtonRunTrace)}"" Text=""{runTrace}"" IsVisible=""false"" Grid.Row=""2"" />
     </Grid>
     <Grid x:Name=""{nameof(PART_ViewContainer)}"" Grid.Row=""2"">
-        <Frame x:Name=""{nameof(PART_NoResultsWarning)}"" BorderColor=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"">
+        <Border x:Name=""{nameof(PART_NoResultsWarning)}"" Stroke=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Padding=""20"" IsVisible=""false"">
             <Label Text=""{noResults}"" TextColor=""{foregroundColor}""  />
-        </Frame>
+        </Border>
         <Grid x:Name=""{nameof(PART_GridResultsDisplay)}"" IsVisible=""false"">
             <BindableLayout.ItemTemplate>
                 <DataTemplate>
@@ -196,9 +196,9 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                             </BindableLayout.ItemTemplate>
                             <BindableLayout.EmptyViewTemplate>
                                 <DataTemplate>
-                                    <Frame BorderColor=""#D83020"" CornerRadius=""4"" Margin=""4"" Grid.RowSpan=""3"">
+                                    <Border Stroke=""#D83020"" StrokeShape=""RoundRectangle 4"" Margin=""4"" Grid.RowSpan=""3"">
                                         <Label Text=""{noFunctionResults}"" HorizontalOptions=""Center"" Padding=""16"" TextColor=""{foregroundColor}""  />
-                                    </Frame> 
+                                    </Border> 
                                 </DataTemplate>
                             </BindableLayout.EmptyViewTemplate>
                         </StackLayout>
@@ -238,12 +238,12 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
             </BindableLayout.ItemTemplate>
         </Grid>
     </Grid>
-    <Frame x:Name=""{nameof(PART_ActivityIndicator)}"" IsVisible=""false"" Grid.RowSpan=""3"" VerticalOptions=""FillAndExpand"" HorizontalOptions=""FillAndExpand"" Background=""{backgroundColor}"" HasShadow=""False"" CornerRadius=""0"" BorderColor=""{backgroundColor}"">
+    <Border x:Name=""{nameof(PART_ActivityIndicator)}"" IsVisible=""false"" Grid.RowSpan=""3"" VerticalOptions=""FillAndExpand"" HorizontalOptions=""FillAndExpand"" Background=""{backgroundColor}"" HasShadow=""False"" Stroke=""{backgroundColor}"">
         <StackLayout Spacing=""8"" VerticalOptions=""Center"" HorizontalOptions=""CenterAndExpand"">
             <ActivityIndicator IsRunning=""True"" Color=""{{AppThemeBinding Light=#007AC2,Dark=#009AF2}}"" />
             <Button x:Name=""{nameof(PART_ButtonCancelActivity)}"" Text=""{cancel}"" />
         </StackLayout>
-    </Frame>
+    </Border>
 </Grid>
 </ControlTemplate>";
         DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
