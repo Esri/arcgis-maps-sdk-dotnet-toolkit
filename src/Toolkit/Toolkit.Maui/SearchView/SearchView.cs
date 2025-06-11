@@ -48,6 +48,8 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     private bool _sourceSelectToggled;
 
+    private bool _loadedHandled;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SearchView"/> class.
     /// </summary>
@@ -82,10 +84,17 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         SearchCommand = new DelegateCommand(HandleSearchCommand);
         RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
         Loaded += SearchView_Loaded;
+        Unloaded += SearchView_Unloaded;
     }
+
+    private void SearchView_Unloaded(object? sender, EventArgs e) => _loadedHandled = false;
 
     private void SearchView_Loaded(object? sender, EventArgs e)
     {
+        if (_loadedHandled)
+            return;
+        _loadedHandled = true;
+
         if (GeoView != null)
         {
             HandleViewpointChanged();
