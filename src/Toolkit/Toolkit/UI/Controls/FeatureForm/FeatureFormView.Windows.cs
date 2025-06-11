@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return (FeatureForm?)GetValue(CurrentFeatureFormPropertyKey.DependencyProperty);
 #endif
         }
-        private FeatureForm? _currentFeatureForm;
+
         private void SetCurrentFeatureForm(FeatureForm? value)
         {
             var oldValue = CurrentFeatureForm;

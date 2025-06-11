@@ -307,17 +307,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("NavigateBack") is Button backButton)
             {
 #if MAUI
-                backButton.Clicked += (s, e) => GoBack();
+                backButton.Clicked += (s, e) => _ = GoBack();
 #else
-                backButton.Click += (s, e) => GoBack();
+                backButton.Click += (s, e) => _ = GoBack();
 #endif
             }
             if (GetTemplateChild("NavigateUp") is Button upButton)
             {
 #if MAUI
-                upButton.Clicked += (s, e) => GoUp();
+                upButton.Clicked += (s, e) => _ = GoUp();
 #else
-                upButton.Click += (s, e) => GoUp();
+                upButton.Click += (s, e) => _ = GoUp();
 #endif
             }
             if (GetTemplateChild("Header") is ContentControl cc1)
