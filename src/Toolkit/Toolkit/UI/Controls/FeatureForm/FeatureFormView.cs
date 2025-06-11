@@ -429,7 +429,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 e.Direction == NavigationSubView.NavigationDirection.Backward && e.NavigatingFrom is FeatureForm))
             {
                 // If the current feature form has edits, we need to discard or save them before navigating to a new form.
-                // TODO: Raise alert. For now just return and don't navigate
+                // TODO: Localize
                 string title = "Unsaved edits";// Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Title"),
                 string content = "You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes?"; // Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Content");
                 string applyText = "Apply"; // Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Save");

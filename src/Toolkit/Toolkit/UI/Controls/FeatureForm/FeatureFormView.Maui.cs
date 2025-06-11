@@ -116,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 root.Children.Add(title);
                 Label desc = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 desc.Style = GetFeatureFormCaptionStyle();
-                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description); // TODO: This needs to be the FeatureForm.Title
+                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
                 desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(desc);
                 return root;
