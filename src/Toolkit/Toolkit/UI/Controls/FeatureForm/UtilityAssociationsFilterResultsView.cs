@@ -38,8 +38,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public partial class UtilityAssociationsFilterResultsView
     {
-        private WeakEventListener<UtilityAssociationsFilterResultsView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UtilityAssociationsFilterResultsView"/> class.
         /// </summary>

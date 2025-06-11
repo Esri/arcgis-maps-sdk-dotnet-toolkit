@@ -41,7 +41,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
 #if WINDOWS_XAML
                 _resultsListView.ItemClick -= ResultsListView_ItemClick;
-                //_resultsListView.Loaded -= ResultsListView_Loaded;
 #endif
             }
             if (GetTemplateChild("ResultsList") is ListView listView)
@@ -49,24 +48,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _resultsListView = listView;
 #if WINDOWS_XAML
                 _resultsListView.ItemClick += ResultsListView_ItemClick;
-                //_resultsListView.Loaded += ResultsListView_Loaded;
 #elif WPF
                 _resultsListView.SelectionChanged += AssociationsListView_SelectionChanged;
 #endif
             }
         }
 
-#if WINDOWS_XAML
-        //private void ResultsListView_Loaded(object sender, RoutedEventArgs e)
-        //{
-            
-        //    ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("Item");
-        //    if (animation != null && GroupResult is not null)
-        //    {
-        //        _ = ((ListView)sender).TryStartConnectedAnimationAsync(animation, GroupResult, "ItemName");
-        //    }
-        //}
-#endif
 #if WPF
         private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
