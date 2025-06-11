@@ -128,11 +128,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             if (GetTemplateChild("TerminalText") is TextBlock terminalText)
             {
-                terminalText.Text = "Terminal: " + (otherElement?.Terminal?.Name) ?? string.Empty; // TODO: Localize
+                string? terminalName = otherElement?.Terminal?.Name;
+                terminalText.Text = string.IsNullOrEmpty(terminalName) ? "" : string.Format(Properties.Resources.GetString("FeatureFormUtilityElementTerminalName")!, terminalName);
 #if MAUI
-                terminalText.IsVisible = !string.IsNullOrEmpty(otherElement?.Terminal?.Name);
+                terminalText.IsVisible = !string.IsNullOrEmpty(terminalName);
 #else
-                terminalText.Visibility = string.IsNullOrEmpty(otherElement?.Terminal?.Name) ? Visibility.Collapsed : Visibility.Visible;
+                terminalText.Visibility = string.IsNullOrEmpty(terminalName) ? Visibility.Collapsed : Visibility.Visible;
 #endif
             }
 
@@ -144,7 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     var fraction = AssociationResult?.Association.FractionAlongEdge ?? 0;
                     if (fraction == 0)
                         fraction = otherElement?.FractionAlongEdge ?? 0;
-                    fractionText.Text = $"FractionAlongTheEdge: {fraction:P0}"; //TODO: Localize
+                    fractionText.Text = string.Format(Properties.Resources.GetString("FeatureFormUtilityElementFractionAlongEdge")!, fraction.ToString("P0"));
                 }
                 else
                     fractionText.Text = "";
@@ -159,7 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 bool showIscontentVisible = AssociationResult?.Association.AssociationType == UtilityAssociationType.Containment
                                 && otherElement == AssociationResult?.Association.ToElement;
-                isContentVisibleText.Text = $"IsContentVisible: {AssociationResult?.Association.IsContainmentVisible.ToString()}"; //TODO: Localize
+                isContentVisibleText.Text = string.Format(Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible")!, AssociationResult?.Association.IsContainmentVisible.ToString());
 #if MAUI
                 isContentVisibleText.IsVisible = showIscontentVisible;
 #else

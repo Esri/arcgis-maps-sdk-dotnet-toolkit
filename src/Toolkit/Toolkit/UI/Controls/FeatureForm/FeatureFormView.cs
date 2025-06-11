@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
                 subView.OnNavigating += SubView_OnNavigating;
-                subView.Navigate(content: FeatureForm, true);
+                _ = subView.Navigate(content: FeatureForm, true);
             }
         }
 
@@ -429,12 +429,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 e.Direction == NavigationSubView.NavigationDirection.Backward && e.NavigatingFrom is FeatureForm))
             {
                 // If the current feature form has edits, we need to discard or save them before navigating to a new form.
-                // TODO: Localize
-                string title = "Unsaved edits";// Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Title"),
-                string content = "You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes?"; // Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Content");
-                string applyText = "Apply"; // Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Save");
-                string discardText = "Discard"; // Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Discard");
-                string cancelText = "Cancel"; // Properties.Resources.GetString("FeatureFormView_NavigatingWithEdits_Cancel");
+                string title = Properties.Resources.GetString("FeatureFormPendingEditsTitle")!;
+                string content = Properties.Resources.GetString("FeatureFormPendingEditsMessage")!;
+                string applyText = Properties.Resources.GetString("FeatureFormPendingEditsApply")!;
+                string discardText = Properties.Resources.GetString("FeatureFormPendingEditsDiscard")!;
+                string cancelText = Properties.Resources.GetString("FeatureFormPendingEditsCancel")!;
 #if WINDOWS_XAML
                 var dialog = new ContentDialog
                 {
