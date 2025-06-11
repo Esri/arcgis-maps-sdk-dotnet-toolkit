@@ -634,6 +634,7 @@ public sealed class FileDownloadTask : IDisposable
             }
             transferTask = Task.CompletedTask;
             Status = FileDownloadStatus.Completed;
+            Completed?.Invoke(this, EventArgs.Empty);
             return;
         }
         lock (_queueLock)
