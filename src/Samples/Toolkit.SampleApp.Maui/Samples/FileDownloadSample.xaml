@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:vm="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples"
+             x:Class="Toolkit.SampleApp.Maui.Samples.FileDownloadSample" Title="File Download">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Label Margin="8" LineBreakMode="WordWrap">Downloads can be resumed, even in the event of app crash. Try starting a download, and restart the application mid-download. You'll be able to resume the download after.</Label>
+
+        <CollectionView x:Name="DownloadItems" Margin="6,0" Grid.Row="1" >
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:DownloadItemVM">
+                    <Grid Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ProgressBar Progress="{Binding Progress, Mode=OneWay}" HorizontalOptions="Fill" VerticalOptions="End" Opacity=".25" Grid.ColumnSpan="3" />
+                        <Label Text="{Binding Item.Name, Mode=OneWay}" VerticalOptions="Center" HorizontalOptions="Start" Margin="4" FontSize="16" LineBreakMode="TailTruncation" />
+                        <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" >
+                            <Label Text="{Binding DownloadSpeed, Mode=OneWay}" VerticalOptions="Center" FontAttributes="Bold" />
+                            <Label Text="{Binding Progress, Mode=OneWay, StringFormat='{0:P1}'}" VerticalOptions="Center" FontAttributes="Bold" Margin="4,0" />
+                            <Label Text="{Binding Status, Mode=OneWay}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Margin="4" Grid.Column="2">
+                            <Button Command="{Binding StartDownloadCommand, Mode=OneWay}" Text="Play"/>
+                            <Button Command="{Binding PauseDownloadCommand, Mode=OneWay}" Text="Pause"/>
+                            <Button Command="{Binding CancelDownloadCommand, Mode=OneWay}" Text="Cancel"/>
+                            <Button Command="{Binding DeleteDownloadCommand, Mode=OneWay}" Text="Delete"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
