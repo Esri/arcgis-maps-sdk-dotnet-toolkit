@@ -62,12 +62,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new WorldGeocoderSearchSource(_worldGeocoderTask, null);
         }
 
-        private readonly Task _loadTask;
+        private readonly Lazy<Task> _loadTask;
 
         /// <summary>
         /// Gets the task used to perform initial locator setup.
         /// </summary>
-        protected Task LoadTask => _loadTask;
+        protected Lazy<Task> LoadTask => _loadTask;
 
         /// <summary>
         /// Gets or sets the name of the locator. Defaults to the locator's name, or "locator" if not set.
@@ -146,7 +146,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Locator = locator;
 
-            _loadTask = EnsureLoaded();
+            RefreshDisplayName();
+
+            _loadTask = new Lazy<Task>(EnsureLoaded);
+        }
+
+        private void RefreshDisplayName()
+        {
+            if (DisplayName != Locator?.LocatorInfo?.Name && !string.IsNullOrWhiteSpace(Locator?.LocatorInfo?.Name))
+            {
+                DisplayName = Locator?.LocatorInfo?.Name ?? "Locator";
+            }
+
+            GeocodeParameters.ResultAttributeNames.Add("*");
         }
 
         private async Task EnsureLoaded()
@@ -169,14 +181,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 pinSymbol.OffsetY = 16.5;
                 DefaultSymbol = pinSymbol;
             }
-
-            if (DisplayName != Locator?.LocatorInfo?.Name && !string.IsNullOrWhiteSpace(Locator?.LocatorInfo?.Name))
-            {
-                DisplayName = Locator?.LocatorInfo?.Name ?? "Locator";
             }
-
-            GeocodeParameters.ResultAttributeNames.Add("*");
-        }
 
         /// <summary>
         /// This search source does not track selection state.
@@ -197,7 +202,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await _loadTask;
+            await LoadTask.Value;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -214,7 +219,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default)
         {
-            await _loadTask;
+            await LoadTask.Value;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -228,7 +233,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await _loadTask;
+            await LoadTask.Value;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -246,7 +251,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public virtual async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken cancellationToken = default)
         {
-            await _loadTask;
+            await LoadTask.Value;
 
             cancellationToken.ThrowIfCancellationRequested();
 
