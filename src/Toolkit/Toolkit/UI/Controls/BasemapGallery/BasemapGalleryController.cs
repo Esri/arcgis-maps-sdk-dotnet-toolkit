@@ -148,7 +148,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AvailableBasemaps)));
 
                 // Update validity
-                AvailableBasemaps?.ToList()?.ForEach(async bmgi => await bmgi.NotifySpatialReferenceChanged(GeoModel));
+                AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(GeoModel));
 
                 // Update selection.
                 UpdateSelectionForGeoModelBasemap();
@@ -168,7 +168,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 case NotifyCollectionChangedAction.Move:
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Reset:
-                    e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(async bmgi => await bmgi.NotifySpatialReferenceChanged(GeoModel));
+                    e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(GeoModel));
                     UpdateSelectionForGeoModelBasemap();
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -187,7 +187,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             else if (e.PropertyName == nameof(GeoModel.SpatialReference))
             {
-                AvailableBasemaps?.ToList().ForEach(async item => await item.NotifySpatialReferenceChanged(GeoModel));
+                AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
             }
         }
 
@@ -197,8 +197,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             await UpdateBasemaps();
         }
 
+        private readonly SemaphoreSlim _updateBasemapsSemaphore = new(1, 1);
+
         public async Task UpdateBasemaps()
         {
+            await _updateBasemapsSemaphore.WaitAsync();
+            try
+            {
             IsLoading = true;
             // Cancel any pending load before starting a new one
             _loadCancellationTokenSource?.Cancel();
@@ -215,6 +220,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             finally
             {
                 IsLoading = false;
+            }
+        }
+            finally
+            {
+                _updateBasemapsSemaphore.Release();
             }
         }
 

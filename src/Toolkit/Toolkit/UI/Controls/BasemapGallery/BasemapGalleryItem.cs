@@ -135,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        internal async Task NotifySpatialReferenceChanged(GeoModel? gm)
+        internal async void NotifySpatialReferenceChanged(GeoModel? gm)
         {
             try
             {
