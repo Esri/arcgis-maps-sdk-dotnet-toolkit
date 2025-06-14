@@ -197,8 +197,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             await UpdateBasemaps();
         }
 
+        private readonly SemaphoreSlim _updateBasemapsSemaphore = new(1, 1);
+
         public async Task UpdateBasemaps()
         {
+            await _updateBasemapsSemaphore.WaitAsync();
+            try
+            {
             IsLoading = true;
             // Cancel any pending load before starting a new one
             _loadCancellationTokenSource?.Cancel();
@@ -215,6 +220,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             finally
             {
                 IsLoading = false;
+            }
+        }
+            finally
+            {
+                _updateBasemapsSemaphore.Release();
             }
         }
 
