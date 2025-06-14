@@ -6,7 +6,7 @@
         <ListView x:Name="SamplesList" ItemSelected="SamplesList_ItemSelected" Margin="{OnPlatform 0, WinUI=20}" RowHeight="{OnPlatform 60, WinUI=45}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding Name}" Detail="{Binding Description}" TextColor="CornflowerBlue" />
+                    <TextCell Text="{Binding Name}" Detail="{Binding Description}" TextColor="CornflowerBlue" DetailColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
