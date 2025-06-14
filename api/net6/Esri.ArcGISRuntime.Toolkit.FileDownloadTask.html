@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FileDownloadTask
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FileDownloadTask
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask">
+  
+  
+  <h1 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask" class="text-break">Class FileDownloadTask
+  </h1>
+  <div class="markdown level0 summary"><p>Task for helping managing large downloads that can be paused and resumed across application sessions.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Object</a></div>
+    <div class="level1"><span class="xref">FileDownloadTask</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Esri.ArcGISRuntime.Toolkit</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.Maui.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[DataContract]
+public sealed class FileDownloadTask : IDisposable</code></pre>
+  </div>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>Once a download has started, you should call <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ToJson">ToJson()</a> to serialize the task to a string. This
+allows you to resume the download later if the app closes for whatever reason before the download completes.</p>
+</div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BufferSize.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L328">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BufferSize_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BufferSize*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BufferSize" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BufferSize">BufferSize</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the buffer size used for downloading the file. The default is 65535 bytes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[DataMember]
+public int BufferSize { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BytesDownloaded.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BytesDownloaded%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L361">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BytesDownloaded_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BytesDownloaded*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BytesDownloaded" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BytesDownloaded">BytesDownloaded</h4>
+  <div class="markdown level1 summary"><p>The number of bytes downloaded so far.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long BytesDownloaded { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int64</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_DownloadSpeed.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.DownloadSpeed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L808">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_DownloadSpeed_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.DownloadSpeed*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_DownloadSpeed" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.DownloadSpeed">DownloadSpeed</h4>
+  <div class="markdown level1 summary"><p>Gets the current download speed as bytes per second based on a moving average calculation</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int DownloadSpeed { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Exception.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Exception%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L298">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Exception_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Exception*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Exception" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Exception">Exception</h4>
+  <div class="markdown level1 summary"><p>Gets the the exception of the download if it failed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Exception? Exception { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Exception</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_IsResumable.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.IsResumable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L344">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_IsResumable_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.IsResumable*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_IsResumable" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.IsResumable">IsResumable</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the download can be resumed from the last position, or will start over on resume.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsResumable { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_IsResumable_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is determined by the server response. If the server supports byte ranges and provides an ETag or Date header, this will be <code>true</code>.</p>
+</div>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_IsResumable_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ResumeAsync_CancellationToken_">ResumeAsync(CancellationToken)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_MaxConcurrentDownloads.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.MaxConcurrentDownloads%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L175">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_MaxConcurrentDownloads_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.MaxConcurrentDownloads*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_MaxConcurrentDownloads" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.MaxConcurrentDownloads">MaxConcurrentDownloads</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the maximum number of downloads that can be in progress at the same time before getting queued. The default is <code>3</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static uint MaxConcurrentDownloads { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">UInt32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_MaxConcurrentDownloads_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If this value is zero, no limits are put on the number of simultanous downloads. If the value decreases, any downloads that are currently in progress will continue,
+but no new downloads will be started until the number of in-progress downloads is below the new limit.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Priority.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Priority%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L273">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Priority_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Priority*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Priority" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Priority">Priority</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the download priority if multiple items are queued. The higher the number, the higher the priority of the download.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Priority { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Status.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Status%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L306">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Status_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Status*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Status" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Status">Status</h4>
+  <div class="markdown level1 summary"><p>Gets the current download status of the download.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[DataMember]
+public FileDownloadStatus Status { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadStatus.html">FileDownloadStatus</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Status_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_StatusChanged">StatusChanged</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_TotalLength.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.TotalLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L366">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_TotalLength_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.TotalLength*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_TotalLength" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.TotalLength">TotalLength</h4>
+  <div class="markdown level1 summary"><p>The total length of the file being downloaded. This is only available if the server provides the content length.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[DataMember]
+public long? TotalLength { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int64</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BeginDownloadAsync_System_String_Uri_System_Net_Http_HttpMessageHandler_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BeginDownloadAsync(System.String%2CUri%2CSystem.Net.Http.HttpMessageHandler%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L458">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BeginDownloadAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BeginDownloadAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BeginDownloadAsync_System_String_Uri_System_Net_Http_HttpMessageHandler_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BeginDownloadAsync(System.String,Uri,System.Net.Http.HttpMessageHandler,CancellationToken)">BeginDownloadAsync(String, Uri, HttpMessageHandler, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Initiates a download to the specified file from the specified URL</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Task&lt;FileDownloadTask&gt; BeginDownloadAsync(string destinationPath, Uri requestUri, HttpMessageHandler handler = null, CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td><span class="parametername">destinationPath</span></td>
+        <td><p>File where the download should be saved to.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Uri</a></td>
+        <td><span class="parametername">requestUri</span></td>
+        <td><p>URL to download</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">HttpMessageHandler</a></td>
+        <td><span class="parametername">handler</span></td>
+        <td><p>Optional custom HTTP handler to be used.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CancellationToken</a></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Cancellation token for starting the download. Note that once download has started, use <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_CancelAsync">CancelAsync()</a> to cancel an active download.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a>&lt;<a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html">FileDownloadTask</a>&gt;</td>
+        <td><p>FileDownloadTask</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Esri.ArcGISRuntime</a></td>
+        <td><p>The destination file already exists</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_CancelAsync.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.CancelAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L543">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_CancelAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.CancelAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_CancelAsync" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.CancelAsync">CancelAsync()</h4>
+  <div class="markdown level1 summary"><p>Aborts the running download and deletes the partial download.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task CancelAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ClearQueue.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ClearQueue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L193">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ClearQueue_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ClearQueue*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ClearQueue" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ClearQueue">ClearQueue()</h4>
+  <div class="markdown level1 summary"><p>Clears any downloads still in the download queue. This will pause all downloads that are queued, and remove them from the queue.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ClearQueue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Dispose.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L276">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Dispose_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Dispose*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Dispose" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Finalize.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Finalize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L279">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Finalize_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Finalize*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Finalize" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Finalize">Finalize()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Finalize()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_FromJson_System_String_System_Net_Http_HttpMessageHandler_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.FromJson(System.String%2CSystem.Net.Http.HttpMessageHandler)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L410">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_FromJson_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.FromJson*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_FromJson_System_String_System_Net_Http_HttpMessageHandler_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.FromJson(System.String,System.Net.Http.HttpMessageHandler)">FromJson(String, HttpMessageHandler)</h4>
+  <div class="markdown level1 summary"><p>Restores a previously serialized <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html">FileDownloadTask</a> from a JSON string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FileDownloadTask FromJson(string json, HttpMessageHandler handler = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>JSON to deserialize.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">HttpMessageHandler</a></td>
+        <td><span class="parametername">handler</span></td>
+        <td><p>Optional custom HTTP handler to be used.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html">FileDownloadTask</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_PauseAsync.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.PauseAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L593">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_PauseAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.PauseAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_PauseAsync" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.PauseAsync">PauseAsync()</h4>
+  <div class="markdown level1 summary"><p>Pauses the active download.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task PauseAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_RestartAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.RestartAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L496">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_RestartAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.RestartAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_RestartAsync_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.RestartAsync(CancellationToken)">RestartAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Restarts the download from the beginning.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task RestartAsync(CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CancellationToken</a></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Cancellation token for resuming the download. Note that once download has started, use <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_CancelAsync">CancelAsync()</a> to cancel an active download.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ResumeAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ResumeAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L521">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ResumeAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ResumeAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ResumeAsync_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ResumeAsync(CancellationToken)">ResumeAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Resumes the download from the last position.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task ResumeAsync(CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">CancellationToken</a></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Cancellation token for resuming the download. Note that once download has started, use <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_CancelAsync">CancelAsync()</a> to cancel an active download.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ResumeAsync_CancellationToken__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If the task isn't resumable, the download will start over, and if it is already running, this is a no-op.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ToJson.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ToJson%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L435">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ToJson_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ToJson*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ToJson" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ToJson">ToJson()</h4>
+  <div class="markdown level1 summary"><p>Serializes the current <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html">FileDownloadTask</a> to a JSON string for later resuming downloads.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ToJson()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td><p>JSON serialized <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html">FileDownloadTask</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Completed.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Completed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L372">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Completed" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Completed">Completed</h4>
+  <div class="markdown level1 summary"><p>Event raised when the download is completed successfully.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler? Completed</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Error.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Error%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L382">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Error" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Error">Error</h4>
+  <div class="markdown level1 summary"><p>Event raised when an error occurs during the download.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;Exception&gt;? Error</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Exception</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Progress.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Progress%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L377">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Progress" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Progress">Progress</h4>
+  <div class="markdown level1 summary"><p>Event raised as the download progresses.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;FileDownloadProgress&gt;? Progress</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&lt;<a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadProgress.html">FileDownloadProgress</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask_StatusChanged.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask.StatusChanged%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L323">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_StatusChanged" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.StatusChanged">StatusChanged</h4>
+  <div class="markdown level1 summary"><p>Event triggered when the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Status">Status</a> property changes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler? StatusChanged</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L149" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
