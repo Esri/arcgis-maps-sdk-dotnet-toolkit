@@ -11,7 +11,7 @@
   <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
   <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
   <internal:FileSizeConverter x:Key="FeatureFormFileSizeConverter" />
-  <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#toolkit-icons</FontFamily>
+  <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
   <Style TargetType="TextBlock" x:Key="FeatureFormViewHeaderStyle">
      <Setter Property="FontSize" Value="16" />
      <Setter Property="FontWeight" Value="Bold" />
@@ -607,8 +607,6 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
@@ -616,13 +614,11 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock x:Name="Icon" VerticalAlignment="Center" Margin="4,0" FontFamily="{StaticResource ToolkitIconsFontFamily}" Grid.RowSpan="2" />
+                        <TextBlock x:Name="Icon" VerticalAlignment="Center" Margin="0,0,4,0" FontFamily="{StaticResource ToolkitIconsFontFamily}" Grid.RowSpan="2" />
                         <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="{Binding AssociationResult.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"
-                                   VerticalAlignment="Center" Grid.Column="1" Grid.ColumnSpan="3" TextTrimming="CharacterEllipsis" />
-                        <TextBlock x:Name="FractionText" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" />
-                        <TextBlock x:Name="IsContentVisibleText" Visibility="Collapsed" Grid.Column="2" Grid.Row="1" />
-                        <TextBlock x:Name="TerminalText" Visibility="Collapsed" Grid.Column="3" Grid.Row="1" />
-                        <TextBlock Text="&#xE76C;" Grid.Column="4" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" FontFamily="Segoe MDL2 Assets" />
+                                   VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" />
+                        <TextBlock x:Name="ConnectionInfo" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=ConnectionInfo, Path=Text}" />
+                        <TextBlock Text="&#xE76C;" Grid.Column="2" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" FontFamily="Segoe MDL2 Assets" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

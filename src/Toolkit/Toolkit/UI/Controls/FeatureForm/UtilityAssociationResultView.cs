@@ -18,6 +18,8 @@ using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UtilityNetworks;
+using System.Text;
+
 
 
 
@@ -124,45 +126,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (AssociationResult?.Association.ToElement.GlobalId == guid)
                 otherElement = AssociationResult?.Association.FromElement;
 
-            if (GetTemplateChild("TerminalText") is TextBlock terminalText)
+            if (GetTemplateChild("ConnectionInfo") is TextBlock connectionInfo)
             {
-                string? terminalName = otherElement?.Terminal?.Name;
-                terminalText.Text = string.IsNullOrEmpty(terminalName) ? "" : string.Format(Properties.Resources.GetString("FeatureFormUtilityElementTerminalName")!, terminalName);
-#if MAUI
-                terminalText.IsVisible = !string.IsNullOrEmpty(terminalName);
-#else
-                terminalText.Visibility = string.IsNullOrEmpty(terminalName) ? Visibility.Collapsed : Visibility.Visible;
-#endif
-            }
-
-            if (GetTemplateChild("FractionText") is TextBlock fractionText)
-            {
+                StringBuilder sb = new StringBuilder();
                 bool showFraction = AssociationResult?.Association.AssociationType == UtilityAssociationType.Connectivity;
                 if (showFraction)
                 {
                     var fraction = AssociationResult?.Association.FractionAlongEdge ?? 0;
                     if (fraction == 0)
                         fraction = otherElement?.FractionAlongEdge ?? 0;
-                    fractionText.Text = string.Format(Properties.Resources.GetString("FeatureFormUtilityElementFractionAlongEdge")!, fraction.ToString("P0"));
+                    if (sb.Length > 0)
+                        sb.Append(" ");
+                    sb.Append(string.Format(Properties.Resources.GetString("FeatureFormUtilityElementFractionAlongEdge")!, fraction.ToString("P0")));
                 }
-                else
-                    fractionText.Text = "";
-#if MAUI
-                fractionText.IsVisible = string.IsNullOrEmpty(fractionText.Text);
-#else
-                fractionText.Visibility = string.IsNullOrEmpty(fractionText.Text) ? Visibility.Collapsed : Visibility.Visible;
-#endif
-            }
 
-            if (GetTemplateChild("IsContentVisibleText") is TextBlock isContentVisibleText)
-            {
-                bool showIscontentVisible = AssociationResult?.Association.AssociationType == UtilityAssociationType.Containment
-                                && otherElement == AssociationResult?.Association.ToElement;
-                isContentVisibleText.Text = string.Format(Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible")!, AssociationResult?.Association.IsContainmentVisible.ToString());
+                string? terminalName = otherElement?.Terminal?.Name;
+                if (!string.IsNullOrEmpty(terminalName))
+                {
+                    if (sb.Length > 0)
+                        sb.Append(" ");
+                    sb.Append(string.IsNullOrEmpty(terminalName) ? "" : string.Format(Properties.Resources.GetString("FeatureFormUtilityElementTerminalName")!, terminalName));
+                }
+
+                bool showIscontentVisible = AssociationResult?.Association.AssociationType == UtilityAssociationType.Containment && otherElement == AssociationResult?.Association.ToElement;
+                if (showIscontentVisible)
+                {
+                    if (sb.Length > 0)
+                        sb.Append(" ");
+                    sb.Append(string.Format(Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible")!, AssociationResult?.Association.IsContainmentVisible.ToString()));
+                }
+                connectionInfo.Text = sb.ToString().Trim();
 #if MAUI
-                isContentVisibleText.IsVisible = showIscontentVisible;
+                connectionInfo.IsVisible = connectionInfo.Text.Length > 0;
 #else
-                isContentVisibleText.Visibility = showIscontentVisible  ? Visibility.Visible : Visibility.Collapsed;
+                connectionInfo.Visibility = connectionInfo.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
 #endif
             }
         }

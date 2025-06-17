@@ -32,16 +32,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
-           Grid layout = new Grid() { Padding = new Thickness(8, 0, 8, 0), MinimumHeightRequest = 40 };
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+           Grid layout = new Grid() { MinimumHeightRequest = 40 };
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-            Image icon = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
+            Image icon = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(0,0,4,0) };
             Grid.SetRowSpan(icon, 2);
             layout.Add(icon);
 
@@ -49,27 +47,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             title.SetBinding(Label.TextProperty, static (UtilityAssociationResultView result) => result.AssociationResult?.Title, source: RelativeBindingSource.TemplatedParent);
             title.Style = FeatureFormView.GetFeatureFormTitleStyle();
             Grid.SetColumn(title, 1);
-            Grid.SetColumnSpan(title, 3);
             layout.Add(title);
 
-            Label fractionText = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false };
-            Grid.SetRow(fractionText, 1);
-            Grid.SetColumn(fractionText, 1);
-            layout.Add(fractionText);
-
-            Label isContentVisibleText = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false };
-            Grid.SetRow(isContentVisibleText, 1);
-            Grid.SetColumn(isContentVisibleText, 2);
-            layout.Add(isContentVisibleText);
-
-            Label terminalText = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false };
-            Grid.SetRow(terminalText, 1);
-            Grid.SetColumn(terminalText, 3);
-            layout.Add(terminalText);
+            Label connectionInfo = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, LineBreakMode = LineBreakMode.TailTruncation, Margin = new Thickness(0,0,2,0) };
+            connectionInfo.SetBinding(ToolTipProperties.TextProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self);
+            Grid.SetRow(connectionInfo, 1);
+            Grid.SetColumn(connectionInfo, 1);
+            layout.Add(connectionInfo);
 
             Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
             image.Source = new FontImageSource() { Glyph = ((char)0xE7A0).ToString(), Color = Colors.Gray, FontFamily = "toolkit-icons", Size = 18 };
-            Grid.SetColumn(image, 4);
+            Grid.SetColumn(image, 2);
             Grid.SetRowSpan(image, 2);
             layout.Add(image);
             // TODO: Set theme-based background once https://github.com/dotnet/maui/issues/26620 is addressed
@@ -82,9 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(layout, nameScope);
             nameScope.RegisterName("Icon", icon);
-            nameScope.RegisterName("FractionText", fractionText);
-            nameScope.RegisterName("IsContentVisibleText", isContentVisibleText);
-            nameScope.RegisterName("TerminalText", terminalText);
+            nameScope.RegisterName("ConnectionInfo", connectionInfo);
             return layout;
         }
     }
