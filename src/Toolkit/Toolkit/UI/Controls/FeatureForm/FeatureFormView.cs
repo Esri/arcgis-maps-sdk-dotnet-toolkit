@@ -454,7 +454,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                        }
                     else if (result == ContentDialogResult.Secondary)
                     {
-                        _ = DiscardEditsAsync();
+                        CurrentFeatureForm?.DiscardEdits();
                     }
                     else if (result == ContentDialogResult.None)
                     {
@@ -493,7 +493,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         }
                         else if (action == discardText)
                         {
-                            _ = DiscardEditsAsync();
+                            CurrentFeatureForm?.DiscardEdits();
                         }
                         else
                         {
