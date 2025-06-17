@@ -409,10 +409,10 @@ public partial class BasemapGallery : TemplatedView
 /// <summary>
 /// Represents an image used in the Basemap Gallery.
 /// <remarks>
-/// This class is only used on Android to work around a .NET MAUI bug where CollectionView may attempt to use a recycled bitmap,
-/// resulting in a Java.Lang.RuntimeException. By using a custom Image control and clearing the native image view when the source changes,
-/// this issue is avoided. See https://github.com/dotnet/maui/issues/11519 for more details.
+///  This class is only used on Android to work around a .NET MAUI bug where CollectionView may attempt to use a recycled bitmap,
+///  resulting in a Java.Lang.RuntimeException. By using a custom Image control and clearing the native image view when the source changes,
+///  this issue is avoided. See https://github.com/dotnet/maui/issues/11519 for more details.
 /// </remarks>
 /// </summary>
-internal class ThumbnailImage : Image { } 
+internal class ThumbnailImage : Image { }
 #endif
