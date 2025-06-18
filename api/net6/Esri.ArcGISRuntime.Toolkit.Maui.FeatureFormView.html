@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FeatureFormView
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FeatureFormView
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView">
+  
+  
+  <h1 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView" class="text-break">Class FeatureFormView
+  </h1>
+  <div class="markdown level0 summary"><p>A visual feature editor form controlled by a <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm">FeatureForm</a> definition.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Object</a></div>
+    <div class="level1"><span class="xref">FeatureFormView</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.html">Esri.ArcGISRuntime.Toolkit.Maui</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.Maui.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class FeatureFormView : TemplatedView</code></pre>
+  </div>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>To use the camera to capture images for attachments, the corerct permissions must be set on your application.</p>
+<p><strong>Android:</strong><br>Add the following to Android&apos;s AndroidManifest.xml:</p>
+<pre><code>&lt;uses-permission android:name=&quot;android.permission.CAMERA&quot; />
+&lt;queries>
+    &lt;intent>
+        &lt;action android:name=&quot;android.media.action.IMAGE_CAPTURE&quot; />
+    &lt;/intent>
+&lt;/queries></code></pre>
+<p><strong>iOS:</strong><br>Add the following to iOS&apos;s Info.plist:</p>
+<pre><code>&lt;key>NSCameraUsageDescription&lt;/key>
+&lt;string>Adding attachments&lt;/string></code></pre>
+<p>If these settings are not added, only file browsing will be enabled.</p>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView__ctor.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L43">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView__ctor_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.#ctor*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.#ctor">FeatureFormView()</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.html">FeatureFormView</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FeatureFormView()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureFormContentScrollViewerName.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureFormContentScrollViewerName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.Maui.cs/#L68">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureFormContentScrollViewerName" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureFormContentScrollViewerName">FeatureFormContentScrollViewerName</h4>
+  <div class="markdown level1 summary"><p>Template name of the form's content's <see cref="!:ScrollView"></see>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string FeatureFormContentScrollViewerName = &quot;FeatureFormContentScrollViewer&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureFormProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureFormProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L157">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureFormProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureFormProperty">FeatureFormProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm">FeatureForm</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly BindableProperty FeatureFormProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">BindableProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ItemsViewName.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ItemsViewName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.Maui.cs/#L59">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ItemsViewName" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ItemsViewName">ItemsViewName</h4>
+  <div class="markdown level1 summary"><p>Template name of the <see cref="!:IBindableLayout"></see> items layout view.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string ItemsViewName = &quot;ItemsView&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibilityProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibilityProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L287">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibilityProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibilityProperty">VerticalScrollBarVisibilityProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibility">VerticalScrollBarVisibility</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly BindableProperty VerticalScrollBarVisibilityProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">BindableProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L147">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm">FeatureForm</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the associated FeatureForm which contains the form.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FeatureForm? FeatureForm { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">FeatureForm</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsValid.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsValid%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L212">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsValid_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsValid*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsValid" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsValid">IsValid</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this form has any validation errors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsValid { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibility.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibility%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L277">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibility_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibility*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibility" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibility">VerticalScrollBarVisibility</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the vertical scrollbar visibility of the scrollviewer below the title.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ScrollBarVisibility VerticalScrollBarVisibility { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">ScrollBarVisibility</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_DiscardEditsAsync.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.DiscardEditsAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L238">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_DiscardEditsAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.DiscardEditsAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_DiscardEditsAsync" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.DiscardEditsAsync">DiscardEditsAsync()</h4>
+  <div class="markdown level1 summary"><p>Discards edits to all elements, refreshes any pending expressions and restores attachment list.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task DiscardEditsAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingAsync.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L265">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingAsync" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingAsync">FinishEditingAsync()</h4>
+  <div class="markdown level1 summary"><p>Saves edits made using the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm">FeatureForm</a> to the database.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task FinishEditingAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_OnApplyTemplate.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.OnApplyTemplate%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L54">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_OnApplyTemplate_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.OnApplyTemplate*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.OnApplyTemplate">OnApplyTemplate()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void OnApplyTemplate()</code></pre>
+  </div>
+  <h3 id="events">Events
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_BarcodeButtonClicked.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.BarcodeButtonClicked%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L433">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_BarcodeButtonClicked" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.BarcodeButtonClicked">BarcodeButtonClicked</h4>
+  <div class="markdown level1 summary"><p>Raised when the Barcode Icon in a barcode element is clicked.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BarcodeButtonClickedEventArgs&gt;? BarcodeButtonClicked</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&lt;<a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.BarcodeButtonClickedEventArgs.html">BarcodeButtonClickedEventArgs</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_BarcodeButtonClicked_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Set the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.BarcodeButtonClickedEventArgs.html#Esri_ArcGISRuntime_Toolkit_Maui_BarcodeButtonClickedEventArgs_Handled">Handled</a> property to <code>true</code> to prevent
+any default code and perform your own logic.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FormAttachmentClicked.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FormAttachmentClicked%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.cs/#L412">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FormAttachmentClicked" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FormAttachmentClicked">FormAttachmentClicked</h4>
+  <div class="markdown level1 summary"><p>Raised when a feature form attachment is clicked</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;FormAttachmentClickedEventArgs&gt;? FormAttachmentClicked</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&lt;<a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FormAttachmentClickedEventArgs.html">FormAttachmentClickedEventArgs</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FormAttachmentClicked_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>By default, when an attachment is clicked, the default application for the file type (if any) is launched. To override this,
+listen to this event, set the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FormAttachmentClickedEventArgs.html#Esri_ArcGISRuntime_Toolkit_Maui_FormAttachmentClickedEventArgs_Handled">Handled</a> property to <code>true</code> and perform
+your own logic. </p>
+<example>
+Example: Use the .NET MAUI share API for the attachment:
+<pre><code class="lang-csharp">private async void FormAttachmentClicked(object sender, FormAttachmentClickedEventArgs e)
+{
+    e.Handled = true; // Prevent default launch action
+    await Share.Default.RequestAsync(new ShareFileRequest(new ReadOnlyFile(e.FilePath!, e.ContentType)));
+}</code></pre>
+</example>
+</div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><span><a href="https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/device-media/picker?#get-started">MAUI: Media picker for photos and videos</a></span></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.Maui.cs/#L48" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

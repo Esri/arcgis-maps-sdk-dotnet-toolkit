@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PopupViewer
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PopupViewer
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer">
+  
+  
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer" class="text-break">Class PopupViewer
+  </h1>
+  <div class="markdown level0 summary"><p>The PopupViewer control is used to display details and media, edit attributes, geometry and related records,
+manage attachments of an <see cref="!:Data.ArcGISFeature"></see> or a <see cref="!:ArcGISRuntime.UI.Graphic"></see>
+as defined in its <see cref="!:Mapping.Popups.Popup"></see>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Object</a></div>
+    <div class="level1"><span class="xref">PopupViewer</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Esri.ArcGISRuntime.Toolkit.UI.Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WPF.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class PopupViewer : Control</code></pre>
+  </div>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>The <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.html">PopupViewer</a> consists of a number of sub-controls all in the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.Primitives.html">Esri.ArcGISRuntime.Toolkit.Primitives</a> namespace.
+<p><strong>Control-Description</strong></p><ul><li><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView.html">AttachmentsPopupElementView</a>Displays and downloads the attachments defind by the <see cref="!:AttachmentsPopupElement"></see>.</li><li><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView.html">FieldsPopupElementView</a>Displays the feature fields defined by the <see cref="!:FieldsPopupElement"></see>.</li><li><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView.html">MediaPopupElementView</a>Displays the images and charts defined by the <see cref="!:MediaPopupElement"></see>.</li><li><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView.html">TextPopupElementView</a>Displays the text content defined by the <see cref="!:TextPopupElement"></see>.</li></ul>
+</p>
+<p>In addition to overwrite the control templates of this control and its child controls, the following styles are available for overriding text styling:
+<p><strong>Resource Key-Description</strong></p><ul><li>PopupViewerHeaderStyleLabel style for the main popup header.</li><li>PopupViewerTitleStyleLabel style for the title of each popup element.</li><li>PopupViewerCaptionStyleLabel style for the caption of each popup element.</li></ul>
+</p>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer__ctor.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.cs/#L75">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer__ctor_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.#ctor*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.#ctor">PopupViewer()</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.html">PopupViewer</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PopupViewer()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_PopupProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.PopupProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.cs/#L166">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_PopupProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.PopupProperty">PopupProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_PopupManager">PopupManager</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty PopupProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_VerticalScrollBarVisibilityProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.VerticalScrollBarVisibilityProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.cs/#L222">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_VerticalScrollBarVisibilityProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.VerticalScrollBarVisibilityProperty">VerticalScrollBarVisibilityProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_VerticalScrollBarVisibility">VerticalScrollBarVisibility</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty VerticalScrollBarVisibilityProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_Popup.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.Popup%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.cs/#L157">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_Popup_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.Popup*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_Popup" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.Popup">Popup</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the associated PopupManager which contains popup and sketch editor.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Mapping.Popups.Popup? Popup { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Mapping.Popups.Popup</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_VerticalScrollBarVisibility.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.VerticalScrollBarVisibility%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.cs/#L213">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_VerticalScrollBarVisibility_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.VerticalScrollBarVisibility*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_VerticalScrollBarVisibility" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.VerticalScrollBarVisibility">VerticalScrollBarVisibility</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the vertical scrollbar visibility of the scrollviewer below the title.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ScrollBarVisibility VerticalScrollBarVisibility { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">ScrollBarVisibility</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_OnApplyTemplate.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.OnApplyTemplate%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.cs/#L88">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_OnApplyTemplate_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.OnApplyTemplate*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.OnApplyTemplate">OnApplyTemplate()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnApplyTemplate()</code></pre>
+  </div>
+  <h3 id="events">Events
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_HyperlinkClicked.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.HyperlinkClicked%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.cs/#L271">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_HyperlinkClicked" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.HyperlinkClicked">HyperlinkClicked</h4>
+  <div class="markdown level1 summary"><p>Raised when a link is clicked</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;HyperlinkClickedEventArgs&gt;? HyperlinkClicked</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&lt;<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.HyperlinkClickedEventArgs.html">HyperlinkClickedEventArgs</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_HyperlinkClicked_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>By default, when an link is clicked, the default application (Browser) for the file type (if any) is launched. To override this,
+listen to this event, set the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.HyperlinkClickedEventArgs.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_HyperlinkClickedEventArgs_Handled">Handled</a> property to <code>true</code> and perform
+your own logic. </p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_PopupAttachmentClicked.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.PopupAttachmentClicked%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.cs/#L249">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_PopupAttachmentClicked" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.PopupAttachmentClicked">PopupAttachmentClicked</h4>
+  <div class="markdown level1 summary"><p>Raised when a popup attachment is clicked</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;PopupAttachmentClickedEventArgs&gt;? PopupAttachmentClicked</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&lt;<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupAttachmentClickedEventArgs.html">PopupAttachmentClickedEventArgs</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer_PopupAttachmentClicked_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>By default, when an attachment is clicked, the default application for the file type (if any) is launched. To override this,
+listen to this event, set the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupAttachmentClickedEventArgs.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupAttachmentClickedEventArgs_Handled">Handled</a> property to <code>true</code> and perform
+your own logic. </p>
+<example>
+Example: Use the .NET MAUI share API for the attachment:
+<pre><code class="lang-csharp">private async void PopupAttachmentClicked(object sender, PopupAttachmentClickedEventArgs e)
+{
+    e.Handled = true; // Prevent default launch action
+    await Share.Default.RequestAsync(new ShareFileRequest(new ReadOnlyFile(e.Attachment.Filename!, e.Attachment.ContentType)));
+}</code></pre>
+</example>
+</div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_PopupViewer.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/PopupViewer/PopupViewer.Windows.cs/#L26" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
