@@ -183,7 +183,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _displayName = info.Name;
                 }
                 else if (!string.IsNullOrWhiteSpace(info.Description))
-            {
+                {
                     _displayName = info.Description;
                 }
             }
@@ -212,7 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 pinSymbol.OffsetY = 16.5;
                 DefaultSymbol = pinSymbol;
             }
-            }
+        }
 
         /// <summary>
         /// This search source does not track selection state.
