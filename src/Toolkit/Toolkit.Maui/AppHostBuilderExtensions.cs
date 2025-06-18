@@ -14,7 +14,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// <returns>The host builder</returns>
         public static MauiAppBuilder UseArcGISToolkit(this MauiAppBuilder builder)
         {
-            return builder.ConfigureFonts(fonts => fonts.AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "calcite-ui-icons-24.ttf", "calcite-ui-icons-24"));
+            return builder.ConfigureFonts(fonts => fonts
+                .AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "calcite-ui-icons-24.ttf", "calcite-ui-icons-24")
+                .AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "toolkit-icons.ttf", "toolkit-icons")
+                );
         }
     }
 }

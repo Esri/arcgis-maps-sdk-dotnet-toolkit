@@ -57,31 +57,122 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("NavigateBack") is FrameworkElement back)
             {
 #if MAUI
-                back.IsVisible = NavigationStack.Count > 0;
+                back.IsVisible = _navigationStack.Count > 0;
 #else
-                back.Visibility = NavigationStack.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+                back.Visibility = _navigationStack.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 #endif
 #if WPF
-                back.Margin = NavigationStack.Count > 1 ? new Thickness() : new Thickness(0, 0, 10, 0);
+                back.Margin = _navigationStack.Count > 1 ? new Thickness() : new Thickness(0, 0, 10, 0);
 #endif
             }
             if (GetTemplateChild("NavigateUp") is FrameworkElement up)
             {
 #if MAUI
-                up.IsVisible = NavigationStack.Count > 1;
+                up.IsVisible = _navigationStack.Count > 1;
 #else
-                up.Visibility = NavigationStack.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
+                up.Visibility = _navigationStack.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
 #endif
             }
         }
 
-        private Stack<Tuple<object,double>> NavigationStack = new Stack<Tuple<object, double>>();
+        private Stack<Tuple<object,double>> _navigationStack = new Stack<Tuple<object, double>>();
+
+        /// <summary>
+        /// Gets the current navigation stack
+        /// </summary>
+        public IEnumerable<object> NavigationStack
+        {
+            get
+            {
+                foreach(var t in _navigationStack)
+                {
+                    yield return t.Item1;
+                }
+            }
+        }
+
+        internal enum NavigationDirection
+        {
+            Forward,
+            Backward,
+            Reset
+        }
+
+        internal class NavigationEventArgs : EventArgs
+        {
+            private TaskCompletionSource<bool>? _deferredTaskCompletionSource;
+
+            public NavigationEventArgs(object? from, object? to, NavigationDirection direction)
+            {
+                NavigatingFrom = from;
+                NavigatingTo = to;
+                Direction = direction;
+            }
+            public NavigationDirection Direction { get; }
+
+
+            public object? NavigatingTo { get; }
+            
+            public object? NavigatingFrom { get; }
+            
+            public bool Cancel { get; set; }
+
+            public NavigationDeferral GetDeferral()
+            {
+                if (_deferredTaskCompletionSource is not null)
+                    throw new InvalidOperationException("Deferral has already been requested"); // Only one deferral currently supported
+
+                _deferredTaskCompletionSource = new TaskCompletionSource<bool>();
+
+                return new NavigationDeferral(() => _deferredTaskCompletionSource.TrySetResult(true));
+            }
+            public Task AwaitDeferralAsync()
+            {
+                return _deferredTaskCompletionSource?.Task ?? Task.CompletedTask;
+            }
+        }
+
+        internal class NavigationDeferral
+        {
+            Action? _completed;
+
+            internal NavigationDeferral(Action completed)
+            {
+                _completed = completed;
+            }
+            public void Complete()
+            {
+                var taskToComplete = Interlocked.Exchange(ref _completed, null);
+
+                if (taskToComplete != null)
+                    taskToComplete?.Invoke();
+            }
+        }
+
+        internal event EventHandler<NavigationEventArgs>? OnNavigating;
+
+        private async Task<bool> RaiseOnNavigatingAsync(object? content, NavigationDirection direction)
+        {
+            var handler = OnNavigating;
+            if (handler is not null)
+            {
+                var args = new NavigationEventArgs(Content, content, direction);
+                handler.Invoke(this, args);
+                await args.AwaitDeferralAsync().ConfigureAwait(false);
+                if (args.Cancel)
+                    return false;
+            }
+            return true;
+        }
         
-        internal void Navigate(object? content, bool clearNavigationStack = false)
+        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false)
         {
             if (content is null && !clearNavigationStack)
                 throw new ArgumentNullException(nameof(content));
-
+            if (!(await RaiseOnNavigatingAsync(content, clearNavigationStack ? NavigationDirection.Reset : NavigationDirection.Forward)))
+            {
+                return false;
+            }
             double offset = 0;
             if (GetTemplateChild("ScrollViewer") is ScrollViewer sv)
             {
@@ -94,9 +185,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
 
             if (clearNavigationStack)
-                NavigationStack.Clear();
+                _navigationStack.Clear();
             else if (Content is not null) // Move current content into the stack
-                NavigationStack.Push(new Tuple<object, double>(Content, offset));
+                _navigationStack.Push(new Tuple<object, double>(Content, offset));
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection();
             ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("NavigationSubViewForwardAnimation");
@@ -107,7 +198,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             if(!success)
             {
-            if (NavigationStack.Count > 0)
+            if (_navigationStack.Count > 0)
                 ContentTransitions.Add(new EntranceThemeTransition() { FromHorizontalOffset = 200, FromVerticalOffset = 0 });
             }
 #endif
@@ -120,6 +211,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif WINDOWS_XAML
             (GetTemplateChild("ScrollViewer") as ScrollViewer)?.ChangeView(null, 0, null, disableAnimation: true);
 #endif
+            return true;
         }
 
         private void SetContent(object? content)
@@ -132,11 +224,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateView();
         }
 
-        private void GoBack()
+        private async Task GoBack()
         {
-            if (NavigationStack.Count == 0)
+            if (_navigationStack.Count == 0)
                 return;
-            var previousPage = NavigationStack.Pop();
+            if (!(await RaiseOnNavigatingAsync(_navigationStack.Peek().Item1, NavigationDirection.Backward)))
+            {
+                return;
+            }
+            var previousPage = _navigationStack.Pop();
             var content = previousPage.Item1;
             var lastOffset = previousPage.Item2;
 
@@ -181,12 +277,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             SetContent(content);
         }
 
-        private void GoUp()
+        private async Task GoUp()
         {
-            if (NavigationStack.Count == 0)
+            if (_navigationStack.Count == 0)
                 return;
-            var content = NavigationStack.Last();
-            NavigationStack.Clear();
+            var content = _navigationStack.Last();
+            if (!(await RaiseOnNavigatingAsync(content.Item1, NavigationDirection.Backward)))
+            {
+                return;
+            }
+            _navigationStack.Clear();
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection
             {
@@ -207,17 +307,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("NavigateBack") is Button backButton)
             {
 #if MAUI
-                backButton.Clicked += (s, e) => GoBack();
+                backButton.Clicked += (s, e) => _ = GoBack();
 #else
-                backButton.Click += (s, e) => GoBack();
+                backButton.Click += (s, e) => _ = GoBack();
 #endif
             }
             if (GetTemplateChild("NavigateUp") is Button upButton)
             {
 #if MAUI
-                upButton.Clicked += (s, e) => GoUp();
+                upButton.Clicked += (s, e) => _ = GoUp();
 #else
-                upButton.Click += (s, e) => GoUp();
+                upButton.Click += (s, e) => _ = GoUp();
 #endif
             }
             if (GetTemplateChild("Header") is ContentControl cc1)
