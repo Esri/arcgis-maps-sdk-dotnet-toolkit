@@ -558,10 +558,14 @@
     <comment>The percentage fraction along an edge of a utility element association</comment>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Is content visible: {0}</value>
+    <value>Is content visible: Yes</value>
     <comment>Whether content is visible on a utility element association</comment>
   </data>
-  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>Is content visible: No</value>
+    <comment>Whether content is not visible on a utility element association</comment>
+  </data>
+    <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>
     <comment>The terminal name of utility element association</comment>
   </data>

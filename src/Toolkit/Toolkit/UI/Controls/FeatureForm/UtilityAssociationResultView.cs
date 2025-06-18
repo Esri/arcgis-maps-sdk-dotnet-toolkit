@@ -153,7 +153,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     if (sb.Length > 0)
                         sb.Append(" ");
-                    sb.Append(string.Format(Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible")!, AssociationResult?.Association.IsContainmentVisible.ToString()));
+                    sb.Append(AssociationResult?.Association.IsContainmentVisible == true ? Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible") : Properties.Resources.GetString("FeatureFormUtilityElementIsContentNotVisible"));
                 }
                 connectionInfo.Text = sb.ToString().Trim();
 #if MAUI
