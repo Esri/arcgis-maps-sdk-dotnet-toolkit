@@ -16,6 +16,7 @@
 
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Platform;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -49,7 +50,24 @@ public partial class BasemapGallery : TemplatedView
             outerScrimContainer.RowSpacing = 4;
 
             Grid thumbnailGrid = new Grid() { WidthRequest = 64, HeightRequest = 64 };
+#if ANDROID
+            // Workaround for .NET MAUI Android bug where CollectionView throws
+            // Java.Lang.RuntimeException: 'Canvas: trying to use a recycled bitmap'
+            // (see https://github.com/dotnet/maui/issues/11519, affects MAUI 9.0.0).
+            // This occurs when images are reused in CollectionView, causing recycled bitmaps to be drawn.
+            // The workaround uses a custom ThumbnailImage control and a custom ImageHandler mapping
+            // to clear the native image view when the image source changes, preventing the recycled bitmap error.
+            ThumbnailImage thumbnail = new ThumbnailImage { Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
+            Microsoft.Maui.Handlers.ImageHandler.Mapper.PrependToMapping(nameof(Microsoft.Maui.IImage.Source), static (handler, view) =>
+            {
+                if (view is ThumbnailImage)
+                {
+                    handler.PlatformView?.Clear();
+                }
+            });
+#else
             Image thumbnail = new Image { Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
+#endif
             Border itemTypeBorder = new Border
             {
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
@@ -386,3 +404,15 @@ public partial class BasemapGallery : TemplatedView
         HandleTemplateChange(width);
     }
 }
+
+#if ANDROID
+/// <summary>
+/// Represents an image used in the Basemap Gallery.
+/// <remarks>
+///  This class is only used on Android to work around a .NET MAUI bug where CollectionView may attempt to use a recycled bitmap,
+///  resulting in a Java.Lang.RuntimeException. By using a custom Image control and clearing the native image view when the source changes,
+///  this issue is avoided. See https://github.com/dotnet/maui/issues/11519 for more details.
+/// </remarks>
+/// </summary>
+internal class ThumbnailImage : Image { }
+#endif
