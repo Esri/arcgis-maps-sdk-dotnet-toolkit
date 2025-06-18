@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -36,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Basic search source implementation for generic locators.
     /// </summary>
-    public class LocatorSearchSource : ISearchSource
+    public class LocatorSearchSource : ISearchSource, INotifyPropertyChanged
     {
         internal const string WorldGeocoderUriString = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
@@ -64,15 +65,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private readonly Lazy<Task> _loadTask;
 
+        /// <inheritdoc/>
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         /// <summary>
         /// Gets the task used to perform initial locator setup.
         /// </summary>
         protected Lazy<Task> LoadTask => _loadTask;
 
+        private string _displayName = string.Empty;
+        private bool _displayNameSetExternally = false;
+
         /// <summary>
         /// Gets or sets the name of the locator. Defaults to the locator's name, or "locator" if not set.
         /// </summary>
-        public string DisplayName { get; set; } = "Locator";
+        public string DisplayName
+        {
+            get => _displayName;
+            set
+            {
+                if (_displayName != value)
+                {
+                    _displayName = value;
+                    _displayNameSetExternally = true;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayName)));
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the maximum number of results to return for a search. Default is 6.
@@ -153,9 +172,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void RefreshDisplayName()
         {
-            if (DisplayName != Locator?.LocatorInfo?.Name && !string.IsNullOrWhiteSpace(Locator?.LocatorInfo?.Name))
+            if (_displayNameSetExternally)
+                return;
+
+            if (Locator?.LocatorInfo is LocatorInfo info)
             {
-                DisplayName = Locator?.LocatorInfo?.Name ?? "Locator";
+                // Locators from online services have descriptions but not names.
+                if (!string.IsNullOrWhiteSpace(info.Name) && info.Name != Locator.Uri?.ToString())
+                {
+                    _displayName = info.Name;
+                }
+                else if (!string.IsNullOrWhiteSpace(info.Description))
+            {
+                    _displayName = info.Description;
+                }
             }
 
             GeocodeParameters.ResultAttributeNames.Add("*");
@@ -164,6 +194,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private async Task EnsureLoaded()
         {
             await Locator.LoadAsync();
+            RefreshDisplayName();
 #if MAUI
             Stream? resourceStream = Assembly.GetAssembly(typeof(LocatorSearchSource))?.GetManifestResourceStream(
                 "Esri.ArcGISRuntime.Toolkit.Maui.Assets.pin-red.png");

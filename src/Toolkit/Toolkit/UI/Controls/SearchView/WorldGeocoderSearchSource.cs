@@ -39,8 +39,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Attribute used to identify the type of result coming from the locaotr.
         private const string LocatorIconAttributeKey = "Type";
 
-        private readonly Lazy<Task> _additionalLoadTask;
-
         /// <summary>
         /// Gets or sets the minimum number of results to attempt to return.
         /// If there are too few results, the search is repeated with loosened parameters until enough results are accumulated.
@@ -88,25 +86,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 ResultSymbolStyle = style;
             }
             InitializeLocatorAttributes();
-
-            _additionalLoadTask = new Lazy<Task>(EnsureLoaded);
         }
 
         private void InitializeLocatorAttributes()
         {
-            if (Locator.LocatorInfo is LocatorInfo info)
-            {
-                // Locators from online services have descriptions but not names.
-                if (!string.IsNullOrWhiteSpace(info.Name) && info.Name != Locator.Uri?.ToString())
-                {
-                    DisplayName = info.Name;
-                }
-                else if (!string.IsNullOrWhiteSpace(info.Description))
-                {
-                    DisplayName = info.Description;
-                }
-            }
-
             // Add attributes expected from the World Geocoder Service if present, otherwise default to all attributes.
             if (Locator.Uri?.ToString() == WorldGeocoderUriString &&
                 (Locator.LocatorInfo?.ResultAttributes?.Any() == true))
@@ -126,8 +109,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private async Task EnsureLoaded() => await LoadTask.Value;
-
         /// <summary>
         /// Converts suggest result list into list of suggestions, applying result limits and calling necessary callbacks.
         /// </summary>
@@ -141,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default)
         {
-            await _additionalLoadTask.Value;
+            await LoadTask.Value;
             cancellationToken.ThrowIfCancellationRequested();
 
             var tempParams = new GeocodeParameters();
@@ -168,7 +149,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public override async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await _additionalLoadTask.Value;
+            await LoadTask.Value;
             cancellationToken.ThrowIfCancellationRequested();
 
             SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
@@ -198,7 +179,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public override async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await _additionalLoadTask.Value;
+            await LoadTask.Value;
             cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
@@ -231,7 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public override async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Geometry.Envelope queryArea, CancellationToken cancellationToken = default)
         {
-            await _additionalLoadTask.Value;
+            await LoadTask.Value;
             cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
