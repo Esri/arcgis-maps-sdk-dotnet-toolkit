@@ -63,11 +63,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new WorldGeocoderSearchSource(_worldGeocoderTask, null);
         }
 
-        private readonly Lazy<Task> _loadTask;
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event for the specified property.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
+        protected virtual void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private readonly Lazy<Task> _loadTask;
         /// <summary>
         /// Gets the task used to perform initial locator setup.
         /// </summary>
@@ -88,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _displayName = value;
                     _displayNameSetExternally = true;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayName)));
+                    OnPropertyChanged(nameof(DisplayName));
                 }
             }
         }
@@ -179,13 +185,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 // Locators from online services have descriptions but not names.
                 if (!string.IsNullOrWhiteSpace(info.Name) && info.Name != Locator.Uri?.ToString())
-                {
                     _displayName = info.Name;
-                }
                 else if (!string.IsNullOrWhiteSpace(info.Description))
-                {
                     _displayName = info.Description;
-                }
+                else
+                    _displayName = string.Empty;
+
+                OnPropertyChanged(nameof(DisplayName));
             }
 
             GeocodeParameters.ResultAttributeNames.Add("*");
