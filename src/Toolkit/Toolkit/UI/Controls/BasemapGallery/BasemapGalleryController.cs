@@ -201,27 +201,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         public async Task UpdateBasemaps()
         {
+            // Cancel any pending load before starting a new one
+            _loadCancellationTokenSource?.Cancel();
+
             await _updateBasemapsSemaphore.WaitAsync();
             try
             {
-            IsLoading = true;
-            // Cancel any pending load before starting a new one
-            _loadCancellationTokenSource?.Cancel();
-            _loadCancellationTokenSource = new CancellationTokenSource();
-            try
-            {
-                _availableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
-                HandleAvailableBasemapsChanged();
+                IsLoading = true;
+                _loadCancellationTokenSource = new CancellationTokenSource();
+                try
+                {
+                    _availableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
+                    HandleAvailableBasemapsChanged();
+                }
+                catch (OperationCanceledException) { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    IsLoading = false;
+                }
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }
             finally
             {
                 _updateBasemapsSemaphore.Release();
