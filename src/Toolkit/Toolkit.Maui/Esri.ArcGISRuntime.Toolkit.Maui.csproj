@@ -26,6 +26,7 @@
       <EmbeddedResource Include="Assets\*.png" />
       <None Include="build\**\*.*" PackagePath="build;buildTransitive" Pack="true" />
       <None Include="Resources\Fonts\calcite-ui-icons-24.ttf" Pack="true" PackagePath="Resources\Fonts" />
+      <None Include="Resources\Fonts\toolkit-icons.ttf" Pack="true" PackagePath="Resources\Fonts" />
     </ItemGroup>
 
     <ItemGroup>
