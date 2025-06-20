@@ -301,13 +301,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
         {
-            if (_loadBasemapGalleryItemsTask is null || _loadBasemapGalleryItemsTask.IsCompleted)
-            {
-                _loadBasemapGalleryItemsTask = LoadBasemapGalleryItemsInternal(portal, cancellationToken);
-                return _loadBasemapGalleryItemsTask;
-            }
-
-            return _loadBasemapGalleryItemsTask;
+            return LoadBasemapGalleryItemsInternal(portal, cancellationToken);
         }
 
         private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItemsInternal(ArcGISPortal portal, CancellationToken cancellationToken = default)
