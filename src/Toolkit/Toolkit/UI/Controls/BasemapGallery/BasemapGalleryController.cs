@@ -299,12 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return await LoadBasemapGalleryItems(Portal, cancellationToken);
         }
 
-        private Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
-        {
-            return LoadBasemapGalleryItemsInternal(portal, cancellationToken);
-        }
-
-        private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItemsInternal(ArcGISPortal portal, CancellationToken cancellationToken = default)
+        private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
         {
             async Task<List<BasemapGalleryItem>> LoadBasemapsAsync(Func<CancellationToken, Task<IEnumerable<Basemap>>> getBasemapsFunc)
             {
