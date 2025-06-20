@@ -209,7 +209,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             try
             {
-            _loadCancellationTokenSource?.Cancel();
+                _loadCancellationTokenSource?.Cancel();
                 IsLoading = true;
                 _loadCancellationTokenSource = new CancellationTokenSource();
                 try
