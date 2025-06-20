@@ -201,12 +201,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         public async Task UpdateBasemaps()
         {
-            // Cancel any pending load before starting a new one
-            _loadCancellationTokenSource?.Cancel();
-
-            await _updateBasemapsSemaphore.WaitAsync();
+            // Try to enter the semaphore without waiting
+            if (!await _updateBasemapsSemaphore.WaitAsync(0))
+            {
+                // Another update is already running; exit immediately
+                return;
+            }
             try
             {
+            _loadCancellationTokenSource?.Cancel();
                 IsLoading = true;
                 _loadCancellationTokenSource = new CancellationTokenSource();
                 try
