@@ -65,8 +65,8 @@ internal class FloorFilterBrowseSitesPage : ContentPage
 
         _closeButton = new Button
         {
-            Text = IconFont.X,
-            FontFamily = "calcite-ui-icons-24",
+            Text = ToolkitIcons.X,
+            FontFamily = ToolkitIcons.FontFamilyName,
             WidthRequest = 32,
             HeightRequest = 32,
             CornerRadius = 16,

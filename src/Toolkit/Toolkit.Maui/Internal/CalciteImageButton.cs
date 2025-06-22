@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
         public CalciteImageButton(string glyph)
         {
             _glyph = glyph;
-            Source = new FontImageSource() { Glyph = _glyph, FontFamily = "calcite-ui-icons-24", Color = Color };
+            Source = new FontImageSource() { Glyph = _glyph, FontFamily = ToolkitIcons.FontFamilyName, Color = Color };
             this.SetAppThemeColor(ColorProperty, Colors.Black, Colors.White);
         }
 

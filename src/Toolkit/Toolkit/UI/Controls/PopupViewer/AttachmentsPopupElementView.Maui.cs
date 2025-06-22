@@ -99,7 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Image image2 = new Image() { WidthRequest = 18, HeightRequest = 18 };
             image2.SetBinding(Image.IsVisibleProperty, static (AttachmentViewModel vm) => vm.IsDownloadButtonVisible);
-            image2.Source = new FontImageSource() { Glyph = ((char)0xE16C).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
+            image2.Source = new FontImageSource() { Glyph = ToolkitIcons.Inbox, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
             Grid.SetColumn(image2, 2);
             Grid.SetRowSpan(image2, 2);
             layout.Add(image2);
@@ -214,29 +214,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 }
                 else
                 {
-                    _thumbnail = new FontImageSource() { Glyph = ContentTypeToCalciteGlyph(Attachment.ContentType).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
+                    _thumbnail = new FontImageSource() { Glyph = ContentTypeToCalciteGlyph(Attachment.ContentType).ToString(), Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
                 }
                 OnPropertyChanged(nameof(Thumbnail));
             }
 
-            private static char ContentTypeToCalciteGlyph(string contentType)
+            private static string ContentTypeToCalciteGlyph(string contentType)
             {
                 contentType = contentType.ToLowerInvariant();
                 if (contentType.StartsWith("image/"))
-                    return(char)0xE169;
+                    return ToolkitIcons.Image;
                 if (contentType.StartsWith("video/"))
-                    return (char)0xE10B;
+                    return ToolkitIcons.VideoWeb;
                 if (contentType.StartsWith("audio/"))
-                    return (char)0xE109;
+                    return ToolkitIcons.FileSound;
                 switch (contentType)
                 {
-                    case "application/pdf": return (char)0xE105;
+                    case "application/pdf": return ToolkitIcons.FilePdf;
                     case "text/csv":
-                    case "application/vnd.ms-excel": return (char)0xE0FD;
+                    case "application/vnd.ms-excel": return ToolkitIcons.FileCsv;
                     case "application/msword":
                     case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                        return (char)0xE10C;
-                    default: return (char)0xE10E;
+                        return ToolkitIcons.FileWord;
+                    default: return ToolkitIcons.File;
                 }
             }
 

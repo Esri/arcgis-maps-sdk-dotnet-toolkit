@@ -74,6 +74,7 @@
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>
         <ProjectReference Include="..\..\Toolkit\Toolkit.Maui\Esri.ArcGISRuntime.Toolkit.Maui.csproj" />
+        <MauiFont Include="$(MSBuildThisFileDirectory)..\..\Toolkit\Toolkit.Maui\Resources\Fonts\*.ttf" Link="Resources\Fonts\%(Filename)%(Extension)" />
       </ItemGroup>
     </When>
     <Otherwise>

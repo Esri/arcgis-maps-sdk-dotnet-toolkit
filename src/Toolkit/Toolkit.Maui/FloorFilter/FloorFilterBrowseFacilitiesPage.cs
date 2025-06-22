@@ -93,8 +93,8 @@ $@"<ResourceDictionary xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" x
 
         if (shouldShowBack)
         {
-            _backButton = new Button { Text = IconFont.ChevronLeft };
-            _backButton.FontFamily = "calcite-ui-icons-24";
+            _backButton = new Button { Text = ToolkitIcons.ChevronLeft };
+            _backButton.FontFamily = ToolkitIcons.FontFamilyName;
             _backButton.WidthRequest = 32;
             _backButton.HeightRequest = 32;
             _backButton.CornerRadius = 16;
@@ -105,8 +105,8 @@ $@"<ResourceDictionary xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" x
             _backButton.Clicked += HandleBack_Clicked;
         }
 
-        _closeButton = new Button { Text = IconFont.X };
-        _closeButton.FontFamily = "calcite-ui-icons-24";
+        _closeButton = new Button { Text = ToolkitIcons.X };
+        _closeButton.FontFamily = ToolkitIcons.FontFamilyName;
         _closeButton.WidthRequest = 32;
         _closeButton.HeightRequest = 32;
         _closeButton.CornerRadius = 16;

@@ -35,9 +35,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             HorizontalStackLayout topheader = new HorizontalStackLayout();
-            var navigateBack = new Button() { Text = ((char)0xE077).ToString(), FontFamily = "calcite-ui-icons-24", BackgroundColor = Colors.Transparent, BorderWidth = 0 };
+            var navigateBack = new Button() { Text =  ToolkitIcons.ChevronLeft, FontFamily = ToolkitIcons.FontFamilyName, BackgroundColor = Colors.Transparent, BorderWidth = 0 };
             navigateBack.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
-            var navigateUp = new Button() { Text = ((char)0xE079).ToString(), FontFamily = "calcite-ui-icons-24", BackgroundColor = Colors.Transparent, BorderWidth = 0 };
+            var navigateUp = new Button() { Text = ToolkitIcons.ChevronUp, FontFamily = ToolkitIcons.FontFamilyName, BackgroundColor = Colors.Transparent, BorderWidth = 0 };
             navigateUp.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
             topheader.Children.Add(navigateBack);
             topheader.Children.Add(navigateUp);

@@ -85,7 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetRow(description, 1);
             layout.Add(description);
             Image image = new Image() { WidthRequest = 18, HeightRequest = 18 };
-            image.Source = new FontImageSource() { Glyph = ((char)0xE078).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
+            image.Source = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
             Grid.SetColumn(image, 1);
             Grid.SetRowSpan(image, 2);
             layout.Add(image);
@@ -93,7 +93,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Border root = new Border() { StrokeThickness = 0, Content = layout };
             return root;
         }
-
 
         private PopupViewer? GetPopupViewerParent()
         {

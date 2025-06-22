@@ -65,7 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(count);
 
             Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
-            image.Source = new FontImageSource() { Glyph = ((char)0xE7A0).ToString(), Color = Colors.Gray, FontFamily = "toolkit-icons", Size = 18 };
+            image.Source = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
             Grid.SetColumn(image, 2);
             layout.Add(image);
 

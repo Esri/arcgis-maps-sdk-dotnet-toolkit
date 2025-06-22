@@ -106,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     Glyph = glyph,
                     Color = Colors.Gray,
-                    FontFamily = "toolkit-icons",
+                    FontFamily = ToolkitIcons.FontFamilyName,
                     Size = 18
                 };
             }
@@ -169,11 +169,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (AssociationResult is not null)
             {
                 if (AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityFromSide)
-                    return ((char)0xE7D7).ToString();
+                    return ToolkitIcons.ConnectionEndLeft;
                 if (AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityToSide)
-                    return ((char)0xE7D8).ToString();
+                    return ToolkitIcons.ConnectionEndRight;
                 if (AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan)
-                    return ((char)0xE7D9).ToString();
+                    return ToolkitIcons.ConnectionMiddle;;
             }
             return "";
         }
