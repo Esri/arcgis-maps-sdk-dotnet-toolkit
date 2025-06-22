@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var sizeLabel = new Label() { VerticalOptions = LayoutOptions.Start, HorizontalOptions = LayoutOptions.Center, FontSize = 10, MaxLines = 1 };
             sizeLabel.SetBinding(Label.TextProperty, static (FormAttachmentView view) => view.Attachment?.Size, source: RelativeBindingSource.TemplatedParent, converter: new FileSizeConverter());
             root.Children.Add(sizeLabel);
-            var downloadIcon = new Label() { VerticalOptions = LayoutOptions.Start, HorizontalOptions = LayoutOptions.End, FontFamily = "calcite-ui-icons-24", Text = "\uE0CB", Margin = new Thickness(2) };
+            var downloadIcon = new Label() { VerticalOptions = LayoutOptions.Start, HorizontalOptions = LayoutOptions.End, FontFamily = "calcite-ui-icons-24", Text = IconFont.DownloadTo, Margin = new Thickness(2) };
             root.Children.Add(downloadIcon);
             var downloadIndicator = new ActivityIndicator() { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, IsRunning = false };
             root.Children.Add(downloadIndicator);
@@ -75,12 +75,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             flyout.Add(new MenuFlyoutItem()
             {
                 Text = Properties.Resources.GetString("FeatureFormRemoveAttachmentMenuItem"),
-                IconImageSource = new FontImageSource { Glyph = "\uE2D0", FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
+                IconImageSource = new FontImageSource { Glyph = IconFont.Trash, FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
             });
             flyout.Add(new MenuFlyoutItem()
             {
                 Text = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem"),
-                IconImageSource = new FontImageSource { Glyph = "\uE209", FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
+                IconImageSource = new FontImageSource { Glyph = IconFont.Pencil, FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
             });
 
             ((MenuFlyoutItem)flyout[0]).Clicked += (s, e) => DeleteAttachment();
@@ -208,14 +208,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             // Fallback to file icon
             string glyph = Attachment.Type switch
             {
-                FormAttachmentType.Image => "\uE169",
-                FormAttachmentType.Audio => "\uE109",
-                FormAttachmentType.Document => "\uE02D",
-                FormAttachmentType.Video => "\uE2F1",
-                _ => "\uE10E"
+                FormAttachmentType.Image => IconFont.Image,
+                FormAttachmentType.Audio => IconFont.FileSound,
+                FormAttachmentType.Document => IconFont.Article,
+                FormAttachmentType.Video => IconFont.VideoWeb,
+                _ => IconFont.File
             };
             if (Attachment.LoadStatus == LoadStatus.FailedToLoad)
-                glyph = "\uE0EC";
+                glyph = IconFont.ExclamationMarkCircle;
             image.Source = new FontImageSource
             {
                 Glyph = glyph,

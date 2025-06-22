@@ -75,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Button addButton = new Button()
             {
                 Margin = new Thickness(0, -5, 0, 0),
-                Text = "\uE21B",
+                Text = IconFont.Plus,
                 FontFamily = "calcite-ui-icons-24",
                 BorderWidth = 0,
                 FontSize = 24,
