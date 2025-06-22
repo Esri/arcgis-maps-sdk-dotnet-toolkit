@@ -89,9 +89,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         _isDirty = false;
                     }
-                    if (FeatureForm != null)
+                    if (CurrentFeatureForm != null)
                     {
-                        await EvaluateExpressions(FeatureForm);
+                        await EvaluateExpressions(CurrentFeatureForm);
                     }
                 }
                 catch
