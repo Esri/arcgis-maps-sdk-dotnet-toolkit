@@ -142,9 +142,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             private void RefreshContent()
             {
-                this.Content = DataTemplateSelector?.SelectTemplate(ContentData, this)?.CreateContent() as View;
-                if (this.Content is not null)
-                    this.Content.BindingContext = ContentData;
+                var view = DataTemplateSelector?.CreateContent(ContentData, this) as View;
+                if (view is not null)
+                    view.BindingContext = ContentData;
+                this.Content = view;
             }
 
             public DataTemplateSelector? DataTemplateSelector { get; set; }

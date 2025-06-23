@@ -3,47 +3,23 @@ using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
-    internal class ContentControl : TemplatedView
+    internal class ContentControl : ContentPresenter
     {
-        private static readonly ControlTemplate DefaultControlTemplate;
-
-        static ContentControl()
-        {
-            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
-        }
-
-        private static object BuildDefaultTemplate()
-        {
-            var presenter = new ContentPresenter();
-            INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(presenter, nameScope);
-            nameScope.RegisterName("ContentPresenter", presenter);
-            return presenter;
-        }
-
         public ContentControl()
         {
-            ControlTemplate = DefaultControlTemplate;
-        }
-
-        protected override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            UpdateData();
         }
 
         private void UpdateData()
         {
-            if (GetTemplateChild("ContentPresenter") is ContentPresenter presenter)
+            if (ContentData is null)
+                Content = null;
+            else
             {
-                var template = ContentTemplateSelector?.SelectTemplate(Content, presenter);
-                if (template is not null)
-                {
-                    var contentView = template.CreateContent() as View;
-                    if (contentView is not null)
-                        contentView.BindingContext = Content;
-                    presenter.Content = contentView;
-                }
+                var view = ContentTemplateSelector?.CreateContent(ContentData, this) as View;
+                if (view is not null)
+                    view.BindingContext = ContentData;
+
+                Content = view;
             }
         }
 
@@ -64,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private object? _content;
 
-        public object? Content
+        public object? ContentData
         {
             get  => _content;
             set
