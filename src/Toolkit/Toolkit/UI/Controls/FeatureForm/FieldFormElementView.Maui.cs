@@ -101,12 +101,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (FieldFormElementView view) => view.Element?.IsVisible);
             var label = new Label();
             label.SetBinding(Label.TextProperty, static (FieldFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent);
-            label.SetBinding(View.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
+            label.SetBinding(View.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             root.Children.Add(label);
             label = new Label();
             label.SetBinding(Label.TextProperty, static (FieldFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
-            label.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
+            label.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             root.Children.Add(label);
             var content = new DataTemplatedContentPresenter();
@@ -114,7 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Children.Add(content);
             var errorLabel = new Label() { Margin = new Thickness(0, 2), TextColor = Colors.Red };
             root.Children.Add(errorLabel);
-            errorLabel.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
+            errorLabel.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);

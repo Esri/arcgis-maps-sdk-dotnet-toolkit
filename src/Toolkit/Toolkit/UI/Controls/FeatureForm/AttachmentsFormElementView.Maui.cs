@@ -63,12 +63,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             var label = new Label();
             label.SetBinding(Label.TextProperty, static (AttachmentsFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent);
-            label.SetBinding(View.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
+            label.SetBinding(View.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             header.Children.Add(label);
             label = new Label();
             label.SetBinding(Label.TextProperty, static (AttachmentsFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
-            label.SetBinding(Label.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter());
+            label.SetBinding(Label.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             Grid.SetRow(label, 1);
             header.Children.Add(label);
