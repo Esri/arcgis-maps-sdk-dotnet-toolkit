@@ -109,8 +109,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             label.SetBinding(Label.IsVisibleProperty, static (Label lbl) => lbl.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             root.Children.Add(label);
-            var content = new DataTemplatedContentPresenter();
-            content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, static (FieldFormElementView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
+            var content = new ContentControl();
+            content.SetBinding(ContentControl.ContentDataProperty, static (FieldFormElementView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(content);
             var errorLabel = new Label() { Margin = new Thickness(0, 2), TextColor = Colors.Red };
             root.Children.Add(errorLabel);
@@ -127,38 +127,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            if (GetTemplateChild(FieldInputName) is DataTemplatedContentPresenter content)
+            if (GetTemplateChild(FieldInputName) is ContentControl content)
             {
-                content.DataTemplateSelector = new FieldTemplateSelector(this);
+                content.ContentTemplate = new FieldTemplateSelector(this);
             }
             UpdateErrorMessages();
-        }
-
-        private class DataTemplatedContentPresenter : ContentPresenter
-        {
-            public DataTemplatedContentPresenter()
-            {                
-            }
-
-            private void RefreshContent()
-            {
-                var view = DataTemplateSelector?.CreateContent(ContentData, this) as View;
-                if (view is not null)
-                    view.BindingContext = ContentData;
-                this.Content = view;
-            }
-
-            public DataTemplateSelector? DataTemplateSelector { get; set; }
-
-            public object ContentData
-            {
-                get { return (object)GetValue(ContentDataProperty); }
-                set { SetValue(ContentDataProperty, value); }
-            }
-
-            public static readonly BindableProperty ContentDataProperty =
-                BindableProperty.Create(nameof(ContentData), typeof(object), typeof(DataTemplatedContentPresenter), null, 
-                    propertyChanged: (s, o, n) => ((DataTemplatedContentPresenter) s).RefreshContent());
         }
     }
 }
