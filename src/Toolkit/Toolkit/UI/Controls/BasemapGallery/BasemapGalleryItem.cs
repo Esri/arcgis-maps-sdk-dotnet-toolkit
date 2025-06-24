@@ -111,7 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 if (Thumbnail?.LoadStatus == LoadStatus.Loaded)
                 {
-                    var stream = await Thumbnail.GetEncodedBufferAsync();
+                    using var stream = await Thumbnail.GetEncodedBufferAsync();
                     var buffer = new byte[stream.Length];
 #if NET8_0_OR_GREATER
                     await stream.ReadExactlyAsync(buffer);
