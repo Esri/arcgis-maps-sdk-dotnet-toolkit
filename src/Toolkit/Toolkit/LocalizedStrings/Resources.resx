@@ -569,4 +569,8 @@
     <value>Terminal: {0}</value>
     <comment>The terminal name of utility element association</comment>
   </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>Locator</value>
+    <comment>Default display name for LocatorSearchSource if locator name is not set.</comment>
+  </data>
 </root>
