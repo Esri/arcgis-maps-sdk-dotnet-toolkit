@@ -48,7 +48,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
             DefaultStyleKey = typeof(FeatureFormView);
 #endif
+            FinishEditingCommand = new Command(() => _ = FinishEditingAsync(), () => IsValid && CurrentFeatureForm?.HasEdits == true);
+            DiscardEditsCommand = new Command(() => _ = DiscardEditsAsync(), () => CurrentFeatureForm?.HasEdits == true);
         }
+
+        private class Command : System.Windows.Input.ICommand
+        {
+            private Action _execute;
+            private Func<bool> _canExecute;
+
+            public Command(Action execute, Func<bool> canExecute)
+            {
+                _execute = execute;
+                _canExecute = canExecute;
+            }
+            internal void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+
+            public event EventHandler? CanExecuteChanged;
+
+            public bool CanExecute(object? parameter) => _canExecute();
+
+            public void Execute(object? parameter) => _execute();
+        }
+
+        /// <summary>
+        /// Command for calling <see cref="FinishEditingAsync"/> and applying edits to the currently active Feature Form if all fields are valid.
+        /// </summary>
+        /// <seealso cref="FinishEditingAsync"/>
+        /// <seealso cref="IsValid"/>
+        /// <seealso cref="FeatureForm.HasEdits"/>
+        /// <seealso cref="DiscardEditsCommand"/>
+        public System.Windows.Input.ICommand FinishEditingCommand { get; }
+
+        /// <summary>
+        /// Discards any pending edits to the currently active Feature Form, if any edits have been made
+        /// </summary>
+        /// <seealso cref="DiscardEditsAsync"/>
+        /// <seealso cref="FeatureForm.HasEdits"/>
+        public System.Windows.Input.ICommand DiscardEditsCommand { get; }
+
         /// <inheritdoc/>
 #if WINDOWS_XAML || MAUI
         protected override void OnApplyTemplate()
@@ -168,6 +206,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 this.Dispatch(UpdateIsValidProperty);
             }
+            else if (e.PropertyName == nameof(FeatureForm.HasEdits))
+            {
+                this.Dispatch(() =>
+                {
+                    ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
+                    ((Command)DiscardEditsCommand).RaiseCanExecuteChanged();
+                });
+            }
         }
 
 #if !WPF
@@ -188,6 +234,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if MAUI
                     base.OnPropertyChanged(nameof(IsValid));
 #endif
+                    ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
                 }
             }
         }
@@ -451,7 +498,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     if (result == ContentDialogResult.Primary)
                     {
                         await FinishEditingAsync();
-                       }
+                    }
                     else if (result == ContentDialogResult.Secondary)
                     {
                         CurrentFeatureForm?.DiscardEdits();
@@ -471,7 +518,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var result = MessageBox.Show(content, title, MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
-                    await FinishEditingAsync();
+                    try
+                    {
+                        await FinishEditingAsync();
+                    }
+                    catch(System.Exception ex)
+                    {
+                        e.Cancel = true;
+                        MessageBox.Show("Error", ex.Message);
+                    }
                 }
                 else
                 {
@@ -500,7 +555,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             e.Cancel = true;
                         }
                     }
-                    catch { e.Cancel = true; }
+                    catch(System.Exception ex)
+                    {
+                        await page.DisplayAlert("Error", ex.Message, "Cancel");
+                        e.Cancel = true;
+                    }
                     finally
                     {
                         deferral.Complete();
@@ -566,6 +625,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateIsValidProperty();
+            ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
+            ((Command)DiscardEditsCommand).RaiseCanExecuteChanged();
         }
     }
 
