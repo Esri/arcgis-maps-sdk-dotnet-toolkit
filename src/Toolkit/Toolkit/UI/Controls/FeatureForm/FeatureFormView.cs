@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
             DefaultStyleKey = typeof(FeatureFormView);
 #endif
-            FinishEditingCommand = new Command(() => _ = FinishEditingAsync(), () => IsValid && CurrentFeatureForm?.HasEdits == true);
+            FinishEditingCommand = new Command(() => _ = FinishEditingAsync(true), () => CurrentFeatureForm?.HasEdits == true);
             DiscardEditsCommand = new Command(() => _ = DiscardEditsAsync(), () => CurrentFeatureForm?.HasEdits == true);
         }
 
@@ -72,9 +72,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Command for calling <see cref="FinishEditingAsync"/> and applying edits to the currently active Feature Form if all fields are valid.
+        /// Command for calling <see cref="FinishEditingAsync(bool)"/> and applying edits to the currently active Feature Form if all fields are valid.
         /// </summary>
-        /// <seealso cref="FinishEditingAsync"/>
+        /// <seealso cref="FinishEditingAsync(bool)"/>
         /// <seealso cref="IsValid"/>
         /// <seealso cref="FeatureForm.HasEdits"/>
         /// <seealso cref="DiscardEditsCommand"/>
@@ -136,6 +136,42 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                 }
             });
+        }
+
+        public enum ShowErrorsVisibility
+        {
+            /// <summary>
+            /// Errors are shown when a field gets focus, or when the user tries to finish editing the form.
+            /// </summary>
+            Automatic,
+            /// <summary>
+            /// Validation errors are always shown, even if the user has not interacted with or edited the field.
+            /// </summary>
+            Always
+        }
+
+        /// <summary>
+        /// Gets or sets the associated PopupManager which contains popup and sketch editor.
+        /// </summary>
+        public ShowErrorsVisibility ErrorsVisibility
+        {
+            get { return (ShowErrorsVisibility)GetValue(ErrorsVisibilityProperty); }
+            set { SetValue(ErrorsVisibilityProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ErrorsVisibility"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ErrorsVisibilityProperty =
+            PropertyHelper.CreateProperty<ShowErrorsVisibility, FeatureFormView>(nameof(ErrorsVisibility), ShowErrorsVisibility.Always, (s, oldValue, newValue) => s.OnErrorsVisibilityChanged(oldValue, newValue));
+
+        private void OnErrorsVisibilityChanged(ShowErrorsVisibility oldValue, ShowErrorsVisibility newValue)
+        {
+            foreach (var item in GetDescendentsOfType<FieldFormElementView>(this))
+            {
+                item.ResetValidationState();
+                ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
+            }
         }
 
         private static object pendingExpressionsLock = new object();
@@ -256,6 +292,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (form is not null)
             {
                 _isDiscarding = true;
+                _wasFinishEditingAttempted = false;
                 form.DiscardEdits();
                 _isDiscarding = false;
                 if (form.DefaultAttachmentsElement is not null)
@@ -273,17 +310,124 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        private bool _wasFinishEditingAttempted = false;
+
+        internal bool ShouldShowError()
+        {
+            return ErrorsVisibility == ShowErrorsVisibility.Always || _wasFinishEditingAttempted;
+        }
+
+        private IEnumerable<FieldFormElement> EnumerateVisibleElements(IEnumerable<FormElement>? elements)
+        {
+            if (elements is not null)
+            {
+                foreach (var element in elements)
+                {
+                    if (element.IsVisible)
+                    {
+                        if (element is FieldFormElement field) yield return field;
+                        else if (element is GroupFormElement group)
+                        {
+                            foreach (var elm in EnumerateVisibleElements(group.Elements))
+                                yield return elm;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Scrolls to the first element with a visible validation error
+        /// </summary>
+        /// <returns><c>True</c> if a form element has an error it could scroll to, otherwise <c>false</c>.</returns>
+        public bool ScrollToFirstError()
+        {
+            foreach (var item in EnumerateVisibleElements(CurrentFeatureForm?.Elements))
+            {
+                bool elementHasVisibleError = item.ValidationErrors.Any() && item.IsEditable == true;
+                if (elementHasVisibleError)
+                {
+                    ScrollTo(item);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Scrolls to the specified form element
+        /// </summary>
+        /// <param name="element">Form element to scrollto.</param>
+        public void ScrollTo(FormElement element)
+        {
+            foreach (var item in GetDescendentsOfType<FieldFormElementView>(this))
+            {
+                if (item.Element == element)
+                {
+#if WINDOWS_XAML
+                    item.StartBringIntoView();
+#elif WPF
+                    item.BringIntoView();
+#elif MAUI
+                    if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+                    {
+                        _ = subView.ScrollToAsync(item, ScrollToPosition.MakeVisible, true);
+                    }
+#endif
+                }
+            }
+        }
+
         /// <summary>
         ///  Saves edits made using the <see cref="FeatureForm"/> to the database for the <see cref="CurrentFeatureForm"/>.
         /// </summary>
-        /// <seealso cref="FeatureForm.FinishEditingAsync"/>
+        /// <remarks>
+        /// Use this method to perform your own validation logic, or if you want to decide which errors are important
+        /// prior to applying edits. Alternatively you can use the <see cref="FinishEditingCommand"/>
+        /// which will handle showing validation errors and scroll to them.
+        /// </remarks>
+        /// <seealso cref="FinishEditingAsync(bool)"/>
+        /// <seealso cref="FinishEditingCommand"/>
+        /// <seealso cref="ErrorsVisibility"/>
+        /// <seealso cref="ScrollToFirstError()"/>
         public async Task FinishEditingAsync()
         {
             if (CurrentFeatureForm is not null)
             {
                 await CurrentFeatureForm.FinishEditingAsync().ConfigureAwait(false);
+                _wasFinishEditingAttempted = false;
                 Esri.ArcGISRuntime.Toolkit.Internal.DispatcherExtensions.Dispatch(this, ResetValidationStates);
             }
+        }
+
+        /// <summary>
+        ///  Saves edits made using the <see cref="FeatureForm"/> to the database for the <see cref="CurrentFeatureForm"/> if there are not errors,
+        ///  otherwise scroll to the first error if <paramref name="requireAllErrorsResolved"/> is <c>true</c>.
+        /// </summary>
+        /// <remarks>
+        /// Use this method to perform your own validation logic, or if you want to decide which errors are important
+        /// prior to applying edits. Alternatively you can use the <see cref="FinishEditingCommand"/>
+        /// which will handle showing validation errors and scroll to them.
+        /// </remarks>
+        /// <seealso cref="FinishEditingAsync()"/>
+        /// <seealso cref="FinishEditingCommand"/>
+        /// <seealso cref="ErrorsVisibility"/>
+        /// <seealso cref="ScrollToFirstError()"/>
+        public async Task<bool> FinishEditingAsync(bool requireAllErrorsResolved)
+        {
+            if (CurrentFeatureForm is not null)
+            {
+                _wasFinishEditingAttempted = true;
+                foreach (var item in GetDescendentsOfType<FieldFormElementView>(this))
+                {
+                    item.ResetValidationState();
+                }
+               ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
+                if (requireAllErrorsResolved && ScrollToFirstError()) return false;
+                await FinishEditingAsync();
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -605,6 +749,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnCurrentFeatureFormPropertyChanged(FeatureForm? oldForm, FeatureForm? newForm)
         {
+            _wasFinishEditingAttempted = false;
+
             if (newForm is not null)
             {
                 InvalidateForm();
