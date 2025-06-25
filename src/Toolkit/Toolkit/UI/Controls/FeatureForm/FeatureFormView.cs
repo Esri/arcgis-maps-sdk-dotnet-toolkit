@@ -48,8 +48,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
             DefaultStyleKey = typeof(FeatureFormView);
 #endif
-            FinishEditingCommand = new Command(() => _ = FinishEditingAsync(true), () => CurrentFeatureForm?.HasEdits == true);
+
             DiscardEditsCommand = new Command(() => _ = DiscardEditsAsync(), () => CurrentFeatureForm?.HasEdits == true);
+            FinishEditingCommand = new Command(async () =>
+            {
+                try
+                {
+                    await FinishEditingAsync(true);
+                }
+                catch (System.Exception ex)
+                {
+#if WPF
+                    ShowError(Properties.Resources.GetString("FeatureFormApplyEditsErrorTitle")!, ex.Message);
+#else
+                    await ShowErrorAsync(Properties.Resources.GetString("FeatureFormApplyEditsErrorTitle")!, ex.Message);
+#endif
+                }
+            }, () => CurrentFeatureForm?.HasEdits == true);
         }
 
         private class Command : System.Windows.Input.ICommand
@@ -640,13 +655,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         e.Cancel = true;
                     }
                 }
-                catch { e.Cancel = true; }
+                catch(System.Exception ex)
+                {
+                    await ShowErrorAsync(Properties.Resources.GetString("FeatureFormApplyEditsErrorTitle")!, ex.Message);
+                    e.Cancel = true;
+                }
                 finally
                 {
                     deferral.Complete();
                 }
 #elif WPF
-
                 var result = MessageBox.Show(content, title, MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
@@ -657,7 +675,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     catch(System.Exception ex)
                     {
                         e.Cancel = true;
-                        MessageBox.Show("Error", ex.Message);
+                        ShowError(Properties.Resources.GetString("FeatureFormApplyEditsErrorTitle")!, ex.Message);
                     }
                 }
                 else
@@ -689,7 +707,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     catch(System.Exception ex)
                     {
-                        await page.DisplayAlert("Error", ex.Message, "Cancel");
+                        await ShowErrorAsync(Properties.Resources.GetString("FeatureFormApplyEditsErrorTitle")!, ex.Message);
                         e.Cancel = true;
                     }
                     finally
@@ -715,6 +733,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     SetCurrentFeatureForm(previousForm);
             }
         }
+
+
+#if WPF
+        private void ShowError(string title, string content)
+#else
+        private async Task ShowErrorAsync(string title, string content)
+#endif
+        {
+#if MAUI
+            var page = GetParent<Page>(this);
+            if(page is not null) {
+                await page.DisplayAlert(title, content, Properties.Resources.GetString("FeatureFormPendingEditsCancel")!);
+            }
+#elif WINDOWS_XAML
+            var dialog = new ContentDialog
+            {
+                Title = title,
+                Content = content,
+                CloseButtonText = Properties.Resources.GetString("FeatureFormPendingEditsCancel")!
+            };
+            dialog.XamlRoot = this.XamlRoot;
+            var result = await dialog.ShowAsync();
+#elif WPF
+            MessageBox.Show(title, content);
+#endif
+            }
 
         internal void NavigateToItem(object item)
         {
