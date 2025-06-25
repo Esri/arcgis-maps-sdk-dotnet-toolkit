@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TimeSlider
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TimeSlider
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider">
+  
+  
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider" class="text-break">Class TimeSlider
+  </h1>
+  <div class="markdown level0 summary"><p>The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control
+to enhance the viewing of geographic features that have attributes based upon Date/Time information.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Object</a></div>
+    <div class="level1"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DispatcherObject</a></div>
+    <div class="level2"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyObject</a></div>
+    <div class="level3"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Visual</a></div>
+    <div class="level4"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">UIElement</a></div>
+    <div class="level5"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">FrameworkElement</a></div>
+    <div class="level6"><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Control</a></div>
+    <div class="level7"><span class="xref">TimeSlider</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IAnimatable</a></div>
+    <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IFrameworkInputElement</a></div>
+    <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IInputElement</a></div>
+    <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">ISupportInitialize</a></div>
+    <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IQueryAmbient</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Esri.ArcGISRuntime.Toolkit.UI.Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WPF.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[TemplatePart(Name = &quot;SliderTrack&quot;, Type = typeof(FrameworkElement))]
+[TemplatePart(Name = &quot;HorizontalTrackThumb&quot;, Type = typeof(Thumb))]
+[TemplatePart(Name = &quot;MinimumThumb&quot;, Type = typeof(Thumb))]
+[TemplatePart(Name = &quot;MinimumThumbLabel&quot;, Type = typeof(TextBlock))]
+[TemplatePart(Name = &quot;MaximumThumb&quot;, Type = typeof(Thumb))]
+[TemplatePart(Name = &quot;MaximumThumbLabel&quot;, Type = typeof(TextBlock))]
+[TemplatePart(Name = &quot;Tickmarks&quot;, Type = typeof(Tickbar))]
+[TemplatePart(Name = &quot;SliderTrackStepBackRepeater&quot;, Type = typeof(RepeatButton))]
+[TemplatePart(Name = &quot;SliderTrackStepForwardRepeater&quot;, Type = typeof(RepeatButton))]
+[TemplatePart(Name = &quot;PlayPauseButton&quot;, Type = typeof(ToggleButton))]
+[TemplatePart(Name = &quot;NextButton&quot;, Type = typeof(ButtonBase))]
+[TemplatePart(Name = &quot;PreviousButton&quot;, Type = typeof(ButtonBase))]
+[TemplatePart(Name = &quot;FullExtentStartTimeLabel&quot;, Type = typeof(TextBlock))]
+[TemplatePart(Name = &quot;FullExtentEndTimeLabel&quot;, Type = typeof(TextBlock))]
+[TemplateVisualState(GroupName = &quot;CommonStates&quot;, Name = &quot;Normal&quot;)]
+[TemplateVisualState(GroupName = &quot;CommonStates&quot;, Name = &quot;MouseOver&quot;)]
+[TemplateVisualState(GroupName = &quot;CommonStates&quot;, Name = &quot;Disabled&quot;)]
+[TemplateVisualState(GroupName = &quot;FocusStates&quot;, Name = &quot;Focused&quot;)]
+[TemplateVisualState(GroupName = &quot;FocusStates&quot;, Name = &quot;Unfocused&quot;)]
+public class TimeSlider : Control, IAnimatable, IFrameworkInputElement, IInputElement, ISupportInitialize, IQueryAmbient</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider__ctor.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L89">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider__ctor_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.#ctor*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.#ctor">TimeSlider()</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html">TimeSlider</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSlider()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFillProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFillProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L686">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFillProperty">CurrentExtentFillProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFill">CurrentExtentFill</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty CurrentExtentFillProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColorProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColorProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L791">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColorProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColorProperty">CurrentExtentLabelColorProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColor">CurrentExtentLabelColor</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty CurrentExtentLabelColorProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormatProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormatProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L585">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormatProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormatProperty">CurrentExtentLabelFormatProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormat">CurrentExtentLabelFormat</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty CurrentExtentLabelFormatProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L368">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentProperty">CurrentExtentProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty CurrentExtentProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFillProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFillProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L701">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFillProperty">FullExtentFillProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFill">FullExtentFill</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty FullExtentFillProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColorProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColorProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L776">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColorProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColorProperty">FullExtentLabelColorProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColor">FullExtentLabelColor</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty FullExtentLabelColorProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormatProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormatProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L553">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormatProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormatProperty">FullExtentLabelFormatProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormat">FullExtentLabelFormat</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty FullExtentLabelFormatProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L390">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentProperty">FullExtentProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty FullExtentProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStrokeProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStrokeProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L716">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStrokeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStrokeProperty">FullExtentStrokeProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStroke">FullExtentStroke</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty FullExtentStrokeProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinnedProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinnedProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L514">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinnedProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinnedProperty">IsEndTimePinnedProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinned">IsEndTimePinned</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty IsEndTimePinnedProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlayingProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlayingProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L533">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlayingProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlayingProperty">IsPlayingProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlaying">IsPlaying</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty IsPlayingProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinnedProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinnedProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L495">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinnedProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinnedProperty">IsStartTimePinnedProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinned">IsStartTimePinned</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty IsStartTimePinnedProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelModeProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelModeProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L637">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelModeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelModeProperty">LabelModeProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelMode">LabelMode</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty LabelModeProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LoopModeProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LoopModeProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L480">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LoopModeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LoopModeProperty">LoopModeProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackLoopMode">PlaybackLoopMode</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty LoopModeProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFillProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFillProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L746">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFillProperty">PlaybackButtonsFillProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFill">PlaybackButtonsFill</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty PlaybackButtonsFillProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStrokeProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStrokeProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L761">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStrokeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStrokeProperty">PlaybackButtonsStrokeProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStroke">PlaybackButtonsStroke</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty PlaybackButtonsStrokeProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirectionProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirectionProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L464">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirectionProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirectionProperty">PlaybackDirectionProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirection">PlaybackDirection</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty PlaybackDirectionProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackIntervalProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackIntervalProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L445">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackIntervalProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackIntervalProperty">PlaybackIntervalProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackInterval">PlaybackInterval</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty PlaybackIntervalProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFillProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFillProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L671">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFillProperty">ThumbFillProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFill">ThumbFill</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty ThumbFillProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStrokeProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStrokeProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L656">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStrokeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStrokeProperty">ThumbStrokeProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStroke">ThumbStroke</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty ThumbStrokeProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColorProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColorProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L806">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColorProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColorProperty">TimeStepIntervalLabelColorProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColor">TimeStepIntervalLabelColor</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty TimeStepIntervalLabelColorProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormatProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormatProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L618">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormatProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormatProperty">TimeStepIntervalLabelFormatProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormat">TimeStepIntervalLabelFormat</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty TimeStepIntervalLabelFormatProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L408">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalProperty">TimeStepIntervalProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval">TimeStepInterval</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty TimeStepIntervalProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFillProperty.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFillProperty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L731">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFillProperty">TimeStepIntervalTickFillProperty</h4>
+  <div class="markdown level1 summary"><p>Identifies the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFill">TimeStepIntervalTickFill</a> dependency property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DependencyProperty TimeStepIntervalTickFillProperty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DependencyProperty</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L778">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent">CurrentExtent</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the <see cref="!:TimeExtent"></see> associated with the visual thumbs(s) displayed on the TimeSlider.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[TypeConverter(typeof(TimeExtentConverter))]
+public TimeExtent? CurrentExtent { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">TimeExtent</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFill.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFill%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1184">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFill_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFill*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFill">CurrentExtentFill</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the fill color of the area on the slider track that indicates the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush CurrentExtentFill { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColor.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1275">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColor_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColor*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColor">CurrentExtentLabelColor</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the color of the current extent labels.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush CurrentExtentLabelColor { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormat.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1081">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormat_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormat*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormat" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormat">CurrentExtentLabelFormat</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the string format to use for displaying the start and end labels for the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string CurrentExtentLabelFormat { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L812">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent">FullExtent</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the <see cref="!:TimeExtent"></see> that specifies the overall start and end time of the time slider instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[TypeConverter(typeof(TimeExtentConverter))]
+public TimeExtent? FullExtent { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">TimeExtent</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFill.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFill%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1197">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFill_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFill*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFill">FullExtentFill</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the fill color of the area on the slider track that indicates the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush FullExtentFill { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColor.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1262">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColor_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColor*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColor">FullExtentLabelColor</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the color of the full extent labels.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush FullExtentLabelColor { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormat.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1072">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormat_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormat*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormat" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormat">FullExtentLabelFormat</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the string format to use for displaying the start and end labels for the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string FullExtentLabelFormat { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStroke.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStroke%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1210">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStroke_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStroke*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStroke" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStroke">FullExtentStroke</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the border color of the area on the slider track that indicates the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush FullExtentStroke { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinned.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinned%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L990">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinned_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinned*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinned" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinned">IsEndTimePinned</h4>
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the end time of the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a> is locked into place.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsEndTimePinned { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlaying.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlaying%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1028">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlaying_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlaying*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlaying" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlaying">IsPlaying</h4>
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the time slider is animating playback.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsPlaying { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinned.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinned%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L952">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinned_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinned*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinned" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinned">IsStartTimePinned</h4>
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the start time of the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a> is locked into place.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsStartTimePinned { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelMode.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelMode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1113">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelMode_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelMode*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelMode" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelMode">LabelMode</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the mode to use for labels along the time slider.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSliderLabelMode LabelMode { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.html">TimeSliderLabelMode</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFill.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFill%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1236">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFill_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFill*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFill">PlaybackButtonsFill</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the fill color of the playback buttons.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush PlaybackButtonsFill { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStroke.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStroke%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1249">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStroke_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStroke*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStroke" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStroke">PlaybackButtonsStroke</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the border color of the playback buttons.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush PlaybackButtonsStroke { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirection.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L926">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirection_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirection*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirection" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirection">PlaybackDirection</h4>
+  <div class="markdown level1 summary"><p>Gets or sets whether the current extent will move to the next or the previous time step during playback.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PlaybackDirection PlaybackDirection { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.html">PlaybackDirection</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackInterval.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackInterval%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L915">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackInterval_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackInterval*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackInterval" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackInterval">PlaybackInterval</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the interval at which the time slider's current extent will move to the next or previous time step.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpan PlaybackInterval { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">TimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackLoopMode.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackLoopMode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L935">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackLoopMode_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackLoopMode*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackLoopMode" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackLoopMode">PlaybackLoopMode</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the behavior when the current extent reaches the end of the slider during playback.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LoopMode PlaybackLoopMode { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.html">LoopMode</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFill.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFill%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1171">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFill_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFill*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFill">ThumbFill</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the fill color of the thumbs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush ThumbFill { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStroke.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStroke%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1158">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStroke_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStroke*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStroke" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStroke">ThumbStroke</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the border color of the thumbs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush ThumbStroke { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepInterval%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L830">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepInterval*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepInterval">TimeStepInterval</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the time step intervals for the time slider.  The slider thumbs will snap to and tick marks will be shown at this interval.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeValue? TimeStepInterval { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">TimeValue</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColor.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1288">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColor_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColor*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColor">TimeStepIntervalLabelColor</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the color of the time step interval labels.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush TimeStepIntervalLabelColor { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormat.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1096">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormat_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormat*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormat" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormat">TimeStepIntervalLabelFormat</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string TimeStepIntervalLabelFormat { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFill.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFill%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1223">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFill_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFill*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFill">TimeStepIntervalTickFill</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the color of the slider's tickmarks.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Brush TimeStepIntervalTickFill { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Brush</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeSteps.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeSteps%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L881">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeSteps_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeSteps*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeSteps" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeSteps">TimeSteps</h4>
+  <div class="markdown level1 summary"><p>Gets the time steps that can be used to set the slider instance's current extent.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;DateTimeOffset&gt; TimeSteps { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IReadOnlyList</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">DateTimeOffset</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_ITimeAware_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync(ITimeAware)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1398">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_ITimeAware_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync(ITimeAware)">InitializeTimePropertiesAsync(ITimeAware)</h4>
+  <div class="markdown level1 summary"><p>Initializes the time slider's temporal properties based on the specified time-aware layer. Specifically,
+this will initialize <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>, <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval">TimeStepInterval</a>, and <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">ITimeAware</a></td>
+        <td><span class="parametername">timeAwareLayer</span></td>
+        <td><p>The layer to use to initialize the time slider.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td><p>Task.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_System_Nullable_GeoView__.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync(System.Nullable%7BGeoView%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1334">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_System_Nullable_GeoView__" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync(System.Nullable{GeoView})">InitializeTimePropertiesAsync(Nullable&lt;GeoView&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes the time slider's temporal properties based on the specified GeoView. Specifically,
+this will initialize <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>, <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval">TimeStepInterval</a>, and <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task InitializeTimePropertiesAsync(GeoView? geoView)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Nullable</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">GeoView</a>&gt;</td>
+        <td><span class="parametername">geoView</span></td>
+        <td><p>The GeoView to use to initialize the time-slider's properties.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Task</a></td>
+        <td><p>Task.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimeSteps_System_Int32_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimeSteps(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1313">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimeSteps_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimeSteps*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimeSteps_System_Int32_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimeSteps(System.Int32)">InitializeTimeSteps(Int32)</h4>
+  <div class="markdown level1 summary"><p>Updates the time slider to have the specified number of time steps.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void InitializeTimeSteps(int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int32</a></td>
+        <td><span class="parametername">count</span></td>
+        <td><p>The number of time steps.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimeSteps_System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method divides the TimeSlider instance's <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a> into the number of steps specified,
+updating the <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval">TimeStepInterval</a> and <a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeSteps">TimeSteps</a> properties.  The method will attempt to set
+the interval to a TimeValue with the smallest duration and largest time unit that will fit evenly (i.e. without
+fractional duration values) into the TimeSlider's full extent.  If there is no TimeValue that will fit evenly, then
+the interval will be initialized to the smallest possible fractional duration that is greater than one with a time
+unit of days or smaller.</p>
+<p>Note that, if the TimeSlider instance's FullExtent property is not set, invoking this method will have no effect.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnApplyTemplate.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnApplyTemplate%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L95">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnApplyTemplate_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnApplyTemplate*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnApplyTemplate">OnApplyTemplate()</h4>
+  <div class="markdown level1 summary"><p>When overridden in a derived class, is invoked whenever application
+code or internal processes (such as a rebuilding layout pass) call
+<a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Esri.ArcGISRuntime</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnApplyTemplate()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">FrameworkElement.OnApplyTemplate()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnGotFocus_System_Windows_RoutedEventArgs_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnGotFocus(System.Windows.RoutedEventArgs)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L237">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnGotFocus_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnGotFocus*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnGotFocus_System_Windows_RoutedEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnGotFocus(System.Windows.RoutedEventArgs)">OnGotFocus(RoutedEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Called before the <a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Esri.ArcGISRuntime</a> event occurs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void OnGotFocus(RoutedEventArgs e)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">RoutedEventArgs</a></td>
+        <td><span class="parametername">e</span></td>
+        <td><p>The data for the event.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">FrameworkElement.OnGotFocus(RoutedEventArgs)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnKeyDown_System_Windows_Input_KeyEventArgs_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnKeyDown(System.Windows.Input.KeyEventArgs)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L305">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnKeyDown_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnKeyDown*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnKeyDown_System_Windows_Input_KeyEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnKeyDown(System.Windows.Input.KeyEventArgs)">OnKeyDown(KeyEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Called before the <a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Esri.ArcGISRuntime</a> event occurs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void OnKeyDown(KeyEventArgs e)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">KeyEventArgs</a></td>
+        <td><span class="parametername">e</span></td>
+        <td><p>The data for the event.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">UIElement.OnKeyDown(KeyEventArgs)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnLostFocus_System_Windows_RoutedEventArgs_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnLostFocus(System.Windows.RoutedEventArgs)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L226">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnLostFocus_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnLostFocus*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnLostFocus_System_Windows_RoutedEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnLostFocus(System.Windows.RoutedEventArgs)">OnLostFocus(RoutedEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Called before the <a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Esri.ArcGISRuntime</a> event occurs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void OnLostFocus(RoutedEventArgs e)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">RoutedEventArgs</a></td>
+        <td><span class="parametername">e</span></td>
+        <td><p>The data for the event.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">UIElement.OnLostFocus(RoutedEventArgs)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseEnter_System_Windows_Input_MouseEventArgs_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseEnter(System.Windows.Input.MouseEventArgs)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L250">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseEnter_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseEnter*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseEnter_System_Windows_Input_MouseEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseEnter(System.Windows.Input.MouseEventArgs)">OnMouseEnter(MouseEventArgs)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void OnMouseEnter(MouseEventArgs e)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">MouseEventArgs</a></td>
+        <td><span class="parametername">e</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">UIElement.OnMouseEnter(MouseEventArgs)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeave_System_Windows_Input_MouseEventArgs_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeave(System.Windows.Input.MouseEventArgs)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L269">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeave_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeave*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeave_System_Windows_Input_MouseEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeave(System.Windows.Input.MouseEventArgs)">OnMouseLeave(MouseEventArgs)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void OnMouseLeave(MouseEventArgs e)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">MouseEventArgs</a></td>
+        <td><span class="parametername">e</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">UIElement.OnMouseLeave(MouseEventArgs)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeftButtonDown_System_Windows_Input_MouseButtonEventArgs_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L288">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeftButtonDown_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeftButtonDown*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeftButtonDown_System_Windows_Input_MouseButtonEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">OnMouseLeftButtonDown(MouseButtonEventArgs)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">MouseButtonEventArgs</a></td>
+        <td><span class="parametername">e</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">UIElement.OnMouseLeftButtonDown(MouseButtonEventArgs)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepBack_System_Int32_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepBack(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1612">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepBack_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepBack*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepBack_System_Int32_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepBack(System.Int32)">StepBack(Int32)</h4>
+  <div class="markdown level1 summary"><p>Moves the slider position back by the specified number of time steps.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool StepBack(int timeSteps = 1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int32</a></td>
+        <td><span class="parametername">timeSteps</span></td>
+        <td><p>The number of steps to advance the slider's position.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Boolean</a></td>
+        <td><p><code>true</code> if succeeded, <code>false</code> if the position could not be moved as requested.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepBack_System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>When the current time extent represents a time range and neither the start nor end time are pinned, then the number of
+time steps between the start and end time will always be preserved.  In that case, a value of false will be returned if the
+extent could not be moved by the specified number of time steps without going beyond the start of the time slider's full extent.
+If the current time extent is a time instant and either the start or end time are pinned, then the method call will attempt to
+move the unpinned end of the time extent.  In that case, the method will return false if the unpinned end could not be moved by
+the specified number of steps without going beyond the start of the full extent or the pinned end of the current extent.  In all
+cases, when the method returns false, the time slider's current extent will be unchanged.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepForward_System_Int32_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepForward(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1588">View Source</a>
+  </span>
+  <a id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepForward_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepForward*"></a>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepForward_System_Int32_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepForward(System.Int32)">StepForward(Int32)</h4>
+  <div class="markdown level1 summary"><p>Moves the slider position forward by the specified number of time steps.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool StepForward(int timeSteps = 1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Int32</a></td>
+        <td><span class="parametername">timeSteps</span></td>
+        <td><p>The number of steps to advance the slider's position.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">Boolean</a></td>
+        <td><p><code>true</code> if succeeded, <code>false</code> if the position could not be moved as requested.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepForward_System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>When the current time extent represents a time range and neither the start nor end time are pinned, then the number of
+time steps between the start and end time will always be preserved.  In that case, a value of false will be returned if the
+extent could not be moved by the specified number of time steps without going beyond the end of the time slider's full extent.
+If the current time extent is a time instant and either the start or end time are pinned, then the method call will attempt to
+move the unpinned end of the time extent.  In that case, the method will return false if the unpinned end could not be moved by
+the specified number of steps without going beyond the end of the full extent or the pinned end of the current extent.  In all
+cases, when the method returns false, the time slider's current extent will be unchanged.</p>
+</div>
+  <h3 id="events">Events
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentChanged.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentChanged%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.cs/#L1570">View Source</a>
+  </span>
+  <h4 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentChanged" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentChanged">CurrentExtentChanged</h4>
+  <div class="markdown level1 summary"><p>Occurs when the selected time extent has changed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TimeExtentChangedEventArgs&gt; CurrentExtentChanged</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">EventHandler</a>&lt;<a class="xref" href="../net6/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.html">TimeExtentChangedEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IAnimatable</a>
+  </div>
+  <div>
+      <a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IFrameworkInputElement</a>
+  </div>
+  <div>
+      <a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IInputElement</a>
+  </div>
+  <div>
+      <a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">ISupportInitialize</a>
+  </div>
+  <div>
+      <a class="xref" href="https://developers.arcgis.com/net/api-reference/api/net/Esri.ArcGISRuntime/Esri.ArcGISRuntime.html">IQueryAmbient</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/apidoc/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L35" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
