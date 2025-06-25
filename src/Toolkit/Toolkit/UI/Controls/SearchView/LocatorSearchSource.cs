@@ -189,7 +189,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else if (!string.IsNullOrWhiteSpace(info.Description))
                     _displayName = info.Description;
                 else
-                    _displayName = string.Empty;
+                    _displayName = Properties.Resources.GetString("Locator_DefaultName") ?? string.Empty;
 
                 OnPropertyChanged(nameof(DisplayName));
             }
