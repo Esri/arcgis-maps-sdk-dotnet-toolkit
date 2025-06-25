@@ -653,6 +653,5 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Width" Value="256" />
         <Setter Property="Margin" Value="4" />
-        <Setter Property="EnableDefaultWorldGeocoder" Value="True" />
     </Style>
 </ResourceDictionary>

@@ -533,4 +533,8 @@
     <value>Zoom to result</value>
     <comment>The text on button that zooms to the selected trace result.</comment>
   </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>Locator</value>
+    <comment>Default display name for LocatorSearchSource if locator name is not set.</comment>
+  </data>
 </root>
