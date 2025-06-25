@@ -138,24 +138,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             });
         }
 
-        public enum ShowErrorsVisibility
-        {
-            /// <summary>
-            /// Errors are shown when a field gets focus, or when the user tries to finish editing the form.
-            /// </summary>
-            Automatic,
-            /// <summary>
-            /// Validation errors are always shown, even if the user has not interacted with or edited the field.
-            /// </summary>
-            Always
-        }
-
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.
         /// </summary>
-        public ShowErrorsVisibility ErrorsVisibility
+        public ValidationErrorVisibility ErrorsVisibility
         {
-            get { return (ShowErrorsVisibility)GetValue(ErrorsVisibilityProperty); }
+            get { return (ValidationErrorVisibility)GetValue(ErrorsVisibilityProperty); }
             set { SetValue(ErrorsVisibilityProperty, value); }
         }
 
@@ -163,9 +151,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="ErrorsVisibility"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ErrorsVisibilityProperty =
-            PropertyHelper.CreateProperty<ShowErrorsVisibility, FeatureFormView>(nameof(ErrorsVisibility), ShowErrorsVisibility.Always, (s, oldValue, newValue) => s.OnErrorsVisibilityChanged(oldValue, newValue));
+            PropertyHelper.CreateProperty<ValidationErrorVisibility, FeatureFormView>(nameof(ErrorsVisibility), ValidationErrorVisibility.Visible, (s, oldValue, newValue) => s.OnErrorsVisibilityChanged(oldValue, newValue));
 
-        private void OnErrorsVisibilityChanged(ShowErrorsVisibility oldValue, ShowErrorsVisibility newValue)
+        private void OnErrorsVisibilityChanged(ValidationErrorVisibility oldValue, ValidationErrorVisibility newValue)
         {
             foreach (var item in GetDescendentsOfType<FieldFormElementView>(this))
             {
@@ -314,7 +302,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal bool ShouldShowError()
         {
-            return ErrorsVisibility == ShowErrorsVisibility.Always || _wasFinishEditingAttempted;
+            return ErrorsVisibility == ValidationErrorVisibility.Visible || _wasFinishEditingAttempted;
         }
 
         private IEnumerable<FieldFormElement> EnumerateVisibleElements(IEnumerable<FormElement>? elements)
@@ -816,5 +804,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets the element that was clicked.
         /// </summary>
         public FieldFormElement FormElement { get; }
+    }
+
+    /// <summary>
+    /// Defines when validation errors should be shown in the <see cref="FeatureFormView"/>.
+    /// </summary>
+    /// <seealso cref="FeatureFormView.ErrorsVisibility"/>
+    public enum ValidationErrorVisibility
+    {
+        /// <summary>
+        /// All errors are visible for every editable element.
+        /// </summary>
+        Visible,
+
+        /// <summary>
+        /// All errors are hidden by default and made visible once an element has received interaction or the user attempts to finish editing.
+        /// </summary>
+        Automatic,
     }
 }
