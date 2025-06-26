@@ -20,11 +20,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using Esri.ArcGISRuntime.Portal;
-#if NET8_0_OR_GREATER
+
+
+#if NET5_0_OR_GREATER
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+using System.Text.Json;
 #else
 using JsonIncludeAttribute = System.Runtime.Serialization.DataMemberAttribute;
 #endif
@@ -33,6 +36,69 @@ namespace Esri.ArcGISRuntime.Toolkit;
 
 // Swift reference: https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Sources/ArcGISToolkit/Components/Offline/OfflineMapInfo.swift
 
+
+#if NET5_0_OR_GREATER
+[JsonSerializable(typeof(SerializableInfo))]
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+internal partial class InfoSerializationContext : JsonSerializerContext { }
+#endif
+
+[DataContract]
+internal partial class SerializableInfo
+{
+#if NET5_0_OR_GREATER
+    public static SerializableInfo? FromJson(string json) => System.Text.Json.JsonSerializer.Deserialize(json, typeof(SerializableInfo), InfoSerializationContext.Default) as SerializableInfo;
+
+    public string ToJson() => System.Text.Json.JsonSerializer.Serialize(this, InfoSerializationContext.Default.SerializableInfo);
+#else
+        private static System.Runtime.Serialization.Json.DataContractJsonSerializer serializer  = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(SerializableInfo));
+        public static SerializableInfo? FromJson(string json)
+        {
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+            {
+                return serializer.ReadObject(stream) as SerializableInfo;
+            }
+        }
+
+        public string ToJson()
+        {
+            string result;
+            using (var stream = new MemoryStream())
+            {
+                serializer.WriteObject(stream, this);
+                stream.Position = 0;
+                using (var reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
+            }
+            return result;
+        }
+#endif
+
+    [DataMember(Name = "title")]
+#if NET5_0_OR_GREATER
+    [JsonPropertyName("title")]
+#endif
+    public string Title { get; set; } = string.Empty;
+    [DataMember(Name = "id")]
+#if NET5_0_OR_GREATER
+    [JsonPropertyName("id")]
+#endif
+    public string Id { get; set; } = string.Empty;
+    [DataMember(Name = "description")]
+#if NET5_0_OR_GREATER
+    [JsonPropertyName("description")]
+#endif
+    public string Description { get; set; } = string.Empty;
+    [DataMember(Name = "portalItemURL")]
+#if NET5_0_OR_GREATER
+    [JsonPropertyName("portalItemURL")]
+#endif
+    public Uri? PortalItemURL { get; set; }
+
+}
+
 /// <summary>
 ///  A model type that maintains information about an offline map area.
 /// </summary>
@@ -40,15 +106,6 @@ public class OfflineMapInfo
 {
     internal const string offlineMapInfoJsonFile = "info.json";
     internal const string offlineMapInfoThumbnailFile = "thumbnail.png";
-
-    private class SerializableInfo
-    {
-        public string Title { get; set; } = string.Empty;
-        public string Id { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public Uri? PortalItemURL { get; set; }
-
-    }
 
     private SerializableInfo _info;
 

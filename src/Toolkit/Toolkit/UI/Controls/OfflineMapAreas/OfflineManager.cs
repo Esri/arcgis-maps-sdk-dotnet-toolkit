@@ -24,10 +24,10 @@ using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Esri.ArcGISRuntime.Tasks.Offline;
 #if NET8_0_OR_GREATER
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Esri.ArcGISRuntime.Tasks.Offline;
 #else
 using JsonIncludeAttribute = System.Runtime.Serialization.DataMemberAttribute;
 #endif
@@ -88,7 +88,7 @@ public class OfflineManager
 #elif __IOS__
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "com.esri.ArcGISToolkit.offlineManager");
 #elif __ANDROID__
-        return Path.Combine(Android.App.Application.Context.GetExternalFilesDir(), "com.arcgismaps.toolkit.offline");
+        return Path.Combine(Android.App.Application.Context.GetExternalFilesDir(null /*TODO*/)!.AbsolutePath, "com.arcgismaps.toolkit.offline");
 #endif
         throw new PlatformNotSupportedException();
     }
@@ -98,6 +98,11 @@ public class OfflineManager
     /// <summary>
     /// Gets or sets the folder used for storing maps when using the <see cref="OfflineManager.Default"/> instance.
     /// </summary>
+    /// <remarks>
+    /// If you develop a non-packaged app on Windows, it's recommended to instead use <see cref="OfflineManager.OfflineManager(string)"> the constructor that takes a specific folder path</see>,
+    /// so that maps won't get shared among multiple applications.
+    /// </remarks>
+
     public static string DefaultFolder
     {
         get => _defaultFolder;
@@ -110,7 +115,7 @@ public class OfflineManager
     }
 
     /// <summary>
-    /// A shared singleton instance of offline manager.
+    /// A shared singleton instance of offline manager using the <see cref="DefaultFolder"> location.
     /// </summary>
     public static OfflineManager Default { get; } = new OfflineManager(); // TODO: Consider allowing creation with specific folder name
 
@@ -125,19 +130,19 @@ public class OfflineManager
     private List<GenerateOfflineMapJob> generateOfflineMapJobs = new List<GenerateOfflineMapJob>();
     private List<OfflineMapSyncJob> offlineMapSyncJobs = new List<OfflineMapSyncJob>();
 
-    public async Task Start(DownloadPreplannedOfflineMapJob job)
+    internal async Task Start(DownloadPreplannedOfflineMapJob job)
     {
         preplannedJobs.Add(job);
         var result = await job.GetResultAsync();
         preplannedJobs.Remove(job);
     }
-    public async void Start(GenerateOfflineMapJob job)
+    internal async void Start(GenerateOfflineMapJob job)
     {
         generateOfflineMapJobs.Add(job);
         var result = await job.GetResultAsync();
         generateOfflineMapJobs.Remove(job);
     }
-    public async void Start(OfflineMapSyncJob job)
+    internal async void Start(OfflineMapSyncJob job)
     {
         offlineMapSyncJobs.Add(job);
         var result = await job.GetResultAsync();
