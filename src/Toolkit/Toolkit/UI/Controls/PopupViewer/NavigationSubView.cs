@@ -67,13 +67,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             if (GetTemplateChild("NavigateUp") is FrameworkElement up)
             {
+                bool isVisible = ShowHomeButton && _navigationStack.Count > 1;
 #if MAUI
-                up.IsVisible = _navigationStack.Count > 1;
+                up.IsVisible = isVisible;
 #else
-                up.Visibility = _navigationStack.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
+                up.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
 #endif
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the Home button should show when navigating more than one level deep.
+        /// </summary>
+        internal bool ShowHomeButton { get; set; } = false;
 
         private Stack<Tuple<object,double>> _navigationStack = new Stack<Tuple<object, double>>();
 
