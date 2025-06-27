@@ -232,8 +232,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async Task GoBack()
         {
-            if (_navigationStack.Count == 0)
+            if (!IsBackNavigationEnabled || _navigationStack.Count == 0)
                 return;
+
             if (!(await RaiseOnNavigatingAsync(_navigationStack.Peek().Item1, NavigationDirection.Backward)))
             {
                 return;
@@ -285,8 +286,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async Task GoUp()
         {
-            if (_navigationStack.Count == 0)
+            if (!IsBackNavigationEnabled || _navigationStack.Count == 0)
                 return;
+
             var content = _navigationStack.Last();
             if (!(await RaiseOnNavigatingAsync(content.Item1, NavigationDirection.Backward)))
             {
@@ -331,6 +333,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("Content") is ContentControl cc2)
                 cc2.Content = Content;
             UpdateView();
+            UpdateButtonEnableStates();
         }
 
         /// <summary>
@@ -394,6 +397,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty VerticalScrollBarVisibilityProperty =
             DependencyProperty.Register(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(NavigationSubView), new PropertyMetadata(ScrollBarVisibility.Auto));
 #endif
+        /// <summary>
+        /// Gets or sets a value indicating whether the back buttons are enabled or not.
+        /// </summary>
+        public bool IsBackNavigationEnabled
+        {
+            get { return (bool)GetValue(IsBackNavigationEnabledProperty); }
+            set { SetValue(IsBackNavigationEnabledProperty, value); }
+        }
 
+        /// <summary>
+        /// Identifies the <see cref="VerticalScrollBarVisibility"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsBackNavigationEnabledProperty =
+            PropertyHelper.CreateProperty<bool, NavigationSubView>(nameof(IsBackNavigationEnabled), true, OnIsBackNavigationEnabledPropertyChanged);
+
+        private static void OnIsBackNavigationEnabledPropertyChanged(NavigationSubView view, bool oldValue, bool newValue)
+        {
+            view.UpdateButtonEnableStates();
+        }
+
+        private void UpdateButtonEnableStates()
+        {
+            if (GetTemplateChild("NavigateBack") is Button back)
+            {
+                back.IsEnabled = IsBackNavigationEnabled;
+            }
+            if (GetTemplateChild("NavigateUp") is Button up)
+            {
+                up.IsEnabled = IsBackNavigationEnabled;
+            }
+        }
     }
 }

@@ -233,7 +233,7 @@
                             <Button x:Name="NavigateUp" Background="Transparent" BorderThickness="0" VerticalAlignment="Stretch" MinHeight="50">
                                 <FontIcon Glyph="&#xE74A;" />
                             </Button>
-                            <ContentControl ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Margin="{TemplateBinding Padding}"
+                            <ContentControl ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Padding="{TemplateBinding Padding}" Margin="12,0,0,0"
                                             VerticalAlignment="Stretch" VerticalContentAlignment="Center" x:Name="Header" />
                         </StackPanel>
                         <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1" IsVerticalRailEnabled="True" Padding="{TemplateBinding Padding}" >

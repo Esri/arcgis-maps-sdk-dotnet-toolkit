@@ -419,14 +419,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Launcher.LaunchUriAsync(uri);
         }
 
-
-
-
         private async void SubView_OnNavigating(object? sender, NavigationSubView.NavigationEventArgs e)
         {
-            if (CurrentFeatureForm?.HasEdits == true &&
-                (e.Direction == NavigationSubView.NavigationDirection.Forward && e.NavigatingTo is FeatureForm ||
-                e.Direction == NavigationSubView.NavigationDirection.Backward && e.NavigatingFrom is FeatureForm))
+            bool navigatingToANewFeatureForm = (e.Direction == NavigationSubView.NavigationDirection.Forward && e.NavigatingTo is FeatureForm ||
+                e.Direction == NavigationSubView.NavigationDirection.Backward && e.NavigatingFrom is FeatureForm);
+            
+            if (!IsNavigationEnabled && navigatingToANewFeatureForm) // Navigation to a new form is currently disabled
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            // Disable the back button if it would cause a change in CurrentFeatureForm
+            ((NavigationSubView)sender!).IsBackNavigationEnabled  = IsNavigationEnabled || !(e.Direction == NavigationSubView.NavigationDirection.Backward && e.NavigatingTo is FeatureForm);
+
+            if (CurrentFeatureForm?.HasEdits == true && navigatingToANewFeatureForm)
             {
                 // If the current feature form has edits, we need to discard or save them before navigating to a new form.
                 string title = Properties.Resources.GetString("FeatureFormPendingEditsTitle")!;
@@ -518,10 +525,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (e.NavigatingFrom is FeatureForm fromff && e.Direction == NavigationSubView.NavigationDirection.Backward)
             {
-                // 
                 var previousForm = ((NavigationSubView?)sender)?.NavigationStack.OfType<FeatureForm>().Where(o => o != fromff)?.FirstOrDefault();
                 if (previousForm is not null)
+                {
+                    // When navigating back, a sub-feature edit could have caused a ripple-effect and changed other features,
+                    // so refresh the feature and re-evaluate the expressions.
+                    previousForm.Feature.Refresh();
+                    _ = previousForm.EvaluateExpressionsAsync();
                     SetCurrentFeatureForm(previousForm);
+                }
             }
         }
 
@@ -566,6 +578,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateIsValidProperty();
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to allow navigating to a different feature
+        /// </summary>
+        public bool IsNavigationEnabled
+        {
+            get { return (bool)GetValue(IsNavigationEnabledProperty); }
+            set { SetValue(IsNavigationEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="VerticalScrollBarVisibility"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsNavigationEnabledProperty =
+            PropertyHelper.CreateProperty<bool, FeatureFormView>(nameof(IsNavigationEnabled), true, OnIsNavigationEnabledPropertyChanged);
+
+        private static void OnIsNavigationEnabledPropertyChanged(FeatureFormView view, bool oldValue, bool newValue)
+        {
+            if (view.GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                if (newValue)
+                    subView.IsBackNavigationEnabled = true;
+                else if (subView.Content is FeatureForm)
+                    subView.IsBackNavigationEnabled = false;
+            }
         }
     }
 
