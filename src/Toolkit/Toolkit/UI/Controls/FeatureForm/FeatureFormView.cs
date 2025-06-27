@@ -756,7 +756,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             dialog.XamlRoot = this.XamlRoot;
             var result = await dialog.ShowAsync();
 #elif WPF
-            MessageBox.Show(title, content);
+            MessageBox.Show(content, title);
 #endif
             }
 
