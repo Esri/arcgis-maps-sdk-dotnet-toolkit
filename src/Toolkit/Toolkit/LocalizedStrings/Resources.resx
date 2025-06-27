@@ -545,7 +545,11 @@
     <value>Discard</value>
     <comment>The text on the Discard button of the unsaved-edits warning dialog</comment>
   </data>
-  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>Error</value>
+    <comment>The text on the dialog shown if saving edits to a feature form fails</comment>
+  </data>
+    <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
     <value>You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes?</value>
     <comment>The content of the dialog when user is warned about unsaved edits</comment>
   </data>

@@ -61,6 +61,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("ScrollViewer", scrollview);
             return root;
         }
+
+        internal Task ScrollToAsync(Element element, ScrollToPosition position, bool animated)
+        {
+            if (GetTemplateChild("ScrollViewer") is ScrollView scrollView)
+            {
+                return scrollView.ScrollToAsync(element, position, animated);
+            }
+            return Task.CompletedTask;
+        }
     }
 }
 #endif

@@ -62,48 +62,10 @@ namespace Toolkit.SampleApp.Maui.Samples
             Debug.WriteLine("Attachment clicked: " + e.Attachment.Name);
         }
 
-        private async void DiscardButton_Click(object sender, EventArgs e)
-        {
-            var result = await DisplayAlert("Confirm", "Discard edits?", "Yes", "Cancel");
-            if (result)
-            {
-
-                ((Button)sender).IsEnabled = false;
-                try
-                {
-                    await formViewer.DiscardEditsAsync();
-                } catch { }
-
-                ((Button)sender).IsEnabled = true;
-            }
-        }
-
         private void CloseButton_Click(object sender, EventArgs e)
         {
             formViewer.FeatureForm = null;
             SidePanel.IsVisible = false;
-        }
-
-        private async void UpdateButton_Click(object sender, EventArgs e)
-        {
-            if (formViewer.FeatureForm == null) return;
-            if (!formViewer.IsValid)
-            {
-                var errorsMessages = formViewer.FeatureForm.Elements.OfType<FieldFormElement>().Where(e=>e.ValidationErrors.Any()).Select(s => s.FieldName + ": " + string.Join(",", s.ValidationErrors.Select(e=>e.Message)));
-                if (errorsMessages.Any())
-                {
-                    await DisplayAlert("Form has errors", string.Join("\n", errorsMessages), "OK");
-                    return;
-                }
-            }
-            try
-            {
-                await formViewer.FinishEditingAsync();
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", "Failed to apply edits:\n" + ex.Message, "OK");
-            }
         }
 
         private void FeatureFormViewSample_SizeChanged(object? sender, EventArgs e)

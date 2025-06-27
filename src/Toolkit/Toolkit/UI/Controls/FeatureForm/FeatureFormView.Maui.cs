@@ -62,11 +62,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private const string FeatureFormTitleStyleName = "FeatureFormTitleStyle";
         private const string FeatureFormCaptionStyleName = "FeatureFormCaptionStyle";
 
-        /// <summary>
-        /// Template name of the form's content's <see cref="ScrollView"/>.
-        /// </summary>
-        public const string FeatureFormContentScrollViewerName = "FeatureFormContentScrollViewer";
-
         static FeatureFormView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
@@ -88,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private static object BuildDefaultTemplate()
         {
             NavigationSubView root = new NavigationSubView();
-            root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (PopupViewer viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
+            root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (FeatureFormView viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             root.HeaderTemplateSelector = BuildHeaderTemplateSelector();
             root.ContentTemplateSelector = BuildContentTemplateSelector();
             INameScope nameScope = new NameScope();
