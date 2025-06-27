@@ -743,7 +743,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
 #if MAUI
             var page = GetParent<Page>(this);
-            if(page is not null) {
+            if (page is not null)
+            {
                 await page.DisplayAlert(title, content, Properties.Resources.GetString("FeatureFormPendingEditsCancel")!);
             }
 #elif WINDOWS_XAML
