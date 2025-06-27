@@ -42,14 +42,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             topheader.Children.Add(navigateBack);
             topheader.Children.Add(navigateUp);
             ContentControl header = new ContentControl() { VerticalOptions = new LayoutOptions(LayoutAlignment.Fill, true) };
-            header.SetBinding(ContentControl.ContentTemplateSelectorProperty, static (NavigationSubView view) => view.HeaderTemplateSelector, source: RelativeBindingSource.TemplatedParent);
+            header.SetBinding(ContentControl.ContentTemplateProperty, static (NavigationSubView view) => view.HeaderTemplateSelector, source: RelativeBindingSource.TemplatedParent);
             topheader.Children.Add(header);
             root.Children.Add(topheader);
             ScrollView scrollview = new ScrollView();
             scrollview.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (NavigationSubView viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(scrollview, 1);
             ContentControl content = new ContentControl() { VerticalOptions = new LayoutOptions(LayoutAlignment.Fill, true) };
-            content.SetBinding(ContentControl.ContentTemplateSelectorProperty, static (NavigationSubView view) => view.ContentTemplateSelector, source: RelativeBindingSource.TemplatedParent);
+            content.SetBinding(ContentControl.ContentTemplateProperty, static (NavigationSubView view) => view.ContentTemplateSelector, source: RelativeBindingSource.TemplatedParent);
             scrollview.Content = content;
             root.Children.Add(scrollview);
             INameScope nameScope = new NameScope();

@@ -20,6 +20,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 internal class EmptyStringToBoolConverter : IValueConverter
 {
+    private EmptyStringToBoolConverter() { }
+
     /// <summary>
     /// Converts a string to a bool, true if not empty, false otherwise.
     /// </summary>
@@ -38,4 +40,5 @@ internal class EmptyStringToBoolConverter : IValueConverter
     {
         throw new NotImplementedException();
     }
+    internal static EmptyStringToBoolConverter Instance { get; } = new EmptyStringToBoolConverter();
 }
