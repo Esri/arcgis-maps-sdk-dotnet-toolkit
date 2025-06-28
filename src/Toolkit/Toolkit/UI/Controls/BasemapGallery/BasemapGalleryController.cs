@@ -197,39 +197,44 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             await UpdateBasemaps();
         }
 
-        private readonly SemaphoreSlim _updateBasemapsSemaphore = new(1, 1);
+        private bool _pendingUpdateBasemaps;
+        private bool _isUpdatingBasemaps;
 
         public async Task UpdateBasemaps()
         {
-            // Try to enter the semaphore without waiting
-            if (!await _updateBasemapsSemaphore.WaitAsync(0))
-            {
-                // Another update is already running; exit immediately
+            _pendingUpdateBasemaps = true;
+            if (_isUpdatingBasemaps)
                 return;
-            }
+
+            _isUpdatingBasemaps = true;
             try
             {
-                _loadCancellationTokenSource?.Cancel();
-                IsLoading = true;
-                _loadCancellationTokenSource = new CancellationTokenSource();
-                try
+                while (_pendingUpdateBasemaps)
                 {
-                    _availableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
-                    HandleAvailableBasemapsChanged();
-                }
-                catch (OperationCanceledException) { }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Trace.WriteLine(ex.Message);
-                }
-                finally
-                {
-                    IsLoading = false;
+                    _pendingUpdateBasemaps = false;
+                    
+                    _loadCancellationTokenSource?.Cancel();
+                    IsLoading = true;
+                    _loadCancellationTokenSource = new CancellationTokenSource();
+                    try
+                    {
+                        _availableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
+                        HandleAvailableBasemapsChanged();
+                    }
+                    catch (OperationCanceledException) { }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine(ex.Message);
+                    }
+                    finally
+                    {
+                        IsLoading = false;
+                    }
                 }
             }
             finally
             {
-                _updateBasemapsSemaphore.Release();
+                _isUpdatingBasemaps = false;
             }
         }
 
