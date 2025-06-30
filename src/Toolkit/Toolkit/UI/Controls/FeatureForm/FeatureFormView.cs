@@ -590,7 +590,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Identifies the <see cref="VerticalScrollBarVisibility"/> dependency property.
+        /// Identifies the <see cref="IsNavigationEnabled"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty IsNavigationEnabledProperty =
             PropertyHelper.CreateProperty<bool, FeatureFormView>(nameof(IsNavigationEnabled), true, OnIsNavigationEnabledPropertyChanged);
