@@ -407,7 +407,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Identifies the <see cref="VerticalScrollBarVisibility"/> dependency property.
+        /// Identifies the <see cref="IsBackNavigationEnabled"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty IsBackNavigationEnabledProperty =
             PropertyHelper.CreateProperty<bool, NavigationSubView>(nameof(IsBackNavigationEnabled), true, OnIsBackNavigationEnabledPropertyChanged);
