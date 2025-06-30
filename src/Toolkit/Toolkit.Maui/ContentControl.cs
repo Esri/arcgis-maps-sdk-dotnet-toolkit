@@ -3,79 +3,69 @@ using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
-    internal class ContentControl : TemplatedView
+    internal class ContentControl : ContentPresenter
     {
-        private static readonly ControlTemplate DefaultControlTemplate;
-
-        static ContentControl()
-        {
-            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
-        }
-
-        private static object BuildDefaultTemplate()
-        {
-            var presenter = new ContentPresenter();
-            INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(presenter, nameScope);
-            nameScope.RegisterName("ContentPresenter", presenter);
-            return presenter;
-        }
-
+        private DataTemplate? currentTemplate;
+        
         public ContentControl()
         {
-            ControlTemplate = DefaultControlTemplate;
-        }
-
-        protected override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            UpdateData();
         }
 
         private void UpdateData()
         {
-            if (GetTemplateChild("ContentPresenter") is ContentPresenter presenter)
+            if (ContentData is null)
+                Content = null;
+            else
             {
-                var template = ContentTemplateSelector?.SelectTemplate(Content, presenter);
-                if (template is not null)
+                var template = ContentTemplate.SelectDataTemplate(ContentData, this);
+                if (template is null)
                 {
-                    var contentView = template.CreateContent() as View;
-                    if (contentView is not null)
-                        contentView.BindingContext = Content;
-                    presenter.Content = contentView;
+                    Content = null;
+                    return;
                 }
+
+                if (currentTemplate != template) //Don't create a new view if the template isn't changing.
+                {
+                    currentTemplate = template;
+                    var view = template.CreateContent(ContentData, this) as View;
+                    if (view is null)
+                    {
+                        Content = null;
+                        return;
+                    }
+                    view.BindingContext = ContentData;
+                    Content = view;
+                }
+                else  if (Content is not null && Content.BindingContext != ContentData)
+                    Content.BindingContext = ContentData;
             }
         }
 
         /// <summary>
-        /// Gets or sets the template selector for the header.
+        /// Gets or sets the template for the header.
         /// </summary>
-        public DataTemplateSelector? ContentTemplateSelector
+        public DataTemplate? ContentTemplate
         {
-            get { return GetValue(ContentTemplateSelectorProperty) as DataTemplateSelector; }
-            set { SetValue(ContentTemplateSelectorProperty, value); }
+            get { return GetValue(ContentTemplateProperty) as DataTemplateSelector; }
+            set { SetValue(ContentTemplateProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="ContentTemplateSelector"/> dependency property.
+        /// Identifies the <see cref="ContentTemplate"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty ContentTemplateSelectorProperty = Toolkit.Internal.PropertyHelper.CreateProperty<DataTemplateSelector, ContentControl>(
-            nameof(ContentTemplateSelector), propertyChanged: (cc, oldvalue, newvalue) => cc.UpdateData());
+        public static readonly DependencyProperty ContentTemplateProperty = Toolkit.Internal.PropertyHelper.CreateProperty<DataTemplate, ContentControl>(
+            nameof(ContentTemplate), propertyChanged: (cc, oldvalue, newvalue) => cc.UpdateData());
 
         private object? _content;
 
-        public object? Content
+        public object? ContentData
         {
-            get  => _content;
-            set
-            {
-                if (_content != value)
-                {
-                    _content = value;
-                    UpdateData();
-                }
-            }
+            get => GetValue(ContentDataProperty);
+            set => SetValue(ContentDataProperty, value);
         }
+
+        public static readonly DependencyProperty ContentDataProperty = Toolkit.Internal.PropertyHelper.CreateProperty<object, ContentControl>(
+           nameof(ContentData), propertyChanged: (cc, oldvalue, newvalue) => cc.UpdateData());
     }
 }
 #endif

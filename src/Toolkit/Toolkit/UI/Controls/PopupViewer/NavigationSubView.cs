@@ -224,9 +224,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             Content = content;
             if (GetTemplateChild("Header") is ContentControl cc1)
+#if MAUI
+                cc1.ContentData = content;
+#else
                 cc1.Content = content;
+#endif
             if (GetTemplateChild("Content") is ContentControl cc2)
+#if MAUI
+                cc2.ContentData = content;
+#else
                 cc2.Content = content;
+#endif
             UpdateView();
         }
 
@@ -329,9 +337,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
             if (GetTemplateChild("Header") is ContentControl cc1)
+#if MAUI
+                cc1.ContentData = Content;
+#else
                 cc1.Content = Content;
+#endif
             if (GetTemplateChild("Content") is ContentControl cc2)
+#if MAUI
+                cc2.ContentData = Content;
+#else
                 cc2.Content = Content;
+#endif
             UpdateView();
             UpdateButtonEnableStates();
         }

@@ -49,7 +49,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     {
         ImageSourceConverter = new ByteArrayToImageSourceConverter();
         CollectionIconConverter = new BoolToCollectionIconImageConverter();
-        EmptyStringConverter = new EmptyStringToBoolConverter();
+        EmptyStringConverter = EmptyStringToBoolConverter.Instance;
         DefaultSuggestionGroupHeaderTemplate = new DataTemplate(() =>
         {
             Grid containingGrid = new Grid();
