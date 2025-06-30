@@ -198,15 +198,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private bool _pendingUpdateBasemaps;
-        private bool _isUpdatingBasemaps;
 
         public async Task UpdateBasemaps()
         {
             _pendingUpdateBasemaps = true;
-            if (_isUpdatingBasemaps)
+            if (IsLoading)
                 return;
 
-            _isUpdatingBasemaps = true;
+            IsLoading = true;
             try
             {
                 while (_pendingUpdateBasemaps)
@@ -214,7 +213,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     _pendingUpdateBasemaps = false;
                     
                     _loadCancellationTokenSource?.Cancel();
-                    IsLoading = true;
                     _loadCancellationTokenSource = new CancellationTokenSource();
                     try
                     {
@@ -226,15 +224,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     {
                         System.Diagnostics.Trace.WriteLine(ex.Message);
                     }
-                    finally
-                    {
-                        IsLoading = false;
-                    }
                 }
             }
             finally
             {
-                _isUpdatingBasemaps = false;
+                IsLoading = false;
             }
         }
 
