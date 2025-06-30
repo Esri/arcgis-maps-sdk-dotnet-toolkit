@@ -42,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         }
 
         /// <summary>
-        /// Gets or sets the template selector for the header.
+        /// Gets or sets the template for the header.
         /// </summary>
         public DataTemplate? ContentTemplate
         {
