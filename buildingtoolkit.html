@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Instructions for Building the toolkit </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Instructions for Building the toolkit ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="instructions-for-building-the-toolkit">Instructions for Building the toolkit</h1>
+
+<ol>
+<li><p>Confirm that your system meets the requirements for compiling the Toolkit:</p>
+<ul>
+<li>Visual Studio 2019 Update 4 (or later) with the following workloads:
+<ul>
+<li><code>Universal Windows Platform development</code> (UWP)</li>
+<li><code>.NET desktop development</code> (WPF)</li>
+<li><code>Mobile development with .NET</code> (MAUI)</li>
+<li><code>.NET Core cross-platform development</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Confirm your system meets the requirements for developing with ArcGIS Maps SDK for .NET. <a href="https://developers.arcgis.com/net/reference/system-requirements/">System Requirements</a></p>
+</li>
+<li><p>Fork and then clone the repo or download the .zip file.</p>
+</li>
+<li><p>Include (i) or reference (ii) the Toolkit in your projects:</p>
+<blockquote>
+<p>Note the Toolkit references <a href="http://esriurl.com/dotnetsdk">ArcGIS Maps SDK for .NET</a> by Nuget package. The package is automatically downloaded when you build the solution for the first time.</p>
+</blockquote>
+<ol>
+<li>Include the appropriate platform Projects in your Solution.
+<ul>
+<li>WPF (src\Toolkit\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj)</li>
+<li>UWP (\src\Toolkit\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj)</li>
+<li>WinUI (\src\Toolkit\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj)</li>
+<li>MAUI (\src\Toolkit\Toolkit.MAUI\Esri.ArcGISRuntime.Toolkit.MAUI.csproj)</li>
+</ul>
+</li>
+<li>Build the Toolkit and reference the NuGet package you built.
+<ul>
+<li>Building each Toolkit project automatically creates the NuGet package for each platform in the project Output folder.</li>
+<li>Create a local nuget source/feed and set it to the \Output\NuGet\Release folder.</li>
+<li>Add the nuget package using the standard Nuget package manager dialog in Visual Studio.</li>
+<li>See <a href="https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds">Setting Up Local NuGet Feeds</a> for more information.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/buildingtoolkit.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

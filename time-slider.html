@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>TimeSlider </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="TimeSlider ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="timeslider">TimeSlider</h1>
+
+<p>TimeSlider allows you to animate or manually step through a time range, with options to configure based on a time-aware layer or a GeoView.</p>
+<p><img src="https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png" alt="TimeSlider on UWP"></p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Supports stepping through the time extent with pre-defined steps. Steps can be customized.</li>
+<li>Supports animating, with play and pause functionality, the time extent</li>
+<li>Raises events when the time slider's time extent changes</li>
+<li>Supports initialization of the slider from a layer or a GeoView.</li>
+</ul>
+<h2 id="key-api">Key API</h2>
+<p>The following API methods, events, and properties are available to configure, interact, and respond to the time slider.</p>
+<p>See the API reference for full details.</p>
+<h3 id="time-control">Time control</h3>
+<ul>
+<li><code>CurrentExtentChanged</code> - Raised when the current time extent in the slider changes. Listen to this if you want to update a GeoView's time extent.</li>
+<li><code>InitializeTimePropertiesAsync</code> - Initializes various properties, including full extent and time intervals, based on the GeoModel displayed by a GeoView, or a time-aware layer.</li>
+<li><code>InitializeTimeSteps</code> - Divides the slider into a specific number of steps</li>
+<li><code>FullExtent</code> - Full time range for the slider</li>
+<li><code>CurrentExtent</code> - Currently selected time range within the slider</li>
+<li><code>TimeStepInterval</code> - Duration of a time step</li>
+<li><code>TimeSteps</code> - Quantity of time steps</li>
+<li><code>IsStartTimePinned</code> - Controls whether selected start time can be changed</li>
+<li><code>IsEndTimePinned</code> - Controls whether selected end time can be changed</li>
+</ul>
+<h3 id="playback">Playback</h3>
+<ul>
+<li><code>IsPlaying</code> - Gets or sets a value indicating whether the time slider is animating</li>
+<li><code>PlaybackInterval</code> - Controls how long (in user time) the time slider waits before stepping the current extent when <code>IsPlaying</code> is true.</li>
+<li><code>PlaybackDirection</code> - Controls whether playback is moving forward or backward</li>
+<li><code>PlaybackLoopMode</code> - Controls the behavior when the time slider reaches the end of the animation</li>
+</ul>
+<h3 id="labeling">Labeling</h3>
+<ul>
+<li><code>LabelMode</code> - Controls how intervals and extents are labeled</li>
+<li><code>FullExtentLabelFormat</code> - Controls the format for the extent labels</li>
+<li><code>CurrentExtentLabelFormat</code> - Controls the format for the current extent labels</li>
+<li><code>TimeStepIntervalLabelFormat</code> - Controls the format for the interval labels</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>Note: following code assumes that <code>TimeSlider</code> has already been added to the view alongside a <code>MapView</code>.</p>
+<pre><code class="lang-cs">private async Task InitializeSliderAsync()
+{
+    timeSlider.CurrentExtentChanged += Slider_CurrentExtentChanged;
+    await timeSlider.InitializeTimePropertiesAsync(mapView);
+}
+
+private void Slider_CurrentExtentChanged(object sender, UI.TimeExtentChangedEventArgs e)
+{
+    mapView.TimeExtent = e.NewExtent;
+}
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/time-slider.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

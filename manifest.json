@@ -1,0 +1,443 @@
+{
+  "homepages": [],
+  "source_base_path": "D:/a/arcgis-maps-sdk-dotnet-toolkit/arcgis-maps-sdk-dotnet-toolkit/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/android/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/index.html",
+          "hash": "UwVnvjwJfb9XpknXTa94u2umq56CfT6VqLnrpA85NeI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "aNsZRusjL/4FbfM4YSkeSE9hKHby0VxvTE6zkIoYWqs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/ios/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/index.html",
+          "hash": "7o0lHzbr+LmpO6xKywbi06Yo2T+R9KUSAGyTegpHeUY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/net6/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/index.html",
+          "hash": "Ywp2BrSsb3fay5Ezuc98wxttpOLbGnXku7A0m1RdguY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/netfx/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/index.html",
+          "hash": "0NmMiwmfB3DXSScHzBwAuK8OgEzBZ+FytRgU0qVcsz8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/netstd/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/netstd/index.html",
+          "hash": "7z9a0Lu30ScaZmdd9rJHATV34NpxpZwWdKLPSRuTVU0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/uwp/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/index.html",
+          "hash": "GvcJdVNhXglY9rKHJ3QQjBkK+qlSNp9irypK3nOHVis="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "ar.md",
+      "output": {
+        ".html": {
+          "relative_path": "ar.html",
+          "hash": "XCeibAduyBfFI1KNfS0kDGMxm4RdD+GTcjTIzaaGSIw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "basemap-gallery.md",
+      "output": {
+        ".html": {
+          "relative_path": "basemap-gallery.html",
+          "hash": "j2QZqqJs5gsYgUGmoHgt9IMHyQsUNPNqPHr3Xdxd1dU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "bookmarks-view.md",
+      "output": {
+        ".html": {
+          "relative_path": "bookmarks-view.html",
+          "hash": "z5g9ZheqdESCSlDCcdCxSDuiDbubpUF6l6hh3M0uKr8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "buildingtoolkit.md",
+      "output": {
+        ".html": {
+          "relative_path": "buildingtoolkit.html",
+          "hash": "cnWqaELHGhPqSfmPGBxdM+zg4xcWTcnG7EPYtY9PKTs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "compass.md",
+      "output": {
+        ".html": {
+          "relative_path": "compass.html",
+          "hash": "Q1k9j8t25/UxK3raM4qRpj/uCMK07YWTKC5i0tn9xRk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "concepts/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "concepts/index.html",
+          "hash": "6wgV5USw6Jze1FpY4ANOTPlMYUozVAi4T1fxE6rVR7E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "concepts/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "concepts/toc.html",
+          "hash": "1b/RAoENIJsZ5VRubVA81UCsTTnFOA2chU8v26Ck8vo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "controls.md",
+      "output": {
+        ".html": {
+          "relative_path": "controls.html",
+          "hash": "pDyb3u9UbQ4YNaPQ1OiVakA/sNwMsBafQU7E8wtrfNE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "feature-data-field.md",
+      "output": {
+        ".html": {
+          "relative_path": "feature-data-field.html",
+          "hash": "LHcJ92GtTMyHSqhB2Sdd0BvVWz1U6bYRM/eJWRPFQ3s="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "featureformview.md",
+      "output": {
+        ".html": {
+          "relative_path": "featureformview.html",
+          "hash": "u+bf0RiNqeSma3u/1ZUvA/beKQx9tIO+ef2HNlI2Ai0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "floor-filter.md",
+      "output": {
+        ".html": {
+          "relative_path": "floor-filter.html",
+          "hash": "oVB/AdmD/oSfUj5GIVaLYkUtW6puz0AxOlFw6fvywRo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "geoviewcontroller.md",
+      "output": {
+        ".html": {
+          "relative_path": "geoviewcontroller.html",
+          "hash": "bVS8zmJZtOYMTHxxe7wbxoEaDHZN8yNl3AEEpk0NhmA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "SoNsa6FDVEC0bBdVyvm/jOJN7lMcmvV3XFeLFgTHpFo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "legend.md",
+      "output": {
+        ".html": {
+          "relative_path": "legend.html",
+          "hash": "fHb5AKtor5dsEa/1nysogIPzG39RVSVFs1JZ+VPJjtU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "measure-toolbar.md",
+      "output": {
+        ".html": {
+          "relative_path": "measure-toolbar.html",
+          "hash": "Egznm8sPef7c48h8/fALD1URZRREeQPXvaxqJzIi3Nw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "overview-map.md",
+      "output": {
+        ".html": {
+          "relative_path": "overview-map.html",
+          "hash": "s19xs5UPE13yxqPuwYkBTogjHCHWtp0al5bdL7GzXTw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "popup-viewer.md",
+      "output": {
+        ".html": {
+          "relative_path": "popup-viewer.html",
+          "hash": "gTkRH0kbWLeQmvDJESj1y8luT1a7cxOh8CtZhcOq9nM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "requirements.md",
+      "output": {
+        ".html": {
+          "relative_path": "requirements.html",
+          "hash": "Bg1W1D6ccdksneNH6E7GqBts9P9xS1Ravsjp1UupYnU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "scale-line.md",
+      "output": {
+        ".html": {
+          "relative_path": "scale-line.html",
+          "hash": "p8CPzQOKl1HOjzQTh2HGBJ/F40lYIj3XkcQWGGBuWsE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "search-view.md",
+      "output": {
+        ".html": {
+          "relative_path": "search-view.html",
+          "hash": "O7LNhPS+siJ0TdMZ7Mc2g7qSADE+9QOBZ8iw59toZ3g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "symbol-display.md",
+      "output": {
+        ".html": {
+          "relative_path": "symbol-display.html",
+          "hash": "zv1P1kMm0REzSne2x6xCTIxyYosA22QewVPchZvcig4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "time-slider.md",
+      "output": {
+        ".html": {
+          "relative_path": "time-slider.html",
+          "hash": "hs1OS+qUhTeeNw3mdZmUXpc2bM+inw8QAiJcB2e1LD8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "nkEqgIEOseCNxhbgX6P9XB3DU9uyQ53P6DOQgfeG+aU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "un-trace.md",
+      "output": {
+        ".html": {
+          "relative_path": "un-trace.html",
+          "hash": "PLu4RDGK/N0Y9IL5Hg+ej0h6RzB7dJmRvD2jL6jAsBA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 29,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
