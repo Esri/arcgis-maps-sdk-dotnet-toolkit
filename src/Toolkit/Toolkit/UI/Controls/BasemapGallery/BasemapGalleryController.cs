@@ -197,20 +197,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             await UpdateBasemaps();
         }
 
+        private bool _pendingUpdateBasemaps;
+
         public async Task UpdateBasemaps()
         {
+            _pendingUpdateBasemaps = true;
+            if (IsLoading)
+                return;
+
             IsLoading = true;
-            // Cancel any pending load before starting a new one
-            _loadCancellationTokenSource?.Cancel();
-            _loadCancellationTokenSource = new CancellationTokenSource();
             try
             {
-                _availableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
-                HandleAvailableBasemapsChanged();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
+                while (_pendingUpdateBasemaps)
+                {
+                    _pendingUpdateBasemaps = false;
+                    
+                    _loadCancellationTokenSource?.Cancel();
+                    _loadCancellationTokenSource = new CancellationTokenSource();
+                    try
+                    {
+                        _availableBasemaps = await PopulateBasemaps(_loadCancellationTokenSource.Token);
+                        HandleAvailableBasemapsChanged();
+                    }
+                    catch (OperationCanceledException) { }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine(ex.Message);
+                    }
+                }
             }
             finally
             {
@@ -284,18 +298,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return await LoadBasemapGalleryItems(Portal, cancellationToken);
         }
 
-        private Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
-        {
-            if (_loadBasemapGalleryItemsTask is null || _loadBasemapGalleryItemsTask.IsCompleted)
-            {
-                _loadBasemapGalleryItemsTask = LoadBasemapGalleryItemsInternal(portal, cancellationToken);
-                return _loadBasemapGalleryItemsTask;
-            }
-
-            return _loadBasemapGalleryItemsTask;
-        }
-
-        private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItemsInternal(ArcGISPortal portal, CancellationToken cancellationToken = default)
+        private async Task<ObservableCollection<BasemapGalleryItem>> LoadBasemapGalleryItems(ArcGISPortal portal, CancellationToken cancellationToken = default)
         {
             async Task<List<BasemapGalleryItem>> LoadBasemapsAsync(Func<CancellationToken, Task<IEnumerable<Basemap>>> getBasemapsFunc)
             {
