@@ -55,46 +55,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Forms
             return null;
         }
 
-        private async void DiscardButton_Click(object sender, RoutedEventArgs e)
-        {
-            var result = MessageBox.Show("Discard edits?", "Confirm", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                ((Button)sender).IsEnabled = false;
-                try
-                {
-                    await formViewer.DiscardEditsAsync();
-                }
-                catch { }
-                ((Button)sender).IsEnabled = true;
-            }
-        }
-
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             formViewer.FeatureForm = null;
             SidePanel.Visibility = Visibility.Collapsed;
-        }
-
-        private async void UpdateButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (!formViewer.IsValid)
-            {
-                var errorsMessages = formViewer.FeatureForm.Elements.OfType<FieldFormElement>().Where(e => e.ValidationErrors.Any()).Select(s => s.FieldName + ": " + string.Join(",", s.ValidationErrors.Select(e => e.Message)));
-                if (errorsMessages.Any())
-                {
-                    MessageBox.Show("Form has errors:\n" + string.Join("\n", errorsMessages), "Can't apply");
-                    return;
-                }
-            }
-            try
-            {
-                await formViewer.FinishEditingAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to apply edits:\n" + ex.Message, "Error");
-            }
         }
     }
 }

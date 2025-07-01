@@ -162,7 +162,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void Apply()
         {
-            if (_textInput is null || _textInput.Text == Element?.Value as string) return;
+            if (Element?.IsEditable == false || _textInput is null || _textInput.Text == Element?.Value as string) return;
             string strvalue = _textInput.Text;
             object? value = strvalue;
             if (string.IsNullOrEmpty(strvalue))
