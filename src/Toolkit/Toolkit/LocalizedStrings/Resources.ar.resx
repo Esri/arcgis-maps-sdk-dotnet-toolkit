@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>试_Basemap Gallery________________验</value>
+    <value>試_Basemap Gallery________________驗</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>试_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________验.</value>
+    <value>試_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________驗.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>إضافة مرفق</value>
@@ -256,16 +256,16 @@
     <value>م</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>试_Scale___________验</value>
+    <value>試_Scale___________驗</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>试_Map Scale___________________验</value>
+    <value>試_Map Scale___________________驗</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>试_Indicates the current scale for the map_____________________验</value>
+    <value>試_Indicates the current scale for the map_____________________驗</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>试_1 to {0}_________________验</value>
+    <value>試_1 to {0}_________________驗</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>ميل</value>
@@ -430,36 +430,36 @@
     <value>تكبير/تصغير إلى الناتج</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>试_Apply___________验</value>
+    <value>試_Apply___________驗</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>试_Cancel_____________验</value>
+    <value>試_Cancel_____________驗</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>试_Discard_______________验</value>
+    <value>試_Discard_______________驗</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>试_Error___________验</value>
+    <value>試_Error___________驗</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>试_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________验?</value>
+    <value>試_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________驗?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>试_Unsaved edits______________验</value>
+    <value>試_Unsaved edits______________驗</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>试_Fraction along edge: {0}_________________________验</value>
+    <value>試_Fraction along edge: {0}_________________________驗</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>试_Is content visible: Yes________________________验</value>
+    <value>試_Is content visible: Yes________________________驗</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>试_Is content visible: No_______________________验</value>
+    <value>試_Is content visible: No_______________________驗</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>试_Terminal: {0}______________验</value>
+    <value>試_Terminal: {0}______________驗</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>试_Locator_______________验</value>
+    <value>試_Locator_______________驗</value>
   </data>
 </root>
