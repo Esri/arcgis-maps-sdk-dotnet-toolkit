@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>试_Basemap Gallery________________验</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>试_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________验.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>إضافة مرفق</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>م</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>试_Scale___________验</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>试_Map Scale___________________验</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>试_Indicates the current scale for the map_____________________验</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>试_1 to {0}_________________验</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>ميل</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>تكبير/تصغير إلى الناتج</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>试_Apply___________验</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>试_Cancel_____________验</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>试_Discard_______________验</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>试_Error___________验</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>试_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________验?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>试_Unsaved edits______________验</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>试_Fraction along edge: {0}_________________________验</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>试_Is content visible: Yes________________________验</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>试_Is content visible: No_______________________验</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>试_Terminal: {0}______________验</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>试_Locator_______________验</value>
   </data>
 </root>
