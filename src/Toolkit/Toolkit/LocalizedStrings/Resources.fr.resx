@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>æ_Basemap Gallery________________Â</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>æ_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________Â.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Ajouter une pièce jointe</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>m</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>æ_Scale___________Â</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>æ_Map Scale___________________Â</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>æ_Indicates the current scale for the map_____________________Â</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>æ_1 to {0}_________________Â</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Zoom sur le résultat</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>æ_Apply___________Â</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>æ_Cancel_____________Â</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>æ_Discard_______________Â</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>æ_Error___________Â</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>æ_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________Â?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>æ_Unsaved edits______________Â</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>æ_Fraction along edge: {0}_________________________Â</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>æ_Is content visible: Yes________________________Â</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>æ_Is content visible: No_______________________Â</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>æ_Terminal: {0}______________Â</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>æ_Locator_______________Â</value>
   </data>
 </root>

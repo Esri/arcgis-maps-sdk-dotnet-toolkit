@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>ґ_Basemap Gallery________________Ї</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>ґ_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________Ї.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Додати прикріплення</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>м</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>ґ_Scale___________Ї</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>ґ_Map Scale___________________Ї</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>ґ_Indicates the current scale for the map_____________________Ї</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>ґ_1 to {0}_________________Ї</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>миля</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Масштабування до результату</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>ґ_Apply___________Ї</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>ґ_Cancel_____________Ї</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>ґ_Discard_______________Ї</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>ґ_Error___________Ї</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>ґ_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________Ї?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>ґ_Unsaved edits______________Ї</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>ґ_Fraction along edge: {0}_________________________Ї</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>ґ_Is content visible: Yes________________________Ї</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>ґ_Is content visible: No_______________________Ї</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>ґ_Terminal: {0}______________Ї</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>ґ_Locator_______________Ї</value>
   </data>
 </root>

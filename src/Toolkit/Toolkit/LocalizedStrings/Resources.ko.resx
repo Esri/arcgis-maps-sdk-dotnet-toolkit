@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>한_Basemap Gallery________________빠</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>한_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________빠.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>첨부 파일 추가</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>m</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>한_Scale___________빠</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>한_Map Scale___________________빠</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>한_Indicates the current scale for the map_____________________빠</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>한_1 to {0}_________________빠</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>결과 확대</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>한_Apply___________빠</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>한_Cancel_____________빠</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>한_Discard_______________빠</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>한_Error___________빠</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>한_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________빠?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>한_Unsaved edits______________빠</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>한_Fraction along edge: {0}_________________________빠</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>한_Is content visible: Yes________________________빠</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>한_Is content visible: No_______________________빠</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>한_Terminal: {0}______________빠</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>한_Locator_______________빠</value>
   </data>
 </root>

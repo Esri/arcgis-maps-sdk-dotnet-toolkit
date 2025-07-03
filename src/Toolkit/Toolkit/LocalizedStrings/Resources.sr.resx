@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>Č_Basemap Gallery________________ž</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>Č_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ž.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Dodajte prilog</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>m</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>Č_Scale___________ž</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>Č_Map Scale___________________ž</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>Č_Indicates the current scale for the map_____________________ž</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>Č_1 to {0}_________________ž</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Zumirajte na rezultat</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>Č_Apply___________ž</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>Č_Cancel_____________ž</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>Č_Discard_______________ž</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>Č_Error___________ž</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>Č_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ž?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>Č_Unsaved edits______________ž</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>Č_Fraction along edge: {0}_________________________ž</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>Č_Is content visible: Yes________________________ž</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>Č_Is content visible: No_______________________ž</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>Č_Terminal: {0}______________ž</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>Č_Locator_______________ž</value>
   </data>
 </root>
