@@ -68,7 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>? _dynamicEntityChangedListener;
         private WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _geoElementPropertyChangedListener;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
@@ -92,7 +92,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidatePopup();
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                subView.Navigate(content: Popup, true);
+                subView.OnNavigating += SubView_OnNavigating;
+                _ = subView.Navigate(content: Popup, true);
             }
         }
 
@@ -135,6 +136,44 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                 }
             });
+        }
+
+
+        private void SubView_OnNavigating(object? sender, NavigationSubView.NavigationEventArgs e)
+        {
+            bool navigatingToANewPopup = (e.Direction == NavigationSubView.NavigationDirection.Forward && e.NavigatingTo is Popup ||
+                e.Direction == NavigationSubView.NavigationDirection.Backward && e.NavigatingFrom is Popup);
+
+            if (e.Cancel)
+                return;
+
+            if (e.NavigatingTo is Popup to)
+            {
+                SetCurrentPopup(to);
+            }
+            else if (e.NavigatingFrom is Popup from && e.Direction == NavigationSubView.NavigationDirection.Backward)
+            {
+                var previousForm = ((NavigationSubView?)sender)?.NavigationStack.OfType<Popup>().Where(o => o != from)?.FirstOrDefault();
+                if (previousForm is not null)
+                {
+                    _ = previousForm.EvaluateExpressionsAsync();
+                    SetCurrentPopup(previousForm);
+                }
+            }
+        }
+
+        private void SetCurrentPopup(Popup? value)
+        {
+            var oldValue = Popup;
+            if (oldValue != value)
+            {
+#if WINDOWS_XAML
+                SetValue(PopupProperty, value);
+#elif WPF
+                SetValue(PopupProperty, value);
+#endif
+                OnPopupPropertyChanged(oldValue, value);
+            }
         }
 
         /// <summary>
@@ -185,7 +224,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                subView.Navigate(content: Popup, true);
+                _ = subView.Navigate(content: Popup, true);
             }
             InvalidatePopup();
         }
@@ -270,7 +309,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                subView.Navigate(content: item);
+                _ = subView.Navigate(content: item);
             }
         }
     }

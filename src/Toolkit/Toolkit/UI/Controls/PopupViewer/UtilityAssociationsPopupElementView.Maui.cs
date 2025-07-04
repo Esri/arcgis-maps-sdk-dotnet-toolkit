@@ -19,18 +19,12 @@ using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    /// <summary>
-    /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer"/> control,
-    /// used for rendering a <see cref="Esri.ArcGISRuntime.Mapping.Popups.UtilityAssociationsPopupElement"/>.
-    /// </summary>
-    public partial class UtilityAssociationsPopupElementView : ContentView
+    public partial class UtilityAssociationsPopupElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-
-        /// <summary>
-        /// Name of the carousel control in the template.
-        /// </summary>
-        public const string CarouselName = "Carousel";
+        private Label? _titleLabel;
+        private CollectionView? _associationsListView;
+        private Grid? _noAssociationsGrid;
 
         static UtilityAssociationsPopupElementView()
         {
@@ -40,81 +34,140 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             VerticalStackLayout root = new VerticalStackLayout();
+
             Label title = new Label();
-            title.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
-            title.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            title.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, fallbackValue: Properties.Resources.GetString("PopupViewerUtilityAssociationsDefaultTitle"));
+            title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             title.Style = PopupViewer.GetPopupViewerTitleStyle();
             root.Add(title);
+
             Label description = new Label();
             description.SetBinding(Label.TextProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
-            description.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            description.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             description.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(description);
-            root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0, 5) });
+
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityAssociationsPopupElementView view) => view.Element?.AssociationsFilterResults, source: RelativeBindingSource.TemplatedParent);
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             root.Add(cv);
+
+            Grid noAssociationsGrid = new Grid() { Margin = new Thickness(10, 0, 0, 0) };
+            noAssociationsGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            noAssociationsGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            noAssociationsGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+
+            var divider = new Border() { StrokeThickness = 0, WidthRequest = 1, BackgroundColor = Colors.Red, Margin = new Thickness(2) };
+            noAssociationsGrid.Add(divider);
+
+            Image warningImage = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Margin = new Thickness(5) };
+            warningImage.Source = new FontImageSource() { Glyph = ToolkitIcons.ExclamationMarkTriangle, Color = Colors.Red, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            Grid.SetColumn(warningImage, 1);
+            noAssociationsGrid.Add(warningImage);
+
+            Label warningText = new Label() { Margin = new Thickness(5) };
+            warningText.Text = Properties.Resources.GetString("PopupViewerUtilityAssociationsNone");
+            Grid.SetColumn(warningText, 2);
+            noAssociationsGrid.Add(warningText);
+
+            root.Add(noAssociationsGrid);
+
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName("Title", title);
             nameScope.RegisterName("AssociationsList", cv);
+            nameScope.RegisterName("NoAssociationsGrid", noAssociationsGrid);
             return root;
         }
 
         private static object BuildDefaultItemTemplate()
         {
-            Grid layout = new Grid() { Padding = new Thickness(10, 0, 0, 0) };
+            Grid layout = new Grid() { Margin = new Thickness(8, 0, 8, 0) };
             TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
             itemTapGesture.Tapped += Result_Tapped;
             layout.GestureRecognizers.Add(itemTapGesture);
+
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            layout.RowDefinitions.Add(new RowDefinition(20));
-            layout.RowDefinitions.Add(new RowDefinition(20));
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-            Label title = new Label();
+            Label title = new Label() { VerticalOptions = LayoutOptions.Center };
             title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title);
             title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title, converter: Internal.EmptyToFalseConverter.Instance);
             title.Style = PopupViewer.GetPopupViewerTitleStyle();
             layout.Add(title);
-            Label description = new Label();
+
+            Label description = new Label() { VerticalOptions = LayoutOptions.Center };
             description.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Description);
             description.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Description, converter: Internal.EmptyToFalseConverter.Instance);
             description.Style = PopupViewer.GetPopupViewerCaptionStyle();
-
             Grid.SetRow(description, 1);
             layout.Add(description);
-            Image image = new Image() { WidthRequest = 18, HeightRequest = 18 };
+
+            Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
             image.Source = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
             Grid.SetColumn(image, 1);
+            Grid.SetRow(image, 0);
             Grid.SetRowSpan(image, 2);
             layout.Add(image);
+
+            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.LightGray, Margin = new Thickness(2) };
+            Grid.SetRow(divider, 2);
+            Grid.SetColumnSpan(divider, 2);
+            layout.Add(divider);
 
             Border root = new Border() { StrokeThickness = 0, Content = layout };
             return root;
         }
 
-        private PopupViewer? GetPopupViewerParent()
+        /// <inheritdoc />
+        protected override void OnApplyTemplate()
         {
-            var parent = this.Parent;
-            while (parent is not null && parent is not PopupViewer popup)
+            base.OnApplyTemplate();
+
+            if (GetTemplateChild("Title") is Label label)
             {
-                parent = parent.Parent;
+                _titleLabel = label;
             }
-            return parent as PopupViewer;
+            if (GetTemplateChild("AssociationsList") is CollectionView listView)
+            {
+                _associationsListView = listView;
+            }
+            if (GetTemplateChild("NoAssociationsGrid") is Grid grid)
+            {
+                _noAssociationsGrid = grid;
+            }
+            UpdateView();
+        }
+
+        private void UpdateView()
+        {
+            if (_titleLabel is not null)
+            {
+                _titleLabel.Text = (Element is null || string.IsNullOrEmpty(Element.Title)) ? Properties.Resources.GetString("PopupViewerUtilityAssociationsDefaultTitle") : Element.Title;
+            }
+
+            bool hasAssociations = Element?.AssociationsFilterResults.Any(r => r.ResultCount > 0) == true;
+            if (_associationsListView is not null)
+            {
+                _associationsListView.ItemsSource = Element?.AssociationsFilterResults.Where(r => r.ResultCount > 0);
+                _associationsListView.IsVisible = hasAssociations;
+            }
+            if (_noAssociationsGrid is not null)
+            {
+                _noAssociationsGrid.IsVisible = !hasAssociations;
+            }
         }
 
         private static void Result_Tapped(object? sender, EventArgs e)
         {
             var cell = sender as View;
-            Element? parent = cell?.Parent;
-            while (parent is View && parent is not UtilityAssociationsPopupElementView)
+            if (cell?.BindingContext is UtilityNetworks.UtilityAssociationsFilterResult result)
             {
-                parent = parent.Parent;
-            }
-            if (parent is UtilityAssociationsPopupElementView a && cell?.BindingContext is UtilityNetworks.UtilityAssociationsFilterResult result)
-            {
-                a.GetPopupViewerParent()?.NavigateToItem(result);
+                var parent = PopupViewer.GetPopupViewerParent(cell);
+                parent?.NavigateToItem(result);
             }
         }
     }

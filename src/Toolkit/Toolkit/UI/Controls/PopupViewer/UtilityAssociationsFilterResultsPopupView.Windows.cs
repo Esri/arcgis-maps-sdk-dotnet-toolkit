@@ -15,15 +15,19 @@
 //  ******************************************************************************/
 
 #if WPF || WINDOWS_XAML
+using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.UtilityNetworks;
+#if WINUI
+using Microsoft.UI.Xaml.Media.Animation;
+#elif WINDOWS_UWP
+using Windows.UI.Xaml.Media.Animation;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    public partial class UtilityAssociationsPopupElementView : Control
+    public partial class UtilityAssociationsFilterResultsPopupView : Control
     {
-        private TextBlock? _titleTextBlock;
-        private ListView? _associationsListView;
-        private Grid? _noAssociationsGrid;
+        private ListView? _resultsListView;
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
@@ -32,40 +36,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
-            if (_associationsListView is not null)
+            if (_resultsListView is not null)
             {
 #if WINDOWS_XAML
-                _associationsListView.ItemClick -= AssociationsListView_ItemClick;
+                _resultsListView.ItemClick -= ResultsListView_ItemClick;
 #endif
             }
-            if (GetTemplateChild("Title") is TextBlock textBlock)
+            if (GetTemplateChild("ResultsList") is ListView listView)
             {
-                _titleTextBlock = textBlock;
-            }
-            if (GetTemplateChild("AssociationsList") is ListView listView)
-            {
-                _associationsListView = listView;
+                _resultsListView = listView;
 #if WINDOWS_XAML
-                _associationsListView.ItemClick += AssociationsListView_ItemClick;
+                _resultsListView.ItemClick += ResultsListView_ItemClick;
 #elif WPF
-                _associationsListView.SelectionChanged += AssociationsListView_SelectionChanged;
+                _resultsListView.SelectionChanged += AssociationsListView_SelectionChanged;
 #endif
             }
-            if (GetTemplateChild("NoAssociationsGrid") is Grid grid)
-            {
-                _noAssociationsGrid = grid;
-            }
-            UpdateView();
         }
+
 #if WPF
         private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = ((ListView)sender).SelectedItem;
             ((ListView)sender).SelectedItem = null; // Clear selection
 #elif WINDOWS_XAML
-        private void AssociationsListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void ResultsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as UtilityAssociationsFilterResult;
+            var item = e.ClickedItem as UtilityAssociationGroupResult;
 #endif
             if (item is null)
             {
@@ -73,25 +69,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             var parent = UI.Controls.PopupViewer.GetPopupViewerParent(this);
             parent?.NavigateToItem(item);
-        }
-
-        private void UpdateView()
-        {
-            if (_titleTextBlock is not null)
-            {
-                _titleTextBlock.Text = (Element is null || string.IsNullOrEmpty(Element.Title)) ? Properties.Resources.GetString("PopupViewerUtilityAssociationsDefaultTitle") : Element.Title;
-            }
-
-            bool hasAssociations = Element?.AssociationsFilterResults.Any(r => r.ResultCount > 0) == true;
-            if (_associationsListView is not null)
-            {
-                _associationsListView.ItemsSource = Element?.AssociationsFilterResults.Where(r => r.ResultCount > 0);
-                _associationsListView.Visibility = hasAssociations ? Visibility.Visible : Visibility.Collapsed;
-            }
-            if (_noAssociationsGrid is not null)
-            {
-                _noAssociationsGrid.Visibility = hasAssociations ? Visibility.Collapsed : Visibility.Visible;
-            }
         }
 
         /// <summary>
@@ -107,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="ItemTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
-            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsPopupElementView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFilterResultsPopupView), new PropertyMetadata(null));
     }
 }
 #endif

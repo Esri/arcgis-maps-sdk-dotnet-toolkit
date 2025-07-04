@@ -31,8 +31,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (item is Esri.ArcGISRuntime.Mapping.Popups.Popup)
                 return PopupTemplate;
-            if(item is UtilityNetworks.UtilityAssociationsFilterResult)
+            if (item is UtilityNetworks.UtilityAssociationsFilterResult)
                 return UtilityAssociationsFilterResultTemplate;
+            if (item is UtilityNetworks.UtilityAssociationGroupResult)
+                return UtilityAssociationGroupResultTemplate;
 #if WINDOWS_XAML
             return base.SelectTemplateCore(item, container);
 #elif MAUI
@@ -51,5 +53,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Gets or sets the template used for rendering a <see cref="UtilityNetworks.UtilityAssociationsFilterResult"/>
         /// </summary>
         public DataTemplate? UtilityAssociationsFilterResultTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template used for rendering a <see cref="UtilityNetworks.UtilityAssociationGroupResult"/>
+        /// </summary>
+        public DataTemplate? UtilityAssociationGroupResultTemplate { get; set; }
     }
 }

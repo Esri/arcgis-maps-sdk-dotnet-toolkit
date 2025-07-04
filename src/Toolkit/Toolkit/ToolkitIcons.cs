@@ -43,10 +43,13 @@ internal static class ToolkitIcons
     public const string Article = "\uE745";
     public const string VideoWeb = "\uEB35";
     public const string ExclamationMarkCircle = "\uE844";
+    public const string ExclamationMarkTriangle = "\uE846";
     public const string QrCode = "\uEA12";
     public const string ConnectionEndLeft = "\uE7D7";
     public const string ConnectionEndRight = "\uE7D8";
     public const string ConnectionMiddle = "\uE7D9";
+    public const string ConnectionToConnection= "\uE7DA";
+    public const string Search= "\uEA72";
     public const string Inbox = "\uE8F4";
     public const string DownloadTo = "\uE81C";
 }
