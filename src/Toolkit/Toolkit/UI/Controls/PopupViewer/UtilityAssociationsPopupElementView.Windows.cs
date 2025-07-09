@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 #if WPF || WINDOWS_XAML
-using Esri.ArcGISRuntime.UtilityNetworks;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -65,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif WINDOWS_XAML
         private void AssociationsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as UtilityAssociationsFilterResult;
+            var item = e.ClickedItem as UtilityNetworks.UtilityAssociationsFilterResult;
 #endif
             if (item is null)
             {

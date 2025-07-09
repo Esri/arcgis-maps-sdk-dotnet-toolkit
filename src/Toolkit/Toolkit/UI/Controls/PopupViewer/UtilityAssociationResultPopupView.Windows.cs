@@ -15,13 +15,6 @@
 //  ******************************************************************************/
 
 #if WPF || WINDOWS_XAML
-using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.UtilityNetworks;
-#if WINUI
-using Microsoft.UI.Xaml.Media.Animation;
-#elif WINDOWS_UWP
-using Windows.UI.Xaml.Media.Animation;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {

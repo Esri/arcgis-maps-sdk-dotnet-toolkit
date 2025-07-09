@@ -302,7 +302,7 @@
     <comment>The text used to expand a group in a UtilityAssociationsPopupElement's filter result</comment>
   </data>
   <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
-    <value>Total: {0}</value>
+    <value>Total:</value>
     <comment>The text used to display the number of associations for a group in a UtilityAssociationsPopupElement's filter result</comment>
   </data>
   <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">

@@ -15,13 +15,6 @@
 //  ******************************************************************************/
 
 #if WPF || WINDOWS_XAML
-using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.UtilityNetworks;
-#if WINUI
-using Microsoft.UI.Xaml.Media.Animation;
-#elif WINDOWS_UWP
-using Windows.UI.Xaml.Media.Animation;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -36,39 +29,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
-            if (_resultsListView is not null)
-            {
-#if WINDOWS_XAML
-                _resultsListView.ItemClick -= ResultsListView_ItemClick;
-#endif
-            }
-            if (GetTemplateChild("ResultsList") is ListView listView)
-            {
-                _resultsListView = listView;
-#if WINDOWS_XAML
-                _resultsListView.ItemClick += ResultsListView_ItemClick;
-#elif WPF
-                _resultsListView.SelectionChanged += AssociationsListView_SelectionChanged;
-#endif
-            }
-        }
 
-#if WPF
-        private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var item = ((ListView)sender).SelectedItem;
-            ((ListView)sender).SelectedItem = null; // Clear selection
-#elif WINDOWS_XAML
-        private void ResultsListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var item = e.ClickedItem as UtilityAssociationGroupResult;
-#endif
-            if (item is null)
+            if (GetTemplateChild("ResultsList") is ListView view)
             {
-                return;
+                _resultsListView = view;
             }
-            var parent = UI.Controls.PopupViewer.GetPopupViewerParent(this);
-            parent?.NavigateToItem(item);
         }
 
         /// <summary>
@@ -85,6 +50,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFilterResultsPopupView), new PropertyMetadata(null));
+
+
+        private void UpdateView()
+        {
+            if (_resultsListView is not null && AssociationsFilterResult is not null)
+            {
+                _resultsListView.ItemsSource = IsExpanded ? AssociationsFilterResult.GroupResults : Enumerable.Empty<UtilityNetworks.UtilityAssociationGroupResult>();
+            }
+        }
     }
 }
 #endif

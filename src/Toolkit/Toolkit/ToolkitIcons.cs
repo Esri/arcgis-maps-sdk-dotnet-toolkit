@@ -48,8 +48,9 @@ internal static class ToolkitIcons
     public const string ConnectionEndLeft = "\uE7D7";
     public const string ConnectionEndRight = "\uE7D8";
     public const string ConnectionMiddle = "\uE7D9";
-    public const string ConnectionToConnection= "\uE7DA";
-    public const string Search= "\uEA72";
+    public const string ConnectionToConnection = "\uE7DA";
+    public const string Search = "\uEA72";
+    public const string List = "\uE94A";
     public const string Inbox = "\uE8F4";
     public const string DownloadTo = "\uE81C";
 }

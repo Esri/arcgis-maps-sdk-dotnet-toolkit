@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
-            Grid layout = new Grid() { Padding = new Thickness(10, 0, 0, 0) };
+            Grid layout = new Grid() { Margin = new Thickness(10, 0, 0, 0) };
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
@@ -44,8 +44,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(icon);
 
             Label title = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
-            title.SetBinding(Label.TextProperty, static (UtilityAssociationResultPopupView result) => result.AssociationResult?.Title, source: RelativeBindingSource.TemplatedParent);
-            title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationResultPopupView result) => result.AssociationResult?.Title, converter: Internal.EmptyToFalseConverter.Instance);
+            title.SetBinding(Label.TextProperty, static (UtilityAssociationResultPopupView view) => view.AssociationResult?.Title, source: RelativeBindingSource.TemplatedParent);
+            title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationResultPopupView view) => view.AssociationResult?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             title.Style = PopupViewer.GetPopupViewerTitleStyle();
             Grid.SetColumn(title, 1);
             layout.Add(title);
@@ -76,6 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("FractionAlong", fractionAlong);
             nameScope.RegisterName("Icon", icon);
             nameScope.RegisterName("ConnectionInfo", connectionInfo);
+
             return layout;
         }
     }

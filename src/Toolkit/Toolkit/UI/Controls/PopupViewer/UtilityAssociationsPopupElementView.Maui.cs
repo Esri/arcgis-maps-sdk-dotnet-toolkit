@@ -77,46 +77,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("Title", title);
             nameScope.RegisterName("AssociationsList", cv);
             nameScope.RegisterName("NoAssociationsGrid", noAssociationsGrid);
+
             return root;
         }
 
         private static object BuildDefaultItemTemplate()
         {
-            Grid layout = new Grid() { Margin = new Thickness(8, 0, 8, 0) };
+            Grid layout = new Grid() { Margin = new Thickness(10, 0, 0, 0) };
             TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
             itemTapGesture.Tapped += Result_Tapped;
             layout.GestureRecognizers.Add(itemTapGesture);
 
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-
-            Label title = new Label() { VerticalOptions = LayoutOptions.Center };
-            title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title);
-            title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Title, converter: Internal.EmptyToFalseConverter.Instance);
-            title.Style = PopupViewer.GetPopupViewerTitleStyle();
-            layout.Add(title);
-
-            Label description = new Label() { VerticalOptions = LayoutOptions.Center };
-            description.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Description);
-            description.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result.Filter?.Description, converter: Internal.EmptyToFalseConverter.Instance);
-            description.Style = PopupViewer.GetPopupViewerCaptionStyle();
-            Grid.SetRow(description, 1);
-            layout.Add(description);
-
-            Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
-            image.Source = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
-            Grid.SetColumn(image, 1);
-            Grid.SetRow(image, 0);
-            Grid.SetRowSpan(image, 2);
-            layout.Add(image);
-
-            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.LightGray, Margin = new Thickness(2) };
-            Grid.SetRow(divider, 2);
-            Grid.SetColumnSpan(divider, 2);
-            layout.Add(divider);
+            var view = new UtilityAssociationsFilterResultsPopupView() { IsExpanded = false };
+            view.SetBinding(UtilityAssociationsFilterResultsPopupView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
+            layout.Add(view);
 
             Border root = new Border() { StrokeThickness = 0, Content = layout };
             return root;

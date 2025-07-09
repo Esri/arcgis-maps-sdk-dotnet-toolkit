@@ -7,6 +7,7 @@
     xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
 
     <internal:VisibilityConverter x:Key="PopupViewerVisibilityConverter"/>
+    <internal:EmptyStringToVisibilityConverter x:Key="PlaceholderVisibilityConverter" />
     <internal:HtmlToPlainTextConverter x:Key="PopupViewerHtmlToPlainTextConverter"/>
     <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
     <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
@@ -128,7 +129,7 @@
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                      <primitives:AttachmentThumbnailImage Attachment="{Binding}" />
+                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" />
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
@@ -193,22 +194,8 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <!-- x:DataType=UtilityAssociationsPopupElement-->
-                    <Grid Margin="10,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Filter.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Grid.Row="1" Text="{Binding Filter.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Filter.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" />
-                        <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.Row="2" Grid.ColumnSpan="2"/>
-                    </Grid>
+                    <!-- x:DataType=UtilityAssociationsFilterResults-->
+                    <primitives:UtilityAssociationsFilterResultsPopupView AssociationsFilterResult="{Binding}" x:Name="ResultView" MinHeight="40" AutomationProperties.Name="{Binding Title}" IsExpanded="False" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -222,7 +209,8 @@
                                   x:Name="AssociationsList" SelectionMode="Single" BorderThickness="0" >
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
                                 </Style>
                             </ListView.ItemContainerStyle>
                         </ListView>
@@ -247,38 +235,41 @@
             <Setter.Value>
                 <DataTemplate>
                     <!-- x:DataType=UtilityAssociationGroupResult-->
-                    <Grid AutomationProperties.Name="{Binding Name}" Margin="10,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" Margin="5"/>
-                        <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource PopupViewerTitleStyle}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Grid.Column="1"/>
-                        <Border Width="30" Height="20" CornerRadius="10" Background="LightGray" Grid.Column="2">
-                            <TextBlock Text="{Binding AssociationResults.Count}" HorizontalAlignment="Center" />
-                        </Border>
-                        <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.Row="1" Grid.ColumnSpan="3"/>
-                    </Grid>
+                    <primitives:UtilityAssociationGroupResultPopupView GroupResult="{Binding}" x:Name="ResultView" MinHeight="40" AutomationProperties.Name="{Binding Name}" IsSearchable="False" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationsFilterResultsPopupView}">
-                    <ListView VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding AssociationsFilterResult.GroupResults, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
-                        SelectionMode="Single" x:Name="ResultsList" Margin="0,12,0,8" BorderThickness="0">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
+                    <Grid Margin="10,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" TextTrimming="CharacterEllipsis"
+                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding Filter.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" TextTrimming="CharacterEllipsis"
+                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <ListView VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AssociationsFilterResult.GroupResults}"
+                                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}}"
+                        SelectionMode="Single" x:Name="ResultsList" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="0">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -297,14 +288,74 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationGroupResultPopupView}">
-                    <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding GroupResult.AssociationResults, RelativeSource={RelativeSource Mode=TemplatedParent}}" x:Name="ResultsList" SelectionMode="Single" BorderThickness="0">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="ExpandIcon" Text="&#xE79B;" FontFamily="{StaticResource ToolkitIconsFontFamily}" VerticalAlignment="Center" Margin="5"
+                                   Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource PopupViewerTitleStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1"
+                                   Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <Border Width="30" Height="20" CornerRadius="10" Background="LightGray" Grid.Column="2" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}">
+                            <TextBlock Text="{Binding AssociationResults.Count}" HorizontalAlignment="Center" />
+                        </Border>
+                        <Border BorderThickness="0" Height="1" Margin="2" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <Grid x:Name="Search" Grid.ColumnSpan="3" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="&#xE71E;" FontFamily="Segoe MDL2 Assets" Margin="2" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="SearchText" Margin="2" BorderThickness="0" Grid.Column="1"/>
+                                    <TextBlock x:Name="SearchPlaceholder" Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsFilterByTitle}" Style="{StaticResource PopupViewerCaptionStyle}" Margin="2" IsHitTestVisible="False" 
+                                               Visibility="{Binding ElementName=SearchText, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" Grid.Column="1"/>
+                                </Grid>
+                            </Border>
+                            <Button x:Name="ClearSearch" Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets" Margin="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        </Grid>
+                        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding Path=GroupResult.AssociationResults, RelativeSource={RelativeSource Mode=TemplatedParent}}" x:Name="ResultsList" SelectionMode="Single" BorderThickness="0" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                        <Grid x:Name="ShowAll" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" MaxHeight="40" Margin="10,0,0,0" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=".25*" />
+                                <RowDefinition Height=".25*" />
+                                <RowDefinition Height=".25*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsShowAll}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" FontSize="12"/>
+                            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
+                                <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsTotal}" Style="{StaticResource PopupViewerCaptionStyle}" VerticalAlignment="Top" Margin="0,0,2,0" />
+                                <TextBlock Text="{Binding AssociationResults.Count}" VerticalAlignment="Top" Style="{StaticResource PopupViewerCaptionStyle}" />
+                            </StackPanel>
+                            <TextBlock Text="&#xE8FD;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Stretch" FontSize="18" Grid.Column="1" Grid.RowSpan="2" Margin="2"/>
+                            <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.ColumnSpan="3" Grid.Row="2"/>
+                        </Grid>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -461,12 +512,12 @@
                                     </primitives:PopupContentTemplateSelector.PopupTemplate>
                                     <primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
                                         <DataTemplate>
-                                            <primitives:UtilityAssociationsFilterResultsPopupView AssociationsFilterResult="{Binding}" />
+                                            <primitives:UtilityAssociationsFilterResultsPopupView AssociationsFilterResult="{Binding}" IsExpanded="True"/>
                                         </DataTemplate>
                                     </primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
                                     <primitives:PopupContentTemplateSelector.UtilityAssociationGroupResultTemplate>
                                         <DataTemplate>
-                                            <primitives:UtilityAssociationGroupResultPopupView GroupResult="{Binding}" />
+                                            <primitives:UtilityAssociationGroupResultPopupView GroupResult="{Binding}" IsSearchable="True"/>
                                         </DataTemplate>
                                     </primitives:PopupContentTemplateSelector.UtilityAssociationGroupResultTemplate>
                                 </primitives:PopupContentTemplateSelector>
