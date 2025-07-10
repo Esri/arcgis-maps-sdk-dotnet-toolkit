@@ -134,14 +134,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
             {
-                var view = new UtilityAssociationsFilterResultsPopupView() { IsExpanded = true };
+                var view = new UtilityAssociationsFilterResultsPopupView();
                 view.SetBinding(UtilityAssociationsFilterResultsPopupView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
                 return view;
             });
 
             selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
             {
-                var view = new UtilityAssociationGroupResultPopupView() { IsSearchable = true };
+                var view = new UtilityAssociationGroupResultPopupView();
                 view.SetBinding(UtilityAssociationGroupResultPopupView.GroupResultProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result);
                 return view;
             });

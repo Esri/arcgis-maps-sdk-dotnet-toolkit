@@ -61,56 +61,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
 #if MAUI
         public static readonly BindableProperty AssociationsFilterResultProperty =
-            BindableProperty.Create(nameof(AssociationsFilterResult), typeof(UtilityAssociationsFilterResult), typeof(UtilityAssociationsFilterResultsPopupView), propertyChanged: (s, oldValue, newValue) => ((UtilityAssociationsFilterResultsPopupView)s).OnAssociationsFilterResultPropertyChanged());
+            BindableProperty.Create(nameof(AssociationsFilterResult), typeof(UtilityAssociationsFilterResult), typeof(UtilityAssociationsFilterResultsPopupView));
 #else
         public static readonly DependencyProperty AssociationsFilterResultProperty =
-            DependencyProperty.Register(nameof(AssociationsFilterResult), typeof(UtilityAssociationsFilterResult), typeof(UtilityAssociationsFilterResultsPopupView),  new PropertyMetadata(null, (s, e) => ((UtilityAssociationsFilterResultsPopupView)s).OnAssociationsFilterResultPropertyChanged()));
+            DependencyProperty.Register(nameof(AssociationsFilterResult), typeof(UtilityAssociationsFilterResult), typeof(UtilityAssociationsFilterResultsPopupView), null);
 #endif
-
-        private void OnAssociationsFilterResultPropertyChanged()
-        {
-            UpdateView();
-        }
-
-        /// <summary>
-        /// Gets or sets the display count from <see cref="UtilityAssociationsPopupElement.DisplayCount"/>.
-        /// </summary>
-        public int DisplayCount
-        {
-            get => (int)GetValue(DisplayCountProperty);
-            set => SetValue(DisplayCountProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="DisplayCount"/> dependency property.
-        /// </summary>
-#if MAUI
-        public static readonly BindableProperty DisplayCountProperty =
-            BindableProperty.Create(nameof(DisplayCount), typeof(int), typeof(UtilityAssociationsFilterResultsPopupView), defaultValue: 1);
-#else
-        public static readonly DependencyProperty DisplayCountProperty =
-            DependencyProperty.Register(nameof(DisplayCount), typeof(int), typeof(UtilityAssociationsFilterResultsPopupView), new PropertyMetadata(1));
-#endif
-
-        /// <summary>
-        /// Gets or sets a value indicating whether results in this filter is expanded.
-        /// </summary>
-        public bool IsExpanded
-        {
-            get => (bool)GetValue(IsExpandedProperty);
-            set => SetValue(IsExpandedProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="IsExpanded"/> dependency property.
-        /// </summary>
-#if MAUI
-        public static readonly BindableProperty IsExpandedProperty =
-            BindableProperty.Create(nameof(IsExpanded), typeof(bool), typeof(UtilityAssociationsFilterResultsPopupView), defaultValue: false);
-#else
-        public static readonly DependencyProperty IsExpandedProperty =
-            DependencyProperty.Register(nameof(IsExpanded), typeof(bool), typeof(UtilityAssociationsFilterResultsPopupView), new PropertyMetadata(false));
-#endif
-
     }
 }

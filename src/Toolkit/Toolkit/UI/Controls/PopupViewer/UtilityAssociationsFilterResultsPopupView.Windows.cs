@@ -51,6 +51,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFilterResultsPopupView), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets the display count from <see cref="Mapping.Popups.UtilityAssociationsPopupElement.DisplayCount"/>.
+        /// </summary>
+        public int DisplayCount
+        {
+            get => (int)GetValue(DisplayCountProperty);
+            set => SetValue(DisplayCountProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="DisplayCount"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DisplayCountProperty =
+            DependencyProperty.Register(nameof(DisplayCount), typeof(int), typeof(UtilityAssociationsFilterResultsPopupView), new PropertyMetadata(1));
+
+        /// <summary>
+        /// Gets or sets a value indicating whether results in this filter is expanded.
+        /// </summary>
+        public bool IsExpanded
+        {
+            get => (bool)GetValue(IsExpandedProperty);
+            set => SetValue(IsExpandedProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="IsExpanded"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsExpandedProperty =
+            DependencyProperty.Register(nameof(IsExpanded), typeof(bool), typeof(UtilityAssociationsFilterResultsPopupView), new PropertyMetadata(false));
 
         private void UpdateView()
         {

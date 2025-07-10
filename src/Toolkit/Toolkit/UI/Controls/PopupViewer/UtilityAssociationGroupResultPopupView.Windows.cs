@@ -168,9 +168,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
 #elif WPF
         private void ExpandTextBlock_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {;
-        
-            bool isExpanded = true; 
+        {
+            ;
+
+            bool isExpanded = true;
             if (_expandTextBlock is not null)
             {
                 _expandTextBlock.Text = _expandTextBlock.Text == ToolkitIcons.ChevronDown ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronDown;
@@ -264,6 +265,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Gets or sets the display count from <see cref="Mapping.Popups.UtilityAssociationsPopupElement.DisplayCount"/>.
+        /// </summary>
+        public int DisplayCount
+        {
+            get => (int)GetValue(DisplayCountProperty);
+            set => SetValue(DisplayCountProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="DisplayCount"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DisplayCountProperty =
+            DependencyProperty.Register(nameof(DisplayCount), typeof(int), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(1));
+
+        /// <summary>
+        /// Gets or sets a value indicating whether results in this group is searchable.
+        /// </summary>
+        public bool IsSearchable
+        {
+            get => (bool)GetValue(IsSearchableProperty);
+            set => SetValue(IsSearchableProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="IsSearchable"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsSearchableProperty =
+            DependencyProperty.Register(nameof(IsSearchable), typeof(bool), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(false));
     }
 }
 #endif

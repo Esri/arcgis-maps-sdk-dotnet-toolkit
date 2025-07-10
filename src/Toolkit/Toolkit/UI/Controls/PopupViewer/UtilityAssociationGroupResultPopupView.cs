@@ -15,8 +15,6 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.UtilityNetworks;
-using Esri.ArcGISRuntime.Mapping.Popups;
-
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
@@ -62,55 +60,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
 #if MAUI
         public static readonly BindableProperty GroupResultProperty =
-            BindableProperty.Create(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView), propertyChanged: (s, oldValue, newValue) => ((UtilityAssociationGroupResultPopupView)s).OnGroupResultPropertyChanged());
+            BindableProperty.Create(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView));
 #else
         public static readonly DependencyProperty GroupResultProperty =
-            DependencyProperty.Register(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(null, (s, e) => ((UtilityAssociationGroupResultPopupView)s).OnGroupResultPropertyChanged()));
-#endif
-
-        private void OnGroupResultPropertyChanged()
-        {
-            UpdateView();
-        }
-
-        /// <summary>
-        /// Gets or sets the display count from <see cref="UtilityAssociationsPopupElement.DisplayCount"/>.
-        /// </summary>
-        public int DisplayCount
-        {
-            get => (int)GetValue(DisplayCountProperty);
-            set => SetValue(DisplayCountProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="DisplayCount"/> dependency property.
-        /// </summary>
-#if MAUI
-        public static readonly BindableProperty DisplayCountProperty =
-            BindableProperty.Create(nameof(DisplayCount), typeof(int), typeof(UtilityAssociationGroupResultPopupView), defaultValue: 1);
-#else
-        public static readonly DependencyProperty DisplayCountProperty =
-            DependencyProperty.Register(nameof(DisplayCount), typeof(int), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(1));
-#endif
-
-        /// <summary>
-        /// Gets or sets a value indicating whether results in this group is searchable.
-        /// </summary>
-        public bool IsSearchable
-        {
-            get => (bool)GetValue(IsSearchableProperty);
-            set => SetValue(IsSearchableProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="IsSearchable"/> dependency property.
-        /// </summary>
-#if MAUI
-        public static readonly BindableProperty IsSearchableProperty =
-            BindableProperty.Create(nameof(IsSearchable), typeof(bool), typeof(UtilityAssociationGroupResultPopupView), defaultValue: false);
-#else
-        public static readonly DependencyProperty IsSearchableProperty =
-            DependencyProperty.Register(nameof(IsSearchable), typeof(bool), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(null));
 #endif
 
     }
