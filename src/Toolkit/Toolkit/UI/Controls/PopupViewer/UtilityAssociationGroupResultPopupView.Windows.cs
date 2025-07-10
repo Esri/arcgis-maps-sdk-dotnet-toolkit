@@ -169,8 +169,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif WPF
         private void ExpandTextBlock_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ;
-
             bool isExpanded = true;
             if (_expandTextBlock is not null)
             {
@@ -249,6 +247,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             var parent = UI.Controls.PopupViewer.GetPopupViewerParent(this);
             parent?.NavigateToItem(Popup.FromGeoElement(item.AssociatedFeature));
+        }
+
+        private void OnGroupResultPropertyChanged()
+        {
+            UpdateView();
         }
 
         /// <summary>

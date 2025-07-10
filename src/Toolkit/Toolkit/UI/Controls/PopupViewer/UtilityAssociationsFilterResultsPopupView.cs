@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             BindableProperty.Create(nameof(AssociationsFilterResult), typeof(UtilityAssociationsFilterResult), typeof(UtilityAssociationsFilterResultsPopupView));
 #else
         public static readonly DependencyProperty AssociationsFilterResultProperty =
-            DependencyProperty.Register(nameof(AssociationsFilterResult), typeof(UtilityAssociationsFilterResult), typeof(UtilityAssociationsFilterResultsPopupView), null);
+            DependencyProperty.Register(nameof(AssociationsFilterResult), typeof(UtilityAssociationsFilterResult), typeof(UtilityAssociationsFilterResultsPopupView), new PropertyMetadata(null, (s, e) => ((UtilityAssociationsFilterResultsPopupView)s).OnAssociationsFilterResultPropertyChanged()));
 #endif
     }
 }

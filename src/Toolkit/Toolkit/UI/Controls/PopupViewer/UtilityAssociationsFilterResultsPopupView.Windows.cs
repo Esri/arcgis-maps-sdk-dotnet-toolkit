@@ -88,6 +88,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _resultsListView.ItemsSource = IsExpanded ? AssociationsFilterResult.GroupResults : Enumerable.Empty<UtilityNetworks.UtilityAssociationGroupResult>();
             }
         }
+
+        private void OnAssociationsFilterResultPropertyChanged()
+        {
+            UpdateView();
+        }
     }
 }
 #endif

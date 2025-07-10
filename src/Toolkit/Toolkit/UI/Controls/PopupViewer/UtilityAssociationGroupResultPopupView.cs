@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             BindableProperty.Create(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView));
 #else
         public static readonly DependencyProperty GroupResultProperty =
-            DependencyProperty.Register(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(null, (s, e) => ((UtilityAssociationGroupResultPopupView)s).OnGroupResultPropertyChanged()));
 #endif
 
     }
