@@ -141,9 +141,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void SubView_OnNavigating(object? sender, NavigationSubView.NavigationEventArgs e)
         {
-            bool navigatingToANewPopup = (e.Direction == NavigationSubView.NavigationDirection.Forward && e.NavigatingTo is Popup ||
-                e.Direction == NavigationSubView.NavigationDirection.Backward && e.NavigatingFrom is Popup);
-
             if (e.Cancel)
                 return;
 
@@ -172,7 +169,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #elif WPF
                 SetValue(PopupProperty, value);
 #endif
-                OnPopupPropertyChanged(oldValue, value);
             }
         }
 
@@ -224,7 +220,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                _ = subView.Navigate(content: Popup, true);
+                _ = subView.Navigate(content: Popup, clearNavigationStack: true, skipRaisingEvent: true);
             }
             InvalidatePopup();
         }
