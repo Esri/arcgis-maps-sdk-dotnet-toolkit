@@ -22,9 +22,9 @@
     <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
         <Setter Property="FontSize" Value="12" />
         <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="Foreground" Value="Gray" />
     </Style>
-    <Style TargetType="{x:Type primitives:TextPopupElementView}" >
+    <Style TargetType="{x:Type primitives:TextPopupElementView}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:TextPopupElementView}">
@@ -206,7 +206,7 @@
                         <TextBlock x:Name="Title" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay, FallbackValue={internal:LocalizedString Key=PopupViewerUtilityAssociationsDefaultTitle}}" TextTrimming="CharacterEllipsis" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <ListView ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}"
-                                  x:Name="AssociationsList" SelectionMode="Single" BorderThickness="0" >
+                                  x:Name="AssociationsList" SelectionMode="Single" BorderThickness="0">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -230,7 +230,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type primitives:UtilityAssociationsFilterResultsPopupView}" >
+    <Style TargetType="{x:Type primitives:UtilityAssociationsFilterResultsPopupView}">
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -276,7 +276,7 @@
         <Setter Property="IsTabStop" Value="False" />
     </Style>
 
-    <Style TargetType="{x:Type primitives:UtilityAssociationGroupResultPopupView}" >
+    <Style TargetType="{x:Type primitives:UtilityAssociationGroupResultPopupView}">
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -362,7 +362,7 @@
         <Setter Property="IsTabStop" Value="False" />
     </Style>
 
-    <Style TargetType="{x:Type primitives:UtilityAssociationResultPopupView}" >
+    <Style TargetType="{x:Type primitives:UtilityAssociationResultPopupView}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationResultPopupView}">
@@ -431,7 +431,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type controls:PopupViewer}" >
+    <Style TargetType="{x:Type controls:PopupViewer}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:PopupViewer}">
