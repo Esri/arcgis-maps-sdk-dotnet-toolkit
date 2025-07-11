@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>ґ_Basemap Gallery________________Ї</value>
+    <value>Галерея базових карт</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>ґ_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________Ї.</value>
+    <value>Відобразити список доступних базових карт. Вибрати базову карту, щоб використовувати її для поточної карти або сцени.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Додати прикріплення</value>
@@ -256,16 +256,16 @@
     <value>м</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>ґ_Scale___________Ї</value>
+    <value>Масштаб</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>ґ_Map Scale___________________Ї</value>
+    <value>Масштаб карти</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>ґ_Indicates the current scale for the map_____________________Ї</value>
+    <value>Відображає поточний масштаб карти</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>ґ_1 to {0}_________________Ї</value>
+    <value>1 до {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>миля</value>
@@ -430,36 +430,36 @@
     <value>Масштабування до результату</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>ґ_Apply___________Ї</value>
+    <value>Застосувати</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>ґ_Cancel_____________Ї</value>
+    <value>Скасувати</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>ґ_Discard_______________Ї</value>
+    <value>Вилучити</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>ґ_Error___________Ї</value>
+    <value>Помилка</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>ґ_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________Ї?</value>
+    <value>Потрібно застосувати або відхилити зміни поточного обʼєкту, перш ніж переходити до іншого обʼєкту. Бажаєте застосувати зміни?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>ґ_Unsaved edits______________Ї</value>
+    <value>Незбережені зміни</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>ґ_Fraction along edge: {0}_________________________Ї</value>
+    <value>Частка уздовж ребра: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>ґ_Is content visible: Yes________________________Ї</value>
+    <value>Вміст видимий: так</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>ґ_Is content visible: No_______________________Ї</value>
+    <value>Вміст видимий: ні</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>ґ_Terminal: {0}______________Ї</value>
+    <value>Термінал: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>ґ_Locator_______________Ї</value>
+    <value>Локатор</value>
   </data>
 </root>

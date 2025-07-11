@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>ķ_Basemap Gallery________________ū</value>
+    <value>Pamatkaršu galerija</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>ķ_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ū.</value>
+    <value>Parāda pieejamo pamatkaršu sarakstu. Izvēlieties pamatkarti, ko izmantot pašreizējā kartē vai scēnā.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Pievienot pielikumu</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>ķ_Scale___________ū</value>
+    <value>Mērogs</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>ķ_Map Scale___________________ū</value>
+    <value>Kartes mērogs</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>ķ_Indicates the current scale for the map_____________________ū</value>
+    <value>Norāda pašreizējo kartes mērogu</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>ķ_1 to {0}_________________ū</value>
+    <value>1 pret {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>jūdzes</value>
@@ -430,36 +430,36 @@
     <value>Tuvināt rezultātu</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>ķ_Apply___________ū</value>
+    <value>Lietot</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>ķ_Cancel_____________ū</value>
+    <value>Atcelt</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>ķ_Discard_______________ū</value>
+    <value>Atmest</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>ķ_Error___________ū</value>
+    <value>Kļūda</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>ķ_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ū?</value>
+    <value>Jums ir jāapstiprina vai jāatceļ pašreizējā elementa rediģēšnas izmaiņas pirms pāriešanas uz citu elementu. Vai vēlaties saglabāt izmaiņas?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>ķ_Unsaved edits______________ū</value>
+    <value>Nesaglabātas izmaiņas</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>ķ_Fraction along edge: {0}_________________________ū</value>
+    <value>Daļa gar malu: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>ķ_Is content visible: Yes________________________ū</value>
+    <value>Vai saturs ir redzams: Jā</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>ķ_Is content visible: No_______________________ū</value>
+    <value>Vai saturs ir redzams: Nē</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>ķ_Terminal: {0}______________ū</value>
+    <value>Terminālis: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>ķ_Locator_______________ū</value>
+    <value>Meklētājs</value>
   </data>
 </root>

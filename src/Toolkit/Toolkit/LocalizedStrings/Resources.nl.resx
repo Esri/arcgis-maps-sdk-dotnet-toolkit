@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>Ĳ_Basemap Gallery________________ä</value>
+    <value>Basiskaartgalerij</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>Ĳ_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ä.</value>
+    <value>Geeft een lijst met beschikbare basiskaarten weer. Selecteer een basiskaart die u voor de huidige kaart of scene wilt gebruiken.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Bijlage toevoegen</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>Ĳ_Scale___________ä</value>
+    <value>Schaal</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>Ĳ_Map Scale___________________ä</value>
+    <value>Schaal kaart</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>Ĳ_Indicates the current scale for the map_____________________ä</value>
+    <value>Geeft de huidige schaal van de kaart aan</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>Ĳ_1 to {0}_________________ä</value>
+    <value>1 op {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Inzoomen op resultaat</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>Ĳ_Apply___________ä</value>
+    <value>Toepassen</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>Ĳ_Cancel_____________ä</value>
+    <value>Annuleren</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>Ĳ_Discard_______________ä</value>
+    <value>Annuleren</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>Ĳ_Error___________ä</value>
+    <value>Fout</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>Ĳ_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ä?</value>
+    <value>U moet bewerkingen voor het huidige object toepassen of verwijderen voordat u doorgaat naar een ander object. Wilt u de wijzigingen toepassen?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>Ĳ_Unsaved edits______________ä</value>
+    <value>Niet-opgeslagen bewerkingen</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>Ĳ_Fraction along edge: {0}_________________________ä</value>
+    <value>Fractie langs rand: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Ĳ_Is content visible: Yes________________________ä</value>
+    <value>Is content zichtbaar: ja</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Ĳ_Is content visible: No_______________________ä</value>
+    <value>Is content zichtbaar: nee</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>Ĳ_Terminal: {0}______________ä</value>
+    <value>Terminal: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>Ĳ_Locator_______________ä</value>
+    <value>Locator</value>
   </data>
 </root>

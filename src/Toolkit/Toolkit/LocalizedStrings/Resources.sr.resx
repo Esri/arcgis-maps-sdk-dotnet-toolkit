@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>Č_Basemap Gallery________________ž</value>
+    <value>Galerija pozadinskih mapa</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>Č_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ž.</value>
+    <value>Prikazuje listu dostupnih pozadinskih mapa. Izaberite pozadinsku mapu da biste je koristili kao trenutnu mapu ili scenu.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Dodajte prilog</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>Č_Scale___________ž</value>
+    <value>Razmera</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>Č_Map Scale___________________ž</value>
+    <value>Razmera mape</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>Č_Indicates the current scale for the map_____________________ž</value>
+    <value>Označava trenutnu razmeru mape</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>Č_1 to {0}_________________ž</value>
+    <value>1 prema {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Zumirajte na rezultat</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>Č_Apply___________ž</value>
+    <value>Primeni</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>Č_Cancel_____________ž</value>
+    <value>Otkaži</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>Č_Discard_______________ž</value>
+    <value>Odbaci</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>Č_Error___________ž</value>
+    <value>Greška</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>Č_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ž?</value>
+    <value>Potrebno je da primenite ili odbacite uređivanja trenutnog geoobjekta pre nego što pređete na drugi geoobjekat. Da li želite da primenite promene?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>Č_Unsaved edits______________ž</value>
+    <value>Nesačuvana uređivanja</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>Č_Fraction along edge: {0}_________________________ž</value>
+    <value>Razlomak duž ivice: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Č_Is content visible: Yes________________________ž</value>
+    <value>Da li je sadržaj vidljiv: Da</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Č_Is content visible: No_______________________ž</value>
+    <value>Da li je sadržaj vidljiv: Ne</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>Č_Terminal: {0}______________ž</value>
+    <value>Terminal: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>Č_Locator_______________ž</value>
+    <value>Lokator</value>
   </data>
 </root>

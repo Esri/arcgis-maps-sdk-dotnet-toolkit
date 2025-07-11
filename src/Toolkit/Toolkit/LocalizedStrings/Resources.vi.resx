@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>Đ_Basemap Gallery________________ớ</value>
+    <value>Thư viện Bản đồ nền</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>Đ_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ớ.</value>
+    <value>Hiển thị danh sách bản đồ nền khả dụng. Chọn bản đồ nền để sử dụng cho bản đồ hoặc scene hiện tại.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Thêm Tệp đính kèm</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>Đ_Scale___________ớ</value>
+    <value>Tỷ lệ</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>Đ_Map Scale___________________ớ</value>
+    <value>Tỷ lệ Bản đồ</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>Đ_Indicates the current scale for the map_____________________ớ</value>
+    <value>Biểu thị tỷ lệ hiện tại của bản đồ</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>Đ_1 to {0}_________________ớ</value>
+    <value>1 đến {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Thu phóng kết quả</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>Đ_Apply___________ớ</value>
+    <value>Áp dụng</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>Đ_Cancel_____________ớ</value>
+    <value>Hủy bỏ</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>Đ_Discard_______________ớ</value>
+    <value>Hủy</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>Đ_Error___________ớ</value>
+    <value>Lỗi</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>Đ_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ớ?</value>
+    <value>Bạn cần áp dụng hoặc hủy các chỉnh sửa của đối tượng hiện tại trước khi chuyển sang đối tượng khác. Bạn có muốn áp dụng thay đổi không?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>Đ_Unsaved edits______________ớ</value>
+    <value>Chỉnh sửa chưa lưu</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>Đ_Fraction along edge: {0}_________________________ớ</value>
+    <value>Phân số dọc theo cạnh: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Đ_Is content visible: Yes________________________ớ</value>
+    <value>Nội dung có hiển thị không: Có</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Đ_Is content visible: No_______________________ớ</value>
+    <value>Nội dung có hiển thị không: Không</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>Đ_Terminal: {0}______________ớ</value>
+    <value>Thiết bị đầu cuối: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>Đ_Locator_______________ớ</value>
+    <value>Bộ định vị</value>
   </data>
 </root>

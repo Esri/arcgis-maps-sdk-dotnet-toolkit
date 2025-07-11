@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>å_Basemap Gallery________________ø</value>
+    <value>Bakgrunnskartgalleri</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>å_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ø.</value>
+    <value>Viser en liste over tilgjengelige bakgrunnskart. Velg et bakgrunnskart eller bruk gjeldende kart eller scene.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Legg til vedlegg</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>å_Scale___________ø</value>
+    <value>Målestokk</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>å_Map Scale___________________ø</value>
+    <value>Kartets målestokk</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>å_Indicates the current scale for the map_____________________ø</value>
+    <value>Viser kartets gjeldende målestokk</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>å_1 to {0}_________________ø</value>
+    <value>1 til {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Zoom til resultatet</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>å_Apply___________ø</value>
+    <value>Bruk</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>å_Cancel_____________ø</value>
+    <value>Avbryt</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>å_Discard_______________ø</value>
+    <value>Forkast</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>å_Error___________ø</value>
+    <value>Feil</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>å_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ø?</value>
+    <value>Du må bruke eller forkaste redigeringer av gjeldende geoobjekt før du går videre til neste geoobjekt. Vil du bruke endringene?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>å_Unsaved edits______________ø</value>
+    <value>Ulagrede redigeringer</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>å_Fraction along edge: {0}_________________________ø</value>
+    <value>Fraksjon langs kant: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>å_Is content visible: Yes________________________ø</value>
+    <value>Er innholdet synlig: Ja</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>å_Is content visible: No_______________________ø</value>
+    <value>Er innholdet synlig: Nei</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>å_Terminal: {0}______________ø</value>
+    <value>Terminal: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>å_Locator_______________ø</value>
+    <value>Posisjonsindikator</value>
   </data>
 </root>

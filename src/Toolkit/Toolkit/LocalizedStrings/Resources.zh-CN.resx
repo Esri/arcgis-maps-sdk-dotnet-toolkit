@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>试_Basemap Gallery________________验</value>
+    <value>底图库</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>试_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________验.</value>
+    <value>显示可用底图的列表。 选择底图以将其用于当前地图或场景。</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>新增附件</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>试_Scale___________验</value>
+    <value>比例</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>试_Map Scale___________________验</value>
+    <value>地图比例</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>试_Indicates the current scale for the map_____________________验</value>
+    <value>指示地图的当前比例</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>试_1 to {0}_________________验</value>
+    <value>1 至 {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>缩放至结果</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>试_Apply___________验</value>
+    <value>应用</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>试_Cancel_____________验</value>
+    <value>取消</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>试_Discard_______________验</value>
+    <value>放弃</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>试_Error___________验</value>
+    <value>错误</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>试_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________验?</value>
+    <value>在移动到另一要素之前，您需要应用或放弃当前要素的编辑。 是否要应用更改?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>试_Unsaved edits______________验</value>
+    <value>未保存的编辑</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>试_Fraction along edge: {0}_________________________验</value>
+    <value>沿边缘的分数: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>试_Is content visible: Yes________________________验</value>
+    <value>内容是否可见: 是</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>试_Is content visible: No_______________________验</value>
+    <value>内容是否可见: 否</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>试_Terminal: {0}______________验</value>
+    <value>终端: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>试_Locator_______________验</value>
+    <value>定位器</value>
   </data>
 </root>

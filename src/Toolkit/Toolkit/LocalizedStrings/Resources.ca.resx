@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>ó_Basemap Gallery________________à</value>
+    <value>Galeria de mapes de base</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>ó_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________à.</value>
+    <value>Mostra una llista dels mapes de base disponibles. Seleccioneu un mapa de base per fer-lo servir per al mapa o l'escena actual.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Afegeix un fitxer adjunt</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>ó_Scale___________à</value>
+    <value>Escala</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>ó_Map Scale___________________à</value>
+    <value>Escala del mapa</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>ó_Indicates the current scale for the map_____________________à</value>
+    <value>Indica l'escala actual del mapa</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>ó_1 to {0}_________________à</value>
+    <value>1 a {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Aplica el zoom als resultats</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>ó_Apply___________à</value>
+    <value>Aplica</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>ó_Cancel_____________à</value>
+    <value>Cancel·la</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>ó_Discard_______________à</value>
+    <value>Descarta</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>ó_Error___________à</value>
+    <value>Error</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>ó_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________à?</value>
+    <value>Abans de passar a una altra entitat, heu d'aplicar o descartar les edicions de l'entitat actual. Voleu aplicar els canvis?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>ó_Unsaved edits______________à</value>
+    <value>Edicions no desades</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>ó_Fraction along edge: {0}_________________________à</value>
+    <value>Fracció al llarg de la vora: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>ó_Is content visible: Yes________________________à</value>
+    <value>El contingut és visible: sí</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>ó_Is content visible: No_______________________à</value>
+    <value>El contingut és visible: no</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>ó_Terminal: {0}______________à</value>
+    <value>Terminal: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>ó_Locator_______________à</value>
+    <value>Localitzador</value>
   </data>
 </root>

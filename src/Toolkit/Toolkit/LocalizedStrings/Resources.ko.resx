@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>한_Basemap Gallery________________빠</value>
+    <value>베이스맵 갤러리</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>한_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________빠.</value>
+    <value>사용 가능한 베이스맵 목록을 표시합니다. 현재 맵 또는 씬에 사용할 베이스맵을 선택하세요.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>첨부 파일 추가</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>한_Scale___________빠</value>
+    <value>축척</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>한_Map Scale___________________빠</value>
+    <value>맵 축척</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>한_Indicates the current scale for the map_____________________빠</value>
+    <value>맵의 현재 축척을 나타냄</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>한_1 to {0}_________________빠</value>
+    <value>1~{0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>결과 확대</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>한_Apply___________빠</value>
+    <value>적용</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>한_Cancel_____________빠</value>
+    <value>취소</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>한_Discard_______________빠</value>
+    <value>취소</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>한_Error___________빠</value>
+    <value>오류</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>한_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________빠?</value>
+    <value>다른 피처로 이동하기 전에 먼저 현재 피처의 편집 내용을 적용하거나 삭제해야 합니다. 변경 사항을 적용하시겠습니까?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>한_Unsaved edits______________빠</value>
+    <value>저장되지 않은 편집 내용</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>한_Fraction along edge: {0}_________________________빠</value>
+    <value>엣지상의 분수 지점: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>한_Is content visible: Yes________________________빠</value>
+    <value>콘텐츠 표시 여부: 예</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>한_Is content visible: No_______________________빠</value>
+    <value>콘텐츠 표시 여부: 아니요</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>한_Terminal: {0}______________빠</value>
+    <value>터미널: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>한_Locator_______________빠</value>
+    <value>로케이터</value>
   </data>
 </root>

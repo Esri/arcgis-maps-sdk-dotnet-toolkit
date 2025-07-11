@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>Š_Basemap Gallery________________ä</value>
+    <value>Aluskaartide galerii</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>Š_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ä.</value>
+    <value>Kuvatakse saadaolevate aluskaartide loend. Valige aluskaart, mida soovite praeguse kaardi või stseeni jaoks kasutada.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Lisa manus</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>Š_Scale___________ä</value>
+    <value>Mõõtkava</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>Š_Map Scale___________________ä</value>
+    <value>Kaardi mõõtkava</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>Š_Indicates the current scale for the map_____________________ä</value>
+    <value>Näitab kaardi praegust mõõtkava</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>Š_1 to {0}_________________ä</value>
+    <value>1: {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Suumi tulemini</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>Š_Apply___________ä</value>
+    <value>Esitage taotlus</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>Š_Cancel_____________ä</value>
+    <value>Tühista</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>Š_Discard_______________ä</value>
+    <value>Loobu</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>Š_Error___________ä</value>
+    <value>Tõrge</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>Š_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ä?</value>
+    <value>Enne teisele objektile liikumist peate praeguse objekti muudatused rakendama või tühistama. Kas soovite muudatusi rakendada?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>Š_Unsaved edits______________ä</value>
+    <value>Salvestamata muudatused</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>Š_Fraction along edge: {0}_________________________ä</value>
+    <value>Murdosa mööda serva: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Š_Is content visible: Yes________________________ä</value>
+    <value>Kas sisu on nähtav: jah</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Š_Is content visible: No_______________________ä</value>
+    <value>Kas sisu on nähtav: ei</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>Š_Terminal: {0}______________ä</value>
+    <value>Terminal: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>Š_Locator_______________ä</value>
+    <value>Lokaator</value>
   </data>
 </root>

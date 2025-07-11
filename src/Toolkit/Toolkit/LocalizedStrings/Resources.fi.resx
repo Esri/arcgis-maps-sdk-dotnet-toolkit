@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>Å_Basemap Gallery________________ö</value>
+    <value>Taustakarttagalleria</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>Å_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ö.</value>
+    <value>Näyttää käytettävissä olevien taustakarttojen luettelon. Valitse taustakartta, jotta voit käyttää sitä nykyisessä kartassa tai maisemassa.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Lisää liite</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>Å_Scale___________ö</value>
+    <value>Mittakaava</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>Å_Map Scale___________________ö</value>
+    <value>Kartan mittakaava</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>Å_Indicates the current scale for the map_____________________ö</value>
+    <value>Ilmaisee kartan nykyisen mittakaavan</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>Å_1 to {0}_________________ö</value>
+    <value>1–{0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Tarkenna tulokseen</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>Å_Apply___________ö</value>
+    <value>Käytä</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>Å_Cancel_____________ö</value>
+    <value>Peruuta</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>Å_Discard_______________ö</value>
+    <value>Hylkää</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>Å_Error___________ö</value>
+    <value>Virhe</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>Å_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ö?</value>
+    <value>Sinun on otettava nykyisen kohteen muokkaukset käyttöön tai hylättävä ne ennen toiseen kohteeseen siirtymistä. Haluatko ottaa muutokset käyttöön?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>Å_Unsaved edits______________ö</value>
+    <value>Muokkauksia ei tallennettu</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>Å_Fraction along edge: {0}_________________________ö</value>
+    <value>Osuus reunaa pitkin: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Å_Is content visible: Yes________________________ö</value>
+    <value>Onko sisältö näkyvissä? Kyllä</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Å_Is content visible: No_______________________ö</value>
+    <value>Onko sisältö näkyvissä? Ei</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>Å_Terminal: {0}______________ö</value>
+    <value>Pääte: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>Å_Locator_______________ö</value>
+    <value>Paikannin</value>
   </data>
 </root>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>ı_Basemap Gallery________________İ</value>
+    <value>Altlık Harita Galerisi</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>ı_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________İ.</value>
+    <value>Mevcut altlık haritaların bir listesini görüntüler. Geçerli harita veya sahne için kullanmak üzere bir altlık harita seçin.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Ek Ekle</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>ı_Scale___________İ</value>
+    <value>Ölçeklendir</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>ı_Map Scale___________________İ</value>
+    <value>Harita Ölçeği</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>ı_Indicates the current scale for the map_____________________İ</value>
+    <value>Harita için geçerli ölçeği belirtir</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>ı_1 to {0}_________________İ</value>
+    <value>1 - {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Sonuca yakınlaştır</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>ı_Apply___________İ</value>
+    <value>Uygula</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>ı_Cancel_____________İ</value>
+    <value>İptal</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>ı_Discard_______________İ</value>
+    <value>Çıkar</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>ı_Error___________İ</value>
+    <value>Hata</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>ı_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________İ?</value>
+    <value>Başka bir detaya geçmeden önce geçerli detayın düzenlemelerini uygulamanız veya iptal etmeniz gerekir. Değişiklikleri uygulamak istiyor musunuz?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>ı_Unsaved edits______________İ</value>
+    <value>Kaydedilmemiş düzenlemeler</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>ı_Fraction along edge: {0}_________________________İ</value>
+    <value>Kenar boyunca kesir: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>ı_Is content visible: Yes________________________İ</value>
+    <value>İçerik görünür: Evet</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>ı_Is content visible: No_______________________İ</value>
+    <value>İçerik görünür: Hayır</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>ı_Terminal: {0}______________İ</value>
+    <value>Terminal: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>ı_Locator_______________İ</value>
+    <value>Konumlandırıcı</value>
   </data>
 </root>

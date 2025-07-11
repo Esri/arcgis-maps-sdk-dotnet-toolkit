@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>須_Basemap Gallery________________鷗</value>
+    <value>ベースマップ ギャラリー</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>須_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________鷗.</value>
+    <value>使用可能なベースマップのリストを表示します。 ベースマップを選択して、現在のマップまたはシーンに使用します。</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>アタッチメントの追加</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>須_Scale___________鷗</value>
+    <value>縮尺</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>須_Map Scale___________________鷗</value>
+    <value>マップ縮尺</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>須_Indicates the current scale for the map_____________________鷗</value>
+    <value>マップの現在の縮尺を示します</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>須_1 to {0}_________________鷗</value>
+    <value>1 から {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>結果にズーム</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>須_Apply___________鷗</value>
+    <value>適用</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>須_Cancel_____________鷗</value>
+    <value>キャンセル</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>須_Discard_______________鷗</value>
+    <value>破棄</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>須_Error___________鷗</value>
+    <value>エラー</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>須_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________鷗?</value>
+    <value>別のフィーチャに移動する前に、現在のフィーチャの編集を適用または破棄する必要があります。 変更を適用しますか？</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>須_Unsaved edits______________鷗</value>
+    <value>保存されていない編集内容</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>須_Fraction along edge: {0}_________________________鷗</value>
+    <value>エッジに沿った部分: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>須_Is content visible: Yes________________________鷗</value>
+    <value>コンテンツが表示されていますか: はい</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>須_Is content visible: No_______________________鷗</value>
+    <value>コンテンツは表示されていますか: いいえ</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>須_Terminal: {0}______________鷗</value>
+    <value>ターミナル: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>須_Locator_______________鷗</value>
+    <value>ロケーター</value>
   </data>
 </root>

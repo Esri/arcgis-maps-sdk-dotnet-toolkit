@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>بيت_Basemap Gallery________________لاحقة</value>
+    <value>معرض خرائط الأساس</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>بيت_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________لاحقة.</value>
+    <value>يعرض قائمة بالخرائط الأساسية المتوفرة. حدد خريطة أساسية لاستخدامها للخريطة الحالية أو المشهد الحالي.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>إضافة مرفق</value>
@@ -256,16 +256,16 @@
     <value>م</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>بيت_Scale___________لاحقة</value>
+    <value>مقياس</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>بيت_Map Scale___________________لاحقة</value>
+    <value>مقياس الخريطة</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>بيت_Indicates the current scale for the map_____________________لاحقة</value>
+    <value>يشير إلى المقياس الحالي للخريطة</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>بيت_1 to {0}_________________لاحقة</value>
+    <value>1 إلى {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>ميل</value>
@@ -430,36 +430,36 @@
     <value>تكبير/تصغير إلى الناتج</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>بيت_Apply___________لاحقة</value>
+    <value>تطبيق</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>بيت_Cancel_____________لاحقة</value>
+    <value>إلغاء الأمر</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>بيت_Discard_______________لاحقة</value>
+    <value>تجاهل</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>بيت_Error___________لاحقة</value>
+    <value>خطأ</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>بيت_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________لاحقة?</value>
+    <value>يتعين عليك تطبيق أو تجاهل تعديلات المعلم الحالية قبل الانتقال إلى معلم آخر. هل أنت متأكد أنك تريد تطبيق التغييرات؟</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>بيت_Unsaved edits______________لاحقة</value>
+    <value>التعديلات غير المحفوظة</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>بيت_Fraction along edge: {0}_________________________لاحقة</value>
+    <value>الجزء النسبي على امتداد الحافة: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>بيت_Is content visible: Yes________________________لاحقة</value>
+    <value>هل المحتوى مرئي: نعم</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>بيت_Is content visible: No_______________________لاحقة</value>
+    <value>هل المحتوى مرئي: لا</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>بيت_Terminal: {0}______________لاحقة</value>
+    <value>النقطة الطرفية: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>بيت_Locator_______________لاحقة</value>
+    <value>محدد موقع</value>
   </data>
 </root>

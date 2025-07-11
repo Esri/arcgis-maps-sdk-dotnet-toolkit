@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>Į_Basemap Gallery________________š</value>
+    <value>Pagrindo žemėlapių galerija</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>Į_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________š.</value>
+    <value>Pateikiamas pasiekiamų pagrindo žemėlapių sąrašas. Pasirinkite pagrindo žemėlapį, kad galėtumėte naudoti dabartiniam žemėlapiui ar scenai.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Pridėti priedą</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>Į_Scale___________š</value>
+    <value>Mastelis</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>Į_Map Scale___________________š</value>
+    <value>Žemėlapio mastelis</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>Į_Indicates the current scale for the map_____________________š</value>
+    <value>Nurodomas dabartinis žemėlapio mastelis</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>Į_1 to {0}_________________š</value>
+    <value>1:{0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>myl.</value>
@@ -430,36 +430,36 @@
     <value>Pritraukti prie rezultato</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>Į_Apply___________š</value>
+    <value>Taikyti</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>Į_Cancel_____________š</value>
+    <value>Atšaukti</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>Į_Discard_______________š</value>
+    <value>Atmesti</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>Į_Error___________š</value>
+    <value>Klaida</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>Į_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________š?</value>
+    <value>Prieš pereidami prie kito elemento, turite pritaikyti arba atmesti dabartinio elemento pakeitimus. Ar norite pritaikyti pakeitimus?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>Į_Unsaved edits______________š</value>
+    <value>Neįrašyti pakeitimai</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>Į_Fraction along edge: {0}_________________________š</value>
+    <value>Trupmena išilgai krašto: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Į_Is content visible: Yes________________________š</value>
+    <value>Ar turinys matomas: taip</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Į_Is content visible: No_______________________š</value>
+    <value>Ar turinys matomas: ne</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>Į_Terminal: {0}______________š</value>
+    <value>Terminalas: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>Į_Locator_______________š</value>
+    <value>Lokatorius</value>
   </data>
 </root>

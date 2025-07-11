@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>ng_Basemap Gallery________________ny</value>
+    <value>Galeri Peta Dasar</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>ng_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ny.</value>
+    <value>Menampilkan daftar basemap yang tersedia. Pilih basemap untuk menggunakannya untuk peta atau scene saat ini.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Tambahkan Lampiran</value>
@@ -256,16 +256,16 @@
     <value>mnt</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>ng_Scale___________ny</value>
+    <value>Skala</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>ng_Map Scale___________________ny</value>
+    <value>Skala Peta</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>ng_Indicates the current scale for the map_____________________ny</value>
+    <value>Menunjukkan skala saat ini untuk peta</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>ng_1 to {0}_________________ny</value>
+    <value>1 hingga {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mil</value>
@@ -430,36 +430,36 @@
     <value>Perbesar hasil</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>ng_Apply___________ny</value>
+    <value>Terapkan</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>ng_Cancel_____________ny</value>
+    <value>Batalkan</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>ng_Discard_______________ny</value>
+    <value>Buang</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>ng_Error___________ny</value>
+    <value>Kesalahan</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>ng_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ny?</value>
+    <value>Anda harus menerapkan atau menghapus editan fitur saat ini sebelum pindah ke fitur lain. Anda ingin menerapkan perubahan?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>ng_Unsaved edits______________ny</value>
+    <value>Editan yang belum disimpan</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>ng_Fraction along edge: {0}_________________________ny</value>
+    <value>Fraksi sepanjang tepi: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>ng_Is content visible: Yes________________________ny</value>
+    <value>Apakan konten dapat dilihat: Ya</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>ng_Is content visible: No_______________________ny</value>
+    <value>Apakah konten dapat dilihat: Tidak</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>ng_Terminal: {0}______________ny</value>
+    <value>Terminal: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>ng_Locator_______________ny</value>
+    <value>Penentu Lokasi</value>
   </data>
 </root>

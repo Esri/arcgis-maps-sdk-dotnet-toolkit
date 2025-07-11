@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>כן_Basemap Gallery________________ש</value>
+    <value>גלריית מפות בסיס</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>כן_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ש.</value>
+    <value>מציג הרשימה של מפות בסיס זמינות. בחר מפת בסיס אשר תשמש עבור המפה או הסצנה הנוכחיות</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>הוסף צורפה</value>
@@ -256,16 +256,16 @@
     <value>מ'</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>כן_Scale___________ש</value>
+    <value>קנה מידה</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>כן_Map Scale___________________ש</value>
+    <value>קנ"מ של המפה:</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>כן_Indicates the current scale for the map_____________________ש</value>
+    <value>מציין את קנה המידה הנוכחי עבור המפה</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>כן_1 to {0}_________________ש</value>
+    <value>1 עד {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>מייל</value>
@@ -430,36 +430,36 @@
     <value>זום לתוצאה</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>כן_Apply___________ש</value>
+    <value>החל</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>כן_Cancel_____________ש</value>
+    <value>ביטול</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>כן_Discard_______________ש</value>
+    <value>בטל</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>כן_Error___________ש</value>
+    <value>שגיאה</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>כן_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ש?</value>
+    <value>יש להחיל או לבטל את שינויי הערכיה של היישות הנוכחית לפני מעבר ליישות אחרת. האם ברצונך להחיל את השינויים?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>כן_Unsaved edits______________ש</value>
+    <value>שינויי עריכה שלא נשמרו</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>כן_Fraction along edge: {0}_________________________ש</value>
+    <value>חתוך לאורך הקצה: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>כן_Is content visible: Yes________________________ש</value>
+    <value>האם ניתן לראות את התוכן: כן</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>כן_Is content visible: No_______________________ש</value>
+    <value>האם ניתן לראות את התוכן: לא</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>כן_Terminal: {0}______________ש</value>
+    <value>מסוף: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>כן_Locator_______________ש</value>
+    <value>מגדיר עיגון כתובות</value>
   </data>
 </root>

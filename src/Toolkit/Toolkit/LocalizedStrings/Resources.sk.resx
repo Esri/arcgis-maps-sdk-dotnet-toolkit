@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>ĺ_Basemap Gallery________________ľ</value>
+    <value>Galéria podkladových máp</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>ĺ_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________ľ.</value>
+    <value>Zobrazí zoznam dostupných podkladových máp Vyberte podkladovú mapu na použitie pre aktuálnu mapu alebo scénu.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Pridať prílohu</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>ĺ_Scale___________ľ</value>
+    <value>Mierka</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>ĺ_Map Scale___________________ľ</value>
+    <value>Mierka mapy</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>ĺ_Indicates the current scale for the map_____________________ľ</value>
+    <value>Označuje aktuálnu mierku mapy:</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>ĺ_1 to {0}_________________ľ</value>
+    <value>1 ku {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>míle</value>
@@ -430,36 +430,36 @@
     <value>Priblížiť na výsledok</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>ĺ_Apply___________ľ</value>
+    <value>Použiť</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>ĺ_Cancel_____________ľ</value>
+    <value>Zrušiť</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>ĺ_Discard_______________ľ</value>
+    <value>Zahodiť</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>ĺ_Error___________ľ</value>
+    <value>Chyba</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>ĺ_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________ľ?</value>
+    <value>Pred prechodom na ďalší prvok musíte aplikovať alebo zahodiť editácie aktuálneho prvku. Chcete aplikovať tieto zmeny?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>ĺ_Unsaved edits______________ľ</value>
+    <value>Neuložené editácie</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>ĺ_Fraction along edge: {0}_________________________ľ</value>
+    <value>Časť pozdĺž hrany: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>ĺ_Is content visible: Yes________________________ľ</value>
+    <value>Je obsah viditeľný: Áno</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>ĺ_Is content visible: No_______________________ľ</value>
+    <value>Je obsah viditeľný: Nie</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>ĺ_Terminal: {0}______________ľ</value>
+    <value>Konečný: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>ĺ_Locator_______________ľ</value>
+    <value>Lokátor</value>
   </data>
 </root>

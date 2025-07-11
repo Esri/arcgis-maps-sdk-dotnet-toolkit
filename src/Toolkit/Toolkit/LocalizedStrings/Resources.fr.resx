@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>æ_Basemap Gallery________________Â</value>
+    <value>Bibliothèque de fonds de carte</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>æ_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________Â.</value>
+    <value>Cette option affiche une liste des fonds de carte disponibles. Sélectionnez un fond de carte à utiliser pour la carte ou scène actuelle.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Ajouter une pièce jointe</value>
@@ -256,16 +256,16 @@
     <value>m</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>æ_Scale___________Â</value>
+    <value>Échelle</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>æ_Map Scale___________________Â</value>
+    <value>Échelle de la carte</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>æ_Indicates the current scale for the map_____________________Â</value>
+    <value>Cette option indique l’échelle actuelle de la carte</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>æ_1 to {0}_________________Â</value>
+    <value>1 à {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -430,36 +430,36 @@
     <value>Zoom sur le résultat</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>æ_Apply___________Â</value>
+    <value>Appliquer</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>æ_Cancel_____________Â</value>
+    <value>Annuler</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>æ_Discard_______________Â</value>
+    <value>Ignorer</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>æ_Error___________Â</value>
+    <value>Erreur</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>æ_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________Â?</value>
+    <value>Vous devez appliquer ou ignorer les modifications apportées à l’entité actuelle avant de passer à une autre entité. Voulez-vous appliquer les modifications ?</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>æ_Unsaved edits______________Â</value>
+    <value>Modifications non enregistrées</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>æ_Fraction along edge: {0}_________________________Â</value>
+    <value>Fraction sur un tronçon : {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>æ_Is content visible: Yes________________________Â</value>
+    <value>Contenu visible : oui</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>æ_Is content visible: No_______________________Â</value>
+    <value>Contenu visible : non</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>æ_Terminal: {0}______________Â</value>
+    <value>Borne : {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>æ_Locator_______________Â</value>
+    <value>Localisateur</value>
   </data>
 </root>

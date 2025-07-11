@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasemapGalleryAutomationName" xml:space="preserve">
-    <value>π_Basemap Gallery________________Ω</value>
+    <value>Συλλογή υποβάθρων</value>
   </data>
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
-    <value>π_Displays a list of available basemaps. Select a basemap to use it for the current map or scene_________________________________________________Ω.</value>
+    <value>Εμφανίζει μια λίστα με τα διαθέσιμα υπόβαθρα. Επιλέξτε ένα υπόβαθρο για να το χρησιμοποιήσετε για τον τρέχοντα χάρτη ή την τρέχουσα 3D προβολή.</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Προσθήκη συνημμένου</value>
@@ -256,16 +256,16 @@
     <value>μ.</value>
   </data>
   <data name="ScaleLineAutomationTypeName" xml:space="preserve">
-    <value>π_Scale___________Ω</value>
+    <value>Κλίμακα</value>
   </data>
   <data name="ScaleLineAutomationName" xml:space="preserve">
-    <value>π_Map Scale___________________Ω</value>
+    <value>Κλίμακα χάρτη</value>
   </data>
   <data name="ScaleLineAutomationHelpText" xml:space="preserve">
-    <value>π_Indicates the current scale for the map_____________________Ω</value>
+    <value>Υποδεικνύει την τρέχουσα κλίμακα του χάρτη</value>
   </data>
   <data name="ScaleLineAutomationValue" xml:space="preserve">
-    <value>π_1 to {0}_________________Ω</value>
+    <value>1 προς {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>μίλ.</value>
@@ -430,36 +430,36 @@
     <value>Εστίαση στο αποτέλεσμα</value>
   </data>
   <data name="FeatureFormPendingEditsApply" xml:space="preserve">
-    <value>π_Apply___________Ω</value>
+    <value>Εφαρμογή</value>
   </data>
   <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
-    <value>π_Cancel_____________Ω</value>
+    <value>Ακύρωση</value>
   </data>
   <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
-    <value>π_Discard_______________Ω</value>
+    <value>Απόρριψη</value>
   </data>
   <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
-    <value>π_Error___________Ω</value>
+    <value>Σφάλμα</value>
   </data>
   <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
-    <value>π_You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes________________________________________________________________Ω?</value>
+    <value>Πρέπει να εφαρμόσετε ή να απορρίψετε τις αλλαγές του τρέχοντος στοιχείου για να μεταβείτε σε άλλο στοιχείο. Θέλετε να εφαρμόσετε τις αλλαγές;</value>
   </data>
   <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
-    <value>π_Unsaved edits______________Ω</value>
+    <value>Μη αποθηκευμένες αλλαγές</value>
   </data>
   <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
-    <value>π_Fraction along edge: {0}_________________________Ω</value>
+    <value>Αναλογία κατά μήκος της ακμής: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>π_Is content visible: Yes________________________Ω</value>
+    <value>Είναι το περιεχόμενο ορατό: Ναι</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>π_Is content visible: No_______________________Ω</value>
+    <value>Είναι το περιεχόμενο ορατό: Όχι</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
-    <value>π_Terminal: {0}______________Ω</value>
+    <value>Τερματικό: {0}</value>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
-    <value>π_Locator_______________Ω</value>
+    <value>Εργαλείο εντοπισμού</value>
   </data>
 </root>
