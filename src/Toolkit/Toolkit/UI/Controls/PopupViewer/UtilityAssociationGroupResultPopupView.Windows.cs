@@ -249,11 +249,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             parent?.NavigateToItem(Popup.FromGeoElement(item.AssociatedFeature));
         }
 
-        private void OnGroupResultPropertyChanged()
-        {
-            UpdateView();
-        }
-
         /// <summary>
         /// Gets or sets the template for UtilityAssociationsFilterResult items.
         /// </summary>

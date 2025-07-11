@@ -26,6 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private CollectionView? _resultsListView;
         private Entry? _searchEntry;
+        private ImageButton? _clearSearchButton;
 
         static UtilityAssociationGroupResultPopupView()
         {
@@ -41,6 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid searchGrid = new Grid();
             searchGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             searchGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            searchGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             Grid.SetColumnSpan(searchGrid, 2);
 
             Image searchIcon = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(5) };
@@ -50,6 +52,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Entry searchText = new Entry() { Placeholder = Properties.Resources.GetString("PopupViewerUtilityAssociationsFilterByTitle"), VerticalOptions = LayoutOptions.Center, Margin = new Thickness(2) };
             Grid.SetColumn(searchText, 1);
             searchGrid.Add(searchText);
+
+            ImageButton clearButton = new ImageButton() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(5) };
+            clearButton.Source = new FontImageSource() { Glyph = ToolkitIcons.X, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            Grid.SetColumn(clearButton, 2);
+            searchGrid.Add(clearButton);
 
             Border searchBorder = new Border() { StrokeThickness = 1 };
             searchBorder.Content = searchGrid;
@@ -62,6 +69,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(cv);
 
             INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(layout, nameScope);
+            nameScope.RegisterName("ClearSearch", clearButton);
             nameScope.RegisterName("SearchText", searchText);
             nameScope.RegisterName("ResultsList", cv);
 
@@ -85,12 +94,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            return;
 
-            // TODO: Investigate why view stops rendering with this code.
             if (_searchEntry is not null)
             {
                 _searchEntry.TextChanged -= SearchText_TextChanged;
+            }
+
+            if (_clearSearchButton is not null)
+            {
+                _clearSearchButton.Clicked -= ClearSearchButton_Clicked;
             }
 
             if (GetTemplateChild("ResultsList") is CollectionView listView)
@@ -103,7 +115,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 _searchEntry = entry;
                 _searchEntry.TextChanged += SearchText_TextChanged;
             }
+            if (GetTemplateChild("ClearSearch") is ImageButton button)
+            {
+                _clearSearchButton = button;
+                _clearSearchButton.Clicked += ClearSearchButton_Clicked;
+            }
+
             UpdateView();
+        }
+
+        private void ClearSearchButton_Clicked(object? sender, EventArgs e)
+        {
+            if (_searchEntry is not null)
+            {
+                _searchEntry.Text = string.Empty;
+            }
         }
 
         private void UpdateView()

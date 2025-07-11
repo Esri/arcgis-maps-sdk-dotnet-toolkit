@@ -60,11 +60,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
 #if MAUI
         public static readonly BindableProperty GroupResultProperty =
-            BindableProperty.Create(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView));
+            BindableProperty.Create(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView), propertyChanged: (s, oldValue, newValue) => ((UtilityAssociationGroupResultPopupView)s).OnGroupResultPropertyChanged());
 #else
         public static readonly DependencyProperty GroupResultProperty =
             DependencyProperty.Register(nameof(GroupResult), typeof(UtilityAssociationGroupResult), typeof(UtilityAssociationGroupResultPopupView), new PropertyMetadata(null, (s, e) => ((UtilityAssociationGroupResultPopupView)s).OnGroupResultPropertyChanged()));
 #endif
+
+        private void OnGroupResultPropertyChanged()
+        {
+            UpdateView();
+        }
 
     }
 }

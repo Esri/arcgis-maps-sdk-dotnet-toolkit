@@ -36,6 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
 
             INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(cv, nameScope);
             nameScope.RegisterName("ResultsList", cv);
             return cv;
         }
