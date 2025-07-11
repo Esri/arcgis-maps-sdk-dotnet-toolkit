@@ -35,6 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
 #if WINDOWS_XAML
                 _associationsListView.ItemClick -= AssociationsListView_ItemClick;
+#elif WPF
+                _associationsListView.SelectionChanged -= AssociationsListView_SelectionChanged;
 #endif
             }
             if (GetTemplateChild("Title") is TextBlock textBlock)
