@@ -55,6 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             ImageButton clearButton = new ImageButton() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(5) };
             clearButton.Source = new FontImageSource() { Glyph = ToolkitIcons.X, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            clearButton.IsVisible = false;
             Grid.SetColumn(clearButton, 2);
             searchGrid.Add(clearButton);
 
@@ -149,12 +150,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     _resultsListView.ItemsSource = GroupResult?.AssociationResults?.Where(r => r.Title?.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0);
                 }
+                if (_clearSearchButton is not null)
+                {
+                    _clearSearchButton.IsVisible = true;
+                }
             }
             else
             {
                 if (_resultsListView is not null)
                 {
                     _resultsListView.ItemsSource = GroupResult?.AssociationResults;
+                }
+                if (_clearSearchButton is not null)
+                {
+                    _clearSearchButton.IsVisible = false;
                 }
             }
         }
