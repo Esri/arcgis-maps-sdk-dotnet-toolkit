@@ -20,6 +20,10 @@
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <internal:VisibilityConverter x:Key="PopupViewerVisibilityConverter"/>
     <internal:EmptyStringToVisibilityConverter x:Key="PlaceholderVisibilityConverter" />
     <internal:HtmlToPlainTextConverter x:Key="PopupViewerHtmlToPlainTextConverter"/>
@@ -290,7 +294,7 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <FontIcon x:Name="ExpandIcon" Glyph="&#xE79B;" VerticalAlignment="Center" Margin="5" FontFamily="/Esri.ArcGISRuntime.Toolkit.WinUI/Assets/toolkit-icons.ttf#calcite-ui-icons-24"
+                        <FontIcon x:Name="ExpandIcon" Glyph="&#xE79B;" VerticalAlignment="Center" Margin="5" FontFamily="{StaticResource toolkit-icons}"
                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
                         <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource PopupViewerTitleStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1"
                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
@@ -364,7 +368,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <FontIcon x:Name="Icon" Width="20" VerticalAlignment="Center" Margin="5" Grid.RowSpan="2" FontFamily="/Esri.ArcGISRuntime.Toolkit.WinUI/Assets/toolkit-icons.ttf#calcite-ui-icons-24"/>
+                        <FontIcon x:Name="Icon" Width="20" VerticalAlignment="Center" Margin="5" Grid.RowSpan="2" FontFamily="{StaticResource toolkit-icons}"/>
                         <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="{Binding AssociationResult.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource PopupViewerTitleStyle}"
                                    VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" />
                         <TextBlock x:Name="FractionAlong" Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=FractionAlong, Path=Text}" />
