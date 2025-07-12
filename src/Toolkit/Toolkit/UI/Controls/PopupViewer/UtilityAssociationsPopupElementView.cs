@@ -15,11 +15,11 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UtilityNetworks;
 
 #if MAUI
-using ItemsControl = Microsoft.Maui.Controls.CollectionView;
+using Esri.ArcGISRuntime.Toolkit.Maui;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 #if MAUI
@@ -28,10 +28,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
+    /// <summary>
+    /// Supporting control for the <see cref="PopupViewer"/> control,
+    /// used for rendering a <see cref="UtilityAssociationsPopupElement"/> and picking the correct template for each Input type.
+    /// </summary>
     public partial class UtilityAssociationsPopupElementView
     {
-        private ListView? _associationsListView;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UtilityAssociationsPopupElementView"/> class.
         /// </summary>
@@ -44,79 +46,66 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         }
 
-        /// <inheritdoc />
-#if WINDOWS_XAML || MAUI
-        protected override void OnApplyTemplate()
-#elif WPF
-        public override void OnApplyTemplate()
-#endif
+#if WINDOWS_XAML
+        internal PopupViewer? PopupViewer => PopupViewer.GetPopupViewerParent(this);
+#else
+        /// <summary>
+        /// Gets or sets the PopupViewer that the <see cref="PopupViewer"/> belongs to.
+        /// </summary>
+        public PopupViewer PopupViewer
         {
-            base.OnApplyTemplate();
-            if (_associationsListView is not null)
-            {
-#if WINDOWS_XAML
-                _associationsListView.ItemClick -= AssociationsListView_ItemClick;
-#endif
-            }
-            if (GetTemplateChild("AssociationsList") is ListView listView)
-            {
-                _associationsListView = listView;
-#if WINDOWS_XAML
-                _associationsListView.ItemClick += AssociationsListView_ItemClick;
-#elif WPF
-                _associationsListView.SelectionChanged += AssociationsListView_SelectionChanged;
-#endif
-            }
+            get { return (PopupViewer)GetValue(PopupViewerProperty); }
+            set { SetValue(PopupViewerProperty, value); }
         }
 
-#if !MAUI
-#if WPF
-        private void AssociationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var item = ((ListView)sender).SelectedItem;
-            ((ListView)sender).SelectedItem = null; // Clear selection
-#elif WINDOWS_XAML
-        private void AssociationsListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var item = e.ClickedItem as UtilityAssociationsFilterResult;
+        /// <summary>
+        /// Identifies the <see cref="PopupViewer"/> dependency property.
+        /// </summary>
+#if MAUI
+        public static readonly BindableProperty PopupViewerProperty =
+            BindableProperty.Create(nameof(PopupViewer), typeof(PopupViewer), typeof(UtilityAssociationsPopupElementView), null);
+#else
+        public static readonly DependencyProperty PopupViewerProperty =
+            DependencyProperty.Register(nameof(PopupViewer), typeof(PopupViewer), typeof(UtilityAssociationsPopupElementView), new PropertyMetadata(null));
 #endif
-            if (item is null)
-            {
-                return;
-            }
-            var parent = UI.Controls.PopupViewer.GetPopupViewerParent(this);
-            parent?.NavigateToItem(item);
-        }
 #endif
 
         /// <summary>
-        /// Gets or sets the UtilityAssociationsPopupElement.
+        /// Gets or sets the <see cref="UtilityAssociationsPopupElement"/>.
         /// </summary>
         public UtilityAssociationsPopupElement? Element
         {
-            get { return GetValue(ElementProperty) as UtilityAssociationsPopupElement; }
-            set { SetValue(ElementProperty, value); }
+            get => GetValue(ElementProperty) as UtilityAssociationsPopupElement;
+            set => SetValue(ElementProperty, value);
         }
 
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty ElementProperty =
+            BindableProperty.Create(nameof(Element), typeof(UtilityAssociationsPopupElement), typeof(UtilityAssociationsPopupElementView), null, propertyChanged: (s, oldValue, newValue) => ((UtilityAssociationsPopupElementView)s).OnElementPropertyChanged());
+#else
         public static readonly DependencyProperty ElementProperty =
-            PropertyHelper.CreateProperty<UtilityAssociationsPopupElement, UtilityAssociationsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.OnElementPropertyChanged());
+            DependencyProperty.Register(nameof(Element), typeof(UtilityAssociationsPopupElement), typeof(UtilityAssociationsPopupElementView), new PropertyMetadata(null, (s, e) => ((UtilityAssociationsPopupElementView)s).OnElementPropertyChanged()));
+#endif
 
-        private async void OnElementPropertyChanged()
+        private void OnElementPropertyChanged()
         {
-            if(Element is not null)
+            RefreshAssociations();
+        }
+
+        private async void RefreshAssociations()
+        {
+            if (Element is not null)
             {
-                if(Element.AssociationsFilterResults.Count == 0)
+                try
                 {
                     await Element.FetchAssociationsFilterResultsAsync();
-                    if (GetTemplateChild("AssociationsList") is ItemsControl itemsView)
-                    {
-                        itemsView.ItemsSource = Element.AssociationsFilterResults; // Refresh the collection
-                    }
                 }
+                catch { }
             }
+            UpdateView();
         }
     }
 }

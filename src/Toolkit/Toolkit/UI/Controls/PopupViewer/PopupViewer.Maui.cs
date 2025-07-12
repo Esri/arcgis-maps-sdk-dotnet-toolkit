@@ -45,6 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         static PopupViewer()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+
             DefaultPopupViewerHeaderStyle = new Style(typeof(Label));
             DefaultPopupViewerHeaderStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 16 });
             DefaultPopupViewerHeaderStyle.Setters.Add(new Setter() { Property = Label.FontAttributesProperty, Value = FontAttributes.Bold });
@@ -57,17 +58,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             DefaultPopupViewerCaptionStyle = new Style(typeof(Label));
             DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12 });
             DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
+            DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.TextColorProperty, Value = Colors.Gray });
         }
 
         private static object BuildDefaultTemplate()
         {
             NavigationSubView root = new NavigationSubView();
+
             root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (PopupViewer viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             root.HeaderTemplateSelector = BuildHeaderTemplateSelector();
             root.ContentTemplateSelector = BuildContentTemplateSelector();
+
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName("SubFrameView", root);
+
             return root;
         }
 
@@ -82,21 +87,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 roottitle.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 return roottitle;
             });
+
             selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
             {
-                VerticalStackLayout root = new VerticalStackLayout();
-                Label title = new Label();
+                VerticalStackLayout root = new VerticalStackLayout() { VerticalOptions = LayoutOptions.Center };
+
+                Label title = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 title.Style = GetPopupViewerHeaderStyle();
                 title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
-                title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(title);
-                Label desc = new Label();
+
+                Label desc = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 desc.Style = GetPopupViewerCaptionStyle();
                 desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
                 desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(desc);
+
                 return root;
             });
+
+            selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                roottitle.Style = GetPopupViewerHeaderStyle();
+                roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
+                return roottitle;
+            });
+
             return selector;
         }
 
@@ -114,30 +131,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (Popup popup) => popup?.EvaluatedElements);
                 return itemsView;
             });
+
             selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
             {
-                CollectionView itemsView = new CollectionView()
-                {
-                    Margin = new Thickness(0, 10),
-                    ItemTemplate = new DataTemplate(() =>
-                    {
-                        var grid = new Grid();
-                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-                        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-                        Label name = new Label();
-                        name.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.Name);
-                        grid.Children.Add(name);
-                        //TODO: Put count inside a circle
-                        Label count = new Label();
-                        count.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result.AssociationResults.Count);
-                        Grid.SetColumn(count, 1);
-                        grid.Children.Add(count);
-                        return grid;
-                    })
-                };
-                itemsView.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.GroupResults);
-                return itemsView;
+                var view = new UtilityAssociationsFilterResultsPopupView();
+                view.SetBinding(UtilityAssociationsFilterResultsPopupView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
+                return view;
             });
+
+            selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
+            {
+                var view = new UtilityAssociationGroupResultPopupView();
+                view.SetBinding(UtilityAssociationGroupResultPopupView.GroupResultProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result);
+                return view;
+            });
+
             return selector;
         }
 
