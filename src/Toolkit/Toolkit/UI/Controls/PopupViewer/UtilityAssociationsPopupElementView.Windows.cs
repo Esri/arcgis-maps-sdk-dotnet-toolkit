@@ -73,6 +73,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return;
             }
             var parent = UI.Controls.PopupViewer.GetPopupViewerParent(this);
+#if WINDOWS_XAML
+            (sender as ListView)?.PrepareConnectedAnimation("NavigationSubViewForwardAnimation", item, "ResultView");
+#endif
             parent?.NavigateToItem(item);
         }
 

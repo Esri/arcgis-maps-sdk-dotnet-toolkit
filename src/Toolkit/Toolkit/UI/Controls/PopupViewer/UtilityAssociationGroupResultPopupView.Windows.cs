@@ -246,6 +246,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return;
             }
             var parent = UI.Controls.PopupViewer.GetPopupViewerParent(this);
+#if WINDOWS_XAML
+            _resultsListView?.PrepareConnectedAnimation("NavigationSubViewForwardAnimation", item, "ResultView");
+#endif
             parent?.NavigateToItem(Popup.FromGeoElement(item.AssociatedFeature));
         }
 

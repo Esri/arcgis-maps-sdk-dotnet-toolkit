@@ -164,11 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var oldValue = Popup;
             if (oldValue != value)
             {
-#if WINDOWS_XAML
                 SetValue(PopupProperty, value);
-#elif WPF
-                SetValue(PopupProperty, value);
-#endif
             }
         }
 
