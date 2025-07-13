@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets a reference to the MapView this controller is currently connected to.
         /// </summary>
-        protected MapView? ConnectedMapView => base.ConnectedView as MapView;
+        protected new MapView? ConnectedView => base.ConnectedView as MapView;
 
         /// <summary>
         /// Attaches a Mapview to the controller, or detaches if <c>null</c>.
@@ -116,9 +116,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         /// <inheritdoc cref="MapView.IdentifyGeometryEditorAsync(Point, double)" />
         public virtual async Task<IdentifyGeometryEditorResult?> IdentifyGeometryEditorAsync(Point screenPoint, double tolerance) =>
-            ConnectedMapView is null
+            ConnectedView is null
                 ? null
-                : await ConnectedMapView.IdentifyGeometryEditorAsync(screenPoint, tolerance).ConfigureAwait(false);
+                : await ConnectedView.IdentifyGeometryEditorAsync(screenPoint, tolerance).ConfigureAwait(false);
 
         #endregion
 
