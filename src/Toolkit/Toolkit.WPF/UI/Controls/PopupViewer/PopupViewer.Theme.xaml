@@ -259,16 +259,10 @@
                                     Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
                         <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
                         <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
-                        <ListView VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AssociationsFilterResult.GroupResults}"
+                        <ItemsControl VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AssociationsFilterResult.GroupResults}"
                                   Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}}"
-                        SelectionMode="Single" x:Name="ResultsList" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="0">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
+                                 x:Name="ResultsList" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="0">
+                        </ItemsControl>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

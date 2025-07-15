@@ -18,6 +18,7 @@
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
+    [TemplatePart(Name = "AssociationsList", Type = typeof(ListView))]
     public partial class UtilityAssociationsPopupElementView : Control
     {
         private TextBlock? _titleTextBlock;

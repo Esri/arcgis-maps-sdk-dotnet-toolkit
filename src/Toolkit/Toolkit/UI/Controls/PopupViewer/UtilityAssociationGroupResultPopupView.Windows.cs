@@ -20,6 +20,7 @@ using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
+    [TemplatePart(Name = "ResultsList", Type = typeof(ListView))]
     public partial class UtilityAssociationGroupResultPopupView : Control
     {
 #if WINDOWS_XAML

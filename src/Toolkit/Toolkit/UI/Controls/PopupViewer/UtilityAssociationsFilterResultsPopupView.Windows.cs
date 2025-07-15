@@ -18,9 +18,10 @@
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
+    [TemplatePart(Name = "ResultsList", Type = typeof(ItemsControl))]
     public partial class UtilityAssociationsFilterResultsPopupView : Control
     {
-        private ListView? _resultsListView;
+        private ItemsControl? _resultsItemsControl;
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
@@ -30,9 +31,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             base.OnApplyTemplate();
 
-            if (GetTemplateChild("ResultsList") is ListView view)
+            if (GetTemplateChild("ResultsList") is ItemsControl control)
             {
-                _resultsListView = view;
+                _resultsItemsControl = control;
             }
         }
 
@@ -83,9 +84,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateView()
         {
-            if (_resultsListView is not null && AssociationsFilterResult is not null)
+            if (_resultsItemsControl is not null && AssociationsFilterResult is not null)
             {
-                _resultsListView.ItemsSource = IsExpanded ? AssociationsFilterResult.GroupResults : Enumerable.Empty<UtilityNetworks.UtilityAssociationGroupResult>();
+                _resultsItemsControl.ItemsSource = IsExpanded ? AssociationsFilterResult.GroupResults : Enumerable.Empty<UtilityNetworks.UtilityAssociationGroupResult>();
             }
         }
 
