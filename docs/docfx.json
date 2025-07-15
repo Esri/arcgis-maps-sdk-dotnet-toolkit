@@ -74,7 +74,7 @@
             "Toolkit/Toolkit.UWP/Esri.ArcGISRuntime.Toolkit.UWP.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
-          "src" : "../src/",
+          "src" : "../src/"
         }
       ],
       "dest": "../output/docs/api/uwp",
@@ -125,7 +125,7 @@
       "_appLogoPath": "images/logo.png",
       "_gitContribute": {
         "branch": "main",
-        "apiSpecFolder": "docs/apidoc"
+        "apiSpecFolder": "docs/api"
       }
     },
     "dest": "../Output/docs_site",
@@ -141,7 +141,7 @@
        "https://omds.xaml.dev/xrefmap/netwin.xrefmap.json",
        "https://omds.xaml.dev/xrefmap/netios.xrefmap.json",
        "https://omds.xaml.dev/xrefmap/netandroid.xrefmap.json",	   
-       "https://omds.xaml.dev/xrefmap/netuwp.xrefmap.json",
+       "https://omds.xaml.dev/xrefmap/netuwp.xrefmap.json"
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",

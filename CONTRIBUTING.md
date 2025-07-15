@@ -15,9 +15,9 @@ This guide describes how you can contribute improvements to the ArcGIS Maps SDK 
 2. To add an enhancement or fix a problem, create an issue.
     * Be descriptive: Clearly describe the issue including steps to reproduce and, if possible, a sample.
     * If an enhancement, clearly describe the additional functionality and provide a good use case to support it.
-3. [Fork](https://help.github.com/articles/fork-a-repo) the [ArcGIS Maps SDK for .NET Toolkit repo](https://github.com/Esri/arcgis-toolkit-dotnet/) on GitHub.
+3. [Fork](https://help.github.com/articles/fork-a-repo) the [ArcGIS Maps SDK for .NET Toolkit repo](https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/) on GitHub.
 4. Clone it to your local machine.
-5. Checkout the [main branch](https://github.com/Esri/arcgis-toolkit-dotnet/tree/main).
+5. Checkout the [main branch](https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/tree/main).
 6. Create a new feature branch on your local machine. The name of the branch is not important.
 7. Write code to add an enhancement or fix a problem.  
     * Follow the coding conventions already used in the Toolkit source code.
