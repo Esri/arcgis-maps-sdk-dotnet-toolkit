@@ -111,7 +111,7 @@
       {
         "files": [
           "images/**"
-        ],
+        ]
       }
     ],
     "overwrite": [
@@ -125,7 +125,8 @@
       "_appLogoPath": "images/logo.png",
       "_gitContribute": {
         "branch": "main",
-        "apiSpecFolder": "docs/api"
+        "apiSpecFolder": "docs/api",
+        "repo":"https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit.git"
       }
     },
     "dest": "../Output/docs_site",
