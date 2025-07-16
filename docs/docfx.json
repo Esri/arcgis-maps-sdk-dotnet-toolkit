@@ -101,7 +101,7 @@
       {
         "files": [
           "concepts/**.md",
-          "concepts/**/toc.yml",
+          "concepts/**.yml",
           "toc.yml",
           "*.md"
         ]
