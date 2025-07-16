@@ -16,6 +16,7 @@
 
 #nullable enable
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 #if WINUI 
 using Point = Windows.Foundation.Point;
 #elif WINDOWS_UWP
@@ -43,74 +44,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         protected new MapView? ConnectedView => base.ConnectedView as MapView;
 
-        /// <summary>
-        /// Attaches a Mapview to the controller, or detaches if <c>null</c>.
-        /// </summary>
-        /// <param name="mapView">The <see cref="MapView"/> to attach, or <c>null</c> is detaching.</param>
-        public void Attach(MapView mapView)
-        {
-            base.Attach(mapView);
-        }
+        /// <inheritdoc cref="MapView.ScreenToLocation(Point)" />
+        public virtual MapPoint? ScreenToLocation(Point screenPoint) =>
+    ConnectedView?.ScreenToLocation(screenPoint);
 
-        /// <summary>
-        /// Raised when the <see cref="MapViewController"/> has been attached to a <see cref="MapView"/>.
-        /// </summary>
-        /// <param name="mapView"></param>
-        protected virtual void OnMapViewAttached(MapView mapView) { }
-
-        /// <summary>
-        /// Raised when the <see cref="MapViewController"/> has been detached from a <see cref="MapView"/>.
-        /// </summary>
-        /// <param name="mapView"></param>
-        protected virtual void OnMapViewDetached(MapView mapView) { }
-
-        /// <summary>
-        /// Raised when the attached <see cref="MapView"/> loads into the active view.
-        /// </summary>
-        /// <param name="mapView">MapView that was loaded</param>
-        protected virtual void OnMapViewLoaded(MapView mapView) { }
-
-        /// <summary>
-        /// Raised when the attached <see cref="MapView"/> unloads from the active view.
-        /// </summary>
-        /// <param name="mapView">MapView that was unloaded</param>
-        protected virtual void OnMapViewUnloaded(MapView mapView) { }
-
-        /// <inheritdoc />
-        protected sealed override void OnGeoViewAttached(GeoView geoView)
-        {
-            if (geoView is MapView mapView)
-                OnMapViewAttached(mapView);
-            else
-                base.OnGeoViewAttached(geoView);
-        }
-
-        /// <inheritdoc />
-        protected sealed override void OnGeoViewDetached(GeoView geoView)
-        {
-            if (geoView is MapView mapView)
-                OnMapViewDetached(mapView);
-            else
-                base.OnGeoViewDetached(geoView);
-        }
-
-        /// <inheritdoc />
-        protected sealed override void OnGeoViewLoaded(GeoView geoView)
-        {
-            if (geoView is MapView mapView)
-                OnMapViewLoaded(mapView);
-            else
-                base.OnGeoViewLoaded(geoView);
-        }
-
-        /// <inheritdoc />
-        protected sealed override void OnGeoViewUnloaded(GeoView geoView)
-        {
-            if (geoView is MapView mapView)
-                OnMapViewUnloaded(mapView);
-            else
-                base.OnGeoViewUnloaded(geoView);
-        }
+        /// <inheritdoc cref="MapView.LocationToScreen(MapPoint)" />
+        public virtual Point? LocationToScreen(MapPoint location) =>
+            ConnectedView?.LocationToScreen(location);
 
         #region Identify
 
