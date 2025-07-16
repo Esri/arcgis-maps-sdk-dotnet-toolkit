@@ -31,7 +31,7 @@ jobs:
         DOCFX_SOURCE_BRANCH_NAME: main
       run: |
         .tools/docfx/docfx.exe docs/docfx.json
-        powershell -ExecutionPolicy ByPass -command "docs\FixApiRefLinks" -Path output\docs_site\api\
+        powershell -ExecutionPolicy ByPass -command "docs\FixApiRefLinks" -Path Output\docs_site\api\
       
     - name: Publish Documentation
       env:

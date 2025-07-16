@@ -10,7 +10,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/netfx",
+      "dest": "../Output/docs/api/netfx",
       "properties": { "TargetFramework": "net472" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
@@ -27,7 +27,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/net6",
+      "dest": "../Output/docs/api/net6",
       "properties": { "TargetFramework": "net6.0-windows10.0.19041.0" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
@@ -44,7 +44,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/android",
+      "dest": "../Output/docs/api/android",
       "properties": { "TargetFramework": "net6.0-android" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
@@ -62,7 +62,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/ios",
+      "dest": "../Output/docs/api/ios",
       "properties": { "TargetFramework": "net6.0-ios" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
@@ -77,7 +77,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/uwp",
+      "dest": "../Output/docs/api/uwp",
       "properties": { "TargetFramework": "uap10.0.19041" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
@@ -96,7 +96,7 @@
           "api/**.yml",
           "api/**/toc.yml"
         ],
-        "src" : "../output/docs"
+        "src" : "../Output/docs"
       },
       {
         "files": [
@@ -125,8 +125,7 @@
       "_appLogoPath": "images/logo.png",
       "_gitContribute": {
         "branch": "main",
-        "apiSpecFolder": "docs/api",
-        "repo":"https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit.git"
+        "apiSpecFolder": "docs/api"
       }
     },
     "dest": "../Output/docs_site",
