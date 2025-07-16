@@ -17,7 +17,8 @@
 #nullable enable
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
-#if WINUI 
+using Esri.ArcGISRuntime.UI;
+#if WINUI
 using Point = Windows.Foundation.Point;
 #elif WINDOWS_UWP
 using Point = Windows.Foundation.Point;
@@ -46,11 +47,69 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         /// <inheritdoc cref="MapView.ScreenToLocation(Point)" />
         public virtual MapPoint? ScreenToLocation(Point screenPoint) =>
-    ConnectedView?.ScreenToLocation(screenPoint);
+            ConnectedView?.ScreenToLocation(screenPoint);
 
         /// <inheritdoc cref="MapView.LocationToScreen(MapPoint)" />
         public virtual Point? LocationToScreen(MapPoint location) =>
             ConnectedView?.LocationToScreen(location);
+
+        #region SetViewPoint Methods
+
+        /// <inheritdoc cref="MapView.SetViewpointAsync(Mapping.Viewpoint, TimeSpan, AnimationCurve)" />
+        public virtual Task<bool> SetViewpointAsync(Mapping.Viewpoint viewpoint, TimeSpan duration, AnimationCurve animationCurve) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointAsync(viewpoint, duration, animationCurve);
+
+        /// <inheritdoc cref="MapView.SetViewpointCenterAsync(MapPoint)" />
+        public virtual Task<bool> SetViewpointCenterAsync(MapPoint center) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointCenterAsync(center);
+
+        /// <inheritdoc cref="MapView.SetViewpointCenterAsync(double, double)" />
+        public virtual Task<bool> SetViewpointCenterAsync(double x, double y) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointCenterAsync(x, y);
+
+        /// <inheritdoc cref="MapView.SetViewpointCenterAsync(MapPoint, double)" />
+        public virtual Task<bool> SetViewpointCenterAsync(MapPoint center, double scale) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointCenterAsync(center, scale);
+
+        /// <inheritdoc cref="MapView.SetViewpointCenterAsync(double, double, double)" />
+        public virtual Task<bool> SetViewpointCenterAsync(double latitude, double longitude, double scale) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointCenterAsync(latitude, longitude, scale);
+
+        /// <inheritdoc cref="MapView.SetViewpointGeometryAsync(Geometry.Geometry)" />
+        public virtual Task<bool> SetViewpointGeometryAsync(Geometry.Geometry geometry) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointGeometryAsync(geometry);
+
+        /// <inheritdoc cref="MapView.SetViewpointGeometryAsync(Geometry.Geometry, double)" />
+        public virtual Task<bool> SetViewpointGeometryAsync(Geometry.Geometry geometry, double padding) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointGeometryAsync(geometry, padding);
+
+        /// <inheritdoc cref="MapView.SetViewpointRotationAsync(double)" />
+        public virtual Task<bool> SetViewpointRotationAsync(double rotation) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointRotationAsync(rotation);
+
+        /// <inheritdoc cref="MapView.SetViewpointScaleAsync(double)" />
+        public virtual Task<bool> SetViewpointScaleAsync(double scale) =>
+            ConnectedView is null
+                ? Task.FromResult(false)
+                : ConnectedView.SetViewpointScaleAsync(scale);
+
+        #endregion
 
         #region Identify
 
