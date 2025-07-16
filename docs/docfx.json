@@ -134,15 +134,6 @@
     "template": [
       "default", "template-override"
     ],
-    "xrefService": [
-       "https://xref.docs.microsoft.com/query?uid={uid}",
-       "https://omds.xaml.dev/xrefmap/net.xrefmap.json",
-       "https://omds.xaml.dev/xrefmap/netstandard.xrefmap.json",
-       "https://omds.xaml.dev/xrefmap/netwin.xrefmap.json",
-       "https://omds.xaml.dev/xrefmap/netios.xrefmap.json",
-       "https://omds.xaml.dev/xrefmap/netandroid.xrefmap.json",	   
-       "https://omds.xaml.dev/xrefmap/netuwp.xrefmap.json"
-    ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
