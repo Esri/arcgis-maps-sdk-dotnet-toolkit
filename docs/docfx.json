@@ -97,7 +97,7 @@
           "api/**.yml",
           "api/**/toc.yml"
         ],
-        "src" : "../Output/docs"
+        "src" : "../Output/docs/"
       },
       {
         "files": [
