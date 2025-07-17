@@ -12,7 +12,7 @@ IF NOT EXIST "%DocFxFolder%\v%DocFXVersion%\docfx.exe" (
    DEL "%DocFxFolder%\docfx_v%DocFXVersion%.zip" /Q
 )
 REM Build the output site (HTML) from the generated metadata and input files (uses configuration in docfx.json in this folder)
-%DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json
+%DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json --force
 ECHO Fixing API Reference Links
 powershell -ExecutionPolicy ByPass -command "%~dp0FixApiRefLinks" -Path %~dp0..\Output\docs_site\api\
 start http://localhost:8080
