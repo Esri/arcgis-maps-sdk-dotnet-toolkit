@@ -27,8 +27,8 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../Output/docs/api/net6",
-      "properties": { "TargetFramework": "net6.0-windows10.0.19041.0" },
+      "dest": "../Output/docs/api/net9",
+      "properties": { "TargetFramework": "net9.0-windows10.0.19041.0" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -45,7 +45,7 @@
         }
       ],
       "dest": "../Output/docs/api/android",
-      "properties": { "TargetFramework": "net6.0-android" },
+      "properties": { "TargetFramework": "net9.0-android" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
@@ -63,7 +63,7 @@
         }
       ],
       "dest": "../Output/docs/api/ios",
-      "properties": { "TargetFramework": "net6.0-ios" },
+      "properties": { "TargetFramework": "net9.0-ios" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
