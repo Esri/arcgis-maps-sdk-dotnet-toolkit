@@ -188,7 +188,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <!-- x:DataType=UtilityAssociationsFilterResults-->
-                    <primitives:UtilityAssociationsFilterResultsPopupView AssociationsFilterResult="{Binding}" x:Name="ResultView" MinHeight="40" AutomationProperties.Name="{Binding Title}" IsExpanded="False" />
+                    <primitives:UtilityAssociationsFilterResultsPopupView AssociationsFilterResult="{Binding}" x:Name="ResultView" MinHeight="40" AutomationProperties.Name="{Binding Filter.Title}" IsExpanded="False" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -288,8 +288,11 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <FontIcon x:Name="ExpandIcon" Glyph="&#xE79B;" VerticalAlignment="Center" Margin="5" FontFamily="{StaticResource toolkit-icons}"
-                                   Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <Button x:Name="ExpandIcon" Background="{TemplateBinding Background}" BorderThickness="0"
+                                VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}">
+                            <FontIcon Glyph="&#xE79B;" VerticalAlignment="Center" Margin="5" FontFamily="{StaticResource toolkit-icons}"/>
+                        </Button>
                         <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource PopupViewerTitleStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1"
                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
                         <Border Width="30" Height="20" CornerRadius="10" Background="LightGray" Grid.Column="2" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}">
@@ -297,10 +300,6 @@
                         </Border>
                         <Border BorderThickness="0" Height="1" Margin="2" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
                         <Grid x:Name="Search" Grid.ColumnSpan="3" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
                             <Border BorderThickness="1">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -320,25 +319,29 @@
                                 </Style>
                             </ListView.ItemContainerStyle>
                         </ListView>
-                        <Grid x:Name="ShowAll" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" MaxHeight="40" Margin="10,0,0,0" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height=".25*" />
-                                <RowDefinition Height=".25*" />
-                                <RowDefinition Height=".25*" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsShowAll}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" FontSize="12"/>
-                            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
-                                <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsTotal}" Style="{StaticResource PopupViewerCaptionStyle}" VerticalAlignment="Top" Margin="0,0,2,0" />
-                                <TextBlock Text="{Binding AssociationResults.Count}" VerticalAlignment="Top" Style="{StaticResource PopupViewerCaptionStyle}" />
-                            </StackPanel>
-                            <FontIcon Glyph="&#xE8FD;" VerticalAlignment="Stretch" FontSize="18" Grid.Column="1" Grid.RowSpan="2" Margin="2"/>
-                            <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.ColumnSpan="3" Grid.Row="2"/>
-                        </Grid>
+                        <Button x:Name="ShowAll" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Margin="10,0,0,0" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"
+                                VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                Background="{TemplateBinding Background}" BorderThickness="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height=".25*" />
+                                    <RowDefinition Height=".25*" />
+                                    <RowDefinition Height=".25*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsShowAll}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" FontSize="12"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
+                                    <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsTotal}" Style="{StaticResource PopupViewerCaptionStyle}" VerticalAlignment="Top" Margin="0,0,2,0" />
+                                    <TextBlock Text="{Binding AssociationResults.Count}" VerticalAlignment="Top" Style="{StaticResource PopupViewerCaptionStyle}" />
+                                </StackPanel>
+                                <FontIcon Glyph="&#xE8FD;" VerticalAlignment="Stretch" FontSize="18" Grid.Column="1" Grid.RowSpan="2" Margin="2"/>
+                                <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.ColumnSpan="3" Grid.Row="2"/>
+                            </Grid>
+                        </Button>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

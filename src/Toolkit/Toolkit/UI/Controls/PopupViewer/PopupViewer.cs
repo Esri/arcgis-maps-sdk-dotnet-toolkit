@@ -194,7 +194,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (newPopup?.GeoElement is not null)
             {
-                if(newPopup.GeoElement is DynamicEntity de)
+                if (newPopup.GeoElement is DynamicEntity de)
                 {
                     _dynamicEntityChangedListener = new WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>(this, de)
                     {
@@ -216,7 +216,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                _ = subView.Navigate(content: Popup, clearNavigationStack: true, skipRaisingEvent: true);
+                _ = subView.Navigate(content: Popup, skipRaisingEvent: true);
             }
             InvalidatePopup();
         }

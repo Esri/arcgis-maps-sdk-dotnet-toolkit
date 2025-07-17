@@ -23,14 +23,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     [TemplatePart(Name = "ResultsList", Type = typeof(ListView))]
     public partial class UtilityAssociationGroupResultPopupView : Control
     {
-#if WINDOWS_XAML
-        private FontIcon? _expandIcon;
-#elif WPF
-        private TextBlock? _expandTextBlock;
+        private Button? _expandButton;
+#if WPF
         private Button? _clearButton;
 #endif
         private ListView? _resultsListView;
-        private Grid? _showAllGrid;
+        private Button? _showAllButton;
         private TextBox? _searchTextBox;
 
         /// <inheritdoc />
@@ -43,17 +41,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             base.OnApplyTemplate();
 
-#if WINDOWS_XAML
-            if (_expandIcon is not null)
+            if (_expandButton is not null)
             {
-                _expandIcon.Tapped -= ExpandTextBlock_Tapped;
+                _expandButton.Click -= ExpandButton_Click;
             }
-#elif WPF
-            if (_expandTextBlock is not null)
-            {
-                _expandTextBlock.MouseLeftButtonUp -= ExpandTextBlock_MouseLeftButtonUp;
-            }
-#endif
 
             if (_resultsListView is not null)
             {
@@ -64,13 +55,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
 
-            if (_showAllGrid is not null)
+            if (_showAllButton is not null)
             {
-#if WINDOWS_XAML
-                _showAllGrid.Tapped -= ShowAllGrid_Tapped;
-#elif WPF
-                _showAllGrid.MouseLeftButtonUp -= ShowAllGrid_MouseLeftButtonUp;
-#endif
+                _showAllButton.Click -= ShowAllButton_Click;
             }
 
             if (_searchTextBox is not null)
@@ -84,19 +71,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
 #endif
 
-#if WINDOWS_XAML
-            if (GetTemplateChild("ExpandIcon") is FontIcon icon)
+            if (GetTemplateChild("ExpandIcon") is Button expandButton)
             {
-                _expandIcon = icon;
-                _expandIcon.Tapped += ExpandTextBlock_Tapped;
+                _expandButton = expandButton;
+                _expandButton.Click += ExpandButton_Click;
             }
-#elif WPF
-            if (GetTemplateChild("ExpandIcon") is TextBlock textBlock)
-            {
-                _expandTextBlock = textBlock;
-                _expandTextBlock.MouseLeftButtonUp += ExpandTextBlock_MouseLeftButtonUp;
-            }
-#endif
 
             if (GetTemplateChild("ResultsList") is ListView listView)
             {
@@ -109,15 +88,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
 
-            if (GetTemplateChild("ShowAll") is Grid grid)
+            if (GetTemplateChild("ShowAll") is Button showAllButton)
             {
-                _showAllGrid = grid;
-                _showAllGrid.Visibility = IsSearchable ? Visibility.Collapsed : GroupResult?.AssociationResults?.Count > DisplayCount ? Visibility.Visible : Visibility.Collapsed;
-#if WINDOWS_XAML
-                _showAllGrid.Tapped += ShowAllGrid_Tapped;
-#elif WPF
-                _showAllGrid.MouseLeftButtonUp += ShowAllGrid_MouseLeftButtonUp;
-#endif
+                _showAllButton = showAllButton;
+                _showAllButton.Visibility = IsSearchable ? Visibility.Collapsed : GroupResult?.AssociationResults?.Count > DisplayCount ? Visibility.Visible : Visibility.Collapsed;
+                _showAllButton.Click += ShowAllButton_Click;
             }
 
             if (GetTemplateChild("SearchText") is TextBox textBox)
@@ -130,6 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("ClearSearch") is Button button)
             {
                 _clearButton = button;
+                _clearButton.Visibility = Visibility.Collapsed;
                 _clearButton.Click += ClearButton_Click;
             }
 #endif
@@ -142,9 +118,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _resultsListView.ItemsSource = IsSearchable ? GroupResult?.AssociationResults : GroupResult?.AssociationResults?.Take(DisplayCount);
             }
 
-            if (_showAllGrid is not null)
+            if (_showAllButton is not null)
             {
-                _showAllGrid.Visibility = !IsSearchable && GroupResult?.AssociationResults?.Count > DisplayCount ? Visibility.Visible : Visibility.Collapsed;
+                _showAllButton.Visibility = !IsSearchable && GroupResult?.AssociationResults?.Count > DisplayCount ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -158,42 +134,37 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 #endif
 
+        private void ExpandButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool isExpanded = true;
+            if (_expandButton is not null)
+            {
 #if WINDOWS_XAML
-        private void ExpandTextBlock_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            bool isExpanded = true;
-            if (_expandIcon is not null)
-            {
-                _expandIcon.Glyph = _expandIcon.Glyph == ToolkitIcons.ChevronDown ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronDown;
-                isExpanded = _expandIcon.Glyph == ToolkitIcons.ChevronDown;
-            }
-#elif WPF
-        private void ExpandTextBlock_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            bool isExpanded = true;
-            if (_expandTextBlock is not null)
-            {
-                _expandTextBlock.Text = _expandTextBlock.Text == ToolkitIcons.ChevronDown ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronDown;
-                isExpanded = _expandTextBlock.Text == ToolkitIcons.ChevronDown;
-            }
+                if(_expandButton.Content is FontIcon fontIcon)
+                {
+                    fontIcon.Glyph = fontIcon.Glyph == ToolkitIcons.ChevronDown ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronDown;
+                    isExpanded = fontIcon.Glyph == ToolkitIcons.ChevronDown;
+                }
+#else
+                if (_expandButton.Content is TextBlock iconTextBlock)
+                {
+                    iconTextBlock.Text = iconTextBlock.Text == ToolkitIcons.ChevronDown ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronDown;
+                    isExpanded = iconTextBlock.Text == ToolkitIcons.ChevronDown;
+                }
 #endif
+            }
             if (_resultsListView is not null)
             {
                 _resultsListView.Visibility = isExpanded ? Visibility.Visible : Visibility.Collapsed;
             }
-            if (_showAllGrid is not null)
+            if (_showAllButton is not null)
             {
-                _showAllGrid.Visibility = isExpanded && GroupResult?.AssociationResults?.Count > DisplayCount ? Visibility.Visible : Visibility.Collapsed;
+                _showAllButton.Visibility = isExpanded && GroupResult?.AssociationResults?.Count > DisplayCount ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
-#if WINDOWS_XAML
-        private void ShowAllGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        private void ShowAllButton_Click(object sender, RoutedEventArgs e)
         {
-#elif WPF
-        private void ShowAllGrid_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-#endif
             if (GroupResult != null)
             {
                 var parent = UI.Controls.PopupViewer.GetPopupViewerParent(this);
