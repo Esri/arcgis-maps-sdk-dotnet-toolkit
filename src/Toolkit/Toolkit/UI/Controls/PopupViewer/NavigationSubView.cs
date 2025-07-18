@@ -61,9 +61,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
                 back.Visibility = _navigationStack.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 #endif
-#if WPF
-                back.Margin = _navigationStack.Count > 1 ? new Thickness() : new Thickness(0, 0, 10, 0);
-#endif
             }
             if (GetTemplateChild("NavigateUp") is FrameworkElement up)
             {
@@ -170,12 +167,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             return true;
         }
-        
-        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false)
+
+        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false, bool skipRaisingEvent = false)
         {
             if (content is null && !clearNavigationStack)
                 throw new ArgumentNullException(nameof(content));
-            if (!(await RaiseOnNavigatingAsync(content, clearNavigationStack ? NavigationDirection.Reset : NavigationDirection.Forward)))
+            if (!skipRaisingEvent && !(await RaiseOnNavigatingAsync(content, clearNavigationStack ? NavigationDirection.Reset : NavigationDirection.Forward)))
             {
                 return false;
             }
@@ -188,7 +185,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 offset = sv.VerticalOffset;
 #endif
             }
-
 
             if (clearNavigationStack)
                 _navigationStack.Clear();
