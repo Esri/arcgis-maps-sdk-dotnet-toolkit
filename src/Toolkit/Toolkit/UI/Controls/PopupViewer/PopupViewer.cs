@@ -216,7 +216,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                _ = subView.Navigate(content: Popup, skipRaisingEvent: true);
+                _ = subView.Navigate(content: Popup, clearNavigationStack: Popup is null, navigationHandled: true);
             }
             InvalidatePopup();
         }

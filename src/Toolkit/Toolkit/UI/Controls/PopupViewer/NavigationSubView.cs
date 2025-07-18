@@ -171,11 +171,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return true;
         }
 
-        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false, bool skipRaisingEvent = false)
+        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false, bool navigationHandled = false)
         {
+            if (navigationHandled)
+            {
+                return false;
+            }
+
             if (content is null && !clearNavigationStack)
                 throw new ArgumentNullException(nameof(content));
-            if (!skipRaisingEvent && !(await RaiseOnNavigatingAsync(content, clearNavigationStack ? NavigationDirection.Reset : NavigationDirection.Forward)))
+            if (!(await RaiseOnNavigatingAsync(content, clearNavigationStack ? NavigationDirection.Reset : NavigationDirection.Forward)))
             {
                 return false;
             }
