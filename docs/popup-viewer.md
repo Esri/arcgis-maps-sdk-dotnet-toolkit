@@ -10,8 +10,6 @@ Displays information from simple [popups](https://pro.arcgis.com/en/pro-app/late
 - Supports charts, media, attachments.
 - Supports basic display of fields and values in non-HTML-based popups.
 
-> **Important**: Support for charts, multimedia, and attachments is currently only available for WPF.
-
 ## Usage
 
 PopupViewer displays popup information using an underlying [`PopupManager`](https://developers.arcgis.com/net/api-reference/api/netwin/Esri.ArcGISRuntime/Esri.ArcGISRuntime.Mapping.Popups.PopupManager.html).
