@@ -409,7 +409,7 @@
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal">
                             <Button x:Name="NavigateBack" Background="Transparent" BorderThickness="0,0,1,0" VerticalAlignment="Center"
-                                    Height="40" Width="40" Visibility="Visible">
+                                    Height="40" Width="40" Visibility="Visible" Margin="0,0,10,0">
                                 <TextBlock Text="&#xE76B;" FontFamily="Segoe MDL2 Assets" />
                             </Button>
                             <Button x:Name="NavigateUp" Background="Transparent" Width="40" Height="40" BorderThickness="0" VerticalAlignment="Center" >
