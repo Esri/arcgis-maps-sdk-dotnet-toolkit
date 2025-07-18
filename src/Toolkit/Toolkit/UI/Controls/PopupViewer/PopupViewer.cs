@@ -138,25 +138,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             });
         }
 
+        private bool _isNavigating = false;
 
         private void SubView_OnNavigating(object? sender, NavigationSubView.NavigationEventArgs e)
         {
             if (e.Cancel)
                 return;
-
+            
+            _isNavigating = true;
             if (e.NavigatingTo is Popup to)
             {
                 SetCurrentPopup(to);
             }
             else if (e.NavigatingFrom is Popup from && e.Direction == NavigationSubView.NavigationDirection.Backward)
             {
-                var previousForm = ((NavigationSubView?)sender)?.NavigationStack.OfType<Popup>().Where(o => o != from)?.FirstOrDefault();
-                if (previousForm is not null)
+                var previousPopup = ((NavigationSubView?)sender)?.NavigationStack.OfType<Popup>().Where(o => o != from)?.LastOrDefault();
+                if (previousPopup is not null)
                 {
-                    _ = previousForm.EvaluateExpressionsAsync();
-                    SetCurrentPopup(previousForm);
+                    SetCurrentPopup(previousPopup);
                 }
             }
+            _isNavigating = false;
         }
 
         private void SetCurrentPopup(Popup? value)
@@ -169,7 +171,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the associated PopupManager which contains popup and sketch editor.
+        /// Gets or sets the associated Popup.
         /// </summary>
         public Popup? Popup
         {
@@ -214,9 +216,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 }
             }
-            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            if (!_isNavigating && GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                _ = subView.Navigate(content: Popup, clearNavigationStack: Popup is null, navigationHandled: true);
+                _ = subView.Navigate(content: Popup, clearNavigationStack: Popup is null, skipRaisingEvent: true);
             }
             InvalidatePopup();
         }
