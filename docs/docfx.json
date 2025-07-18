@@ -36,9 +36,7 @@
       "src": [
         {
           "files": [
-            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Maui/Esri.ArcGISRuntime.ARToolkit.Maui.csproj"
+            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/"
@@ -54,9 +52,7 @@
       "src": [
         {
           "files": [
-            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Maui/Esri.ArcGISRuntime.ARToolkit.Maui.csproj"
+            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/"
