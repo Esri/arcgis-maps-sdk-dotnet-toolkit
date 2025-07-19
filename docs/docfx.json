@@ -27,7 +27,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../Output/docs/api/net9",
+      "dest": "../Output/docs/api/net6",
       "properties": { "TargetFramework": "net9.0-windows10.0.19041.0" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
