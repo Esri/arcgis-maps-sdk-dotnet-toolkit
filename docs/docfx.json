@@ -10,7 +10,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/netfx",
+      "dest": "../Output/docs/api/netfx",
       "properties": { "TargetFramework": "net472" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
@@ -27,8 +27,8 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/net6",
-      "properties": { "TargetFramework": "net6.0-windows10.0.19041.0" },
+      "dest": "../Output/docs/api/net6",
+      "properties": { "TargetFramework": "net9.0-windows10.0.19041.0" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -36,16 +36,14 @@
       "src": [
         {
           "files": [
-            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Maui/Esri.ArcGISRuntime.ARToolkit.Maui.csproj"
+            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/android",
-      "properties": { "TargetFramework": "net6.0-android" },
+      "dest": "../Output/docs/api/android",
+      "properties": { "TargetFramework": "net9.0-android" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
@@ -54,16 +52,14 @@
       "src": [
         {
           "files": [
-            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Maui/Esri.ArcGISRuntime.ARToolkit.Maui.csproj"
+            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/ios",
-      "properties": { "TargetFramework": "net6.0-ios" },
+      "dest": "../Output/docs/api/ios",
+      "properties": { "TargetFramework": "net9.0-ios" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -74,10 +70,10 @@
             "Toolkit/Toolkit.UWP/Esri.ArcGISRuntime.Toolkit.UWP.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
-          "src" : "../src/",
+          "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/uwp",
+      "dest": "../Output/docs/api/uwp",
       "properties": { "TargetFramework": "uap10.0.19041" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
@@ -88,7 +84,8 @@
     "content": [
       {
         "files": [
-          "api/**/index.md"
+          "api/**/index.md",
+          "api/index.md"
         ]
       },
       {
@@ -96,12 +93,12 @@
           "api/**.yml",
           "api/**/toc.yml"
         ],
-        "src" : "../output/docs"
+        "src" : "../Output/docs/"
       },
       {
         "files": [
           "concepts/**.md",
-          "concepts/**/toc.yml",
+          "concepts/**.yml",
           "toc.yml",
           "*.md"
         ]
@@ -111,7 +108,7 @@
       {
         "files": [
           "images/**"
-        ],
+        ]
       }
     ],
     "overwrite": [
@@ -125,7 +122,7 @@
       "_appLogoPath": "images/logo.png",
       "_gitContribute": {
         "branch": "main",
-        "apiSpecFolder": "docs/apidoc"
+        "apiSpecFolder": "docs/api"
       }
     },
     "dest": "../Output/docs_site",
@@ -133,15 +130,6 @@
     "fileMetadataFiles": [],
     "template": [
       "default", "template-override"
-    ],
-    "xrefService": [
-       "https://xref.docs.microsoft.com/query?uid={uid}",
-       "https://omds.xaml.dev/xrefmap/net.xrefmap.json",
-       "https://omds.xaml.dev/xrefmap/netstandard.xrefmap.json",
-       "https://omds.xaml.dev/xrefmap/netwin.xrefmap.json",
-       "https://omds.xaml.dev/xrefmap/netios.xrefmap.json",
-       "https://omds.xaml.dev/xrefmap/netandroid.xrefmap.json",	   
-       "https://omds.xaml.dev/xrefmap/netuwp.xrefmap.json",
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
