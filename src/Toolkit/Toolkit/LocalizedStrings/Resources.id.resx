@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>Galeri Peta Dasar</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>Menampilkan daftar basemap yang tersedia. Pilih basemap untuk menggunakannya untuk peta atau scene saat ini.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Tambahkan Lampiran</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>mnt</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>Skala</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>Skala Peta</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>Menunjukkan skala saat ini untuk peta</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>1 hingga {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mil</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Perbesar hasil</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>Terapkan</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>Batalkan</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>Buang</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>Kesalahan</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>Anda harus menerapkan atau menghapus editan fitur saat ini sebelum pindah ke fitur lain. Anda ingin menerapkan perubahan?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>Editan yang belum disimpan</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>Fraksi sepanjang tepi: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>Apakan konten dapat dilihat: Ya</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>Apakah konten dapat dilihat: Tidak</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>Terminal: {0}</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>Penentu Lokasi</value>
   </data>
 </root>

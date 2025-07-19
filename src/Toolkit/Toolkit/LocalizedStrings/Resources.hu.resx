@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>Alaptérkép-galéria</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>Megjeleníti az elérhető alaptérképek listáját. Válasszon ki egy alaptérképet, hogy azt a jelenlegi térképhez vagy 3D térképhez használhassa.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Csatolmány hozzáadása</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>m</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>Méretarány</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>Térkép méretaránya</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>A térkép jelenlegi méretarányát jelzi</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>1 és {0} között</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mérföld</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Nagyítás az eredményre</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>Alkalmaz</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>Mégse</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>Elvetés</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>Hiba</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>A jelenlegi vektoros elem módosításait alkalmaznia kell vagy el kell vetnie, mielőtt egy másik vektoros elemre lépne. Alkalmazza a módosításokat?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>Nem mentett szerkesztések</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>Részarány az él mentén: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>A tartalom látható: Igen</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>A tartalom látható: Nem</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>Terminál: {0}</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>Locator</value>
   </data>
 </root>

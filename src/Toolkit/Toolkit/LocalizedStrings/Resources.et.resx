@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>Aluskaartide galerii</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>Kuvatakse saadaolevate aluskaartide loend. Valige aluskaart, mida soovite praeguse kaardi või stseeni jaoks kasutada.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Lisa manus</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>m</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>Mõõtkava</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>Kaardi mõõtkava</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>Näitab kaardi praegust mõõtkava</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>1: {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Suumi tulemini</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>Esitage taotlus</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>Tühista</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>Loobu</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>Tõrge</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>Enne teisele objektile liikumist peate praeguse objekti muudatused rakendama või tühistama. Kas soovite muudatusi rakendada?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>Salvestamata muudatused</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>Murdosa mööda serva: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>Kas sisu on nähtav: jah</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>Kas sisu on nähtav: ei</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>Terminal: {0}</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>Lokaator</value>
   </data>
 </root>

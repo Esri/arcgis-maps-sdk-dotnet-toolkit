@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>Галерия с базови карти</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>Показва налични базови карти. Селектирайте базова карта, за да я използвате за настоящата карта или сцена.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Добавяне на прикачен файл</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>м</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>Мащаб</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>Мащаб на карта</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>Показва текущия мащаб на картата</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>1 към {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>миля</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Приближаване към резултата</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>Прилагане</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>Отказ</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>Отхвърляне</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>Грешка</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>Трябва да приложите или да отхвърлите редакциите от настоящия обект, преди да преминете към друг обект. Искате ли да приложите промените?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>Незапазени редакции</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>Фракция по ръба: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>Съдържанието видимо ли е: да</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>Съдържанието видимо ли е: не</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>Терминал: {0}</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>Локатор</value>
   </data>
 </root>

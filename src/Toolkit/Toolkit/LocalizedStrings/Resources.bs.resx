@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BasemapGalleryAutomationName" xml:space="preserve">
+    <value>Kartografskih podloga</value>
+  </data>
+  <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
+    <value>Prikazuje popis dostupnih kartografskih podloga Odaberite kartografsku podlogu koju ćete koristiti za trenutnu kartu ili scenu.</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Dodaj privitak</value>
   </data>
@@ -248,6 +254,18 @@
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
     <value>m</value>
+  </data>
+  <data name="ScaleLineAutomationTypeName" xml:space="preserve">
+    <value>Mjerilo</value>
+  </data>
+  <data name="ScaleLineAutomationName" xml:space="preserve">
+    <value>Mjerilo karte</value>
+  </data>
+  <data name="ScaleLineAutomationHelpText" xml:space="preserve">
+    <value>Označava trenutno mjerilo karte</value>
+  </data>
+  <data name="ScaleLineAutomationValue" xml:space="preserve">
+    <value>1 do {0}</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
     <value>mi</value>
@@ -410,5 +428,38 @@
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Povećaj na rezultat</value>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>Primijeni</value>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>Odustani</value>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>Odbaci</value>
+  </data>
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>Pogreška</value>
+  </data>
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>Prije prelaska na drugi geoobjekt morate primijeniti ili odbaciti uređivanja trenutnog geoobjekta. Želite li primijeniti promjene?</value>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>Nespremljena uređivanja</value>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>Frakcija uz rub: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>Je li sadržaj vidljiv: da</value>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>Je li sadržaj vidljiv: ne</value>
+  </data>
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>Terminal: {0}</value>
+  </data>
+  <data name="Locator_DefaultName" xml:space="preserve">
+    <value>Lokator</value>
   </data>
 </root>
