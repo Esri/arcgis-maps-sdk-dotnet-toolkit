@@ -1,0 +1,1302 @@
+{
+  "source_base_path": "D:/a/arcgis-maps-sdk-dotnet-toolkit/arcgis-maps-sdk-dotnet-toolkit/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadProgress.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadProgress.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.FileDownloadProgress",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadProgress.yml\" sourcestartlinenumber=\"1\">Provides the progress information of a download.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadStatus.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadStatus.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.FileDownloadStatus",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadStatus.yml\" sourcestartlinenumber=\"1\">Represents the status of a download.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadTask.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.FileDownloadTask",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadTask.yml\" sourcestartlinenumber=\"1\">Task for helping managing large downloads that can be paused and resumed across application sessions.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadTaskExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadTaskExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.FileDownloadTaskExtensions",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.FileDownloadTaskExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for downloading files.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentThumbnailImage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentThumbnailImage.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentThumbnailImage",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentThumbnailImage.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a <xref href=\"Esri.ArcGISRuntime.Mapping.Popups.PopupAttachment\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsFormElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsFormElementView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsFormElementView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsFormElementView.yml\" sourcestartlinenumber=\"1\">Displays the list of Attachments in an <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement\" data-throw-if-not-resolved=\"false\"></xref> object.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a <xref href=\"Esri.ArcGISRuntime.Mapping.Popups.AttachmentsPopupElement\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.ComboBoxFormInputView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.ComboBoxFormInputView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.ComboBoxFormInputView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.ComboBoxFormInputView.yml\" sourcestartlinenumber=\"1\">Combobox picker for the <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.ComboBoxFormInput\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.DateTimePickerFormInputView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.DateTimePickerFormInputView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.DateTimePickerFormInputView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.DateTimePickerFormInputView.yml\" sourcestartlinenumber=\"1\">Picker for the <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.DateTimePickerFormInput\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FieldFormElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FieldFormElementView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.FieldFormElementView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FieldFormElementView.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement\" data-throw-if-not-resolved=\"false\"></xref> and picking the correct template for each Input type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a <xref href=\"Esri.ArcGISRuntime.Mapping.Popups.FieldsPopupElement\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FormAttachmentView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FormAttachmentView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.FormAttachmentView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FormAttachmentView.yml\" sourcestartlinenumber=\"1\">Displays a <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.FormAttachment\" data-throw-if-not-resolved=\"false\"></xref> object.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FormElementItemsControl.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FormElementItemsControl.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.FormElementItemsControl",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FormElementItemsControl.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a set of popup elements responsible for rendering <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement\" data-throw-if-not-resolved=\"false\"></xref> and <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a <xref href=\"Esri.ArcGISRuntime.Mapping.Popups.MediaPopupElement\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupElementItemsControl.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupElementItemsControl.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.PopupElementItemsControl",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupElementItemsControl.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a set of popup elements.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a <xref href=\"Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView.PopupMedia\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.RadioButtonsFormInputView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.RadioButtonsFormInputView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.RadioButtonsFormInputView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.RadioButtonsFormInputView.yml\" sourcestartlinenumber=\"1\">Radio button view for the <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.RadioButtonsFormInput\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.SwitchFormInputView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.SwitchFormInputView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.SwitchFormInputView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.SwitchFormInputView.yml\" sourcestartlinenumber=\"1\">Checkbox switch for the <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.SwitchFormInput\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextFormElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextFormElementView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.TextFormElementView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextFormElementView.yml\" sourcestartlinenumber=\"1\">Text view for a <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.TextFormElement\" data-throw-if-not-resolved=\"false\"></xref> instance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextFormInputView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextFormInputView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.TextFormInputView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextFormInputView.yml\" sourcestartlinenumber=\"1\">Text input for the <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput\" data-throw-if-not-resolved=\"false\"></xref> and <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput\" data-throw-if-not-resolved=\"false\"></xref> inputs.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView.yml\" sourcestartlinenumber=\"1\">Supporting control for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer\" data-throw-if-not-resolved=\"false\"></xref> control,\nused for rendering a <xref href=\"Esri.ArcGISRuntime.Mapping.Popups.TextPopupElement\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TimePicker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TimePicker.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives.TimePicker",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TimePicker.yml\" sourcestartlinenumber=\"1\">TimePicker used by <xref href=\"Esri.ArcGISRuntime.Mapping.FeatureForms.DateTimePickerFormInput\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.Primitives",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.yml\" sourcestartlinenumber=\"1\">Field attribute change events used by the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.yml\" sourcestartlinenumber=\"1\">Defines the selection modes for the FloorFilter.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.yml\" sourcestartlinenumber=\"1\">Encompasses an element in a basemap gallery.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.yml\" sourcestartlinenumber=\"1\">The view style of a basemap gallery.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BarcodeButtonClickedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BarcodeButtonClickedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.BarcodeButtonClickedEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BarcodeButtonClickedEventArgs.yml\" sourcestartlinenumber=\"1\">Event argument for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView.BarcodeButtonClicked\" data-throw-if-not-resolved=\"false\"></xref> event.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.yml\" sourcestartlinenumber=\"1\">Displays a collection of images representing basemaps from ArcGIS Online, a user-defined Portal, or a user-defined collection.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.yml\" sourcestartlinenumber=\"1\">The BookmarksView view presents bookmarks, either from a list defined by <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.BookmarksOverride\" data-throw-if-not-resolved=\"false\"></xref> or\nthe Map or Scene shown in the associated <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.GeoView\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.yml\" sourcestartlinenumber=\"1\">The Compass Control showing the heading on the map when the rotation is not North up / 0.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.yml\" sourcestartlinenumber=\"1\">The FeatureDataField control is used to display or edit a single field attribute of an <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.Feature\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView.yml\" sourcestartlinenumber=\"1\">A visual feature editor form controlled by a <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView.FeatureForm\" data-throw-if-not-resolved=\"false\"></xref> definition.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.yml\" sourcestartlinenumber=\"1\">FloorFilter provides a browsing experience for floor-aware maps and scenes, and allows you to filter the view to show a single floor/level.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FormAttachmentClickedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FormAttachmentClickedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.FormAttachmentClickedEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FormAttachmentClickedEventArgs.yml\" sourcestartlinenumber=\"1\">Event argument for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView.FormAttachmentClicked\" data-throw-if-not-resolved=\"false\"></xref> event.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.HyperlinkClickedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.HyperlinkClickedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.HyperlinkClickedEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.HyperlinkClickedEventArgs.yml\" sourcestartlinenumber=\"1\">Event argument for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.HyperlinkClicked\" data-throw-if-not-resolved=\"false\"></xref> event.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.yml\" sourcestartlinenumber=\"1\">Defines the API contract for sources of search results that can be used with <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.yml\" sourcestartlinenumber=\"1\">The Legend control is used to display symbology and description for a set of <xref href=\"Esri.ArcGISRuntime.Mapping.Layer\" data-throw-if-not-resolved=\"false\"></xref>s\nin a <xref href=\"Esri.ArcGISRuntime.Mapping.Map\" data-throw-if-not-resolved=\"false\"></xref> or <xref href=\"Esri.ArcGISRuntime.Mapping.Scene\" data-throw-if-not-resolved=\"false\"></xref> contained in a <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.GeoView\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.yml\" sourcestartlinenumber=\"1\">Basic search source implementation for generic locators.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.yml\" sourcestartlinenumber=\"1\">The MeasureToolbar control is used to measure distances and areas on a <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.MapView\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.yml\" sourcestartlinenumber=\"1\">Defines a small &quot;overview&quot; (or &quot;inset&quot;) map displaying a representation of the attached <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.GeoView\" data-throw-if-not-resolved=\"false\"></xref>'s current viewpoint.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupAttachmentClickedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupAttachmentClickedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupAttachmentClickedEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupAttachmentClickedEventArgs.yml\" sourcestartlinenumber=\"1\">Event argument for the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.PopupAttachmentClicked\" data-throw-if-not-resolved=\"false\"></xref> event.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.yml\" sourcestartlinenumber=\"1\">The PopupViewer control is used to display details and media, edit attributes, geometry and related records,\nmanage attachments of an <xref href=\"Esri.ArcGISRuntime.Data.ArcGISFeature\" data-throw-if-not-resolved=\"false\"></xref> or a <xref href=\"Esri.ArcGISRuntime.UI.Graphic\" data-throw-if-not-resolved=\"false\"></xref>\nas defined in its <xref href=\"Esri.ArcGISRuntime.Mapping.Popups.Popup\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.yml\" sourcestartlinenumber=\"1\">The ScaleLine Control generates a line representing\na certain distance on the map in both Metric and US units.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLineAutomationPeer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLineAutomationPeer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLineAutomationPeer",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLineAutomationPeer.yml\" sourcestartlinenumber=\"1\">Exposes <xref href=\"System.Windows.FrameworkElement\" data-throw-if-not-resolved=\"false\"></xref> types to UI Automation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.yml\" sourcestartlinenumber=\"1\">Wraps a search result for display.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.yml\" sourcestartlinenumber=\"1\">Defines how many results should be returned by a search.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.yml\" sourcestartlinenumber=\"1\">Wraps a search suggestion for display.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.yml\" sourcestartlinenumber=\"1\">View for searching with locators or custom search sources.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.yml\" sourcestartlinenumber=\"1\">Backing controller for a search experience, intended for use with SearchView.\nSearchView supports searching, with search-as-you-type for multiple search providers via <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewTemplateSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewTemplateSettings.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewTemplateSettings",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewTemplateSettings.yml\" sourcestartlinenumber=\"1\"><xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewTemplateSettings\" data-throw-if-not-resolved=\"false\"></xref> provides a set of properties that are used when you define a new control template for a control that derives from <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.yml\" sourcestartlinenumber=\"1\">A control that renders a <xref href=\"Esri.ArcGISRuntime.Symbology.Symbol\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents.yml\" sourcestartlinenumber=\"1\">A control that creates a table of content tree view from a <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents.GeoView\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.yml\" sourcestartlinenumber=\"1\">The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control\nto enhance the viewing of geographic features that have attributes based upon Date/Time information.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TocItemContextMenuEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TocItemContextMenuEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.TocItemContextMenuEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TocItemContextMenuEventArgs.yml\" sourcestartlinenumber=\"1\">Event argument fired by the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents\" data-throw-if-not-resolved=\"false\"></xref> when right-clicking an item.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.yml\" sourcestartlinenumber=\"1\">Event argument used by <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.UtilityNetworkChanged\" data-throw-if-not-resolved=\"false\"></xref> event.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.yml\" sourcestartlinenumber=\"1\">Event argument used by <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.UtilityNetworkTraceCompleted\" data-throw-if-not-resolved=\"false\"></xref> event.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.yml\" sourcestartlinenumber=\"1\">Represents a control that enables user to perform trace analysis with pre-configured trace types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.Controls",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.GeoViewController",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.yml\" sourcestartlinenumber=\"1\">Helper class for separating GeoView and ViewModel in an MVVM pattern, while allowing operations on the view from the ViewModel.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.LegendEntry",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.yml\" sourcestartlinenumber=\"1\">Class used to represent an entry in the Legend control.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.LoopMode",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.yml\" sourcestartlinenumber=\"1\">Specifies the loop behavior of temporal playback.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.yml\" sourcestartlinenumber=\"1\">Specifies the direction of temporal playback.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.yml\" sourcestartlinenumber=\"1\">Event arguments used when raising the <xref href=\"Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentChanged\" data-throw-if-not-resolved=\"false\"></xref> event.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.yml\" sourcestartlinenumber=\"1\">Represents the display mode for time slider labels.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TocItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TocItem.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI.TocItem",
+      "Summary": "<p sourcefile=\"../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TocItem.yml\" sourcestartlinenumber=\"1\">Class used to represent an entry in the Legend control.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit.UI",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../Output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Esri.ArcGISRuntime.Toolkit",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "../Output/docs/api/netfx/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/netfx/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/android/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/ios/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/net6/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/netfx/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/netstd/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/netstd/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/uwp/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "ar.md",
+      "output": {
+        ".html": {
+          "relative_path": "ar.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "basemap-gallery.md",
+      "output": {
+        ".html": {
+          "relative_path": "basemap-gallery.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "bookmarks-view.md",
+      "output": {
+        ".html": {
+          "relative_path": "bookmarks-view.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "buildingtoolkit.md",
+      "output": {
+        ".html": {
+          "relative_path": "buildingtoolkit.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "compass.md",
+      "output": {
+        ".html": {
+          "relative_path": "compass.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "concepts/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "concepts/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "concepts/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "concepts/toc.html"
+        },
+        ".json": {
+          "relative_path": "concepts/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "controls.md",
+      "output": {
+        ".html": {
+          "relative_path": "controls.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "feature-data-field.md",
+      "output": {
+        ".html": {
+          "relative_path": "feature-data-field.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "featureformview.md",
+      "output": {
+        ".html": {
+          "relative_path": "featureformview.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "floor-filter.md",
+      "output": {
+        ".html": {
+          "relative_path": "floor-filter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "geoviewcontroller.md",
+      "output": {
+        ".html": {
+          "relative_path": "geoviewcontroller.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "legend.md",
+      "output": {
+        ".html": {
+          "relative_path": "legend.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "measure-toolbar.md",
+      "output": {
+        ".html": {
+          "relative_path": "measure-toolbar.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "overview-map.md",
+      "output": {
+        ".html": {
+          "relative_path": "overview-map.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "popup-viewer.md",
+      "output": {
+        ".html": {
+          "relative_path": "popup-viewer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "requirements.md",
+      "output": {
+        ".html": {
+          "relative_path": "requirements.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "scale-line.md",
+      "output": {
+        ".html": {
+          "relative_path": "scale-line.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "search-view.md",
+      "output": {
+        ".html": {
+          "relative_path": "search-view.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "symbol-display.md",
+      "output": {
+        ".html": {
+          "relative_path": "symbol-display.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "time-slider.md",
+      "output": {
+        ".html": {
+          "relative_path": "time-slider.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "un-trace.md",
+      "output": {
+        ".html": {
+          "relative_path": "un-trace.html"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
