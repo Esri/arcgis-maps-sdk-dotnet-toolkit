@@ -14,7 +14,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private void UpdateData()
         {
             if (ContentData is null)
-                Content = null;
+            {
+                if (Content is not null)
+                {
+                    // We don't want to clear the content - there's a good chance it can be reused if currentTemplate doesn't change on the next item presented.
+                    Content.BindingContext = null;
+                    Content.IsVisible = false;
+                }
+            }
             else
             {
                 var template = ContentTemplate.SelectDataTemplate(ContentData, this);
@@ -36,8 +43,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     view.BindingContext = ContentData;
                     Content = view;
                 }
-                else  if (Content is not null && Content.BindingContext != ContentData)
+                else if (Content is not null && Content.BindingContext != ContentData)
                     Content.BindingContext = ContentData;
+
+                if (Content is not null)
+                    Content.IsVisible = true;
             }
         }
 
