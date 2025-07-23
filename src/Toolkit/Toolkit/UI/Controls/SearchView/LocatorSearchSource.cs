@@ -77,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the task used to perform initial locator setup.
         /// </summary>
-        protected Lazy<Task> LoadTask => _loadTask;
+        protected Task LoadTask => _loadTask.Value;
 
         private string _displayName = string.Empty;
         private bool _displayNameSetExternally = false;
@@ -239,7 +239,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await LoadTask.Value;
+            await LoadTask;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -256,7 +256,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default)
         {
-            await LoadTask.Value;
+            await LoadTask;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -270,7 +270,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await LoadTask.Value;
+            await LoadTask;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -288,7 +288,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public virtual async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken cancellationToken = default)
         {
-            await LoadTask.Value;
+            await LoadTask;
 
             cancellationToken.ThrowIfCancellationRequested();
 
