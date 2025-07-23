@@ -11,6 +11,10 @@ IF NOT EXIST "%DocFxFolder%\v%DocFXVersion%\docfx.exe" (
    powershell -ExecutionPolicy ByPass -command "Expand-Archive -LiteralPath '%DocFxFolder%\docfx_v%DocFXVersion%.zip' -DestinationPath '%DocFxFolder%\v%DocFXVersion%'"
    DEL "%DocFxFolder%\docfx_v%DocFXVersion%.zip" /Q
 )
+IF NOT EXIST "../Output/dotnet.xrefmap.json" (
+   powershell -ExecutionPolicy ByPass -command "Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/raw/main/.xrefmap.json" -OutFile '../Output/dotnet.xrefmap.json'"
+)
+
 REM Build the output site (HTML) from the generated metadata and input files (uses configuration in docfx.json in this folder)
 %DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json
 ECHO Fixing API Reference Links
