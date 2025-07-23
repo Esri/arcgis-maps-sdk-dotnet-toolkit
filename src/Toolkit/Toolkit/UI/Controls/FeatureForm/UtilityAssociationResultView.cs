@@ -153,8 +153,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 associationResult.Association.ToElement.GlobalId.Equals(associatedFeatureGlobalId))
             {
                 var contentVisibility = associationResult.Association.IsContainmentVisible ?
-                    Properties.Resources.GetString("FeatureFormUtilityAssociationsVisibleContent") :
-                    Properties.Resources.GetString("FeatureFormUtilityAssociationsNonVisibleContent");
+                    Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible") :
+                    Properties.Resources.GetString("FeatureFormUtilityElementIsContentNotVisible");
                 return contentVisibility ?? string.Empty;
             }
 
