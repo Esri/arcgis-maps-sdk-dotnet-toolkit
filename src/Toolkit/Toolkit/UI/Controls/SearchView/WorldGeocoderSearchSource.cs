@@ -122,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default)
         {
-            await LoadTask.Value;
+            await LoadTask;
             cancellationToken.ThrowIfCancellationRequested();
 
             var tempParams = new GeocodeParameters();
@@ -149,7 +149,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public override async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await LoadTask.Value;
+            await LoadTask;
             cancellationToken.ThrowIfCancellationRequested();
 
             SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
@@ -179,7 +179,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public override async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await LoadTask.Value;
+            await LoadTask;
             cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
@@ -212,7 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public override async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Geometry.Envelope queryArea, CancellationToken cancellationToken = default)
         {
-            await LoadTask.Value;
+            await LoadTask;
             cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
