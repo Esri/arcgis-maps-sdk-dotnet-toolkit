@@ -111,7 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 fractionAlong.Text = AssociationResult != null &&
                 AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan &&
                 AssociationResult.Association.FractionAlongEdge > 0
-                    ? $"{AssociationResult.Association.FractionAlongEdge * 100} %"
+                    ? $"{Math.Round(AssociationResult.Association.FractionAlongEdge * 100)} %"
                     : string.Empty; ;
 #if MAUI
                 fractionAlong.IsVisible = fractionAlong.Text?.Length > 0;

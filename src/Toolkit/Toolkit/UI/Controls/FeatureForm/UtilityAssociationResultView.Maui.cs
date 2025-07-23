@@ -36,6 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
@@ -49,6 +50,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(title, 1);
             layout.Add(title);
 
+            Label fractionAlong = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+            Grid.SetColumn(fractionAlong, 2);
+            Grid.SetRowSpan(fractionAlong, 2);
+            layout.Add(fractionAlong);
+
             Label connectionInfo = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, LineBreakMode = LineBreakMode.TailTruncation, Margin = new Thickness(0,0,2,0) };
             connectionInfo.SetBinding(ToolTipProperties.TextProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self);
             Grid.SetRow(connectionInfo, 1);
@@ -57,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
             image.Source = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
-            Grid.SetColumn(image, 2);
+            Grid.SetColumn(image, 3);
             Grid.SetRowSpan(image, 2);
             layout.Add(image);
             // TODO: Set theme-based background once https://github.com/dotnet/maui/issues/26620 is addressed
@@ -69,6 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(layout, nameScope);
+            nameScope.RegisterName("FractionAlong", fractionAlong);
             nameScope.RegisterName("Icon", icon);
             nameScope.RegisterName("ConnectionInfo", connectionInfo);
             return layout;
