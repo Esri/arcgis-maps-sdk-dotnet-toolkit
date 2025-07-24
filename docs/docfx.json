@@ -62,7 +62,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/ios",
+      "dest": "../Output/docs/api/ios",
       "properties": { "TargetFramework": "net9.0-ios" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
