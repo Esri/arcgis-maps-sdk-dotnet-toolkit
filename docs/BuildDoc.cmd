@@ -27,4 +27,4 @@ REM cd %~dp0..\Output\docs_site
 REM git init
 REM git add .
 REM git commit -m "Update doc"
-REM git push --force https://github.com/Esri/arcgis-toolkit-dotnet.git main:gh-pages
+REM git push --force https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit.git main:gh-pages
