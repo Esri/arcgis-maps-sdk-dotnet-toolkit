@@ -23,6 +23,11 @@ jobs:
       env:
         DOCFXVERSION: 2.59.4
 
+    - name: Download .NET xrefmap
+      run: |
+        mkdir output
+        Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/raw/main/.xrefmap.json" -OutFile "output/dotnet.xrefmap.json"
+
     - name: Build Documentation
       env:         
         DOCFX_SOURCE_BRANCH_NAME: main
