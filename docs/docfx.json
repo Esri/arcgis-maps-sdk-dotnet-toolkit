@@ -13,7 +13,8 @@
       "dest": "../output/docs/api/netfx",
       "properties": { "TargetFramework": "net472" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout": "separatePages"
     },    
     {
       "src": [
@@ -28,44 +29,43 @@
         }
       ],
       "dest": "../Output/docs/api/netwin",
-      "properties": { "TargetFramework": "net9.0-windows10.0.19041.0" },
+      "properties": { "NETWinOnly": "true", "_MauiBindingInterceptorsSupport": "false" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout": "separatePages"
     },
     {
       "src": [
         {
           "files": [
             "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Maui/Esri.ArcGISRuntime.ARToolkit.Maui.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/"
         }
       ],
       "dest": "../Output/docs/api/android",
-      "properties": { "TargetFramework": "net9.0-android" },
+      "properties": { "TargetFramework": "net9.0-android35.0", "_MauiBindingInterceptorsSupport": "false" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout": "separatePages"
     },
     {
       "src": [
         {
           "files": [
             "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Maui/Esri.ArcGISRuntime.ARToolkit.Maui.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/"
         }
       ],
       "dest": "../Output/docs/api/ios",
-      "properties": { "TargetFramework": "net9.0-ios" },
+      "properties": { "TargetFramework": "net9.0-ios18.0", "_MauiBindingInterceptorsSupport": "false" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout": "separatePages"
     },
     {
       "src": [
@@ -78,10 +78,11 @@
         }
       ],
       "dest": "../output/docs/api/uwp",
-      "properties": { "TargetFramework": "uap10.0.19041" },
+      "properties": { "TargetFramework": "uap10.0.19041", "DocfxBuild": "true", "MSBuildExtensionsPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\MSBuild" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout": "separatePages"
     }
   ],
   "build": {
@@ -126,7 +127,8 @@
       "_gitContribute": {
         "branch": "main",
         "apiSpecFolder": "docs/api"
-      }
+      },
+	  "memberLayout": "separatePages"
     },
     "dest": "../Output/docs_site",
     "globalMetadataFiles": [],
