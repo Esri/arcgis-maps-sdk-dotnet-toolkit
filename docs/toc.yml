@@ -5,4 +5,4 @@
 - name: API Reference
   href: api/index.md
 - name: GitHub
-  href: https://github.com/Esri/arcgis-toolkit-dotnet
+  href: https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit

@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>$(NETMauiTarget);$(NetAndroidTargetFramework);$(NetiOSTargetFramework);$(NetCatalystTargetFramework)</TargetFrameworks>
+		<TargetFrameworks Condition="'$(NETWinOnly)'=='true'">$(NETMauiTarget)</TargetFrameworks>
         <Description>ArcGIS Maps SDK for .NET controls and utilities for .NET MAUI apps including .NET for Android, .NET for iOS, .NET for macOS, or Windows UI 3 (WinUI 3)</Description>
         <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D WinUI Android iOS Mac Catalyst MacCatalyst Windows UI 3 toolkit</PackageTags>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);$(NetMauiWindowsTargetFramework)</TargetFrameworks>

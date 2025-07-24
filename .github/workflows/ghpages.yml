@@ -14,14 +14,29 @@ jobs:
         
     - name: Clone Repo
       uses: actions/checkout@v1
+    
+    - name: Setup Visual Studio Command Prompt
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Restore
+      run: |
+        msbuild /restore /t:Restore src/Toolkit/Toolkit.WPF/Esri.ArcGISRuntime.Toolkit.WPF.csproj /p:Configuration=Release
+        msbuild /restore /t:Restore src/Toolkit/Toolkit.WinUI/Esri.ArcGISRuntime.Toolkit.WinUI.csproj /p:Configuration=Release
+        msbuild /restore /t:Restore src/Toolkit/Toolkit.UWP/Esri.ArcGISRuntime.Toolkit.UWP.csproj /p:Configuration=Release
+        msbuild /restore /t:Restore src/Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj /p:Configuration=Release
 
     - name: Download DocFX
       run: |
         mkdir .tools/docfx
-        Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/releases/download/v${env:DOCFXVERSION}/docfx.zip" -OutFile ".tools/docfx/docfx.zip"
+        Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/releases/download/v${env:DOCFXVERSION}/docfx-win-x64-v${env:DOCFXVERSION}.zip" -OutFile ".tools/docfx/docfx.zip"
         [System.IO.Compression.ZipFile]::ExtractToDirectory(".tools/docfx/docfx.zip", ".tools/docfx" )
       env:
-        DOCFXVERSION: 2.59.4
+        DOCFXVERSION: 2.77.0
+
+    - name: Download .NET xrefmap
+      run: |
+        mkdir output
+        Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/raw/main/.xrefmap.json" -OutFile "output/dotnet.xrefmap.json"
 
     - name: Build Documentation
       env:         
