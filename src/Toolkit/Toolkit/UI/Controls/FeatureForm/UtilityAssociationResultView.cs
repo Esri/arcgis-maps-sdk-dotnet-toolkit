@@ -19,6 +19,8 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UtilityNetworks;
 using System.Text;
+using Esri.ArcGISRuntime.Data;
+
 
 
 
@@ -111,71 +113,87 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 };
             }
 #endif
-            // One of the elements is this associated feature. We want to display info about the other element
-            // Use the guids to figure out whether this is the To or From element, and select the other one to
-            // display information on.
-            var guidField = (AssociationResult?.AssociatedFeature.FeatureTable as Data.ArcGISFeatureTable)?.GlobalIdField;
-            Guid? guid = null;
-            if (guidField is not null && AssociationResult?.AssociatedFeature.Attributes.ContainsKey(guidField) == true)
+
+            if (GetTemplateChild("FractionAlong") is TextBlock fractionAlong)
             {
-                guid = (Guid?)AssociationResult?.AssociatedFeature.Attributes[guidField];
+                fractionAlong.Text = AssociationResult != null &&
+                AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan &&
+                AssociationResult.Association.FractionAlongEdge > 0
+                    ? $"{Math.Round(AssociationResult.Association.FractionAlongEdge * 100)} %"
+                    : string.Empty;
+#if MAUI
+                fractionAlong.IsVisible = fractionAlong.Text?.Length > 0;
+#else
+                fractionAlong.Visibility = fractionAlong.Text?.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+#endif
             }
-            UtilityElement? otherElement = null;
-            if (AssociationResult?.Association.FromElement.GlobalId == guid)
-                otherElement = AssociationResult?.Association.ToElement;
-            if (AssociationResult?.Association.ToElement.GlobalId == guid)
-                otherElement = AssociationResult?.Association.FromElement;
 
             if (GetTemplateChild("ConnectionInfo") is TextBlock connectionInfo)
             {
-                StringBuilder sb = new StringBuilder();
-                bool showFraction = AssociationResult?.Association.AssociationType == UtilityAssociationType.Connectivity;
-                if (showFraction)
-                {
-                    var fraction = AssociationResult?.Association.FractionAlongEdge ?? 0;
-                    if (fraction == 0)
-                        fraction = otherElement?.FractionAlongEdge ?? 0;
-                    if (sb.Length > 0)
-                        sb.Append(" ");
-                    sb.Append(string.Format(Properties.Resources.GetString("FeatureFormUtilityElementFractionAlongEdge")!, fraction.ToString("P0")));
-                }
-
-                string? terminalName = otherElement?.Terminal?.Name;
-                if (!string.IsNullOrEmpty(terminalName))
-                {
-                    if (sb.Length > 0)
-                        sb.Append(" ");
-                    sb.Append(string.IsNullOrEmpty(terminalName) ? "" : string.Format(Properties.Resources.GetString("FeatureFormUtilityElementTerminalName")!, terminalName));
-                }
-
-                bool showIscontentVisible = AssociationResult?.Association.AssociationType == UtilityAssociationType.Containment && otherElement == AssociationResult?.Association.ToElement;
-                if (showIscontentVisible)
-                {
-                    if (sb.Length > 0)
-                        sb.Append(" ");
-                    sb.Append(AssociationResult?.Association.IsContainmentVisible == true ? Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible") : Properties.Resources.GetString("FeatureFormUtilityElementIsContentNotVisible"));
-                }
-                connectionInfo.Text = sb.ToString().Trim();
+                connectionInfo.Text = GetAssociationProperty(AssociationResult);
 #if MAUI
-                connectionInfo.IsVisible = connectionInfo.Text.Length > 0;
+                connectionInfo.IsVisible = connectionInfo.Text?.Length > 0;
 #else
-                connectionInfo.Visibility = connectionInfo.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+                connectionInfo.Visibility = connectionInfo.Text?.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
 #endif
             }
         }
 
+        private string GetAssociationProperty(UtilityAssociationResult? associationResult)
+        {
+            if (associationResult is null ||
+                associationResult.AssociatedFeature is not ArcGISFeature feature ||
+                feature.FeatureTable is not ArcGISFeatureTable table ||
+                feature.GetAttributeValue(table.GlobalIdField) is not Guid associatedFeatureGlobalId)
+            {
+                return string.Empty;
+            }
+
+            if (associationResult.Association.AssociationType == UtilityAssociationType.Containment &&
+                associationResult.Association.ToElement.GlobalId.Equals(associatedFeatureGlobalId))
+            {
+                var contentVisibility = associationResult.Association.IsContainmentVisible ?
+                    Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible") :
+                    Properties.Resources.GetString("FeatureFormUtilityElementIsContentNotVisible");
+                return contentVisibility ?? string.Empty;
+            }
+
+            if (associationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityFromSide ||
+                associationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan ||
+                associationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityToSide ||
+                associationResult.Association.AssociationType == UtilityAssociationType.Connectivity)
+            {
+                if (associationResult.Association.FromElement.GlobalId.Equals(associatedFeatureGlobalId) &&
+                    associationResult.Association.FromElement.Terminal is UtilityTerminal fromTerminal)
+                {
+                    return fromTerminal.Name;
+                }
+
+                if (associationResult.Association.ToElement.GlobalId.Equals(associatedFeatureGlobalId) &&
+                    associationResult.Association.ToElement.Terminal is UtilityTerminal toTerminal)
+                {
+                    return toTerminal.Name;
+                }
+            }
+
+            return string.Empty;
+        }
+
         private string GetIconGlyph()
         {
-            if (AssociationResult is not null)
-            {
-                if (AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityFromSide)
-                    return ToolkitIcons.ConnectionEndLeft;
-                if (AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityToSide)
-                    return ToolkitIcons.ConnectionEndRight;
-                if (AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan)
-                    return ToolkitIcons.ConnectionMiddle;;
-            }
-            return "";
+            if (AssociationResult?.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityFromSide)
+                return ToolkitIcons.ConnectionEndLeft;
+
+            if (AssociationResult?.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityToSide)
+                return ToolkitIcons.ConnectionEndRight;
+
+            if (AssociationResult?.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan)
+                return ToolkitIcons.ConnectionMiddle;
+
+            if (AssociationResult?.Association.AssociationType == UtilityAssociationType.Connectivity)
+                return ToolkitIcons.ConnectionToConnection;
+
+            return string.Empty;
         }
     }
 }

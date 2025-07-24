@@ -306,11 +306,11 @@
     <comment>The text used to display the number of associations for a group in a UtilityAssociationsPopupElement's filter result</comment>
   </data>
   <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
-    <value>visible content</value>
+    <value>Visible content</value>
     <comment>The text used to indicate the associated feature is a visible content in a UtilityAssociationsPopupElement's group result</comment>
   </data>
   <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
-    <value>content</value>
+    <value>Content</value>
     <comment>The text used to indicate the associated feature is non-visible content in a UtilityAssociationsPopupElement's group result</comment>
   </data>
   <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
@@ -590,12 +590,12 @@
     <comment>The percentage fraction along an edge of a utility element association</comment>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Is content visible: Yes</value>
-    <comment>Whether content is visible on a utility element association</comment>
+    <value>Visible content</value>
+    <comment>The text used to indicate the associated feature is a visible content in a UtilityAssociationsFormElement's group result</comment>
   </data>
-    <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Is content visible: No</value>
-    <comment>Whether content is not visible on a utility element association</comment>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>Content</value>
+    <comment>The text used to indicate the associated feature is non-visible content in a UtilityAssociationsFormElement's group result</comment>
   </data>
     <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>

@@ -52,6 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Label fractionAlong = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
             Grid.SetColumn(fractionAlong, 2);
+            Grid.SetRowSpan(fractionAlong, 2);
             layout.Add(fractionAlong);
 
             Label connectionInfo = new Label() { Style = PopupViewer.GetPopupViewerCaptionStyle(), IsVisible = false, LineBreakMode = LineBreakMode.TailTruncation, Margin = new Thickness(0, 0, 2, 0) };
