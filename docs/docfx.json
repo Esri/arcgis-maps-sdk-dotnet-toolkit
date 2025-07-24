@@ -27,7 +27,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/netwin",
+      "dest": "../Output/docs/api/netwin",
       "properties": { "TargetFramework": "net9.0-windows10.0.19041.0" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
@@ -44,7 +44,7 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/android",
+      "dest": "../Output/docs/api/android",
       "properties": { "TargetFramework": "net9.0-android" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
