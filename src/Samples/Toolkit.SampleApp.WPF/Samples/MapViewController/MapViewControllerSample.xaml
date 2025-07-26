@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.MapViewController.MapViewControllerSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.MapViewController"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:MapViewControllerSampleVM x:Key="VM" />
+    </UserControl.Resources>
+    <Grid>
+        <esri:MapView x:Name="MyMapView"
+                   Map="{Binding Map, Source={StaticResource VM}}"
+                   esri:GeoViewController.GeoViewController="{Binding Controller, Source={StaticResource VM}}">
+            <Behaviors:Interaction.Triggers>
+                <Behaviors:EventTrigger EventName="">
+                    <Behaviors:InvokeCommandAction Command="{Binding GeoViewTappedCommand, Source={StaticResource VM}}" PassEventArgsToCommand="True" />
+                </Behaviors:EventTrigger>
+            </Behaviors:Interaction.Triggers>
+        </esri:MapView>
+        <Button Content="Start/Stop Geometry" Command="{Binding ToggleGeometryEditorCommand, Source={StaticResource VM}}" 
+                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" />
+    </Grid>
+</UserControl>
