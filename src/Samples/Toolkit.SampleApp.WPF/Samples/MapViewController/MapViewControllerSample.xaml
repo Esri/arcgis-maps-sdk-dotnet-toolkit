@@ -16,12 +16,20 @@
                    Map="{Binding Map, Source={StaticResource VM}}"
                    esri:GeoViewController.GeoViewController="{Binding Controller, Source={StaticResource VM}}">
             <Behaviors:Interaction.Triggers>
-                <Behaviors:EventTrigger EventName="">
-                    <Behaviors:InvokeCommandAction Command="{Binding GeoViewTappedCommand, Source={StaticResource VM}}" PassEventArgsToCommand="True" />
+                <Behaviors:EventTrigger EventName="GeoViewTapped">
+                    <Behaviors:InvokeCommandAction Command="{Binding MapViewTappedCommand, Source={StaticResource VM}}" PassEventArgsToCommand="True" />
                 </Behaviors:EventTrigger>
             </Behaviors:Interaction.Triggers>
         </esri:MapView>
         <Button Content="Start/Stop Geometry" Command="{Binding ToggleGeometryEditorCommand, Source={StaticResource VM}}" 
                 HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" />
+        <Popup x:Name="InfoPopup"
+               IsOpen="{Binding IsPopupOpen, Source={StaticResource VM}}"
+               Placement="Mouse"
+               StaysOpen="False">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10">
+                <TextBlock Text="{Binding PopupText, Source={StaticResource VM}}" />
+            </Border>
+        </Popup>
     </Grid>
 </UserControl>

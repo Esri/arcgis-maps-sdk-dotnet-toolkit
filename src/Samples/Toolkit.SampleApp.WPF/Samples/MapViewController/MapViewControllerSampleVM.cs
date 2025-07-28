@@ -17,27 +17,35 @@ using Esri.ArcGISRuntime.UI.Editing;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.MapViewController;
 
-public partial class MapViewControllerSampleVM
+public partial class MapViewControllerSampleVM : ObservableObject
 {
+    [ObservableProperty]
+    private bool isPopupOpen;
+
+    [ObservableProperty]
+    private string? popupText;
+
     public Map Map { get; } = new Map(BasemapStyle.OpenStreets);
 
     public MyMapViewController Controller { get; } = new MyMapViewController();
-
-    [RelayCommand]
-    public async Task OnGeoViewTapped(GeoViewInputEventArgs eventArgs) => await Identify(eventArgs.Position, eventArgs.Location);
 
     [RelayCommand]
     public void OnToggleGeometryEditor()
     {
         if (Controller.GeometryEditor?.Stop() is null)
         {
-            Controller.GeometryEditor?.Start(GeometryType.Point);
+            Controller.GeometryEditor?.Start(GeometryType.Polygon);
             if (Controller.GeometryEditor?.SnapSettings is SnapSettings snapSettings)
             {
                 snapSettings.IsEnabled = true;
+                snapSettings.Tolerance = 10;
+                snapSettings.SyncSourceSettings();
             }
         }
     }
+
+    [RelayCommand]
+    public async Task OnMapViewTapped(GeoViewInputEventArgs eventArgs) => await Identify(eventArgs.Position, eventArgs.Location);
 
     public async Task Identify(Point location, MapPoint? mapLocation)
     {
@@ -49,31 +57,24 @@ public partial class MapViewControllerSampleVM
             {
                 var summary = $"Selected {result.Elements.Count} element(s):\n" +
                               string.Join("\n", result.Elements.Select(e => e.GetType().Name));
+                if (Controller.GeometryEditor is { IsStarted: true })
+                {
+                    summary += "\n\nGeometry Editor is active.";
+                }
 
-                MapPoint? calloutLocation = null;
-                if (result.Elements.FirstOrDefault() is GeometryEditorElement firstElem)
-                    calloutLocation = firstElem switch
-                    {
-                        GeometryEditorVertex pt => pt.Point,
-                        GeometryEditorPart part => part.Part.StartPoint,
-                        GeometryEditorMidVertex midVertex => midVertex.Point,
-                        GeometryEditorGeometry geometry => geometry.Geometry?.Extent?.GetCenter(),
-                        _ => null
-                    };
-
-                calloutLocation ??= mapLocation;
-
-                if (calloutLocation != null)
-                    Controller.ShowCalloutAt(calloutLocation, new Esri.ArcGISRuntime.UI.CalloutDefinition(summary));
+                PopupText = summary;
+                IsPopupOpen = true;
             }
             else if (mapLocation is not null)
             {
-                Controller.ShowCalloutAt(mapLocation, new Esri.ArcGISRuntime.UI.CalloutDefinition("No Geometry found"));
+                PopupText = "No Geometry found";
+                IsPopupOpen = true;
             }
         }
         catch (ArcGISException ex)
         {
-            Controller.ShowCalloutAt(mapLocation, new Esri.ArcGISRuntime.UI.CalloutDefinition("Failed to identfy Geometry", ex.Message));
+            PopupText = $"Failed to identify Geometry\n{ex.Message}";
+            IsPopupOpen = true;
         }
     }
 }
