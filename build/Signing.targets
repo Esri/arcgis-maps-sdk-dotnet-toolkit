@@ -7,18 +7,16 @@
     <SignToolPath Condition="!Exists($(SignToolPath))">$(MSBuildProgramFiles32)\Windows Kits\10\bin\x64\signtool.exe</SignToolPath>
     <SignToolPath Condition="!Exists($(SignToolPath))">$(MSBuildProgramFiles32)\Windows Kits\10\bin\10.0.22000.0\x64\signtool.exe</SignToolPath>
     <SignToolPath Condition="!Exists($(SignToolPath))">$(MSBuildProgramFiles32)\Windows Kits\10\bin\10.0.19041.0\x64\signtool.exe</SignToolPath>
-	<SignToolPath Condition="!Exists($(SignToolPath))">$(WindowsSDK80Path)bin\x64\signtool.exe</SignToolPath>
+    <SignToolPath Condition="!Exists($(SignToolPath))">$(WindowsSDK80Path)bin\x64\signtool.exe</SignToolPath>
     <SignToolPath Condition="!Exists($(SignToolPath))">signtool.exe</SignToolPath> <!-- fallback to use PATH environment -->
     
     <CodeSignCertificateStore Condition="'$(CodeSignCertificateStore)'==''">LocalMachine</CodeSignCertificateStore>
-    <CodeSignCertificateName Condition="'$(THUMBPRINT)'==''"></CodeSignCertificateName>
-    <SignOutput Condition="'$(THUMBPRINT)'!=''">true</SignOutput>    
-    <SignAssemblyCommand Condition="'$(SignOutput)' == 'true'">"$(SignToolPath)" sign /fd SHA256 /sha1 $(THUMBPRINT) /sm /tr $(CertificateTimeStampService) /td SHA256</SignAssemblyCommand>
+    <SignAssemblyCommand>"$(SignToolPath)" sign /fd SHA256 /sha1 $(THUMBPRINT_SHA1) /sm /tr $(CertificateTimeStampService) /td SHA256</SignAssemblyCommand>
     <NuGetExePath>$(MSBuildThisFileDirectory)..\.tools\NuGet.exe</NuGetExePath>
-    <SignNugetCommand>--certificate-fingerprint $(THUMBPRINT) --certificate-store-name My --certificate-store-location $(CodeSignCertificateStore) --timestamper $(CertificateTimeStampService) --overwrite</SignNugetCommand>
+    <SignNugetCommand>--certificate-fingerprint $(THUMBPRINT_SHA256) --certificate-store-name My --certificate-store-location $(CodeSignCertificateStore) --timestamper $(CertificateTimeStampService) --overwrite</SignNugetCommand>
   </PropertyGroup>
   
-  <Target Name="SignAssembly" Condition="'$(SignOutput)' == 'true'" BeforeTargets="CopyFilesToOutputDirectory" DependsOnTargets="ComputeIntermediateSatelliteAssemblies"> 
+  <Target Name="SignAssembly" Condition="'$(THUMBPRINT_SHA1)' != ''" BeforeTargets="CopyFilesToOutputDirectory" DependsOnTargets="ComputeIntermediateSatelliteAssemblies"> 
     <ItemGroup>
       <FilesToSign Include="@(IntermediateAssembly)" />
       <FilesToSign Include="@(IntermediateRefAssembly)" />
@@ -32,60 +30,13 @@
           WorkingDirectory="$(ProjectDir)" EchoOff="true" />
   </Target>
   
-  <Target Name="SignNuGet" Condition="'$(SignOutput)' == 'true' AND '$(IsPackable)'=='true'" AfterTargets="Pack">
+  <Target Name="SignNuGet" Condition="'$(THUMBPRINT_SHA256)' != '' AND '$(IsPackable)'=='true'" AfterTargets="Pack">
    <PropertyGroup>
       <NugetPackageFileName>$(PackageOutputPath)\$(PackageId).$(PackageVersion).nupkg</NugetPackageFileName>
       <SNugetPackageFileName>$(PackageOutputPath)\$(PackageId).$(PackageVersion).snupkg</SNugetPackageFileName>
    </PropertyGroup>
-    <Exec Command="dotnet nuget sign &quot;$(NugetPackageFileName)&quot; $(SignNugetCommand)" />
-    <Exec Command="dotnet nuget sign &quot;$(SNugetPackageFileName)&quot; $(SignNugetCommand)" />
+    <Exec Command="$(DOTNET_HOST_PATH) nuget sign &quot;$(NugetPackageFileName)&quot; $(SignNugetCommand)" />
+    <Exec Command="$(DOTNET_HOST_PATH) nuget sign &quot;$(SNugetPackageFileName)&quot; $(SignNugetCommand)" />
   </Target> 
-  
-  <Target Name="DownloadNuGetExe">
-    <DownloadNuGet OutputFilename="$(NuGetExePath)" Condition="!Exists('$(NuGetExePath)')" />
-  </Target>
-  
- <UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-    <ParameterGroup>
-      <OutputFilename ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-    <Task>
-      <Reference Include="System.Core" />
-      <Reference Include="System.Xml" />
-      <Reference Include="WindowsBase" />
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Using Namespace="System.IO.Packaging" />
-      <Using Namespace="System.Linq" />
-      <Using Namespace="System.Net" />
-      <Using Namespace="System.Xml" />
-      <Using Namespace="Microsoft.Build.Framework" />
-      <Using Namespace="Microsoft.Build.Utilities" />
-      <Code Type="Fragment" Language="cs">
-        <![CDATA[
-                string zipTempPath = null;
-                try {
-                    OutputFilename = Path.GetFullPath(OutputFilename);
-                    if (File.Exists(OutputFilename)) {
-                        Log.LogMessage("NuGet command line utility already present at " + OutputFilename);
-                        return true;
-                    }
-                    var info = new FileInfo(OutputFilename);
-                    if(!info.Directory.Exists)
-                      info.Directory.Create();
-                    WebClient webClient = new WebClient();
-                    Log.LogMessage("Downloading NuGet.CommandLine");
-                    webClient.DownloadFile("https://dist.nuget.org/win-x86-commandline/v5.7.0/nuget.exe", OutputFilename);
-                    return true;
-                }
-                catch (Exception ex) {
-                    Log.LogErrorFromException(ex);
-                    return false;
-                }
-            ]]>
-      </Code>
-    </Task>
-  </UsingTask>
-
 
 </Project>
