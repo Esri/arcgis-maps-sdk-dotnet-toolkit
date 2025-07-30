@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             readonlyText.SetBinding(Label.TextProperty, static (TextFormInputView view) => view.Element?.Value, source: RelativeBindingSource.TemplatedParent);
             Grid.SetColumnSpan(readonlyText, 2);
             root.Add(readonlyText);
-            Internal.CalciteImageButton barcodeButton = new Internal.CalciteImageButton("\uE22F") { IsVisible = false, BorderWidth = 0 };
+            Internal.CalciteImageButton barcodeButton = new Internal.CalciteImageButton(ToolkitIcons.QrCode) { IsVisible = false, BorderWidth = 0 };
             Grid.SetColumn(barcodeButton, 2);
             barcodeButton.SetBinding(View.IsVisibleProperty, new Binding(nameof(TextFormInputView.ShowBarcodeScanner), source: RelativeBindingSource.TemplatedParent));
             root.Add(barcodeButton);

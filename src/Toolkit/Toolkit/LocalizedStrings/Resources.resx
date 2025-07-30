@@ -289,6 +289,34 @@
     <value>View</value>
     <comment>The text displayed for a hyperlink, that when clicked will view that webpage/link</comment>
   </data>
+  <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
+    <value>Associations</value>
+    <comment>The default title used when UtilityAssociationsPopupElement's title is empty</comment>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
+    <value>No associations were found</value>
+    <comment>The text used when all of UtilityAssociationsPopupElement's filters have no results</comment>
+  </data>
+  <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
+    <value>Show all</value>
+    <comment>The text used to expand a group in a UtilityAssociationsPopupElement's filter result</comment>
+  </data>
+  <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
+    <value>Total:</value>
+    <comment>The text used to display the number of associations for a group in a UtilityAssociationsPopupElement's filter result</comment>
+  </data>
+  <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
+    <value>Visible content</value>
+    <comment>The text used to indicate the associated feature is a visible content in a UtilityAssociationsPopupElement's group result</comment>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
+    <value>Content</value>
+    <comment>The text used to indicate the associated feature is non-visible content in a UtilityAssociationsPopupElement's group result</comment>
+  </data>
+  <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
+    <value>Filter by feature title</value>
+    <comment>The placeholder text to search associated features by title in a UtilityAssociationsPopupElement's group result</comment>
+  </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
     <comment>Abbreviation of "Feet" displayed in the scale bar</comment>
@@ -532,6 +560,46 @@
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
     <value>Zoom to result</value>
     <comment>The text on button that zooms to the selected trace result.</comment>
+  </data>
+  <data name="FeatureFormPendingEditsApply" xml:space="preserve">
+    <value>Apply</value>
+    <comment>The text on the Apply button of the unsaved-edits warning dialog</comment>
+  </data>
+  <data name="FeatureFormPendingEditsCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The text on the Cancel button of the unsaved-edits warning dialog</comment>
+  </data>
+  <data name="FeatureFormPendingEditsDiscard" xml:space="preserve">
+    <value>Discard</value>
+    <comment>The text on the Discard button of the unsaved-edits warning dialog</comment>
+  </data>
+    <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <value>Error</value>
+    <comment>The text on the dialog shown if saving edits to a feature form fails</comment>
+  </data>
+    <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <value>You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes?</value>
+    <comment>The content of the dialog when user is warned about unsaved edits</comment>
+  </data>
+  <data name="FeatureFormPendingEditsTitle" xml:space="preserve">
+    <value>Unsaved edits</value>
+    <comment>The title of the dialog when user is warned about unsaved edits</comment>
+  </data>
+  <data name="FeatureFormUtilityElementFractionAlongEdge" xml:space="preserve">
+    <value>Fraction along edge: {0}</value>
+    <comment>The percentage fraction along an edge of a utility element association</comment>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
+    <value>Visible content</value>
+    <comment>The text used to indicate the associated feature is a visible content in a UtilityAssociationsFormElement's group result</comment>
+  </data>
+  <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
+    <value>Content</value>
+    <comment>The text used to indicate the associated feature is non-visible content in a UtilityAssociationsFormElement's group result</comment>
+  </data>
+    <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <value>Terminal: {0}</value>
+    <comment>The terminal name of utility element association</comment>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>Locator</value>

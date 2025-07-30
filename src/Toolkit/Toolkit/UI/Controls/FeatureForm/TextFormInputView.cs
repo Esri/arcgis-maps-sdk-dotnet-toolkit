@@ -120,7 +120,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif WPF
                 _readonlyLabel.Visibility = Element?.IsEditable == false ? Visibility.Visible : Visibility.Collapsed;
 #endif
-                _readonlyLabel.Text = Element?.FormattedValue;
             }
 
 #if !WINDOWS_XAML
@@ -135,11 +134,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateText()
         {
-            if (_textInput != null)
+            if (_textInput != null && Element?.IsEditable == true)
             {
                 string newValue = Element?.Value?.ToString() ?? string.Empty;
                 if (_textInput.Text != newValue)
                     _textInput.Text = newValue;
+            }
+            if (_readonlyLabel is not null && Element?.IsEditable == false)
+            {
+                _readonlyLabel.Text = Element?.FormattedValue;
             }
         }
 
@@ -159,11 +162,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void Apply()
         {
-            if (_textInput is null || _textInput.Text == Element?.Value as string) return;
+            if (Element?.IsEditable == false || _textInput is null || _textInput.Text == Element?.Value as string) return;
             string strvalue = _textInput.Text;
             object? value = strvalue;
             if (string.IsNullOrEmpty(strvalue))
             {
+                if (Element?.Value is null) return;
                 value = null;
             }
             else if (Element?.FieldType == FieldType.Int32 && int.TryParse(strvalue, out var intvalue))

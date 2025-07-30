@@ -153,7 +153,7 @@
                             BorderBrush="#4d6e6e6e"
                             BorderThickness="1">
                             <Grid>
-                                <FontIcon FontFamily="{StaticResource calcite-ui-icons-24}" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE032;" />
+                                <FontIcon FontFamily="{StaticResource toolkit-icons}" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE74D;" />
                                 <Image
                                     Width="62"
                                     Height="62"
@@ -209,7 +209,7 @@
                             BorderBrush="#4d6e6e6e"
                             BorderThickness="1">
                             <Grid>
-                                <FontIcon FontFamily="{StaticResource calcite-ui-icons-24}" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE032;" />
+                                <FontIcon FontFamily="{StaticResource toolkit-icons}" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE74D;" />
                                 <Image
                                     Width="62"
                                     Height="62"

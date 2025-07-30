@@ -9,9 +9,9 @@
         <UseMaui>true</UseMaui>
         <SingleProject>true</SingleProject>
         <ImplicitUsings>enable</ImplicitUsings>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">16.0</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">16.1</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">17.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
         <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
@@ -22,10 +22,10 @@
 
     <ItemGroup>
       <EmbeddedResource Include="..\Toolkit\LocalizedStrings\*.resx" Link="LocalizedStrings\%(Filename).resx" />
-      <EmbeddedResource Include="Resources\Fonts\calcite-ui-icons-24.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\toolkit-icons.ttf" />
       <EmbeddedResource Include="Assets\*.png" />
       <None Include="build\**\*.*" PackagePath="build;buildTransitive" Pack="true" />
-      <None Include="Resources\Fonts\calcite-ui-icons-24.ttf" Pack="true" PackagePath="Resources\Fonts" />
+      <None Include="Resources\Fonts\toolkit-icons.ttf" Pack="true" PackagePath="Resources\Fonts" />
     </ItemGroup>
 
     <ItemGroup>

@@ -37,6 +37,7 @@
   <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
     <EmbeddedResource Include="..\Toolkit\LocalizedStrings\*.resx" Link="LocalizedStrings\%(Filename).resx" />
+    <Resource Include="Assets\toolkit-icons.ttf" />
   </ItemGroup>
 
   <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />

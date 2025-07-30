@@ -154,7 +154,7 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
                 <Setter Property=""CornerRadius"" Value=""0"" />
                 <Setter Property=""BorderWidth"" Value=""1"" />
                 <Setter Property=""BorderColor"" Value=""{{AppThemeBinding Light=#dfdfdf, Dark=#404040}}"" />
-                <Setter Property=""FontFamily"" Value=""calcite-ui-icons-24"" />
+                <Setter Property=""FontFamily"" Value=""{ToolkitIcons.FontFamilyName}"" />
                 <Setter Property=""HeightRequest"" Value=""48"" />
                 <Setter Property=""WidthRequest"" Value=""48"" />
             </Style>
@@ -170,8 +170,8 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
            <RowDefinition Height=""Auto"" />
         </Grid.RowDefinitions>
 <Border BackgroundColor=""{{AppThemeBinding Light=#dfdfdf, Dark=#404040}}"" Grid.RowSpan=""5"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" />
-        <Button x:Name=""{nameof(PART_BrowseButton)}"" Margin=""0"" Padding=""16"" Text=""{IconFont.UrbanModel}"" />
-        <Button x:Name=""{nameof(PART_AllButton)}"" Text=""{IconFont.Viewshed}"" Margin=""0,-1,0,0""
+        <Button x:Name=""{nameof(PART_BrowseButton)}"" Margin=""0"" Padding=""16"" Text=""{ToolkitIcons.UrbanModel}"" />
+        <Button x:Name=""{nameof(PART_AllButton)}"" Text=""{ToolkitIcons.Viewshed}"" Margin=""0,-1,0,0""
            Grid.Row=""1"" />
         <Border x:Name=""{nameof(PART_LevelListContainer)}"" Grid.Row=""2"" Stroke=""{{AppThemeBinding Light=#dfdfdf, Dark=#404040}}"" StrokeThickness=""1"" StrokeShape=""Rectangle""
            Padding=""-1,0,0,0"" Margin=""0,-1,0,0"">
@@ -207,7 +207,7 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
                  WidthRequest=""46""
                  Margin=""0"" />
         </Border>
-        <Button x:Name=""{nameof(PART_ZoomButton)}"" Text=""{IconFont.ZoomToObject}"" Margin=""0,-1,0,0""
+        <Button x:Name=""{nameof(PART_ZoomButton)}"" Text=""{ToolkitIcons.ZoomToObject}"" Margin=""0,-1,0,0""
            Grid.Row=""3""
            IsVisible=""True"" />
    </Grid>

@@ -7,7 +7,9 @@
     xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
 
     <internal:VisibilityConverter x:Key="PopupViewerVisibilityConverter"/>
+    <internal:EmptyStringToVisibilityConverter x:Key="PlaceholderVisibilityConverter" />
     <internal:HtmlToPlainTextConverter x:Key="PopupViewerHtmlToPlainTextConverter"/>
+    <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
     <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="Bold" />
@@ -20,8 +22,9 @@
     <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
         <Setter Property="FontSize" Value="12" />
         <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Foreground" Value="Gray" />
     </Style>
-    <Style TargetType="{x:Type primitives:TextPopupElementView}" >
+    <Style TargetType="{x:Type primitives:TextPopupElementView}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:TextPopupElementView}">
@@ -126,7 +129,7 @@
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                      <primitives:AttachmentThumbnailImage Attachment="{Binding}" />
+                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" />
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
@@ -186,57 +189,345 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="{x:Type controls:PopupViewer}" >
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="{x:Type controls:PopupViewer}">
-          <Border Background="{TemplateBinding Background}"
+
+    <Style TargetType="{x:Type primitives:UtilityAssociationsPopupElementView}" >
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <!-- x:DataType=UtilityAssociationsFilterResults-->
+                    <primitives:UtilityAssociationsFilterResultsPopupView AssociationsFilterResult="{Binding}" x:Name="ResultView" MinHeight="40" AutomationProperties.Name="{Binding Filter.Title}" IsExpanded="False" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationsPopupElementView}">
+                    <StackPanel>
+                        <TextBlock x:Name="Title" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay, FallbackValue={internal:LocalizedString Key=PopupViewerUtilityAssociationsDefaultTitle}}" TextTrimming="CharacterEllipsis" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <ListView ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}"
+                                  x:Name="AssociationsList" SelectionMode="Single" BorderThickness="0">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                        <Grid x:Name="NoAssociationsGrid" Margin="10,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border BorderThickness="0" Width="1" Background="Red" Margin="2" />
+                            <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" Foreground="Red" Margin="5" Grid.Column="1" VerticalAlignment="Center" />
+                            <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsNone}" VerticalAlignment="Center" Grid.Column="2" Margin="5" />
+                        </Grid>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type primitives:UtilityAssociationsFilterResultsPopupView}">
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <!-- x:DataType=UtilityAssociationGroupResult-->
+                    <primitives:UtilityAssociationGroupResultPopupView GroupResult="{Binding}" x:Name="ResultView" MinHeight="40" AutomationProperties.Name="{Binding Name}" IsSearchable="False" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationsFilterResultsPopupView}">
+                    <Grid Margin="10,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" TextTrimming="CharacterEllipsis"
+                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding Filter.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" TextTrimming="CharacterEllipsis"
+                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <ItemsControl VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AssociationsFilterResult.GroupResults}"
+                                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}}"
+                                 x:Name="ResultsList" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="0">
+                        </ItemsControl>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsTabStop" Value="False" />
+    </Style>
+
+    <Style TargetType="{x:Type primitives:UtilityAssociationGroupResultPopupView}">
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <!-- x:DataType=UtilityAssociationResult-->
+                    <primitives:UtilityAssociationResultPopupView AssociationResult="{Binding}" x:Name="ResultView" MinHeight="40" AutomationProperties.Name="{Binding Title}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationGroupResultPopupView}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Button x:Name="ExpandIcon" Background="{TemplateBinding Background}" BorderThickness="0"
+                                VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}">
+                            <TextBlock Text="&#xE79B;" FontSize="16" FontFamily="{StaticResource ToolkitIconsFontFamily}" VerticalAlignment="Center" Margin="5"/>
+                        </Button>
+                        <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource PopupViewerTitleStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1"
+                                   Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <Border Width="30" Height="20" CornerRadius="10" Background="LightGray" Grid.Column="2" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}">
+                            <TextBlock Text="{Binding AssociationResults.Count}" HorizontalAlignment="Center" />
+                        </Border>
+                        <Border BorderThickness="0" Height="1" Margin="2" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
+                        <Border BorderThickness="1" BorderBrush="LightGray" x:Name="Search" Grid.ColumnSpan="3" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="&#xE71E;" FontFamily="Segoe MDL2 Assets" Margin="2" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="SearchText" Margin="2" BorderThickness="0" Grid.Column="1"/>
+                                    <TextBlock x:Name="SearchPlaceholder" Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsFilterByTitle}" Style="{StaticResource PopupViewerCaptionStyle}" Margin="2" IsHitTestVisible="False" 
+                                               Visibility="{Binding ElementName=SearchText, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" Grid.Column="1"  />
+                                </Grid>
+                                <Button x:Name="ClearSearch" Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets" Margin="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="{TemplateBinding Background}" BorderThickness="0"
+                                        Visibility="{Binding ElementName=SearchText, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter=Reverse}" />
+                            </Grid>
+                        </Border>
+                        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding Path=GroupResult.AssociationResults, RelativeSource={RelativeSource Mode=TemplatedParent}}" x:Name="ResultsList" SelectionMode="Single" BorderThickness="0" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                        <Button x:Name="ShowAll" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Margin="10,0,0,0" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"
+                                VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                Background="{TemplateBinding Background}" BorderThickness="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height=".25*" />
+                                    <RowDefinition Height=".25*" />
+                                    <RowDefinition Height=".25*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsShowAll}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" FontSize="12"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
+                                    <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsTotal}" Style="{StaticResource PopupViewerCaptionStyle}" VerticalAlignment="Top" Margin="0,0,2,0" />
+                                    <TextBlock Text="{Binding AssociationResults.Count}" VerticalAlignment="Top" Style="{StaticResource PopupViewerCaptionStyle}" />
+                                </StackPanel>
+                                <TextBlock Text="&#xE8FD;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Stretch" FontSize="18" Grid.Column="1" Grid.RowSpan="2" Margin="2"/>
+                                <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.ColumnSpan="3" Grid.Row="2"/>
+                            </Grid>
+                        </Button>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsTabStop" Value="False" />
+    </Style>
+
+    <Style TargetType="{x:Type primitives:UtilityAssociationResultPopupView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationResultPopupView}">
+                    <Grid Margin="10,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="Icon" Width="20" FontSize="16" VerticalAlignment="Center" Margin="5" FontFamily="{StaticResource ToolkitIconsFontFamily}" Grid.RowSpan="2" />
+                        <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="{Binding AssociationResult.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource PopupViewerTitleStyle}"
+                                   VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" />
+                        <TextBlock x:Name="FractionAlong" Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=FractionAlong, Path=Text}" />
+                        <TextBlock x:Name="ConnectionInfo" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=ConnectionInfo, Path=Text}" Style="{StaticResource PopupViewerCaptionStyle}"/>
+                        <TextBlock Text="&#xE76C;" Grid.Column="3" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" FontFamily="Segoe MDL2 Assets" />
+                        <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.Row="2" Grid.ColumnSpan="4"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type primitives:NavigationSubView}">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:NavigationSubView}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="NavigateBack" Background="Transparent" BorderThickness="0,0,1,0" VerticalAlignment="Center"
+                                    Height="40" Width="40" Visibility="Visible" Margin="0,0,10,0">
+                                <TextBlock Text="&#xE76B;" FontFamily="Segoe MDL2 Assets" />
+                            </Button>
+                            <Button x:Name="NavigateUp" Background="Transparent" Width="40" Height="40" BorderThickness="0" VerticalAlignment="Center" >
+                                <TextBlock Text="&#xE74A;" FontFamily="Segoe MDL2 Assets" />
+                            </Button>
+                            <ContentControl ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Margin="{TemplateBinding Padding}"
+                                            VerticalAlignment="Stretch" VerticalContentAlignment="Center" x:Name="Header" />
+                        </StackPanel>
+                        <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1">
+                            <ContentControl x:Name="Content"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </ScrollViewer>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:PopupViewer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:PopupViewer}">
+                    <Border Background="{TemplateBinding Background}"
                    BorderBrush="{TemplateBinding BorderBrush}"
                    BorderThickness="{TemplateBinding BorderThickness}"
                    Padding="{TemplateBinding Padding}"
                    Margin="{TemplateBinding Margin}"
                    MinWidth="{TemplateBinding MinWidth}"
                    MaxWidth="{TemplateBinding MaxWidth}">
-            <Grid DataContext="{TemplateBinding Popup}">
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
-                <TextBlock Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
-                         Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="PopupContentScrollViewer">
-                    <primitives:PopupElementItemsControl ItemsSource="{Binding EvaluatedElements}" Margin="0,10" x:Name="ItemsView">
-                        <primitives:PopupElementItemsControl.TextPopupElementTemplate>
-                            <DataTemplate>
-                                <primitives:TextPopupElementView Element="{Binding}" Margin="0,10" />
-                            </DataTemplate>
-                        </primitives:PopupElementItemsControl.TextPopupElementTemplate>
-                        <primitives:PopupElementItemsControl.MediaPopupElementTemplate>
-                            <DataTemplate>
-                                 <primitives:MediaPopupElementView Element="{Binding}" Margin="0,10" />
-                            </DataTemplate>
-                        </primitives:PopupElementItemsControl.MediaPopupElementTemplate>
-                        <primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
-                            <DataTemplate>
-                                <primitives:FieldsPopupElementView Element="{Binding}" Margin="0,10" />
-                            </DataTemplate>
-                        </primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
-                        <primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
-                            <DataTemplate>
-                                <primitives:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />
-                            </DataTemplate>
-                        </primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
-                        <!--<primitives:PopupElementItemsControl.RelationshipPopupElementTemplate>
-                            <DataTemplate>
-                                <primitives:RelationshipPopupElementView Element="{Binding}" GeoElement="{Binding Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}"  Margin="0,10" />
-                            </DataTemplate>
-                        </primitives:PopupElementItemsControl.RelationshipPopupElementTemplate>-->
-                    </primitives:PopupElementItemsControl>
-                </ScrollViewer>
-            </Grid>
-          </Border>
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
-  </Style>
+                        <primitives:NavigationSubView x:Name="SubFrameView" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Padding="{TemplateBinding Padding}">
+                            <primitives:NavigationSubView.HeaderTemplateSelector>
+                                <primitives:PopupContentTemplateSelector>
+                                    <primitives:PopupContentTemplateSelector.PopupTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
+                                  Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                                        </DataTemplate>
+                                    </primitives:PopupContentTemplateSelector.PopupTemplate>
+                                    <primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Filter.Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
+                                  Visibility="{Binding Filter.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                                                <TextBlock Text="{Binding Filter.Description, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}"
+                                  Visibility="{Binding Filter.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                                    <primitives:PopupContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                                        <DataTemplate>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </primitives:PopupContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                                </primitives:PopupContentTemplateSelector>
+                            </primitives:NavigationSubView.HeaderTemplateSelector>
+                            <primitives:NavigationSubView.ContentTemplateSelector>
+                                <primitives:PopupContentTemplateSelector>
+                                    <primitives:PopupContentTemplateSelector.PopupTemplate>
+                                        <DataTemplate>
+                                            <Grid DataContext="{Binding}">
+                                                <primitives:PopupElementItemsControl ItemsSource="{Binding EvaluatedElements, Mode=OneWay}" Margin="0,10" x:Name="ItemsView">
+                                                    <primitives:PopupElementItemsControl.TextPopupElementTemplate>
+                                                        <DataTemplate>
+                                                            <primitives:TextPopupElementView Element="{Binding}" Margin="0,10" />
+                                                        </DataTemplate>
+                                                    </primitives:PopupElementItemsControl.TextPopupElementTemplate>
+                                                    <primitives:PopupElementItemsControl.MediaPopupElementTemplate>
+                                                        <DataTemplate>
+                                                            <primitives:MediaPopupElementView Element="{Binding}" Margin="0,10" />
+                                                        </DataTemplate>
+                                                    </primitives:PopupElementItemsControl.MediaPopupElementTemplate>
+                                                    <primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
+                                                        <DataTemplate>
+                                                            <primitives:FieldsPopupElementView Element="{Binding}" Margin="0,10" />
+                                                        </DataTemplate>
+                                                    </primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
+                                                    <primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
+                                                        <DataTemplate>
+                                                            <primitives:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />
+                                                        </DataTemplate>
+                                                    </primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
+                                                    <primitives:PopupElementItemsControl.UtilityAssociationsPopupElementTemplate>
+                                                        <DataTemplate>
+                                                            <primitives:UtilityAssociationsPopupElementView Element="{Binding}" Margin="0,10" />
+                                                        </DataTemplate>
+                                                    </primitives:PopupElementItemsControl.UtilityAssociationsPopupElementTemplate>
+                                                    <!--<primitives:PopupElementItemsControl.RelationshipPopupElementTemplate>
+                                              <DataTemplate>
+                                                  <primitives:RelationshipPopupElementView Element="{Binding}" GeoElement="{Binding Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}"  Margin="0,10" />
+                                              </DataTemplate>
+                                          </primitives:PopupElementItemsControl.RelationshipPopupElementTemplate>-->
+                                                </primitives:PopupElementItemsControl>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </primitives:PopupContentTemplateSelector.PopupTemplate>
+                                    <primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                                        <DataTemplate>
+                                            <primitives:UtilityAssociationsFilterResultsPopupView AssociationsFilterResult="{Binding}" IsExpanded="True"/>
+                                        </DataTemplate>
+                                    </primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
+                                    <primitives:PopupContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                                        <DataTemplate>
+                                            <primitives:UtilityAssociationGroupResultPopupView GroupResult="{Binding}" IsSearchable="True"/>
+                                        </DataTemplate>
+                                    </primitives:PopupContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                                </primitives:PopupContentTemplateSelector>
+                            </primitives:NavigationSubView.ContentTemplateSelector>
+                        </primitives:NavigationSubView>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

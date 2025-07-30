@@ -68,7 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>? _dynamicEntityChangedListener;
         private WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _geoElementPropertyChangedListener;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
@@ -90,15 +90,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.OnApplyTemplate();
             InvalidatePopup();
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.OnNavigating += SubView_OnNavigating;
+                _ = subView.Navigate(content: Popup, true);
+            }
         }
 
 
         private bool _isDirty = false;
         private object _isDirtyLock = new object();
 
-#if MAUI
-        [System.Diagnostics.CodeAnalysis.DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Popups.Popup.EvaluatedElements), "Esri.ArcGISRuntime.Mapping.Popups.Popup", "Esri.ArcGISRuntime")]
-#endif
         private void InvalidatePopup()
         {
             lock (_isDirtyLock)
@@ -127,22 +129,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     if (Popup != null)
                     {
-                        var expressions = await Popup.EvaluateExpressionsAsync();
-#if MAUI
-                        var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
-                        if (ctrl != null && ctrl is BindableObject bo)
-                        {
-                            bo.SetBinding(BindableLayout.ItemsSourceProperty, static (PopupViewer viewer) => viewer.Popup?.EvaluatedElements, source: RelativeBindingSource.TemplatedParent);
-                        }
-#else
-                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
-                        var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
-#if WPF
-                        binding?.UpdateTarget();
-#elif WINDOWS_XAML
-                        ctrl?.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Path = new PropertyPath("Popup.EvaluatedElements"), Source = this });
-#endif
-#endif
+                        _ = await Popup.EvaluateExpressionsAsync();
                     }
                 }
                 catch
@@ -151,8 +138,40 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             });
         }
 
+        private bool _isNavigating = false;
+
+        private void SubView_OnNavigating(object? sender, NavigationSubView.NavigationEventArgs e)
+        {
+            if (e.Cancel)
+                return;
+            
+            _isNavigating = true;
+            if (e.NavigatingTo is Popup to)
+            {
+                SetCurrentPopup(to);
+            }
+            else if (e.NavigatingFrom is Popup from && e.Direction == NavigationSubView.NavigationDirection.Backward)
+            {
+                var previousPopup = ((NavigationSubView?)sender)?.NavigationStack.OfType<Popup>().Where(o => o != from)?.LastOrDefault();
+                if (previousPopup is not null)
+                {
+                    SetCurrentPopup(previousPopup);
+                }
+            }
+            _isNavigating = false;
+        }
+
+        private void SetCurrentPopup(Popup? value)
+        {
+            var oldValue = Popup;
+            if (oldValue != value)
+            {
+                SetValue(PopupProperty, value);
+            }
+        }
+
         /// <summary>
-        /// Gets or sets the associated PopupManager which contains popup and sketch editor.
+        /// Gets or sets the associated Popup.
         /// </summary>
         public Popup? Popup
         {
@@ -177,7 +196,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (newPopup?.GeoElement is not null)
             {
-                if(newPopup.GeoElement is DynamicEntity de)
+                if (newPopup.GeoElement is DynamicEntity de)
                 {
                     _dynamicEntityChangedListener = new WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>(this, de)
                     {
@@ -197,14 +216,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 }
             }
+            if (!_isNavigating && GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                _ = subView.Navigate(content: Popup, clearNavigationStack: Popup is null, skipRaisingEvent: true);
+            }
             InvalidatePopup();
-#if MAUI
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
-#elif WPF
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
-#elif WINDOWS_XAML
-            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ChangeView(null, 0, null, disableAnimation: true);
-#endif
         }
 
         /// <summary>
@@ -281,6 +297,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     return;
             }
             Launcher.LaunchUriAsync(uri);
+        }
+
+        internal void NavigateToItem(object item)
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                _ = subView.Navigate(content: item);
+            }
         }
     }
 

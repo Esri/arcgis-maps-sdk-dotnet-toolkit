@@ -72,11 +72,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetRow(label, 1);
             clickAreaContent.Children.Add(label);
 
-            Label collapsedChevron = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = "calcite-ui-icons-24" };
+            Label collapsedChevron = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = ToolkitIcons.FontFamilyName };
 #if IOS
-            collapsedChevron.Text = "\uE078"; // iOS use right-chevron for expand
+            collapsedChevron.Text = ToolkitIcons.ChevronRight; // iOS use right-chevron for expand
 #else
-            collapsedChevron.Text = "\uE076";
+            collapsedChevron.Text = ToolkitIcons.ChevronDown;
 #endif
             collapsedChevron.SetBinding(VisualElement.IsVisibleProperty, static (GroupFormElementView view) => view.IsExpanded, converter: Internal.InvertBoolConverter.Instance, source: RelativeBindingSource.TemplatedParent);
 
@@ -84,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(collapsedChevron, 1);
             clickAreaContent.Children.Add(collapsedChevron);
             
-            Label expandedChevron = new Label() { Text = "\uE079", VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = "calcite-ui-icons-24" };
+            Label expandedChevron = new Label() { Text = ToolkitIcons.ChevronUp, VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = ToolkitIcons.FontFamilyName };
             expandedChevron.SetBinding(VisualElement.IsVisibleProperty, static (GroupFormElementView view) => view.IsExpanded, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRowSpan(expandedChevron, 2);
             Grid.SetColumn(expandedChevron, 1);

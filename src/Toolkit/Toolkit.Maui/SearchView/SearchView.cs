@@ -73,7 +73,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
         if (GetTemplateChild(nameof(PART_CancelButton)) is ImageButton cancelButton)
         {
-            cancelButton.Source = new FontImageSource { Glyph = "\ue30a", FontFamily = "calcite-ui-icons-24", Color = Color.FromArgb("#6E6E6E") };
+            cancelButton.Source = new FontImageSource { Glyph = ToolkitIcons.X, FontFamily = ToolkitIcons.FontFamilyName, Color = Color.FromArgb("#6E6E6E") };
         }
 
         BindingContext = this;

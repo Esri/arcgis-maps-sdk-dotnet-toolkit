@@ -47,7 +47,7 @@
                                           VerticalContentAlignment="Center"
                                           ToolTipService.ToolTip="Length">
                                 <ToggleButton.Content>
-                                    <FontIcon FontFamily="{StaticResource calcite-ui-icons-24}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE1C6;" />
+                                    <FontIcon FontFamily="{StaticResource toolkit-icons}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE973;" />
                                 </ToggleButton.Content>
                             </ToggleButton>
                             <ToggleButton x:Name="MeasureArea"
@@ -58,7 +58,7 @@
                                           ToolTipService.ToolTip="Area"
                                           Grid.Column="1">
                                 <ToggleButton.Content>
-                                    <FontIcon FontFamily="{StaticResource calcite-ui-icons-24}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE1C2;" />
+                                    <FontIcon FontFamily="{StaticResource toolkit-icons}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE96F;" />
                                 </ToggleButton.Content>
                             </ToggleButton>
                             <ToggleButton x:Name="MeasureFeature"
@@ -69,7 +69,7 @@
                                           ToolTipService.ToolTip="Feature"
                                           Grid.Column="2">
                                 <ToggleButton.Content>
-                                    <FontIcon FontFamily="{StaticResource calcite-ui-icons-24}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE1C7;" />
+                                    <FontIcon FontFamily="{StaticResource toolkit-icons}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Glyph="&#xE96E;" />
                                 </ToggleButton.Content>
                             </ToggleButton>
                             <Border Background="{TemplateBinding Background}"

@@ -102,6 +102,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // - the time has changed and IncludeTime is true
                 if (date != oldDate && (date == null || oldDate == null || date != oldDate.Value.Date || input.IncludeTime))
                 {
+#if MAUI
+                    if (date != null && oldDate != null && oldDate.Value.AddSeconds(-oldDate.Value.Second).AddMilliseconds(-oldDate.Value.Millisecond) == date.Value)
+                        return; // .NET MAUI's TimePicker cuts of the seconds, so ignore this to avoid flagging the feature form as having edits
+#endif
                     Element.UpdateValue(date);
                 }
             }

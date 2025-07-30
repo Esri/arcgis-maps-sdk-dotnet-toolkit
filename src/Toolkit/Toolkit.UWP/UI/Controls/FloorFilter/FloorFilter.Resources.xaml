@@ -4,5 +4,5 @@
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
-    <FontFamily x:Key="CalciteIconFont">ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/Assets/calcite-ui-icons-24.ttf#calcite-ui-icons-24</FontFamily>
+    <FontFamily x:Key="CalciteIconFont">ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
 </ResourceDictionary>

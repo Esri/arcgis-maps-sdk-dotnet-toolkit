@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <FontFamily x:Key="calcite-ui-icons-24">ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/Assets/calcite-ui-icons-24.ttf#calcite-ui-icons-24</FontFamily>
+    <FontFamily x:Key="toolkit-icons">ms-appx:///Esri.ArcGISRuntime.Toolkit.UWP/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
  </ResourceDictionary>

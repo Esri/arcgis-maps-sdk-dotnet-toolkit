@@ -179,7 +179,7 @@
                             VerticalAlignment="Center"
                             FontFamily="{StaticResource CalciteIconFont}"
                             Foreground="{ThemeResource FloorFilterAlternateForegroundBrush}"
-                            Text="&#xe268;"
+                            Text="&#xEA72;"
                             TextAlignment="Center" />
                         <TextBox
                             x:Name="PART_SearchBox"
@@ -546,7 +546,7 @@
                         x:Name="BrowseToggle"
                         Grid.Row="0"
                         HorizontalContentAlignment="Center"
-                        Content="&#xe2de;"
+                        Content="&#xEB19;"
                         FontFamily="{StaticResource CalciteIconFont}"
                         IsChecked="{x:Bind IsBrowseOpen, Mode=TwoWay}"
                         Style="{TemplateBinding BrowseButtonStyle}"
@@ -555,7 +555,7 @@
                         x:Name="AllButton"
                         Grid.Row="1"
                         HorizontalContentAlignment="Center"
-                        Content="&#x32f6;"
+                        Content="&#xe943;"
                         FontFamily="{StaticResource CalciteIconFont}"
                         IsChecked="{x:Bind AllDisplayLevelsSelected, Mode=TwoWay}"
                         Style="{TemplateBinding BrowseButtonStyle}"
@@ -571,7 +571,7 @@
                         x:Name="PART_ZoomButton"
                         Grid.Row="3"
                         HorizontalContentAlignment="Center"
-                        Content="&#xe30e;"
+                        Content="&#xEB53;"
                         FontFamily="{StaticResource CalciteIconFont}"
                         Style="{TemplateBinding ZoomToButtonStyle}"
                         ToolTipService.ToolTip="{TemplateBinding ZoomToLabel}" />
@@ -602,7 +602,7 @@
                         Width="24"
                         Padding="0"
                         VerticalAlignment="Stretch"
-                        Content="&#xe077;"
+                        Content="&#xE79F;"
                         FontFamily="{StaticResource CalciteIconFont}"
                         Style="{StaticResource FloorFilterCloseButtonStyle}"
                         ToolTipService.ToolTip="{TemplateBinding BackButtonLabel}" />
@@ -636,7 +636,7 @@
                         Margin="0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Stretch"
-                        Content="&#xe30a;"
+                        Content="&#xEB49;"
                         FontFamily="{StaticResource CalciteIconFont}"
                         Style="{StaticResource FloorFilterCloseButtonStyle}"
                         ToolTipService.ToolTip="{TemplateBinding CloseLabel}" />

@@ -62,11 +62,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private const string FeatureFormTitleStyleName = "FeatureFormTitleStyle";
         private const string FeatureFormCaptionStyleName = "FeatureFormCaptionStyle";
 
-        /// <summary>
-        /// Template name of the form's content's <see cref="ScrollView"/>.
-        /// </summary>
-        public const string FeatureFormContentScrollViewerName = "FeatureFormContentScrollViewer";
-
         static FeatureFormView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
@@ -87,37 +82,87 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private static object BuildDefaultTemplate()
         {
-            Grid root = new Grid();
-            root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
-            Label roottitle = new Label();
-            roottitle.Style = GetFeatureFormHeaderStyle();
-            roottitle.SetBinding(Label.TextProperty, static (FeatureFormView view) => view.FeatureForm?.Title, source: RelativeBindingSource.TemplatedParent);
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, static (FeatureFormView view) => view.FeatureForm?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
-            root.Add(roottitle);
-            ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never, Margin = new Thickness(0, 5, 0, 0) };
-#if WINDOWS
-            scrollView.Padding = new Thickness(0, 0, 10, 0);
-#endif
-            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (FeatureFormView view) => view.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
-            var scrollableContent = new VerticalStackLayout();
-            scrollView.Content = scrollableContent;
-            Grid.SetRow(scrollView, 1);
-            root.Add(scrollView);
-            VerticalStackLayout itemsView = new VerticalStackLayout();
-            BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (FeatureFormView view) => view.FeatureForm?.Elements, source: RelativeBindingSource.TemplatedParent);
-            scrollableContent.Add(itemsView);
-
-            AttachmentsFormElementView attachmentsView = new AttachmentsFormElementView();
-            attachmentsView.SetBinding(AttachmentsFormElementView.ElementProperty, static (FeatureFormView view) => view.FeatureForm?.DefaultAttachmentsElement, source: RelativeBindingSource.TemplatedParent);
-            scrollableContent.Add(attachmentsView);
-
+            NavigationSubView root = new NavigationSubView();
+            root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (FeatureFormView viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
+            root.HeaderTemplateSelector = BuildHeaderTemplateSelector();
+            root.ContentTemplateSelector = BuildContentTemplateSelector();
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
-            nameScope.RegisterName(FeatureFormContentScrollViewerName, scrollView);
-            nameScope.RegisterName(ItemsViewName, itemsView);
+            nameScope.RegisterName("SubFrameView", root);
             return root;
+        }
+
+        private static DataTemplateSelector BuildHeaderTemplateSelector()
+        {
+            FeatureFormContentTemplateSelector selector = new FeatureFormContentTemplateSelector();
+            selector.FeatureFormTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                roottitle.Style = GetFeatureFormHeaderStyle();
+                roottitle.SetBinding(Label.TextProperty, static (FeatureForm form) => form?.Title);
+                return roottitle;
+            });
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                VerticalStackLayout root = new VerticalStackLayout() { VerticalOptions = LayoutOptions.Center };
+                Label title = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                title.Style = GetFeatureFormHeaderStyle();
+                title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
+                root.Children.Add(title);
+                Label desc = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                desc.Style = GetFeatureFormCaptionStyle();
+                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
+                desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(desc);
+                return root;
+            });
+            selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                roottitle.Style = GetFeatureFormHeaderStyle();
+                roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
+                return roottitle;
+            });
+            return selector;
+        }
+
+        private static DataTemplateSelector BuildContentTemplateSelector()
+        {
+            FeatureFormContentTemplateSelector selector = new FeatureFormContentTemplateSelector();
+
+            selector.FeatureFormTemplate = new DataTemplate(() =>
+            {
+                var layout = new VerticalStackLayout();
+                VerticalStackLayout itemsView = new VerticalStackLayout();
+                BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
+                itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (FeatureForm form) => form?.Elements);
+                layout.Add(itemsView);
+
+                AttachmentsFormElementView attachmentsView = new AttachmentsFormElementView();
+                attachmentsView.SetBinding(AttachmentsFormElementView.ElementProperty, static (FeatureForm form) => form?.DefaultAttachmentsElement);
+                layout.Add(attachmentsView);
+                return layout;
+            });
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                var view = new UtilityAssociationsFilterResultsView();
+                view.SetBinding(UtilityAssociationsFilterResultsView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
+                return view;
+            });
+
+            selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
+            {
+                var view = new UtilityAssociationGroupResultView();
+                view.SetBinding(UtilityAssociationGroupResultView.GroupResultProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result);
+                return view;
+            });
+            selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
+            {
+                var view = new UtilityAssociationsFilterResultsView();
+                view.SetBinding(UtilityAssociationsFilterResultsView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
+                return view;
+            });
+            return selector;
         }
 
         internal static Style GetStyle(string resourceKey, Style defaultStyle)
@@ -150,6 +195,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         internal static IEnumerable<T> GetDescendentsOfType<T>(Element root)
         {
             return root.GetVisualTreeDescendants().OfType<T>();
+        }
+
+        private FeatureForm? _currentFeatureForm;
+
+        private FeatureForm? GetCurrentFeatureForm() => _currentFeatureForm;
+
+        private void SetCurrentFeatureForm(FeatureForm? value)
+        {
+            if(_currentFeatureForm != value)
+            {
+                var oldValue = _currentFeatureForm;
+                _currentFeatureForm = value;
+                OnCurrentFeatureFormPropertyChanged(oldValue, value);
+                OnPropertyChanged(nameof(CurrentFeatureForm));
+            }
         }
     }
 }

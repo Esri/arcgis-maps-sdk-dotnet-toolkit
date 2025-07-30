@@ -85,6 +85,41 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
+
+        private FeatureForm? GetCurrentFeatureForm()
+        {
+#if WINDOWS_XAML
+            return (FeatureForm?)GetValue(CurrentFeatureFormProperty);
+#elif WPF
+            return (FeatureForm?)GetValue(CurrentFeatureFormPropertyKey.DependencyProperty);
+#endif
+        }
+
+        private void SetCurrentFeatureForm(FeatureForm? value)
+        {
+            var oldValue = CurrentFeatureForm;
+            if (oldValue != value)
+            {
+#if WINDOWS_XAML
+                SetValue(CurrentFeatureFormProperty, value);
+#elif WPF
+                SetValue(CurrentFeatureFormPropertyKey, value);
+#endif
+                OnCurrentFeatureFormPropertyChanged(oldValue, value);
+            }
+        }
+
+#if WINDOWS_XAML
+        private static readonly DependencyProperty CurrentFeatureFormProperty =
+            DependencyProperty.Register(nameof(CurrentFeatureForm), typeof(FeatureForm), typeof(FeatureFormView), new PropertyMetadata(null));
+#else
+        private static readonly DependencyPropertyKey CurrentFeatureFormPropertyKey =
+                DependencyProperty.RegisterReadOnly(
+                  name: nameof(CurrentFeatureForm),
+                  propertyType: typeof(FeatureForm),
+                  ownerType: typeof(FeatureFormView),
+                  typeMetadata: new FrameworkPropertyMetadata());
+#endif
     }
 }
 #endif
