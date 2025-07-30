@@ -224,3 +224,4 @@ MigrationBackup/
 
 # Repo-specific additions
 src/Toolkit/Toolkit.UWP/LocalizedStrings/*/Resources.resw
+Output
