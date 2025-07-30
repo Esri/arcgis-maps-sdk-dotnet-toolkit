@@ -35,8 +35,8 @@
       <NugetPackageFileName>$(PackageOutputPath)\$(PackageId).$(PackageVersion).nupkg</NugetPackageFileName>
       <SNugetPackageFileName>$(PackageOutputPath)\$(PackageId).$(PackageVersion).snupkg</SNugetPackageFileName>
    </PropertyGroup>
-    <Exec Command="$(DOTNET_HOST_PATH) nuget sign &quot;$(NugetPackageFileName)&quot; $(SignNugetCommand)" />
-    <Exec Command="$(DOTNET_HOST_PATH) nuget sign &quot;$(SNugetPackageFileName)&quot; $(SignNugetCommand)" />
+    <Exec Command="dotnet nuget sign &quot;$(NugetPackageFileName)&quot; $(SignNugetCommand)" />
+    <Exec Command="dotnet nuget sign &quot;$(SNugetPackageFileName)&quot; $(SignNugetCommand)" />
   </Target> 
 
 </Project>
