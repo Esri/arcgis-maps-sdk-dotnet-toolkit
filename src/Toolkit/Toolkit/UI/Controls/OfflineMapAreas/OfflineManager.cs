@@ -25,6 +25,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using Esri.ArcGISRuntime.Tasks.Offline;
+
 #if NET8_0_OR_GREATER
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -57,22 +58,35 @@ public class OfflineManager
     // internal const string onDemandAreas = "OnDemand"
 
     private readonly string? _offlineMapsFolder;
+    private readonly List<DownloadPreplannedOfflineMapJob> _preplannedJobs = new List<DownloadPreplannedOfflineMapJob>();
+    private readonly List<GenerateOfflineMapJob> _generateOfflineMapJobs = new List<GenerateOfflineMapJob>();
+    private readonly List<OfflineMapSyncJob> _offlineMapSyncJobs = new List<OfflineMapSyncJob>();
+    private readonly ReadonlyObservableCollection<OfflineMapInfo> _offlineMapAreas = new ReadonlyObservableCollection<OfflineMapInfo>();
+
 
     internal string OfflineMapsFolder
     {
-        get => _offlineMapsFolder ?? DefaultFolder;
+        get => _offlineMapsFolder
+#if !NETFRAMEWORK
+            ?? DefaultFolder
+#endif
+            ;
     }
 
+#if !NETFRAMEWORK
     private OfflineManager() // Will use the default folder
     {
     }
+#endif
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OfflineManager"/> class with a specific folder for storing offline maps.
     /// </summary>
     /// <param name="offlineMapsFolder">Folder where the maps should be stored</param>
     /// <exception cref="DirectoryNotFoundException">Thrown if the folder does not exist</exception>
+#if !NETFRAMEWORK
     /// <seealso cref="Default"/>
+#endif
     public OfflineManager(string offlineMapsFolder)
     {
         if (string.IsNullOrEmpty(offlineMapsFolder)) throw new ArgumentNullException(nameof(offlineMapsFolder));
@@ -80,10 +94,13 @@ public class OfflineManager
         _offlineMapsFolder = offlineMapsFolder;
     }
 
+#if !NETFRAMEWORK
     private static string GetDefaultFolder()
     {
 #if WINDOWS
-        //bool isPackaged = false; // TODO: Check if app is packaged
+        if (Windows.ApplicationModel.Package.Current is null)
+            throw new PlatformNotSupportedException("Default folder is only supported for packaged applications");
+
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Esri", "ArcGISToolkit", "OfflineManager");
 #elif __IOS__
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "com.esri.ArcGISToolkit.offlineManager");
@@ -115,38 +132,35 @@ public class OfflineManager
     }
 
     /// <summary>
-    /// A shared singleton instance of offline manager using the <see cref="DefaultFolder"> location.
+    /// A shared singleton instance of offline manager using the <see cref="DefaultFolder"/> location.
     /// </summary>
-    public static OfflineManager Default { get; } = new OfflineManager(); // TODO: Consider allowing creation with specific folder name
-
-    private ReadonlyObservableCollection<OfflineMapInfo> _offlineMapAreas = new ReadonlyObservableCollection<OfflineMapInfo>();
+    public static OfflineManager Default { get; } = new OfflineManager();
+#endif
 
     /// <summary>
     /// Gets the portal item information for web maps that have downloaded map areas.
     /// </summary>
     public IReadOnlyList<OfflineMapInfo> OfflineMapAreas => _offlineMapAreas;
 
-    private List<DownloadPreplannedOfflineMapJob> preplannedJobs = new List<DownloadPreplannedOfflineMapJob>();
-    private List<GenerateOfflineMapJob> generateOfflineMapJobs = new List<GenerateOfflineMapJob>();
-    private List<OfflineMapSyncJob> offlineMapSyncJobs = new List<OfflineMapSyncJob>();
-
     internal async Task Start(DownloadPreplannedOfflineMapJob job)
     {
-        preplannedJobs.Add(job);
+        _preplannedJobs.Add(job);
         var result = await job.GetResultAsync();
-        preplannedJobs.Remove(job);
+        _preplannedJobs.Remove(job);
     }
+
     internal async void Start(GenerateOfflineMapJob job)
     {
-        generateOfflineMapJobs.Add(job);
+        _generateOfflineMapJobs.Add(job);
         var result = await job.GetResultAsync();
-        generateOfflineMapJobs.Remove(job);
+        _generateOfflineMapJobs.Remove(job);
     }
+
     internal async void Start(OfflineMapSyncJob job)
     {
-        offlineMapSyncJobs.Add(job);
+        _offlineMapSyncJobs.Add(job);
         var result = await job.GetResultAsync();
-        offlineMapSyncJobs.Remove(job);
+        _offlineMapSyncJobs.Remove(job);
     }
 
     /// <summary>
