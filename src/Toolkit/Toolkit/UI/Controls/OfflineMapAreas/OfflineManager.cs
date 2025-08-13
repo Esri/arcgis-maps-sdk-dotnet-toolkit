@@ -33,6 +33,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #if NET8_0_OR_GREATER
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Tasks;
 #else
 using JsonIncludeAttribute = System.Runtime.Serialization.DataMemberAttribute;
 #endif
@@ -52,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit;
 /// The component supports both ahead-of-time(preplanned) and on-demand workflows for offline mapping. It allows you to:
 /// <list type="bullet">
 /// <item>Observe job status.</item>
-/// <item>Access map info for web maps that have saved map areas via <see cref="OfflineManager.OfflineMapAreas"/>.</item>
+/// <item>Access map info for web maps that have saved map areas via <see cref="OfflineManager.OfflineMapInfos"/>.</item>
 /// <item>Remove offline map areas from the device.</item>
 /// <item>Run download jobs while the app is in the background.</item>
 /// </list>
@@ -88,7 +89,7 @@ public class OfflineManager
     private readonly List<DownloadPreplannedOfflineMapJob> _preplannedJobs = new List<DownloadPreplannedOfflineMapJob>();
     private readonly List<GenerateOfflineMapJob> _generateOfflineMapJobs = new List<GenerateOfflineMapJob>();
     private readonly List<OfflineMapSyncJob> _offlineMapSyncJobs = new List<OfflineMapSyncJob>();
-    private readonly ReadonlyObservableCollection<OfflineMapInfo> _offlineMapAreas = new ReadonlyObservableCollection<OfflineMapInfo>();
+    private readonly ReadonlyObservableCollection<OfflineMapInfo> _offlineMapInfos = new ReadonlyObservableCollection<OfflineMapInfo>();
 
 
     internal string OfflineMapsFolder
@@ -167,7 +168,7 @@ public class OfflineManager
     /// <summary>
     /// Gets the portal item information for web maps that have downloaded map areas.
     /// </summary>
-    public IReadOnlyList<OfflineMapInfo> OfflineMapAreas => _offlineMapAreas;
+    public IReadOnlyList<OfflineMapInfo> OfflineMapInfos => _offlineMapInfos;
 
     internal async Task Start(DownloadPreplannedOfflineMapJob job)
     {
@@ -195,7 +196,7 @@ public class OfflineManager
     /// </summary>
     public void RemoveAllDownloads()
     {
-        foreach (var item in OfflineMapAreas.ToArray())
+        foreach (var item in OfflineMapInfos.ToArray())
         {
             RemoveDownloads(item);
         }

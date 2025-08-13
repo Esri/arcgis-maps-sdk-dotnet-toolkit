@@ -95,7 +95,7 @@ internal partial class SerializableInfo
 #if NET5_0_OR_GREATER
     [JsonPropertyName("portalItemURL")]
 #endif
-    public Uri? PortalItemURL { get; set; }
+    public Uri? PortalItemUrl { get; set; }
 
 }
 
@@ -120,7 +120,7 @@ public class OfflineMapInfo
             Title = portalItem.Title,
             Id = portalItem.ItemId,
             Description = portalItem.Description,
-            PortalItemURL = portalItem.Url
+            PortalItemUrl = portalItem.Url
         };
         Thumbnail = portalItem.Thumbnail;
     }
@@ -159,7 +159,7 @@ public class OfflineMapInfo
     /// <summary>
     /// The URL of the portal item associated with the map.
     /// </summary>
-    public Uri? PortalItemURL => _info.PortalItemURL;
+    public Uri? PortalItemUrl => _info.PortalItemUrl;
 
     internal static Task<OfflineMapInfo> FromFolder(string directoryPath)
     {
