@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(DotNetTargetFramework);$(NetWindowsTargetFramework)</TargetFrameworks>
+	<TargetFrameworks Condition="'$(NETWinOnly)'=='true'">$(NetWindowsTargetFramework)</TargetFrameworks>
     <Description>ArcGIS Maps SDK for .NET controls and utilities for WPF apps.</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D  WPF toolkit</PackageTags>
     <ImplicitUsings>enable</ImplicitUsings>

@@ -35,8 +35,8 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Button Content="Close" Background="#007AC2" Foreground="White" Padding="5" Click="CloseButton_Click" Grid.Column="0" />
-                            <Button Content="Reset" Margin="5,0" Background="#D83020" Foreground="White" Padding="5" Click="DiscardButton_Click" Grid.Column="1" />
-                            <Button Content="Apply" Background="#35AC46" Foreground="White" Padding="5" Click="UpdateButton_Click" Grid.Column="2" />
+                            <Button Content="Reset" Margin="5,0" Background="#D83020" Foreground="White" Padding="5" Command="{Binding DiscardEditsCommand, ElementName=formViewer}" Grid.Column="1" />
+                            <Button Content="Apply" Background="#35AC46" Foreground="White" Padding="5" Command="{Binding FinishEditingCommand, ElementName=formViewer}" Grid.Column="2" />
                         </Grid>
                     </Border>
                 </Grid>

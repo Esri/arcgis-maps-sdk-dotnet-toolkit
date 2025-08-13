@@ -179,15 +179,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("ErrorLabel") is TextBlock tb)
             {
                 tb.Text = errMessage ?? string.Empty;
+                bool showError = false;
+                if (!string.IsNullOrEmpty(errMessage) && (_hadFocus || FeatureFormView.GetFeatureFormViewParent(this)?.ShouldShowError() == true))
+                    showError = true;
 #if MAUI
-                tb.IsVisible = !string.IsNullOrEmpty(errMessage) && _hadFocus;
+                tb.IsVisible = showError;
 #else
-                tb.Visibility = !string.IsNullOrEmpty(errMessage) && _hadFocus ? Visibility.Visible : Visibility.Collapsed;
+                tb.Visibility = showError ? Visibility.Visible : Visibility.Collapsed;
 #endif
             }
         }
 
-        private bool _hadFocus = false;
+        private bool _hadFocus = false; // Tracks if the control has ever had focus, and will then show errors if FeatureFormView.ErrorsVisibility is set to "Automatic".
 
         internal void OnGotFocus()
         {

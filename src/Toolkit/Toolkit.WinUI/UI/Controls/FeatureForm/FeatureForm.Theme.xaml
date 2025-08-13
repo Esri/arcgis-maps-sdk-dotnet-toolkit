@@ -7,6 +7,10 @@
                     xmlns:un="using:Esri.ArcGISRuntime.UtilityNetworks"
                     >
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <SolidColorBrush x:Key="FeatureFormAccentBrush" Color="#007AC2" />
     <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
     <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
@@ -451,16 +455,18 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <FontIcon x:Name="Icon" Width="20" VerticalAlignment="Center" Margin="-8,0,4,0" FontFamily="/Esri.ArcGISRuntime.Toolkit.WinUI/Assets/toolkit-icons.ttf#calcite-ui-icons-24" Grid.RowSpan="2" />
+                        <FontIcon x:Name="Icon" Width="20" VerticalAlignment="Center" Margin="-8,0,4,0" FontFamily="{StaticResource toolkit-icons}" Grid.RowSpan="2" />
                         <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="{Binding AssociationResult.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource FeatureFormViewTitleStyle}"
                                    VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" />
+                        <TextBlock x:Name="FractionAlong" Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=FractionAlong, Path=Text}" />
                         <TextBlock x:Name="ConnectionInfo" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=ConnectionInfo, Path=Text}" />
-                        <FontIcon Glyph="&#xE76C;" Grid.Column="2" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" />
+                        <FontIcon Glyph="&#xE76C;" Grid.Column="3" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

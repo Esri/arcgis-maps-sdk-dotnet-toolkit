@@ -61,19 +61,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
                 back.Visibility = _navigationStack.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 #endif
-#if WPF
-                back.Margin = _navigationStack.Count > 1 ? new Thickness() : new Thickness(0, 0, 10, 0);
-#endif
             }
             if (GetTemplateChild("NavigateUp") is FrameworkElement up)
             {
+                bool isVisible = ShowHomeButton && _navigationStack.Count > 1;
 #if MAUI
-                up.IsVisible = _navigationStack.Count > 1;
+                up.IsVisible = isVisible;
 #else
-                up.Visibility = _navigationStack.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
+                up.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
 #endif
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the Home button should show when navigating more than one level deep.
+        /// </summary>
+        internal bool ShowHomeButton { get; set; } = false;
 
         private Stack<Tuple<object,double>> _navigationStack = new Stack<Tuple<object, double>>();
 
@@ -164,12 +167,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             return true;
         }
-        
-        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false)
+
+        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false, bool skipRaisingEvent = false)
         {
             if (content is null && !clearNavigationStack)
                 throw new ArgumentNullException(nameof(content));
-            if (!(await RaiseOnNavigatingAsync(content, clearNavigationStack ? NavigationDirection.Reset : NavigationDirection.Forward)))
+            if (!skipRaisingEvent && !(await RaiseOnNavigatingAsync(content, clearNavigationStack ? NavigationDirection.Reset : NavigationDirection.Forward)))
             {
                 return false;
             }
@@ -182,7 +185,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 offset = sv.VerticalOffset;
 #endif
             }
-
 
             if (clearNavigationStack)
                 _navigationStack.Clear();
@@ -218,16 +220,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             Content = content;
             if (GetTemplateChild("Header") is ContentControl cc1)
+#if MAUI
+                cc1.ContentData = content;
+#else
                 cc1.Content = content;
+#endif
             if (GetTemplateChild("Content") is ContentControl cc2)
+#if MAUI
+                cc2.ContentData = content;
+#else
                 cc2.Content = content;
+#endif
             UpdateView();
         }
 
         private async Task GoBack()
         {
-            if (_navigationStack.Count == 0)
+            if (!IsBackNavigationEnabled || _navigationStack.Count == 0)
                 return;
+
             if (!(await RaiseOnNavigatingAsync(_navigationStack.Peek().Item1, NavigationDirection.Backward)))
             {
                 return;
@@ -279,8 +290,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async Task GoUp()
         {
-            if (_navigationStack.Count == 0)
+            if (!IsBackNavigationEnabled || _navigationStack.Count == 0)
                 return;
+
             var content = _navigationStack.Last();
             if (!(await RaiseOnNavigatingAsync(content.Item1, NavigationDirection.Backward)))
             {
@@ -321,10 +333,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
             if (GetTemplateChild("Header") is ContentControl cc1)
+#if MAUI
+                cc1.ContentData = Content;
+#else
                 cc1.Content = Content;
+#endif
             if (GetTemplateChild("Content") is ContentControl cc2)
+#if MAUI
+                cc2.ContentData = Content;
+#else
                 cc2.Content = Content;
+#endif
             UpdateView();
+            UpdateButtonEnableStates();
         }
 
         /// <summary>
@@ -388,6 +409,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty VerticalScrollBarVisibilityProperty =
             DependencyProperty.Register(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(NavigationSubView), new PropertyMetadata(ScrollBarVisibility.Auto));
 #endif
+        /// <summary>
+        /// Gets or sets a value indicating whether the back buttons are enabled or not.
+        /// </summary>
+        public bool IsBackNavigationEnabled
+        {
+            get { return (bool)GetValue(IsBackNavigationEnabledProperty); }
+            set { SetValue(IsBackNavigationEnabledProperty, value); }
+        }
 
+        /// <summary>
+        /// Identifies the <see cref="IsBackNavigationEnabled"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsBackNavigationEnabledProperty =
+            PropertyHelper.CreateProperty<bool, NavigationSubView>(nameof(IsBackNavigationEnabled), true, OnIsBackNavigationEnabledPropertyChanged);
+
+        private static void OnIsBackNavigationEnabledPropertyChanged(NavigationSubView view, bool oldValue, bool newValue)
+        {
+            view.UpdateButtonEnableStates();
+        }
+
+        private void UpdateButtonEnableStates()
+        {
+            if (GetTemplateChild("NavigateBack") is Button back)
+            {
+                back.IsEnabled = IsBackNavigationEnabled;
+            }
+            if (GetTemplateChild("NavigateUp") is Button up)
+            {
+                up.IsEnabled = IsBackNavigationEnabled;
+            }
+        }
     }
 }

@@ -14,19 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System.ComponentModel;
-using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UtilityNetworks;
-using System.Text;
 using Esri.ArcGISRuntime.Data;
 
-
-
-
-
 #if MAUI
-using Esri.ArcGISRuntime.Toolkit.Maui;
 using TextBlock = Microsoft.Maui.Controls.Label;
 #else
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -39,20 +31,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
     /// <summary>
-    /// Supporting control for the <see cref="FeatureFormView"/> control,
+    /// Supporting control for the <see cref="PopupViewer"/> control,
     /// used for rendering a <see cref="UtilityAssociationResult"/>.
     /// </summary>
-    public partial class UtilityAssociationResultView
+    public partial class UtilityAssociationResultPopupView
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UtilityAssociationResultView"/> class.
+        /// Initializes a new instance of the <see cref="UtilityAssociationResultPopupView"/> class.
         /// </summary>
-        public UtilityAssociationResultView()
+        public UtilityAssociationResultPopupView()
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
 #else
-            DefaultStyleKey = typeof(UtilityAssociationResultView);
+            DefaultStyleKey = typeof(UtilityAssociationResultPopupView);
 #endif
         }
 
@@ -80,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="AssociationResult"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty AssociationResultProperty =
-            PropertyHelper.CreateProperty<UtilityAssociationResult, UtilityAssociationResultView>(nameof(AssociationResult), null, (s, oldValue, newValue) => s.OnAssociationResultPropertyChanged());
+            PropertyHelper.CreateProperty<UtilityAssociationResult, UtilityAssociationResultPopupView>(nameof(AssociationResult), null, (s, oldValue, newValue) => s.OnAssociationResultPropertyChanged());
 
         private void OnAssociationResultPropertyChanged()
         {
@@ -120,7 +112,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan &&
                 AssociationResult.Association.FractionAlongEdge > 0
                     ? $"{Math.Round(AssociationResult.Association.FractionAlongEdge * 100)} %"
-                    : string.Empty;
+                    : string.Empty; ;
 #if MAUI
                 fractionAlong.IsVisible = fractionAlong.Text?.Length > 0;
 #else
@@ -153,8 +145,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 associationResult.Association.ToElement.GlobalId.Equals(associatedFeatureGlobalId))
             {
                 var contentVisibility = associationResult.Association.IsContainmentVisible ?
-                    Properties.Resources.GetString("FeatureFormUtilityElementIsContentVisible") :
-                    Properties.Resources.GetString("FeatureFormUtilityElementIsContentNotVisible");
+                    Properties.Resources.GetString("PopupViewerUtilityAssociationsVisibleContent") :
+                    Properties.Resources.GetString("PopupViewerUtilityAssociationsNonVisibleContent");
                 return contentVisibility ?? string.Empty;
             }
 

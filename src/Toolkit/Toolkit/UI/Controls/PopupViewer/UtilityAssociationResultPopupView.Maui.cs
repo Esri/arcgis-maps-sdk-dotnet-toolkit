@@ -16,37 +16,37 @@
 
 #if MAUI
 using Microsoft.Maui.Controls.Internals;
-using Esri.ArcGISRuntime.Mapping.FeatureForms;
-using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    public partial class UtilityAssociationResultView : TemplatedView
+    public partial class UtilityAssociationResultPopupView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
 
-        static UtilityAssociationResultView()
+        static UtilityAssociationResultPopupView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
         private static object BuildDefaultTemplate()
         {
-           Grid layout = new Grid() { MinimumHeightRequest = 40 };
+            Grid layout = new Grid() { Margin = new Thickness(10, 0, 0, 0) };
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-            Image icon = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(0,0,4,0) };
+            Image icon = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(5) };
             Grid.SetRowSpan(icon, 2);
             layout.Add(icon);
 
             Label title = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
-            title.SetBinding(Label.TextProperty, static (UtilityAssociationResultView result) => result.AssociationResult?.Title, source: RelativeBindingSource.TemplatedParent);
-            title.Style = FeatureFormView.GetFeatureFormTitleStyle();
+            title.SetBinding(Label.TextProperty, static (UtilityAssociationResultPopupView view) => view.AssociationResult?.Title, source: RelativeBindingSource.TemplatedParent);
+            title.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationResultPopupView view) => view.AssociationResult?.Title, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
+            title.Style = PopupViewer.GetPopupViewerTitleStyle();
             Grid.SetColumn(title, 1);
             layout.Add(title);
 
@@ -55,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetRowSpan(fractionAlong, 2);
             layout.Add(fractionAlong);
 
-            Label connectionInfo = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, LineBreakMode = LineBreakMode.TailTruncation, Margin = new Thickness(0,0,2,0) };
+            Label connectionInfo = new Label() { Style = PopupViewer.GetPopupViewerCaptionStyle(), IsVisible = false, LineBreakMode = LineBreakMode.TailTruncation, Margin = new Thickness(0, 0, 2, 0) };
             connectionInfo.SetBinding(ToolTipProperties.TextProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self);
             Grid.SetRow(connectionInfo, 1);
             Grid.SetColumn(connectionInfo, 1);
@@ -66,18 +66,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(image, 3);
             Grid.SetRowSpan(image, 2);
             layout.Add(image);
-            // TODO: Set theme-based background once https://github.com/dotnet/maui/issues/26620 is addressed
-            // var g = new VisualStateGroup();
-            // g.States.Add(new VisualState() { Name = "Normal" });
-            // g.States.Add(new VisualState() { Name = "PointerOver" });
-            // g.States[1].Setters.Add(new Setter() { Property = Grid.BackgroundColorProperty, Value = Colors.LightGray });
-            // VisualStateManager.SetVisualStateGroups(layout, new VisualStateGroupList { g });
+
+            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.LightGray, Margin = new Thickness(2) };
+            Grid.SetRow(divider, 2);
+            Grid.SetColumnSpan(divider, 4);
+            layout.Add(divider);
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(layout, nameScope);
             nameScope.RegisterName("FractionAlong", fractionAlong);
             nameScope.RegisterName("Icon", icon);
             nameScope.RegisterName("ConnectionInfo", connectionInfo);
+
             return layout;
         }
     }
