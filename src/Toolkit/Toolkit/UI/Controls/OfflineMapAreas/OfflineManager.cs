@@ -25,7 +25,11 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using Esri.ArcGISRuntime.Tasks.Offline;
-
+#if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 #if NET8_0_OR_GREATER
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -38,8 +42,31 @@ namespace Esri.ArcGISRuntime.Toolkit;
 // Swift reference: https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Sources/ArcGISToolkit/Components/Offline/OfflineManager.swift
 
 /// <summary>
-/// Manages offline map operations and storage.
+/// A utility object that maintains the state of offline map areas and their storage on the device.
 /// </summary>
+/// <remarks>
+/// <para>This component provides high-level APIs to manage offline map areas and
+/// access their data.</para>
+///<para>
+/// <b>Features</b><br/>
+/// The component supports both ahead-of-time(preplanned) and on-demand workflows for offline mapping. It allows you to:
+/// <list type="bullet">
+/// <item>Observe job status.</item>
+/// <item>Access map info for web maps that have saved map areas via <see cref="OfflineManager.OfflineMapAreas"/>.</item>
+/// <item>Remove offline map areas from the device.</item>
+/// <item>Run download jobs while the app is in the background.</item>
+/// </list>
+/// </para><para>
+/// The component is useful both for building custom UI with the provided APIs,
+/// and for supporting workflows that require retrieving offline map areas
+/// information from the device. By using the <see cref="OfflineManager"/>, you can create
+/// an <see cref="OfflineMapAreasView" />.</para>
+/// <note type="note">
+/// The <see cref="OfflineManager"/> can be used independently of any UI components,
+/// making it suitable for automated workflows or custom implementations.
+/// </note>
+/// </remarks>
+
 public class OfflineManager
 {
     // Work Manager constants
