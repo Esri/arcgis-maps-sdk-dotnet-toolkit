@@ -30,7 +30,9 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
   </PropertyGroup>
-
+  <PropertyGroup Condition="$(TargetFramework.Contains('-ios')) OR $(TargetFramework.Contains('-maccatalyst'))">
+    <ProvisioningType>manual</ProvisioningType>
+  </PropertyGroup>
   <ItemGroup>
     <Using Remove="Microsoft.Maui.ApplicationModel" />
     <!-- App Icon -->
