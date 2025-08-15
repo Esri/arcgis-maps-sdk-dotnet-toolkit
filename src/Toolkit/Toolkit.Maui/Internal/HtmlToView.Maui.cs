@@ -82,6 +82,8 @@ internal static class HtmlToView
         }
     }
 
+    // CreateBlock builds a view for a single *blocky* node. It is called for nodes that are
+    // blocks themselves (List/Table/Block/Divider/Image) and also for nodes that contain block descendants.
     private static View CreateBlock(MarkupNode node, EventHandler<Uri>? urlClickHandler)
     {
         // Create a view for a single block node.
@@ -161,6 +163,47 @@ internal static class HtmlToView
                     imageElement.Source = imageSource;
                 return imageElement;
 
+            case MarkupType.Link:
+                // If the link wraps block content (like <img>), render it as a tappable ContentView.
+                if (Uri.TryCreate(node.Content, UriKind.Absolute, out var linkUri))
+                {
+                    View content;
+                    if (node.Children.Count == 1)
+                    {
+                        var child = node.Children[0];
+                        child.InheritAttributes(node);
+                        content = CreateBlock(child, urlClickHandler);
+                    }
+                    else
+                    {
+                        var stack = new StackLayout();
+                        foreach (var child in node.Children)
+                        {
+                            child.InheritAttributes(node);
+                            stack.Children.Add(CreateBlock(child, urlClickHandler));
+                        }
+                        content = stack;
+                    }
+
+                    var wrapper = new ContentView { Content = content, Padding = 0 };
+                    if (urlClickHandler != null)
+                    {
+                        var tap = new TapGestureRecognizer();
+                        tap.Tapped += (s, e) => urlClickHandler(wrapper, linkUri);
+                        wrapper.GestureRecognizers.Add(tap);
+                    }
+                    return wrapper;
+                }
+
+                // If the href isn't a clickable URI, just render children normally
+                var fallback = new StackLayout();
+                foreach (var child in node.Children)
+                {
+                    child.InheritAttributes(node);
+                    fallback.Children.Add(CreateBlock(child, urlClickHandler));
+                }
+                return fallback;
+
             default:
                 return new Border(); // placeholder for unsupported things
         }
@@ -198,6 +241,8 @@ internal static class HtmlToView
         return new Label { FormattedText = str, LineBreakMode = LineBreakMode.WordWrap };
     }
 
+    // Flattens an *inline-only* subtree into text spans for a single Label.
+    // It is only used when VisitChildren has verified there are no block elements underneath.
     private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri>? urlClickHandler)
     {
         // Converts a single inline node into a sequence of spans.
@@ -309,7 +354,7 @@ internal static class HtmlToView
                 if (attr.TryGetValue("rowspan", out var rowSpanStr) && ushort.TryParse(rowSpanStr, out var rowSpanFromAttr))
                 {
                     rowSpan = rowSpanFromAttr;
-                    Grid.SetRowSpan(cellView, colSpan);
+                    Grid.SetRowSpan(cellView, rowSpan);
                 }
                 gridView.Add(cellView, curCol, curRow);
 

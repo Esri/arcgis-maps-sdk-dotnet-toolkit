@@ -84,6 +84,8 @@ internal static class HtmlToView
         }
     }
 
+    // CreateBlock builds a view for a single *blocky* node. It is called for nodes that are
+    // blocks themselves (List/Table/Block/Divider/Image) and also for nodes that contain block descendants.
     private static FrameworkElement CreateBlock(MarkupNode node, EventHandler<Uri>? urlClickHandler)
     {
         // Create a view for a single block node.
@@ -167,6 +169,51 @@ internal static class HtmlToView
                     imageElement.Source = imageSource;
                 return imageElement;
 
+            case MarkupType.Link:
+                // If the link wraps block content (like <img>), render it as a HyperlinkButton
+                if (Uri.TryCreate(node.Content, UriKind.Absolute, out var linkUri))
+                {
+                    var linkButton = new HyperlinkButton
+                    {
+                        Padding = new Thickness(0),
+                        BorderThickness = new Thickness(0),
+                        Background = null
+                    };
+                    if (urlClickHandler != null)
+                        linkButton.Click += (s, e) => urlClickHandler(s, linkUri);
+
+                    // Build the content from the children as blocks
+                    FrameworkElement content;
+                    if (node.Children.Count == 1)
+                    {
+                        var child = node.Children[0];
+                        child.InheritAttributes(node);
+                        content = CreateBlock(child, urlClickHandler);
+                    }
+                    else
+                    {
+                        var panel = new StackPanel();
+                        foreach (var child in node.Children)
+                        {
+                            child.InheritAttributes(node);
+                            panel.Children.Add(CreateBlock(child, urlClickHandler));
+                        }
+                        content = panel;
+                    }
+
+                    linkButton.Content = content;
+                    return linkButton;
+                }
+
+                // If the href isn't a clickable URI, just render children normally
+                var fallback = new StackPanel();
+                foreach (var child in node.Children)
+                {
+                    child.InheritAttributes(node);
+                    fallback.Children.Add(CreateBlock(child, urlClickHandler));
+                }
+                return fallback;
+
             default:
                 return new Border(); // placeholder for unsupported things
         }
@@ -205,6 +252,8 @@ internal static class HtmlToView
         return tb;
     }
 
+    // Flattens an *inline-only* subtree into text spans for a single TextBlock.
+    // It is only used when VisitChildren has verified there are no block elements underneath.
     private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri>? urlClickHandler)
     {
         // Converts a single inline node into a sequence of spans.
@@ -308,7 +357,7 @@ internal static class HtmlToView
                 if (attr.TryGetValue("rowspan", out var rowSpanStr) && ushort.TryParse(rowSpanStr, out var rowSpanFromAttr))
                 {
                     rowSpan = rowSpanFromAttr;
-                    Grid.SetRowSpan(cellView, colSpan);
+                    Grid.SetRowSpan(cellView, rowSpan);
                 }
                 Grid.SetRow(cellView, curRow);
                 Grid.SetColumn(cellView, curCol);
@@ -358,9 +407,9 @@ internal static class HtmlToView
             el.FontWeight = FontWeights.Normal;
 
         if (node.IsItalic == true)
-            el.FontStyle |= FontStyle.Italic;
+            el.FontStyle = FontStyle.Italic;
         else if (node.IsItalic == false)
-            el.TextDecorations |= ~TextDecorations.Underline;
+            el.FontStyle = FontStyle.Normal;
 
         if (node.IsUnderline == true)
             el.TextDecorations |= TextDecorations.Underline;
@@ -386,14 +435,14 @@ internal static class HtmlToView
             el.FontWeight = FontWeights.Normal;
 
         if (node.IsItalic == true)
-            el.FontStyle |= FontStyle.Italic;
+            el.FontStyle = FontStyle.Italic;
         else if (node.IsItalic == false)
-            el.FontStyle |= ~FontStyle.Italic;
+            el.FontStyle = FontStyle.Normal;
 
         if (node.IsUnderline == true)
             el.TextDecorations |= TextDecorations.Underline;
         else if (node.IsUnderline == false)
-            el.TextDecorations |= ~TextDecorations.Underline;
+            el.TextDecorations &= ~TextDecorations.Underline;
 
         if (node.FontColor.HasValue)
             el.Foreground = new SolidColorBrush() { Color = ConvertColor(node.FontColor.Value) };
