@@ -286,6 +286,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 ArcGISSceneLayer sceneLayer => sceneLayer.Source == ((ArcGISSceneLayer)layer2).Source,
                 ArcGISTiledLayer tiledLayer => tiledLayer.Source == ((ArcGISTiledLayer)layer2).Source,
                 ArcGISVectorTiledLayer vectorTiledLayer => vectorTiledLayer.Source == ((ArcGISVectorTiledLayer)layer2).Source,
+                BingMapsLayer imageServiceLayer => imageServiceLayer.Portal?.Uri == ((BingMapsLayer)layer2).Portal?.Uri,
                 DimensionLayer dimensionLayer => dimensionLayer.Source == ((DimensionLayer)layer2).Source,
                 FeatureCollectionLayer featureCollectionLayer => featureCollectionLayer.FeatureCollection == ((FeatureCollectionLayer)layer2).FeatureCollection,
                 GroupLayer groupLayer => groupLayer.Layers.Count == ((GroupLayer)layer2).Layers.Count && LayersEqual(groupLayer.Layers, ((GroupLayer)layer2).Layers),
