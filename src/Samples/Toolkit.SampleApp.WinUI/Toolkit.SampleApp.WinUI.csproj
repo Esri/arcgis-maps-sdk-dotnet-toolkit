@@ -57,12 +57,6 @@
         </Otherwise>
     </Choose>
 
-    <!--<Target BeforeTargets="Build;Rebuild" Name="CopyUWPSamples">
-        <ItemGroup>
-            <SampleSources Include="..\Toolkit.SampleApp.UWP\Samples\**\*.*" />
-        </ItemGroup>
-        <Copy SourceFiles="@(SampleSources)" DestinationFiles="Samples\%(RecursiveDir)%(Filename)%(Extension)" SkipUnchangedFiles="true" />
-    </Target>-->
   <!-- 
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
     Tools extension to be activated for this project even if the Windows App SDK Nuget

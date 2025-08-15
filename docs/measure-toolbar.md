@@ -13,7 +13,7 @@ Measure distances, areas, and features in a `MapView`.
 
 ## Usage
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"

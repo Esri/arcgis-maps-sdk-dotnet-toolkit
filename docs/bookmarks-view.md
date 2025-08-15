@@ -2,10 +2,10 @@
 
 ## Features
 
-* Associate the bookmarks control with a `MapView` or `SceneView` (`GeoView` property), through binding on supported platforms (WPF, UWP, Forms) or plain properties otherwise.
+* Associate the bookmarks control with a `MapView` or `SceneView` (`GeoView` property), through binding on supported platforms (WPF, WinUI, MAUI) or plain properties otherwise.
 * Display a list of bookmarks, defined by the `Map` or `Scene` from the associated `GeoView` or the `BookmarksOverride` if set.
 * Navigates the associated `GeoView` to the selected bookmark.
-* Customize the display of the list with the `ItemTemplate` property on UWP and WPF.
+* Customize the display of the list with the `ItemTemplate` property on WinUI and WPF.
 * Supports observable collections for `BookmarksOverride` and handles changes to the `Map`/`Scene` properties.
 
 ## Usage
@@ -38,7 +38,7 @@ To customize the item template:
 </esri:BookmarksView>
 ```
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
