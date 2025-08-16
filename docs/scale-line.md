@@ -24,7 +24,7 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
 </Grid>
 ```
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"

@@ -65,25 +65,8 @@
       "properties": { "TargetFramework": "net9.0-ios18.0", "_MauiBindingInterceptorsSupport": "false" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false,
-	  "memberLayout": "separatePages"
+      "memberLayout": "separatePages"
     },
-    {
-      "src": [
-        {
-          "files": [
-            "Toolkit/Toolkit.UWP/Esri.ArcGISRuntime.Toolkit.UWP.csproj"
-          ],
-          "exclude": [ "**/bin/**", "**/obj/**" ],
-          "src" : "../src/",
-        }
-      ],
-      "dest": "../output/docs/api/uwp",
-      "properties": { "TargetFramework": "uap10.0.19041", "DocfxBuild": "true", "MSBuildExtensionsPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\MSBuild" },
-      "filter": "filterConfig.yml",
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false,
-	  "memberLayout": "separatePages"
-    }
   ],
   "build": {
     "content": [
@@ -144,7 +127,6 @@
        "https://developers.arcgis.com/net/api-reference/netwin.xrefmap.yml",
        "https://developers.arcgis.com/net/api-reference/ios.xrefmap.yml",
        "https://developers.arcgis.com/net/api-reference/android.xrefmap.yml",	   
-       "https://developers.arcgis.com/net/api-reference/uwp.xrefmap.yml",
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",

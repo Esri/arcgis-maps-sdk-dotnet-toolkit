@@ -30,7 +30,6 @@ IF "%VSINSTALLDIR%"=="" (
 
 msbuild /restore /t:Restore %~dp0../src/Toolkit/Toolkit.WPF/Esri.ArcGISRuntime.Toolkit.WPF.csproj /p:Configuration=Release
 msbuild /restore /t:Restore %~dp0../src/Toolkit/Toolkit.WinUI/Esri.ArcGISRuntime.Toolkit.WinUI.csproj /p:Configuration=Release
-msbuild /restore /t:Restore %~dp0../src/Toolkit/Toolkit.UWP/Esri.ArcGISRuntime.Toolkit.UWP.csproj /p:Configuration=Release
 msbuild /restore /t:Restore %~dp0../src/Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj /p:Configuration=Release
 
 
