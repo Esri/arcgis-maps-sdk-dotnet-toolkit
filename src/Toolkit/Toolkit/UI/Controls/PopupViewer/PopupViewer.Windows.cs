@@ -30,33 +30,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private const string ItemsViewName = "ItemsView";
         private const string PopupContentScrollViewerName = "PopupContentScrollViewer";
 
-        /// <summary>
-        /// Gets or sets the associated PopupManager which contains popup and sketch editor.
-        /// </summary>
-        [Obsolete("Use Popup property.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public PopupManager? PopupManager
-        {
-            get { return GetValue(PopupManagerProperty) as PopupManager; }
-            set { SetValue(PopupManagerProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="PopupManager"/> dependency property.
-        /// </summary>
-        [Obsolete("Use PopupProperty field.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static readonly DependencyProperty PopupManagerProperty =
-            DependencyProperty.Register(nameof(PopupManager), typeof(PopupManager), typeof(PopupViewer),
-                new PropertyMetadata(null, OnPopupManagerPropertyChanged));
-
-        private static void OnPopupManagerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-#pragma warning disable CS0618 // Type or member is obsolete
-            ((PopupViewer)d).Popup = ((PopupViewer)d).PopupManager?.Popup;
-#pragma warning restore CS0618 // Type or member is obsolete
-        }
-
         internal static PopupViewer? GetPopupViewerParent(DependencyObject? child) => GetParent<PopupViewer>(child);
 
         private static T? GetParent<T>(DependencyObject? child) where T : DependencyObject

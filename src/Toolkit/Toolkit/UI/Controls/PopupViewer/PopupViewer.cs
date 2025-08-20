@@ -180,7 +180,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Identifies the <see cref="PopupManager"/> dependency property.
+        /// Identifies the <see cref="Popup"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty PopupProperty =
             PropertyHelper.CreateProperty<Popup, PopupViewer>(nameof(Popup), null, (s, oldValue, newValue) => s.OnPopupPropertyChanged(oldValue, newValue));
