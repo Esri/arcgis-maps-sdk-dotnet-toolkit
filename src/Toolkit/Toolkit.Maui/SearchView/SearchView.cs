@@ -313,6 +313,8 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     {
         if (SearchViewModel != null)
         {
+            _sourceSelectToggled = false;
+            UpdateVisibility();
             SearchViewModel.CurrentQuery = e.NewTextValue;
         }
     }

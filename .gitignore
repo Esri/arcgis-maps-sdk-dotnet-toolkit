@@ -225,3 +225,6 @@ MigrationBackup/
 # Repo-specific additions
 src/Toolkit/Toolkit.UWP/LocalizedStrings/*/Resources.resw
 Output
+
+# Rider Files
+.idea
