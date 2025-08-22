@@ -611,65 +611,7 @@
                                                                                 BorderThickness="0,1,0,0"
                                                                                 Header="{internal:LocalizedString Key=UtilityNetworkTraceToolAssetDetails}"
                                                                                 Style="{StaticResource UNTraceGroupBox}">
-                                                                                <controls:PopupViewer Popup="{Binding Popup}">
-                                                                                    <controls:PopupViewer.Template>
-                                                                                        <ControlTemplate TargetType="controls:PopupViewer">
-                                                                                            <Border
-                                                                                                MinWidth="{TemplateBinding MinWidth}"
-                                                                                                MaxWidth="{TemplateBinding MaxWidth}"
-                                                                                                Margin="{TemplateBinding Margin}"
-                                                                                                Padding="{TemplateBinding Padding}"
-                                                                                                Background="{TemplateBinding Background}"
-                                                                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                                                                BorderThickness="{TemplateBinding BorderThickness}">
-                                                                                                <Grid DataContext="{TemplateBinding PopupManager}">
-                                                                                                    <Grid.Resources>
-                                                                                                        <internal:VisibilityConverter x:Key="VisibilityConverter" />
-                                                                                                        <internal:HtmlToPlainTextConverter x:Key="HtmlToPlainTextConverter" />
-                                                                                                    </Grid.Resources>
-                                                                                                    <Grid.RowDefinitions>
-                                                                                                        <RowDefinition Height="Auto" />
-                                                                                                        <RowDefinition Height="*" />
-                                                                                                    </Grid.RowDefinitions>
-                                                                                                    <Grid Grid.Row="1">
-                                                                                                        <ItemsControl ItemsSource="{Binding DisplayedFields}" Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}, ConverterParameter=Reverse}">
-                                                                                                            <ItemsControl.ItemTemplate>
-                                                                                                                <DataTemplate>
-                                                                                                                    <Grid Margin="0,0,0,2">
-                                                                                                                        <Grid.ColumnDefinitions>
-                                                                                                                            <ColumnDefinition Width="*" />
-                                                                                                                            <ColumnDefinition Width="*" />
-                                                                                                                        </Grid.ColumnDefinitions>
-                                                                                                                        <TextBlock
-                                                                                                                            FontWeight="SemiBold"
-                                                                                                                            Text="{Binding Field.Label}"
-                                                                                                                            TextWrapping="Wrap" />
-                                                                                                                        <TextBox
-                                                                                                                            Grid.Column="1"
-                                                                                                                            Margin="0"
-                                                                                                                            Padding="0"
-                                                                                                                            Background="Transparent"
-                                                                                                                            BorderThickness="0"
-                                                                                                                            Text="{Binding FormattedValue, Mode=OneWay}"
-                                                                                                                            TextWrapping="Wrap" />
-                                                                                                                    </Grid>
-                                                                                                                </DataTemplate>
-                                                                                                            </ItemsControl.ItemTemplate>
-                                                                                                        </ItemsControl>
-                                                                                                        <TextBox
-                                                                                                            Margin="0"
-                                                                                                            Padding="0"
-                                                                                                            Background="Transparent"
-                                                                                                            BorderThickness="0"
-                                                                                                            Text="{Binding CustomDescriptionHtml, Converter={StaticResource HtmlToPlainTextConverter}, Mode=OneWay}"
-                                                                                                            TextWrapping="Wrap"
-                                                                                                            Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}}" />
-                                                                                                    </Grid>
-                                                                                                </Grid>
-                                                                                            </Border>
-                                                                                        </ControlTemplate>
-                                                                                    </controls:PopupViewer.Template>
-                                                                                </controls:PopupViewer>
+                                                                                <controls:PopupViewer Popup="{Binding Popup}" />
                                                                             </internal:GroupBox>
                                                                         </StackPanel>
                                                                     </Border>
