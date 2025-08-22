@@ -315,7 +315,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             //JH: Added for collapsing dialog when user starts typing in search
             _sourceSelectToggled = false;
-            UpdateVisibility();
+            UpdateVisibility();			
             SearchViewModel.CurrentQuery = e.NewTextValue;
         }
     }
