@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class UtilityNetworkTraceTool </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class UtilityNetworkTraceTool ">
+    
+    <meta name="description" content="Represents a control that enables user to perform trace analysis with pre-configured trace types.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool" class="text-break">Class UtilityNetworkTraceTool</h1>
+  <div class="markdown level0 summary"><p>Represents a control that enables user to perform trace analysis with pre-configured trace types.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.bindableobject">BindableObject</a></div>
+    <div class="level2"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.element">Element</a></div>
+    <div class="level3"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.styleableelement">StyleableElement</a></div>
+    <div class="level4"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.navigableelement">NavigableElement</a></div>
+    <div class="level5"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.visualelement">VisualElement</a></div>
+    <div class="level6"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.view">View</a></div>
+    <div class="level7"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.compatibility.layout">Layout</a></div>
+    <div class="level8"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.templatedview">TemplatedView</a></div>
+    <div class="level9"><span class="xref">UtilityNetworkTraceTool</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanged">INotifyPropertyChanged</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ieffectcontrolprovider">IEffectControlProvider</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.itooltipelement">IToolTipElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icontextflyoutelement">IContextFlyoutElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ianimatable">IAnimatable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.iviewcontroller">IViewController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ivisualelementcontroller">IVisualElementController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ielementcontroller">IElementController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.internals.igesturecontroller">IGestureController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.igesturerecognizers">IGestureRecognizers</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ipropertymapperview">IPropertyMapperView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.hotreload.ihotreloadableview">IHotReloadableView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ireplaceableview">IReplaceableView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ilayout">ILayout</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ilayoutcontroller">ILayoutController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ivisualtreeelement">IVisualTreeElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icontentview">IContentView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.iview">IView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ielement">IElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.itransform">ITransform</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ipadding">IPadding</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icrossplatformlayout">ICrossPlatformLayout</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.html">Maui</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.Maui.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public class UtilityNetworkTraceTool : TemplatedView, INotifyPropertyChanged, IEffectControlProvider, IToolTipElement, IContextFlyoutElement, IAnimatable, IViewController, IVisualElementController, IElementController, IGestureController, IGestureRecognizers, IPropertyMapperView, IHotReloadableView, IReplaceableView, ILayout, ILayoutController, IVisualTreeElement, IContentView, IView, IElement, ITransform, IPadding, ICrossPlatformLayout</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.#ctor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.-ctor.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool__ctor">UtilityNetworkTraceTool()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.html">UtilityNetworkTraceTool</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_AutoZoomToTraceResultsProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.AutoZoomToTraceResultsProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.AutoZoomToTraceResultsProperty.html">AutoZoomToTraceResultsProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.AutoZoomToTraceResults.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_AutoZoomToTraceResults">AutoZoomToTraceResults</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_GeoViewProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.GeoViewProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.GeoViewProperty.html">GeoViewProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.GeoView.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_GeoView">GeoView</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultFillSymbolProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultFillSymbolProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultFillSymbolProperty.html">ResultFillSymbolProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultFillSymbol.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultFillSymbol">ResultFillSymbol</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultLineSymbolProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultLineSymbolProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultLineSymbolProperty.html">ResultLineSymbolProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultLineSymbol.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultLineSymbol">ResultLineSymbol</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultPointSymbolProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultPointSymbolProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultPointSymbolProperty.html">ResultPointSymbolProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultPointSymbol.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultPointSymbol">ResultPointSymbol</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_StartingPointSymbolProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.StartingPointSymbolProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.StartingPointSymbolProperty.html">StartingPointSymbolProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.StartingPointSymbol.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_StartingPointSymbol">StartingPointSymbol</a> bindable property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_AutoZoomToTraceResults" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.AutoZoomToTraceResults">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.AutoZoomToTraceResults.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_AutoZoomToTraceResults">AutoZoomToTraceResults</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the GeoView should automatically zoom to show trace results.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_GeoView" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.GeoView">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.GeoView.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_GeoView">GeoView</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the GeoView associated with this view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultFillSymbol" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultFillSymbol">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultFillSymbol.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultFillSymbol">ResultFillSymbol</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Symbology.Symbol.html">Symbol</a> that represents an aggregated polygon trace result.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultLineSymbol" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultLineSymbol">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultLineSymbol.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultLineSymbol">ResultLineSymbol</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Symbology.Symbol.html">Symbol</a> that represents an aggregated polyline trace result.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultPointSymbol" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultPointSymbol">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.ResultPointSymbol.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_ResultPointSymbol">ResultPointSymbol</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Symbology.Symbol.html">Symbol</a> that represents an aggregated multipoint trace result.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_StartingPointSymbol" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.StartingPointSymbol">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.StartingPointSymbol.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_StartingPointSymbol">StartingPointSymbol</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Symbology.Symbol.html">Symbol</a> that represents a starting point.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.OnApplyTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.OnApplyTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_OnApplyTemplate">OnApplyTemplate()</a>
+        </td>
+        <td class="markdown level1 summary"></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_UtilityNetworkChanged" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.UtilityNetworkChanged">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.UtilityNetworkChanged.html">UtilityNetworkChanged</a>
+        </td>
+        <td class="markdown level1 summary"><p>Event raised when a new utility network is selected.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool_UtilityNetworkTraceCompleted" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.UtilityNetworkTraceCompleted">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.UtilityNetworkTraceCompleted.html">UtilityNetworkTraceCompleted</a>
+        </td>
+        <td class="markdown level1 summary"><p>Event raised when a utility network trace is completed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_UtilityNetworkTraceTool.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.Maui/UtilityNetworkTraceTool/UtilityNetworkTraceTool.cs/#L30" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
