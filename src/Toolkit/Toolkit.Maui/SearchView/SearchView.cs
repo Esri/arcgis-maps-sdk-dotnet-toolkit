@@ -100,6 +100,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         NoResultMessage = Properties.Resources.GetString("SearchViewNoResults");
         AllSourcesSelectText = Properties.Resources.GetString("SearchViewAllSourcesSelect");
         RepeatSearchButtonText = Properties.Resources.GetString("SearchViewRepeatSearch");
+
     }
 
     /// <summary>
@@ -315,7 +316,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             //JH: Added for collapsing dialog when user starts typing in search
             _sourceSelectToggled = false;
-            UpdateVisibility();			
+            UpdateVisibility();
             SearchViewModel.CurrentQuery = e.NewTextValue;
         }
     }
