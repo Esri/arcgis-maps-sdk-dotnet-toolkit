@@ -178,6 +178,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             if (GetTemplateChild("ErrorLabel") is TextBlock tb)
             {
+                // JH: If the control is not loaded yet, updating error message will fail.
+                if ( !IsLoaded ) return;
+                
                 tb.Text = errMessage ?? string.Empty;
                 bool showError = false;
                 if (!string.IsNullOrEmpty(errMessage) && (_hadFocus || FeatureFormView.GetFeatureFormViewParent(this)?.ShouldShowError() == true))
