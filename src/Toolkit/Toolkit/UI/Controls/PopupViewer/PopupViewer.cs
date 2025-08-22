@@ -253,7 +253,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the associated Popup.
         /// </summary>
-        /// /// <seealso cref="CurrentPopup"/>
+        /// <seealso cref="CurrentPopup"/>
         public Popup? Popup
         {
             get { return GetValue(PopupProperty) as Popup; }
