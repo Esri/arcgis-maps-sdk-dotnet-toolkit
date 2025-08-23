@@ -127,9 +127,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         _isDirty = false;
                     }
-                    if (Popup != null)
+                    if (CurrentPopup != null)
                     {
-                        _ = await Popup.EvaluateExpressionsAsync();
+                        _ = await CurrentPopup.EvaluateExpressionsAsync();
                     }
                 }
                 catch
@@ -138,14 +138,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             });
         }
 
-        private bool _isNavigating = false;
-
         private void SubView_OnNavigating(object? sender, NavigationSubView.NavigationEventArgs e)
         {
             if (e.Cancel)
                 return;
             
-            _isNavigating = true;
             if (e.NavigatingTo is Popup to)
             {
                 SetCurrentPopup(to);
@@ -158,35 +155,57 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     SetCurrentPopup(previousPopup);
                 }
             }
-            _isNavigating = false;
+        }
+
+        
+#if WINDOWS_XAML
+        private static readonly DependencyProperty CurrentPopupProperty =
+            DependencyProperty.Register(nameof(CurrentPopup), typeof(Popup), typeof(PopupViewer), new PropertyMetadata(null));
+#elif MAUI
+        private Popup? _currentPopup;
+#elif WPF
+        private static readonly DependencyPropertyKey CurrentPopupPropertyKey =
+                DependencyProperty.RegisterReadOnly(
+                  name: nameof(CurrentPopup),
+                  propertyType: typeof(Popup),
+                  ownerType: typeof(PopupViewer),
+                  typeMetadata: new FrameworkPropertyMetadata());
+#endif
+        private Popup? GetCurrentPopup()
+        {
+#if WINDOWS_XAML
+            return (Popup?)GetValue(CurrentPopupProperty);
+#elif WPF
+            return (Popup?)GetValue(CurrentPopupPropertyKey.DependencyProperty);
+#elif MAUI
+            return _currentPopup;
+#endif
         }
 
         private void SetCurrentPopup(Popup? value)
         {
-            var oldValue = Popup;
+            var oldValue = CurrentPopup;
             if (oldValue != value)
             {
-                SetValue(PopupProperty, value);
+#if WINDOWS_XAML
+                SetValue(CurrentPopupProperty, value);
+#elif WPF
+                SetValue(CurrentPopupPropertyKey, value);
+#elif MAUI
+                _currentPopup = value;
+                OnPropertyChanged(nameof(CurrentPopup));
+#endif
+                OnCurrentPopupPropertyChanged(oldValue, value);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the associated Popup.
-        /// </summary>
-        public Popup? Popup
+        private void OnCurrentPopupPropertyChanged(Popup? oldPopup, Popup? newPopup)
         {
-            get { return GetValue(PopupProperty) as Popup; }
-            set { SetValue(PopupProperty, value); }
-        }
+            if (newPopup is not null)
+            {
+                InvalidatePopup();
+            }
 
-        /// <summary>
-        /// Identifies the <see cref="Popup"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty PopupProperty =
-            PropertyHelper.CreateProperty<Popup, PopupViewer>(nameof(Popup), null, (s, oldValue, newValue) => s.OnPopupPropertyChanged(oldValue, newValue));
-
-        private void OnPopupPropertyChanged(Popup? oldPopup, Popup? newPopup)
-        {
             if (oldPopup?.GeoElement is not null)
             {
                 _dynamicEntityChangedListener?.Detach();
@@ -216,11 +235,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 }
             }
-            if (!_isNavigating && GetTemplateChild("SubFrameView") is NavigationSubView subView)
-            {
-                _ = subView.Navigate(content: Popup, clearNavigationStack: Popup is null, skipRaisingEvent: true);
-            }
             InvalidatePopup();
+        }
+
+        /// <summary>
+        /// Gets the currently active popup being viewed
+        /// </summary>
+        /// <remarks>
+        /// If you are viewing related features or utility network associations, this will return the currently active popup being viewed.
+        /// </remarks>
+        /// <seealso cref="Popup"/>
+        public Popup? CurrentPopup
+        {
+            get => GetCurrentPopup();
+        }
+
+        /// <summary>
+        /// Gets or sets the associated Popup.
+        /// </summary>
+        /// <seealso cref="CurrentPopup"/>
+        public Popup? Popup
+        {
+            get { return GetValue(PopupProperty) as Popup; }
+            set { SetValue(PopupProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="Popup"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty PopupProperty =
+            PropertyHelper.CreateProperty<Popup, PopupViewer>(nameof(Popup), null, (s, oldValue, newValue) => s.OnPopupPropertyChanged(oldValue, newValue));
+
+        private void OnPopupPropertyChanged(Popup? oldPopup, Popup? newPopup)
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                _ = subView.Navigate(content: Popup, clearNavigationStack: true);
+            }
         }
 
         /// <summary>
