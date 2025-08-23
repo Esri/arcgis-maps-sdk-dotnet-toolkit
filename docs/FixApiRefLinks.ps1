@@ -7,7 +7,7 @@ function FixApiLinks([string]$path)
     foreach ($file in $files)
     {
         $content = Get-Content -Path $file
-        $newContent = $content -replace "../(android|ios|uwp|netwin|netstd|netfx)/", ''
+        $newContent = $content -replace "../(android|ios|netwin)/", ''
         $newContent | Set-Content -Path $file
     }
 }

@@ -22,7 +22,6 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Compile Include="..\Toolkit.SampleApp.UWP\SampleDatasource.cs" Link="SampleDatasource.cs" />
     <Compile Include="..\Toolkit.SampleApp.WPF\Samples\Downloading\DownloadItemVM.cs" Link="Samples\Downloading\DownloadItemVM.cs" />
   </ItemGroup>
 
@@ -58,12 +57,6 @@
         </Otherwise>
     </Choose>
 
-    <!--<Target BeforeTargets="Build;Rebuild" Name="CopyUWPSamples">
-        <ItemGroup>
-            <SampleSources Include="..\Toolkit.SampleApp.UWP\Samples\**\*.*" />
-        </ItemGroup>
-        <Copy SourceFiles="@(SampleSources)" DestinationFiles="Samples\%(RecursiveDir)%(Filename)%(Extension)" SkipUnchangedFiles="true" />
-    </Target>-->
   <!-- 
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
     Tools extension to be activated for this project even if the Windows App SDK Nuget
@@ -71,18 +64,6 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Samples\" />
-      <Compile Include="..\Toolkit.SampleApp.UWP\Samples\**\*.cs" Link="Samples\%(RecursiveDir)%(Filename)%(Extension)" />
-      <Page Include="..\Toolkit.SampleApp.UWP\Samples\**\*.xaml" Link="Samples\%(RecursiveDir)%(Filename)%(Extension)" />
-
-      <Compile Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\DataGridSample.xaml.cs" />
-
-      <Compile Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\EditFeatureSample.xaml.cs" />
-      <Page Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\DataGridSample.xaml" />
-      <Page Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\EditFeatureSample.xaml" />
-      <Page Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\FeatureDataFieldSample.xaml" />
   </ItemGroup>
 
   <!-- 
