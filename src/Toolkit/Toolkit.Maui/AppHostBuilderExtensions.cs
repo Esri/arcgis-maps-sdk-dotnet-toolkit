@@ -1,6 +1,4 @@
-﻿using Esri.ArcGISRuntime.Toolkit.Maui.Handlers;
-
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+﻿namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
     /// <summary>
     /// Extensions used to configure ArcGIS Maps SDK for .NET Toolkit

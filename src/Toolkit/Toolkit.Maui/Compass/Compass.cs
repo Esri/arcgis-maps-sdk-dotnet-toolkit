@@ -25,9 +25,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// The Compass Control showing the heading on the map when the rotation is not North up / 0.
 /// </summary>
 public class Compass : TemplatedView
-#pragma warning disable CS0618 // Type or member is obsolete
-    , ICompass
-#pragma warning restore CS0618 // Type or member is obsolete
 {
     private static readonly ControlTemplate DefaultControlTemplate;
     private bool _headingSetByGeoView;
