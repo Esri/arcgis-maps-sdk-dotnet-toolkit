@@ -115,8 +115,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 };
             LineGeometryEditor = new GeometryEditor();
             AreaGeometryEditor = new GeometryEditor();
-            SelectionLineSymbol = LineGeometryEditor.Tool.Style?.LineSymbol;
-            SelectionFillSymbol = AreaGeometryEditor.Tool.Style?.FillSymbol;
+            SelectionLineSymbol = LineGeometryEditor.Tool?.Style?.LineSymbol;
+            SelectionFillSymbol = AreaGeometryEditor.Tool?.Style?.FillSymbol;
         }
 
         /// <inheritdoc/>
