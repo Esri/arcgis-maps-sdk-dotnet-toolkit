@@ -130,6 +130,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, GeoViewDocumentChanged);
 #endif
                 }
+                else if (_geoview is LocalSceneView localsceneview)
+                {
+#if WINDOWS_XAML
+                    localsceneview.UnregisterPropertyChangedCallback(LocalSceneView.SceneProperty, _propertyChangedCallbackToken);
+#else
+                    DependencyPropertyDescriptor.FromProperty(LocalSceneView.SceneProperty, typeof(LocalSceneView)).RemoveValueChanged(localsceneview, GeoViewDocumentChanged);
+#endif
+                }
 #endif
             }
 
@@ -155,6 +163,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, GeoViewDocumentChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, GeoViewDocumentChanged);
+#endif
+                }
+                else if (_geoview is LocalSceneView localsceneview)
+                {
+#if WINDOWS_XAML
+                    _propertyChangedCallbackToken = localsceneview.RegisterPropertyChangedCallback(LocalSceneView.SceneProperty, GeoViewDocumentChanged);
+#else
+                    DependencyPropertyDescriptor.FromProperty(LocalSceneView.SceneProperty, typeof(LocalSceneView)).AddValueChanged(localsceneview, GeoViewDocumentChanged);
 #endif
                 }
 #endif
@@ -189,6 +205,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 OnGeoViewPropertyChanged(sceneView, nameof(SceneView.Scene));
             }
+            else if (sender is LocalSceneView localsceneView)
+            {
+                OnGeoViewPropertyChanged(localsceneView, nameof(LocalSceneView.Scene));
+            }
         }
 #endif
 
@@ -198,7 +218,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
 #if MAUI
                 if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
-                    (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
+                    (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)) ||
+                    (sender is LocalSceneView && e.PropertyName == nameof(LocalSceneView.Scene)))
                 {
                     OnDocumentChanged();
                 }
@@ -298,6 +319,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     SubscribeToDocument(sv.Scene);
                 }
             }
+            else if (_geoview is LocalSceneView lsv)
+            {
+                if (lsv.Scene != null)
+                {
+                    SubscribeToDocument(lsv.Scene);
+                }
+            }
 
             TrackOperationalLayers();
 
@@ -354,6 +382,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             else if (_geoview is SceneView sv)
             {
                 layers = sv.Scene?.OperationalLayers;
+            }
+            else if (_geoview is LocalSceneView lsv)
+            {
+                layers = lsv.Scene?.OperationalLayers;
             }
 
             _operationalLayerTrackingDetachActions = new List<Action>(TrackLayerContentsRecursive(layers));

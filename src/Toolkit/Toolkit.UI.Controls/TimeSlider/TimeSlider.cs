@@ -1341,13 +1341,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 await sv.Scene.LoadAsync();
             }
+            else if (geoView is LocalSceneView lsv && lsv.Scene != null)
+            {
+                await lsv.Scene.LoadAsync();
+            }
             else if (geoView is null)
             {
                 throw new ArgumentNullException(nameof(geoView));
             }
 
             // Get all the layers from the geoview
-            var allLayers = geoView is MapView mapView ? mapView.Map?.AllLayers : ((SceneView)geoView).Scene?.AllLayers;
+            var allLayers = (geoView as MapView)?.Map?.AllLayers ?? (geoView as SceneView)?.Scene?.AllLayers ?? (geoView as LocalSceneView)?.Scene?.AllLayers ?? null;
 
             // Get all the layers that are visible and are participating in time-based filtering
             var temporallyActiveLayers = allLayers?.Where(l =>
