@@ -1351,7 +1351,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             // Get all the layers from the geoview
-            var allLayers = (geoView as MapView)?.Map?.AllLayers ?? (geoView as SceneView)?.Scene?.AllLayers ?? (geoView as LocalSceneView)?.Scene?.AllLayers ?? null;
+            var allLayers = (geoView as MapView)?.Map?.AllLayers ?? (geoView as SceneView)?.Scene?.AllLayers ?? (geoView as LocalSceneView)?.Scene?.AllLayers;
 
             // Get all the layers that are visible and are participating in time-based filtering
             var temporallyActiveLayers = allLayers?.Where(l =>
