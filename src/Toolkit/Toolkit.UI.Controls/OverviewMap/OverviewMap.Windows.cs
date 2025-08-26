@@ -25,9 +25,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// Defines a small "overview" (or "inset") map displaying a representation of the attached <see cref="GeoView"/>'s current viewpoint.
     /// </summary>
     /// <remarks>
-    /// <para><note type="caution">
-    /// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the current extent will not be shown on the overview map.
-    /// </note></para></remarks>
     [TemplatePart(Name = "PART_MapView", Type = typeof(MapView))]
     public partial class OverviewMap : Control
     {
@@ -176,10 +173,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is LocalSceneView)
-            {
-                System.Diagnostics.Trace.WriteLine("OverviewMap does not currently support showing the extent on a LocalSceneView.");
-            }
             if (((OverviewMap)d)._controller is OverviewMapController controller)
             {
                 controller.AttachedView = e.NewValue as GeoView;

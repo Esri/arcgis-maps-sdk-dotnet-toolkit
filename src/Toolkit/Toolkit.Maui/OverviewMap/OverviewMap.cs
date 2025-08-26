@@ -24,9 +24,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// <summary>
 /// Defines a small "overview" (or "inset") map displaying a representation of the attached <see cref="GeoView"/>'s current viewpoint.
 /// </summary>
-/// <para><note type="caution">
-/// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the current extent will not be shown on the overview map.
-/// </note></para></remarks>
 public class OverviewMap : TemplatedView
 {
     private OverviewMapController? _controller;
@@ -215,10 +212,6 @@ public class OverviewMap : TemplatedView
 
     private static void OnGeoViewPropertyChanged(BindableObject sender, object oldValue, object newValue)
     {
-        if (newValue is LocalSceneView)
-        {
-            System.Diagnostics.Trace.WriteLine("OverviewMap does not currently support showing the extent on a LocalSceneView.");
-        }
         if (((OverviewMap)sender)._controller is OverviewMapController controller)
         {
             controller.AttachedView = newValue as GeoView;
