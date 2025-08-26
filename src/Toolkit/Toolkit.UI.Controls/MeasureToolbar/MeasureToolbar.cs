@@ -117,6 +117,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AreaGeometryEditor = new GeometryEditor();
             SelectionLineSymbol = LineGeometryEditor.Tool?.Style?.LineSymbol;
             SelectionFillSymbol = AreaGeometryEditor.Tool?.Style?.FillSymbol;
+            if (SelectionFillSymbol is Symbology.SimpleFillSymbol fillSymbol)
+            {
+                fillSymbol.Color = System.Drawing.Color.FromArgb(90, 60, 60, 60);
+            }
         }
 
         /// <inheritdoc/>
