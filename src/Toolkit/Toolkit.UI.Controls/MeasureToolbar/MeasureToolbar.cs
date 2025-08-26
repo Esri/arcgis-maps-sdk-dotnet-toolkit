@@ -115,8 +115,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 };
             LineGeometryEditor = new GeometryEditor();
             AreaGeometryEditor = new GeometryEditor();
-            SelectionLineSymbol = LineGeometryEditor.Tool?.Style?.LineSymbol;
-            SelectionFillSymbol = AreaGeometryEditor.Tool?.Style?.FillSymbol;
+            SelectionLineSymbol = LineGeometryEditor.Tool!.Style!.LineSymbol; // Default tool and style are always set by GeometryEditor
+            SelectionFillSymbol = AreaGeometryEditor.Tool!.Style!.FillSymbol; // Default tool and style are always set by GeometryEditor
             if (SelectionFillSymbol is Symbology.SimpleFillSymbol fillSymbol)
             {
                 fillSymbol.Color = System.Drawing.Color.FromArgb(90, 60, 60, 60);
