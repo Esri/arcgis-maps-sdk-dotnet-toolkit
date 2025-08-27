@@ -341,9 +341,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _autoVisibilityWrapper?.SetValue(VisibilityProperty, _controller.ShouldDisplayFloorPicker ? Visibility.Visible : Visibility.Collapsed);
                     break;
                 case nameof(_controller.AllDisplayLevelsSelected):
-#pragma warning disable CS0618 // Ensure typo property is still set for backwards compatibility purposes.
-                    OnPropertyChanged(nameof(AllDisplayLevelsSelecteded));
-#pragma warning restore CS0618
                     OnPropertyChanged(nameof(AllDisplayLevelsSelected));
                     break;
             }
@@ -653,20 +650,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public void SetSelectedLevelWithoutZoom(FloorLevel newLevel)
         {
             _controller.SetSelectedLevel(newLevel, true);
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether all of the levels for the selected facility should be enabled for display.
-        /// </summary>
-        /// <remarks>
-        /// This is used for showing an entire facility in 3D.
-        /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("This property is deprecated. Use AllDisplayLevelsSelected instead.")]
-        public bool AllDisplayLevelsSelecteded
-        {
-            get => AllDisplayLevelsSelected;
-            set => AllDisplayLevelsSelected = value;
         }
 
         /// <summary>
