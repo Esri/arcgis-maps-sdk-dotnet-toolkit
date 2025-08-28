@@ -121,8 +121,6 @@
                                     VerticalAlignment="Stretch"
                                     ToolTipService.ToolTip="Undo"
                                     Grid.Column="5"
-                                    DataContext="{TemplateBinding MapView}"
-                                    Command="{Binding Path=GeometryEditor.UndoCommand}"
                                     FontFamily="Segoe MDL2 Assets"
                                     Content="&#xE7A7;" />
                             <Button x:Name="Redo"
@@ -134,8 +132,6 @@
                                     VerticalAlignment="Stretch"
                                     ToolTipService.ToolTip="Redo"
                                     Grid.Column="6"
-                                    DataContext="{TemplateBinding MapView}"
-                                    Command="{Binding Path=GeometryEditor.RedoCommand}"
                                     FontFamily="Segoe MDL2 Assets"
                                     Content="&#xE7A6;" />
                             <Button x:Name="Clear"

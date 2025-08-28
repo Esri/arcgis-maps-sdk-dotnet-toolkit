@@ -17,6 +17,7 @@
 #if WPF || WINDOWS_XAML
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI;
@@ -32,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "MeasureLength", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "MeasureArea", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "MeasureResult", Type = typeof(TextBlock))]
-    public partial class MeasureToolbar : Control
+    public partial class MeasureToolbar : Control, INotifyPropertyChanged
     {
         // Supported measure mode
         private enum MeasureToolbarMode
@@ -75,8 +76,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Used for clearing map and measurement result
         private ButtonBase? _clearButton;
 
+        // Used for Undo the GoemetryEditor
+        private ButtonBase? _undoButton;
+
+        // Used for Redo the GoemetryEditor
+        private ButtonBase? _redoButton;
+
         // Used for internal measure editors
-        private GeometryEditor _geometryEditor = new();
+        private GeometryEditor? _geometryEditor;
 
         // Used for restoring original tool when switching from feature measure mode
         private VertexTool? _originalTool;
@@ -116,17 +123,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Geometry.AreaUnits.SquareMillimeters,
                     Geometry.AreaUnits.SquareYards,
                 };
-            if (_geometryEditor.Tool is VertexTool tool)
-            {
-                AreaVertexTool = tool;
-                LineVertexTool = tool;
-            }
-            SelectionLineSymbol = _geometryEditor.Tool!.Style!.LineSymbol; // Default tool and style are always set by GeometryEditor
-            SelectionFillSymbol = _geometryEditor.Tool!.Style!.FillSymbol; // Default tool and style are always set by GeometryEditor
-            if (SelectionFillSymbol is Symbology.SimpleFillSymbol fillSymbol)
-            {
-                fillSymbol.Color = System.Drawing.Color.FromArgb(90, 60, 60, 60);
-            }
         }
 
         /// <inheritdoc/>
@@ -168,6 +164,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                       }
                   };
                 _clearButton.Click += OnClear;
+            }
+
+            _undoButton = GetTemplateChild("Undo") as ButtonBase;
+            if (_undoButton != null)
+            {
+                _undoButton.Click += (s, e) =>
+                {
+                    if (_geometryEditor != null && _geometryEditor.CanUndo)
+                    {
+                        _geometryEditor.Undo();
+                    }
+                };
+            }
+
+            _redoButton = GetTemplateChild("Redo") as ButtonBase;
+            if (_redoButton != null)
+            {
+                _redoButton.Click += (s, e) =>
+                {
+                    if (_geometryEditor != null && _geometryEditor.CanRedo)
+                    {
+                        _geometryEditor.Redo();
+                    }
+                };
             }
 
             _measureResultTextBlock = GetTemplateChild("MeasureResult") as TextBlock;
@@ -370,7 +390,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="e">Contains information or event data associated with routed event.</param>
         private void OnToggleMeasureMode(object? sender, RoutedEventArgs e)
         {
-            _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
+            if (_geometryEditor is not null)
+            {
+                _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
+            }
 
             var toggleButton = sender as ToggleButton;
             Mode = toggleButton != null && toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
@@ -443,11 +466,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Symbology.Symbol? symbol = null;
             if (geometry is Polyline)
             {
-                symbol = SelectionLineSymbol;
+                symbol = _geometryEditor?.Tool?.Style?.LineSymbol;
             }
             else if (geometry is Polygon || geometry is Envelope)
             {
-                symbol = SelectionFillSymbol;
+                symbol = _geometryEditor?.Tool?.Style?.FillSymbol;
             }
 
             if (geometry != null)
@@ -593,7 +616,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
             toolbar._geometryEditor = newMapView.GeometryEditor!;
+            toolbar.InitializeGeometryEditorProperties(toolbar._geometryEditor);
             toolbar.DisplayResult(newMapView.GeometryEditor?.Geometry);
+        }
+
+        private void InitializeGeometryEditorProperties(GeometryEditor? geometryEditor)
+        {
+            if (geometryEditor?.Tool is VertexTool tool)
+            {
+                AreaVertexTool ??= tool;
+                LineVertexTool ??= tool;
+            }
+            if (geometryEditor?.Tool?.Style?.FillSymbol is Symbology.SimpleFillSymbol fillSymbol)
+            {
+                fillSymbol.Color = System.Drawing.Color.FromArgb(90, 60, 60, 60);
+            }
         }
 
         /// <summary>
@@ -621,82 +658,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             toolbar.DisplayResult();
         }
 
+        private VertexTool? _areaVertexTool;
         /// <summary>
         /// Gets or sets the <see cref="VertexTool"/> used for measuring areas.
         /// </summary>
         public VertexTool? AreaVertexTool
         {
-            get { return GetValue(AreaVertexToolProperty) as VertexTool; }
-            set { SetValue(AreaVertexToolProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="AreaVertexTool"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty AreaVertexToolProperty =
-            DependencyProperty.Register(nameof(AreaVertexTool), typeof(VertexTool), typeof(MeasureToolbar), new PropertyMetadata(null, OnAreaVertexToolPropertyChanged));
-
-        private static void OnAreaVertexToolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            if (e.NewValue is not VertexTool newVertexTool)
+            get => _areaVertexTool;
+            set
             {
-                throw new ArgumentException($"{nameof(AreaVertexTool)} cannot be null or empty.");
-            }
-            toolbar.DisplayResult();
-        }
-
-        /// <summary>
-        /// Gets or sets the symbol used for highlighting the polyline feature or graphic whose geometry is measured for distance.
-        /// </summary>
-        public Symbology.Symbol? SelectionLineSymbol
-        {
-            get { return GetValue(SelectionLineSymbolProperty) as Symbology.Symbol; }
-            set { SetValue(SelectionLineSymbolProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionLineSymbol"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SelectionLineSymbolProperty =
-            DependencyProperty.Register(nameof(SelectionLineSymbol), typeof(Symbology.Symbol), typeof(MeasureToolbar), new PropertyMetadata(null, OnSelectionLineSymbolPropertyChanged));
-
-        private static void OnSelectionLineSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            var symbol = e.NewValue as Symbology.Symbol;
-            var graphic = toolbar._measureFeatureResultOverlay.Graphics.FirstOrDefault();
-            if (graphic?.Geometry is Polyline)
-            {
-                graphic.Symbol = symbol;
+                if (_areaVertexTool != value)
+                {
+                    _areaVertexTool = value;
+                    OnPropertyChanged();
+                    DisplayResult();
+                }
             }
         }
 
-        /// <summary>
-        /// Gets or sets the symbol used for highlighting the polygon feature or graphic whose geometry is measured for area.
-        /// </summary>
-        public Symbology.Symbol? SelectionFillSymbol
-        {
-            get { return GetValue(SelectionFillSymbolProperty) as Symbology.Symbol; }
-            set { SetValue(SelectionFillSymbolProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionFillSymbol"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SelectionFillSymbolProperty =
-            DependencyProperty.Register(nameof(SelectionFillSymbol), typeof(Symbology.Symbol), typeof(MeasureToolbar), new PropertyMetadata(null, OnSelectionFillSymbolPropertyChanged));
-
-        private static void OnSelectionFillSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            var symbol = e.NewValue as Symbology.Symbol;
-            var graphic = toolbar._measureFeatureResultOverlay.Graphics.FirstOrDefault();
-            if (graphic?.Geometry is Polygon || graphic?.Geometry is Envelope)
-            {
-                graphic.Symbol = symbol;
-            }
-        }
+        /// <inheritdoc />
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.LinearUnit"/> used to configure display for distance measurements.
