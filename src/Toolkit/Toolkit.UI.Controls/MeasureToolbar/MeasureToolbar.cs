@@ -75,8 +75,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Used for clearing map and measurement result
         private ButtonBase? _clearButton;
 
-        // Used for replacing measure editors
-        private GeometryEditor? _originalGeometryEditor;
+        // Used for internal measure editors
+        private GeometryEditor _geometryEditor = new();
+
+        // Used for restoring original tool when switching from feature measure mode
+        private VertexTool? _originalTool;
 
         // Used for highlighting feature for measurement
         private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay();
@@ -113,10 +116,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Geometry.AreaUnits.SquareMillimeters,
                     Geometry.AreaUnits.SquareYards,
                 };
-            LineGeometryEditor = new GeometryEditor();
-            AreaGeometryEditor = new GeometryEditor();
-            SelectionLineSymbol = LineGeometryEditor.Tool!.Style!.LineSymbol; // Default tool and style are always set by GeometryEditor
-            SelectionFillSymbol = AreaGeometryEditor.Tool!.Style!.FillSymbol; // Default tool and style are always set by GeometryEditor
+            if (_geometryEditor.Tool is VertexTool tool)
+            {
+                AreaVertexTool = tool;
+                LineVertexTool = tool;
+            }
+            SelectionLineSymbol = _geometryEditor.Tool!.Style!.LineSymbol; // Default tool and style are always set by GeometryEditor
+            SelectionFillSymbol = _geometryEditor.Tool!.Style!.FillSymbol; // Default tool and style are always set by GeometryEditor
             if (SelectionFillSymbol is Symbology.SimpleFillSymbol fillSymbol)
             {
                 fillSymbol.Color = System.Drawing.Color.FromArgb(90, 60, 60, 60);
@@ -211,7 +217,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// - Only one of the measure toggle buttons is enabled
         /// - Only one of the units selector is visible
         /// - Updates instruction text
-        /// - Assigns the appropriate GeometryEditor
+        /// - Assigns the correct GeometryEditor tool for the selected mode.
         /// - Updates command to execute on clear.
         /// </summary>
         private void PrepareMeasureMode()
@@ -220,19 +226,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var isMeasuringArea = _mode == MeasureToolbarMode.Area;
             var isMeasuringFeature = _mode == MeasureToolbarMode.Feature;
 
-            var geometryEditor = isMeasuringLength ?
-                LineGeometryEditor :
-                (isMeasuringArea ? AreaGeometryEditor : _originalGeometryEditor);
+            var tool = isMeasuringLength ?
+                LineVertexTool :
+                isMeasuringArea ? AreaVertexTool : _originalTool;
             if (MapView != null)
             {
-                if (MapView.GeometryEditor != geometryEditor)
+                if (MapView.GeometryEditor is GeometryEditor geometryEditor)
                 {
-                    MapView.GeometryEditor = geometryEditor;
-                }
+                    if (geometryEditor.Tool != tool)
+                    {
+                        _originalTool = MapView.GeometryEditor.Tool as VertexTool;
+                        if (tool is not null)
+                        {
+                            geometryEditor.Tool = tool;
+                        }
+                    }
 
-                if (MapView.GeometryEditor != null)
-                {
-                    MapView.GeometryEditor.IsVisible = isMeasuringLength || isMeasuringArea;
+                    geometryEditor.IsVisible = isMeasuringLength || isMeasuringArea;
                 }
 
                 if (isMeasuringFeature)
@@ -317,14 +327,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     switch (Mode)
                     {
                         case MeasureToolbarMode.Line:
-                            {
-                                geometry = LineGeometryEditor?.Geometry;
-                                break;
-                            }
-
                         case MeasureToolbarMode.Area:
                             {
-                                geometry = AreaGeometryEditor?.Geometry;
+                                geometry = _geometryEditor?.Geometry;
                                 break;
                             }
 
@@ -365,13 +370,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="e">Contains information or event data associated with routed event.</param>
         private void OnToggleMeasureMode(object? sender, RoutedEventArgs e)
         {
+            _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
+
             var toggleButton = sender as ToggleButton;
             Mode = toggleButton != null && toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
                (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
                toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
                toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
                MeasureToolbarMode.None;
-            if (MapView?.GeometryEditor != null && MapView.GeometryEditor.Geometry == null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
+            if (MapView?.GeometryEditor != null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
             {
                 try
                 {
@@ -572,88 +579,71 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnMapViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var toolbar = (MeasureToolbar)d;
-            var newMapView = e.NewValue as MapView;
-            if (newMapView == null)
+            if (e.NewValue is not MapView newMapView)
             {
                 throw new ArgumentException($"{nameof(MapView)} cannot be null or empty.");
             }
 
-            var oldMapView = e.OldValue as MapView;
-            if (oldMapView != null)
+            if (e.OldValue is MapView oldMapView)
             {
-                oldMapView.GeometryEditor = toolbar._originalGeometryEditor;
+                oldMapView.GeometryEditor = toolbar._geometryEditor;
                 oldMapView.GeoViewTapped -= toolbar.OnMapViewTapped;
                 toolbar.RemoveMeasureFeatureResultOverlay(oldMapView);
             }
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
-            toolbar._originalGeometryEditor = newMapView.GeometryEditor;
+            toolbar._geometryEditor = newMapView.GeometryEditor!;
             toolbar.DisplayResult(newMapView.GeometryEditor?.Geometry);
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="GeometryEditor"/> used for measuring distances.
+        /// Gets or sets the <see cref="VertexTool"/> used for measuring distances.
         /// </summary>
-        public GeometryEditor? LineGeometryEditor
+        public VertexTool? LineVertexTool
         {
-            get { return GetValue(LineGeometryEditorProperty) as GeometryEditor; }
-            set { SetValue(LineGeometryEditorProperty, value); }
+            get { return GetValue(LineVertexToolProperty) as VertexTool; }
+            set { SetValue(LineVertexToolProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="LineGeometryEditor"/> dependency property.
+        /// Identifies the <see cref="LineVertexTool"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty LineGeometryEditorProperty =
-            DependencyProperty.Register(nameof(LineGeometryEditor), typeof(GeometryEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnLineGeometryEditorPropertyChanged));
+        public static readonly DependencyProperty LineVertexToolProperty =
+            DependencyProperty.Register(nameof(LineVertexTool), typeof(VertexTool), typeof(MeasureToolbar), new PropertyMetadata(null, OnLineVertexToolPropertyChanged));
 
-        private static void OnLineGeometryEditorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnLineVertexToolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var toolbar = (MeasureToolbar)d;
-            if (e.NewValue is not GeometryEditor newGeometryEditor)
+            if (e.NewValue is not VertexTool newVertexTool)
             {
-                throw new ArgumentException($"{nameof(LineGeometryEditor)} cannot be null or empty.");
+                throw new ArgumentException($"{nameof(LineVertexTool)} cannot be null or empty.");
             }
-
-            if (e.OldValue is GeometryEditor oldGeometryEditor)
-            {
-                oldGeometryEditor.PropertyChanged -= toolbar.OnGeometryEditorPropertyChanged;
-
-            }
-
-            newGeometryEditor.PropertyChanged += toolbar.OnGeometryEditorPropertyChanged;
-            toolbar.DisplayResult(newGeometryEditor.Geometry);
+            toolbar.DisplayResult();
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="GeometryEditor"/> used for measuring areas.
+        /// Gets or sets the <see cref="VertexTool"/> used for measuring areas.
         /// </summary>
-        public GeometryEditor? AreaGeometryEditor
+        public VertexTool? AreaVertexTool
         {
-            get { return GetValue(AreaGeometryEditorProperty) as GeometryEditor; }
-            set { SetValue(AreaGeometryEditorProperty, value); }
+            get { return GetValue(AreaVertexToolProperty) as VertexTool; }
+            set { SetValue(AreaVertexToolProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="AreaGeometryEditor"/> dependency property.
+        /// Identifies the <see cref="AreaVertexTool"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty AreaGeometryEditorProperty =
-            DependencyProperty.Register(nameof(AreaGeometryEditor), typeof(GeometryEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnAreaGeometryEditorPropertyChanged));
+        public static readonly DependencyProperty AreaVertexToolProperty =
+            DependencyProperty.Register(nameof(AreaVertexTool), typeof(VertexTool), typeof(MeasureToolbar), new PropertyMetadata(null, OnAreaVertexToolPropertyChanged));
 
-        private static void OnAreaGeometryEditorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnAreaVertexToolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var toolbar = (MeasureToolbar)d;
-            if (e.NewValue is not GeometryEditor newGeometryEditor)
+            if (e.NewValue is not VertexTool newVertexTool)
             {
-                throw new ArgumentException($"{nameof(AreaGeometryEditor)} cannot be null or empty.");
+                throw new ArgumentException($"{nameof(AreaVertexTool)} cannot be null or empty.");
             }
-
-            if (e.OldValue is GeometryEditor oldGeometryEditor)
-            {
-                oldGeometryEditor.PropertyChanged -= toolbar.OnGeometryEditorPropertyChanged;
-            }
-
-            newGeometryEditor.PropertyChanged += toolbar.OnGeometryEditorPropertyChanged;
-            toolbar.DisplayResult(newGeometryEditor.Geometry);
+            toolbar.DisplayResult();
         }
 
         /// <summary>
