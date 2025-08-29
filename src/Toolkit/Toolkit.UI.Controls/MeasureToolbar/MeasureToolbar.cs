@@ -394,12 +394,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="e">Contains information or event data associated with routed event.</param>
         private void OnToggleMeasureMode(object? sender, RoutedEventArgs e)
         {
-            if (_geometryEditor is not null)
-            {
-                _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
-                _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
-            }
-
             var toggleButton = sender as ToggleButton;
             Mode = toggleButton != null && toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
                (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
@@ -620,6 +614,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
             toolbar._geometryEditor = newMapView.GeometryEditor;
+            if (toolbar._geometryEditor != null)
+            {
+                toolbar._geometryEditor.PropertyChanged += toolbar.OnGeometryEditorPropertyChanged;
+            }
             toolbar.DisplayResult(newMapView.GeometryEditor?.Geometry);
         }
 
