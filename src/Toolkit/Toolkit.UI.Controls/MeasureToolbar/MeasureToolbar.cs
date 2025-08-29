@@ -393,6 +393,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (_geometryEditor is not null)
             {
+                _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
                 _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
             }
 
