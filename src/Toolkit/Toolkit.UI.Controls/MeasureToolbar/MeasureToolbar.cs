@@ -254,15 +254,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         // Save the original tool before switching
                         _originalTool ??= geometryEditor.Tool;
-
-                        var newTool = isMeasuringLength ? LineVertexTool
-                            : isMeasuringArea ? AreaVertexTool
-                            : _originalTool;
-
-                        if (newTool != null)
-                        {
-                            geometryEditor.Tool = newTool;
-                        }
+                        geometryEditor.Tool = MeasureTool ?? _originalTool;
                         geometryEditor.IsVisible = true;
                     }
                     else
@@ -628,37 +620,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
             toolbar._geometryEditor = newMapView.GeometryEditor!;
-            toolbar.InitializeGeometryEditorProperties(toolbar._geometryEditor);
             toolbar.DisplayResult(newMapView.GeometryEditor?.Geometry);
         }
 
-        private void InitializeGeometryEditorProperties(GeometryEditor? geometryEditor)
+        /// <summary>
+        /// Gets the <see cref="VertexTool"/> used for measuring distances and areas.
+        /// </summary>
+        public VertexTool MeasureTool { get; } = new VertexTool
         {
-            if (geometryEditor != null)
+            Style = new GeometryEditorStyle
             {
-                // Instantiate separate VertexTool instances for line and area
-                _lineVertexTool ??= new VertexTool();
-                _areaVertexTool ??= new VertexTool();
-                if (_areaVertexTool?.Style?.FillSymbol is Symbology.SimpleFillSymbol fillSymbol)
+                FillSymbol = new Symbology.SimpleFillSymbol
                 {
-                    fillSymbol.Color = System.Drawing.Color.FromArgb(90, 60, 60, 60);
+                    Color = System.Drawing.Color.FromArgb(90, 60, 60, 60),
                 }
             }
-        }
-
-        private VertexTool? _lineVertexTool;
-
-        /// <summary>
-        /// Gets the <see cref="VertexTool"/> used for measuring distances.
-        /// </summary>
-        public VertexTool? LineVertexTool => _lineVertexTool;
-
-        private VertexTool? _areaVertexTool;
-
-        /// <summary>
-        /// Gets the <see cref="VertexTool"/> used for measuring areas.
-        /// </summary>
-        public VertexTool? AreaVertexTool => _areaVertexTool;
+        };
 
         /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.LinearUnit"/> used to configure display for distance measurements.
