@@ -436,7 +436,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var editor = sender as GeometryEditor;
                 if (_clearButton != null)
                 {
-                    _clearButton.IsEnabled = editor?.Geometry != null;
+                    _clearButton.IsEnabled = editor?.Geometry is Geometry.Geometry geometry && !geometry.IsEmpty;
                 }
                 DisplayResult(editor?.Geometry);
             }
