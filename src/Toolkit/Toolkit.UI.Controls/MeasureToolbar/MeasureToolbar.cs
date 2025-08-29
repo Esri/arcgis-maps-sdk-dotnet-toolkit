@@ -634,14 +634,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void InitializeGeometryEditorProperties(GeometryEditor? geometryEditor)
         {
-            if (geometryEditor?.Tool is VertexTool tool)
+            if (geometryEditor != null)
             {
-                _lineVertexTool ??= tool;
-                _areaVertexTool ??= tool;
-            }
-            if (geometryEditor?.Tool?.Style?.FillSymbol is Symbology.SimpleFillSymbol fillSymbol)
-            {
-                fillSymbol.Color = System.Drawing.Color.FromArgb(90, 60, 60, 60);
+                // Instantiate separate VertexTool instances for line and area
+                _lineVertexTool ??= new VertexTool();
+                _areaVertexTool ??= new VertexTool();
+                if (_areaVertexTool?.Style?.FillSymbol is Symbology.SimpleFillSymbol fillSymbol)
+                {
+                    fillSymbol.Color = System.Drawing.Color.FromArgb(90, 60, 60, 60);
+                }
             }
         }
 
