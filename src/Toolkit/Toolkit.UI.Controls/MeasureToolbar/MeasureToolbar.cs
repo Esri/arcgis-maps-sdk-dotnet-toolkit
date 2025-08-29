@@ -33,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "MeasureLength", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "MeasureArea", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "MeasureResult", Type = typeof(TextBlock))]
-    public partial class MeasureToolbar : Control, INotifyPropertyChanged
+    public partial class MeasureToolbar : Control
     {
         // Supported measure mode
         private enum MeasureToolbarMode
@@ -636,8 +636,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (geometryEditor?.Tool is VertexTool tool)
             {
-                AreaVertexTool ??= tool;
-                LineVertexTool ??= tool;
+                _lineVertexTool ??= tool;
+                _areaVertexTool ??= tool;
             }
             if (geometryEditor?.Tool?.Style?.FillSymbol is Symbology.SimpleFillSymbol fillSymbol)
             {
@@ -645,53 +645,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="VertexTool"/> used for measuring distances.
-        /// </summary>
-        public VertexTool? LineVertexTool
-        {
-            get { return GetValue(LineVertexToolProperty) as VertexTool; }
-            set { SetValue(LineVertexToolProperty, value); }
-        }
+        private VertexTool? _lineVertexTool;
 
         /// <summary>
-        /// Identifies the <see cref="LineVertexTool"/> dependency property.
+        /// Gets the <see cref="VertexTool"/> used for measuring distances.
         /// </summary>
-        public static readonly DependencyProperty LineVertexToolProperty =
-            DependencyProperty.Register(nameof(LineVertexTool), typeof(VertexTool), typeof(MeasureToolbar), new PropertyMetadata(null, OnLineVertexToolPropertyChanged));
-
-        private static void OnLineVertexToolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            if (e.NewValue is not VertexTool newVertexTool)
-            {
-                throw new ArgumentException($"{nameof(LineVertexTool)} cannot be null or empty.");
-            }
-            toolbar.DisplayResult();
-        }
+        public VertexTool? LineVertexTool => _lineVertexTool;
 
         private VertexTool? _areaVertexTool;
-        /// <summary>
-        /// Gets or sets the <see cref="VertexTool"/> used for measuring areas.
-        /// </summary>
-        public VertexTool? AreaVertexTool
-        {
-            get => _areaVertexTool;
-            set
-            {
-                if (_areaVertexTool != value)
-                {
-                    _areaVertexTool = value;
-                    OnPropertyChanged();
-                    DisplayResult();
-                }
-            }
-        }
 
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler? PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        /// <summary>
+        /// Gets the <see cref="VertexTool"/> used for measuring areas.
+        /// </summary>
+        public VertexTool? AreaVertexTool => _areaVertexTool;
 
         /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.LinearUnit"/> used to configure display for distance measurements.
