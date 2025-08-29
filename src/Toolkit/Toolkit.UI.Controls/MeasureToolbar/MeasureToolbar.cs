@@ -246,24 +246,35 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var isMeasuringArea = _mode == MeasureToolbarMode.Area;
             var isMeasuringFeature = _mode == MeasureToolbarMode.Feature;
 
-            var tool = isMeasuringLength ?
-                LineVertexTool :
-                isMeasuringArea ? AreaVertexTool : _originalTool;
             if (MapView != null)
             {
                 if (_geometryEditor is GeometryEditor geometryEditor)
                 {
-                    // Preserving the original tool before switching to feature measure mode
-                    _originalTool ??= geometryEditor.Tool;
-                    if (geometryEditor.Tool != tool)
+                    if (isMeasuringLength || isMeasuringArea)
                     {
-                        if (tool is not null)
-                        {
-                            geometryEditor.Tool = tool;
-                        }
-                    }
+                        // Save the original tool before switching
+                        _originalTool ??= geometryEditor.Tool;
 
-                    geometryEditor.IsVisible = isMeasuringLength || isMeasuringArea;
+                        var newTool = isMeasuringLength ? LineVertexTool
+                            : isMeasuringArea ? AreaVertexTool
+                            : _originalTool;
+
+                        if (newTool != null)
+                        {
+                            geometryEditor.Tool = newTool;
+                        }
+                        geometryEditor.IsVisible = true;
+                    }
+                    else
+                    {
+                        // Restore the original tool when not measuring
+                        if (_originalTool != null)
+                        {
+                            geometryEditor.Tool = _originalTool;
+                            _originalTool = null;
+                        }
+                        geometryEditor.IsVisible = false;
+                    }
                 }
 
                 if (isMeasuringFeature)
@@ -611,7 +622,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (e.OldValue is MapView oldMapView)
             {
-                oldMapView.GeometryEditor = toolbar._geometryEditor;
                 oldMapView.GeoViewTapped -= toolbar.OnMapViewTapped;
                 toolbar.RemoveMeasureFeatureResultOverlay(oldMapView);
             }
