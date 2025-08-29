@@ -76,10 +76,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Used for clearing map and measurement result
         private ButtonBase? _clearButton;
 
-        // Used for Undo the GoemetryEditor
+        // Used for Undo the GeometryEditor
         private ButtonBase? _undoButton;
 
-        // Used for Redo the GoemetryEditor
+        // Used for Redo the GeometryEditor
         private ButtonBase? _redoButton;
 
         // Used for internal measure editors
@@ -619,7 +619,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
-            toolbar._geometryEditor = newMapView.GeometryEditor!;
+            toolbar._geometryEditor = newMapView.GeometryEditor;
             toolbar.DisplayResult(newMapView.GeometryEditor?.Geometry);
         }
 
