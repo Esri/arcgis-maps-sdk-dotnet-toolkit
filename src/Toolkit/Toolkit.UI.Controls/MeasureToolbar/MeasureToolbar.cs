@@ -86,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeometryEditor? _geometryEditor;
 
         // Used for restoring original tool when switching from feature measure mode
-        private VertexTool? _originalTool;
+        private GeometryEditorTool? _originalTool;
 
         // Used for highlighting feature for measurement
         private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay();
@@ -251,11 +251,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 isMeasuringArea ? AreaVertexTool : _originalTool;
             if (MapView != null)
             {
-                if (MapView.GeometryEditor is GeometryEditor geometryEditor)
+                if (_geometryEditor is GeometryEditor geometryEditor)
                 {
+                    // Preserving the original tool before switching to feature measure mode
+                    _originalTool ??= geometryEditor.Tool;
                     if (geometryEditor.Tool != tool)
                     {
-                        _originalTool = MapView.GeometryEditor.Tool as VertexTool;
                         if (tool is not null)
                         {
                             geometryEditor.Tool = tool;
@@ -306,7 +307,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (isMeasuringLength || isMeasuringArea)
                 {
-                    _clearButton.IsEnabled = MapView?.GeometryEditor?.Geometry != null;
+                    _clearButton.IsEnabled = _geometryEditor?.Geometry != null;
                 }
                 else
                 {
@@ -401,13 +402,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
                toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
                MeasureToolbarMode.None;
-            if (MapView?.GeometryEditor != null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
+            if (_geometryEditor != null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
             {
                 try
                 {
                     var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
-                    MapView.GeometryEditor.Start(creationMode);
-                    DisplayResult(MapView.GeometryEditor.Geometry);
+                    _geometryEditor.Start(creationMode);
+                    DisplayResult(_geometryEditor.Geometry);
                 }
                 catch (TaskCanceledException)
                 {
@@ -574,7 +575,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
             {
-                MapView?.GeometryEditor?.ClearGeometry();
+                _geometryEditor?.ClearGeometry();
             }
             else if (Mode == MeasureToolbarMode.Feature)
             {
