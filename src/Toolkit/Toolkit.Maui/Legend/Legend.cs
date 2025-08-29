@@ -108,6 +108,7 @@ public class Legend : TemplatedView
     /// </summary>
     /// <seealso cref="MapView"/>
     /// <seealso cref="SceneView"/>
+    /// <seealso cref="LocalSceneView"/>
     /// <seealso cref="GeoViewProperty"/>
     public GeoView? GeoView
     {

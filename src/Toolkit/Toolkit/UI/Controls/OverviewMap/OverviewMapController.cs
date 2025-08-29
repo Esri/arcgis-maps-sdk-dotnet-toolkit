@@ -171,6 +171,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _extentGraphic.Geometry = centerPoint;
             }
+            else if (_connectedView is LocalSceneView lsv && lsv.GetCurrentViewpoint(ViewpointType.CenterAndScale)?.TargetGeometry is MapPoint localcenterPoint)
+            {
+                _extentGraphic.Geometry = localcenterPoint;
+            }
         }
 
         private void OnInsetViewpointChanged(object? sender, EventArgs e)
@@ -236,6 +240,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _extentOverlay.Renderer = new SimpleRenderer(AreaSymbol);
             }
             else if (_connectedView is SceneView)
+            {
+                _extentOverlay.Renderer = new SimpleRenderer(PointSymbol);
+            }
+            else if (_connectedView is LocalSceneView)
             {
                 _extentOverlay.Renderer = new SimpleRenderer(PointSymbol);
             }

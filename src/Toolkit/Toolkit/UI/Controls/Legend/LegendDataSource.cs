@@ -217,6 +217,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 layers = sv.Scene?.OperationalLayers;
             }
+            else if (GeoView is LocalSceneView lsv)
+            {
+                layers = lsv.Scene?.OperationalLayers;
+            }
 
             return BuildLegendList(layers, _reverseLayerOrder) ?? new List<LegendEntry>();
         }

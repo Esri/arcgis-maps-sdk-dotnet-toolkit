@@ -62,6 +62,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     return sv.Scene.Bookmarks;
                 }
+                else if (_geoView is LocalSceneView lsv && lsv.Scene?.Bookmarks != null)
+                {
+                    return lsv.Scene.Bookmarks;
+                }
 
                 return new Bookmark[] { };
             }
@@ -143,6 +147,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, GeoViewDocumentChanged);
 #endif
                 }
+                else if (_geoView is LocalSceneView localsceneview)
+                {
+#if WINDOWS_XAML
+                    localsceneview.UnregisterPropertyChangedCallback(LocalSceneView.SceneProperty, _propertyChangedCallbackToken);
+#else
+                    DependencyPropertyDescriptor.FromProperty(LocalSceneView.SceneProperty, typeof(LocalSceneView)).RemoveValueChanged(localsceneview, GeoViewDocumentChanged);
+#endif
+                }
 #else
                 (_geoView as INotifyPropertyChanged).PropertyChanged -= GeoView_PropertyChanged;
 #endif
@@ -174,6 +186,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, GeoViewDocumentChanged);
 #endif
                 }
+                else if (_geoView is LocalSceneView localsceneview)
+                {
+#if WINDOWS_XAML
+                    _propertyChangedCallbackToken = localsceneview.RegisterPropertyChangedCallback(LocalSceneView.SceneProperty, GeoViewDocumentChanged);
+#else
+                    DependencyPropertyDescriptor.FromProperty(LocalSceneView.SceneProperty, typeof(LocalSceneView)).AddValueChanged(localsceneview, GeoViewDocumentChanged);
+#endif
+                }
 #else
 
                 (_geoView as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
@@ -188,7 +208,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void GeoView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
-                (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
+                (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)) ||
+                (sender is LocalSceneView && e.PropertyName == nameof(LocalSceneView.Scene)))
             {
                 GeoViewDocumentChanged(sender, e);
             }
@@ -223,6 +244,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 // Ensure event is raised even if already loaded
                 _ = sv.Scene.RetryLoadAsync();
+            }
+            else if (_geoView is LocalSceneView lsv && lsv.Scene is ILoadable localsceneLoadable)
+            {
+                // Listen for load completion
+                _geoViewLoadListener = new WeakEventListener<BookmarksViewDataSource, ILoadable, object?, EventArgs>(this, localsceneLoadable)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.Doc_Loaded(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.Loaded -= weakEventListener.OnEvent
+                };
+                localsceneLoadable.Loaded += _geoViewLoadListener.OnEvent;
+
+                // Ensure event is raised even if already loaded
+                _ = lsv.Scene.RetryLoadAsync();
             }
 
             if (_overrideList == null)

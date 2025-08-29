@@ -80,10 +80,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var scale = GetScaleFactor();
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                     var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                    img.MaxWidth = imageData.Width / scale;
-                    img.MaxHeight = imageData.Height / scale;
-                    img.Source = await imageData.ToImageSourceAsync();
-                    SourceUpdated?.Invoke(this, EventArgs.Empty);
+                    if (imageData is not null)
+                    {
+                        img.MaxWidth = imageData.Width / scale;
+                        img.MaxHeight = imageData.Height / scale;
+                        img.Source = await imageData.ToImageSourceAsync();
+                        SourceUpdated?.Invoke(this, EventArgs.Empty);
+                    }
+                    else
+                    {
+                        img.Source = null;
+                    }
 #pragma warning restore ESRI1800
                 }
                 catch

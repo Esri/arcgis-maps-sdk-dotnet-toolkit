@@ -30,6 +30,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// View for searching with locators or custom search sources.
     /// </summary>
+    /// <para><note type="caution">
+    /// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the current search results will not currently be shown on the scene.
+    /// </note></para></remarks>
 #if WINDOWS_XAML
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
 #endif
@@ -227,6 +230,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     (newGeoView as INotifyPropertyChanged).PropertyChanged += sender.HandleMapChange;
                     newGeoView.ViewpointChanged += sender.GeoView_ViewpointChanged;
                     newGeoView.GraphicsOverlays?.Add(sender._resultOverlay);
+                    if (newGeoView is LocalSceneView)
+                    {
+                        System.Diagnostics.Trace.WriteLine("SearchView does not currently support showing the search results on a LocalSceneView.");
+                    }
                 }
 
                 _ = sender.ConfigureViewModel();
@@ -291,6 +298,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else if (GeoView is SceneView sv && sv.Scene is Scene scene)
                 {
                     _lastUsedGeomodel = scene;
+                }
+                else if (GeoView is LocalSceneView lsv && lsv.Scene is Scene localscene)
+                {
+                    _lastUsedGeomodel = localscene;
                 }
 
                 _ = ConfigureViewModel();

@@ -31,6 +31,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// <summary>
 /// View for searching with locators and custom search sources.
 /// </summary>
+/// <para><note type="caution">
+/// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the current search results will not currently be shown on the scene.
+/// </note></para></remarks>
 public partial class SearchView : TemplatedView, INotifyPropertyChanged
 {
     // Controls how long the control waits after typing stops before looking for suggestions.
@@ -461,6 +464,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 (newGeoView as INotifyPropertyChanged).PropertyChanged += sendingView.HandleMapChange;
                 newGeoView.ViewpointChanged += sendingView.GeoView_ViewpointChanged;
                 newGeoView.GraphicsOverlays?.Add(sendingView._resultOverlay);
+                if (newGeoView is LocalSceneView)
+                {
+                    System.Diagnostics.Trace.WriteLine("SearchView does not currently support showing the search results on a LocalSceneView.");
+                }
             }
         }
     }
@@ -553,6 +560,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             else if (GeoView is SceneView sv && sv.Scene is Scene scene)
             {
                 _lastUsedGeomodel = scene;
+            }
+            else if (GeoView is LocalSceneView lsv && lsv.Scene is Scene localscene)
+            {
+                _lastUsedGeomodel = localscene;
             }
         }
     }

@@ -363,6 +363,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     GeoView.NavigationCompleted += HandleGeoViewNavigationCompleted;
                     await sv.SetViewpointAsync(_controller.RequestedViewpoint);
                 }
+                else if (GeoView is LocalSceneView lsv && _controller.RequestedViewpoint != null)
+                {
+                    GeoView.ViewpointChanged -= HandleGeoViewViewpointChanged;
+                    GeoView.NavigationCompleted += HandleGeoViewNavigationCompleted;
+                    await lsv.SetViewpointAsync(_controller.RequestedViewpoint);
+                }
             }
             catch (Exception ex)
             {
@@ -437,6 +443,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, HandleGeoModelChanged);
 #endif
                 }
+                else if (oldView is LocalSceneView localsceneview)
+                {
+#if WINDOWS_XAML
+                    localsceneview.UnregisterPropertyChangedCallback(LocalSceneView.SceneProperty, _propertyChangedCallbackToken);
+#else
+                    DependencyPropertyDescriptor.FromProperty(LocalSceneView.SceneProperty, typeof(LocalSceneView)).RemoveValueChanged(localsceneview, HandleGeoModelChanged);
+#endif
+                }
 
                 oldView.ViewpointChanged -= HandleGeoViewViewpointChanged;
                 oldView.NavigationCompleted -= HandleGeoViewNavigationCompleted;
@@ -458,6 +472,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, HandleGeoModelChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, HandleGeoModelChanged);
+#endif
+                }
+                else if (newView is LocalSceneView localsceneview)
+                {
+#if WINDOWS_XAML
+                    _propertyChangedCallbackToken = localsceneview.RegisterPropertyChangedCallback(LocalSceneView.SceneProperty, HandleGeoModelChanged);
+#else
+                    DependencyPropertyDescriptor.FromProperty(LocalSceneView.SceneProperty, typeof(LocalSceneView)).AddValueChanged(localsceneview, HandleGeoModelChanged);
 #endif
                 }
 
@@ -519,6 +541,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     HandleGeoModelLoaded();
                 }
             }
+            else if (GeoView is LocalSceneView lsv && lsv.Scene is ILoadable localsceneLoadable)
+            {
+                if (localsceneLoadable.LoadStatus == LoadStatus.Loaded)
+                {
+                    HandleGeoModelLoaded();
+                }
+                else
+                {
+                    localsceneLoadable.Loaded += ForwardGeoModelLoaded;
+                    HandleGeoModelLoaded();
+                }
+            }
         }
 
         private void ForwardGeoModelLoaded(object? sender, EventArgs e) => HandleGeoModelLoaded();
@@ -540,6 +574,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else if (GeoView is SceneView sv && sv.Scene is Scene sceneLoadable && sceneLoadable.LoadStatus == LoadStatus.Loaded)
                 {
                     _controller.FloorManager = sv.Scene?.FloorManager;
+                }
+                else if (GeoView is LocalSceneView lsv && lsv.Scene is Scene localsceneLoadable && localsceneLoadable.LoadStatus == LoadStatus.Loaded)
+                {
+                    _controller.FloorManager = lsv.Scene?.FloorManager;
                 }
             });
         }
@@ -826,7 +864,7 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
         /// Gets a value indicating whether the floor filter should display an 'All Floors' button.
         /// </summary>
         /// <remarks>The 'All Floors' button is useful in 3D.</remarks>
-        public bool ShowAllFloorsButton => GeoView is SceneView sv && sv.Scene is not null && SelectedFacility != null && SelectedFacility.Levels.Count > 1;
+        public bool ShowAllFloorsButton => (GeoView is SceneView sv && sv.Scene is not null || GeoView is LocalSceneView lsv && lsv.Scene is not null) && SelectedFacility != null && SelectedFacility.Levels.Count > 1;
 
         /// <summary>
         /// Gets a value indicating whether the selected site's name should be displayed in the browse experience.

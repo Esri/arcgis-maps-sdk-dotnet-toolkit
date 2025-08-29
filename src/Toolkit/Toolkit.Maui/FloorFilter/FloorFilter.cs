@@ -281,6 +281,12 @@ public partial class FloorFilter : TemplatedView
                 GeoView.NavigationCompleted += HandleGeoViewNavigationCompleted;
                 await sv.SetViewpointAsync(_controller.RequestedViewpoint);
             }
+            else if (GeoView is LocalSceneView lsv && _controller.RequestedViewpoint != null)
+            {
+                GeoView.ViewpointChanged -= HandleGeoViewViewpointChanged;
+                GeoView.NavigationCompleted += HandleGeoViewNavigationCompleted;
+                await lsv.SetViewpointAsync(_controller.RequestedViewpoint);
+            }
         }
         catch (Exception ex)
         {
@@ -396,6 +402,18 @@ public partial class FloorFilter : TemplatedView
                 HandleGeoModelLoaded();
             }
         }
+        else if (GeoView is LocalSceneView lsv && lsv.Scene is ILoadable localsceneLoadable)
+        {
+            if (localsceneLoadable.LoadStatus == LoadStatus.Loaded)
+            {
+                HandleGeoModelLoaded();
+            }
+            else
+            {
+                localsceneLoadable.Loaded += ForwardGeoModelLoaded;
+                HandleGeoModelLoaded();
+            }
+        }
     }
 
     private void ForwardGeoModelLoaded(object? sender, EventArgs e) => HandleGeoModelLoaded();
@@ -411,6 +429,10 @@ public partial class FloorFilter : TemplatedView
             else if (GeoView is SceneView sv && sv.Scene is Scene sceneLoadable && sceneLoadable.LoadStatus == LoadStatus.Loaded)
             {
                 _controller.FloorManager = sv.Scene?.FloorManager;
+            }
+            else if (GeoView is LocalSceneView lsv && lsv.Scene is Scene localsceneLoadable && localsceneLoadable.LoadStatus == LoadStatus.Loaded)
+            {
+                _controller.FloorManager = lsv.Scene?.FloorManager;
             }
         });
     }
@@ -648,6 +670,6 @@ public partial class FloorFilter : TemplatedView
     /// Gets a value indicating whether the floor filter should display an 'All Floors' button.
     /// </summary>
     /// <remarks>The 'All Floors' button is useful in 3D.</remarks>
-    public bool ShowAllFloorsButton => GeoView is SceneView sv && sv.Scene is not null && SelectedFacility != null && SelectedFacility.Levels.Count > 1;
+    public bool ShowAllFloorsButton => (GeoView is SceneView sv && sv.Scene is not null || GeoView is LocalSceneView lsv && lsv.Scene is not null) && SelectedFacility != null && SelectedFacility.Levels.Count > 1;
 #endregion UI State Management
 }

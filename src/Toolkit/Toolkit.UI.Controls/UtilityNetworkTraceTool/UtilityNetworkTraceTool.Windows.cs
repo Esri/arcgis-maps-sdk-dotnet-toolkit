@@ -35,6 +35,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Represents a control that enables user to perform trace analysis with pre-configured trace types.
     /// </summary>
+    /// <para><note type="caution">
+    /// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the trace results will not currently be shown on the scene.
+    /// </note></para></remarks>
     public partial class UtilityNetworkTraceTool : Control
     {
         private CancellationTokenSource? _identifyLayersCts;
@@ -426,6 +429,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     oldGeoView.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
                 }
+                else if (oldGeoView is LocalSceneView)
+                {
+                    oldGeoView.UnregisterPropertyChangedCallback(LocalSceneView.SceneProperty, _propertyChangedCallbackToken);
+                }
 #else
                 if (oldGeoView is MapView)
                 {
@@ -434,6 +441,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else if (oldGeoView is SceneView)
                 {
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
+                }
+                else if (oldGeoView is LocalSceneView)
+                {
+                    DependencyPropertyDescriptor.FromProperty(LocalSceneView.SceneProperty, typeof(LocalSceneView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
                 }
 #endif
                 if (oldGeoView.GraphicsOverlays != null)
@@ -461,6 +472,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(SceneView.SceneProperty, OnGeoModelPropertyChanged);
                 }
+                else if (newGeoView is LocalSceneView)
+                {
+                    _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(LocalSceneView.SceneProperty, OnGeoModelPropertyChanged);
+                }
 #else
                 if (newGeoView is MapView)
                 {
@@ -469,6 +484,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else if (newGeoView is SceneView)
                 {
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(newGeoView, OnGeoModelPropertyChanged);
+                }
+                else if (newGeoView is LocalSceneView)
+                {
+                    DependencyPropertyDescriptor.FromProperty(LocalSceneView.SceneProperty, typeof(LocalSceneView)).AddValueChanged(newGeoView, OnGeoModelPropertyChanged);
                 }
 #endif
                 if (newGeoView.GraphicsOverlays != null)
@@ -482,6 +501,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                 }
 
+                if (newGeoView is LocalSceneView)
+                {
+                    System.Diagnostics.Trace.WriteLine("UtilityNetworkTraceTool does not currently support showing trace results on a LocalSceneView.");
+                }
                 OnGeoModelPropertyChanged(null, null);
             }
         }
