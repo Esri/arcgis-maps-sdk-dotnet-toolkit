@@ -76,7 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Used for clearing map and measurement result
         private ButtonBase? _clearButton;
 
-        // Used for Undo the GoemetryEditor
+        // Used for Undo the GeometryEditor
         private ButtonBase? _undoButton;
 
         // Used for Redo the GoemetryEditor
