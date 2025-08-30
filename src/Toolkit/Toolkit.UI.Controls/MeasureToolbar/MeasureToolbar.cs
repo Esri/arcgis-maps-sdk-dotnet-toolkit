@@ -454,11 +454,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Symbology.Symbol? symbol = null;
             if (geometry is Polyline)
             {
-                symbol = _geometryEditor?.Tool?.Style?.LineSymbol;
+                symbol = MeasureTool.Style.LineSymbol;
             }
             else if (geometry is Polygon || geometry is Envelope)
             {
-                symbol = _geometryEditor?.Tool?.Style?.FillSymbol;
+                symbol = MeasureTool.Style.FillSymbol;
             }
 
             if (geometry != null)
