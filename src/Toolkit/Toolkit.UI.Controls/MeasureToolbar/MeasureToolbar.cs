@@ -17,9 +17,10 @@
 #if WPF || WINDOWS_XAML
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Editing;
 #if WPF
@@ -88,6 +89,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Used for restoring original tool when switching from feature measure mode
         private GeometryEditorTool? _originalTool;
 
+        // Commands for undo/redo
+        private readonly ICommand _undoCommand;
+        private readonly ICommand _redoCommand;
+
         // Used for highlighting feature for measurement
         private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay();
 
@@ -123,6 +128,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Geometry.AreaUnits.SquareMillimeters,
                     Geometry.AreaUnits.SquareYards,
                 };
+
+            _undoCommand = new DelegateCommand(_ => _geometryEditor?.Undo());
+            _redoCommand = new DelegateCommand(_ => _geometryEditor?.Redo());
         }
 
         /// <inheritdoc/>
@@ -164,30 +172,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                       }
                   };
                 _clearButton.Click += OnClear;
-            }
-
-            _undoButton = GetTemplateChild("Undo") as ButtonBase;
-            if (_undoButton != null)
-            {
-                _undoButton.Click += (s, e) =>
-                {
-                    if (_geometryEditor != null && _geometryEditor.CanUndo)
-                    {
-                        _geometryEditor.Undo();
-                    }
-                };
-            }
-
-            _redoButton = GetTemplateChild("Redo") as ButtonBase;
-            if (_redoButton != null)
-            {
-                _redoButton.Click += (s, e) =>
-                {
-                    if (_geometryEditor != null && _geometryEditor.CanRedo)
-                    {
-                        _geometryEditor.Redo();
-                    }
-                };
             }
 
             _measureResultTextBlock = GetTemplateChild("MeasureResult") as TextBlock;
@@ -438,6 +422,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _clearButton.IsEnabled = editor?.Geometry is Geometry.Geometry geometry && !geometry.IsEmpty;
                 }
                 DisplayResult(editor?.Geometry);
+            }
+            if (_geometryEditor is not null)
+            {
+                (UndoCommand as DelegateCommand)?.NotifyCanExecuteChanged(_geometryEditor?.CanUndo is true);
+                (RedoCommand as DelegateCommand)?.NotifyCanExecuteChanged(_geometryEditor?.CanRedo is true);
             }
         }
 
@@ -706,6 +695,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var toolbar = (MeasureToolbar)d;
             toolbar.DisplayResult();
         }
+
+        /// <summary>
+        /// Gets a command that undoes the last operation performed in the geometry editor.
+        /// </summary>
+        public ICommand? UndoCommand => _undoCommand;
+
+        /// <summary>
+        /// Gets a command that redoes the last operation performed in the geometry editor.
+        /// </summary>
+        public ICommand? RedoCommand => _redoCommand;
     }
 }
 #endif

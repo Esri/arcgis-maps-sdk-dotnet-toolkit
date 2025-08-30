@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <inheritdoc/>
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return _canExecute;
         }
 
         /// <inheritdoc/>
