@@ -339,7 +339,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void StartMeasureSession(GeometryType creationMode)
         {
-            if (_geometryEditor != null)
+            if (_geometryEditor is not null)
             {
                 if (!_isGeometryEditorHooked)
                 {
@@ -353,10 +353,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void EndMeasureSession()
         {
-            if (_geometryEditor != null && _isGeometryEditorHooked)
+            if (_geometryEditor is not null)
             {
-                _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
-                _isGeometryEditorHooked = false;
+                if (_isGeometryEditorHooked)
+                {
+                    _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
+                    _isGeometryEditorHooked = false;
+                }
             }
         }
 
