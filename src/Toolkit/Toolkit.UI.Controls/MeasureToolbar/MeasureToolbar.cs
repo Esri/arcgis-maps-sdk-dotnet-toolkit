@@ -84,8 +84,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeometryEditorTool? _originalTool;
 
         // Commands for undo/redo
-        private readonly ICommand _undoCommand;
-        private readonly ICommand _redoCommand;
+        private readonly DelegateCommand _undoCommand;
+        private readonly DelegateCommand _redoCommand;
 
         // Used for highlighting feature for measurement
         private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay();
@@ -333,8 +333,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _measureResultTextBlock.Text = string.Format("{0:0,0.00}", measurement);
                 }
             }
-            (UndoCommand as DelegateCommand)?.NotifyCanExecuteChanged(_geometryEditor?.CanUndo is true);
-            (RedoCommand as DelegateCommand)?.NotifyCanExecuteChanged(_geometryEditor?.CanRedo is true);
+            _undoCommand?.NotifyCanExecuteChanged(_geometryEditor?.CanUndo is true);
+            _redoCommand?.NotifyCanExecuteChanged(_geometryEditor?.CanRedo is true);
         }
 
         private void StartMeasureSession(GeometryType creationMode)
