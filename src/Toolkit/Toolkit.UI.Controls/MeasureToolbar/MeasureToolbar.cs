@@ -337,32 +337,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _redoCommand?.NotifyCanExecuteChanged(_geometryEditor?.CanRedo is true);
         }
 
-        private void StartMeasureSession(GeometryType creationMode)
-        {
-            if (_geometryEditor is not null)
-            {
-                if (!_isGeometryEditorHooked)
-                {
-                    _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
-                    _isGeometryEditorHooked = true;
-                }
-                _geometryEditor.Start(creationMode);
-                DisplayResult(_geometryEditor.Geometry);
-            }
-        }
-
-        private void EndMeasureSession()
-        {
-            if (_geometryEditor is not null)
-            {
-                if (_isGeometryEditorHooked)
-                {
-                    _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
-                    _isGeometryEditorHooked = false;
-                }
-            }
-        }
-
         /// <summary>
         /// Toggles between measure modes and starts <see cref="GeometryEditor"/> when not already started for length and area.
         /// </summary>
@@ -379,46 +353,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     : MeasureToolbarMode.None;
 
             Mode = selectedMode;
+
+            EndMeasureSession();
             if (MapView is null)
             {
-                EndMeasureSession();
                 return;
             }
-            _geometryEditor = MapView.GeometryEditor;
 
-            if (_geometryEditor is GeometryEditor geometryEditor)
+            if (Mode is MeasureToolbarMode.Line || Mode is MeasureToolbarMode.Area)
             {
-                geometryEditor.Stop();
-
-                if (Mode is MeasureToolbarMode.Line || Mode is MeasureToolbarMode.Area)
+                _geometryEditor = MapView.GeometryEditor;
+                try
                 {
-                    _originalTool ??= geometryEditor.Tool;
-                    geometryEditor.Tool = MeasureTool ?? _originalTool;
-                    try
-                    {
-                        var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
-                        StartMeasureSession(creationMode);
-                    }
-                    catch (TaskCanceledException) { }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
-                    }
+                    var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
+                    StartMeasureSession(creationMode);
                 }
-                else
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
                 {
-                    if (_originalTool is not null)
-                    {
-                        geometryEditor.Tool = _originalTool;
-                        _originalTool = null;
-                    }
+                    System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
                 }
             }
 
             if (Mode is MeasureToolbarMode.Feature)
+            {
                 AddMeasureFeatureResultOverlay(MapView);
+            }
             else
+            {
                 RemoveMeasureFeatureResultOverlay(MapView);
+            }
         }
 
         /// <summary>
@@ -445,6 +409,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (e.PropertyName is nameof(GeometryEditor.IsStarted) && _geometryEditor is not null && !_geometryEditor.IsStarted)
             {
                 EndMeasureSession();
+            }
+        }
+
+        private void StartMeasureSession(GeometryType creationMode)
+        {
+            if (_geometryEditor is GeometryEditor geometryEditor)
+            {
+                if (!_isGeometryEditorHooked)
+                {
+                    _originalTool = geometryEditor.Tool;
+                    geometryEditor.Tool = MeasureTool ?? _originalTool;
+                    _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
+                    _isGeometryEditorHooked = true;
+                }
+                _geometryEditor.Start(creationMode);
+                DisplayResult(_geometryEditor.Geometry);
+            }
+        }
+
+        private void EndMeasureSession()
+        {
+            MapView?.GeometryEditor?.Stop();
+            if (_geometryEditor is GeometryEditor geometryEditor)
+            {
+                if (_originalTool is not null && _isGeometryEditorHooked)
+                {
+                    geometryEditor.Tool = _originalTool;
+                    _originalTool = null;
+                    _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
+                    _isGeometryEditorHooked = false;
+                }
             }
         }
 
