@@ -90,6 +90,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Used for highlighting feature for measurement
         private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay();
 
+        // Add a field to track hook state
+        private bool _isGeometryEditorHooked = false;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MeasureToolbar"/> class.
         /// </summary>
@@ -233,7 +236,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         // Save the original tool before switching
                         _originalTool ??= geometryEditor.Tool;
                         geometryEditor.Tool = MeasureTool ?? _originalTool;
-                        geometryEditor.IsVisible = true;
                     }
                     else
                     {
@@ -243,7 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             geometryEditor.Tool = _originalTool;
                             _originalTool = null;
                         }
-                        geometryEditor.IsVisible = false;
+                        geometryEditor.Stop();
                     }
                 }
 
@@ -365,6 +367,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        private void StartMeasureSession(GeometryType creationMode)
+        {
+            if (_geometryEditor != null)
+            {
+                if (!_isGeometryEditorHooked)
+                {
+                    _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
+                    _isGeometryEditorHooked = true;
+                }
+                _geometryEditor.Start(creationMode);
+                DisplayResult(_geometryEditor.Geometry);
+            }
+        }
+
+        private void EndMeasureSession()
+        {
+            if (_geometryEditor != null && _isGeometryEditorHooked)
+            {
+                _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
+                _isGeometryEditorHooked = false;
+            }
+        }
+
         /// <summary>
         /// Toggles between measure modes and starts <see cref="GeometryEditor"/> when not already started for length and area.
         /// </summary>
@@ -378,20 +403,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
                toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
                MeasureToolbarMode.None;
-            if (_geometryEditor != null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
+
+            if (_geometryEditor != null)
             {
-                try
+                if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
                 {
-                    var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
-                    _geometryEditor.Start(creationMode);
-                    DisplayResult(_geometryEditor.Geometry);
+                    try
+                    {
+                        var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
+                        StartMeasureSession(creationMode);
+                    }
+                    catch (TaskCanceledException) { }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
+                    }
                 }
-                catch (TaskCanceledException)
+                else
                 {
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
+                    EndMeasureSession();
                 }
             }
         }
@@ -416,6 +446,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _clearButton.IsEnabled = editor?.Geometry is Geometry.Geometry geometry && !geometry.IsEmpty;
                 }
                 DisplayResult(editor?.Geometry);
+            }
+            if (e.PropertyName is nameof(GeometryEditor.IsStarted) && _geometryEditor is not null && !_geometryEditor.IsStarted)
+            {
+                EndMeasureSession();
             }
             if (_geometryEditor is not null)
             {
@@ -557,6 +591,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
             {
                 _geometryEditor?.ClearGeometry();
+                EndMeasureSession();
             }
             else if (Mode == MeasureToolbarMode.Feature)
             {
