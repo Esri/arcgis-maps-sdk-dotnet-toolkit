@@ -239,13 +239,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     else
                     {
+                        geometryEditor.Stop();
                         // Restore the original tool when not measuring
                         if (_originalTool != null)
                         {
                             geometryEditor.Tool = _originalTool;
                             _originalTool = null;
                         }
-                        geometryEditor.Stop();
                     }
                 }
 
