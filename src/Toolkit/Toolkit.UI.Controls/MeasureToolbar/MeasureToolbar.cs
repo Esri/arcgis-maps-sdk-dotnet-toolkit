@@ -227,38 +227,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var isMeasuringArea = _mode == MeasureToolbarMode.Area;
             var isMeasuringFeature = _mode == MeasureToolbarMode.Feature;
 
-            if (MapView != null)
-            {
-                if (_geometryEditor is GeometryEditor geometryEditor)
-                {
-                    if (isMeasuringLength || isMeasuringArea)
-                    {
-                        // Save the original tool before switching
-                        _originalTool ??= geometryEditor.Tool;
-                        geometryEditor.Tool = MeasureTool ?? _originalTool;
-                    }
-                    else
-                    {
-                        geometryEditor.Stop();
-                        // Restore the original tool when not measuring
-                        if (_originalTool != null)
-                        {
-                            geometryEditor.Tool = _originalTool;
-                            _originalTool = null;
-                        }
-                    }
-                }
-
-                if (isMeasuringFeature)
-                {
-                    AddMeasureFeatureResultOverlay(MapView);
-                }
-                else
-                {
-                    RemoveMeasureFeatureResultOverlay(MapView);
-                }
-            }
-
             if (_measureLengthButton != null)
             {
                 _measureLengthButton.IsChecked = isMeasuringLength;
@@ -365,6 +333,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _measureResultTextBlock.Text = string.Format("{0:0,0.00}", measurement);
                 }
             }
+            (UndoCommand as DelegateCommand)?.NotifyCanExecuteChanged(_geometryEditor?.CanUndo is true);
+            (RedoCommand as DelegateCommand)?.NotifyCanExecuteChanged(_geometryEditor?.CanRedo is true);
         }
 
         private void StartMeasureSession(GeometryType creationMode)
@@ -397,17 +367,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="e">Contains information or event data associated with routed event.</param>
         private void OnToggleMeasureMode(object? sender, RoutedEventArgs e)
         {
-            var toggleButton = sender as ToggleButton;
-            Mode = toggleButton != null && toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
-               (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
-               toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
-               toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
-               MeasureToolbarMode.None;
+            var selectedMode =
+                sender is ToggleButton toggleButton && toggleButton.IsChecked == true
+                    ? (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line
+                        : toggleButton == _measureAreaButton ? MeasureToolbarMode.Area
+                        : toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature
+                        : MeasureToolbarMode.None)
+                    : MeasureToolbarMode.None;
 
-            if (_geometryEditor != null)
+            Mode = selectedMode;
+            if (MapView is null)
             {
-                if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
+                EndMeasureSession();
+                return;
+            }
+            _geometryEditor = MapView.GeometryEditor;
+
+            if (_geometryEditor is GeometryEditor geometryEditor)
+            {
+                geometryEditor.Stop();
+
+                if (Mode is MeasureToolbarMode.Line || Mode is MeasureToolbarMode.Area)
                 {
+                    _originalTool ??= geometryEditor.Tool;
+                    geometryEditor.Tool = MeasureTool ?? _originalTool;
                     try
                     {
                         var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
@@ -421,9 +404,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else
                 {
-                    EndMeasureSession();
+                    if (_originalTool is not null)
+                    {
+                        geometryEditor.Tool = _originalTool;
+                        _originalTool = null;
+                    }
                 }
             }
+
+            if (Mode is MeasureToolbarMode.Feature)
+                AddMeasureFeatureResultOverlay(MapView);
+            else
+                RemoveMeasureFeatureResultOverlay(MapView);
         }
 
         /// <summary>
@@ -450,11 +442,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (e.PropertyName is nameof(GeometryEditor.IsStarted) && _geometryEditor is not null && !_geometryEditor.IsStarted)
             {
                 EndMeasureSession();
-            }
-            if (_geometryEditor is not null)
-            {
-                (UndoCommand as DelegateCommand)?.NotifyCanExecuteChanged(_geometryEditor?.CanUndo is true);
-                (RedoCommand as DelegateCommand)?.NotifyCanExecuteChanged(_geometryEditor?.CanRedo is true);
             }
         }
 
@@ -591,7 +578,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
             {
                 _geometryEditor?.ClearGeometry();
-                EndMeasureSession();
             }
             else if (Mode == MeasureToolbarMode.Feature)
             {
@@ -631,12 +617,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
-            toolbar._geometryEditor = newMapView.GeometryEditor;
-            if (toolbar._geometryEditor != null)
-            {
-                toolbar._geometryEditor.PropertyChanged += toolbar.OnGeometryEditorPropertyChanged;
-            }
-            toolbar.DisplayResult(newMapView.GeometryEditor?.Geometry);
         }
 
         /// <summary>
