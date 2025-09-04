@@ -132,8 +132,8 @@
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     ToolTipService.ToolTip="Redo"
-                                    Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RedoCommand}"
                                     Grid.Column="6"
+                                    Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RedoCommand}"
                                     FontFamily="Segoe MDL2 Assets"
                                     Content="&#xE7A6;" />
                             <Button x:Name="Clear"
