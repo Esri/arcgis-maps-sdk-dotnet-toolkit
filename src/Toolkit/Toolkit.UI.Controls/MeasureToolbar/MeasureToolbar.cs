@@ -374,7 +374,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void OnToggleMeasureMode(object? sender, RoutedEventArgs e)
         {
             var selectedMode =
-                sender is ToggleButton toggleButton && toggleButton.IsChecked == true
+                sender is ToggleButton toggleButton && toggleButton.IsChecked is true
                     ? (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line
                         : toggleButton == _measureAreaButton ? MeasureToolbarMode.Area
                         : toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature
@@ -431,10 +431,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void EndMeasureSession()
         {
             MapView?.GeometryEditor?.Stop();
+            Mode = MeasureToolbarMode.None;
             if (_geometryEditor is GeometryEditor geometryEditor)
             {
-                Mode = MeasureToolbarMode.None;
-
                 if (_originalTool is not null && _isGeometryEditorHooked)
                 {
                     geometryEditor.Tool = _originalTool;
