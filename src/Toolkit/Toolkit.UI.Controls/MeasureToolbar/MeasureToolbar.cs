@@ -227,6 +227,35 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var isMeasuringArea = _mode == MeasureToolbarMode.Area;
             var isMeasuringFeature = _mode == MeasureToolbarMode.Feature;
 
+            if (MapView is null)
+            {
+                return;
+            }
+
+            if (isMeasuringLength || isMeasuringArea)
+            {
+                _geometryEditor = MapView.GeometryEditor;
+                try
+                {
+                    var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
+                    StartMeasureSession(creationMode);
+                }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
+                }
+            }
+
+            if (isMeasuringFeature)
+            {
+                AddMeasureFeatureResultOverlay(MapView);
+            }
+            else
+            {
+                RemoveMeasureFeatureResultOverlay(MapView);
+            }
+
             if (_measureLengthButton != null)
             {
                 _measureLengthButton.IsChecked = isMeasuringLength;
@@ -352,37 +381,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         : MeasureToolbarMode.None)
                     : MeasureToolbarMode.None;
 
-            Mode = selectedMode;
-
             EndMeasureSession();
-            if (MapView is null)
-            {
-                return;
-            }
-
-            if (Mode is MeasureToolbarMode.Line || Mode is MeasureToolbarMode.Area)
-            {
-                _geometryEditor = MapView.GeometryEditor;
-                try
-                {
-                    var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
-                    StartMeasureSession(creationMode);
-                }
-                catch (TaskCanceledException) { }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
-                }
-            }
-
-            if (Mode is MeasureToolbarMode.Feature)
-            {
-                AddMeasureFeatureResultOverlay(MapView);
-            }
-            else
-            {
-                RemoveMeasureFeatureResultOverlay(MapView);
-            }
+            Mode = selectedMode;
         }
 
         /// <summary>
@@ -433,6 +433,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             MapView?.GeometryEditor?.Stop();
             if (_geometryEditor is GeometryEditor geometryEditor)
             {
+                Mode = MeasureToolbarMode.None;
+
                 if (_originalTool is not null && _isGeometryEditorHooked)
                 {
                     geometryEditor.Tool = _originalTool;
