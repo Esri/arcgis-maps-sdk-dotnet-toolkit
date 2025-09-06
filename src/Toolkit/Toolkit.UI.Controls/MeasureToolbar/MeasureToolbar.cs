@@ -435,12 +435,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Mode = MeasureToolbarMode.None;
             if (_geometryEditor is GeometryEditor geometryEditor)
             {
-                if (_originalTool is not null && _isGeometryEditorHooked)
+                if (_isGeometryEditorHooked)
                 {
-                    geometryEditor.Tool = _originalTool;
-                    _originalTool = null;
+                    if (_originalTool is not null)
+                    {
+                        geometryEditor.Tool = _originalTool;
+                        _originalTool = null;
+                    }
                     _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
-                    _isGeometryEditorHooked = false;
+                    _isGeometryEditorHooked = false; 
                 }
             }
         }
