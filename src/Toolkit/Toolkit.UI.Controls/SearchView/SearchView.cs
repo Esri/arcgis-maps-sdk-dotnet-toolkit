@@ -30,9 +30,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// View for searching with locators or custom search sources.
     /// </summary>
-    /// <para><note type="caution">
+    /// <remarks><note type="caution">
     /// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the current search results will not currently be shown on the scene.
-    /// </note></para></remarks>
+    /// </note></remarks>
 #if WINDOWS_XAML
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
 #endif

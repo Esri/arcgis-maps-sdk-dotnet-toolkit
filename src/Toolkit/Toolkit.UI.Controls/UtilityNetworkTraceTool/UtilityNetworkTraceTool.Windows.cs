@@ -35,9 +35,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Represents a control that enables user to perform trace analysis with pre-configured trace types.
     /// </summary>
-    /// <para><note type="caution">
+    /// <remarks><note type="caution">
     /// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the trace results will not currently be shown on the scene.
-    /// </note></para></remarks>
+    /// </note></remarks>
     public partial class UtilityNetworkTraceTool : Control
     {
         private CancellationTokenSource? _identifyLayersCts;
