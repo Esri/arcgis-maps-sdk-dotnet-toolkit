@@ -16,13 +16,16 @@
 
 #if WPF || WINDOWS_XAML
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Input;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.UI.Editing;
 #if WPF
 using System.Windows.Controls.Primitives;
 #endif
-#pragma warning disable CS0618 // SketchEditor is Obsolete
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
@@ -30,6 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     [TemplatePart(Name = "MeasureLength", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "MeasureArea", Type = typeof(ToggleButton))]
+    [TemplatePart(Name = "MeasureFeature", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "MeasureResult", Type = typeof(TextBlock))]
     public partial class MeasureToolbar : Control
     {
@@ -74,11 +78,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Used for clearing map and measurement result
         private ButtonBase? _clearButton;
 
-        // Used for replacing measure editors
-        private SketchEditor? _originalSketchEditor;
+        // Used for internal measure editors
+        private GeometryEditor? _geometryEditor;
+
+        // Used for restoring original tool when switching from feature measure mode
+        private GeometryEditorTool? _originalTool;
+
+        // Commands for undo/redo
+        private readonly DelegateCommand _undoCommand;
+        private readonly DelegateCommand _redoCommand;
 
         // Used for highlighting feature for measurement
         private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay();
+
+        // Add a field to track hook state
+        private bool _isGeometryEditorHooked = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MeasureToolbar"/> class.
@@ -112,10 +126,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Geometry.AreaUnits.SquareMillimeters,
                     Geometry.AreaUnits.SquareYards,
                 };
-            LineSketchEditor = new SketchEditor();
-            AreaSketchEditor = new SketchEditor();
-            SelectionLineSymbol = LineSketchEditor.Style?.LineSymbol;
-            SelectionFillSymbol = AreaSketchEditor.Style?.FillSymbol;
+
+            _undoCommand = new DelegateCommand(_ => _geometryEditor?.Undo());
+            _redoCommand = new DelegateCommand(_ => _geometryEditor?.Redo());
         }
 
         /// <inheritdoc/>
@@ -206,7 +219,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// - Only one of the measure toggle buttons is enabled
         /// - Only one of the units selector is visible
         /// - Updates instruction text
-        /// - Assigns the appropriate SketchEditor
+        /// - Assigns the correct GeometryEditor tool for the selected mode.
         /// - Updates command to execute on clear.
         /// </summary>
         private void PrepareMeasureMode()
@@ -215,29 +228,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var isMeasuringArea = _mode == MeasureToolbarMode.Area;
             var isMeasuringFeature = _mode == MeasureToolbarMode.Feature;
 
-            var sketchEditor = isMeasuringLength ?
-                LineSketchEditor :
-                (isMeasuringArea ? AreaSketchEditor : _originalSketchEditor);
-            if (MapView != null)
+            if (MapView is null)
             {
-                if (MapView.SketchEditor != sketchEditor)
-                {
-                    MapView.SketchEditor = sketchEditor;
-                }
+                return;
+            }
 
-                if (MapView.SketchEditor != null)
+            if (isMeasuringLength || isMeasuringArea)
+            {
+                _geometryEditor = MapView.GeometryEditor;
+                try
                 {
-                    MapView.SketchEditor.IsVisible = isMeasuringLength || isMeasuringArea;
+                    var creationMode = Mode == MeasureToolbarMode.Line ? GeometryType.Polyline : GeometryType.Polygon;
+                    StartMeasureSession(creationMode);
                 }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
+                }
+            }
 
-                if (isMeasuringFeature)
-                {
-                    AddMeasureFeatureResultOverlay(MapView);
-                }
-                else
-                {
-                    RemoveMeasureFeatureResultOverlay(MapView);
-                }
+            if (isMeasuringFeature)
+            {
+                AddMeasureFeatureResultOverlay(MapView);
+            }
+            else
+            {
+                RemoveMeasureFeatureResultOverlay(MapView);
             }
 
             if (_measureLengthButton != null)
@@ -271,7 +288,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (isMeasuringLength || isMeasuringArea)
                 {
-                    _clearButton.IsEnabled = MapView?.SketchEditor?.Geometry != null;
+                    _clearButton.IsEnabled = _geometryEditor?.Geometry != null;
                 }
                 else
                 {
@@ -312,14 +329,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     switch (Mode)
                     {
                         case MeasureToolbarMode.Line:
-                            {
-                                geometry = LineSketchEditor?.Geometry;
-                                break;
-                            }
-
                         case MeasureToolbarMode.Area:
                             {
-                                geometry = AreaSketchEditor?.Geometry;
+                                geometry = _geometryEditor?.Geometry;
                                 break;
                             }
 
@@ -351,52 +363,89 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _measureResultTextBlock.Text = string.Format("{0:0,0.00}", measurement);
                 }
             }
+            _undoCommand?.NotifyCanExecuteChanged(_geometryEditor?.CanUndo is true);
+            _redoCommand?.NotifyCanExecuteChanged(_geometryEditor?.CanRedo is true);
         }
 
         /// <summary>
-        /// Toggles between measure modes and starts SketchEditor when not already started for length and area.
+        /// Toggles between measure modes and starts <see cref="GeometryEditor"/> when not already started for length and area.
         /// </summary>
         /// <param name="sender">Toggle button that raised click event.</param>
         /// <param name="e">Contains information or event data associated with routed event.</param>
-        private async void OnToggleMeasureMode(object? sender, RoutedEventArgs e)
+        private void OnToggleMeasureMode(object? sender, RoutedEventArgs e)
         {
-            var toggleButton = sender as ToggleButton;
-            Mode = toggleButton != null && toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
-               (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
-               toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
-               toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
-               MeasureToolbarMode.None;
-            if (MapView?.SketchEditor != null && MapView.SketchEditor.Geometry == null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
-            {
-                try
-                {
-                    var creationMode = Mode == MeasureToolbarMode.Line ? SketchCreationMode.Polyline : SketchCreationMode.Polygon;
-                    var geometry = await MapView.SketchEditor.StartAsync(creationMode);
-                    DisplayResult(geometry);
-                }
-                catch (TaskCanceledException)
-                {
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
-                }
-            }
+            var selectedMode =
+                sender is ToggleButton toggleButton && toggleButton.IsChecked is true
+                    ? (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line
+                        : toggleButton == _measureAreaButton ? MeasureToolbarMode.Area
+                        : toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature
+                        : MeasureToolbarMode.None)
+                    : MeasureToolbarMode.None;
+
+            EndMeasureSession();
+            Mode = selectedMode;
         }
 
         /// <summary>
-        /// Displays the measurement result for the given new geometry.
+        /// Handles the <see cref="INotifyPropertyChanged.PropertyChanged"/> event for the <see cref="GeometryEditor"/>
+        /// instance.
         /// </summary>
-        /// <param name="sender">SketchEditor that raised GeometryChanged event.</param>
-        /// <param name="e">Data for the GeometryChanged event.</param>
-        private void OnGeometryChanged(object? sender, GeometryChangedEventArgs e)
+        /// <remarks>This method updates the state of the clear button based on the <see
+        /// cref="GeometryEditor.Geometry"/> property and displays the updated geometry result. The <paramref
+        /// name="sender"/> must be a <see cref="GeometryEditor"/>  instance for the method to function
+        /// correctly.</remarks>
+        /// <param name="sender">The source of the event, expected to be a <see cref="GeometryEditor"/> instance.</param>
+        /// <param name="e">The event data containing the name of the property that changed.</param>
+        private void OnGeometryEditorPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (_clearButton != null)
+            if (e.PropertyName is nameof(GeometryEditor.Geometry))
             {
-                _clearButton.IsEnabled = e.NewGeometry != null;
+                var editor = sender as GeometryEditor;
+                if (_clearButton != null)
+                {
+                    _clearButton.IsEnabled = editor?.Geometry is Geometry.Geometry geometry && !geometry.IsEmpty;
+                }
+                DisplayResult(editor?.Geometry);
             }
+            if (e.PropertyName is nameof(GeometryEditor.IsStarted) && _geometryEditor is not null && !_geometryEditor.IsStarted)
+            {
+                EndMeasureSession();
+            }
+        }
 
-            DisplayResult(e.NewGeometry);
+        private void StartMeasureSession(GeometryType creationMode)
+        {
+            if (_geometryEditor is GeometryEditor geometryEditor)
+            {
+                if (!_isGeometryEditorHooked)
+                {
+                    _originalTool = geometryEditor.Tool;
+                    geometryEditor.Tool = MeasureTool ?? _originalTool;
+                    _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
+                    _isGeometryEditorHooked = true;
+                }
+                _geometryEditor.Start(creationMode);
+                DisplayResult(_geometryEditor.Geometry);
+            }
+        }
+
+        private void EndMeasureSession()
+        {
+            MapView?.GeometryEditor?.Stop();
+            Mode = MeasureToolbarMode.None;
+            if (_geometryEditor is GeometryEditor geometryEditor)
+            {
+                if (_isGeometryEditorHooked)
+                {
+                    if (_originalTool is not null)
+                    {
+                        geometryEditor.Tool = _originalTool;
+                        _originalTool = null;
+                    }
+                    _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
+                    _isGeometryEditorHooked = false; 
+                }
+            }
         }
 
         /// <summary>
@@ -423,11 +472,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Symbology.Symbol? symbol = null;
             if (geometry is Polyline)
             {
-                symbol = SelectionLineSymbol;
+                symbol = MeasureTool.Style.LineSymbol;
             }
             else if (geometry is Polygon || geometry is Envelope)
             {
-                symbol = SelectionFillSymbol;
+                symbol = MeasureTool.Style.FillSymbol;
             }
 
             if (geometry != null)
@@ -531,7 +580,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
             {
-                MapView?.SketchEditor?.ClearGeometry();
+                _geometryEditor?.ClearGeometry();
             }
             else if (Mode == MeasureToolbarMode.Feature)
             {
@@ -559,144 +608,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnMapViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var toolbar = (MeasureToolbar)d;
-            var newMapView = e.NewValue as MapView;
-            if (newMapView == null)
+            if (e.NewValue is not MapView newMapView)
             {
                 throw new ArgumentException($"{nameof(MapView)} cannot be null or empty.");
             }
 
-            var oldMapView = e.OldValue as MapView;
-            if (oldMapView != null)
+            if (e.OldValue is MapView oldMapView)
             {
-                oldMapView.SketchEditor = toolbar._originalSketchEditor;
                 oldMapView.GeoViewTapped -= toolbar.OnMapViewTapped;
                 toolbar.RemoveMeasureFeatureResultOverlay(oldMapView);
             }
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
-            toolbar._originalSketchEditor = newMapView.SketchEditor;
-            toolbar.DisplayResult(newMapView.SketchEditor?.Geometry);
         }
 
         /// <summary>
-        /// Gets or sets the sketch editor used for measuring distances.
+        /// Gets the <see cref="VertexTool"/> used for measuring distances and areas.
         /// </summary>
-        public SketchEditor? LineSketchEditor
+        public VertexTool MeasureTool { get; } = new VertexTool
         {
-            get { return GetValue(LineSketchEditorProperty) as SketchEditor; }
-            set { SetValue(LineSketchEditorProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="LineSketchEditor"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty LineSketchEditorProperty =
-            DependencyProperty.Register(nameof(LineSketchEditor), typeof(SketchEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnLineSketchEditorPropertyChanged));
-
-        private static void OnLineSketchEditorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            var newSketchEditor = e.NewValue as SketchEditor;
-            if (newSketchEditor == null)
+            Style = new GeometryEditorStyle
             {
-                throw new ArgumentException($"{nameof(LineSketchEditor)} cannot be null or empty.");
+                FillSymbol = new Symbology.SimpleFillSymbol
+                {
+                    Color = System.Drawing.Color.FromArgb(90, 60, 60, 60),
+                }
             }
-
-            var oldSketchEditor = e.OldValue as SketchEditor;
-            if (oldSketchEditor != null)
-            {
-                oldSketchEditor.GeometryChanged -= toolbar.OnGeometryChanged;
-            }
-
-            newSketchEditor.GeometryChanged += toolbar.OnGeometryChanged;
-            toolbar.DisplayResult(newSketchEditor.Geometry);
-        }
-
-        /// <summary>
-        /// Gets or sets the sketch editor used for measuring areas.
-        /// </summary>
-        public SketchEditor? AreaSketchEditor
-        {
-            get { return GetValue(AreaSketchEditorProperty) as SketchEditor; }
-            set { SetValue(AreaSketchEditorProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="AreaSketchEditor"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty AreaSketchEditorProperty =
-            DependencyProperty.Register(nameof(AreaSketchEditor), typeof(SketchEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnAreaSketchEditorPropertyChanged));
-
-        private static void OnAreaSketchEditorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            var newSketchEditor = e.NewValue as SketchEditor;
-            if (newSketchEditor == null)
-            {
-                throw new ArgumentException($"{nameof(AreaSketchEditor)} cannot be null or empty.");
-            }
-
-            var oldSketchEditor = e.OldValue as SketchEditor;
-            if (oldSketchEditor != null)
-            {
-                oldSketchEditor.GeometryChanged -= toolbar.OnGeometryChanged;
-            }
-
-            newSketchEditor.GeometryChanged += toolbar.OnGeometryChanged;
-            toolbar.DisplayResult(newSketchEditor.Geometry);
-        }
-
-        /// <summary>
-        /// Gets or sets the symbol used for highlighting the polyline feature or graphic whose geometry is measured for distance.
-        /// </summary>
-        public Symbology.Symbol? SelectionLineSymbol
-        {
-            get { return GetValue(SelectionLineSymbolProperty) as Symbology.Symbol; }
-            set { SetValue(SelectionLineSymbolProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionLineSymbol"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SelectionLineSymbolProperty =
-            DependencyProperty.Register(nameof(SelectionLineSymbol), typeof(Symbology.Symbol), typeof(MeasureToolbar), new PropertyMetadata(null, OnSelectionLineSymbolPropertyChanged));
-
-        private static void OnSelectionLineSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            var symbol = e.NewValue as Symbology.Symbol;
-            var graphic = toolbar._measureFeatureResultOverlay.Graphics.FirstOrDefault();
-            if (graphic?.Geometry is Polyline)
-            {
-                graphic.Symbol = symbol;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the symbol used for highlighting the polygon feature or graphic whose geometry is measured for area.
-        /// </summary>
-        public Symbology.Symbol? SelectionFillSymbol
-        {
-            get { return GetValue(SelectionFillSymbolProperty) as Symbology.Symbol; }
-            set { SetValue(SelectionFillSymbolProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionFillSymbol"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SelectionFillSymbolProperty =
-            DependencyProperty.Register(nameof(SelectionFillSymbol), typeof(Symbology.Symbol), typeof(MeasureToolbar), new PropertyMetadata(null, OnSelectionFillSymbolPropertyChanged));
-
-        private static void OnSelectionFillSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            var symbol = e.NewValue as Symbology.Symbol;
-            var graphic = toolbar._measureFeatureResultOverlay.Graphics.FirstOrDefault();
-            if (graphic?.Geometry is Polygon || graphic?.Geometry is Envelope)
-            {
-                graphic.Symbol = symbol;
-            }
-        }
+        };
 
         /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.LinearUnit"/> used to configure display for distance measurements.
@@ -769,7 +707,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var toolbar = (MeasureToolbar)d;
             toolbar.DisplayResult();
         }
+
+        /// <summary>
+        /// Gets a command that undoes the last operation performed in the geometry editor.
+        /// </summary>
+        public ICommand? UndoCommand => _undoCommand;
+
+        /// <summary>
+        /// Gets a command that redoes the last operation performed in the geometry editor.
+        /// </summary>
+        public ICommand? RedoCommand => _redoCommand;
     }
 }
-#pragma warning restore CS0618 // SketchEditor is Obsolete
 #endif

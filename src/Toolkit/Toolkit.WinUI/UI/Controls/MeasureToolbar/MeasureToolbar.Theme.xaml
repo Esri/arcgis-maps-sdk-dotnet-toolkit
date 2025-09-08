@@ -121,8 +121,7 @@
                                     VerticalAlignment="Stretch"
                                     ToolTipService.ToolTip="Undo"
                                     Grid.Column="5"
-                                    DataContext="{TemplateBinding MapView}"
-                                    Command="{Binding Path=SketchEditor.UndoCommand}"
+                                    Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=UndoCommand}"
                                     FontFamily="Segoe MDL2 Assets"
                                     Content="&#xE7A7;" />
                             <Button x:Name="Redo"
@@ -134,8 +133,7 @@
                                     VerticalAlignment="Stretch"
                                     ToolTipService.ToolTip="Redo"
                                     Grid.Column="6"
-                                    DataContext="{TemplateBinding MapView}"
-                                    Command="{Binding Path=SketchEditor.RedoCommand}"
+                                    Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RedoCommand}"
                                     FontFamily="Segoe MDL2 Assets"
                                     Content="&#xE7A6;" />
                             <Button x:Name="Clear"
