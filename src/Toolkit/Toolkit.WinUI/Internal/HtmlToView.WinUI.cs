@@ -176,7 +176,7 @@ internal static class HtmlToView
                 string? mediaType = null;
                 foreach (var child in node.Children)
                 {
-                    if (child.Type == MarkupType.Source && !string.IsNullOrEmpty(child.Content))
+                    if (child.Type is MarkupType.Source && !string.IsNullOrEmpty(child.Content))
                     {
                         mediaSrc = child.Content;
                         var attr = HtmlUtility.ParseAttributes(child.Token?.Attributes);
@@ -190,7 +190,6 @@ internal static class HtmlToView
                     {
                         Source = Windows.Media.Core.MediaSource.CreateFromUri(new Uri(mediaSrc, UriKind.RelativeOrAbsolute)),
                         AreTransportControlsEnabled = true,
-                        AutoPlay = true,
                         Stretch = Stretch.Uniform,
                     };
                     return mediaPlayerElement;
@@ -503,7 +502,7 @@ internal static class HtmlToView
 
     private static bool MapsToBlock(MarkupNode node)
     {
-        return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider or MarkupType.Image;
+        return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider or MarkupType.Image or MarkupType.Audio or MarkupType.Video;
     }
 
 }
