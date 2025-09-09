@@ -169,6 +169,34 @@ internal static class HtmlToView
                     imageElement.Source = imageSource;
                 return imageElement;
 
+            case MarkupType.Audio:
+            case MarkupType.Video:
+                // Find the first valid <source> child, or use the node's Content
+                string? mediaSrc = node.Content;
+                string? mediaType = null;
+                foreach (var child in node.Children)
+                {
+                    if (child.Type == MarkupType.Source && !string.IsNullOrEmpty(child.Content))
+                    {
+                        mediaSrc = child.Content;
+                        var attr = HtmlUtility.ParseAttributes(child.Token?.Attributes);
+                        attr.TryGetValue("type", out mediaType);
+                        break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(mediaSrc))
+                {
+                    var mediaPlayerElement = new MediaPlayerElement
+                    {
+                        Source = Windows.Media.Core.MediaSource.CreateFromUri(new Uri(mediaSrc, UriKind.RelativeOrAbsolute)),
+                        AreTransportControlsEnabled = true,
+                        AutoPlay = true,
+                        Stretch = Stretch.Uniform,
+                    };
+                    return mediaPlayerElement;
+                }
+                return new TextBlock { Text = "Media not available" };
+
             case MarkupType.Link:
                 // If the link wraps block content (like <img>), render it as a HyperlinkButton
                 if (Uri.TryCreate(node.Content, UriKind.Absolute, out var linkUri))

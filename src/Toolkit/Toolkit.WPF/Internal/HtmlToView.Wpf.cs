@@ -183,6 +183,35 @@ internal static class HtmlToView
                 }
                 return new Run(); // TODO find a better placeholder when img src is invalid
 
+            case MarkupType.Audio:
+            case MarkupType.Video:
+                // Find the first valid <source> child, or use the node's Content
+                string? mediaSrc = node.Content;
+                string? mediaType = null;
+                foreach (var child in node.Children)
+                {
+                    if (child.Type is MarkupType.Source && !string.IsNullOrEmpty(child.Content))
+                    {
+                        mediaSrc = child.Content;
+                        var attr = HtmlUtility.ParseAttributes(child.Token?.Attributes);
+                        attr.TryGetValue("type", out mediaType);
+                        break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(mediaSrc))
+                {
+                    var mediaElement = new MediaElement
+                    {
+                        Source = new Uri(mediaSrc, UriKind.RelativeOrAbsolute),
+                        LoadedBehavior = MediaState.Manual,
+                        UnloadedBehavior = MediaState.Manual,
+                        Stretch = Stretch.Uniform,
+                    };
+                    mediaElement.Loaded += (s, e) => mediaElement.Play();
+                    return new InlineUIContainer(mediaElement);
+                }
+                return new Run("Media not available");
+
             case MarkupType.Span:
                 var span = new Span();
                 ApplyStyle(span, node);

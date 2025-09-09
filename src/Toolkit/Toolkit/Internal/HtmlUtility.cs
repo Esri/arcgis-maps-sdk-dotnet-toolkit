@@ -40,7 +40,10 @@ internal enum MarkupType
     Sup, // sup
     Divider, // hr
     Break, // br
-    Text
+    Text,
+    Source,
+    Audio,
+    Video,
 }
 
 /// <summary>
@@ -384,12 +387,24 @@ internal class HtmlUtility
                 case "sub":
                     newNode.Type = MarkupType.Sub;
                     break;
-                case "source": // ignore; we don't support embedded audio or video.
+                case "source":
+                    newNode.Type = MarkupType.Source;
+                    if (attr.TryGetValue("src", out var sourceSrc))
+                        newNode.Content = sourceSrc;
+                    break;
                 case "thead": // ignore optional groupings; they carry no useful attributes
                 case "tbody": // ignore optional groupings; they carry no useful attributes
                     continue;
-                case "video": // just use fallback content
-                case "audio": // just use fallback content
+                case "video":
+                    newNode.Type = MarkupType.Video;
+                    if (attr.TryGetValue("src", out var videoSrc))
+                        newNode.Content = videoSrc;
+                    break;
+                case "audio":
+                    newNode.Type = MarkupType.Audio;
+                    if (attr.TryGetValue("src", out var audioSrc))
+                        newNode.Content = audioSrc;
+                    break;
                 case "figure": // TODO add a default margin
                 case "figcaption":
                 case "p":
