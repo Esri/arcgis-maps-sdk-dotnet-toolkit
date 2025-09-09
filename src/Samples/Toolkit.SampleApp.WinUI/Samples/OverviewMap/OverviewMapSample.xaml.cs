@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap
         {
             _mapToggle = !_mapToggle;
 
-            SampleOverview.Map = _mapToggle ? new Map(BasemapStyle.OSMDarkGray) : new Map(BasemapStyle.ArcGISNavigation);
+            SampleOverview.Map = _mapToggle ? new Map(BasemapStyle.OpenDarkGray) : new Map(BasemapStyle.ArcGISNavigation);
         }
 
         private void ToggleSymbolsClick(object sender, RoutedEventArgs e)
