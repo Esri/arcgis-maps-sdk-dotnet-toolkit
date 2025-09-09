@@ -57,7 +57,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 
             if (_mapToggle)
             {
-                SampleOverview.Map = new Map(BasemapStyle.OSMDarkGray);
+                SampleOverview.Map = new Map(BasemapStyle.OpenDarkGray);
             }
             else
             {
