@@ -200,18 +200,9 @@ internal static class HtmlToView
                 }
                 if (!string.IsNullOrEmpty(mediaSrc))
                 {
-                    var mediaElement = new MediaElement
-                    {
-                        Source = new Uri(mediaSrc, UriKind.RelativeOrAbsolute),
-                        LoadedBehavior = MediaState.Manual,
-                        UnloadedBehavior = MediaState.Manual,
-                        Stretch = Stretch.Uniform,
-                        Width = node.Type is MarkupType.Audio ? double.NaN : 300,
-                        Height = node.Type is MarkupType.Audio ? 50 : 200,
-                    };
-
-                    var mediaVisual = BuildMediaInline(mediaElement, node);
-                    return mediaVisual;
+                    var currentMediaType = node.Type == MarkupType.Audio ? MediaType.Audio : MediaType.Video;
+                    var control = new MediaInlineControl(new Uri(mediaSrc, UriKind.RelativeOrAbsolute), currentMediaType);
+                    return new InlineUIContainer(control);
                 }
                 return new Run("Media not available");
 
@@ -246,98 +237,6 @@ internal static class HtmlToView
             default:
                 return new Run(); // placeholder for unsupported types
         }
-    }
-
-    private static InlineUIContainer BuildMediaInline(MediaElement mediaElement, MarkupNode node)
-    {
-        var button = new Button
-        {
-            Padding = new Thickness(0),
-            BorderThickness = new Thickness(0),
-            Background = Brushes.Transparent,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Focusable = false
-        };
-
-        UIElement mediaVisual;
-        bool isPlaying = false;
-
-        // Overlay: semi-transparent grid with play icon
-        var overlay = new Grid
-        {
-            Background = new SolidColorBrush(Color.FromArgb(128, 0, 0, 0)),
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            VerticalAlignment = VerticalAlignment.Stretch,
-            Visibility = Visibility.Visible
-        };
-        var playIcon = new TextBlock
-        {
-            Text = "▶",
-            FontSize = 32,
-            Foreground = Brushes.LightGray,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        overlay.Children.Add(playIcon);
-
-        if (node.Type is MarkupType.Audio)
-        {
-            // Use an icon for audio
-            var audioIcon = new TextBlock
-            {
-                Text = "🔊",
-                FontSize = 32,
-                Foreground = Brushes.Gray,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            mediaVisual = audioIcon;
-        }
-        else
-        {
-            mediaVisual = mediaElement;
-        }
-
-        var panel = new Grid();
-        panel.Children.Add(mediaVisual);
-        panel.Children.Add(overlay);
-        button.Content = panel;
-
-        void UpdateOverlay()
-        {
-            overlay.Visibility = (!isPlaying) ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        mediaElement.MediaEnded += (s, e) =>
-        {
-            mediaElement.Stop();
-            isPlaying = false;
-            UpdateOverlay();
-        };
-        mediaElement.MediaFailed += (s, e) =>
-        {
-            isPlaying = false;
-            UpdateOverlay();
-        };
-
-        button.Click += (s, e) =>
-        {
-            if (isPlaying)
-            {
-                mediaElement.Pause();
-            }
-            else
-            {
-                isPlaying = true;
-                mediaElement.Play();
-            }
-            UpdateOverlay();
-        };
-
-        UpdateOverlay();
-
-        return new InlineUIContainer(button);
     }
 
     private static bool HasAnyBlocks(MarkupNode node)
