@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Forms
         {
             if (results == null)
                 return null;
-            foreach (var result in results.Where(r => r.LayerContent is FeatureLayer layer && (layer.FeatureFormDefinition is not null || layer.FeatureTable is ArcGISFeatureTable { FeatureFormDefinition: not null })))
+            foreach (var result in results.Where(r => r.LayerContent is FeatureLayer layer && (layer.FeatureFormDefinition is not null || (layer.FeatureTable as ArcGISFeatureTable)?.FeatureFormDefinition is not null)))
             {
                 return result.GeoElements?.OfType<ArcGISFeature>()?.FirstOrDefault();
             }
