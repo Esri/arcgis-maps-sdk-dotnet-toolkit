@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class FileDownloadTask </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class FileDownloadTask ">
+    
+    <meta name="description" content="Task for helping managing large downloads that can be paused and resumed across application sessions.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask" class="text-break">Class FileDownloadTask</h1>
+  <div class="markdown level0 summary"><p>Task for helping managing large downloads that can be paused and resumed across application sessions.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">FileDownloadTask</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WPF.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">[DataContract]
+public sealed class FileDownloadTask : IDisposable</code></pre>
+  </div>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>Once a download has started, you should call <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ToJson.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ToJson">ToJson()</a> to serialize the task to a string. This
+allows you to resume the download later if the app closes for whatever reason before the download completes.</p>
+</div>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BufferSize" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BufferSize">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BufferSize.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BufferSize">BufferSize</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the buffer size used for downloading the file. The default is 65535 bytes.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BytesDownloaded" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BytesDownloaded">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BytesDownloaded.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BytesDownloaded">BytesDownloaded</a>
+        </td>
+        <td class="markdown level1 summary"><p>The number of bytes downloaded so far.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_DownloadSpeed" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.DownloadSpeed">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.DownloadSpeed.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_DownloadSpeed">DownloadSpeed</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the current download speed as bytes per second based on a moving average calculation</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Exception" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Exception">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Exception.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Exception">Exception</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the the exception of the download if it failed.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_IsResumable" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.IsResumable">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.IsResumable.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_IsResumable">IsResumable</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether the download can be resumed from the last position, or will start over on resume.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_MaxConcurrentDownloads" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.MaxConcurrentDownloads">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.MaxConcurrentDownloads.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_MaxConcurrentDownloads">MaxConcurrentDownloads</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the maximum number of downloads that can be in progress at the same time before getting queued. The default is <code>3</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Priority" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Priority">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Priority.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Priority">Priority</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the download priority if multiple items are queued. The higher the number, the higher the priority of the download.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Status" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Status">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Status.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Status">Status</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the current download status of the download.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_TotalLength" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.TotalLength">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.TotalLength.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_TotalLength">TotalLength</a>
+        </td>
+        <td class="markdown level1 summary"><p>The total length of the file being downloaded. This is only available if the server provides the content length.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BeginDownloadAsync_System_String_System_Uri_System_Net_Http_HttpMessageHandler_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BeginDownloadAsync(System.String,System.Uri,System.Net.Http.HttpMessageHandler,System.Threading.CancellationToken)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.BeginDownloadAsync.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_BeginDownloadAsync_System_String_System_Uri_System_Net_Http_HttpMessageHandler_System_Threading_CancellationToken_">BeginDownloadAsync(string, Uri, HttpMessageHandler?, CancellationToken)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initiates a download to the specified file from the specified URL</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_CancelAsync" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.CancelAsync">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.CancelAsync.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_CancelAsync">CancelAsync()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Aborts the running download and deletes the partial download.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ClearQueue" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ClearQueue">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ClearQueue.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ClearQueue">ClearQueue()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Clears any downloads still in the download queue. This will pause all downloads that are queued, and remove them from the queue.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Dispose" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Dispose">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Dispose.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Dispose">Dispose()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Finalize" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Finalize">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Finalize.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Finalize">~FileDownloadTask()</a>
+        </td>
+        <td class="markdown level1 summary"></td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_FromJson_System_String_System_Net_Http_HttpMessageHandler_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.FromJson(System.String,System.Net.Http.HttpMessageHandler)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.FromJson.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_FromJson_System_String_System_Net_Http_HttpMessageHandler_">FromJson(string, HttpMessageHandler?)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Restores a previously serialized <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html">FileDownloadTask</a> from a JSON string.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_PauseAsync" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.PauseAsync">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.PauseAsync.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_PauseAsync">PauseAsync()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Pauses the active download.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_RestartAsync_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.RestartAsync(System.Threading.CancellationToken)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.RestartAsync.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_RestartAsync_System_Threading_CancellationToken_">RestartAsync(CancellationToken)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Restarts the download from the beginning.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ResumeAsync_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ResumeAsync(System.Threading.CancellationToken)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ResumeAsync.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ResumeAsync_System_Threading_CancellationToken_">ResumeAsync(CancellationToken)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Resumes the download from the last position.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ToJson" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ToJson">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.ToJson.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_ToJson">ToJson()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Serializes the current <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.html">FileDownloadTask</a> to a JSON string for later resuming downloads.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Completed" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Completed">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Completed.html">Completed</a>
+        </td>
+        <td class="markdown level1 summary"><p>Event raised when the download is completed successfully.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Error" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Error">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Error.html">Error</a>
+        </td>
+        <td class="markdown level1 summary"><p>Event raised when an error occurs during the download.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Progress" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Progress">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Progress.html">Progress</a>
+        </td>
+        <td class="markdown level1 summary"><p>Event raised as the download progresses.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_FileDownloadTask_StatusChanged" data-uid="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.StatusChanged">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.StatusChanged.html">StatusChanged</a>
+        </td>
+        <td class="markdown level1 summary"><p>Event triggered when the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.FileDownloadTask.Status.html#Esri_ArcGISRuntime_Toolkit_FileDownloadTask_Status">Status</a> property changes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_FileDownloadTask.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.FileDownloadTask%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/FileDownloadTask.cs/#L149" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
