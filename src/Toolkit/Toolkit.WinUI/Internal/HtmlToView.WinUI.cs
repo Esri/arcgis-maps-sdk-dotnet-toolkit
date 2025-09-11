@@ -169,6 +169,44 @@ internal static class HtmlToView
                     imageElement.Source = imageSource;
                 return imageElement;
 
+            case MarkupType.Audio:
+            case MarkupType.Video:
+                // Find the first valid <source> child, or use the node's Content
+                string? mediaSrc = node.Content;
+                string? mediaType = null;
+                foreach (var child in node.Children)
+                {
+                    if (child.Type is MarkupType.Source && !string.IsNullOrEmpty(child.Content))
+                    {
+                        mediaSrc = child.Content;
+                        var attr = HtmlUtility.ParseAttributes(child.Token?.Attributes);
+                        attr.TryGetValue("type", out mediaType);
+                        break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(mediaSrc))
+                {
+                    if (Uri.TryCreate(mediaSrc, UriKind.RelativeOrAbsolute, out var mediaUri))
+                    {
+                        var mediaPlayerElement = new MediaPlayerElement
+                        {
+                            Source = Windows.Media.Core.MediaSource.CreateFromUri(mediaUri),
+                            AreTransportControlsEnabled = true,
+                            Stretch = Stretch.Uniform,
+                        };
+                        return mediaPlayerElement;
+                    }
+                    else
+                    {
+                        return new TextBlock { Text = "Invalid media URL" };
+                    }
+                }
+                if (node.Children.Any(c => c.Type != MarkupType.Source))
+                {
+                    goto case MarkupType.Block;
+                }
+                return new TextBlock { Text = "Media not available" };
+
             case MarkupType.Link:
                 // If the link wraps block content (like <img>), render it as a HyperlinkButton
                 if (Uri.TryCreate(node.Content, UriKind.Absolute, out var linkUri))
@@ -475,7 +513,7 @@ internal static class HtmlToView
 
     private static bool MapsToBlock(MarkupNode node)
     {
-        return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider or MarkupType.Image;
+        return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider or MarkupType.Image or MarkupType.Audio or MarkupType.Video;
     }
 
 }
