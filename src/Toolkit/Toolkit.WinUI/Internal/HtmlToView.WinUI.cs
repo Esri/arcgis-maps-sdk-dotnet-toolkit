@@ -186,13 +186,24 @@ internal static class HtmlToView
                 }
                 if (!string.IsNullOrEmpty(mediaSrc))
                 {
-                    var mediaPlayerElement = new MediaPlayerElement
+                    if (Uri.TryCreate(mediaSrc, UriKind.RelativeOrAbsolute, out var mediaUri))
                     {
-                        Source = Windows.Media.Core.MediaSource.CreateFromUri(new Uri(mediaSrc, UriKind.RelativeOrAbsolute)),
-                        AreTransportControlsEnabled = true,
-                        Stretch = Stretch.Uniform,
-                    };
-                    return mediaPlayerElement;
+                        var mediaPlayerElement = new MediaPlayerElement
+                        {
+                            Source = Windows.Media.Core.MediaSource.CreateFromUri(mediaUri),
+                            AreTransportControlsEnabled = true,
+                            Stretch = Stretch.Uniform,
+                        };
+                        return mediaPlayerElement;
+                    }
+                    else
+                    {
+                        return new TextBlock { Text = "Invalid media URL" };
+                    }
+                }
+                if (node.Children.Any(c => c.Type != MarkupType.Source))
+                {
+                    goto case MarkupType.Block;
                 }
                 return new TextBlock { Text = "Media not available" };
 

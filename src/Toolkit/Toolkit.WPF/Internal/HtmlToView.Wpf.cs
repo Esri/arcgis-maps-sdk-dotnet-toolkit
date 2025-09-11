@@ -175,8 +175,11 @@ internal static class HtmlToView
                     var control = new MediaInlineControl(new Uri(mediaSrc, UriKind.RelativeOrAbsolute), currentMediaType);
                     return new BlockUIContainer(control);
                 }
+                if (node.Children.Any(c => c.Type != MarkupType.Source))
+                {
+                    goto case MarkupType.Block;
+                }
                 return new Paragraph(new Run("Media not available"));
-
 
             default:
                 return new Section(); // placeholder for unsupported things

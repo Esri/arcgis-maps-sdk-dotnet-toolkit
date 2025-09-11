@@ -173,6 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 _playPauseButton.Content = PlayButtonGlyph;
                 _timer.Stop();
                 UpdateTimestamp();
+                System.Diagnostics.Trace.WriteLine($"Media failed to load: {e.ErrorException}");
             };
         }
 
