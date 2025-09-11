@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Forms
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
 
                 // Retrieves feature from IdentifyLayerResult with a form definition
-                var feature = GetFeature(result, out var def);
+                var feature = GetFeature(result);
                 if (feature != null)
                 {
                     formViewer.FeatureForm = new FeatureForm(feature);
@@ -40,19 +40,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Forms
             }
         }
 
-        private ArcGISFeature GetFeature(IEnumerable<IdentifyLayerResult> results, out FeatureFormDefinition def)
+        private ArcGISFeature GetFeature(IEnumerable<IdentifyLayerResult> results)
         {
-            def = null;
             if (results == null)
                 return null;
             foreach (var result in results.Where(r => r.LayerContent is FeatureLayer layer && (layer.FeatureFormDefinition is not null || (layer.FeatureTable as ArcGISFeatureTable)?.FeatureFormDefinition is not null)))
             {
-                var feature = result.GeoElements?.OfType<ArcGISFeature>()?.FirstOrDefault();
-                def = (result.LayerContent as FeatureLayer)?.FeatureFormDefinition ?? ((result.LayerContent as FeatureLayer)?.FeatureTable as ArcGISFeatureTable)?.FeatureFormDefinition;
-                if (feature != null && def != null)
-                {
-                    return feature;
-                }
+                return result.GeoElements?.OfType<ArcGISFeature>()?.FirstOrDefault();
             }
 
             return null;

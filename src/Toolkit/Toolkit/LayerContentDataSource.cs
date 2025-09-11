@@ -89,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #elif NETFX_CORE
             _ = _owner.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
 #elif WINUI
-            _ = _owner.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => action());
+            _ = _owner.DispatcherQueue?.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => action());
 #else
             _owner.Dispatcher.Invoke(action);
 #endif

@@ -40,10 +40,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 #elif WINUI
         internal static void Dispatch(this DependencyObject dObject, Action action)
         {
-            if (dObject.DispatcherQueue.HasThreadAccess)
+            var queue = dObject.DispatcherQueue;
+            if (queue is null)
+                return;
+            if (queue.HasThreadAccess)
                 action();
             else
-                dObject.DispatcherQueue.TryEnqueue(() => action());
+                queue.TryEnqueue(() => action());
         }
 #elif WINDOWS_UWP
         internal static void Dispatch(this DependencyObject dObject, Action action)

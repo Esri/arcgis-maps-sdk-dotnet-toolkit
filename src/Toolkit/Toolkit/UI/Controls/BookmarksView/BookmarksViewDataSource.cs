@@ -323,7 +323,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #elif NETFX_CORE
             _ = _geoView?.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
 #elif WINUI
-            _ = _geoView?.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => action());
+            _ = _geoView?.DispatcherQueue?.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => action());
 #else
             _geoView?.Dispatcher.Invoke(action);
 #endif
