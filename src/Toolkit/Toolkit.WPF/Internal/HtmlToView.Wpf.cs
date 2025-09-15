@@ -154,6 +154,32 @@ internal static class HtmlToView
                 }
                 table.RowGroups.Add(rowGroup);
                 return table;
+            case MarkupType.Audio:
+            case MarkupType.Video:
+                // Find the first valid <source> child, or use the node's Content
+                string? mediaSrc = node.Content;
+                string? mediaType = null;
+                foreach (var child in node.Children)
+                {
+                    if (child.Type is MarkupType.Source && !string.IsNullOrEmpty(child.Content))
+                    {
+                        mediaSrc = child.Content;
+                        var attr = HtmlUtility.ParseAttributes(child.Token?.Attributes);
+                        attr.TryGetValue("type", out mediaType);
+                        break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(mediaSrc))
+                {
+                    var currentMediaType = node.Type is MarkupType.Audio ? MediaType.Audio : MediaType.Video;
+                    var control = new MediaInlineControl(new Uri(mediaSrc, UriKind.RelativeOrAbsolute), currentMediaType);
+                    return new BlockUIContainer(control);
+                }
+                if (node.Children.Any(c => c.Type != MarkupType.Source))
+                {
+                    goto case MarkupType.Block;
+                }
+                return new Paragraph(new Run("Media not available"));
 
             default:
                 return new Section(); // placeholder for unsupported things
@@ -223,7 +249,7 @@ internal static class HtmlToView
 
     private static bool MapsToBlock(MarkupNode node)
     {
-        return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider;
+        return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider or MarkupType.Audio or MarkupType.Video;
     }
 
     private static void ApplyStyle(TextElement el, MarkupNode node)
