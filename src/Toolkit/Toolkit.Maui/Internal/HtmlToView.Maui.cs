@@ -165,6 +165,12 @@ internal static class HtmlToView
 
             case MarkupType.Audio:
             case MarkupType.Video:
+#if ANDROID // TODO: This needs to be revisited when we have a support for Android
+                if (node.Children.Any(c => c.Type != MarkupType.Source))
+                {
+                    goto case MarkupType.Block;
+                }
+#endif
                 // Find the first valid <source> child, or use the node's Content
                 string? mediaSrc = node.Content;
                 string? mediaType = null;
