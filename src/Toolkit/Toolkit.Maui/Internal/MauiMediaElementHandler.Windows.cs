@@ -19,11 +19,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
             }
         }
 
-        protected override void ConnectHandler(MediaPlayerElement platformView)
-        {
-            base.ConnectHandler(platformView);
-        }
-
         protected override void DisconnectHandler(MediaPlayerElement platformView)
         {
             platformView.Source = null;

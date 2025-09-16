@@ -36,11 +36,6 @@ internal partial class MauiMediaElementHandler : ViewHandler<MauiMediaElement, U
         }
     }
 
-    protected override void ConnectHandler(UIView platformView)
-    {
-        base.ConnectHandler(platformView);
-    }
-
     protected override void DisconnectHandler(UIView platformView)
     {
         Dispose();
