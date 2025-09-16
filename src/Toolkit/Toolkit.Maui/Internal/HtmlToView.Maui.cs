@@ -190,6 +190,10 @@ internal static class HtmlToView
                         };
                         return mediaElement;
                     }
+                    else
+                    {
+                        return new Label { Text = "Invalid media URL" };
+                    }
                 }
                 return new Label { Text = "Media not available" };
 
