@@ -15,7 +15,7 @@
     <UseWinUI>true</UseWinUI>
     <IncludeXamlFilesInNugetPackage>False</IncludeXamlFilesInNugetPackage>
     <DisableEmbeddedXbf>false</DisableEmbeddedXbf>
-    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
