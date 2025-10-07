@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             var root = new VerticalStackLayout();
-            root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (AttachmentsFormElementView view) => view.Element?.IsVisible, source: RelativeBindingSource.TemplatedParent);
+            root.SetBinding(VerticalStackLayout.IsVisibleProperty, static (AttachmentsFormElementView view) => view.Element?.IsVisible, source: RelativeBindingSource.TemplatedParent, converter: BoolOrNullToBoolConverter.Instance);
 
             Grid header = new Grid();
             header.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
@@ -89,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             
             Grid.SetColumn(addButton, 1);
             Grid.SetRowSpan(addButton, 2);
-            addButton.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsFormElementView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent);
+            addButton.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsFormElementView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent, converter: BoolOrNullToBoolConverter.Instance);
             header.Children.Add(addButton);
 
             root.Children.Add(header);
