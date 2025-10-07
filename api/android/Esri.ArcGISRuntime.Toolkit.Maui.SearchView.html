@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class SearchView </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class SearchView ">
+    
+    <meta name="description" content="View for searching with locators and custom search sources.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView" class="text-break">Class SearchView</h1>
+  <div class="markdown level0 summary"><p>View for searching with locators and custom search sources.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.bindableobject">BindableObject</a></div>
+    <div class="level2"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.element">Element</a></div>
+    <div class="level3"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.styleableelement">StyleableElement</a></div>
+    <div class="level4"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.navigableelement">NavigableElement</a></div>
+    <div class="level5"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.visualelement">VisualElement</a></div>
+    <div class="level6"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.view">View</a></div>
+    <div class="level7"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.compatibility.layout">Layout</a></div>
+    <div class="level8"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.templatedview">TemplatedView</a></div>
+    <div class="level9"><span class="xref">SearchView</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ieffectcontrolprovider">IEffectControlProvider</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.itooltipelement">IToolTipElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icontextflyoutelement">IContextFlyoutElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ianimatable">IAnimatable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.iviewcontroller">IViewController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ivisualelementcontroller">IVisualElementController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ielementcontroller">IElementController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.internals.igesturecontroller">IGestureController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.igesturerecognizers">IGestureRecognizers</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ipropertymapperview">IPropertyMapperView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.hotreload.ihotreloadableview">IHotReloadableView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ireplaceableview">IReplaceableView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ilayout">ILayout</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ilayoutcontroller">ILayoutController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ivisualtreeelement">IVisualTreeElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icontentview">IContentView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.iview">IView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ielement">IElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.itransform">ITransform</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ipadding">IPadding</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icrossplatformlayout">ICrossPlatformLayout</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanged">INotifyPropertyChanged</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.html">Maui</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.Maui.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public class SearchView : TemplatedView, IEffectControlProvider, IToolTipElement, IContextFlyoutElement, IAnimatable, IViewController, IVisualElementController, IElementController, IGestureController, IGestureRecognizers, IPropertyMapperView, IHotReloadableView, IReplaceableView, ILayout, ILayoutController, IVisualTreeElement, IContentView, IView, IElement, ITransform, IPadding, ICrossPlatformLayout, INotifyPropertyChanged</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.#ctor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.-ctor.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView__ctor">SearchView()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.html">SearchView</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_AllSourcesSelectTextProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.AllSourcesSelectTextProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.AllSourcesSelectTextProperty.html">AllSourcesSelectTextProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.AllSourcesSelectText.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_AllSourcesSelectText">AllSourcesSelectText</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableDefaultWorldGeocoderProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableDefaultWorldGeocoderProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableDefaultWorldGeocoderProperty.html">EnableDefaultWorldGeocoderProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableDefaultWorldGeocoder.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableDefaultWorldGeocoder">EnableDefaultWorldGeocoder</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableIndividualResultDisplayProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableIndividualResultDisplayProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableIndividualResultDisplayProperty.html">EnableIndividualResultDisplayProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableIndividualResultDisplay.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableIndividualResultDisplay">EnableIndividualResultDisplay</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableRepeatSearchHereButtonProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableRepeatSearchHereButtonProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableRepeatSearchHereButtonProperty.html">EnableRepeatSearchHereButtonProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableRepeatSearchHereButton.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableRepeatSearchHereButton">EnableRepeatSearchHereButton</a> bindable proeprty.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableResultListViewProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableResultListViewProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableResultListViewProperty.html">EnableResultListViewProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableResultListView.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableResultListView">EnableResultListView</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_GeoViewProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.GeoViewProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.GeoViewProperty.html">GeoViewProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.GeoView.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_GeoView">GeoView</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_MultipleResultZoomBufferProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.MultipleResultZoomBufferProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.MultipleResultZoomBufferProperty.html">MultipleResultZoomBufferProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.MultipleResultZoomBuffer.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_MultipleResultZoomBuffer">MultipleResultZoomBuffer</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_NoResultMessageProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.NoResultMessageProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.NoResultMessageProperty.html">NoResultMessageProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.NoResultMessage.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_NoResultMessage">NoResultMessage</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_RepeatSearchButtonTextProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.RepeatSearchButtonTextProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.RepeatSearchButtonTextProperty.html">RepeatSearchButtonTextProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.RepeatSearchButtonText.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_RepeatSearchButtonText">RepeatSearchButtonText</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_ResultTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.ResultTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.ResultTemplateProperty.html">ResultTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.ResultTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_ResultTemplate">ResultTemplate</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SearchViewModelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SearchViewModelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SearchViewModelProperty.html">SearchViewModelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SearchViewModel.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SearchViewModel">SearchViewModel</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SuggestionGroupHeaderTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionGroupHeaderTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionGroupHeaderTemplateProperty.html">SuggestionGroupHeaderTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionGroupHeaderTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SuggestionGroupHeaderTemplate">SuggestionGroupHeaderTemplate</a> bindable property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SuggestionTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionTemplateProperty.html">SuggestionTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SuggestionTemplate">SuggestionTemplate</a> bindable property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_AllSourcesSelectText" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.AllSourcesSelectText">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.AllSourcesSelectText.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_AllSourcesSelectText">AllSourcesSelectText</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the text to show in the button for selecting all search sources.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_ClearCommand" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.ClearCommand">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.ClearCommand.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_ClearCommand">ClearCommand</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a command that clears the current search.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableDefaultWorldGeocoder" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableDefaultWorldGeocoder">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableDefaultWorldGeocoder.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableDefaultWorldGeocoder">EnableDefaultWorldGeocoder</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SearchViewModel.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SearchViewModel">SearchViewModel</a> will include the Esri World Geocoder service by default.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableIndividualResultDisplay" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableIndividualResultDisplay">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableIndividualResultDisplay.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableIndividualResultDisplay">EnableIndividualResultDisplay</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the view will show the selected result.
+If false, the result list is hidden automatically when a result is selected.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableRepeatSearchHereButton" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableRepeatSearchHereButton">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableRepeatSearchHereButton.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableRepeatSearchHereButton">EnableRepeatSearchHereButton</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether a 'Repeat Search' button will be displayed
+when the user pans the map a sufficient amount after a search completes.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableResultListView" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableResultListView">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.EnableResultListView.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_EnableResultListView">EnableResultListView</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the default result list view will be shown.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_GeoView" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.GeoView">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.GeoView.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_GeoView">GeoView</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the GeoView associated with this view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_MultipleResultZoomBuffer" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.MultipleResultZoomBuffer">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.MultipleResultZoomBuffer.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_MultipleResultZoomBuffer">MultipleResultZoomBuffer</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the buffer used when zooming to a set of results.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_NoResultMessage" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.NoResultMessage">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.NoResultMessage.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_NoResultMessage">NoResultMessage</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a message to show when a search completes with no results.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_RepeatSearchButtonText" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.RepeatSearchButtonText">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.RepeatSearchButtonText.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_RepeatSearchButtonText">RepeatSearchButtonText</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the text to show in the 'Repeat search' button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_RepeatSearchHereCommand" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.RepeatSearchHereCommand">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.RepeatSearchHereCommand.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_RepeatSearchHereCommand">RepeatSearchHereCommand</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a command that repeats the last search with new geometry.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_ResultTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.ResultTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.ResultTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_ResultTemplate">ResultTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the template used to display results.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SearchCommand" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SearchCommand">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SearchCommand.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SearchCommand">SearchCommand</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a command that starts a search with current parameters.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SearchViewModel" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SearchViewModel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SearchViewModel.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SearchViewModel">SearchViewModel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the viewmodel that implements core search behavior.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SuggestionGroupHeaderTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionGroupHeaderTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionGroupHeaderTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SuggestionGroupHeaderTemplate">SuggestionGroupHeaderTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the template used to display the header that groups suggestion results by source.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SuggestionTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.SuggestionTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_SuggestionTemplate">SuggestionTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the template used to display suggestions.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_SearchView_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.OnApplyTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.SearchView.OnApplyTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_SearchView_OnApplyTemplate">OnApplyTemplate()</a>
+        </td>
+        <td class="markdown level1 summary"></td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_SearchView.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.SearchView%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.Maui/SearchView/SearchView.cs/#L34" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Interface ISearchSource </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Interface ISearchSource ">
+    
+    <meta name="description" content="Defines the API contract for sources of search results that can be used with .">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource" class="text-break">Interface ISearchSource</h1>
+  <div class="markdown level0 summary"><p>Defines the API contract for sources of search results that can be used with <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.html">SearchViewModel</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.html">UI</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WPF.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public interface ISearchSource</code></pre>
+  </div>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_DefaultCalloutDefinition" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.DefaultCalloutDefinition">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.DefaultCalloutDefinition.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_DefaultCalloutDefinition">DefaultCalloutDefinition</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the callout definition used for results by default.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_DefaultSymbol" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.DefaultSymbol">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.DefaultSymbol.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_DefaultSymbol">DefaultSymbol</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the symbol to be used for results by default.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_DefaultZoomScale" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.DefaultZoomScale">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.DefaultZoomScale.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_DefaultZoomScale">DefaultZoomScale</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the default zoom scale to be used for results from this source.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_DisplayName" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.DisplayName">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.DisplayName.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_DisplayName">DisplayName</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the display name for the source, which may be displayed in the UI.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_MaximumResults" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.MaximumResults">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.MaximumResults.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_MaximumResults">MaximumResults</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the maximum number of results to return when completing a search.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_MaximumSuggestions" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.MaximumSuggestions">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.MaximumSuggestions.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_MaximumSuggestions">MaximumSuggestions</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the maximum number of results to return when requesting search suggestions.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_Placeholder" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.Placeholder">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.Placeholder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_Placeholder">Placeholder</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the placeholder used for this source, which may be displaye in the UI.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_PreferredSearchLocation" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.PreferredSearchLocation">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.PreferredSearchLocation.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_PreferredSearchLocation">PreferredSearchLocation</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the point to be used as an input to searches and suggestions.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_SearchArea" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.SearchArea">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.SearchArea.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_SearchArea">SearchArea</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the area to be used as a constraint for searches and suggestions.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_NotifyDeselected_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResult_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.NotifyDeselected(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.NotifyDeselected.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_NotifyDeselected_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResult_">NotifyDeselected(SearchResult?)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Used to notify the source when the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.html">SearchViewModel</a> has deselected a result, or all results if <code class="paramref">result</code> is null.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_NotifySelected_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResult_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.NotifySelected(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.NotifySelected.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_NotifySelected_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResult_">NotifySelected(SearchResult)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Used to notify the source when the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.html">SearchViewModel</a> has selected a result.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_RepeatSearchAsync_System_String_Esri_ArcGISRuntime_Geometry_Envelope_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.RepeatSearchAsync(System.String,Esri.ArcGISRuntime.Geometry.Envelope,System.Threading.CancellationToken)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.RepeatSearchAsync.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_RepeatSearchAsync_System_String_Esri_ArcGISRuntime_Geometry_Envelope_System_Threading_CancellationToken_">RepeatSearchAsync(string, Envelope, CancellationToken)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Repeats the last search, with results restricted to the current visible area.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_SearchAsync_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchSuggestion_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.SearchAsync(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion,System.Threading.CancellationToken)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.SearchAsync.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_SearchAsync_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchSuggestion_System_Threading_CancellationToken_">SearchAsync(SearchSuggestion, CancellationToken)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a list of search results for the given suggestions.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_SearchAsync_System_String_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.SearchAsync(System.String,System.Threading.CancellationToken)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.SearchAsync.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_SearchAsync_System_String_System_Threading_CancellationToken_">SearchAsync(string, CancellationToken)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a list of search results for the given query.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_SuggestAsync_System_String_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.SuggestAsync(System.String,System.Threading.CancellationToken)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.SuggestAsync.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource_SuggestAsync_System_String_System_Threading_CancellationToken_">SuggestAsync(string, CancellationToken)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a list of suggestions for the given query.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_ISearchSource.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/SearchView/ISearchSource.cs/#L35" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

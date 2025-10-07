@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class TimeSlider </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class TimeSlider ">
+    
+    <meta name="description" content="The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control to enhance the viewing of geographic features that have attributes based upon Date/Time information.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider" class="text-break">Class TimeSlider</h1>
+  <div class="markdown level0 summary"><p>The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control
+to enhance the viewing of geographic features that have attributes based upon Date/Time information.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.threading.dispatcherobject">DispatcherObject</a></div>
+    <div class="level2"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.dependencyobject">DependencyObject</a></div>
+    <div class="level3"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.media.visual">Visual</a></div>
+    <div class="level4"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.uielement">UIElement</a></div>
+    <div class="level5"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.frameworkelement">FrameworkElement</a></div>
+    <div class="level6"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.controls.control">Control</a></div>
+    <div class="level7"><span class="xref">TimeSlider</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.media.animation.ianimatable">IAnimatable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.iframeworkinputelement">IFrameworkInputElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.iinputelement">IInputElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.isupportinitialize">ISupportInitialize</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.markup.iqueryambient">IQueryAmbient</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.html">UI</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WPF.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">[TemplatePart(Name = &quot;SliderTrack&quot;, Type = typeof(FrameworkElement))]
+[TemplatePart(Name = &quot;HorizontalTrackThumb&quot;, Type = typeof(Thumb))]
+[TemplatePart(Name = &quot;MinimumThumb&quot;, Type = typeof(Thumb))]
+[TemplatePart(Name = &quot;MinimumThumbLabel&quot;, Type = typeof(TextBlock))]
+[TemplatePart(Name = &quot;MaximumThumb&quot;, Type = typeof(Thumb))]
+[TemplatePart(Name = &quot;MaximumThumbLabel&quot;, Type = typeof(TextBlock))]
+[TemplatePart(Name = &quot;Tickmarks&quot;, Type = typeof(Tickbar))]
+[TemplatePart(Name = &quot;SliderTrackStepBackRepeater&quot;, Type = typeof(RepeatButton))]
+[TemplatePart(Name = &quot;SliderTrackStepForwardRepeater&quot;, Type = typeof(RepeatButton))]
+[TemplatePart(Name = &quot;PlayPauseButton&quot;, Type = typeof(ToggleButton))]
+[TemplatePart(Name = &quot;NextButton&quot;, Type = typeof(ButtonBase))]
+[TemplatePart(Name = &quot;PreviousButton&quot;, Type = typeof(ButtonBase))]
+[TemplatePart(Name = &quot;FullExtentStartTimeLabel&quot;, Type = typeof(TextBlock))]
+[TemplatePart(Name = &quot;FullExtentEndTimeLabel&quot;, Type = typeof(TextBlock))]
+[TemplateVisualState(GroupName = &quot;CommonStates&quot;, Name = &quot;Normal&quot;)]
+[TemplateVisualState(GroupName = &quot;CommonStates&quot;, Name = &quot;MouseOver&quot;)]
+[TemplateVisualState(GroupName = &quot;CommonStates&quot;, Name = &quot;Disabled&quot;)]
+[TemplateVisualState(GroupName = &quot;FocusStates&quot;, Name = &quot;Focused&quot;)]
+[TemplateVisualState(GroupName = &quot;FocusStates&quot;, Name = &quot;Unfocused&quot;)]
+public class TimeSlider : Control, IAnimatable, IFrameworkInputElement, IInputElement, ISupportInitialize, IQueryAmbient</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.#ctor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.-ctor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider__ctor">TimeSlider()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html">TimeSlider</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFillProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFillProperty.html">CurrentExtentFillProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFill">CurrentExtentFill</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColorProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColorProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColorProperty.html">CurrentExtentLabelColorProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColor">CurrentExtentLabelColor</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormatProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormatProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormatProperty.html">CurrentExtentLabelFormatProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormat.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormat">CurrentExtentLabelFormat</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentProperty.html">CurrentExtentProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFillProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFillProperty.html">FullExtentFillProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFill">FullExtentFill</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColorProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColorProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColorProperty.html">FullExtentLabelColorProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColor">FullExtentLabelColor</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormatProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormatProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormatProperty.html">FullExtentLabelFormatProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormat.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormat">FullExtentLabelFormat</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentProperty.html">FullExtentProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStrokeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStrokeProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStrokeProperty.html">FullExtentStrokeProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStroke.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStroke">FullExtentStroke</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinnedProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinnedProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinnedProperty.html">IsEndTimePinnedProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinned.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinned">IsEndTimePinned</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlayingProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlayingProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlayingProperty.html">IsPlayingProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlaying.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlaying">IsPlaying</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinnedProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinnedProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinnedProperty.html">IsStartTimePinnedProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinned.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinned">IsStartTimePinned</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelModeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelModeProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelModeProperty.html">LabelModeProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelMode.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelMode">LabelMode</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LoopModeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LoopModeProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LoopModeProperty.html">LoopModeProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackLoopMode.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackLoopMode">PlaybackLoopMode</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFillProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFillProperty.html">PlaybackButtonsFillProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFill">PlaybackButtonsFill</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStrokeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStrokeProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStrokeProperty.html">PlaybackButtonsStrokeProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStroke.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStroke">PlaybackButtonsStroke</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirectionProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirectionProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirectionProperty.html">PlaybackDirectionProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirection.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirection">PlaybackDirection</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackIntervalProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackIntervalProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackIntervalProperty.html">PlaybackIntervalProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackInterval.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackInterval">PlaybackInterval</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFillProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFillProperty.html">ThumbFillProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFill">ThumbFill</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStrokeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStrokeProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStrokeProperty.html">ThumbStrokeProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStroke.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStroke">ThumbStroke</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColorProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColorProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColorProperty.html">TimeStepIntervalLabelColorProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColor">TimeStepIntervalLabelColor</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormatProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormatProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormatProperty.html">TimeStepIntervalLabelFormatProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormat.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormat">TimeStepIntervalLabelFormat</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalProperty.html">TimeStepIntervalProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepInterval.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval">TimeStepInterval</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFillProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFillProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFillProperty.html">TimeStepIntervalTickFillProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFill">TimeStepIntervalTickFill</a> dependency property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.TimeExtent.html">TimeExtent</a> associated with the visual thumbs(s) displayed on the TimeSlider.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFill">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentFill">CurrentExtentFill</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the fill color of the area on the slider track that indicates the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelColor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelColor">CurrentExtentLabelColor</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the color of the current extent labels.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormat" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormat">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentLabelFormat.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentLabelFormat">CurrentExtentLabelFormat</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the string format to use for displaying the start and end labels for the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.TimeExtent.html">TimeExtent</a> that specifies the overall start and end time of the time slider instance.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFill">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentFill">FullExtentFill</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the fill color of the area on the slider track that indicates the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelColor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelColor">FullExtentLabelColor</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the color of the full extent labels.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormat" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormat">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentLabelFormat.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentLabelFormat">FullExtentLabelFormat</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the string format to use for displaying the start and end labels for the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStroke" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStroke">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtentStroke.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtentStroke">FullExtentStroke</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the border color of the area on the slider track that indicates the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinned" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinned">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsEndTimePinned.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsEndTimePinned">IsEndTimePinned</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the end time of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a> is locked into place.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlaying" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlaying">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsPlaying.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsPlaying">IsPlaying</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the time slider is animating playback.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinned" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinned">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.IsStartTimePinned.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_IsStartTimePinned">IsStartTimePinned</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the start time of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a> is locked into place.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelMode" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelMode">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.LabelMode.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_LabelMode">LabelMode</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the mode to use for labels along the time slider.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFill">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsFill">PlaybackButtonsFill</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the fill color of the playback buttons.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStroke" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStroke">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackButtonsStroke.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackButtonsStroke">PlaybackButtonsStroke</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the border color of the playback buttons.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirection" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirection">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackDirection.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackDirection">PlaybackDirection</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets whether the current extent will move to the next or the previous time step during playback.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackInterval" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackInterval">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackInterval.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackInterval">PlaybackInterval</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the interval at which the time slider's current extent will move to the next or previous time step.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackLoopMode" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackLoopMode">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.PlaybackLoopMode.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_PlaybackLoopMode">PlaybackLoopMode</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the behavior when the current extent reaches the end of the slider during playback.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFill">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbFill">ThumbFill</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the fill color of the thumbs.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStroke" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStroke">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.ThumbStroke.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_ThumbStroke">ThumbStroke</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the border color of the thumbs.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepInterval">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepInterval.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval">TimeStepInterval</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the time step intervals for the time slider.  The slider thumbs will snap to and tick marks will be shown at this interval.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelColor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelColor">TimeStepIntervalLabelColor</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the color of the time step interval labels.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormat" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormat">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalLabelFormat.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalLabelFormat">TimeStepIntervalLabelFormat</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFill" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFill">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepIntervalTickFill.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepIntervalTickFill">TimeStepIntervalTickFill</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the color of the slider's tickmarks.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeSteps" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeSteps">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeSteps.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeSteps">TimeSteps</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the time steps that can be used to set the slider instance's current extent.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_Esri_ArcGISRuntime_ITimeAware_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync(Esri.ArcGISRuntime.ITimeAware)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_Esri_ArcGISRuntime_ITimeAware_">InitializeTimePropertiesAsync(ITimeAware)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes the time slider's temporal properties based on the specified time-aware layer. Specifically,
+this will initialize <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>, <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepInterval.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval">TimeStepInterval</a>, and <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_Esri_ArcGISRuntime_UI_Controls_GeoView_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync(Esri.ArcGISRuntime.UI.Controls.GeoView)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimePropertiesAsync.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimePropertiesAsync_Esri_ArcGISRuntime_UI_Controls_GeoView_">InitializeTimePropertiesAsync(GeoView?)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes the time slider's temporal properties based on the specified GeoView. Specifically,
+this will initialize <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.FullExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_FullExtent">FullExtent</a>, <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.TimeStepInterval.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_TimeStepInterval">TimeStepInterval</a>, and <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtent.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtent">CurrentExtent</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimeSteps_System_Int32_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimeSteps(System.Int32)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.InitializeTimeSteps.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_InitializeTimeSteps_System_Int32_">InitializeTimeSteps(int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Updates the time slider to have the specified number of time steps.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnApplyTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnApplyTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnApplyTemplate">OnApplyTemplate()</a>
+        </td>
+        <td class="markdown level1 summary"><p>When overridden in a derived class, is invoked whenever application
+code or internal processes (such as a rebuilding layout pass) call
+<span class="xref">System.Windows.Controls.Control.ApplyTemplate</span>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnGotFocus_System_Windows_RoutedEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnGotFocus(System.Windows.RoutedEventArgs)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnGotFocus.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnGotFocus_System_Windows_RoutedEventArgs_">OnGotFocus(RoutedEventArgs)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Called before the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.uielement.gotfocus">GotFocus</a> event occurs.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnKeyDown_System_Windows_Input_KeyEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnKeyDown(System.Windows.Input.KeyEventArgs)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnKeyDown.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnKeyDown_System_Windows_Input_KeyEventArgs_">OnKeyDown(KeyEventArgs)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Called before the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.uielement.keydown">KeyDown</a> event occurs.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnLostFocus_System_Windows_RoutedEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnLostFocus(System.Windows.RoutedEventArgs)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnLostFocus.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnLostFocus_System_Windows_RoutedEventArgs_">OnLostFocus(RoutedEventArgs)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Called before the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.uielement.lostfocus">LostFocus</a> event occurs.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseEnter_System_Windows_Input_MouseEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseEnter(System.Windows.Input.MouseEventArgs)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseEnter.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseEnter_System_Windows_Input_MouseEventArgs_">OnMouseEnter(MouseEventArgs)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when an unhandled <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.input.mouse.mouseenter#system-windows-input-mouse-mouseenter">MouseEnter</a> attached event is raised on this element. Implement this method to add class handling for this event.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeave_System_Windows_Input_MouseEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeave(System.Windows.Input.MouseEventArgs)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeave.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeave_System_Windows_Input_MouseEventArgs_">OnMouseLeave(MouseEventArgs)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when an unhandled <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.input.mouse.mouseleave#system-windows-input-mouse-mouseleave">MouseLeave</a> attached event is raised on this element. Implement this method to add class handling for this event.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeftButtonDown_System_Windows_Input_MouseButtonEventArgs_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.OnMouseLeftButtonDown.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_OnMouseLeftButtonDown_System_Windows_Input_MouseButtonEventArgs_">OnMouseLeftButtonDown(MouseButtonEventArgs)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when an unhandled <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.uielement.mouseleftbuttondown">MouseLeftButtonDown</a> routed event is raised on this element. Implement this method to add class handling for this event.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepBack_System_Int32_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepBack(System.Int32)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepBack.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepBack_System_Int32_">StepBack(int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Moves the slider position back by the specified number of time steps.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepForward_System_Int32_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepForward(System.Int32)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.StepForward.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_StepForward_System_Int32_">StepForward(int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Moves the slider position forward by the specified number of time steps.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider_CurrentExtentChanged" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentChanged">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.CurrentExtentChanged.html">CurrentExtentChanged</a>
+        </td>
+        <td class="markdown level1 summary"><p>Occurs when the selected time extent has changed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_TimeSlider.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/TimeSlider/TimeSlider.Windows.cs/#L35" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
