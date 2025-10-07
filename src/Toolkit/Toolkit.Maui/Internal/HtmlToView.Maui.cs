@@ -173,14 +173,11 @@ internal static class HtmlToView
 #endif
                 // Find the first valid <source> child, or use the node's Content
                 string? mediaSrc = node.Content;
-                string? mediaType = null;
                 foreach (var child in node.Children)
                 {
                     if (child.Type is MarkupType.Source && !string.IsNullOrEmpty(child.Content))
                     {
                         mediaSrc = child.Content;
-                        var attr = HtmlUtility.ParseAttributes(child.Token?.Attributes);
-                        attr.TryGetValue("type", out mediaType);
                         break;
                     }
                 }
