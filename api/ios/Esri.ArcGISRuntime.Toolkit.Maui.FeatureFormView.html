@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class FeatureFormView </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class FeatureFormView ">
+    
+    <meta name="description" content="A visual feature editor form controlled by a  definition.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView" class="text-break">Class FeatureFormView</h1>
+  <div class="markdown level0 summary"><p>A visual feature editor form controlled by a <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm">FeatureForm</a> definition.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.bindableobject">BindableObject</a></div>
+    <div class="level2"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.element">Element</a></div>
+    <div class="level3"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.styleableelement">StyleableElement</a></div>
+    <div class="level4"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.navigableelement">NavigableElement</a></div>
+    <div class="level5"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.visualelement">VisualElement</a></div>
+    <div class="level6"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.view">View</a></div>
+    <div class="level7"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.compatibility.layout">Layout</a></div>
+    <div class="level8"><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.templatedview">TemplatedView</a></div>
+    <div class="level9"><span class="xref">FeatureFormView</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanged">INotifyPropertyChanged</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ieffectcontrolprovider">IEffectControlProvider</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.itooltipelement">IToolTipElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icontextflyoutelement">IContextFlyoutElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ianimatable">IAnimatable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.iviewcontroller">IViewController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ivisualelementcontroller">IVisualElementController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ielementcontroller">IElementController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.internals.igesturecontroller">IGestureController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.igesturerecognizers">IGestureRecognizers</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ipropertymapperview">IPropertyMapperView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.hotreload.ihotreloadableview">IHotReloadableView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ireplaceableview">IReplaceableView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ilayout">ILayout</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ilayoutcontroller">ILayoutController</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ivisualtreeelement">IVisualTreeElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icontentview">IContentView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.iview">IView</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ielement">IElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.itransform">ITransform</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.ipadding">IPadding</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.icrossplatformlayout">ICrossPlatformLayout</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.html">Maui</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.Maui.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public class FeatureFormView : TemplatedView, INotifyPropertyChanged, IEffectControlProvider, IToolTipElement, IContextFlyoutElement, IAnimatable, IViewController, IVisualElementController, IElementController, IGestureController, IGestureRecognizers, IPropertyMapperView, IHotReloadableView, IReplaceableView, ILayout, ILayoutController, IVisualTreeElement, IContentView, IView, IElement, ITransform, IPadding, ICrossPlatformLayout</code></pre>
+  </div>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>To use the camera to capture images for attachments, the corerct permissions must be set on your application.</p>
+<p>
+  <b>Android:</b>
+  <br>Add the following to Android's AndroidManifest.xml:</p>
+<pre><code class="lang-csharp">&lt;uses-permission android:name="android.permission.CAMERA" /&gt;
+&lt;queries&gt;
+    &lt;intent&gt;
+        &lt;action android:name="android.media.action.IMAGE_CAPTURE" /&gt;
+    &lt;/intent&gt;
+&lt;/queries&gt;</code></pre>
+<p>
+  <b>iOS:</b>
+  <br>Add the following to iOS's Info.plist:</p>
+<pre><code class="lang-csharp">&lt;key&gt;NSCameraUsageDescription&lt;/key&gt;
+&lt;string&gt;Adding attachments&lt;/string&gt;</code></pre>
+<p>If these settings are not added, only file browsing will be enabled.</p>
+</div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.#ctor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.-ctor.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView__ctor">FeatureFormView()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.html">FeatureFormView</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ErrorsVisibilityProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ErrorsVisibilityProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ErrorsVisibilityProperty.html">ErrorsVisibilityProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ErrorsVisibility.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ErrorsVisibility">ErrorsVisibility</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureFormProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureFormProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureFormProperty.html">FeatureFormProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm">FeatureForm</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsNavigationEnabledProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsNavigationEnabledProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsNavigationEnabledProperty.html">IsNavigationEnabledProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsNavigationEnabled.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsNavigationEnabled">IsNavigationEnabled</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ItemsViewName" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ItemsViewName">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ItemsViewName.html">ItemsViewName</a>
+        </td>
+        <td class="markdown level1 summary"><p>Template name of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.controls.ibindablelayout">IBindableLayout</a> items layout view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibilityProperty" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibilityProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibilityProperty.html">VerticalScrollBarVisibilityProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibility.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibility">VerticalScrollBarVisibility</a> dependency property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_CurrentFeatureForm" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.CurrentFeatureForm">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.CurrentFeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_CurrentFeatureForm">CurrentFeatureForm</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the currently active feature form being edited</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_DiscardEditsCommand" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.DiscardEditsCommand">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.DiscardEditsCommand.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_DiscardEditsCommand">DiscardEditsCommand</a>
+        </td>
+        <td class="markdown level1 summary"><p>Discards any pending edits to the currently active Feature Form, if any edits have been made</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ErrorsVisibility" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ErrorsVisibility">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ErrorsVisibility.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ErrorsVisibility">ErrorsVisibility</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets when validation errors should be shown in the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.html">FeatureFormView</a>..</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm">FeatureForm</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the associated FeatureForm which contains the form.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingCommand" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingCommand">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingCommand.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingCommand">FinishEditingCommand</a>
+        </td>
+        <td class="markdown level1 summary"><p>Command for calling <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingAsync.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingAsync_System_Boolean_">FinishEditingAsync(bool)</a> and applying edits to the currently active Feature Form if all fields are valid.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsNavigationEnabled" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsNavigationEnabled">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsNavigationEnabled.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsNavigationEnabled">IsNavigationEnabled</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether to allow navigating to a different feature</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsValid" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsValid">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.IsValid.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_IsValid">IsValid</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.CurrentFeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_CurrentFeatureForm">CurrentFeatureForm</a> has any validation errors.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibility" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibility">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.VerticalScrollBarVisibility.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_VerticalScrollBarVisibility">VerticalScrollBarVisibility</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the vertical scrollbar visibility of the scrollviewer below the title.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_DiscardEditsAsync" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.DiscardEditsAsync">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.DiscardEditsAsync.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_DiscardEditsAsync">DiscardEditsAsync()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Discards edits to all elements, refreshes any pending expressions and restores attachment list for the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.CurrentFeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_CurrentFeatureForm">CurrentFeatureForm</a> .</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingAsync" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingAsync">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingAsync.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingAsync">FinishEditingAsync()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Saves edits made using the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm">FeatureForm</a> to the database for the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.CurrentFeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_CurrentFeatureForm">CurrentFeatureForm</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingAsync_System_Boolean_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingAsync(System.Boolean)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FinishEditingAsync.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FinishEditingAsync_System_Boolean_">FinishEditingAsync(bool)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Saves edits made using the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FeatureForm">FeatureForm</a> to the database for the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.CurrentFeatureForm.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_CurrentFeatureForm">CurrentFeatureForm</a> if there are not errors,
+otherwise scroll to the first error if <code class="paramref">requireAllErrorsResolved</code> is <code>true</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.OnApplyTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.OnApplyTemplate.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_OnApplyTemplate">OnApplyTemplate()</a>
+        </td>
+        <td class="markdown level1 summary"></td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ScrollTo_Esri_ArcGISRuntime_Mapping_FeatureForms_FormElement_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ScrollTo(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ScrollTo.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ScrollTo_Esri_ArcGISRuntime_Mapping_FeatureForms_FormElement_">ScrollTo(FormElement)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Scrolls to the specified form element</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ScrollToFirstError" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ScrollToFirstError">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.ScrollToFirstError.html#Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_ScrollToFirstError">ScrollToFirstError()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Scrolls to the first element with a visible validation error</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_BarcodeButtonClicked" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.BarcodeButtonClicked">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.BarcodeButtonClicked.html">BarcodeButtonClicked</a>
+        </td>
+        <td class="markdown level1 summary"><p>Raised when the Barcode Icon in a barcode element is clicked.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView_FormAttachmentClicked" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FormAttachmentClicked">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView.FormAttachmentClicked.html">FormAttachmentClicked</a>
+        </td>
+        <td class="markdown level1 summary"><p>Raised when a feature form attachment is clicked</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><span><a href="https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/device-media/picker?#get-started">MAUI: Media picker for photos and videos</a></span></div>
+      <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Data.ArcGISFeatureTable.FeatureFormDefinition.html#Esri_ArcGISRuntime_Data_ArcGISFeatureTable_FeatureFormDefinition">FeatureFormDefinition</a></div>
+      <div><a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition.html#Esri_ArcGISRuntime_Mapping_FeatureLayer_FeatureFormDefinition">FeatureFormDefinition</a></div>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_FeatureFormView.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/UI/Controls/FeatureForm/FeatureFormView.Maui.cs/#L48" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

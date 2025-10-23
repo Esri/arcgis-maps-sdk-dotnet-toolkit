@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class FloorFilter </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class FloorFilter ">
+    
+    <meta name="description" content="FloorFilter provides a browsing experience for floor-aware maps and scenes, and allows you to filter the view to show a single floor/level.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter" class="text-break">Class FloorFilter</h1>
+  <div class="markdown level0 summary"><p>FloorFilter provides a browsing experience for floor-aware maps and scenes, and allows you to filter the view to show a single floor/level.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.dependencyobject">DependencyObject</a></div>
+    <div class="level2"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.uielement">UIElement</a></div>
+    <div class="level3"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.frameworkelement">FrameworkElement</a></div>
+    <div class="level4"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.control">Control</a></div>
+    <div class="level5"><span class="xref">FloorFilter</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.dependencyobject">DependencyObject</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ianimationobject">IAnimationObject</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ivisualelement">IVisualElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ivisualelement2">IVisualElement2</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.uielement">UIElement</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.frameworkelement">FrameworkElement</a>&gt;</div>
+    <div><span class="xref">IWinRTObject</span></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.runtime.interopservices.marshalling.iunmanagedvirtualmethodtableprovider">IUnmanagedVirtualMethodTableProvider</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.runtime.interopservices.idynamicinterfacecastable">IDynamicInterfaceCastable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.control">Control</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanged">INotifyPropertyChanged</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.html">UI</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WinUI.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">[TemplatePart(Name = &quot;PART_AutoVisibilityWrapper&quot;, Type = typeof(UIElement))]
+[TemplatePart(Name = &quot;PART_SiteListView&quot;, Type = typeof(ListView))]
+[TemplatePart(Name = &quot;PART_FacilitiesListView&quot;, Type = typeof(ListView))]
+[TemplatePart(Name = &quot;PART_AllFacilitiesListView&quot;, Type = typeof(ListView))]
+[TemplatePart(Name = &quot;PART_FacilitiesNoSitesListView&quot;, Type = typeof(ListView))]
+[TemplatePart(Name = &quot;PART_ZoomButton&quot;, Type = typeof(Button))]
+[TemplatePart(Name = &quot;PART_CloseBrowseButton&quot;, Type = typeof(Button))]
+[TemplatePart(Name = &quot;PART_BackButton&quot;, Type = typeof(Button))]
+[TemplatePart(Name = &quot;PART_AllButton&quot;, Type = typeof(Button))]
+[WinRTRuntimeClassName(&quot;Microsoft.UI.Xaml.IUIElementOverrides&quot;)]
+[WinRTExposedType(typeof(Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilterWinRTTypeDetails))]
+public class FloorFilter : Control, IEquatable&lt;DependencyObject&gt;, IAnimationObject, IVisualElement, IVisualElement2, IEquatable&lt;UIElement&gt;, IEquatable&lt;FrameworkElement&gt;, IWinRTObject, IUnmanagedVirtualMethodTableProvider, IDynamicInterfaceCastable, IEquatable&lt;Control&gt;, INotifyPropertyChanged</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.#ctor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.-ctor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter__ctor">FloorFilter()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.html">FloorFilter</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFacilitiesLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilitiesLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilitiesLabelProperty.html">AllFacilitiesLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilitiesLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFacilitiesLabel">AllFacilitiesLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFacilitiesProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilitiesProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilitiesProperty.html">AllFacilitiesProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identiies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilities.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFacilities">AllFacilities</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFloorsLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFloorsLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFloorsLabelProperty.html">AllFloorsLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFloorsLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFloorsLabel">AllFloorsLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllSitesProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllSitesProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllSitesProperty.html">AllSitesProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllSites.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllSites">AllSites</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AutomaticSelectionModeProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AutomaticSelectionModeProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AutomaticSelectionModeProperty.html">AutomaticSelectionModeProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AutomaticSelectionMode.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AutomaticSelectionMode">AutomaticSelectionMode</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BackButtonLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BackButtonLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BackButtonLabelProperty.html">BackButtonLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BackButtonLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BackButtonLabel">BackButtonLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseButtonStyleProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseButtonStyleProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseButtonStyleProperty.html">BrowseButtonStyleProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseButtonStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseButtonStyle">BrowseButtonStyle</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseFacilitiesLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseFacilitiesLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseFacilitiesLabelProperty.html">BrowseFacilitiesLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseFacilitiesLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseFacilitiesLabel">BrowseFacilitiesLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseLabelProperty.html">BrowseLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseLabel">BrowseLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseSitesLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseSitesLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseSitesLabelProperty.html">BrowseSitesLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseSitesLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseSitesLabel">BrowseSitesLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CloseLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CloseLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CloseLabelProperty.html">CloseLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CloseLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CloseLabel">CloseLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CollapseLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CollapseLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CollapseLabelProperty.html">CollapseLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CollapseLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CollapseLabel">CollapseLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CommonListStyleProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CommonListStyleProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CommonListStyleProperty.html">CommonListStyleProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CommonListStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CommonListStyle">CommonListStyle</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_DifferentiatingFacilityDataTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DifferentiatingFacilityDataTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DifferentiatingFacilityDataTemplateProperty.html">DifferentiatingFacilityDataTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DifferentiatingFacilityDataTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_DifferentiatingFacilityDataTemplate">DifferentiatingFacilityDataTemplate</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_DisplayLevelsProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DisplayLevelsProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DisplayLevelsProperty.html">DisplayLevelsProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DisplayLevels.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_DisplayLevels">DisplayLevels</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ExpandCollapseButtonStyleProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandCollapseButtonStyleProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandCollapseButtonStyleProperty.html">ExpandCollapseButtonStyleProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandCollapseButtonStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ExpandCollapseButtonStyle">ExpandCollapseButtonStyle</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ExpandLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandLabelProperty.html">ExpandLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ExpandLabel">ExpandLabel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_FacilityDataTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.FacilityDataTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.FacilityDataTemplateProperty.html">FacilityDataTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.FacilityDataTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_FacilityDataTemplate">FacilityDataTemplate</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GeoViewProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GeoViewProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GeoViewProperty.html">GeoViewProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GeoView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GeoView">GeoView</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_IsBrowseOpenProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.IsBrowseOpenProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.IsBrowseOpenProperty.html">IsBrowseOpenProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.IsBrowseOpen.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_IsBrowseOpen">IsBrowseOpen</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_IsExpandedProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.IsExpandedProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.IsExpandedProperty.html">IsExpandedProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the &quot;IsExpanded&quot; attached property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_LevelDataTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.LevelDataTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.LevelDataTemplateProperty.html">LevelDataTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.LevelDataTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_LevelDataTemplate">LevelDataTemplate</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_NoResultsMessageProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.NoResultsMessageProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.NoResultsMessageProperty.html">NoResultsMessageProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.NoResultsMessage.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_NoResultsMessage">NoResultsMessage</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SearchPlaceholderProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SearchPlaceholderProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SearchPlaceholderProperty.html">SearchPlaceholderProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SearchPlaceholder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SearchPlaceholder">SearchPlaceholder</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedFacilityProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedFacilityProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedFacilityProperty.html">SelectedFacilityProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedFacility.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedFacility">SelectedFacility</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedLevelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedLevelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedLevelProperty.html">SelectedLevelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedLevel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedLevel">SelectedLevel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedSiteProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedSiteProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedSiteProperty.html">SelectedSiteProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedSite.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedSite">SelectedSite</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SiteDataTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SiteDataTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SiteDataTemplateProperty.html">SiteDataTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SiteDataTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SiteDataTemplate">SiteDataTemplate</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ZoomToButtonStyleProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToButtonStyleProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToButtonStyleProperty.html">ZoomToButtonStyleProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToButtonStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ZoomToButtonStyle">ZoomToButtonStyle</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ZoomToLabelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToLabelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToLabelProperty.html">ZoomToLabelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ZoomToLabel">ZoomToLabel</a> dependency property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllDisplayLevelsSelected" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllDisplayLevelsSelected">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllDisplayLevelsSelected.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllDisplayLevelsSelected">AllDisplayLevelsSelected</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether all of the levels for the selected facility should be enabled for display.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFacilities" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilities">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilities.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFacilities">AllFacilities</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the list of available facilities across all sites.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFacilitiesLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilitiesLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFacilitiesLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFacilitiesLabel">AllFacilitiesLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip shown for the button that is used to navigate to the list of sites in all facilities when the site browsing view is open.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFloorsLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFloorsLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllFloorsLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllFloorsLabel">AllFloorsLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip shown for the button that shows all levels for a selected facility.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllSites" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllSites">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AllSites.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AllSites">AllSites</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the list of available sites.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AutomaticSelectionMode" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AutomaticSelectionMode">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.AutomaticSelectionMode.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_AutomaticSelectionMode">AutomaticSelectionMode</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the value that defines how the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedFacility.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedFacility">SelectedFacility</a> is updated as the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GeoView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GeoView">GeoView</a>'s viewpoint changes.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BackButtonLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BackButtonLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BackButtonLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BackButtonLabel">BackButtonLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip text shown on the back button used to navigate from the facilities to the site list when the browsing view is open.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseButtonStyle" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseButtonStyle">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseButtonStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseButtonStyle">BrowseButtonStyle</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the style applied to the &quot;Browse&quot; button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseFacilitiesLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseFacilitiesLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseFacilitiesLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseFacilitiesLabel">BrowseFacilitiesLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label shown on the browsing view header for facilities.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseLabel">BrowseLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip shown on the button that opens the browsing view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseSitesLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseSitesLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseSitesLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseSitesLabel">BrowseSitesLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip shown on the browsing view header for sites.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CloseLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CloseLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CloseLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CloseLabel">CloseLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip shown for the button that is used to close the browsing view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CollapseLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CollapseLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CollapseLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CollapseLabel">CollapseLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip shown on the expand/collapse button when the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.html">FloorFilter</a> is expanded.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CommonListStyle" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CommonListStyle">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.CommonListStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_CommonListStyle">CommonListStyle</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the style applied to list views.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_DifferentiatingFacilityDataTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DifferentiatingFacilityDataTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DifferentiatingFacilityDataTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_DifferentiatingFacilityDataTemplate">DifferentiatingFacilityDataTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the data template used to present <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Mapping.Floor.FloorFacility.html">FloorFacility</a> items in the browsing view when facilities are being shown from multiple sites.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_DisplayLevels" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DisplayLevels">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.DisplayLevels.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_DisplayLevels">DisplayLevels</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the list of available levels in the currently selected facility.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ExpandCollapseButtonStyle" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandCollapseButtonStyle">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandCollapseButtonStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ExpandCollapseButtonStyle">ExpandCollapseButtonStyle</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the style applied to the &quot;Expand&quot;/&quot;Collapse&quot; button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ExpandLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ExpandLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ExpandLabel">ExpandLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip shown on the expand/collapse button when the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.html">FloorFilter</a> is collapsed.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_FacilityDataTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.FacilityDataTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.FacilityDataTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_FacilityDataTemplate">FacilityDataTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the template used to present <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Mapping.Floor.FloorFacility.html">FloorFacility</a> items for a single site, or when there are no sites.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GeoView" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GeoView">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GeoView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GeoView">GeoView</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the GeoView associated with this view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_IsBrowseOpen" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.IsBrowseOpen">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.IsBrowseOpen.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_IsBrowseOpen">IsBrowseOpen</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the browsing view is open.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_LevelDataTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.LevelDataTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.LevelDataTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_LevelDataTemplate">LevelDataTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the template used to present <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Mapping.Floor.FloorLevel.html">FloorLevel</a> items.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_NoResultsMessage" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.NoResultsMessage">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.NoResultsMessage.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_NoResultsMessage">NoResultsMessage</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the message shown to the user when a list or filtered list is empty.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SearchPlaceholder" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SearchPlaceholder">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SearchPlaceholder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SearchPlaceholder">SearchPlaceholder</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the text shown as a placeholder in search/filter boxes in the browsing view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedBrowseTab" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedBrowseTab">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedBrowseTab.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedBrowseTab">SelectedBrowseTab</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the tab in the browsing experience that should be active.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedFacility" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedFacility">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedFacility.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedFacility">SelectedFacility</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the selected facility.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedLevel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedLevel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedLevel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedLevel">SelectedLevel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the selected level.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedSite" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedSite">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedSite.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedSite">SelectedSite</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the currently selected site.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ShowAllFloorsButton" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ShowAllFloorsButton">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ShowAllFloorsButton.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ShowAllFloorsButton">ShowAllFloorsButton</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether the floor filter should display an 'All Floors' button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ShowFacilityBrowseLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ShowFacilityBrowseLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ShowFacilityBrowseLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ShowFacilityBrowseLabel">ShowFacilityBrowseLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether the browse view should show <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseFacilitiesLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseFacilitiesLabel">BrowseFacilitiesLabel</a> rather than <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.BrowseSitesLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_BrowseSitesLabel">BrowseSitesLabel</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ShowSiteNameSubtitle" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ShowSiteNameSubtitle">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ShowSiteNameSubtitle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ShowSiteNameSubtitle">ShowSiteNameSubtitle</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether the selected site's name should be displayed in the browse experience.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SiteDataTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SiteDataTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SiteDataTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SiteDataTemplate">SiteDataTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the data template used to present <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Mapping.Floor.FloorSite.html">FloorSite</a> items in the browsing view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ZoomToButtonStyle" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToButtonStyle">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToButtonStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ZoomToButtonStyle">ZoomToButtonStyle</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the style that is applied to the &quot;Zoom To&quot; button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ZoomToLabel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToLabel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.ZoomToLabel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_ZoomToLabel">ZoomToLabel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the label or tooltip shown on the button that zooms to the currently selected site or facility.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GetIsExpanded_Microsoft_UI_Xaml_DependencyObject_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GetIsExpanded(Microsoft.UI.Xaml.DependencyObject)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GetIsExpanded.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GetIsExpanded_Microsoft_UI_Xaml_DependencyObject_">GetIsExpanded(DependencyObject)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether the given dependency object is in an expanded state.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GetIsExpanded_System_Windows_DependencyObject_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GetIsExpanded(System.Windows.DependencyObject)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.GetIsExpanded.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_GetIsExpanded_System_Windows_DependencyObject_">GetIsExpanded(DependencyObject)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether the given dependency object is in an expanded state.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.OnApplyTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.OnApplyTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_OnApplyTemplate">OnApplyTemplate()</a>
+        </td>
+        <td class="markdown level1 summary"><p>When overridden in a derived class, is invoked whenever application code or internal processes call <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.frameworkelement.applytemplate">ApplyTemplate()</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetIsExpanded_Microsoft_UI_Xaml_DependencyObject_System_Boolean_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetIsExpanded(Microsoft.UI.Xaml.DependencyObject,System.Boolean)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetIsExpanded.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetIsExpanded_Microsoft_UI_Xaml_DependencyObject_System_Boolean_">SetIsExpanded(DependencyObject, bool)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Sets a value indicating whether the given dependency object is in an expanded state.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetIsExpanded_System_Windows_DependencyObject_System_Boolean_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetIsExpanded(System.Windows.DependencyObject,System.Boolean)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetIsExpanded.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetIsExpanded_System_Windows_DependencyObject_System_Boolean_">SetIsExpanded(DependencyObject, bool)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Sets a value indicating whether the given dependency object is in an expanded state.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetSelectedFacilityWithoutZoom_Esri_ArcGISRuntime_Mapping_Floor_FloorFacility_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetSelectedFacilityWithoutZoom(Esri.ArcGISRuntime.Mapping.Floor.FloorFacility)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetSelectedFacilityWithoutZoom.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetSelectedFacilityWithoutZoom_Esri_ArcGISRuntime_Mapping_Floor_FloorFacility_">SetSelectedFacilityWithoutZoom(FloorFacility)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Sets the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedFacility.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedFacility">SelectedFacility</a> without triggering a GeoView navigation.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetSelectedLevelWithoutZoom_Esri_ArcGISRuntime_Mapping_Floor_FloorLevel_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetSelectedLevelWithoutZoom(Esri.ArcGISRuntime.Mapping.Floor.FloorLevel)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetSelectedLevelWithoutZoom.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetSelectedLevelWithoutZoom_Esri_ArcGISRuntime_Mapping_Floor_FloorLevel_">SetSelectedLevelWithoutZoom(FloorLevel)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Sets the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedLevel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedLevel">SelectedLevel</a> without triggering a GeoView navigation.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetSelectedSiteWithoutZoom_Esri_ArcGISRuntime_Mapping_Floor_FloorSite_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetSelectedSiteWithoutZoom(Esri.ArcGISRuntime.Mapping.Floor.FloorSite)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SetSelectedSiteWithoutZoom.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SetSelectedSiteWithoutZoom_Esri_ArcGISRuntime_Mapping_Floor_FloorSite_">SetSelectedSiteWithoutZoom(FloorSite)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Sets the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.SelectedSite.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_SelectedSite">SelectedSite</a> without triggering a GeoView navigation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_FloorFilter_PropertyChanged" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.PropertyChanged">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.PropertyChanged.html">PropertyChanged</a>
+        </td>
+        <td class="markdown level1 summary"><p>Occurs when a property value changes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

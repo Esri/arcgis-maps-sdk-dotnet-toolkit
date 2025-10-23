@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class BasemapGallery </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class BasemapGallery ">
+    
+    <meta name="description" content="Displays a collection of images representing basemaps from ArcGIS Online, a user-defined Portal, or a user-defined collection.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery" class="text-break">Class BasemapGallery</h1>
+  <div class="markdown level0 summary"><p>Displays a collection of images representing basemaps from ArcGIS Online, a user-defined Portal, or a user-defined collection.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.threading.dispatcherobject">DispatcherObject</a></div>
+    <div class="level2"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.dependencyobject">DependencyObject</a></div>
+    <div class="level3"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.media.visual">Visual</a></div>
+    <div class="level4"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.uielement">UIElement</a></div>
+    <div class="level5"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.frameworkelement">FrameworkElement</a></div>
+    <div class="level6"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.controls.control">Control</a></div>
+    <div class="level7"><span class="xref">BasemapGallery</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.media.animation.ianimatable">IAnimatable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.iframeworkinputelement">IFrameworkInputElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.iinputelement">IInputElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.isupportinitialize">ISupportInitialize</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.markup.iqueryambient">IQueryAmbient</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.html">UI</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WPF.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">[TemplatePart(Name = &quot;PART_InnerListView&quot;, Type = typeof(ListView))]
+[TemplatePart(Name = &quot;PART_LoadingScrim&quot;, Type = typeof(UIElement))]
+public class BasemapGallery : Control, IAnimatable, IFrameworkInputElement, IInputElement, ISupportInitialize, IQueryAmbient</code></pre>
+  </div>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>If connected to a GeoView, changing the basemap selection will change the connected Map or Scene's basemap.
+Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.</p>
+</div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.#ctor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.-ctor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery__ctor">BasemapGallery()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.html">BasemapGallery</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_AvailableBasemapsProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.AvailableBasemapsProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.AvailableBasemapsProperty.html">AvailableBasemapsProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.AvailableBasemaps.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_AvailableBasemaps">AvailableBasemaps</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GalleryViewStyleProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GalleryViewStyleProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GalleryViewStyleProperty.html">GalleryViewStyleProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GalleryViewStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GalleryViewStyle">GalleryViewStyle</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GeoModelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GeoModelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GeoModelProperty.html">GeoModelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GeoModel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GeoModel">GeoModel</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GridItemContainerStyleProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemContainerStyleProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemContainerStyleProperty.html">GridItemContainerStyleProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemContainerStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GridItemContainerStyle">GridItemContainerStyle</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GridItemTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemTemplateProperty.html">GridItemTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GridItemTemplate">GridItemTemplate</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_ListItemContainerStyleProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemContainerStyleProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemContainerStyleProperty.html">ListItemContainerStyleProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemContainerStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_ListItemContainerStyle">ListItemContainerStyle</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_ListItemTemplateProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemTemplateProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemTemplateProperty.html">ListItemTemplateProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_ListItemTemplate">ListItemTemplate</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_PortalProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.PortalProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.PortalProperty.html">PortalProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.Portal.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_Portal">Portal</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_SelectedBasemapProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.SelectedBasemapProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.SelectedBasemapProperty.html">SelectedBasemapProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.SelectedBasemap.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_SelectedBasemap">SelectedBasemap</a> dependency property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_AvailableBasemaps" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.AvailableBasemaps">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.AvailableBasemaps.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_AvailableBasemaps">AvailableBasemaps</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the gallery of basemaps to show.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GalleryViewStyle" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GalleryViewStyle">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GalleryViewStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GalleryViewStyle">GalleryViewStyle</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the view style for the gallery.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GeoModel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GeoModel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GeoModel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GeoModel">GeoModel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the connected GeoModel.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GridItemContainerStyle" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemContainerStyle">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemContainerStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GridItemContainerStyle">GridItemContainerStyle</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the style used for the container used to display items when showing basemaps in a grid.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GridItemTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.GridItemTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_GridItemTemplate">GridItemTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the data template used to show basemaps in a grid.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_ListItemContainerStyle" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemContainerStyle">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemContainerStyle.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_ListItemContainerStyle">ListItemContainerStyle</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the style used for the container used to display items when showing basemaps in a list.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_ListItemTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.ListItemTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_ListItemTemplate">ListItemTemplate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the data template used to show basemaps in a list.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_Portal" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.Portal">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.Portal.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_Portal">Portal</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the portal to use for displaying basemaps.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_SelectedBasemap" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.SelectedBasemap">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.SelectedBasemap.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_SelectedBasemap">SelectedBasemap</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the selected basemap.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.OnApplyTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.OnApplyTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_OnApplyTemplate">OnApplyTemplate()</a>
+        </td>
+        <td class="markdown level1 summary"><p>When overridden in a derived class, is invoked whenever application code or internal processes call <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.frameworkelement.applytemplate">ApplyTemplate()</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery_BasemapSelected" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.BasemapSelected">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.BasemapSelected.html">BasemapSelected</a>
+        </td>
+        <td class="markdown level1 summary"><p>Event raised when a basemap is selected.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_UI_Controls_BasemapGallery.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit.UI.Controls/BasemapGallery/BasemapGallery.Windows.cs/#L34" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

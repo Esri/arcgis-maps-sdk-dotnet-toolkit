@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class SearchViewModel </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class SearchViewModel ">
+    
+    <meta name="description" content="Backing controller for a search experience, intended for use with SearchView. SearchView supports searching, with search-as-you-type for multiple search providers via .">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel" class="text-break">Class SearchViewModel</h1>
+  <div class="markdown level0 summary"><p>Backing controller for a search experience, intended for use with SearchView.
+SearchView supports searching, with search-as-you-type for multiple search providers via <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.html">ISearchSource</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">SearchViewModel</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanged">INotifyPropertyChanged</a></div>
+    <div><span class="xref">IBindableCustomPropertyImplementation</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.html">UI</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WinUI.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">[GeneratedBindableCustomProperty]
+[WinRTRuntimeClassName(&quot;Microsoft.UI.Xaml.Data.INotifyPropertyChanged&quot;)]
+[WinRTExposedType(typeof(Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewTemplateSettingsWinRTTypeDetails))]
+public class SearchViewModel : INotifyPropertyChanged, IBindableCustomPropertyImplementation</code></pre>
+  </div>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ActivePlaceholder" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ActivePlaceholder">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ActivePlaceholder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ActivePlaceholder">ActivePlaceholder</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the correct placeholder to display in the UI.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ActiveSource" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ActiveSource">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ActiveSource.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ActiveSource">ActiveSource</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the active search source, if one is selected. If there is no selection, all sources will be used for the search.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_CurrentQuery" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.CurrentQuery">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.CurrentQuery.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_CurrentQuery">CurrentQuery</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the current query.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_DefaultPlaceholder" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.DefaultPlaceholder">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.DefaultPlaceholder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_DefaultPlaceholder">DefaultPlaceholder</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the default placeholder to use when there is no <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ActiveSource.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ActiveSource">ActiveSource</a> or the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ActiveSource.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ActiveSource">ActiveSource</a> does not have a placeholder defined.
+Consumers should always display the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ActivePlaceholder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ActivePlaceholder">ActivePlaceholder</a> in the UI, rather than accessing this property directly.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IgnoreAreaChangesFlag" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IgnoreAreaChangesFlag">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IgnoreAreaChangesFlag.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IgnoreAreaChangesFlag">IgnoreAreaChangesFlag</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether changes to the query area should be ignored. This is used to prevent <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsEligibleForRequery.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsEligibleForRequery">IsEligibleForRequery</a> becoming true because the view zoomed to a result.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsEligibleForRequery" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsEligibleForRequery">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsEligibleForRequery.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsEligibleForRequery">IsEligibleForRequery</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether spatial parameters have changed enough to justify displaying a 'Repeat Search Here' button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsSearchInProgress" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsSearchInProgress">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsSearchInProgress.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsSearchInProgress">IsSearchInProgress</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether a search operation is in progress.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsSuggestInProgress" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsSuggestInProgress">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsSuggestInProgress.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsSuggestInProgress">IsSuggestInProgress</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether a suggestion request is in progress.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsWaiting" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsWaiting">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsWaiting.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsWaiting">IsWaiting</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether a waiting operation (search, suggestion) is in progress.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_QueryArea" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.QueryArea">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.QueryArea.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_QueryArea">QueryArea</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the query area to use when searching and getting suggestions.
+When used in conjunction with a GeoView, this property should be set every time navigation completes,
+to enable automatic update of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.IsEligibleForRequery.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_IsEligibleForRequery">IsEligibleForRequery</a> property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_QueryCenter" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.QueryCenter">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.QueryCenter.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_QueryCenter">QueryCenter</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the center point around which results should be returned.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_Results" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.Results">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.Results.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_Results">Results</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the list of search results for the most-recently completed query.
+Clearing a search via <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ClearSearch.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ClearSearch">ClearSearch()</a> will set this collection to <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_SearchMode" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.SearchMode">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.SearchMode.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_SearchMode">SearchMode</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the search mode, which defaults to <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchResultMode_Automatic">Automatic</a>.
+This mode controls how many results are displayed when a search is performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_SelectedResult" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.SelectedResult">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.SelectedResult.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_SelectedResult">SelectedResult</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the selected search result.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_Sources" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.Sources">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.Sources.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_Sources">Sources</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the list of available search sources, which can be updated dynamically.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_Suggestions" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.Suggestions">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.Suggestions.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_Suggestions">Suggestions</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the list of search suggestions. This value is set after calls to <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.UpdateSuggestions.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_UpdateSuggestions">UpdateSuggestions()</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_AcceptSuggestion_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchSuggestion_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.AcceptSuggestion(Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.AcceptSuggestion.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_AcceptSuggestion_Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchSuggestion_">AcceptSuggestion(SearchSuggestion)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initiates a search using a suggestion as the query.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_CancelSearch" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.CancelSearch">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.CancelSearch.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_CancelSearch">CancelSearch()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Cancels any active search task.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_CancelSuggestion" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.CancelSuggestion">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.CancelSuggestion.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_CancelSuggestion">CancelSuggestion()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Cancels any active suggest task.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ClearSearch" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ClearSearch">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ClearSearch.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ClearSearch">ClearSearch()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Cancels any active search/suggest tasks, then clears all results and the current query.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_CommitSearch" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.CommitSearch">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.CommitSearch.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_CommitSearch">CommitSearch()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Submits the current query as a fresh search.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ConfigureDefaultWorldGeocoder_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ConfigureDefaultWorldGeocoder(System.Threading.CancellationToken)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.ConfigureDefaultWorldGeocoder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_ConfigureDefaultWorldGeocoder_System_Threading_CancellationToken_">ConfigureDefaultWorldGeocoder(CancellationToken)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Configures the viewmodel with a search source optimized for use with the Esri World Geocoder service.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_RepeatSearchHere" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.RepeatSearchHere">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.RepeatSearchHere.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_RepeatSearchHere">RepeatSearchHere()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Repeats the current search, with results confined to the area defined by <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.QueryArea.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_QueryArea">QueryArea</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_UpdateSuggestions" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.UpdateSuggestions">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.UpdateSuggestions.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_UpdateSuggestions">UpdateSuggestions()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Updates <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.Suggestions.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_Suggestions">Suggestions</a> for the current query.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchViewModel_PropertyChanged" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.PropertyChanged">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.PropertyChanged.html">PropertyChanged</a>
+        </td>
+        <td class="markdown level1 summary"><p>Occurs when a property value changes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

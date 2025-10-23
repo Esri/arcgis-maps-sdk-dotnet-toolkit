@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class MeasureToolbar </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class MeasureToolbar ">
+    
+    <meta name="description" content="The MeasureToolbar control is used to measure distances and areas on a .">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar" class="text-break">Class MeasureToolbar</h1>
+  <div class="markdown level0 summary"><p>The MeasureToolbar control is used to measure distances and areas on a <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.MapView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_MapView">MapView</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.dependencyobject">DependencyObject</a></div>
+    <div class="level2"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.uielement">UIElement</a></div>
+    <div class="level3"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.frameworkelement">FrameworkElement</a></div>
+    <div class="level4"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.control">Control</a></div>
+    <div class="level5"><span class="xref">MeasureToolbar</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.dependencyobject">DependencyObject</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ianimationobject">IAnimationObject</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ivisualelement">IVisualElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ivisualelement2">IVisualElement2</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.uielement">UIElement</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.frameworkelement">FrameworkElement</a>&gt;</div>
+    <div><span class="xref">IWinRTObject</span></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.runtime.interopservices.marshalling.iunmanagedvirtualmethodtableprovider">IUnmanagedVirtualMethodTableProvider</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.runtime.interopservices.idynamicinterfacecastable">IDynamicInterfaceCastable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.control">Control</a>&gt;</div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.html">UI</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WinUI.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">[TemplatePart(Name = &quot;MeasureLength&quot;, Type = typeof(ToggleButton))]
+[TemplatePart(Name = &quot;MeasureArea&quot;, Type = typeof(ToggleButton))]
+[TemplatePart(Name = &quot;MeasureResult&quot;, Type = typeof(TextBlock))]
+[WinRTRuntimeClassName(&quot;Microsoft.UI.Xaml.IUIElementOverrides&quot;)]
+[WinRTExposedType(typeof(Esri_ArcGISRuntime_Toolkit_UI_Controls_LayerLegendWinRTTypeDetails))]
+public class MeasureToolbar : Control, IEquatable&lt;DependencyObject&gt;, IAnimationObject, IVisualElement, IVisualElement2, IEquatable&lt;UIElement&gt;, IEquatable&lt;FrameworkElement&gt;, IWinRTObject, IUnmanagedVirtualMethodTableProvider, IDynamicInterfaceCastable, IEquatable&lt;Control&gt;</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.#ctor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.-ctor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar__ctor">MeasureToolbar()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.html">MeasureToolbar</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_AreaSketchEditorProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaSketchEditorProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaSketchEditorProperty.html">AreaSketchEditorProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaSketchEditor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_AreaSketchEditor">AreaSketchEditor</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_AreaUnitsProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaUnitsProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaUnitsProperty.html">AreaUnitsProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaUnits.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_AreaUnits">AreaUnits</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_LineSketchEditorProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LineSketchEditorProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LineSketchEditorProperty.html">LineSketchEditorProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LineSketchEditor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_LineSketchEditor">LineSketchEditor</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_LinearUnitsProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LinearUnitsProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LinearUnitsProperty.html">LinearUnitsProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LinearUnits.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_LinearUnits">LinearUnits</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_MapViewProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.MapViewProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.MapViewProperty.html">MapViewProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.MapView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_MapView">MapView</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectedAreaUnitProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedAreaUnitProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedAreaUnitProperty.html">SelectedAreaUnitProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedAreaUnit.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectedAreaUnit">SelectedAreaUnit</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectedLinearUnitProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedLinearUnitProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedLinearUnitProperty.html">SelectedLinearUnitProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedLinearUnit.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectedLinearUnit">SelectedLinearUnit</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectionFillSymbolProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionFillSymbolProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionFillSymbolProperty.html">SelectionFillSymbolProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionFillSymbol.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectionFillSymbol">SelectionFillSymbol</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectionLineSymbolProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionLineSymbolProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionLineSymbolProperty.html">SelectionLineSymbolProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionLineSymbol.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectionLineSymbol">SelectionLineSymbol</a> dependency property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_AreaSketchEditor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaSketchEditor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaSketchEditor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_AreaSketchEditor">AreaSketchEditor</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the sketch editor used for measuring areas.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_AreaUnits" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaUnits">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.AreaUnits.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_AreaUnits">AreaUnits</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the collection of <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Geometry.AreaUnit.html">AreaUnit</a> used to configure display for area measurements.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_LineSketchEditor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LineSketchEditor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LineSketchEditor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_LineSketchEditor">LineSketchEditor</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the sketch editor used for measuring distances.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_LinearUnits" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LinearUnits">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.LinearUnits.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_LinearUnits">LinearUnits</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the collection of <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Geometry.LinearUnit.html">LinearUnit</a> used to configure display for distance measurements.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_MapView" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.MapView">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.MapView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_MapView">MapView</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the map view where measuring distances and areas will be done.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectedAreaUnit" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedAreaUnit">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedAreaUnit.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectedAreaUnit">SelectedAreaUnit</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the unit used to display for area measurements.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectedLinearUnit" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedLinearUnit">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectedLinearUnit.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectedLinearUnit">SelectedLinearUnit</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the unit used to display for distance measurements.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectionFillSymbol" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionFillSymbol">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionFillSymbol.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectionFillSymbol">SelectionFillSymbol</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the symbol used for highlighting the polygon feature or graphic whose geometry is measured for area.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectionLineSymbol" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionLineSymbol">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.SelectionLineSymbol.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_SelectionLineSymbol">SelectionLineSymbol</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the symbol used for highlighting the polyline feature or graphic whose geometry is measured for distance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.OnApplyTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.OnApplyTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_MeasureToolbar_OnApplyTemplate">OnApplyTemplate()</a>
+        </td>
+        <td class="markdown level1 summary"><p>When overridden in a derived class, is invoked whenever application code or internal processes call <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.windows.frameworkelement.applytemplate">ApplyTemplate()</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Method IdentifyLayersAsync </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Method IdentifyLayersAsync ">
+    
+    
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.IdentifyLayersAsync*">
+
+
+
+<h1 id="Esri_ArcGISRuntime_Toolkit_Maui_GeoViewController_IdentifyLayersAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.IdentifyLayersAsync*">Method IdentifyLayersAsync</h1>
+<div class="markdown level0 summary"></div>
+<div class="markdown level0 conceptual"></div>
+
+<span class="small pull-right mobile-hide">
+  <span class="divider">|</span>
+  <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_GeoViewController_IdentifyLayersAsync_Microsoft_Maui_Graphics_Point_System_Double_System_Boolean_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.IdentifyLayersAsync(Microsoft.Maui.Graphics.Point%2CSystem.Double%2CSystem.Boolean%2CSystem.Threading.CancellationToken)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Edit this page</a>
+</span>
+<span class="small pull-right mobile-hide">
+  <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/GeoViewController.cs/#L168">View Source</a>
+</span>
+<a id="Esri_ArcGISRuntime_Toolkit_Maui_GeoViewController_IdentifyLayersAsync_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.IdentifyLayersAsync*"></a>
+<h4 id="Esri_ArcGISRuntime_Toolkit_Maui_GeoViewController_IdentifyLayersAsync_Microsoft_Maui_Graphics_Point_System_Double_System_Boolean_System_Threading_CancellationToken_" data-uid="Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.IdentifyLayersAsync(Microsoft.Maui.Graphics.Point,System.Double,System.Boolean,System.Threading.CancellationToken)">IdentifyLayersAsync(Point, double, bool, CancellationToken)</h4>
+<div class="markdown level1 summary"><p>Initiates an identify operation on all layers in the view which will return the single visible topmost geoelement per layer only.</p>
+</div>
+<div class="markdown level1 conceptual"></div>
+<h5 class="declaration">Declaration</h5>
+<div class="codewrapper">
+  <pre><code class="lang-csharp hljs">public virtual Task&lt;IReadOnlyList&lt;IdentifyLayerResult&gt;&gt; IdentifyLayersAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default)</code></pre>
+</div>
+<h5 class="parameters">Parameters</h5>
+<table class="table table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.maui.graphics.point">Point</a></td>
+      <td><span class="parametername">screenPoint</span></td>
+      <td><p>The location on which to run identify in screen coordinates.</p>
+</td>
+    </tr>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+      <td><span class="parametername">tolerance</span></td>
+      <td><p>The width and height in screen coordinates of the square centered on screen coordinate that will be used in the identify.</p>
+</td>
+    </tr>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+      <td><span class="parametername">returnPopupsOnly</span></td>
+      <td><p><code>true</code> includes only popups in the identify results. <code>false</code> includes both geoelements and popups in the identify results.</p>
+</td>
+    </tr>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken">CancellationToken</a></td>
+      <td><span class="parametername">cancellationToken</span></td>
+      <td><p>A cancellation token that can be used by other objects or threads to receive notice of cancellation.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+<h5 class="returns">Returns</h5>
+<table class="table table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Data.IdentifyLayerResult.html">IdentifyLayerResult</a>&gt;&gt;</td>
+      <td><p>A task that represents the asynchronous identify operation on all layers in the view
+The value of the TResult parameter contains a read-only collection of <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Data.IdentifyLayerResult.html">IdentifyLayerResult</a> in top to bottom order.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+<h5 id="Esri_ArcGISRuntime_Toolkit_Maui_GeoViewController_IdentifyLayersAsync_Microsoft_Maui_Graphics_Point_System_Double_System_Boolean_System_Threading_CancellationToken__remarks">Remarks</h5>
+<div class="markdown level1 remarks"><p>
+        As locations from user gestures are not always accurate to the exact pixel, you can define a tolerance for
+        the identify operation. The tolerance parameter sets the radius of a circle, centered at the specified
+        coordinates, in device-independent pixels (DIP). If the tolerance value is 0, identify performs the test at
+        the specified coordinates. If it is greater than 0, identify tests inside the circle. For touch displays a
+        value of 22 is recommended to cover an average finger tap. The maximum allowed value is 100 DIPs.
+        </p>
+<p>
+        The result is returned in a collection of <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Data.IdentifyLayerResult.html">IdentifyLayerResult</a> to match the order of the <a class="xref" href="https://developers.arcgis.com/net/api-reference/aMaui/Esri.ArcGISRuntime.Maui.GeoView.html">GeoView</a>'s
+        <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Mapping.Map.html">Map</a> or <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Mapping.Scene.html">Scene</a> operationalLayers collection. If the <code class="paramref">returnPopupsOnly</code> parameter is <code>true</code>
+        only <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Data.IdentifyLayerResult.Popups.html#Esri_ArcGISRuntime_Data_IdentifyLayerResult_Popups">Popups</a> is populated. If the <code class="paramref">returnPopupsOnly</code> parameter is <code>false</code>, both <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Data.IdentifyLayerResult.GeoElements.html#Esri_ArcGISRuntime_Data_IdentifyLayerResult_GeoElements">GeoElements</a> and
+        <a class="xref" href="https://developers.arcgis.com/net/api-reference/aEsri.ArcGISRuntime/Esri.ArcGISRuntime.Data.IdentifyLayerResult.Popups.html#Esri_ArcGISRuntime_Data_IdentifyLayerResult_Popups">Popups</a> are populated, if the layer has popups.
+        </p>
+</div>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_Maui_GeoViewController_IdentifyLayersAsync_.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.IdentifyLayersAsync*%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/GeoViewController.cs/#L168" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

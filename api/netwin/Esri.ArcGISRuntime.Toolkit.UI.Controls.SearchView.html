@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class SearchView </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class SearchView ">
+    
+    <meta name="description" content="View for searching with locators or custom search sources.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView" class="text-break">Class SearchView</h1>
+  <div class="markdown level0 summary"><p>View for searching with locators or custom search sources.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.dependencyobject">DependencyObject</a></div>
+    <div class="level2"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.uielement">UIElement</a></div>
+    <div class="level3"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.frameworkelement">FrameworkElement</a></div>
+    <div class="level4"><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.control">Control</a></div>
+    <div class="level5"><span class="xref">SearchView</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.dependencyobject">DependencyObject</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ianimationobject">IAnimationObject</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ivisualelement">IVisualElement</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.composition.ivisualelement2">IVisualElement2</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.uielement">UIElement</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.frameworkelement">FrameworkElement</a>&gt;</div>
+    <div><span class="xref">IWinRTObject</span></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.runtime.interopservices.marshalling.iunmanagedvirtualmethodtableprovider">IUnmanagedVirtualMethodTableProvider</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.runtime.interopservices.idynamicinterfacecastable">IDynamicInterfaceCastable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.control">Control</a>&gt;</div>
+    <div><span class="xref">IBindableCustomPropertyImplementation</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.html">UI</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.html">Controls</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.WinUI.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">[TemplatePart(Name = &quot;PART_SuggestionList&quot;, Type = typeof(ListView))]
+[GeneratedBindableCustomProperty]
+[WinRTRuntimeClassName(&quot;Microsoft.UI.Xaml.IUIElementOverrides&quot;)]
+[WinRTExposedType(typeof(Esri_ArcGISRuntime_Toolkit_UI_Controls_LayerLegendWinRTTypeDetails))]
+public class SearchView : Control, IEquatable&lt;DependencyObject&gt;, IAnimationObject, IVisualElement, IVisualElement2, IEquatable&lt;UIElement&gt;, IEquatable&lt;FrameworkElement&gt;, IWinRTObject, IUnmanagedVirtualMethodTableProvider, IDynamicInterfaceCastable, IEquatable&lt;Control&gt;, IBindableCustomPropertyImplementation</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView__ctor" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.#ctor">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.-ctor.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView__ctor">SearchView()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.html">SearchView</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_AllSourceSelectTextProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.AllSourceSelectTextProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.AllSourceSelectTextProperty.html">AllSourceSelectTextProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.AllSourceSelectText.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_AllSourceSelectText">AllSourceSelectText</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_ClearSearchTooltipTextProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.ClearSearchTooltipTextProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.ClearSearchTooltipTextProperty.html">ClearSearchTooltipTextProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.ClearSearchTooltipText.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_ClearSearchTooltipText">ClearSearchTooltipText</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableDefaultWorldGeocoderProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableDefaultWorldGeocoderProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableDefaultWorldGeocoderProperty.html">EnableDefaultWorldGeocoderProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableDefaultWorldGeocoder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableDefaultWorldGeocoder">EnableDefaultWorldGeocoder</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableIndividualResultDisplayProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableIndividualResultDisplayProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableIndividualResultDisplayProperty.html">EnableIndividualResultDisplayProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableIndividualResultDisplay.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableIndividualResultDisplay">EnableIndividualResultDisplay</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableRepeatSearchHereButtonProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableRepeatSearchHereButtonProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableRepeatSearchHereButtonProperty.html">EnableRepeatSearchHereButtonProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableRepeatSearchHereButton.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableRepeatSearchHereButton">EnableRepeatSearchHereButton</a> dependency proeprty.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableResultListViewProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableResultListViewProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableResultListViewProperty.html">EnableResultListViewProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableResultListView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableResultListView">EnableResultListView</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_GeoViewProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.GeoViewProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.GeoViewProperty.html">GeoViewProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.GeoView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_GeoView">GeoView</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_IsSourceSelectOpenProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.IsSourceSelectOpenProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.IsSourceSelectOpenProperty.html">IsSourceSelectOpenProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.IsSourceSelectOpen.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_IsSourceSelectOpen">IsSourceSelectOpen</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_MultipleResultZoomBufferProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.MultipleResultZoomBufferProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.MultipleResultZoomBufferProperty.html">MultipleResultZoomBufferProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.MultipleResultZoomBuffer.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_MultipleResultZoomBuffer">MultipleResultZoomBuffer</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_NoResultMessageProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.NoResultMessageProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.NoResultMessageProperty.html">NoResultMessageProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.NoResultMessage.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_NoResultMessage">NoResultMessage</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_RepeatSearchButtonTextProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.RepeatSearchButtonTextProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.RepeatSearchButtonTextProperty.html">RepeatSearchButtonTextProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.RepeatSearchButtonText.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_RepeatSearchButtonText">RepeatSearchButtonText</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchTooltipTextProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchTooltipTextProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchTooltipTextProperty.html">SearchTooltipTextProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchTooltipText.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchTooltipText">SearchTooltipText</a> dependency property.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchViewModelProperty" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchViewModelProperty">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchViewModelProperty.html">SearchViewModelProperty</a>
+        </td>
+        <td class="markdown level1 summary"><p>Identifies the <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchViewModel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchViewModel">SearchViewModel</a> dependency property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_AllSourceSelectText" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.AllSourceSelectText">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.AllSourceSelectText.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_AllSourceSelectText">AllSourceSelectText</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the text to display for the button used to select all search sources.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_ClearSearchTooltipText" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.ClearSearchTooltipText">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.ClearSearchTooltipText.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_ClearSearchTooltipText">ClearSearchTooltipText</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the tooltip text to display for the clear/cancel search button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableDefaultWorldGeocoder" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableDefaultWorldGeocoder">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableDefaultWorldGeocoder.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableDefaultWorldGeocoder">EnableDefaultWorldGeocoder</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchViewModel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchViewModel">SearchViewModel</a> will include the Esri World Geocoder service by default.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableIndividualResultDisplay" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableIndividualResultDisplay">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableIndividualResultDisplay.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableIndividualResultDisplay">EnableIndividualResultDisplay</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the view will show the selected result.
+If false, the result list is hidden automatically when a result is selected.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableRepeatSearchHereButton" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableRepeatSearchHereButton">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableRepeatSearchHereButton.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableRepeatSearchHereButton">EnableRepeatSearchHereButton</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether a 'Repeat Search' button will be displayed
+when the user pans the map a sufficient amount after a search completes.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableResultListView" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableResultListView">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.EnableResultListView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_EnableResultListView">EnableResultListView</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the default result list view will be shown.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_GeoView" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.GeoView">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.GeoView.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_GeoView">GeoView</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the GeoView associated with this view.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_GroupedSuggestions" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.GroupedSuggestions">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.GroupedSuggestions.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_GroupedSuggestions">GroupedSuggestions</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the grouped list of suggestions.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_IsSourceSelectOpen" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.IsSourceSelectOpen">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.IsSourceSelectOpen.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_IsSourceSelectOpen">IsSourceSelectOpen</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a value indicating whether the source selection view is being displayed.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_MultipleResultZoomBuffer" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.MultipleResultZoomBuffer">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.MultipleResultZoomBuffer.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_MultipleResultZoomBuffer">MultipleResultZoomBuffer</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the buffer used when zooming to a set of results.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_NoResultMessage" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.NoResultMessage">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.NoResultMessage.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_NoResultMessage">NoResultMessage</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets a message to show when a search completes with no results.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_RepeatSearchButtonText" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.RepeatSearchButtonText">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.RepeatSearchButtonText.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_RepeatSearchButtonText">RepeatSearchButtonText</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the text to display in the 'Repeat Search' button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchTooltipText" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchTooltipText">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchTooltipText.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchTooltipText">SearchTooltipText</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the tooltip text to display for the search button.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchViewModel" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchViewModel">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SearchViewModel.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SearchViewModel">SearchViewModel</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the viewmodel that implements core search behavior.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SelectedSuggestion" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SelectedSuggestion">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SelectedSuggestion.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_SelectedSuggestion">SelectedSuggestion</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the selected suggestion, triggering a search.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_TemplateSettings" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.TemplateSettings">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.TemplateSettings.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_TemplateSettings">TemplateSettings</a>
+        </td>
+        <td class="markdown level1 summary"><p><a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewTemplateSettings.html">SearchViewTemplateSettings</a> provides a set of properties that are used when you define a new control template for a control that derives from <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.html">SearchView</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_OnApplyTemplate" data-uid="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.OnApplyTemplate">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.OnApplyTemplate.html#Esri_ArcGISRuntime_Toolkit_UI_Controls_SearchView_OnApplyTemplate">OnApplyTemplate()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked whenever application code or internal processes (such as a rebuilding layout pass) call ApplyTemplate. In simplest terms, this means the method is called just before a UI element displays in your app. Override this method to influence the default post-template logic of a class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
