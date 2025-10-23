@@ -55,10 +55,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Entry textInput = new Entry();
             Grid.SetColumnSpan(textInput, 2);
             root.Add(textInput);
-            textInput.SetBinding(Entry.IsEnabledProperty, static (TextFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent);
+            textInput.SetBinding(Entry.IsEnabledProperty, static (TextFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent, converter: BoolOrNullToBoolConverter.Instance);
             Editor textArea = new Editor() { IsVisible = false, HeightRequest = 100, AutoSize = EditorAutoSizeOption.Disabled };
             Grid.SetColumnSpan(textArea, 2);
-            textArea.SetBinding(Editor.IsEnabledProperty, static (TextFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent);
+            textArea.SetBinding(Editor.IsEnabledProperty, static (TextFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent, converter: BoolOrNullToBoolConverter.Instance);
             root.Add(textArea);
             Label readonlyText = new Label() { IsVisible = false, LineBreakMode = LineBreakMode.WordWrap };
             readonlyText.SetBinding(Label.TextProperty, static (TextFormInputView view) => view.Element?.Value, source: RelativeBindingSource.TemplatedParent);
