@@ -111,6 +111,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Children.Add(label);
             var content = new ContentControl();
             content.SetBinding(ContentControl.ContentDataProperty, static (FieldFormElementView view) => view.Element, source: RelativeBindingSource.TemplatedParent);
+            content.SetBinding(SemanticProperties.DescriptionProperty, static (FieldFormElementView view) => view.Element?.Label, source: RelativeBindingSource.TemplatedParent);
+            content.SetBinding(SemanticProperties.HintProperty, static (FieldFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(content);
             var errorLabel = new Label() { Margin = new Thickness(0, 2), TextColor = Colors.Red };
             root.Children.Add(errorLabel);

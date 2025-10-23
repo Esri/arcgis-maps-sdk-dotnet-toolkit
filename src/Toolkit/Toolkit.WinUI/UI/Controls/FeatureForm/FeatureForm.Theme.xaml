@@ -229,7 +229,8 @@
                 <ControlTemplate TargetType="primitives:FieldFormElementView">
                     <StackPanel>
                         <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
-                        <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element}" x:Name="FieldInput" IsTabStop="False" HorizontalContentAlignment="Stretch">
+                        <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element}" x:Name="FieldInput" IsTabStop="False" HorizontalContentAlignment="Stretch"
+                                        AutomationProperties.Name="{Binding Label}" AutomationProperties.HelpText="{Binding Description}">
                             <ToolTipService.ToolTip>
                                 <ToolTip Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Hint}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Hint, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                             </ToolTipService.ToolTip>
