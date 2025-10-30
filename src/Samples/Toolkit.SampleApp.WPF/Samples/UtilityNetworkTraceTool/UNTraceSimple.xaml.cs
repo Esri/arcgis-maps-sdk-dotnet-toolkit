@@ -22,8 +22,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.UtilityNetworkTraceTool
             try
             {
                 // Using public credentials from https://developers.arcgis.com/javascript/latest/sample-code/widgets-untrace/
-                var portal1Credential = await AuthenticationManager.Current.GenerateCredentialAsync(new Uri("https://sampleserver7.arcgisonline.com/portal/sharing/rest"), "viewer01", "I68VGU^nMurF");
-                AuthenticationManager.Current.AddCredential(portal1Credential);
+                var preCredential = await AccessTokenCredential.CreateAsync(new Uri("https://sampleserver7.arcgisonline.com/portal/sharing/rest"), "viewer01", "I68VGU^nMurF");
+                AuthenticationManager.Current.AddCredential(preCredential);
 
                 MyMapView.Map = new Map(new Uri(WebmapURL));
             }
