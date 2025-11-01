@@ -59,6 +59,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (_mode != value)
                 {
+                    // When leaving Feature mode, clear any previously selected feature so it does not persist.
+                    if (_mode is MeasureToolbarMode.Feature && value is not MeasureToolbarMode.Feature)
+                    {
+                        _measureFeatureResultOverlay.Graphics.Clear();
+                        if (_clearButton is not null)
+                        {
+                            _clearButton.IsEnabled = false;
+                        }
+                    }
                     _mode = value;
                     PrepareMeasureMode();
                 }
@@ -617,9 +626,50 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 oldMapView.GeoViewTapped -= toolbar.OnMapViewTapped;
                 toolbar.RemoveMeasureFeatureResultOverlay(oldMapView);
+                if (oldMapView.GeometryEditor is not null)
+                {
+                    oldMapView.GeometryEditor.PropertyChanged -= toolbar.OnExternalGeometryEditorPropertyChanged;
+                }
             }
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
+            if (newMapView.GeometryEditor is not null)
+            {
+                newMapView.GeometryEditor.PropertyChanged += toolbar.OnExternalGeometryEditorPropertyChanged;
+            }
+        }
+
+        /// <summary>
+        /// Watches the MapView.GeometryEditor for sessions started externally (not by this toolbar).
+        /// If a geometry editing session starts while in feature measurement mode, feature measurement is cancelled.
+        /// </summary>
+        /// <remarks>
+        /// We only care when we are in Feature mode and the toolbar has not itself hooked the editor
+        /// (length/area measuring). In that case a foreign geometry editing workflow would conflict with
+        /// feature identify measurement, so we exit Feature mode and clear any selection.
+        /// </remarks>
+        private void OnExternalGeometryEditorPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName is not nameof(GeometryEditor.IsStarted))
+            {
+                return;
+            }
+            if (sender is not GeometryEditor ge)
+            {
+                return;
+            }
+            // Ignore if this toolbar owns the session (length/area modes)
+            if (_isGeometryEditorHooked)
+            {
+                return;
+            }
+            // If an external session starts while measuring a feature, end feature measurement.
+            if (ge.IsStarted && Mode is MeasureToolbarMode.Feature)
+            {
+                _measureFeatureResultOverlay.Graphics.Clear();
+                Mode = MeasureToolbarMode.None;
+                DisplayResult();
+            }
         }
 
         /// <summary>
