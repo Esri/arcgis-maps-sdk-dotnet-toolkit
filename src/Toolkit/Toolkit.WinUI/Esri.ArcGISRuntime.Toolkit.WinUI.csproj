@@ -18,6 +18,7 @@
     <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <IsAotCompatible>True</IsAotCompatible>
+    <EnableMsixTooling>True</EnableMsixTooling>
   </PropertyGroup>
 
   <Import Project="..\..\CommonProperties.targets" />
