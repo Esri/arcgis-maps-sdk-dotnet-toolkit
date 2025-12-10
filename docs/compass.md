@@ -25,7 +25,7 @@ Show a compass direction for a `MapView` or `SceneView`. Resets the view orienta
 </Grid>
 ```
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls" 

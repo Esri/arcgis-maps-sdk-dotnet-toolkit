@@ -171,12 +171,11 @@
                         <TextBlock Grid.Row="0" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <FlipView Background="Transparent" MaxHeight="200" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Media}" Grid.Row="2"/>
-                        <ContentControl x:Name="PipsPagerContainer" Grid.Row="3" Visibility="Collapsed" HorizontalAlignment="Center" />
-                        <!-- Without UWP support we could have used PipsPager directly here: <PipsPager x:Name="PipsPager"
+                        <PipsPager x:Name="PipsPager"
                             HorizontalAlignment="Center"
                             Grid.Row="3"
                             NumberOfPages="{Binding Media.Count}"
-                            SelectedPageIndex="{Binding SelectedIndex, ElementName=FlipView, Mode=TwoWay}" /> -->
+                            SelectedPageIndex="{Binding SelectedIndex, ElementName=FlipView, Mode=TwoWay}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

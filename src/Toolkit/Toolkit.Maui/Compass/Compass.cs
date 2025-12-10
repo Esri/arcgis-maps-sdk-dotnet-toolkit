@@ -25,9 +25,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// The Compass Control showing the heading on the map when the rotation is not North up / 0.
 /// </summary>
 public class Compass : TemplatedView
-#pragma warning disable CS0618 // Type or member is obsolete
-    , ICompass
-#pragma warning restore CS0618 // Type or member is obsolete
 {
     private static readonly ControlTemplate DefaultControlTemplate;
     private bool _headingSetByGeoView;
@@ -222,7 +219,7 @@ public class Compass : TemplatedView
 
     private void GeoView_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(MapView.MapRotation) || e.PropertyName == nameof(SceneView.Camera))
+        if (e.PropertyName == nameof(MapView.MapRotation) || e.PropertyName == nameof(SceneView.Camera) || e.PropertyName == nameof(LocalSceneView.Camera))
         {
             UpdateCompassFromGeoView(sender as GeoView);
         }
@@ -230,22 +227,26 @@ public class Compass : TemplatedView
     private void UpdateCompassFromGeoView(GeoView? view)
     {
         _headingSetByGeoView = true;
-        Heading = (view is MapView mv) ? mv.MapRotation : (view is SceneView sv ? sv.Camera.Heading : 0);
+        Heading = (view is MapView mv) ? mv.MapRotation : (view is SceneView sv ? sv.Camera.Heading : (view is LocalSceneView lsv ? lsv.Camera.Heading : 0));
         _headingSetByGeoView = false;
     }
 
     private void ResetRotation()
     {
         var view = GeoView;
-        if (view is MapView)
+        if (view is MapView mv)
         {
-            ((MapView)view).SetViewpointRotationAsync(0);
+            mv.SetViewpointRotationAsync(0);
         }
-        else if (view is SceneView)
+        else if (view is SceneView sv)
         {
-            var sv = (SceneView)view;
             var c = sv.Camera;
             sv.SetViewpointCameraAsync(c.RotateTo(0, c.Pitch, c.Roll));
+        }
+        else if (view is LocalSceneView lsv)
+        {
+            var c = lsv.Camera;
+            lsv.SetViewpointCameraAsync(c.RotateTo(0, c.Pitch, c.Roll));
         }
     }
 }

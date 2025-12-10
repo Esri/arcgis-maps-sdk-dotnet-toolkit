@@ -27,6 +27,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// <summary>
 /// Represents a control that enables user to perform trace analysis with pre-configured trace types.
 /// </summary>
+/// <para><note type="caution">
+/// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the trace results will not currently be shown on the scene.
+/// </note></para></remarks>
 public partial class UtilityNetworkTraceTool : TemplatedView
 {
     private CancellationTokenSource? _identifyLayersCts;
@@ -516,6 +519,10 @@ public partial class UtilityNetworkTraceTool : TemplatedView
                 if (newGeoView is MapView mv && mv.Map != null)
                 {
                     sendingView._controller.Map = mv.Map;
+                }
+                if (newGeoView is LocalSceneView)
+                {
+                    System.Diagnostics.Trace.WriteLine("UtilityNetworkTraceTool does not currently support showing trace results on a LocalSceneView.");
                 }
             }
         }

@@ -218,7 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private ImageSource? _thumbnailBitmap;
 
         /// <summary>
-        /// Gets the thumbnail as an ImageSource for convenient use from UWP.
+        /// Gets the thumbnail as an ImageSource for convenient use from WinUI.
         /// </summary>
         public ImageSource? ThumbnailBitmap
         {
@@ -286,7 +286,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 ArcGISSceneLayer sceneLayer => sceneLayer.Source == ((ArcGISSceneLayer)layer2).Source,
                 ArcGISTiledLayer tiledLayer => tiledLayer.Source == ((ArcGISTiledLayer)layer2).Source,
                 ArcGISVectorTiledLayer vectorTiledLayer => vectorTiledLayer.Source == ((ArcGISVectorTiledLayer)layer2).Source,
+#pragma warning disable CS0618 // Type or member is obsolete
                 BingMapsLayer imageServiceLayer => imageServiceLayer.Portal?.Uri == ((BingMapsLayer)layer2).Portal?.Uri,
+#pragma warning restore CS0618 // Type or member is obsolete
                 DimensionLayer dimensionLayer => dimensionLayer.Source == ((DimensionLayer)layer2).Source,
                 FeatureCollectionLayer featureCollectionLayer => featureCollectionLayer.FeatureCollection == ((FeatureCollectionLayer)layer2).FeatureCollection,
                 GroupLayer groupLayer => groupLayer.Layers.Count == ((GroupLayer)layer2).Layers.Count && LayersEqual(groupLayer.Layers, ((GroupLayer)layer2).Layers),

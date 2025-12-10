@@ -24,7 +24,7 @@ Display a legend for a map or scene view.
 </Grid>
 ```
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"

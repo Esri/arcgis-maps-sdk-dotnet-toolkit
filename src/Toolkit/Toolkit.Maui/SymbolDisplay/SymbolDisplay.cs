@@ -158,9 +158,16 @@ public partial class SymbolDisplay : TemplatedView
                 }
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                image.MaximumWidthRequest = imageData.Width / scale;
-                image.MaximumHeightRequest = imageData.Height / scale;
-                image.Source = await imageData.ToImageSourceAsync();
+                if (imageData is not null)
+                {
+                    image.MaximumWidthRequest = imageData.Width / scale;
+                    image.MaximumHeightRequest = imageData.Height / scale;
+                    image.Source = await imageData.ToImageSourceAsync();
+                }
+                else
+                {
+                    image.Source = null;
+                }
                 SourceUpdated?.Invoke(this, EventArgs.Empty);
 #pragma warning restore ESRI1800
             }

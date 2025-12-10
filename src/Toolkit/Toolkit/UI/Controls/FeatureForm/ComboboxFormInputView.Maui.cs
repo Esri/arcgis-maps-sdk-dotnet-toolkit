@@ -21,7 +21,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             Picker view = new Picker();
-            view.SetBinding(Picker.IsEnabledProperty, static (ComboBoxFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent);
+            view.SetBinding(Picker.IsEnabledProperty, static (ComboBoxFormInputView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent, converter: BoolOrNullToBoolConverter.Instance);
             view.ItemDisplayBinding = new Binding(nameof(CodedValue.Name));
             view.Focused += static (s, e) => FeatureFormView.GetParent<FieldFormElementView>(s as Element)?.OnGotFocus();
             INameScope nameScope = new NameScope();

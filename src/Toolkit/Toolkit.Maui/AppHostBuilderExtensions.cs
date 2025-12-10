@@ -1,6 +1,6 @@
-﻿using Esri.ArcGISRuntime.Toolkit.Maui.Handlers;
+﻿using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+﻿namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
     /// <summary>
     /// Extensions used to configure ArcGIS Maps SDK for .NET Toolkit
@@ -14,9 +14,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// <returns>The host builder</returns>
         public static MauiAppBuilder UseArcGISToolkit(this MauiAppBuilder builder)
         {
-            return builder.ConfigureFonts(fonts => fonts
+#if WINDOWS || __IOS__
+            builder.ConfigureMauiHandlers(handler => handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>());
+#endif
+            builder.ConfigureFonts(fonts => fonts
                 .AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "toolkit-icons.ttf", ToolkitIcons.FontFamilyName)
                 );
+            return builder;
         }
     }
 }

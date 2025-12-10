@@ -2,7 +2,7 @@
 
 TimeSlider allows you to animate or manually step through a time range, with options to configure based on a time-aware layer or a GeoView.
 
-![TimeSlider on UWP](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png)
+![TimeSlider on WinUI](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png)
 
 ## Features
 

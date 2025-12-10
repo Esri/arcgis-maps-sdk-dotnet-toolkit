@@ -100,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // - the date has changed, or
                 // - the value has changed to/from null, or
                 // - the time has changed and IncludeTime is true
-                if (date != oldDate && (date == null || oldDate == null || date != oldDate.Value.Date || input.IncludeTime))
+                if (date != oldDate && (date == null || oldDate == null || date.Value.Date != oldDate.Value.Date || input.IncludeTime))
                 {
 #if MAUI
                     if (date != null && oldDate != null && oldDate.Value.AddSeconds(-oldDate.Value.Second).AddMilliseconds(-oldDate.Value.Millisecond) == date.Value)
