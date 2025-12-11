@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 using Esri.ArcGISRuntime.Tasks;
 
@@ -74,7 +75,9 @@ namespace Esri.ArcGISRuntime.Toolkit
     /// In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
     /// </para>
     /// </remarks>
+#pragma warning disable CA1060 // Move pinvokes to native methods class
     public sealed partial class JobManager
+#pragma warning restore CA1060 // Move pinvokes to native methods class
     {
         /// <summary>
         /// Gets the shared job manager.
@@ -110,21 +113,16 @@ namespace Esri.ArcGISRuntime.Toolkit
 
         private void Init()
         {
-            var jobCollection = new System.Collections.ObjectModel.ObservableCollection<IJob>();
-            Jobs = jobCollection;
             LoadState();
             foreach (var job in Jobs)
             {
                 job.StatusChanged += Job_StatusChanged;
                 job.ProgressChanged += Job_ProgressChanged;
             }
-            jobCollection.CollectionChanged += JobCollection_CollectionChanged;
+            ((INotifyCollectionChanged)Jobs).CollectionChanged += JobCollection_CollectionChanged;
         }
 
-        private void Job_ProgressChanged(object? sender, EventArgs e)
-        {
-            OnJobCollectionChanged();
-        }
+        private void Job_ProgressChanged(object? sender, EventArgs e) => SaveState();
 
         private void JobCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -138,23 +136,15 @@ namespace Esri.ArcGISRuntime.Toolkit
                 job.StatusChanged -= Job_StatusChanged;
                 job.ProgressChanged -= Job_ProgressChanged;
             }
-            OnJobCollectionChanged();
-        }
-
-        private void Job_StatusChanged(object? sender, JobStatus e)
-        {
-#if WINODWS
             SaveState();
-#endif
         }
 
-        partial void OnJobCollectionChanged();
+        private void Job_StatusChanged(object? sender, JobStatus e) =>  SaveState();
 
         /// <summary>
         /// The jobs being managed by the job manager.
         /// </summary>
-        public IList<IJob> Jobs { get; private set; }
-
+        public IList<IJob> Jobs { get; } = new System.Collections.ObjectModel.ObservableCollection<IJob>();
 
         // A Boolean value indicating if there are jobs running.
         private bool HasRunningJobs => Jobs.Any(j => j.Status == JobStatus.Started);

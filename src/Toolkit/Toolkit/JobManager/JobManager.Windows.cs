@@ -1,13 +1,11 @@
 ﻿#if WINDOWS
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Esri.ArcGISRuntime.Tasks;
-#if WINUI || MAUI
-using Microsoft.Windows.AppNotifications;
-using Microsoft.Windows.AppNotifications.Builder;
-#endif
 using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.System.Threading;
@@ -22,112 +20,104 @@ namespace Esri.ArcGISRuntime.Toolkit
         {
             _id = id;
             Init();
-#if WINUI || MAUI // Windows App SDK is required for background tasks
-            //TODO RegisterBackgroundTask();
-#endif
+            RegisterBackgroundTask();
         }
 
-#if WINUI || MAUI
-		private void RegisterBackgroundTask()
+        private void RegisterBackgroundTask()
         {
-            
-            var builder = new BackgroundTaskBuilder();
-            //var trigger = new SystemTrigger(SystemTriggerType.TimeZoneChange, false);
-            //var backgroundTrigger = trigger as IBackgroundTrigger;
-            //builder.SetTrigger(backgroundTrigger);
-            var trigger = new TimeTrigger(15, false);
-            builder.SetTrigger(trigger);
-            builder.AddCondition(new SystemCondition(SystemConditionType.InternetAvailable));
-            builder.SetTaskEntryPointClsid(new Guid(classGuid));
-            builder.Register();
-
-            var notification = new AppNotificationBuilder()
-.AddText("Background registered")
-.BuildNotification();
-
-            AppNotificationManager.Default.Show(notification);
-        }
-#endif
-        private const int MaxLength = 4090;
-
-        private void SaveState(string? json)
-        {
-#if WPF
-            throw new NotImplementedException("Job persistence is not implemented for WPF applications."); // TODO
-#endif
-            var localSettings = ApplicationData.Current.LocalSettings;
-            if (localSettings.Containers.ContainsKey(DefaultsKey))
-                localSettings.DeleteContainer(DefaultsKey);
-            var entries = json?.Split('\n',StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            if(entries is null || entries.Length == 0)
+            if (!IsAppPackaged)
             {
                 return;
             }
-            var container = localSettings.CreateContainer(DefaultsKey, ApplicationDataCreateDisposition.Always);
-            int i = 0;
-            foreach (var entry in entries)
+            try
             {
-                var jsonEntry = entry;
-                if(jsonEntry.Length > MaxLength)
-                {
-                    while(jsonEntry.Length > MaxLength)
-                    {   
-                        var chunk = jsonEntry.Substring(0, MaxLength - 1);
-                        container.Values[(i++).ToString()] = chunk + '\n';
-                        jsonEntry = jsonEntry.Substring(MaxLength - 1);
-                    }
-                }
-                container.Values[(i++).ToString()] = jsonEntry;
+                // TODO: Check app manifest for background task declaration
+                var builder = new BackgroundTaskBuilder();
+                var trigger = new TimeTrigger(15, false);
+                builder.SetTrigger(trigger);
+                builder.AddCondition(new SystemCondition(SystemConditionType.InternetAvailable));
+                builder.SetTaskEntryPointClsid(new Guid(classGuid));
+                builder.Register();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Failed to register background task for JobManager: " + ex.Message);
             }
         }
 
-        partial void OnJobCollectionChanged()
-        {
-            SaveState();
-        }
+        private void SaveState(string? json) => File.WriteAllText(GetStateFilename(), json);
 
         private string? LoadStateInternal()
         {
-            var localSettings = ApplicationData.Current.LocalSettings;
-            if (localSettings.Containers.TryGetValue(DefaultsKey, out var container))
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (var item in container.Values.Keys.OrderBy(k=>int.Parse(k)))
-                {
-                    var value = container.Values[item];
-                    if (value is string json)
-                    {
-                        var lastchar = json[json.Length - 1];
-                        sb.Append(json.TrimEnd());
-                        if (lastchar != '\n')
-                            sb.Append('\n');
-                    }
-                }
-                return sb.ToString();
-            }
+            var filename = GetStateFilename();
+            if (System.IO.File.Exists(filename))
+                return System.IO.File.ReadAllText(GetStateFilename());
             return null;
         }
 
-#if WINUI || MAUI
+        private string GetStateFilename()
+        {
+            if (IsAppPackaged)
+            {
+                var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                return Path.Combine(folderPath, $"{DefaultsKey}.json");
+            }
+            else
+            {
+                // If the app is unpackaged, we'll generate a unique filename based on the process and assembly and place it in the temp folder
+                string location = Environment.ProcessPath + "|" + typeof(JobManager).Assembly.FullName + "|" + DefaultsKey;
+                using (var hasher = System.Security.Cryptography.SHA256.Create())
+                {
+                    StringBuilder hash = new StringBuilder();
+                    byte[] bytes = hasher.ComputeHash(new UTF8Encoding().GetBytes(location));
+                    for (int i = 0; i < bytes.Length / 2; i++) // Only grab the first half to keep path name short
+                    {
+                        hash.Append(bytes[i].ToString("x2"));
+                    }
+
+                    return Path.Combine(Path.GetTempPath(), hash.ToString() + ".json");
+                }
+            }
+        }
+
+#pragma warning disable SA1203 // Constants should appear before fields
+        private const long AppModelErrorNoPackage = 15700L;
+#pragma warning restore SA1203 // Constants should appear before fields
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int GetCurrentPackageFullName(ref int packageFullNameLength, StringBuilder packageFullName);
+
+        private static bool IsAppPackaged
+        {
+            get
+            {
+                // Application is MSIX packaged if it has an identity: https://learn.microsoft.com/en-us/windows/msix/detect-package-identity
+                int length = 0;
+                var sb = new StringBuilder(0);
+                int result = GetCurrentPackageFullName(ref length, sb);
+                return result != AppModelErrorNoPackage;
+            }
+        }
+
         [ComVisible(true)]
         [ClassInterface(ClassInterfaceType.None)]
         [Guid(classGuid)]
         [ComSourceInterfaces(typeof(IBackgroundTask))]
-        public sealed class BackgroundTask : IBackgroundTask
+        internal sealed partial class BackgroundTask : IBackgroundTask
         {
             private BackgroundTaskDeferral? _deferral = null;
             private volatile bool _cancelRequested = false;
             private ThreadPoolTimer? _periodicTimer = null;
-            private int _progress = 0;
             private JobManager? manager;
             private IBackgroundTaskInstance? _taskInstance;
+
             [MTAThread]
             public void Run(IBackgroundTaskInstance taskInstance)
             {
                 
                 var taskId = taskInstance.Task.Name;
                 manager = JobManager.Create(taskId);
-                if(manager.HasRunningJobs == false)
+                if(!manager.HasRunningJobs)
                 {
                     return;
                 }
@@ -138,18 +128,13 @@ namespace Esri.ArcGISRuntime.Toolkit
 
                 // Set the progress to indicate this task has started
                 taskInstance.Progress = 0;
-                var notification = new AppNotificationBuilder()
-                    .AddText("Background task launched!")
-                    .BuildNotification();
-
-                AppNotificationManager.Default.Show(notification);
-
+                
                 _periodicTimer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(PeriodicTimerCallback), TimeSpan.FromSeconds(30));
             }
 
             private async void PeriodicTimerCallback(ThreadPoolTimer timer)
             {
-                if (manager is not null && manager.Jobs.Count > 0)
+                if (manager is not null && manager.HasRunningJobs)
                 {
                     if (!_cancelRequested)
                     {
@@ -162,16 +147,16 @@ namespace Esri.ArcGISRuntime.Toolkit
                             {
                                 _taskInstance.Progress = (uint)progress;
                             }
-                            var notification = new AppNotificationBuilder().AddText("Progress " + progress.ToString() + "%").BuildNotification();
-                            AppNotificationManager.Default.Show(notification);
                         }
                         catch { }
                     }
                 }
-                if (manager is null || manager.HasRunningJobs)
+                else
+                {
+                    _periodicTimer?.Cancel();
+                }
+                if (manager is null || !manager.HasRunningJobs)
                     _deferral?.Complete();
-
-                //BackgroundTaskBuilder.MainWindow.taskStatus(_progress);
             }
 
             private void OnCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
@@ -180,7 +165,6 @@ namespace Esri.ArcGISRuntime.Toolkit
                 _cancelRequested = true;
             }
         }
-#endif
     }
 }
 #endif
