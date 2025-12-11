@@ -20,6 +20,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
         public string DisplayName { get; set; }
         public bool ApiKeyRequired { get; set; }
     }
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public class ExcludeFromSamplesAttribute : Attribute { }
 
     public class SampleDatasource
     {
@@ -29,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
                 where t.GetTypeInfo().IsSubclassOf(typeof(UserControl)) && t.FullName.Contains(".Samples.")
                 select t;
 
-            Samples = (from p in pages select new Sample() { Page = p }).ToArray();
+            Samples = (from p in pages select new Sample() { Page = p }).Where(s=>s.Page.GetTypeInfo().GetCustomAttribute(typeof(ExcludeFromSamplesAttribute)) is null).ToArray();
             foreach (var sample in Samples)
             {
                 var attr = sample.Page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttribute)) as SampleInfoAttribute;

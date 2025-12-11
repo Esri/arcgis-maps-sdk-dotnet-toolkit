@@ -165,13 +165,14 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <summary>
         /// Resumes all paused jobs.
         /// </summary>
-        public void ResumeAllPausedJobs()
+        public async void ResumeAllPausedJobs()
         {
             // Make sure the default background URLSession is re-created here
             // in case this method is called from an app relaunch due to background downloads
             // completed for a terminated app. We need the session to be re-created in that case.
             // TODO ?? _ = ArcGISEnvironment.backgroundURLSession;
 
+            await PerformStatusChecks(); // Won't throw
             foreach (var job in Jobs.Where(j => j.Status == JobStatus.Paused))
             {
                 job.Start();
