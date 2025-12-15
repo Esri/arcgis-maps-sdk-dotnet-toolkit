@@ -39,7 +39,7 @@ namespace Toolkit.SampleApp.Maui.Samples
         {
             var task = await OfflineMapTask.CreateAsync(map);
             var parameters = await task.CreateDefaultGenerateOfflineMapParametersAsync(areaOfInterest: extent);
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString());
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Guid.NewGuid().ToString());
             return task.GenerateOfflineMap(parameters, path);
         }
 
@@ -62,7 +62,7 @@ namespace Toolkit.SampleApp.Maui.Samples
                 }
             }
 
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), new Guid().ToString() + ".geodatabase");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), new Guid().ToString() + ".geodatabase");
             var job = task.GenerateGeodatabase(parameters, path);
             return job;
         }

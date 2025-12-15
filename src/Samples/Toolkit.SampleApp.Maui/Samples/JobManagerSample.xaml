@@ -5,7 +5,7 @@
              xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              xmlns:sample="clr-namespace:Toolkit.SampleApp.Maui"
              xmlns:vm="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples"
-             x:Class="Toolkit.SampleApp.Maui.Samples.JobManagerSample" Title="File Download">
+             x:Class="Toolkit.SampleApp.Maui.Samples.JobManagerSample" Title="Job Manager">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

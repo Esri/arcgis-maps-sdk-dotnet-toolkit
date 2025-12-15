@@ -7,10 +7,10 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <ProgressBar x:Name="ProgressBar" HorizontalOptions="Fill" Grid.ColumnSpan="2" VerticalOptions="Center" Height="60" Opacity=".5" />
         <VerticalStackLayout Margin="5">
             <Label x:Name="Status" FontAttributes="Bold" />
             <Label x:Name="Message" HorizontalOptions="Fill" />
+            <ProgressBar x:Name="ProgressBar" HorizontalOptions="Fill" />
         </VerticalStackLayout>
         <Button x:Name="PauseButton" Text="Pause" IsVisible="False" Clicked="PauseJob_Click" Grid.Column="1" VerticalOptions="Center" Margin="5" />
         <Button x:Name="ResumeButton" Text="Resume" IsVisible="False" Clicked="ResumeJob_Click" Grid.Column="1" VerticalOptions="Center" Margin="5" />
