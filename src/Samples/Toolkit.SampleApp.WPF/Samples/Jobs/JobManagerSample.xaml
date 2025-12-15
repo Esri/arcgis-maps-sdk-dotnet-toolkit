@@ -23,7 +23,7 @@
             <Button Content="Clear completed jobs" Click="Clear_Click" Margin="8" Padding="4" Style="{StaticResource CalciteDangerSecondaryButtonStyle}" />
         </StackPanel>
 
-        <ListView x:Name="JobCollectionView" Grid.Row="2" ItemsSource="{Binding Jobs, Source={x:Static tk:JobManager.Shared}}">
+        <ListView x:Name="JobCollectionView" Grid.Row="2" ItemsSource="{Binding Jobs, Source={x:Static tk:JobManager.Shared}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -31,7 +31,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate >
-                    <Border BorderBrush="Gray" Margin="5" Padding="10">
+                    <Border BorderBrush="Gray" >
                         <local:JobViewControl Job="{Binding}" HorizontalAlignment="Stretch" />
                     </Border>
                 </DataTemplate>

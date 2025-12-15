@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Jobs
             if (Job is not null)
             {
                 Job.ProgressChanged += Job_ProgressChanged;
-                UpdateJob(Job);
+                UpdateJob();
             }
         }
 
@@ -62,28 +62,53 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Jobs
             }
             if (newJob != null)
                 newJob.StatusChanged += Job_StatusChanged;
-            UpdateJob(newJob);
-        }
-        private static void Job_StatusChanged(object? sender, JobStatus e)
-        {
-            if (e == JobStatus.Succeeded || e == JobStatus.Failed)
-            {
-
-            }
-        }
-        private void Job_ProgressChanged(object? sender, EventArgs e)
-        {
-            UpdateJob(sender as IJob);
+            UpdateJob();
+            UpdateButtons();
         }
 
-        private void UpdateJob(IJob? job)
+        private void Job_StatusChanged(object? sender, JobStatus e)
         {
-            Dispatcher.Invoke(() =>
+            SafeDispatch(() =>
             {
-                Status.Text = job?.Status.ToString();
-                Message.Text = job?.Messages?.LastOrDefault()?.Message;
-                ProgressBar.Value = job?.Progress ?? 0;
-            });
+                Status.Text = Job?.Status.ToString();
+                UpdateButtons();
+            });            
+        }
+
+        private void Job_ProgressChanged(object? sender, EventArgs e) => SafeDispatch(UpdateJob);
+
+        private void SafeDispatch(Action action)
+        {
+            if (Dispatcher.HasShutdownStarted || Dispatcher.HasShutdownFinished)
+                return;
+            if (Dispatcher.CheckAccess())
+                action();
+            else
+                Dispatcher.Invoke(action);
+        }
+
+        private void UpdateButtons()
+        {
+            ResumeButton.Visibility = Job?.Status == JobStatus.Paused ? Visibility.Visible : Visibility.Collapsed;
+            PauseButton.Visibility = Job?.Status == JobStatus.Started ? Visibility.Visible : Visibility.Collapsed;
+            DeleteButton.Visibility = Job?.Status == JobStatus.Failed || Job?.Status == JobStatus.Succeeded ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void UpdateJob()
+        {
+            Status.Text = Job?.Status.ToString();
+            Message.Text = Job?.Messages?.LastOrDefault()?.Message;
+            ProgressBar.Value = Job?.Progress ?? 0;
+        }
+
+        private void PauseJob_Click(object sender, RoutedEventArgs e) => Job?.Pause();
+
+        private void ResumeJob_Click(object sender, RoutedEventArgs e) => Job?.Start();
+
+        private void DeleteJob_Click(object sender, RoutedEventArgs e)
+        {
+            if (Job is not null)
+                JobManager.Shared.Jobs.Remove(Job);
         }
     }
 }

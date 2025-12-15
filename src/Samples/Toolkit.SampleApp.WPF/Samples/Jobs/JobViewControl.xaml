@@ -6,9 +6,18 @@
              xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.Jobs"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-        <StackPanel>
+    <Grid Height="60">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Stretch" Maximum="100" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="60" Opacity=".5" />
+        <StackPanel Margin="5">
             <TextBlock x:Name="Status" FontWeight="Bold" />
             <TextBlock x:Name="Message" TextWrapping="Wrap" HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"/>
-            <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Stretch" Maximum="100" />
         </StackPanel>
+        <Button x:Name="PauseButton" Content="Pause" Visibility="Collapsed" Click="PauseJob_Click" Grid.Column="1" VerticalAlignment="Center" Margin="5" />
+        <Button x:Name="ResumeButton" Content="Resume" Visibility="Collapsed" Click="ResumeJob_Click" Grid.Column="1" VerticalAlignment="Center" Margin="5" />
+        <Button x:Name="DeleteButton" Content="Delete" Visibility="Collapsed" Click="DeleteJob_Click" Grid.Column="1" VerticalAlignment="Center" Margin="5" />
+    </Grid>
 </UserControl>
