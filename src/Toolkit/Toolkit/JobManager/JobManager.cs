@@ -64,15 +64,6 @@ namespace Esri.ArcGISRuntime.Toolkit
     /// job manager will check the status of any running jobs. At that point the jobs may start
     /// downloading their result. Note, this does not work on the simulator, this behavior can only
     /// be tested on an actual device.
-    ///</para><para>
-    /// Now that the job can check status in the background, it can start downloading in the background.
-    /// By default, jobs will download their results with background URL session. This means that the
-    /// download can execute out of process, even if the app is terminated. If the app is terminated and
-    /// then later relaunched by the system because a background downloaded completed, then you may
-    /// call the <c>JobManager.ResumeAllPausedJobs()</c> method from the application relaunch point,
-    /// which will correlate the jobs to their respective downloads that completed and the jobs will
-    /// then finish. The app relaunch point can happen via the SwiftUI modifier `.backgroundTask(.urlSession(...))`.
-    /// In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
     /// </para>
     /// </remarks>
 #pragma warning disable CA1060 // Move pinvokes to native methods class
@@ -167,11 +158,6 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// </summary>
         public async void ResumeAllPausedJobs()
         {
-            // Make sure the default background URLSession is re-created here
-            // in case this method is called from an app relaunch due to background downloads
-            // completed for a terminated app. We need the session to be re-created in that case.
-            // TODO ?? _ = ArcGISEnvironment.backgroundURLSession;
-
             await PerformStatusChecks(); // Won't throw
             foreach (var job in Jobs.Where(j => j.Status == JobStatus.Paused))
             {

@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
             try
             {
-                // TODO: Check app manifest for background task declaration
+                // TODO: Check app manifest for background task declaration and provide better instructions how to register the background task
                 var builder = new BackgroundTaskBuilder();
                 var trigger = new TimeTrigger(15, false);
                 builder.SetTrigger(trigger);
