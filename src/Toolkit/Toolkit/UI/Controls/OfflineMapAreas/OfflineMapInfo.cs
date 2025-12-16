@@ -109,36 +109,13 @@ public class OfflineMapInfo
 
     private SerializableInfo _info;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="OfflineMapInfo"/> class.
-    /// </summary>
-    /// <param name="portalItem">The portal item of the web map which the offline map area was downloaded from.</param>
-    internal OfflineMapInfo(PortalItem portalItem)
-    {
-        _info = new SerializableInfo
-        {
-            Title = portalItem.Title,
-            Id = portalItem.ItemId,
-            Description = portalItem.Description,
-            PortalItemUrl = portalItem.Url
-        };
-        Thumbnail = portalItem.Thumbnail;
-    }
+    internal string? InfoFile { get; }
 
-    internal string InfoFile { get; }
-
-    internal string ThumbnailFile { get; }
-
-    internal OfflineMapInfo(string infoFile, string thumbnailFile)
+    internal OfflineMapInfo(string infoFile, Esri.ArcGISRuntime.UI.RuntimeImage? image, SerializableInfo info)
     {
         InfoFile = infoFile;
-        ThumbnailFile = thumbnailFile;
-        _info = SerializableInfo.FromJson(File.ReadAllText(InfoFile)) ?? throw new FileLoadException("Failed to read OfflineMapInfo");
-        if (File.Exists(thumbnailFile))
-        {
-            var bytes = File.ReadAllBytes(thumbnailFile);
-            Thumbnail = new Esri.ArcGISRuntime.UI.RuntimeImage(bytes);
-        }
+        _info = info;
+        Thumbnail = image;
     }
 
     /// <summary>
@@ -166,28 +143,61 @@ public class OfflineMapInfo
     /// </summary>
     public Uri? PortalItemUrl => _info.PortalItemUrl;
 
-    internal static OfflineMapInfo FromFolderAsync(string directoryPath)
+    internal static async Task<OfflineMapInfo> CreateAsync(PortalItem portalItem, string directoryPath)
+    {
+        var info = new SerializableInfo
+        {
+            Title = portalItem.Title,
+            Id = portalItem.ItemId,
+            Description = portalItem.Description,
+            PortalItemUrl = portalItem.Url,
+        };
+        if (!Directory.Exists(directoryPath))
+            Directory.CreateDirectory(directoryPath);
+        string infoFile = Path.Combine(directoryPath, offlineMapInfoJsonFile);
+        string? thumbnailFile = null;
+        File.WriteAllText(infoFile, info.ToJson());
+        if (portalItem.Thumbnail != null)
+        {
+            using var thumbnailstream = await portalItem.Thumbnail.GetEncodedBufferAsync();
+            thumbnailFile = Path.Combine(directoryPath, offlineMapInfoThumbnailFile);
+            using var fileStream = File.OpenWrite(thumbnailFile);
+            await thumbnailstream.CopyToAsync(fileStream);
+        }
+        return new OfflineMapInfo(infoFile, portalItem.Thumbnail, info);
+    }
+
+    internal static OfflineMapInfo FromFolder(string directoryPath)
     {
         if (!Directory.Exists(directoryPath))
             throw new DirectoryNotFoundException(directoryPath);
         string path = Path.Combine(directoryPath, offlineMapInfoJsonFile);
         if(!File.Exists(path))
             throw new FileNotFoundException("Offline map info file not found", path);
-        return new OfflineMapInfo(path, Path.Combine(directoryPath, offlineMapInfoThumbnailFile));
+        string infoFile = Path.Combine(directoryPath, offlineMapInfoJsonFile);
+        var info = SerializableInfo.FromJson(File.ReadAllText(infoFile)) ?? throw new FileLoadException("Failed to read OfflineMapInfo");
+        string thumbnailFile = Path.Combine(directoryPath, offlineMapInfoThumbnailFile);
+        Esri.ArcGISRuntime.UI.RuntimeImage? thumbNail = null;
+        if (File.Exists(thumbnailFile))
+        {
+            var bytes = File.ReadAllBytes(thumbnailFile);
+            thumbNail = new Esri.ArcGISRuntime.UI.RuntimeImage(bytes);
+        }
+        return new OfflineMapInfo(path, thumbNail, info);
     }
 
-    internal async Task Save(string directoryPath)
-    {
-        if (!Directory.Exists(directoryPath))
-            Directory.CreateDirectory(directoryPath);
-        File.WriteAllText(Path.Combine(directoryPath, offlineMapInfoJsonFile), _info.ToJson());
-        if (Thumbnail != null)
-        {
-            using var thumbnailstream = await Thumbnail.GetEncodedBufferAsync();
-            using var fileStream = File.OpenWrite(Path.Combine(directoryPath, offlineMapInfoThumbnailFile));
-            await thumbnailstream.CopyToAsync(fileStream);
-        }
-    }
+    //internal async Task Save(string directoryPath)
+    //{
+    //    if (!Directory.Exists(directoryPath))
+    //        Directory.CreateDirectory(directoryPath);
+    //    File.WriteAllText(Path.Combine(directoryPath, offlineMapInfoJsonFile), _info.ToJson());
+    //    if (Thumbnail != null)
+    //    {
+    //        using var thumbnailstream = await Thumbnail.GetEncodedBufferAsync();
+    //        using var fileStream = File.OpenWrite(Path.Combine(directoryPath, offlineMapInfoThumbnailFile));
+    //        await thumbnailstream.CopyToAsync(fileStream);
+    //    }
+    //}
 
     internal static bool InfoExists(string directoryPath)
     {
