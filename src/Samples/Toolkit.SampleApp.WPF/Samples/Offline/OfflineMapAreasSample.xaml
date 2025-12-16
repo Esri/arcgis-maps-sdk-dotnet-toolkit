@@ -27,6 +27,6 @@
 
         <esri:MapView Grid.Row="1" Grid.Column="1" Map="{Binding SelectedMap, Mode=OneWay}" />
 
-        <esri:OfflineMapAreasView Grid.Row="1" OnlineMap="{Binding OnlineMap, Mode=OneWay}" SelectedMap="{Binding SelectedOfflineMap, Mode=TwoWay}" />
+        <esri:OfflineMapAreasView Grid.Row="1" PortalItem="{Binding Naperville, Mode=OneWay}" SelectedMap="{Binding SelectedOfflineMap, Mode=TwoWay}" />
     </Grid>
 </UserControl>

@@ -15,6 +15,8 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Portal;
+using Esri.ArcGISRuntime.Tasks.Offline;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
@@ -33,6 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class OfflineMapAreasView
     {
+        private Map? _onlineMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OfflineMapAreasView"/> class.
@@ -49,18 +52,54 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the online map to take offline.
         /// </summary>
-        public Map? OnlineMap
+        public PortalItem? PortalItem
         {
-            get => GetValue(OnlineMapProperty) as Map;
-            set => SetValue(OnlineMapProperty, value);
+            get => GetValue(PortalItemProperty) as PortalItem;
+            set => SetValue(PortalItemProperty, value);
         }
 
         /// <summary>
-        /// Identifies the <see cref="OnlineMap"/> dependency property.
+        /// Identifies the <see cref="PortalItem"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty OnlineMapProperty =
-            PropertyHelper.CreateProperty<Map, OfflineMapAreasView>(nameof(OnlineMap), null);
+        public static readonly DependencyProperty PortalItemProperty =
+            PropertyHelper.CreateProperty<PortalItem, OfflineMapAreasView>(nameof(PortalItem), propertyChanged: (view,oldItem,newItem) => view.OnPortalItemChanged(newItem));
 
+        private async void OnPortalItemChanged(PortalItem? newItem)
+        {
+            SelectedMap = null;
+            _onlineMap = null;
+            OfflineMapViewModel = null;
+            if (newItem is not null)
+            {
+                _onlineMap = new Map(newItem);
+                try
+                {
+                    OfflineMapViewModel = await OfflineMapViewModel.CreateAsync(_onlineMap);
+                }
+                catch {
+                    //TODO: Trace.Write
+                }
+            }
+        }
+
+        private OfflineMapViewModel? _offlineMapViewModel;
+
+        private OfflineMapViewModel? OfflineMapViewModel
+        {
+            get => _offlineMapViewModel;
+            set
+            {
+                if (_offlineMapViewModel != value)
+                {
+                    //TODO: Clear any other state associated with this internal VM
+                    _offlineMapViewModel = value;
+                    if (GetTemplateChild("OfflineMapAreasListView") is ListView lv)
+                    {
+                        lv.ItemsSource = _offlineMapViewModel?.PreplannedMapAreas;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the selected map from list of available offline maps
