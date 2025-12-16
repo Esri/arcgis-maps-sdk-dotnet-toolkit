@@ -1,0 +1,32 @@
+<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.Offline.OfflineMapAreasSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:tk="clr-namespace:Esri.ArcGISRuntime.Toolkit;assembly=Esri.ArcGISRuntime.Toolkit.WPF"
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.Jobs"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock TextWrapping="Wrap" Margin="8" Grid.ColumnSpan="2" FontWeight="Bold">
+           Offline Map Areas
+        </TextBlock>
+        
+        <CheckBox IsChecked="{Binding IsOffline, Mode=TwoWay}" Content="Enable Offline Mode" IsEnabled="{Binding IsOfflineAvailable, Mode=OneWay}" HorizontalAlignment="Right"
+                  VerticalContentAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Margin="4,0"
+                  />
+
+        <esri:MapView Grid.Row="1" Grid.Column="1" Map="{Binding SelectedMap, Mode=OneWay}" />
+
+        <esri:OfflineMapAreasView Grid.Row="1" OnlineMap="{Binding OnlineMap, Mode=OneWay}" SelectedMap="{Binding SelectedOfflineMap, Mode=TwoWay}" />
+    </Grid>
+</UserControl>

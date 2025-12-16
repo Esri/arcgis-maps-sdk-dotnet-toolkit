@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 #else
@@ -43,5 +45,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DefaultStyleKey = typeof(OfflineMapAreasView);
 #endif
         }
+
+        /// <summary>
+        /// Gets or sets the online map to take offline.
+        /// </summary>
+        public Map? OnlineMap
+        {
+            get => GetValue(OnlineMapProperty) as Map;
+            set => SetValue(OnlineMapProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="OnlineMap"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty OnlineMapProperty =
+            PropertyHelper.CreateProperty<Map, OfflineMapAreasView>(nameof(OnlineMap), null);
+
+
+        /// <summary>
+        /// Gets or sets the selected map from list of available offline maps
+        /// </summary>
+        public Map? SelectedMap
+        {
+            get => GetValue(SelectedMapProperty) as Map;
+            set => SetValue(SelectedMapProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="SelectedMap"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SelectedMapProperty =
+            PropertyHelper.CreateProperty<Map, OfflineMapAreasView>(nameof(SelectedMap), null);
     }
 }
