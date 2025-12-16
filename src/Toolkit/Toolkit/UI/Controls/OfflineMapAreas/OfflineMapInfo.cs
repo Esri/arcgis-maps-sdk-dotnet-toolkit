@@ -133,7 +133,12 @@ public class OfflineMapInfo
     {
         InfoFile = infoFile;
         ThumbnailFile = thumbnailFile;
-        //TODO: Load from json
+        _info = SerializableInfo.FromJson(File.ReadAllText(InfoFile)) ?? throw new FileLoadException("Failed to read OfflineMapInfo");
+        if (File.Exists(thumbnailFile))
+        {
+            var bytes = File.ReadAllBytes(thumbnailFile);
+            Thumbnail = new Esri.ArcGISRuntime.UI.RuntimeImage(bytes);
+        }
     }
 
     /// <summary>
@@ -161,17 +166,32 @@ public class OfflineMapInfo
     /// </summary>
     public Uri? PortalItemUrl => _info.PortalItemUrl;
 
-    internal static Task<OfflineMapInfo> FromFolder(string directoryPath)
+    internal static OfflineMapInfo FromFolderAsync(string directoryPath)
     {
         if (!Directory.Exists(directoryPath))
             throw new DirectoryNotFoundException(directoryPath);
-        throw new NotImplementedException();
+        string path = Path.Combine(directoryPath, offlineMapInfoJsonFile);
+        if(!File.Exists(path))
+            throw new FileNotFoundException("Offline map info file not found", path);
+        return new OfflineMapInfo(path, Path.Combine(directoryPath, offlineMapInfoThumbnailFile));
     }
-    private void Save(string directoryPath)
-    {
-        throw new NotImplementedException();
-        //TODO: Save to JSON + save thumbnail to file
 
+    internal async Task Save(string directoryPath)
+    {
+        if (!Directory.Exists(directoryPath))
+            Directory.CreateDirectory(directoryPath);
+        File.WriteAllText(Path.Combine(directoryPath, offlineMapInfoJsonFile), _info.ToJson());
+        if (Thumbnail != null)
+        {
+            using var thumbnailstream = await Thumbnail.GetEncodedBufferAsync();
+            using var fileStream = File.OpenWrite(Path.Combine(directoryPath, offlineMapInfoThumbnailFile));
+            await thumbnailstream.CopyToAsync(fileStream);
+        }
+    }
+
+    internal static bool InfoExists(string directoryPath)
+    {
+        return File.Exists(Path.Combine(directoryPath, offlineMapInfoJsonFile));
     }
 
     internal static void Delete(string directoryPath)

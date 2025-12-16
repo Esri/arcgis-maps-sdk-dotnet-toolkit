@@ -34,6 +34,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Tasks;
+using Esri.ArcGISRuntime.Portal;
 #else
 using JsonIncludeAttribute = System.Runtime.Serialization.DataMemberAttribute;
 #endif
@@ -86,43 +87,35 @@ public class OfflineManager
     // internal const string onDemandAreas = "OnDemand"
 
     private readonly string? _offlineMapsFolder;
-    private readonly List<DownloadPreplannedOfflineMapJob> _preplannedJobs = new List<DownloadPreplannedOfflineMapJob>();
-    private readonly List<GenerateOfflineMapJob> _generateOfflineMapJobs = new List<GenerateOfflineMapJob>();
-    private readonly List<OfflineMapSyncJob> _offlineMapSyncJobs = new List<OfflineMapSyncJob>();
     private readonly ReadonlyObservableCollection<OfflineMapInfo> _offlineMapInfos = new ReadonlyObservableCollection<OfflineMapInfo>();
-
+    private readonly JobManager _jobManager;
 
     internal string OfflineMapsFolder
     {
-        get => _offlineMapsFolder
-#if !NETFRAMEWORK
-            ?? DefaultFolder
-#endif
-            ;
+        get => _offlineMapsFolder ?? DefaultFolder;
     }
 
-#if !NETFRAMEWORK
     private OfflineManager() // Will use the default folder
     {
+        _jobManager = JobManager.Shared;
+        _jobManager.ResumeAllPausedJobs();
+        
     }
-#endif
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OfflineManager"/> class with a specific folder for storing offline maps.
     /// </summary>
     /// <param name="offlineMapsFolder">Folder where the maps should be stored</param>
-    /// <exception cref="DirectoryNotFoundException">Thrown if the folder does not exist</exception>
-#if !NETFRAMEWORK
-    /// <seealso cref="Default"/>
-#endif
-    public OfflineManager(string offlineMapsFolder)
+    /// <param name="jobManager">Optional job manager instance. If not specified, the <see cref="JobManager.Shared"/> instance is used.</param>
+    /// <exception cref="DirectoryNotFoundException">Thrown if the <paramref name="offlineMapsFolder"/> folder does not exist</exception>
+    public OfflineManager(string offlineMapsFolder, JobManager? jobManager = null) 
     {
         if (string.IsNullOrEmpty(offlineMapsFolder)) throw new ArgumentNullException(nameof(offlineMapsFolder));
         if (!Directory.Exists(offlineMapsFolder)) throw new DirectoryNotFoundException(offlineMapsFolder);
         _offlineMapsFolder = offlineMapsFolder;
+        _jobManager = jobManager ?? JobManager.Shared;
     }
 
-#if !NETFRAMEWORK
     private static string GetDefaultFolder()
     {
 #if WINDOWS
@@ -144,7 +137,7 @@ public class OfflineManager
     /// Gets or sets the folder used for storing maps when using the <see cref="OfflineManager.Default"/> instance.
     /// </summary>
     /// <remarks>
-    /// If you develop a non-packaged app on Windows, it's recommended to instead use <see cref="OfflineManager.OfflineManager(string)"> the constructor that takes a specific folder path</see>,
+    /// If you develop a non-packaged app on Windows, it's recommended to instead use <see cref="OfflineManager.OfflineManager(string, JobManager?)"> the constructor that takes a specific folder path</see>,
     /// so that maps won't get shared among multiple applications.
     /// </remarks>
 
@@ -163,32 +156,113 @@ public class OfflineManager
     /// A shared singleton instance of offline manager using the <see cref="DefaultFolder"/> location.
     /// </summary>
     public static OfflineManager Default { get; } = new OfflineManager();
-#endif
 
     /// <summary>
     /// Gets the portal item information for web maps that have downloaded map areas.
     /// </summary>
     public IReadOnlyList<OfflineMapInfo> OfflineMapInfos => _offlineMapInfos;
 
-    internal async Task Start(DownloadPreplannedOfflineMapJob job)
+    /// <summary>
+    /// Starts a job that will be managed by this instance.
+    /// </summary>
+    /// <param name="job">The job to start.</param>
+    /// <param name="portalItem">The portal item whose map is being taken offline.</param>
+    /// <returns></returns>
+    public void Start(DownloadPreplannedOfflineMapJob job, PortalItem portalItem ) => Start((IJob)job, portalItem);
+
+    public void Start(GenerateOfflineMapJob job, PortalItem portalItem) => Start((IJob)job, portalItem);
+
+    private void Start(IJob job, PortalItem portalItem)
     {
-        _preplannedJobs.Add(job);
-        var result = await job.GetResultAsync();
-        _preplannedJobs.Remove(job);
+        _jobManager.Jobs.Add(job);
+        _ = ObserveJob(job);
+        job.Start();
+        SavePendingMapInfo(portalItem);
+     
     }
 
-    internal async void Start(GenerateOfflineMapJob job)
+    private async Task ObserveJob(IJob job)
     {
-        _generateOfflineMapJobs.Add(job);
-        var result = await job.GetResultAsync();
-        _generateOfflineMapJobs.Remove(job);
+        try
+        {
+            var result = await job.GetResultAsync();
+        }
+        catch { }
+        if (_jobManager.Jobs.Contains(job))
+            _jobManager.Jobs.Remove(job);
+        // JobCompleted?.Invoke(this, job);
+
+        // Check pending map infos.
+         HandlePendingMapInfo(GetPortalItemForJob(job)?.ItemId);
     }
 
-    internal async void Start(OfflineMapSyncJob job)
+    /// <summary>
+    /// Figures out and returns the portal item associated with the online map for a particular offline job.
+    /// </summary>
+    /// <param name="job"></param>
+    /// <returns></returns>
+    private PortalItem? GetPortalItemForJob(IJob job)
     {
-        _offlineMapSyncJobs.Add(job);
-        var result = await job.GetResultAsync();
-        _offlineMapSyncJobs.Remove(job);
+        if (job is DownloadPreplannedOfflineMapJob downloadPreplanned)
+            return downloadPreplanned.OnlineMap?.Item as PortalItem;
+        if (job is GenerateOfflineMapJob generateOffline)
+            return generateOffline.OnlineMap?.Item as PortalItem;
+        return null;
+    }
+
+    private void RemoveMapInfo(string portalItemID)
+    {
+        var item = _offlineMapInfos.Where(o => o.Id == portalItemID).FirstOrDefault();
+        if (item is not null)
+        {
+            _offlineMapInfos.RemoveItem(item);
+            OfflineMapInfo.Delete(GetPortalItemDirectory(portalItemID));
+        }
+    }
+
+    private async void LoadOfflineMapInfos()
+    {
+        if (!Directory.Exists(OfflineMapsFolder))
+            return;
+        var directories = Directory.GetDirectories(OfflineMapsFolder);
+        var mapInfos = new List<OfflineMapInfo>();
+        foreach (var dir in directories)
+        {
+            try
+            {
+                var mapInfo = await OfflineMapInfo.FromFolderAsync(dir);
+                mapInfos.Add(mapInfo);
+            }
+            catch
+            {
+                // Ignore invalid folders
+            }
+        }
+        _offlineMapInfos.AddRange(mapInfos);
+    }
+
+    // Saves the map info to the pending folder for a particular portal item.
+    // The info will stay in that folder until the job completes.
+    private async Task SavePendingMapInfo(PortalItem portalItem)
+    {
+        var id = portalItem.ItemId;
+        if (string.IsNullOrEmpty(id))
+            return;
+        string path = GetPendingMapInfoDirectory(id);
+        if (OfflineMapInfo.InfoExists(path))
+            return; //No need to save pending info as pending offline map info already exists.
+
+        var info = new OfflineMapInfo(portalItem);
+        await info.Save(path);
+    }
+
+    // For a successful job, this function moves the pending map info from the pending
+    // folder to its final destination.
+    private void HandlePendingMapInfo(string? id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return;
+        // TODO
     }
 
     /// <summary>
@@ -213,5 +287,16 @@ public class OfflineManager
             throw new ArgumentNullException(nameof(mapInfo));
         }
         throw new NotImplementedException();
+    }
+
+
+
+    private string GetPortalItemDirectory(string portalItemID)
+    {
+        return Path.Combine(OfflineMapsFolder, "Maps", portalItemID);
+    }
+    private string GetPendingMapInfoDirectory(string portalItemID)
+    {
+        return Path.Combine(OfflineMapsFolder, "Pending", portalItemID);
     }
 }
