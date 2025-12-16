@@ -22,6 +22,7 @@
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/FeatureForm/FeatureFormView.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OfflineMapAreasView/OfflineMapAreasView.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
    
