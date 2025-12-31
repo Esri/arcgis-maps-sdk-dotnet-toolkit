@@ -18,20 +18,13 @@ internal abstract partial class AppiumTestBase
 
     protected void ZoomIn(int x, int y)
     {
-        switch (Platform)
-        {
-            case TestPlatform.WinUI:
-            case TestPlatform.MauiWinUI:
-            case TestPlatform.WPF:
-                WindowsScrollZoomIn(x, y);
-                break;
-            case TestPlatform.MauiAndroid:
-            case TestPlatform.MauiIOS:
-                PinchToZoomInCoordinates(x, y);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(Platform), Platform, "Unrecognized platform.");
-        }
+#if WINDOWS_TEST
+        WindowsScrollZoomIn(x, y);
+#elif ANDROID_TEST || IOS_TEST
+        PinchToZoomInCoordinates(x, y);
+#else
+        throw new NotImplementedException("ZoomIn is not implemented for this platform.");
+#endif
     }
 
     protected void WindowsScrollZoomIn(int x, int y, int deltaY = 10)

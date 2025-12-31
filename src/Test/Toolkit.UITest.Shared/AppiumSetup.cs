@@ -10,8 +10,17 @@ namespace Toolkit.UITest.Shared;
 internal partial class AppiumSetup
 {
     private static AppiumLocalService? appiumLocalService;
-    private static AppiumDriver? driver;
-    internal static AppiumDriver? Driver => driver;
+
+#if WINDOWS_TEST
+    private static WindowsDriver? driver;
+    internal static WindowsDriver? Driver => driver;
+#elif ANDROID_TEST
+    private static AndroidDriver? driver;
+    internal static AndroidDriver? Driver => driver;
+#elif IOS_TEST
+    private static IOSDriver? driver;
+    internal static IOSDriver? Driver => driver;
+#endif
 
     /// <summary>
     /// Creates and starts a local Appium server instance.

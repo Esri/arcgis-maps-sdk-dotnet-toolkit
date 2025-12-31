@@ -1,4 +1,7 @@
-﻿namespace Toolkit.UITest.Shared;
+﻿using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Windows;
+
+namespace Toolkit.UITest.Shared;
 
 internal abstract partial class AppiumTestBase
 {

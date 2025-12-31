@@ -1,18 +1,20 @@
-﻿using OpenQA.Selenium.Appium;
+﻿#if WINDOWS_TEST
+using OpenQA.Selenium.Appium.Windows;
+#elif ANDROID_TEST
+using OpenQA.Selenium.Appium.Android;
+#elif IOS_TEST
+using OpenQA.Selenium.Appium.iOS;
+#endif
 
 namespace Toolkit.UITest.Shared;
 
 internal abstract partial class AppiumTestBase
 {
-    protected AppiumDriver Driver => AppiumSetup.Driver;
-    protected TestPlatform Platform => TestPlatform.WPF;
-
-    protected enum TestPlatform
-    {
-        WinUI,
-        WPF,
-        MauiWinUI,
-        MauiAndroid,
-        MauiIOS
-    }
+#if WINDOWS_TEST
+    protected WindowsDriver Driver => AppiumSetup.Driver;
+#elif ANDROID_TEST
+    protected AndroidDriver Driver => AppiumSetup.Driver;
+#elif IOS_TEST
+    protected IOSDriver Driver => AppiumSetup.Driver;
+#endif
 }
