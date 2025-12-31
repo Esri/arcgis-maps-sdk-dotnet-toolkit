@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium.Appium;
+using System.Reflection;
 
 namespace Toolkit.UITest.Shared;
 
@@ -7,7 +8,7 @@ internal partial class AppiumSetup
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
-        var wpfSamplesApp = @"YOUR_PATH\arcgis-maps-sdk-dotnet-toolkit\src\Samples\Toolkit.SampleApp.WPF\bin\Debug\net8.0-windows10.0.19041.0\Toolkit.SampleApp.WPF.exe";
+        var wpfSamplesApp = GetSampleAppPath();
 
         appiumLocalService = StartServer();
         driver = MakeWindowsDriver(wpfSamplesApp);
@@ -18,5 +19,26 @@ internal partial class AppiumSetup
         Console.WriteLine("WPF OneTimeSetup complete.");
 
         Task.Delay(500).Wait();
+    }
+
+    private static string GetSampleAppPath()
+    {
+        var testAssemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            ?? throw new InvalidOperationException("Could not determine test assembly directory.");
+
+        var pathFile = Path.Combine(testAssemblyDir, "SampleAppPath.txt");
+        if (!File.Exists(pathFile))
+        {
+            throw new FileNotFoundException(
+                $"Missing '{pathFile}'. Ensure the 'BuildSamplesApp' MSBuild target ran before tests.");
+        }
+
+        var exePath = File.ReadAllText(pathFile).Trim();
+        if (string.IsNullOrWhiteSpace(exePath))
+        {
+            throw new InvalidOperationException($"'{pathFile}' was empty.");
+        }
+
+        return exePath;
     }
 }

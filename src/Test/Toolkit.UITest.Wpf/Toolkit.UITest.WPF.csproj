@@ -24,4 +24,19 @@
 
   <Import Project="..\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems" Label="Shared" />
 
+  <!-- Build sample app if needed and record build location to SampleAppPath.txt -->
+  <Target Name="BuildSamplesApp" BeforeTargets="Build">
+    <MSBuild Projects="..\..\Samples\Toolkit.SampleApp.WPF\Toolkit.SampleApp.WPF.csproj" Targets="Build" Properties="Configuration=Release">
+      <Output TaskParameter="TargetOutputs" ItemName="_SampleAppTargetOutputs" />
+    </MSBuild>
+
+    <PropertyGroup>
+      <_SampleAppExePath>@(_SampleAppTargetOutputs->'%(FullPath)')</_SampleAppExePath>
+      <_SampleAppExePath>$(_SampleAppExePath.Replace(dll,exe))</_SampleAppExePath>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="WPF Sample app built at: $(_SampleAppExePath)" />
+    <WriteLinesToFile File="$(TargetDir)SampleAppPath.txt" Lines="$(_SampleAppExePath)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+
 </Project>

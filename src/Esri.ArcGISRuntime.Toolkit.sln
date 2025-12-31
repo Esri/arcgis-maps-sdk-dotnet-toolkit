@@ -44,6 +44,9 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Toolkit.UITest.Shared", "Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.shproj", "{B30BF646-12C1-41E9-8CAB-59A6F1521E06}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.WPF", "Test\Toolkit.UITest.Wpf\Toolkit.UITest.WPF.csproj", "{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FE10E0C1-FFF3-4767-BD4A-D5C61B17C2C4} = {FE10E0C1-FFF3-4767-BD4A-D5C61B17C2C4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.WinUI", "Test\Toolkit.UITest.WinUI\Toolkit.UITest.WinUI.csproj", "{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}"
 EndProject
