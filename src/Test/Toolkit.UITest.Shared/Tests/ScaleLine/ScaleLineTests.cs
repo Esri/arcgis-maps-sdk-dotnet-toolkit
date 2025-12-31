@@ -9,8 +9,7 @@ internal class ScaleLineTests : AppiumTestBase
     [Test]
     public async Task ScaleLineUpdatesOnZoom()
     {
-        FindElementByName("ScaleLine").Click();
-        FindElementByName("Scale Line").Click();
+        OpenSample("ScaleLine");
 
         await Task.Delay(500);
         var mapView = FindElement("MainMapView");
