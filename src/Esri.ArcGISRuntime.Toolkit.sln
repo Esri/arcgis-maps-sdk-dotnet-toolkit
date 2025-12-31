@@ -39,6 +39,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Analyzers.Test", "Analyzers\Toolkit.Analyzers.Test\Esri.ArcGISRuntime.Toolkit.Analyzers.Test.shproj", "{61FBC238-623C-42FF-8C47-95D710A1E66F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{51D1BA93-1436-4F4E-A8EF-DFE8B2123C88}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Toolkit.UITest.Shared", "Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.shproj", "{B30BF646-12C1-41E9-8CAB-59A6F1521E06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.WPF", "Test\Toolkit.UITest.Wpf\Toolkit.UITest.WPF.csproj", "{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.WinUI", "Test\Toolkit.UITest.WinUI\Toolkit.UITest.WinUI.csproj", "{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.MauiWinUI", "Test\Toolkit.UITest.Maui\Toolkit.UITest.MauiWinUI.csproj", "{D5402A23-1EB8-40DD-A739-F37D6FBDED43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.MauiIOS", "Test\Toolkit.UITest.MauiIOS\Toolkit.UITest.MauiIOS.csproj", "{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.MauiAndroid", "Test\Toolkit.UITest.Android\Toolkit.UITest.MauiAndroid.csproj", "{28901C18-892C-4549-AFB8-4C94A633F18E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UITest", "UITest", "{677C30FB-49C9-476C-BB87-3CE1B5F1A77B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -253,6 +269,106 @@ Global
 		{7A6C1C09-8CD6-4C8E-B866-248429B4848F}.Release|x64.Build.0 = Release|Any CPU
 		{7A6C1C09-8CD6-4C8E-B866-248429B4848F}.Release|x86.ActiveCfg = Release|Any CPU
 		{7A6C1C09-8CD6-4C8E-B866-248429B4848F}.Release|x86.Build.0 = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|ARM.Build.0 = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|x64.Build.0 = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Debug|x86.Build.0 = Debug|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|ARM.Build.0 = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|ARM64.Build.0 = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|x64.ActiveCfg = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|x64.Build.0 = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|x86.ActiveCfg = Release|Any CPU
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30}.Release|x86.Build.0 = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|ARM.Build.0 = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|x64.Build.0 = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Debug|x86.Build.0 = Debug|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|ARM.ActiveCfg = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|ARM.Build.0 = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|ARM64.Build.0 = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|x64.ActiveCfg = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|x64.Build.0 = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|x86.ActiveCfg = Release|Any CPU
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718}.Release|x86.Build.0 = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|ARM.Build.0 = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|x64.Build.0 = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Debug|x86.Build.0 = Debug|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|ARM.Build.0 = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|ARM64.Build.0 = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|x64.ActiveCfg = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|x64.Build.0 = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|x86.ActiveCfg = Release|Any CPU
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43}.Release|x86.Build.0 = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|ARM.Build.0 = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|x64.Build.0 = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Debug|x86.Build.0 = Debug|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|ARM.Build.0 = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|ARM64.Build.0 = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|x64.ActiveCfg = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|x64.Build.0 = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|x86.ActiveCfg = Release|Any CPU
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412}.Release|x86.Build.0 = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|x64.Build.0 = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Debug|x86.Build.0 = Debug|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|ARM.Build.0 = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|ARM64.Build.0 = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|x64.ActiveCfg = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|x64.Build.0 = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|x86.ActiveCfg = Release|Any CPU
+		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -270,19 +386,32 @@ Global
 		{BF6231E6-1900-458B-8520-4B236CDBDB20} = {8BEEA12E-FC7C-4577-80D9-A2C4FDB76208}
 		{7A6C1C09-8CD6-4C8E-B866-248429B4848F} = {8BEEA12E-FC7C-4577-80D9-A2C4FDB76208}
 		{61FBC238-623C-42FF-8C47-95D710A1E66F} = {8BEEA12E-FC7C-4577-80D9-A2C4FDB76208}
+		{B30BF646-12C1-41E9-8CAB-59A6F1521E06} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
+		{DFC2C5D8-2661-4773-BEC1-FC83B4C40D30} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
+		{CFBA6AC1-9174-4EBB-916E-A8DD0767D718} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
+		{D5402A23-1EB8-40DD-A739-F37D6FBDED43} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
+		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
+		{28901C18-892C-4549-AFB8-4C94A633F18E} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
+		{677C30FB-49C9-476C-BB87-3CE1B5F1A77B} = {51D1BA93-1436-4F4E-A8EF-DFE8B2123C88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD437263-1C96-46A9-A641-C312BF7DAF99}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems*{28901c18-892c-4549-afb8-4c94a633f18e}*SharedItemsImports = 5
 		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{5f3cad93-6062-450a-8771-7b4645caf598}*SharedItemsImports = 13
 		Analyzers\Toolkit.Analyzers.Test\Esri.ArcGISRuntime.Toolkit.Analyzers.Test.projitems*{61fbc238-623c-42ff-8c47-95d710a1e66f}*SharedItemsImports = 13
 		Analyzers\Toolkit.Analyzers.Test\Esri.ArcGISRuntime.Toolkit.Analyzers.Test.projitems*{7a6c1c09-8cd6-4c8e-b866-248429b4848f}*SharedItemsImports = 5
+		Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems*{aa220bcb-7ca2-46ce-abac-b15a4bf66412}*SharedItemsImports = 5
+		Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems*{b30bf646-12c1-41e9-8cab-59a6f1521e06}*SharedItemsImports = 13
 		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{bdb163a7-b221-4e9f-a960-92a849ba3f3f}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{bdb163a7-b221-4e9f-a960-92a849ba3f3f}*SharedItemsImports = 5
+		Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems*{cfba6ac1-9174-4ebb-916e-a8dd0767d718}*SharedItemsImports = 5
+		Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems*{d5402a23-1eb8-40dd-a739-f37d6fbded43}*SharedItemsImports = 5
 		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{d9b86d10-7483-47ee-994e-9764fdb07b20}*SharedItemsImports = 13
+		Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems*{dfc2c5d8-2661-4773-bec1-fc83b4c40d30}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{f7f98ce8-5304-460d-83a2-f4f7fe50b370}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
