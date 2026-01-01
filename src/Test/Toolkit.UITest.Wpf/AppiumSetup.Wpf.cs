@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium.Appium;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Toolkit.UITest.Shared;

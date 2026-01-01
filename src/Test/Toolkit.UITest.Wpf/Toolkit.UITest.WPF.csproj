@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Appium.WebDriver" Version="8.0.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
     <PackageReference Include="NUnit" Version="4.3.2" />
     <PackageReference Include="NUnit.Analyzers" Version="4.7.0" />
