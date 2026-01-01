@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CheckOS">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <DefineConstants>$(DefineConstants);WINDOWS_TEST;MAUI_TEST</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;WINDOWS_TEST;MAUI_TEST</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,5 +23,10 @@
   </ItemGroup>
 
   <Import Project="..\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems" Label="Shared" />
+
+  <!-- The Maui Windows tests should only run on a Windows machine -->
+  <Target Name="CheckOS">
+    <Error Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The Maui Windows tests must be run from a Windows machine" />
+  </Target>
 
 </Project>

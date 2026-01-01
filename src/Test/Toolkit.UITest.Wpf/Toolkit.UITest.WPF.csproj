@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CheckOS">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <DefineConstants>$(DefineConstants);WINDOWS_TEST;WINUI_TEST</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;WINDOWS_TEST;WINUI_TEST</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +23,11 @@
   </ItemGroup>
 
   <Import Project="..\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems" Label="Shared" />
+
+  <!-- The WPF tests should only run on a Windows machine -->
+  <Target Name="CheckOS">
+    <Error Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The WPF tests must be run from a Windows machine" />
+  </Target>
 
   <!-- Build sample app if needed and record build location to SampleAppPath.txt -->
   <Target Name="BuildSamplesApp" BeforeTargets="Build">
