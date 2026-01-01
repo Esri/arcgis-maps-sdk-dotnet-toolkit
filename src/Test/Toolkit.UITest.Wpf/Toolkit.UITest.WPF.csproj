@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;WINDOWS_TEST;WINUI_TEST</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;WINDOWS_TEST;WPF_TEST</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
