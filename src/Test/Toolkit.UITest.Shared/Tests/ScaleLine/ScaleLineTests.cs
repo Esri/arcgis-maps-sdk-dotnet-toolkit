@@ -7,32 +7,29 @@ internal class ScaleLineTests : AppiumTestBase
     private const string ScaleLineMetricValueId = "ScaleLineMetricValue";
 
     [Test]
-    public async Task ScaleLineUpdatesOnZoom()
+    public async Task AdvancedScaleLineUpdatesOnZoomAndPan()
     {
         OpenSample("ScaleLine");
 
-        await Task.Delay(500);
+        await Task.Delay(1000);
+
+        // Verify initial render
+        var advancedScaleLine = FindElement("AdvancedScaleLine");
+        CompareBaseline("AdvancedScaleLineInitialViewTest", advancedScaleLine);
+
         var mapView = FindElement("MainMapView");
-        var mapViewRect = mapView.Rect;
+        var mapCenterX = mapView.Rect.X + mapView.Rect.Width / 2;
+        var mapCenterY = mapView.Rect.Y + mapView.Rect.Height / 2;
 
+        // Starting scale value
         var lastScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
-
-        var mapCenterX = mapViewRect.X + mapViewRect.Width / 2;
-        var mapCenterY = mapViewRect.Y + mapViewRect.Height / 2;
 
         // Test zoom in
         ZoomIn(mapCenterX, mapCenterY);
         await Task.Delay(1000);
 
         var currentScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
-        if (currentScaleValue >= lastScaleValue)
-        {
-            Console.WriteLine($"Scale line did not update correctly after zooming in. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
-        }
-        else
-        {
-            Console.WriteLine($"Scale line updated correctly after zooming in. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
-        }
+        Assert.That(currentScaleValue > lastScaleValue, $"Scale line did not update correctly after zooming in. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
         lastScaleValue = currentScaleValue;
 
         // Test pan up (on mercator map this should distort the scale so that it is larger)
@@ -40,14 +37,8 @@ internal class ScaleLineTests : AppiumTestBase
         await Task.Delay(1000);
 
         currentScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
-        if (currentScaleValue >= lastScaleValue)
-        {
-            Console.WriteLine($"Scale line did not update correctly after panning up. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
-        }
-        else
-        {
-            Console.WriteLine($"Scale line updated correctly after panning up. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
-        }
+        Assert.That(currentScaleValue > lastScaleValue, $"Scale line did not update correctly after panning up. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
+
         lastScaleValue = currentScaleValue;
     }
 
@@ -68,7 +59,7 @@ internal class ScaleLineTests : AppiumTestBase
         var initialScaleValue = int.Parse(scaleValueElement.GetAttribute("Name"));
 
         var scaleLineLength = scaleValueElement.Location.X - scaleLineElement.Rect.Left;
-        return initialScaleValue / (float)scaleLineLength;
+        return scaleLineLength / (float)initialScaleValue;
     }
 
     private enum ScaleLineType
