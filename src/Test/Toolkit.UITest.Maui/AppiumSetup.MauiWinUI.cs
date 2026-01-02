@@ -9,7 +9,6 @@ internal partial class AppiumSetup
     {
         var MauiSamplesApp = @"91226bae-9931-4128-86d9-0452a67f1bc2_9zz4h110yvjzm!App";
 
-        appiumLocalService = StartServer();
         driver = MakeWindowsDriver(MauiSamplesApp);
 
         var maximizeButton = Driver.FindElement(MobileBy.Name("Maximize"));

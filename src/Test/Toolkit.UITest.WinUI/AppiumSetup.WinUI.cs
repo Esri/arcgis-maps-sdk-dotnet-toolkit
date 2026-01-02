@@ -12,7 +12,6 @@ internal partial class AppiumSetup
     {
         var WinUISamplesApp = @"1a3f5c3d-27ca-45dd-bbe3-5e2fad821f9d_btzmr6n615d7a!App";
 
-        appiumLocalService = StartServer();
         driver = MakeWindowsDriver(WinUISamplesApp);
 
         var maximizeButton = Driver.FindElement(MobileBy.Name("Maximize"));

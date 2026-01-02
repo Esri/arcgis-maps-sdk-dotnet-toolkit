@@ -22,16 +22,6 @@ internal partial class AppiumSetup
     internal static IOSDriver? Driver => driver;
 #endif
 
-    /// <summary>
-    /// Creates and starts a local Appium server instance.
-    /// </summary>
-    private AppiumLocalService StartServer()
-    {
-        var localService = AppiumLocalService.BuildDefaultService();
-        localService.Start();
-        return localService;
-    }
-
     private WindowsDriver MakeWindowsDriver(string app, string port = "4723", int timeoutSeconds = 10)
     {
         var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
@@ -80,6 +70,5 @@ internal partial class AppiumSetup
     {
         driver?.Quit();
         driver?.Dispose();
-        appiumLocalService?.Dispose();
     }
 }

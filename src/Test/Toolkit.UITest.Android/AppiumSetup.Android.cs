@@ -7,7 +7,6 @@ internal partial class AppiumSetup
     {
         var MauiSamplesApp = @"";
 
-        appiumLocalService = StartServer();
         driver = MakeAndroidDriver(MauiSamplesApp);
 
         Task.Delay(500).Wait();
