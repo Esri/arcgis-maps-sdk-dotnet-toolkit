@@ -10,8 +10,8 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        
-        <esri:MapView Map="{x:Bind Map}" x:Name="mapView"/>
+
+        <esri:MapView Map="{x:Bind Map}" x:Name="mapView" AutomationProperties.AutomationId="MainMapView"/>
 
         <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderBrush="Black" BorderThickness="1" Width="350">
             <Grid Margin="10">
@@ -26,7 +26,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="Basic Scale Calculation" />
-                <esriToolkit:ScaleLine MapScale="{x:Bind mapView.MapScale, Mode=OneWay}" Grid.Row="1" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
+                <esriToolkit:ScaleLine MapScale="{x:Bind mapView.MapScale, Mode=OneWay}" Grid.Row="1" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+                                       AutomationProperties.AutomationId="SimpleScaleLine" />
                 <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
                     <ToolTipService.ToolTip>
                         <TextBlock MaxWidth="300" TextWrapping="Wrap">
@@ -38,7 +39,8 @@
                 </TextBlock>
 
                 <TextBlock Text="Advanced Scale Calculation" Grid.Row="2" />
-                <esriToolkit:ScaleLine MapView="{x:Bind mapView}" Grid.Row="3" Foreground="{ThemeResource ApplicationForegroundThemeBrush}" />
+                <esriToolkit:ScaleLine MapView="{x:Bind mapView}" Grid.Row="3" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+                                       AutomationProperties.AutomationId="AdvancedScaleLine" />
                 <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
                     <ToolTipService.ToolTip>
                         <TextBlock MaxWidth="300" TextWrapping="Wrap">
