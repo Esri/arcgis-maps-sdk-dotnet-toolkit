@@ -5,7 +5,7 @@ internal partial class AppiumSetup
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
-        var MauiSamplesApp = @"";
+        var MauiSamplesApp = @"com.companyname.toolkit.sampleapp.maui";
 
         driver = MakeAndroidDriver(MauiSamplesApp);
 

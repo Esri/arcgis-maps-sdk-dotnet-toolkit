@@ -40,6 +40,21 @@ internal abstract partial class AppiumTestBase
 
     protected AppiumElement FindElementByName(string name)
     {
+#if ANDROID_TEST
+        return Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().text(\"{name}\")"));
+#else
         return Driver.FindElement(MobileBy.Name(name));
+#endif
+    }
+
+    protected string GetElementText(AppiumElement element)
+    {
+#if WINDOWS_TEST
+        return element.GetAttribute("Name");
+#elif ANDROID_TEST
+        return element.GetAttribute("text");
+#else
+        throw new NotImplementedException("GetElementText is not implemented for this platform.");
+#endif
     }
 }

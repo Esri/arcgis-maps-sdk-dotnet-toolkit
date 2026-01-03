@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium.Appium;
+using System.Diagnostics;
 
 namespace Toolkit.UITest.Shared.ScaleLine;
 
@@ -56,10 +57,11 @@ internal class ScaleLineTests : AppiumTestBase
     private float GetScale(AppiumElement scaleLineElement)
     {
         var scaleValueElement = FindElement(scaleLineElement, "ScaleLineMetricValue");
-        var initialScaleValue = int.Parse(scaleValueElement.GetAttribute("Name"));
+        var scaleValue = int.Parse(GetElementText(scaleValueElement));
 
         var scaleLineLength = scaleValueElement.Location.X - scaleLineElement.Rect.Left;
-        return scaleLineLength / (float)initialScaleValue;
+        TestContext.Out.WriteLine($"Scale line length in pixels: {scaleLineLength}, scale value: {scaleValue}");
+        return scaleLineLength / (float)scaleValue;
     }
 
     private enum ScaleLineType

@@ -15,12 +15,17 @@ internal abstract partial class AppiumTestBase
         {
             if (baselinesDirPath == null)
                 baselinesDirPath = GetBaselinesFolder();
-
-            Debug.WriteLine(baselinesDirPath);
             return baselinesDirPath;
         }
     }
-    private string ComparisonFailuresDirectory => Path.Combine(BaselinesDirectory, "Failures");
+    private string ComparisonFailuresDirectory {
+        get {
+            var path = Path.Combine(BaselinesDirectory, "Failures");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            return path;
+        }
+    }
 
     protected void CompareBaseline(string baselineName, AppiumElement? element = null)
     {
