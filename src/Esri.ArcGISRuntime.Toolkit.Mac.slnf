@@ -1,0 +1,18 @@
+{
+  "solution": {
+    "path": "Esri.ArcGISRuntime.Toolkit.sln",
+    "projects": [
+      "Analyzers\\Toolkit.Analyzers.Test\\Esri.ArcGISRuntime.Toolkit.Analyzers.Test.shproj",
+      "Analyzers\\Toolkit.Maui.Analyzers.CodeFixes\\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.csproj",
+      "Analyzers\\Toolkit.Maui.Analyzers.UnitTests\\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.UnitTests.csproj",
+      "Analyzers\\Toolkit.Maui.Analyzers\\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.csproj",
+      "Samples\\Toolkit.SampleApp.Maui\\Toolkit.SampleApp.Maui.csproj",
+      "Test\\Toolkit.UITest.MauiIOS\\Toolkit.UITest.MauiIOS.csproj",
+      "Test\\Toolkit.UITest.MauiMac\\Toolkit.UITest.MauiMac.csproj",
+      "Test\\Toolkit.UITest.Shared\\Toolkit.UITest.Shared.shproj",
+      "Toolkit\\Toolkit.Maui\\Esri.ArcGISRuntime.Toolkit.Maui.csproj",
+      "Toolkit\\Toolkit.UI.Controls\\Esri.ArcGISRuntime.Toolkit.UI.Controls.shproj",
+      "Toolkit\\Toolkit\\Esri.ArcGISRuntime.Toolkit.Shared.shproj"
+    ]
+  }
+}
