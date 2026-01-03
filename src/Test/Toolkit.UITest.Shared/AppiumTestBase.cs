@@ -13,12 +13,12 @@ namespace Toolkit.UITest.Shared;
 internal abstract partial class AppiumTestBase
 {
 #if WINDOWS_TEST
-    protected WindowsDriver Driver => AppiumSetup.Driver;
+    protected WindowsDriver Driver => AppiumSetup.Driver!;
 #elif ANDROID_TEST
-    protected AndroidDriver Driver => AppiumSetup.Driver;
+    protected AndroidDriver Driver => AppiumSetup.Driver!;
 #elif IOS_TEST
-    protected IOSDriver Driver => AppiumSetup.Driver;
+    protected IOSDriver Driver => AppiumSetup.Driver!;
 #elif MAC_TEST
-    protected MacDriver Driver => AppiumSetup.Driver;
+    protected MacDriver Driver => AppiumSetup.Driver!;
 #endif
 }

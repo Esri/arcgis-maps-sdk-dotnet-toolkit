@@ -2,7 +2,6 @@
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.iOS;
 using OpenQA.Selenium.Appium.Mac;
-using OpenQA.Selenium.Appium.Service;
 using OpenQA.Selenium.Appium.Windows;
 
 namespace Toolkit.UITest.Shared;
@@ -10,8 +9,6 @@ namespace Toolkit.UITest.Shared;
 [SetUpFixture]
 internal partial class AppiumSetup
 {
-    private static AppiumLocalService? appiumLocalService;
-
 #if WINDOWS_TEST
     private static WindowsDriver? driver;
     internal static WindowsDriver? Driver => driver;
