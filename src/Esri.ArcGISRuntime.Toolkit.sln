@@ -58,6 +58,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.MauiAndroid"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UITest", "UITest", "{677C30FB-49C9-476C-BB87-3CE1B5F1A77B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITest.MauiMac", "Test\Toolkit.UITest.MauiMac\Toolkit.UITest.MauiMac.csproj", "{61EDCABD-00A6-4081-B13C-64196930B052}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -372,6 +374,26 @@ Global
 		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|x64.Build.0 = Release|Any CPU
 		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|x86.ActiveCfg = Release|Any CPU
 		{28901C18-892C-4549-AFB8-4C94A633F18E}.Release|x86.Build.0 = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|ARM.Build.0 = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|x64.Build.0 = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Debug|x86.Build.0 = Debug|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|ARM.ActiveCfg = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|ARM.Build.0 = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|ARM64.Build.0 = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|x64.ActiveCfg = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|x64.Build.0 = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|x86.ActiveCfg = Release|Any CPU
+		{61EDCABD-00A6-4081-B13C-64196930B052}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -396,6 +418,7 @@ Global
 		{AA220BCB-7CA2-46CE-ABAC-B15A4BF66412} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
 		{28901C18-892C-4549-AFB8-4C94A633F18E} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
 		{677C30FB-49C9-476C-BB87-3CE1B5F1A77B} = {51D1BA93-1436-4F4E-A8EF-DFE8B2123C88}
+		{61EDCABD-00A6-4081-B13C-64196930B052} = {677C30FB-49C9-476C-BB87-3CE1B5F1A77B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD437263-1C96-46A9-A641-C312BF7DAF99}
@@ -405,6 +428,7 @@ Global
 		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{5f3cad93-6062-450a-8771-7b4645caf598}*SharedItemsImports = 13
+		Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems*{61edcabd-00a6-4081-b13c-64196930b052}*SharedItemsImports = 5
 		Analyzers\Toolkit.Analyzers.Test\Esri.ArcGISRuntime.Toolkit.Analyzers.Test.projitems*{61fbc238-623c-42ff-8c47-95d710a1e66f}*SharedItemsImports = 13
 		Analyzers\Toolkit.Analyzers.Test\Esri.ArcGISRuntime.Toolkit.Analyzers.Test.projitems*{7a6c1c09-8cd6-4c8e-b866-248429b4848f}*SharedItemsImports = 5
 		Test\Toolkit.UITest.Shared\Toolkit.UITest.Shared.projitems*{aa220bcb-7ca2-46ce-abac-b15a4bf66412}*SharedItemsImports = 5

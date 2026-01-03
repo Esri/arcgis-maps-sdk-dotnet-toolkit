@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.iOS;
+using OpenQA.Selenium.Appium.Mac;
 using OpenQA.Selenium.Appium.Service;
 using OpenQA.Selenium.Appium.Windows;
 
@@ -20,6 +21,9 @@ internal partial class AppiumSetup
 #elif IOS_TEST
     private static IOSDriver? driver;
     internal static IOSDriver? Driver => driver;
+#elif MAC_TEST
+    private static MacDriver? driver;
+    internal static MacDriver? Driver => driver;
 #endif
 
     private WindowsDriver MakeWindowsDriver(string app, string port = "4723", int timeoutSeconds = 10)
@@ -60,7 +64,7 @@ internal partial class AppiumSetup
         throw new NotImplementedException("iOS tests are not yet implemented.");
     }
 
-    private IOSDriver MakeMacDriver(string bundleId, string port = "4723", int timeoutSeconds = 10)
+    private MacDriver MakeMacDriver(string bundleId, string port = "4723", int timeoutSeconds = 10)
     {
         throw new NotImplementedException("MacCatalyst tests are not yet implemented.");
     }
