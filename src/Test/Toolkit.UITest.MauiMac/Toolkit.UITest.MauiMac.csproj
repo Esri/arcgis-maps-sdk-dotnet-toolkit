@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CheckOS">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -27,7 +27,7 @@
 
   <!-- The Maui MacCatalysts tests can only run from a Mac machine -->
   <Target Name="CheckOS">
-    <Warning Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui MacCatalyst tests must be run from a Mac machine" />
+    <Warning Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui MacCatalyst UI tests must be run from a Mac machine" />
   </Target>
 
 </Project>

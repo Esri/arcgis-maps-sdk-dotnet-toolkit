@@ -27,7 +27,7 @@
 
   <!-- The Maui iOS tests should only run from a Mac machine -->
   <Target Name="CheckOS">
-    <Error Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui iOS tests must be run from a Mac machine" />
+    <Warning Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui iOS UI tests must be run from a Mac machine" />
   </Target>
 
 </Project>

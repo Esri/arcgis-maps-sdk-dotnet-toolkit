@@ -27,7 +27,7 @@
 
   <!-- The Maui Android tests should only run from a Windows machine -->
   <Target Name="CheckOS">
-    <Error Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The Maui Android tests must be run from a Windows machine" />
+    <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The Maui Android tests must be run from a Windows machine" />
   </Target>
 
 </Project>
