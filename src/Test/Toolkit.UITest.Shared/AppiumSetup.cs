@@ -56,14 +56,37 @@ internal partial class AppiumSetup
         return androidDriver;
     }
 
-    private IOSDriver MakeiOSDriver(string bundleId, string port = "4723", int timeoutSeconds = 10)
+    private IOSDriver MakeiOSDriver(string deviceUdid, string bundleId, string port = "4723", int timeoutSeconds = 10)
     {
-        throw new NotImplementedException("iOS tests are not yet implemented.");
+        var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
+        var driverOptions = new AppiumOptions()
+        {
+            PlatformName = "iOS",
+            AutomationName = "XCUITest",
+        };
+        driverOptions.AddAdditionalAppiumOption("bundleId", bundleId);
+        driverOptions.AddAdditionalAppiumOption("udid", deviceUdid);
+
+        var iosDriver = new IOSDriver(serverUri, driverOptions, TimeSpan.FromSeconds(timeoutSeconds));
+        iosDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(timeoutSeconds);
+
+        return iosDriver;
     }
 
     private MacDriver MakeMacDriver(string bundleId, string port = "4723", int timeoutSeconds = 10)
     {
-        throw new NotImplementedException("MacCatalyst tests are not yet implemented.");
+        var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
+        var driverOptions = new AppiumOptions()
+        {
+            PlatformName = "mac",
+            AutomationName = "mac2",
+        };
+        driverOptions.AddAdditionalAppiumOption("bundleId", bundleId);
+
+        var macDriver = new MacDriver(serverUri, driverOptions, TimeSpan.FromSeconds(timeoutSeconds));
+        macDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(timeoutSeconds);
+
+        return macDriver;
     }
 
     [OneTimeTearDown]
