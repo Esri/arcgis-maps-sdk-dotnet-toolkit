@@ -9,10 +9,8 @@ internal abstract partial class AppiumTestBase
     {
 #if WINDOWS_TEST
         return Driver.FindElements(MobileBy.AccessibilityId(name));
-#elif ANDROID_TEST
-        return Driver.FindElements(MobileBy.Id(name));
 #else
-        throw new NotImplementedException("FindElements is not implemented for this platform.");
+        return Driver.FindElements(MobileBy.Id(name));
 #endif
     }
 
@@ -20,10 +18,8 @@ internal abstract partial class AppiumTestBase
     {
 #if WINDOWS_TEST
         return Driver.FindElement(MobileBy.AccessibilityId(id));
-#elif ANDROID_TEST
-        return Driver.FindElement(MobileBy.Id(id));
 #else
-        throw new NotImplementedException("FindElement(string) is not implemented for this platform.");
+        return Driver.FindElement(MobileBy.Id(id));
 #endif
     }
 
@@ -31,10 +27,8 @@ internal abstract partial class AppiumTestBase
     {
 #if WINDOWS_TEST
         return parent.FindElement(MobileBy.AccessibilityId(id));
-#elif ANDROID_TEST
-        return parent.FindElement(MobileBy.Id(id));
 #else
-        throw new NotImplementedException("FindElement(AppiumElement,string) is not implemented for this platform.");
+        return parent.FindElement(MobileBy.Id(id));
 #endif
     }
 
@@ -53,8 +47,10 @@ internal abstract partial class AppiumTestBase
         return element.GetAttribute("Name");
 #elif ANDROID_TEST
         return element.GetAttribute("text");
+#elif MAC_TEST || IOS_TEST
+        return element.GetAttribute("label");
 #else
-        throw new NotImplementedException("GetElementText is not implemented for this platform.");
+        throw new NotImplementedException("FindElement(AppiumElement,string) is not implemented for this platform.");
 #endif
     }
 }

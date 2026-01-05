@@ -62,7 +62,6 @@ internal abstract partial class AppiumTestBase
         }
     }
 
-#if WINDOWS_RUNNER
     private string GetBaselinesFolder()
     {
         var testAssemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
@@ -89,18 +88,6 @@ internal abstract partial class AppiumTestBase
             return new MagickImage(imagePath);
     }
 
-#elif MAC_RUNNER
-    private string GetBaselinesFolder()
-    {
-        throw new NotImplementedException("GetBaselinesFolder is not implemented for tests run from Mac machines.");
-    }
-
-    private MagickImage? GetBaseline(string testName)
-    {
-        throw new NotImplementedException("GetBaseline is not implemented for tests run from Mac machines.");
-    }
-#endif
-
     private string GetPlatformFolderName()
     {
 #if WPF_TEST
@@ -113,6 +100,8 @@ internal abstract partial class AppiumTestBase
         return "MauiAndroid";
 #elif IOS_TEST && MAUI_TEST
         return "MauiIOS";
+#elif MAC_TEST && MAUI_TEST
+        return "MauiMac";
 #else
         throw new NotImplementedException("GetPlatformFolderName is not implemented for this platform.");
 #endif

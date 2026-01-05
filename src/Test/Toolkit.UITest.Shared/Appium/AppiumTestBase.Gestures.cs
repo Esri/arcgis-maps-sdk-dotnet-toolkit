@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium.Appium.Interactions;
+﻿using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Interactions;
 using OpenQA.Selenium.Interactions;
 
 namespace Toolkit.UITest.Shared;
@@ -7,6 +8,7 @@ internal abstract partial class AppiumTestBase
 {
     protected void DragCoordinates(double fromX, double fromY, double toX, double toY)
     {
+#if ANDROID_TEST || IOS_TEST || WINDOWS_TEST
         OpenQA.Selenium.Appium.Interactions.PointerInputDevice touchDevice = new OpenQA.Selenium.Appium.Interactions.PointerInputDevice(PointerKind.Touch);
         var dragSequence = new ActionSequence(touchDevice, 0);
         dragSequence.AddAction(touchDevice.CreatePointerMove(CoordinateOrigin.Viewport, (int)fromX, (int)fromY, TimeSpan.Zero));
@@ -14,12 +16,23 @@ internal abstract partial class AppiumTestBase
         dragSequence.AddAction(touchDevice.CreatePointerMove(CoordinateOrigin.Viewport, (int)toX, (int)toY, TimeSpan.FromMilliseconds(250)));
         dragSequence.AddAction(touchDevice.CreatePointerUp(PointerButton.TouchContact));
         Driver.PerformActions(new List<ActionSequence> { dragSequence });
+#elif MAC_TEST
+        var a1 = new Actions(Driver);
+        a1
+            .MoveToLocation((int)fromX, (int)fromY)
+            .ClickAndHold()
+            .MoveToLocation((int)toX, (int)toY)
+            .Release()
+            .Perform();
+#endif
     }
 
     protected void ZoomIn(int x, int y)
     {
 #if WINDOWS_TEST
         WindowsScrollZoomIn(x, y);
+#elif MAC_TEST
+        MacDoubleTapZoomIn(x, y);
 #elif ANDROID_TEST || IOS_TEST
         PinchToZoomInCoordinates(x, y);
 #else
@@ -35,6 +48,15 @@ internal abstract partial class AppiumTestBase
                 { "y", y },
                 { "deltaY", deltaY }
             });
+    }
+
+    protected void MacDoubleTapZoomIn(int x, int y, int deltaY = 10, AppiumElement? element = null)
+    {
+        Driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
+        {
+            {"x", x},
+            {"y", y}
+        });
     }
 
     protected void PinchToZoomInCoordinates(int x, int y, int distance = 100, int durationMilliseconds = 250)

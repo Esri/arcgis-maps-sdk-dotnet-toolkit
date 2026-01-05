@@ -9,6 +9,8 @@ internal partial class AppiumSetup
 
         driver = MakeMacDriver(MauiSamplesApp);
 
+        // TODO: Enter fullscreen mode
+
         Task.Delay(500).Wait();
     }
 }
