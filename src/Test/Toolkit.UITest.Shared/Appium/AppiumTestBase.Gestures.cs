@@ -6,6 +6,19 @@ namespace Toolkit.UITest.Shared;
 
 internal abstract partial class AppiumTestBase
 {
+    protected void TapCoordinates(int x, int y)
+    {
+#if WINDOWS_TEST
+        Driver.ExecuteScript("windows: click", new Dictionary<string, object>
+        {
+            { "x", x },
+            { "y", y }
+        });
+#else
+        throw new NotImplementedException("TapCoordinates is not implemented for this platform.");
+#endif
+    }
+
     protected void DragCoordinates(double fromX, double fromY, double toX, double toY)
     {
 #if ANDROID_TEST || IOS_TEST || WINDOWS_TEST

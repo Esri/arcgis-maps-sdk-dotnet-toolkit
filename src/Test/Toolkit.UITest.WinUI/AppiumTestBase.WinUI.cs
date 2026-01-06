@@ -10,6 +10,9 @@ internal abstract partial class AppiumTestBase
             case "ScaleLine":
                 FindElementByName("Scale Line ").Click();
                 break;
+            case "PopupViewer":
+                FindElementByName("Popup Viewer ").Click();
+                break;
             case null:
             case "":
                 throw new ArgumentException("Sample name cannot be null or empty.", nameof(sampleName));

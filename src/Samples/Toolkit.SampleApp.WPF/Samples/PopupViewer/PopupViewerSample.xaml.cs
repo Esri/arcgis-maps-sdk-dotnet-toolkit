@@ -1,4 +1,6 @@
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.UI;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
@@ -20,11 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
         public PopupViewerSample()
         {
             InitializeComponent();
-
         }
-
-        // Used in Callout to see feature details in PopupViewer
-        private RuntimeImage InfoIcon { get; } = new RuntimeImage(new Uri("Samples/PopupViewer/info.png", UriKind.Relative));
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
@@ -163,6 +162,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 
             // Perform custom action when a link is clicked
             Debug.WriteLine(e.Uri);
+        }
+
+        private async void ZoomButton_Click(object sender, RoutedEventArgs e)
+        {
+            MapPoint centerPoint;
+            var button = sender as Button;
+
+            switch (AutomationProperties.GetAutomationId(button))
+            {
+                case "ZoomWhiteMountainButton":
+                    centerPoint = new MapPoint(-13164164.3074, 4527864.5883, SpatialReferences.WebMercator);
+                    break;
+                case "ZoomMountWhitneyButton":
+                    centerPoint = new MapPoint(-13168205.2049, 4380530.7065, SpatialReferences.WebMercator);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown button");
+            }
+
+            await mapView.SetViewpointAsync(new Viewpoint(centerPoint, 500));
         }
     }
 }

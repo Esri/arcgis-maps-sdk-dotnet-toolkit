@@ -9,13 +9,23 @@
     <Grid>
         <esri:MapView x:Name="mapView" 
                       Map="https://www.arcgis.com/home/item.html?id=9f3a674e998f461580006e626611f9ad" 
-                      GeoViewTapped="mapView_GeoViewTapped"/>
+                      GeoViewTapped="mapView_GeoViewTapped"
+                      AutomationProperties.AutomationId="MainMapView"/>
 
 
         <Grid Background="#AA333333" Visibility="Collapsed" x:Name="PopupBackground" MouseDown="PopupBackground_MouseDown">
             <Border  BorderBrush="Black" BorderThickness="1" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <esri:PopupViewer x:Name="popupViewer" Margin="5" Width="400" MaxHeight="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" HyperlinkClicked="popupViewer_LinkClicked" />
             </Border>
+        </Grid>
+
+        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button Content="Zoom: White Mountain" AutomationProperties.AutomationId="ZoomWhiteMountainButton" Click="ZoomButton_Click" />
+            <Button Grid.Row="1" Content="Zoom: Mount Whitney" AutomationProperties.AutomationId="ZoomMountWhitneyButton" Click="ZoomButton_Click" />
         </Grid>
     </Grid>
 </UserControl>

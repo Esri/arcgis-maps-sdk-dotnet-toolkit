@@ -1,8 +1,10 @@
 ﻿using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
+using Microsoft.UI.Xaml.Automation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,6 +154,26 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
 
             // Perform custom action when a link is clicked
             System.Diagnostics.Debug.WriteLine(e.Uri);
+        }
+
+        private async void ZoomButton_Click(object sender, RoutedEventArgs e)
+        {
+            MapPoint centerPoint;
+            var button = sender as Button;
+
+            switch (AutomationProperties.GetAutomationId(button))
+            {
+                case "ZoomWhiteMountainButton":
+                    centerPoint = new MapPoint(-13164164.3074, 4527864.5883, SpatialReferences.WebMercator);
+                    break;
+                case "ZoomMountWhitneyButton":
+                    centerPoint = new MapPoint(-13168205.2049, 4380530.7065, SpatialReferences.WebMercator);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown button");
+            }
+
+            await mapView.SetViewpointAsync(new Viewpoint(centerPoint, 500));
         }
     }
 }
