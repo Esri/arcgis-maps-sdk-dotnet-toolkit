@@ -65,26 +65,30 @@ internal abstract partial class AppiumTestBase
 
         int touch1StartX = x;
         int touch1StartY = y;
-        int touch1EndX = x - distance;
+        int touch1EndX = x - distance / 2;
         int touch1EndY = y;
 
         OpenQA.Selenium.Appium.Interactions.PointerInputDevice touch1 = new OpenQA.Selenium.Appium.Interactions.PointerInputDevice(PointerKind.Touch);
         ActionSequence touch1Sequence = new ActionSequence(touch1, 0);
         touch1Sequence.AddAction(touch1.CreatePointerMove(CoordinateOrigin.Viewport, touch1StartX, touch1StartY, TimeSpan.Zero));
         touch1Sequence.AddAction(touch1.CreatePointerDown(PointerButton.TouchContact));
+        touch1Sequence.AddAction(touch1.CreatePause(TimeSpan.FromMilliseconds(100)));
         touch1Sequence.AddAction(touch1.CreatePointerMove(CoordinateOrigin.Viewport, touch1EndX, touch1EndY, duration));
+        touch1Sequence.AddAction(touch1.CreatePause(TimeSpan.FromMilliseconds(100)));
         touch1Sequence.AddAction(touch1.CreatePointerUp(PointerButton.TouchContact));
 
         int touch2StartX = x;
         int touch2StartY = y;
-        int touch2EndX = x + distance;
+        int touch2EndX = x + distance / 2;
         int touch2EndY = y;
 
         OpenQA.Selenium.Appium.Interactions.PointerInputDevice touch2 = new OpenQA.Selenium.Appium.Interactions.PointerInputDevice(PointerKind.Touch);
         ActionSequence touch2Sequence = new ActionSequence(touch2, 0);
         touch2Sequence.AddAction(touch2.CreatePointerMove(CoordinateOrigin.Viewport, touch2StartX, touch2StartY, TimeSpan.Zero));
         touch2Sequence.AddAction(touch2.CreatePointerDown(PointerButton.TouchContact));
+        touch1Sequence.AddAction(touch1.CreatePause(TimeSpan.FromMilliseconds(100)));
         touch2Sequence.AddAction(touch2.CreatePointerMove(CoordinateOrigin.Viewport, touch2EndX, touch2EndY, duration));
+        touch2Sequence.AddAction(touch2.CreatePause(TimeSpan.FromMilliseconds(100)));
         touch2Sequence.AddAction(touch2.CreatePointerUp(PointerButton.TouchContact));
 
         Driver.PerformActions(new List<ActionSequence> { touch1Sequence, touch2Sequence });
