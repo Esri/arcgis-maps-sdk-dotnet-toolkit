@@ -27,15 +27,16 @@ internal class ScaleLineTests : AppiumTestBase
 
         // Test zoom in
         ZoomIn(mapCenterX, mapCenterY);
-        await Task.Delay(1000);
+        await Task.Delay(2000);
 
         var currentScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
         Assert.That(currentScaleValue > lastScaleValue, $"Scale line did not update correctly after zooming in. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
         lastScaleValue = currentScaleValue;
 
         // Test pan up (on mercator map this should distort the scale so that it is larger)
-        DragCoordinates(mapCenterX, mapCenterY - 100, mapCenterX, mapCenterY + 100);
-        await Task.Delay(1000);
+        var dragDistance = mapView.Rect.Height / 3;
+        DragCoordinates(mapCenterX, mapCenterY - dragDistance / 2, mapCenterX, mapCenterY + dragDistance / 2);
+        await Task.Delay(2000);
 
         currentScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
         Assert.That(currentScaleValue > lastScaleValue, $"Scale line did not update correctly after panning up. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
