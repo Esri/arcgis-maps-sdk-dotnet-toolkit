@@ -1,4 +1,6 @@
-﻿namespace Toolkit.UITest.Shared;
+﻿using System.Diagnostics;
+
+namespace Toolkit.UITest.Shared;
 
 internal partial class AppiumSetup
 {
@@ -9,7 +11,14 @@ internal partial class AppiumSetup
 
         driver = MakeMacDriver(MauiSamplesApp);
 
-        // TODO: Enter fullscreen mode
+        try
+        {
+            driver.Manage().Window.FullScreen();
+        }
+        catch
+        {
+            Debug.WriteLine("Could not fullscreen app. It may have already opened in fullscreen mode.");
+        }
 
         Task.Delay(500).Wait();
     }
