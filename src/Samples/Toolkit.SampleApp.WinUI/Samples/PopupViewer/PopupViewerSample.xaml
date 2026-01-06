@@ -15,7 +15,8 @@
         </Grid.ColumnDefinitions>
         <esri:MapView x:Name="mapView" 
                       Map="{x:Bind Map}" 
-                      GeoViewTapped="mapView_GeoViewTapped"/>
+                      GeoViewTapped="mapView_GeoViewTapped"
+                      AutomationProperties.AutomationId="MainMapView"/>
         <toolkit:PopupViewer x:Name="popupViewer"
                              Grid.Column="1"
                              Padding="10"
@@ -25,5 +26,14 @@
                              VerticalAlignment="Stretch"
                              PopupAttachmentClicked="popupViewer_PopupAttachmentClicked"
                              HyperlinkClicked="popupViewer_LinkClicked" />
+
+        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button Content="Zoom: White Mountain" AutomationProperties.AutomationId="ZoomWhiteMountainButton" Click="ZoomButton_Click" />
+            <Button Grid.Row="1" Content="Zoom: Mount Whitney" AutomationProperties.AutomationId="ZoomMountWhitneyButton" Click="ZoomButton_Click" />
+        </Grid>
     </Grid>
 </Page>
