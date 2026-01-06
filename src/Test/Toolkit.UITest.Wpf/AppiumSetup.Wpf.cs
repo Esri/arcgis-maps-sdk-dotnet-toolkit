@@ -13,10 +13,7 @@ internal partial class AppiumSetup
 
         driver = MakeWindowsDriver(wpfSamplesApp);
 
-        var maximizeButton = Driver!.FindElement(MobileBy.Name("Maximize"));
-        maximizeButton.Click();
-
-        Console.WriteLine("WPF OneTimeSetup complete.");
+        driver.Manage().Window.Maximize();
 
         Task.Delay(500).Wait();
     }

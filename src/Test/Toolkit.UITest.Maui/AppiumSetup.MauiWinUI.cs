@@ -11,8 +11,7 @@ internal partial class AppiumSetup
 
         driver = MakeWindowsDriver(MauiSamplesApp);
 
-        var maximizeButton = Driver!.FindElement(MobileBy.Name("Maximize"));
-        maximizeButton.Click();
+        driver.Manage().Window.Maximize();
 
         Task.Delay(500).Wait();
     }
