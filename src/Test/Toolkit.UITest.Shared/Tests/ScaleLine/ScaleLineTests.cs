@@ -12,12 +12,13 @@ internal class ScaleLineTests : AppiumTestBase
     {
         OpenSample("ScaleLine");
 
-        await Task.Delay(1000);
+        await Task.Delay(2000);
 
         // Verify initial render
         var advancedScaleLine = FindElement("AdvancedScaleLine");
         CompareBaseline("AdvancedScaleLineInitialViewTest", advancedScaleLine);
 
+        // Get map center coordinates
         var mapView = FindElement("MainMapView");
         var mapCenterX = mapView.Rect.X + mapView.Rect.Width / 2;
         var mapCenterY = mapView.Rect.Y + mapView.Rect.Height / 2;
@@ -40,8 +41,6 @@ internal class ScaleLineTests : AppiumTestBase
 
         currentScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
         Assert.That(currentScaleValue > lastScaleValue, $"Scale line did not update correctly after panning up. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
-
-        lastScaleValue = currentScaleValue;
     }
 
     private float GetScaleUnitsPerPixel(string elementId, ScaleLineType type)
