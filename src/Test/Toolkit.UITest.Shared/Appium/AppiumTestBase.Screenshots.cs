@@ -8,14 +8,16 @@ namespace Toolkit.UITest.Shared;
 
 internal abstract partial class AppiumTestBase
 {
-    private string? baselinesDirPath;
+    private string? _baselinesDirPath;
+
+
     private string BaselinesDirectory
     {
         get
         {
-            if (baselinesDirPath == null)
-                baselinesDirPath = GetBaselinesFolder();
-            return baselinesDirPath;
+            if (_baselinesDirPath == null)
+                _baselinesDirPath = GetBaselinesFolder();
+            return _baselinesDirPath;
         }
     }
     private string ComparisonFailuresDirectory {
