@@ -5,8 +5,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Legend
 {
     public partial class LegendSample : UserControl
     {
-        private const string defaultMapUrl = "http://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213";
-        private const string alternateMapUrl = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2";
+        private const string defaultMapUrl = "https://www.arcgis.com/home/item.html?id=df8bcc10430f48878b01c96e907a1fc3";
+        private const string alternateMapUrl = "https://www.arcgis.com/home/item.html?id=cf35269c59cd45cc9bfae3480c0a64d7";
         public LegendSample()
         {
             InitializeComponent();

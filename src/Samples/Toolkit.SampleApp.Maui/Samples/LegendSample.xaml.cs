@@ -3,31 +3,25 @@ using Esri.ArcGISRuntime.Mapping;
 
 namespace Toolkit.SampleApp.Maui.Samples
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     [SampleInfo(Category = "Legend", Description = "Legend with MapView sample")]
     public partial class LegendSample : ContentPage
-	{
-		public LegendSample ()
-		{
-			InitializeComponent ();
+    {
+        public LegendSample()
+        {
+            InitializeComponent();
             mapView.Map = CreateMap();
         }
 
         private Map CreateMap()
         {
-            Map map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"))
-            {
-                InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
-            };
-            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer")));
-            map.OperationalLayers.Add(new FeatureLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0")));
-            return map;
+            return new Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=df8bcc10430f48878b01c96e907a1fc3"));
         }
 
         private void Grid_SizeChanged(object? sender, EventArgs e)
         {
             // Place legend on left size when view is wide, otherwise below mapview
-            if(sender is Grid sg && sg.Width > sg.Height)
+            if (sender is Grid sg && sg.Width > sg.Height)
             {
                 Grid.SetColumnSpan(mapView, 1);
                 Grid.SetColumnSpan(legend, 1);
