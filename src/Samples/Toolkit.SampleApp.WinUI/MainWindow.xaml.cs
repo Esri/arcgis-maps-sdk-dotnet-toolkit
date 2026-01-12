@@ -10,10 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
 using Windows.Storage;
 using Windows.UI.Core;
 
@@ -27,11 +29,22 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public MainWindow()
         {
             this.InitializeComponent();
+            Activated += MainWindow_Activated;
             var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             Microsoft.UI.WindowId windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
             appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
             appWindow.Title = WindowTitle;
             CheckAPIKey();
+        }
+
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern int GetDpiForWindow(IntPtr hwnd);
+
+        private void MainWindow_Activated(object sender, Microsoft.UI.Xaml.WindowActivatedEventArgs args)
+        {
+            IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+            float scale = GetDpiForWindow(hWnd)/96.0f;
+            ScreenDensityTextBlock.Text = scale.ToString();
         }
 
         private async void CheckAPIKey()

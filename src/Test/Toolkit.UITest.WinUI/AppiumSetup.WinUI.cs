@@ -6,6 +6,7 @@ namespace Toolkit.UITest.Shared;
 
 internal partial class AppiumSetup
 {
+    internal static float? ScreenDensity;
 
     [OneTimeSetUp]
     public void OneTimeSetup()
@@ -15,6 +16,9 @@ internal partial class AppiumSetup
         driver = MakeWindowsDriver(WinUISamplesApp);
 
         driver.Manage().Window.Maximize();
+
+        var dpiLabel = driver.FindElement(MobileBy.AccessibilityId("ScreenDensity"));
+        ScreenDensity = float.Parse(dpiLabel.GetAttribute("Name"));
 
         Task.Delay(500).Wait();
     }

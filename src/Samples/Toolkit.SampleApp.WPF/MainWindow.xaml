@@ -35,6 +35,11 @@
 
         </Border>
 
+        <TextBlock Grid.Row="2"
+                   x:Name="ScreenDensityTextBlock"
+                   Text="DPI not yet retrieved"
+                   AutomationProperties.AutomationId="ScreenDensity" />
+
         <Border Grid.Row="1" x:Name="ApiKeyWindow" Background="#ccffffff" d:Visibility="Visible" Visibility="Collapsed">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="White">
                 <Grid.RowDefinitions>

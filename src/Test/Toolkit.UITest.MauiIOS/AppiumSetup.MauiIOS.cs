@@ -1,7 +1,11 @@
-﻿namespace Toolkit.UITest.Shared;
+﻿using OpenQA.Selenium.Appium;
+
+namespace Toolkit.UITest.Shared;
 
 internal partial class AppiumSetup
 {
+    internal static float? ScreenDensity;
+
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -9,6 +13,9 @@ internal partial class AppiumSetup
         var deviceUdid = @"YOUR_DEVICE_UDID";
 
         driver = MakeiOSDriver(deviceUdid, MauiSamplesApp);
+
+        var densityLabel = driver.FindElement(MobileBy.Id("ScreenDensity"));
+        ScreenDensity = float.Parse(densityLabel.GetAttribute("label"));
 
         Task.Delay(500).Wait();
     }

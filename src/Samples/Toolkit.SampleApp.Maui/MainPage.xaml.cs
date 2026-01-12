@@ -18,6 +18,7 @@ public partial class MainPage : ContentPage
         }));
         SamplesList.ItemsSource = SampleDatasource.Current.Samples;
         CheckAPIKey();
+        ScreenDensityLabel.Text = DeviceDisplay.MainDisplayInfo.Density.ToString();
     }
 
     private async void CheckAPIKey()

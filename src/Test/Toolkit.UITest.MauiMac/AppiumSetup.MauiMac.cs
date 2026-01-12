@@ -1,9 +1,12 @@
-﻿using System.Diagnostics;
+﻿using OpenQA.Selenium.Appium;
+using System.Diagnostics;
 
 namespace Toolkit.UITest.Shared;
 
 internal partial class AppiumSetup
 {
+    internal static float? ScreenDensity;
+
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -17,8 +20,11 @@ internal partial class AppiumSetup
         }
         catch
         {
-            Debug.WriteLine("Could not fullscreen app. It may have already opened in fullscreen mode.");
+            TestContext.Out.WriteLine("Could not fullscreen app. It may have already opened in fullscreen mode.");
         }
+
+        var densityLabel = driver.FindElement(MobileBy.Id("ScreenDensity"));
+        ScreenDensity = float.Parse(densityLabel.GetAttribute("label"));
 
         Task.Delay(500).Wait();
     }

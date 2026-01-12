@@ -26,8 +26,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
             InitializeComponent();
 
+            Loaded += MainWindow_Loaded;
+
             Esri.ArcGISRuntime.Security.AuthenticationManager.Current.ChallengeHandler = new Esri.ArcGISRuntime.Security.DefaultChallengeHandler();
             LoadSamples();
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            var dpi = VisualTreeHelper.GetDpi(this);
+            ScreenDensityTextBlock.Text = dpi.DpiScaleX.ToString();
         }
 
         private void LoadSamples()

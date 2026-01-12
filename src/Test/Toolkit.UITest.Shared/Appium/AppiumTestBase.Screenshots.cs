@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
-using System.Diagnostics;
 using System.Reflection;
 using ImageMagick;
 
@@ -9,7 +8,24 @@ namespace Toolkit.UITest.Shared;
 internal abstract partial class AppiumTestBase
 {
     private string? _baselinesDirPath;
+    private ScreenDensity? _screenDensity;
+#if WINDOWS_TEST
+    private float[] _supportedDensities = new float[] { 1.0f, 1.25f, 1.5f, 1.75f };
+#elif ANDROID_TEST
+    private float[] _supportedDensities = new float[] { 1.0f, 2.0f, 3.0f, 4.0f };
+#elif IOS_TEST || MAC_TEST
+    private float[] _supportedDensities = new float[] { 1.0f, 2.0f, 3.0f, 4.0f };
+#endif
 
+    private ScreenDensity DeviceScreenDensity
+    {
+        get
+        {
+            if (_screenDensity == null)
+                _screenDensity = GetScreenDensity();
+            return _screenDensity.Value;
+        }
+    }
 
     private string BaselinesDirectory
     {
@@ -31,6 +47,12 @@ internal abstract partial class AppiumTestBase
 
     protected void CompareBaseline(string baselineName, AppiumElement? element = null)
     {
+        if (DeviceScreenDensity == ScreenDensity.Unsupported)
+        {
+            TestContext.Out.WriteLine($"Screen density is unsupported; skipping baseline comparison for baseline {baselineName}.");
+            return;
+        }
+
         Screenshot screenshot;
         if (element == null)
         {
@@ -41,7 +63,7 @@ internal abstract partial class AppiumTestBase
             screenshot = element.GetScreenshot();
         }
 
-        var baselinePath = Path.Combine(BaselinesDirectory, baselineName + ".png");
+        var baselinePath = Path.Combine(BaselinesDirectory, baselineName + "_" + DeviceScreenDensity + ".png");
         if (!File.Exists(baselinePath))
         {
             screenshot.SaveAsFile(baselinePath);
@@ -107,5 +129,52 @@ internal abstract partial class AppiumTestBase
 #else
         throw new NotImplementedException("GetPlatformFolderName is not implemented for this platform.");
 #endif
+    }
+
+    private ScreenDensity GetScreenDensity()
+    {
+        if (AppiumSetup.ScreenDensity == null)
+        {
+            TestContext.Out.WriteLine("Warning: Screen density could not be determined.");
+            return ScreenDensity.Unsupported;
+        }
+
+        ScreenDensity density;
+        var densityIndex = _supportedDensities.IndexOf(AppiumSetup.ScreenDensity.Value);
+
+        density = densityIndex switch
+        {
+            0 => ScreenDensity.Low,
+            1 => ScreenDensity.Medium,
+            2 => ScreenDensity.High,
+            3 => ScreenDensity.XHigh,
+            4 => ScreenDensity.XXHigh,
+            _ => ScreenDensity.Unsupported,
+        };
+
+        if (density == ScreenDensity.Unsupported)
+        {
+            TestContext.Out.WriteLine($"Warning: Unsupported screen scale {AppiumSetup.ScreenDensity}. Screenshot coparisons will either fail or be skipped.");
+            TestContext.Out.WriteLine($"Supported screen scales are {string.Join(", ", _supportedDensities)}.");
+#if WINDOWS_TEST
+            TestContext.Out.WriteLine("Consider changing the display scale in the Windows Display settings.");
+#elif ANDROID_TEST
+            TestContext.Out.WriteLine("Consider changing the screen density using the `adb shell wm density {density}` terminal command. Supported DPIs are multiples of 160.");
+#endif
+        }
+        return density;
+    }
+
+    /// <summary>
+    /// Enums corresponding to different screen densities. The exact DPIs each enum value represents vary by platform.
+    /// </summary>
+    private enum ScreenDensity
+    {
+        Low,
+        Medium,
+        High,
+        XHigh,
+        XXHigh,
+        Unsupported
     }
 }

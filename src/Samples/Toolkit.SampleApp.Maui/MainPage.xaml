@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Toolkit.SampleApp.Maui.MainPage">
-    <Grid>
+    <Grid RowDefinitions="*,Auto">
         <ListView x:Name="SamplesList" ItemSelected="SamplesList_ItemSelected" Margin="{OnPlatform 0, WinUI=20}" RowHeight="{OnPlatform 60, WinUI=45}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -11,7 +11,12 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Grid x:Name="ApiKeyWindow" Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" IsVisible="false">
+        <StackLayout Orientation="Horizontal" Grid.Row="1" Padding="10" HorizontalOptions="Center">
+            <Label Text="Screen Density: " />
+            <Label x:Name="ScreenDensityLabel" Text="Not yet retrieved" Grid.Row="1" AutomationId="ScreenDensity" />
+        </StackLayout>
+
+        <Grid x:Name="ApiKeyWindow" Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" IsVisible="false" Grid.RowSpan="2">
             <Grid HorizontalOptions="Center" VerticalOptions="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
