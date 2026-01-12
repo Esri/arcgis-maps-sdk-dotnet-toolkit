@@ -56,7 +56,7 @@ internal partial class AppiumSetup
         return androidDriver;
     }
 
-    private IOSDriver MakeiOSDriver(string deviceUdid, string bundleId, string port = "4723", int timeoutSeconds = 10)
+    private IOSDriver MakeiOSDriver(string deviceUdid, string bundleId, string port = "4723", int timeoutSeconds = 20)
     {
         var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
         var driverOptions = new AppiumOptions()
@@ -66,6 +66,7 @@ internal partial class AppiumSetup
         };
         driverOptions.AddAdditionalAppiumOption("bundleId", bundleId);
         driverOptions.AddAdditionalAppiumOption("udid", deviceUdid);
+        driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
 
         var iosDriver = new IOSDriver(serverUri, driverOptions, TimeSpan.FromSeconds(timeoutSeconds));
         iosDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(timeoutSeconds);
