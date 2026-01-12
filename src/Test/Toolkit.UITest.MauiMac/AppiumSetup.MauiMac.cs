@@ -17,6 +17,7 @@ internal partial class AppiumSetup
         try
         {
             driver.Manage().Window.FullScreen();
+            Task.Delay(500).Wait();
         }
         catch
         {
@@ -25,7 +26,5 @@ internal partial class AppiumSetup
 
         var densityLabel = driver.FindElement(MobileBy.Id("ScreenDensity"));
         ScreenDensity = float.Parse(densityLabel.GetAttribute("label"));
-
-        Task.Delay(500).Wait();
     }
 }

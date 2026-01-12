@@ -14,10 +14,9 @@ internal partial class AppiumSetup
         driver = MakeWindowsDriver(MauiSamplesApp);
 
         driver.Manage().Window.Maximize();
+        Task.Delay(500).Wait();
 
         var dpiLabel = driver.FindElement(MobileBy.AccessibilityId("ScreenDensity"));
         ScreenDensity = float.Parse(dpiLabel.GetAttribute("Name"));
-
-        Task.Delay(500).Wait();
     }
 }

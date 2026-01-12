@@ -14,9 +14,9 @@ internal partial class AppiumSetup
 
         driver = MakeiOSDriver(deviceUdid, MauiSamplesApp);
 
+        Task.Delay(500).Wait();
+
         var densityLabel = driver.FindElement(MobileBy.Id("ScreenDensity"));
         ScreenDensity = float.Parse(densityLabel.GetAttribute("label"));
-
-        Task.Delay(500).Wait();
     }
 }
