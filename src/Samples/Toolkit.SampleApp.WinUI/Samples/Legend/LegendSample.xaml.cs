@@ -16,8 +16,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Legend
 
         private static Map CreateMap()
         {
-            Map map = new Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213"));
-            return map;
+            return new Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=df8bcc10430f48878b01c96e907a1fc3"));
         }
     }
 }
