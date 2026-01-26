@@ -12,8 +12,7 @@ namespace Toolkit.UITest.Shared;
 
 public abstract partial class AppiumTestBase
 {
-    private TestContext _testContext;
-    protected TestContext TestContext => _testContext;
+    public TestContext TestContext { get; set; } = null!;
 
 #if WINDOWS_TEST
     protected WindowsDriver Driver => AppiumSetup.Driver!;
@@ -24,9 +23,4 @@ public abstract partial class AppiumTestBase
 #elif MAC_TEST
     protected MacDriver Driver => AppiumSetup.Driver!;
 #endif
-
-    public AppiumTestBase(TestContext testContext)
-    {
-        _testContext = testContext;
-    }
 }

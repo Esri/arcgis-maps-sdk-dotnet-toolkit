@@ -7,8 +7,6 @@ public class ScaleLineTests : AppiumTestBase
 {
     private const string ScaleLineMetricValueId = "ScaleLineMetricValue";
 
-    public ScaleLineTests(TestContext testContext) : base(testContext) { }
-
     [TestMethod]
     public async Task AdvancedScaleLineUpdatesOnZoomAndPan()
     {
@@ -62,7 +60,7 @@ public class ScaleLineTests : AppiumTestBase
         var scaleValue = int.Parse(GetElementText(scaleValueElement));
 
         var scaleLineLength = scaleValueElement.Location.X - scaleLineElement.Rect.Left;
-        TestContext.Write($"Scale line length in pixels: {scaleLineLength}, scale value: {scaleValue}");
+        TestContext.WriteLine($"Scale line length in pixels: {scaleLineLength}, scale value: {scaleValue}");
         return scaleLineLength / (float)scaleValue;
     }
 
