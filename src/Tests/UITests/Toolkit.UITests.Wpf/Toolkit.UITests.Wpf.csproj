@@ -1,0 +1,42 @@
+﻿<Project Sdk="MSTest.Sdk" InitialTargets="CheckOS">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;WINDOWS_TEST;WPF_TEST</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MSTest" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Appium.WebDriver" Version="8.0.1" />
+	  <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.2" />
+  </ItemGroup>
+
+  <Import Project="..\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems" Label="Shared" />
+
+  <!-- The WPF tests should only run on a Windows machine -->
+  <Target Name="CheckOS">
+    <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The WPF tests must be run from a Windows machine" />
+  </Target>
+
+  <!-- Build sample app if needed and record build location to SampleAppPath.txt -->
+  <Target Name="BuildSamplesApp" BeforeTargets="Build">
+    <MSBuild Projects="..\..\..\Samples\Toolkit.SampleApp.WPF\Toolkit.SampleApp.WPF.csproj" Targets="Build" Properties="Configuration=Release">
+      <Output TaskParameter="TargetOutputs" ItemName="_SampleAppTargetOutputs" />
+    </MSBuild>
+
+    <PropertyGroup>
+      <_SampleAppExePath>@(_SampleAppTargetOutputs->'%(FullPath)')</_SampleAppExePath>
+      <_SampleAppExePath>$(_SampleAppExePath.Replace(dll,exe))</_SampleAppExePath>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="WPF Sample app built at: $(_SampleAppExePath)" />
+    <WriteLinesToFile File="$(TargetDir)SampleAppPath.txt" Lines="$(_SampleAppExePath)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+
+</Project>

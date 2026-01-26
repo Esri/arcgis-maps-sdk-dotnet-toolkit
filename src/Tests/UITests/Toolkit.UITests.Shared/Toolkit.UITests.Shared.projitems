@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>000a3cc1-f6ae-45e9-aa18-4e116ad7b20d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Toolkit.UITests.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AppiumSetup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AppiumTestBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Appium\AppiumTestBase.Gestures.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Appium\AppiumTestBase.Screenshots.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Appium\AppiumTestBase.Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tests\ScaleLine\ScaleLineTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Appium\license.txt" />
+  </ItemGroup>
+</Project>

@@ -26,6 +26,7 @@
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
     <IsSampleProject Condition="'$(IsSampleProject)'!='true'">$(MSBuildProjectName.Contains('.SampleApp.'))</IsSampleProject>
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
+    <IsTestProject Condition="'$(IsTestProject)' != 'true'">$(MSBuildProjectName.Contains('.UITest'))</IsTestProject>
     <IsTemplateProject>$(MSBuildProjectDirectory.Contains('ProjectTemplates'))</IsTemplateProject>
     <IsAnalyzerProject>$(MSBuildProjectDirectory.Contains('Analyzers'))</IsAnalyzerProject>
     
