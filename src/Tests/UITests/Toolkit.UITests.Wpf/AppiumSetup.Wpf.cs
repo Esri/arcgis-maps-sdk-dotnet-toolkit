@@ -23,11 +23,11 @@ public static partial class AppiumSetup
         var testAssemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
             ?? throw new InvalidOperationException("Could not determine test assembly directory.");
 
-        var pathFile = Path.Combine(testAssemblyDir, "SampleAppPath.txt");
+        var pathFile = Path.Combine(testAssemblyDir, "PuppetAppPath.txt");
         if (!File.Exists(pathFile))
         {
             throw new FileNotFoundException(
-                $"Missing '{pathFile}'. Ensure the 'BuildSamplesApp' MSBuild target ran before tests.");
+                $"Missing '{pathFile}'. Ensure the 'BuildPuppetApp' MSBuild target ran before tests.");
         }
 
         var exePath = File.ReadAllText(pathFile).Trim();

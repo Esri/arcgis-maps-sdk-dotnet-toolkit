@@ -51,6 +51,9 @@
   <PropertyGroup>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
+    <!-- Disable FUTDC to avoid issues with unrecognized XAML updates -->
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 

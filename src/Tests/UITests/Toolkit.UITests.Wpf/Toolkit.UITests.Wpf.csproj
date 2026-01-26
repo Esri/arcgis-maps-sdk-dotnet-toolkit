@@ -24,19 +24,19 @@
     <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The WPF tests must be run from a Windows machine" />
   </Target>
 
-  <!-- Build sample app if needed and record build location to SampleAppPath.txt -->
-  <Target Name="BuildSamplesApp" BeforeTargets="Build">
-    <MSBuild Projects="..\..\..\Samples\Toolkit.SampleApp.WPF\Toolkit.SampleApp.WPF.csproj" Targets="Build" Properties="Configuration=Release">
-      <Output TaskParameter="TargetOutputs" ItemName="_SampleAppTargetOutputs" />
+  <!-- Build puppet app if needed and record build location to SampleAppPath.txt -->
+  <Target Name="BuildPuppetApp" BeforeTargets="Build">
+    <MSBuild Projects="..\..\UITests\Toolkit.UITests.Wpf.Puppet\Toolkit.UITests.Wpf.Puppet.csproj" Targets="Build" Properties="Configuration=Release">
+      <Output TaskParameter="TargetOutputs" ItemName="_PuppetAppTargetOutputs" />
     </MSBuild>
 
     <PropertyGroup>
-      <_SampleAppExePath>@(_SampleAppTargetOutputs->'%(FullPath)')</_SampleAppExePath>
-      <_SampleAppExePath>$(_SampleAppExePath.Replace(dll,exe))</_SampleAppExePath>
+      <_PuppetAppExePath>@(_PuppetAppTargetOutputs->'%(FullPath)')</_PuppetAppExePath>
+      <_PuppetAppExePath>$(_PuppetAppExePath.Replace(dll,exe))</_PuppetAppExePath>
     </PropertyGroup>
 
-    <Message Importance="high" Text="WPF Sample app built at: $(_SampleAppExePath)" />
-    <WriteLinesToFile File="$(TargetDir)SampleAppPath.txt" Lines="$(_SampleAppExePath)" Overwrite="true" Encoding="UTF-8" />
+    <Message Importance="high" Text="WPF Sample app built at: $(_PuppetAppExePath)" />
+    <WriteLinesToFile File="$(TargetDir)PuppetAppPath.txt" Lines="$(_PuppetAppExePath)" Overwrite="true" Encoding="UTF-8" />
   </Target>
 
 </Project>
