@@ -29,7 +29,7 @@ public partial class MainWindow : Window
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         var dpi = VisualTreeHelper.GetDpi(this);
-        ScreenScaleTextBlock.Text = dpi.DpiScaleX.ToString();
+        ScreenDensityTextBlock.Text = dpi.DpiScaleX.ToString();
 
         NetVersionTextBlock.Text = Environment.Version.ToString();
         
