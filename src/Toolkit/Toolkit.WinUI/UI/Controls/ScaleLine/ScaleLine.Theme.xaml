@@ -23,8 +23,8 @@
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal" Grid.Row="0">
                                 <Rectangle Width="{Binding Width, ElementName=MetricScaleLine}"/>
-                                <TextBlock x:Name="MetricValue" Text="100" Foreground="{TemplateBinding Foreground}" AutomationProperties.AutomationId="ScaleLineMetricValue" />
-                                <TextBlock x:Name="MetricUnit" Text="m" Foreground="{TemplateBinding Foreground}" AutomationProperties.AutomationId="ScaleLineMetricUnit" />
+                                <TextBlock x:Name="MetricValue" Text="100" Foreground="{TemplateBinding Foreground}"/>
+                                <TextBlock x:Name="MetricUnit" Text="m" Foreground="{TemplateBinding Foreground}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Row="1">
                                 <Rectangle Width="2" Fill="{TemplateBinding Foreground}" Height="5" />
@@ -38,8 +38,8 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Row="4">
                                 <Rectangle Width="{Binding Width, ElementName=UsScaleLine}"/>
-                                <TextBlock x:Name="UsValue" Text="USValue" Foreground="{TemplateBinding Foreground}" AutomationProperties.AutomationId="ScaleLineUsValue" />
-                                <TextBlock x:Name="UsUnit" Text="UsUnit" Foreground="{TemplateBinding Foreground}" AutomationProperties.AutomationId="ScaleLineUsUnit" />
+                                <TextBlock x:Name="UsValue" Text="USValue" Foreground="{TemplateBinding Foreground}"/>
+                                <TextBlock x:Name="UsUnit" Text="UsUnit" Foreground="{TemplateBinding Foreground}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Row="2">
                                 <Rectangle Fill="{TemplateBinding Foreground}" Height="2" Width="4"/>
