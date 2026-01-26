@@ -1,0 +1,43 @@
+﻿<Window x:Class="Toolkit.UITests.Wpf.Puppet.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+        xmlns:local="clr-namespace:Toolkit.UITests.Wpf.Puppet"
+        mc:Ignorable="d"
+        Title="WPF UI Test Puppet" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Background="White" Orientation="Horizontal" HorizontalAlignment="Left">
+            <TextBlock Text="Net Version: " FontSize="12" Margin="5,1,1,3"/>
+            <TextBlock x:Name="NetVersionTextBlock" AutomationProperties.AutomationId="ScreenScale"
+                       Text="undefined" FontSize="12" Margin="0,1,10,1"/>
+            <TextBlock Text="Toolkit Version: " FontSize="12" Margin="5,1,1,3"/>
+            <TextBlock x:Name="ToolkitVersionTextBlock" AutomationProperties.AutomationId="ScreenScale"
+                       Text="undefined" FontSize="12" Margin="0,1,10,1"/>
+            <TextBlock Text="Runtime Version: " FontSize="12" Margin="5,1,1,3"/>
+            <TextBlock x:Name="RuntimeVersionTextBlock" AutomationProperties.AutomationId="ScreenScale"
+                       Text="undefined" FontSize="12" Margin="0,1,10,1"/>
+            <TextBlock Text="Screen Scale: " FontSize="12" Margin="5,1,1,3"/>
+            <TextBlock x:Name="ScreenScaleTextBlock" AutomationProperties.AutomationId="ScreenScale"
+                       Text="undefined" FontSize="12" Margin="0,1,10,1"/>
+        </StackPanel>
+
+        <StackPanel Background="White" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Text="Open Page: " FontSize="12" Margin="5,1,1,0"/>
+            <TextBox x:Name="TestSearchBox" AutomationProperties.AutomationId="TestSearchBox"
+                 MinWidth="120"
+                 Margin="3,0,3,0"
+                 BorderBrush="DarkGray"
+                 AcceptsReturn="False"
+                 AcceptsTab="False"
+                 KeyDown="TestSearchBox_KeyDown"/>
+        </StackPanel>
+
+        <ContentPresenter Grid.Row="1" x:Name="TestContentPresenter"/>
+    </Grid>
+</Window>
