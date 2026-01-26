@@ -14,16 +14,16 @@
         </Grid.RowDefinitions>
         <StackPanel Background="White" Orientation="Horizontal" HorizontalAlignment="Left">
             <TextBlock Text="Net Version: " FontSize="12" Margin="5,1,1,3"/>
-            <TextBlock x:Name="NetVersionTextBlock" AutomationProperties.AutomationId="ScreenScale"
+            <TextBlock x:Name="NetVersionTextBlock" AutomationProperties.AutomationId="NetVersion"
                        Text="undefined" FontSize="12" Margin="0,1,10,1"/>
             <TextBlock Text="Toolkit Version: " FontSize="12" Margin="5,1,1,3"/>
-            <TextBlock x:Name="ToolkitVersionTextBlock" AutomationProperties.AutomationId="ScreenScale"
+            <TextBlock x:Name="ToolkitVersionTextBlock" AutomationProperties.AutomationId="ToolkitVersion"
                        Text="undefined" FontSize="12" Margin="0,1,10,1"/>
             <TextBlock Text="Runtime Version: " FontSize="12" Margin="5,1,1,3"/>
-            <TextBlock x:Name="RuntimeVersionTextBlock" AutomationProperties.AutomationId="ScreenScale"
+            <TextBlock x:Name="RuntimeVersionTextBlock" AutomationProperties.AutomationId="RuntimeVersion"
                        Text="undefined" FontSize="12" Margin="0,1,10,1"/>
-            <TextBlock Text="Screen Scale: " FontSize="12" Margin="5,1,1,3"/>
-            <TextBlock x:Name="ScreenScaleTextBlock" AutomationProperties.AutomationId="ScreenScale"
+            <TextBlock Text="Screen Density: " FontSize="12" Margin="5,1,1,3"/>
+            <TextBlock x:Name="ScreenDensityTextBlock" AutomationProperties.AutomationId="ScreenDensity"
                        Text="undefined" FontSize="12" Margin="0,1,10,1"/>
         </StackPanel>
 
