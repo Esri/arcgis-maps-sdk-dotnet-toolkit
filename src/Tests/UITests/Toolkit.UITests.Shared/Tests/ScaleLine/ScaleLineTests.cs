@@ -10,7 +10,7 @@ public class ScaleLineTests : AppiumTestBase
     [TestMethod]
     public async Task AdvancedScaleLineUpdatesOnZoomAndPan()
     {
-        OpenSample("ScaleLine");
+        OpenSample("ScaleLineRenders");
 
         await Task.Delay(2000);
 
