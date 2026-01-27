@@ -53,4 +53,20 @@ public abstract partial class AppiumTestBase
         throw new NotImplementedException("FindElement(AppiumElement,string) is not implemented for this platform.");
 #endif
     }
+
+    /// <summary>
+    /// Normalizes pixel values based on platform and device DPI. Normalized values are approximately equivalent to what renders
+    /// on Windows at a screen density of 1 (96 DPI).
+    /// </summary>
+    protected double GetNormalizedPixelValue(int pixelValue)
+    {
+#if WINDOWS_TEST
+        return pixelValue / ScreenDensity;
+#else
+        // Mac baseline is ~72 DPI
+        // iOS baseline is ~160 DPI
+        // Android baseline is 160 DPI
+        throw new NotImplementedException("GetNormalizedPixelValue(int) is not implemented for this platform.");
+#endif
+    }
 }
