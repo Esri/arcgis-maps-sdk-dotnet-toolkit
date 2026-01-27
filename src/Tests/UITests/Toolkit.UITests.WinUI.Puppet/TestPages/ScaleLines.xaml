@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Toolkit.UITests.WinUI.Puppet.TestPages.ScaleLines"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Toolkit.UITests.WinUI.Puppet.TestPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    mc:Ignorable="d">
+
+    <Grid>
+        <esri:MapView x:Name="MainMapView" AutomationProperties.AutomationId="MainMapView"/>
+
+        <Border HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Background="{ThemeResource CalciteBackground1Color}"
+                BorderBrush="{ThemeResource CalciteBorder1Color}"
+                BorderThickness="1">
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <TextBlock Text="Scale: 1 / " Margin="1,1,0,1" VerticalAlignment="Center"/>
+                    <TextBox x:Name="ScaleTextBox" Text="50000000" MinWidth="60" FontSize="14"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <TextBlock Text="Latitude: " Margin="1,1,3,1" VerticalAlignment="Center"/>
+                    <TextBox x:Name="LatitudeTextBox" Text="0" MinWidth="60" FontSize="14"/>
+                </StackPanel>
+
+                <Button x:Name="UpdateViewpoint" Content="Update Viewpoint" Click="UpdateViewpoint_Click" />
+            </StackPanel>
+        </Border>
+
+        <Border HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                Background="{ThemeResource CalciteBackground1Color}"
+                BorderBrush="{ThemeResource CalciteBorder1Color}"
+                BorderThickness="1"
+                Margin="0,0,0,20">
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Basic Scale Calculation" />
+                <esriToolkit:ScaleLine MapScale="{Binding MapScale, ElementName=MainMapView, Mode=OneWay}" Grid.Row="1" AutomationProperties.AutomationId="SimpleScaleLine" />
+
+                <TextBlock Text="Advanced Scale Calculation" Grid.Row="2" />
+                <esriToolkit:ScaleLine MapView="{Binding ElementName=MainMapView}" Grid.Row="3" AutomationProperties.AutomationId="AdvancedScaleLine" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Toolkit.UITests.WinUI.Puppet (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Toolkit.UITests.WinUI.Puppet (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

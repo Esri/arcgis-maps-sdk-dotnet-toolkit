@@ -53,6 +53,10 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Toolkit.UITests.Shared", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.Wpf.Puppet", "Tests\UITests\Toolkit.UITests.Wpf.Puppet\Toolkit.UITests.Wpf.Puppet.csproj", "{ED324C95-A086-4555-A7F7-5922204111D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.WinUI.Puppet", "Tests\UITests\Toolkit.UITests.WinUI.Puppet\Toolkit.UITests.WinUI.Puppet.csproj", "{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.WinUI", "Tests\UITests\Toolkit.UITests.WinUI\Toolkit.UITests.WinUI.csproj", "{459389AC-D935-404A-B31C-BAD978A6F514}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -307,6 +311,56 @@ Global
 		{ED324C95-A086-4555-A7F7-5922204111D6}.Release|x64.Build.0 = Release|Any CPU
 		{ED324C95-A086-4555-A7F7-5922204111D6}.Release|x86.ActiveCfg = Release|Any CPU
 		{ED324C95-A086-4555-A7F7-5922204111D6}.Release|x86.Build.0 = Release|Any CPU
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|Any CPU.Build.0 = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|ARM.ActiveCfg = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|ARM.Build.0 = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|ARM.Deploy.0 = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|ARM64.Build.0 = Debug|ARM64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|x64.ActiveCfg = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|x64.Build.0 = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|x64.Deploy.0 = Debug|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|x86.ActiveCfg = Debug|x86
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|x86.Build.0 = Debug|x86
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Debug|x86.Deploy.0 = Debug|x86
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|Any CPU.ActiveCfg = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|Any CPU.Build.0 = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|Any CPU.Deploy.0 = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|ARM.ActiveCfg = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|ARM.Build.0 = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|ARM.Deploy.0 = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|ARM64.ActiveCfg = Release|ARM64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|ARM64.Build.0 = Release|ARM64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|ARM64.Deploy.0 = Release|ARM64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|x64.ActiveCfg = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|x64.Build.0 = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|x64.Deploy.0 = Release|x64
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|x86.ActiveCfg = Release|x86
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|x86.Build.0 = Release|x86
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}.Release|x86.Deploy.0 = Release|x86
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|ARM.Build.0 = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|x64.Build.0 = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Debug|x86.Build.0 = Debug|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|Any CPU.Build.0 = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|ARM.ActiveCfg = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|ARM.Build.0 = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|ARM64.Build.0 = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|x64.ActiveCfg = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|x64.Build.0 = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|x86.ActiveCfg = Release|Any CPU
+		{459389AC-D935-404A-B31C-BAD978A6F514}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -328,6 +382,8 @@ Global
 		{3046611A-ABBE-4433-A5A2-CFC98060C709} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
 		{000A3CC1-F6AE-45E9-AA18-4E116AD7B20D} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
 		{ED324C95-A086-4555-A7F7-5922204111D6} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
+		{0B5AA64F-0FAA-4299-BEA0-E48544FA8066} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
+		{459389AC-D935-404A-B31C-BAD978A6F514} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD437263-1C96-46A9-A641-C312BF7DAF99}
@@ -335,6 +391,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{000a3cc1-f6ae-45e9-aa18-4e116ad7b20d}*SharedItemsImports = 13
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{3046611a-abbe-4433-a5a2-cfc98060c709}*SharedItemsImports = 5
+		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{459389ac-d935-404a-b31c-bad978a6f514}*SharedItemsImports = 5
 		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{5f3cad93-6062-450a-8771-7b4645caf598}*SharedItemsImports = 13

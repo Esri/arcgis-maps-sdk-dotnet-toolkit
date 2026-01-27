@@ -1,0 +1,24 @@
+﻿<Project Sdk="MSTest.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;WINDOWS_TEST;WINUI_TEST</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Appium.WebDriver" Version="8.0.1" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+  </ItemGroup>
+
+  <Import Project="..\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems" Label="Shared" />
+
+  <!-- The WinUI tests should only run on a Windows machine -->
+  <Target Name="CheckOS">
+    <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The WinUI tests must be run from a Windows machine" />
+  </Target>
+
+</Project>
