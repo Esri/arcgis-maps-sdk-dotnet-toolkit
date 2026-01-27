@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MSTest" Version="4.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <PackageReference Include="Appium.WebDriver" Version="8.0.1" />
 	  <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.2" />
   </ItemGroup>

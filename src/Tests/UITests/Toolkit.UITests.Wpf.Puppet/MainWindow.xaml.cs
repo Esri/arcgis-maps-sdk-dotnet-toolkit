@@ -16,12 +16,12 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
-        InitializeComponent();
-
         Loaded += MainWindow_Loaded;
 
+        InitializeComponent();
+
         var testPages = from t in Assembly.GetExecutingAssembly().ExportedTypes
-                        where t.GetTypeInfo().IsSubclassOf(typeof(UserControl)) && t.FullName!.Contains(".Tests.")
+                        where t.GetTypeInfo().IsSubclassOf(typeof(UserControl)) && t.FullName!.Contains(".TestPages.")
                         select t;
         _testTypes = testPages.ToArray();
     }

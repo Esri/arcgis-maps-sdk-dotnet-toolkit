@@ -2,14 +2,14 @@
 using Esri.ArcGISRuntime.Mapping;
 using System.Windows.Controls;
 
-namespace Toolkit.UITests.Wpf.Puppet.Tests;
+namespace Toolkit.UITests.Wpf.Puppet.TestPages;
 
 /// <summary>
 /// Interaction logic for ScaleLineRender.xaml
 /// </summary>
-public partial class ScaleLineRenders : UserControl
+public partial class ScaleLines : UserControl
 {
-    public ScaleLineRenders()
+    public ScaleLines()
     {
         InitializeComponent();
 
