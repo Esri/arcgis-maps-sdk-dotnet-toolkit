@@ -5,12 +5,14 @@ namespace Toolkit.UITest.Shared.ScaleLine;
 [TestClass]
 public class ScaleLineTests : AppiumTestBase
 {
+    private const string ScaleLinePage = "ScaleLines";
+
     [TestMethod]
     [DataRow(ScaleLineType.Advanced)]
     [DataRow(ScaleLineType.Simple)]
     public async Task ScaleLine_Renders(ScaleLineType scaleLineType)
     {
-        OpenSample("ScaleLineRenders");
+        OpenSample(ScaleLinePage);
         UpdateViewpoint(50000000, 0);
 
         // Check initial render
@@ -32,7 +34,7 @@ public class ScaleLineTests : AppiumTestBase
     [DataRow(ScaleLineType.Simple)]
     public async Task ScaleLine_UpdatesWithScale(ScaleLineType scaleLineType)
     {
-        OpenSample("ScaleLineRenders");
+        OpenSample(ScaleLinePage);
 
         UpdateViewpoint(50000000, 0);
         var initialScaleLineInfo = GetScaleLineInfo(scaleLineType);
@@ -54,7 +56,7 @@ public class ScaleLineTests : AppiumTestBase
     [DataRow(ScaleLineType.Simple)]
     public async Task ScaleLine_UpdatesWithLatitude(ScaleLineType scaleLineType)
     {
-        OpenSample("ScaleLineRenders");
+        OpenSample(ScaleLinePage);
 
         UpdateViewpoint(5000000, 0);
         var initialInfo = GetScaleLineInfo(scaleLineType);
