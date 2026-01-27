@@ -23,4 +23,10 @@ public abstract partial class AppiumTestBase
 #elif MAC_TEST
     protected MacDriver Driver => AppiumSetup.Driver!;
 #endif
+
+    private double? _screenDensity;
+    protected double ScreenDensity
+    {
+        get => _screenDensity ??= AppiumSetup.ScreenDensity!.Value;
+    }
 }

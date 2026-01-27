@@ -23,6 +23,8 @@ public static partial class AppiumSetup
     public static MacDriver? Driver => driver;
 #endif
 
+    public static double? ScreenDensity { get; private set; }
+
     private static WindowsDriver MakeWindowsDriver(string app, string port = "4723", int timeoutSeconds = 10)
     {
         var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);

@@ -5,68 +5,167 @@ namespace Toolkit.UITest.Shared.ScaleLine;
 [TestClass]
 public class ScaleLineTests : AppiumTestBase
 {
-    private const string ScaleLineMetricValueId = "ScaleLineMetricValue";
+    [TestMethod]
+    [DataRow(ScaleLineType.Advanced)]
+    [DataRow(ScaleLineType.Simple)]
+    public async Task ScaleLine_Renders(ScaleLineType scaleLineType)
+    {
+        OpenSample("ScaleLineRenders");
+        UpdateViewpoint(50000000, 0);
+
+        // Check initial render
+        var scaleLineInfo = GetScaleLineInfo(scaleLineType);
+        var initialExpectedValues = new ScaleLineInfo
+        {
+            MetricValue = 2000,
+            MetricUnits = "km",
+            MetricLineLengthPixels = 151,
+            USValue = 1000,
+            USUnits = "mi",
+            USLineLengthPixels = 122
+        };
+        AssertScaleLineInfo(initialExpectedValues, scaleLineInfo);
+    }
 
     [TestMethod]
-    public async Task AdvancedScaleLineUpdatesOnZoomAndPan()
+    [DataRow(ScaleLineType.Advanced)]
+    [DataRow(ScaleLineType.Simple)]
+    public async Task ScaleLine_UpdatesWithScale(ScaleLineType scaleLineType)
     {
         OpenSample("ScaleLineRenders");
 
-        await Task.Delay(2000);
+        UpdateViewpoint(50000000, 0);
+        var initialScaleLineInfo = GetScaleLineInfo(scaleLineType);
 
-        // Verify initial render
-        var advancedScaleLine = FindElement("AdvancedScaleLine");
-        CompareBaseline("AdvancedScaleLineInitialViewTest", advancedScaleLine);
+        UpdateViewpoint(5000000, 0);
+        var finalScaleLineInfo = GetScaleLineInfo(scaleLineType);
 
-        // Get map center coordinates
-        var mapView = FindElement("MainMapView");
-        var mapCenterX = mapView.Rect.X + mapView.Rect.Width / 2;
-        var mapCenterY = mapView.Rect.Y + mapView.Rect.Height / 2;
+        var scaleRatioMetric = finalScaleLineInfo.MetricScale / initialScaleLineInfo.MetricScale;
+        var scaleRatioUS = finalScaleLineInfo.USScale / initialScaleLineInfo.USScale;
 
-        // Starting scale value
-        var lastScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
-
-        // Test zoom in
-        ZoomIn(mapCenterX, mapCenterY);
-        await Task.Delay(2000);
-
-        var currentScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
-        Assert.IsGreaterThan(lastScaleValue, currentScaleValue, $"Scale line did not update correctly after zooming in. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
-        lastScaleValue = currentScaleValue;
-
-        // Test pan up (on mercator map this should distort the scale so that it is larger)
-        var dragDistance = mapView.Rect.Height / 3;
-        DragCoordinates(mapCenterX, mapCenterY - dragDistance / 2, mapCenterX, mapCenterY + dragDistance / 2);
-        await Task.Delay(2000);
-
-        currentScaleValue = GetScaleUnitsPerPixel(ScaleLineMetricValueId, ScaleLineType.Advanced);
-        Assert.IsGreaterThan(lastScaleValue, currentScaleValue, $"Scale line did not update correctly after panning up. Last: {lastScaleValue:F}, Current: {currentScaleValue:F}");
+        // The viewpoint scale increased by 10 times (5000000 is the denominator), so the scale lines should reflect this
+        Assert.AreEqual(10.0, scaleRatioMetric, 0.1);
+        Assert.AreEqual(10.0, scaleRatioUS, 0.1);
     }
 
-    private float GetScaleUnitsPerPixel(string elementId, ScaleLineType type)
+
+    [TestMethod]
+    [DataRow(ScaleLineType.Advanced)]
+    [DataRow(ScaleLineType.Simple)]
+    public async Task ScaleLine_UpdatesWithLatitude(ScaleLineType scaleLineType)
     {
-        // There are two scale lines in the sample. The first is simple, the second is advanced.
+        OpenSample("ScaleLineRenders");
+
+        UpdateViewpoint(5000000, 0);
+        var initialInfo = GetScaleLineInfo(scaleLineType);
+
+        UpdateViewpoint(5000000, 60);
+        var finalInfo = GetScaleLineInfo(scaleLineType);
+
+        if (scaleLineType == ScaleLineType.Advanced)
+        {
+            // Moving away from the equator increases scale in the mercator projection
+            Assert.IsGreaterThan(initialInfo.MetricScale, finalInfo.MetricScale);
+            Assert.IsGreaterThan(initialInfo.USScale, finalInfo.USScale);
+        }
+        else if (scaleLineType == ScaleLineType.Simple)
+        {
+            // The simple scale line should not update
+            Assert.AreEqual(initialInfo.MetricScale, finalInfo.MetricScale, 0.01);
+            Assert.AreEqual(initialInfo.USScale, finalInfo.USScale, 0.01);
+        }
+    }
+
+    private void AssertScaleLineInfo(ScaleLineInfo expected, ScaleLineInfo actual)
+    {
+        Assert.AreEqual(expected.MetricValue, actual.MetricValue);
+        Assert.AreEqual(expected.MetricUnits, actual.MetricUnits);
+        Assert.AreEqual(expected.MetricLineLengthPixels, GetNormalizedPixelValue(actual.MetricLineLengthPixels), 3.0);
+        Assert.AreEqual(expected.USValue, actual.USValue);
+        Assert.AreEqual(expected.USUnits, actual.USUnits);
+        Assert.AreEqual(expected.USLineLengthPixels, GetNormalizedPixelValue(actual.USLineLengthPixels), 3.0);
+    }
+
+    private ScaleLineInfo GetScaleLineInfo(ScaleLineType type)
+    {
+        var scaleLineElement = GetScaleElement(type);
+
+        var metricValueElement = FindElement(scaleLineElement, "MetricValue");
+        var metricValue = int.Parse(GetElementText(metricValueElement));
+        var metricUnitElement = FindElement(scaleLineElement, "MetricUnit");
+        var metricUnit = GetElementText(metricUnitElement);
+        var metricLineLength = metricValueElement.Location.X - scaleLineElement.Rect.Left;
+
+        var usValueElement = FindElement(scaleLineElement, "UsValue");
+        var usValue = int.Parse(GetElementText(usValueElement));
+        var usUnitElement = FindElement(scaleLineElement, "UsUnit");
+        var usUnit = GetElementText(usUnitElement);
+        var usLineLength = usValueElement.Location.X - scaleLineElement.Rect.Left;
+
+        return new ScaleLineInfo
+        {
+            MetricValue = metricValue,
+            MetricUnits = metricUnit,
+            MetricLineLengthPixels = metricLineLength,
+            USValue = usValue,
+            USUnits = usUnit,
+            USLineLengthPixels = usLineLength
+        };
+    }
+
+    private AppiumElement GetScaleElement(ScaleLineType type)
+    {
         if (type == ScaleLineType.Advanced)
-            return GetScale(FindElement("AdvancedScaleLine"));
+            return FindElement("AdvancedScaleLine");
         else if (type == ScaleLineType.Simple)
-            return GetScale(FindElement("SimpleScaleLine"));
+            return FindElement("SimpleScaleLine");
         else
             throw new ArgumentOutOfRangeException(nameof(type), type, "Invalid scale line type.");
     }
 
-    private float GetScale(AppiumElement scaleLineElement)
+    private void UpdateViewpoint(int scale, int latitude)
     {
-        var scaleValueElement = FindElement(scaleLineElement, "ScaleLineMetricValue");
-        var scaleValue = int.Parse(GetElementText(scaleValueElement));
+        var scaleInputElement = FindElement("ScaleTextBox");
+        scaleInputElement.Clear();
+        scaleInputElement.SendKeys(scale.ToString());
 
-        var scaleLineLength = scaleValueElement.Location.X - scaleLineElement.Rect.Left;
-        TestContext.WriteLine($"Scale line length in pixels: {scaleLineLength}, scale value: {scaleValue}");
-        return scaleLineLength / (float)scaleValue;
+        var latitudeInputElement = FindElement("LatitudeTextBox");
+        latitudeInputElement.Clear();
+        latitudeInputElement.SendKeys(latitude.ToString());
+
+        var updateButtonElement = FindElement("UpdateViewpoint");
+        updateButtonElement.Click();
     }
 
-    private enum ScaleLineType
+    public enum ScaleLineType
     {
         Advanced,
         Simple
+    }
+
+    private class ScaleLineInfo
+    {
+        public int MetricValue;
+        public string MetricUnits = "";
+        public int MetricLineLengthPixels;
+        public int USValue;
+        public string USUnits = "";
+        public int USLineLengthPixels;
+
+        public double MetricScale
+        {
+            get
+            {
+                return MetricLineLengthPixels / (double)MetricValue;
+            }
+        }
+
+        public double USScale
+        {
+            get
+            {
+                return USLineLengthPixels / (double)USValue;
+            }
+        }
     }
 }

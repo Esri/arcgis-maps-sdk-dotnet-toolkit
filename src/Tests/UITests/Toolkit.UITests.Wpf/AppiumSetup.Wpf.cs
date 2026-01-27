@@ -16,6 +16,9 @@ public static partial class AppiumSetup
         driver.Manage().Window.Maximize();
 
         Task.Delay(500).Wait();
+
+        var screenDensityElement = driver.FindElement(MobileBy.AccessibilityId("ScreenDensity"));
+        ScreenDensity = float.Parse(screenDensityElement.GetAttribute("Name"));
     }
 
     private static string GetSampleAppPath()
