@@ -70,7 +70,6 @@
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
     <PackageReference Include="Esri.Calcite.Maui" Version="1.0.0-rc.1" />
   </ItemGroup>
-  </ItemGroup>
 
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">

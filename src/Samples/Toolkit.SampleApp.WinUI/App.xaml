@@ -6,8 +6,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" >
+                    <XamlControlsResources.MergedDictionaries>
+                        <CalciteResources xmlns="using:Esri.Calcite.WinUI" />
+                    </XamlControlsResources.MergedDictionaries>
+                </XamlControlsResources>
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
         </ResourceDictionary>

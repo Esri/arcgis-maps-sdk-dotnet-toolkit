@@ -76,6 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         public static JobManager Shared { get; } = new JobManager(null);
 
         private string? _id;
+        private bool _lastHasRunningJobsValue = false;
 
         // The key for which state will be serialized under the user defaults.
         private string DefaultsKey =>
@@ -117,7 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 
         private void JobCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            foreach(var job in e.NewItems?.OfType<IJob>() ?? Array.Empty<IJob>())
+            foreach (var job in e.NewItems?.OfType<IJob>() ?? Array.Empty<IJob>())
             {
                 job.StatusChanged += Job_StatusChanged;
                 job.ProgressChanged += Job_ProgressChanged;
@@ -128,17 +129,39 @@ namespace Esri.ArcGISRuntime.Toolkit
                 job.ProgressChanged -= Job_ProgressChanged;
             }
             SaveState();
+            CheckAnyJobRunningStateChanged();
         }
 
-        private void Job_StatusChanged(object? sender, JobStatus e) =>  SaveState();
+        private void Job_StatusChanged(object? sender, JobStatus e)
+        {
+            SaveState();
+            CheckAnyJobRunningStateChanged();
+        }
+
+        private void CheckAnyJobRunningStateChanged()
+        {
+            if (_lastHasRunningJobsValue != HasRunningJobs)
+            {
+                _lastHasRunningJobsValue = HasRunningJobs;
+                JobsRunningChanged(_lastHasRunningJobsValue);
+            }
+        }
+
+        partial void JobsRunningChanged(bool hasRunningJobs);
 
         /// <summary>
         /// The jobs being managed by the job manager.
         /// </summary>
-        public IList<IJob> Jobs { get; } = new System.Collections.ObjectModel.ObservableCollection<IJob>();
+        public IList<IJob> Jobs { get; } = new JobCollection();
 
         // A Boolean value indicating if there are jobs running.
-        private bool HasRunningJobs => Jobs.Any(j => j.Status == JobStatus.Started);
+        private bool HasRunningJobs
+        {
+            get 
+            {
+                lock (((JobCollection)Jobs).SyncRoot) { return Jobs.Any(j => j.Status == JobStatus.Started); }
+            }
+        }
 
         /// <summary>
         /// Check the status of all managed jobs.
@@ -146,10 +169,14 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <returns></returns>
         public async Task PerformStatusChecks()
         {
-            var tasks = Jobs.Select(async job =>
+            Task[] tasks;
+            lock (((JobCollection)Jobs).SyncRoot)
             {
-                try { await job.CheckStatusAsync(); } catch { }
-            });
+                tasks = Jobs.Select(async job =>
+                {
+                    try { await job.CheckStatusAsync(); } catch { }
+                }).ToArray();
+            }
             await Task.WhenAll(tasks);
         }
 
@@ -159,44 +186,84 @@ namespace Esri.ArcGISRuntime.Toolkit
         public async void ResumeAllPausedJobs()
         {
             await PerformStatusChecks(); // Won't throw
-            foreach (var job in Jobs.Where(j => j.Status == JobStatus.Paused))
+            lock (((JobCollection)Jobs).SyncRoot)
             {
-                job.Start();
+                foreach (var job in Jobs.Where(j => j.Status == JobStatus.Paused))
+                {
+                    job.Start();
+                }
             }
         }
-
-        private object StateLock = new object();
 
         /// <summary>
         /// Saves the current job state
         /// </summary>
         public void SaveState()
         {
-            var array = Jobs.Select(j => j.ToJson()).ToArray();
-            lock (StateLock)
+            string[] array;
+            lock (((JobCollection)Jobs).SyncRoot)
+                array = Jobs.Select(j => j.ToJson()).ToArray();
+            try
             {
-                SaveState(string.Join("\n", array));
+                SaveState(string.Join("|\n|", array));
             }
+            catch { }
         }
 
         private void LoadState()
         {
-
-            lock (StateLock)
+            string? data = LoadStateInternal();
+            if (!string.IsNullOrEmpty(data))
             {
-                string? data = LoadStateInternal();
-                if (!string.IsNullOrEmpty(data))
-                {
-                    Jobs.Clear();
-                    foreach (var job in data.Split('\n')
-                        .Select(json =>
-                        {
-                            try { return IJob.FromJson(json)!; }
-                            catch { return null; }
-                        })
-                        .Where(j => j != null))
-                        Jobs.Add(job);
-                }
+                foreach (var job in data.Split("|\n|")
+                    .Select(json =>
+                    {
+                        try { return IJob.FromJson(json)!; }
+                        catch { return null; }
+                    })
+                    .Where(j => j != null))
+                    Jobs.Add(job!);
+            }
+        }
+
+        /// <summary>
+        /// Exposes a lock to ensure edits to the collection is thread safe, and exposes the syncroot
+        /// to allow thread-safe reads.
+        /// </summary>
+        private sealed partial class JobCollection : System.Collections.ObjectModel.ObservableCollection<IJob>
+        {
+            public object SyncRoot { get; } = new object();
+
+            public JobCollection() { }
+
+            protected override void InsertItem(int index, IJob item)
+            {
+                lock (SyncRoot)
+                    base.InsertItem(index, item);
+            }
+
+            protected override void MoveItem(int oldIndex, int newIndex)
+            {
+                lock (SyncRoot)
+                    base.MoveItem(oldIndex, newIndex);
+            }
+
+            protected override void ClearItems()
+            {
+                lock (SyncRoot)
+                    base.ClearItems();
+            }
+
+            protected override void RemoveItem(int index)
+            {
+                lock (SyncRoot)
+                    base.RemoveItem(index);
+            }
+
+            protected override void SetItem(int index, IJob item)
+            {
+                lock (SyncRoot)
+                    base.SetItem(index, item);
             }
         }
     }

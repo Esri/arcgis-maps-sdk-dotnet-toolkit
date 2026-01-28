@@ -1,24 +1,25 @@
-using Esri.ArcGISRuntime.Geometry;
+﻿using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Tasks.Offline;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples.Jobs
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Jobs
 {
     [SampleInfo(ApiKeyRequired = true)]
-    public partial class JobManagerSample : UserControl
+    public sealed partial class JobManagerSample : Page
     {
         public JobManagerSample()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             JobManager.Shared.ResumeAllPausedJobs();
         }
 
-        private async void GenerateGdb_Click(object sender, System.Windows.RoutedEventArgs e)
+        public JobManager JobManager => JobManager.Shared;
+        private async void GenerateGdb_Click(object sender, RoutedEventArgs e)
         {
             var url = new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Sync/WildfireSync/FeatureServer");
             var job = await CreateGenerateGeodatabaseJob(url: url, syncModel: SyncModel.Layer);
@@ -26,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Jobs
             job.Start();
         }
 
-        private async void GenerateMap_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void GenerateMap_Click(object sender, RoutedEventArgs e)
         {
             var item = await Esri.ArcGISRuntime.Portal.PortalItem.CreateAsync(new Uri("https://www.arcgis.com/home/item.html?id=acc027394bc84c2fb04d1ed317aac674"));
 
@@ -69,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Jobs
             return job;
         }
 
-        private void Clear_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void Clear_Click(object sender, RoutedEventArgs e)
         {
             foreach (var job in JobManager.Shared.Jobs.ToList())
             {

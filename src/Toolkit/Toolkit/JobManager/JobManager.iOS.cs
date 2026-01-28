@@ -46,10 +46,14 @@ namespace  Esri.ArcGISRuntime.Toolkit
             get { return _preferredBackgroundStatusCheckSchedule; }
             set
             {
-                if (value != BackgroundStatusCheckSchedule.Disabled && ValidateInfoPlist())
+                if (value == BackgroundStatusCheckSchedule.Disabled || ValidateInfoPlist())
                     _preferredBackgroundStatusCheckSchedule = value;
             }
         }
+
+        /// <summary>
+        /// Gets the task identifier used for scheduling background status checks.
+        /// </summary>
         public string StatusChecksTaskIdentifier =>
             _id != null
                 ? $"com.esri.ArcGISToolkit.jobManager.{_id}.statusCheck"
@@ -97,8 +101,11 @@ namespace  Esri.ArcGISRuntime.Toolkit
             {
                 EarliestBeginDate = NSDate.Now.AddSeconds(PreferredBackgroundStatusCheckSchedule.Interval)
             };
-            NSError error;
-            BGTaskScheduler.Shared.Submit(request, out error);
+            BGTaskScheduler.Shared.Submit(request, out var Error);
+            if (Error != null)
+            {
+                System.Diagnostics.Trace.WriteLine($"Error scheduling background status check: {Error.LocalizedDescription}", "ArcGIS Toolkit");
+            }
         }
 
 
@@ -199,14 +206,38 @@ namespace  Esri.ArcGISRuntime.Toolkit
             }
             System.Diagnostics.Trace.WriteLine($"'BGTaskSchedulerPermittedIdentifiers' must contain '{DefaultsKey}'.", "ArcGIS Toolkit");
             return false;
-            throw new InvalidOperationException($"'BGTaskSchedulerPermittedIdentifiers' must contain '{DefaultsKey}'.");
         }
     }
 
-    public class BackgroundStatusCheckSchedule
+    /// <summary>
+    /// Defines a schedule for background status checks.
+    /// </summary>
+    /// <seealso cref="JobManager.PreferredBackgroundStatusCheckSchedule"/>
+    public sealed class BackgroundStatusCheckSchedule
     {
+        private BackgroundStatusCheckSchedule()
+        {
+        }
+
+        /// <summary>
+        /// No background status checks will be requested.
+        /// </summary>
         public static readonly BackgroundStatusCheckSchedule Disabled = new BackgroundStatusCheckSchedule();
-        public static BackgroundStatusCheckSchedule RegularInterval(double interval) => new BackgroundStatusCheckSchedule { Interval = interval };
+        /// <summary>
+        /// Requests that the system schedule a background check at a regular interval.
+        /// Ultimately it is up to the discretion of the system if that check is run.
+        /// </summary>
+        /// <param name="interval">Number of seconds between each background status check.</param>
+        /// <returns>BackgroundStatusCheckSchedule</returns>
+        public static BackgroundStatusCheckSchedule RegularInterval(double interval)
+        {
+            if (interval <= 0) throw new ArgumentOutOfRangeException(nameof(interval), "Interval must be greater than zero.");
+            return new BackgroundStatusCheckSchedule { Interval = interval };
+        }
+
+        /// <summary>
+        /// Number of seconds between each background status check or <c>zero</c> if disabled.
+        /// </summary>
         public double Interval { get; private set; }
     }
 }

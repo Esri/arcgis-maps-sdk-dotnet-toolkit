@@ -40,7 +40,10 @@ public partial class JobView : ContentView
     private void OnJobPropertyChanged(IJob? oldJob, IJob? newJob)
     {
         if (oldJob is not null)
+        {
+            oldJob.StatusChanged -= Job_StatusChanged;
             oldJob.ProgressChanged -= Job_ProgressChanged;
+        }
         if (newJob != null && this.IsLoaded)
         {
             newJob.ProgressChanged += Job_ProgressChanged;
