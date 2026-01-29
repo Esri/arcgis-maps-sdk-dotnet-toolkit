@@ -134,7 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
                 Label editSummaryLabel = new Label() { LineBreakMode = LineBreakMode.WordWrap, Style = GetPopupViewerCaptionStyle(), Margin = new Thickness(0, 10, 0, 0)};
                 editSummaryLabel.SetBinding(Label.TextProperty, static (Popup popup) => popup?.EditSummary);
-                editSummaryLabel.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) =>popup?.PopupDefinition?.ShowEditSummary);
+                editSummaryLabel.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.PopupDefinition?.ShowEditSummary);
                 rootLayout.Children.Add(editSummaryLabel);
 
                 return rootLayout;
