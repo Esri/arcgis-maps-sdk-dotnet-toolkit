@@ -32,6 +32,83 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class FieldsPopupElementView : Control
     {
         private const string TableAreaContentName = "TableAreaContent";
+
+#if WPF
+        private static bool IsStyleCompatible(Type elementType, Style? style)
+        {
+            // A Style can be applied if its TargetType is null or a base type of the element.
+            return style is null || style.TargetType is null || style.TargetType.IsAssignableFrom(elementType);
+        }
+
+        private FrameworkElement CreateTextCell(string? text, bool wrap)
+        {
+            bool canApplyBlockStyle = IsStyleCompatible(typeof(TextBlock), FieldTextStyle);
+            bool canApplyBoxStyle = IsStyleCompatible(typeof(TextBox), FieldTextStyle);
+
+            if (canApplyBlockStyle && !canApplyBoxStyle)
+            {
+                // Fallback to TextBlock if user specifically provided a custom style for it.
+                // Previous versions of this control used TextBlock, so this allows users to keep their existing styling.
+                return new TextBlock
+                {
+                    Style = FieldTextStyle,
+                    Text = text ?? "",
+                    TextWrapping = wrap ? TextWrapping.Wrap : TextWrapping.NoWrap,
+                };
+            }
+
+            // Default: Use a TextBox styled to look like a TextBlock, which allows text selection and copying.
+            // Requested for WPF by https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/issues/710
+            var tb = new TextBox
+            {
+                Text = text ?? "",
+
+                IsReadOnly = true,
+                IsReadOnlyCaretVisible = false,
+                IsTabStop = false,
+
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                Padding = new Thickness(0),
+
+                FocusVisualStyle = null,
+                VerticalContentAlignment = VerticalAlignment.Top,
+            };
+
+            if (canApplyBoxStyle)
+                tb.Style = FieldTextStyle;
+
+            if (wrap)
+            {
+                tb.AcceptsReturn = true; // enables multi-line text
+                tb.TextWrapping = TextWrapping.Wrap;
+                tb.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                tb.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+            }
+
+            return tb;
+        }
+
+        private TextBlock CreateHyperlinkCell(Uri uri)
+        {
+            var t = new TextBlock { TextWrapping = TextWrapping.Wrap };
+
+            // Apply FieldTextStyle if it also works for TextBlock
+            if (IsStyleCompatible(typeof(TextBlock), FieldTextStyle))
+                t.Style = FieldTextStyle;
+
+            var hl = new Hyperlink { NavigateUri = uri };
+            hl.Click += Hyperlink_Click;
+            hl.Inlines.Add(Properties.Resources.GetString("PopupViewerViewHyperlinkText"));
+            t.Inlines.Add(hl);
+            return t;
+        }
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Hyperlink link)
+                UI.Controls.PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(link.NavigateUri);
+        }
+#endif
     }
 }
 #endif
