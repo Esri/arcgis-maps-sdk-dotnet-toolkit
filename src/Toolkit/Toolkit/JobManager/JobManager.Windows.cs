@@ -80,18 +80,36 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
         }
 
+        private readonly object fileLock = new object();
+
         private void SaveState(string? json)
         {
-            using var file = File.Open(GetStateFilename(), FileMode.Create, FileAccess.Write, FileShare.Write);
-            using var writer = new StreamWriter(file);
-            writer.Write(json);
+            lock (fileLock)
+            {
+                var stateFile = GetStateFilename();
+                if (string.IsNullOrEmpty(json))
+                {
+                    if (File.Exists(stateFile))
+                        File.Delete(stateFile);
+                    return;
+                }
+                var tmpFile = Path.GetTempFileName();
+                File.WriteAllText(tmpFile, json);
+                if (File.Exists(stateFile))
+                    File.Replace(tmpFile, stateFile, null);
+                else
+                    File.Move(tmpFile, stateFile, true);
+            }
         }
 
         private string? LoadStateInternal()
         {
-            var filename = GetStateFilename();
-            if (System.IO.File.Exists(filename))
-                return System.IO.File.ReadAllText(GetStateFilename());
+            lock (fileLock)
+            {
+                var filename = GetStateFilename();
+                if (File.Exists(filename))
+                    return File.ReadAllText(GetStateFilename());
+            }
             return null;
         }
 
@@ -106,9 +124,10 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 // If the app is unpackaged, we'll generate a unique filename based on the process and assembly and place it in the temp folder
                 string location = Environment.ProcessPath + "|" + typeof(JobManager).Assembly.FullName + "|" + DefaultsKey;
-                return Path.Combine(Path.GetTempPath(), HashString(location)) + ".json");
+                return Path.Combine(Path.GetTempPath(), HashString(location) + ".json");
             }
         }
+
         private static string HashString(string input)
         {
             using (var hasher = System.Security.Cryptography.SHA256.Create())
