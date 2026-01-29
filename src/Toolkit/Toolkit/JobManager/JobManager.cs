@@ -183,7 +183,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <summary>
         /// Resumes all paused jobs.
         /// </summary>
-        public async void ResumeAllPausedJobs()
+        public async Task ResumeAllPausedJobsAsync()
         {
             await PerformStatusChecks(); // Won't throw
             lock (((JobCollection)Jobs).SyncRoot)

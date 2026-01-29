@@ -15,7 +15,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Jobs
         public JobManagerSample()
         {
             InitializeComponent();
-            JobManager.Shared.ResumeAllPausedJobs();
+            _ = JobManager.Shared.ResumeAllPausedJobsAsync();
         }
 
         private async void GenerateGdb_Click(object sender, System.Windows.RoutedEventArgs e)

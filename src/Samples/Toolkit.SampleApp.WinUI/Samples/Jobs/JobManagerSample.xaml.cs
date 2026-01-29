@@ -15,7 +15,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Jobs
         public JobManagerSample()
         {
             this.InitializeComponent();
-            JobManager.Shared.ResumeAllPausedJobs();
+            JobManager.Shared.ResumeAllPausedJobsAsync();
         }
 
         public JobManager JobManager => JobManager.Shared;

@@ -100,23 +100,26 @@ namespace Esri.ArcGISRuntime.Toolkit
             if (IsAppPackaged)
             {
                 var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                return Path.Combine(folderPath, $"{DefaultsKey}.json");
+                return Path.Combine(folderPath, $"{HashString(DefaultsKey)}.json");
             }
             else
             {
                 // If the app is unpackaged, we'll generate a unique filename based on the process and assembly and place it in the temp folder
                 string location = Environment.ProcessPath + "|" + typeof(JobManager).Assembly.FullName + "|" + DefaultsKey;
-                using (var hasher = System.Security.Cryptography.SHA256.Create())
+                return Path.Combine(Path.GetTempPath(), HashString(location)) + ".json");
+            }
+        }
+        private static string HashString(string input)
+        {
+            using (var hasher = System.Security.Cryptography.SHA256.Create())
+            {
+                StringBuilder hash = new StringBuilder();
+                byte[] bytes = hasher.ComputeHash(new UTF8Encoding().GetBytes(input));
+                for (int i = 0; i < bytes.Length / 2; i++) // Only grab the first half to keep path name short
                 {
-                    StringBuilder hash = new StringBuilder();
-                    byte[] bytes = hasher.ComputeHash(new UTF8Encoding().GetBytes(location));
-                    for (int i = 0; i < bytes.Length / 2; i++) // Only grab the first half to keep path name short
-                    {
-                        hash.Append(bytes[i].ToString("x2"));
-                    }
-
-                    return Path.Combine(Path.GetTempPath(), hash.ToString() + ".json");
+                    hash.Append(bytes[i].ToString("x2"));
                 }
+                return hash.ToString();
             }
         }
 
@@ -226,7 +229,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             private bool disposed = false;
 
             [MTAThread]
-            public void Run(IBackgroundTaskInstance taskInstance)
+            public async void Run(IBackgroundTaskInstance taskInstance)
             {
                 var taskName = taskInstance.Task.Name;
                 if (taskName == "com.esri.ArcGISToolkit.jobManager.statusCheck")
@@ -241,22 +244,31 @@ namespace Esri.ArcGISRuntime.Toolkit
                 {
                     return; // Unknown task id
                 }
-                manager.ResumeAllPausedJobs();
-                if (!manager.HasRunningJobs)
-                {
-                    return;
-                }
-
                 // Get deferral to indicate not to kill the background task process as soon as the Run method returns
                 _deferral = taskInstance.GetDeferral();
-                // Wire the cancellation handler.
-                taskInstance.Canceled += this.OnCanceled;
+                try
+                {
+                    await manager.ResumeAllPausedJobsAsync();
+                    if (!manager.HasRunningJobs)
+                    {
+                        _deferral.Complete();
+                        return;
+                    }
 
-                // Set the progress to indicate this task has started
-                taskInstance.Progress = 0;
-                
-                _periodicTimer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(PeriodicTimerCallback), TimeSpan.FromSeconds(30));
-                _taskInstance = taskInstance;
+                    // Wire the cancellation handler.
+                    taskInstance.Canceled += this.OnCanceled;
+
+                    // Set the progress to indicate this task has started
+                    taskInstance.Progress = 0;
+
+                    _periodicTimer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(PeriodicTimerCallback), TimeSpan.FromSeconds(30));
+                    _taskInstance = taskInstance;
+                }
+                catch
+                {
+                    _deferral?.Complete();
+                    JobManager._exitEvent.Set();
+                }
             }
 
             private async void PeriodicTimerCallback(ThreadPoolTimer timer)
@@ -283,7 +295,10 @@ namespace Esri.ArcGISRuntime.Toolkit
                     _periodicTimer?.Cancel();
                 }
                 if (manager is null || !manager.HasRunningJobs)
+                {
                     _deferral?.Complete();
+                    JobManager._exitEvent.Set();
+                }
             }
 
             private void OnCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
