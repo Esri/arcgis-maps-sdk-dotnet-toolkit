@@ -96,7 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                 var tmpFile = Path.GetTempFileName();
                 File.WriteAllText(tmpFile, json);
                 if (File.Exists(stateFile))
-                    File.Replace(tmpFile, stateFile, null);
+                    File.Replace(tmpFile, stateFile, stateFile + ".bak");
                 else
                     File.Move(tmpFile, stateFile, true);
             }
