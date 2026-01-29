@@ -18,7 +18,6 @@
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
-using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
