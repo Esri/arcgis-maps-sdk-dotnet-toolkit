@@ -60,6 +60,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.Maui.App", "Tests\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj", "{20689CA3-CA87-4305-88CA-CAFCDE92ECC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.Maui.WinUI", "Tests\UITests\Toolkit.UITests.Maui.WinUI\Toolkit.UITests.Maui.WinUI.csproj", "{F4979959-EA7D-452E-A673-87767F5F59E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F7F98CE8-5304-460D-83A2-F4F7FE50B370} = {F7F98CE8-5304-460D-83A2-F4F7FE50B370}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

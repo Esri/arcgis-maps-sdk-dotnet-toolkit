@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium.Appium;
+using System.Reflection;
 
 namespace Toolkit.UITest.Shared;
 
@@ -7,7 +8,7 @@ public static partial class AppiumSetup
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext testContext)
     {
-        var mauiSamplesApp = @"PATH_TO_APP";
+        var mauiSamplesApp = GetSampleAppPath();
 
         driver = MakeWindowsDriver(mauiSamplesApp);
 
@@ -15,5 +16,26 @@ public static partial class AppiumSetup
 
         var screenDensityElement = driver.FindElement(MobileBy.AccessibilityId("ScreenDensity"));
         ScreenDensity = float.Parse(screenDensityElement.GetAttribute("Name"));
+    }
+
+    private static string GetSampleAppPath()
+    {
+        var testAssemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            ?? throw new InvalidOperationException("Could not determine test assembly directory.");
+
+        var pathFile = Path.Combine(testAssemblyDir, "TestAppPath.txt");
+        if (!File.Exists(pathFile))
+        {
+            throw new FileNotFoundException(
+                $"Missing '{pathFile}'. Ensure the 'BuildTestApp' MSBuild target ran before tests.");
+        }
+
+        var exePath = File.ReadAllText(pathFile).Trim();
+        if (string.IsNullOrWhiteSpace(exePath))
+        {
+            throw new InvalidOperationException($"'{pathFile}' was empty.");
+        }
+
+        return exePath;
     }
 }

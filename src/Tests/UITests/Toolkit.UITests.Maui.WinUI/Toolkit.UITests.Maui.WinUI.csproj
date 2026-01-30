@@ -19,5 +19,36 @@
   <Target Name="CheckOS">
     <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The Maui Windows tests must be run from a Windows machine" />
   </Target>
-  
+
+  <!-- Build test app if needed and record build location to TestAppPath.txt -->
+  <Target Name="BuildTestApp" BeforeTargets="Build">
+    <PropertyGroup>
+      <!-- Force Windows target when building the MAUI test app from the test project -->
+      <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
+      <_MauiTestAppTfm>net10.0-windows10.0.19041.0</_MauiTestAppTfm>
+    </PropertyGroup>
+
+    <!-- Build the MAUI app -->
+    <MSBuild
+      Projects="$(_MauiTestAppProject)"
+      Targets="Build"
+      Properties="Configuration=$(Configuration);TargetFramework=$(_MauiTestAppTfm)" />
+
+    <!-- Query its TargetPath (more reliable than TargetOutputs for MAUI) -->
+    <MSBuild
+      Projects="$(_MauiTestAppProject)"
+      Targets="GetTargetPath"
+      Properties="Configuration=$(Configuration);TargetFramework=$(_MauiTestAppTfm)">
+      <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetPaths" />
+    </MSBuild>
+
+    <PropertyGroup>
+      <_TestAppExePath>@(_TestAppTargetPaths->'%(FullPath)')</_TestAppExePath>
+      <_TestAppExePath>$(_TestAppExePath.Replace('.dll','.exe'))</_TestAppExePath>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="Maui Sample app built at: $(_TestAppExePath)" />
+    <WriteLinesToFile File="$(TargetDir)TestAppPath.txt" Lines="$(_TestAppExePath)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+
 </Project>
