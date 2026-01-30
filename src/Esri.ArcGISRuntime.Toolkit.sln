@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.Wpf", "Test
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Toolkit.UITests.Shared", "Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.shproj", "{000A3CC1-F6AE-45E9-AA18-4E116AD7B20D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.Wpf.Puppet", "Tests\UITests\Toolkit.UITests.Wpf.Puppet\Toolkit.UITests.Wpf.Puppet.csproj", "{ED324C95-A086-4555-A7F7-5922204111D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.Wpf.App", "Tests\UITests\Toolkit.UITests.Wpf.App\Toolkit.UITests.Wpf.App.csproj", "{ED324C95-A086-4555-A7F7-5922204111D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.WinUI.Puppet", "Tests\UITests\Toolkit.UITests.WinUI.Puppet\Toolkit.UITests.WinUI.Puppet.csproj", "{0B5AA64F-0FAA-4299-BEA0-E48544FA8066}"
 EndProject

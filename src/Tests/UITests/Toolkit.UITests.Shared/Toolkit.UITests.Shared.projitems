@@ -16,7 +16,4 @@
     <Compile Include="$(MSBuildThisFileDirectory)Appium\AppiumTestBase.Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tests\ScaleLine\ScaleLineTests.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Appium\license.txt" />
-  </ItemGroup>
 </Project>

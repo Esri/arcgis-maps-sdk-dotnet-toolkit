@@ -15,8 +15,6 @@ public static partial class AppiumSetup
 
         driver.Manage().Window.Maximize();
 
-        Task.Delay(500).Wait();
-
         var screenDensityElement = driver.FindElement(MobileBy.AccessibilityId("ScreenDensity"));
         ScreenDensity = float.Parse(screenDensityElement.GetAttribute("Name"));
     }
@@ -26,11 +24,11 @@ public static partial class AppiumSetup
         var testAssemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
             ?? throw new InvalidOperationException("Could not determine test assembly directory.");
 
-        var pathFile = Path.Combine(testAssemblyDir, "PuppetAppPath.txt");
+        var pathFile = Path.Combine(testAssemblyDir, "TestAppPath.txt");
         if (!File.Exists(pathFile))
         {
             throw new FileNotFoundException(
-                $"Missing '{pathFile}'. Ensure the 'BuildPuppetApp' MSBuild target ran before tests.");
+                $"Missing '{pathFile}'. Ensure the 'BuildTestApp' MSBuild target ran before tests.");
         }
 
         var exePath = File.ReadAllText(pathFile).Trim();
