@@ -15,7 +15,7 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			}).UseWindowsAutomationTreeFix().UseArcGISRuntime().UseArcGISToolkit().UseMauiCommunityToolkit();
+			}).UseArcGISRuntime().UseArcGISToolkit().UseMauiCommunityToolkit();
 
 		return builder.Build();
 	}
