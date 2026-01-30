@@ -10,8 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{26E85B83-D430-4A75-9431-8A014AA7117E}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
-		version.json = version.json
 		global.json = global.json
+		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Shared", "Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.shproj", "{5F3CAD93-6062-450A-8771-7B4645CAF598}"
