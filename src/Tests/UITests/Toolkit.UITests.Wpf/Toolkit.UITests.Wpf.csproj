@@ -22,7 +22,7 @@
 
   <!-- Build test app if needed and record build location to SampleTestAppPath.txt -->
   <Target Name="BuildTestApp" BeforeTargets="Build">
-    <MSBuild Projects="..\..\UITests\Toolkit.UITests.Wpf.App\Toolkit.UITests.Wpf.App.csproj" Targets="Build" Properties="Configuration=Release">
+    <MSBuild Projects="..\..\UITests\Toolkit.UITests.Wpf.App\Toolkit.UITests.Wpf.App.csproj" Targets="Build" Properties="Configuration=$(Configuration)">
       <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetOutputs" />
     </MSBuild>
 
