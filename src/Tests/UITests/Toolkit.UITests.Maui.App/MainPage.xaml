@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             x:Class="Toolkit.UITests.Maui.App.MainPage">
+
+    <Grid RowDefinitions="30,*">
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Net Version: " FontSize="12" Margin="5,1,1,3"/>
+            <Label x:Name="NetVersionLabel" AutomationId="NetVersion"
+                   Text="undefined" FontSize="12" Margin="0,1,10,1"/>
+            <Label Text="Toolkit Version: " FontSize="12" Margin="5,1,1,3"/>
+            <Label x:Name="ToolkitVersionLabel" AutomationId="ToolkitVersion"
+                   Text="undefined" FontSize="12" Margin="0,1,10,1"/>
+            <Label Text="Runtime Version: " FontSize="12" Margin="5,1,1,3"/>
+            <Label x:Name="RuntimeVersionLabel" AutomationId="RuntimeVersion"
+                   Text="undefined" FontSize="12" Margin="0,1,10,1"/>
+            <Label Text="Screen Density: " FontSize="12" Margin="5,1,1,3"/>
+            <Label x:Name="ScreenDensityLabel" AutomationId="ScreenDensity"
+                   Text="undefined" FontSize="12" Margin="0,1,10,1"/>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+            <Button x:Name="SwitchThemeButton"
+                    Text="Toggle Theme"
+                    Clicked="SwitchThemeButton_Clicked"
+                    Style="{StaticResource CalciteSecondaryButtonStyle}"
+                    Grid.Column="1"
+                    MinimumWidthRequest="10"
+                    MinimumHeightRequest="20"
+                    Margin="10,1"
+                    VerticalOptions="Center"
+                    FontSize="12"
+                    Padding="5"/>
+            <Label Text="Open Page: " FontSize="12" Margin="5,1,1,0" VerticalOptions="Center"/>
+            <Entry x:Name="TestSearchBox" AutomationId="TestSearchBox"
+                 MinimumWidthRequest="120"
+                 MinimumHeightRequest="20"
+                 Margin="3,0,3,0"/>
+        </StackLayout>
+
+        <ContentPresenter Grid.Row="1" x:Name="TestContentPresenter"/>
+    </Grid>
+
+</ContentPage>
