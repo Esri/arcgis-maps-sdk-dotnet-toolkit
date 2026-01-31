@@ -1,5 +1,9 @@
-﻿using OpenQA.Selenium.Appium;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Support.UI;
+using System;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace Toolkit.UITest.Shared;
 
@@ -13,53 +17,68 @@ public abstract partial class AppiumTestBase
         PressEnter();
     }
 
-    protected ReadOnlyCollection<AppiumElement> FindElements(string name)
+    private T OptionalWaitCall<T>(Func<T> call, TimeSpan? timeout = null)
     {
-#if WINDOWS_TEST
-        return Driver.FindElements(MobileBy.AccessibilityId(name));
-#else
-        return Driver.FindElements(MobileBy.Id(name));
-#endif
+        if (timeout is null || timeout.Value.TotalMilliseconds <= 0)
+        {
+            return call();
+        }
+        var wait = new WebDriverWait(Driver, timeout.Value);
+        return wait.Until(d => call());
     }
 
-    protected AppiumElement FindElement(string id)
+    protected ReadOnlyCollection<AppiumElement> FindElements(string name, TimeSpan? timeout = null)
     {
 #if WINDOWS_TEST
-        return Driver.FindElement(MobileBy.AccessibilityId(id));
+        var action = () => Driver.FindElements(MobileBy.AccessibilityId(name));
 #else
-        return Driver.FindElement(MobileBy.Id(id));
+        var action = () => Driver.FindElements(MobileBy.Id(name);
 #endif
+        return OptionalWaitCall(action, timeout);
     }
 
-    protected AppiumElement FindElement(AppiumElement parent, string id)
+    protected AppiumElement FindElement(string id, TimeSpan? timeout = null)
     {
 #if WINDOWS_TEST
-        return parent.FindElement(MobileBy.AccessibilityId(id));
+        var action = () => Driver.FindElement(MobileBy.AccessibilityId(id));
 #else
-        return parent.FindElement(MobileBy.Id(id));
+        var action = () => Driver.FindElement(MobileBy.Id(id));
 #endif
+        return OptionalWaitCall(action, timeout);
     }
 
-    protected AppiumElement FindElementByName(string name)
+    protected AppiumElement FindElement(AppiumElement parent, string id, TimeSpan? timeout = null)
+    {
+#if WINDOWS_TEST
+        var action = () => parent.FindElement(MobileBy.AccessibilityId(id));
+#else
+        var action = () => parent.FindElement(MobileBy.Id(id));
+#endif
+        return OptionalWaitCall(action, timeout);
+    }
+
+    protected AppiumElement FindElementByName(string name, TimeSpan? timeout = null)
     {
 #if ANDROID_TEST
-        return Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().text(\"{name}\")"));
+        var action = () => Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().text(\"{name}\")"));
 #else
-        return Driver.FindElement(MobileBy.Name(name));
+        var action = () => Driver.FindElement(MobileBy.Name(name));
 #endif
+        return OptionalWaitCall(action, timeout);
     }
 
-    protected string GetElementText(AppiumElement element)
+    protected string GetElementText(AppiumElement element, TimeSpan? timeout = null)
     {
 #if WINDOWS_TEST
-        return element.GetAttribute("Name");
+        var action = () => element.GetAttribute("Name");
 #elif ANDROID_TEST
-        return element.GetAttribute("text");
+        var action = () =>  element.GetAttribute("text");
 #elif MAC_TEST || IOS_TEST
-        return element.GetAttribute("label");
+        var action = () =>  element.GetAttribute("label");
 #else
         throw new NotImplementedException("FindElement(AppiumElement,string) is not implemented for this platform.");
 #endif
+        return OptionalWaitCall(action, timeout);
     }
 
     /// <summary>
