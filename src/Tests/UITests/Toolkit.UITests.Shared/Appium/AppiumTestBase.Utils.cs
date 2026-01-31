@@ -32,7 +32,7 @@ public abstract partial class AppiumTestBase
 #if WINDOWS_TEST
         var action = () => Driver.FindElements(MobileBy.AccessibilityId(name));
 #else
-        var action = () => Driver.FindElements(MobileBy.Id(name);
+        var action = () => Driver.FindElements(MobileBy.Id(name));
 #endif
         return OptionalWaitCall(action, timeout);
     }
