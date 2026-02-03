@@ -130,15 +130,8 @@ namespace Esri.ArcGISRuntime.Toolkit
 
         private static string HashString(string input)
         {
-            using (var hasher = System.Security.Cryptography.SHA256.Create())
-            {
-                StringBuilder hash = new StringBuilder();
-                byte[] bytes = hasher.ComputeHash(new UTF8Encoding().GetBytes(input));
-                for (int i = 0; i < bytes.Length / 2; i++) // Only grab the first half to keep path name short
-                {
-                    hash.Append(bytes[i].ToString("x2"));
-                }
-                return hash.ToString();
+            byte[] bytes = System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(input));
+            return Convert.ToHexStringLower(bytes.AsSpan(0, bytes.Length / 2)); // Only grab the first half to keep path name short
             }
         }
 
