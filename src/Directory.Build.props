@@ -83,8 +83,8 @@
     <NerdbankGitVersioningVersion>3.0.26</NerdbankGitVersioningVersion>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(VersionOverride)'!='true' AND $([MSBuild]::IsOSPlatform('windows'))">
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115" PrivateAssets="all" />
+  <ItemGroup Condition="'$(VersionOverride)'!='true' AND $([MSBuild]::IsOSPlatform('windows')) AND '$(OutputType)'=='library' AND '$(AndroidApplication)'!='true'">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50" PrivateAssets="all" />
   </ItemGroup>
   
   <ItemGroup Condition="$(IsToolkitLibrary)">
