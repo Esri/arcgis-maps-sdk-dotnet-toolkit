@@ -66,8 +66,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         public static readonly DependencyProperty ContentTemplateProperty = Toolkit.Internal.PropertyHelper.CreateProperty<DataTemplate, ContentControl>(
             nameof(ContentTemplate), propertyChanged: (cc, oldvalue, newvalue) => cc.UpdateData());
 
-        private object? _content;
-
         public object? ContentData
         {
             get => GetValue(ContentDataProperty);

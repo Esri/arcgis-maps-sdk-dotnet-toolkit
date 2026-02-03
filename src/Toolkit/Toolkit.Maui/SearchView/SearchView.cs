@@ -48,8 +48,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     private bool _sourceSelectToggled;
 
-    private bool _loadedHandled;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="SearchView"/> class.
     /// </summary>

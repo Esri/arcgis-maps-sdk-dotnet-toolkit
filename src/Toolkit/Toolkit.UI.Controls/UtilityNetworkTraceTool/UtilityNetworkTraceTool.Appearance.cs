@@ -23,7 +23,7 @@ using Esri.ArcGISRuntime.UtilityNetworks;
 using ToggleButton = Windows.UI.Xaml.Controls.ToggleSwitch;
 #elif WINUI
 using ToggleButton = Microsoft.UI.Xaml.Controls.ToggleSwitch;
-#else
+#elif WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;

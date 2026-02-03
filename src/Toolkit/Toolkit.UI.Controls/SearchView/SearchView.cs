@@ -517,7 +517,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// Some consumer applications will display this button in a separate area of the UI from the search bar, often centered over the map.
         /// This property is intended to allow hiding the default button if using a custom 'Repeat Search' implementation.
-        /// See <see cref="TemplateSettings.RepeatSearchHereCommand"/> and <see cref="SearchViewModel.IsEligibleForRequery"/> to enable a custom button implementation.
+        /// See <see cref="SearchViewTemplateSettings.RepeatSearchHereCommand"/> and <see cref="SearchViewModel.IsEligibleForRequery"/> to enable a custom button implementation.
         /// </remarks>
         public bool EnableRepeatSearchHereButton
         {
