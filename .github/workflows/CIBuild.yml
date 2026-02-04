@@ -25,6 +25,9 @@ jobs:
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v1.0.2
        
+    - name: Install MAUI Workload
+      run: dotnet workload install maui
+       
     - name: Build
       run: |
         msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release
