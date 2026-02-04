@@ -16,7 +16,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: windows-2022
     
     steps:
     - name: Clone Toolkit
@@ -27,7 +27,6 @@ jobs:
        
     - name: Build
       run: |
-        dotnet workload install maui@9.0.100
         msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release
 #       msbuild /restore /t:Build src/Esri.ArcGISRuntime.ARToolkit.sln /p:Configuration=Release
       
