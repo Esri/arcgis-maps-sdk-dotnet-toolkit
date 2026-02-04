@@ -26,7 +26,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
        
     - name: Install MAUI Workload
-      run: dotnet workload install maui
+      run: dotnet workload restore src/Esri.ArcGISRuntime.Toolkit.sln
        
     - name: Build
       run: |
