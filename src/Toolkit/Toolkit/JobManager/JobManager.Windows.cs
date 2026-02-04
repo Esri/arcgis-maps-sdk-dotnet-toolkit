@@ -387,7 +387,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                         return CLASS_E_NOAGGREGATION;
                     }
 
-                    if ((interfaceId != typeof(BackgroundTask).GUID) && (interfaceId != new Guid(IID_IUnknown)))
+                    if ((interfaceId != typeof(IBackgroundTask).GUID) && (interfaceId != new Guid(IID_IUnknown)))
                     {
                         objectPointer = IntPtr.Zero;
                         return E_NOINTERFACE;
