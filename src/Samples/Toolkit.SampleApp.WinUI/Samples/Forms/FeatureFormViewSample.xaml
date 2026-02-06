@@ -30,7 +30,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <toolkit:FeatureFormView x:Name="formViewer" Margin="5,5,5,0" VerticalScrollBarVisibility="Hidden" Grid.ColumnSpan="3" />
-                    <Border BorderThickness="0,1,0,0" BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}" Background="#eeeeee" Grid.Row="1" Grid.ColumnSpan="3" Padding="5">
+                    <Border BorderThickness="0,1,0,0" BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Grid.Row="1" Grid.ColumnSpan="3" Padding="5">
                         <Grid>
                             <Grid.ColumnDefinitions >
                                 <ColumnDefinition />
