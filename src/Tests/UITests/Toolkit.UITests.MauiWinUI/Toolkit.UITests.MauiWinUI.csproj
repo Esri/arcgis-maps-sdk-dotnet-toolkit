@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSTest.Sdk">
+﻿<Project Sdk="MSTest.Sdk" InitialTargets="CheckOS">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
