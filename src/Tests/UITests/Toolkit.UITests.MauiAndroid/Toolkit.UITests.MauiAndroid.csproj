@@ -1,0 +1,23 @@
+﻿<Project Sdk="MSTest.Sdk" InitialTargets="CheckOS">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;ANDROID_TEST;MAUI_TEST</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Appium.WebDriver" Version="8.0.1" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.2" />
+  </ItemGroup>
+
+  <Import Project="..\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems" Label="Shared" />
+
+  <!-- The Maui Android tests are currently only configured to be run from windows machines -->
+  <Target Name="CheckOS">
+    <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The Maui Windows tests must be run from a Windows machine" />
+  </Target>
+
+</Project>

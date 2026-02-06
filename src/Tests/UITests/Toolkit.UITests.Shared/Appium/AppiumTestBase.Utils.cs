@@ -12,6 +12,7 @@ public abstract partial class AppiumTestBase
     protected void OpenSample(string sampleName)
     {
         var searchBox = FindElement("TestSearchBox");
+        searchBox.Click();
         searchBox.Clear();
         searchBox.SendKeys(sampleName);
         PressEnter();
@@ -85,14 +86,11 @@ public abstract partial class AppiumTestBase
     /// Normalizes pixel values based on platform and device DPI. Normalized values are approximately equivalent to what renders
     /// on Windows at a screen density of 1 (96 DPI).
     /// </summary>
-    protected double GetNormalizedPixelValue(int pixelValue)
+    protected double GetNormalizedPixelValue(int pixels)
     {
-#if WINDOWS_TEST
-        return pixelValue / ScreenDensity;
+#if WINDOWS_TEST || ANDROID_TEST
+        return pixels / ScreenDensity;
 #else
-        // Mac baseline is ~72 DPI
-        // iOS baseline is ~160 DPI
-        // Android baseline is 160 DPI
         throw new NotImplementedException("GetNormalizedPixelValue(int) is not implemented for this platform.");
 #endif
     }

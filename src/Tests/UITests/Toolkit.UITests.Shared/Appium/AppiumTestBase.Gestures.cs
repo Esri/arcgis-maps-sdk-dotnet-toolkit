@@ -23,6 +23,12 @@ public abstract partial class AppiumTestBase
         {
             {"actions",  actions}
         });
+#elif ANDROID_TEST
+        // This only works if the keyboard is open, you might need to click on the input first to open it
+        Driver.ExecuteScript("mobile: performEditorAction", new Dictionary<string, object>
+        {
+            {"action", "done" }
+        });
 #else
         throw new NotImplementedException("PressEnter is not implemented for this platform.");
 #endif
