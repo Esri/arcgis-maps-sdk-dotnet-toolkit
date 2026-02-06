@@ -40,14 +40,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             set
             {
                 _itemsSource = value;
-                if(GetTemplateChild("ItemsPanel") is Layout layout)
+                if (GetTemplateChild("ItemsPanel") is Layout layout)
                 {
                     layout.Children.Clear();
                     if (_itemsSource is not null)
                     {
                         foreach (var item in _itemsSource)
                         {
+#if __IOS__
+                            var button = new RadioButtonFix();
+#else
                             var button = new RadioButton();
+#endif
                             button.SetBinding(RadioButton.ContentProperty, static (CodedValue item) => item.Name);
                             button.BindingContext = item;
                             button.IsChecked = item == SelectedItem;
@@ -61,6 +65,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 }
             }
         }
+#if __IOS__
+        private class RadioButtonFix : RadioButton
+        {
+            // Workaround for MAUI arrange bug when the collection of radio buttons
+            // are inside a collapsed group expander.
+            protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
+            {
+                var size = base.MeasureOverride(widthConstraint, heightConstraint);
+                if (size.Height > 0 && this.Bounds.Height == 0)
+                    this.Handler?.PlatformArrange(new Rect(0, 0, size.Width, size.Height));
+                return size;
+            }
+        }
+#endif
 
         private void Button_CheckedChanged(object? sender, CheckedChangedEventArgs e)
         {
