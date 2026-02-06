@@ -16,7 +16,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: windows-2022
     
     steps:
     - name: Clone Toolkit
@@ -24,6 +24,11 @@ jobs:
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v1.0.2
+       
+    - name: Install MAUI Workload
+      run: |
+        dotnet workload install maui@9.0.100
+        dotnet workload restore src/Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj --from-previous-sdk
        
     - name: Build
       run: |

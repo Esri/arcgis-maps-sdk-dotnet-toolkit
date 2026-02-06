@@ -20,21 +20,17 @@ using Esri.ArcGISRuntime.UI.Controls;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
+using System.Windows.Shapes;
 #elif WINDOWS_UWP
 using Windows.UI.Xaml.Automation;
 using Windows.UI.Xaml.Automation.Peers;
 using Windows.UI.Xaml.Automation.Provider;
+using Windows.UI.Xaml.Shapes;
 #elif WINUI
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Automation.Peers;
 using Microsoft.UI.Xaml.Automation.Provider;
-#endif
-#if NETFX_CORE
-using Windows.UI.Xaml.Shapes;
-#elif WINUI
 using Microsoft.UI.Xaml.Shapes;
-#else
-using System.Windows.Shapes;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

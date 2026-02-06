@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine("Failed to load basemaps", "ArcGIS Maps SDK Toolkit");
+                System.Diagnostics.Trace.WriteLine($"Failed to load basemaps: {ex.Message}", "ArcGIS Maps SDK Toolkit");
             }
         }
 

@@ -23,7 +23,10 @@ using Esri.ArcGISRuntime.UI;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using System.Xaml;
+#elif MAUI
+using DispatcherTimer = Microsoft.Maui.Dispatching.IDispatcherTimer;
 #elif WINDOWS_XAML
 using Esri.ArcGISRuntime.UI;
 using Windows.Foundation;
@@ -44,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private double _lastChartSize = 0;
         private const double MaxChartSize = 1024;
-        private Timer? _refreshTimer;
+        private DispatcherTimer? _refreshTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupMediaView"/> class.
@@ -93,13 +96,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
 #if MAUI
-                    if (img.Source is not RuntimeStreamImageSource rsis || rsis.Source?.OriginalString != sourceUrl || _refreshTimer?.Enabled == true)
-#else
-                    if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl || _refreshTimer?.Enabled == true)
-#endif
+                    if (img.Source is not RuntimeStreamImageSource rsis || rsis.Source?.OriginalString != sourceUrl || _refreshTimer?.IsRunning == true)
                     {
-                        if (TryCreateImageSource(sourceUrl, out var source, _refreshTimer?.Enabled == true))
+                        if (TryCreateImageSource(sourceUrl, out var source, _refreshTimer?.IsRunning == true))
                         {
+#else
+                    if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl || _refreshTimer?.IsEnabled == true)
+                    {
+                        if (TryCreateImageSource(sourceUrl, out var source, _refreshTimer?.IsEnabled == true))
+                        {
+#endif
 #if WPF
                             // This code ensures that the height of the MediaView in the Popup Viewer for WPF is maintained
                             // during refreshes of a dynamic image source for a smooth visual experience. It temporarily sets the height to the current
@@ -341,9 +347,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             StopRefreshTimer();
 
             // Initialize and start a new timer
-            _refreshTimer = new Timer(interval.TotalMilliseconds);
-            _refreshTimer.Elapsed += OnRefreshTimerElapsed;
-            _refreshTimer.AutoReset = true;
+#if MAUI
+            _refreshTimer = Dispatcher.CreateTimer();
+            _refreshTimer.IsRepeating = true;
+#else
+            _refreshTimer = new DispatcherTimer();
+#endif
+            _refreshTimer.Tick += OnRefreshTimerElapsed;
+            _refreshTimer.Interval = interval;
             _refreshTimer.Start();
         }
 
@@ -352,16 +363,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (_refreshTimer != null)
             {
                 _refreshTimer.Stop();
-                _refreshTimer.Elapsed -= OnRefreshTimerElapsed;
-                _refreshTimer.Dispose();
+                _refreshTimer.Tick -= OnRefreshTimerElapsed;
                 _refreshTimer = null;
             }
         }
 
-        private void OnRefreshTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        private void OnRefreshTimerElapsed(object? sender, object e)
         {
-            // Ensure this runs on the UI thread
-            this.Dispatch(UpdateImage);
+            UpdateImage();
         }
     }
 }
