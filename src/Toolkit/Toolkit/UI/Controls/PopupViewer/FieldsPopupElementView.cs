@@ -22,7 +22,10 @@ using Esri.ArcGISRuntime.Toolkit.Maui;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-#if MAUI
+#if MAUI && WINDOWS
+using TextBlock = Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SelectableLabel;
+using ChildElement = Microsoft.Maui.Controls.View;
+#elif MAUI // iOS, Android, generic
 using TextBlock = Microsoft.Maui.Controls.Label;
 using ChildElement = Microsoft.Maui.Controls.View;
 #elif WPF
