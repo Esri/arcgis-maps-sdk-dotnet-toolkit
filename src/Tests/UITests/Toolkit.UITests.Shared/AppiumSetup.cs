@@ -60,7 +60,7 @@ public static partial class AppiumSetup
         return androidDriver;
     }
 
-    private static IOSDriver MakeiOSDriver(string deviceUdid, string bundleId, string port = "4723", int timeoutSeconds = 60)
+    private static IOSDriver MakeiOSDriver(string deviceUdid, string bundleId, bool usePreinstalledWDA = false, string port = "4723", int timeoutSeconds = 60)
     {
         var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
         var driverOptions = new AppiumOptions()
@@ -71,6 +71,7 @@ public static partial class AppiumSetup
         driverOptions.AddAdditionalAppiumOption("bundleId", bundleId);
         driverOptions.AddAdditionalAppiumOption("udid", deviceUdid);
         driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
+        driverOptions.AddAdditionalAppiumOption("usePreinstalledWDA", usePreinstalledWDA);
 
         var iosDriver = new IOSDriver(serverUri, driverOptions, TimeSpan.FromSeconds(timeoutSeconds));
 

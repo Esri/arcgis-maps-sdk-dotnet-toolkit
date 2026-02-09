@@ -130,10 +130,16 @@ public class ScaleLineTests : AppiumTestBase
         var scaleInputElement = FindElement("ScaleTextBox");
         scaleInputElement.Clear();
         scaleInputElement.SendKeys(scale.ToString());
+#if IOS_TEST
+        PressEnter(scaleInputElement);
+#endif
 
         var latitudeInputElement = FindElement("LatitudeTextBox");
         latitudeInputElement.Clear();
         latitudeInputElement.SendKeys(latitude.ToString());
+#if IOS_TEST
+        PressEnter(latitudeInputElement);
+#endif
 
         var updateButtonElement = FindElement("UpdateViewpoint");
         updateButtonElement.Click();

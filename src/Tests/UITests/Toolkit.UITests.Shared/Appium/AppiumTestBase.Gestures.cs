@@ -1,8 +1,16 @@
+using OpenQA.Selenium.Appium;
+
 namespace Toolkit.UITest.Shared;
 
 public abstract partial class AppiumTestBase
 {
-    protected void PressEnter()
+    protected void PressEnter(
+#if IOS_TEST
+    AppiumElement element
+#else
+    AppiumElement? element = null
+#endif
+    )
     {
 #if WINDOWS_TEST
         var actions = new List<Dictionary<string, object>>
@@ -29,6 +37,8 @@ public abstract partial class AppiumTestBase
         {
             {"action", "done" }
         });
+#elif IOS_TEST
+        element.SendKeys("\n");
 #else
         throw new NotImplementedException("PressEnter is not implemented for this platform.");
 #endif

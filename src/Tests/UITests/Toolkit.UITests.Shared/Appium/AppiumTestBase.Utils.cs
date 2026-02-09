@@ -12,10 +12,12 @@ public abstract partial class AppiumTestBase
     protected void OpenSample(string sampleName)
     {
         var searchBox = FindElement("TestSearchBox");
+#if ANDROID_TEST
         searchBox.Click();
+#endif
         searchBox.Clear();
         searchBox.SendKeys(sampleName);
-        PressEnter();
+        PressEnter(searchBox);
     }
 
     private T OptionalWaitCall<T>(Func<T> call, TimeSpan? timeout = null)
@@ -130,6 +132,9 @@ public abstract partial class AppiumTestBase
     {
 #if WINDOWS_TEST || ANDROID_TEST
         return pixels / ScreenDensity;
+#elif IOS_TEST
+        // XCUI tests already returns points rather than pixels
+        return pixels;
 #else
         throw new NotImplementedException("GetNormalizedPixelValue(int) is not implemented for this platform.");
 #endif
