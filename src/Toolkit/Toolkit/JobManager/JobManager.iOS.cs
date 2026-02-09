@@ -104,6 +104,7 @@ namespace  Esri.ArcGISRuntime.Toolkit
             BGTaskScheduler.Shared.Submit(request, out var Error);
             if (Error != null)
             {
+                _isBackgroundStatusChecksScheduled = false;
                 System.Diagnostics.Trace.WriteLine($"Error scheduling background status check: {Error.LocalizedDescription}", "ArcGIS Toolkit");
             }
         }

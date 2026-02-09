@@ -55,7 +55,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Jobs
         private void OnJobPropertyChanged(IJob oldJob, IJob newJob)
         {
             if (oldJob is not null)
+            {
                 oldJob.ProgressChanged -= Job_ProgressChanged;
+                oldJob.StatusChanged -= Job_StatusChanged;
+            }
             if (newJob != null && this.IsLoaded)
             {
                 newJob.ProgressChanged += Job_ProgressChanged;

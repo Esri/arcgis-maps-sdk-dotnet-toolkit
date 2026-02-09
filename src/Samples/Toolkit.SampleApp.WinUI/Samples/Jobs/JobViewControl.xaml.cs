@@ -14,9 +14,6 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Esri.ArcGISRuntime.Tasks;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Jobs;
 
 public sealed partial class JobViewControl : UserControl
@@ -57,7 +54,10 @@ public sealed partial class JobViewControl : UserControl
     private void OnJobPropertyChanged(IJob oldJob, IJob newJob)
     {
         if (oldJob is not null)
+        {
             oldJob.ProgressChanged -= Job_ProgressChanged;
+            oldJob.StatusChanged -= Job_StatusChanged;
+        }
         if (newJob != null && this.IsLoaded)
         {
             newJob.ProgressChanged += Job_ProgressChanged;
