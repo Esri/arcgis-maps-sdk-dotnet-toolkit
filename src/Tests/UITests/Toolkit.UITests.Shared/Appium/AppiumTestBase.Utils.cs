@@ -28,14 +28,22 @@ public abstract partial class AppiumTestBase
         return wait.Until(d => call());
     }
 
-    protected ReadOnlyCollection<AppiumElement> FindElements(string name, TimeSpan? timeout = null)
+    protected ReadOnlyCollection<AppiumElement> FindElements(string id, TimeSpan? timeout = null)
     {
 #if WINDOWS_TEST
-        var action = () => Driver.FindElements(MobileBy.AccessibilityId(name));
+        var action = () => Driver.FindElements(MobileBy.AccessibilityId(id));
 #else
-        var action = () => Driver.FindElements(MobileBy.Id(name));
+        var action = () => Driver.FindElements(MobileBy.Id(id));
 #endif
-        return OptionalWaitCall(action, timeout);
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"No elements found with id \"{id}\". See exception for details.");
+            throw;
+        }
     }
 
     protected AppiumElement FindElement(string id, TimeSpan? timeout = null)
@@ -45,7 +53,15 @@ public abstract partial class AppiumTestBase
 #else
         var action = () => Driver.FindElement(MobileBy.Id(id));
 #endif
-        return OptionalWaitCall(action, timeout);
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"No elements found with id \"{id}\". See exception for details.");
+            throw;
+        }
     }
 
     protected AppiumElement FindElement(AppiumElement parent, string id, TimeSpan? timeout = null)
@@ -55,7 +71,15 @@ public abstract partial class AppiumTestBase
 #else
         var action = () => parent.FindElement(MobileBy.Id(id));
 #endif
-        return OptionalWaitCall(action, timeout);
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"No child elements found with id \"{id}\". See exception for details.");
+            throw;
+        }
     }
 
     protected AppiumElement FindElementByName(string name, TimeSpan? timeout = null)
@@ -65,7 +89,15 @@ public abstract partial class AppiumTestBase
 #else
         var action = () => Driver.FindElement(MobileBy.Name(name));
 #endif
-        return OptionalWaitCall(action, timeout);
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"No elements found with name \"{name}\". See exception for details.");
+            throw;
+        }
     }
 
     protected string GetElementText(AppiumElement element, TimeSpan? timeout = null)
@@ -79,7 +111,15 @@ public abstract partial class AppiumTestBase
 #else
         throw new NotImplementedException("FindElement(AppiumElement,string) is not implemented for this platform.");
 #endif
-        return OptionalWaitCall(action, timeout);
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"Could not get text for element \"{element.Id}\". See exception for details.");
+            throw;
+        }
     }
 
     /// <summary>
