@@ -27,6 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// <summary>
 /// Represents a control that enables user to perform trace analysis with pre-configured trace types.
 /// </summary>
+/// <remarks>
 /// <para><note type="caution">
 /// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the trace results will not currently be shown on the scene.
 /// </note></para></remarks>
