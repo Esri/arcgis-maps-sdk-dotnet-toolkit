@@ -11,6 +11,7 @@
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
     <SupportedOSPlatformVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
   <ItemGroup>
