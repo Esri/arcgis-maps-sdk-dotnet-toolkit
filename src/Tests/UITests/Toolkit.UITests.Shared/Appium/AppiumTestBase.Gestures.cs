@@ -4,8 +4,34 @@ namespace Toolkit.UITest.Shared;
 
 public abstract partial class AppiumTestBase
 {
+    protected void SubmitText(AppiumElement element, string text)
+    {
+#if ANDROID_TEST
+        element.Click();
+        element.Clear();
+#elif MAC_TEST
+        element.Click();
+        Driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+        {
+            {"elementId", element.Id},
+            {"keys", new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"key", "a"},
+                    {"modifierFlags", 1<<4}
+                }
+            }}
+        });
+#else
+        element.Clear();
+#endif
+        element.SendKeys(text);
+        PressEnter(element);
+    }
+
     protected void PressEnter(
-#if IOS_TEST
+#if IOS_TEST || MAC_TEST
     AppiumElement element
 #else
     AppiumElement? element = null
@@ -39,6 +65,11 @@ public abstract partial class AppiumTestBase
         });
 #elif IOS_TEST
         element.SendKeys("\n");
+#elif MAC_TEST
+        Driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+        {
+            {"keys", new List<string> {"XCUIKeyboardKeyReturn"} }
+        });
 #else
         throw new NotImplementedException("PressEnter is not implemented for this platform.");
 #endif

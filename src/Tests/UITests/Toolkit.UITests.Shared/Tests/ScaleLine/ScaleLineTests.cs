@@ -21,10 +21,10 @@ public class ScaleLineTests : AppiumTestBase
         {
             MetricValue = 2000,
             MetricUnits = "km",
-            MetricLineLengthPixels = 151,
+            MetricLineLengthPixels = PlatformSpecificPixelValue(151, 151, 151, 117),
             USValue = 1000,
             USUnits = "mi",
-            USLineLengthPixels = 122
+            USLineLengthPixels = PlatformSpecificPixelValue(122, 122, 122, 94)
         };
         AssertScaleLineInfo(initialExpectedValues, scaleLineInfo);
     }
@@ -128,18 +128,10 @@ public class ScaleLineTests : AppiumTestBase
     private void UpdateViewpoint(int scale, int latitude)
     {
         var scaleInputElement = FindElement("ScaleTextBox");
-        scaleInputElement.Clear();
-        scaleInputElement.SendKeys(scale.ToString());
-#if IOS_TEST
-        PressEnter(scaleInputElement);
-#endif
+        SubmitText(scaleInputElement, scale.ToString());
 
         var latitudeInputElement = FindElement("LatitudeTextBox");
-        latitudeInputElement.Clear();
-        latitudeInputElement.SendKeys(latitude.ToString());
-#if IOS_TEST
-        PressEnter(latitudeInputElement);
-#endif
+        SubmitText(latitudeInputElement, latitude.ToString());
 
         var updateButtonElement = FindElement("UpdateViewpoint");
         updateButtonElement.Click();
