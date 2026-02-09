@@ -123,13 +123,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             selector.PopupTemplate = new DataTemplate(() =>
             {
-                VerticalStackLayout itemsView = new VerticalStackLayout()
+                VerticalStackLayout rootLayout = new VerticalStackLayout()
                 {
                     Margin = new Thickness(0, 10),
                 };
+                VerticalStackLayout itemsView = new VerticalStackLayout();
                 BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
                 itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (Popup popup) => popup?.EvaluatedElements);
-                return itemsView;
+                rootLayout.Children.Add(itemsView);
+
+                Label editSummaryLabel = new Label() { LineBreakMode = LineBreakMode.WordWrap, Style = GetPopupViewerCaptionStyle(), Margin = new Thickness(0, 10, 0, 0)};
+                editSummaryLabel.SetBinding(Label.TextProperty, static (Popup popup) => popup?.EditSummary);
+                editSummaryLabel.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.PopupDefinition?.ShowEditSummary);
+                rootLayout.Children.Add(editSummaryLabel);
+
+                return rootLayout;
             });
 
             selector.UtilityAssociationsFilterResultTemplate = new DataTemplate(() =>
