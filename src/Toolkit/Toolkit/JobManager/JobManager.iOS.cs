@@ -27,7 +27,6 @@ namespace  Esri.ArcGISRuntime.Toolkit
         /// If you enable background status checks then you must also make sure to have enabled
         /// the "Background fetch" background mode in your application settings.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown if a schedule is set and the task identifier is not added to <c>info.plist</c>.</exception>
         /// <remarks>
         /// <note>
         /// You must also add the <see cref="StatusChecksTaskIdentifier"/> to the "Permitted
