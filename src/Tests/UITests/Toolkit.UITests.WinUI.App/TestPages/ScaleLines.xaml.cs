@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 
-namespace Toolkit.UITests.WinUI.Puppet.TestPages;
+namespace Toolkit.UITests.WinUI.App.TestPages;
 
 public sealed partial class ScaleLines : UserControl
 {

@@ -2,7 +2,7 @@
 using Esri.ArcGISRuntime.Mapping;
 using System.Windows.Controls;
 
-namespace Toolkit.UITests.Wpf.Puppet.TestPages;
+namespace Toolkit.UITests.Wpf.App.TestPages.ScaleLine;
 
 /// <summary>
 /// Interaction logic for ScaleLineRender.xaml

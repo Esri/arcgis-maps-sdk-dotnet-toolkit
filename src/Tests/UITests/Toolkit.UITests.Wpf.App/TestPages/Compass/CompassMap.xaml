@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Toolkit.UITests.WPF.App.TestPages.Compass.CompassMap"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:local="clr-namespace:Toolkit.UITests.WPF.App.TestPages.Compass"
+    mc:Ignorable="d" 
+    d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <esri:MapView x:Name="MainMapView"/>
+
+        <esri:Compass x:Name="MapCompass" GeoView="{Binding ElementName=MainMapView, Mode=OneWay}"
+                      Margin="20" AutoHide="False" />
+
+
+        <esri:Compass x:Name="HeadingCompass" Heading="{Binding Heading}"
+                      HorizontalAlignment="Left" Margin="20" AutoHide="False" />
+
+        <Border Background="Gold" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="5" BorderThickness="1" BorderBrush="Black">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Enter rotation: "/>
+                    <TextBox x:Name="RotateInput" MinWidth="30"/>
+                </StackPanel>
+                <Button x:Name="RotateButton" Content="Update Rotation" Click="RotateButton_Click"/>
+                <Button x:Name="ToggleAutoHideButton" Content="Toggle Auto Hide" Click="ToggleAutoHideButton_Click"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Map Rotation: "/>
+                    <TextBlock x:Name="MapRotationText" Text="{Binding MapRotation, ElementName=MainMapView, Mode=OneWay}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

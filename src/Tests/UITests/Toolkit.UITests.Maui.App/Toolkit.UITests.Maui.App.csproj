@@ -68,6 +68,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="TestPages\CompassMap.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="TestPages\ScaleLines.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

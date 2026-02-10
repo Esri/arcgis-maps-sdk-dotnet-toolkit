@@ -1,7 +1,7 @@
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 
-namespace Toolkit.UITests.Maui.Puppet.TestPages;
+namespace Toolkit.UITests.Maui.App.TestPages;
 
 public partial class ScaleLines : ContentView
 {

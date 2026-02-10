@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             x:Class="Toolkit.UITests.Maui.App.TestPages.CompassMap">
+    <Grid>
+        <esri:MapView x:Name="MainMapView"/>
+
+        <toolkit:Compass x:Name="MapCompass" AutomationId="MapCompass" GeoView="{Binding Source={x:Reference MainMapView}, Mode=OneWay}"
+                         Margin="20" AutoHide="False" />
+
+        <toolkit:Compass x:Name="HeadingCompass" AutomationId="HeadingCompass" Heading="{Binding Heading}" HorizontalOptions="Start"
+                         Margin="20" AutoHide="False" />
+
+        <Border Background="Gold" HorizontalOptions="Center" VerticalOptions="End" Padding="5" StrokeThickness="1" Stroke="{StaticResource CalciteBorder1Brush}">
+            <StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Enter rotation: "/>
+                    <Entry x:Name="RotateInput" AutomationId="RotateInput" MinimumWidthRequest="50"/>
+                </StackLayout>
+                <Button x:Name="RotateButton" AutomationId="RotateButton" Text="Update Rotation" Clicked="RotateButton_Clicked"/>
+                <Button x:Name="ToggleAutoHideButton" AutomationId="ToggleAutoHideButton" Text="Toggle Auto Hide" Clicked="ToggleAutoHideButton_Clicked"/>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Map Rotation: "/>
+                    <Label x:Name="MapRotationText" AutomationId="MapRotationText" Text="{Binding MapRotation, Source={x:Reference MainMapView}, Mode=OneWay}"/>
+                </StackLayout>
+            </StackLayout>
+        </Border>
+    </Grid>
+</ContentView>

@@ -27,6 +27,12 @@ public abstract partial class AppiumTestBase
         }
     }
 
+    protected MagickImage GetScreenshot(AppiumElement element)
+    {
+        var screenshot = element.GetScreenshot();
+        return new MagickImage(screenshot.AsByteArray);
+    }
+
     protected void CompareBaseline(string baselineName, AppiumElement? element = null)
     {
         Screenshot screenshot;
