@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Appium.WebDriver" Version="8.0.1" />
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.2" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.2" />
   </ItemGroup>
 
   <Import Project="..\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems" Label="Shared" />
