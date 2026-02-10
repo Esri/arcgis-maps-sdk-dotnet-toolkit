@@ -135,21 +135,19 @@ public class CompassTests : AppiumTestBase
         var offset = new PointD(arrowComponent.Centroid.X - imageCenterX, arrowComponent.Centroid.Y - imageCenterY);
 
         var direction = CompassOrientation.Unknown;
-        if (offset.Y < -1d)
+        if (Math.Abs(offset.Y) > Math.Abs(offset.X))
         {
-            direction = CompassOrientation.North;
+            if (offset.Y < -1d)
+                direction = CompassOrientation.North;
+            else if (offset.Y > 1d)
+                direction = CompassOrientation.South;
         }
-        else if (offset.Y > 1d)
+        else
         {
-            direction = CompassOrientation.South;
-        }
-        if (offset.X < -1d)
-        {
-            direction = CompassOrientation.West;
-        }
-        else if (offset.X > 1d)
-        {
-            direction = CompassOrientation.East;
+            if (offset.X < -1d)
+                direction = CompassOrientation.West;
+            else if (offset.X > 1d)
+                direction = CompassOrientation.East;
         }
         return direction;
     }
