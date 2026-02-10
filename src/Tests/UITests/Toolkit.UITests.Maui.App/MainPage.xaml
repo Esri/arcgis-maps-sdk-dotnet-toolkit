@@ -45,8 +45,7 @@
             <Label Text="Open Page: " FontSize="12" Margin="5,1,1,0" VerticalOptions="Center"/>
             <Entry x:Name="TestSearchBox" AutomationId="TestSearchBox"
                  MinimumWidthRequest="120"
-                 MinimumHeightRequest="20"
-                   HeightRequest="40"
+                 MaximumHeightRequest="40"
                  Margin="3,0,3,0"/>
         </StackLayout>
 

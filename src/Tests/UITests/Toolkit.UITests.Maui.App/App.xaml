@@ -9,6 +9,12 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <CalciteResources xmlns="http://schemas.esri.com/calcite/2024"/>
+                <ResourceDictionary>
+                    <Style TargetType="Entry" BasedOn="{StaticResource CalciteEntryStyle}">
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="MinimumHeightRequest" Value="30"/>
+                    </Style>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
