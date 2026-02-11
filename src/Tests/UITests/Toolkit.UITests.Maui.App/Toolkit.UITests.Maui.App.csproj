@@ -18,6 +18,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
     <TrimMode>partial</TrimMode>
+    <LangVersion>latest</LangVersion>
+    <DefineConstants>$(DefineConstants);MAUI_APP</DefineConstants>
 
 		<!-- Display name -->
 		<ApplicationTitle>Toolkit.UITests.Maui.App</ApplicationTitle>
@@ -90,5 +92,7 @@
       </ItemGroup>
     </Otherwise>
   </Choose>
+
+  <Import Project="..\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.projitems" Label="Shared" />
 
 </Project>

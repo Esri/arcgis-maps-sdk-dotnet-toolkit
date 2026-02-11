@@ -12,6 +12,8 @@
     <WinUISDKReferences>false</WinUISDKReferences>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <DefineConstants>$(DefineConstants);WINUI_APP</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="TestPages\CompassMap.xaml" />
@@ -88,4 +90,7 @@
       </ItemGroup>
     </Otherwise>
   </Choose>
+  
+  <!-- Shared view models -->
+  <Import Project="..\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.projitems" Label="Shared" />
 </Project>

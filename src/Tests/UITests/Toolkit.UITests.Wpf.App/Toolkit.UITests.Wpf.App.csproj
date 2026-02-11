@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+    <DefineConstants>$(DefineConstants);WPF_APP</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,5 +28,7 @@
       </ItemGroup>
     </Otherwise>
   </Choose>
+
+  <Import Project="..\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.projitems" Label="Shared" />
 
 </Project>

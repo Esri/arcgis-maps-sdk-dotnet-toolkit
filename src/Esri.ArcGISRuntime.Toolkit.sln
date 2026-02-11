@@ -70,6 +70,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.MauiiOS", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.MauiMac", "Tests\UITests\Toolkit.UITests.MauiMac\Toolkit.UITests.MauiMac.csproj", "{345D1E2E-4494-230F-8A6E-8D0EE591F2BD}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Toolkit.UITests.AppCodeBehinds", "Tests\UITests\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.shproj", "{6C50750F-C32A-4306-9C87-22F16ACF879F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -506,12 +508,15 @@ Global
 		{E38E274A-FEA8-5E85-C9AD-43F19DACA778} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
 		{938FA4A1-5D8A-4F24-9777-92DA6894F180} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
 		{345D1E2E-4494-230F-8A6E-8D0EE591F2BD} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
+		{6C50750F-C32A-4306-9C87-22F16ACF879F} = {78A5CF46-42B1-4199-AA2E-2BDC3DE68186}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD437263-1C96-46A9-A641-C312BF7DAF99}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{000a3cc1-f6ae-45e9-aa18-4e116ad7b20d}*SharedItemsImports = 13
+		Tests\UITests\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.projitems*{0b5aa64f-0faa-4299-bea0-e48544fa8066}*SharedItemsImports = 5
+		Tests\UITests\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.projitems*{20689ca3-ca87-4305-88ca-cafcde92ecc6}*SharedItemsImports = 5
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{3046611a-abbe-4433-a5a2-cfc98060c709}*SharedItemsImports = 5
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{345d1e2e-4494-230f-8a6e-8d0ee591f2bd}*SharedItemsImports = 5
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{459389ac-d935-404a-b31c-bad978a6f514}*SharedItemsImports = 5
@@ -519,12 +524,14 @@ Global
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{5f3cad93-6062-450a-8771-7b4645caf598}*SharedItemsImports = 13
 		Analyzers\Toolkit.Analyzers.Test\Esri.ArcGISRuntime.Toolkit.Analyzers.Test.projitems*{61fbc238-623c-42ff-8c47-95d710a1e66f}*SharedItemsImports = 13
+		Tests\UITests\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.projitems*{6c50750f-c32a-4306-9c87-22f16acf879f}*SharedItemsImports = 13
 		Analyzers\Toolkit.Analyzers.Test\Esri.ArcGISRuntime.Toolkit.Analyzers.Test.projitems*{7a6c1c09-8cd6-4c8e-b866-248429b4848f}*SharedItemsImports = 5
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{938fa4a1-5d8a-4f24-9777-92da6894f180}*SharedItemsImports = 5
 		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{bdb163a7-b221-4e9f-a960-92a849ba3f3f}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{bdb163a7-b221-4e9f-a960-92a849ba3f3f}*SharedItemsImports = 5
 		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{d9b86d10-7483-47ee-994e-9764fdb07b20}*SharedItemsImports = 13
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{e38e274a-fea8-5e85-c9ad-43f19daca778}*SharedItemsImports = 5
+		Tests\UITests\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.projitems*{ed324c95-a086-4555-a7f7-5922204111d6}*SharedItemsImports = 5
 		Tests\UITests\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems*{f4979959-ea7d-452e-a673-87767f5f59e6}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{f7f98ce8-5304-460d-83a2-f4f7fe50b370}*SharedItemsImports = 5
 	EndGlobalSection

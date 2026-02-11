@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UserControl
-    x:Class="Toolkit.UITests.WinUI.Puppet.TestPages.CompassMap"
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.CompassMap"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Toolkit.UITests.WinUI.Puppet.TestPages"
+    xmlns:local="using:Toolkit.UITests.App.TestPages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    x:Name="CompassMapPage"
     mc:Ignorable="d">
 
     <Grid>
@@ -16,7 +17,7 @@
         <toolkit:Compass x:Name="MapCompass" GeoView="{Binding ElementName=MainMapView, Mode=OneWay}"
                         Margin="20" AutoHide="False" />
 
-        <toolkit:Compass x:Name="HeadingCompass" Heading="{Binding Heading}" HorizontalAlignment="Left"
+        <toolkit:Compass x:Name="HeadingCompass" Heading="{Binding Heading, ElementName=CompassMapPage}" HorizontalAlignment="Left"
                          Margin="20" AutoHide="False" />
 
         <Border Background="Gold" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="5" BorderThickness="1" BorderBrush="Black">
@@ -34,4 +35,4 @@
             </StackPanel>
         </Border>
     </Grid>
-</UserControl>
+</local:TestPage>

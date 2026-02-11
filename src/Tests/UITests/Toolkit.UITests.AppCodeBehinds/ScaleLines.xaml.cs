@@ -1,9 +1,18 @@
-using Esri.ArcGISRuntime.Geometry;
+#if MAUI_APP
+using ClickEventArgs = System.EventArgs;
+#elif WINUI_APP
+using System;
+using ClickEventArgs = Microsoft.UI.Xaml.RoutedEventArgs;
+#elif WPF_APP
+using ClickEventArgs = System.Windows.RoutedEventArgs;
+#endif
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Geometry;
 
-namespace Toolkit.UITests.Maui.App.TestPages;
 
-public partial class ScaleLines : ContentView
+namespace Toolkit.UITests.App.TestPages;
+
+public partial class ScaleLines : TestPage
 {
     public ScaleLines()
     {
@@ -14,7 +23,7 @@ public partial class ScaleLines : ContentView
         MainMapView.Map = map;
     }
 
-    private void UpdateViewpoint_Clicked(object sender, EventArgs e)
+    private void UpdateViewpoint_Click(object sender, ClickEventArgs e)
     {
         var scale = double.Parse(ScaleTextBox.Text);
         var latitude = double.Parse(LatitudeTextBox.Text);

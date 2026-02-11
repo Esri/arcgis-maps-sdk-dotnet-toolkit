@@ -1,6 +1,14 @@
-namespace Toolkit.UITests.Maui.App.TestPages;
+#if MAUI_APP
+using ClickEventArgs = System.EventArgs;
+#elif WINUI_APP
+using ClickEventArgs = Microsoft.UI.Xaml.RoutedEventArgs;
+#elif WPF_APP
+using ClickEventArgs = System.Windows.RoutedEventArgs;
+#endif
 
-public partial class CompassMap : ContentView
+namespace Toolkit.UITests.App.TestPages;
+
+public partial class CompassMap : TestPage
 {
     private double _heading;
 
@@ -13,8 +21,6 @@ public partial class CompassMap : ContentView
         MainMapView.Map = map;
         MainMapView.Grid = null;
         MainMapView.IsAttributionTextVisible = false;
-
-        HeadingCompass.BindingContext = this;
     }
 
     public double Heading
@@ -27,14 +33,14 @@ public partial class CompassMap : ContentView
         }
     }
 
-    private async void RotateButton_Clicked(object sender, EventArgs e)
+    private async void RotateButton_Click(object sender, ClickEventArgs e)
     {
         var heading = double.Parse(RotateInput.Text);
         Heading = heading;
         await MainMapView.SetViewpointRotationAsync(heading);
     }
 
-    private void ToggleAutoHideButton_Clicked(object sender, EventArgs e)
+    private void ToggleAutoHideButton_Click(object sender, ClickEventArgs e)
     {
         var hide = !MapCompass.AutoHide;
         MapCompass.AutoHide = hide;
