@@ -115,6 +115,9 @@ public class CompassTests : AppiumTestBase
                 }
             }
 
+            if (loaded)
+                break;
+
             tryCount++;
             await Task.Delay(200);
         }
