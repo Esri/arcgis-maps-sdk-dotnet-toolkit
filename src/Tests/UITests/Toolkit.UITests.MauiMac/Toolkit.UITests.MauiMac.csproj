@@ -20,4 +20,12 @@
     <Warning Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui MacCatalyst UI tests must be run from a Mac machine" />
   </Target>
 
+  <!-- Build test app -->
+  <Target Name="BuildTestApp" BeforeTargets="Build">
+    <MSBuild Projects="..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj" Targets="Build"
+             Properties="Configuration=$(Configuration);TargetFramework=net10.0-maccatalyst">
+      <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetOutputs" />
+    </MSBuild>
+  </Target>
+
 </Project>
