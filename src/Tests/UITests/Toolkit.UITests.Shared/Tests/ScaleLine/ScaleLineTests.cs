@@ -134,7 +134,7 @@ public class ScaleLineTests : AppiumTestBase
         SubmitText(latitudeInputElement, latitude.ToString());
 
         var updateButtonElement = FindElement("UpdateViewpoint");
-        updateButtonElement.Click();
+        Click(updateButtonElement);
     }
 
     public enum ScaleLineType

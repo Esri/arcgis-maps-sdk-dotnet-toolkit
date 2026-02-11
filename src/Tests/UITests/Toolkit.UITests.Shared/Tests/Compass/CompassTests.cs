@@ -37,7 +37,7 @@ public class CompassTests : AppiumTestBase
         // Check that the compass hides when facing north
         var autoHideButton = FindElement("ToggleAutoHideButton");
         SetRotation(0);
-        autoHideButton.Click();
+        Click(autoHideButton);
 
         var maxTries = 5;
         var tryCount = 0;
@@ -69,7 +69,7 @@ public class CompassTests : AppiumTestBase
         SetRotation(90d);
 
         var compassElement = GetCompassElement(CompassType.MapBound);
-        compassElement.Click();
+        Click(compassElement);
 
         var mapRotationElement = FindElement("MapRotationText");
         var mapRotation = double.Parse(mapRotationElement.Text);
@@ -86,7 +86,7 @@ public class CompassTests : AppiumTestBase
         var rotationInputElement = FindElement("RotateInput");
         var rotateButtonElement = FindElement("RotateButton");
         SubmitText(rotationInputElement, rotation.ToString());
-        rotateButtonElement.Click();
+        Click(rotateButtonElement);
     }
 
     /// <summary>

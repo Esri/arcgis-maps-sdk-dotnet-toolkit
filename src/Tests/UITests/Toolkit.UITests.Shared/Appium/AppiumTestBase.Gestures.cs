@@ -4,13 +4,23 @@ namespace Toolkit.UITest.Shared;
 
 public abstract partial class AppiumTestBase
 {
+    protected void Click(AppiumElement element)
+    {
+        element.Click();
+    }
+
+    protected void ClearEntry(AppiumElement element)
+    {
+        element.Clear();
+    }
+
     protected void SubmitText(AppiumElement element, string text)
     {
 #if ANDROID_TEST
-        element.Click();
-        element.Clear();
+        Click(element);
+        ClearEntry(element);
 #elif MAC_TEST
-        element.Click();
+        Click(element);
         Driver.ExecuteScript("macos: keys", new Dictionary<string, object>
         {
             {"elementId", element.Id},
@@ -24,7 +34,7 @@ public abstract partial class AppiumTestBase
             }}
         });
 #else
-        element.Clear();
+        ClearEntry(element);
 #endif
         element.SendKeys(text);
         PressEnter(element);
