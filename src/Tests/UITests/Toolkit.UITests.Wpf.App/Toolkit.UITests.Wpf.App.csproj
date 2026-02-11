@@ -29,6 +29,6 @@
     </Otherwise>
   </Choose>
 
-  <Import Project="..\Toolkit.UITests.AppCodeBehinds\Toolkit.UITests.AppCodeBehinds.projitems" Label="Shared" />
+  <Import Project="..\Toolkit.UITests.TestPages.Shared\Toolkit.UITests.TestPages.Shared.projitems" Label="Shared" />
 
 </Project>
