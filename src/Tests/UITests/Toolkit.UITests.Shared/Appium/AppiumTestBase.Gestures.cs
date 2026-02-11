@@ -11,15 +11,10 @@ public abstract partial class AppiumTestBase
 
     protected void ClearEntry(AppiumElement element)
     {
+#if !MAC_TEST
         element.Clear();
-    }
-
-    protected void SubmitText(AppiumElement element, string text)
-    {
-#if ANDROID_TEST
-        Click(element);
-        ClearEntry(element);
-#elif MAC_TEST
+#else
+        // Currently doing this manually is significantly faster on Mac
         Click(element);
         Driver.ExecuteScript("macos: keys", new Dictionary<string, object>
         {
@@ -30,12 +25,23 @@ public abstract partial class AppiumTestBase
                 {
                     {"key", "a"},
                     {"modifierFlags", 1<<4}
+                },
+                new Dictionary<string, object>
+                {
+                    {"key", "XCUIKeyboardKeyDelete"},
+                    {"modifierFlags", 0}
                 }
             }}
         });
-#else
-        ClearEntry(element);
 #endif
+    }
+
+    protected void SubmitText(AppiumElement element, string text)
+    {
+#if ANDROID_TEST
+        Click(element);
+#endif
+        ClearEntry(element);
         element.SendKeys(text);
         PressEnter(element);
     }
