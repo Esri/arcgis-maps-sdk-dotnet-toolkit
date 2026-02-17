@@ -7,11 +7,14 @@ public static partial class AppiumSetup
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext testContext)
     {
-        var MauiSamplesApp = @"com.esri.toolkit.uitests.maui";
-        var deviceUdid = @"YOUR_DEVICE_UDID";
-        bool usePreinstalledWDA = true;
+        var buildSettings = GetBuildSettings();
 
-        driver = MakeiOSDriver(deviceUdid, MauiSamplesApp, usePreinstalledWDA);
+        var app = buildSettings["app"];
+        var udid = buildSettings["deviceUdid"];
+        if (string.IsNullOrEmpty(udid))
+            throw new InvalidOperationException("Device UDID not found in build settings. Set this value in src/Tests/UITests/Directory.Build.props");
+
+        driver = MakeiOSDriver(app, udid, buildSettings);
 
         var screenDensityElement = driver.FindElement(MobileBy.Id("ScreenDensity"));
         ScreenDensity = float.Parse(screenDensityElement.GetAttribute("label"));

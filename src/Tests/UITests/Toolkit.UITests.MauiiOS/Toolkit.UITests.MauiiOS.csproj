@@ -20,4 +20,44 @@
     <Warning Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui iOS UI tests must be run from a Mac machine" />
   </Target>
 
+  <!-- Build test app if needed and record build location to TestAppPath.txt -->
+  <Target Name="BuildTestApp" BeforeTargets="Build">
+    <PropertyGroup>
+      <!-- Force iOS target when building the MAUI test app from the test project -->
+      <_MauiTestAppTfm>net10.0-ios</_MauiTestAppTfm>
+      <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
+    </PropertyGroup>
+
+    <!-- Get architecture -->
+    <Exec Command="$(MSBuildProjectDirectory)/GetDeviceArchitecture.sh $(iOSDeviceUdid)" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_RuntimeIdentifier" />
+    </Exec>
+
+    <!-- Build the app (the MSBuild task has some side effects that cause problems, hence the Exec) -->
+    <Exec Command="dotnet build -t:Build -c $(Configuration) -f $(_MauiTestAppTfm) -p:RuntimeIdentifier=$(_RuntimeIdentifier) $(_MauiTestAppProject)"/>
+
+    <!-- Get the path to the built app -->
+    <MSBuild
+      Projects="$(_MauiTestAppProject)"
+      Targets="GetTargetPath"
+      Properties="Configuration=$(Configuration);TargetFramework=$(_MauiTestAppTfm);RuntimeIdentifier=$(_RuntimeIdentifier)">
+      <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetPaths" />
+    </MSBuild>
+
+    <PropertyGroup>
+      <_TestAppExePath>@(_TestAppTargetPaths->'%(FullPath)')</_TestAppExePath>
+      <_TestAppExePath>$(_TestAppExePath.Replace('.dll','.app'))</_TestAppExePath>
+      <_TestSettings>app=$(_TestAppExePath)</_TestSettings>
+      <_TestSettings>$(_TestSettings);deviceUdid=$(iOSDeviceUdid)</_TestSettings>
+      <_TestSettings>$(_TestSettings);usePreinstalledWDA=$(UsePreinstalledWDA)</_TestSettings>
+      <_TestSettings>$(_TestSettings);xcodeOrgId=$(XCodeOrgId)</_TestSettings>
+      <_TestSettings>$(_TestSettings);xcodeSigningId=$(XCodeSigningId)</_TestSettings>
+      <_TestSettings>$(_TestSettings);updatedWDABundleId=$(UpdatedWDABundleId)</_TestSettings>
+      <_TestSettings>$(_TestSettings);prebuiltWDAPath=$(PrebuiltWDAPath)</_TestSettings>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="Maui Sample app built at: $(_TestAppExePath)" />
+    <WriteLinesToFile File="$(TargetDir)TestAppPath.txt" Lines="$(_TestSettings)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+
 </Project>

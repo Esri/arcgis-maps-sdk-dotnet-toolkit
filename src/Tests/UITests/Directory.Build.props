@@ -1,0 +1,19 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" Condition="'' != $([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- iOS Settings -->
+  <PropertyGroup>
+    <!-- The target device (required) -->
+    <iOSDeviceUdid></iOSDeviceUdid>
+
+    <!-- WDA setup (one of either automatic or manual must be configured)-->
+    <!-- Automatic setup: https://appium.github.io/appium-xcuitest-driver/latest/preparation/prov-profile-basic-auto/ -->
+    <XcodeOrgId></XcodeOrgId>
+    <XcodeSigningId></XcodeSigningId>
+    <UpdatedWDABundleId></UpdatedWDABundleId>
+
+    <!-- Preinstalled setups: https://appium.github.io/appium-xcuitest-driver/latest/guides/run-preinstalled-wda/ -->
+    <UsePreinstalledWDA></UsePreinstalledWDA>
+    <PrebuiltWDAPath></PrebuiltWDAPath>
+  </PropertyGroup>
+</Project>
