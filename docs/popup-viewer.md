@@ -11,7 +11,7 @@ Displays information from simple [popups](https://pro.arcgis.com/en/pro-app/late
 - Supports basic display of fields and values in non-HTML-based popups.
 
 ### EditSummary
-`Popup.EditSummary` is a localized summary of when the popup was last edited or created by an editor or author respectively. The implementation formats the edit/creation date conditionally depending on if the date is a week or more ago.
+`Popup.EditSummary` is a localized summary of when the popup was last edited or created by an editor or author respectively. The implementation formats the edit/creation date conditionally depending on whether the date is less than a week old or a week or more old.
 
 Dates less than a week ago are formatted as relative dates such as "seconds ago", "a minute ago", "2 minutes ago", "an hour ago", "2 hours ago", "Wednesday at 12:34pm".
 Dates a week or more ago are formatted as "MM/dd/YYYY, hh:mm AM|PM" using [general date short format](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#the-g-format-specifier).
