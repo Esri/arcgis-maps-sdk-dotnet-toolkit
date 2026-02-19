@@ -102,7 +102,6 @@ public static partial class AppiumSetup
         return macDriver;
     }
 
-#if WPF_TEST || (MAUI_TEST && (WINDOWS_TEST || IOS_TEST))
     /// <summary>
     /// For test projects that save the path to the test app in a text file. (Currently Wpf, MauiWinUI, and MauiiOS)
     /// </summary>
@@ -126,9 +125,7 @@ public static partial class AppiumSetup
 
         return exePath;
     }
-#endif
 
-#if MAUI_TEST && IOS_TEST
     private static Dictionary<string, string> GetBuildSettings()
     {
         var rawMetadata = GetSampleAppPath();
@@ -145,7 +142,6 @@ public static partial class AppiumSetup
         }
         return metadata;
     }
-#endif
 
     [AssemblyCleanup]
     public static void AssemblyCleanup()
