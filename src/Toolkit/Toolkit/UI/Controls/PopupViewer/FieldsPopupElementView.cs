@@ -226,9 +226,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 #endif
 
-            /// <summary>
-            /// Gets or sets the background of the odd rows in the table.
-            /// </summary>
+        /// <summary>
+        /// Gets or sets the background of the odd rows in the table.
+        /// </summary>
         public Brush RowOddBackground
         {
             get { return (Brush)GetValue(RowOddBackgroundProperty); }
