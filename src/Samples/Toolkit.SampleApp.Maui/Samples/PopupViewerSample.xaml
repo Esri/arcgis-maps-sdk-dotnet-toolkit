@@ -59,7 +59,7 @@
                                   PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" HyperlinkClicked="popupViewer_HyperlinkClicked" 
                                   />
 
-                    <Button HorizontalOptions="Fill" Text="Close" Grid.Row="3" Clicked="CloseButton_Clicked" Style="{StaticResource CalcitePrimaryButtonStyle}" />
+                    <Button HorizontalOptions="Fill" Text="Close" Grid.Row="3" Clicked="CloseButton_Clicked" />
                 </Grid>
             </Border>
 
