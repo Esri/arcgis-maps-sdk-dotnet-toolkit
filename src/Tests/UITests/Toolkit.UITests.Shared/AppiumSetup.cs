@@ -41,19 +41,28 @@ public static partial class AppiumSetup
         return windowsDriver;
     }
 
-    private static AndroidDriver MakeAndroidDriver(string appPackage, string appIntent, string port = "4723", int timeoutSeconds = 60)
+    private static AndroidDriver MakeAndroidDriver(string app, Dictionary<string, string> settings, string port = "4723", int timeoutSeconds = 60)
     {
         var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
         var driverOptions = new AppiumOptions()
         {
             PlatformName = "Android",
             AutomationName = "UiAutomator2",
+            App=app
         };
         // See https://github.com/appium/appium-uiautomator2-driver/blob/master/docs/activity-startup.md for troubleshooting
-        driverOptions.AddAdditionalAppiumOption("appPackage", appPackage);
-        driverOptions.AddAdditionalAppiumOption("appIntent", appIntent);
         driverOptions.AddAdditionalAppiumOption("noReset", true);
         driverOptions.AddAdditionalAppiumOption("appWaitDuration", 60000);
+
+        foreach (var pair in settings)
+        {
+            if (pair.Key == "app")
+                continue; // These are required and are handled manually
+            if (string.IsNullOrEmpty(pair.Value))
+                continue; // Skip empty values
+
+            driverOptions.AddAdditionalAppiumOption(pair.Key, pair.Value);
+        }
 
         var androidDriver = new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(timeoutSeconds));
 

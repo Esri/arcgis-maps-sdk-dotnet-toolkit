@@ -16,4 +16,10 @@
     <UsePreinstalledWDA></UsePreinstalledWDA>
     <PrebuiltWDAPath></PrebuiltWDAPath>
   </PropertyGroup>
+
+  <!-- Android Settings -->
+  <PropertyGroup>
+    <!-- The target device (required if multiple devices and/or emulators are connected and on) -->
+    <AndroidDeviceUdid></AndroidDeviceUdid>
+  </PropertyGroup>
 </Project>

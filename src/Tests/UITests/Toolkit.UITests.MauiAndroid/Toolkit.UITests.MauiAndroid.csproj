@@ -20,4 +20,35 @@
     <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The Maui Windows tests must be run from a Windows machine" />
   </Target>
 
+  <!-- Build test app if needed and record build location to TestAppPath.txt -->
+  <Target Name="BuildTestApp" BeforeTargets="Build">
+    <PropertyGroup>
+      <!-- Force iOS target when building the MAUI test app from the test project -->
+      <_MauiTestAppTfm>net10.0-android</_MauiTestAppTfm>
+      <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
+    </PropertyGroup>
+
+    <!-- Build the app -->
+    <MSBuild Projects="$(_MauiTestAppProject)" Targets="Build" Properties="Configuration=$(Configuration);TargetFramework=$(_MauiTestAppTfm)" />
+
+    <!-- Ask MSBuild for the app project's intermediate output path, then find the produced APK -->
+    <MSBuild Projects="$(_MauiTestAppProject)" Targets="GetTargetPath" Properties="Configuration=$(Configuration);TargetFramework=$(_MauiTestAppTfm)">
+      <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetPaths" />
+    </MSBuild>
+
+    <!-- Get the build directory from the dll path in _TestAppTargetPaths. During initial setup the tests search this directory for the APK -->
+    <PropertyGroup>
+      <_TestAppBuildDir>$([System.IO.Path]::GetDirectoryName('%(_TestAppTargetPaths.Identity)'))</_TestAppBuildDir>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="Build folder: $(_TestAppBuildDir)" />
+
+    <PropertyGroup>
+      <_TestSettings>appDirectory=$(_TestAppBuildDir)</_TestSettings>
+      <_TestSettings>$(_TestSettings);deviceUdid=$(AndroidDeviceUdid)</_TestSettings>
+    </PropertyGroup>
+
+    <WriteLinesToFile File="$(TargetDir)TestAppPath.txt" Lines="$(_TestSettings)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+
 </Project>

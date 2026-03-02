@@ -4,15 +4,33 @@ namespace Toolkit.UITest.Shared;
 
 public static partial class AppiumSetup
 {
+    private static string MauiAppPackage = @"com.esri.toolkit.uitests.maui";
+
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext testContext)
     {
-        var mauiAppPackage = @"com.esri.toolkit.uitests.maui";
-        var mauiAppIntent = "crc6424445f98e2c29dbe.MainActivity";
+        var settings = GetBuildSettings();
+        var appDirectory = settings["appDirectory"];
 
-        driver = MakeAndroidDriver(mauiAppPackage, mauiAppIntent);
+        var appPath = FindApp(appDirectory);
+
+        driver = MakeAndroidDriver(appPath, settings);
 
         var screenDensityElement = driver.FindElement(MobileBy.Id("ScreenDensity"));
         ScreenDensity = float.Parse(screenDensityElement.GetAttribute("text"));
+    }
+
+    private static string FindApp(string appDirectory)
+    {
+        var signedApks = Directory.GetFiles(appDirectory, $"{MauiAppPackage}*Signed.apk", SearchOption.TopDirectoryOnly);
+        if (signedApks.Length > 0)
+            return signedApks[0];
+
+
+        var unsignedApks = Directory.GetFiles(appDirectory, $"{MauiAppPackage}*.apk", SearchOption.TopDirectoryOnly);
+        if (unsignedApks.Length > 0)
+            return unsignedApks[0];
+
+        throw new FileNotFoundException($"Could not find any apk files in given directory. Please make sure the BuildTestApp build target ran successfully. Directory searched: {appDirectory}");
     }
 }
