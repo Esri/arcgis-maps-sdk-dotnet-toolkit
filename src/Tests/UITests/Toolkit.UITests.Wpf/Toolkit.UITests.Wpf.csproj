@@ -20,7 +20,7 @@
     <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The WPF tests must be run from a Windows machine" />
   </Target>
 
-  <!-- Build test app if needed and record build location to SampleTestAppPath.txt -->
+  <!-- Build test app if needed and record build location to SampleAppBuildInfo.txt -->
   <Target Name="BuildTestApp" BeforeTargets="Build">
     <MSBuild Projects="..\..\UITests\Toolkit.UITests.Wpf.App\Toolkit.UITests.Wpf.App.csproj" Targets="Build" Properties="Configuration=$(Configuration)">
       <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetOutputs" />
@@ -32,7 +32,7 @@
     </PropertyGroup>
 
     <Message Importance="high" Text="WPF Sample app built at: $(_TestAppExePath)" />
-    <WriteLinesToFile File="$(TargetDir)TestAppPath.txt" Lines="$(_TestAppExePath)" Overwrite="true" Encoding="UTF-8" />
+    <WriteLinesToFile File="$(TargetDir)AppBuildInfo.txt" Lines="app=$(_TestAppExePath)" Overwrite="true" Encoding="UTF-8" />
   </Target>
 
 </Project>

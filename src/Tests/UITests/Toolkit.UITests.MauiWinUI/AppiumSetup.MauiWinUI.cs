@@ -8,7 +8,7 @@ public static partial class AppiumSetup
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext testContext)
     {
-        var mauiSamplesApp = GetSampleAppPath();
+        var mauiSamplesApp = GetBuildSettings()["app"];
 
         driver = MakeWindowsDriver(mauiSamplesApp);
 

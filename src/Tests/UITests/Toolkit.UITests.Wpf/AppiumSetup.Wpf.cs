@@ -9,7 +9,7 @@ public static partial class AppiumSetup
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext testContext)
     {
-        var wpfSamplesApp = GetSampleAppPath();
+        var wpfSamplesApp = GetBuildSettings()["app"];
 
         driver = MakeWindowsDriver(wpfSamplesApp);
 

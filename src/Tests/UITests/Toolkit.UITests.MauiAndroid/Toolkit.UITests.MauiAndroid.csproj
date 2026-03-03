@@ -20,7 +20,7 @@
     <Warning Condition="$([MSBuild]::IsOSPlatform('Windows')) != 'true'" Text="The Maui Windows tests must be run from a Windows machine" />
   </Target>
 
-  <!-- Build test app if needed and record build location to TestAppPath.txt -->
+  <!-- Build test app if needed and record build location to AppBuildInfo.txt -->
   <Target Name="BuildTestApp" BeforeTargets="Build">
     <PropertyGroup>
       <!-- Force iOS target when building the MAUI test app from the test project -->
@@ -48,7 +48,7 @@
       <_TestSettings>$(_TestSettings);deviceUdid=$(AndroidDeviceUdid)</_TestSettings>
     </PropertyGroup>
 
-    <WriteLinesToFile File="$(TargetDir)TestAppPath.txt" Lines="$(_TestSettings)" Overwrite="true" Encoding="UTF-8" />
+    <WriteLinesToFile File="$(TargetDir)AppBuildInfo.txt" Lines="$(_TestSettings)" Overwrite="true" Encoding="UTF-8" />
   </Target>
 
 </Project>

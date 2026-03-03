@@ -114,32 +114,27 @@ public static partial class AppiumSetup
     /// <summary>
     /// For test projects that save the path to the test app in a text file. (Currently Wpf, MauiWinUI, and MauiiOS)
     /// </summary>
-    private static string GetSampleAppPath()
+    private static Dictionary<string, string> GetBuildSettings()
     {
+        // Find and read file
         var testAssemblyDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             ?? throw new InvalidOperationException("Could not determine test assembly directory.");
 
-        var pathFile = Path.Combine(testAssemblyDir, "TestAppPath.txt");
+        var pathFile = Path.Combine(testAssemblyDir, "AppBuildInfo.txt");
         if (!File.Exists(pathFile))
         {
             throw new FileNotFoundException(
                 $"Missing '{pathFile}'. Ensure the 'BuildTestApp' MSBuild target ran before tests.");
         }
 
-        var exePath = File.ReadAllText(pathFile).Trim();
-        if (string.IsNullOrWhiteSpace(exePath))
+        var rawFile = File.ReadAllText(pathFile).Trim();
+        if (string.IsNullOrWhiteSpace(rawFile))
         {
             throw new InvalidOperationException($"'{pathFile}' was empty.");
         }
 
-        return exePath;
-    }
-
-    private static Dictionary<string, string> GetBuildSettings()
-    {
-        var rawMetadata = GetSampleAppPath();
-        var lines = rawMetadata.Split('\n');
-
+        // Extract key-value pairs
+        var lines = rawFile.Split('\n');
         var metadata = new Dictionary<string, string>();
         foreach (var line in lines)
         {
