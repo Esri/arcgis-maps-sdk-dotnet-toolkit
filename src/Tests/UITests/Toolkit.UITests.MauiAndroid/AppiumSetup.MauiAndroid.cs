@@ -10,11 +10,18 @@ public static partial class AppiumSetup
     public static void AssemblyInitialize(TestContext testContext)
     {
         var settings = GetBuildSettings();
-        var appDirectory = settings["appDirectory"];
 
-        var appPath = FindApp(appDirectory);
-
-        driver = MakeAndroidDriver(appPath, settings);
+        if (settings["usePreinstalledApp"] == "true")
+        {
+            var appPackage = settings["appPackage"] ?? MauiAppPackage;
+            driver = MakeAndroidDriver(true, appPackage, settings);
+        }
+        else
+        {
+            var appDirectory = settings["appDirectory"];
+            var appPath = FindApp(appDirectory);
+            driver = MakeAndroidDriver(false, appPath, settings);
+        }
 
         var screenDensityElement = driver.FindElement(MobileBy.Id("ScreenDensity"));
         ScreenDensity = float.Parse(screenDensityElement.GetAttribute("text"));

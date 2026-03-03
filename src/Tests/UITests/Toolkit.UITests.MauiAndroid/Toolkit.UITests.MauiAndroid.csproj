@@ -21,18 +21,21 @@
   </Target>
 
   <!-- Build test app if needed and record build location to AppBuildInfo.txt -->
-  <Target Name="BuildTestApp" BeforeTargets="Build">
+  <Target Name="BuildTestApp" BeforeTargets="Build" Condition="'$(AndroidUsePreinstalledApp)' != 'true'">
     <PropertyGroup>
       <!-- Force iOS target when building the MAUI test app from the test project -->
-      <_MauiTestAppTfm>net10.0-android</_MauiTestAppTfm>
+      <_MauiTestAppTfm>net9.0-android</_MauiTestAppTfm>
       <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
+      <!-- Force Release mode to avoid crashes from FastDeploy -->
+      <_ForcedConfig>Release</_ForcedConfig>
     </PropertyGroup>
 
-    <!-- Build the app -->
-    <MSBuild Projects="$(_MauiTestAppProject)" Targets="Build" Properties="Configuration=$(Configuration);TargetFramework=$(_MauiTestAppTfm)" />
+    <!-- Build the app. Use dotnet build since the MSBuild task does not generate APKs. -->
+    <Exec Command="dotnet build -t:Build -c $(_ForcedConfig) -f $(_MauiTestAppTfm) $(_MauiTestAppProject)" />
+    <Warning Condition="$(Configuration) == 'Debug'" Text="The Maui Android app is always built in Release mode, even when tests are run in Debug." />
 
     <!-- Ask MSBuild for the app project's intermediate output path, then find the produced APK -->
-    <MSBuild Projects="$(_MauiTestAppProject)" Targets="GetTargetPath" Properties="Configuration=$(Configuration);TargetFramework=$(_MauiTestAppTfm)">
+    <MSBuild Projects="$(_MauiTestAppProject)" Targets="GetTargetPath" Properties="Configuration=$(_ForcedConfig);TargetFramework=$(_MauiTestAppTfm)">
       <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetPaths" />
     </MSBuild>
 
@@ -44,8 +47,21 @@
     <Message Importance="high" Text="Build folder: $(_TestAppBuildDir)" />
 
     <PropertyGroup>
-      <_TestSettings>appDirectory=$(_TestAppBuildDir)</_TestSettings>
-      <_TestSettings>$(_TestSettings);deviceUdid=$(AndroidDeviceUdid)</_TestSettings>
+      <_TestSettings>usePreinstalledApp=$(AndroidUsePreinstalledApp)</_TestSettings>
+      <_TestSettings>$(_TestSettings);appDirectory=$(_TestAppBuildDir)</_TestSettings>
+      <_TestSettings>$(_TestSettings);udid=$(AndroidDeviceUdid)</_TestSettings>
+      <_TestSettings>$(_TestSettings);noReset=$(AndroidNoReset)</_TestSettings>
+    </PropertyGroup>
+
+    <WriteLinesToFile File="$(TargetDir)AppBuildInfo.txt" Lines="$(_TestSettings)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+
+  <Target Name="WriteSettingsFileForPreinstalledApp" BeforeTargets="Build" Condition="'$(AndroidUsePreinstalledApp)' == 'true'">
+    <PropertyGroup>
+      <_TestSettings>usePreinstalledApp=$(AndroidUsePreinstalledApp)</_TestSettings>
+      <_TestSettings>$(_TestSettings);appPackage=$(AndroidAppPackage)</_TestSettings>
+      <_TestSettings>$(_TestSettings);udid=$(AndroidDeviceUdid)</_TestSettings>
+      <_TestSettings>$(_TestSettings);noReset=$(AndroidNoReset)</_TestSettings>
     </PropertyGroup>
 
     <WriteLinesToFile File="$(TargetDir)AppBuildInfo.txt" Lines="$(_TestSettings)" Overwrite="true" Encoding="UTF-8" />

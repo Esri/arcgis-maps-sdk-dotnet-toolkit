@@ -68,9 +68,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.MauiWinUI",
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.MauiAndroid", "Tests\UITests\Toolkit.UITests.MauiAndroid\Toolkit.UITests.MauiAndroid.csproj", "{E38E274A-FEA8-5E85-C9AD-43F19DACA778}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F7F98CE8-5304-460D-83A2-F4F7FE50B370} = {F7F98CE8-5304-460D-83A2-F4F7FE50B370}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.MauiiOS", "Tests\UITests\Toolkit.UITests.MauiiOS\Toolkit.UITests.MauiiOS.csproj", "{938FA4A1-5D8A-4F24-9777-92DA6894F180}"
 EndProject
