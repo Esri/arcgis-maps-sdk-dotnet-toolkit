@@ -29,9 +29,12 @@
     </PropertyGroup>
 
     <!-- Get architecture -->
-    <Exec Command="$(MSBuildProjectDirectory)/GetDeviceArchitecture.sh $(iOSDeviceUdid)" ConsoleToMSBuild="true">
+    <Exec Command="$(MSBuildProjectDirectory)/GetDeviceArchitecture.sh $(iOSDeviceUdid)" ConsoleToMSBuild="true" IgnoreExitCode="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="_RuntimeIdentifier" />
+      <Output TaskParameter="ExitCode" PropertyName="_GetArchExitCode" />
     </Exec>
+
+    <Error Condition="'$(_GetArchExitCode)' != '0'" Text="Failed to get device architecture. Have you set the device UDID in UITests/Directory.Build.props? Error: $(_RuntimeIdentifier)" />
 
     <!-- Build the app (the MSBuild task has some side effects that cause problems, hence the Exec) -->
     <Exec Command="dotnet build -t:Build -c $(Configuration) -f $(_MauiTestAppTfm) -p:RuntimeIdentifier=$(_RuntimeIdentifier) $(_MauiTestAppProject)"/>

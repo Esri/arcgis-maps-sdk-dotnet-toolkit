@@ -12,7 +12,7 @@
     <XcodeSigningId></XcodeSigningId>
     <UpdatedWDABundleId></UpdatedWDABundleId>
 
-    <!-- Preinstalled setups: https://appium.github.io/appium-xcuitest-driver/latest/guides/run-preinstalled-wda/ -->
+    <!-- Preinstalled setups (remember to set UpdatedWDABundleId above if needed!): https://appium.github.io/appium-xcuitest-driver/latest/guides/run-preinstalled-wda/ -->
     <UsePreinstalledWDA></UsePreinstalledWDA>
     <PrebuiltWDAPath></PrebuiltWDAPath>
   </PropertyGroup>
