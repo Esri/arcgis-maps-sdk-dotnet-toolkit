@@ -1,5 +1,4 @@
-﻿using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Mapping;
+﻿using Esri.ArcGISRuntime.Mapping;
 using System;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.ScaleLine
@@ -12,10 +11,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.ScaleLine
         public ScaleLineSample()
         {
             this.InitializeComponent();
-
-            var map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"));
-            map.InitialViewpoint = new Viewpoint(new MapPoint(0, 0, SpatialReferences.WebMercator), 50000000);
-            MainMapView.Map = map;
         }
+
+        public Map Map { get; } = new Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=c50de463235e4161b206d000587af18b"));
     }
 }

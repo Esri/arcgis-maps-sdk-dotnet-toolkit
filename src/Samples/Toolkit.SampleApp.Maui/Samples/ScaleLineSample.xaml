@@ -6,18 +6,11 @@
              x:Class="Toolkit.SampleApp.Maui.Samples.ScaleLineSample" Title="ScaleLine">
     <ContentPage.Content>
         <Grid>
-            <esriUI:MapView x:Name="MainMapView" AutomationId="MainMapView"/>
+            <esriUI:MapView x:Name="mapView" />
 
-            <Border Background="White" VerticalOptions="End" HorizontalOptions="Start">
-                <Grid RowDefinitions="Auto,Auto">
-                    <esriTK:ScaleLine Grid.Row="0"
-                                      MapScale="{Binding MapScale, Source={x:Reference MainMapView}}"
-                                      AutomationId="SimpleScaleLine"/>
-                    <esriTK:ScaleLine Grid.Row="1"
-                                      MapView="{x:Reference MainMapView}"
-                                      AutomationId="AdvancedScaleLine"/>
-                </Grid>
-            </Border>
+            <esriTK:ScaleLine Margin="20" VerticalOptions="End"
+                    MapView="{x:Reference mapView}"/>
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>
