@@ -20,7 +20,7 @@
     <Copyright>Copyright © 2014-$([System.DateTime]::Now.ToString('yyyy')) Esri.</Copyright>
 
     <DefaultLanguage>en-US</DefaultLanguage>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
 
     <!--Project type identifiers-->
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
@@ -57,7 +57,7 @@
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
-    <NoWarn>$(NoWarn);NU5105</NoWarn>
+    <NoWarn>$(NoWarn);NU5105;CA1060</NoWarn>
 	
     <!-- Set this to a Toolkit NuGet version like '100.10.0' to have samples use nuget packages 
          instead of project references. Leave blank for project reference. -->

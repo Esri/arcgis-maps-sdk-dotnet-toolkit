@@ -19,6 +19,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <IsAotCompatible>True</IsAotCompatible>
     <EnableMsixTooling>True</EnableMsixTooling>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <Import Project="..\..\CommonProperties.targets" />
@@ -42,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'"/>
+    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="$(WinAppSDKVersion)" />
 	<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2651.64" IncludeAssets="none" Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(WinAppSDKVersion)','1.6.240923002'))" />
     <PackageReference Include="Markdig" Version="0.31.0" />

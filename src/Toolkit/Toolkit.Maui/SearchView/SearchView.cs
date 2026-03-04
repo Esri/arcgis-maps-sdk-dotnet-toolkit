@@ -31,9 +31,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// <summary>
 /// View for searching with locators and custom search sources.
 /// </summary>
+/// <remarks>
 /// <para><note type="caution">
 /// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the current search results will not currently be shown on the scene.
-/// </note></para></remarks>
+/// </note></para>
+/// </remarks>
 public partial class SearchView : TemplatedView, INotifyPropertyChanged
 {
     // Controls how long the control waits after typing stops before looking for suggestions.
