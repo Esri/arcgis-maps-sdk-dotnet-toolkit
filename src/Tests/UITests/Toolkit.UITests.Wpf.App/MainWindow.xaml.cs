@@ -28,9 +28,11 @@ public partial class MainWindow : Window
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        // DPI is used in the tests to make size comparisons screen-independent
         var dpi = VisualTreeHelper.GetDpi(this);
         ScreenDensityTextBlock.Text = dpi.DpiScaleX.ToString();
 
+        // .NET and SDK versions are a convenience for users to know what the tests are running
         NetVersionTextBlock.Text = Environment.Version.ToString();
         
         var runtimeTypeInfo = typeof(ArcGISRuntimeEnvironment).GetTypeInfo();

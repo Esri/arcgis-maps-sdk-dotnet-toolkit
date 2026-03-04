@@ -30,6 +30,9 @@ namespace Toolkit.SampleApp.Maui;
 
 internal static class AppBuilderExtensions
 {
+    /// <summary>
+    /// Applies a fix for Layouts, Pages, and ContentViews not being exposed in the Windows automation tree.
+    /// </summary>
     public static MauiAppBuilder UseWindowsAutomationTreeFix(this MauiAppBuilder builder)
     {
 #if WINDOWS

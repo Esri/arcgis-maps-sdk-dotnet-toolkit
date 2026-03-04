@@ -39,8 +39,10 @@ public partial class MainPage : ContentPage
 
     private void MainWindow_Loaded(object? sender, EventArgs e)
     {
+        // DPI is used in the tests to make size comparisons screen-independent
         ScreenDensityLabel.Text = DeviceDisplay.MainDisplayInfo.Density.ToString();
 
+        // .NET and SDK versions are a convenience for test users to know what the tests are running
         NetVersionLabel.Text = Environment.Version.ToString();
 
 #if DEBUG || !ANDROID // The trimming on android causes crashes here. This might be fixed when we fully update the android toolkit and this app to .NET 10

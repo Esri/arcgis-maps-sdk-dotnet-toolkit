@@ -33,10 +33,12 @@ public sealed partial class MainWindow : Window
 
     private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
     {
+        // DPI is used in the tests to make size comparisons screen-independent
         IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
         float scale = GetDpiForWindow(hWnd) / 96.0f;
         ScreenDensityTextBlock.Text = scale.ToString();
 
+        // .NET and SDK versions are a convenience for users to know what the tests are running
         NetVersionTextBlock.Text = Environment.Version.ToString();
 
         var runtimeTypeInfo = typeof(ArcGISRuntimeEnvironment).GetTypeInfo();
