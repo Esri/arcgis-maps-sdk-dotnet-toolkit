@@ -50,9 +50,17 @@ XCUITest can be an involved setup. Some of the install settings listed in the do
 ## Running the Tests
 Before running any tests, first open a terminal on the host machine and start appium. (This is done by executing the `appium` command with no arguments.)
 
-For most platforms, building and running a test runner on the host machine will also build and run the test app automatically before execution of the tests. MauiAndroid is the one exception, and is discussed in more detail below.
+For most platforms, building and running a test runner on the host machine will also build and run the test app automatically before execution of the tests. WinUI and MauiAndroid are the two exceptions, and are discussed in more detail below.
 
 The other outlier is MauiiOS which requires additional configuration before tests can run.
+
+#### Notes
+Running the MacCatalyst test or any of the Windows tests will take over your machine. Moving the mouse is still possible but may interfere with the tests. Tests will abort if the test app gets closed (pressing the close button or `Alt+F4` are both options).
+
+Be sure to turn off any screen overlays like blue light filters before running the tests. Appium takes screenshots of the entire screen, not just renders of components, so any overlays will get included in screenshots and affect image analysis tests.
+
+#### WinUI
+Currently automatic building of WinUI is not set up. To run the tests, first build and run the `Toolkit.UITests.WinUI.App` project to install the app on your machine. This must be done before starting the `.WinUI` test runner, and must be done manually any time a new change needs testing.
 
 ### MauiAndroid
 In Debug mode Maui Android uses a FastDeploy process which skips embedding some assemblies into the generated APK. Appium cannot install these APKs, so instead the Maui test app must first be run (and therefore installed) on the target device using the dotnet commandline or visual studio. This must be done before starting the `.MauiAndroid` test runner, and must be done manually any time a new change needs testing.
