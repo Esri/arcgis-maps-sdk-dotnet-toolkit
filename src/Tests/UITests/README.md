@@ -10,8 +10,9 @@ Almost all code, including individual tests, is shared between the projects in t
 The test projects must be run from either a Windows or Mac machine with appium installed. See the below table for details.
 | Required Platform | Runners |
 | --- | --- |
-| Windows | `.MauiAndroid`, `.MauiWinUI`, `.WinUI`, `.WPF` |
+| Windows | `.MauiWinUI`, `.WinUI`, `.WPF` |
 | Mac | `.MauiiOS`, `.MauiMac` |
+| Either | `.MauiAndroid` |
 
 ### Test App Projects
 Each framework (WPF, WinUI, and Maui) has a test app project with the naming convention `Toolkit.UITests.Framework.App`. Test apps make use of the ArcGIS Maps SDK for .NET Toolkit and are manipulated by the test runners during test execution.
