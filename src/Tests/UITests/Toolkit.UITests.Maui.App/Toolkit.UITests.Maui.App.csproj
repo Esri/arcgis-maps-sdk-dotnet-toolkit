@@ -38,6 +38,10 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
+
+    <!-- Do not compile xaml bindings and do not warn about them -->
+    <MauiEnableXamlCBindingWithSourceCompilation>false</MauiEnableXamlCBindingWithSourceCompilation>
+    <NoWarn>$(NoWarn);XC0025</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios'">
