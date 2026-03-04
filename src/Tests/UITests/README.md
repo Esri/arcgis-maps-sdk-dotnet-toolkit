@@ -20,6 +20,10 @@ Each framework (WPF, WinUI, and Maui) has a test app project with the naming con
 Each app contains a collection of mirrored test pages. Xaml files are necessarily unique to each framework, but code-behinds are shared in the [`Toolkit.UITests.TestPages.Shared`](./Toolkit.UITests.TestPages.Shared) library.
 
 
+## Appium Inspector
+It is highly recommended that you install Appium Inspector for troubleshooting appium setup and testing. Downloads and documentation can be found here: https://github.com/appium/appium-inspector/.
+
+
 ## Setting Up the Tests
 Appium must be installed and running on the machine before executing any tests.
 
@@ -56,7 +60,9 @@ In Debug mode Maui Android uses a FastDeploy process which skips embedding some 
 > Note: The [`UITests/Directory.Build.props`](./Directory.Build.props) file includes an option to not use a preinstalled app (set `AndroidUsePreinstalledApp` to `false` or nothing). This will cause the `.MauiAndroid` build process to attempt to build the `.Maui.App` app in `Release` mode before tests run. This is not recommended as the `Release` build is slow, appears to do a full rebuild each time, and may not work at all if `.MauiAndroid` itself is being built in `Debug`.
 
 ### MauiiOS
-XCUITest has a somewhat involved setup process as documented on their wiki: https://appium.github.io/appium-xcuitest-driver/latest/preparation/. The `.MauiiOS` test runner supports both automatic WDA setup and preinstalled WDA setup configs (though with a limited number of supported options). These options can be configured in the [`UITests/Directory.Build.props`](./Directory.Build.props) file.
+XCUITest has a particularly difficult setup documented on its wiki: https://appium.github.io/appium-xcuitest-driver/latest/preparation/. The `.MauiiOS` test runner supports both automatic WDA setup and preinstalled WDA setup configs (though with a limited number of supported options). These options can be configured in the [`UITests/Directory.Build.props`](./Directory.Build.props) file.
+
+To get automatic provisioning working you may need to go through the [Full Manual Configuration](https://appium.github.io/appium-xcuitest-driver/latest/preparation/prov-profile-full-manual/) steps once. Also a signing ID of `Apple Development` may work better than the suggested `Apple Developer` suggested in the automatic provisioning docs.
 
 
 ## Contributing
