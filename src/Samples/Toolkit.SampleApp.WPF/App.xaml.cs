@@ -15,7 +15,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
     {
         public App()
         {
-            ControlPatcher.ApplyPatches();
             Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
         }
     }

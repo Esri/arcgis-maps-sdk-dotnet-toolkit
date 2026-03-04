@@ -9,7 +9,7 @@
              d:DesignHeight="400" d:DesignWidth="600">
     <Grid>
 
-        <esri:MapView x:Name="MainMapView" AutomationProperties.AutomationId="MainMapView"/>
+        <esri:MapView Map="http://www.arcgis.com/home/webmap/viewer.html?webmap=c50de463235e4161b206d000587af18b" x:Name="mapView"/>
 
         <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Background="White" BorderBrush="Black" BorderThickness="1" Width="350">
             <Grid Margin="10">
@@ -24,7 +24,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="Basic Scale Calculation" />
-                <esri:ScaleLine MapScale="{Binding MapScale, ElementName=MainMapView, Mode=OneWay}" Grid.Row="1" AutomationProperties.AutomationId="SimpleScaleLine" />
+                <esri:ScaleLine MapScale="{Binding MapScale, ElementName=mapView, Mode=OneWay}" Grid.Row="1" />
                 <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
                     <TextBlock.ToolTip>
                         <TextBlock MaxWidth="300" TextWrapping="Wrap">
@@ -36,7 +36,7 @@
                 </TextBlock>
 
                 <TextBlock Text="Advanced Scale Calculation" Grid.Row="2" />
-                <esri:ScaleLine MapView="{Binding ElementName=MainMapView}" Grid.Row="3" AutomationProperties.AutomationId="AdvancedScaleLine" />
+                <esri:ScaleLine MapView="{Binding ElementName=mapView}" Grid.Row="3" />
                 <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
                     <TextBlock.ToolTip>
                         <TextBlock MaxWidth="300" TextWrapping="Wrap">
