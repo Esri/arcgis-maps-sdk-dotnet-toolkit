@@ -500,7 +500,7 @@
                         x:Name="SourceSelectToggle"
                         Grid.Column="0"
                         BorderThickness="0,0,1,0"
-                        IsChecked="{TemplateBinding IsSourceSelectOpen}"
+                        IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
                         Style="{StaticResource BarActionButtonStyle}"
                         Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility}">
                         <Path
