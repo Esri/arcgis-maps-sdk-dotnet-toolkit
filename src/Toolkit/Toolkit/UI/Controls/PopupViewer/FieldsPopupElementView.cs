@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,9 +55,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public FieldsPopupElementView()
         {
 #if MAUI
-            RowEvenBackground = new SolidColorBrush(Color.FromRgb(0xFB, 0xFB, 0xFB));
-            RowOddBackground = new SolidColorBrush(Color.FromRgb(0xED, 0xED, 0xED));
-            DividerBrush = new SolidColorBrush(Color.FromRgba(0x33, 0x33, 0x33, 0x11));
+            this.SetAppTheme<Brush>(
+                RowEvenBackgroundProperty,
+                new SolidColorBrush(Color.FromArgb("#FBFBFB")),
+                new SolidColorBrush(Color.FromArgb("#1F1F1F")));
+
+            this.SetAppTheme<Brush>(
+                RowOddBackgroundProperty,
+                new SolidColorBrush(Color.FromArgb("#EDEDED")),
+                new SolidColorBrush(Color.FromArgb("#2B2B2B")));
+
+            this.SetAppTheme<Brush>(
+                DividerBrushProperty,
+                new SolidColorBrush(Color.FromArgb("#11333333")),
+                new SolidColorBrush(Color.FromArgb("#22FFFFFF")));
+
             ControlTemplate = DefaultControlTemplate;
             FieldTextStyle = DefaultFieldTextStyle;
 #else
@@ -239,7 +251,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="RowOddBackground"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty RowOddBackgroundProperty =
-            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(RowOddBackground));
+            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(RowOddBackground),
+                propertyChanged: static (s, oldValue, newValue) => s.RefreshTable());
 
         /// <summary>
         /// Gets or sets the background of the even rows in the table.
@@ -254,7 +267,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="RowEvenBackground"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty RowEvenBackgroundProperty =
-            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(RowEvenBackground));
+            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(RowEvenBackground),
+                propertyChanged: static (s, oldValue, newValue) => s.RefreshTable());
 
         /// <summary>
         /// Gets or sets the vertical divider brush in the table.
@@ -269,7 +283,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="DividerBrush"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty DividerBrushProperty =
-            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(DividerBrush));
+            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(DividerBrush),
+                propertyChanged: static (s, oldValue, newValue) => s.RefreshTable());
 
         /// <summary>
         /// Gets or sets the <see cref="TextBlock"/> style applied to the text in the table.
