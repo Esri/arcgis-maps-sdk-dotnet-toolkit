@@ -242,7 +242,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 return false;
             }
 
-            return EqualsBasemap(other.Basemap);
+            return Name == other.Name && Tooltip == other.Tooltip
+                                      && Thumbnail == other.Thumbnail
+                                      && EqualsBasemap(other.Basemap);
         }
 
         /// <summary>
