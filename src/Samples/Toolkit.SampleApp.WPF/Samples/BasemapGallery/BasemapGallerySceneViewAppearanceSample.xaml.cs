@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
         {
             if (Gallery.AvailableBasemaps.Any())
             {
-                Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
+                Gallery.AvailableBasemaps.RemoveAt(Gallery.AvailableBasemaps.Count - 1);
             }
         }
     }
