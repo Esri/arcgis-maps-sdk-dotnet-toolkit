@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:TestPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+                xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+                xmlns:local="clr-namespace:Toolkit.UITests.App.TestPages"
+                x:Class="Toolkit.UITests.App.TestPages.ScaleLines">
+    <Grid>
+        <esri:MapView x:Name="MainMapView" AutomationId="MainMapView"/>
+
+        <Border HorizontalOptions="Start"
+                VerticalOptions="Start"
+                StrokeThickness="1"
+                Background="{StaticResource CalciteBackground1Brush}"
+                Stroke="{StaticResource CalciteBorder1Brush}">
+            <StackLayout Margin="5">
+                <StackLayout Orientation="Horizontal" Margin="0,0,0,5">
+                    <Label Text="Scale: 1 / " Margin="1,1,0,1" VerticalOptions="Center"/>
+                    <Entry x:Name="ScaleTextBox" AutomationId="ScaleTextBox" Text="50000000" MinimumWidthRequest="60" FontSize="14"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" Margin="0,0,0,5">
+                    <Label Text="Latitude: " Margin="1,1,3,1" VerticalOptions="Center"/>
+                    <Entry x:Name="LatitudeTextBox" AutomationId="LatitudeTextBox" Text="0" MinimumWidthRequest="60" FontSize="14"/>
+                </StackLayout>
+
+                <Button x:Name="UpdateViewpoint" AutomationId="UpdateViewpoint" Text="Update Viewpoint" Clicked="UpdateViewpoint_Click" />
+            </StackLayout>
+        </Border>
+
+        <Border VerticalOptions="End" HorizontalOptions="Start" Background="{StaticResource CalciteBackground1Brush}">
+            <Grid RowDefinitions="Auto,Auto">
+                <toolkit:ScaleLine Grid.Row="0"
+                                   MapScale="{Binding MapScale, Source={x:Reference MainMapView}}"
+                                   AutomationId="SimpleScaleLine"/>
+                <toolkit:ScaleLine Grid.Row="1"
+                                   MapView="{x:Reference MainMapView}"
+                                   AutomationId="AdvancedScaleLine"/>
+            </Grid>
+        </Border>
+    </Grid>
+</local:TestPage>

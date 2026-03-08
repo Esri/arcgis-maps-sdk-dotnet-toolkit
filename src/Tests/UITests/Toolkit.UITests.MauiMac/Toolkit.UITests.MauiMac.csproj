@@ -1,0 +1,27 @@
+﻿<Project Sdk="MSTest.Sdk" InitialTargets="CheckOS">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DefineConstants>$(DefineConstants);MAC_RUNNER;MAC_TEST;MAUI_TEST</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Appium.WebDriver" Version="8.1.0" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.3" />
+  </ItemGroup>
+
+  <Import Project="..\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems" Label="Shared" />
+
+  <!-- The Maui MacCatalysts tests can only run from a Mac machine -->
+  <Target Name="CheckOS">
+    <Warning Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui MacCatalyst UI tests must be run from a Mac machine" />
+  </Target>
+
+  <!-- Build test app -->
+  <Target Name="BuildTestApp" BeforeTargets="Build">
+  </Target>
+
+</Project>
