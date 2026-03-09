@@ -54,6 +54,7 @@
         <Setter Property="Margin" Value="7" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Foreground" Value="{ThemeResource FieldsPopupElementViewForegroundBrush}" />
+        <Setter Property="IsTextSelectionEnabled" Value="True" />
     </Style>
     <Style TargetType="primitives:FieldsPopupElementView" >
         <Setter Property="RowOddBackground" Value="{ThemeResource FieldsPopupElementViewBackgroundRowOddBrush}" />

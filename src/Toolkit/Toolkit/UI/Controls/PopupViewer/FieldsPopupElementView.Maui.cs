@@ -52,5 +52,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return presenter;
         }
     }
+
+#if WINDOWS
+    // Enables the text cells to be selectable for MAUI-on-WinUI.
+    internal sealed partial class SelectableLabel : Microsoft.Maui.Controls.Label
+    {
+        protected override void OnHandlerChanged()
+        {
+            if (Handler?.PlatformView is Microsoft.UI.Xaml.Controls.TextBlock textBlock)
+            {
+                textBlock.IsTextSelectionEnabled = true;
+            }
+            base.OnHandlerChanged();
+        }
+    }
+#endif
 }
 #endif
