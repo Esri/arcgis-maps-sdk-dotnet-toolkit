@@ -14,8 +14,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
 
         private Dictionary<string, ITimeAware> _namedLayers = new()
         {
-            {"Earthquakes", new FeatureLayer(new Uri("https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Historical_Quakes/FeatureServer/0")) },
-            {"Sentinel-2 Land Cover", new RasterLayer(new ImageServiceRaster(new Uri("https://ic.imagery1.arcgis.com/arcgis/rest/services/Sentinel2_10m_LandCover/ImageServer"))) }
+            {"Sentinel-2 Land Cover", new RasterLayer(new ImageServiceRaster(new Uri("https://ic.imagery1.arcgis.com/arcgis/rest/services/Sentinel2_10m_LandCover/ImageServer"))) },
+            {"Earthquakes", new FeatureLayer(new Uri("https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Historical_Quakes/FeatureServer/0")) }
         };
 
         public TimeSliderSample()
