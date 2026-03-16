@@ -9,14 +9,14 @@
         <ResourceDictionary x:Key="Default">
             <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowOddBrush">#FF121212</SolidColorBrush>
             <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowEvenBrush">#FF040404</SolidColorBrush>
-            <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush">#11CCCCCC</SolidColorBrush>
-            <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush">#FFCDCDCD</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush">#11FFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush">#FFE5E5E5</SolidColorBrush>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowOddBrush">#FFEDEDED</SolidColorBrush>
             <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowEvenBrush">#FFFBFBFB</SolidColorBrush>
-            <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush">#11333333</SolidColorBrush>
-            <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush">#FF323232</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush">#11000000</SolidColorBrush>
+            <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush">#FF2D2D2D</SolidColorBrush>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
