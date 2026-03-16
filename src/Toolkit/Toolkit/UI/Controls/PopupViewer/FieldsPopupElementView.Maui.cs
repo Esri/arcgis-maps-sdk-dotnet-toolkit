@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultFieldTextStyle = new Style(typeof(Label));
             DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.MarginProperty, Value = new Thickness(7) });
             DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12d });
-            DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.TextColorProperty, Value = Color.FromRgb(0x32, 0x32, 0x32) });
+            // Do not set TextColorProperty to avoid dark/light mode issues
         }
 
         private static object BuildDefaultTemplate()
