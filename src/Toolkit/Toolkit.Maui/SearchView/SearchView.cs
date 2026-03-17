@@ -667,7 +667,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
         if (SearchViewModel?.SelectedResult is SearchResult selectedResult)
         {
-            PART_ResultView?.SetValue(CollectionView.SelectedItemProperty, selectedResult);
             _resultOverlay?.Graphics.Clear();
             AddResultToGeoView(selectedResult);
 
