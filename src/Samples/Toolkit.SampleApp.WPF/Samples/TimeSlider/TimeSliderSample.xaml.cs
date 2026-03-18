@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Rasters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,10 +12,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
     {
         public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"));
 
-        private Dictionary<string, Uri> _namedLayers = new Dictionary<string, Uri>
+        private Dictionary<string, ITimeAware> _namedLayers = new()
         {
-            {"Hurricanes", new Uri("https://services.arcgis.com/XSeYKQzfXnEgju9o/ArcGIS/rest/services/Hurricanes_1950_to_2015/FeatureServer/0") },
-            {"Human Life Expectancy", new Uri("https://services1.arcgis.com/VAI453sU9tG9rSmh/arcgis/rest/services/WorldGeo_HumanCulture_LifeExpectancy_features/FeatureServer/0") }
+            {"Sentinel-2 Land Cover", new RasterLayer(new ImageServiceRaster(new Uri("https://ic.imagery1.arcgis.com/arcgis/rest/services/Sentinel2_10m_LandCover/ImageServer"))) },
+            {"Earthquakes", new FeatureLayer(new Uri("https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Historical_Quakes/FeatureServer/0")) }
         };
 
         public TimeSliderSample()
@@ -43,8 +44,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
             Map.OperationalLayers.Clear();
             var selectedLayer = LayerSelectionBox.SelectedItem.ToString();
 
-            var layer = new FeatureLayer(_namedLayers[selectedLayer]);
-            Map.OperationalLayers.Add(layer);
+            var layer = _namedLayers[selectedLayer];
+            Map.OperationalLayers.Add(layer as Layer);
             await slider.InitializeTimePropertiesAsync(layer);
 
             IsTimeAwareLabel.Text = layer.SupportsTimeFiltering ? "Yes" : "No";

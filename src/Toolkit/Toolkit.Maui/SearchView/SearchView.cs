@@ -584,7 +584,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             case nameof(SearchViewModel.Suggestions):
                 // Only group if there are multiple sources
                 bool groupingEnabled = SearchViewModel.Sources.Count > 1 && SearchViewModel.ActiveSource == null;
-                PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, groupingEnabled);
                 if (groupingEnabled)
                 {
                     var grouped = SearchViewModel.Suggestions?.GroupBy(item => item.OwningSource);
@@ -603,6 +602,9 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 {
                     PART_SuggestionsView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Suggestions ?? new List<SearchSuggestion>());
                 }
+
+                // Update IsGrouped after ItemsSource has been set to avoid this Maui Windows bug: https://github.com/dotnet/maui/issues/28824
+                PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, groupingEnabled);
 
                 UpdateVisibility();
                 break;
