@@ -322,14 +322,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int hashCode = 17;
-                hashCode = 397 * (hashCode ^ (Name?.GetHashCode() ?? 0));
-                hashCode = 397 * (hashCode ^ (Tooltip?.GetHashCode() ?? 0));
-                hashCode = 397 * (hashCode ^ (Thumbnail?.GetHashCode() ?? 0));
-                return hashCode;
-            }
+            return Basemap?.Name?.GetHashCode() ?? -1;
         }
 
         /// <summary>
