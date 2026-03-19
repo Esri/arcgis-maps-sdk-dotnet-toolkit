@@ -22,7 +22,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             process.StartInfo.UseShellExecute = true;
             return Task.FromResult(process.Start());
 #elif MAUI
-            return Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(uri);
+            try
+            {
+                return Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(uri);
+            }
+            catch { }
 #endif
         }
     }
