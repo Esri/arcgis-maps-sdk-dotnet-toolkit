@@ -26,7 +26,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 return Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(uri);
             }
-            catch { }
+            catch
+            {
+                return Task.FromResult<bool>(false);
+            }
 #endif
         }
     }
