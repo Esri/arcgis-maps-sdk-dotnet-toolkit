@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSTest.Sdk" InitialTargets="CheckOS">
+﻿<Project Sdk="MSTest.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -16,12 +16,13 @@
   <Import Project="..\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems" Label="Shared" />
 
   <!-- The Maui iOS tests should only run from a Mac machine -->
-  <Target Name="CheckOS">
+  <Target Name="CheckOS" BeforeTargets="Build">
     <Warning Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui iOS UI tests must be run from a Mac machine" />
+    <CallTarget Targets="BuildTestApp" Condition="$([MSBuild]::IsOSPlatform('OSX')) == 'true'" />
   </Target>
 
   <!-- Build test app if needed and record build location to AppBuildInfo.txt -->
-  <Target Name="BuildTestApp" BeforeTargets="Build">
+  <Target Name="BuildTestApp">
     <PropertyGroup>
       <!-- Force iOS target when building the MAUI test app from the test project -->
       <_MauiTestAppTfm>net10.0-ios</_MauiTestAppTfm>
