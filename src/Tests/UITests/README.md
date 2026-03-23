@@ -7,12 +7,13 @@ Each platform has its own test runner project with the naming convention `Toolki
 
 Almost all code, including individual tests, is shared between the projects in the [`Toolkit.UITests.Shared`](./Toolkit.UITests.Shared) library. Only minimal setup code is present in the projects themselves.
 
-The test projects must be run from either a Windows or Mac machine with appium installed. See the below table for details.
-| Required Platform | Runners |
-| --- | --- |
-| Windows | `.MauiWinUI`, `.WinUI`, `.WPF` |
-| Mac | `.MauiiOS`, `.MauiMac` |
-| Either | `.MauiAndroid` |
+> [!NOTE]
+> Because of limitations from Appium, Windows tests must be run from Windows machines, and Mac/iOS tests must be run from Mac devices. The Android test runner works on either platform. See the table below for quick reference.
+> | Required Platform | Runners |
+> | --- | --- |
+> | Windows | `.MauiWinUI`, `.WinUI`, `.WPF` |
+> | Mac | `.MauiiOS`, `.MauiMac` |
+> | Either | `.MauiAndroid` |
 
 ### Test App Projects
 Each framework (WPF, WinUI, and Maui) has a test app project with the naming convention `Toolkit.UITests.Framework.App`. Test apps make use of the ArcGIS Maps SDK for .NET Toolkit and are manipulated by the test runners during test execution.
