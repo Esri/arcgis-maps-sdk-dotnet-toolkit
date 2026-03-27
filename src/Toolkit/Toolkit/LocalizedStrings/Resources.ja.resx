@@ -246,6 +246,27 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>表示</value>
   </data>
+  <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
+    <value>須_Associations_____________鷗</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
+    <value>須_No associations were found___________________________鷗</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
+    <value>須_Show all_________________鷗</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
+    <value>須_Total_____________鷗:</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
+    <value>須_Visible content________________鷗</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
+    <value>須_Content_______________鷗</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
+    <value>須_Filter by feature title________________________鷗</value>
+  </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
   </data>
@@ -451,10 +472,10 @@
     <value>エッジに沿った部分: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>コンテンツが表示されていますか: はい</value>
+    <value>須_Visible content________________鷗</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>コンテンツは表示されていますか: いいえ</value>
+    <value>須_Content_______________鷗</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>ターミナル: {0}</value>

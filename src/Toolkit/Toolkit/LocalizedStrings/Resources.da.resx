@@ -246,6 +246,27 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Vis</value>
   </data>
+  <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
+    <value>ø_Associations_____________å</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
+    <value>ø_No associations were found___________________________å</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
+    <value>ø_Show all_________________å</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
+    <value>ø_Total_____________å:</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
+    <value>ø_Visible content________________å</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
+    <value>ø_Content_______________å</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
+    <value>ø_Filter by feature title________________________å</value>
+  </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>fod</value>
   </data>
@@ -451,10 +472,10 @@
     <value>Fraktion langs kant: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Er indholdet synligt: Ja</value>
+    <value>ø_Visible content________________å</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Er indholdet synligt: Nej</value>
+    <value>ø_Content_______________å</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>

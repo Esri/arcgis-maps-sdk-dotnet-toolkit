@@ -246,6 +246,27 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Kuva</value>
   </data>
+  <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
+    <value>Š_Associations_____________ä</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
+    <value>Š_No associations were found___________________________ä</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
+    <value>Š_Show all_________________ä</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
+    <value>Š_Total_____________ä:</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
+    <value>Š_Visible content________________ä</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
+    <value>Š_Content_______________ä</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
+    <value>Š_Filter by feature title________________________ä</value>
+  </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>jl</value>
   </data>
@@ -451,10 +472,10 @@
     <value>Murdosa mööda serva: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Kas sisu on nähtav: jah</value>
+    <value>Š_Visible content________________ä</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Kas sisu on nähtav: ei</value>
+    <value>Š_Content_______________ä</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>

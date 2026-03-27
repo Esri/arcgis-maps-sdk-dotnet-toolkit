@@ -246,6 +246,27 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Afficher</value>
   </data>
+  <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
+    <value>æ_Associations_____________Â</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
+    <value>æ_No associations were found___________________________Â</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
+    <value>æ_Show all_________________Â</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
+    <value>æ_Total_____________Â:</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
+    <value>æ_Visible content________________Â</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
+    <value>æ_Content_______________Â</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
+    <value>æ_Filter by feature title________________________Â</value>
+  </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>pi</value>
   </data>
@@ -451,10 +472,10 @@
     <value>Fraction sur un tronçon : {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Contenu visible : oui</value>
+    <value>æ_Visible content________________Â</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Contenu visible : non</value>
+    <value>æ_Content_______________Â</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Borne : {0}</value>
