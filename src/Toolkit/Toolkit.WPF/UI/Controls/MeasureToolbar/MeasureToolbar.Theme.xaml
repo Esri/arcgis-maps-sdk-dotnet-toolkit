@@ -127,8 +127,7 @@
                                     Padding="8,4,8,4"
                                     ToolTip="Undo"
                                     Grid.Column="5"
-                                    DataContext="{TemplateBinding MapView}"
-                                    Command="{Binding Path=SketchEditor.UndoCommand}"
+                                    Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=UndoCommand}"
                                     FontSize="20"
                                     FontFamily="Wingdings 3"
                                     Content="Q" />
@@ -142,8 +141,7 @@
                                     Padding="8,4,8,4"
                                     ToolTip="Redo"
                                     Grid.Column="6"
-                                    DataContext="{TemplateBinding MapView}"
-                                    Command="{Binding Path=SketchEditor.RedoCommand}"
+                                    Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RedoCommand}"
                                     FontSize="20"
                                     FontFamily="Wingdings 3"
                                     Content="P" />

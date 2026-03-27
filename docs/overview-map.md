@@ -38,7 +38,7 @@ OverviewMap has the following bindable properties:
 </Grid>
 ```
 
-### WinUI/UWP:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"

@@ -31,6 +31,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// <summary>
 /// View for searching with locators and custom search sources.
 /// </summary>
+/// <remarks>
+/// <para><note type="caution">
+/// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the current search results will not currently be shown on the scene.
+/// </note></para>
+/// </remarks>
 public partial class SearchView : TemplatedView, INotifyPropertyChanged
 {
     // Controls how long the control waits after typing stops before looking for suggestions.
@@ -47,8 +52,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     private bool _acceptingSuggestionFlag;
 
     private bool _sourceSelectToggled;
-
-    private bool _loadedHandled;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SearchView"/> class.
@@ -461,6 +464,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 (newGeoView as INotifyPropertyChanged).PropertyChanged += sendingView.HandleMapChange;
                 newGeoView.ViewpointChanged += sendingView.GeoView_ViewpointChanged;
                 newGeoView.GraphicsOverlays?.Add(sendingView._resultOverlay);
+                if (newGeoView is LocalSceneView)
+                {
+                    System.Diagnostics.Trace.WriteLine("SearchView does not currently support showing the search results on a LocalSceneView.");
+                }
             }
         }
     }
@@ -554,6 +561,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             {
                 _lastUsedGeomodel = scene;
             }
+            else if (GeoView is LocalSceneView lsv && lsv.Scene is Scene localscene)
+            {
+                _lastUsedGeomodel = localscene;
+            }
         }
     }
 
@@ -573,7 +584,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             case nameof(SearchViewModel.Suggestions):
                 // Only group if there are multiple sources
                 bool groupingEnabled = SearchViewModel.Sources.Count > 1 && SearchViewModel.ActiveSource == null;
-                PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, groupingEnabled);
                 if (groupingEnabled)
                 {
                     var grouped = SearchViewModel.Suggestions?.GroupBy(item => item.OwningSource);
@@ -592,6 +602,9 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 {
                     PART_SuggestionsView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Suggestions ?? new List<SearchSuggestion>());
                 }
+
+                // Update IsGrouped after ItemsSource has been set to avoid this Maui Windows bug: https://github.com/dotnet/maui/issues/28824
+                PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, groupingEnabled);
 
                 UpdateVisibility();
                 break;

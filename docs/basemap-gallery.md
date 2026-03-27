@@ -17,7 +17,7 @@ BasemapGallery:
 - Shows basemaps from a portal, and allows manually adding and removing basemaps from the collection.
 - Shows a representation of the map or scene's current basemap if that basemap exists in the gallery.
 - Shows a name and thumbnail for each basemap.
-- Shows a tooltip on hover on WPF and UWP.
+- Shows a tooltip on hover on WPF and WinUI.
 - Supports templating.
 
 ## Key properties
@@ -51,7 +51,7 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
 </Grid>
 ```
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"

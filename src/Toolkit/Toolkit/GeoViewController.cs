@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 AttachToGeoView(geoView);
         }
 
-        private void AttachToGeoView(GeoView geoView)
+        private protected void AttachToGeoView(GeoView geoView)
         {
             var connectedView = ConnectedView;
             if (connectedView == geoView)
@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 GeoView_Loaded(geoView);
         }
 
-        private void DetachFromGeoView(GeoView geoView)
+        private protected void DetachFromGeoView(GeoView geoView)
         {
             var connectedView = ConnectedView;
             if (connectedView != null && connectedView == geoView)

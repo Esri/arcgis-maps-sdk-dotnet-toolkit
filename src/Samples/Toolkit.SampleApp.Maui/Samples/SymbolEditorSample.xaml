@@ -12,18 +12,16 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <StackLayout Margin="20">
-
+            <StackLayout Margin="20" 
+                         BindingContext="{Binding Symbol, Source={x:Reference symbolDisplay}}" 
+                         x:DataType="sym:SimpleMarkerSymbol">
                 <Label Text="Size" />
-                <Slider Maximum="100" Minimum="5" Value="{Binding Symbol.Size, Source={x:Reference symbolDisplay}, Mode=TwoWay}" />
+                <Slider Maximum="100" Minimum="5" Value="{Binding Size, Mode=TwoWay}" />
                 <Label Text="Style" />
-                <Picker ItemsSource="{Binding SimpleMarkerSymbolStyles}" SelectedItem="{Binding Symbol.Style, Source={x:Reference symbolDisplay}, Mode=TwoWay}"/>
+                <Picker ItemsSource="{Binding SimpleMarkerSymbolStyles, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                        SelectedItem="{Binding Style, Mode=TwoWay}"/>
                 <Label Text="Angle" />
-                <Slider Minimum="0" Maximum="360"
-                        BindingContext="{Binding Symbol, Source={x:Reference symbolDisplay}}"
-                        x:DataType="sym:SimpleMarkerSymbol"
-                        Value="{Binding Angle, Mode=TwoWay}" />
-
+                <Slider Maximum="360" Minimum="0" Value="{Binding Angle, Mode=TwoWay}" />
             </StackLayout>
 
             <esri:SymbolDisplay x:Name="symbolDisplay" Grid.Row="1" Symbol="{Binding Symbol}" />

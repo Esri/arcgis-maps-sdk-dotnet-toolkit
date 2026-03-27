@@ -40,7 +40,7 @@
                       Background="LightGray"
                       HorizontalAlignment="Stretch"
                       Grid.Row="1" />
-        <esri:MapView Map="http://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213"
+        <esri:MapView Map="http://www.arcgis.com/home/webmap/viewer.html?webmap=df8bcc10430f48878b01c96e907a1fc3"
                       x:Name="mapView"
                       Grid.Column="2" />
     </Grid>

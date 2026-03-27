@@ -195,7 +195,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var view = GeoView;
             if ((view is MapView && e.PropertyName == nameof(MapView.MapRotation)) ||
-                (view is SceneView && e.PropertyName == nameof(SceneView.Camera)))
+                (view is SceneView && e.PropertyName == nameof(SceneView.Camera)) ||
+                (view is LocalSceneView && e.PropertyName == nameof(LocalSceneView.Camera)))
             {
                 UpdateCompassFromGeoView(GeoView);
             }
@@ -204,22 +205,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void UpdateCompassFromGeoView(GeoView? view)
         {
             _headingSetByGeoView = true;
-            Heading = (view is MapView mv) ? mv.MapRotation : (view is SceneView sv ? sv.Camera.Heading : 0);
+            Heading = (view is MapView mv) ? mv.MapRotation : (view is SceneView sv ? sv.Camera.Heading : (view is LocalSceneView lsv ? lsv.Camera.Heading : 0));
             _headingSetByGeoView = false;
         }
 
         private void ResetRotation()
         {
             var view = GeoView;
-            if (view is MapView)
+            if (view is MapView mv)
             {
-                ((MapView)view).SetViewpointRotationAsync(0);
+                mv.SetViewpointRotationAsync(0);
             }
-            else if (view is SceneView)
+            else if (view is SceneView sv)
             {
-                var sv = (SceneView)view;
                 var c = sv.Camera;
                 sv.SetViewpointCameraAsync(c.RotateTo(0, c.Pitch, c.Roll));
+            }
+            else if (view is LocalSceneView lsv)
+            {
+                var c = lsv.Camera;
+                lsv.SetViewpointCameraAsync(c.RotateTo(0, c.Pitch, c.Roll));
             }
         }
     }

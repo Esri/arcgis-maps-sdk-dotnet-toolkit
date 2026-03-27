@@ -19,22 +19,22 @@ The ArcGIS Maps SDK for .NET Toolkit contains controls and components to acceler
 
 | Component | Screenshot | Description | Availability |
 |-----------|------------|-------------|--------------|
-|[BasemapGallery](docs/basemap-gallery.md) | <img width="150" title="Basemap Gallery" src="https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png" />| Display a list or grid of Basemaps. | WinUI, MAUI, UWP, WPF |
-|[BookmarksView](docs/bookmarks-view.md) | ![image](https://user-images.githubusercontent.com/29742178/150397137-28029b87-5384-41b1-aabf-98260885152d.png) | Show and navigate to bookmarks from a map or a custom list. | WinUI, MAUI, UWP, WPF |
-| [Compass](docs/compass.md) | ![compass](https://user-images.githubusercontent.com/1378165/73389839-d9c8f500-4289-11ea-923c-18232489b3e0.png) | Show a compass direction when the map or scene is rotated. | WinUI, MAUI, UWP, WPF |
-| [FeatureDataField](docs/feature-data-field.md)   | ![FeatureDataField](https://user-images.githubusercontent.com/1378165/73389879-ebaa9800-4289-11ea-8e4e-de153a6a371a.png) | Display and optionally allow editing of a single field attribute of a feature. | UWP, WPF |
+|[BasemapGallery](docs/basemap-gallery.md) | <img width="150" title="Basemap Gallery" src="https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png" />| Display a list or grid of Basemaps. | WinUI, MAUI, WPF |
+|[BookmarksView](docs/bookmarks-view.md) | ![image](https://user-images.githubusercontent.com/29742178/150397137-28029b87-5384-41b1-aabf-98260885152d.png) | Show and navigate to bookmarks from a map or a custom list. | WinUI, MAUI, WPF |
+| [Compass](docs/compass.md) | ![compass](https://user-images.githubusercontent.com/1378165/73389839-d9c8f500-4289-11ea-923c-18232489b3e0.png) | Show a compass direction when the map or scene is rotated. | WinUI, MAUI, WPF |
+| [FeatureDataField](docs/feature-data-field.md)   | ![FeatureDataField](https://user-images.githubusercontent.com/1378165/73389879-ebaa9800-4289-11ea-8e4e-de153a6a371a.png) | Display and optionally allow editing of a single field attribute of a feature. | WinUI, WPF |
 |[FeatureFormView](docs/featureformview.md) | <img src="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/assets/1378165/db61facf-d45e-49ac-b1ac-9af55511cd6c" width="150" title="FeatureFormView" /> | Generates an interactive form. | MAUI, WPF |
-|[FloorFilter](docs/floor-filter.md) | ![image](https://user-images.githubusercontent.com/29742178/158746908-71a39e28-596f-44b6-9230-e2a04bdaeb9e.png) | Browse floor-aware maps and scenes and filter the view to show levels in a facility. | WinUI, MAUI, UWP, WPF |
-|[GeoViewController](docs/geoviewcontroller.md) | | A helper class to enable easy adoption of MVVM patterns in an ArcGIS Maps SDK for .NET application. | WinUI, MAUI, UWP, WPF |
-| [Legend](docs/legend.md)   | <img src="https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png" width="105" title="Legend" />| Display a legend for a map or scene view. | WinUI, MAUI, UWP, WPF |
-| [MeasureToolbar](docs/measure-toolbar.md)  | ![MeasureToolbar](https://user-images.githubusercontent.com/1378165/73389958-0f6dde00-428a-11ea-8c78-7192d49ea605.png) | Measure distances, areas, and features in a map view. | WinUI, UWP, WPF |
-|[OverviewMap](docs/overview-map.md) | <img src="https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png" width="150" title="Overview Map" /> | Display an interactive inset map for a map or scene. | WinUI, MAUI, UWP, WPF |
-|[PopupViewer](docs/popup-viewer.md) | <img src="https://user-images.githubusercontent.com/3878047/228625594-d0009216-0cb3-4836-9a62-e197371779ac.png" width="150" title="Popup Viewer" /> | Displays information from simple popups. | WinUI, MAUI, UWP, WPF |
-| [ScaleLine](docs/scale-line.md)   | ![ScaleLine](https://user-images.githubusercontent.com/1378165/73390077-3debb900-428a-11ea-8b2f-dfd4914a637e.png) | Display the current scale reference for a map. | WinUI, MAUI, UWP, WPF |
-|[SearchView](docs/search-view.md) | <img title="Search View" width="150" src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" /> | Search using one or more locators, with support for suggestions, automatic zooming, and custom search sources. | WinUI, MAUI, UWP, WPF |
-| [SymbolDisplay](docs/symbol-display.md)   | ![SymbolDisplay](https://user-images.githubusercontent.com/1378165/73390051-31676080-428a-11ea-9feb-afb5d2aa6385.png) | Render a symbol in a control. | WinUI, MAUI, UWP, WPF |
-|[TimeSlider](docs/time-slider.md) | ![TimeSlider on UWP](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png) | Interactively manipulate or animate the time extent for a map or scene. | WinUI, UWP, WPF |
-|[UtilityNetworkTraceTool](docs/un-trace.md) | ![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) | Use named trace configurations defined in a web map to perform connected trace operations and compare results. | WPF, UWP, WinUI, MAUI |
+|[FloorFilter](docs/floor-filter.md) | ![image](https://user-images.githubusercontent.com/29742178/158746908-71a39e28-596f-44b6-9230-e2a04bdaeb9e.png) | Browse floor-aware maps and scenes and filter the view to show levels in a facility. | WinUI, MAUI, WPF |
+|[GeoViewController](docs/geoviewcontroller.md) | | A helper class to enable easy adoption of MVVM patterns in an ArcGIS Maps SDK for .NET application. | WinUI, MAUI, WPF |
+| [Legend](docs/legend.md)   | <img src="https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png" width="105" title="Legend" />| Display a legend for a map or scene view. | WinUI, MAUI, WPF |
+| [MeasureToolbar](docs/measure-toolbar.md)  | ![MeasureToolbar](https://user-images.githubusercontent.com/1378165/73389958-0f6dde00-428a-11ea-8c78-7192d49ea605.png) | Measure distances, areas, and features in a map view. | WinUI, WPF |
+|[OverviewMap](docs/overview-map.md) | <img src="https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png" width="150" title="Overview Map" /> | Display an interactive inset map for a map or scene. | WinUI, MAUI, WPF |
+|[PopupViewer](docs/popup-viewer.md) | <img src="https://user-images.githubusercontent.com/3878047/228625594-d0009216-0cb3-4836-9a62-e197371779ac.png" width="150" title="Popup Viewer" /> | Displays information from simple popups. | WinUI, MAUI, WPF |
+| [ScaleLine](docs/scale-line.md)   | ![ScaleLine](https://user-images.githubusercontent.com/1378165/73390077-3debb900-428a-11ea-8b2f-dfd4914a637e.png) | Display the current scale reference for a map. | WinUI, MAUI, WPF |
+|[SearchView](docs/search-view.md) | <img title="Search View" width="150" src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" /> | Search using one or more locators, with support for suggestions, automatic zooming, and custom search sources. | WinUI, MAUI, WPF |
+| [SymbolDisplay](docs/symbol-display.md)   | ![SymbolDisplay](https://user-images.githubusercontent.com/1378165/73390051-31676080-428a-11ea-9feb-afb5d2aa6385.png) | Render a symbol in a control. | WinUI, MAUI, WPF |
+|[TimeSlider](docs/time-slider.md) | ![TimeSlider on WinUI](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png) | Interactively manipulate or animate the time extent for a map or scene. | WinUI, WPF |
+|[UtilityNetworkTraceTool](docs/un-trace.md) | ![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) | Use named trace configurations defined in a web map to perform connected trace operations and compare results. | WPF, WinUI, MAUI |
 
 ## Get started
 
@@ -42,7 +42,6 @@ The simplest way to get started is to add the platform-specific NuGet package(s)
 
 - WPF: `Esri.ArcGISRuntime.Toolkit.WPF`
 - WinUI: `Esri.ArcGISRuntime.Toolkit.WinUI`
-- UWP: `Esri.ArcGISRuntime.Toolkit.UWP`
 - MAUI: `Esri.ArcGISRuntime.Toolkit.Maui`
 
 ## Customize

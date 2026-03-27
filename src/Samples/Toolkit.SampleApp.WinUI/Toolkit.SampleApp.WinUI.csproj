@@ -5,13 +5,14 @@
     <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit.SampleApp</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Platforms>x86;x64;arm64</Platforms>
-    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+    <Platforms>x64;arm64</Platforms>
+    <RuntimeIdentifiers>win10-x64;win10-arm64</RuntimeIdentifiers>
     <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
-    <DefineConstants>$(DefineConstants);WINUI</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINUI;DISABLE_XAML_GENERATED_MAIN</DefineConstants>
     <UseRidGraph>true</UseRidGraph>
+    <WindowsAppSDKBackgroundTask>true</WindowsAppSDKBackgroundTask>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +23,6 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Compile Include="..\Toolkit.SampleApp.UWP\SampleDatasource.cs" Link="SampleDatasource.cs" />
     <Compile Include="..\Toolkit.SampleApp.WPF\Samples\Downloading\DownloadItemVM.cs" Link="Samples\Downloading\DownloadItemVM.cs" />
   </ItemGroup>
 
@@ -34,6 +34,7 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+    <PackageReference Include="Esri.Calcite.WinUI" Version="1.0.0-rc.1" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -58,12 +59,6 @@
         </Otherwise>
     </Choose>
 
-    <!--<Target BeforeTargets="Build;Rebuild" Name="CopyUWPSamples">
-        <ItemGroup>
-            <SampleSources Include="..\Toolkit.SampleApp.UWP\Samples\**\*.*" />
-        </ItemGroup>
-        <Copy SourceFiles="@(SampleSources)" DestinationFiles="Samples\%(RecursiveDir)%(Filename)%(Extension)" SkipUnchangedFiles="true" />
-    </Target>-->
   <!-- 
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
     Tools extension to be activated for this project even if the Windows App SDK Nuget
@@ -71,18 +66,6 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Samples\" />
-      <Compile Include="..\Toolkit.SampleApp.UWP\Samples\**\*.cs" Link="Samples\%(RecursiveDir)%(Filename)%(Extension)" />
-      <Page Include="..\Toolkit.SampleApp.UWP\Samples\**\*.xaml" Link="Samples\%(RecursiveDir)%(Filename)%(Extension)" />
-
-      <Compile Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\DataGridSample.xaml.cs" />
-
-      <Compile Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\EditFeatureSample.xaml.cs" />
-      <Page Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\DataGridSample.xaml" />
-      <Page Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\EditFeatureSample.xaml" />
-      <Page Remove="..\Toolkit.SampleApp.UWP\Samples\FeatureDataField\FeatureDataFieldSample.xaml" />
   </ItemGroup>
 
   <!-- 

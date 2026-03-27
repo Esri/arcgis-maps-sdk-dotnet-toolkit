@@ -45,7 +45,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private CancellationTokenSource? _loadCancellationTokenSource;
         private IList<BasemapGalleryItem>? _cached2DBasemaps;
         private IList<BasemapGalleryItem>? _cached3DBasemaps;
-        private Task<ObservableCollection<BasemapGalleryItem>>? _loadBasemapGalleryItemsTask;
 
         public bool IsLoading
         {

@@ -116,7 +116,7 @@ public enum FileDownloadStatus
     /// <summary>
     /// The download is starting.
     /// </summary>
-    /// <seealso cref="FileDownloadTask.BeginDownloadAsync(string, Uri, HttpMessageHandler?)"/>
+    /// <seealso cref="FileDownloadTask.BeginDownloadAsync(string, Uri, HttpMessageHandler, CancellationToken)"/>
     Starting,
 
     /// <summary>

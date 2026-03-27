@@ -25,6 +25,7 @@ using Windows.UI.Xaml.Markup;
 using Size = Windows.Foundation.Size;
 using Microsoft.UI.Xaml.Markup;
 #elif WPF
+using Size = System.Windows.Size;
 using System.Windows.Markup;
 #endif
 

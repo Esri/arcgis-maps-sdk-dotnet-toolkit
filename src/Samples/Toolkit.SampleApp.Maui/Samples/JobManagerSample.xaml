@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:sample="clr-namespace:Toolkit.SampleApp.Maui"
+             xmlns:vm="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples"
+             x:Class="Toolkit.SampleApp.Maui.Samples.JobManagerSample" Title="Job Manager">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label Margin="8">
+            Jobs are automatically persisted across application sessions. You can start a job below and shut down the app. When the app resumes, the jobs will also auto-resume.
+        </Label>
+        <HorizontalStackLayout Grid.Row="1">
+            <Button Text="Generate a geodatabase" Clicked="GenerateGdb_Click" Margin="8" Padding="4" />
+            <Button Text="Generate an offline map" Clicked="GenerateMap_Click" Margin="8" Padding="4" />
+            <Button Text="Clear completed jobs" Clicked="Clear_Click" Margin="8" Padding="4" />
+        </HorizontalStackLayout>
+
+        <CollectionView x:Name="JobCollectionView" Margin="6,0" Grid.Row="2" >
+            <CollectionView.ItemTemplate>
+                <DataTemplate >
+                    <sample:JobView Job="{Binding}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

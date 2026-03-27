@@ -60,7 +60,7 @@ The following properties enable customization or localization of text displayed 
 </Grid>
 ```
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"

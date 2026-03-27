@@ -1,0 +1,41 @@
+<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.Jobs.JobManagerSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:tk="clr-namespace:Esri.ArcGISRuntime.Toolkit;assembly=Esri.ArcGISRuntime.Toolkit.WPF"
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.Jobs"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock TextWrapping="Wrap" Margin="8">
+            Jobs are automatically persisted across application sessions. You can start a job below and shut down the app. When the app resumes, the jobs will also auto-resume.
+        </TextBlock>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Button Content="Generate a geodatabase" Click="GenerateGdb_Click" Margin="8" Padding="4" Style="{StaticResource CalcitePrimaryButtonStyle}" />
+            <Button Content="Generate an offline map" Click="GenerateMap_Click" Margin="8" Padding="4" Style="{StaticResource CalcitePrimaryButtonStyle}" />
+            <Button Content="Clear completed jobs" Click="Clear_Click" Margin="8" Padding="4" Style="{StaticResource CalciteDangerSecondaryButtonStyle}" />
+        </StackPanel>
+
+        <ListView x:Name="JobCollectionView" Grid.Row="2" ItemsSource="{Binding Jobs, Source={x:Static tk:JobManager.Shared}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <Border BorderBrush="Gray" >
+                        <local:JobViewControl Job="{Binding}" HorizontalAlignment="Stretch" />
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

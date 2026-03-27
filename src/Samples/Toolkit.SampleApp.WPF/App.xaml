@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <CalciteResources xmlns="http://schemas.esri.com/calcite/2024" Theme="Light" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

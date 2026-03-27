@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.8.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.8.0</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">300.0.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">300.0.0</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -20,7 +20,7 @@
     <Copyright>Copyright © 2014-$([System.DateTime]::Now.ToString('yyyy')) Esri.</Copyright>
 
     <DefaultLanguage>en-US</DefaultLanguage>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
 
     <!--Project type identifiers-->
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
@@ -37,10 +37,7 @@
   <PropertyGroup>
     <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">19041</ArcGISRuntime_MinimumSupportedWindowsBuild>
     <WindowsSDKTargetBuild Condition="'$(WindowsSDKTargetBuild)'==''">19041</WindowsSDKTargetBuild>
-    <UWPTargetPlatformVersion>10.0.$(WindowsSDKTargetBuild).0</UWPTargetPlatformVersion>
-    <UWPTargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformMinVersion>
     <DotNetTargetFramework>net472</DotNetTargetFramework>
-    <UWPTargetFramework>uap10.0.$(WindowsSDKTargetBuild)</UWPTargetFramework>
     <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">net8.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
     <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net9.0</NETMauiTarget>
     <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
@@ -56,7 +53,7 @@
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
-    <NoWarn>$(NoWarn);NU5105</NoWarn>
+    <NoWarn>$(NoWarn);NU5105;CA1060</NoWarn>
 	
     <!-- Set this to a Toolkit NuGet version like '100.10.0' to have samples use nuget packages 
          instead of project references. Leave blank for project reference. -->
@@ -86,8 +83,8 @@
     <NerdbankGitVersioningVersion>3.0.26</NerdbankGitVersioningVersion>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(VersionOverride)'!='true' AND $([MSBuild]::IsOSPlatform('windows'))">
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.26" PrivateAssets="all" />
+  <ItemGroup Condition="'$(VersionOverride)'!='true' AND $([MSBuild]::IsOSPlatform('windows')) AND '$(OutputType)'=='library' AND '$(AndroidApplication)'!='true'">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50" PrivateAssets="all" />
   </ItemGroup>
   
   <ItemGroup Condition="$(IsToolkitLibrary)">
@@ -148,13 +145,7 @@
             </Code>
         </Task>
     </UsingTask>
-    <Target Name="XamlTypeInfoBuildTask" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)' AND '$(DesignTimeBuild)' != 'true'"
-                    AfterTargets="MarkupCompilePass2"
-                    BeforeTargets="CoreCompile">
-        <XamlTypeInfoBuildTask InputFilename="$(IntermediateOutputPath)\XamlTypeInfo.g.cs" />
-    </Target>
 
-	
     <Import Project="$(MSBuildThisFileDirectory)..\build\Signing.targets" />
 
 </Project>

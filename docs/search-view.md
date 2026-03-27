@@ -44,7 +44,7 @@ The following properties enable customization of the view:
 </Grid>
 ```
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"

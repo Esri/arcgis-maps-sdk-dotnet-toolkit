@@ -41,15 +41,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
-#pragma warning disable CS0067 // event is required by interface, so this warning shouldn't happen
         /// <inheritdoc/>
         public event EventHandler? CanExecuteChanged;
-#pragma warning restore CS0067
 
         /// <inheritdoc/>
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return _canExecute;
         }
 
         /// <inheritdoc/>

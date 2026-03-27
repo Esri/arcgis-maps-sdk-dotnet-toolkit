@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             UpdateContent();
 #elif WINUI
-            CreatePipsPager();
+            UpdatePipsVisibility();
 #endif
             base.OnApplyTemplate();
         }
@@ -135,23 +135,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
 #if WINUI
-        private void CreatePipsPager()
-        {
-            // Instead of creating Pips in XAML which UWP doesn't support, we create it in code here instead of having to maintain two sets of control templates
-            if (GetTemplateChild("PipsPagerContainer") is ContentControl contentControl && GetTemplateChild("FlipView") is FlipView flipView)
-            {
-                PipsPager p = new PipsPager() { HorizontalAlignment = HorizontalAlignment.Center };
-                p.SetBinding(PipsPager.NumberOfPagesProperty, new Binding() { Path = new PropertyPath("Element.Media.Count"), Source = this });
-                p.SetBinding(PipsPager.SelectedPageIndexProperty, new Binding() { Path = new PropertyPath(nameof(FlipView.SelectedIndex)), Mode = BindingMode.TwoWay, Source = flipView });
-                contentControl.Content = p;
-            }
-            UpdatePipsVisibility();
-        }
         private void UpdatePipsVisibility()
         {
-            if (GetTemplateChild("PipsPagerContainer") is ContentControl cc)
+            if (GetTemplateChild("PipsPager") is UIElement pager)
             {
-                cc.Visibility = (Element?.Media?.Count ?? 0) > 1 ? Visibility.Visible : Visibility.Collapsed;
+                pager.Visibility = (Element?.Media?.Count ?? 0) > 1 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 #endif
