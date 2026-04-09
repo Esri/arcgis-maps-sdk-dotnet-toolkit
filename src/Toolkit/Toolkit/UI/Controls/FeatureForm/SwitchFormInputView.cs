@@ -80,8 +80,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateCheckState();
-#if MAUI && WINDOWS
+#if MAUI
+            UpdateEditableState();
+#if WINDOWS
             UpdateOnOffContent();
+#endif
 #endif
         }
 
