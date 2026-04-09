@@ -247,25 +247,25 @@
     <value>Prikaži</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
-    <value>Š_Associations_____________č</value>
+    <value>Asociacije</value>
   </data>
   <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
-    <value>Š_No associations were found___________________________č</value>
+    <value>Ni najdenih asociacij</value>
   </data>
   <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
-    <value>Š_Show all_________________č</value>
+    <value>Prikaži vse</value>
   </data>
   <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
-    <value>Š_Total_____________č:</value>
+    <value>Skupaj:</value>
   </data>
   <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
-    <value>Š_Visible content________________č</value>
+    <value>Vidna vsebina</value>
   </data>
   <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
-    <value>Š_Content_______________č</value>
+    <value>Vsebina</value>
   </data>
   <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
-    <value>Š_Filter by feature title________________________č</value>
+    <value>Filtriraj po naslovu geoobjekta</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
@@ -472,10 +472,10 @@
     <value>Delež ob robu: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Š_Visible content________________č</value>
+    <value>Vidna vsebina</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Š_Content_______________č</value>
+    <value>Vsebina</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>

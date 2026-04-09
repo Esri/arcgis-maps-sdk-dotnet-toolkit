@@ -247,25 +247,25 @@
     <value>Vizualizează</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
-    <value>Ă_Associations_____________ș</value>
+    <value>Asocieri</value>
   </data>
   <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
-    <value>Ă_No associations were found___________________________ș</value>
+    <value>Nu s-au găsit asocieri</value>
   </data>
   <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
-    <value>Ă_Show all_________________ș</value>
+    <value>Afișare toate</value>
   </data>
   <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
-    <value>Ă_Total_____________ș:</value>
+    <value>Total:</value>
   </data>
   <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
-    <value>Ă_Visible content________________ș</value>
+    <value>Conținut vizibil</value>
   </data>
   <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
-    <value>Ă_Content_______________ș</value>
+    <value>Conținut</value>
   </data>
   <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
-    <value>Ă_Filter by feature title________________________ș</value>
+    <value>Filtrare după titlul obiectului spațial</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
@@ -472,10 +472,10 @@
     <value>Fracție pe margine: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Ă_Visible content________________ș</value>
+    <value>Conținut vizibil</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Ă_Content_______________ș</value>
+    <value>Conținut</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>

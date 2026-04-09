@@ -247,25 +247,25 @@
     <value>Näytä</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
-    <value>Å_Associations_____________ö</value>
+    <value>Liitokset</value>
   </data>
   <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
-    <value>Å_No associations were found___________________________ö</value>
+    <value>Liitoksia ei löytynyt</value>
   </data>
   <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
-    <value>Å_Show all_________________ö</value>
+    <value>Näytä kaikki</value>
   </data>
   <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
-    <value>Å_Total_____________ö:</value>
+    <value>Yhteensä:</value>
   </data>
   <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
-    <value>Å_Visible content________________ö</value>
+    <value>Näkyvä sisältö</value>
   </data>
   <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
-    <value>Å_Content_______________ö</value>
+    <value>Sisältö</value>
   </data>
   <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
-    <value>Å_Filter by feature title________________________ö</value>
+    <value>Suodata kohteen otsikon mukaan</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
@@ -472,10 +472,10 @@
     <value>Osuus reunaa pitkin: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>Å_Visible content________________ö</value>
+    <value>Näkyvä sisältö</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>Å_Content_______________ö</value>
+    <value>Sisältö</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Pääte: {0}</value>

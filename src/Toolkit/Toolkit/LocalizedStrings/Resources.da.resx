@@ -247,25 +247,25 @@
     <value>Vis</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
-    <value>ø_Associations_____________å</value>
+    <value>Tilknytninger</value>
   </data>
   <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
-    <value>ø_No associations were found___________________________å</value>
+    <value>Der blev ikke fundet nogen tilknytninger</value>
   </data>
   <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
-    <value>ø_Show all_________________å</value>
+    <value>Vis alle</value>
   </data>
   <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
-    <value>ø_Total_____________å:</value>
+    <value>I alt:</value>
   </data>
   <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
-    <value>ø_Visible content________________å</value>
+    <value>Synligt indhold</value>
   </data>
   <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
-    <value>ø_Content_______________å</value>
+    <value>Indhold</value>
   </data>
   <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
-    <value>ø_Filter by feature title________________________å</value>
+    <value>Filtrér efter objekttitel</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>fod</value>
@@ -472,10 +472,10 @@
     <value>Fraktion langs kant: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>ø_Visible content________________å</value>
+    <value>Synligt indhold</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>ø_Content_______________å</value>
+    <value>Indhold</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>
