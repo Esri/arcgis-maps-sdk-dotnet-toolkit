@@ -49,7 +49,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:SwitchFormInputView">
-                    <ToggleSwitch IsOn="{TemplateBinding IsChecked}" OnContent="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Input.OnValue.Name}" OffContent="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Input.OffValue.Name}" IsEnabled="{TemplateBinding IsEnabled}" />
+                    <ToggleSwitch IsOn="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" OnContent="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Input.OnValue.Name}" OffContent="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Input.OffValue.Name}" IsEnabled="{TemplateBinding IsEnabled}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
