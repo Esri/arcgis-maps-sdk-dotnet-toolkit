@@ -63,12 +63,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif IOS || ANDROID
                 if (_datePicker.Handler?.PlatformView is not Microsoft.Maui.Platform.MauiDatePicker nativePicker || !String.IsNullOrEmpty(nativePicker.Text))
                 {
-                    date = _datePicker.Date.ToUniversalTime();
+                    // Date property is nullable in .NET 10 - this code works with both .NET 9 and .NET 10
+                    date = (DateTime?)_datePicker.Date?.ToUniversalTime();
                 }
 #elif MACCATALYST
                 if (_hasValueSwitch?.IsToggled != false)
                 {
-                    date = _datePicker.Date.ToUniversalTime();
+                    // Date property is nullable in .NET 10 - this code works with both .NET 9 and .NET 10
+                    date = (DateTime?)_datePicker.Date?.ToUniversalTime();
                 }
 #endif
 #elif WINDOWS_XAML
