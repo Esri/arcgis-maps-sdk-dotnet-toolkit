@@ -6,6 +6,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Platform;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -152,6 +153,56 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
 
         private void DatePicker_DateSelected(object? sender, DateChangedEventArgs e) => UpdateValue();
+
+
+#if MAUI && !NET10_0_OR_GREATER // Work around for breaking change in .NET MAUI 10.0
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_MinimumDate")]
+        extern static void SetMinimumDate(DatePicker p, DateTime? value);
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_MaximumDate")]
+        extern static void SetMaximumDate(DatePicker p, DateTime? value);
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Date")]
+        extern static void SetDate(DatePicker p, DateTime? value);
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "get_Date")]
+        extern static DateTime? GetDate(DatePicker p);
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Time")]
+        extern static void SetTime(TimePicker p, TimeSpan? value);
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "get_Time")]
+        extern static TimeSpan? GetTime(TimePicker p);
+
+        private static void SetMinMaxDate_Net9(DatePicker _datePicker, DateTime? minValue, DateTime? maxValue)
+        {
+            _datePicker.MinimumDate = minValue?.ToLocalTime().Date ?? DateTime.MinValue;
+            _datePicker.MaximumDate = maxValue?.ToLocalTime().Date ?? DateTime.MaxValue;
+        }
+        private static void SetMinMaxDate_Net10(DatePicker _datePicker, DateTime? minValue, DateTime? maxValue)
+        {
+            SetMinimumDate(_datePicker, minValue?.ToLocalTime().Date);
+            SetMaximumDate(_datePicker, maxValue?.ToLocalTime().Date);
+        }
+        private static void SetDate_Net9(DatePicker datePicker, DateTime value) => datePicker.Date = value;
+        private static void SetDate_Net10(DatePicker datePicker, DateTime? value) => SetDate(datePicker, value);
+        private static DateTime? GetDateMAUI(DatePicker datePicker)
+        {
+            if (Environment.Version.Major < 10)
+                return GetDate_Net9(datePicker);
+            else
+                return GetDate_Net10(datePicker);
+        }
+        private static DateTime? GetDate_Net9(DatePicker datePicker) => datePicker.Date;
+        private static DateTime? GetDate_Net10(DatePicker datePicker) => GetDate(datePicker);
+        private static void SetTime_Net9(TimePicker timePicker, TimeSpan value) => timePicker.Time = value;
+        private static void SetTime_Net10(TimePicker timePicker, TimeSpan? value) => SetTime(timePicker, value);
+        private static TimeSpan? GetTimeMAUI(TimePicker timePicker)
+        {
+            if (Environment.Version.Major < 10)
+                return GetTime_Net9(timePicker);
+            else
+                return GetTime_Net10(timePicker);
+        }
+        private static TimeSpan? GetTime_Net9(TimePicker timePicker) => timePicker.Time;
+        private static TimeSpan? GetTime_Net10(TimePicker timePicker) => GetTime(timePicker);
+#endif
+
     }
 }
 #endif
