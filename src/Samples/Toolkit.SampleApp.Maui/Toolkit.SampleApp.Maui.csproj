@@ -1,35 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>$(NETMauiTarget)-android;$(NETMauiTarget)-ios;$(NETMauiTarget)-maccatalyst</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);$(NetMauiWindowsTargetFramework)</TargetFrameworks>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Toolkit.SampleApp.Maui</RootNamespace>
-    <UseMaui>true</UseMaui>
-    <SingleProject>true</SingleProject>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
+    <PropertyGroup>
+        <TargetFrameworks>$(NETMauiTarget)-android;$(NETMauiTarget)-ios;$(NETMauiTarget)-maccatalyst</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);$(NETMauiTarget)-windows10.0.19041.0</TargetFrameworks>
+        <TargetFrameworks Condition="$(MSBuildVersion) &gt;= 18.0.0">$(TargetFrameworks);$(TargetFrameworks.Replace("net9.0-","net10.0-"))</TargetFrameworks>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>Toolkit.SampleApp.Maui</RootNamespace>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
 
-    <WarningsAsErrors>$(WarningsAsErrors);IL2036;IL2037</WarningsAsErrors>
+        <WarningsAsErrors>$(WarningsAsErrors);IL2036;IL2037</WarningsAsErrors>
 
-    <!-- Display name -->
-    <ApplicationTitle>Toolkit.SampleApp.Maui</ApplicationTitle>
+        <!-- Display name -->
+        <ApplicationTitle>Toolkit.SampleApp.Maui</ApplicationTitle>
 
-    <!-- App Identifier -->
-    <ApplicationId>com.companyname.toolkit.sampleapp.maui</ApplicationId>
-    <ApplicationIdGuid>91226bae-9931-4128-86d9-0452a67f1bc2</ApplicationIdGuid>
+        <!-- App Identifier -->
+        <ApplicationId>com.companyname.toolkit.sampleapp.maui</ApplicationId>
+        <ApplicationIdGuid>91226bae-9931-4128-86d9-0452a67f1bc2</ApplicationIdGuid>
 
-    <!-- Versions -->
-    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-    <ApplicationVersion>1</ApplicationVersion>
+        <!-- Versions -->
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationVersion>1</ApplicationVersion>
 
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">17.0</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
-    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
-  </PropertyGroup>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">17.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
+        <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
+        <MauiVersion Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net10.0'))">10.0.51</MauiVersion>
+    </PropertyGroup>
 
   <ItemGroup>
     <Using Remove="Microsoft.Maui.ApplicationModel" />
@@ -63,13 +65,16 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
   </ItemGroup>
 
+  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net10.0-android'))">
+      <!-- See https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/issues/707#issuecomment-3675340740 -->
+      <PackageReference Include="Xamarin.AndroidX.Tracing.Tracing" Version="1.3.0.1" />
+      <PackageReference Include="Xamarin.AndroidX.Tracing.Tracing.Ktx" Version="1.3.0.1" />
+      <PackageReference Include="Xamarin.AndroidX.Concurrent.Futures" Version="1.3.0.1" />
+      <PackageReference Include="Xamarin.AndroidX.Concurrent.Futures.Ktx" Version="1.3.0.1" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>

@@ -63,12 +63,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif IOS || ANDROID
                 if (_datePicker.Handler?.PlatformView is not Microsoft.Maui.Platform.MauiDatePicker nativePicker || !String.IsNullOrEmpty(nativePicker.Text))
                 {
-                    date = _datePicker.Date.ToUniversalTime();
+                    date = GetDateMAUI(_datePicker)?.ToUniversalTime();
                 }
 #elif MACCATALYST
                 if (_hasValueSwitch?.IsToggled != false)
                 {
-                    date = _datePicker.Date.ToUniversalTime();
+                    date = GetDateMAUI(_datePicker)?.ToUniversalTime();
                 }
 #endif
 #elif WINDOWS_XAML
@@ -78,7 +78,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
                 date = _datePicker.SelectedDate?.ToUniversalTime();
 #endif
-                if (date is DateTime newDate && input.IncludeTime && _timePicker?.Time is TimeSpan time
+#if MAUI
+                TimeSpan? timePicked = GetTimeMAUI(_timePicker);
+#else
+                TimeSpan? timePicked = _timePicker?.Time;
+#endif
+                if (date is DateTime newDate && input.IncludeTime && timePicked is TimeSpan time
 #if WINDOWS_XAML
                     && time.Ticks != -1 // TimePicker.SelectedTime is Ticks=-1 when the time is empty
 #endif
@@ -178,12 +183,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
 #if MAUI
                     // Min/Max are always converted to local time
-                    _datePicker.MinimumDate = input.Min?.ToLocalTime().Date ?? DateTime.MinValue;
-                    _datePicker.MaximumDate = input.Max?.ToLocalTime().Date ?? DateTime.MaxValue;
+                    if (Environment.Version.Major < 10)
+                    {
+                        SetMinMaxDate_Net9(_datePicker, input.Min, input.Max);
+                    }
+                    else
+                    {
+                        SetMinMaxDate_Net10(_datePicker, input.Min, input.Max);
+                    }
+
 #if WINDOWS
                     if (selectedDate is DateTime date)
                     {
-                        _datePicker.Date = selectedDate.Value;
+                        if (Environment.Version.Major < 10)
+                            SetDate_Net9(_datePicker, selectedDate.Value);
+                        else
+                            SetDate_Net10(_datePicker, selectedDate);
                     }
                     else if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
                     {
@@ -192,7 +207,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif IOS || ANDROID
                     if (selectedDate is DateTime date)
                     {
-                        _datePicker.Date = date;
+                        if (Environment.Version.Major < 10)
+                            SetDate_Net9(_datePicker, date);
+                        else
+                            SetDate_Net10(_datePicker, date);
                     }
                     else if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
                     {
@@ -201,7 +219,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif MACCATALYST
                     if (selectedDate is DateTime date)
                     {
-                        _datePicker.Date = date;
+                        if (Environment.Version.Major < 10)
+                            SetDate_Net9(_datePicker, date);
+                        else
+                            SetDate(_datePicker, date);
                     }
                     if (_hasValueSwitch != null)
                     {
@@ -223,7 +244,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
 #if MAUI
                     _timePicker.IsVisible = input.IncludeTime;
-                    _timePicker.Time = selectedDate?.TimeOfDay ?? TimeSpan.Zero;
+                    if (Environment.Version.Major < 10)
+                        SetTime_Net9(_timePicker, selectedDate?.TimeOfDay ?? TimeSpan.Zero);
+                    else
+                        SetTime_Net10(_timePicker, selectedDate?.TimeOfDay);
 #else
                     _timePicker.Visibility = input.IncludeTime ? Visibility.Visible : Visibility.Collapsed;
 #if WINDOWS_XAML
