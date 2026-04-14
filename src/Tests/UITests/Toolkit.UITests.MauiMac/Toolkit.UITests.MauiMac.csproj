@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSTest.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>$(TestRunnerNetVersion)</TargetFramework>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Appium.WebDriver" Version="8.1.0" />
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.11.0" />
+    <PackageReference Include="Appium.WebDriver" Version="$(AppiumWebDriverVersion)" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="$(MagickNetVersion)" />
   </ItemGroup>
 
   <Import Project="..\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems" Label="Shared" />
