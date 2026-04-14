@@ -1,5 +1,16 @@
 <Project>
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" Condition="'' != $([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  
+  <!-- General Settings -->
+  <PropertyGroup>
+    <TestAppNetVersion>net9.0</TestAppNetVersion>
+    
+    <!-- Maui Version gets set explicitly in the root Directory.build.props file, so it must be reset or explicitly specified here. -->
+    <MauiVersion></MauiVersion>
+  
+    <!-- Other useful general properties (particularly ArcGISRuntimeToolkitPackageVersion, ArcGISRuntimePackageVersion, and UseNugetPackage)
+         may be found in the root Directory.build.props file. -->
+  </PropertyGroup>
 
   <!-- iOS Settings -->
   <PropertyGroup>

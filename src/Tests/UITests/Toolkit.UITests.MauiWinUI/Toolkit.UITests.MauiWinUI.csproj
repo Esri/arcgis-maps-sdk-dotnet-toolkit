@@ -25,7 +25,7 @@
     <PropertyGroup>
       <!-- Force Windows target when building the MAUI test app from the test project -->
       <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
-      <_MauiTestAppTfm>net10.0-windows10.0.19041.0</_MauiTestAppTfm>
+      <_MauiTestAppTfm>$(TestAppNetVersion)-windows10.0.19041.0</_MauiTestAppTfm>
     </PropertyGroup>
 
     <!-- Build the MAUI app -->
