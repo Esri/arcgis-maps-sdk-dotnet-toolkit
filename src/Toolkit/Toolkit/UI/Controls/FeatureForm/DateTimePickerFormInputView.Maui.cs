@@ -176,8 +176,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
         private static void SetMinMaxDate_Net10(DatePicker _datePicker, DateTime? minValue, DateTime? maxValue)
         {
+#if WINDOWS
+            SetMinimumDate(_datePicker, minValue?.ToLocalTime().Date ?? DateTime.MinValue);
+            SetMaximumDate(_datePicker, maxValue?.ToLocalTime().Date ?? DateTime.MaxValue);
+#else
             SetMinimumDate(_datePicker, minValue?.ToLocalTime().Date);
             SetMaximumDate(_datePicker, maxValue?.ToLocalTime().Date);
+#endif
         }
         private static void SetDate_Net9(DatePicker datePicker, DateTime value) => datePicker.Date = value;
         private static void SetDate_Net10(DatePicker datePicker, DateTime? value) => SetDate(datePicker, value);
@@ -203,6 +208,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static TimeSpan? GetTime_Net10(TimePicker timePicker) => GetTime(timePicker);
 #endif
 
+        }
     }
-}
 #endif
