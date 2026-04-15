@@ -19,6 +19,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <IsAotCompatible>True</IsAotCompatible>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableMsixTooling>True</EnableMsixTooling>
   </PropertyGroup>
 
   <Import Project="..\..\CommonProperties.targets" />

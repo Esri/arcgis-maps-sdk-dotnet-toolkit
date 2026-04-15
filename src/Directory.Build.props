@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">300.0.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">300.1.0</ArcGISRuntimeToolkitPackageVersion>
     <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">300.0.0</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
@@ -39,12 +39,12 @@
     <WindowsSDKTargetBuild Condition="'$(WindowsSDKTargetBuild)'==''">19041</WindowsSDKTargetBuild>
     <DotNetTargetFramework>net472</DotNetTargetFramework>
     <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">net8.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
-    <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net9.0</NETMauiTarget>
+    <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net10.0</NETMauiTarget>
     <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
-    <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android35.0</NetAndroidTargetFramework>
-    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst18.0</NetCatalystTargetFramework>
-    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios18.0</NetiOSTargetFramework>  
-    <MauiVersion Condition="'$(MauiVersion)'==''">9.0.0</MauiVersion>
+    <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android36.0</NetAndroidTargetFramework>
+    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst26.0</NetCatalystTargetFramework>
+    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios26.0</NetiOSTargetFramework>  
+    <MauiVersion Condition="'$(MauiVersion)'==''">10.0.0</MauiVersion>
     <WinAppSDKVersion Condition="'$(WinAppSDKVersion)'==''">1.6.240923002</WinAppSDKVersion>
   </PropertyGroup>
   <PropertyGroup>
