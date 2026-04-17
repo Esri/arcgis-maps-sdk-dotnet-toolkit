@@ -3,6 +3,7 @@
   
   <!-- General Settings -->
   <PropertyGroup>
+    <!-- Be sure to delete the obj/ and bin/ folders in both App and Runner projects when updating this parameter -->
     <TestAppNetVersion>net10.0</TestAppNetVersion>
     
     <!-- Maui Version gets set explicitly in the root Directory.build.props file, so it must be reset or explicitly specified here. -->
