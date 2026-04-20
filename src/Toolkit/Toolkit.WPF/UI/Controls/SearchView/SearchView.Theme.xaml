@@ -373,7 +373,8 @@
                                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"
                                     SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay}"
                                     SelectionMode="Single"
-                                    Style="{StaticResource ListStyle}" />
+                                    Style="{StaticResource ListStyle}" 
+                                    AutomationProperties.Name="Search Sources"/>
                             </StackPanel>
                         </Border>
                     </Popup>
@@ -422,7 +423,8 @@
                                 ItemContainerStyle="{StaticResource SearchSuggestionResultStyle}"
                                 ItemsSource="{Binding Source={StaticResource GroupedSuggestions}}"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedSuggestion, Mode=OneWayToSource}"
-                                Style="{StaticResource ListStyle}">
+                                Style="{StaticResource ListStyle}"
+                                AutomationProperties.Name="Search Suggestions">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchSuggestion}">
                                         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,0,0,1">
@@ -513,7 +515,8 @@
                                 ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Results, Mode=OneWay}"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.SelectedResult, Mode=OneWayToSource}"
                                 SelectionMode="Single"
-                                Style="{StaticResource ListStyle}">
+                                Style="{StaticResource ListStyle}"
+                                AutomationProperties.Name="Search Results">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchResult}">
                                         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
