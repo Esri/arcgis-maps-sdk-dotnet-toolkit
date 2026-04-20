@@ -14,12 +14,15 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
-#if WPF
+#if !MAUI
 using System;
+#if WPF
 using System.Windows.Data;
 using Culture = System.Globalization.CultureInfo;
-
+#elif WINUI
+using Microsoft.UI.Xaml.Data;
+using Culture = System.Globalization.CultureInfo;
+#endif
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
@@ -27,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// If subtitle is empty, returns only the title.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-
+#if WPF
     public sealed class AutomationNameConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, Culture culture)
@@ -48,5 +51,37 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             throw new NotImplementedException();
         }
     }
+#elif WINUI
+    public sealed partial class AutomationNameConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value == null)
+                return string.Empty;
+
+            var type = value.GetType();
+
+            var titleProp = type.GetProperty("DisplayTitle");
+            var subtitleProp = type.GetProperty("DisplaySubtitle");
+
+            string title = titleProp?.GetValue(value)?.ToString();
+            string subtitle = subtitleProp?.GetValue(value)?.ToString();
+
+            if (string.IsNullOrWhiteSpace(title))
+                return string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(subtitle))
+                return $"{title}, {subtitle}";
+
+            return title;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotSupportedException();
+        }
+
+    }
+#endif
 }
 #endif
