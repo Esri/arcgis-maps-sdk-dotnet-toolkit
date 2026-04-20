@@ -129,6 +129,7 @@
         </Border>
     </DataTemplate>
     <DataTemplate x:Key="ResultTemplate">
+        <Border AutomationProperties.Name="{Binding Converter={StaticResource AutomationNameConverter}}">
             <Grid Margin="4,4,4,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="24" />
