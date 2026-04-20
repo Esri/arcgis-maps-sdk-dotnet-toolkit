@@ -339,7 +339,8 @@
                         BorderThickness="0,0,1,0"
                         IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
                         Style="{StaticResource BarActionButtonStyle}"
-                        Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}">
+                        Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}"
+                        AutomationProperties.Name="Select Sources">
                         <Path
                             Width="12"
                             Height="12"
