@@ -14,7 +14,7 @@ Display and optionally allow editing of a single attribute of a feature.
 
 ## Usage
 
-### UWP/WinUI:
+### WinUI:
 
 ```xml
 <esri:FeatureDataField xmlns:esri="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"

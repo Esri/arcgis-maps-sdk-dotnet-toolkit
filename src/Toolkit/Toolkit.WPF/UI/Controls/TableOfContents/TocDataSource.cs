@@ -111,6 +111,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 layers = sv.Scene?.OperationalLayers;
                 basemap = sv.Scene?.Basemap;
             }
+            else if (GeoView is LocalSceneView lsv)
+            {
+                layers = lsv.Scene?.OperationalLayers;
+                basemap = lsv.Scene?.Basemap;
+            }
 
             var result = new List<TocItem>();
             if (layers != null)

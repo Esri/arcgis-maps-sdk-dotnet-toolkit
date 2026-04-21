@@ -246,6 +246,27 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>表示</value>
   </data>
+  <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
+    <value>関連付け</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNone" xml:space="preserve">
+    <value>関連付けが見つかりませんでした</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsShowAll" xml:space="preserve">
+    <value>すべて表示</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsTotal" xml:space="preserve">
+    <value>合計:</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsVisibleContent" xml:space="preserve">
+    <value>表示コンテンツ</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsNonVisibleContent" xml:space="preserve">
+    <value>コンテンツ</value>
+  </data>
+  <data name="PopupViewerUtilityAssociationsFilterByTitle" xml:space="preserve">
+    <value>フィーチャ タイトルでフィルター</value>
+  </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
   </data>
@@ -451,10 +472,10 @@
     <value>エッジに沿った部分: {0}</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentVisible" xml:space="preserve">
-    <value>コンテンツが表示されていますか: はい</value>
+    <value>表示コンテンツ</value>
   </data>
   <data name="FeatureFormUtilityElementIsContentNotVisible" xml:space="preserve">
-    <value>コンテンツは表示されていますか: いいえ</value>
+    <value>コンテンツ</value>
   </data>
   <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>ターミナル: {0}</value>

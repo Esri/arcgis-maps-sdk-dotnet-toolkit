@@ -20,7 +20,7 @@ Displays a symbol outside of a `GeoView`.
                     Symbol="{x:Reference Symbol}" />
 ```
 
-## UWP/WinUI:
+## WinUI:
 
 ```xml
 <esri:SymbolDisplay xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"

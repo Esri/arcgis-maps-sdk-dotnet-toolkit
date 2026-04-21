@@ -116,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #elif WPF
             _ = Dispatcher.InvokeAsync(async () =>
 #elif WINUI
-            DispatcherQueue.TryEnqueue(async () =>
+            DispatcherQueue?.TryEnqueue(async () =>
 #elif WINDOWS_UWP
             _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
 #endif

@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal;
@@ -162,6 +162,41 @@ internal static class HtmlToView
                 if (PopupMediaView.TryCreateImageSource(node.Content, out var imageSource))
                     imageElement.Source = imageSource;
                 return imageElement;
+
+            case MarkupType.Audio:
+            case MarkupType.Video:
+#if ANDROID // TODO: This needs to be revisited when we have a support for Android
+                goto case MarkupType.Block;
+#else
+                // Find the first valid <source> child, or use the node's Content
+                string? mediaSrc = node.Content;
+                foreach (var child in node.Children)
+                {
+                    if (child.Type is MarkupType.Source && !string.IsNullOrEmpty(child.Content))
+                    {
+                        mediaSrc = child.Content;
+                        break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(mediaSrc))
+                {
+                    if (Uri.TryCreate(mediaSrc, UriKind.Absolute, out var mediaUri))
+                    {
+                        var mediaElement = new MauiMediaElement
+                        {
+                            Source = mediaUri,
+                            HorizontalOptions = LayoutOptions.Fill,
+                            VerticalOptions = LayoutOptions.Center,
+                        };
+                        return mediaElement;
+                    }
+                    else
+                    {
+                        return new Label { Text = "Invalid media URL" };
+                    }
+                }
+                return new Label { Text = "Media not available" };
+#endif
 
             case MarkupType.Link:
                 // If the link wraps block content (like <img>), render it as a tappable ContentView.
@@ -470,6 +505,6 @@ internal static class HtmlToView
 
     private static bool MapsToBlock(MarkupNode node)
     {
-        return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider or MarkupType.Image;
+        return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider or MarkupType.Image or MarkupType.Audio or MarkupType.Video;
     }
 }

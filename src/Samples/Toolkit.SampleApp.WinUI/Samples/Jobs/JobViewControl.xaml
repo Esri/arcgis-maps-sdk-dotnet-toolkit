@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Jobs.JobViewControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Jobs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Height="60">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Margin="5">
+            <TextBlock x:Name="Status" FontWeight="Bold" />
+            <ProgressBar x:Name="ProgressBar" Maximum="100" VerticalAlignment="Center" />
+            <TextBlock x:Name="Message" TextWrapping="Wrap" HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"/>
+        </StackPanel>
+        <Button x:Name="PauseButton" Content="Pause" Visibility="Collapsed" Click="PauseJob_Click" Grid.Column="1" VerticalAlignment="Center" Margin="5" />
+        <Button x:Name="ResumeButton" Content="Resume" Visibility="Collapsed" Click="ResumeJob_Click" Grid.Column="1" VerticalAlignment="Center" Margin="5" />
+        <Button x:Name="DeleteButton" Content="Delete" Visibility="Collapsed" Click="DeleteJob_Click" Grid.Column="1" VerticalAlignment="Center" Margin="5" />
+    </Grid>
+</UserControl>

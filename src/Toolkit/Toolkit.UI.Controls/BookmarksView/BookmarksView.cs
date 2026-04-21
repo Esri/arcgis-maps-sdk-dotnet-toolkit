@@ -55,6 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <seealso cref="MapView"/>
         /// <seealso cref="SceneView"/>
+        /// <seealso cref="LocalSceneView"/>
         public GeoView? GeoView
         {
             get => GeoViewImpl;

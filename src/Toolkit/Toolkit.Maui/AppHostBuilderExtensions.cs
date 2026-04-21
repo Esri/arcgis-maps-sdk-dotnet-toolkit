@@ -1,4 +1,5 @@
-﻿using Esri.ArcGISRuntime.Toolkit.Maui.Handlers;
+﻿using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+using Microsoft.Maui.LifecycleEvents;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -14,9 +15,42 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// <returns>The host builder</returns>
         public static MauiAppBuilder UseArcGISToolkit(this MauiAppBuilder builder)
         {
-            return builder.ConfigureFonts(fonts => fonts
+#if WINDOWS || __IOS__
+            builder.ConfigureMauiHandlers(handler => handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>());
+#endif
+            builder.ConfigureFonts(fonts => fonts
                 .AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "toolkit-icons.ttf", ToolkitIcons.FontFamilyName)
                 );
+            builder = builder.ConfigureLifecycleEvents(events =>
+            {
+#if __IOS__
+                events.AddiOS(iosLifeCycleBuilder =>
+                {
+                    iosLifeCycleBuilder.FinishedLaunching((app, b) =>
+                    {
+                        JobManager.Shared.ResumeAllPausedJobsAsync();
+                        return true;
+                    });
+                });
+#elif WINDOWS
+                events.AddWindows(winLifeCycleBuilder =>
+                {
+                    winLifeCycleBuilder.OnLaunched((app, b) =>
+                    {
+                        JobManager.Shared.ResumeAllPausedJobsAsync();
+                    });
+                });
+#elif ANDROID
+                events.AddAndroid(androidLifeCycleBuilder =>
+                {
+                    androidLifeCycleBuilder.OnResume((activity) =>
+                    {
+                        _ = JobManager.Shared.ResumeAllPausedJobsAsync();
+                    });
+                });
+#endif
+            });
+            return builder;
         }
     }
 }

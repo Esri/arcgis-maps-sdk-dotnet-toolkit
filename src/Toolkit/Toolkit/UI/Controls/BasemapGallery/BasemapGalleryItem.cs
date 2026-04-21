@@ -218,7 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private ImageSource? _thumbnailBitmap;
 
         /// <summary>
-        /// Gets the thumbnail as an ImageSource for convenient use from UWP.
+        /// Gets the thumbnail as an ImageSource for convenient use from WinUI.
         /// </summary>
         public ImageSource? ThumbnailBitmap
         {
