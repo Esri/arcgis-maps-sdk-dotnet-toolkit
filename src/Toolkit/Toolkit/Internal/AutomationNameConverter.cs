@@ -21,7 +21,7 @@ using System.Windows.Data;
 using Culture = System.Globalization.CultureInfo;
 #elif WINUI
 using Microsoft.UI.Xaml.Data;
-using Culture = System.Globalization.CultureInfo;
+using Culture = System.String;
 #endif
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -31,31 +31,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
 #if WPF
-    public sealed class AutomationNameConverter : IMultiValueConverter
+    public sealed partial class SearchViewAutomationNameConverter : IMultiValueConverter
+#elif WINUI
+    public sealed partial class SearchViewAutomationNameConverter : IValueConverter
+#endif
     {
+        /// <inheritdoc/>
+#if WPF
         public object Convert(object[] values, Type targetType, object parameter, Culture culture)
+#elif WINUI
+        public object Convert(object value, Type targetType, object parameter, Culture culture)
+#endif
         {
+#if WPF
             var title = values.Length > 0 ? values[0] as string : null;
             var subtitle = values.Length > 1 ? values[1] as string : null;
-
-            if (string.IsNullOrWhiteSpace(subtitle))
-            {
-                return title;
-            }
-
-            return $"{title}, {subtitle}";
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, Culture culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
 #elif WINUI
-    public sealed partial class AutomationNameConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
             if (value == null)
                 return string.Empty;
 
@@ -64,24 +55,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             var titleProp = type.GetProperty("DisplayTitle");
             var subtitleProp = type.GetProperty("DisplaySubtitle");
 
-            string title = titleProp?.GetValue(value)?.ToString();
-            string subtitle = subtitleProp?.GetValue(value)?.ToString();
-
-            if (string.IsNullOrWhiteSpace(title))
-                return string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(subtitle))
-                return $"{title}, {subtitle}";
-
-            return title;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotSupportedException();
-        }
-
-    }
+            string? title = titleProp?.GetValue(value)?.ToString();
+            string? subtitle = subtitleProp?.GetValue(value)?.ToString();
 #endif
+            if (string.IsNullOrWhiteSpace(subtitle))
+                return $"{title}";
+
+            return $"{title}, {subtitle}";
+        }
+
+        /// <inheritdoc/>
+#if WPF
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, Culture culture)
+#elif WINUI
+        public object ConvertBack(object value, Type targetType, object parameter, Culture culture)
+#endif
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 #endif
