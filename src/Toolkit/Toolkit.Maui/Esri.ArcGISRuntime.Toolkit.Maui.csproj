@@ -19,6 +19,8 @@
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
         <NoWarn>$(NoWarn);CS9270</NoWarn> <!-- Workaround for https://github.com/dotnet/maui/issues/33866 -->
         <IncludeProjectPriFile>False</IncludeProjectPriFile>
+        <DeployArcGISNetworkAnalystResources>false</DeployArcGISNetworkAnalystResources>
+        <DeployArcGISEGM96GridResources>false</DeployArcGISEGM96GridResources>
     </PropertyGroup>
 
     <ItemGroup>
