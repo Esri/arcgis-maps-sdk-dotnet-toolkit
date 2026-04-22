@@ -44,7 +44,7 @@
     <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android36.0</NetAndroidTargetFramework>
     <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst26.0</NetCatalystTargetFramework>
     <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios26.0</NetiOSTargetFramework>  
-    <MauiVersion Condition="'$(MauiVersion)'==''">10.0.0</MauiVersion>
+    <MauiVersion Condition="'$(MauiVersion)'==''">10.0.40</MauiVersion>
     <WinAppSDKVersion Condition="'$(WinAppSDKVersion)'==''">1.8.250916003</WinAppSDKVersion>
   </PropertyGroup>
   <PropertyGroup>
