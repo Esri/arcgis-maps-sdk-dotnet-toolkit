@@ -286,7 +286,7 @@
         </Setter>
     </Style>
     <Style x:Key="SearchSourcesStyle" TargetType="ListViewItem" BasedOn="{StaticResource ListContainerStyle}">
-        <Setter Property="AutomationProperties.Name" Value="{Binding Path= DisplayName}"/>
+        <Setter Property="AutomationProperties.Name" Value="{Binding Path=DisplayName}"/>
     </Style>
     <Style x:Key="ListStyle" TargetType="ListView">
         <Setter Property="SnapsToDevicePixels" Value="true" />
