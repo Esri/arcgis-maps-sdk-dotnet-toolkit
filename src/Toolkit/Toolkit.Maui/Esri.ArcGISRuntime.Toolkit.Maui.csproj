@@ -16,9 +16,9 @@
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
         <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
         <Nullable>annotations</Nullable>
-        <WindowsSdkPackageVersion Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(WinAppSDKVersion)','1.6.240923002'))">10.0.19041.38</WindowsSdkPackageVersion> <!-- Workaround for older .NET SDKs. Not needed with VS17.12+  -->
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
         <NoWarn>$(NoWarn);CS9270</NoWarn> <!-- Workaround for https://github.com/dotnet/maui/issues/33866 -->
+        <IncludeProjectPriFile>False</IncludeProjectPriFile>
     </PropertyGroup>
 
     <ItemGroup>
