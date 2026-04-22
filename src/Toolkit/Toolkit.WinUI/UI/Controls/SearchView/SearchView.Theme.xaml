@@ -504,7 +504,7 @@
                         IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
                         Style="{StaticResource BarActionButtonStyle}"
                         Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility}"
-                        AutomationProperties.Name="{converter:LocalizedString Key=SelectSearchSource}">
+                        AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSelectSearchSource}">
                         <Path
                             Data="M13.1 6L8 11.1 2.9 6z"
                             Fill="Transparent"
@@ -569,14 +569,14 @@
                             ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Suggestions, Mode=OneWay}"
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedSuggestion, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
-                            AutomationProperties.Name="{converter:LocalizedString Key=SearchSuggestions}"
+                            AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}}" />
                         <ListView
                             x:Name="PART_SuggestionList"
                             ItemTemplate="{StaticResource SuggestionTemplate}"
                             ItemsSource="{Binding Source={StaticResource GroupedSuggestionsEx}, Mode=OneWay}"
                             Style="{StaticResource ListStyle}"
-                            AutomationProperties.Name="{converter:LocalizedString Key=SearchSuggestions}"
+                            AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}">
                             <ListView.GroupStyle>
                                 <GroupStyle>
@@ -618,7 +618,7 @@
                         ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Results, Mode=OneWay}"
                         SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.SelectedResult, Mode=TwoWay}"
                         Style="{StaticResource ListStyle}"
-                        AutomationProperties.Name="{converter:LocalizedString Key=SearchResults}"/>
+                        AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchResults}"/>
                     <TextBlock
                         Style="{StaticResource ResultMessageStyle}"
                         Text="{TemplateBinding NoResultMessage}"
@@ -640,7 +640,7 @@
                             ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
-                            AutomationProperties.Name="{converter:LocalizedString Key=SearchSources}"/>
+                            AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"/>
                     </StackPanel>
                 </Border>
             </Popup>
