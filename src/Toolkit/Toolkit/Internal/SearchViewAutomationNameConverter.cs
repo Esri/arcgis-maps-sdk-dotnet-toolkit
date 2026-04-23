@@ -44,24 +44,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 #endif
         {
 #if WPF
-            var title = values.Length > 0 ? values[0] as string : null;
-            var subtitle = values.Length > 1 ? values[1] as string : null;
+            var title = values.Length > 0 ? values[0] as string : string.Empty;
+            var subtitle = values.Length > 1 ? values[1] as string : string.Empty;
+            return string.IsNullOrWhiteSpace(subtitle) ? $"{title}" : $"{title}, {subtitle}";
 #elif WINUI
-            if (value == null)
+            if (value is null)
                 return string.Empty;
 
-            var type = value.GetType();
-
-            var titleProp = type.GetProperty("DisplayTitle");
-            var subtitleProp = type.GetProperty("DisplaySubtitle");
-
-            string? title = titleProp?.GetValue(value)?.ToString();
-            string? subtitle = subtitleProp?.GetValue(value)?.ToString();
+            if (value is UI.Controls.ISearchDisplayInfo info)
+            {
+                var title = info.DisplayTitle;
+                var subtitle = info.DisplaySubtitle;
+                return string.IsNullOrWhiteSpace(subtitle) ? $"{title}" : $"{title}, {subtitle}";
+            }
+            // fallback for unexpected types
+            return value.ToString() ?? string.Empty;
 #endif
-            if (string.IsNullOrWhiteSpace(subtitle))
-                return $"{title}";
-
-            return $"{title}, {subtitle}";
         }
 
         /// <inheritdoc/>
