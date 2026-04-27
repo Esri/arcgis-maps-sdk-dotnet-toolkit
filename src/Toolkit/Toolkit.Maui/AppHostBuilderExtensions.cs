@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 {
                     iosLifeCycleBuilder.FinishedLaunching((app, b) =>
                     {
-                        JobManager.Shared.ResumeAllPausedJobsAsync();
+                        _ = JobManager.Shared.ResumeAllPausedJobsAsync();
                         return true;
                     });
                 });
@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 {
                     winLifeCycleBuilder.OnLaunched((app, b) =>
                     {
-                        JobManager.Shared.ResumeAllPausedJobsAsync();
+                        _ = JobManager.Shared.ResumeAllPausedJobsAsync();
                     });
                 });
 #elif ANDROID
