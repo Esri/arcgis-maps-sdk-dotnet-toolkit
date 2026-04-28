@@ -17,7 +17,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="TestPages\CompassMap.xaml" />
-    <None Remove="TestPages\ScaleLines.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,11 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="TestPages\CompassMap.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="TestPages\ScaleLines.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -79,15 +79,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <MauiXaml Update="TestPages\CompassMap.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="TestPages\ScaleLines.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-  </ItemGroup>
-
   <Choose>
     <When Condition=" '$(UseNugetPackage)' == '' ">
       <ItemGroup>
