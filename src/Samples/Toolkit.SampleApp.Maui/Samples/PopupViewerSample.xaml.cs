@@ -1,4 +1,6 @@
-﻿using Esri.ArcGISRuntime.Data;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Maui;
 using System.Diagnostics;
@@ -14,7 +16,15 @@ namespace Toolkit.SampleApp.Maui.Samples
             InitializeComponent();
             mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://www.arcgis.com/home/item.html?id=9f3a674e998f461580006e626611f9ad"));
             mapView.GeoViewTapped += mapView_GeoViewTapped;
+            this.BindingContext = VM = new ViewModel();
         }
+
+        private void CloseButton_Clicked(object sender, EventArgs e)
+        {
+            VM.Popups = null;
+        }
+
+        public ViewModel VM { get; }
 
 
         private async void mapView_GeoViewTapped(object? sender, GeoViewInputEventArgs e)
@@ -22,16 +32,9 @@ namespace Toolkit.SampleApp.Maui.Samples
             Exception? error = null;
             try
             {
-                var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
-
-                // Retrieves or builds Popup from IdentifyLayerResult
-                var popup = GetPopup(result);
-
-                if (popup != null)
-                {
-                    popupViewer.Popup = popup;
-                    popupPanel.IsVisible = true;
-                }
+                var result = await mapView.IdentifyLayersAsync(e.Position, 2, false, 10);
+                var popups = GetGeoElements(result).Select(e => new Popup(e, null));
+                VM.Popups = popups.ToList();
             }
             catch (Exception ex)
             {
@@ -41,69 +44,17 @@ namespace Toolkit.SampleApp.Maui.Samples
             if (error != null)
                 await DisplayAlert(error.GetType().Name, error.Message, "OK");
         }
-
-        private Popup? GetPopup(IdentifyLayerResult result)
+        public IEnumerable<GeoElement> GetGeoElements(IEnumerable<IdentifyLayerResult> results)
         {
-            if (result == null)
-            {
-                return null;
-            }
-
-            var popup = result.Popups.FirstOrDefault();
-            if (popup != null)
-            {
-                return popup;
-            }
-
-            var geoElement = result.GeoElements.FirstOrDefault();
-            if (geoElement != null)
-            {
-                if (result.LayerContent is IPopupSource)
-                {
-                    var popupDefinition = ((IPopupSource)result.LayerContent).PopupDefinition;
-                    if (popupDefinition != null)
-                    {
-                        return new Popup(geoElement, popupDefinition);
-                    }
-                }
-
-                return Popup.FromGeoElement(geoElement);
-            }
-
-            return null;
-        }
-
-        private Popup? GetPopup(IEnumerable<IdentifyLayerResult> results)
-        {
-            if (results == null)
-            {
-                return null;
-            }
             foreach (var result in results)
             {
-                var popup = GetPopup(result);
-                if (popup != null)
-                {
-                    return popup;
-                }
-
-                foreach (var subResult in result.SublayerResults)
-                {
-                    popup = GetPopup(subResult);
-                    if (popup != null)
-                    {
-                        return popup;
-                    }
-                }
+                foreach (var elm in result.GeoElements)
+                    yield return elm;
+                foreach (var item in GetGeoElements(result.SublayerResults))
+                    yield return item;
             }
-
-            return null;
         }
 
-        private void CloseButton_Click(object sender, EventArgs e)
-        {
-            popupPanel.IsVisible = false;
-        }
 
         private void popupViewer_PopupAttachmentClicked(object sender, Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs e)
         {
@@ -123,6 +74,42 @@ namespace Toolkit.SampleApp.Maui.Samples
 
             // Perform custom action when a link is clicked
             Debug.WriteLine(e.Uri);
+        }
+    }
+
+    public partial class ViewModel : ObservableObject
+    {
+        public bool IsSidePanelOpen => Popups?.Count > 0;
+
+        public bool HasMoreThanOneResult => Popups?.Count > 1;
+
+        [ObservableProperty]
+        private IList<Popup>? _popups;
+
+        async partial void OnPopupsChanged(IList<Popup>? value)
+        {
+            OnPropertyChanged(nameof(IsSidePanelOpen));
+            OnPropertyChanged(nameof(HasMoreThanOneResult));
+            await Task.Yield(); // Allows picker to refresh
+            if (SelectedPopup is null || value?.Contains(SelectedPopup) != true)
+                SelectedPopup = value?.FirstOrDefault();
+        }
+
+        [ObservableProperty]
+        private Popup? _selectedPopup;
+
+        partial void OnSelectedPopupChanged(Popup? oldValue, Popup? newValue)
+        {
+            if (oldValue is not null)
+            {
+                if (oldValue.GeoElement is Feature feature && feature.FeatureTable?.Layer is FeatureLayer featureLayer)
+                    featureLayer.UnselectFeature(feature);
+            }
+            if (newValue is not null)
+            {
+                if (newValue.GeoElement is Feature feature && feature.FeatureTable?.Layer is FeatureLayer featureLayer)
+                    featureLayer.SelectFeature(feature);
+            }
         }
     }
 }

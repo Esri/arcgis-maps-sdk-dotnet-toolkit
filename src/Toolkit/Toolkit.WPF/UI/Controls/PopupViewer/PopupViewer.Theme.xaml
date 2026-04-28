@@ -33,10 +33,12 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="TextBlock" x:Key="FieldsPopupElementViewTextStyle">
+    <Style TargetType="{x:Type FrameworkElement}" x:Key="FieldsPopupElementViewTextStyle">
         <Setter Property="Margin" Value="7" />
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="Foreground" Value="#FF323232" />
+        <!-- The FieldsPopupElementView uses a TextBox for fields and values to make them selectable. -->
+        <!-- But previous versions of toolkit used TextBlock. Use generic style here to maximize compat with custom styles. -->
+        <Setter Property="TextElement.FontSize" Value="12" />
+        <Setter Property="TextElement.Foreground" Value="#FF323232" />
     </Style>
     <Style TargetType="{x:Type primitives:FieldsPopupElementView}" >
         <Setter Property="RowOddBackground" Value="#FFEDEDED" />

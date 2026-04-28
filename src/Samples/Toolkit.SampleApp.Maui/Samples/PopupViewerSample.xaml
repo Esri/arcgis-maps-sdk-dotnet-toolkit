@@ -3,20 +3,66 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
              xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:popups="clr-namespace:Esri.ArcGISRuntime.Mapping.Popups;assembly=Esri.ArcGISRuntime"
              x:Class="Toolkit.SampleApp.Maui.Samples.PopupViewerSample" Title="PopupViewer">
     <ContentPage.Content>
         <Grid>
-            <esriUI:MapView x:Name="mapView" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="500" />
+            </Grid.ColumnDefinitions>
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="WidthStates">
+                    <VisualState x:Name="PhoneState">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="0" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter TargetName="SidePanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="SidePanel" Property="Grid.ColumnSpan" Value="2" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="DesktopState">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="800" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter TargetName="SidePanel" Property="Grid.Column" Value="1" />
+                            <Setter TargetName="SidePanel" Property="Grid.ColumnSpan" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <esriUI:MapView x:Name="mapView" Grid.ColumnSpan="2" />
 
 
-            <Border Background="#99ffffff" x:Name="popupPanel" IsVisible="False">
-                <Border HorizontalOptions="Center" VerticalOptions="Center" Background="{AppThemeBinding Dark=Black, Light=White}" Margin="0,32" Padding="12">
-                    <Grid>
-                        <esriTK:PopupViewer x:Name="popupViewer" Padding="12" MaximumWidthRequest="400" MaximumHeightRequest="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" HyperlinkClicked="popupViewer_HyperlinkClicked" />
-                        <Button BorderWidth="0" Text="X" HorizontalOptions="End" VerticalOptions="Start" Clicked="CloseButton_Click" BackgroundColor="Transparent" TextColor="{AppThemeBinding Dark=White, Light=Black}" Margin="5" />
-                    </Grid>
-                </Border>
+            <!-- Side Panel -->
+            <Border Grid.Column="1" x:Name="SidePanel" Padding="8" Background="{AppThemeBinding Dark=Black, Light=White}" IsVisible="{Binding IsSidePanelOpen}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Picker ItemDisplayBinding="{Binding Title, x:DataType=popups:Popup}"
+                        ItemsSource="{Binding Popups}"
+                        SelectedItem="{Binding SelectedPopup, Mode=TwoWay}"
+                        IsVisible="{Binding HasMoreThanOneResult}">
+                    </Picker>
+
+                    <esriTK:PopupViewer Grid.Row="1" Popup="{Binding SelectedPopup}" MinimumWidthRequest="400" HorizontalOptions="Fill"
+                                  x:Name="PopupView"
+                                  PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" HyperlinkClicked="popupViewer_HyperlinkClicked" 
+                                  />
+
+                    <Button HorizontalOptions="Fill" Text="Close" Grid.Row="3" Clicked="CloseButton_Clicked" />
+                </Grid>
             </Border>
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultFieldTextStyle = new Style(typeof(Label));
             DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.MarginProperty, Value = new Thickness(7) });
             DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12d });
-            DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.TextColorProperty, Value = Color.FromRgb(0x32, 0x32, 0x32) });
+            // Do not set TextColorProperty to avoid dark/light mode issues
         }
 
         private static object BuildDefaultTemplate()
@@ -52,5 +52,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return presenter;
         }
     }
+
+#if WINDOWS
+    // Enables the text cells to be selectable for MAUI-on-WinUI.
+    internal sealed partial class SelectableLabel : Microsoft.Maui.Controls.Label
+    {
+        protected override void OnHandlerChanged()
+        {
+            if (Handler?.PlatformView is Microsoft.UI.Xaml.Controls.TextBlock textBlock)
+            {
+                textBlock.IsTextSelectionEnabled = true;
+            }
+            base.OnHandlerChanged();
+        }
+    }
+#endif
 }
 #endif

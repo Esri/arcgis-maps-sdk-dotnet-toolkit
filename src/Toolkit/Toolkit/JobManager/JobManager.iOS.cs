@@ -30,10 +30,10 @@ namespace  Esri.ArcGISRuntime.Toolkit
         /// <remarks>
         /// <note>
         /// You must also add the <see cref="StatusChecksTaskIdentifier"/> to the "Permitted
-        // background task scheduler identifiers" in your application's plist file.
-        // The status checks task identifier will be <c>com.esri.ArcGISToolkit.jobManager.statusCheck</c> if using the shared instance.
-        // If you are using a job manager instance that you created with a specific ID, then the
-        // identifier will be <c>com.esri.ArcGISToolkit.jobManager.&lt;id&gt;.statusCheck</c>.
+        /// background task scheduler identifiers" in your application's plist file.
+        /// The status checks task identifier will be <c>com.esri.ArcGISToolkit.jobManager.statusCheck</c> if using the shared instance.
+        /// If you are using a job manager instance that you created with a specific ID, then the
+        /// identifier will be <c>com.esri.ArcGISToolkit.jobManager.&lt;id&gt;.statusCheck</c>.
         /// </note>
         /// <para>
         /// Background checks only work on device and not on the simulator.
