@@ -6,6 +6,10 @@ public abstract partial class AppiumTestBase
 {
     private static bool HasAppCrashed = false;
 
+    /// <summary>
+    /// Tests running after a the App has crashed should immediately return inconclusive to avoid wasting time,
+    /// and because it cannot be determined whether they would pass otherwise.
+    /// </summary>
     [TestInitialize]
     public void FailFastIfAppAlreadyCrashed()
     {
