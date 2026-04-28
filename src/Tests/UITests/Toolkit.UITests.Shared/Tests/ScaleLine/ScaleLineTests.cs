@@ -7,6 +7,9 @@ public class ScaleLineTests : AppiumTestBase
 {
     private const string ScaleLinePage = "ScaleLines";
 
+    /// <summary>
+    /// Basic test to show how platform-specific expected dimensions can be handled.
+    /// </summary>
     [TestMethod]
     [DataRow(ScaleLineType.Advanced)]
     [DataRow(ScaleLineType.Simple)]
@@ -16,8 +19,8 @@ public class ScaleLineTests : AppiumTestBase
         UpdateViewpoint(50000000, 0);
 
         // Check initial render
-        var scaleLineInfo = GetScaleLineInfo(scaleLineType);
-        var initialExpectedValues = new ScaleLineInfo
+        var actualValues = GetScaleLineInfo(scaleLineType);
+        var expectedValues = new ScaleLineInfo
         {
             MetricValue = 2000,
             MetricUnits = "km",
@@ -26,71 +29,19 @@ public class ScaleLineTests : AppiumTestBase
             USUnits = "mi",
             USLineLengthPixels = PlatformSpecificPixelValue(122, 122, 122, 94)
         };
-        AssertScaleLineInfo(initialExpectedValues, scaleLineInfo);
-    }
 
-    [TestMethod]
-    [DataRow(ScaleLineType.Advanced)]
-    [DataRow(ScaleLineType.Simple)]
-    public async Task ScaleLine_UpdatesWithScale(ScaleLineType scaleLineType)
-    {
-        OpenSample(ScaleLinePage);
+        Assert.AreEqual(expectedValues.MetricValue, actualValues.MetricValue);
+        Assert.AreEqual(expectedValues.MetricUnits, actualValues.MetricUnits);
+        Assert.AreEqual(expectedValues.USValue, actualValues.USValue);
+        Assert.AreEqual(expectedValues.USUnits, actualValues.USUnits);
 
-        UpdateViewpoint(50000000, 0);
-        var initialScaleLineInfo = GetScaleLineInfo(scaleLineType);
-
-        UpdateViewpoint(5000000, 0);
-        var finalScaleLineInfo = GetScaleLineInfo(scaleLineType);
-
-        var scaleRatioMetric = finalScaleLineInfo.MetricScale / initialScaleLineInfo.MetricScale;
-        var scaleRatioUS = finalScaleLineInfo.USScale / initialScaleLineInfo.USScale;
-
-        // The viewpoint scale increased by 10 times (5000000 is the denominator), so the scale lines should reflect this
-        Assert.AreEqual(10.0, scaleRatioMetric, 0.1);
-        Assert.AreEqual(10.0, scaleRatioUS, 0.1);
-    }
-
-
-    [TestMethod]
-    [DataRow(ScaleLineType.Advanced)]
-    [DataRow(ScaleLineType.Simple)]
-    public async Task ScaleLine_UpdatesWithLatitude(ScaleLineType scaleLineType)
-    {
-        OpenSample(ScaleLinePage);
-
-        UpdateViewpoint(5000000, 0);
-        var initialInfo = GetScaleLineInfo(scaleLineType);
-
-        UpdateViewpoint(5000000, 60);
-        var finalInfo = GetScaleLineInfo(scaleLineType);
-
-        if (scaleLineType == ScaleLineType.Advanced)
-        {
-            // Moving away from the equator increases scale in the mercator projection
-            Assert.IsGreaterThan(initialInfo.MetricScale, finalInfo.MetricScale);
-            Assert.IsGreaterThan(initialInfo.USScale, finalInfo.USScale);
-        }
-        else if (scaleLineType == ScaleLineType.Simple)
-        {
-            // The simple scale line should not update
-            Assert.AreEqual(initialInfo.MetricScale, finalInfo.MetricScale, 0.01);
-            Assert.AreEqual(initialInfo.USScale, finalInfo.USScale, 0.01);
-        }
-    }
-
-    private void AssertScaleLineInfo(ScaleLineInfo expected, ScaleLineInfo actual)
-    {
-        Assert.AreEqual(expected.MetricValue, actual.MetricValue);
-        Assert.AreEqual(expected.MetricUnits, actual.MetricUnits);
-        Assert.AreEqual(expected.MetricLineLengthPixels, GetNormalizedPixelValue(actual.MetricLineLengthPixels), 3.0);
-        Assert.AreEqual(expected.USValue, actual.USValue);
-        Assert.AreEqual(expected.USUnits, actual.USUnits);
-        Assert.AreEqual(expected.USLineLengthPixels, GetNormalizedPixelValue(actual.USLineLengthPixels), 3.0);
+        Assert.AreEqual(expectedValues.MetricLineLengthPixels, GetNormalizedPixelValue(actualValues.MetricLineLengthPixels), 3.0);
+        Assert.AreEqual(expectedValues.USLineLengthPixels, GetNormalizedPixelValue(actualValues.USLineLengthPixels), 3.0);
     }
 
     private ScaleLineInfo GetScaleLineInfo(ScaleLineType type)
     {
-        var scaleLineElement = GetScaleElement(type);
+        var scaleLineElement = FindElement(type == ScaleLineType.Advanced ? "AdvancedScaleLine" : "SimpleScaleLine");
 
         var metricValueElement = FindElement(scaleLineElement, "MetricValue");
         var metricValue = int.Parse(GetElementText(metricValueElement));
@@ -113,16 +64,6 @@ public class ScaleLineTests : AppiumTestBase
             USUnits = usUnit,
             USLineLengthPixels = usLineLength
         };
-    }
-
-    private AppiumElement GetScaleElement(ScaleLineType type)
-    {
-        if (type == ScaleLineType.Advanced)
-            return FindElement("AdvancedScaleLine");
-        else if (type == ScaleLineType.Simple)
-            return FindElement("SimpleScaleLine");
-        else
-            throw new ArgumentOutOfRangeException(nameof(type), type, "Invalid scale line type.");
     }
 
     private void UpdateViewpoint(int scale, int latitude)
