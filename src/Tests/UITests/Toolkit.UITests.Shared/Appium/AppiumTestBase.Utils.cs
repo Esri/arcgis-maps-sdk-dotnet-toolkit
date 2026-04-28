@@ -118,33 +118,4 @@ public abstract partial class AppiumTestBase
             throw;
         }
     }
-
-    /// <summary>
-    /// Normalizes pixel values based on platform and device DPI. Normalized values are approximately equivalent to what renders
-    /// on Windows at a screen density of 1 (96 DPI).
-    /// </summary>
-    protected double GetNormalizedPixelValue(int pixels)
-    {
-#if WINDOWS_TEST || ANDROID_TEST
-        return pixels / ScreenDensity;
-#elif IOS_TEST || MAC_TEST
-        // XCUI tests already returns points rather than pixels
-        return pixels;
-#else
-        throw new NotImplementedException("GetNormalizedPixelValue(int) is not implemented for this platform.");
-#endif
-    }
-
-    protected int PlatformSpecificPixelValue(int windows, int android, int ios, int mac)
-    {
-#if WINDOWS_TEST
-        return windows;
-#elif ANDROID_TEST
-        return android;
-#elif IOS_TEST
-        return ios;
-#elif MAC_TEST
-        return mac;
-#endif
-    }
 }
