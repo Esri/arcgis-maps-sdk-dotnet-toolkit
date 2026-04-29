@@ -251,6 +251,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
             }
+            UpdateAltText();
+        }
+
+        private void UpdateAltText()
+        {
+            string? altText = GetAltText();
+#if WPF
+            this.ToolTip = altText;
+#elif WINUI
+            ToolTipService.SetToolTip(this, GetAltText());
+#elif MAUI
+            ToolTipProperties.SetText(this, altText);
+#endif
+        }
+
+        private string? GetAltText()
+        {
+            if (!string.IsNullOrWhiteSpace(PopupMedia?.AlternativeText))
+                return PopupMedia.AlternativeText;
+            if (!string.IsNullOrWhiteSpace(PopupMedia?.Title))
+                return PopupMedia.Title;
+            if (!string.IsNullOrWhiteSpace(PopupMedia?.Caption))
+                return PopupMedia.Caption;
+            return null;
         }
 
         // Also used for embedded images in TextPopupElement views
