@@ -1,0 +1,21 @@
+<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.Jobs.OfflineMapAreasSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:tk="clr-namespace:Esri.ArcGISRuntime.Toolkit;assembly=Esri.ArcGISRuntime.Toolkit.WPF"
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.Jobs"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+        <esri:MapView Map="{Binding SelectedMap, ElementName=OfflineMapAreasView}" />
+        <esri:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Column="1" />
+
+    </Grid>
+</UserControl>
