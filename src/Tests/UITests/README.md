@@ -2,6 +2,24 @@
 The toolkit's UI Tests use Appium to simulate gestures on all six supported platforms (WPF, WinUI, Maui Android, Maui iOS, and Maui Mac Catalyst).
 
 ## Structure
+At runtime, the test system works as a layered request chain.
+
+```mermaid
+flowchart LR
+    Runner["<b>UITest Runner</b><br/>MSTest + shared test code"]
+    Appium["<b>Appium Server</b><br/>Translates request to native framework calls"]
+    Native["<b>Native automation / accessibility driver</b><br/>(Windows UI Automation, UiAutomator2, XCUITest)"]
+    App["<b>UITest App</b><br/>WPF / WinUI / MAUI"]
+
+    Runner -->|"UI command request"| Appium
+    Appium -->|"Translated command"| Native
+    Native -->|"Find, inspect, tap, type, capture"| App
+
+    App -->|"UI state / screenshots / accessibility data"| Native
+    Native -->|"Automation result"| Appium
+    Appium -->|"Translated driver response"| Runner
+```
+
 ### Test Runner Projects
 Each platform has its own test runner project with the naming convention `Toolkit.UITests.Platform`. Each test project is an MSTest SDK application that can run either in its own console or using VSTest.
 
@@ -19,6 +37,29 @@ Almost all code, including individual tests, is shared between the projects in t
 Each framework (WPF, WinUI, and Maui) has a test app project with the naming convention `Toolkit.UITests.Framework.App`. Test apps make use of the ArcGIS Maps SDK for .NET Toolkit and are manipulated by the test runners during test execution.
 
 Each app contains a collection of mirrored test pages. Xaml files are necessarily unique to each framework, but code-behinds are shared in the [`Toolkit.UITests.TestPages.Shared`](./Toolkit.UITests.TestPages.Shared) library.
+
+### Architecture Diagram
+```mermaid
+flowchart TD
+    Props["<b>Directory.Build.props</b><br>General settings file"]
+
+
+    SharedTests["<b>Toolkit.UITests.Shared</b><br/>Tests and shared Appium logic"]
+    Runners["<b>Test Runner Projects</b><br/>Platform-specific appium setup code"]
+    
+    Toolkits["<b>ArcGIS Maps SDK for .NET Toolkit</b>"]
+    SharedPages["<b>Toolkit.UITests.TestPages.Shared</b><br/>Shared test page code-behinds"]
+    Apps["<b>Test app projects</b><br>Contain mirrored xaml test pages"]
+
+    Props --> Runners
+    Props --> Apps
+
+    SharedTests --> Runners
+    SharedPages --> Apps
+
+    Toolkits --> Apps
+    Runners -->|"Manipulate via Appium"| Apps
+```
 
 
 ## Appium Inspector
