@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:TestPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+    xmlns:local="clr-namespace:Toolkit.UITests.App.TestPages"
+    x:Class="Toolkit.UITests.App.TestPages.PageName">
+
+    <Grid>
+        <esri:MapView x:Name="MainMapView" AutomationId="MainMapView"/>
+
+        <!-- Add additional UI elements here or entirely replace this Grid -->
+    </Grid>
+</local:TestPage>
