@@ -27,8 +27,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
 #if WINUI
     [WinRT.GeneratedBindableCustomProperty]
-#endif
+    public partial class SearchSuggestion : ISearchDisplayInfo
+#else
     public partial class SearchSuggestion
+#endif
     {
         /// <summary>
         /// Gets or sets the title to use when displaying a suggestion.
