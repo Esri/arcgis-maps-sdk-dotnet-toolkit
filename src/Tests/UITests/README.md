@@ -2,7 +2,7 @@
 The toolkit's UI Tests use Appium to simulate gestures on all six supported platforms (WPF, WinUI, Maui Android, Maui iOS, and Maui Mac Catalyst).
 
 ## Structure
-At runtime, the test system works as a layered request chain.
+At runtime, the test system works as a layered request chain. A **Test Runner** interfaces with an **Appium server** to manipulate a **Test App**.
 
 ```mermaid
 flowchart LR
@@ -13,9 +13,9 @@ flowchart LR
 
     Runner -->|"UI command request"| Appium
     Appium -->|"Translated command"| Native
-    Native -->|"Find, inspect, tap, type, capture"| App
+    Native -->|"Find, tap, type, screenshot, etc."| App
 
-    App -->|"UI state / screenshots / accessibility data"| Native
+    App -->|"UI state, screenshots, etc."| Native
     Native -->|"Automation result"| Appium
     Appium -->|"Translated driver response"| Runner
 ```
@@ -49,7 +49,7 @@ flowchart TD
     
     Toolkits["<b>ArcGIS Maps SDK for .NET Toolkit</b>"]
     SharedPages["<b>Toolkit.UITests.TestPages.Shared</b><br/>Shared test page code-behinds"]
-    Apps["<b>Test app projects</b><br>Contain mirrored xaml test pages"]
+    Apps["<b>Test App Projects</b><br>Contain mirrored xaml test pages"]
 
     Props --> Runners
     Props --> Apps
@@ -58,7 +58,7 @@ flowchart TD
     SharedPages --> Apps
 
     Toolkits --> Apps
-    Runners -->|"Manipulate via Appium"| Apps
+    Runners -->|"Manipulates via Appium"| Apps
 ```
 
 
