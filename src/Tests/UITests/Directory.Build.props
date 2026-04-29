@@ -1,0 +1,51 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" Condition="'' != $([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- General Settings -->
+  <PropertyGroup>
+    <!-- Be sure to delete the obj/ and bin/ folders in both App and Runner projects when updating this parameter -->
+    <TestAppNetVersion>net10.0</TestAppNetVersion>
+
+    <!-- Maui Version gets set explicitly in the root Directory.build.props file, so it must be reset or explicitly specified here. -->
+    <MauiVersion></MauiVersion>
+
+    <!-- Other useful general properties (particularly ArcGISRuntimeToolkitPackageVersion, ArcGISRuntimePackageVersion, and UseNugetPackage)
+         may be found in the root Directory.build.props file. -->
+  </PropertyGroup>
+
+  <!-- iOS Settings -->
+  <PropertyGroup>
+    <!-- The target device (required) -->
+    <iOSDeviceUdid></iOSDeviceUdid>
+
+    <!-- WDA setup (one of either automatic or manual must be configured)-->
+    <!-- Automatic setup: https://appium.github.io/appium-xcuitest-driver/latest/preparation/prov-profile-basic-auto/ -->
+    <XcodeOrgId></XcodeOrgId>
+    <XcodeSigningId></XcodeSigningId>
+    <UpdatedWDABundleId></UpdatedWDABundleId>
+
+    <!-- Preinstalled setups (remember to set UpdatedWDABundleId above if needed!): https://appium.github.io/appium-xcuitest-driver/latest/guides/run-preinstalled-wda/ -->
+    <UsePreinstalledWDA></UsePreinstalledWDA>
+    <PrebuiltWDAPath></PrebuiltWDAPath>
+  </PropertyGroup>
+
+  <!-- Android Settings -->
+  <PropertyGroup>
+    <!-- Automatic building of the maui app currently only works in Release mode due to complications from Maui Android FastDeployment.
+         Instead build the app on your device manually then run the test app. -->
+    <AndroidUsePreinstalledApp>true</AndroidUsePreinstalledApp>
+    <AndroidNoReset>true</AndroidNoReset>
+    <AndroidAppPackage>com.esri.toolkit.uitests.maui</AndroidAppPackage>
+
+    <!-- The target device (required if multiple devices and/or emulators are connected and on) -->
+    <AndroidDeviceUdid></AndroidDeviceUdid>
+  </PropertyGroup>
+  
+  <!-- Maintenance Settings -->
+  <!-- These are unlikely to need to be changed in normal use -->
+  <PropertyGroup>
+    <TestRunnerNetVersion>net10.0</TestRunnerNetVersion>
+    <AppiumWebDriverVersion>8.2.0</AppiumWebDriverVersion>
+    <MagickNetVersion>14.12.0</MagickNetVersion>
+  </PropertyGroup>
+</Project>
