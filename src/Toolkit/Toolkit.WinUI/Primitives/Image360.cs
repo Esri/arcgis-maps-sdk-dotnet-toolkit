@@ -3,8 +3,10 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Media.Imaging;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -43,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public Image360()
         {
             DefaultStyleKey = typeof(Image360);
-
+            MarkerLocations = new ObservableCollection<Point>();
             Loaded += ImageViewer3D_Loaded;
             Unloaded += ImageViewer3D_Unloaded;
             SizeChanged += ImageViewer3D_SizeChanged;
@@ -361,6 +363,51 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var v = phi / MathF.PI;
 
             return new Point(meshU, v);
+        }
+
+        /// <summary>
+        /// Gets or sets normalized marker locations rendered as red dots on the panorama image.
+        /// </summary>
+        public IList<Point> MarkerLocations
+        {
+            get { return (IList<Point>)GetValue(MarkerLocationsProperty); }
+            set { SetValue(MarkerLocationsProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the MarkerLocations dependency property for the Image360 control.
+        /// </summary>
+        public static readonly DependencyProperty MarkerLocationsProperty =
+            DependencyProperty.Register(
+                nameof(MarkerLocations),
+                typeof(IList<Point>),
+                typeof(Image360),
+                new PropertyMetadata(null, (s, e) => ((Image360)s).OnMarkerLocationsPropertyChanged((IList<Point>?)e.OldValue, (IList<Point>?)e.NewValue)));
+
+        private void OnMarkerLocationsPropertyChanged(IList<Point>? oldValue, IList<Point>? newValue)
+        {
+            if (oldValue is INotifyCollectionChanged oldIncc)
+            {
+                oldIncc.CollectionChanged -= MarkerLocations_Changed;
+            }
+
+            if (newValue is INotifyCollectionChanged newIncc)
+            {
+                newIncc.CollectionChanged += MarkerLocations_Changed;
+            }
+
+            UpdateMarkers();
+        }
+
+        private void MarkerLocations_Changed(object? sender, EventArgs e)
+        {
+            UpdateMarkers();
+        }
+
+        private void UpdateMarkers()
+        {
+            m_markersDirty = true;
+            RequestRender();
         }
     }
 }

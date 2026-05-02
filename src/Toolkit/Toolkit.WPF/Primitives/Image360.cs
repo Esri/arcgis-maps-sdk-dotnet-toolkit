@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +15,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Esri.ArcGISRuntime.Toolkit
+namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     /// <summary>
     /// 360 Panorama Image Control
@@ -21,9 +23,12 @@ namespace Esri.ArcGISRuntime.Toolkit
     public class Image360 : Control
     {
         private readonly GeometryModel3D _model;
+        private readonly Model3DGroup _markersModel = new Model3DGroup();
         private Point _lastMousePosition;
         private double _yaw;
         private double _pitch;
+        private Viewport3D? _viewport;
+        private PointCollection? _subscribedMarkerLocations;
         private PerspectiveCamera _camera = new PerspectiveCamera
             {
                 Position = new Point3D(0, 0, 0),
@@ -43,6 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                 Geometry = CreateSphereMesh()
             };
             InitializeAnglesFromLookDirection();
+            MarkerLocations = new ObservableCollection<Point>();
         }
 
         /// <inheritdoc />
@@ -51,6 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             base.OnApplyTemplate();
             if (GetTemplateChild("Viewport") is Viewport3D viewport)
             {
+                _viewport = viewport;
                 InitializeScene(viewport);
             }
         }
@@ -62,6 +69,8 @@ namespace Esri.ArcGISRuntime.Toolkit
             viewport.Children.Add(new ModelVisual3D { Content = ambientLight });
             var modelVisual3D = new ModelVisual3D { Content = _model };
             viewport.Children.Add(modelVisual3D);
+            viewport.Children.Add(new ModelVisual3D { Content = _markersModel });
+            UpdateMarkers();
         }
 
         private static MeshGeometry3D CreateSphereMesh()
@@ -117,6 +126,25 @@ namespace Esri.ArcGISRuntime.Toolkit
         public static readonly DependencyProperty SourceProperty =
             DependencyProperty.Register(nameof(Source), typeof(ImageSource), typeof(Image360), new PropertyMetadata(null, (s, e) => ((Image360)s).OnSourcePropertyChanged()));
 
+        /// <summary>
+        /// Gets or sets normalized marker locations rendered as red dots on the panorama image.
+        /// </summary>
+        public IList<Point> MarkerLocations
+        {
+            get { return (IList<Point>)GetValue(MarkerLocationsProperty); }
+            private set { SetValue(MarkerLocationsProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the MarkerLocations dependency property for the Image360 control.
+        /// </summary>
+        private static readonly DependencyProperty MarkerLocationsProperty =
+            DependencyProperty.Register(
+                nameof(MarkerLocations),
+                typeof(IList<Point>),
+                typeof(Image360),
+                new PropertyMetadata(null, (s, e) => ((Image360)s).OnMarkerLocationsPropertyChanged((IList<Point>?)e.OldValue, (IList<Point>?)e.NewValue)));
+
         private void OnSourcePropertyChanged()
         {
             if (Source is not null)
@@ -133,6 +161,100 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 _model.BackMaterial = null;
             }
+        }
+
+        private void OnMarkerLocationsPropertyChanged(IList<Point>? oldValue, IList<Point>? newValue)
+        {
+            if (oldValue is INotifyCollectionChanged oldIncc)
+            {
+                oldIncc.CollectionChanged -= MarkerLocations_Changed;
+            }
+
+            if (newValue is INotifyCollectionChanged newIncc)
+            {
+                newIncc.CollectionChanged += MarkerLocations_Changed;
+            }
+
+            UpdateMarkers();
+        }
+
+        private void MarkerLocations_Changed(object? sender, EventArgs e)
+        {
+            UpdateMarkers();
+        }
+
+        private void UpdateMarkers()
+        {
+            _markersModel.Children.Clear();
+
+            if (_viewport is null || MarkerLocations is null || MarkerLocations.Count == 0)
+            {
+                return;
+            }
+
+            var redMaterial = new DiffuseMaterial(new SolidColorBrush(Colors.Red));
+            foreach (var marker in MarkerLocations)
+            {
+                var position = GetPointOnSphere(marker);
+                var markerMesh = CreateSmallSphereMesh(position, 0.01, 6);
+                _markersModel.Children.Add(new GeometryModel3D
+                {
+                    Geometry = markerMesh,
+                    Material = redMaterial,
+                    BackMaterial = redMaterial
+                });
+            }
+        }
+
+        private static Point3D GetPointOnSphere(Point normalized)
+        {
+            var u = Math.Max(0, Math.Min(1, normalized.X));
+            var v = Math.Max(0, Math.Min(1, normalized.Y));
+            var phi = v * Math.PI;
+            var theta = u * Math.PI * 2.0;
+            var radius = 0.98;
+
+            return new Point3D(
+                radius * Math.Sin(phi) * Math.Cos(theta),
+                radius * Math.Cos(phi),
+                radius * Math.Sin(phi) * Math.Sin(theta));
+        }
+
+        private static MeshGeometry3D CreateSmallSphereMesh(Point3D center, double radius, int segments)
+        {
+            var mesh = new MeshGeometry3D();
+            for (int i = 0; i <= segments; i++)
+            {
+                var phi = Math.PI * i / segments;
+                for (int j = 0; j <= segments * 2; j++)
+                {
+                    var theta = 2.0 * Math.PI * j / (segments * 2);
+                    var x = center.X + radius * Math.Sin(phi) * Math.Cos(theta);
+                    var y = center.Y + radius * Math.Cos(phi);
+                    var z = center.Z + radius * Math.Sin(phi) * Math.Sin(theta);
+                    mesh.Positions.Add(new Point3D(x, y, z));
+                }
+            }
+
+            for (int x = 0; x < segments; x++)
+            {
+                for (int y = 0; y < segments * 2; y++)
+                {
+                    var v0 = x * (segments * 2 + 1) + y;
+                    var v1 = (x + 1) * (segments * 2 + 1) + y;
+                    var v2 = x * (segments * 2 + 1) + y + 1;
+                    var v3 = (x + 1) * (segments * 2 + 1) + y + 1;
+
+                    mesh.TriangleIndices.Add(v0);
+                    mesh.TriangleIndices.Add(v2);
+                    mesh.TriangleIndices.Add(v1);
+                    mesh.TriangleIndices.Add(v2);
+                    mesh.TriangleIndices.Add(v3);
+                    mesh.TriangleIndices.Add(v1);
+                }
+            }
+
+            return mesh;
         }
 
         /// <inheritdoc />

@@ -60,6 +60,12 @@ float4 main(PSInput input) : SV_TARGET
     return PanoramaTexture.Sample(PanoramaSampler, input.TexCoord);
 }
 """;
+        private static readonly string MarkerPixelShaderSource = """
+float4 main() : SV_TARGET
+{
+    return float4(1.0f, 0.0f, 0.0f, 1.0f);
+}
+""";
 
         private IDXGISwapChain1? m_swapchain;
         private ID3D11Device? m_d3dDevice;
@@ -70,15 +76,20 @@ float4 main(PSInput input) : SV_TARGET
         private ID3D11DepthStencilView? m_depthStencilView;
         private ID3D11VertexShader? m_vertexShader;
         private ID3D11PixelShader? m_pixelShader;
+        private ID3D11PixelShader? m_markerPixelShader;
         private ID3D11InputLayout? m_inputLayout;
         private ID3D11Buffer? m_vertexBuffer;
         private ID3D11Buffer? m_indexBuffer;
+        private ID3D11Buffer? m_markerVertexBuffer;
+        private ID3D11Buffer? m_markerIndexBuffer;
         private ID3D11Buffer? m_constantBuffer;
         private ID3D11Texture2D? m_panoramaTexture;
         private ID3D11ShaderResourceView? m_panoramaTextureView;
         private ID3D11SamplerState? m_samplerState;
         private ID3D11RasterizerState? m_rasterizerState;
         private D3D11_VIEWPORT m_viewport;
+        private uint m_markerIndexCount;
+        private bool m_markersDirty = true;
 
         private async Task InitializeAsyncCore()
         {
@@ -230,11 +241,13 @@ float4 main(PSInput input) : SV_TARGET
 
             ID3DBlob vertexShaderBlob = CompileShader(VertexShaderSource, "main", "vs_4_0");
             ID3DBlob pixelShaderBlob = CompileShader(PixelShaderSource, "main", "ps_4_0");
+            ID3DBlob markerPixelShaderBlob = CompileShader(MarkerPixelShaderSource, "main", "ps_4_0");
 
             try
             {
                 m_vertexShader = CreateVertexShaderNative(m_d3dDevice!, vertexShaderBlob.GetBufferPointer(), vertexShaderBlob.GetBufferSize());
                 m_pixelShader = CreatePixelShaderNative(m_d3dDevice!, pixelShaderBlob.GetBufferPointer(), pixelShaderBlob.GetBufferSize());
+                m_markerPixelShader = CreatePixelShaderNative(m_d3dDevice!, markerPixelShaderBlob.GetBufferPointer(), markerPixelShaderBlob.GetBufferSize());
 
                 byte[] positionSemantic = Encoding.ASCII.GetBytes("POSITION\0");
                 byte[] texCoordSemantic = Encoding.ASCII.GetBytes("TEXCOORD\0");
@@ -286,7 +299,7 @@ float4 main(PSInput input) : SV_TARGET
                 return;
             }
 
-            (VertexPositionTexture[] vertices, ushort[] indices) = CreatePanoramaSphere();
+            (VertexPositionTexture[] vertices, ushort[] indices) = CreateSphereMesh();
             m_indexCount = (uint)indices.Length;
 
             D3D11_BUFFER_DESC vertexBufferDesc = new()
@@ -345,6 +358,60 @@ float4 main(PSInput input) : SV_TARGET
             };
 
             m_rasterizerState = CreateRasterizerStateNative(m_d3dDevice!, &rasterizerDesc);
+        }
+
+        private unsafe void UpdateMarkerBuffers()
+        {
+            ReleaseComObject(ref m_markerVertexBuffer);
+            ReleaseComObject(ref m_markerIndexBuffer);
+            m_markerIndexCount = 0;
+            m_markersDirty = false;
+
+            if (m_d3dDevice is null || m_d3dContext is null || MarkerLocations is null || MarkerLocations.Count == 0)
+            {
+                return;
+            }
+
+            (VertexPositionTexture[] vertices, ushort[] indices) = CreateMarkerGeometry(MarkerLocations);
+            if (vertices.Length == 0 || indices.Length == 0)
+            {
+                return;
+            }
+
+            m_markerIndexCount = (uint)indices.Length;
+
+            D3D11_BUFFER_DESC vertexBufferDesc = new()
+            {
+                ByteWidth = (uint)(vertices.Length * Marshal.SizeOf<VertexPositionTexture>()),
+                Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
+                BindFlags = D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER,
+                CPUAccessFlags = 0,
+                MiscFlags = 0,
+                StructureByteStride = 0,
+            };
+
+            D3D11_BUFFER_DESC indexBufferDesc = new()
+            {
+                ByteWidth = (uint)(indices.Length * sizeof(ushort)),
+                Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
+                BindFlags = D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER,
+                CPUAccessFlags = 0,
+                MiscFlags = 0,
+                StructureByteStride = 0,
+            };
+
+            m_markerVertexBuffer = CreateBufferNative(m_d3dDevice, &vertexBufferDesc, null, "Failed to create the marker vertex buffer.");
+            m_markerIndexBuffer = CreateBufferNative(m_d3dDevice, &indexBufferDesc, null, "Failed to create the marker index buffer.");
+
+            fixed (VertexPositionTexture* vertexData = vertices)
+            {
+                m_d3dContext.UpdateSubresource(m_markerVertexBuffer, 0, null, vertexData, 0, 0);
+            }
+
+            fixed (ushort* indexData = indices)
+            {
+                m_d3dContext.UpdateSubresource(m_markerIndexBuffer, 0, null, indexData, 0, 0);
+            }
         }
 
         private unsafe void CreateConstantBuffer()
@@ -447,6 +514,11 @@ float4 main(PSInput input) : SV_TARGET
                 return;
             }
 
+            if (m_markersDirty)
+            {
+                UpdateMarkerBuffers();
+            }
+
             UpdateSceneConstants();
 
             uint stride = (uint)Marshal.SizeOf<VertexPositionTexture>();
@@ -476,9 +548,31 @@ float4 main(PSInput input) : SV_TARGET
             PSSetShaderResourcesNative(m_d3dContext, shaderResources);
             PSSetSamplersNative(m_d3dContext, samplers);
             m_d3dContext.DrawIndexed(m_indexCount, 0, 0);
+
+            DrawMarkers(stride, offset, constantBuffers);
+
             m_swapchain.Present(1, 0);
 
             m_needsRender = false;
+        }
+
+        private void DrawMarkers(uint stride, uint offset, ID3D11Buffer[] constantBuffers)
+        {
+            if (m_d3dContext is null ||
+                m_markerPixelShader is null ||
+                m_markerVertexBuffer is null ||
+                m_markerIndexBuffer is null ||
+                m_markerIndexCount == 0)
+            {
+                return;
+            }
+
+            ID3D11Buffer[] markerVertexBuffers = [m_markerVertexBuffer];
+            IASetVertexBuffersNative(m_d3dContext, markerVertexBuffers, stride, offset);
+            m_d3dContext.IASetIndexBuffer(m_markerIndexBuffer, DXGI_FORMAT.DXGI_FORMAT_R16_UINT, 0);
+            VSSetConstantBuffersNative(m_d3dContext, constantBuffers);
+            PSSetShaderNative(m_d3dContext, m_markerPixelShader);
+            m_d3dContext.DrawIndexed(m_markerIndexCount, 0, 0);
         }
 
         private unsafe void UpdateSceneConstants()
@@ -921,7 +1015,7 @@ float4 main(PSInput input) : SV_TARGET
             m_needsRender = true;
         }
 
-        private static (VertexPositionTexture[] Vertices, ushort[] Indices) CreatePanoramaSphere()
+        private static (VertexPositionTexture[] Vertices, ushort[] Indices) CreateSphereMesh()
         {
             const int size = 30;
 
@@ -964,6 +1058,78 @@ float4 main(PSInput input) : SV_TARGET
             }
 
             return (vertices.ToArray(), indices.ToArray());
+        }
+
+        private static (VertexPositionTexture[] Vertices, ushort[] Indices) CreateMarkerGeometry(IList<Windows.Foundation.Point> markerLocations)
+        {
+            const int segments = 8;
+            const float sphereRadius = 0.965f;
+            const float markerRadius = 0.01f;
+            int verticesPerMarker = (segments + 1) * ((segments * 2) + 1);
+            int indicesPerMarker = segments * segments * 2 * 6;
+
+            if (markerLocations.Count > ushort.MaxValue / verticesPerMarker)
+            {
+                throw new InvalidOperationException("Too many markers to render.");
+            }
+
+            List<VertexPositionTexture> vertices = new(markerLocations.Count * verticesPerMarker);
+            List<ushort> indices = new(markerLocations.Count * indicesPerMarker);
+
+            foreach (var markerLocation in markerLocations)
+            {
+                ushort baseVertex = (ushort)vertices.Count;
+                Vector3 center = GetPointOnSphere(markerLocation, sphereRadius);
+
+                for (int i = 0; i <= segments; i++)
+                {
+                    float phi = MathF.PI * i / segments;
+
+                    for (int j = 0; j <= (segments * 2); j++)
+                    {
+                        float theta = 2.0f * MathF.PI * j / (segments * 2);
+                        Vector3 offset = new(
+                            markerRadius * MathF.Sin(phi) * MathF.Cos(theta),
+                            markerRadius * MathF.Cos(phi),
+                            markerRadius * MathF.Sin(phi) * MathF.Sin(theta));
+
+                        vertices.Add(new VertexPositionTexture(center + offset, Vector2.Zero));
+                    }
+                }
+
+                for (ushort x = 0; x < segments; x++)
+                {
+                    for (ushort y = 0; y < (segments * 2); y++)
+                    {
+                        ushort v0 = (ushort)(baseVertex + x * ((segments * 2) + 1) + y);
+                        ushort v1 = (ushort)(baseVertex + (x + 1) * ((segments * 2) + 1) + y);
+                        ushort v2 = (ushort)(baseVertex + x * ((segments * 2) + 1) + y + 1);
+                        ushort v3 = (ushort)(baseVertex + (x + 1) * ((segments * 2) + 1) + y + 1);
+
+                        indices.Add(v0);
+                        indices.Add(v2);
+                        indices.Add(v1);
+                        indices.Add(v2);
+                        indices.Add(v3);
+                        indices.Add(v1);
+                    }
+                }
+            }
+
+            return (vertices.ToArray(), indices.ToArray());
+        }
+
+        private static Vector3 GetPointOnSphere(Windows.Foundation.Point normalized, float radius)
+        {
+            float u = (float)Math.Clamp(normalized.X, 0, 1);
+            float v = (float)Math.Clamp(normalized.Y, 0, 1);
+            float phi = v * MathF.PI;
+            float theta = u * MathF.PI * 2.0f;
+
+            return new Vector3(
+                radius * MathF.Sin(phi) * MathF.Cos(theta),
+                radius * MathF.Cos(phi),
+                radius * MathF.Sin(phi) * MathF.Sin(theta));
         }
 
         private static unsafe Windows.Win32.Graphics.Direct3D.ID3DBlob CompileShader(string source, string entryPoint, string shaderTarget)
@@ -1019,9 +1185,12 @@ float4 main(PSInput input) : SV_TARGET
             ReleaseComObject(ref m_panoramaTextureView);
             ReleaseComObject(ref m_panoramaTexture);
             ReleaseComObject(ref m_constantBuffer);
+            ReleaseComObject(ref m_markerIndexBuffer);
+            ReleaseComObject(ref m_markerVertexBuffer);
             ReleaseComObject(ref m_indexBuffer);
             ReleaseComObject(ref m_vertexBuffer);
             ReleaseComObject(ref m_inputLayout);
+            ReleaseComObject(ref m_markerPixelShader);
             ReleaseComObject(ref m_pixelShader);
             ReleaseComObject(ref m_vertexShader);
             ReleaseComObject(ref m_depthStencilView);
