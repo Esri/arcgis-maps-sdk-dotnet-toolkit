@@ -2,7 +2,7 @@ using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
-public class Image360 : ContentPresenter
+internal sealed class Image360 : View
 {
     public Image360()
     {

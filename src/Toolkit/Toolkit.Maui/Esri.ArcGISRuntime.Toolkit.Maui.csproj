@@ -70,8 +70,8 @@
         <None Include="tools\*.ps1" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="tools" />
     </ItemGroup>
     <ItemGroup>
-      <Compile Include="..\Toolkit.WinUI\Primitives\Image360.Rendering.cs" Link="Primitives\Windows\Image360.Rendering.cs" />
-      <Compile Include="..\Toolkit.WinUI\Primitives\Image360.cs" Link="Primitives\Windows\Image360.cs" />
+      <Compile Include="..\Toolkit.WinUI\Primitives\Image360.Rendering.cs" Link="Image360\Windows\Image360.Rendering.cs" />
+      <Compile Include="..\Toolkit.WinUI\Primitives\Image360.cs" Link="Image360\Windows\Image360.cs" />
       <AdditionalFiles Include="..\Toolkit.WinUI\NativeMethods.txt" Link="NativeMethods.txt" />
     </ItemGroup>
 </Project>
