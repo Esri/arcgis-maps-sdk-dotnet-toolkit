@@ -20,11 +20,17 @@ namespace Esri.ArcGISRuntime.Toolkit
     /// </summary>
     public class Image360 : Control
     {
-        private readonly AxisAngleRotation3D _horizontalRot = new AxisAngleRotation3D(new Vector3D(0, 1, 0), 0);
-        private readonly AxisAngleRotation3D _verticalRot = new AxisAngleRotation3D(new Vector3D(1, 0, 0), 0);
-        private readonly ScaleTransform3D _scaleTransform = new ScaleTransform3D(1, 1, 1);
         private readonly GeometryModel3D _model;
         private Point _lastMousePosition;
+        private double _yaw;
+        private double _pitch;
+        private PerspectiveCamera _camera = new PerspectiveCamera
+            {
+                Position = new Point3D(0, 0, 0),
+                LookDirection = new Vector3D(0, 0, 1),
+                UpDirection = new Vector3D(0, 1, 0),
+                FieldOfView = 90
+            };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Image360"/> class.
@@ -36,11 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 Geometry = CreateSphereMesh()
             };
-            var transformGroup = new Transform3DGroup();
-            transformGroup.Children.Add(new RotateTransform3D(_horizontalRot));
-            transformGroup.Children.Add(new RotateTransform3D(_verticalRot));
-            transformGroup.Children.Add(_scaleTransform);
-            _model.Transform = transformGroup;            
+            InitializeAnglesFromLookDirection();
         }
 
         /// <inheritdoc />
@@ -55,13 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 
         private void InitializeScene(Viewport3D viewport)
         {
-            viewport.Camera = new PerspectiveCamera
-            {
-                Position = new Point3D(0, 0, 0),
-                LookDirection = new Vector3D(0, 0, 1),
-                UpDirection = new Vector3D(0, 1, 0),
-                FieldOfView = 90
-            };
+            viewport.Camera = _camera;
             var ambientLight = new AmbientLight(Colors.White);
             viewport.Children.Add(new ModelVisual3D { Content = ambientLight });
             var modelVisual3D = new ModelVisual3D { Content = _model };
@@ -160,12 +156,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                 var mousePos = e.GetPosition(this);
                 double deltaX = mousePos.X - _lastMousePosition.X;
                 double deltaY = _lastMousePosition.Y - mousePos.Y;
-                _horizontalRot.Angle -= deltaX * 0.25;
-                double newVerticalAngle = _verticalRot.Angle - deltaY * 0.25;
-                if (newVerticalAngle >= -90 && newVerticalAngle <= 45)
-                {
-                    _verticalRot.Angle = newVerticalAngle;
-                }
+                Pan(deltaX * .25, deltaY * .25);
                 _lastMousePosition = mousePos;
             }
         }
@@ -185,28 +176,24 @@ namespace Esri.ArcGISRuntime.Toolkit
             switch (e.Key)
             {
                 case Key.Left:
-                    _horizontalRot.Angle -= rotationDelta;
+                    Pan(rotationDelta, 0);
                     break;
                 case Key.Right:
-                    _horizontalRot.Angle += rotationDelta;
+                    Pan(-rotationDelta, 0);
                     break;
                 case Key.Up:
-                    if (_verticalRot.Angle + rotationDelta <= 45)
-                        _verticalRot.Angle += rotationDelta;
+                    Pan(0, -rotationDelta);
                     break;
                 case Key.Down:
-                    if (_verticalRot.Angle - rotationDelta >= -90)
-                        _verticalRot.Angle -= rotationDelta;
+                    Pan(0, rotationDelta);
                     break;
                 case Key.OemPlus:
                 case Key.Add:
-                    var scale = Math.Min(5, Math.Max(1, _scaleTransform.ScaleX * 1.5));
-                    _scaleTransform.ScaleX = _scaleTransform.ScaleY = scale;
+                    Zoom(0.9);
                     break;
                 case Key.OemMinus:
                 case Key.Subtract:
-                    scale = Math.Min(5, Math.Max(1, _scaleTransform.ScaleX * .667));
-                    _scaleTransform.ScaleX = _scaleTransform.ScaleY = scale;
+                    Zoom(1.1);
                     break;
             }
         }
@@ -215,8 +202,102 @@ namespace Esri.ArcGISRuntime.Toolkit
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             base.OnMouseWheel(e);
-            var scale = Math.Min(5, Math.Max(1, _scaleTransform.ScaleX * (e.Delta > 0 ? 1.1 : 0.9)));
-            _scaleTransform.ScaleX = _scaleTransform.ScaleY = scale;
+            Zoom(e.Delta > 0 ? 0.9 : 1.1);
         }
+
+        private void Zoom(double amount)
+        {
+            var fov = _camera.FieldOfView * amount;
+            _camera.FieldOfView = Math.Min(120, Math.Max(15, fov));
+        }
+
+        private void Pan(double x, double y)
+        {
+            _yaw += x;
+            _pitch = Math.Min(89.9, Math.Max(-89.9, _pitch + y));
+
+            var yawRadians = _yaw * Math.PI / 180.0;
+            var pitchRadians = _pitch * Math.PI / 180.0;
+            var cosPitch = Math.Cos(pitchRadians);
+
+            _camera.LookDirection = new Vector3D(
+                cosPitch * Math.Sin(yawRadians),
+                Math.Sin(pitchRadians),
+                cosPitch * Math.Cos(yawRadians));
+            _camera.UpDirection = new Vector3D(0, 1, 0);
+        }
+
+        private void InitializeAnglesFromLookDirection()
+        {
+            var direction = _camera.LookDirection;
+            if (direction.LengthSquared <= double.Epsilon)
+            {
+                _yaw = 0;
+                _pitch = 0;
+                return;
+            }
+
+            direction.Normalize();
+            _yaw = Math.Atan2(direction.X, direction.Z) * 180.0 / Math.PI;
+            _pitch = Math.Asin(Math.Max(-1.0, Math.Min(1.0, direction.Y))) * 180.0 / Math.PI;
+        }
+
+        /// <summary>
+        /// Given a screen coordinate, returns the corresponding location on the physical image normalized to 0..1.
+        /// </summary>
+        /// <param name="point">The screen coordinate.</param>
+        /// <returns>The normalized location on the physical image.</returns>
+        public Point GetLocation(Point point)
+        {
+            // Based on screen location, scale and rotation, calculate the corresponding location on physical image normalized to 0..1
+            var width = this.ActualWidth;
+            var height = this.ActualHeight;
+            if (width <= 0 || height <= 0)
+            {
+                return default;
+            }
+
+            var lookDirection = _camera.LookDirection;
+            lookDirection.Normalize();
+
+            var upDirection = _camera.UpDirection;
+            upDirection.Normalize();
+
+            var right = Vector3D.CrossProduct(lookDirection, upDirection);
+            if (right.LengthSquared <= double.Epsilon)
+            {
+                return default;
+            }
+
+            right.Normalize();
+            upDirection = Vector3D.CrossProduct(right, lookDirection);
+            upDirection.Normalize();
+
+            var aspect = width / height;
+            var halfHorizontalFov = (_camera.FieldOfView * Math.PI / 180.0) * 0.5;
+            var halfWidthOnNearPlane = Math.Tan(halfHorizontalFov);
+            var halfHeightOnNearPlane = halfWidthOnNearPlane / aspect;
+
+            var normalizedX = (point.X / width) * 2.0 - 1.0;
+            var normalizedY = 1.0 - (point.Y / height) * 2.0;
+
+            var rayDirection = lookDirection
+                + (right * (normalizedX * halfWidthOnNearPlane))
+                + (upDirection * (normalizedY * halfHeightOnNearPlane));
+            rayDirection.Normalize();
+
+            var phi = Math.Acos(Math.Max(-1.0, Math.Min(1.0, rayDirection.Y)));
+            var theta = Math.Atan2(rayDirection.Z, rayDirection.X);
+            if (theta < 0)
+            {
+                theta += Math.PI * 2.0;
+            }
+
+            var u = theta / (Math.PI * 2.0);
+            var v = phi / Math.PI;
+
+            return new Point(u, v);
+        }
+
     }
 }

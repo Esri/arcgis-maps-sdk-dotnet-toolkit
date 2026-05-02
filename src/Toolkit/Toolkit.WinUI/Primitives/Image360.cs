@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Diagnostics;
+using System.Numerics;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Graphics.Imaging;
@@ -63,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            if(GetTemplateChild("Viewport") is SwapChainPanel panel)
+            if (GetTemplateChild("Viewport") is SwapChainPanel panel)
             {
                 swapchainPanel = panel;
             }
@@ -308,6 +309,58 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 m_initializationTask = null;
             }
+        }
+
+        /// <summary>
+        /// Given a screen coordinate, returns the corresponding location on the physical image normalized to 0..1.
+        /// </summary>
+        /// <param name="point">The screen coordinate.</param>
+        /// <returns>The normalized location on the physical image.</returns>
+        public Point GetLocation(Point point)
+        {
+            // Based on screen location, scale and rotation, calculate the corresponding location on physical image normalized to 0..1
+            var width = this.ActualWidth;
+            var height = this.ActualHeight;
+            if (width <= 0 || height <= 0)
+            {
+                return default;
+            }
+
+            var aspect = (float)(width / height);
+            var world = Matrix4x4.CreateRotationY(m_yaw) * Matrix4x4.CreateRotationX(m_pitch);
+            var projection = Matrix4x4.CreatePerspectiveFieldOfView(m_fieldOfView, aspect, 0.1f, 10.0f);
+            var worldViewProjection = world * projection;
+
+            if (!Matrix4x4.Invert(worldViewProjection, out var inverseWorldViewProjection))
+            {
+                return default;
+            }
+
+            var normalizedX = (float)((point.X / width) * 2.0 - 1.0);
+            var normalizedY = (float)(1.0 - (point.Y / height) * 2.0);
+
+            var clipPoint = new Vector4(normalizedX, normalizedY, 1f, 1f);
+            var localPointH = Vector4.Transform(clipPoint, inverseWorldViewProjection);
+            if (Math.Abs(localPointH.W) <= float.Epsilon)
+            {
+                return default;
+            }
+
+            var localPoint = new Vector3(localPointH.X / localPointH.W, localPointH.Y / localPointH.W, localPointH.Z / localPointH.W);
+            var rayLocal = Vector3.Normalize(localPoint);
+
+            var clampedY = Math.Clamp(rayLocal.Y, -1f, 1f);
+            var phi = MathF.Acos(clampedY);
+            var theta = MathF.Atan2(rayLocal.Z, rayLocal.X);
+            if (theta < 0f)
+            {
+                theta += 2f * MathF.PI;
+            }
+
+            var meshU = theta / (2f * MathF.PI);
+            var v = phi / MathF.PI;
+
+            return new Point(meshU, v);
         }
     }
 }

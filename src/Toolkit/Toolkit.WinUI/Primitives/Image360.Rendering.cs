@@ -41,7 +41,7 @@ VSOutput main(VSInput input)
 {
     VSOutput output;
     output.Position = mul(float4(input.Position, 1.0f), WorldViewProjection);
-    output.TexCoord = float2(1.0f - input.TexCoord.x, input.TexCoord.y);
+    output.TexCoord = input.TexCoord;
     return output;
 }
 """;
