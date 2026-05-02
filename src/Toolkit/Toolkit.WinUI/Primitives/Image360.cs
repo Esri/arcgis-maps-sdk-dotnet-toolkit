@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Input;
+﻿#if WINDOWS
+using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -15,13 +16,21 @@ using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.System;
+using DProp = Microsoft.UI.Xaml.DependencyProperty;
 
+#if MAUI
+using Point = Windows.Foundation.Point;
+#endif
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     /// <summary>
     /// 360 Panorama Image Control
     /// </summary>
+#if MAUI
+    internal partial class Image360 : SwapChainPanel
+#else
     public partial class Image360 : Control
+#endif
     {
         private SwapChainPanel? swapchainPanel;
         private const float MouseRotationScale = 0.0035f;
@@ -44,7 +53,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public Image360()
         {
+#if !MAUI
             DefaultStyleKey = typeof(Image360);
+#else
+            ManipulationMode = ManipulationModes.All;
+            IsTabStop = true;
+            swapchainPanel = this;
+#endif
             MarkerLocations = new ObservableCollection<Point>();
             Loaded += ImageViewer3D_Loaded;
             Unloaded += ImageViewer3D_Unloaded;
@@ -62,6 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             ReleaseDeviceResources();
         }
 
+#if !MAUI
         /// <inheritdoc />
         protected override void OnApplyTemplate()
         {
@@ -72,6 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             Start();
         }
+#endif
 
         /// <summary>
         /// Gets or sets the source URI for the 360 image. 
@@ -86,8 +103,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the Source dependency property for the Image360 control.
         /// </summary>
-        public static readonly DependencyProperty SourceProperty =
-            DependencyProperty.Register(nameof(Source), typeof(Uri), typeof(Image360), new PropertyMetadata(null, (s, e) => ((Image360)s).OnSourcePropertyChanged()));
+        public static readonly DProp SourceProperty =
+            DProp.Register(nameof(Source), typeof(Uri), typeof(Image360), new PropertyMetadata(null, (s, e) => ((Image360)s).OnSourcePropertyChanged()));
 
         private void OnSourcePropertyChanged()
         {
@@ -112,7 +129,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(Source);
                     stream = await file.OpenReadAsync();
                 }
-                else if (Source.Scheme == "http" || Source.Scheme == "https")
+                else if (Source.Scheme == Uri.UriSchemeHttp || Source.Scheme == Uri.UriSchemeHttps)
                 {
                     using var httpClient = new System.Net.Http.HttpClient();
                     var response = await httpClient.GetAsync(Source);
@@ -377,8 +394,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the MarkerLocations dependency property for the Image360 control.
         /// </summary>
-        public static readonly DependencyProperty MarkerLocationsProperty =
-            DependencyProperty.Register(
+        public static readonly DProp MarkerLocationsProperty =
+            DProp.Register(
                 nameof(MarkerLocations),
                 typeof(IList<Point>),
                 typeof(Image360),
@@ -411,3 +428,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
+#endif

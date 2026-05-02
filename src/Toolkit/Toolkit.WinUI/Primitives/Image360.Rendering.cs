@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿#if WINDOWS
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -16,7 +17,11 @@ using Windows.Win32.Graphics.Dxgi.Common;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    public partial class Image360 : Control
+#if MAUI
+    internal partial class Image360
+#else
+    public partial class Image360
+#endif
     {
         private static readonly Guid IidDxgiFactory2 = new("50c83a1c-e072-4c48-87b0-3630fa36a6d0");
         private static readonly string VertexShaderSource = """
@@ -1245,3 +1250,4 @@ float4 main() : SV_TARGET
         }
     }
 }
+#endif
