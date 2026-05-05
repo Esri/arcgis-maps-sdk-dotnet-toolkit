@@ -550,7 +550,7 @@
                     <CollectionViewSource
                         x:Key="GroupedSuggestionsEx"
                         IsSourceGrouped="True"
-                        Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=GroupedSuggestions, Mode=TwoWay}" />
+                        Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=GroupedSuggestions, Mode=OneWay}" />
                 </Popup.Resources>
                 <Border
                     Width="{TemplateBinding Width}"
