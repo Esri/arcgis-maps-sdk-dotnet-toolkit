@@ -260,7 +260,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if WPF
             this.ToolTip = altText;
 #elif WINUI
-            ToolTipService.SetToolTip(this, GetAltText());
+            ToolTipService.SetToolTip(this, altText);
 #elif MAUI
             ToolTipProperties.SetText(this, altText);
 #endif
