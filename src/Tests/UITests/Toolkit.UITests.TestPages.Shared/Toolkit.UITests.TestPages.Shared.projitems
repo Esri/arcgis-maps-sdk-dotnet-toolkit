@@ -10,6 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)TestPage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)*.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.xaml.cs" />
   </ItemGroup>
 </Project>

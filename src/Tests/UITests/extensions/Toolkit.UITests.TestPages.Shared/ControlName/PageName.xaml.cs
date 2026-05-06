@@ -17,7 +17,7 @@ namespace Toolkit.UITests.App.TestPages;
 /// <remarks>
 /// This class acts as the code-behind for the TestTemplate.xaml files, which should be mirrored across platforms.
 /// The xaml files are located in the Toolkit.UITests.Wpf.App, Toolkit.UITests.WinUI.App, and Toolkit.UITests.Maui.App
-/// projects under TestPages/TestTemplate.xaml.
+/// projects under TestPages/ControlName/TestTemplate.xaml.
 /// </remarks>
 public partial class PageName : TestPage
 {
