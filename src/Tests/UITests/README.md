@@ -129,15 +129,12 @@ dotnet new install ./src/Tests/UITests/extensions/
 
 To see the template's options run
 ```sh
-dotnet new toolkit-uitest -?
+dotnet new toolkit-uitest -h
 ```
 
 Try the template out by running the following on a clean tree:
 ```sh
-dotnet new toolkit-uitest --output ./src/Tests/UITests/ \
-    --ControlName ExampleControl \
-    --PageName ExampleTestPage \
-    --TestsName ExampleControlTests
+dotnet new toolkit-uitest --output ./src/Tests/UITests/ -C ExampleControl -P ExampleTestPage -T ExampleControlTests
 ```
 
 If you run `git status` you should see 5 new untracked files have been added. At this point if you have Visual Studio open on Windows it is a good idea to close and reopen it. If you have Appium installed and running you should be able to run the new `ExampleControl_CompassAutoHideExample` test from the Visual Studio Test Explorer.
