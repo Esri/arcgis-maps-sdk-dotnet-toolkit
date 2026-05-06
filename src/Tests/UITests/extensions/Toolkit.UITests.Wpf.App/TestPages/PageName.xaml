@@ -10,8 +10,16 @@
     d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <esri:MapView x:Name="MainMapView" AutomationProperties.AutomationId="MainMapView"/>
+        <esri:MapView x:Name="MainMapView"/>
 
-        <!-- Add additional UI elements here or entirely replace this Grid -->
+        <esri:Compass x:Name="MapCompass"
+                      GeoView="{Binding ElementName=MainMapView, Mode=OneWay}"
+                      AutoHide="False"
+                      Margin="20" />
+
+        <Button x:Name="ToggleAutoHideButton"
+                Content="Toggle Auto Hide"
+                Click="ToggleAutoHideButton_Click"
+                HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
     </Grid>
 </local:TestPage>

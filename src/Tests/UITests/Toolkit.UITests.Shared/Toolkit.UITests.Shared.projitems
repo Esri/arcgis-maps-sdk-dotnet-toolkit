@@ -15,7 +15,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Appium\AppiumTestBase.Gestures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Appium\AppiumTestBase.ImageAnalysis.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Appium\AppiumTestBase.Utils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tests\Compass\CompassTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tests\ScaleLine\ScaleLineTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tests\**\*.cs" />
   </ItemGroup>
 </Project>

@@ -8,8 +8,18 @@
     x:Class="Toolkit.UITests.App.TestPages.PageName">
 
     <Grid>
-        <esri:MapView x:Name="MainMapView" AutomationId="MainMapView"/>
+        <esri:MapView x:Name="MainMapView"/>
 
-        <!-- Add additional UI elements here or entirely replace this Grid -->
+        <esri:Compass x:Name="MapCompass"
+                      AutomationId="MapCompass"
+                      GeoView="{Binding Source={x:Reference MainMapView}, Mode=OneWay}"
+                      AutoHide="False"
+                      Margin="20" />
+
+        <Button x:Name="ToggleAutoHideButton"
+                AutomationId="ToggleAutoHideButton"
+                Text="Toggle Auto Hide"
+                Clicked="ToggleAutoHideButton_Click"
+                HorizontalOptions="Center" VerticalOptions="End" />
     </Grid>
 </local:TestPage>
