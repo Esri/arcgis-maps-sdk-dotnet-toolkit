@@ -546,12 +546,6 @@
                 </Grid>
             </Border>
             <Popup IsOpen="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}" VerticalOffset="34">
-                <Popup.Resources>
-                    <CollectionViewSource
-                        x:Key="GroupedSuggestionsEx"
-                        IsSourceGrouped="True"
-                        Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=GroupedSuggestions, Mode=OneWay}" />
-                </Popup.Resources>
                 <Border
                     Width="{TemplateBinding Width}"
                     BorderThickness="1,0,1,1"
@@ -567,7 +561,7 @@
                         <ListView
                             x:Name="PART_SuggestionList"
                             ItemTemplate="{StaticResource SuggestionTemplate}"
-                            ItemsSource="{Binding Source={StaticResource GroupedSuggestionsEx}, Mode=OneWay}"
+                            ItemsSource="{TemplateBinding GroupedSuggestions}"
                             Style="{StaticResource ListStyle}"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}">
                             <ListView.GroupStyle>

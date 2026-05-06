@@ -698,7 +698,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _groupListSelectionFlag = true;
             if (SearchViewModel?.Suggestions != null)
             {
-                GroupedSuggestions = SearchViewModel.Suggestions.GroupBy(m => m.OwningSource, (key, list) => new SuggestionsGrouped(key, list)).ToList();
+                var collectionViewSource = new Microsoft.UI.Xaml.Data.CollectionViewSource()
+                {
+                    IsSourceGrouped = true,
+                    Source = SearchViewModel.Suggestions.GroupBy(m => m.OwningSource, (key, list) => new SuggestionsGrouped(key, list)).ToList()
+                };
+                GroupedSuggestions = collectionViewSource.View;
             }
             else
             {
@@ -711,20 +716,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the grouped list of suggestions.
         /// </summary>
-        public List<SuggestionsGrouped>? GroupedSuggestions
+        public ICollectionView? GroupedSuggestions
         {
-            get => GetValue(GroupedSuggestionsProperty) as List<SuggestionsGrouped>;
+            get => GetValue(GroupedSuggestionsProperty) as ICollectionView;
             private set
             {
                 SetValue(GroupedSuggestionsProperty, value);
             }
         }
+
         /// <summary>
         /// Identifies the <see cref="TemplateSettings"/> dependency property.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static readonly DependencyProperty GroupedSuggestionsProperty =
-            DependencyProperty.Register(nameof(GroupedSuggestions), typeof(List<SuggestionsGrouped>), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(GroupedSuggestions), typeof(ICollectionView), typeof(SearchView), new PropertyMetadata(null));
 
         /// <summary>
         /// Class to support grouping suggestions on UWP.
