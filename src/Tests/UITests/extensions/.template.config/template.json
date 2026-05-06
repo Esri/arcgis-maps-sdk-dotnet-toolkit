@@ -1,0 +1,48 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "classifications": [ "Esri", "ArcGIS Maps SDK for .NET Toolkit", "UI Tests" ],
+    "identity": "UITests.TestTemplates",
+    "name": "ArcGIS Maps SDK for .NET Toolkit UI Test Template",
+    "shortName": "toolkit-uitest",
+    "description": "A template for creating new tests in the ArcGIS Maps SDK for .NET Toolkit UI test framework. This template should be run on the src/Tests/UITests directory.",
+    "tags": {
+      "language": "C#",
+      "type": "item"
+    },
+    "symbols": {
+      "PageName":{
+        "type": "parameter",
+        "description": "The name of the new test page.",
+        "datatype": "text",
+        "replaces": "PageName",
+        "fileRename": "PageName",
+        "isRequired": true
+      },
+      "ControlName":{
+        "type": "parameter",
+        "description": "The name of the control being tested (ex. ScaleLine, FeatureFormView). Only applies when creating a new test logic file.",
+        "datatype": "text",
+        "replaces": "ControlName",
+        "fileRename": "ControlName",
+        "isRequired": true
+      },
+      "TestsName":{
+        "type": "parameter",
+        "description": "The name of the test file to be created (ex. FeatureFormViewTests, FeatureFormViewTests_Accessibility). If you just need to create a new test page and will add new test logic to an existing file, leave this unset.",
+        "datatype": "text",
+        "replaces": "TestsName",
+        "fileRename": "TestsName",
+        "defaultValue": "",
+        "isRequired": false
+      }
+    },
+    "sources": [
+      {
+        "include": [ "**/PageName.xaml", "**/PageName.xaml.cs" ]
+      },
+      {
+        "condition": "TestsName != ''",
+        "include": [ "**/TestsName.cs" ]
+      }
+    ]
+  }

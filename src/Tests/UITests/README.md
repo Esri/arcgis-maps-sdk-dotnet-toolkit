@@ -119,8 +119,32 @@ To get automatic provisioning working you may need to go through the [Full Manua
 
 
 ## Contributing
+### Quick Start
+The easiest way to get started making a new test is to use the included template. The following snippets assume commands will be run from the root of the toolkit repository.
+
+The template can be installed by running
+```sh
+dotnet new install ./src/Tests/UITests/extensions/
+```
+
+To see the template's options run
+```sh
+dotnet new toolkit-uitest -h
+```
+
+Try the template out by running the following on a clean tree:
+```sh
+dotnet new toolkit-uitest --output ./src/Tests/UITests/ -C ExampleControl -P ExampleTestPage -T ExampleControlTests
+```
+
+If you run `git status` you should see 5 new untracked files have been added. At this point if you have Visual Studio open on Windows it is a good idea to close and reopen it. If you have Appium installed and running you should be able to run the new `ExampleControl_CompassAutoHideExample` test from the Visual Studio Test Explorer.
+
+From here you can refer to the generated files and compare them to existing tests to get a better idea of how the framework functions. After you have a good idea of how things work you can re-run the template with a real control name and more fitting page and/or test names, and start developing your test.
+
 ### Guidelines
-The intent of the UITests is to allow as much code as possible to be shared between frameworks and platforms. Towards this goal, test pages created for the app projects should be as similar as possible. The recommended way to create a test page is to use the cross-framework [`TestPage`](./Toolkit.UITests.TestPages.Shared/TestPage.cs) class. This class allows xaml pages from different platforms to use the same code-behind, which helps all three test apps stay in sync. You can refer to existing test pages such as [`CompassMap.xaml.cs`](./Toolkit.UITests.TestPages.Shared/CompassMap.xaml.cs) to see how the class is used.
+The intent of the UITests is to allow as much code as possible to be shared between frameworks and platforms. Towards this goal, test pages created for the app projects should be as similar as possible. The recommended way to create a test page is to use the template as outlined in the [Quick Start](#quick-start) section above.
+
+If test pages must be created manually, the cross-framework [`TestPage`](./Toolkit.UITests.TestPages.Shared/TestPage.cs) class can be used to help share code-behind logic across the different apps. You can refer to existing test pages such as [`CompassMap.xaml.cs`](./Toolkit.UITests.TestPages.Shared/CompassMap.xaml.cs) to see how the class is used.
 
 Try to keep tests small with few steps. On some platforms in particular the lag between an instruction being sent by the test runner, translated by the appium server, sent to the test app, sent back to appium, and finally sent back to the runner can be quite long.
 
