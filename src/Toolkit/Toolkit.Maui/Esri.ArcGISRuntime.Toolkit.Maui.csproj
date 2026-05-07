@@ -50,6 +50,12 @@
       <PackageReference Include="Xamarin.AndroidX.Camera.Camera2" Version="1.4.2.3" />
       <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.10.1.3" />
     </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.275">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
     <Import Project="..\..\CommonProperties.targets" />
     <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
@@ -62,5 +68,10 @@
         <None Include="..\..\Analyzers\Toolkit.Maui.Analyzers\bin\$(Configuration)\netstandard2.0\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Link="analyzers\dotnet\cs\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.dll" />
         <None Include="..\..\Analyzers\Toolkit.Maui.Analyzers.CodeFixes\bin\$(Configuration)\netstandard2.0\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Link="analyzers\dotnet\cs\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.dll" />
         <None Include="tools\*.ps1" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="tools" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Include="..\Toolkit.WinUI\Primitives\Image360.Rendering.cs" Link="Image360\Windows\Image360.Rendering.cs" />
+      <Compile Include="..\Toolkit.WinUI\Primitives\Image360.cs" Link="Image360\Windows\Image360.cs" />
+      <AdditionalFiles Include="..\Toolkit.WinUI\NativeMethods.txt" Link="NativeMethods.txt" />
     </ItemGroup>
 </Project>

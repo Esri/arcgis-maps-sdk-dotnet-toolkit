@@ -43,6 +43,10 @@
     <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'" />
     <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="$(WinUIVersion)" />
     <PackageReference Include="Markdig" Version="0.31.0" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.275">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
