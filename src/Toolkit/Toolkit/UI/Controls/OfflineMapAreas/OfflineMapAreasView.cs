@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (GetTemplateChild(ItemsViewName) is BaseItemsControl lv)
             {
-                lv.ItemsSource = OfflineManager.Instance.OfflineMapInfos;
+                lv.ItemsSource = OfflineManager.Shared.OfflineMapInfos;
             }
         }
 

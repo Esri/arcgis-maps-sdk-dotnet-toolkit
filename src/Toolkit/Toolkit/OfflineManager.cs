@@ -100,12 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <summary>
         /// Gets the shared offline manager instance.
         /// </summary>
-        public static OfflineManager Instance { get; } = new OfflineManager();
-
-        /// <summary>
-        /// Gets the shared offline manager instance.
-        /// </summary>
-        public static OfflineManager Shared => Instance;
+        public static OfflineManager Shared { get; } = new OfflineManager();
 
         /// <summary>
         /// Gets or sets the configuration for this offline manager.
@@ -142,7 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <param name="portalItem">The portal item whose map is being taken offline.</param>
         /// <param name="title">The title of the map area being taken offline.</param>
         public Task StartJobAsync(OfflineMapSyncJob job, PortalItem portalItem, string title)
-            => StartJobAsync(job, portalItem, title);
+            => StartJobAsync((IJob)job, portalItem, title);
 
         /// <summary>
         /// Starts a job that will be managed by this instance.
@@ -151,7 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <param name="portalItem">The portal item whose map is being taken offline.</param>
         /// <param name="title">The title of the map area being taken offline.</param>
         public Task StartJobAsync(GenerateOfflineMapJob job, PortalItem portalItem, string title)
-            => StartJobAsync(job, portalItem, title);
+            => StartJobAsync((IJob)job, portalItem, title);
 
         /// <summary>
         /// Starts a job that will be managed by this instance.
@@ -160,7 +155,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <param name="portalItem">The portal item whose map is being taken offline.</param>
         /// <param name="title">The title of the map area being taken offline.</param>
         public Task StartJobAsync(DownloadPreplannedOfflineMapJob job, PortalItem portalItem, string title)
-            => StartJobAsync(job, portalItem, title);
+            => StartJobAsync((IJob)job, portalItem, title);
 
         private async Task StartJobAsync(IJob job, PortalItem portalItem, string title)
         {
@@ -216,10 +211,16 @@ namespace Esri.ArcGISRuntime.Toolkit
                 throw new ArgumentNullException(nameof(offlineMapInfo));
             }
 
-            var portalItemDirectory = GetPortalItemFilename(offlineMapInfo.Id);
-            if (File.Exists(portalItemDirectory))
+            var portalItemInfoFile = GetPortalItemFilename(offlineMapInfo.Id);
+            if (File.Exists(portalItemInfoFile))
             {
-                File.Delete(portalItemDirectory);
+                File.Delete(portalItemInfoFile);
+            }
+
+            var portalItemAreasDirectory = Path.Combine(GetOfflineManagerDirectory(), MapAreasFolderName, offlineMapInfo.Id);
+            if (Directory.Exists(portalItemAreasDirectory))
+            {
+                Directory.Delete(portalItemAreasDirectory, recursive: true);
             }
 
             RunOnCapturedContext(() =>
@@ -282,7 +283,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
             catch (Exception ex)
             {
-                Trace.WriteLine($"ArcGIS Toolkit - Offline job completed with an error: {ex}");
+                Trace.WriteLine($"Offline job completed with an error: {ex}", "ArcGIS Toolkit");
             }
             finally
             {
@@ -424,6 +425,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         }
 
         private const string PendingFolderName = ".pending";
+        private const string MapAreasFolderName = "MapAreas";
 
         private sealed class ReferenceEqualityComparer<T> : IEqualityComparer<T>
             where T : class
