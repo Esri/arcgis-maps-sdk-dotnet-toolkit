@@ -518,7 +518,7 @@
                         Grid.Column="1"
                         Style="{StaticResource QueryEntryStyle}"
                         Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        AutomationProperties.Name="{Binding Path=SearchViewModel.ActivePlaceholder}"
+                        AutomationProperties.Name="{Binding RelativeSource={RelativeSource TemplatedParent},Path=SearchViewModel.ActivePlaceholder}"
                         AutomationProperties.AutomationId="QueryEntry" />
                     <TextBlock
                         Grid.Column="1"
@@ -573,7 +573,7 @@
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedSuggestion, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
                             AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
-                            AutomationProperties.AutomationId="SearchSuggestionsList"
+                            AutomationProperties.AutomationId="SearchSuggestionsListFlat"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}}" />
                         <ListView
                             x:Name="PART_SuggestionList"
@@ -581,15 +581,10 @@
                             ItemsSource="{Binding Source={StaticResource GroupedSuggestionsEx}, Mode=OneWay}"
                             Style="{StaticResource ListStyle}"
                             AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
-                            AutomationProperties.AutomationId="SearchSuggestionsList"
+                            AutomationProperties.AutomationId="SearchSuggestionsListGrouped"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}">
                             <ListView.GroupStyle>
                                 <GroupStyle>
-                                    <GroupStyle.ContainerStyle>
-                                            <Style TargetType="GroupItem">
-                                                <Setter Property="AutomationProperties.Name" Value="{Binding Name.DisplayName}" />
-                                            </Style>
-                                        </GroupStyle.ContainerStyle>
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
                                             <TextBlock Style="{StaticResource GroupHeaderTextStyle}" Text="{Binding Key.DisplayName}" />

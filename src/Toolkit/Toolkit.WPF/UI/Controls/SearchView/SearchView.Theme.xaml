@@ -388,7 +388,8 @@
                         x:Name="QueryEntry"
                         Grid.Column="1"
                         Style="{StaticResource QueryEntryStyle}"
-                        Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="{Binding Path=SearchViewModel.ActivePlaceholder}" 
+                        Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.Name="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActivePlaceholder, Mode=OneWay}" 
                         AutomationProperties.AutomationId="QueryEntry"/>
                     <TextBlock
                         Grid.Column="1"
@@ -433,7 +434,7 @@
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedSuggestion, Mode=OneWayToSource}"
                                 Style="{StaticResource ListStyle}"
                                 AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
-                                AutomationProperties.AutomationId="SearchSuggestionsList">
+                                AutomationProperties.AutomationId="SearchSuggestionsListGrouped">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchSuggestion}">
                                         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,0,0,1">

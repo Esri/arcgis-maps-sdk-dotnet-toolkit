@@ -21,6 +21,8 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
+using Microsoft.UI.Xaml.Automation;
+
 #if WINDOWS_XAML
 using Windows.Foundation;
 #endif
@@ -100,6 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_suggestionList != null)
             {
                 _suggestionList.SelectionChanged -= SuggestionList_SelectionChanged;
+                _suggestionList.ChoosingGroupHeaderContainer -= ListView_ChoosingGroupHeaderContainer;
                 _suggestionList = null;
             }
 
@@ -110,7 +113,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _suggestionList = newlistview;
                 _suggestionList.SelectedIndex = -1;
                 _suggestionList.SelectionChanged += SuggestionList_SelectionChanged;
+                _suggestionList.ChoosingGroupHeaderContainer += ListView_ChoosingGroupHeaderContainer;
             }
+
         }
 
         private void SuggestionList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -693,6 +698,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if WINDOWS_XAML
+        private void ListView_ChoosingGroupHeaderContainer(ListViewBase sender, ChoosingGroupHeaderContainerEventArgs args)
+        {
+            if (args.Group is SuggestionsGrouped group)
+            {
+                args.GroupHeaderContainer ??= new ListViewHeaderItem();
+
+                AutomationProperties.SetName(
+                    args.GroupHeaderContainer,
+                    group.Key?.DisplayName ?? string.Empty);
+            }
+        }
         private void UpdateGroupingForUWP()
         {
             _groupListSelectionFlag = true;
