@@ -1,4 +1,4 @@
-//-:cnd:noEmit
+//-:cnd:noEmit (copy these statements verbatim, see https://github.com/dotnet/templating/wiki/Conditional-processing-and-comment-syntax#ignore-conditions-expressions-in-language-files)
 #if MAUI_APP
 using ClickEventArgs = System.EventArgs;
 #elif WINUI_APP
