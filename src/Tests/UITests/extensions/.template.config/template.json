@@ -3,7 +3,7 @@
     "classifications": [ "Esri", "ArcGIS Maps SDK for .NET Toolkit", "UI Tests" ],
     "identity": "UITests.TestTemplates",
     "name": "ArcGIS Maps SDK for .NET Toolkit UI Test Template",
-    "shortName": "toolkit-uitest",
+    "shortName": "arcgis-toolkit-uitest",
     "description": "A template for creating new tests in the ArcGIS Maps SDK for .NET Toolkit UI test framework. This template should be run on the src/Tests/UITests directory.",
     "tags": {
       "language": "C#",
