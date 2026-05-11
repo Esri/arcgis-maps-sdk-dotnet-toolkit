@@ -9,8 +9,7 @@
     <Import_RootNamespace>Toolkit.UITests.AppCodeBehinds</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)CompassMap.xaml.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ScaleLines.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.xaml.cs" />
   </ItemGroup>
 </Project>

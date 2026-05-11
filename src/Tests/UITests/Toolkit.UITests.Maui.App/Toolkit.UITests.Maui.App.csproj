@@ -79,11 +79,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
   </ItemGroup>
 
+  <!-- Test Pages -->
   <ItemGroup>
-    <MauiXaml Update="TestPages\CompassMap.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="TestPages\ScaleLines.xaml">
+    <MauiXaml Update="TestPages\**\*.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>
