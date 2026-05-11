@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WINUI
     [WinRT.GeneratedBindableCustomProperty]
 #endif
-    public sealed partial class OnDemandMapModel : OfflineBindableObject
+    internal sealed partial class OnDemandMapModel : OfflineBindableObject
     {
         private readonly Func<Task<OfflineMapTask>>? _offlineMapTaskFactory;
         private readonly Action<OnDemandMapModel> _onRemoveDownloadAction;
@@ -379,7 +379,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     }
 
 
-    public enum OnDemandMapModelStatus
+    internal enum OnDemandMapModelStatus
     {
         Initialized,
         Downloading,
@@ -389,7 +389,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         MmpkLoadFailure
     }
 
-    public sealed class OnDemandMapAreaConfiguration
+    internal sealed class OnDemandMapAreaConfiguration
     {
         public OnDemandMapAreaConfiguration(string title, Esri.ArcGISRuntime.Geometry.Geometry areaOfInterest, double minScale, double maxScale, byte[]? thumbnailData = null)
         {

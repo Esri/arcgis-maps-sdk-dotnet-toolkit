@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
-    public enum PreplannedMapModelStatus
+    internal enum PreplannedMapModelStatus
     {
         NotLoaded,
         Loading,
@@ -62,7 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WINUI
     [WinRT.GeneratedBindableCustomProperty]
 #endif
-    public sealed partial class PreplannedMapModel : OfflineBindableObject
+    internal sealed partial class PreplannedMapModel : OfflineBindableObject
     {
         private readonly Func<Task<OfflineMapTask>> _offlineMapTaskFactory;
         private readonly Action<PreplannedMapModel> _onRemoveDownloadAction;

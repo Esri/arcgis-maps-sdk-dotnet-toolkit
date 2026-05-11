@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WINUI
     [WinRT.GeneratedBindableCustomProperty]
 #endif
-    public sealed class OfflineMapViewModel : OfflineBindableObject
+    internal sealed class OfflineMapViewModel : OfflineBindableObject
     {
         private readonly ObservableCollection<PreplannedMapModel> _preplannedMapModels = new ObservableCollection<PreplannedMapModel>();
         private readonly ObservableCollection<OnDemandMapModel> _onDemandMapModels = new ObservableCollection<OnDemandMapModel>();
@@ -322,7 +322,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 
-    public abstract class OfflineBindableObject : INotifyPropertyChanged
+    internal abstract class OfflineBindableObject : INotifyPropertyChanged
     {
         private readonly SynchronizationContext? _synchronizationContext = SynchronizationContext.Current;
 
