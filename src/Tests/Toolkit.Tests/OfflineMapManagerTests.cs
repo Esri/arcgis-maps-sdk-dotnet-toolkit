@@ -21,7 +21,7 @@ namespace Toolkit.Tests
         // It doesn't have preplanned map areas
         string naperville_ondemand = "https://www.arcgis.com/home/item.html?id=b95fe18073bc4f7788f0375af2bb445e";
 
-        public static void CloseVM(OfflineMapViewModel vm)
+        private static void CloseVM(OfflineMapViewModel vm)
         {
             foreach (var item in vm.PreplannedMapModels.ToArray())
             {
