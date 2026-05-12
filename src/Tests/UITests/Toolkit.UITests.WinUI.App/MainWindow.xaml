@@ -1,0 +1,85 @@
+<Window
+    x:Class="Toolkit.UITests.WinUI.Puppet.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ca="using:Esri.Calcite.WinUI"
+    mc:Ignorable="d"
+    Title="WinUI UI Test Puppet">
+
+    <Grid Background="{ThemeResource CalciteBackground1Color}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+            <TextBlock Text="Net Version: "
+                        FontSize="12"
+                        Margin="5,1,1,3" />
+            <TextBlock x:Name="NetVersionTextBlock"
+                        AutomationProperties.AutomationId="NetVersion"
+                        Text="undefined"
+                        FontSize="12"
+                        Margin="0,1,10,1" />
+
+            <TextBlock Text="Toolkit Version: "
+                        FontSize="12"
+                        Margin="5,1,1,3" />
+            <TextBlock x:Name="ToolkitVersionTextBlock"
+                        AutomationProperties.AutomationId="ToolkitVersion"
+                        Text="undefined"
+                        FontSize="12"
+                        Margin="0,1,10,1" />
+
+            <TextBlock Text="Runtime Version: "
+                        FontSize="12"
+                        Margin="5,1,1,3" />
+            <TextBlock x:Name="RuntimeVersionTextBlock"
+                        AutomationProperties.AutomationId="RuntimeVersion"
+                        Text="undefined"
+                        FontSize="12"
+                        Margin="0,1,10,1" />
+
+            <TextBlock Text="Screen Density: "
+                        FontSize="12"
+                        Margin="5,1,1,3" />
+            <TextBlock x:Name="ScreenDensityTextBlock"
+                        AutomationProperties.AutomationId="ScreenDensity"
+                        Text="undefined"
+                        FontSize="12"
+                        Margin="0,1,10,1" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button x:Name="SwitchThemeButton"
+                    Content="Toggle Theme"
+                    Click="SwitchThemeButton_Click"
+                    Style="{StaticResource CalciteSecondaryButtonStyle}"
+                    Grid.Column="1"
+                    MinWidth="10"
+                    Margin="10,1"
+                    MinHeight="20"
+                    VerticalAlignment="Center"/>
+            <TextBlock Text="Open Page: "
+                    FontSize="12"
+                    VerticalAlignment="Center" />
+            <TextBox x:Name="TestSearchBox"
+                    AutomationProperties.AutomationId="TestSearchBox"
+                     KeyDown="TestSearchBox_KeyDown"
+                    MinWidth="120"
+                    MinHeight="20"
+                    MaxHeight="24"
+                    Margin="3,0" />
+        </StackPanel>
+
+        <ContentControl Grid.Row="1"
+                        x:Name="TestPagePresenter"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"/>
+    </Grid>
+</Window>

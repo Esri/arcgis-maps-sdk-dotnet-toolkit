@@ -1,0 +1,67 @@
+﻿<Project Sdk="MSTest.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(TestRunnerNetVersion)</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DefineConstants>$(DefineConstants);MAC_RUNNER;IOS_TEST;MAUI_TEST</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Appium.WebDriver" Version="$(AppiumWebDriverVersion)" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="$(MagickNetVersion)" />
+  </ItemGroup>
+
+  <Import Project="..\Toolkit.UITests.Shared\Toolkit.UITests.Shared.projitems" Label="Shared" />
+
+  <!-- The Maui iOS tests should only run from a Mac machine -->
+  <Target Name="CheckOS" BeforeTargets="Build">
+    <Warning Condition="$([MSBuild]::IsOSPlatform('OSX')) != 'true'" Text="The Maui iOS UI tests must be run from a Mac machine" />
+    <CallTarget Targets="BuildTestApp" Condition="$([MSBuild]::IsOSPlatform('OSX')) == 'true'" />
+  </Target>
+
+  <!-- Build test app if needed and record build location to AppBuildInfo.txt -->
+  <Target Name="BuildTestApp">
+    <PropertyGroup>
+      <!-- Force iOS target when building the MAUI test app from the test project -->
+      <_MauiTestAppTfm>$(TestAppNetVersion)-ios</_MauiTestAppTfm>
+      <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
+    </PropertyGroup>
+
+    <!-- Get architecture -->
+    <Exec Command="$(MSBuildProjectDirectory)/GetDeviceArchitecture.sh $(iOSDeviceUdid)" ConsoleToMSBuild="true" IgnoreExitCode="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_RuntimeIdentifier" />
+      <Output TaskParameter="ExitCode" PropertyName="_GetArchExitCode" />
+    </Exec>
+
+    <Error Condition="'$(_GetArchExitCode)' != '0'" Text="Failed to get device architecture. Have you set the device UDID in UITests/Directory.Build.props? Error: $(_RuntimeIdentifier)" />
+
+    <!-- Build the app (the MSBuild task has some side effects that cause problems, hence the Exec) -->
+    <Exec Command="dotnet build -t:Build -c $(Configuration) -f $(_MauiTestAppTfm) -p:RuntimeIdentifier=$(_RuntimeIdentifier) $(_MauiTestAppProject)"/>
+
+    <!-- Get the path to the built app -->
+    <MSBuild
+      Projects="$(_MauiTestAppProject)"
+      Targets="GetTargetPath"
+      Properties="Configuration=$(Configuration);TargetFramework=$(_MauiTestAppTfm);RuntimeIdentifier=$(_RuntimeIdentifier)">
+      <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetPaths" />
+    </MSBuild>
+
+    <PropertyGroup>
+      <_TestAppExePath>@(_TestAppTargetPaths->'%(FullPath)')</_TestAppExePath>
+      <_TestAppExePath>$(_TestAppExePath.Replace('.dll','.app'))</_TestAppExePath>
+      <_TestSettings>app=$(_TestAppExePath)</_TestSettings>
+      <_TestSettings>$(_TestSettings);deviceUdid=$(iOSDeviceUdid)</_TestSettings>
+      <_TestSettings>$(_TestSettings);usePreinstalledWDA=$(UsePreinstalledWDA)</_TestSettings>
+      <_TestSettings>$(_TestSettings);xcodeOrgId=$(XCodeOrgId)</_TestSettings>
+      <_TestSettings>$(_TestSettings);xcodeSigningId=$(XCodeSigningId)</_TestSettings>
+      <_TestSettings>$(_TestSettings);updatedWDABundleId=$(UpdatedWDABundleId)</_TestSettings>
+      <_TestSettings>$(_TestSettings);prebuiltWDAPath=$(PrebuiltWDAPath)</_TestSettings>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="Maui Sample app built at: $(_TestAppExePath)" />
+    <WriteLinesToFile File="$(TargetDir)AppBuildInfo.txt" Lines="$(_TestSettings)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+
+</Project>
