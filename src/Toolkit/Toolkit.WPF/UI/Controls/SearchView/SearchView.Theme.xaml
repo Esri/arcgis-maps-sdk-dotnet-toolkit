@@ -413,6 +413,7 @@
                         </Popup.Resources>
                         <Border BorderThickness="1,1,1,0" Style="{StaticResource ResultAreaBorderStyle}">
                             <ListView
+                                ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding Source={StaticResource GroupedSuggestions}}"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedSuggestion, Mode=OneWayToSource}"
                                 Style="{StaticResource ListStyle}"
@@ -512,6 +513,7 @@
                             <ListView
                                 MaxHeight="300"
                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
+                                ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Results, Mode=OneWay}"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.SelectedResult, Mode=OneWayToSource}"
                                 SelectionMode="Single"
