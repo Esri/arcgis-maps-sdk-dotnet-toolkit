@@ -37,26 +37,21 @@ Only fall back to manual page creation when the template cannot express the chan
 
 Use an iterative workflow. Do **not** try to finish every mirrored page up front.
 
-1. **Look for prior implementation first.** Start with `Compass` and `ScaleLine` tests and pages:
-   - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\Compass\CompassTests.cs`
-   - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\ScaleLine\ScaleLineTests.cs`
-   - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\CompassMap.xaml.cs`
-   - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\ScaleLines.xaml.cs`
-2. **Choose the first platform based on the host OS.**
+1. **Choose the first platform based on the host OS.**
    - On **Windows**, start with **WPF**.
    - On **macOS**, start with **MAUI iOS**.
    - Treat that first platform as the design and validation surface for the initial test.
-3. **Follow the README Quick Start** to install the local template, inspect its options if needed, and generate the starting files.
-4. **Omit `-T`** when you are adding a page to an existing shared test class instead of creating a new test file.
-5. **Create or refine only the shared code-behind and the first-platform page at first.** Keep the logic shared through `TestPage`, but do not spend time filling in the remaining mirrored pages yet.
-6. **Add stable automation IDs for every element the test touches.** This is the default rule in this repo.
-7. **Add or extend the shared MSTest class** in `Toolkit.UITests.Shared\Tests\<Control>\`.
-8. **Open the page through the shared harness** with `OpenSample("<PageClassName>")`.
-9. **Use the Appium helpers in `AppiumTestBase`** such as `FindElement`, `FindElements`, `Click`, `SubmitText`, and `GetScreenshot`.
-10. **Keep tests small.** Favor a few deterministic steps over long end-to-end flows.
-11. **Prefer lightweight image analysis over direct screenshot comparison** when visual verification is required.
-12. **Stop after the first-platform test is working well enough for review.** Have the user review the changes and run the focused test(s) on that platform until the behavior and test shape are satisfactory.
-13. **Only after the first-platform test is accepted, fill in the mirrored pages for the remaining platforms.** Keep those pages aligned to the reviewed first-platform surface rather than inventing platform-specific variants early.
+2. **Follow the README Quick Start** to install the local template, inspect its options if needed, and generate the starting files.
+3. **Omit `-T`** when you are adding a page to an existing shared test class instead of creating a new test file.
+4. **Create or refine only the shared code-behind and the first-platform page at first.** Keep the logic shared through `TestPage`, but do not spend time filling in the remaining mirrored pages yet.
+5. **Add stable automation IDs for every element the test touches.** This is the default rule in this repo.
+6. **Add or extend the shared MSTest class** in `Toolkit.UITests.Shared\Tests\<Control>\`.
+7. **Open the page through the shared harness** with `OpenSample("<PageClassName>")`.
+8. **Use the Appium helpers in `AppiumTestBase`** such as `FindElement`, `FindElements`, `Click`, `SubmitText`, and `GetScreenshot`.
+9. **Keep tests small.** Favor a few deterministic steps over long end-to-end flows.
+10. **Prefer lightweight image analysis over direct screenshot comparison** when visual verification is required.
+11. **Stop after the first-platform test is working well enough for review.** Have the user review the changes and run the focused test(s) on that platform until the behavior and test shape are satisfactory.
+12. **Only after the first-platform test is accepted, fill in the mirrored pages for the remaining platforms.** Keep those pages aligned to the reviewed first-platform surface rather than inventing platform-specific variants early.
 
 ## Required iteration loop
 
