@@ -19,10 +19,12 @@ public sealed partial class MainWindow : Window
 
         InitializeComponent();
 
+#pragma warning disable IL2026 // Suppresses a reflection warning
         var testPages = from t in Assembly.GetExecutingAssembly().ExportedTypes
                         where t.GetTypeInfo().IsSubclassOf(typeof(UserControl)) && t.FullName!.Contains(".TestPages.")
                         select t;
         _testTypes = testPages.ToArray();
+#pragma warning restore IL2026
 
         var content = this.Content as FrameworkElement;
         content!.RequestedTheme = ElementTheme.Light;
@@ -63,7 +65,9 @@ public sealed partial class MainWindow : Window
             var testType = _testTypes.FirstOrDefault(t => t.FullName!.EndsWith(TestSearchBox.Text, StringComparison.OrdinalIgnoreCase));
             if (testType != null)
             {
+#pragma warning disable IL2072 // Suppresses a reflection trim warning
                 TestPagePresenter.Content = Activator.CreateInstance(testType);
+#pragma warning disable IL2072
             }
         }
     }
