@@ -1,6 +1,6 @@
 ---
 name: create-ui-tests
-description: 'Create or update Appium-based UI tests for this repository''s UITests projects. Use when scaffolding a new UITest with the `dotnet new arcgis-toolkit-uitest` template, adding coverage for a toolkit control, wiring mirrored test pages, checking Appium dependencies, or deciding whether AutomationId, AutomationProperties, or SemanticProperties are needed.'
+description: 'Create or update tests using this repository''s Appium-based UITests framework. Use when adding UI-based test coverage for a toolkit control, scaffolding from the UITest `dotnet new` template, modifying existing UI test logic, or wiring mirrored test pages.'
 ---
 
 # Create UI Tests
@@ -77,9 +77,7 @@ For cross-platform coverage, set the automation ID explicitly instead of assumin
 
 `SemanticProperties` are **not** the primary mechanism used by the current UITest suite.
 
-Use them only when:
-
-- you intentionally want an accessibility label or hint for assistive technologies
+Use them only when you intentionally want an accessibility label or hint for assistive technologies
 
 Do **not** use `SemanticProperties` as a substitute for `AutomationId` when the test can identify the control by ID. In this repo, ID-based lookup is the preferred and more stable approach.
 
