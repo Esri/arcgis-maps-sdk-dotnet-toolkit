@@ -14,12 +14,43 @@
                         Height="{TemplateBinding Height}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid>
-                            <ListView x:Name="ListView" 
-                                      ScrollViewer.VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
-                                      ItemTemplate="{TemplateBinding ItemTemplate}" />
-                            <TextBlock x:Name="NoItemsText" Visibility="Collapsed" />
-                        </Grid>
+                        <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
+                            <StackPanel>
+                                <ProgressBar IsIndeterminate="{Binding TemplateSettings.IsLoadingModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding OnlineMap.Item.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    <TextBlock Text="(Online)" />
+                                </StackPanel>
+                                <TextBlock Text="On-Demand Map Areas" />
+                                <ListView x:Name="ListView" SelectionMode="Single"
+                                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                          ItemsSource="{Binding TemplateSettings.OnDemandMapModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Title}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <TextBlock Text="Preplanned Map Areas" />
+                                <ListView x:Name="ListView2" SelectionMode="Single"
+                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                        ItemsSource="{Binding TemplateSettings.PreplannedMapModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Title}" />
+                                                <CheckBox Content="IsDownloaded" IsChecked="{Binding IsDownloaded, Mode=OneWay}" IsEnabled="False" />
+                                                <CheckBox Content="AllowsDownload" IsChecked="{Binding AllowsDownload, Mode=OneWay}" IsEnabled="False" />
+                                                <TextBlock Text="{Binding SizeInBytes}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                            </StackPanel>
+                        </ScrollViewer>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

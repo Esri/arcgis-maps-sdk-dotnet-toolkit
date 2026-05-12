@@ -62,7 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WINUI
     [WinRT.GeneratedBindableCustomProperty]
 #endif
-    internal sealed partial class PreplannedMapModel : OfflineBindableObject
+    internal sealed partial class PreplannedMapModel : OfflineBindableObject, IOfflineMapAreaItem
     {
         private readonly Func<Task<OfflineMapTask>> _offlineMapTaskFactory;
         private readonly Action<PreplannedMapModel> _onRemoveDownloadAction;
@@ -267,6 +267,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             (Status == PreplannedMapModelStatus.NotLoaded ||
              Status == PreplannedMapModelStatus.LoadFailure ||
              Status == PreplannedMapModelStatus.PackageFailure);
+
+        bool IOfflineMapAreaItem.MapIsOfflineDisabled => false;
 
         private async Task LoadPreplannedMapAreaAsync()
         {

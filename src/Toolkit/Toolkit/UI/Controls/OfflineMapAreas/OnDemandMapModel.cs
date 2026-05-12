@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WINUI
     [WinRT.GeneratedBindableCustomProperty]
 #endif
-    internal sealed partial class OnDemandMapModel : OfflineBindableObject
+    internal sealed partial class OnDemandMapModel : OfflineBindableObject, IOfflineMapAreaItem
     {
         private readonly Func<Task<OfflineMapTask>>? _offlineMapTaskFactory;
         private readonly Action<OnDemandMapModel> _onRemoveDownloadAction;
@@ -163,6 +163,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool AllowsDownload => Status == OnDemandMapModelStatus.Initialized;
 
         public bool IsDownloaded => Status == OnDemandMapModelStatus.Downloaded;
+
+        string IOfflineMapAreaItem.Description => string.Empty;
+
+        bool IOfflineMapAreaItem.MapIsOfflineDisabled => false;
+
+        bool IOfflineMapAreaItem.SupportsRedownloading => false;
 
         public async Task DownloadOnDemandMapAreaAsync()
         {
@@ -378,7 +384,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 
-
     internal enum OnDemandMapModelStatus
     {
         Initialized,
@@ -418,5 +423,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public byte[]? ThumbnailData { get; }
     }
-
 }

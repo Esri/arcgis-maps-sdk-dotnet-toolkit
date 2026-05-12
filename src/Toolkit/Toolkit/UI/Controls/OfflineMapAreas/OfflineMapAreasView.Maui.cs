@@ -44,6 +44,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             nameScope.RegisterName(ItemsViewName, listView);
             return listView;
         }
+
+        private OfflineMapViewModel? _vm;
+
+        private void SetVM(OfflineMapViewModel? vm)
+        {
+            _vm = vm;
+        }
     }
 }
 #endif

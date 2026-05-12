@@ -19,6 +19,10 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
+using Microsoft.UI;
+using Windows.Media.Ocr;
+using System.Net;
+
 
 
 #if MAUI
@@ -40,6 +44,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
+    /// <summary>
+    /// The OfflineMapAreasView allows users to take a web map offline by downloading map areas.
+    /// </summary>
+    /// <remarks>
+    /// The view supports both ahead-of-time(preplanned) and on-demand map areas for an offline enabled web map. The view:
+    /// <para>
+    /// Displays a list of map areas.
+    /// <list type="bullet">
+    /// <item>Shows download progress and status for map areas.</item>
+    /// <item>Opens a map area for viewing when selected.</item>
+    /// <item>Provides options to view details about downloaded map areas.</item>
+    /// <item>Supports removing downloaded offline map areas files from the device.</item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// For preplanned workflows, the view:
+    /// <list type="bullet">
+    /// <item>Displays a list of available preplanned map areas from an offline-enabled web map that contains preplanned map areas when the network is connected.</item>
+    /// <item>Downloads preplanned map areas in the list.</item>
+    /// <item>Displays a list of downloaded preplanned map areas on the device when the network is disconnected.</item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// For on-demand workflows, the view:
+    /// <list type="bullet">
+    /// <item>Allows users to add and download on-demand map areas to the device by specifying an area of interest and level of detail.</item>
+    /// <item>Displays a list of on-demand map areas available on the device that are tied to a specific web map</item>
+    /// </list>
+    /// </para>
+    /// </remarks>
     public partial class OfflineMapAreasView
     {
         /// <summary>
@@ -52,6 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ControlTemplate = DefaultControlTemplate;
 #else
             DefaultStyleKey = typeof(OfflineMapAreasView);
+            TemplateSettings = new OfflineMapAreasTemplateSettings();
 #endif
             // Since we're binding to a static collection, we need to unbind when the control is unloaded to prevent memory leaks.
             this.Unloaded += (s, e) => UnassignItemsSource();
@@ -109,6 +144,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnOnlineMapPropertyChanged(Map? oldMap, Map? newMap)
         {
+            SetVM(null);
             if (newMap is not null && OfflineMapInfo is not null)
             {
                 OfflineMapInfo = null; // Only one of OnlineMap or OfflineMapInfo can be set at a time, so clear the other when one is set.
@@ -116,7 +152,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (newMap is not null)
             {
                 SelectedMap = newMap;
+                InitVM(newMap);
             }
+        }
+
+        private async void InitVM(Map map)
+        {
+            if (map.Item is null && map.Uri is not null && map.LoadStatus != LoadStatus.Loaded)
+            {
+                try
+                {
+                    await map.LoadAsync();
+                }
+                catch { }
+            }
+
+            if (!string.IsNullOrWhiteSpace(map.Item?.ItemId))
+                SetVM(new OfflineMapViewModel(map));
         }
 
         /// <summary>
@@ -141,18 +193,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnOfflineMapInfoPropertyChanged(OfflineMapInfo? oldMap, OfflineMapInfo? newOfflineMap)
         {
-            if(newOfflineMap is not null && OnlineMap is not null)
+            if (newOfflineMap is not null && OnlineMap is not null)
             {
                 OnlineMap = null; // Only one of OnlineMap or OfflineMapInfo can be set at a time, so clear the other when one is set.
             }
-            if(newOfflineMap is not null)
+            SetVM(null);
+            if (newOfflineMap is not null)
             {
                 SelectedOfflineMapInfo = newOfflineMap;
+                // TODO: Load new VM based on new OfflineMapInfo...
             }
         }
 
         /// <summary>
-        /// Gets or sets item template for the <see cref="SelectedOfflineMapInfo"/> items in the list.
+        /// Gets or sets the <see cref="SelectedOfflineMapInfo"/>.
         /// </summary>
         public OfflineMapInfo? SelectedOfflineMapInfo
         {
@@ -173,7 +227,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnSelectedOfflineMapInfoPropertyChanged(OfflineMapInfo? oldMap, OfflineMapInfo? newOfflineMap)
         {
-            
+
         }
 
 
@@ -194,7 +248,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #elif WINDOWS_XAML
         public Map? SelectedMap
         {
-            get => GetValue(SelectedMapProperty) as Map; 
+            get => GetValue(SelectedMapProperty) as Map;
             private set => SetValue(SelectedMapProperty, value);
         }
 
@@ -255,5 +309,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(OfflineMapAreasView), new PropertyMetadata(default(DataTemplate)));
 #endif
+    }
+
+    public interface IOfflineMapAreaItem
+    {
+        string Title { get; }
+
+        string Description { get; }
+
+        public byte[]? ThumbnailData { get; }
+
+        long SizeInBytes { get; }
+
+        Exception? Error { get; }
+
+        bool MapIsOfflineDisabled { get; }
+
+        bool AllowsDownload { get; }
+
+        bool IsDownloaded { get; }
+
+        bool SupportsRedownloading { get; }
     }
 }
