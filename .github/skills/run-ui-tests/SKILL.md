@@ -54,9 +54,9 @@ appium driver doctor mac2
 
 Additional setup notes from this repo:
 
-- `Appium Inspector` is recommended for investigating element IDs and layout.
+- `Appium Inspector` is recommended for users to investigate element IDs and layout.
 - Android (`uiautomator2`) may require `bundletool.jar` on `PATH`, and on Windows `.jar` may need to be present in `PATHEXT`.
-- iOS setup is the hardest path. Review `src\Tests\UITests\README.md` and `src\Tests\UITests\Directory.Build.props` for `iOSDeviceUdid`, WDA signing, and preinstalled WDA settings.
+- iOS setup is the hardest. Review `src\Tests\UITests\README.md` and `src\Tests\UITests\Directory.Build.props` for `iOSDeviceUdid`, WDA signing, and preinstalled WDA settings.
 - Android and iOS device selection can be configured in `src\Tests\UITests\Directory.Build.props`.
 
 Before running tests, start the Appium server in a separate terminal:
