@@ -1,6 +1,6 @@
 ---
 name: create-ui-tests
-description: 'Create or update Appium-based UI tests for this repository''s UITests projects. Use when adding coverage for a toolkit control, wiring mirrored test pages, checking Appium dependencies, or deciding whether AutomationId, AutomationProperties, or SemanticProperties are needed.'
+description: 'Create or update Appium-based UI tests for this repository''s UITests projects. Use when scaffolding a new UITest with the `dotnet new arcgis-toolkit-uitest` template, adding coverage for a toolkit control, wiring mirrored test pages, checking Appium dependencies, or deciding whether AutomationId, AutomationProperties, or SemanticProperties are needed.'
 ---
 
 # Create UI Tests
@@ -19,6 +19,42 @@ Use this skill when working in `src\Tests\UITests\` to add or update Appium UI t
 - Test pages should derive from `Toolkit.UITests.App.TestPages.TestPage`.
 - New pages are discovered automatically by reflection in each test app. There is no manual registration list. Keep the page in the `.TestPages.` namespace and make it derive from the correct platform base (`UserControl` on WPF/WinUI via `TestPage`, `ContentView` on MAUI via `TestPage`).
 
+## Preferred path: scaffold from the UITest template
+
+For a new page or control test, start with the repo's `dotnet new` template instead of creating the files by hand.
+
+Install the local template from the repository root:
+
+```powershell
+dotnet new install .\src\Tests\UITests\extensions\
+```
+
+Inspect the available arguments:
+
+```powershell
+dotnet new arcgis-toolkit-uitest -h
+```
+
+Generate the new UITest files into `src\Tests\UITests\`:
+
+```powershell
+dotnet new arcgis-toolkit-uitest --output .\src\Tests\UITests\ -C <ControlName> -P <PageName> -T <TestsName>
+```
+
+Parameter meanings:
+
+- `-C` / `ControlName`: folder and control name, such as `Compass` or `FeatureFormView`
+- `-P` / `PageName`: test page name, such as `CompassMap` or `FeatureFormViewForms`
+- `-T` / `TestsName`: optional shared MSTest file name, such as `CompassTests` or `FeatureFormViewTests_Accessibility`
+
+What the template creates:
+
+- shared page code-behind in `Toolkit.UITests.TestPages.Shared\`
+- mirrored XAML pages for WPF, WinUI, and MAUI
+- optional shared test class in `Toolkit.UITests.Shared\Tests\<ControlName>\` when `-T` is provided
+
+If you only need an additional page for an existing test class, omit `-T` and add the new assertions to the existing shared test file manually.
+
 ## How to add a new control test
 
 1. **Look for prior art first.** Start with `Compass` and `ScaleLine` tests and pages:
@@ -26,14 +62,19 @@ Use this skill when working in `src\Tests\UITests\` to add or update Appium UI t
    - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\ScaleLine\ScaleLineTests.cs`
    - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\CompassMap.xaml.cs`
    - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\ScaleLines.xaml.cs`
-2. **Create or extend a shared test page code-behind** in `Toolkit.UITests.TestPages.Shared\`. Reuse `TestPage` so the logic stays shared across frameworks.
-3. **Create or update mirrored XAML pages** in the WPF, WinUI, and MAUI app projects with the same class name and the same test surface.
-4. **Add stable automation IDs for every element the test touches.** This is the default rule in this repo.
-5. **Add a shared MSTest class** in `Toolkit.UITests.Shared\Tests\<Control>\`.
-6. **Open the page through the shared harness** with `OpenSample("<PageClassName>")`.
-7. **Use the Appium helpers in `AppiumTestBase`** such as `FindElement`, `FindElements`, `Click`, `SubmitText`, and `GetScreenshot`.
-8. **Keep tests small.** Favor a few deterministic steps over long end-to-end flows.
-9. **Prefer lightweight image analysis over direct screenshot comparison** when visual verification is required.
+2. **Install the local UITest template**:
+   - `dotnet new install --force .\src\Tests\UITests\extensions\`
+3. **Generate the starting files with the template**:
+   - `dotnet new arcgis-toolkit-uitest --output .\src\Tests\UITests\ -C <ControlName> -P <PageName> -T <TestsName>`
+   - Omit `-T` when you are adding a page to an existing shared test class instead of creating a new test file.
+4. **Refine the generated shared test page code-behind** in `Toolkit.UITests.TestPages.Shared\`. Keep the logic shared through `TestPage`.
+5. **Refine the generated mirrored XAML pages** in the WPF, WinUI, and MAUI app projects so they expose the same test surface.
+6. **Add stable automation IDs for every element the test touches.** This is the default rule in this repo.
+7. **Add or extend the shared MSTest class** in `Toolkit.UITests.Shared\Tests\<Control>\`.
+8. **Open the page through the shared harness** with `OpenSample("<PageClassName>")`.
+9. **Use the Appium helpers in `AppiumTestBase`** such as `FindElement`, `FindElements`, `Click`, `SubmitText`, and `GetScreenshot`.
+10. **Keep tests small.** Favor a few deterministic steps over long end-to-end flows.
+11. **Prefer lightweight image analysis over direct screenshot comparison** when visual verification is required.
 
 ## Accessibility and element identity rules
 
@@ -63,8 +104,7 @@ For cross-platform coverage, set the automation ID explicitly instead of assumin
 
 Use them only when:
 
-- you intentionally want an accessibility label or hint for assistive technologies, or
-- you need the control to expose a stable accessible **name** and the test is using `FindElementByName(...)`.
+- you intentionally want an accessibility label or hint for assistive technologies
 
 Do **not** use `SemanticProperties` as a substitute for `AutomationId` when the test can identify the control by ID. In this repo, ID-based lookup is the preferred and more stable approach.
 
@@ -97,6 +137,7 @@ Before considering the work complete, make sure all of these are true:
 ## File references
 
 - `src\Tests\UITests\README.md`
+- `src\Tests\UITests\extensions\.template.config\template.json`
 - `src\Tests\UITests\Directory.Build.props`
 - `src\Tests\UITests\Toolkit.UITests.Shared\Appium\AppiumTestBase.Utils.cs`
 - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\Compass\CompassTests.cs`
