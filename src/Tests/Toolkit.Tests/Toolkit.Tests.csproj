@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <EnableMSTestRunner>true</EnableMSTestRunner>
     <OutputType>Exe</OutputType>
+    <AssemblyName>Esri.ArcGISRuntime.Toolkit.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
