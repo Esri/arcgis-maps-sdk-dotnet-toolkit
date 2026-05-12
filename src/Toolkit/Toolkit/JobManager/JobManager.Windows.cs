@@ -192,7 +192,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// For the job manager background task to work, the application manifest must also be configured to declare the background task using the COM server class ID "D998B238-C096-4181-B971-9CD1EB760547".
         /// Under the Application section add:
         /// <code language="xml">
-        /// /// *lt;Extensions>
+        /// *lt;Extensions>
         ///     *lt;!-- Below Entry Point is to be mentioned in case of C# application for usage of WinAppSDK Background Task API -->
         ///     *lt;Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.Task">
         ///     *lt;BackgroundTasks>
@@ -211,7 +211,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         ///     *lt;/com:Extension>
         /// *lt;/Extensions>
         /// </code>
-        /// And under the <c>&ltPackage&gt;</c> section add the following:
+        /// And under the &lt;c>Package&gt;&lt;/c section add the following:
         /// <code language="xml">
         /// &lt;Extensions>
         ///     &lt;Extension Category="windows.activatableClass.inProcessServer">

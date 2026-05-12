@@ -26,7 +26,8 @@
       <FilesToSignFiltered Include="@(FilesToSign)" Condition="Exists(%(FilesToSign.Identity))" />
       <FilesToSignFiltered Condition="'@(FilesToSignFiltered->Count())' == 0" Include="$(TargetPath)" /> <!-- used by C++ projects -->
     </ItemGroup>
-    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="$(SignAssemblyCommand) &quot;%(FilesToSignFiltered.Identity)&quot;"
+    <!-- Pass all files to a single signtool invocation. Per-item batching via %(Identity) would launch one signtool process per file, paying process startup and an RFC 3161 timestamp round-trip every time. -->
+    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="$(SignAssemblyCommand) @(FilesToSignFiltered->'&quot;%(Identity)&quot;', ' ')"
           WorkingDirectory="$(ProjectDir)" EchoOff="true" />
   </Target>
   
