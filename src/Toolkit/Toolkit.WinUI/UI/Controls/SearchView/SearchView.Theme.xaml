@@ -62,7 +62,6 @@
     <converter:CollectionIsSingletonToBoolConverter x:Key="CollectionIsSingletonToBoolConverter" />
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
-    <converter:SearchViewAutomationNameConverter x:Key="SearchViewAutomationNameConverter" />
     <ControlTemplate x:Key="ListItemTemplate" TargetType="ListViewItem">
         <Border
             x:Name="Border"
@@ -129,7 +128,7 @@
         </Border>
     </DataTemplate>
     <DataTemplate x:Key="ResultTemplate">
-        <Border AutomationProperties.Name="{Binding Converter={StaticResource SearchViewAutomationNameConverter}}">
+        <Border>
             <Grid Margin="4,4,4,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="24" />
@@ -160,6 +159,7 @@
         </Border>
     </DataTemplate>
     <DataTemplate x:Key="SuggestionTemplate">
+        <Border>
             <Grid Margin="8,6,4,6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10" />

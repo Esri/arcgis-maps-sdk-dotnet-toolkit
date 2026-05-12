@@ -8,7 +8,6 @@
     <converter:CollectionIsSingletonToBoolConverter x:Key="CollectionIsSingletonToBoolConverter" />
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
-    <converter:SearchViewAutomationNameConverter x:Key="SearchViewAutomationNameConverter" />
     <Color x:Key="ButtonHoverColor">#f3f3f3</Color>
     <Color x:Key="ButtonPressColor">#e2f1fb</Color>
     <Color x:Key="BlueButtonColor">#007AC2</Color>
