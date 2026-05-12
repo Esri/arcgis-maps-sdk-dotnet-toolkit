@@ -29,16 +29,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         private bool _canExecute = true;
         private readonly Action<object?>? _onExecute;
+        private readonly Func<bool>? _canExecuteFunc;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand"/> class.
         /// </summary>
         public DelegateCommand(Action inputAction) => _onExecute = (o) => inputAction();
 
-        internal DelegateCommand(Action<object?> onExecute)
+        internal DelegateCommand(Action<object?> onExecute) : this(onExecute, null)
+        {
+        }
+        
+        internal DelegateCommand(Action<object?> onExecute, Func<bool>? canExecute)
         {
             _onExecute = onExecute ?? throw new ArgumentNullException(nameof(onExecute));
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            _canExecuteFunc = canExecute;
         }
 
         /// <inheritdoc/>
@@ -47,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <inheritdoc/>
         public bool CanExecute(object? parameter)
         {
-            return _canExecute;
+            return _canExecuteFunc?.Invoke() ?? _canExecute;
         }
 
         /// <inheritdoc/>
@@ -56,8 +61,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             _onExecute?.Invoke(parameter);
         }
 
+        internal void NotifyCanExecuteChanged()
+        {
+            System.Diagnostics.Debug.Assert(_canExecuteFunc != null);
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
         internal void NotifyCanExecuteChanged(bool newValue)
         {
+            System.Diagnostics.Debug.Assert(_canExecuteFunc == null);
             if (newValue != _canExecute)
             {
                 _canExecute = newValue;

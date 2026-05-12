@@ -101,9 +101,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             IsLoadingModels = _vm?.IsLoadingModels ?? false;
             IsShowingOnlyOfflineModels = _vm?.IsShowingOnlyOfflineModels ?? false;
             MapIsOfflineDisabled = _vm?.MapIsOfflineDisabled ?? false;
-            OnDemandMapModels = _vm?.OnDemandMapModels;
+            OnDemandMapModels = _vm?.OnDemandMapModels is null ? null : new ReadonlyCollection<IOfflineMapAreaItem>(_vm.OnDemandMapModels);
             OnlineMap = _vm?.OnlineMap;
-            PreplannedMapModels = _vm?.PreplannedMapModels;
+            PreplannedMapModels = _vm?.PreplannedMapModels is null ? null : new ReadonlyCollection<IOfflineMapAreaItem>(_vm.PreplannedMapModels);
             PreplannedMapModelsError = _vm?.PreplannedMapModelsError;
         }
 

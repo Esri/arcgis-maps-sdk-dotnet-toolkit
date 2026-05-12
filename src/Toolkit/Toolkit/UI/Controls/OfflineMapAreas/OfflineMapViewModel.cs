@@ -348,7 +348,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            _synchronizationContext.Send(static state => ((Action)state!).Invoke(), action);
+            _synchronizationContext.Post(static state => ((Action)state!).Invoke(), action);
         }
     }
 
