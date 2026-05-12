@@ -22,33 +22,86 @@
                                     <TextBlock Text="(Online)" />
                                 </StackPanel>
                                 <TextBlock Text="On-Demand Map Areas" />
-                                <ListView x:Name="ListView" SelectionMode="Single"
-                                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                <ItemsControl  x:Name="ListView" 
                                           ItemsSource="{Binding TemplateSettings.OnDemandMapModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
-                                    <ListView.ItemTemplate>
+                                    <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel>
                                                 <TextBlock Text="{Binding Title}" />
                                             </StackPanel>
                                         </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                                 <TextBlock Text="Preplanned Map Areas" />
-                                <ListView x:Name="ListView2" SelectionMode="Single"
-                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                <ItemsControl x:Name="ListView2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                                         ItemsSource="{Binding TemplateSettings.PreplannedMapModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
-                                    <ListView.ItemTemplate>
+                                    <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding Title}" />
-                                                <CheckBox Content="IsDownloaded" IsChecked="{Binding IsDownloaded, Mode=OneWay}" IsEnabled="False" />
-                                                <CheckBox Content="AllowsDownload" IsChecked="{Binding AllowsDownload, Mode=OneWay}" IsEnabled="False" />
-                                                <TextBlock Text="{Binding SizeInBytes}" />
-                                            </StackPanel>
+                                            <Grid Height="64" Margin="0,4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Image Source="{Binding ThumbnailData}" Width="64" Height="64" Stretch="UniformToFill" Grid.RowSpan="2" />
+                                                <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                                    <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" FontWeight="Bold" />
+                                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                                <TextBlock Text="Downloaded" Grid.Row="1" Grid.Column="1" Margin="8,0,0,0">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsDownloaded}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <Grid Grid.Column="2" Grid.RowSpan="2">
+                                                    <!--<Button Content="Open">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsDownloaded}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>-->
+                                                    <Button Content="Download" Command="{Binding DownloadCommand}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsEnabled}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    <!--<Button Content="Pause">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsDownloading}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>-->
+                                                </Grid>
+                                            </Grid>
                                         </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
                         </ScrollViewer>
                     </Border>

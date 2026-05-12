@@ -330,5 +330,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         bool IsDownloaded { get; }
 
         bool SupportsRedownloading { get; }
+
+        System.Windows.Input.ICommand DownloadCommand { get; }
+        //System.Windows.Input.ICommand OpenCommand { get; }
     }
 }

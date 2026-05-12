@@ -15,7 +15,7 @@
             <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
         <esri:MapView Map="{Binding SelectedMap, ElementName=OfflineMapAreasView}" />
-        <esri:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Column="1" />
+        <esri:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Column="1" Margin="4" />
 
     </Grid>
 </UserControl>

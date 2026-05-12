@@ -22,6 +22,7 @@
 using System.IO;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Tasks.Offline;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
@@ -80,6 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Map? _map;
         private Exception? _error;
         private bool _supportsRedownloading;
+        private readonly DelegateCommand _downloadCommand;
 
         internal PreplannedMapModel(
             Func<Task<OfflineMapTask>> offlineMapTaskFactory,
@@ -97,6 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _title = preplannedMapArea.PortalItem?.Title ?? preplannedMapAreaId;
             _description = OfflineMapAreaUtilities.StripHtml(preplannedMapArea.PortalItem?.Description);
             _supportsRedownloading = true;
+            _downloadCommand = new DelegateCommand((o) => _ = DownloadPreplannedMapAreaAsync(), () => _preplannedMapArea != null && AllowsDownload && Status != PreplannedMapModelStatus.Downloading);
         }
 
         internal PreplannedMapModel(
@@ -118,6 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _supportsRedownloading = supportsRedownloading;
             _onRemoveDownloadAction = onRemoveDownload;
             _mmpkDirectoryPath = OfflineMapAreaStorage.GetPreplannedAreaDirectory(portalItemId, preplannedMapAreaId);
+            _downloadCommand = new DelegateCommand((o) => _ = DownloadPreplannedMapAreaAsync(), () => _preplannedMapArea != null && AllowsDownload && Status != PreplannedMapModelStatus.Downloading);
         }
 
         public string PreplannedMapAreaId => _preplannedMapAreaId;
@@ -155,7 +159,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public PreplannedMapModelStatus Status
         {
             get => _status;
-            private set => SetProperty(ref _status, value);
+            private set
+            {
+                SetProperty(ref _status, value);
+                _downloadCommand.NotifyCanExecuteChanged();
+            }
         }
 
         public MobileMapPackage? MobileMapPackage
@@ -186,6 +194,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public bool IsDownloaded => Status == PreplannedMapModelStatus.Downloaded;
 
+        public System.Windows.Input.ICommand DownloadCommand => _downloadCommand;
+
         public async Task LoadAsync()
         {
             if (Job is null && TryLookupDownloadJob() is DownloadPreplannedOfflineMapJob existingJob)
@@ -200,6 +210,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 await LoadPreplannedMapAreaAsync().ConfigureAwait(false);
             }
+            _downloadCommand.NotifyCanExecuteChanged();
         }
 
         public async Task DownloadPreplannedMapAreaAsync()
@@ -219,8 +230,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                var offlineMapTask = await _offlineMapTaskFactory().ConfigureAwait(false);
-                var parameters = await offlineMapTask.CreateDefaultDownloadPreplannedOfflineMapParametersAsync(_preplannedMapArea).ConfigureAwait(false);
+                var offlineMapTask = await _offlineMapTaskFactory();
+                var parameters = await offlineMapTask.CreateDefaultDownloadPreplannedOfflineMapParametersAsync(_preplannedMapArea);
                 parameters.UpdateMode = OfflineManager.Shared.Configuration.PreplannedUpdateMode;
                 parameters.ContinueOnErrors = false;
 
@@ -231,7 +242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 var job = offlineMapTask.DownloadPreplannedOfflineMap(parameters, _mmpkDirectoryPath);
                 var portalItem = offlineMapTask.PortalItem ?? throw new InvalidOperationException("The offline map task does not reference a portal item.");
-                await OfflineManager.Shared.StartJobAsync(job, portalItem, Title).ConfigureAwait(false);
+                await OfflineManager.Shared.StartJobAsync(job, portalItem, Title);
                 ObserveJob(job);
             }
             catch (Exception ex)
@@ -239,6 +250,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Error = ex;
                 Status = PreplannedMapModelStatus.DownloadFailure;
             }
+            _downloadCommand.NotifyCanExecuteChanged();
         }
 
         public void RemoveDownloadedArea()

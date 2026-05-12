@@ -15,8 +15,10 @@
 //  ******************************************************************************/
 
 using System.IO;
+using System.Windows.Input;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Tasks.Offline;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
@@ -164,11 +166,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public bool IsDownloaded => Status == OnDemandMapModelStatus.Downloaded;
 
-        string IOfflineMapAreaItem.Description => string.Empty;
+        static IValueConverter _converter = new FileSizeConverter();
+        string IOfflineMapAreaItem.Description => $"Size: {_converter.Convert(SizeInBytes, typeof(string), null, null!)}";
 
         bool IOfflineMapAreaItem.MapIsOfflineDisabled => false;
 
         bool IOfflineMapAreaItem.SupportsRedownloading => false;
+        
+        ICommand IOfflineMapAreaItem.DownloadCommand => null!; // TODO
 
         public async Task DownloadOnDemandMapAreaAsync()
         {
