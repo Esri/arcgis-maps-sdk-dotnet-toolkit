@@ -19,33 +19,9 @@ Use this skill when working in `src\Tests\UITests\` to add or update Appium UI t
 - Test pages should derive from `Toolkit.UITests.App.TestPages.TestPage`.
 - New pages are discovered automatically by reflection in each test app. There is no manual registration list. Keep the page in the `.TestPages.` namespace and make it derive from the correct platform base (`UserControl` on WPF/WinUI via `TestPage`, `ContentView` on MAUI via `TestPage`).
 
-## Preferred path: scaffold from the UITest template
+## Preferred path: use the UITest `dotnet new` template
 
-For a new page or control test, start with the repo's `dotnet new` template instead of creating the files by hand.
-
-Install the local template from the repository root:
-
-```powershell
-dotnet new install .\src\Tests\UITests\extensions\
-```
-
-Inspect the available arguments:
-
-```powershell
-dotnet new arcgis-toolkit-uitest -h
-```
-
-Generate the new UITest files into `src\Tests\UITests\`:
-
-```powershell
-dotnet new arcgis-toolkit-uitest --output .\src\Tests\UITests\ -C <ControlName> -P <PageName> -T <TestsName>
-```
-
-Parameter meanings:
-
-- `-C` / `ControlName`: folder and control name, such as `Compass` or `FeatureFormView`
-- `-P` / `PageName`: test page name, such as `CompassMap` or `FeatureFormViewForms`
-- `-T` / `TestsName`: optional shared MSTest file name, such as `CompassTests` or `FeatureFormViewTests_Accessibility`
+For a new page or control test, use the Quick Start flow in `src\Tests\UITests\README.md` instead of creating files by hand. Treat the README as the canonical source for the exact `dotnet new install`, help, and generation commands.
 
 What the template creates:
 
@@ -53,20 +29,19 @@ What the template creates:
 - mirrored XAML pages for WPF, WinUI, and MAUI
 - optional shared test class in `Toolkit.UITests.Shared\Tests\<ControlName>\` when `-T` is provided
 
-If you only need an additional page for an existing test class, omit `-T` and add the new assertions to the existing shared test file manually.
+If you only need an additional page for an existing test class, use the template without `-T` and add the new assertions to the existing shared test file manually.
+
+Only fall back to manual page creation when the template cannot express the change. In that case, follow the manual guidance in `src\Tests\UITests\README.md` and reuse `Toolkit.UITests.TestPages.Shared\TestPage.cs`.
 
 ## How to add a new control test
 
-1. **Look for prior art first.** Start with `Compass` and `ScaleLine` tests and pages:
+1. **Look for prior implementation first.** Start with `Compass` and `ScaleLine` tests and pages:
    - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\Compass\CompassTests.cs`
    - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\ScaleLine\ScaleLineTests.cs`
    - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\CompassMap.xaml.cs`
    - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\ScaleLines.xaml.cs`
-2. **Install the local UITest template**:
-   - `dotnet new install --force .\src\Tests\UITests\extensions\`
-3. **Generate the starting files with the template**:
-   - `dotnet new arcgis-toolkit-uitest --output .\src\Tests\UITests\ -C <ControlName> -P <PageName> -T <TestsName>`
-   - Omit `-T` when you are adding a page to an existing shared test class instead of creating a new test file.
+2. **Follow the README Quick Start** to install the local template, inspect its options if needed, and generate the starting files.
+3. **Omit `-T`** when you are adding a page to an existing shared test class instead of creating a new test file.
 4. **Refine the generated shared test page code-behind** in `Toolkit.UITests.TestPages.Shared\`. Keep the logic shared through `TestPage`.
 5. **Refine the generated mirrored XAML pages** in the WPF, WinUI, and MAUI app projects so they expose the same test surface.
 6. **Add stable automation IDs for every element the test touches.** This is the default rule in this repo.
