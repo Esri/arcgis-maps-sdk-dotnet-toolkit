@@ -73,7 +73,7 @@ public static class MauiProgram
     }
 
     [TestMethod]
-    public async Task CodeFixer()   
+    public async Task CodeFixer()
     {
         var testCode = @"
 using Microsoft.Maui.Hosting;
