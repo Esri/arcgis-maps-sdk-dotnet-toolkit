@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
+using Microsoft.CodeAnalysis.Testing;
 using System.Numerics;
 
 namespace Esri.ArcGISRuntime.Toolkit.Analyzers.Test
@@ -10,7 +10,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Analyzers.Test
         where TAnalyzer : DiagnosticAnalyzer, new()
         where TCodeFix : CodeFixProvider, new()
     {
-        public class Test : CSharpCodeFixTest<TAnalyzer, TCodeFix, MSTestVerifier>
+        public class Test : CSharpCodeFixTest<TAnalyzer, TCodeFix, DefaultVerifier>
         {
             public Test()
             {
