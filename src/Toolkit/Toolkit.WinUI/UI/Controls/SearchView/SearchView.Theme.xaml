@@ -160,7 +160,6 @@
         </Border>
     </DataTemplate>
     <DataTemplate x:Key="SuggestionTemplate">
-        <Border AutomationProperties.Name="{Binding Path=DisplayTitle}">
             <Grid Margin="8,6,4,6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10" />

@@ -70,5 +70,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DisplayTitle = title;
             OwningSource = owner;
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(DisplayTitle)
+                ? ""
+                : $"{DisplayTitle}";
+        }
     }
 }
