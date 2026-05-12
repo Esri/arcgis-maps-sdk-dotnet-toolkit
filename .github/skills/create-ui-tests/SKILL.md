@@ -35,21 +35,38 @@ Only fall back to manual page creation when the template cannot express the chan
 
 ## How to add a new control test
 
+Use an iterative workflow. Do **not** try to finish every mirrored page up front.
+
 1. **Look for prior implementation first.** Start with `Compass` and `ScaleLine` tests and pages:
    - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\Compass\CompassTests.cs`
    - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\ScaleLine\ScaleLineTests.cs`
    - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\CompassMap.xaml.cs`
    - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\ScaleLines.xaml.cs`
-2. **Follow the README Quick Start** to install the local template, inspect its options if needed, and generate the starting files.
-3. **Omit `-T`** when you are adding a page to an existing shared test class instead of creating a new test file.
-4. **Refine the generated shared test page code-behind** in `Toolkit.UITests.TestPages.Shared\`. Keep the logic shared through `TestPage`.
-5. **Refine the generated mirrored XAML pages** in the WPF, WinUI, and MAUI app projects so they expose the same test surface.
+2. **Choose the first platform based on the host OS.**
+   - On **Windows**, start with **WPF**.
+   - On **macOS**, start with **MAUI iOS**.
+   - Treat that first platform as the design and validation surface for the initial test.
+3. **Follow the README Quick Start** to install the local template, inspect its options if needed, and generate the starting files.
+4. **Omit `-T`** when you are adding a page to an existing shared test class instead of creating a new test file.
+5. **Create or refine only the shared code-behind and the first-platform page at first.** Keep the logic shared through `TestPage`, but do not spend time filling in the remaining mirrored pages yet.
 6. **Add stable automation IDs for every element the test touches.** This is the default rule in this repo.
 7. **Add or extend the shared MSTest class** in `Toolkit.UITests.Shared\Tests\<Control>\`.
 8. **Open the page through the shared harness** with `OpenSample("<PageClassName>")`.
 9. **Use the Appium helpers in `AppiumTestBase`** such as `FindElement`, `FindElements`, `Click`, `SubmitText`, and `GetScreenshot`.
 10. **Keep tests small.** Favor a few deterministic steps over long end-to-end flows.
 11. **Prefer lightweight image analysis over direct screenshot comparison** when visual verification is required.
+12. **Stop after the first-platform test is working well enough for review.** Have the user review the changes and run the focused test(s) on that platform until the behavior and test shape are satisfactory.
+13. **Only after the first-platform test is accepted, fill in the mirrored pages for the remaining platforms.** Keep those pages aligned to the reviewed first-platform surface rather than inventing platform-specific variants early.
+
+## Required iteration loop
+
+When using this skill for a new control test, follow this loop explicitly:
+
+1. Build the shared test logic and one host-native page first.
+2. Ask the user to review and run the focused test(s) for that first platform.
+3. Incorporate feedback until the user is satisfied with the initial test page and assertions.
+4. Mirror that approved test surface into the remaining platform pages.
+5. Reuse the same shared test class unless a real platform-specific difference requires a narrow exception.
 
 ## Accessibility and element identity rules
 
@@ -100,12 +117,13 @@ Prefer assertions based on:
 
 Before considering the work complete, make sure all of these are true:
 
-1. The test page exists for WPF, WinUI, and MAUI.
-2. The shared code-behind is reused where possible.
-3. Every interacted-with element has an explicit automation ID.
-4. The shared test uses `AppiumTestBase` helpers instead of ad hoc selectors.
-5. The runner for the target platform is used with a focused MSTest filter first.
-6. Any platform-specific differences are kept minimal and documented in code only where necessary.
+1. The first host-native platform page was built and reviewed before the mirrored pages were filled in.
+2. The test page now exists for WPF, WinUI, and MAUI where applicable to the scenario.
+3. The shared code-behind is reused where possible.
+4. Every interacted-with element has an explicit automation ID.
+5. The shared test uses `AppiumTestBase` helpers instead of ad hoc selectors.
+6. The runner for the target platform is used with a focused MSTest filter first.
+7. Any platform-specific differences are kept minimal and documented in code only where necessary.
 
 ## File references
 
