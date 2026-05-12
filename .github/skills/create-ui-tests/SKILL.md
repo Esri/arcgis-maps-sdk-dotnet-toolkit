@@ -1,0 +1,103 @@
+---
+name: create-ui-tests
+description: 'Create or update Appium-based UI tests for this repository''s UITests projects. Use when adding coverage for a toolkit control, wiring mirrored test pages, checking Appium dependencies, or deciding whether AutomationId, AutomationProperties, or SemanticProperties are needed.'
+---
+
+# Create UI Tests
+
+Use this skill when working in `src\Tests\UITests\` to add or update Appium UI tests for toolkit controls.
+
+## What this repo expects
+
+- UI tests are Appium-driven MSTest projects.
+- Shared test logic lives in `src\Tests\UITests\Toolkit.UITests.Shared\`.
+- Shared test page code-behind lives in `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\`.
+- Mirrored XAML pages live in:
+  - `src\Tests\UITests\Toolkit.UITests.Wpf.App\TestPages\`
+  - `src\Tests\UITests\Toolkit.UITests.WinUI.App\TestPages\`
+  - `src\Tests\UITests\Toolkit.UITests.Maui.App\TestPages\`
+- Test pages should derive from `Toolkit.UITests.App.TestPages.TestPage`.
+- New pages are discovered automatically by reflection in each test app. There is no manual registration list. Keep the page in the `.TestPages.` namespace and make it derive from the correct platform base (`UserControl` on WPF/WinUI via `TestPage`, `ContentView` on MAUI via `TestPage`).
+
+## How to add a new control test
+
+1. **Look for prior art first.** Start with `Compass` and `ScaleLine` tests and pages:
+   - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\Compass\CompassTests.cs`
+   - `src\Tests\UITests\Toolkit.UITests.Shared\Tests\ScaleLine\ScaleLineTests.cs`
+   - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\CompassMap.xaml.cs`
+   - `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\ScaleLines.xaml.cs`
+2. **Create or extend a shared test page code-behind** in `Toolkit.UITests.TestPages.Shared\`. Reuse `TestPage` so the logic stays shared across frameworks.
+3. **Create or update mirrored XAML pages** in the WPF, WinUI, and MAUI app projects with the same class name and the same test surface.
+4. **Add stable automation IDs for every element the test touches.** This is the default rule in this repo.
+5. **Add a shared MSTest class** in `Toolkit.UITests.Shared\Tests\<Control>\`.
+6. **Open the page through the shared harness** with `OpenSample("<PageClassName>")`.
+7. **Use the Appium helpers in `AppiumTestBase`** such as `FindElement`, `FindElements`, `Click`, `SubmitText`, and `GetScreenshot`.
+8. **Keep tests small.** Favor a few deterministic steps over long end-to-end flows.
+9. **Prefer lightweight image analysis over direct screenshot comparison** when visual verification is required.
+
+## Accessibility and element identity rules
+
+### Use explicit IDs by default
+
+If a test will interact with or inspect a control, define an explicit automation identifier on that control.
+
+- **WPF / WinUI:** use `AutomationProperties.AutomationId="..."`.
+- **MAUI:** use `AutomationId="..."`.
+
+Examples already in the repo:
+
+- WPF / WinUI `ScaleLines.xaml` sets `AutomationProperties.AutomationId` on `MapView` and `ScaleLine`.
+- MAUI `CompassMap.xaml` and `ScaleLines.xaml` set `AutomationId` on the controls the tests query.
+
+### Do not rely on `x:Name` alone for cross-platform tests
+
+- Windows runners use `MobileBy.AccessibilityId(...)`.
+- Non-Windows runners use `MobileBy.Id(...)`.
+- Some controls may be findable from `x:Name` on Windows, but that does not make the ID stable across MAUI platforms.
+
+For cross-platform coverage, set the automation ID explicitly instead of assuming the framework will expose `x:Name` the same way everywhere.
+
+### When to use `SemanticProperties`
+
+`SemanticProperties` are **not** the primary mechanism used by the current UITest suite.
+
+Use them only when:
+
+- you intentionally want an accessibility label or hint for assistive technologies, or
+- you need the control to expose a stable accessible **name** and the test is using `FindElementByName(...)`.
+
+Do **not** use `SemanticProperties` as a substitute for `AutomationId` when the test can identify the control by ID. In this repo, ID-based lookup is the preferred and more stable approach.
+
+## Writing the shared test
+
+Follow the patterns in `AppiumTestBase`:
+
+- `OpenSample("PageName")` loads the page by class name.
+- `FindElement("Id")` is the normal lookup path.
+- `FindElement(parent, "ChildId")` is the normal path for child elements.
+- `FindElementByName("Text")` is a fallback, not the first choice.
+
+Prefer assertions based on:
+
+- explicit UI state exposed through IDs,
+- control text retrieved through the helper methods, or
+- targeted image analysis when rendering itself is the feature under test.
+
+## Implementation checklist
+
+Before considering the work complete, make sure all of these are true:
+
+1. The test page exists for WPF, WinUI, and MAUI.
+2. The shared code-behind is reused where possible.
+3. Every interacted-with element has an explicit automation ID.
+4. The shared test uses `AppiumTestBase` helpers instead of ad hoc selectors.
+5. The runner for the target platform is used with a focused MSTest filter first.
+6. Any platform-specific differences are kept minimal and documented in code only where necessary.
+
+## File references
+
+- `src\Tests\UITests\README.md`
+- `src\Tests\UITests\Directory.Build.props`
+- `src\Tests\UITests\Toolkit.UITests.Shared\Appium\AppiumTestBase.Utils.cs`
+- `src\Tests\UITests\Toolkit.UITests.Shared\Tests\Compass\CompassTests.cs`
+- `src\Tests\UITests\Toolkit.UITests.TestPages.Shared\TestPage.cs`
