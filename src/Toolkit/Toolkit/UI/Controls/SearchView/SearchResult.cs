@@ -35,9 +35,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
 #if WINUI
     [WinRT.GeneratedBindableCustomProperty]
-    public partial class SearchResult : INotifyPropertyChanged, ISearchDisplayInfo
-#else 
-    public partial class SearchResult : INotifyPropertyChanged
 #endif
     {
 #pragma warning disable SA1011 // Closing square brackets should be spaced correctly - catch-22
