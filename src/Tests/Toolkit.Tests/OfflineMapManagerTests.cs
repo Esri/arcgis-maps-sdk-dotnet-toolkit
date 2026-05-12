@@ -173,6 +173,8 @@ namespace Toolkit.Tests
         [TestMethod]
         public async Task AddAndDownloadOnDemandArea()
         {
+            if(string.IsNullOrEmpty(Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey))
+                Assert.Inconclusive("API KEY is required for this test. See TestInitializer.cs");
             var map = new Map(new Uri(naperville_ondemand));
             await map.LoadAsync();
             var vm = new OfflineMapViewModel(map);
