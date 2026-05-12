@@ -10,7 +10,14 @@ namespace Toolkit.Tests
         [AssemblyInitialize]
         public static void Initialize(TestContext context)
         {
-            // Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = "";
+            if (context.Properties.ContainsKey("APIKey"))
+                Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = context.Properties["APIKey"] as string ?? string.Empty;
+        }
+
+        internal static void AssertAPIKey()
+        {
+            if (string.IsNullOrEmpty(Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey))
+                Assert.Inconclusive("API KEY is required for this test. See TestInitializer.cs");
         }
     }
 }
