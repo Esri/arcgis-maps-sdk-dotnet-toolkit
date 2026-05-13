@@ -41,7 +41,7 @@ Use an iterative workflow. Do **not** try to finish every mirrored page up front
    - On **Windows**, start with **WPF**.
    - On **macOS**, start with **MAUI iOS**.
    - Treat that first platform as the design and validation surface for the initial test.
-2. **Follow the README Quick Start** to install the local template, inspect its options if needed, and generate the starting files.
+2. **Follow the README Quick Start** to install the local `dotnet new` template, inspect its options if needed, and generate the starting files using the template.
 3. **Omit `-T`** when you are adding a page to an existing shared test class instead of creating a new test file.
 4. **Create or refine only the shared code-behind and the first-platform page at first.** Keep the logic shared through `TestPage`, but do not spend time filling in the remaining mirrored pages yet.
 5. **Add stable automation IDs for every element the test touches.** This is the default rule in this repo.
@@ -57,11 +57,13 @@ Use an iterative workflow. Do **not** try to finish every mirrored page up front
 
 When using this skill for a new control test, follow this loop explicitly:
 
-1. Build the shared test logic and one host-native page first.
-2. Ask the user to review and run the focused test(s) for that first platform.
-3. Incorporate feedback until the user is satisfied with the initial test page and assertions.
-4. Mirror that approved test surface into the remaining platform pages.
-5. Reuse the same shared test class unless a real platform-specific difference requires a narrow exception.
+1. Build only the shared test logic and one host-native page first.
+2. Do use the dotnet new template to scaffold the initial files, but do not fill in all the mirrored pages yet.
+3. Use the `ask_user` tool to gather feedback on the initial implementation. Provide a command to run the focused test(s) for that first platform, and ask if the user is satisfied with the test page and assertions.
+  - For example: `dotnet test --project src\Tests\UITests\Toolkit.UITests.Wpf\Toolkit.UITests.Wpf.csproj --filter "FullyQualifiedName~CompassTests"`
+4. Stop and wait for the user's response.
+5. Incorporate feedback until the user is satisfied with the initial test page and assertions.
+6. DO NOT continue to mirror the approved test page to the other platforms until the user approves the first page and test logic. This ensures that the shared code and test shape are well-designed before replicating them.
 
 ## Accessibility and element identity rules
 
