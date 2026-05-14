@@ -21,9 +21,9 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
-using Microsoft.UI.Xaml.Automation;
 
 #if WINDOWS_XAML
+using Microsoft.UI.Xaml.Automation;
 using Windows.Foundation;
 #endif
 
