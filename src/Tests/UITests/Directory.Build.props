@@ -3,14 +3,10 @@
 
   <!-- General Settings -->
   <PropertyGroup>
-    <!-- Be sure to delete the obj/ and bin/ folders in both App and Runner projects when updating this parameter -->
+    <!-- Be sure to delete the obj/ and bin/ folders in both App and Runner projects if updating this parameter -->
     <TestAppNetVersion>net10.0</TestAppNetVersion>
 
-    <!-- Maui Version gets set explicitly in the root Directory.build.props file, so if we want to test a newer version it must be set here.
-         Currently this defaults to the latest version of Maui 10 as per floating version syntax: https://learn.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions -->
-    <MauiVersion>10.*</MauiVersion>
-
-    <!-- Other useful general properties (particularly ArcGISRuntimeToolkitPackageVersion, ArcGISRuntimePackageVersion, and UseNugetPackage)
+    <!-- Other useful general properties (particularly ArcGISRuntimeToolkitPackageVersion, ArcGISRuntimePackageVersion, MauiVersion, and UseNugetPackage)
          may be found in the root Directory.build.props file. -->
   </PropertyGroup>
 
