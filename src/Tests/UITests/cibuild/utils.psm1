@@ -80,3 +80,42 @@ function Install-Nodejs {
 
   return $node_exe, $npm_exe
 }
+
+function Set-NugetSource {
+
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory)]
+    [string]$workspace,
+
+    [Parameter(Mandatory)]
+    [string]$dotnet_exe,
+
+    [Parameter(Mandatory)]
+    [string]$nuget_repo
+  )
+
+  Write-Host "Configuring nuget..."
+
+  $LASTEXITCODE = 0
+  & $dotnet_exe new nugetconfig --force -o $workspace
+  if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+  }
+
+  $configfile = Join-Path $workspace 'nuget.config'
+  & $dotnet_exe nuget add source $nuget_repo --configfile $configfile
+  if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+  }
+
+  $nuget_dir = Join-Path $workspace '.nuget'
+  $env:NUGET_PACKAGES = Join-Path $nuget_dir 'packages'
+  $env:NUGET_HTTP_CACHE_PATH = Join-Path $nuget_dir 'cache'
+  if (!$?) {
+    Write-Error "Failed to set nuget environment variables."
+    exit 1
+  }
+
+  Write-Host "Done configuring nuget.`n"
+}
