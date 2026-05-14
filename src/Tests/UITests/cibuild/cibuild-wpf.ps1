@@ -29,6 +29,15 @@ if ($LASTEXITCODE -ne 0) {
 
 & $node_exe $appium_entry driver install windows
 
+# Set nuget source if provided
+if (![string]::IsNullOrWhiteSpace($env:NUGET_REPO)) {
+  $toolkit_src_dir = Join-Path $PSScriptRoot '..\..\..'
+  Set-NugetSource $toolkit_src_dir $dotnet_exe $env:NUGET_REPO
+  if (!$?) {
+    exit 1
+  }
+}
+
 # Build both projects manually since it is easier to see build errors when they are built separately
 $output_dir = Join-Path $env:WORKSPACE 'wpf-cibuild-output'
 $wpf_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF\Toolkit.UITests.WPF.csproj'
