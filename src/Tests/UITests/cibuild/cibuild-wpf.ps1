@@ -29,10 +29,35 @@ if ($LASTEXITCODE -ne 0) {
 
 & $node_exe $appium_entry driver install windows
 
+# Build both projects manually since it is easier to see build errors when they are built separately
+$output_dir = Join-Path $env:WORKSPACE 'wpf-cibuild-output'
+$wpf_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF\Toolkit.UITests.WPF.csproj'
+$wpf_app_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF.App\Toolkit.UITests.WPF.App.csproj'
+& $dotnet_exe build $wpf_app_project
+& $dotnet_exe build $wpf_project -o $output_dir
+if (!$?) {
+  exit 1
+}
+
+# Kill the dotnet build server as it is no longer needed
+& $dotnet_exe build-server shutdown
+
 # Start appium
 $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
+if (!$?) {
+  exit 1
+}
 
-Read-Host -Prompt "Press enter to kill appium"
+# Run tests
+$test_exe = Join-Path $output_dir 'Toolkit.UITests.WPF.exe'
+$results_dir = Join-Path $env:WORKSPACE 'TestResults'
+Write-Host $trx_file
+if ([string]::IsNullOrWhiteSpace($env:TRX_FILENAME)) {
+  & $test_exe --results-directory $results_dir --report-trx
+}
+else {
+  & $test_exe --results-directory $results_dir --report-trx --report-trx-filename $env:TRX_FILENAME
+}
 
 # Kill the appium server process
 Stop-Process -InputObject $appium_server_process
