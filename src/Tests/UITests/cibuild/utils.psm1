@@ -23,7 +23,7 @@ function Install-Dotnet {
 
   if ([string]::IsNullOrWhiteSpace($dotnet_cache_folder) -or !(Test-Path -Path $dotnet_exe)) {
     $installerPath = Join-Path $workspace 'dotnet-install.ps1'
-    curl -L https://dot.net/v1/dotnet-install.ps1 -o $installerPath
+    & curl.exe -L https://dot.net/v1/dotnet-install.ps1 -o $installerPath
     & $installerPath -Version $dotnet_version -InstallDir $dotnet_install_folder -NoPath
     if ($LASTEXITCODE -ne 0) {
      exit 1
@@ -56,7 +56,7 @@ function Install-Nodejs {
     $node_url = "https://nodejs.org/dist/v$($node_version)/node-v$($node_version)-win-x64.zip"
     $node_zip = Join-Path $env:WORKSPACE "node.zip"
 
-    curl $node_url -o $node_zip
+    & curl.exe -L $node_url -o $node_zip
     Expand-Archive -Path $node_zip -Destination $env:WORKSPACE
 
     if (!($?) -or ($LASTEXITCODE -ne 0)) {
