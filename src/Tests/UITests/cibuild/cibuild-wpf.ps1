@@ -15,14 +15,14 @@ $dotnet_exe = Install-Dotnet $env:WORKSPACE $dotnet_version $env:DOTNET_CACHE_FO
 
 # Install Node.js
 $node_version = '24.15.0'
-$node_exe, $npm_exe = Install-Nodejs $env:WORKSPACE $node_version
-$node_prefix = Join-Path $env:WORKSPACE '.node'
+$node_workspace = Join-Path $env:WORKSPACE '.node'
+$node_exe, $npm_exe = Install-Nodejs $node_workspace $node_version
 
 # Install appium and driver
-$appium_entry = Join-Path $node_prefix 'node_modules\appium\index.js'
+$appium_entry = Join-Path $node_workspace 'node_modules\appium\index.js'
 $env:APPIUM_HOME = Join-Path $env:WORKSPACE '.appium'
 
-& $npm_exe install appium --prefix $node_prefix
+& $npm_exe install appium --prefix $node_workspace
 if ($LASTEXITCODE -ne 0) {
   exit $LASTEXITCODE
 }
