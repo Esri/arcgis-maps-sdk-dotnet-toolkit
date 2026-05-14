@@ -37,3 +37,37 @@ function Install-Dotnet {
 
   return $dotnet_exe
 }
+
+function Install-Nodejs {
+
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory)]
+    [string]$workspace,
+
+    [Parameter(Mandatory)]
+    [string]$node_version
+  )
+
+  $node_dir = Join-Path $env:WORKSPACE "node-v$($node_version)-win-x64"
+  $node_exe = Join-Path $node_dir 'node.exe'
+  $npm_exe = Join-Path $node_dir 'npm.cmd'
+  if (!(Test-Path $node_exe)) {
+    $node_url = "https://nodejs.org/dist/v$($node_version)/node-v$($node_version)-win-x64.zip"
+    $node_zip = Join-Path $env:WORKSPACE "node.zip"
+
+    curl $node_url -o $node_zip
+    Expand-Archive -Path $node_zip -Destination $env:WORKSPACE
+
+    if (!($?) -or ($LASTEXITCODE -ne 0)) {
+      exit 1
+    }
+
+    Write-Host "Node.js installed at $($node_exe)"
+  }
+  else {
+    Write-Host "Found cached Node.js at $($node_exe)"
+  }
+
+  return $node_exe, $npm_exe
+}
