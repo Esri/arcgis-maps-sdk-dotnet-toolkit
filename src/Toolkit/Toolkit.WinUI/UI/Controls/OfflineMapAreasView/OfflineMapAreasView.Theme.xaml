@@ -3,8 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Esri.ArcGISRuntime.Toolkit.OfflineMapAreasViewResources"
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    xmlns:local="using:Esri.ArcGISRuntime.Toolkit"
-    >
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="OfflineMapAreasViewButtonStyle" TargetType="Button">
         <Setter Property="BorderThickness" Value="0"/>
@@ -30,29 +32,12 @@
                             <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource ControlFillColorDefault}" />
                         </Border.Resources>
                         <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
-                            <StackPanel>
-                                <ProgressRing IsIndeterminate="{x:Bind TemplateSettings.IsLoadingModels, Mode=OneWay}" />
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{x:Bind OnlineMap.Item.Title, Mode=OneWay}" />
-                                    <TextBlock Text="(Online)" />
-                                </StackPanel>
-                                <TextBlock Text="On-Demand Map Areas" />
-                                <ItemsControl x:Name="ListView" 
-                                          ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.OnDemandMapModels, Mode=OneWay}" >
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate x:DataType="controls:IOfflineMapAreaItem">
-                                            <StackPanel>
-                                                <TextBlock Text="{x:Bind Title, Mode=OneWay}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                <TextBlock Text="Preplanned Map Areas" />
+                            <Grid>
                                 <ItemsControl x:Name="ListView2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                        ItemsSource="{x:Bind TemplateSettings.PreplannedMapModels, Mode=OneWay}" >
+                                        ItemsSource="{x:Bind TemplateSettings.MapAreas, Mode=OneWay}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate x:DataType="controls:IOfflineMapAreaItem">
-                                            <Grid Height="64" Margin="0,4">
+                                            <Grid Height="64" Margin="0,4" AutomationProperties.HelpText="{x:Bind Title, Mode=OneWay}" AutomationProperties.FullDescription="{x:Bind Description, Mode=OneWay}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="68" />
                                                     <ColumnDefinition Width="*" />
@@ -70,21 +55,78 @@
                                                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxLines="3" Style="{StaticResource CaptionTextBlockStyle}" />
                                                 <TextBlock Text="Downloaded" Grid.Row="2" Grid.Column="1" Visibility="{x:Bind IsDownloaded, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" />
                                                 <Grid Grid.Column="2" Grid.RowSpan="3">
-
-                                                    <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="Download" Command="{x:Bind DownloadCommand, Mode=OneWay}" Visibility="{x:Bind AllowsDownload, Mode=OneWay}">
+                                                    <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" AutomationProperties.HelpText="Stop" ToolTipService.ToolTip="Stop" Command="{x:Bind StopDownloadCommand, Mode=OneWay}" Visibility="{x:Bind IsDownloading, Mode=OneWay}">
+                                                        <SymbolIcon Symbol="Stop" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" AutomationProperties.HelpText="Download" ToolTipService.ToolTip="Download" Command="{x:Bind DownloadCommand, Mode=OneWay}" Visibility="{x:Bind AllowsDownload, Mode=OneWay}">
                                                         <SymbolIcon Symbol="Download" />
                                                     </Button>
-                                                    <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="Remove" Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}" Visibility="{x:Bind IsDownloaded, Mode=OneWay}">
-                                                        <SymbolIcon Symbol="Delete" />
-                                                    </Button>
                                                     <ProgressRing Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Minimum="0" Maximum="1" IsIndeterminate="False" Value="{x:Bind DownloadProgress, Mode=OneWay}" Visibility="{x:Bind IsDownloading, Mode=OneWay}" />
-
+                                                    <StackPanel Orientation="Horizontal" Visibility="{x:Bind IsDownloaded, Mode=OneWay}" >
+                                                        <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="Remove" AutomationProperties.HelpText="Remove" Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}">
+                                                            <SymbolIcon Symbol="Delete" />
+                                                        </Button>
+                                                        <Button Content="Open" AutomationProperties.HelpText="Open" Margin="8,0,0,0" Command="{x:Bind OpenCommand, Mode=OneWay}" CommandParameter="{x:Bind Map, Mode=OneWay}" />
+                                                    </StackPanel>
                                                 </Grid>
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                            </StackPanel>
+
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.MapIsOfflineDisabled, Mode=OneWay}">
+                                    <TextBlock
+                                            Grid.Column="0" Foreground="{StaticResource TextFillColorTertiaryBrush}"
+                                            HorizontalAlignment="Center"
+                                            FontFamily="{StaticResource toolkit-icons}"
+                                           Text="&#xE846;" FontSize="48" />
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Offline Disabled" TextTrimming="CharacterEllipsis" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="The map is not enabled for offline use" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" Foreground="{StaticResource TextFillColorSecondaryBrush}" />
+                                </StackPanel>
+
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.IsInternetNotAvailable, Mode=OneWay}">
+                                    <TextBlock
+                                            Grid.Column="0" Foreground="{StaticResource TextFillColorTertiaryBrush}"
+                                            HorizontalAlignment="Center"
+                                            FontFamily="{StaticResource toolkit-icons}"
+                                           Text="&#xE846;" FontSize="48" />
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="No Internet Connection" TextTrimming="CharacterEllipsis" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Could not retrieve map areas for this map" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" Foreground="{StaticResource TextFillColorSecondaryBrush}" />
+                                    <Button HorizontalAlignment="Center" AutomationProperties.HelpText="Refresh" x:Name="NoInternetRefreshButton">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#xEB66;" FontFamily="{StaticResource toolkit-icons}" VerticalAlignment="Center" FontSize="14" Margin="0,0,4,0" />
+                                            <TextBlock Text="Refresh"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.HasNoAreas, Mode=OneWay}">
+                                    <TextBlock
+                                        Grid.Column="0" Foreground="{StaticResource TextFillColorTertiaryBrush}"
+                                        HorizontalAlignment="Center"
+                                        FontFamily="{StaticResource toolkit-icons}"
+                                       Text="&#xE81C;" FontSize="48" />
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="No Map Areas" TextTrimming="CharacterEllipsis" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="There are no map areas for this map." Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" Foreground="{StaticResource TextFillColorSecondaryBrush}"
+                                               Visibility="{x:Bind TemplateSettings.IsPreplannedMode, Mode=OneWay}" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="There are no map areas for this map. Tap the button below to get started" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" Foreground="{StaticResource TextFillColorSecondaryBrush}"
+                                               Visibility="{x:Bind TemplateSettings.IsOnDemandMode, Mode=OneWay}" />
+                                    <Button HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.IsPreplannedMode, Mode=OneWay}" AutomationProperties.HelpText="Refresh" x:Name="RefreshMapAreasButton">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#xEB66;" FontFamily="{StaticResource toolkit-icons}" VerticalAlignment="Center" FontSize="14" Margin="0,0,4,0" />
+                                            <TextBlock Text="Refresh"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.IsOnDemandMode, Mode=OneWay}" AutomationProperties.HelpText="Add Map Area" x:Name="AddMapAreaButton">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#xE9F6;" FontFamily="{StaticResource toolkit-icons}" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="Add Map Area" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                                <ProgressRing Visibility="{x:Bind TemplateSettings.IsLoadingModels, Mode=OneWay}" IsHitTestVisible="False" />
+                            </Grid>
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>

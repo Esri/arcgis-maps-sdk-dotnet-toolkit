@@ -99,56 +99,53 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void UpdateProperties()
         {
-            IsLoadingModels = _vm?.IsLoadingModels ?? false;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsLoadingModels)));
-            IsShowingOnlyOfflineModels = _vm?.IsShowingOnlyOfflineModels ?? false;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsShowingOnlyOfflineModels)));
-            MapIsOfflineDisabled = _vm?.MapIsOfflineDisabled ?? false;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(MapIsOfflineDisabled)));
-            OnlineMap = _vm?.OnlineMap;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(OnlineMap)));
-            PreplannedMapModels = _vm?.PreplannedMapModels;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(PreplannedMapModels)));
-            OnDemandMapModels = _vm?.OnDemandMapModels;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(OnDemandMapModels)));
-            PreplannedMapModelsError = _vm?.PreplannedMapModelsError;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(PreplannedMapModelsError)));
+            OnPropertyChanged(new PropertyChangedEventArgs(null)); // Raise for all props
         }
 
         /// <summary>
         /// Gets a value that indicates whether the current view model is loading map area models.
         /// </summary>
-        public bool IsLoadingModels { get; private set; }
+        public bool IsLoadingModels => _vm?.IsLoadingModels ?? false;
 
         /// <summary>
         /// Gets a value that indicates whether only offline models are available.
         /// </summary>
-        public bool IsShowingOnlyOfflineModels { get; private set; }
+//        public bool IsShowingOnlyOfflineModels => _vm?.IsShowingOnlyOfflineModels ?? false;
 
         /// <summary>
         /// Gets a value that indicates whether offline map areas are disabled for the current map.
         /// </summary>
-        public bool MapIsOfflineDisabled { get; private set; }
+        public bool MapIsOfflineDisabled => _vm?.MapIsOfflineDisabled ?? false;
 
         /// <summary>
-        /// Gets the current on-demand map area models.
+        /// Gets a value indicating whether an internet connection is not available.
         /// </summary>
-        public IReadOnlyCollection<IOfflineMapAreaItem>? OnDemandMapModels { get; private set; }
+        public bool IsInternetNotAvailable => _vm?.DisplayMode == OfflineMapViewModel.Mode.NoInternetAvailable;
 
         /// <summary>
-        /// Gets the current online map.
+        /// Gets a value indicating whether the offline map is operating in on-demand mode.
         /// </summary>
-        public Map? OnlineMap { get; private set; }
+        public bool IsOnDemandMode => _vm?.DisplayMode == OfflineMapViewModel.Mode.OnDemand || _vm?.DisplayMode == OfflineMapViewModel.Mode.Ambiguous;
 
         /// <summary>
-        /// Gets the current preplanned map area models.
+        /// Gets a value indicating whether the offline map is operating in preplanned mode.
         /// </summary>
-        public IReadOnlyCollection<IOfflineMapAreaItem>? PreplannedMapModels { get; private set; }
+        public bool IsPreplannedMode => _vm?.DisplayMode == OfflineMapViewModel.Mode.Preplanned;
+
+        /// <summary>
+        /// Gets a value indicating whether there are no map areas available for the current map after it has loaded.
+        /// </summary>
+        public bool HasNoAreas => MapAreas is not null && _vm?.IsLoadingModels == false && !MapIsOfflineDisabled && (MapAreas?.Count ??  0) == 0;
+
+        /// <summary>
+        /// Gets the current map areas.
+        /// </summary>
+        public IReadOnlyCollection<IOfflineMapAreaItem>? MapAreas => _vm is null ? null : (_vm.PreplannedMapModels.Count > 0 ? _vm.PreplannedMapModels : _vm.OnDemandMapModels);
 
         /// <summary>
         /// Gets the current error raised while loading preplanned map models.
         /// </summary>
-        public Exception? PreplannedMapModelsError { get; private set; }
+        public Exception? PreplannedMapModelsError => _vm?.PreplannedMapModelsError;
 
         /// <inheritdoc />
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -158,28 +155,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             switch(e.PropertyName)
             {
                 case nameof(OfflineMapViewModel.IsLoadingModels):
-                    IsLoadingModels = _vm?.IsLoadingModels ?? false;
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(MapAreas)));
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(HasNoAreas)));
                     break;
-                case nameof(OfflineMapViewModel.IsShowingOnlyOfflineModels):
-                    IsShowingOnlyOfflineModels = _vm?.IsShowingOnlyOfflineModels ?? false;
-                    break;
-                case nameof(OfflineMapViewModel.MapIsOfflineDisabled):
-                    MapIsOfflineDisabled = _vm?.MapIsOfflineDisabled ?? false;
-                    break;
-                case nameof(OfflineMapViewModel.OnDemandMapModels):
-                    OnDemandMapModels = _vm?.OnDemandMapModels;
-                    break;
-                case nameof(OfflineMapViewModel.OnlineMap):
-                    OnlineMap = _vm?.OnlineMap;
-                    break;
-                case nameof(OfflineMapViewModel.PreplannedMapModels):
-                    PreplannedMapModels = _vm?.PreplannedMapModels;
-                    break;
-                case nameof(OfflineMapViewModel.PreplannedMapModelsError):
-                    PreplannedMapModelsError = _vm?.PreplannedMapModelsError;
-                    break;
-                default:
-                    UpdateProperties();
+                case nameof(OfflineMapViewModel.DisplayMode):
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsInternetNotAvailable)));
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsOnDemandMode)));
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsPreplannedMode)));
                     break;
             }
             OnPropertyChanged(e);

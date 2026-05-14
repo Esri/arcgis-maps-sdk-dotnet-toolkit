@@ -19,10 +19,8 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
-using Microsoft.UI;
-using Windows.Media.Ocr;
 using System.Net;
-
+using System.Windows.Input;
 
 
 #if MAUI
@@ -30,7 +28,9 @@ using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 using BaseItemsControl = Microsoft.Maui.Controls.ItemsView;
+using ButtonBase = Microsoft.Maui.Controls.Button;
 #elif WPF
+using System.Windows.Controls.Primitives;
 using BaseItemsControl = System.Windows.Controls.ItemsControl;
 using Esri.ArcGISRuntime.Toolkit.Primitives;
 #elif WINDOWS_XAML
@@ -76,6 +76,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </remarks>
     public partial class OfflineMapAreasView
     {
+        private readonly DelegateCommand _openMapCommand;
+        private OfflineMapViewModel? _vm;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureFormView"/> class.
         /// </summary>
@@ -91,6 +94,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Since we're binding to a static collection, we need to unbind when the control is unloaded to prevent memory leaks.
             this.Unloaded += (s, e) => UnassignItemsSource();
             this.Loaded += (s, e) => AssignItemsSource();
+
+            _openMapCommand = new DelegateCommand((map) => SelectedMap = map as Map, (map) => map != SelectedMap);
+
+            _goOnlineCommand = new DelegateCommand((o) => SelectedMap = OnlineMap, () => SelectedMap != OnlineMap && OnlineMap != null);
         }
 
 
@@ -117,10 +124,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override void OnApplyTemplate()
 #endif
         {
+
+#if WINDOWS_XAML || WPF
+            if(GetTemplateChild("RefreshMapAreasButton") is ButtonBase refreshAreasButton)
+            {
+                refreshAreasButton.Click += (s,e) => _vm?.LoadModelsAsync();
+            }
+            if (GetTemplateChild("NoInternetRefreshButton") is ButtonBase refreshButton)
+            {
+                refreshButton.Click += (s, e) => _vm?.LoadModelsAsync();
+            }
+            if (GetTemplateChild("AddMapAreaButton") is ButtonBase addMapAreaButton)
+            {
+                // TODO
+            }
+#endif
             base.OnApplyTemplate();
             AssignItemsSource();
         }
 
+        private readonly DelegateCommand _goOnlineCommand;
+
+        /// <summary>
+        /// Sets the selected map back to the <see cref="OnlineMap"/>
+        /// </summary>
+        public ICommand GoOnlineCommand => _goOnlineCommand;
 
         /// <summary>
         /// Gets or sets Online map to display areas for in the list.
@@ -169,7 +197,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (!string.IsNullOrWhiteSpace(map.Item?.ItemId))
             {
-                SetVM(new OfflineMapViewModel(map, DispatchAction));
+                _vm = new OfflineMapViewModel(map, DispatchAction, _openMapCommand);
+                SetVM(_vm);
             }
         }
 
@@ -235,6 +264,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 
+        private void OnSelectedMapPropertyChanged(Map? map)
+        {
+            _openMapCommand.NotifyCanExecuteChanged();
+            _goOnlineCommand.NotifyCanExecuteChanged();
+        }
+
 #if MAUI
         private Map? _selectedMap;
 
@@ -246,6 +281,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_selectedMap != value) {
                     _selectedMap = value;
                     OnPropertyChanged(nameof(SelectedMap));
+                    OnSelectedMapPropertyChanged(_selectedMap);
                 }
             }
         }
@@ -256,8 +292,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             private set => SetValue(SelectedMapProperty, value);
         }
 
-        private static readonly DependencyProperty SelectedMapProperty =
-            DependencyProperty.Register(nameof(SelectedMap), typeof(Map), typeof(OfflineMapAreasView), new PropertyMetadata(null));
+        public static readonly DependencyProperty SelectedMapProperty =
+            DependencyProperty.Register(nameof(SelectedMap), typeof(Map), typeof(OfflineMapAreasView), new PropertyMetadata(null, (s,e) => ((OfflineMapAreasView)s).OnSelectedMapPropertyChanged(e.NewValue as Map)));
+
 
 #elif WPF
         public Map? SelectedMap
@@ -271,7 +308,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                   name: nameof(SelectedMap),
                   propertyType: typeof(Map),
                   ownerType: typeof(OfflineMapAreasView),
-                  typeMetadata: new FrameworkPropertyMetadata());
+                  typeMetadata: new FrameworkPropertyMetadata(null, (s,e) => ((OfflineMapAreasView)s).OnSelectedMapPropertyChanged(e.NewValue as Map)));
 #endif
 
         /// <summary>
@@ -340,6 +377,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         double DownloadProgress { get; }
 
         System.Windows.Input.ICommand DownloadCommand { get; }
+
         System.Windows.Input.ICommand RemoveDownloadCommand { get; }
+
+        System.Windows.Input.ICommand StopDownloadCommand { get; }
+
+        System.Windows.Input.ICommand OpenCommand { get; }
+
+        Map? Map { get; }
     }
 }

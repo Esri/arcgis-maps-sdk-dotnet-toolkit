@@ -47,12 +47,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private MobileMapPackage? _mobileMapPackage;
         private Map? _map;
         private Exception? _error;
+        private readonly ICommand _openMapCommand;
 
         internal OnDemandMapModel(
             Func<Task<OfflineMapTask>> offlineMapTaskFactory,
             OnDemandMapAreaConfiguration configuration,
             string portalItemId,
             Action<OnDemandMapModel> onRemoveDownload,
+            ICommand openMapCommand,
             Action<Action> dispatcher) : base(dispatcher)
         {
             _offlineMapTaskFactory = offlineMapTaskFactory;
@@ -65,7 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _directoryPath = OfflineMapAreaStorage.GetOnDemandAreaDirectory(portalItemId, _areaId);
             _mmpkDirectoryPath = OfflineMapAreaStorage.GetOnDemandMmpkDirectory(portalItemId, _areaId);
             _thumbnailPath = OfflineMapAreaStorage.GetOnDemandThumbnailPath(portalItemId, _areaId);
-
+            _openMapCommand = openMapCommand;
             if (_thumbnailData is { Length: > 0 })
             {
                 Directory.CreateDirectory(_directoryPath);
@@ -78,6 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             string areaId,
             string portalItemId,
             Action<OnDemandMapModel> onRemoveDownload,
+            ICommand openMapCommand,
             Action<Action> dispatcher) : base(dispatcher)
         {
             _job = job;
@@ -88,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _directoryPath = OfflineMapAreaStorage.GetOnDemandAreaDirectory(portalItemId, _areaId);
             _mmpkDirectoryPath = OfflineMapAreaStorage.GetOnDemandMmpkDirectory(portalItemId, _areaId);
             _thumbnailPath = OfflineMapAreaStorage.GetOnDemandThumbnailPath(portalItemId, _areaId);
-
+            _openMapCommand = openMapCommand;
             if (File.Exists(_thumbnailPath))
             {
                 _thumbnailData = File.ReadAllBytes(_thumbnailPath);
@@ -103,6 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             string title,
             byte[]? thumbnailData,
             Action<OnDemandMapModel> onRemoveDownload,
+            ICommand openMapCommand,
             Action<Action> dispatcher) : base(dispatcher)
         {
             _areaId = areaId;
@@ -110,6 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _title = title;
             _thumbnailData = thumbnailData;
             _onRemoveDownloadAction = onRemoveDownload;
+            _openMapCommand = openMapCommand;
             _directoryPath = OfflineMapAreaStorage.GetOnDemandAreaDirectory(portalItemId, _areaId);
             _mmpkDirectoryPath = OfflineMapAreaStorage.GetOnDemandMmpkDirectory(portalItemId, _areaId);
             _thumbnailPath = OfflineMapAreaStorage.GetOnDemandThumbnailPath(portalItemId, _areaId);
@@ -196,6 +201,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         ICommand IOfflineMapAreaItem.DownloadCommand => null!; // TODO
 
         ICommand IOfflineMapAreaItem.RemoveDownloadCommand => null!; // TODO
+        
+        ICommand IOfflineMapAreaItem.StopDownloadCommand => null!; // TODO
+        
+        System.Windows.Input.ICommand IOfflineMapAreaItem.OpenCommand => _openMapCommand;
 
         bool IOfflineMapAreaItem.IsDownloading => Status == OnDemandMapModelStatus.Downloading;
 
@@ -333,7 +342,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal static async Task<IReadOnlyList<OnDemandMapModel>> LoadOnDemandMapModelsAsync(
             string portalItemId,
-            Action<OnDemandMapModel> onRemoveDownload, Action<Action> dispatcher)
+            Action<OnDemandMapModel> onRemoveDownload, System.Windows.Input.ICommand openCommand, Action<Action> dispatcher)
         {
             var models = new List<OnDemandMapModel>();
 
@@ -350,7 +359,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     continue;
                 }
 
-                models.Add(new OnDemandMapModel(job, areaId, portalItemId, onRemoveDownload, dispatcher));
+                models.Add(new OnDemandMapModel(job, areaId, portalItemId, onRemoveDownload, openCommand, dispatcher));
             }
 
             var onDemandDirectory = OfflineMapAreaStorage.GetOnDemandAreasDirectory(portalItemId);
@@ -364,7 +373,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         continue;
                     }
 
-                    var model = await CreateDownloadedAsync(areaId, portalItemId, onRemoveDownload, dispatcher).ConfigureAwait(false);
+                    var model = await CreateDownloadedAsync(areaId, portalItemId, onRemoveDownload, openCommand, dispatcher).ConfigureAwait(false);
                     if (model is not null)
                     {
                         models.Add(model);
@@ -382,7 +391,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static async Task<OnDemandMapModel?> CreateDownloadedAsync(
             string areaId,
             string portalItemId,
-            Action<OnDemandMapModel> onRemoveDownload, Action<Action> dispatcher)
+            Action<OnDemandMapModel> onRemoveDownload, System.Windows.Input.ICommand openCommand, Action<Action> dispatcher)
         {
             var mmpkDirectory = OfflineMapAreaStorage.GetOnDemandMmpkDirectory(portalItemId, areaId);
             if (!Directory.Exists(mmpkDirectory))
@@ -408,7 +417,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 portalItemId,
                 mobileMapPackage.Item?.Title ?? OfflineMapAreaUtilities.UnknownAreaTitle,
                 thumbnailData,
-                onRemoveDownload, dispatcher);
+                onRemoveDownload, openCommand, dispatcher);
 
             await model.LoadAndUpdateMobileMapPackageAsync(mobileMapPackage).ConfigureAwait(false);
             return model;

@@ -29,18 +29,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         private bool _canExecute = true;
         private readonly Action<object?>? _onExecute;
-        private readonly Func<bool>? _canExecuteFunc;
+        private readonly Func<object?, bool>? _canExecuteFunc;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand"/> class.
         /// </summary>
         public DelegateCommand(Action inputAction) => _onExecute = (o) => inputAction();
 
-        internal DelegateCommand(Action<object?> onExecute) : this(onExecute, null)
+        internal DelegateCommand(Action<object?> onExecute) : this(onExecute, (Func<object?, bool>?)null)
         {
         }
         
-        internal DelegateCommand(Action<object?> onExecute, Func<bool>? canExecute)
+        internal DelegateCommand(Action<object?> onExecute, Func<bool>? canExecute) :this (onExecute, canExecute is null ? null : (o) => canExecute.Invoke())
+        {
+        }
+
+        internal DelegateCommand(Action<object?> onExecute, Func<object?, bool>? canExecute)
         {
             _onExecute = onExecute ?? throw new ArgumentNullException(nameof(onExecute));
             _canExecuteFunc = canExecute;
@@ -52,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <inheritdoc/>
         public bool CanExecute(object? parameter)
         {
-            return _canExecuteFunc?.Invoke() ?? _canExecute;
+            return _canExecuteFunc?.Invoke(parameter) ?? _canExecute;
         }
 
         /// <inheritdoc/>

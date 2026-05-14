@@ -54,8 +54,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isLoadingModels;
         private bool _mapIsOfflineDisabled;
         private Exception? _preplannedMapModelsError;
+        private Func<Map> _setSelectedMapAction;
+        private System.Windows.Input.ICommand _openMapCommand;
 
-        public OfflineMapViewModel(Map onlineMap, Action<Action> dispatcher) : base(dispatcher)
+        public OfflineMapViewModel(Map onlineMap, Action<Action> dispatcher, System.Windows.Input.ICommand openMapCommand) : base(dispatcher)
         {
             if (onlineMap is null)
             {
@@ -74,6 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _onlineMap = onlineMap;
             _portalItemId = onlineMap.Item!.ItemId!;
+            _openMapCommand = openMapCommand;
             PreplannedMapModels = new ReadOnlyObservableCollection<PreplannedMapModel>(_preplannedMapModels);
             OnDemandMapModels = new ReadOnlyObservableCollection<OnDemandMapModel>(_onDemandMapModels);
         }
@@ -180,7 +183,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            var model = new OnDemandMapModel(GetOfflineMapTaskAsync, configuration, PortalItemId, OnRemoveDownloadOfOnDemandArea, Dispatcher);
+            var model = new OnDemandMapModel(GetOfflineMapTaskAsync, configuration, PortalItemId, OnRemoveDownloadOfOnDemandArea, _openMapCommand, Dispatcher);
             Dispatcher(() => InsertSorted(_onDemandMapModels, model, static item => item.Title));
             await model.DownloadOnDemandMapAreaAsync().ConfigureAwait(false);
         }
@@ -234,7 +237,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async Task LoadPreplannedMapModelsAsync()
         {
-            var result = await PreplannedMapModel.LoadPreplannedMapModelsAsync(GetOfflineMapTaskAsync, PortalItemId, OnRemoveDownloadOfPreplannedArea, Dispatcher).ConfigureAwait(false);
+            var result = await PreplannedMapModel.LoadPreplannedMapModelsAsync(GetOfflineMapTaskAsync, PortalItemId, OnRemoveDownloadOfPreplannedArea, _openMapCommand, Dispatcher).ConfigureAwait(false);
 
             Dispatcher(() =>
             {
@@ -246,7 +249,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async Task LoadOnDemandMapModelsAsync()
         {
-            var models = await OnDemandMapModel.LoadOnDemandMapModelsAsync(PortalItemId, OnRemoveDownloadOfOnDemandArea, Dispatcher).ConfigureAwait(false);
+            var models = await OnDemandMapModel.LoadOnDemandMapModelsAsync(PortalItemId, OnRemoveDownloadOfOnDemandArea, _openMapCommand, Dispatcher).ConfigureAwait(false);
             Dispatcher(() => ReplaceCollection(_onDemandMapModels, models));
         }
 

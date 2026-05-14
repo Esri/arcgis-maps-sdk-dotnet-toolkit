@@ -16,8 +16,24 @@
             <ColumnDefinition />
             <ColumnDefinition Width="400" />
         </Grid.ColumnDefinitions>
-        <esri:MapView Map="{x:Bind OfflineMapAreasView.OnlineMap, Mode=OneWay}" />
-        <tk:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Column="1" Margin="4" />
+
+        <esri:MapView Map="{x:Bind OfflineMapAreasView.SelectedMap, Mode=OneWay}" />
+
+        <Border HorizontalAlignment="Center" Margin="20" Padding="20" BorderThickness="2" VerticalAlignment="Top" CornerRadius="8"
+                Background="{StaticResource ControlOnImageFillColorDefaultBrush}" BorderBrush="{StaticResource CardStrokeColorDefaultBrush}">
+            <ComboBox Header="Select Online Map" x:Name="MapSelector" ItemsSource="{x:Bind Maps}" SelectedIndex="0" />
+        </Border>
+
+        <Grid Grid.Column="1" Margin="4" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Map Areas" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center" />
+            <tk:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Row="1" OnlineMap="{Binding SelectedItem.Map, ElementName=MapSelector, Mode=OneWay}" />
+            <Button Command="{x:Bind OfflineMapAreasView.GoOnlineCommand}" Content="Go Online" Grid.Row="2" HorizontalAlignment="Stretch" Background="{StaticResource AccentFillColorDefaultBrush}" Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}" />
+        </Grid>
 
     </Grid>
 </Page>
