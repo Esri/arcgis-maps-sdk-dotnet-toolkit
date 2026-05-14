@@ -3,7 +3,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Esri.ArcGISRuntime.Toolkit.OfflineMapAreasViewResources"
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit"
+    >
+
+    <Style x:Key="OfflineMapAreasViewButtonStyle" TargetType="Button">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="CornerRadius" Value="4" />
+    </Style>
     <Style TargetType="controls:OfflineMapAreasView">
         <!--  Default item template can be overriden by the user.  -->
         <Setter Property="Template">
@@ -14,16 +26,19 @@
                         Height="{TemplateBinding Height}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                        <Border.Resources>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource ControlFillColorDefault}" />
+                        </Border.Resources>
                         <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
                             <StackPanel>
-                                <ProgressRing IsIndeterminate="{Binding TemplateSettings.IsLoadingModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                <ProgressRing IsIndeterminate="{x:Bind TemplateSettings.IsLoadingModels, Mode=OneWay}" />
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding OnlineMap.Item.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    <TextBlock Text="{x:Bind OnlineMap.Item.Title, Mode=OneWay}" />
                                     <TextBlock Text="(Online)" />
                                 </StackPanel>
                                 <TextBlock Text="On-Demand Map Areas" />
                                 <ItemsControl x:Name="ListView" 
-                                          ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.OnDemandMapModels}" >
+                                          ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.OnDemandMapModels, Mode=OneWay}" >
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate x:DataType="controls:IOfflineMapAreaItem">
                                             <StackPanel>
@@ -34,29 +49,35 @@
                                 </ItemsControl>
                                 <TextBlock Text="Preplanned Map Areas" />
                                 <ItemsControl x:Name="ListView2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                        ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.PreplannedMapModels}" >
+                                        ItemsSource="{x:Bind TemplateSettings.PreplannedMapModels, Mode=OneWay}" >
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate x:DataType="controls:IOfflineMapAreaItem">
                                             <Grid Height="64" Margin="0,4">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="68" />
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
-                                                <Image Source="{Binding ThumbnailData}" Width="64" Height="64" Stretch="UniformToFill" Grid.RowSpan="2" />
-                                                <StackPanel Grid.Column="1" Margin="8,0,0,0">
-                                                    <TextBlock Text="{x:Bind Title, Mode=OneWay}" TextTrimming="CharacterEllipsis" FontWeight="Bold" />
-                                                    <TextBlock Text="{x:Bind Description, Mode=OneWay}" TextWrapping="Wrap" />
-                                                </StackPanel>
-                                                <TextBlock Text="Downloaded" Grid.Row="1" Grid.Column="1" Margin="8,0,0,0" /> <!-- TODO: SHow if IsDownloaded==true-->
-                                                <Grid Grid.Column="2" Grid.RowSpan="2">
+                                                <Border CornerRadius="8" Grid.RowSpan="3" BorderThickness="1" BorderBrush="LightGray" Margin="0,0,4,0">
+                                                    <Image Source="{x:Bind local:OfflineMapAreasViewResources.BytesToImage(ThumbnailData), Mode=OneWay}" Width="64" Height="64" Stretch="UniformToFill"/>
+                                                </Border>
+                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind Title, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxLines="3" Style="{StaticResource CaptionTextBlockStyle}" />
+                                                <TextBlock Text="Downloaded" Grid.Row="2" Grid.Column="1" Visibility="{x:Bind IsDownloaded, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" />
+                                                <Grid Grid.Column="2" Grid.RowSpan="3">
 
-                                                    <AppBarButton Icon="Download" Command="{x:Bind DownloadCommand, Mode=OneTime}" Visibility="{x:Bind AllowsDownload, Mode=OneWay}"/>
-                                                    <!--<ProgressRing IsHitTestVisible="False" Value=".5" Visibility="{x:Bind IsDownloaded}" />-->
+                                                    <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="Download" Command="{x:Bind DownloadCommand, Mode=OneWay}" Visibility="{x:Bind AllowsDownload, Mode=OneWay}">
+                                                        <SymbolIcon Symbol="Download" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="Remove" Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}" Visibility="{x:Bind IsDownloaded, Mode=OneWay}">
+                                                        <SymbolIcon Symbol="Delete" />
+                                                    </Button>
+                                                    <ProgressRing Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Minimum="0" Maximum="1" IsIndeterminate="False" Value="{x:Bind DownloadProgress, Mode=OneWay}" Visibility="{x:Bind IsDownloading, Mode=OneWay}" />
 
                                                 </Grid>
                                             </Grid>

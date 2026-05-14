@@ -14,7 +14,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="400" />
         </Grid.ColumnDefinitions>
         <esri:MapView Map="{x:Bind OfflineMapAreasView.OnlineMap, Mode=OneWay}" />
         <tk:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Column="1" Margin="4" />

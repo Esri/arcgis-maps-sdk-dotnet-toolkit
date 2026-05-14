@@ -168,8 +168,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             if (!string.IsNullOrWhiteSpace(map.Item?.ItemId))
-                SetVM(new OfflineMapViewModel(map));
+            {
+                SetVM(new OfflineMapViewModel(map, DispatchAction));
+            }
         }
+
+        private void DispatchAction(Action action) => this.Dispatch(action);
 
         /// <summary>
         /// Gets or sets OfflineMapInfo to display areas for in the list.
@@ -311,7 +315,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
     }
 
-    public interface IOfflineMapAreaItem
+    public interface IOfflineMapAreaItem : INotifyPropertyChanged
     {
         string Title { get; }
 
@@ -331,7 +335,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         bool SupportsRedownloading { get; }
 
+        bool IsDownloading { get; }
+
+        double DownloadProgress { get; }
+
         System.Windows.Input.ICommand DownloadCommand { get; }
-        //System.Windows.Input.ICommand OpenCommand { get; }
+        System.Windows.Input.ICommand RemoveDownloadCommand { get; }
     }
 }

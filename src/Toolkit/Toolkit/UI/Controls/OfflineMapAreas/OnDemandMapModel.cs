@@ -52,7 +52,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Func<Task<OfflineMapTask>> offlineMapTaskFactory,
             OnDemandMapAreaConfiguration configuration,
             string portalItemId,
-            Action<OnDemandMapModel> onRemoveDownload)
+            Action<OnDemandMapModel> onRemoveDownload,
+            Action<Action> dispatcher) : base(dispatcher)
         {
             _offlineMapTaskFactory = offlineMapTaskFactory;
             _configuration = configuration;
@@ -76,7 +77,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             GenerateOfflineMapJob job,
             string areaId,
             string portalItemId,
-            Action<OnDemandMapModel> onRemoveDownload)
+            Action<OnDemandMapModel> onRemoveDownload,
+            Action<Action> dispatcher) : base(dispatcher)
         {
             _job = job;
             _areaId = areaId;
@@ -100,7 +102,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             string portalItemId,
             string title,
             byte[]? thumbnailData,
-            Action<OnDemandMapModel> onRemoveDownload)
+            Action<OnDemandMapModel> onRemoveDownload,
+            Action<Action> dispatcher) : base(dispatcher)
         {
             _areaId = areaId;
             _portalItemId = portalItemId;
@@ -135,13 +138,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public GenerateOfflineMapJob? Job
         {
             get => _job;
-            private set => SetProperty(ref _job, value);
+            private set
+            {
+                if (_job is not null)
+                    _job.ProgressChanged -= JobProgressChanged;
+                SetProperty(ref _job, value);
+                OnPropertyChanged(nameof(IOfflineMapAreaItem.DownloadProgress));
+                if (_job is not null)
+                    _job.ProgressChanged += JobProgressChanged;
+            }
+        }
+
+        private void JobProgressChanged(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(IOfflineMapAreaItem.DownloadProgress));
         }
 
         public OnDemandMapModelStatus Status
         {
             get => _status;
-            private set => SetProperty(ref _status, value);
+            private set
+            {
+                SetProperty(ref _status, value);
+                OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloading));
+            }
         }
 
         public MobileMapPackage? MobileMapPackage
@@ -174,6 +194,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         bool IOfflineMapAreaItem.SupportsRedownloading => false;
         
         ICommand IOfflineMapAreaItem.DownloadCommand => null!; // TODO
+
+        ICommand IOfflineMapAreaItem.RemoveDownloadCommand => null!; // TODO
+
+        bool IOfflineMapAreaItem.IsDownloading => Status == OnDemandMapModelStatus.Downloading;
+
+        double IOfflineMapAreaItem.DownloadProgress => Job is null ? 0d : Job.Progress / 100d;
 
         public async Task DownloadOnDemandMapAreaAsync()
         {
@@ -307,7 +333,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal static async Task<IReadOnlyList<OnDemandMapModel>> LoadOnDemandMapModelsAsync(
             string portalItemId,
-            Action<OnDemandMapModel> onRemoveDownload)
+            Action<OnDemandMapModel> onRemoveDownload, Action<Action> dispatcher)
         {
             var models = new List<OnDemandMapModel>();
 
@@ -324,7 +350,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     continue;
                 }
 
-                models.Add(new OnDemandMapModel(job, areaId, portalItemId, onRemoveDownload));
+                models.Add(new OnDemandMapModel(job, areaId, portalItemId, onRemoveDownload, dispatcher));
             }
 
             var onDemandDirectory = OfflineMapAreaStorage.GetOnDemandAreasDirectory(portalItemId);
@@ -338,7 +364,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         continue;
                     }
 
-                    var model = await CreateDownloadedAsync(areaId, portalItemId, onRemoveDownload).ConfigureAwait(false);
+                    var model = await CreateDownloadedAsync(areaId, portalItemId, onRemoveDownload, dispatcher).ConfigureAwait(false);
                     if (model is not null)
                     {
                         models.Add(model);
@@ -356,7 +382,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static async Task<OnDemandMapModel?> CreateDownloadedAsync(
             string areaId,
             string portalItemId,
-            Action<OnDemandMapModel> onRemoveDownload)
+            Action<OnDemandMapModel> onRemoveDownload, Action<Action> dispatcher)
         {
             var mmpkDirectory = OfflineMapAreaStorage.GetOnDemandMmpkDirectory(portalItemId, areaId);
             if (!Directory.Exists(mmpkDirectory))
@@ -382,7 +408,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 portalItemId,
                 mobileMapPackage.Item?.Title ?? OfflineMapAreaUtilities.UnknownAreaTitle,
                 thumbnailData,
-                onRemoveDownload);
+                onRemoveDownload, dispatcher);
 
             await model.LoadAndUpdateMobileMapPackageAsync(mobileMapPackage).ConfigureAwait(false);
             return model;

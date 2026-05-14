@@ -55,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _mapIsOfflineDisabled;
         private Exception? _preplannedMapModelsError;
 
-        public OfflineMapViewModel(Map onlineMap)
+        public OfflineMapViewModel(Map onlineMap, Action<Action> dispatcher) : base(dispatcher)
         {
             if (onlineMap is null)
             {
@@ -90,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public string PortalItemId => _portalItemId;
 
-        public ReadOnlyObservableCollection<PreplannedMapModel> PreplannedMapModels { get; }
+        internal ReadOnlyObservableCollection<PreplannedMapModel> PreplannedMapModels { get; }
 
         public Exception? PreplannedMapModelsError
         {
@@ -104,7 +104,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             private set => SetProperty(ref _isShowingOnlyOfflineModels, value);
         }
 
-        public ReadOnlyObservableCollection<OnDemandMapModel> OnDemandMapModels { get; }
+        internal ReadOnlyObservableCollection<OnDemandMapModel> OnDemandMapModels { get; }
 
         public Mode DisplayMode
         {
@@ -180,8 +180,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            var model = new OnDemandMapModel(GetOfflineMapTaskAsync, configuration, PortalItemId, OnRemoveDownloadOfOnDemandArea);
-            RunOnCapturedContext(() => InsertSorted(_onDemandMapModels, model, static item => item.Title));
+            var model = new OnDemandMapModel(GetOfflineMapTaskAsync, configuration, PortalItemId, OnRemoveDownloadOfOnDemandArea, Dispatcher);
+            Dispatcher(() => InsertSorted(_onDemandMapModels, model, static item => item.Title));
             await model.DownloadOnDemandMapAreaAsync().ConfigureAwait(false);
         }
 
@@ -234,9 +234,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async Task LoadPreplannedMapModelsAsync()
         {
-            var result = await PreplannedMapModel.LoadPreplannedMapModelsAsync(GetOfflineMapTaskAsync, PortalItemId, OnRemoveDownloadOfPreplannedArea).ConfigureAwait(false);
+            var result = await PreplannedMapModel.LoadPreplannedMapModelsAsync(GetOfflineMapTaskAsync, PortalItemId, OnRemoveDownloadOfPreplannedArea, Dispatcher).ConfigureAwait(false);
 
-            RunOnCapturedContext(() =>
+            Dispatcher(() =>
             {
                 ReplaceCollection(_preplannedMapModels, result.Models);
                 PreplannedMapModelsError = result.Error;
@@ -246,8 +246,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async Task LoadOnDemandMapModelsAsync()
         {
-            var models = await OnDemandMapModel.LoadOnDemandMapModelsAsync(PortalItemId, OnRemoveDownloadOfOnDemandArea).ConfigureAwait(false);
-            RunOnCapturedContext(() => ReplaceCollection(_onDemandMapModels, models));
+            var models = await OnDemandMapModel.LoadOnDemandMapModelsAsync(PortalItemId, OnRemoveDownloadOfOnDemandArea, Dispatcher).ConfigureAwait(false);
+            Dispatcher(() => ReplaceCollection(_onDemandMapModels, models));
         }
 
         private async Task<OfflineMapTask> GetOfflineMapTaskAsync()
@@ -286,13 +286,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (IsShowingOnlyOfflineModels && !model.SupportsRedownloading)
             {
-                RunOnCapturedContext(() => _preplannedMapModels.Remove(model));
+                Dispatcher(() => _preplannedMapModels.Remove(model));
             }
         }
 
         private void OnRemoveDownloadOfOnDemandArea(OnDemandMapModel model)
         {
-            RunOnCapturedContext(() => _onDemandMapModels.Remove(model));
+            Dispatcher(() => _onDemandMapModels.Remove(model));
 
             if (!HasDownloadedMapAreas)
             {
@@ -324,9 +324,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
     internal abstract class OfflineBindableObject : INotifyPropertyChanged
     {
-        private readonly SynchronizationContext? _synchronizationContext = SynchronizationContext.Current;
-
         public event PropertyChangedEventHandler? PropertyChanged;
+        
+        protected Action<Action> Dispatcher { get; }
+
+        public OfflineBindableObject(Action<Action> dispatcher)
+        {
+            Dispatcher = dispatcher;
+        }
 
         protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
@@ -336,20 +341,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             field = value;
-            RunOnCapturedContext(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
+            OnPropertyChanged(propertyName!);
             return true;
         }
 
-        protected void RunOnCapturedContext(Action action)
-        {
-            if (_synchronizationContext is null || SynchronizationContext.Current == _synchronizationContext)
-            {
-                action();
-                return;
-            }
-
-            _synchronizationContext.Post(static state => ((Action)state!).Invoke(), action);
-        }
+        protected void OnPropertyChanged(string propertyName)
+            => Dispatcher(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
     }
 
     internal static class OfflineMapAreaStorage
