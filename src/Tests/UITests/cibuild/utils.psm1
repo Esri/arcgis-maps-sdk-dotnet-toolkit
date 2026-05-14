@@ -11,6 +11,8 @@ function Install-Dotnet {
     [string]$dotnet_cache_folder=$env:DOTNET_CACHE_FOLDER
   )
 
+  Write-Host 'Starting dotnet install...'
+
   # Install the requested dotnet version if it is not already present.
   if ([string]::IsNullOrWhiteSpace($dotnet_cache_folder)) {
     $dotnet_install_folder = Join-Path $workspace '.dotnet'
@@ -29,10 +31,10 @@ function Install-Dotnet {
      exit 1
     }
 
-    Write-Host "Dotnet installed at $dotnet_exe"
+    Write-Host "Dotnet installed at $($dotnet_exe)`n"
   }
   else {
-    Write-Host "Found cached dotnet at $dotnet_exe"
+    Write-Host "Found cached dotnet at $($dotnet_exe)`n"
   }
 
   return $dotnet_exe
@@ -49,24 +51,31 @@ function Install-Nodejs {
     [string]$node_version
   )
 
-  $node_dir = Join-Path $env:WORKSPACE "node-v$($node_version)-win-x64"
+  Write-Host "Starting Node.js install..."
+
+  $node_dir = Join-Path $workspace "node-v$($node_version)-win-x64"
   $node_exe = Join-Path $node_dir 'node.exe'
   $npm_exe = Join-Path $node_dir 'npm.cmd'
   if (!(Test-Path $node_exe)) {
     $node_url = "https://nodejs.org/dist/v$($node_version)/node-v$($node_version)-win-x64.zip"
-    $node_zip = Join-Path $env:WORKSPACE "node.zip"
+    $node_zip = Join-Path $workspace "node.zip"
 
-    & curl.exe -L $node_url -o $node_zip
-    Expand-Archive -Path $node_zip -Destination $env:WORKSPACE
-
-    if (!($?) -or ($LASTEXITCODE -ne 0)) {
+    & curl.exe -L $node_url -o $node_zip --create-dirs
+    if ($LASTEXITCODE -ne 0) {
+      Write-Error 'Failed to download Node.js zip'
       exit 1
     }
 
-    Write-Host "Node.js installed at $($node_exe)"
+    Expand-Archive -Path $node_zip -Destination $workspace
+    if (!$?) {
+      Write-Error 'Failed to extract Node.js zip'
+      exit 1
+    }
+
+    Write-Host "Node.js installed at $($node_exe)`n"
   }
   else {
-    Write-Host "Found cached Node.js at $($node_exe)"
+    Write-Host "Found cached Node.js at $($node_exe)`n"
   }
 
   return $node_exe, $npm_exe
