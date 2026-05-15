@@ -1,9 +1,56 @@
-﻿<ResourceDictionary
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-    xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal">
+    xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
+    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
+    <internal:VisibilityConverter x:Key="OfflineMapAreasViewVisibilityConverter"/>
+    
+    <Style x:Key="OfflineMapAreasViewIconButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <!--<Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        x:Name="ButtonBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="#FFF0F0F0" />
+                            <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#FFD9D9D9" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="#FFE6E6E6" />
+                            <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#FFC6C6C6" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+
+    <Style x:Key="OfflineMapAreasViewStatePanelStyle" TargetType="{x:Type StackPanel}">
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="MaxWidth" Value="320" />
+    </Style>
+
     <Style TargetType="{x:Type controls:OfflineMapAreasView}">
         <!--  Default item template can be overriden by the user.  -->
         <Setter Property="Template">
@@ -12,97 +59,330 @@
                     <Border
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}"
+                        Padding="{TemplateBinding Padding}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
-                            <StackPanel>
-                                <ProgressBar IsIndeterminate="{Binding TemplateSettings.IsLoadingModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding OnlineMap.Item.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                                    <TextBlock Text="(Online)" />
-                                </StackPanel>
-                                <TextBlock Text="On-Demand Map Areas" />
-                                <ItemsControl  x:Name="ListView" 
-                                          ItemsSource="{Binding TemplateSettings.OnDemandMapModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <ItemsControl
+                                    x:Name="ListView2"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MapAreas}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding Title}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                <TextBlock Text="Preplanned Map Areas" />
-                                <ItemsControl x:Name="ListView2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                        ItemsSource="{Binding TemplateSettings.PreplannedMapModels, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Height="64" Margin="0,4">
+                                            <Grid
+                                                Height="64"
+                                                Margin="0,4"
+                                                AutomationProperties.HelpText="{Binding Title}">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="68" />
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
-                                                <Image Source="{Binding ThumbnailData}" Width="64" Height="64" Stretch="UniformToFill" Grid.RowSpan="2" />
-                                                <StackPanel Grid.Column="1" Margin="8,0,0,0">
-                                                    <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" FontWeight="Bold" />
-                                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
-                                                </StackPanel>
-                                                <TextBlock Text="Downloaded" Grid.Row="1" Grid.Column="1" Margin="8,0,0,0">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsDownloaded}" Value="False">
-                                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
+
+                                                <Border
+                                                    Grid.RowSpan="3"
+                                                    Margin="0,0,4,0"
+                                                    BorderBrush="LightGray"
+                                                    BorderThickness="1"
+                                                    CornerRadius="8">
+                                                    <Image
+                                                        Width="64"
+                                                        Height="64"
+                                                        Source="{Binding ThumbnailData}"
+                                                        Stretch="UniformToFill" />
+                                                </Border>
+
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    FontSize="14"
+                                                    FontWeight="SemiBold"
+                                                    Text="{Binding Title}"
+                                                    TextTrimming="CharacterEllipsis" />
+
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    Grid.Column="1"
+                                                    MaxHeight="42"
+                                                    Margin="0,2,0,0"
+                                                    Foreground="#FF666666"
+                                                    Text="{Binding Description}"
+                                                    TextWrapping="Wrap" />
+
+                                                <TextBlock
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Foreground="#FF666666"
+                                                    Text="Downloaded"  Visibility="{Binding IsDownloaded, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                                                 </TextBlock>
-                                                <Grid Grid.Column="2" Grid.RowSpan="2">
-                                                    <!--<Button Content="Open">
-                                                        <Button.Style>
-                                                            <Style TargetType="Button">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsDownloaded}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Visible" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Button.Style>
-                                                    </Button>-->
-                                                    <Button Content="Download" Command="{Binding DownloadCommand}">
-                                                        <Button.Style>
-                                                            <Style TargetType="Button">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsEnabled}" Value="False">
-                                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Button.Style>
+
+                                                <Grid Grid.RowSpan="3" Grid.Column="2">
+                                                    <Button
+                                                        AutomationProperties.HelpText="Stop"
+                                                        Command="{Binding StopDownloadCommand}" Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
+                                                        ToolTipService.ToolTip="Stop" Visibility="{Binding IsDownloading, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
+                                                        <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xEAB7;" />
                                                     </Button>
-                                                    <!--<Button Content="Pause">
-                                                        <Button.Style>
-                                                            <Style TargetType="Button">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsDownloading}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Visible" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Button.Style>
-                                                    </Button>-->
+
+                                                    <Button
+                                                        AutomationProperties.HelpText="Download"
+                                                        Command="{Binding DownloadCommand}"
+                                                        ToolTipService.ToolTip="Download" Foreground="Red"
+                                                        Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
+                                                        Visibility="{Binding AllowsDownload, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
+                                                        <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="16" Text="&#xE81C;" />
+                                                    </Button>
+
+                                                    <StackPanel Orientation="Horizontal" Visibility="{Binding IsDownloaded, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
+                                                        <Button
+                                                            AutomationProperties.HelpText="Remove"
+                                                            Command="{Binding RemoveDownloadCommand}"
+                                                            Style="{StaticResource OfflineMapAreasViewIconButtonStyle}"
+                                                            ToolTipService.ToolTip="Remove">
+                                                            <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xEB04;" />
+                                                        </Button>
+                                                        <Button
+                                                            Margin="8,0,0,0" VerticalAlignment="Center"
+                                                            AutomationProperties.HelpText="Open"
+                                                            Command="{Binding OpenCommand}"
+                                                            CommandParameter="{Binding Map}"
+                                                            Content="Open" />
+                                                    </StackPanel>
                                                 </Grid>
+                                                <ProgressBar
+                                                     Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"
+                                                     Minimum="0" Maximum="1" VerticalAlignment="Bottom"
+                                                     IsIndeterminate="False" IsHitTestVisible="False"
+                                                     Value="{Binding DownloadProgress}" Visibility="{Binding IsDownloading, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}"/>
+
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                            </StackPanel>
+
+                                <StackPanel Grid.Row="0">
+                                    <StackPanel.Style>
+                                        <Style BasedOn="{StaticResource OfflineMapAreasViewStatePanelStyle}" TargetType="{x:Type StackPanel}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MapIsOfflineDisabled}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                        FontSize="48"
+                                        Foreground="#FF8A8A8A"
+                                        Text="&#xE846;" />
+                                    <TextBlock
+                                        Margin="0,8,0,0"
+                                        HorizontalAlignment="Center"
+                                        FontSize="20"
+                                        FontWeight="SemiBold"
+                                        Text="Offline Disabled"
+                                        TextAlignment="Center" />
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#FF666666"
+                                        Text="The map is not enabled for offline use"
+                                        TextAlignment="Center"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="0">
+                                    <StackPanel.Style>
+                                        <Style BasedOn="{StaticResource OfflineMapAreasViewStatePanelStyle}" TargetType="{x:Type StackPanel}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IsInternetNotAvailable}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                        FontSize="48"
+                                        Foreground="#FF8A8A8A"
+                                        Text="&#xE846;" />
+                                    <TextBlock
+                                        Margin="0,8,0,0"
+                                        HorizontalAlignment="Center"
+                                        FontSize="20"
+                                        FontWeight="SemiBold"
+                                        Text="No Internet Connection"
+                                        TextAlignment="Center" />
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#FF666666"
+                                        Text="Could not retrieve map areas for this map"
+                                        TextAlignment="Center"
+                                        TextWrapping="Wrap" />
+                                    <Button
+                                        x:Name="NoInternetRefreshButton"
+                                        Margin="0,12,0,0"
+                                        HorizontalAlignment="Center"
+                                        AutomationProperties.HelpText="Refresh">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                Margin="0,0,4,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                                FontSize="14"
+                                                Text="&#xE72C;" />
+                                            <TextBlock Text="Refresh" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="0">
+                                    <StackPanel.Style>
+                                        <Style BasedOn="{StaticResource OfflineMapAreasViewStatePanelStyle}" TargetType="{x:Type StackPanel}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.HasNoAreas}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                        FontSize="48"
+                                        Foreground="#FF8A8A8A"
+                                        Text="&#xE81C;" />
+                                    <TextBlock
+                                        Margin="0,8,0,0"
+                                        HorizontalAlignment="Center"
+                                        FontSize="20"
+                                        FontWeight="SemiBold"
+                                        Text="No Map Areas"
+                                        TextAlignment="Center" />
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#FF666666"
+                                        Text="There are no map areas for this map.">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Setter Property="TextAlignment" Value="Center" />
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IsPreplannedMode}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#FF666666"
+                                        Text="There are no map areas for this map. Tap the button below to get started.">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Setter Property="TextAlignment" Value="Center" />
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IsOnDemandMode}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <Button
+                                        x:Name="RefreshMapAreasButton"
+                                        Margin="0,12,0,0"
+                                        HorizontalAlignment="Center"
+                                        AutomationProperties.HelpText="Refresh">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IsPreplannedMode}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                Margin="0,0,4,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                                FontSize="14"
+                                                Text="&#xE72C;" />
+                                            <TextBlock Text="Refresh" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                                <ProgressBar
+                                    Grid.Row="0"
+                                    Width="120"
+                                    Height="4"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsIndeterminate="True">
+                                    <ProgressBar.Style>
+                                        <Style TargetType="{x:Type ProgressBar}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IsLoadingModels}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ProgressBar.Style>
+                                </ProgressBar>
+
+                                <Button
+                                    x:Name="AddMapAreaButton"
+                                    Grid.Row="1"
+                                    Margin="0,12,0,0"
+                                    HorizontalAlignment="Center"
+                                    AutomationProperties.HelpText="Add Map Area">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IsOnDemandMode}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,4,0"
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                            FontSize="18"
+                                            Text="&#xE9F6;" />
+                                        <TextBlock VerticalAlignment="Center" Text="Add Map Area" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>
