@@ -51,8 +51,6 @@ if (!$?) {
   exit 1
 }
 
-# Kill the dotnet build server as it is no longer needed
-
 # Start appium
 $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
 if (!$?) {
@@ -61,16 +59,14 @@ if (!$?) {
 }
 
 # Run tests
-$toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
-Set-Location -Path $toolkit_src_root
-
 $results_dir = Join-Path $env:WORKSPACE 'TestResults'
+$toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
 if ([string]::IsNullOrWhiteSpace($env:TRX_FILENAME)) {
-  & $dotnet_exe test $wpf_project --results-directory $results_dir --report-trx
+  $parameter_trxfilename = "--report-trx-filename $($env:TRX_FILENAME)"
 }
-else {
-  & $dotnet_exe test $wpf_project --results-directory $results_dir --report-trx --report-trx-filename $env:TRX_FILENAME
-}
+
+Set-Location -Path $toolkit_src_root
+& $dotnet_exe test $wpf_project $property_UseNugetPackage --results-directory $results_dir --report-trx $parameter_trxfilename
 
 # Kill the appium server process and build server
 Stop-Process -InputObject $appium_server_process
