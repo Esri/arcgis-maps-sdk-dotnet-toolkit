@@ -62,14 +62,15 @@ if (!$?) {
 }
 
 # Run tests
-$test_exe = Join-Path $output_dir 'Toolkit.UITests.WPF.exe'
+$toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
+Set-Location -Path $toolkit_src_root
+
 $results_dir = Join-Path $env:WORKSPACE 'TestResults'
-Write-Host $trx_file
 if ([string]::IsNullOrWhiteSpace($env:TRX_FILENAME)) {
-  & $test_exe --results-directory $results_dir --report-trx
+  & $dotnet_exe test $wpf_project --results-directory $results_dir --report-trx
 }
 else {
-  & $test_exe --results-directory $results_dir --report-trx --report-trx-filename $env:TRX_FILENAME
+  & $dotnet_exe test $wpf_project --results-directory $results_dir --report-trx --report-trx-filename $env:TRX_FILENAME
 }
 
 # Kill the appium server process
