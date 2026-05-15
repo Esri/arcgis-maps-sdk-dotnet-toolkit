@@ -61,7 +61,7 @@ if (!$?) {
 # Run tests
 $results_dir = Join-Path $env:WORKSPACE 'TestResults'
 $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
-if ([string]::IsNullOrWhiteSpace($env:TRX_FILENAME)) {
+if (![string]::IsNullOrWhiteSpace($env:TRX_FILENAME)) {
   $parameter_trxfilename = "--report-trx-filename $($env:TRX_FILENAME)"
 }
 
