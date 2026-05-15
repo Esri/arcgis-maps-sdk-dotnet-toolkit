@@ -78,6 +78,9 @@ function Install-Nodejs {
     Write-Host "Found cached Node.js at $($node_exe)`n"
   }
 
+  # Node sometimes calls itself base on path internally, so we cannot rely on returning the local variables
+  $env:PATH = "$($node_dir);$($env:PATH)"
+
   return $node_exe, $npm_exe
 }
 
