@@ -53,5 +53,5 @@ internal static class ToolkitIcons
     public const string List = "\uE94A";
     public const string Inbox = "\uE8F4";
     public const string DownloadTo = "\uE81C";
+    public const string Refresh = "\uEB66";
 }
-

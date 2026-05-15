@@ -20,6 +20,46 @@
     </Style>
     <Style TargetType="controls:OfflineMapAreasView">
         <!--  Default item template can be overriden by the user.  -->
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate x:DataType="controls:IOfflineMapAreaItem">
+                    <Grid Height="64" Margin="0,4" AutomationProperties.HelpText="{x:Bind Title, Mode=OneWay}" AutomationProperties.FullDescription="{x:Bind Description, Mode=OneWay}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="68" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Border CornerRadius="8" Grid.RowSpan="3" BorderThickness="1" BorderBrush="LightGray" Margin="0,0,4,0">
+                            <Image Source="{x:Bind local:OfflineMapAreasViewResources.BytesToImage(ThumbnailData), Mode=OneWay}" Width="64" Height="64" Stretch="UniformToFill"/>
+                        </Border>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind Title, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxLines="3" Style="{StaticResource CaptionTextBlockStyle}" />
+                        <TextBlock Text="Downloaded" Grid.Row="2" Grid.Column="1" Visibility="{x:Bind IsDownloaded, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" />
+                        <Grid Grid.Column="2" Grid.RowSpan="3">
+                            <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" AutomationProperties.HelpText="Stop" ToolTipService.ToolTip="Stop" Command="{x:Bind StopDownloadCommand, Mode=OneWay}" Visibility="{x:Bind IsDownloading, Mode=OneWay}">
+                                <SymbolIcon Symbol="Stop" />
+                            </Button>
+                            <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" AutomationProperties.HelpText="Download" ToolTipService.ToolTip="Download" Command="{x:Bind DownloadCommand, Mode=OneWay}" Visibility="{x:Bind AllowsDownload, Mode=OneWay}">
+                                <SymbolIcon Symbol="Download" />
+                            </Button>
+                            <ProgressRing Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Minimum="0" Maximum="1" IsIndeterminate="False" Value="{x:Bind DownloadProgress, Mode=OneWay}" Visibility="{x:Bind IsDownloading, Mode=OneWay}" />
+                            <StackPanel Orientation="Horizontal" Visibility="{x:Bind IsDownloaded, Mode=OneWay}" >
+                                <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="Remove" AutomationProperties.HelpText="Remove" Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}">
+                                    <SymbolIcon Symbol="Delete" />
+                                </Button>
+                                <Button Content="Open" AutomationProperties.HelpText="Open" Margin="8,0,0,0" Command="{x:Bind OpenCommand, Mode=OneWay}" CommandParameter="{x:Bind Map, Mode=OneWay}" />
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:OfflineMapAreasView">
@@ -37,48 +77,8 @@
                                     <RowDefinition/>
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <ItemsControl x:Name="ListView2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                        ItemsSource="{x:Bind TemplateSettings.MapAreas, Mode=OneWay}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate x:DataType="controls:IOfflineMapAreaItem">
-                                            <Grid Height="64" Margin="0,4" AutomationProperties.HelpText="{x:Bind Title, Mode=OneWay}" AutomationProperties.FullDescription="{x:Bind Description, Mode=OneWay}">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="68" />
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                    <RowDefinition Height="Auto" />
-                                                </Grid.RowDefinitions>
-                                                <Border CornerRadius="8" Grid.RowSpan="3" BorderThickness="1" BorderBrush="LightGray" Margin="0,0,4,0">
-                                                    <Image Source="{x:Bind local:OfflineMapAreasViewResources.BytesToImage(ThumbnailData), Mode=OneWay}" Width="64" Height="64" Stretch="UniformToFill"/>
-                                                </Border>
-                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind Title, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource BodyStrongTextBlockStyle}" />
-                                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxLines="3" Style="{StaticResource CaptionTextBlockStyle}" />
-                                                <TextBlock Text="Downloaded" Grid.Row="2" Grid.Column="1" Visibility="{x:Bind IsDownloaded, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" />
-                                                <Grid Grid.Column="2" Grid.RowSpan="3">
-                                                    <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" AutomationProperties.HelpText="Stop" ToolTipService.ToolTip="Stop" Command="{x:Bind StopDownloadCommand, Mode=OneWay}" Visibility="{x:Bind IsDownloading, Mode=OneWay}">
-                                                        <SymbolIcon Symbol="Stop" />
-                                                    </Button>
-                                                    <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" AutomationProperties.HelpText="Download" ToolTipService.ToolTip="Download" Command="{x:Bind DownloadCommand, Mode=OneWay}" Visibility="{x:Bind AllowsDownload, Mode=OneWay}">
-                                                        <SymbolIcon Symbol="Download" />
-                                                    </Button>
-                                                    <ProgressRing Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Minimum="0" Maximum="1" IsIndeterminate="False" Value="{x:Bind DownloadProgress, Mode=OneWay}" Visibility="{x:Bind IsDownloading, Mode=OneWay}" />
-                                                    <StackPanel Orientation="Horizontal" Visibility="{x:Bind IsDownloaded, Mode=OneWay}" >
-                                                        <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="Remove" AutomationProperties.HelpText="Remove" Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}">
-                                                            <SymbolIcon Symbol="Delete" />
-                                                        </Button>
-                                                        <Button Content="Open" AutomationProperties.HelpText="Open" Margin="8,0,0,0" Command="{x:Bind OpenCommand, Mode=OneWay}" CommandParameter="{x:Bind Map, Mode=OneWay}" />
-                                                    </StackPanel>
-                                                </Grid>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                
-                                
+                                <ItemsControl x:Name="MapAreasView" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                        ItemsSource="{x:Bind TemplateSettings.MapAreas, Mode=OneWay}" ItemTemplate="{TemplateBinding ItemTemplate}"/>
 
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.MapIsOfflineDisabled, Mode=OneWay}">
                                     <TextBlock

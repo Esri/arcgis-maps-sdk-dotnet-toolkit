@@ -23,6 +23,7 @@ using System.IO;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Tasks.Offline;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Microsoft.VisualBasic.FileIO;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
@@ -85,7 +86,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly DelegateCommand _removeDownloadCommand;
         private readonly DelegateCommand _stopDownloadCommand;
         private readonly System.Windows.Input.ICommand _openMapCommand;
-
 
         internal PreplannedMapModel(
             Func<Task<OfflineMapTask>> offlineMapTaskFactory,
@@ -188,11 +188,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             private set
             {
                 SetProperty(ref _status, value);
-                _downloadCommand.NotifyCanExecuteChanged();
-                _removeDownloadCommand.NotifyCanExecuteChanged();
-                OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloading));
-                OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloaded));
-                OnPropertyChanged(nameof(IOfflineMapAreaItem.AllowsDownload));
+                Dispatcher.Invoke(() =>
+                {
+                    _downloadCommand.NotifyCanExecuteChanged();
+                    _removeDownloadCommand.NotifyCanExecuteChanged();
+                    OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloading));
+                    OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloaded));
+                    OnPropertyChanged(nameof(IOfflineMapAreaItem.AllowsDownload));
+                });
             }
         }
 
@@ -243,7 +246,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 await LoadPreplannedMapAreaAsync().ConfigureAwait(false);
             }
-            _downloadCommand.NotifyCanExecuteChanged();
+            Dispatcher.Invoke(() => _downloadCommand.NotifyCanExecuteChanged());
         }
 
         public async Task DownloadPreplannedMapAreaAsync()
@@ -268,6 +271,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 parameters.UpdateMode = OfflineManager.Shared.Configuration.PreplannedUpdateMode;
                 parameters.ContinueOnErrors = false;
 
+                if (Directory.Exists(_mmpkDirectoryPath))
+                {
+                    try
+                    {
+                        Directory.Delete(_mmpkDirectoryPath, true);
+                    }
+                    catch
+                    {
+                        Directory.Move(_mmpkDirectoryPath, _mmpkDirectoryPath + ".old");
+                    }
+                }
                 Directory.CreateDirectory(_mmpkDirectoryPath);
 
                 var job = offlineMapTask.DownloadPreplannedOfflineMap(parameters, _mmpkDirectoryPath);
@@ -280,7 +294,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Error = ex;
                 Status = PreplannedMapModelStatus.DownloadFailure;
             }
-            _downloadCommand.NotifyCanExecuteChanged();
+            Dispatcher.Invoke(() => _downloadCommand.NotifyCanExecuteChanged());
         }
 
         public void RemoveDownloadedArea()
@@ -310,11 +324,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
              Status == PreplannedMapModelStatus.LoadFailure ||
              Status == PreplannedMapModelStatus.PackageFailure);
 
-        bool IOfflineMapAreaItem.MapIsOfflineDisabled => false;
+        public bool MapIsOfflineDisabled => false;
 
-        bool IOfflineMapAreaItem.IsDownloading => Status == PreplannedMapModelStatus.Downloading;
+        public bool IsDownloading => Status == PreplannedMapModelStatus.Downloading;
 
-        double IOfflineMapAreaItem.DownloadProgress => Job is null ? 0d : Job.Progress / 100d;
+        public double DownloadProgress => Job is null ? 0d : Job.Progress / 100d;
 
         private async Task LoadPreplannedMapAreaAsync()
         {
@@ -368,6 +382,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             catch (Exception ex)
             {
                 Error = ex;
+                mobileMapPackage.Close();
                 MobileMapPackage = null;
                 Map = null;
                 SizeInBytes = 0;
@@ -483,9 +498,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     continue;
                 }
 
+                MobileMapPackage? mobileMapPackage = null;
                 try
                 {
-                    var mobileMapPackage = new MobileMapPackage(mapAreaDirectory);
+                    mobileMapPackage = new MobileMapPackage(mapAreaDirectory);
                     await mobileMapPackage.LoadAsync().ConfigureAwait(false);
 
                     var model = new PreplannedMapModel(
@@ -504,6 +520,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 catch
                 {
                     // Skip invalid local packages.
+                    mobileMapPackage?.Close();
                 }
             }
 

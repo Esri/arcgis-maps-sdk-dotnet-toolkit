@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = ItemsViewName, Type = typeof(ItemsControl))]
     public partial class OfflineMapAreasView : Control
     {
-        private const string ItemsViewName = "ItemsView";
+        private const string ItemsViewName = "MapAreasView";
 
         // Template settings class.
         // See https://learn.microsoft.com/en-us/windows/apps/develop/platform/xaml/template-settings-classes for more information about template settings and why we use them.

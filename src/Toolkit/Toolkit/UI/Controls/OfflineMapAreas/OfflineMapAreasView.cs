@@ -87,34 +87,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
+            ItemTemplate = DefaultItemTemplate;
 #else
             DefaultStyleKey = typeof(OfflineMapAreasView);
-            TemplateSettings = new OfflineMapAreasTemplateSettings();
 #endif
-            // Since we're binding to a static collection, we need to unbind when the control is unloaded to prevent memory leaks.
-            this.Unloaded += (s, e) => UnassignItemsSource();
-            this.Loaded += (s, e) => AssignItemsSource();
-
+            TemplateSettings = new OfflineMapAreasTemplateSettings();
             _openMapCommand = new DelegateCommand((map) => SelectedMap = map as Map, (map) => map != SelectedMap);
-
             _goOnlineCommand = new DelegateCommand((o) => SelectedMap = OnlineMap, () => SelectedMap != OnlineMap && OnlineMap != null);
-        }
-
-
-        private void AssignItemsSource()
-        {
-            if (GetTemplateChild(ItemsViewName) is BaseItemsControl lv)
-            {
-                lv.ItemsSource = OfflineManager.Shared.OfflineMapInfos;
-            }
-        }
-
-        private void UnassignItemsSource()
-        {
-            if (GetTemplateChild(ItemsViewName) is BaseItemsControl lv)
-            {
-                lv.ItemsSource = null;
-            }
         }
 
         /// <inheritdoc/>
@@ -138,9 +117,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 // TODO
             }
-#endif
+#elif MAUI
             base.OnApplyTemplate();
-            AssignItemsSource();
+            OnApplyTemplateMaui();
+#else
+            base.OnApplyTemplate();
+#endif
         }
 
         private readonly DelegateCommand _goOnlineCommand;
@@ -298,14 +280,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => GetValue(SelectedMapProperty) as Map;
             private set => SetValue(SelectedMapProperty, value);
         }
-
+        
+        /// <summary>
+        /// Identifies the <see cref="SelectedMap"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty SelectedMapProperty =
             DependencyProperty.Register(nameof(SelectedMap), typeof(Map), typeof(OfflineMapAreasView), new PropertyMetadata(null, (s,e) => ((OfflineMapAreasView)s).OnSelectedMapPropertyChanged(e.NewValue as Map)));
 
 
 #elif WPF
         public Map? SelectedMap
-           {
+        {
             get => GetValue(SelectedMapPropertyKey.DependencyProperty) as Map; 
             private set => SetValue(SelectedMapPropertyKey, value);
         }
@@ -339,7 +324,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets item template for the <see cref="OfflineMapInfo"/> items in the list.
+        /// Gets or sets item template for the <see cref="IOfflineMapAreaItem"/> items in the list.
         /// </summary>
         public DataTemplate? ItemTemplate
         {
@@ -352,13 +337,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
 #if MAUI
         public static readonly BindableProperty ItemTemplateProperty =
-            BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(OfflineMapAreasView), default(DataTemplate));
+            BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(OfflineMapAreasView), null);
 #else
         public static readonly DependencyProperty ItemTemplateProperty =
-            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(OfflineMapAreasView), new PropertyMetadata(default(DataTemplate)));
+            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(OfflineMapAreasView), new PropertyMetadata(null));
 #endif
     }
 
+    // TODO: Should probably be internal for MAUI
     public interface IOfflineMapAreaItem : INotifyPropertyChanged
     {
         string Title { get; }
