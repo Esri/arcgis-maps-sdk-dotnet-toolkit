@@ -53,11 +53,11 @@ if (!$?) {
 }
 
 # Kill the dotnet build server as it is no longer needed
-& $dotnet_exe build-server shutdown
 
 # Start appium
 $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
 if (!$?) {
+  & $dotnet_exe build-server shutdown
   exit 1
 }
 
@@ -73,5 +73,6 @@ else {
   & $dotnet_exe test $wpf_project --results-directory $results_dir --report-trx --report-trx-filename $env:TRX_FILENAME
 }
 
-# Kill the appium server process
+# Kill the appium server process and build server
 Stop-Process -InputObject $appium_server_process
+& $dotnet_exe build-server shutdown
