@@ -43,11 +43,10 @@ if (![string]::IsNullOrWhiteSpace($env:RELEASE_VERSION)) {
   $property_UseNugetPackage = "-p:UseNugetPackage=$($env:RELEASE_VERSION)"
 }
 
-$output_dir = Join-Path $env:WORKSPACE 'wpf-cibuild-output'
 $wpf_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF\Toolkit.UITests.WPF.csproj'
 $wpf_app_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF.App\Toolkit.UITests.WPF.App.csproj'
 & $dotnet_exe build $wpf_app_project -c Release $property_UseNugetPackage
-& $dotnet_exe build $wpf_project -o $output_dir -c Release $property_UseNugetPackage
+& $dotnet_exe build $wpf_project -c Release $property_UseNugetPackage
 if (!$?) {
   exit 1
 }
