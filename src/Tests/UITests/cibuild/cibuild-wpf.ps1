@@ -45,7 +45,7 @@ if (![string]::IsNullOrWhiteSpace($env:RELEASE_VERSION)) {
 
 $wpf_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF\Toolkit.UITests.WPF.csproj'
 $wpf_app_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF.App\Toolkit.UITests.WPF.App.csproj'
-& $dotnet_exe build $wpf_app_project -c Release $property_UseNugetPackage
+& $dotnet_exe build $wpf_app_project -c Release $property_UseNugetPackage -p:SelfContained=true
 & $dotnet_exe build $wpf_project -c Release $property_UseNugetPackage
 if (!$?) {
   exit 1
@@ -66,7 +66,7 @@ if (![string]::IsNullOrWhiteSpace($env:TRX_FILENAME)) {
 }
 
 Set-Location -Path $toolkit_src_root
-Invoke-Expression "$dotnet_exe test $wpf_project $property_UseNugetPackage --results-directory $results_dir --report-trx $parameter_trxfilename"
+Invoke-Expression "$dotnet_exe test $wpf_project -c Release $property_UseNugetPackage --results-directory $results_dir --report-trx $parameter_trxfilename"
 
 # Kill the appium server process and build server
 Stop-Process -InputObject $appium_server_process
