@@ -112,9 +112,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public Exception? PreplannedMapModelsError => _vm?.PreplannedMapModelsError;
 
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         private void OnVMPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch(e.PropertyName)
@@ -140,7 +137,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            this.Dispatch(() => PropertyChanged?.Invoke(this, e));
+            this.Dispatch(() => _handler?.Invoke(this, e));
         }
+
+        PropertyChangedEventHandler? _handler;
+        event PropertyChangedEventHandler? INotifyPropertyChanged.PropertyChanged
+        {
+            add => _handler += value;
+            remove => _handler -= value;
+        }
+
     }
 }
