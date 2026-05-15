@@ -33,6 +33,10 @@
                         </Border.Resources>
                         <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
                             <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
                                 <ItemsControl x:Name="ListView2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                                         ItemsSource="{x:Bind TemplateSettings.MapAreas, Mode=OneWay}">
                                     <ItemsControl.ItemTemplate>
@@ -73,6 +77,8 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
+                                
+                                
 
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.MapIsOfflineDisabled, Mode=OneWay}">
                                     <TextBlock
@@ -109,7 +115,7 @@
                                     <TextBlock Grid.Row="0" Grid.Column="1" Text="No Map Areas" TextTrimming="CharacterEllipsis" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center" />
                                     <TextBlock Grid.Row="1" Grid.Column="1" Text="There are no map areas for this map." Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" Foreground="{StaticResource TextFillColorSecondaryBrush}"
                                                Visibility="{x:Bind TemplateSettings.IsPreplannedMode, Mode=OneWay}" />
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="There are no map areas for this map. Tap the button below to get started" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" Foreground="{StaticResource TextFillColorSecondaryBrush}"
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="There are no map areas for this map. Tap the button below to get started." Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" Foreground="{StaticResource TextFillColorSecondaryBrush}"
                                                Visibility="{x:Bind TemplateSettings.IsOnDemandMode, Mode=OneWay}" />
                                     <Button HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.IsPreplannedMode, Mode=OneWay}" AutomationProperties.HelpText="Refresh" x:Name="RefreshMapAreasButton">
                                         <StackPanel Orientation="Horizontal">
@@ -117,15 +123,17 @@
                                             <TextBlock Text="Refresh"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.IsOnDemandMode, Mode=OneWay}" AutomationProperties.HelpText="Add Map Area" x:Name="AddMapAreaButton">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE9F6;" FontFamily="{StaticResource toolkit-icons}" FontSize="18" VerticalAlignment="Center" />
-                                            <TextBlock Text="Add Map Area" VerticalAlignment="Center" />
-                                        </StackPanel>
-                                    </Button>
+                                    
                                 </StackPanel>
 
                                 <ProgressRing Visibility="{x:Bind TemplateSettings.IsLoadingModels, Mode=OneWay}" IsHitTestVisible="False" />
+                                
+                                <Button HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.IsOnDemandMode, Mode=OneWay}" AutomationProperties.HelpText="Add Map Area" x:Name="AddMapAreaButton" Grid.Row="1">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE9F6;" FontFamily="{StaticResource toolkit-icons}" FontSize="18" VerticalAlignment="Center" />
+                                        <TextBlock Text="Add Map Area" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
                             </Grid>
                         </ScrollViewer>
                     </Border>

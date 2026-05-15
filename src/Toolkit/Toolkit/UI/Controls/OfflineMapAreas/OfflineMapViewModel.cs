@@ -239,12 +239,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var result = await PreplannedMapModel.LoadPreplannedMapModelsAsync(GetOfflineMapTaskAsync, PortalItemId, OnRemoveDownloadOfPreplannedArea, _openMapCommand, Dispatcher).ConfigureAwait(false);
 
+            TaskCompletionSource tcs = new TaskCompletionSource();
             Dispatcher(() =>
             {
-                ReplaceCollection(_preplannedMapModels, result.Models);
-                PreplannedMapModelsError = result.Error;
-                IsShowingOnlyOfflineModels = result.OnlyOfflineModelsAreAvailable;
+                try
+                {
+                    ReplaceCollection(_preplannedMapModels, result.Models);
+                    PreplannedMapModelsError = result.Error;
+                    IsShowingOnlyOfflineModels = result.OnlyOfflineModelsAreAvailable;
+                }
+                finally
+                {
+                    tcs.SetResult();
+                }
             });
+            await tcs.Task.ConfigureAwait(false);
         }
 
         private async Task LoadOnDemandMapModelsAsync()

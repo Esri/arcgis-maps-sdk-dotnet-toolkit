@@ -45,12 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return listView;
         }
 
-        private OfflineMapViewModel? _vm;
-
-        private void SetVM(OfflineMapViewModel? vm)
-        {
-            _vm = vm;
-        }
+        private OfflineMapAreasTemplateSettings TemplateSettings { get; set; }
     }
 }
 #endif

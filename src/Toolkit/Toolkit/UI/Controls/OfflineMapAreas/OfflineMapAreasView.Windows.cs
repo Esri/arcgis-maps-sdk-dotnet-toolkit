@@ -29,13 +29,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private const string ItemsViewName = "ItemsView";
 
-        private void SetVM(OfflineMapViewModel? vm)
-        {
-            TemplateSettings.VM = vm;
-            if (vm is not null)
-                _ = vm.LoadModelsAsync();
-        }
-
         // Template settings class.
         // See https://learn.microsoft.com/en-us/windows/apps/develop/platform/xaml/template-settings-classes for more information about template settings and why we use them.
 
@@ -54,6 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if WINUI
+        /// <summary>Identifies the <see cref="TemplateSettings"/> dependency property.</summary>
         public static readonly DependencyProperty TemplateSettingsProperty =
             DependencyProperty.Register(nameof(TemplateSettings), typeof(OfflineMapAreasTemplateSettings), typeof(OfflineMapAreasView), new PropertyMetadata(null));
 #elif WPF
@@ -64,113 +58,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                   ownerType: typeof(OfflineMapAreasView),
                   typeMetadata: new FrameworkPropertyMetadata());
 #endif
-    }
-
-    /// <summary>
-    /// Provides calculated values that can be referenced as TemplatedParent sources when defining templates for a <see cref="OfflineMapAreasView"/> control. Not intended for general use.
-    /// </summary>
-    public sealed partial class OfflineMapAreasTemplateSettings : DependencyObject, INotifyPropertyChanged
-    {
-        internal OfflineMapAreasTemplateSettings()
-        {
-        }
-
-        private OfflineMapViewModel? _vm;
-
-        internal OfflineMapViewModel? VM
-        {
-            get { return _vm; }
-            set {
-                if (_vm != value)
-                {
-                    if (_vm is not null)
-                    {
-                        _vm.PropertyChanged -= OnVMPropertyChanged;
-                    }
-                    _vm = value;
-                    if (_vm is not null)
-                    {
-                        _vm.PropertyChanged += OnVMPropertyChanged;
-                    }
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private void UpdateProperties()
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(null)); // Raise for all props
-        }
-
-        /// <summary>
-        /// Gets a value that indicates whether the current view model is loading map area models.
-        /// </summary>
-        public bool IsLoadingModels => _vm?.IsLoadingModels ?? false;
-
-        /// <summary>
-        /// Gets a value that indicates whether only offline models are available.
-        /// </summary>
-//        public bool IsShowingOnlyOfflineModels => _vm?.IsShowingOnlyOfflineModels ?? false;
-
-        /// <summary>
-        /// Gets a value that indicates whether offline map areas are disabled for the current map.
-        /// </summary>
-        public bool MapIsOfflineDisabled => _vm?.MapIsOfflineDisabled ?? false;
-
-        /// <summary>
-        /// Gets a value indicating whether an internet connection is not available.
-        /// </summary>
-        public bool IsInternetNotAvailable => _vm?.DisplayMode == OfflineMapViewModel.Mode.NoInternetAvailable;
-
-        /// <summary>
-        /// Gets a value indicating whether the offline map is operating in on-demand mode.
-        /// </summary>
-        public bool IsOnDemandMode => _vm?.DisplayMode == OfflineMapViewModel.Mode.OnDemand || _vm?.DisplayMode == OfflineMapViewModel.Mode.Ambiguous;
-
-        /// <summary>
-        /// Gets a value indicating whether the offline map is operating in preplanned mode.
-        /// </summary>
-        public bool IsPreplannedMode => _vm?.DisplayMode == OfflineMapViewModel.Mode.Preplanned;
-
-        /// <summary>
-        /// Gets a value indicating whether there are no map areas available for the current map after it has loaded.
-        /// </summary>
-        public bool HasNoAreas => MapAreas is not null && _vm?.IsLoadingModels == false && !MapIsOfflineDisabled && (MapAreas?.Count ??  0) == 0;
-
-        /// <summary>
-        /// Gets the current map areas.
-        /// </summary>
-        public IReadOnlyCollection<IOfflineMapAreaItem>? MapAreas => _vm is null ? null : (_vm.PreplannedMapModels.Count > 0 ? _vm.PreplannedMapModels : _vm.OnDemandMapModels);
-
-        /// <summary>
-        /// Gets the current error raised while loading preplanned map models.
-        /// </summary>
-        public Exception? PreplannedMapModelsError => _vm?.PreplannedMapModelsError;
-
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnVMPropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            switch(e.PropertyName)
-            {
-                case nameof(OfflineMapViewModel.IsLoadingModels):
-                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(MapAreas)));
-                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(HasNoAreas)));
-                    break;
-                case nameof(OfflineMapViewModel.DisplayMode):
-                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsInternetNotAvailable)));
-                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsOnDemandMode)));
-                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsPreplannedMode)));
-                    break;
-            }
-            OnPropertyChanged(e);
-        }
-
-        private void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            this.Dispatch(() => PropertyChanged?.Invoke(this, e));
-        }
     }
 }
 #endif

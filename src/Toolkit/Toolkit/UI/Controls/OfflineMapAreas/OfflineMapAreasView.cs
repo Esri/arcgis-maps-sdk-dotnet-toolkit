@@ -202,6 +202,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        private void SetVM(OfflineMapViewModel? vm)
+        {
+            TemplateSettings.VM = vm;
+            if (vm is not null)
+                _ = vm.LoadModelsAsync();
+        }
+
         private void DispatchAction(Action action) => this.Dispatch(action);
 
         /// <summary>
