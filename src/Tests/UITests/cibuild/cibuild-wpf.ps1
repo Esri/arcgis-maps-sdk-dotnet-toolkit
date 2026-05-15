@@ -66,7 +66,7 @@ if (![string]::IsNullOrWhiteSpace($env:TRX_FILENAME)) {
 }
 
 Set-Location -Path $toolkit_src_root
-& $dotnet_exe test $wpf_project $property_UseNugetPackage --results-directory $results_dir --report-trx $parameter_trxfilename
+Invoke-Expression "$dotnet_exe test $wpf_project $property_UseNugetPackage --results-directory $results_dir --report-trx $parameter_trxfilename"
 
 # Kill the appium server process and build server
 Stop-Process -InputObject $appium_server_process
