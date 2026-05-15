@@ -29,6 +29,17 @@ if ($LASTEXITCODE -ne 0) {
 
 & $node_exe $appium_entry driver install windows
 
+# Extract and configure WindowsAppDriver for appium
+$env:APPIUM_WAD_PATH = Join-Path $env:APPIUM_HOME 'WinAppDriver1.2.1\WinAppDriver.exe'
+if (!(Test-Path $env:APPIUM_WAD_PATH)) {
+  $wap_zip = Join-Path $PSScriptRoot 'WinAppDriver1.2.1.zip'
+  Expand-Archive -Path $wap_zip -Destination $env:APPIUM_HOME
+  if (!$?) {
+    Write-Error 'Failed to extract WinAppDriver zip'
+    exit 1
+  }
+}
+
 # Set nuget source if provided
 if (![string]::IsNullOrWhiteSpace($env:NUGET_REPO)) {
   $toolkit_src_dir = Join-Path $PSScriptRoot '..\..\..'
