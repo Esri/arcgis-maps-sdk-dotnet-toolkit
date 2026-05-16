@@ -14,11 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System.IO;
-using System.Windows.Input;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Tasks.Offline;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Input;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
@@ -251,8 +252,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             catch (Exception ex)
             {
+                OfflineMapAreaUtilities.TryDeleteDirectory(_mmpkDirectoryPath);
                 Error = ex;
                 Status = OnDemandMapModelStatus.DownloadFailure;
+                Trace.WriteLine("Failed to download on-demand map area: " + ex.Message, "ArcGIS Toolkit");
             }
         }
 
@@ -296,6 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Map = null;
                 SizeInBytes = 0;
                 Status = OnDemandMapModelStatus.MmpkLoadFailure;
+                Trace.WriteLine("Failed to load mobile map package: " + ex.Message, "ArcGIS Toolkit");
             }
         }
 

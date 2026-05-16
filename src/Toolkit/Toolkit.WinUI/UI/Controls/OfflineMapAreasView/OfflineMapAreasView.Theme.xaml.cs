@@ -16,4 +16,9 @@ internal sealed partial class OfflineMapAreasViewResources : ResourceDictionary
         bmi.SetSource(ms.AsRandomAccessStream());
         return bmi;
     }
+
+    public static Visibility FalseToVisible(bool value)
+    {
+        return value ? Visibility.Collapsed : Visibility.Visible;
+    }
 }

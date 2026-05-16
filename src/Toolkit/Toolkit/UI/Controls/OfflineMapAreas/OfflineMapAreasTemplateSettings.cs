@@ -51,15 +51,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     if (_vm is not null)
                     {
                         _vm.PropertyChanged -= OnVMPropertyChanged;
+                        if(_vm.OnDemandMapModels is INotifyCollectionChanged incc)
+                            incc.CollectionChanged -= OnDemandMapModels_CollectionChanged;
                     }
                     _vm = value;
                     if (_vm is not null)
                     {
                         _vm.PropertyChanged += OnVMPropertyChanged;
+                        if (_vm.OnDemandMapModels is INotifyCollectionChanged incc)
+                            incc.CollectionChanged += OnDemandMapModels_CollectionChanged;
                     }
                     UpdateProperties();
                 }
             }
+        }
+
+        private void OnDemandMapModels_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(HasNoAreas)));
         }
 
         private void UpdateProperties()
@@ -91,6 +100,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets a value indicating whether the offline map is operating in on-demand mode.
         /// </summary>
         public bool IsOnDemandMode =>  _vm is not null && !_vm.IsLoadingModels && !MapIsOfflineDisabled && (_vm.DisplayMode == OfflineMapViewModel.Mode.OnDemand || _vm.DisplayMode == OfflineMapViewModel.Mode.Ambiguous);
+
+        public bool IsAddOnDemandMode { get; private set; }
+
+        internal void SetIsAddOnDemandMode(bool value)
+        {
+            if (IsAddOnDemandMode != value)
+            {
+                IsAddOnDemandMode = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsAddOnDemandMode)));
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the offline map is operating in preplanned mode.

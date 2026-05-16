@@ -20,7 +20,10 @@ using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using System.Net;
+using System.IO;
 using System.Windows.Input;
+using System.Diagnostics;
+
 
 
 #if MAUI
@@ -29,6 +32,7 @@ using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 using BaseItemsControl = Microsoft.Maui.Controls.ItemsView;
 using ButtonBase = Microsoft.Maui.Controls.Button;
+using TextBox = Microsoft.Maui.Controls.Entry;
 #elif WPF
 using System.Windows.Controls.Primitives;
 using BaseItemsControl = System.Windows.Controls.ItemsControl;
@@ -115,14 +119,87 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (GetTemplateChild("AddMapAreaButton") is ButtonBase addMapAreaButton)
             {
-                // TODO
+                addMapAreaButton.Click += (s, e) => InitAddOnDemandArea();
             }
+            if (GetTemplateChild("AcceptAddOnDemandAreaButton") is ButtonBase acceptMapAreaButton)
+            {
+                acceptMapAreaButton.Click += (s, e) => AddOnDemandArea();
+            }
+            if (GetTemplateChild("CancelAddOnDemandAreaButton") is ButtonBase cancelMapAreaButton)
+            {
+                cancelMapAreaButton.Click += (s, e) => CloseAddOnDemandArea();
+            }
+
 #elif MAUI
             base.OnApplyTemplate();
             OnApplyTemplateMaui();
 #else
             base.OnApplyTemplate();
 #endif
+        }
+
+        private void CloseAddOnDemandArea()
+        {
+            TemplateSettings.SetIsAddOnDemandMode(false);
+            if (GetTemplateChild("AddAreaMapView") is MapView mv)
+                mv.Map = null;
+        }
+
+        private void InitAddOnDemandArea()
+        {
+            TemplateSettings.SetIsAddOnDemandMode(true);
+            
+            if (GetTemplateChild("AddAreaMapView") is MapView mv)
+            {
+                if(OnlineMap?.Item is not null)
+                {
+                    mv.Map = new Map(OnlineMap.Item);
+                }
+                else
+                {
+                    // Fallback map
+                    mv.Map = new Map(BasemapStyle.ArcGISLightGray)
+                    {
+                        InitialViewpoint = OnlineMap?.InitialViewpoint
+                    };
+                }
+            }
+            if (GetTemplateChild("AddOnDemandAreaNameTextBox") is TextBox tb)
+            {
+                tb.Text = _vm?.NextOnDemandAreaTitle();
+            }
+        }
+        private async void AddOnDemandArea()
+        {
+            if (_vm is not null)
+            {
+                string name = _vm.NextOnDemandAreaTitle() ?? "Area";
+                if (GetTemplateChild("AddOnDemandAreaNameTextBox") is TextBox tb)
+                {
+                    if (!string.IsNullOrWhiteSpace(tb.Text))
+                        name = tb.Text;
+                }
+                if (GetTemplateChild("AddAreaMapView") is MapView mv)
+                {
+                    var vp = mv.GetCurrentViewpoint(ViewpointType.BoundingGeometry);
+                    if (vp != null)
+                    {
+                        try
+                        {
+                            var image = await mv.ExportImageAsync();
+                            using var ms = new MemoryStream();
+                            using var s = await image.GetEncodedBufferAsync();
+                            s.CopyTo(ms);
+                            await _vm.AddOnDemandMapAreaAsync(new OnDemandMapAreaConfiguration(name, vp.TargetGeometry, 0, mv.MapScale, ms.ToArray()));
+                        }
+                        catch (System.Exception ex)
+                        {
+                            Trace.WriteLine("Failed to add on-demand map area: " + ex.Message, "ArcGIS Toolkit");
+                        }
+                    }
+                }
+            }
+            CloseAddOnDemandArea();
         }
 
         private readonly DelegateCommand _goOnlineCommand;
@@ -168,6 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async void InitVM(Map map)
         {
+            TemplateSettings.SetIsAddOnDemandMode(false);
             if (map.Item is null && map.Uri is not null && map.LoadStatus != LoadStatus.Loaded)
             {
                 try
