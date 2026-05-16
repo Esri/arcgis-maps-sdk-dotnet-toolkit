@@ -37,6 +37,9 @@ function Install-Dotnet {
     Write-Host "Found cached dotnet at $($dotnet_exe)`n"
   }
 
+  # Set dotnet location for apps that rely on .NET runtime: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables#dotnet_host_path
+  $env:DOTNET_ROOT = $dotnet_install_folder
+
   return $dotnet_exe
 }
 
