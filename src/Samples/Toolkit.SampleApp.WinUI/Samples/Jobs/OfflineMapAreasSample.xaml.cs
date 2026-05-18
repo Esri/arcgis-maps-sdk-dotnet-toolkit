@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Jobs
 {
+    [SampleInfo(ApiKeyRequired = true)]
     public sealed partial class OfflineMapAreasSample : Page
     {
         // (Preplanned) Naperville water network - It has 4 map areas 
@@ -27,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Jobs
         {
             Maps = new List<MapAreaViewModel>();
             Maps.Add(new MapAreaViewModel() { Name = "Naperville - Preplanned", Map = new Map(new Uri(naperville_preplanned)) });
-            Maps.Add(new MapAreaViewModel() { Name = "US Breweries - Ond Demand", Map = new Map(new Uri(usBreweries)) });
+            Maps.Add(new MapAreaViewModel() { Name = "US Breweries - On-Demand", Map = new Map(new Uri(usBreweries)) });
             Maps.Add(new MapAreaViewModel() { Name = "Naperville - Offline Disabled", Map = new Map(new Uri(naperville_ondemand)) });
             Maps.Add(new MapAreaViewModel() { Name = "No Map", Map = null! });
             this.InitializeComponent();

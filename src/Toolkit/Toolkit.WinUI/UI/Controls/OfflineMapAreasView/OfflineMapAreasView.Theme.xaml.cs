@@ -21,4 +21,9 @@ internal sealed partial class OfflineMapAreasViewResources : ResourceDictionary
     {
         return value ? Visibility.Collapsed : Visibility.Visible;
     }
+
+    public static Visibility VisibleIfNotNull(object? value)
+    {
+        return value is null ? Visibility.Collapsed : Visibility.Visible;
+    }    
 }

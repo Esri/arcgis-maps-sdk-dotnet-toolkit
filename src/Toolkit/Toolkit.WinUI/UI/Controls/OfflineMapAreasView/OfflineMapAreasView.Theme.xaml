@@ -55,6 +55,11 @@
                                 </Button>
                                 <Button Content="Open" AutomationProperties.HelpText="Open" Margin="8,0,0,0" Command="{x:Bind OpenCommand, Mode=OneWay}" CommandParameter="{x:Bind Map, Mode=OneWay}" />
                             </StackPanel>
+                            <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" AutomationProperties.HelpText="{x:Bind Error.Message, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Error.Message, Mode=OneWay}"
+                                    Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}" Visibility="{x:Bind local:OfflineMapAreasViewResources.VisibleIfNotNull(Error), Mode=OneWay}"
+                                    >
+                                <FontIcon Glyph="&#xE783;" />
+                            </Button>
                         </Grid>
                     </Grid>
                 </DataTemplate>

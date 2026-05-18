@@ -48,6 +48,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private MobileMapPackage? _mobileMapPackage;
         private Map? _map;
         private Exception? _error;
+        private readonly DelegateCommand _downloadCommand;
+        private readonly DelegateCommand _removeDownloadCommand;
+        private readonly DelegateCommand _stopDownloadCommand;
         private readonly ICommand _openMapCommand;
 
         internal OnDemandMapModel(
@@ -56,19 +59,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             string portalItemId,
             Action<OnDemandMapModel> onRemoveDownload,
             ICommand openMapCommand,
-            Action<Action> dispatcher) : base(dispatcher)
+            Action<Action> dispatcher) : this(configuration.AreaId, portalItemId, configuration.Title, configuration.ThumbnailData, onRemoveDownload, openMapCommand, dispatcher)
         {
             _offlineMapTaskFactory = offlineMapTaskFactory;
             _configuration = configuration;
-            _portalItemId = portalItemId;
-            _areaId = configuration.AreaId;
-            _title = configuration.Title;
-            _thumbnailData = configuration.ThumbnailData;
-            _onRemoveDownloadAction = onRemoveDownload;
-            _directoryPath = OfflineMapAreaStorage.GetOnDemandAreaDirectory(portalItemId, _areaId);
-            _mmpkDirectoryPath = OfflineMapAreaStorage.GetOnDemandMmpkDirectory(portalItemId, _areaId);
-            _thumbnailPath = OfflineMapAreaStorage.GetOnDemandThumbnailPath(portalItemId, _areaId);
-            _openMapCommand = openMapCommand;
             if (_thumbnailData is { Length: > 0 })
             {
                 Directory.CreateDirectory(_directoryPath);
@@ -82,29 +76,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             string portalItemId,
             Action<OnDemandMapModel> onRemoveDownload,
             ICommand openMapCommand,
-            Action<Action> dispatcher) : base(dispatcher)
+            Action<Action> dispatcher) : this(areaId, portalItemId, job.Parameters.ItemInfo?.Title, null, onRemoveDownload, openMapCommand, dispatcher)
         {
             _job = job;
-            _areaId = areaId;
-            _portalItemId = portalItemId;
-            _onRemoveDownloadAction = onRemoveDownload;
-            _title = job.Parameters.ItemInfo?.Title ?? OfflineMapAreaUtilities.UnknownAreaTitle;
-            _directoryPath = OfflineMapAreaStorage.GetOnDemandAreaDirectory(portalItemId, _areaId);
-            _mmpkDirectoryPath = OfflineMapAreaStorage.GetOnDemandMmpkDirectory(portalItemId, _areaId);
-            _thumbnailPath = OfflineMapAreaStorage.GetOnDemandThumbnailPath(portalItemId, _areaId);
-            _openMapCommand = openMapCommand;
-            if (File.Exists(_thumbnailPath))
-            {
-                _thumbnailData = File.ReadAllBytes(_thumbnailPath);
-            }
-
             ObserveJob(job);
         }
 
         private OnDemandMapModel(
             string areaId,
             string portalItemId,
-            string title,
+            string? title,
             byte[]? thumbnailData,
             Action<OnDemandMapModel> onRemoveDownload,
             ICommand openMapCommand,
@@ -112,13 +93,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _areaId = areaId;
             _portalItemId = portalItemId;
-            _title = title;
+            _title = title ?? OfflineMapAreaUtilities.UnknownAreaTitle;
             _thumbnailData = thumbnailData;
             _onRemoveDownloadAction = onRemoveDownload;
+            _downloadCommand = new DelegateCommand((o) => _ = DownloadOnDemandMapAreaAsync(), () => false);
+            _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded || Error != null);
+            _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync());
             _openMapCommand = openMapCommand;
             _directoryPath = OfflineMapAreaStorage.GetOnDemandAreaDirectory(portalItemId, _areaId);
             _mmpkDirectoryPath = OfflineMapAreaStorage.GetOnDemandMmpkDirectory(portalItemId, _areaId);
             _thumbnailPath = OfflineMapAreaStorage.GetOnDemandThumbnailPath(portalItemId, _areaId);
+            if (File.Exists(_thumbnailPath) && _thumbnailData is null)
+            {
+                _thumbnailData = File.ReadAllBytes(_thumbnailPath);
+            }
         }
 
         public string AreaId => _areaId;
@@ -166,7 +154,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             private set
             {
                 SetProperty(ref _status, value);
-                OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloading));
+                Dispatcher.Invoke(() =>
+                {
+                    OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloading));
+                    OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloaded));
+                    _removeDownloadCommand.NotifyCanExecuteChanged();
+                });
             }
         }
 
@@ -185,7 +178,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Exception? Error
         {
             get => _error;
-            private set => SetProperty(ref _error, value);
+            private set
+            {
+                SetProperty(ref _error, value);
+                Dispatcher.Invoke(() =>
+                {
+                    _removeDownloadCommand.NotifyCanExecuteChanged();
+                });
+            }
         }
 
         public bool AllowsDownload => Status == OnDemandMapModelStatus.Initialized;
@@ -199,11 +199,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         bool IOfflineMapAreaItem.SupportsRedownloading => false;
         
-        ICommand IOfflineMapAreaItem.DownloadCommand => null!; // TODO
+        public ICommand DownloadCommand => _downloadCommand;
 
-        ICommand IOfflineMapAreaItem.RemoveDownloadCommand => null!; // TODO
-        
-        ICommand IOfflineMapAreaItem.StopDownloadCommand => null!; // TODO
+        public ICommand RemoveDownloadCommand => _removeDownloadCommand;
+
+        public ICommand StopDownloadCommand => _stopDownloadCommand;
         
         System.Windows.Input.ICommand IOfflineMapAreaItem.OpenCommand => _openMapCommand;
 
