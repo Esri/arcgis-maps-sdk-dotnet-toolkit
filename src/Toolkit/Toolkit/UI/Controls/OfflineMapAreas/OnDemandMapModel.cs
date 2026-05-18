@@ -193,11 +193,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool IsDownloaded => Status == OnDemandMapModelStatus.Downloaded;
 
         static IValueConverter _converter = new FileSizeConverter();
-        string IOfflineMapAreaItem.Description => $"Size: {_converter.Convert(SizeInBytes, typeof(string), null, null!)}";
+        public string Description => $"Size: {_converter.Convert(SizeInBytes, typeof(string), null, null!)}";
 
-        bool IOfflineMapAreaItem.MapIsOfflineDisabled => false;
+        public bool MapIsOfflineDisabled => false;
 
-        bool IOfflineMapAreaItem.SupportsRedownloading => false;
+        public bool SupportsRedownloading => false;
         
         public ICommand DownloadCommand => _downloadCommand;
 
@@ -205,11 +205,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public ICommand StopDownloadCommand => _stopDownloadCommand;
         
-        System.Windows.Input.ICommand IOfflineMapAreaItem.OpenCommand => _openMapCommand;
+        public System.Windows.Input.ICommand OpenCommand => _openMapCommand;
 
-        bool IOfflineMapAreaItem.IsDownloading => Status == OnDemandMapModelStatus.Downloading;
+        public bool IsDownloading => Status == OnDemandMapModelStatus.Downloading;
 
-        double IOfflineMapAreaItem.DownloadProgress => Job is null ? 0d : Job.Progress / 100d;
+        public double DownloadProgress => Job is null ? 0d : Job.Progress / 100d;
 
         public async Task DownloadOnDemandMapAreaAsync()
         {
@@ -252,6 +252,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             catch (Exception ex)
             {
+                MobileMapPackage?.Close();
                 OfflineMapAreaUtilities.TryDeleteDirectory(_mmpkDirectoryPath);
                 Error = ex;
                 Status = OnDemandMapModelStatus.DownloadFailure;
@@ -261,8 +262,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public void RemoveDownloadedArea()
         {
-            OfflineMapAreaUtilities.TryDeleteDirectory(_directoryPath);
+            MobileMapPackage?.Close();
             MobileMapPackage = null;
+            OfflineMapAreaUtilities.TryDeleteDirectory(_directoryPath);
             Map = null;
             SizeInBytes = 0;
             Error = null;
@@ -294,8 +296,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             catch (Exception ex)
             {
-                Error = ex;
+                mobileMapPackage.Close();
                 MobileMapPackage = null;
+                Error = ex;
                 Map = null;
                 SizeInBytes = 0;
                 Status = OnDemandMapModelStatus.MmpkLoadFailure;
@@ -329,6 +332,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     Error = null;
                     Status = OnDemandMapModelStatus.DownloadCancelled;
+                    RemoveDownloadedArea();
                 }
                 else
                 {

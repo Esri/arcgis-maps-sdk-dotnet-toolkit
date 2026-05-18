@@ -155,7 +155,7 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="Select Area" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource BodyStrongTextBlockStyle}" />
                                 <Grid Grid.Row="1" >
-                                    <esri:MapView x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" x:Load="False" />
+                                    <esri:MapView x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" x:Load="False" ViewInsets="40" />
                                     <Border BorderBrush="Black" BorderThickness="40" IsHitTestVisible="False" Opacity=".5" />
                                 </Grid>
                                 <TextBox PlaceholderText="Name" Grid.Row="2" x:Name="AddOnDemandAreaNameTextBox" />

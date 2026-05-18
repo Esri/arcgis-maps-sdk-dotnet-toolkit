@@ -158,7 +158,8 @@
                         Padding="{TemplateBinding Padding}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
+                        <Grid>
+                            <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IsAddOnDemandMode,Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, ConverterParameter=Reverse}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
@@ -385,6 +386,26 @@
                                 </Button>
                             </Grid>
                         </ScrollViewer>
+                        <!-- Add Map Area View -->
+                        <Grid Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IsAddOnDemandMode,Converter={StaticResource OfflineMapAreasViewVisibilityConverter}}" Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition MaxHeight="400" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Select Area" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Grid Grid.Row="1" Margin="0,8">
+                                <esri:MapView xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013" ViewInsets="40"
+                                    x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" />
+                                <Border BorderBrush="Black" BorderThickness="40" IsHitTestVisible="False" Opacity=".5" />
+                            </Grid>
+                            <TextBox Grid.Row="2" x:Name="AddOnDemandAreaNameTextBox" />
+                            <Button Content="Add" Grid.Row="3" HorizontalAlignment="Stretch" x:Name="AcceptAddOnDemandAreaButton" Margin="0,8,0,0" />
+                            <Button Content="Cancel" HorizontalAlignment="Right" x:Name="CancelAddOnDemandAreaButton" />
+
+                        </Grid>
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

@@ -23,6 +23,8 @@ using System.Net;
 using System.IO;
 using System.Windows.Input;
 using System.Diagnostics;
+using Esri.ArcGISRuntime.Geometry;
+
 
 
 
@@ -186,11 +188,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         try
                         {
+                            // Subtract the 40px dark buffer around the view.
+                            double buffer = mv.UnitsPerPixel * mv.ViewInsets.Left; // Assume insets are equidistant
+                            var clippedArea = GeometryEngine.Buffer(vp.TargetGeometry, -buffer);
                             var image = await mv.ExportImageAsync();
                             using var ms = new MemoryStream();
                             using var s = await image.GetEncodedBufferAsync();
                             s.CopyTo(ms);
-                            await _vm.AddOnDemandMapAreaAsync(new OnDemandMapAreaConfiguration(name, vp.TargetGeometry, 0, mv.MapScale, ms.ToArray()));
+                            await _vm.AddOnDemandMapAreaAsync(new OnDemandMapAreaConfiguration(name, clippedArea, 0, mv.MapScale, ms.ToArray()));
                         }
                         catch (System.Exception ex)
                         {
