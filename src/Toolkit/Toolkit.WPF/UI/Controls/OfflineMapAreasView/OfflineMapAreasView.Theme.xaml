@@ -111,7 +111,7 @@
                                   AutomationProperties.HelpText="Stop"
                                   Command="{Binding StopDownloadCommand}" Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
                                   ToolTipService.ToolTip="Stop" Visibility="{Binding IsDownloading, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
-                                <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xEAB7;" />
+                                <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xE7B3;" />
                             </Button>
 
                             <Button
@@ -137,6 +137,12 @@
                                     Command="{Binding OpenCommand}"
                                     CommandParameter="{Binding Map}"
                                     Content="Open" />
+                                <Button Margin="8,0,0,0" VerticalAlignment="Center"
+                                    AutomationProperties.HelpText="{Binding Error.Message, Mode=OneWay}"
+                                    ToolTipService.ToolTip="{Binding Error.Message, Mode=OneWay}"
+                                    Command="{Binding RemoveDownloadCommand, Mode=OneWay}" Visibility="{Binding Error, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
+                                    <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="16" Text="&#xE844;" />
+                                </Button>
                             </StackPanel>
                         </Grid>
                         <ProgressBar

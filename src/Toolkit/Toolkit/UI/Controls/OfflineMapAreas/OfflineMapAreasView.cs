@@ -95,9 +95,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ControlTemplate = DefaultControlTemplate;
             ItemTemplate = DefaultItemTemplate;
 #else
+            TemplateSettings = new OfflineMapAreasTemplateSettings();
             DefaultStyleKey = typeof(OfflineMapAreasView);
 #endif
-            TemplateSettings = new OfflineMapAreasTemplateSettings();
             _openMapCommand = new DelegateCommand((map) => SelectedMap = map as Map, (map) => map != SelectedMap);
             _goOnlineCommand = new DelegateCommand((o) => SelectedMap = OnlineMap, () => SelectedMap != OnlineMap && OnlineMap != null);
         }

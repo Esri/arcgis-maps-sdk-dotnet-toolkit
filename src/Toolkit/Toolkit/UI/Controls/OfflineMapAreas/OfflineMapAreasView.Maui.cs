@@ -36,9 +36,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private const string RefreshMapAreasButtonName = "RefreshMapAreasButton";
         private const string NoInternetRefreshButtonName = "NoInternetRefreshButton";
         private const string AddMapAreaButtonName = "AddMapAreaButton";
+        private const string AddAreaMapViewName = "AddAreaMapView";
+        private const string AddOnDemandAreaNameTextBoxName = "AddOnDemandAreaNameTextBox";
+        private const string AcceptAddOnDemandAreaButtonName = "AcceptAddOnDemandAreaButton";
+        private const string CancelAddOnDemandAreaButtonName = "CancelAddOnDemandAreaButton";
 
         private Button? _refreshMapAreasButton;
         private Button? _noInternetRefreshButton;
+        private Button? _addMapAreaButton;
+        private Button? _acceptAddOnDemandAreaButton;
+        private Button? _cancelAddOnDemandAreaButton;
 
         static OfflineMapAreasView()
         {
@@ -48,7 +55,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private static object BuildDefaultTemplate()
         {
-            Grid root = new Grid()
+            Grid root = new Grid();
+
+            // Main panel with list of map areas
+            Grid mainView = new Grid()
             {
                 RowDefinitions =
                 {
@@ -56,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     new RowDefinition(GridLength.Auto),
                 },
             };
-
+            mainView.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsAddOnDemandMode, BindingMode.OneWay, converter: InvertBoolConverter.Instance, source: RelativeBindingSource.TemplatedParent);
             CollectionView listView = new CollectionView()
             {
                 SelectionMode = SelectionMode.None,
@@ -67,16 +77,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             listView.SetBinding(ItemsView.VerticalScrollBarVisibilityProperty, static (OfflineMapAreasView view) => view.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             listView.SetBinding(ItemsView.ItemsSourceProperty, static (OfflineMapAreasView view) => view.TemplateSettings.MapAreas, source: RelativeBindingSource.TemplatedParent);
             listView.SetBinding(ItemsView.ItemTemplateProperty, static (OfflineMapAreasView view) => view.ItemTemplate, source: RelativeBindingSource.TemplatedParent);
-            root.Children.Add(listView);
+            mainView.Children.Add(listView);
 
             VerticalStackLayout offlineDisabledView = CreateStateLayout(ToolkitIcons.ExclamationMarkTriangle, "Offline Disabled", "The map is not enabled for offline use");
             offlineDisabledView.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.MapIsOfflineDisabled, source: RelativeBindingSource.TemplatedParent);
-            root.Children.Add(offlineDisabledView);
+            mainView.Children.Add(offlineDisabledView);
 
             Button noInternetRefreshButton = CreateActionButton("Refresh", ToolkitIcons.Refresh);
             VerticalStackLayout noInternetView = CreateStateLayout(ToolkitIcons.ExclamationMarkTriangle, "No Internet Connection", "Could not retrieve map areas for this map", noInternetRefreshButton);
             noInternetView.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsInternetNotAvailable, source: RelativeBindingSource.TemplatedParent);
-            root.Children.Add(noInternetView);
+            mainView.Children.Add(noInternetView);
 
             Button refreshMapAreasButton = CreateActionButton("Refresh", ToolkitIcons.Refresh);
             VerticalStackLayout noAreasView = CreateStateLayout(ToolkitIcons.DownloadTo, "No Map Areas", "There are no map areas for this map.");
@@ -88,17 +98,97 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             refreshMapAreasButton.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsPreplannedMode, source: RelativeBindingSource.TemplatedParent);
             noAreasView.Children.Add(refreshMapAreasButton);
-            root.Children.Add(noAreasView);
+            mainView.Children.Add(noAreasView);
 
             ActivityIndicator loadingIndicator = new ActivityIndicator() { IsVisible = false };
             loadingIndicator.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsLoadingModels, source: RelativeBindingSource.TemplatedParent);
             loadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsLoadingModels, source: RelativeBindingSource.TemplatedParent);
-            root.Children.Add(loadingIndicator);
+            mainView.Children.Add(loadingIndicator);
 
             Button addMapAreaButton = CreateActionButton("Add Map Area", ToolkitIcons.Plus);
             addMapAreaButton.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsOnDemandMode, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(addMapAreaButton, 1);
-            root.Children.Add(addMapAreaButton);
+            mainView.Children.Add(addMapAreaButton);
+            root.Children.Add(mainView);
+
+            // Add Map Area Panel
+            Grid addAreaView = new Grid()
+            {
+                RowDefinitions =
+                {
+                    new RowDefinition(GridLength.Auto),
+                    new RowDefinition(GridLength.Star) { Height = 400 },
+                    new RowDefinition(GridLength.Auto),
+                    new RowDefinition(GridLength.Auto),
+                },
+                RowSpacing = 8,
+                VerticalOptions = LayoutOptions.Start,
+            };
+            addAreaView.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsAddOnDemandMode, BindingMode.OneWay, source: RelativeBindingSource.TemplatedParent);
+
+            Grid addAreaHeader = new Grid()
+            {
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition(GridLength.Star),
+                    new ColumnDefinition(GridLength.Auto),
+                },
+            };
+            Label addAreaTitle = new Label()
+            {
+                Text = "Select Area",
+                FontAttributes = FontAttributes.Bold,
+                HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
+            };
+            Grid.SetColumnSpan(addAreaTitle, 2);
+            addAreaHeader.Children.Add(addAreaTitle);
+
+            Button cancelAddOnDemandAreaButton = new Button()
+            {
+                Text = "Cancel",
+                HorizontalOptions = LayoutOptions.End,
+            };
+            Grid.SetColumn(cancelAddOnDemandAreaButton, 1);
+            addAreaHeader.Children.Add(cancelAddOnDemandAreaButton);
+            addAreaView.Children.Add(addAreaHeader);
+
+            Grid addAreaMapContainer = new Grid()
+            {
+                MaximumHeightRequest = 400,
+            };
+            MapView addAreaMapView = new MapView()
+            {
+                IsAttributionTextVisible = false,
+                ViewInsets = new Thickness(40),
+            };
+            addAreaMapContainer.Children.Add(addAreaMapView);
+            Border addAreaMapOverlay = new Border()
+            {
+                Stroke = Colors.Black,
+                StrokeThickness = 40,
+                Opacity = 0.5,
+                InputTransparent = true,
+            };
+            addAreaMapContainer.Children.Add(addAreaMapOverlay);
+            Grid.SetRow(addAreaMapContainer, 1);
+            addAreaView.Children.Add(addAreaMapContainer);
+
+            Entry addOnDemandAreaNameTextBox = new Entry()
+            {
+                Placeholder = "Name",
+            };
+            Grid.SetRow(addOnDemandAreaNameTextBox, 2);
+            addAreaView.Children.Add(addOnDemandAreaNameTextBox);
+
+            Button acceptAddOnDemandAreaButton = new Button()
+            {
+                Text = "Add",
+                HorizontalOptions = LayoutOptions.Fill,
+            };
+            Grid.SetRow(acceptAddOnDemandAreaButton, 3);
+            addAreaView.Children.Add(acceptAddOnDemandAreaButton);
+            root.Children.Add(addAreaView);
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
@@ -106,6 +196,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             nameScope.RegisterName(RefreshMapAreasButtonName, refreshMapAreasButton);
             nameScope.RegisterName(NoInternetRefreshButtonName, noInternetRefreshButton);
             nameScope.RegisterName(AddMapAreaButtonName, addMapAreaButton);
+            nameScope.RegisterName(AddAreaMapViewName, addAreaMapView);
+            nameScope.RegisterName(AddOnDemandAreaNameTextBoxName, addOnDemandAreaNameTextBox);
+            nameScope.RegisterName(AcceptAddOnDemandAreaButtonName, acceptAddOnDemandAreaButton);
+            nameScope.RegisterName(CancelAddOnDemandAreaButtonName, cancelAddOnDemandAreaButton);
             return root;
         }
 
@@ -126,7 +220,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     new RowDefinition(GridLength.Auto),
                 },
                 Margin = new Thickness(0, 4),
-                MinimumHeightRequest = 64,
+                MinimumHeightRequest = 64, BackgroundColor = Colors.Red
             };
 
             Border thumbnailBorder = new Border()
@@ -192,7 +286,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid.SetRowSpan(actions, 3);
             root.Children.Add(actions);
 
-            CalciteImageButton stopButton = CreateIconButton(ToolkitIcons.X);
+            CalciteImageButton stopButton = CreateIconButton(ToolkitIcons.CircleStop);
             stopButton.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.IsDownloading);
             stopButton.SetBinding(ImageButton.CommandProperty, static (IOfflineMapAreaItem item) => item.StopDownloadCommand);
             actions.Children.Add(stopButton);
@@ -227,10 +321,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             downloadedActions.Children.Add(openButton);
             actions.Children.Add(downloadedActions);
 
+            CalciteImageButton failedButton = CreateIconButton(ToolkitIcons.ExclamationMarkCircle);
+            failedButton.SetBinding(ToolTipProperties.TextProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
+            failedButton.SetBinding(SemanticProperties.DescriptionProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
+            failedButton.SetBinding(Button.CommandProperty, static (IOfflineMapAreaItem item) => item.RemoveDownloadCommand);
+            failedButton.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.Error, converter: EmptyToFalseConverter.Instance);
+            downloadedActions.Children.Add(failedButton);
+
+            actions.Children.Add(downloadedActions);
+
             return root;
         }
 
-        private OfflineMapAreasTemplateSettings TemplateSettings { get; set; }
+        private OfflineMapAreasTemplateSettings TemplateSettings { get; } = new OfflineMapAreasTemplateSettings();
 
         private static VerticalStackLayout CreateStateLayout(string icon, string title, string message, Button? actionButton = null)
         {
@@ -313,8 +416,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 _noInternetRefreshButton.Clicked -= RefreshMapAreasButton_Clicked;
             }
 
+            if (_addMapAreaButton is not null)
+            {
+                _addMapAreaButton.Clicked -= AddMapAreaButton_Clicked;
+            }
+
+            if (_acceptAddOnDemandAreaButton is not null)
+            {
+                _acceptAddOnDemandAreaButton.Clicked -= AcceptAddOnDemandAreaButton_Clicked;
+            }
+
+            if (_cancelAddOnDemandAreaButton is not null)
+            {
+                _cancelAddOnDemandAreaButton.Clicked -= CancelAddOnDemandAreaButton_Clicked;
+            }
+
             _refreshMapAreasButton = GetTemplateChild(RefreshMapAreasButtonName) as Button;
             _noInternetRefreshButton = GetTemplateChild(NoInternetRefreshButtonName) as Button;
+            _addMapAreaButton = GetTemplateChild(AddMapAreaButtonName) as Button;
+            _acceptAddOnDemandAreaButton = GetTemplateChild(AcceptAddOnDemandAreaButtonName) as Button;
+            _cancelAddOnDemandAreaButton = GetTemplateChild(CancelAddOnDemandAreaButtonName) as Button;
 
             if (_refreshMapAreasButton is not null)
             {
@@ -325,9 +446,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 _noInternetRefreshButton.Clicked += RefreshMapAreasButton_Clicked;
             }
+
+            if (_addMapAreaButton is not null)
+            {
+                _addMapAreaButton.Clicked += AddMapAreaButton_Clicked;
+            }
+
+            if (_acceptAddOnDemandAreaButton is not null)
+            {
+                _acceptAddOnDemandAreaButton.Clicked += AcceptAddOnDemandAreaButton_Clicked;
+            }
+
+            if (_cancelAddOnDemandAreaButton is not null)
+            {
+                _cancelAddOnDemandAreaButton.Clicked += CancelAddOnDemandAreaButton_Clicked;
+            }
         }
 
         private void RefreshMapAreasButton_Clicked(object? sender, EventArgs e) => _ = _vm?.LoadModelsAsync();
+
+        private void AddMapAreaButton_Clicked(object? sender, EventArgs e) => InitAddOnDemandArea();
+
+        private void AcceptAddOnDemandAreaButton_Clicked(object? sender, EventArgs e) => AddOnDemandArea();
+
+        private void CancelAddOnDemandAreaButton_Clicked(object? sender, EventArgs e) => CloseAddOnDemandArea();
     }
 }
 #endif

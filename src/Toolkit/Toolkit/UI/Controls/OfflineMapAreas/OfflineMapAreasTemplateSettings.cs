@@ -101,7 +101,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public bool IsOnDemandMode =>  _vm is not null && !_vm.IsLoadingModels && !MapIsOfflineDisabled && (_vm.DisplayMode == OfflineMapViewModel.Mode.OnDemand || _vm.DisplayMode == OfflineMapViewModel.Mode.Ambiguous);
 
-        public bool IsAddOnDemandMode { get; private set; }
+        public bool IsAddOnDemandMode
+        {
+            get;
+#if MAUI // Maui's code-generator needs this to be two-way bindable, so we need an accessible setter https://github.com/dotnet/maui/issues/26578
+            internal set;
+#else
+            private set;
+#endif
+        }
 
         internal void SetIsAddOnDemandMode(bool value)
         {
