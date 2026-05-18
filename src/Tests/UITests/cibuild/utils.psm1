@@ -31,10 +31,10 @@ function Install-Dotnet {
      exit 1
     }
 
-    Write-Host "Dotnet installed at $($dotnet_exe)`n"
+    Write-Host "Dotnet installed at $dotnet_exe`n"
   }
   else {
-    Write-Host "Found cached dotnet at $($dotnet_exe)`n"
+    Write-Host "Found cached dotnet at $dotnet_exe`n"
   }
 
   # Set dotnet location for apps that rely on .NET runtime: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables#dotnet_host_path
@@ -56,11 +56,11 @@ function Install-Nodejs {
 
   Write-Host "Starting Node.js install..."
 
-  $node_dir = Join-Path $workspace "node-v$($node_version)-win-x64"
+  $node_dir = Join-Path $workspace "node-v${node_version}-win-x64"
   $node_exe = Join-Path $node_dir 'node.exe'
   $npm_exe = Join-Path $node_dir 'npm.cmd'
   if (!(Test-Path $node_exe)) {
-    $node_url = "https://nodejs.org/dist/v$($node_version)/node-v$($node_version)-win-x64.zip"
+    $node_url = "https://nodejs.org/dist/v${node_version}/node-v${node_version}-win-x64.zip"
     $node_zip = Join-Path $workspace "node.zip"
 
     & curl.exe -L $node_url -o $node_zip --create-dirs
@@ -75,14 +75,14 @@ function Install-Nodejs {
       exit 1
     }
 
-    Write-Host "Node.js installed at $($node_exe)`n"
+    Write-Host "Node.js installed at $node_exe`n"
   }
   else {
-    Write-Host "Found cached Node.js at $($node_exe)`n"
+    Write-Host "Found cached Node.js at $node_exe`n"
   }
 
   # Node sometimes calls itself base on path internally, so we cannot rely on returning the local variables
-  $env:PATH = "$($node_dir);$($env:PATH)"
+  $env:PATH = "${node_dir};${env:PATH}"
 
   return $node_exe, $npm_exe
 }
