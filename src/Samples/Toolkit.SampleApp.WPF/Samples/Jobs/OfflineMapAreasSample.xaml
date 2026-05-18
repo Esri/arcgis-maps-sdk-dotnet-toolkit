@@ -12,10 +12,25 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="400" />
         </Grid.ColumnDefinitions>
         <esri:MapView Map="{Binding SelectedMap, ElementName=OfflineMapAreasView}" />
-        <esri:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Column="1" Margin="4" />
+
+        <Border HorizontalAlignment="Center" Margin="20" Padding="20" BorderThickness="2" VerticalAlignment="Top" CornerRadius="8"
+                Background="White" BorderBrush="Gray">
+            <ComboBox x:Name="MapSelector" ItemsSource="{Binding Maps}" SelectedIndex="0" Width="250" />
+        </Border>
+
+        <Grid Grid.Column="1" Margin="4" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Map Areas" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" />
+            <esri:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Row="1" OnlineMap="{Binding SelectedItem.Map, ElementName=MapSelector, Mode=OneWay}" />
+            <Button Command="{Binding ElementName=OfflineMapAreasView, Path=GoOnlineCommand}" Content="Go Online" Grid.Row="2" HorizontalAlignment="Stretch" />
+        </Grid>
 
     </Grid>
 </UserControl>
