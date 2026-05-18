@@ -16,6 +16,7 @@
 
 #nullable enable
 
+using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.Tasks;
 using Esri.ArcGISRuntime.Tasks.Offline;
@@ -26,6 +27,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -83,9 +85,28 @@ namespace Esri.ArcGISRuntime.Toolkit
 
         private OfflineManager()
         {
+#if WINDOWS
+            if (!IsPackagedApp)
+            {
+                // If app isn't packaged, generate a unique temp folder to manage data in
+                string location = Environment.ProcessPath + "|" + typeof(OfflineManager).Assembly.FullName;
+                byte[] bytes = Encoding.UTF8.GetBytes(location);
+                byte[] hash = System.Security.Cryptography.SHA256.HashData(bytes);
+                var base64Hash = Convert.ToBase64String(hash).Replace('/', '_').Replace('+', '-'); // filesystem-safe
+                var foldername = base64Hash[..16];
+               
+                _cacheFolder = Path.Combine(ArcGISRuntimeEnvironment.TempPath, foldername);
+            }
+            else
+                _cacheFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+#endif
+
             _synchronizationContext = SynchronizationContext.Current;
             OfflineMapInfos = new ReadOnlyObservableCollection<OfflineMapInfo>(_offlineMapInfos);
-
+            InitManager();
+        }
+        private void InitManager()
+        { 
             ApplyConfiguration(_configuration);
             LoadOfflineMapInfos();
 
@@ -96,6 +117,56 @@ namespace Esri.ArcGISRuntime.Toolkit
 
             _ = _jobManager.ResumeAllPausedJobsAsync();
         }
+
+#if WINDOWS
+        private string _cacheFolder;
+        /// <summary>
+        /// Gets or sets the root folder where offline maps are stored.
+        /// </summary>
+        /// <remarks>
+        /// By default for packaged apps this will be the <see cref="Environment.SpecialFolder.LocalApplicationData" /> folder, and for unpackaged apps this will be a temp folder unique to the <see cref="Environment.ProcessPath" />.
+        /// </remarks>
+        public string CacheFolder
+        {
+            get => _cacheFolder;
+            set
+            {
+                ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+                if (_cacheFolder != value)
+                {
+                    _cacheFolder = value;                    
+                    InitManager();
+                }
+            }
+        }
+
+#pragma warning disable SA1203 // Constants should appear before fields
+        private const long AppModelErrorNoPackage = 15700L;
+#pragma warning restore SA1203 // Constants should appear before fields
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode, SetLastError = true)]
+        private static extern int GetCurrentPackageFullName(ref int packageFullNameLength, System.Text.StringBuilder packageFullName);
+
+        private static bool IsPackagedApp
+        {
+            get
+            {
+                try
+                {
+                    // Application is MSIX packaged if it has an identity: https://learn.microsoft.com/en-us/windows/msix/detect-package-identity
+                    int length = 0;
+                    var sb = new System.Text.StringBuilder(0);
+                    int result = GetCurrentPackageFullName(ref length, sb);
+                    return result != AppModelErrorNoPackage;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+#endif
+
 
         /// <summary>
         /// Gets the shared offline manager instance.
@@ -320,6 +391,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 
         private void LoadOfflineMapInfos()
         {
+            _offlineMapInfos.Clear();
             var offlineManagerDirectory = GetOfflineManagerDirectory();
             if (!Directory.Exists(offlineManagerDirectory))
             {
@@ -402,24 +474,29 @@ namespace Esri.ArcGISRuntime.Toolkit
             _synchronizationContext.Send(static state => ((Action)state!).Invoke(), action);
         }
 
-        internal static string GetOfflineManagerDirectory()
+        internal string GetOfflineManagerDirectory()
         {
+#if WINDOWS
+            var root = CacheFolder ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            return Path.Combine(root, "offline_map_cache");
+#else
             var root = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            return Path.Combine(root, "Esri", "ArcGISToolkit", "OfflineManager"); //TODO: Unpackaged apps needs to make this more unique
+            return Path.Combine(root, "Esri", "ArcGISToolkit", "OfflineManager");
+#endif
         }
 
-        internal static string GetPendingMapInfoFileName(string portalItemId)
+        internal string GetPendingMapInfoFileName(string portalItemId)
         {
             return Path.Combine(GetPendingDirectory(), portalItemId + ".json");
         }
 
 
-        internal static string GetPendingDirectory()
+        internal string GetPendingDirectory()
         {
             return Path.Combine(GetOfflineManagerDirectory(), PendingFolderName);
         }
 
-        internal static string GetPortalItemFilename(string portalItemId)
+        internal string GetPortalItemFilename(string portalItemId)
         {
             return Path.Combine(GetOfflineManagerDirectory(), portalItemId + ".json");
         }

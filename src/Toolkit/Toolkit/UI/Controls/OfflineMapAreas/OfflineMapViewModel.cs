@@ -370,7 +370,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private const string ThumbnailFileName = "thumbnail.bin";
 
         public static string GetPortalItemAreasDirectory(string portalItemId)
-            => Path.Combine(OfflineManager.GetOfflineManagerDirectory(), MapAreasFolderName, portalItemId);
+            => Path.Combine(OfflineManager.Shared.GetOfflineManagerDirectory(), MapAreasFolderName, portalItemId);
 
         public static string GetPreplannedAreasDirectory(string portalItemId)
             => Path.Combine(GetPortalItemAreasDirectory(portalItemId), PreplannedFolderName);
