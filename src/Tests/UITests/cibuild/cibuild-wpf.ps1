@@ -40,13 +40,14 @@ if (![string]::IsNullOrWhiteSpace($env:NUGET_REPO)) {
 
 # Build the test app and test runner projects
 if (![string]::IsNullOrWhiteSpace($env:RELEASE_VERSION)) {
-  $property_UseNugetPackage = "-p:UseNugetPackage=$($env:RELEASE_VERSION)"
+  $property_UseNugetPackage = "-p:UseNugetPackage=$env:RELEASE_VERSION"
 }
+$common_build_params = "-c Release $property_UseNugetPackage"
 
 $wpf_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF\Toolkit.UITests.WPF.csproj'
 $wpf_app_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF.App\Toolkit.UITests.WPF.App.csproj'
-& $dotnet_exe build $wpf_app_project -c Release $property_UseNugetPackage
-& $dotnet_exe build $wpf_project -c Release $property_UseNugetPackage
+Invoke-Expression "$dotnet_exe build $wpf_app_project $common_build_params"
+Invoke-Expression "$dotnet_exe build $wpf_project $common_build_params"
 if (!$?) {
   exit 1
 }
@@ -62,11 +63,11 @@ if (!$?) {
 $results_dir = Join-Path $env:WORKSPACE 'TestResults'
 $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
 if (![string]::IsNullOrWhiteSpace($env:TRX_FILENAME)) {
-  $parameter_trxfilename = "--report-trx-filename $($env:TRX_FILENAME)"
+  $parameter_trxfilename = "--report-trx-filename $env:TRX_FILENAME"
 }
 
 Set-Location -Path $toolkit_src_root
-Invoke-Expression "$dotnet_exe test $wpf_project -c Release $property_UseNugetPackage --results-directory $results_dir --report-trx $parameter_trxfilename"
+Invoke-Expression "$dotnet_exe test $wpf_project $common_build_params --results-directory $results_dir --report-trx $parameter_trxfilename"
 
 # Kill the appium server process and build server
 Stop-Process -InputObject $appium_server_process
