@@ -1,3 +1,17 @@
+function Get-YamlValue {
+
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory)]
+    [string]$path,
+
+    [Parameter(Mandatory)]
+    [string]$value_name
+  )
+
+  return $(Select-String -Path $path -Pattern "${value_name}: ""(.*)""")[0].Matches[0].Groups[1].Value
+}
+
 function Install-Dotnet {
 
   [CmdletBinding()]
