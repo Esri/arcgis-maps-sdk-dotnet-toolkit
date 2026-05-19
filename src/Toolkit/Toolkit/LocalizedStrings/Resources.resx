@@ -605,4 +605,76 @@
     <value>Locator</value>
     <comment>Default display name for LocatorSearchSource if locator name is not set.</comment>
   </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>Add</value>
+    <comment>The text on the button that confirms adding a new on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>Add Map Area</value>
+    <comment>The text and accessibility label for the button that starts the on-demand offline map area workflow.</comment>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>Name</value>
+    <comment>The placeholder text for the input where the user names an on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The text on the button that cancels adding a new on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>Download</value>
+    <comment>The text and tooltip for the action that downloads an offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>Downloaded</value>
+    <comment>The status label shown for an offline map area that has already been downloaded.</comment>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>Could not retrieve map areas for this map</value>
+    <comment>The message shown when the toolkit cannot load offline map areas because internet access is unavailable.</comment>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>No Internet Connection</value>
+    <comment>The title shown when the toolkit cannot load offline map areas because internet access is unavailable.</comment>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>There are no map areas for this map. Tap the button below to get started.</value>
+    <comment>The message shown when an on-demand offline-enabled map has no local map areas yet.</comment>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>There are no map areas for this map.</value>
+    <comment>The message shown when a preplanned offline-enabled map has no map areas available.</comment>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>No Map Areas</value>
+    <comment>The title shown when no offline map areas are available for the current map.</comment>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>The map is not enabled for offline use</value>
+    <comment>The message shown when the current map does not support offline use.</comment>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>Offline Disabled</value>
+    <comment>The title shown when the current map does not support offline use.</comment>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>Open</value>
+    <comment>The text and accessibility label for the action that opens a downloaded offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>The text and accessibility label for the action that reloads offline map areas.</comment>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>Remove</value>
+    <comment>The text and tooltip for the action that removes a downloaded offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>Select Area</value>
+    <comment>The heading shown above the map used to select the extent of a new on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>The text and tooltip for the action that stops an in-progress offline map area download.</comment>
+  </data>
 </root>

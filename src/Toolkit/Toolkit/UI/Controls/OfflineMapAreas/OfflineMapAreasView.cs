@@ -195,6 +195,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             using var ms = new MemoryStream();
                             using var s = await image.GetEncodedBufferAsync();
                             s.CopyTo(ms);
+                            // TODO: Replace mv.MapScale with scale from scale-picker. See https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Sources/ArcGISToolkit/Components/Offline/Utilities/CacheScale.swift
+
                             await _vm.AddOnDemandMapAreaAsync(new OnDemandMapAreaConfiguration(name, clippedArea, 0, mv.MapScale, ms.ToArray()));
                         }
                         catch (System.Exception ex)

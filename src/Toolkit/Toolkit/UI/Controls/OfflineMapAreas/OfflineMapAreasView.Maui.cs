@@ -55,6 +55,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private static object BuildDefaultTemplate()
         {
+            string offlineDisabledTitle = Properties.Resources.GetString("OfflineMapAreasOfflineDisabledTitle")!;
+            string offlineDisabledMessage = Properties.Resources.GetString("OfflineMapAreasOfflineDisabledMessage")!;
+            string noInternetConnectionTitle = Properties.Resources.GetString("OfflineMapAreasNoInternetConnectionTitle")!;
+            string noInternetConnectionMessage = Properties.Resources.GetString("OfflineMapAreasNoInternetConnectionMessage")!;
+            string refresh = Properties.Resources.GetString("OfflineMapAreasRefresh")!;
+            string noMapAreasTitle = Properties.Resources.GetString("OfflineMapAreasNoMapAreasTitle")!;
+            string noMapAreasPreplannedMessage = Properties.Resources.GetString("OfflineMapAreasNoMapAreasPreplannedMessage")!;
+            string noMapAreasOnDemandMessage = Properties.Resources.GetString("OfflineMapAreasNoMapAreasOnDemandMessage")!;
+            string addMapArea = Properties.Resources.GetString("OfflineMapAreasAddMapArea")!;
+            string selectArea = Properties.Resources.GetString("OfflineMapAreasSelectArea")!;
+            string cancel = Properties.Resources.GetString("OfflineMapAreasCancel")!;
+            string areaNamePlaceholder = Properties.Resources.GetString("OfflineMapAreasAreaNamePlaceholder")!;
+            string add = Properties.Resources.GetString("OfflineMapAreasAdd")!;
+
             Grid root = new Grid();
 
             // Main panel with list of map areas
@@ -79,20 +93,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             listView.SetBinding(ItemsView.ItemTemplateProperty, static (OfflineMapAreasView view) => view.ItemTemplate, source: RelativeBindingSource.TemplatedParent);
             mainView.Children.Add(listView);
 
-            VerticalStackLayout offlineDisabledView = CreateStateLayout(ToolkitIcons.ExclamationMarkTriangle, "Offline Disabled", "The map is not enabled for offline use");
+            VerticalStackLayout offlineDisabledView = CreateStateLayout(ToolkitIcons.ExclamationMarkTriangle, offlineDisabledTitle, offlineDisabledMessage);
             offlineDisabledView.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.MapIsOfflineDisabled, source: RelativeBindingSource.TemplatedParent);
             mainView.Children.Add(offlineDisabledView);
 
-            Button noInternetRefreshButton = CreateActionButton("Refresh", ToolkitIcons.Refresh);
-            VerticalStackLayout noInternetView = CreateStateLayout(ToolkitIcons.ExclamationMarkTriangle, "No Internet Connection", "Could not retrieve map areas for this map", noInternetRefreshButton);
+            Button noInternetRefreshButton = CreateActionButton(refresh, ToolkitIcons.Refresh);
+            VerticalStackLayout noInternetView = CreateStateLayout(ToolkitIcons.ExclamationMarkTriangle, noInternetConnectionTitle, noInternetConnectionMessage, noInternetRefreshButton);
             noInternetView.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsInternetNotAvailable, source: RelativeBindingSource.TemplatedParent);
             mainView.Children.Add(noInternetView);
 
-            Button refreshMapAreasButton = CreateActionButton("Refresh", ToolkitIcons.Refresh);
-            VerticalStackLayout noAreasView = CreateStateLayout(ToolkitIcons.DownloadTo, "No Map Areas", "There are no map areas for this map.");
+            Button refreshMapAreasButton = CreateActionButton(refresh, ToolkitIcons.Refresh);
+            VerticalStackLayout noAreasView = CreateStateLayout(ToolkitIcons.DownloadTo, noMapAreasTitle, noMapAreasPreplannedMessage);
             noAreasView.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.HasNoAreas, source: RelativeBindingSource.TemplatedParent);
 
-            Label onDemandMessage = CreateStateMessage("There are no map areas for this map. Tap the button below to get started.");
+            Label onDemandMessage = CreateStateMessage(noMapAreasOnDemandMessage);
             onDemandMessage.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsOnDemandMode, source: RelativeBindingSource.TemplatedParent);
             noAreasView.Children.Add(onDemandMessage);
 
@@ -105,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             loadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsLoadingModels, source: RelativeBindingSource.TemplatedParent);
             mainView.Children.Add(loadingIndicator);
 
-            Button addMapAreaButton = CreateActionButton("Add Map Area", ToolkitIcons.Plus);
+            Button addMapAreaButton = CreateActionButton(addMapArea, ToolkitIcons.Plus);
             addMapAreaButton.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsOnDemandMode, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(addMapAreaButton, 1);
             mainView.Children.Add(addMapAreaButton);
@@ -136,7 +150,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             };
             Label addAreaTitle = new Label()
             {
-                Text = "Select Area",
+                Text = selectArea,
                 FontAttributes = FontAttributes.Bold,
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Center,
@@ -146,7 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             Button cancelAddOnDemandAreaButton = new Button()
             {
-                Text = "Cancel",
+                Text = cancel,
                 HorizontalOptions = LayoutOptions.End,
             };
             Grid.SetColumn(cancelAddOnDemandAreaButton, 1);
@@ -176,14 +190,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             Entry addOnDemandAreaNameTextBox = new Entry()
             {
-                Placeholder = "Name",
+                Placeholder = areaNamePlaceholder,
             };
             Grid.SetRow(addOnDemandAreaNameTextBox, 2);
             addAreaView.Children.Add(addOnDemandAreaNameTextBox);
 
             Button acceptAddOnDemandAreaButton = new Button()
             {
-                Text = "Add",
+                Text = add,
                 HorizontalOptions = LayoutOptions.Fill,
             };
             Grid.SetRow(acceptAddOnDemandAreaButton, 3);
@@ -205,6 +219,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private static object BuildMapAreasItemTemplate()
         {
+            string downloaded = GetLocalizedString("OfflineMapAreasDownloaded");
+            string open = GetLocalizedString("OfflineMapAreasOpen");
+
             Grid root = new Grid()
             {
                 ColumnDefinitions =
@@ -220,7 +237,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     new RowDefinition(GridLength.Auto),
                 },
                 Margin = new Thickness(0, 4),
-                MinimumHeightRequest = 64, BackgroundColor = Colors.Red
+                MinimumHeightRequest = 64,
             };
 
             Border thumbnailBorder = new Border()
@@ -267,7 +284,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             Label downloadedLabel = new Label()
             {
-                Text = "Downloaded",
+                Text = downloaded,
                 FontSize = 12,
                 TextColor = Colors.Gray,
                 IsVisible = false,
@@ -315,7 +332,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             removeButton.SetBinding(ImageButton.CommandProperty, static (IOfflineMapAreaItem item) => item.RemoveDownloadCommand);
             downloadedActions.Children.Add(removeButton);
 
-            Button openButton = new Button() { Text = "Open" };
+            Button openButton = new Button() { Text = open };
             openButton.SetBinding(Button.CommandProperty, static (IOfflineMapAreaItem item) => item.OpenCommand);
             openButton.SetBinding(Button.CommandParameterProperty, static (IOfflineMapAreaItem item) => item.Map);
             downloadedActions.Children.Add(openButton);

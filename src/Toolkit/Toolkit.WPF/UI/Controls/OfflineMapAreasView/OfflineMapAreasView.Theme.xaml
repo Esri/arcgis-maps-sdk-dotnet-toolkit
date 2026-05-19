@@ -103,21 +103,21 @@
                         <TextBlock
                             Grid.Row="2" Grid.Column="1"
                             Foreground="#FF666666"
-                            Text="Downloaded" Visibility="{Binding IsDownloaded, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
+                            Text="{internal:LocalizedString Key=OfflineMapAreasDownloaded}" Visibility="{Binding IsDownloaded, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                         </TextBlock>
 
                         <Grid Grid.RowSpan="3" Grid.Column="2">
                             <Button
-                                  AutomationProperties.HelpText="Stop"
+                                  AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasStop}"
                                   Command="{Binding StopDownloadCommand}" Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
-                                  ToolTipService.ToolTip="Stop" Visibility="{Binding IsDownloading, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
+                                  ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasStop}" Visibility="{Binding IsDownloading, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                                 <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xE7B3;" />
                             </Button>
 
                             <Button
-                                 AutomationProperties.HelpText="Download"
+                                 AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasDownload}"
                                  Command="{Binding DownloadCommand}"
-                                 ToolTipService.ToolTip="Download"
+                                 ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasDownload}"
                                  Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
                                  Visibility="{Binding AllowsDownload, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                                 <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="16" Text="&#xE81C;" />
@@ -125,18 +125,18 @@
 
                             <StackPanel Orientation="Horizontal" Visibility="{Binding IsDownloaded, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                                 <Button
-                                    AutomationProperties.HelpText="Remove"
+                                    AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasRemove}"
                                     Command="{Binding RemoveDownloadCommand}"
                                     Style="{StaticResource OfflineMapAreasViewIconButtonStyle}"
-                                    ToolTipService.ToolTip="Remove">
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasRemove}">
                                     <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xEB04;" />
                                 </Button>
                                 <Button
                                     Margin="8,0,0,0" VerticalAlignment="Center"
-                                    AutomationProperties.HelpText="Open"
+                                    AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasOpen}"
                                     Command="{Binding OpenCommand}"
                                     CommandParameter="{Binding Map}"
-                                    Content="Open" />
+                                    Content="{internal:LocalizedString Key=OfflineMapAreasOpen}" />
                                 <Button Margin="8,0,0,0" VerticalAlignment="Center"
                                     AutomationProperties.HelpText="{Binding Error.Message, Mode=OneWay}"
                                     ToolTipService.ToolTip="{Binding Error.Message, Mode=OneWay}"
@@ -201,13 +201,13 @@
                                         HorizontalAlignment="Center"
                                         FontSize="20"
                                         FontWeight="SemiBold"
-                                        Text="Offline Disabled"
+                                        Text="{internal:LocalizedString Key=OfflineMapAreasOfflineDisabledTitle}"
                                         TextAlignment="Center" />
                                     <TextBlock
                                         Margin="0,4,0,0"
                                         HorizontalAlignment="Center"
                                         Foreground="#FF666666"
-                                        Text="The map is not enabled for offline use"
+                                        Text="{internal:LocalizedString Key=OfflineMapAreasOfflineDisabledMessage}"
                                         TextAlignment="Center"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
@@ -233,20 +233,20 @@
                                         HorizontalAlignment="Center"
                                         FontSize="20"
                                         FontWeight="SemiBold"
-                                        Text="No Internet Connection"
+                                        Text="{internal:LocalizedString Key=OfflineMapAreasNoInternetConnectionTitle}"
                                         TextAlignment="Center" />
                                     <TextBlock
                                         Margin="0,4,0,0"
                                         HorizontalAlignment="Center"
                                         Foreground="#FF666666"
-                                        Text="Could not retrieve map areas for this map"
+                                        Text="{internal:LocalizedString Key=OfflineMapAreasNoInternetConnectionMessage}"
                                         TextAlignment="Center"
                                         TextWrapping="Wrap" />
                                     <Button
                                         x:Name="NoInternetRefreshButton"
                                         Margin="0,12,0,0"
                                         HorizontalAlignment="Center"
-                                        AutomationProperties.HelpText="Refresh">
+                                        AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasRefresh}">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock
                                                 Margin="0,0,4,0"
@@ -254,7 +254,7 @@
                                                 FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                                 FontSize="14"
                                                 Text="&#xE72C;" />
-                                            <TextBlock Text="Refresh" />
+                                            <TextBlock Text="{internal:LocalizedString Key=OfflineMapAreasRefresh}" />
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
@@ -280,13 +280,13 @@
                                         HorizontalAlignment="Center"
                                         FontSize="20"
                                         FontWeight="SemiBold"
-                                        Text="No Map Areas"
+                                        Text="{internal:LocalizedString Key=OfflineMapAreasNoMapAreasTitle}"
                                         TextAlignment="Center" />
                                     <TextBlock
                                         Margin="0,4,0,0"
                                         HorizontalAlignment="Center"
                                         Foreground="#FF666666"
-                                        Text="There are no map areas for this map.">
+                                        Text="{internal:LocalizedString Key=OfflineMapAreasNoMapAreasPreplannedMessage}">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -304,7 +304,7 @@
                                         Margin="0,4,0,0"
                                         HorizontalAlignment="Center"
                                         Foreground="#FF666666"
-                                        Text="There are no map areas for this map. Tap the button below to get started.">
+                                        Text="{internal:LocalizedString Key=OfflineMapAreasNoMapAreasOnDemandMessage}">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -322,7 +322,7 @@
                                         x:Name="RefreshMapAreasButton"
                                         Margin="0,12,0,0"
                                         HorizontalAlignment="Center"
-                                        AutomationProperties.HelpText="Refresh">
+                                        AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasRefresh}">
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -340,7 +340,7 @@
                                                 FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                                 FontSize="14"
                                                 Text="&#xE72C;" />
-                                            <TextBlock Text="Refresh" />
+                                            <TextBlock Text="{internal:LocalizedString Key=OfflineMapAreasRefresh}" />
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
@@ -369,7 +369,7 @@
                                     Grid.Row="1"
                                     Margin="0,12,0,0"
                                     HorizontalAlignment="Center"
-                                    AutomationProperties.HelpText="Add Map Area">
+                                    AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasAddMapArea}">
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}">
                                             <Setter Property="Visibility" Value="Collapsed" />
@@ -387,7 +387,7 @@
                                             FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                             FontSize="18"
                                             Text="&#xE9F6;" />
-                                        <TextBlock VerticalAlignment="Center" Text="Add Map Area" />
+                                        <TextBlock VerticalAlignment="Center" Text="{internal:LocalizedString Key=OfflineMapAreasAddMapArea}" />
                                     </StackPanel>
                                 </Button>
                             </Grid>
@@ -400,15 +400,15 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Select Area" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+                            <TextBlock Text="{internal:LocalizedString Key=OfflineMapAreasSelectArea}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
                             <Grid Grid.Row="1" Margin="0,8">
                                 <esri:MapView xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013" ViewInsets="40"
                                     x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" />
                                 <Border BorderBrush="Black" BorderThickness="40" IsHitTestVisible="False" Opacity=".5" />
                             </Grid>
                             <TextBox Grid.Row="2" x:Name="AddOnDemandAreaNameTextBox" />
-                            <Button Content="Add" Grid.Row="3" HorizontalAlignment="Stretch" x:Name="AcceptAddOnDemandAreaButton" Margin="0,8,0,0" />
-                            <Button Content="Cancel" HorizontalAlignment="Right" x:Name="CancelAddOnDemandAreaButton" />
+                            <Button Content="{internal:LocalizedString Key=OfflineMapAreasAdd}" Grid.Row="3" HorizontalAlignment="Stretch" x:Name="AcceptAddOnDemandAreaButton" Margin="0,8,0,0" />
+                            <Button Content="{internal:LocalizedString Key=OfflineMapAreasCancel}" HorizontalAlignment="Right" x:Name="CancelAddOnDemandAreaButton" />
 
                         </Grid>
                         </Grid>
