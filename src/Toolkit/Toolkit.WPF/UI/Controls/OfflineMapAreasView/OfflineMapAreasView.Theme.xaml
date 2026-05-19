@@ -399,6 +399,9 @@
                                 <RowDefinition MaxHeight="400" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock Text="{internal:LocalizedString Key=OfflineMapAreasSelectArea}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
                             <Grid Grid.Row="1" Margin="0,8">
@@ -406,8 +409,11 @@
                                     x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" />
                                 <Border BorderBrush="Black" BorderThickness="40" IsHitTestVisible="False" Opacity=".5" />
                             </Grid>
-                            <TextBox Grid.Row="2" x:Name="AddOnDemandAreaNameTextBox" />
-                            <Button Content="{internal:LocalizedString Key=OfflineMapAreasAdd}" Grid.Row="3" HorizontalAlignment="Stretch" x:Name="AcceptAddOnDemandAreaButton" Margin="0,8,0,0" />
+                            <TextBlock Grid.Row="2" Text="{internal:LocalizedString Key=OfflineMapAreasScaleLabel}" />
+                            <ComboBox Grid.Row="3" x:Name="AddOnDemandAreaScaleSelector" DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch" />
+                            <TextBlock Grid.Row="4" Text="{internal:LocalizedString Key=OfflineMapAreasAreaNamePlaceholder}" />
+                            <TextBox Grid.Row="5" x:Name="AddOnDemandAreaNameTextBox" />
+                            <Button Content="{internal:LocalizedString Key=OfflineMapAreasAdd}" Grid.Row="6" HorizontalAlignment="Stretch" x:Name="AcceptAddOnDemandAreaButton" Margin="0,8,0,0" />
                             <Button Content="{internal:LocalizedString Key=OfflineMapAreasCancel}" HorizontalAlignment="Right" x:Name="CancelAddOnDemandAreaButton" />
 
                         </Grid>

@@ -153,14 +153,16 @@
                                     <RowDefinition MaxHeight="400" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{internal:LocalizedString Key=OfflineMapAreasSelectArea}" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource BodyStrongTextBlockStyle}" />
                                 <Grid Grid.Row="1" >
                                     <esri:MapView x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" x:Load="False" ViewInsets="40" />
                                     <Border BorderBrush="Black" BorderThickness="40" IsHitTestVisible="False" Opacity=".5" />
                                 </Grid>
-                                <TextBox PlaceholderText="{internal:LocalizedString Key=OfflineMapAreasAreaNamePlaceholder}" Grid.Row="2" x:Name="AddOnDemandAreaNameTextBox" />
-                                <Button Content="{internal:LocalizedString Key=OfflineMapAreasAdd}" Grid.Row="3" HorizontalAlignment="Stretch" x:Name="AcceptAddOnDemandAreaButton" />
+                                <ComboBox Header="{internal:LocalizedString Key=OfflineMapAreasScaleLabel}" Grid.Row="2" x:Name="AddOnDemandAreaScaleSelector" HorizontalAlignment="Stretch" />
+                                <TextBox Header="{internal:LocalizedString Key=OfflineMapAreasAreaNamePlaceholder}" Grid.Row="3" x:Name="AddOnDemandAreaNameTextBox" />
+                                <Button Content="{internal:LocalizedString Key=OfflineMapAreasAdd}" Grid.Row="4" HorizontalAlignment="Stretch" x:Name="AcceptAddOnDemandAreaButton" />
                                 <Button Content="{internal:LocalizedString Key=OfflineMapAreasCancel}" HorizontalAlignment="Right" x:Name="CancelAddOnDemandAreaButton" />
 
                             </Grid>

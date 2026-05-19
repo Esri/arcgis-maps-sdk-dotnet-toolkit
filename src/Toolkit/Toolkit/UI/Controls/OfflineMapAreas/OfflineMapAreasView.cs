@@ -34,14 +34,17 @@ using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 using BaseItemsControl = Microsoft.Maui.Controls.ItemsView;
 using ButtonBase = Microsoft.Maui.Controls.Button;
+using ScaleSelector = Microsoft.Maui.Controls.Picker;
 using TextBox = Microsoft.Maui.Controls.Entry;
 #elif WPF
 using System.Windows.Controls.Primitives;
 using BaseItemsControl = System.Windows.Controls.ItemsControl;
 using Esri.ArcGISRuntime.Toolkit.Primitives;
+using ScaleSelector = System.Windows.Controls.ComboBox;
 #elif WINDOWS_XAML
 using BaseItemsControl = Microsoft.UI.Xaml.Controls.ItemsControl;
 using Esri.ArcGISRuntime.Toolkit.Primitives;
+using ScaleSelector = Microsoft.UI.Xaml.Controls.ComboBox;
 #endif
 
 #if MAUI
@@ -84,6 +87,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private readonly DelegateCommand _openMapCommand;
         private OfflineMapViewModel? _vm;
+        private static readonly OnDemandScaleOption[] OnDemandScaleOptions = new[]
+        {
+            new OnDemandScaleOption("OfflineMapAreasScaleRoom", 70.5310735),
+            new OnDemandScaleOption("OfflineMapAreasScaleRooms", 141.062147),
+            new OnDemandScaleOption("OfflineMapAreasScaleHouseProperty", 282.124294),
+            new OnDemandScaleOption("OfflineMapAreasScaleHouses", 564.248588),
+            new OnDemandScaleOption("OfflineMapAreasScaleSmallBuilding", 1128.497175),
+            new OnDemandScaleOption("OfflineMapAreasScaleBuilding", 2256.994353),
+            new OnDemandScaleOption("OfflineMapAreasScaleBuildings", 4513.988705),
+            new OnDemandScaleOption("OfflineMapAreasScaleStreet", 9027.977411),
+            new OnDemandScaleOption("OfflineMapAreasScaleStreets", 18055.954822),
+            new OnDemandScaleOption("OfflineMapAreasScaleNeighborhood", 36111.909643),
+            new OnDemandScaleOption("OfflineMapAreasScaleTown", 72223.819286),
+            new OnDemandScaleOption("OfflineMapAreasScaleCity", 144447.638572),
+            new OnDemandScaleOption("OfflineMapAreasScaleCities", 288895.277144),
+            new OnDemandScaleOption("OfflineMapAreasScaleMetropolitanArea", 577790.554289),
+            new OnDemandScaleOption("OfflineMapAreasScaleCounty", 1155581.108577),
+            new OnDemandScaleOption("OfflineMapAreasScaleCounties", 2311162.217155),
+            new OnDemandScaleOption("OfflineMapAreasScaleStateProvince", 4622324.434309),
+            new OnDemandScaleOption("OfflineMapAreasScaleStatesProvinces", 9244648.868618),
+            new OnDemandScaleOption("OfflineMapAreasScaleCountriesSmall", 18489297.737236),
+            new OnDemandScaleOption("OfflineMapAreasScaleCountriesBig", 36978595.474472),
+            new OnDemandScaleOption("OfflineMapAreasScaleContinent", 73957190.948944),
+            new OnDemandScaleOption("OfflineMapAreasScaleWorldSmall", 147914381.897889),
+            new OnDemandScaleOption("OfflineMapAreasScaleWorldBig", 295828763.795777),
+            new OnDemandScaleOption("OfflineMapAreasScaleWorld", 591657527.591555),
+        };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureFormView"/> class.
@@ -170,6 +200,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 tb.Text = _vm?.NextOnDemandAreaTitle();
             }
+            if (GetTemplateChild("AddOnDemandAreaScaleSelector") is ScaleSelector scaleSelector)
+            {
+                scaleSelector.ItemsSource = OnDemandScaleOptions;
+                scaleSelector.SelectedItem = OnDemandScaleOptions.Where(s=>s.ResourceKey == "OfflineMapAreasScaleStreet").FirstOrDefault() ?? OnDemandScaleOptions[0];
+            }
         }
         private async void AddOnDemandArea()
         {
@@ -195,9 +230,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             using var ms = new MemoryStream();
                             using var s = await image.GetEncodedBufferAsync();
                             s.CopyTo(ms);
-                            // TODO: Replace mv.MapScale with scale from scale-picker. See https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Sources/ArcGISToolkit/Components/Offline/Utilities/CacheScale.swift
-
-                            await _vm.AddOnDemandMapAreaAsync(new OnDemandMapAreaConfiguration(name, clippedArea, 0, mv.MapScale, ms.ToArray()));
+                            await _vm.AddOnDemandMapAreaAsync(new OnDemandMapAreaConfiguration(name, clippedArea, 0, GetSelectedOnDemandScale(), ms.ToArray()));
                         }
                         catch (System.Exception ex)
                         {
@@ -207,6 +240,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
             CloseAddOnDemandArea();
+        }
+
+        private double GetSelectedOnDemandScale()
+        {
+            if (GetTemplateChild("AddOnDemandAreaScaleSelector") is ScaleSelector scaleSelector &&
+                scaleSelector.SelectedItem is OnDemandScaleOption selectedOption)
+            {
+                return selectedOption.Scale;
+            }
+
+            return 9027.977411; // Default to street scale
         }
 
         private readonly DelegateCommand _goOnlineCommand;
@@ -223,6 +267,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get => GetValue(OnlineMapProperty) as Map;
             set => SetValue(OnlineMapProperty, value);
+        }
+
+        private sealed class OnDemandScaleOption
+        {
+            public OnDemandScaleOption(string resourceKey, double scale)
+            {
+                ResourceKey = resourceKey;
+                Scale = scale;
+            }
+
+            public string ResourceKey { get; }
+
+            public double Scale { get; }
+
+            public string DisplayName => Properties.Resources.GetString(ResourceKey)!;
+
+            public override string ToString() => DisplayName;
         }
 
         /// <summary>

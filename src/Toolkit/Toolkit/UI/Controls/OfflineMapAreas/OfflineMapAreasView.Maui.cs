@@ -37,6 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private const string NoInternetRefreshButtonName = "NoInternetRefreshButton";
         private const string AddMapAreaButtonName = "AddMapAreaButton";
         private const string AddAreaMapViewName = "AddAreaMapView";
+        private const string AddOnDemandAreaScaleSelectorName = "AddOnDemandAreaScaleSelector";
         private const string AddOnDemandAreaNameTextBoxName = "AddOnDemandAreaNameTextBox";
         private const string AcceptAddOnDemandAreaButtonName = "AcceptAddOnDemandAreaButton";
         private const string CancelAddOnDemandAreaButtonName = "CancelAddOnDemandAreaButton";
@@ -65,6 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             string noMapAreasOnDemandMessage = Properties.Resources.GetString("OfflineMapAreasNoMapAreasOnDemandMessage")!;
             string addMapArea = Properties.Resources.GetString("OfflineMapAreasAddMapArea")!;
             string selectArea = Properties.Resources.GetString("OfflineMapAreasSelectArea")!;
+            string scale = Properties.Resources.GetString("OfflineMapAreasScaleLabel")!;
             string cancel = Properties.Resources.GetString("OfflineMapAreasCancel")!;
             string areaNamePlaceholder = Properties.Resources.GetString("OfflineMapAreasAreaNamePlaceholder")!;
             string add = Properties.Resources.GetString("OfflineMapAreasAdd")!;
@@ -134,6 +136,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     new RowDefinition(GridLength.Star) { Height = 400 },
                     new RowDefinition(GridLength.Auto),
                     new RowDefinition(GridLength.Auto),
+                    new RowDefinition(GridLength.Auto),
+                    new RowDefinition(GridLength.Auto),
                 },
                 RowSpacing = 8,
                 VerticalOptions = LayoutOptions.Start,
@@ -188,11 +192,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid.SetRow(addAreaMapContainer, 1);
             addAreaView.Children.Add(addAreaMapContainer);
 
+            Label scaleLabel = new Label()
+            {
+                Text = scale,
+            };
+            Grid.SetRow(scaleLabel, 2);
+            addAreaView.Children.Add(scaleLabel);
+
+            Picker addOnDemandAreaScaleSelector = new Picker();
+            Grid.SetRow(addOnDemandAreaScaleSelector, 3);
+            addAreaView.Children.Add(addOnDemandAreaScaleSelector);
+
             Entry addOnDemandAreaNameTextBox = new Entry()
             {
                 Placeholder = areaNamePlaceholder,
             };
-            Grid.SetRow(addOnDemandAreaNameTextBox, 2);
+            Grid.SetRow(addOnDemandAreaNameTextBox, 4);
             addAreaView.Children.Add(addOnDemandAreaNameTextBox);
 
             Button acceptAddOnDemandAreaButton = new Button()
@@ -200,7 +215,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 Text = add,
                 HorizontalOptions = LayoutOptions.Fill,
             };
-            Grid.SetRow(acceptAddOnDemandAreaButton, 3);
+            Grid.SetRow(acceptAddOnDemandAreaButton, 5);
             addAreaView.Children.Add(acceptAddOnDemandAreaButton);
             root.Children.Add(addAreaView);
 
@@ -211,6 +226,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             nameScope.RegisterName(NoInternetRefreshButtonName, noInternetRefreshButton);
             nameScope.RegisterName(AddMapAreaButtonName, addMapAreaButton);
             nameScope.RegisterName(AddAreaMapViewName, addAreaMapView);
+            nameScope.RegisterName(AddOnDemandAreaScaleSelectorName, addOnDemandAreaScaleSelector);
             nameScope.RegisterName(AddOnDemandAreaNameTextBoxName, addOnDemandAreaNameTextBox);
             nameScope.RegisterName(AcceptAddOnDemandAreaButtonName, acceptAddOnDemandAreaButton);
             nameScope.RegisterName(CancelAddOnDemandAreaButtonName, cancelAddOnDemandAreaButton);
@@ -219,8 +235,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private static object BuildMapAreasItemTemplate()
         {
-            string downloaded = GetLocalizedString("OfflineMapAreasDownloaded");
-            string open = GetLocalizedString("OfflineMapAreasOpen");
+            string downloaded = Properties.Resources.GetString("OfflineMapAreasDownloaded")!;
+            string open = Properties.Resources.GetString("OfflineMapAreasOpen")!;
 
             Grid root = new Grid()
             {
