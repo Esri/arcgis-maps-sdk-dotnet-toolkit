@@ -123,7 +123,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
-            ItemTemplate = DefaultItemTemplate;
+            ItemTemplate = new DataTemplate(() => BuildMapAreasItemTemplate());
 #else
             TemplateSettings = new OfflineMapAreasTemplateSettings();
             DefaultStyleKey = typeof(OfflineMapAreasView);
@@ -483,7 +483,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
 #if MAUI
         public static readonly BindableProperty ItemTemplateProperty =
-            BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(OfflineMapAreasView), null);
+            BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(OfflineMapAreasView));
 #else
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(OfflineMapAreasView), new PropertyMetadata(null));

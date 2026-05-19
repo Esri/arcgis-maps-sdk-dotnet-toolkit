@@ -158,6 +158,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloading));
                     OnPropertyChanged(nameof(IOfflineMapAreaItem.IsDownloaded));
+                    OnPropertyChanged(nameof(IOfflineMapAreaItem.Description));
                     _removeDownloadCommand.NotifyCanExecuteChanged();
                 });
             }
@@ -193,7 +194,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool IsDownloaded => Status == OnDemandMapModelStatus.Downloaded;
 
         static IValueConverter _converter = new FileSizeConverter();
-        public string Description => $"Size: {_converter.Convert(SizeInBytes, typeof(string), null, null!)}";
+        public string Description => SizeInBytes == 0 ? "" : $"Size: {_converter.Convert(SizeInBytes, typeof(string), null, null!)}";
 
         public bool MapIsOfflineDisabled => false;
 

@@ -25,7 +25,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
     public partial class OfflineMapAreasView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        private static readonly DataTemplate DefaultItemTemplate;
         private static readonly ByteArrayToImageSourceConverter ImageSourceConverter = new();
 
         /// <summary>
@@ -51,7 +50,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         static OfflineMapAreasView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
-            DefaultItemTemplate = new DataTemplate(BuildMapAreasItemTemplate);
         }
 
         private static object BuildDefaultTemplate()
@@ -235,9 +233,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private static object BuildMapAreasItemTemplate()
         {
-            string downloaded = Properties.Resources.GetString("OfflineMapAreasDownloaded")!;
-            string open = Properties.Resources.GetString("OfflineMapAreasOpen")!;
-
             Grid root = new Grid()
             {
                 ColumnDefinitions =
@@ -252,8 +247,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     new RowDefinition(GridLength.Auto),
                     new RowDefinition(GridLength.Auto),
                 },
-                Margin = new Thickness(0, 4),
-                MinimumHeightRequest = 64,
+                HeightRequest = 64,
             };
 
             Border thumbnailBorder = new Border()
@@ -300,7 +294,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             Label downloadedLabel = new Label()
             {
-                Text = downloaded,
+                Text = Properties.Resources.GetString("OfflineMapAreasDownloaded"),
                 FontSize = 12,
                 TextColor = Colors.Gray,
                 IsVisible = false,
@@ -318,13 +312,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid.SetColumn(actions, 2);
             Grid.SetRowSpan(actions, 3);
             root.Children.Add(actions);
-
-            CalciteImageButton stopButton = CreateIconButton(ToolkitIcons.CircleStop);
+            
+            CalciteImageButton stopButton = CreateIconButton(ToolkitIcons.CircleStop, Properties.Resources.GetString("OfflineMapAreasStop"));
             stopButton.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.IsDownloading);
             stopButton.SetBinding(ImageButton.CommandProperty, static (IOfflineMapAreaItem item) => item.StopDownloadCommand);
             actions.Children.Add(stopButton);
 
-            CalciteImageButton downloadButton = CreateIconButton(ToolkitIcons.DownloadTo);
+            CalciteImageButton downloadButton = CreateIconButton(ToolkitIcons.DownloadTo, Properties.Resources.GetString("OfflineMapAreasDownload"));
             downloadButton.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.AllowsDownload);
             downloadButton.SetBinding(ImageButton.CommandProperty, static (IOfflineMapAreaItem item) => item.DownloadCommand);
             actions.Children.Add(downloadButton);
@@ -336,7 +330,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid.SetColumnSpan(progressBar, 2);
             Grid.SetRow(progressBar, 2);
             root.Children.Add(progressBar);
-            
+
+            CalciteImageButton failedButton = CreateIconButton(ToolkitIcons.ExclamationMarkCircle, null);
+            failedButton.SetBinding(ToolTipProperties.TextProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
+            failedButton.SetBinding(SemanticProperties.DescriptionProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
+            failedButton.SetBinding(Button.CommandProperty, static (IOfflineMapAreaItem item) => item.RemoveDownloadCommand);
+            failedButton.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.Error, converter: EmptyToFalseConverter.Instance);
+            actions.Children.Add(failedButton);
+
             HorizontalStackLayout downloadedActions = new HorizontalStackLayout()
             {
                 Spacing = 8,
@@ -344,23 +345,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 IsVisible = false,
             };
             downloadedActions.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.IsDownloaded);
-            CalciteImageButton removeButton = CreateIconButton(ToolkitIcons.Trash);
+
+            CalciteImageButton removeButton = CreateIconButton(ToolkitIcons.Trash, Properties.Resources.GetString("OfflineMapAreasRemove"));
             removeButton.SetBinding(ImageButton.CommandProperty, static (IOfflineMapAreaItem item) => item.RemoveDownloadCommand);
             downloadedActions.Children.Add(removeButton);
 
-            Button openButton = new Button() { Text = open };
+            Button openButton = new Button() { Text = Properties.Resources.GetString("OfflineMapAreasOpen") };
             openButton.SetBinding(Button.CommandProperty, static (IOfflineMapAreaItem item) => item.OpenCommand);
             openButton.SetBinding(Button.CommandParameterProperty, static (IOfflineMapAreaItem item) => item.Map);
             downloadedActions.Children.Add(openButton);
-            actions.Children.Add(downloadedActions);
-
-            CalciteImageButton failedButton = CreateIconButton(ToolkitIcons.ExclamationMarkCircle);
-            failedButton.SetBinding(ToolTipProperties.TextProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
-            failedButton.SetBinding(SemanticProperties.DescriptionProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
-            failedButton.SetBinding(Button.CommandProperty, static (IOfflineMapAreaItem item) => item.RemoveDownloadCommand);
-            failedButton.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.Error, converter: EmptyToFalseConverter.Instance);
-            downloadedActions.Children.Add(failedButton);
-
             actions.Children.Add(downloadedActions);
 
             return root;
@@ -428,14 +421,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             HorizontalOptions = LayoutOptions.Center,
         };
 
-        private static CalciteImageButton CreateIconButton(string glyph) => new CalciteImageButton(glyph, 16)
+        private static CalciteImageButton CreateIconButton(string glyph, string? hint)
         {
-            WidthRequest = 32,
-            HeightRequest = 32,
-            BackgroundColor = Colors.Transparent,
-            BorderWidth = 0,
-            Padding = 0,
-        };
+            var button = new CalciteImageButton(glyph, 16)
+            {
+                WidthRequest = 32,
+                HeightRequest = 32,
+                BackgroundColor = Colors.Transparent,
+                BorderWidth = 0,
+                Padding = 0,
+            };
+            if (!string.IsNullOrEmpty(hint))
+            {
+                SemanticProperties.SetHint(button, hint);
+                ToolTipProperties.SetText(button, hint);
+            }
+            return button;
+        }
 
         private void OnApplyTemplateMaui()
         {
