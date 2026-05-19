@@ -9,12 +9,14 @@ if (-not $?) {
   exit 1
 }
 
+$config_file = Join-Path $PSScriptRoot "variables.yml"
+
 # Install dotnet
-$dotnet_version = "10.0.300"
+$dotnet_version = Get-YamlValue $config_file 'dotnet-version'
 $dotnet_exe = Install-Dotnet $env:WORKSPACE $dotnet_version $env:DOTNET_CACHE_FOLDER
 
 # Install Node.js
-$node_version = '24.15.0'
+$node_version = Get-YamlValue $config_file 'node-version'
 $node_workspace = Join-Path $env:WORKSPACE '.node'
 $node_exe, $npm_exe = Install-Nodejs $node_workspace $node_version
 
