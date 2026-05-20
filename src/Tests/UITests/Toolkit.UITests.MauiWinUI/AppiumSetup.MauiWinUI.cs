@@ -8,7 +8,7 @@ public static partial class AppiumSetup
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext testContext)
     {
-        var envAppPath = Environment.GetEnvironmentVariable("UITEST_APP_PATH");
+        var envAppPath = Environment.GetEnvironmentVariable("TKUITEST_APP");
         var testApp = String.IsNullOrWhiteSpace(envAppPath) ? GetBuildSettings()["app"] : envAppPath;
 
         driver = MakeWindowsDriver(testApp);
