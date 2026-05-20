@@ -17,11 +17,17 @@ function Invoke-WindowsUITests {
     [Parameter(Mandatory)]
     [string[]]$build_parameters,
 
+    [Parameter(Mandatory)]
+    [bool]$install_maui,
+
     [Parameter()]
     [string]$nuget_repo,
 
     [Parameter()]
-    [string]$trx_filename
+    [string]$trx_filename,
+
+    [Parameter()]
+    [string[]]$build_parameters_app
   )
 
   $config_file = Join-Path $PSScriptRoot "variables.yml"
@@ -31,6 +37,11 @@ function Invoke-WindowsUITests {
   # Install dotnet
   $dotnet_version = Get-YamlValue $config_file 'dotnet-version'
   $dotnet_exe = Install-Dotnet $workspace $dotnet_version $env:DOTNET_CACHE_FOLDER
+
+  # Install maui workload if required
+  if ($install_maui) {
+    & $dotnet_exe workload install maui
+  }
 
   # Install Node.js
   $node_version = Get-YamlValue $config_file 'node-version'
@@ -73,7 +84,7 @@ function Invoke-WindowsUITests {
   $build_parameters += $build_params_artifacts
 
   # Build app and runner projects
-  & $dotnet_exe build $app_project @build_parameters
+  & $dotnet_exe build $app_project @build_parameters @build_parameters_app
   if ($LASTEXITCODE -ne 0) {
     echo "App build failed. Aborting."
     & $dotnet_exe build-server shutdown
