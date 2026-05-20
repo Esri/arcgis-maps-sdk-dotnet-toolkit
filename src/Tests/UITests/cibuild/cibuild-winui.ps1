@@ -10,12 +10,14 @@ if (-not $?) {
 }
 
 # Define build parameters
-$build_params = @('-c', 'Release')
+$build_params = @('-c', 'Release', '-r', 'win-x64', '-p:SelfContained=true', '-p:PublishProfile=win-x64.pubxml', '-p:WindowsAppSDKSelfContained=true')
 if (![string]::IsNullOrWhiteSpace($env:RELEASE_VERSION)) {
   $build_params += "-p:UseNugetPackage=$env:RELEASE_VERSION"
 }
 
 # Run tests
-$runner_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF\Toolkit.UITests.WPF.csproj'
-$app_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF.App\Toolkit.UITests.WPF.App.csproj'
+$runner_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WinUI\Toolkit.UITests.WinUI.csproj'
+$app_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WinUI.App\Toolkit.UITests.WinUI.App.csproj'
+
+$env:UITEST_APP_PATH = Join-Path $PSScriptRoot '..\Toolkit.UITests.WinUI.App\bin\Release\net10.0-windows10.0.19041.0\win-x64\Toolkit.UITests.WinUI.App.exe'
 Invoke-WindowsUITests $env:WORKSPACE $runner_project $app_project $build_params $env:NUGET_REPO $env:TRX_FILENAME

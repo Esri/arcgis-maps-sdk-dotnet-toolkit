@@ -1,3 +1,108 @@
+function Invoke-WindowsUITests {
+
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]$workspace,
+
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]$runner_project,
+
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]$app_project,
+
+    [Parameter(Mandatory)]
+    [string[]]$build_parameters,
+
+    [Parameter()]
+    [string]$nuget_repo,
+
+    [Parameter()]
+    [string]$trx_filename
+  )
+
+  $config_file = Join-Path $PSScriptRoot "variables.yml"
+
+  # Install dotnet
+  $dotnet_version = Get-YamlValue $config_file 'dotnet-version'
+  $dotnet_exe = Install-Dotnet $workspace $dotnet_version $env:DOTNET_CACHE_FOLDER
+
+  # Install Node.js
+  $node_version = Get-YamlValue $config_file 'node-version'
+  $node_workspace = Join-Path $workspace '.node'
+  $node_exe, $npm_exe = Install-Nodejs $node_workspace $node_version
+
+  # Install appium and driver
+  $appium_entry = Join-Path $node_workspace 'node_modules\appium\index.js'
+  $env:APPIUM_HOME = Join-Path $workspace '.appium'
+
+  & $npm_exe install appium --prefix $node_workspace
+  if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+  }
+
+  & $node_exe $appium_entry driver install windows
+
+  # Extract and configure WindowsAppDriver for appium
+  $env:APPIUM_WAD_PATH = Join-Path $env:APPIUM_HOME 'WinAppDriver1.2.1\WinAppDriver.exe'
+  if (!(Test-Path $env:APPIUM_WAD_PATH)) {
+    $wap_zip = Join-Path $PSScriptRoot 'WinAppDriver1.2.1.zip'
+    Expand-Archive -Path $wap_zip -Destination $env:APPIUM_HOME
+    if (!$?) {
+      Write-Error 'Failed to extract WinAppDriver zip'
+      exit 1
+    }
+  }
+
+  # Set nuget source if provided
+  if (![string]::IsNullOrWhiteSpace($nuget_repo)) {
+    $toolkit_src_dir = Join-Path $PSScriptRoot '..\..\..'
+    Set-NugetSource $toolkit_src_dir $dotnet_exe $nuget_repo
+    if (!$?) {
+      exit 1
+    }
+  }
+
+  # Build app and runner projects
+  & $dotnet_exe build $app_project @build_parameters
+  if ($LASTEXITCODE -ne 0) {
+    echo "App build failed. Aborting."
+    & $dotnet_exe build-server shutdown
+    exit $LASTEXITCODE
+  }
+
+  & $dotnet_exe build $runner_project @build_parameters
+  if ($LASTEXITCODE -ne 0) {
+    echo "Runner build failed. Aborting."
+    & $dotnet_exe build-server shutdown
+    exit $LASTEXITCODE
+  }
+
+  # Start appium
+  $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
+  if (!$?) {
+    & $dotnet_exe build-server shutdown
+    exit 1
+  }
+
+  # Run tests
+  $results_dir = Join-Path $workspace 'TestResults'
+  $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
+  if (![string]::IsNullOrWhiteSpace($trx_filename)) {
+    $parameter_trxfilename = @('--report-trx-filename', $trx_filename)
+  }
+
+  Set-Location -Path $toolkit_src_root
+  & $dotnet_exe test $runner_project @build_parameters --results-directory $results_dir --report-trx $parameter_trxfilename
+
+  # Kill the appium server process and build server
+  Stop-Process -InputObject $appium_server_process
+  & $dotnet_exe build-server shutdown
+}
+
 function Get-YamlValue {
 
   [CmdletBinding()]
