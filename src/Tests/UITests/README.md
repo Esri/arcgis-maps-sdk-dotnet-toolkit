@@ -96,6 +96,17 @@ The `.Wpf`, `.MauiWinUI`, and `.MauiiOS` test runners will automatically build t
 
 Please be sure to consult the `MauiiOS` section below as it requires additional configuration before tests can run.
 
+### Configuration
+**Directory.Build.props**
+The [`UITests/Directory.Build.props`](./Directory.Build.props) file includes several configuration options, primarily targeted at the `MauiAndroid` and `MauiiOS` test runners.
+
+**Environment Variables**
+Configuration can also be done at runtime by setting certain environment variables. The current list of environment variables is as follows:
+
+| Variable | Description | Affected Tests |
+|---|---|---|
+| UITEST_APP_PATH | Defines the path or application identifier of the target `.App` program. | WPF, WinUI, MauiWinUI |
+
 ### General Notes
 Running the MacCatalyst test or any of the Windows tests will take over your machine. Moving the mouse is still possible but may interfere with the tests. Tests will abort if the test app gets closed (pressing the close button or `Alt+F4` are both options).
 
