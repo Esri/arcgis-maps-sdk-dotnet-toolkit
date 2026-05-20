@@ -8,11 +8,11 @@ function Invoke-WindowsUITests {
 
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string]$runner_project,
+    [string]$runner_name,
 
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string]$app_project,
+    [string]$app_name,
 
     [Parameter(Mandatory)]
     [string[]]$build_parameters,
@@ -25,6 +25,8 @@ function Invoke-WindowsUITests {
   )
 
   $config_file = Join-Path $PSScriptRoot "variables.yml"
+  $runner_project = Join-Path $PSScriptRoot "..\${runner_name}\${runner_name}.csproj"
+  $app_project = Join-Path $PSScriptRoot "..\${app_name}\${app_name}.csproj"
 
   # Install dotnet
   $dotnet_version = Get-YamlValue $config_file 'dotnet-version'
@@ -66,6 +68,10 @@ function Invoke-WindowsUITests {
     }
   }
 
+  # Ensure predictable artifacts output layout for setting env:UITEST_APP_PATH later
+  $build_params_artifacts = @('-p:ArtifactsPivots=TestBuild', '-p:UseArtifactsOutput=true')
+  $build_parameters += $build_params_artifacts
+
   # Build app and runner projects
   & $dotnet_exe build $app_project @build_parameters
   if ($LASTEXITCODE -ne 0) {
@@ -96,6 +102,7 @@ function Invoke-WindowsUITests {
   }
 
   Set-Location -Path $toolkit_src_root
+  $env:UITEST_APP_PATH = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
   & $dotnet_exe test $runner_project @build_parameters --results-directory $results_dir --report-trx $parameter_trxfilename
 
   # Kill the appium server process and build server
