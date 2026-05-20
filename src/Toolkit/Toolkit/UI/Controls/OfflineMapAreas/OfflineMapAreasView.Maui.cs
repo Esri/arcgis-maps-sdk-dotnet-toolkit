@@ -19,6 +19,7 @@ using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Layouts;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -126,18 +127,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             root.Children.Add(mainView);
 
             // Add Map Area Panel
-            Grid addAreaView = new Grid()
+            var addAreaView = new StretchStackPanel()
             {
-                RowDefinitions =
-                {
-                    new RowDefinition(GridLength.Auto),
-                    new RowDefinition(GridLength.Star) { Height = 400 },
-                    new RowDefinition(GridLength.Auto),
-                    new RowDefinition(GridLength.Auto),
-                    new RowDefinition(GridLength.Auto),
-                    new RowDefinition(GridLength.Auto),
-                },
-                RowSpacing = 8,
                 VerticalOptions = LayoutOptions.Start,
             };
             addAreaView.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsAddOnDemandMode, BindingMode.OneWay, source: RelativeBindingSource.TemplatedParent);
@@ -172,40 +163,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid addAreaMapContainer = new Grid()
             {
                 MaximumHeightRequest = 400,
+                MinimumHeightRequest = 100,
             };
             MapView addAreaMapView = new MapView()
             {
                 IsAttributionTextVisible = false,
-                ViewInsets = new Thickness(40),
+                ViewInsets = new Thickness(20),
             };
             addAreaMapContainer.Children.Add(addAreaMapView);
             Border addAreaMapOverlay = new Border()
             {
                 Stroke = Colors.Black,
-                StrokeThickness = 40,
+                StrokeThickness = 20,
                 Opacity = 0.5,
                 InputTransparent = true,
             };
             addAreaMapContainer.Children.Add(addAreaMapOverlay);
-            Grid.SetRow(addAreaMapContainer, 1);
+            StretchStackPanel.SetGridLength(addAreaMapContainer, new GridLength(1, GridUnitType.Star));
             addAreaView.Children.Add(addAreaMapContainer);
 
             Label scaleLabel = new Label()
             {
                 Text = scale,
             };
-            Grid.SetRow(scaleLabel, 2);
             addAreaView.Children.Add(scaleLabel);
 
             Picker addOnDemandAreaScaleSelector = new Picker();
-            Grid.SetRow(addOnDemandAreaScaleSelector, 3);
             addAreaView.Children.Add(addOnDemandAreaScaleSelector);
 
             Entry addOnDemandAreaNameTextBox = new Entry()
             {
                 Placeholder = areaNamePlaceholder,
             };
-            Grid.SetRow(addOnDemandAreaNameTextBox, 4);
             addAreaView.Children.Add(addOnDemandAreaNameTextBox);
 
             Button acceptAddOnDemandAreaButton = new Button()
@@ -213,7 +202,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 Text = add,
                 HorizontalOptions = LayoutOptions.Fill,
             };
-            Grid.SetRow(acceptAddOnDemandAreaButton, 5);
             addAreaView.Children.Add(acceptAddOnDemandAreaButton);
             root.Children.Add(addAreaView);
 
@@ -312,7 +300,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid.SetColumn(actions, 2);
             Grid.SetRowSpan(actions, 3);
             root.Children.Add(actions);
-            
+
             CalciteImageButton stopButton = CreateIconButton(ToolkitIcons.CircleStop, Properties.Resources.GetString("OfflineMapAreasStop"));
             stopButton.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.IsDownloading);
             stopButton.SetBinding(ImageButton.CommandProperty, static (IOfflineMapAreaItem item) => item.StopDownloadCommand);
@@ -505,6 +493,116 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private void AcceptAddOnDemandAreaButton_Clicked(object? sender, EventArgs e) => AddOnDemandArea();
 
         private void CancelAddOnDemandAreaButton_Clicked(object? sender, EventArgs e) => CloseAddOnDemandArea();
+
+        private partial class StretchStackPanel : Layout
+        {
+            const double _padding = 8;
+            public StretchStackPanel()
+            {
+                VerticalOptions = LayoutOptions.Start;
+                HorizontalOptions = LayoutOptions.Fill;
+            }
+            protected override ILayoutManager CreateLayoutManager()
+            {
+                return new LayoutManager(this);
+            }
+
+            private class LayoutManager : ILayoutManager
+            {
+                private StretchStackPanel Layout { get; }
+                public LayoutManager(StretchStackPanel layout)
+                {
+                    Layout = layout;
+                }
+
+                public Size Measure(double widthConstraint, double heightConstraint)
+                {
+                    double height = 0;
+                    bool hasStarSizing = false;
+                    for (int n = 0; n < Layout.Count; n++)
+                    {
+                        var child = Layout[n];
+
+                        if (child.Visibility == Visibility.Collapsed)
+                        {
+                            continue;
+                        }
+                        if (height > 0)
+                            height += _padding;
+                        hasStarSizing = hasStarSizing || StretchStackPanel.GetGridLength(child as BindableObject).IsStar;
+                        var size = child.Measure(widthConstraint, heightConstraint);
+                        height += size.Height;
+                    }
+                    if (hasStarSizing)
+                        return new Size(widthConstraint, heightConstraint);
+                    return new Size(widthConstraint, Math.Min(heightConstraint, height));
+                }
+
+                public Size ArrangeChildren(Rect bounds)
+                {
+                    double ratio = 0;
+                    double height = 0;
+
+                   for (int n = 0; n < Layout.Count; n++)
+                    {
+                        var child = Layout[n];
+
+                        if (child.Visibility == Visibility.Collapsed)
+                        {
+                            continue;
+                        }
+                        var value = StretchStackPanel.GetGridLength(child as BindableObject);
+                        if (height > 0)
+                            height += _padding;
+                        if (value.IsStar)
+                        {
+                            ratio += value.Value;
+                            var min = (child as VisualElement)?.MinimumHeightRequest ?? 0;
+                            if (min > 0)
+                                height += min;
+                        }
+                        else
+                            height += child.DesiredSize.Height;
+                    }
+
+                    var leftover = Math.Max(0, bounds.Height - height);
+                    double y = 0;
+                    for (int n = 0; n < Layout.Count; n++)
+                    {
+                        var child = Layout[n];
+                        if (child.Visibility == Visibility.Collapsed)
+                        {
+                            continue;
+                        }
+                        if (y > 0)
+                            y += _padding;
+                        var childHeight = child.DesiredSize.Height;
+                        var value = StretchStackPanel.GetGridLength(child as BindableObject);
+                        if (value.IsStar)
+                        {
+                            var h = leftover / ratio * value.Value;
+                            var min = (child as VisualElement)?.MinimumHeightRequest ?? 0;
+                            var max = (child as VisualElement)?.MaximumHeightRequest ?? double.MaxValue;
+                            childHeight = Math.Clamp(h, min, max);
+                        }
+                        child.Arrange(new Rect(0, y, bounds.Width, childHeight));
+                        y += childHeight;
+                    }
+                    return new Size(bounds.Width, y);
+                }
+            }
+            public static readonly BindableProperty SizeProperty = BindableProperty.CreateAttached("Size",
+                typeof(GridLength), typeof(Grid), GridLength.Auto, propertyChanged: Invalidate);
+
+            public static GridLength GetGridLength(BindableObject? bindable) => bindable is null ? GridLength.Auto : (GridLength)bindable.GetValue(SizeProperty);
+            public static void SetGridLength(BindableObject bindable, GridLength value) => bindable.SetValue(SizeProperty, value);
+
+            private static void Invalidate(BindableObject bindable, object oldValue, object newValue)
+            {
+                if (bindable is IView view)
+                    view.InvalidateMeasure();
+            }
+        }
     }
 }
 #endif
