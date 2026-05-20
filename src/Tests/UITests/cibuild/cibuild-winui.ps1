@@ -24,4 +24,4 @@ if (![string]::IsNullOrWhiteSpace($env:RELEASE_VERSION)) {
 # Run tests
 $runner_name = 'Toolkit.UITests.WinUI'
 $app_name = 'Toolkit.UITests.WinUI.App'
-Invoke-WindowsUITests $env:WORKSPACE $runner_name $app_name $build_params $env:NUGET_REPO $env:TRX_FILENAME
+Invoke-WindowsUITests $env:WORKSPACE $runner_name $app_name $build_params $false $env:NUGET_REPO $env:TRX_FILENAME
