@@ -16,6 +16,6 @@ if (![string]::IsNullOrWhiteSpace($env:RELEASE_VERSION)) {
 }
 
 # Run tests
-$runner_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF\Toolkit.UITests.WPF.csproj'
-$app_project = Join-Path $PSScriptRoot '..\Toolkit.UITests.WPF.App\Toolkit.UITests.WPF.App.csproj'
-Invoke-WindowsUITests $env:WORKSPACE $runner_project $app_project $build_params $env:NUGET_REPO $env:TRX_FILENAME
+$runner_name = 'Toolkit.UITests.WPF'
+$app_name = 'Toolkit.UITests.WPF.App'
+Invoke-WindowsUITests $env:WORKSPACE $runner_name $app_name $build_params $env:NUGET_REPO $env:TRX_FILENAME
