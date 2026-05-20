@@ -105,7 +105,7 @@ Configuration can also be done at runtime by setting certain environment variabl
 
 | Variable | Description | Affected Tests |
 |---|---|---|
-| UITEST_APP_PATH | Defines the path or application identifier of the target `.App` program. | WPF, WinUI, MauiWinUI |
+| TKUITEST_APP | Defines the path to or package identifier of the target `.App` program. | WPF, WinUI, MauiWinUI |
 
 ### General Notes
 Running the MacCatalyst test or any of the Windows tests will take over your machine. Moving the mouse is still possible but may interfere with the tests. Tests will abort if the test app gets closed (pressing the close button or `Alt+F4` are both options).

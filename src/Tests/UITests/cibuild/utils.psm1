@@ -79,7 +79,7 @@ function Invoke-WindowsUITests {
     }
   }
 
-  # Ensure predictable artifacts output layout for setting env:UITEST_APP_PATH later
+  # Ensure predictable artifacts output layout for setting env:TKUITEST_APP later
   $build_params_artifacts = @('-p:ArtifactsPivots=TestBuild', '-p:UseArtifactsOutput=true')
   $build_parameters += $build_params_artifacts
 
@@ -115,7 +115,7 @@ function Invoke-WindowsUITests {
   $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
   Set-Location -Path $toolkit_src_root
 
-  $env:UITEST_APP_PATH = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
+  $env:TKUITEST_APP = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
   & $dotnet_exe test $runner_project @build_parameters @test_run_params
 
   # Kill the appium server process and build server
