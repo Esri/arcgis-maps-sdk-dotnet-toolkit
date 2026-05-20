@@ -79,6 +79,13 @@ function Invoke-WindowsUITests {
     }
   }
 
+  # Start appium before build so it has time to initialize in the background
+  $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
+  if (!$?) {
+    & $dotnet_exe build-server shutdown
+    exit 1
+  }
+
   # Ensure predictable artifacts output layout for setting env:TKUITEST_APP later
   $build_params_artifacts = @('-p:ArtifactsPivots=TestBuild', '-p:UseArtifactsOutput=true')
   $build_parameters += $build_params_artifacts
@@ -96,13 +103,6 @@ function Invoke-WindowsUITests {
     echo "Runner build failed. Aborting."
     & $dotnet_exe build-server shutdown
     exit $LASTEXITCODE
-  }
-
-  # Start appium
-  $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
-  if (!$?) {
-    & $dotnet_exe build-server shutdown
-    exit 1
   }
 
   # Run tests
