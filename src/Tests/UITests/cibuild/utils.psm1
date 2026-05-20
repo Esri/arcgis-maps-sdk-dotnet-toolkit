@@ -96,14 +96,16 @@ function Invoke-WindowsUITests {
 
   # Run tests
   $results_dir = Join-Path $workspace 'TestResults'
-  $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
+  $test_run_params = @('--no-build', '--report-trx', '--results-directory', $results_dir)
   if (![string]::IsNullOrWhiteSpace($trx_filename)) {
-    $parameter_trxfilename = @('--report-trx-filename', $trx_filename)
+    $test_run_params += @('--report-trx-filename', $trx_filename)
   }
 
+  $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
   Set-Location -Path $toolkit_src_root
+
   $env:UITEST_APP_PATH = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
-  & $dotnet_exe test $runner_project @build_parameters --results-directory $results_dir --report-trx $parameter_trxfilename
+  & $dotnet_exe test $runner_project @build_parameters @test_run_params
 
   # Kill the appium server process and build server
   Stop-Process -InputObject $appium_server_process
