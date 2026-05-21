@@ -40,7 +40,7 @@ function Invoke-WindowsUITests {
 
   # Install maui workload if required
   if ($install_maui) {
-    & $dotnet_exe workload install maui
+    & $dotnet_exe workload install maui-windows
   }
 
   # Install Node.js
