@@ -22,7 +22,7 @@ $dotnet_major_version = $(Select-String -InputObject $dotnet_version -Pattern '\
 $build_params_app = @("-p:MauiVersion=${dotnet_major_version}*")
 
 $framework = "net${dotnet_major_version}-windows$(Get-YamlValue $config_file 'windows-sdk-version')"
-$build_params_app += @('-f', $framework)
+$build_params_app += @('-f', $framework, "-p:TargetFrameworks=${framework}")
 
 # Run tests
 $runner_name = 'Toolkit.UITests.MauiWinUI'
