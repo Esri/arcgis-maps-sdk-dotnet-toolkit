@@ -10,7 +10,7 @@
     xmlns:foldable="clr-namespace:Microsoft.Maui.Controls.Foldable;assembly=Microsoft.Maui.Controls.Foldable"
     x:DataType="sample:OfflineMapAreasSample"
     Title="Offline Map Areas">
-    <foldable:TwoPaneView x:DataType="sample:OfflineMapAreasSampleVM" MinWideModeWidth="800" Pane2Length="400">
+    <foldable:TwoPaneView x:DataType="sample:OfflineMapAreasSampleVM" MinWideModeWidth="800" Pane2Length="500">
         <foldable:TwoPaneView.Pane1>
             <Grid>
                 <esri:MapView Map="{Binding Source={x:Reference mapAreasView}, Path=SelectedMap}" />

@@ -27,6 +27,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+#if __IOS__
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+using BackgroundTasks;
+using Foundation;
+using ObjCRuntime;
+#endif
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit
     /// making it suitable for automated workflows or custom implementations.
     /// </note>
     /// </remarks>
-    public sealed class OfflineManager
+    public sealed partial class OfflineManager
     {
         private readonly JobManager _jobManager = JobManager.Create("offlineManager");
         private readonly ObservableCollection<OfflineMapInfo> _offlineMapInfos = new ObservableCollection<OfflineMapInfo>();
@@ -249,6 +256,13 @@ namespace Esri.ArcGISRuntime.Toolkit
 
             ObserveJob(job);
             job.Start();
+
+#if __IOS__
+            if (OperatingSystem.IsIOSVersionAtLeast(26))
+            {
+                StartContinuedProcessingTask(job, title);
+            }
+#endif
 
             try
             {

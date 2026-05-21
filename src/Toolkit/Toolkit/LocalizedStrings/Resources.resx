@@ -777,4 +777,8 @@
     <value>Stop</value>
     <comment>The text and tooltip for the action that stops an in-progress offline map area download.</comment>
   </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>Offline Map</value>
+    <comment>The title to display on a background task while taking maps offline.</comment>
+  </data>
 </root>
