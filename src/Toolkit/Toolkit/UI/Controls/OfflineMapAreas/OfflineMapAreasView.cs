@@ -82,6 +82,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <item>Displays a list of on-demand map areas available on the device that are tied to a specific web map</item>
     /// </list>
     /// </para>
+    /// <para>
+    /// If you're using the <see cref="OfflineMapAreasView"/> on iOS 26 or later, maps will be downloaded using a background transfer service which allows downloads to continue even if the app is suspended.
+    /// However for that to work, you must register the background task in your <c>info.plist</c> and add the following entry:
+    /// <code lang="xml">
+    ///     &lt;key>BGTaskSchedulerPermittedIdentifiers&lt;/key>
+    ///     &lt;array>
+    ///         &lt;string>APP_BUNDLE_IDENTIFIER.cpt.jobs.*&lt;/string>
+    ///     &lt;/array>
+    /// </code>
+    /// where <c>APP_BUNDLE_IDENTIFIER</c> is the bundle identifier of your app. If this entry is not added, downloads will still work but they may be paused when the app is suspended and may not resume until the app is opened again.
+    /// </para>
     /// </remarks>
     public partial class OfflineMapAreasView
     {
