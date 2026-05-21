@@ -93,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _areaId = areaId;
             _portalItemId = portalItemId;
-            _title = title ?? OfflineMapAreaUtilities.UnknownAreaTitle;
+            _title = title ?? string.Empty;
             _thumbnailData = thumbnailData;
             _onRemoveDownloadAction = onRemoveDownload;
             _downloadCommand = new DelegateCommand((o) => _ = DownloadOnDemandMapAreaAsync(), () => false);
@@ -422,7 +422,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var model = new OnDemandMapModel(
                 areaId,
                 portalItemId,
-                mobileMapPackage.Item?.Title ?? OfflineMapAreaUtilities.UnknownAreaTitle,
+                mobileMapPackage.Item?.Title,
                 thumbnailData,
                 onRemoveDownload, openCommand, dispatcher);
 

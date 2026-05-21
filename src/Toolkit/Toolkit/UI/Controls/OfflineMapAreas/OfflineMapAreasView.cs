@@ -225,6 +225,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets Online map to display areas for in the list.
         /// </summary>
+        /// <remarks>
+        /// <note>
+        /// Setting this will set the <see cref="OfflineMapInfo"/> property to <c>null</c>.
+        /// </note>
+        /// </remarks>
         public Map? OnlineMap
         {
             get => GetValue(OnlineMapProperty) as Map;
@@ -304,6 +309,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets OfflineMapInfo to display areas for in the list.
         /// </summary>
+        /// <remarks>
+        /// <para>A set of previously stored offline map infos can be obtained from <see cref="Esri.ArcGISRuntime.Toolkit.OfflineManager.OfflineMapInfos">OfflineManager.Shared.OfflineMapInfos</see>.
+        /// When an <see cref="OfflineMapInfo"/> is set, the view will attempt to load the areas associated with that info and display the map areas for it in the list.
+        /// </para>
+        /// <note>
+        /// Setting this will set the <see cref="OnlineMap"/> property to <c>null</c>
+        /// </note>
+        /// </remarks>
         public OfflineMapInfo? OfflineMapInfo
         {
             get => GetValue(OfflineMapInfoProperty) as OfflineMapInfo;
@@ -330,36 +343,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SetVM(null);
             if (newOfflineMap is not null)
             {
-                SelectedOfflineMapInfo = newOfflineMap;
-                // TODO: Load new VM based on new OfflineMapInfo...
+                _vm = new OfflineMapViewModel(newOfflineMap, DispatchAction, _openMapCommand);
+                SetVM(_vm);
             }
         }
-
-        /// <summary>
-        /// Gets or sets the <see cref="SelectedOfflineMapInfo"/>.
-        /// </summary>
-        public OfflineMapInfo? SelectedOfflineMapInfo
-        {
-            get => GetValue(SelectedOfflineMapInfoProperty) as OfflineMapInfo;
-            set => SetValue(SelectedOfflineMapInfoProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="SelectedOfflineMapInfo"/> dependency property.
-        /// </summary>
-#if MAUI
-        public static readonly BindableProperty SelectedOfflineMapInfoProperty =
-            BindableProperty.Create(nameof(SelectedOfflineMapInfo), typeof(OfflineMapInfo), typeof(OfflineMapAreasView), propertyChanged: (s, oldValue, newValue) => ((OfflineMapAreasView)s).OnSelectedOfflineMapInfoPropertyChanged(oldValue as OfflineMapInfo, newValue as OfflineMapInfo));
-#else
-        public static readonly DependencyProperty SelectedOfflineMapInfoProperty =
-            DependencyProperty.Register(nameof(SelectedOfflineMapInfo), typeof(OfflineMapInfo), typeof(OfflineMapAreasView), new PropertyMetadata(null, (s, d) => ((OfflineMapAreasView)s).OnSelectedOfflineMapInfoPropertyChanged(d.OldValue as OfflineMapInfo, d.NewValue as OfflineMapInfo)));
-#endif
-
-        private void OnSelectedOfflineMapInfoPropertyChanged(OfflineMapInfo? oldMap, OfflineMapInfo? newOfflineMap)
-        {
-
-        }
-
 
         private void OnSelectedMapPropertyChanged(Map? map)
         {
@@ -389,7 +376,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-#elif WINDOWS_XAML
+#elif WINDOWS_XAML || WPF
         /// <summary>
         /// Gets the currently selected map. This will be set to the map associated with a map area item when a map area is selected from the list in the view. This can be used to display the selected map in a MapView or to take other actions based on the selected map.
         /// </summary>
@@ -399,31 +386,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </remarks>
         public Map? SelectedMap
         {
+#if WINDOWS_XAML
             get => GetValue(SelectedMapProperty) as Map;
             private set => SetValue(SelectedMapProperty, value);
+#elif WPF
+            get => GetValue(SelectedMapPropertyKey.DependencyProperty) as Map; 
+            private set => SetValue(SelectedMapPropertyKey, value);
+#endif
         }
         
+#if WINDOWS_XAML
         /// <summary>
         /// Identifies the <see cref="SelectedMap"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SelectedMapProperty =
             DependencyProperty.Register(nameof(SelectedMap), typeof(Map), typeof(OfflineMapAreasView), new PropertyMetadata(null, (s,e) => ((OfflineMapAreasView)s).OnSelectedMapPropertyChanged(e.NewValue as Map)));
-
-
 #elif WPF
-        /// <summary>
-        /// Gets the currently selected map. This will be set to the map associated with a map area item when a map area is selected from the list in the view. This can be used to display the selected map in a MapView or to take other actions based on the selected map.
-        /// </summary>
-        /// <remarks>
-        /// By default the <see cref="OnlineMap"/> will be the selected map, and the MapView's Map property can be bound to this property. The property will then update when an offline map area is selected.
-        /// To go back to the online map, you can create a button that binds its Command property to the <see cref="GoOnlineCommand"/> which will set the selected map back to the online map.
-        /// </remarks>
-        public Map? SelectedMap
-        {
-            get => GetValue(SelectedMapPropertyKey.DependencyProperty) as Map; 
-            private set => SetValue(SelectedMapPropertyKey, value);
-        }
-
         private static readonly DependencyPropertyKey SelectedMapPropertyKey =
                 DependencyProperty.RegisterReadOnly(
                   name: nameof(SelectedMap),
@@ -431,7 +409,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                   ownerType: typeof(OfflineMapAreasView),
                   typeMetadata: new FrameworkPropertyMetadata(null, (s,e) => ((OfflineMapAreasView)s).OnSelectedMapPropertyChanged(e.NewValue as Map)));
 #endif
-
+#endif
         /// <summary>
         /// Gets or sets the vertical scrollbar visibility of the scrollviewer below the title.
         /// </summary>
@@ -517,8 +495,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets a value indicating whether the map area has been downloaded.
         /// </summary>
         bool IsDownloaded { get; }
-
-        bool SupportsRedownloading { get; }
 
         /// <summary>
         /// Gets a value indicating whether the map area has been downloaded.

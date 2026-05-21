@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:tk="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:tkcommon="using:Esri.ArcGISRuntime.Toolkit"
     xmlns:tasks="using:Esri.ArcGISRuntime.Tasks"
     mc:Ignorable="d">
 
@@ -21,7 +22,22 @@
 
         <Border HorizontalAlignment="Center" Margin="20" Padding="20" BorderThickness="2" VerticalAlignment="Top" CornerRadius="8"
                 Background="{ThemeResource ControlOnImageFillColorDefaultBrush}" BorderBrush="{StaticResource CardStrokeColorDefaultBrush}">
-            <ComboBox Header="Select Online Map" x:Name="MapSelector" ItemsSource="{x:Bind Maps}" SelectedIndex="0" Width="250" />
+            <StackPanel Spacing="16" Orientation="Horizontal">
+            <ComboBox Header="Select Online Map" x:Name="MapSelector" ItemsSource="{x:Bind Maps}" SelectedIndex="0" Width="250"
+                      SelectionChanged="OnlineMapSelection_Changed" />
+
+            <ComboBox Header="Select Offline Map Info" x:Name="OfflineMapSelector" ItemsSource="{x:Bind OfflineMapInfos, Mode=OneWay}" Width="250"
+                      SelectionChanged="OfflineMapSelection_Changed">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="tkcommon:OfflineMapInfo">
+                        <StackPanel Orientation="Horizontal" Width="250">
+                            <Image Source="{x:Bind local:OfflineMapAreasSample.BytesToImage(ThumbnailData)}" MaxWidth="64" Height="64" />
+                            <TextBlock Text="{x:Bind Title}" TextTrimming="CharacterEllipsis" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            </StackPanel>
         </Border>
 
         <Grid Grid.Column="1" Margin="4" >
@@ -31,7 +47,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Map Areas" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center" />
-            <tk:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Row="1" OnlineMap="{Binding SelectedItem.Map, ElementName=MapSelector, Mode=OneWay}" />
+            <tk:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Row="1" />
             <Button Command="{x:Bind OfflineMapAreasView.GoOnlineCommand}" Content="Go Online" Grid.Row="2" HorizontalAlignment="Stretch" Background="{ThemeResource AccentFillColorDefaultBrush}" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
         </Grid>
 

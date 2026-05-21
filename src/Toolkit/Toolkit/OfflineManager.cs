@@ -134,7 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                 ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
                 if (_cacheFolder != value)
                 {
-                    _cacheFolder = value;                    
+                    _cacheFolder = value;
                     InitManager();
                 }
             }
@@ -471,7 +471,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                 return;
             }
 
-            _synchronizationContext.Send(static state => ((Action)state!).Invoke(), action);
+            _synchronizationContext.Post(static state => ((Action)state!).Invoke(), action);
         }
 
         internal string GetOfflineManagerDirectory()

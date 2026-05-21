@@ -56,6 +56,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Exception? _preplannedMapModelsError;
         private System.Windows.Input.ICommand _openMapCommand;
 
+        public OfflineMapViewModel(OfflineMapInfo offlineMap, Action<Action> dispatcher, System.Windows.Input.ICommand openMapCommand) : base(dispatcher)
+        {
+            if (offlineMap is null)
+            {
+                throw new ArgumentNullException(nameof(offlineMap));
+            }
+            _onlineMap = new Map(offlineMap.PortalItemUrl);
+            _portalItemId = offlineMap.Id;
+            _openMapCommand = openMapCommand;
+            PreplannedMapModels = new ReadOnlyObservableCollection<PreplannedMapModel>(_preplannedMapModels);
+            OnDemandMapModels = new ReadOnlyObservableCollection<OnDemandMapModel>(_onDemandMapModels);
+            this._isShowingOnlyOfflineModels = true;
+        }
+
         public OfflineMapViewModel(Map onlineMap, Action<Action> dispatcher, System.Windows.Input.ICommand openMapCommand) : base(dispatcher)
         {
             if (onlineMap is null)
@@ -80,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             OnDemandMapModels = new ReadOnlyObservableCollection<OnDemandMapModel>(_onDemandMapModels);
         }
 
-        public enum Mode
+        internal enum Mode
         {
             Ambiguous,
             Preplanned,
@@ -396,12 +410,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 
+    /// <summary>
+    /// Set of helper utility classes for the Offline Map Areas related classes.
+    /// </summary>
     internal static class OfflineMapAreaUtilities
     {
-        private static readonly Regex HtmlTagExpression = new Regex("<[^>]+>", RegexOptions.Compiled);
-
-        public static string UnknownAreaTitle => "Unknown";
-
         public static long GetDirectorySize(string directory)
         {
             if (!Directory.Exists(directory))
@@ -442,9 +455,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             await stream.ReadExactlyAsync(bytes).ConfigureAwait(false);
             return bytes;
         }
-
-        public static string? StripHtml(string? value)
-            => string.IsNullOrWhiteSpace(value) ? value : HtmlTagExpression.Replace(value, string.Empty);
 
         public static void TryDeleteDirectory(string directory)
         {

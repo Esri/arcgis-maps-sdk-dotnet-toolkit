@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit
     /// </remarks>
     public sealed class OfflineMapInfo
     {
-        private const string ThumbnailFileName = "thumbnail.bin";
+        private string? _description;
 
         private OfflineMapInfo(SerializableOfflineMapInfo info)
         {
@@ -56,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 
             Id = info.PortalItemId;
             Title = info.Title;
-            Description = info.Description;
+            _description = info.Description;
             PortalItemUrl = portalItemUrl;
             ThumbnailData = info.ThumbnailData;
         }
@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <summary>
         /// Gets the description of the portal item associated with the map.
         /// </summary>
-        public string? Description { get; }
+        public string Description => Internal.HtmlUtility.StripHtml(_description) ?? string.Empty;
 
         /// <summary>
         /// Gets the URL of the portal item associated with the map.
@@ -168,8 +168,9 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 PortalItemId = Id,
                 Title = Title,
-                Description = Description,
+                Description = _description,
                 PortalItemUrl = PortalItemUrl.AbsoluteUri,
+                ThumbnailData = ThumbnailData,
             };
 
             await using (var fileStream = File.Create(infoPath))

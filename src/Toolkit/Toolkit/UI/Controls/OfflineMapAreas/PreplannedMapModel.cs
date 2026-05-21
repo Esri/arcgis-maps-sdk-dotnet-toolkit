@@ -94,21 +94,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             string preplannedMapAreaId,
             Action<PreplannedMapModel> onRemoveDownload,
             System.Windows.Input.ICommand openMapCommand,
-            Action<Action> dispatcher) : base(dispatcher)
+            Action<Action> dispatcher) : this(offlineMapTaskFactory, portalItemId, preplannedMapAreaId,
+                preplannedMapArea.PortalItem?.Title ?? preplannedMapAreaId, preplannedMapArea.PortalItem?.Description, true, onRemoveDownload, openMapCommand,  dispatcher)
         {
-            _offlineMapTaskFactory = offlineMapTaskFactory;
-            _preplannedMapArea = preplannedMapArea;
-            _portalItemId = portalItemId;
-            _preplannedMapAreaId = preplannedMapAreaId;
-            _onRemoveDownloadAction = onRemoveDownload;
-            _mmpkDirectoryPath = OfflineMapAreaStorage.GetPreplannedAreaDirectory(portalItemId, preplannedMapAreaId);
-            _title = preplannedMapArea.PortalItem?.Title ?? preplannedMapAreaId;
-            _description = OfflineMapAreaUtilities.StripHtml(preplannedMapArea.PortalItem?.Description);
-            _supportsRedownloading = true;
-            _downloadCommand = new DelegateCommand((o) => _ = DownloadPreplannedMapAreaAsync(), () => _preplannedMapArea != null && AllowsDownload && Status != PreplannedMapModelStatus.Downloading);
-            _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded);
-            _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync());
-            _openMapCommand = openMapCommand;
+            _preplannedMapArea = preplannedMapArea;;
         }
 
         internal PreplannedMapModel(
@@ -121,21 +110,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             bool supportsRedownloading,
             Action<PreplannedMapModel> onRemoveDownload,
             System.Windows.Input.ICommand openMapCommand,
-            Action<Action> dispatcher) : base(dispatcher)
+            Action<Action> dispatcher) : this(offlineMapTaskFactory, portalItemId, preplannedMapAreaId, title, description, supportsRedownloading, onRemoveDownload, openMapCommand, dispatcher)
+        {
+            _thumbnailData = thumbnailData;
+        }
+
+        private PreplannedMapModel(
+            Func<Task<OfflineMapTask>> offlineMapTaskFactory,
+            string portalItemId, string preplannedMapAreaId,
+            string title, string? description,
+            bool supportsRedownloading, Action<PreplannedMapModel> onRemoveDownload,
+            System.Windows.Input.ICommand openMapCommand,
+            Action<Action> dispatcher): base(dispatcher)
         {
             _offlineMapTaskFactory = offlineMapTaskFactory;
             _portalItemId = portalItemId;
             _preplannedMapAreaId = preplannedMapAreaId;
             _title = title;
-            _description = description;
-            _thumbnailData = thumbnailData;
+            _description = HtmlUtility.StripHtml(description);
             _supportsRedownloading = supportsRedownloading;
-            _onRemoveDownloadAction = onRemoveDownload;
-            _mmpkDirectoryPath = OfflineMapAreaStorage.GetPreplannedAreaDirectory(portalItemId, preplannedMapAreaId);
             _downloadCommand = new DelegateCommand((o) => _ = DownloadPreplannedMapAreaAsync(), () => _preplannedMapArea != null && AllowsDownload && Status != PreplannedMapModelStatus.Downloading);
             _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded);
-            _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync()); 
+            _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync());
             _openMapCommand = openMapCommand;
+            _onRemoveDownloadAction = onRemoveDownload;
+            _mmpkDirectoryPath = OfflineMapAreaStorage.GetPreplannedAreaDirectory(portalItemId, preplannedMapAreaId);
         }
 
         public string PreplannedMapAreaId => _preplannedMapAreaId;
@@ -146,9 +145,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             private set => SetProperty(ref _title, value);
         }
 
-        public string? Description
+        public string Description
         {
-            get => _description;
+            get => _description ?? string.Empty;
             private set => SetProperty(ref _description, value);
         }
 
@@ -343,7 +342,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 await _preplannedMapArea.RetryLoadAsync().ConfigureAwait(false);
                 Title = _preplannedMapArea.PortalItem?.Title ?? Title;
-                Description = OfflineMapAreaUtilities.StripHtml(_preplannedMapArea.PortalItem?.Description) ?? Description;
+                Description = HtmlUtility.StripHtml(_preplannedMapArea.PortalItem?.Description) ?? Description;
                 ThumbnailData ??= await OfflineMapAreaUtilities.LoadImageBytesAsync(_preplannedMapArea.PortalItem?.Thumbnail).ConfigureAwait(false);
                 SizeInBytes = _preplannedMapArea.PackageItems.Sum(static item => item.Size);
                 SupportsRedownloading = true;
@@ -373,7 +372,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Map = mobileMapPackage.Maps.FirstOrDefault();
                 SizeInBytes = OfflineMapAreaUtilities.GetDirectorySize(_mmpkDirectoryPath);
                 Title = mobileMapPackage.Item?.Title ?? Title;
-                Description = OfflineMapAreaUtilities.StripHtml(mobileMapPackage.Item?.Description) ?? Description;
+                Description = HtmlUtility.StripHtml(mobileMapPackage.Item?.Description) ?? Description;
                 ThumbnailData ??= await OfflineMapAreaUtilities.LoadImageBytesAsync(mobileMapPackage.Item?.Thumbnail).ConfigureAwait(false);
                 Error = null;
                 Status = PreplannedMapModelStatus.Downloaded;
@@ -508,7 +507,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         portalItemId,
                         preplannedMapAreaId,
                         mobileMapPackage.Item?.Title ?? preplannedMapAreaId,
-                        OfflineMapAreaUtilities.StripHtml(mobileMapPackage.Item?.Description),
+                        HtmlUtility.StripHtml(mobileMapPackage.Item?.Description),
                         await OfflineMapAreaUtilities.LoadImageBytesAsync(mobileMapPackage.Item?.Thumbnail).ConfigureAwait(false),
                         false,
                         onRemoveDownload, openCommand, dispatcher);

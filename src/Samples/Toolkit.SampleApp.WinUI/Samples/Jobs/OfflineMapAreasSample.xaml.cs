@@ -4,6 +4,7 @@ using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Tasks.Offline;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,6 +36,36 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Jobs
         }
 
         public List<MapAreaViewModel> Maps { get; }
+
+        public ReadOnlyObservableCollection<OfflineMapInfo> OfflineMapInfos => Esri.ArcGISRuntime.Toolkit.OfflineManager.Shared.OfflineMapInfos;
+
+        private void OnlineMapSelection_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ComboBox)?.SelectedItem is MapAreaViewModel mapVM)
+            {
+                OfflineMapAreasView.OnlineMap = mapVM.Map;
+                OfflineMapSelector.SelectedItem = null;
+            }
+        }
+
+        private void OfflineMapSelection_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ComboBox)?.SelectedItem is OfflineMapInfo offlineMapInfo)
+            {
+                OfflineMapAreasView.OfflineMapInfo = offlineMapInfo;
+                MapSelector.SelectedItem = null;
+            }
+        }
+
+        public static ImageSource? BytesToImage(byte[]? imageData)
+        {
+            if (imageData is null || imageData.Length == 0)
+                return null;
+            var bmi = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
+            using var ms = new MemoryStream(imageData);
+            bmi.SetSource(ms.AsRandomAccessStream());
+            return bmi;
+        }
     }
     public class MapAreaViewModel
     {
