@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WINUI
     [WinRT.GeneratedBindableCustomProperty]
 #endif
-    internal sealed class OfflineMapViewModel : OfflineBindableObject
+    internal sealed partial class OfflineMapViewModel : OfflineBindableObject
     {
         private readonly ObservableCollection<PreplannedMapModel> _preplannedMapModels = new ObservableCollection<PreplannedMapModel>();
         private readonly ObservableCollection<OnDemandMapModel> _onDemandMapModels = new ObservableCollection<OnDemandMapModel>();
@@ -54,7 +54,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isLoadingModels;
         private bool _mapIsOfflineDisabled;
         private Exception? _preplannedMapModelsError;
-        private Func<Map> _setSelectedMapAction;
         private System.Windows.Input.ICommand _openMapCommand;
 
         public OfflineMapViewModel(Map onlineMap, Action<Action> dispatcher, System.Windows.Input.ICommand openMapCommand) : base(dispatcher)

@@ -132,44 +132,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _goOnlineCommand = new DelegateCommand((o) => SelectedMap = OnlineMap, () => SelectedMap != OnlineMap && OnlineMap != null);
         }
 
-        /// <inheritdoc/>
-#if WINDOWS_XAML || MAUI
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
-#endif
-        {
-
-#if WINDOWS_XAML || WPF
-            if(GetTemplateChild("RefreshMapAreasButton") is ButtonBase refreshAreasButton)
-            {
-                refreshAreasButton.Click += (s,e) => _vm?.LoadModelsAsync();
-            }
-            if (GetTemplateChild("NoInternetRefreshButton") is ButtonBase refreshButton)
-            {
-                refreshButton.Click += (s, e) => _vm?.LoadModelsAsync();
-            }
-            if (GetTemplateChild("AddMapAreaButton") is ButtonBase addMapAreaButton)
-            {
-                addMapAreaButton.Click += (s, e) => InitAddOnDemandArea();
-            }
-            if (GetTemplateChild("AcceptAddOnDemandAreaButton") is ButtonBase acceptMapAreaButton)
-            {
-                acceptMapAreaButton.Click += (s, e) => AddOnDemandArea();
-            }
-            if (GetTemplateChild("CancelAddOnDemandAreaButton") is ButtonBase cancelMapAreaButton)
-            {
-                cancelMapAreaButton.Click += (s, e) => CloseAddOnDemandArea();
-            }
-
-#elif MAUI
-            base.OnApplyTemplate();
-            OnApplyTemplateMaui();
-#else
-            base.OnApplyTemplate();
-#endif
-        }
-
         private void CloseAddOnDemandArea()
         {
             TemplateSettings.SetIsAddOnDemandMode(false);
@@ -408,6 +370,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if MAUI
         private Map? _selectedMap;
 
+        /// <summary>
+        /// Gets the currently selected map. This will be set to the map associated with a map area item when a map area is selected from the list in the view. This can be used to display the selected map in a MapView or to take other actions based on the selected map.
+        /// </summary>
+        /// <remarks>
+        /// By default the <see cref="OnlineMap"/> will be the selected map, and the MapView's Map property can be bound to this property. The property will then update when an offline map area is selected.
+        /// To go back to the online map, you can create a button that binds its Command property to the <see cref="GoOnlineCommand"/> which will set the selected map back to the online map.
+        /// </remarks>
         public Map? SelectedMap
         {
             get => _selectedMap;
@@ -421,6 +390,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 #elif WINDOWS_XAML
+        /// <summary>
+        /// Gets the currently selected map. This will be set to the map associated with a map area item when a map area is selected from the list in the view. This can be used to display the selected map in a MapView or to take other actions based on the selected map.
+        /// </summary>
+        /// <remarks>
+        /// By default the <see cref="OnlineMap"/> will be the selected map, and the MapView's Map property can be bound to this property. The property will then update when an offline map area is selected.
+        /// To go back to the online map, you can create a button that binds its Command property to the <see cref="GoOnlineCommand"/> which will set the selected map back to the online map.
+        /// </remarks>
         public Map? SelectedMap
         {
             get => GetValue(SelectedMapProperty) as Map;
@@ -435,6 +411,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
 
 #elif WPF
+        /// <summary>
+        /// Gets the currently selected map. This will be set to the map associated with a map area item when a map area is selected from the list in the view. This can be used to display the selected map in a MapView or to take other actions based on the selected map.
+        /// </summary>
+        /// <remarks>
+        /// By default the <see cref="OnlineMap"/> will be the selected map, and the MapView's Map property can be bound to this property. The property will then update when an offline map area is selected.
+        /// To go back to the online map, you can create a button that binds its Command property to the <see cref="GoOnlineCommand"/> which will set the selected map back to the online map.
+        /// </remarks>
         public Map? SelectedMap
         {
             get => GetValue(SelectedMapPropertyKey.DependencyProperty) as Map; 
@@ -490,39 +473,86 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
     }
 
-    // TODO: Should probably be internal for MAUI
-    public interface IOfflineMapAreaItem : INotifyPropertyChanged
+    /// <summary>
+    /// Represents an offline map area exposed by <see cref="OfflineMapAreasView.TemplateSettings"/>. This is the item type used for the list of map areas in the view and should contain all necessary information about a map area to be displayed in the list and interacted with (e.g. downloaded, opened, etc.).
+    /// </summary>
+#if MAUI
+    internal
+#else
+    public 
+#endif
+    interface IOfflineMapAreaItem : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Gets the Title of the offline area
+        /// </summary>
         string Title { get; }
 
+        /// <summary>
+        /// Gets the description of the offline area
+        /// </summary>
         string Description { get; }
 
+        /// <summary>
+        /// Gets the thumbnail image data for the offline area.
+        /// </summary>
         public byte[]? ThumbnailData { get; }
 
+        /// <summary>
+        /// The size of the downloaded area in bytes.
+        /// </summary>
         long SizeInBytes { get; }
 
+        /// <summary>
+        /// Gets the error if there was an issue with downloading or opening the map area.
+        /// </summary>
         Exception? Error { get; }
 
-        bool MapIsOfflineDisabled { get; }
-
+        /// <summary>
+        /// Gets a value indicating whether the map area can be downloaded.
+        /// </summary>
         bool AllowsDownload { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether the map area has been downloaded.
+        /// </summary>
         bool IsDownloaded { get; }
 
         bool SupportsRedownloading { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether the map area has been downloaded.
+        /// </summary>
         bool IsDownloading { get; }
 
+        /// <summary>
+        /// Gets the current download progress as a value between 0 (nothing downloaded) and 1 (fully downloaded).
+        /// </summary>
         double DownloadProgress { get; }
 
+        /// <summary>
+        /// Gets a command that will attempt to download the map area when executed.
+        /// </summary>
         System.Windows.Input.ICommand DownloadCommand { get; }
 
+        /// <summary>
+        /// Gets a command that will delete the downloaded map area from disk.
+        /// </summary>
         System.Windows.Input.ICommand RemoveDownloadCommand { get; }
 
+        /// <summary>
+        /// Gets a command that will stop a download in progress.
+        /// </summary>
         System.Windows.Input.ICommand StopDownloadCommand { get; }
 
+        /// <summary>
+        /// Gets a command that sets the <see cref="OfflineMapAreasView.SelectedMap"/> to this instance. The command parameter should be bound to the <see cref="Map"/> property.
+        /// </summary>
         System.Windows.Input.ICommand OpenCommand { get; }
 
+        /// <summary>
+        /// Gets the map associated with this offline map area item. This should be passed as the <see cref="ButtonBase.CommandParameter"/> to the <see cref="OpenCommand"/> command.
+        /// </summary>
         Map? Map { get; }
     }
 }

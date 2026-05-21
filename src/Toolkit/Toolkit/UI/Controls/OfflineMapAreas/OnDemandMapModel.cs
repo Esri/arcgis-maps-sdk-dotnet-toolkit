@@ -196,8 +196,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         static IValueConverter _converter = new FileSizeConverter();
         public string Description => SizeInBytes == 0 ? "" : $"Size: {_converter.Convert(SizeInBytes, typeof(string), null, null!)}";
 
-        public bool MapIsOfflineDisabled => false;
-
         public bool SupportsRedownloading => false;
         
         public ICommand DownloadCommand => _downloadCommand;

@@ -82,9 +82,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool IsLoadingModels => _vm?.IsLoadingModels ?? false;
 
         /// <summary>
-        /// Gets a value that indicates whether only offline models are available.
+        /// Gets a value that indicates whether only already offline models are currently available.
         /// </summary>
-        // public bool IsShowingOnlyOfflineModels => _vm?.IsShowingOnlyOfflineModels ?? false;
+        public bool IsShowingOnlyOfflineModels => _vm?.IsShowingOnlyOfflineModels ?? false;
 
         /// <summary>
         /// Gets a value that indicates whether offline map areas are disabled for the current map.
@@ -101,6 +101,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public bool IsOnDemandMode =>  _vm is not null && !_vm.IsLoadingModels && !MapIsOfflineDisabled && (_vm.DisplayMode == OfflineMapViewModel.Mode.OnDemand || _vm.DisplayMode == OfflineMapViewModel.Mode.Ambiguous);
 
+        /// <summary>
+        /// Gets a value indicating wheteher the Add On-Demand Map Area UI is currently active. This is used to toggle visibility of the Add On-Demand Map Area UI in the control template.
+        /// </summary>
         public bool IsAddOnDemandMode
         {
             get;

@@ -28,11 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private static readonly ControlTemplate DefaultControlTemplate;
         private static readonly ByteArrayToImageSourceConverter ImageSourceConverter = new();
 
-        /// <summary>
-        /// Template name of the <see cref="ItemsView"/> items layout view.
-        /// </summary>
-        public const string ItemsViewName = "MapAreasView";
-
+        private const string ItemsViewName = "MapAreasView";
         private const string RefreshMapAreasButtonName = "RefreshMapAreasButton";
         private const string NoInternetRefreshButtonName = "NoInternetRefreshButton";
         private const string AddMapAreaButtonName = "AddMapAreaButton";
@@ -41,12 +37,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private const string AddOnDemandAreaNameTextBoxName = "AddOnDemandAreaNameTextBox";
         private const string AcceptAddOnDemandAreaButtonName = "AcceptAddOnDemandAreaButton";
         private const string CancelAddOnDemandAreaButtonName = "CancelAddOnDemandAreaButton";
-
-        private Button? _refreshMapAreasButton;
-        private Button? _noInternetRefreshButton;
-        private Button? _addMapAreaButton;
-        private Button? _acceptAddOnDemandAreaButton;
-        private Button? _cancelAddOnDemandAreaButton;
 
         static OfflineMapAreasView()
         {
@@ -225,7 +215,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 ColumnDefinitions =
                 {
-                    new ColumnDefinition(68),
+                    new ColumnDefinition(84),
                     new ColumnDefinition(GridLength.Star),
                     new ColumnDefinition(GridLength.Auto),
                 },
@@ -235,7 +225,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     new RowDefinition(GridLength.Auto),
                     new RowDefinition(GridLength.Auto),
                 },
-                HeightRequest = 64,
+                HeightRequest = 79,
             };
 
             Border thumbnailBorder = new Border()
@@ -244,13 +234,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 StrokeThickness = 1,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(8) },
                 Margin = new Thickness(0, 0, 4, 0),
-                WidthRequest = 64,
-                HeightRequest = 64,
+                WidthRequest = 80,
+                HeightRequest = 80,
             };
             Image thumbnail = new Image()
             {
-                WidthRequest = 64,
-                HeightRequest = 64,
+                WidthRequest = 80,
+                HeightRequest = 80,
                 Aspect = Aspect.AspectFill,
             };
             thumbnail.SetBinding(Image.SourceProperty, static (IOfflineMapAreaItem item) => item.ThumbnailData, converter: ImageSourceConverter);
@@ -427,72 +417,37 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return button;
         }
 
-        private void OnApplyTemplateMaui()
+
+
+        /// <inheritdoc/>
+        protected override void OnApplyTemplate()
         {
-            if (_refreshMapAreasButton is not null)
+            base.OnApplyTemplate();
+            if (GetTemplateChild(RefreshMapAreasButtonName) is Button refreshMapAreasButton)
             {
-                _refreshMapAreasButton.Clicked -= RefreshMapAreasButton_Clicked;
+                refreshMapAreasButton.Clicked += (s,e) =>  _ = _vm?.LoadModelsAsync();
             }
 
-            if (_noInternetRefreshButton is not null)
+            if (GetTemplateChild(NoInternetRefreshButtonName) is Button noInternetRefreshButton)
             {
-                _noInternetRefreshButton.Clicked -= RefreshMapAreasButton_Clicked;
+                noInternetRefreshButton.Clicked += (s,e) => _vm?.LoadModelsAsync();
             }
 
-            if (_addMapAreaButton is not null)
+            if (GetTemplateChild(AddMapAreaButtonName) is Button addMapAreaButton)
             {
-                _addMapAreaButton.Clicked -= AddMapAreaButton_Clicked;
+                addMapAreaButton.Clicked +=  (s,e) => InitAddOnDemandArea();
             }
 
-            if (_acceptAddOnDemandAreaButton is not null)
+            if (GetTemplateChild(AcceptAddOnDemandAreaButtonName) is Button acceptAddOnDemandAreaButton)
             {
-                _acceptAddOnDemandAreaButton.Clicked -= AcceptAddOnDemandAreaButton_Clicked;
+                acceptAddOnDemandAreaButton.Clicked += (s, e) => AddOnDemandArea();
             }
 
-            if (_cancelAddOnDemandAreaButton is not null)
+            if (GetTemplateChild(CancelAddOnDemandAreaButtonName) is Button cancelAddOnDemandAreaButton)
             {
-                _cancelAddOnDemandAreaButton.Clicked -= CancelAddOnDemandAreaButton_Clicked;
-            }
-
-            _refreshMapAreasButton = GetTemplateChild(RefreshMapAreasButtonName) as Button;
-            _noInternetRefreshButton = GetTemplateChild(NoInternetRefreshButtonName) as Button;
-            _addMapAreaButton = GetTemplateChild(AddMapAreaButtonName) as Button;
-            _acceptAddOnDemandAreaButton = GetTemplateChild(AcceptAddOnDemandAreaButtonName) as Button;
-            _cancelAddOnDemandAreaButton = GetTemplateChild(CancelAddOnDemandAreaButtonName) as Button;
-
-            if (_refreshMapAreasButton is not null)
-            {
-                _refreshMapAreasButton.Clicked += RefreshMapAreasButton_Clicked;
-            }
-
-            if (_noInternetRefreshButton is not null)
-            {
-                _noInternetRefreshButton.Clicked += RefreshMapAreasButton_Clicked;
-            }
-
-            if (_addMapAreaButton is not null)
-            {
-                _addMapAreaButton.Clicked += AddMapAreaButton_Clicked;
-            }
-
-            if (_acceptAddOnDemandAreaButton is not null)
-            {
-                _acceptAddOnDemandAreaButton.Clicked += AcceptAddOnDemandAreaButton_Clicked;
-            }
-
-            if (_cancelAddOnDemandAreaButton is not null)
-            {
-                _cancelAddOnDemandAreaButton.Clicked += CancelAddOnDemandAreaButton_Clicked;
+                cancelAddOnDemandAreaButton.Clicked += (s, e) => CloseAddOnDemandArea();
             }
         }
-
-        private void RefreshMapAreasButton_Clicked(object? sender, EventArgs e) => _ = _vm?.LoadModelsAsync();
-
-        private void AddMapAreaButton_Clicked(object? sender, EventArgs e) => InitAddOnDemandArea();
-
-        private void AcceptAddOnDemandAreaButton_Clicked(object? sender, EventArgs e) => AddOnDemandArea();
-
-        private void CancelAddOnDemandAreaButton_Clicked(object? sender, EventArgs e) => CloseAddOnDemandArea();
 
         private partial class StretchStackPanel : Layout
         {

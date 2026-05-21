@@ -134,6 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _mmpkDirectoryPath = OfflineMapAreaStorage.GetPreplannedAreaDirectory(portalItemId, preplannedMapAreaId);
             _downloadCommand = new DelegateCommand((o) => _ = DownloadPreplannedMapAreaAsync(), () => _preplannedMapArea != null && AllowsDownload && Status != PreplannedMapModelStatus.Downloading);
             _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded);
+            _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync()); 
             _openMapCommand = openMapCommand;
         }
 
@@ -323,8 +324,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             (Status == PreplannedMapModelStatus.NotLoaded ||
              Status == PreplannedMapModelStatus.LoadFailure ||
              Status == PreplannedMapModelStatus.PackageFailure);
-
-        public bool MapIsOfflineDisabled => false;
 
         public bool IsDownloading => Status == PreplannedMapModelStatus.Downloading;
 

@@ -21,13 +21,47 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+#if WPF
+using System.Windows.Controls.Primitives;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    [TemplatePart(Name = ItemsViewName, Type = typeof(ItemsControl))]
     public partial class OfflineMapAreasView : Control
     {
-        private const string ItemsViewName = "MapAreasView";
+        /// <inheritdoc/>
+#if WINDOWS_XAML
+        protected override void OnApplyTemplate()
+#else
+        public override void OnApplyTemplate()
+#endif
+        {
+            base.OnApplyTemplate();
+            if (GetTemplateChild("RefreshMapAreasButton") is ButtonBase refreshMapAreasButton)
+            {
+                refreshMapAreasButton.Click += (s, e) => _vm?.LoadModelsAsync();
+            }
+
+            if (GetTemplateChild("NoInternetRefreshButton") is ButtonBase noInternetRefreshButton)
+            {
+                noInternetRefreshButton.Click += (s, e) => _vm?.LoadModelsAsync();
+            }
+
+            if (GetTemplateChild("AddMapAreaButton") is ButtonBase addMapAreaButton)
+            {
+                addMapAreaButton.Click += (s, e) => InitAddOnDemandArea();
+            }
+
+            if (GetTemplateChild("AcceptAddOnDemandAreaButton") is ButtonBase acceptAddOnDemandAreaButton)
+            {
+                acceptAddOnDemandAreaButton.Click += (s, e) => AddOnDemandArea();
+            }
+
+            if (GetTemplateChild("CancelAddOnDemandAreaButton") is ButtonBase cancelAddOnDemandAreaButton)
+            {
+                cancelAddOnDemandAreaButton.Click += (s, e) => CloseAddOnDemandArea();
+            }
+        }
 
         // Template settings class.
         // See https://learn.microsoft.com/en-us/windows/apps/develop/platform/xaml/template-settings-classes for more information about template settings and why we use them.
