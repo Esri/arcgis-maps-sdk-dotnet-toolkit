@@ -157,7 +157,7 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{internal:LocalizedString Key=OfflineMapAreasSelectArea}" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource BodyStrongTextBlockStyle}" />
                                 <Grid Grid.Row="1" >
-                                    <esri:MapView x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" x:Load="False" ViewInsets="40" />
+                                    <esri:MapView x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" x:Load="False" ViewInsets="20" MinHeight="100" />
                                     <Border BorderBrush="Black" BorderThickness="40" IsHitTestVisible="False" Opacity=".5" />
                                 </Grid>
                                 <ComboBox Header="{internal:LocalizedString Key=OfflineMapAreasScaleLabel}" Grid.Row="2" x:Name="AddOnDemandAreaScaleSelector" HorizontalAlignment="Stretch" />

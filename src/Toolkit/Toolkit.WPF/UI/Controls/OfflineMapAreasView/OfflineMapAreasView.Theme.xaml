@@ -405,9 +405,9 @@
                             </Grid.RowDefinitions>
                             <TextBlock Text="{internal:LocalizedString Key=OfflineMapAreasSelectArea}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
                             <Grid Grid.Row="1" Margin="0,8">
-                                <esri:MapView xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013" ViewInsets="40"
+                                <esri:MapView xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013" ViewInsets="20" MinHeight="100"
                                     x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" />
-                                <Border BorderBrush="Black" BorderThickness="40" IsHitTestVisible="False" Opacity=".5" />
+                                <Border BorderBrush="Black" BorderThickness="20" IsHitTestVisible="False" Opacity=".5" />
                             </Grid>
                             <TextBlock Grid.Row="2" Text="{internal:LocalizedString Key=OfflineMapAreasScaleLabel}" />
                             <ComboBox Grid.Row="3" x:Name="AddOnDemandAreaScaleSelector" DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch" />
