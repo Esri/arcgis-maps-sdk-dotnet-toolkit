@@ -40,14 +40,14 @@ namespace Toolkit.Tests
         public async Task PortalItemMustHaveID()
         {
             var map = new Map(new Uri(naperville_preplanned));
-            Assert.ThrowsExactly<ArgumentException>(() => new OfflineMapViewModel(map));
+            Assert.ThrowsExactly<ArgumentException>(() => new OfflineMapViewModel(map, a => a(), null!));
         }
 
         [TestMethod]
         public async Task CreateVMFromUnloadedMapWithItem()
         {
             var item = await Esri.ArcGISRuntime.Portal.PortalItem.CreateAsync(new Uri(naperville_preplanned));
-            var vm = new OfflineMapViewModel(new Map(item));
+            var vm = new OfflineMapViewModel(new Map(item), a => a(), null!);
             CloseVM(vm);
         }
 
@@ -56,7 +56,7 @@ namespace Toolkit.Tests
         {
             var map = new Map(new Uri(naperville_preplanned));
             await map.LoadAsync();
-            var vm = new OfflineMapViewModel(map);
+            var vm = new OfflineMapViewModel(map, a => a(), null!);
             try
             {
                 Assert.AreEqual(map, vm.OnlineMap);
@@ -81,7 +81,7 @@ namespace Toolkit.Tests
         {
             var map = new Map(new Uri(naperville_ondemand));
             await map.LoadAsync();
-            var vm = new OfflineMapViewModel(map);
+            var vm = new OfflineMapViewModel(map, a => a(), null!);
             try
             {
                 Assert.AreEqual(map, vm.OnlineMap);
@@ -103,7 +103,7 @@ namespace Toolkit.Tests
         {
             var map = new Map(new Uri(usBreweries));
             await map.LoadAsync();
-            var vm = new OfflineMapViewModel(map);
+            var vm = new OfflineMapViewModel(map, a => a(), null!);
             try
             {
                 Assert.AreEqual(map, vm.OnlineMap);
@@ -125,7 +125,7 @@ namespace Toolkit.Tests
         {
             var map = new Map(new Uri(naperville_preplanned));
             await map.LoadAsync();
-            var vm = new OfflineMapViewModel(map);
+            var vm = new OfflineMapViewModel(map, (a) => a(), null!);
             try
             {
                 await vm.LoadModelsAsync();
@@ -176,7 +176,7 @@ namespace Toolkit.Tests
             TestInitializer.AssertAPIKey();
             var map = new Map(new Uri(naperville_ondemand));
             await map.LoadAsync();
-            var vm = new OfflineMapViewModel(map);
+            var vm = new OfflineMapViewModel(map, a => a(), null!);
             await vm.AddOnDemandMapAreaAsync(
                 new OnDemandMapAreaConfiguration(
                     "Redlands",
@@ -208,7 +208,7 @@ namespace Toolkit.Tests
         {
             var map = new Map(new Uri(usBreweries));
             await map.LoadAsync();
-            var vm = new OfflineMapViewModel(map);
+            var vm = new OfflineMapViewModel(map, a => a(), null!);
             try
             {
                 await vm.AddOnDemandMapAreaAsync(
