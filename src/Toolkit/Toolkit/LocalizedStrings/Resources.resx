@@ -373,6 +373,22 @@
     <value>Search</value>
     <comment>The tooltip text to display for the search button.</comment>
   </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>Select search source</value>
+    <comment>UIA AutomationProperties.Name for the button to display search sources, used by screen readers to identify the control</comment>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>Search sources</value>
+    <comment>UIA AutomationProperties.Name for the list view control displaying search sources, used by screen readers to identify the control</comment>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>Search suggestions</value>
+    <comment>UIA AutomationProperties.Name for the list view control displaying search suggestions, used by screen readers to identify the control</comment>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>Search results</value>
+    <comment>UIA AutomationProperties.Name for the list view control displaying search results, used by screen readers to identify the control</comment>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Add starting point</value>
     <comment>The text on button for adding starting points.</comment>
