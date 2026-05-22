@@ -24,7 +24,12 @@ jobs:
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v1.0.2
-       
+      
+    - name: "Update windows SDK"
+      uses: fbactions/setup-winsdk@v1
+      with:
+        winsdk-build-version: 19041
+        
     - name: Install MAUI Workload
       run: |
         dotnet workload install maui@10.0.100
