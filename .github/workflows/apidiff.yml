@@ -22,7 +22,7 @@ jobs:
         run: dotnet workload install maui
 
       - name: Install generator
-        run: dotnet tool install --global dotMorten.OmdGenerator --version=1.8.2
+        run: dotnet tool install --global dotMorten.OmdGenerator --version=1.8.3-beta
 
       - name: Generate API diff
         shell: bash
