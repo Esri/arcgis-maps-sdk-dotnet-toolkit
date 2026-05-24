@@ -17,6 +17,9 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
+          
+      - name: Install MAUI workload
+        run: dotnet workload install maui
 
       - name: Install generator
         run: dotnet tool install --global dotMorten.OmdGenerator --version=1.8.2
