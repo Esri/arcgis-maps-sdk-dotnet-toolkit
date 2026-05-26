@@ -11,7 +11,15 @@ public static partial class AppiumSetup
     {
         var settings = GetBuildSettings();
 
-        if (settings["usePreinstalledApp"] == "true")
+        if (!String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TKUITEST_APP")))
+        {
+            // If TKUITEST_APP is set it is assumed to be Release apk, and will be fully uninstalled an reinstalled each run
+            settings["usePreinstalledApp"] = "false";
+            settings["noReset"] = "false";
+            settings["fullReset"] = "true";
+            driver = MakeAndroidDriver(false, Environment.GetEnvironmentVariable("TKUITEST_APP")!, settings);
+        }
+        else if (settings["usePreinstalledApp"] == "true")
         {
             var appPackage = settings["appPackage"] ?? MauiAppPackage;
             driver = MakeAndroidDriver(true, appPackage, settings);
