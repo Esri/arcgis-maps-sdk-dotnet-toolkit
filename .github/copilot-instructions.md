@@ -48,6 +48,11 @@ dotnet build src\Samples\Toolkit.SampleApp.Maui\Toolkit.SampleApp.Maui.csproj -c
 - Platform conditionals are already established and should be reused instead of creating new ad hoc switches: `WPF`, `WINDOWS_XAML`, `MAUI`, `__IOS__`, `__ANDROID__`, and `MACCATALYST`.
 - The sample apps share code across platforms where convenient (for example, some sample view models are linked from the WPF sample into MAUI and WinUI). Check linked includes before duplicating sample code.
 - Do not suppress build warnings, but address them instead.
+- To ensure AoT compatiblity, when creating bindings in WinUI you must use x:Bind or TemplateBindings, and in .NET MAUI you must use coded-bindings, so that stringified path-based bindings that rely on reflection are avoided.
+- Strings displayed in the UI must be localized and added to src\Toolkit\Toolkit\LocalizedStrings\Resources.resx. In XAML files this can be referenced with the markup extension `Esri.ArcGISRuntime.Toolkit.Internal.LocalizedString`
+  and setting the Key to the resource key. For example `{internal:LocalizedString Key=RESOURCE_KEY_NAME}`. From code resource strings can be referenced via `Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString(keyname)`. Only
+  the default English resource file should be modified.
+
 
 ## Tests
 Unit Tests for the toolkit lives in the Test folder.
