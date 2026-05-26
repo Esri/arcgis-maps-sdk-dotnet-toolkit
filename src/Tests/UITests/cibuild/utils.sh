@@ -18,6 +18,7 @@ function install_dotnet {
     bash "${workspace}/dotnet-install.sh" --version "${dotnet_version}" --install-dir "${dotnet_install_dir}"
   fi
 
+  export DOTNET_ROOT="${dotnet_install_dir}"
   export DOTNET_EXE="${dotnet_install_dir}"/dotnet
 }
 
