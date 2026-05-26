@@ -81,7 +81,7 @@ internal class Program
 
     private static void SetNugetSource(string workspace, string dotnetExe, string nugetRepo)
     {
-        Console.WriteLine("Configuring nuget...");
+        Console.WriteLine("\nConfiguring nuget...");
 
         RunBinary(dotnetExe, $"new nugetconfig --force -o \"{workspace}\"");
 
@@ -110,7 +110,7 @@ internal class Program
 
     private static (string NodeExe, string NpmExe) InstallNode(string workspace, string nodeVersion)
     {
-        Console.WriteLine("Starting Node.js install...");
+        Console.WriteLine("\nStarting Node.js install...");
 
         var nodeDir = Path.Combine(workspace, $"node-v{nodeVersion}-darwin-arm64/bin");
         var nodeExe = Path.Combine(nodeDir, "node");
@@ -156,7 +156,7 @@ internal class Program
     }
 
     private static void RunBinary(string binary, string arguments) {
-        Console.WriteLine($"Running {binary} {arguments}");
+        Console.WriteLine($"\nRunning {binary} {arguments}");
 
         var startInfo = new ProcessStartInfo
         {
