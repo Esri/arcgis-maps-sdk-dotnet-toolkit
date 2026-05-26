@@ -103,9 +103,9 @@ The [`UITests/Directory.Build.props`](./Directory.Build.props) file includes sev
 **Environment Variables**
 Configuration can also be done at runtime by setting certain environment variables. The current list of environment variables is as follows:
 
-| Variable | Description | Affected Tests |
-|---|---|---|
-| TKUITEST_APP | Defines the path to or package identifier of the target `.App` program. | WPF, WinUI, MauiWinUI |
+| Variable | Description | Affected Tests | Usage Notes |
+|---|---|---|---|
+| TKUITEST_APP | Defines the path to or package identifier of the target `.App` program. | WPF, WinUI, MauiWinUI, Android | On Android:<br>- The file specified must be a `.apk` file built in `Release` mode.<br>- The app will be fully uninstalled then reinstalled each run. |
 
 ### General Notes
 Running the MacCatalyst test or any of the Windows tests will take over your machine. Moving the mouse is still possible but may interfere with the tests. Tests will abort if the test app gets closed (pressing the close button or `Alt+F4` are both options).

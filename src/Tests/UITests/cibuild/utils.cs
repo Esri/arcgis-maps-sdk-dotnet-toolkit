@@ -24,6 +24,12 @@ internal class Program
         // Install maui
         RunBinary(dotnetExe, "workload install maui-android");
 
+        // Configure nuget repo if set
+        var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
+        if (!String.IsNullOrWhiteSpace(nugetRepo)) {
+            SetNugetSource(workspace, dotnetExe, nugetRepo);
+        }
+
         // Install node
         var nodeWorkspace = Path.Join(workspace, ".node");
         var nodeVersion = ReadYamlValue(yamlConfig, "node-version");
@@ -46,35 +52,82 @@ internal class Program
             Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
         }
 
-        var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
-        if (!String.IsNullOrWhiteSpace(nugetRepo)) {
-            SetNugetSource(workspace, dotnetExe, nugetRepo);
-        }
+        // Run appium in background
+        var appiumStandardOutput = new List<string>();
+        var appiumStandardError = new List<string>();
+        var appiumProcess = RunBinaryBackground(
+            nodeExe,
+            appiumEntry,
+            appiumStandardOutput,
+            appiumStandardError
+        );
 
-        var buildParamsCommon = new List<string>() {
-            "-c Release",
-            "-p:ArtifactsPivots=TestBuild",
-            "-p:UseArtifactsOutput=true"
+        // Configure appium cleanup
+        Action cleanup = () => {
+            appiumProcess.Kill();
+            RunBinary(dotnetExe, "build-server shutdown");
+
+            if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
+                Console.WriteLine("\nAppium standard output logs:");
+                foreach (var line in appiumStandardOutput) {
+                    Console.WriteLine(line);
+                }
+            }
+
+            if (appiumStandardError.Count > 0) {
+                Console.WriteLine("\nAppium standard error logs:");
+                foreach (var line in appiumStandardError) {
+                    Console.WriteLine(line);
+                }
+            }
         };
+        Console.CancelKeyPress += (sender, args) => cleanup();
 
-        var androidFramework = "net10.0-android";
-        var buildParamsApp = new List<string>() {
-            $"-f {androidFramework}",
-            $"-p:TargetFrameworks={androidFramework}",
-            "-r android-arm64"
-        };
-        var releaseVersion = Environment.GetEnvironmentVariable("RELEASE_VERSION");
-        if (!String.IsNullOrWhiteSpace(releaseVersion)) {
-            buildParamsApp.Add($"-p:UseNugetPackage={releaseVersion}");
+        try {
+            // Configure build parameters
+            var buildParamsCommon = new List<string>() {
+                "-c Release",
+                "-p:ArtifactsPivots=TestBuild",
+                "-p:UseArtifactsOutput=true"
+            };
+
+            var androidFramework = "net10.0-android";
+            var buildParamsApp = new List<string>() {
+                $"-f {androidFramework}",
+                $"-p:TargetFrameworks={androidFramework}",
+                "-r android-arm64"
+            };
+            var releaseVersion = Environment.GetEnvironmentVariable("RELEASE_VERSION");
+            if (!String.IsNullOrWhiteSpace(releaseVersion)) {
+                buildParamsApp.Add($"-p:UseNugetPackage={releaseVersion}");
+            }
+
+            // Build app and runner
+            var appPath = Path.Join(toolkitSrc, "Tests", "UITests", "Toolkit.UITests.Maui.App", "Toolkit.UITests.Maui.App.csproj");
+            RunBinary(dotnetExe, $"build {appPath} {String.Join(" ", buildParamsCommon)} {String.Join(" ", buildParamsApp)}");
+
+            var runnerPath = Path.Join(toolkitSrc, "Tests", "UITests", "Toolkit.UITests.MauiAndroid", "Toolkit.UITests.MauiAndroid.csproj");
+            RunBinary(dotnetExe, $"build {runnerPath} {String.Join(" ", buildParamsCommon)}");
+
+            // Run tests
+            var testResultsDir = Path.Join(workspace, "TestResults");
+            var testParams = new List<string>() {
+                "--report-trx",
+                $"--results-directory {testResultsDir}"
+            };
+            var trxFilename = Environment.GetEnvironmentVariable("TRX_FILENAME");
+            if (!String.IsNullOrWhiteSpace(trxFilename)) {
+                testParams.Add($"--report-trx-filename {trxFilename}");
+            }
+
+            var runnerExe = Path.Join(toolkitSrc, "Tests", "UITests", "artifacts", "bin", "Toolkit.UITests.MauiAndroid", "TestBuild", "Toolkit.UITests.MauiAndroid");
+            var appExe = Path.Join(toolkitSrc, "Tests", "UITests", "artifacts", "bin", "Toolkit.UITests.Maui.App", "TestBuild", "com.esri.toolkit.uitests.maui-Signed.apk");
+            Environment.SetEnvironmentVariable("TKUITEST_APP", appExe);
+            RunBinary(runnerExe, $"{String.Join(" ", testParams)}");
         }
-
-        var appPath = Path.Join(toolkitSrc, "Tests", "UITests", "Toolkit.UITests.Maui.App", "Toolkit.UITests.Maui.App.csproj");
-        RunBinary(dotnetExe, $"build {appPath} {String.Join(" ", buildParamsCommon)} {String.Join(" ", buildParamsApp)}");
-
-        var runnerPath = Path.Join(toolkitSrc, "Tests", "UITests", "Toolkit.UITests.MauiAndroid", "Toolkit.UITests.MauiAndroid.csproj");
-        RunBinary(dotnetExe, $"build {runnerPath} {String.Join(" ", buildParamsCommon)}");
-
-
+        finally {
+            cleanup();
+        }
         
         return 0;
     }
@@ -153,6 +206,37 @@ internal class Program
         Environment.SetEnvironmentVariable("PATH", $"{nodeDir}{Path.PathSeparator}{currentPath}");
 
         return (nodeExe, npmExe);
+    }
+
+    private static Process RunBinaryBackground(string binary, string arguments, List<string> standardOutput, List<string> standardError) {
+        Console.WriteLine($"\nRunning {binary} {arguments}");
+
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = binary,
+            Arguments = arguments,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
+        };
+
+        var process = new Process();
+        process.OutputDataReceived += (sender, e) => {
+            if (!string.IsNullOrEmpty(e.Data)) {
+                standardOutput.Add(e.Data);
+            }
+        };
+        process.ErrorDataReceived += (sender, e) => {
+            if (!string.IsNullOrEmpty(e.Data)) {
+                standardError.Add(e.Data);
+            }
+        };
+        process.StartInfo = startInfo;
+        process.Start();
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
+
+        return process;
     }
 
     private static void RunBinary(string binary, string arguments) {
