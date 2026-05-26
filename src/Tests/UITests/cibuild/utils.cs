@@ -27,7 +27,7 @@ internal class Program
         // Configure nuget repo if set
         var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
         if (!String.IsNullOrWhiteSpace(nugetRepo)) {
-            SetNugetSource(workspace, dotnetExe, nugetRepo);
+            SetNugetSource(toolkitSrc, dotnetExe, nugetRepo);
         }
 
         // Install node
