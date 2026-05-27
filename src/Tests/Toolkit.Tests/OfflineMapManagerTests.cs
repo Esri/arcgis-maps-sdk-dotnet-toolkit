@@ -230,7 +230,7 @@ namespace Toolkit.Tests
             System.ComponentModel.PropertyChangedEventHandler? handler = null;
             handler = (s, e) =>
             {
-                if (e.PropertyName == nameof(PreplannedMapModel.Status) || model.Status == PreplannedMapModelStatus.Downloaded)
+                if (e.PropertyName == nameof(PreplannedMapModel.Status) && model.Status == PreplannedMapModelStatus.Downloaded)
                 {
                     downloadCompletionSource.TrySetResult();
                 }
