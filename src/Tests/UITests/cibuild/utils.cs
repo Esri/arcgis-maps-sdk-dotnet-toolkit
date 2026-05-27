@@ -10,9 +10,11 @@ internal class Program
     static int Main(string[] args)
     {
         // Required inputs
-        if (args.Length < 1 || !_testPlatforms.Contains(args[0].Trim()))
-            throw new ArgumentException($"A test platform must be passed as the first and only command line argument. Supported platforms are {_testPlatforms.ToString()}.");
+        if (args.Length < 1)
+            throw new ArgumentException($"A test platform must be passed as the first and only command line argument. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
         var testPlatform = args[0].Trim();
+        if (!_testPlatforms.Contains(testPlatform))
+            throw new ArgumentException($"Test platform '{testPlatform}' not recognized. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
 
         var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
         var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_EXE");
