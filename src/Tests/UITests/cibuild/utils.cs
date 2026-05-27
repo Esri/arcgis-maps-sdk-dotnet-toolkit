@@ -219,11 +219,11 @@ internal class Program
                 settings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
 
                 var androidFramework = "net10.0-android";
-                settings.BuildParamsApp = new List<string>() {
+                settings.BuildParamsApp.AddRange([
                     $"-f {androidFramework}",
                     $"-p:TargetFrameworks={androidFramework}",
                     "-r android-arm64"
-                };
+                ]);
 
                 settings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
 
@@ -233,11 +233,11 @@ internal class Program
         }
 
         // Universal build parameters for the ci builds
-        settings.BuildParamsCommon.AddRange(new List<string>() {
+        settings.BuildParamsCommon.AddRange([
             "-c Release",
             "-p:ArtifactsPivots=TestBuild",
             "-p:UseArtifactsOutput=true"
-        });
+        ]);
 
         // Release version config
         var releaseVersion = Environment.GetEnvironmentVariable("RELEASE_VERSION");
@@ -247,10 +247,10 @@ internal class Program
 
         // Configure the trx output for ci jobs
         var testResultsDir = Path.Join(workspace, "TestResults");
-        settings.TestParams = new List<string>() {
+        settings.TestParams.AddRange([
             "--report-trx",
             $"--results-directory {testResultsDir}"
-        };
+        ]);
         var trxFilename = Environment.GetEnvironmentVariable("TRX_FILENAME");
         if (!String.IsNullOrWhiteSpace(trxFilename)) {
             settings.TestParams.Add($"--report-trx-filename {trxFilename}");
