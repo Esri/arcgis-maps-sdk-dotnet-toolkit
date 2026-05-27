@@ -14,4 +14,4 @@ dotnet_version=$(read_yaml_var "${yaml_config}" "dotnet-version")
 install_dotnet "${WORKSPACE}" "${dotnet_version}" "${DOTNET_CACHE_FOLDER}"
 
 export YAML_CONFIG="${yaml_config}"
-"${DOTNET_EXE}" run "${script_dir}/utils.cs"
+"${DOTNET_EXE}" run "${script_dir}/utils.cs" -- MauiAndroid
