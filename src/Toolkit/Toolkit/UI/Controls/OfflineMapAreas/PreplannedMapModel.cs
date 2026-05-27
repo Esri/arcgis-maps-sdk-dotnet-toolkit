@@ -97,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Action<Action> dispatcher) : this(offlineMapTaskFactory, portalItemId, preplannedMapAreaId,
                 preplannedMapArea.PortalItem?.Title ?? preplannedMapAreaId, preplannedMapArea.PortalItem?.Description, true, onRemoveDownload, openMapCommand,  dispatcher)
         {
-            _preplannedMapArea = preplannedMapArea;;
+            _preplannedMapArea = preplannedMapArea;
         }
 
         internal PreplannedMapModel(
@@ -271,17 +271,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 parameters.UpdateMode = OfflineManager.Shared.Configuration.PreplannedUpdateMode;
                 parameters.ContinueOnErrors = false;
 
-                if (Directory.Exists(_mmpkDirectoryPath))
-                {
-                    try
-                    {
-                        Directory.Delete(_mmpkDirectoryPath, true);
-                    }
-                    catch
-                    {
-                        Directory.Move(_mmpkDirectoryPath, _mmpkDirectoryPath + ".old");
-                    }
-                }
+                OfflineMapAreaUtilities.TryDeleteDirectory(_mmpkDirectoryPath);
                 Directory.CreateDirectory(_mmpkDirectoryPath);
 
                 var job = offlineMapTask.DownloadPreplannedOfflineMap(parameters, _mmpkDirectoryPath);

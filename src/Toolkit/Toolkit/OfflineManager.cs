@@ -20,12 +20,14 @@ using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.Tasks;
 using Esri.ArcGISRuntime.Tasks.Offline;
+using Esri.ArcGISRuntime.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 #if __IOS__
 using System.Runtime.InteropServices;
@@ -37,6 +39,11 @@ using ObjCRuntime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+#if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit
 {
@@ -64,11 +71,10 @@ namespace Esri.ArcGISRuntime.Toolkit
     /// </list>
     /// </para>
     /// <para>
-    /// The component is useful both for building custom UI with the provided APIs,
-    /// and for supporting workflows that require retrieving offline map areas
-    /// information from the device. By using the `OfflineManager`, you can create
-    /// an `OfflineMapAreasView` using the ``OfflineMapAreasView/init(offlineMapInfo:selection:)``
-    /// initializer.
+    /// The component is useful both for building custom UI with the provided APIs, and for supporting workflows that 
+    /// require retrieving offline map areas information from the device. By using the <see cref="OfflineManager"/>, you can create
+    /// an <see cref="OfflineMapAreasView"/> and setting the <see cref="OfflineMapAreasView.OfflineMapInfo"/> property.
+    /// You can get the list of previously stored map infos from the <see cref="OfflineManager.OfflineMapInfos"/> collection.
     /// </para>
     /// <para>
     /// <b>Behavior</b><br/>
@@ -113,7 +119,16 @@ namespace Esri.ArcGISRuntime.Toolkit
             InitManager();
         }
         private void InitManager()
-        { 
+        {
+            // Clean up orphaned directories from previous runs that may not have been cleaned up properly
+            foreach (var oldDir in Directory.GetDirectories(GetOfflineManagerDirectory(), "*.delete", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    Directory.Delete(oldDir, recursive: true);
+                }
+                catch { }
+            }
             ApplyConfiguration(_configuration);
             LoadOfflineMapInfos();
 
@@ -303,10 +318,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
 
             var portalItemAreasDirectory = Path.Combine(GetOfflineManagerDirectory(), MapAreasFolderName, offlineMapInfo.Id);
-            if (Directory.Exists(portalItemAreasDirectory))
-            {
-                Directory.Delete(portalItemAreasDirectory, recursive: true);
-            }
+            OfflineMapAreaUtilities.TryDeleteDirectory(portalItemAreasDirectory);
 
             RunOnCapturedContext(() =>
             {
@@ -601,5 +613,72 @@ namespace Esri.ArcGISRuntime.Toolkit
         internal double Interval { get; private set; }
 
         internal bool IsDisabled => Interval <= 0;
+    }
+
+    /// <summary>
+    /// Set of helper utility classes for the Offline Map Areas related classes.
+    /// </summary>
+    internal static class OfflineMapAreaUtilities
+    {
+        public static long GetDirectorySize(string directory)
+        {
+            if (!Directory.Exists(directory))
+            {
+                return 0;
+            }
+
+            return Directory
+                .EnumerateFiles(directory, "*", SearchOption.AllDirectories)
+                .Select(file => new FileInfo(file).Length)
+                .Sum();
+        }
+
+        public static bool IsNetworkAvailable() => NetworkInterface.GetIsNetworkAvailable();
+
+        public static bool IsCancellation(IJob job, Exception ex)
+            => ex is OperationCanceledException || ex is TaskCanceledException || job.Status == JobStatus.Canceling;
+
+        public static async Task<byte[]?> LoadImageBytesAsync(RuntimeImage? image)
+        {
+            if (image is null)
+            {
+                return null;
+            }
+
+            if (image.LoadStatus != LoadStatus.Loaded)
+            {
+                await image.LoadAsync().ConfigureAwait(false);
+            }
+
+            if (image.LoadStatus != LoadStatus.Loaded)
+            {
+                return null;
+            }
+
+            using var stream = await image.GetEncodedBufferAsync().ConfigureAwait(false);
+            var bytes = new byte[stream.Length];
+            await stream.ReadExactlyAsync(bytes).ConfigureAwait(false);
+            return bytes;
+        }
+
+        public static void TryDeleteDirectory(string directory)
+        {
+            if (!Directory.Exists(directory))
+            {
+                return;
+            }
+            try
+            {
+                Directory.Delete(directory, recursive: true);
+                return;
+            }
+            catch { }
+            try
+            {
+                // If everything else fails, try moving it instead of deleting it.
+                Directory.Move(directory, directory + ".delete");
+            }
+            catch { }
+        }
     }
 }

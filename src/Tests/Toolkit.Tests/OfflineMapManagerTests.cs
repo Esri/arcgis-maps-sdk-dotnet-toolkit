@@ -133,10 +133,6 @@ namespace Toolkit.Tests
                 {
                     vm.PreplannedMapModels[0].RemoveDownloadedArea();
                 }
-                if (vm.PreplannedMapModels[0].AllowsDownload == false)
-                {
-                    System.Diagnostics.Debugger.Break();
-                }
                 Assert.IsTrue(vm.PreplannedMapModels[0].AllowsDownload);
                 Assert.IsFalse(vm.PreplannedMapModels[0].IsDownloaded);
                 Assert.IsNull(vm.PreplannedMapModels[0].Map);
