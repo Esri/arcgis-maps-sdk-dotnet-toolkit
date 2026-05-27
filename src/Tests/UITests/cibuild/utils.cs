@@ -4,13 +4,19 @@ using System.Formats.Tar;
 
 internal class Program
 {
+    // Supported test platforms
+    private static string[] _testPlatforms = { "MauiAndroid" };
+
     static int Main(string[] args)
     {
         // Required inputs
+        if (args.Length < 1 || !_testPlatforms.Contains(args[0].Trim()))
+            throw new ArgumentException($"A test platform must be passed as the first and only command line argument. Supported platforms are {_testPlatforms.ToString()}.");
+        var testPlatform = args[0].Trim();
+
         var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
         var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_EXE");
         var yamlConfig = Environment.GetEnvironmentVariable("YAML_CONFIG");
-
         if (String.IsNullOrWhiteSpace(workspace) || String.IsNullOrEmpty(dotnetExe) || String.IsNullOrEmpty(yamlConfig)) {
             throw new ArgumentException("Environment variables WORKSPACE, DOTNET_DIR, and YAML_CONFIG must all be set.");
         }
@@ -20,9 +26,6 @@ internal class Program
 
         // Derived variables
         var toolkitSrc = Path.GetFullPath(Path.Join(Path.GetDirectoryName(yamlConfig), "..", "..", ".."));
-
-        // Install maui
-        RunBinary(dotnetExe, "workload install maui-android");
 
         // Configure nuget repo if set
         var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
@@ -40,16 +43,11 @@ internal class Program
         var appiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
         RunBinary(npmExe, $"install appium --prefix \"{nodeWorkspace}\"");
 
-        // Install appium android driver
-        try {
-            RunBinary(nodeExe, $"\"{appiumEntry}\" driver install uiautomator2");
-
-            // Additional setup for android? May need to have build task set ANDROID_HOME, JAVA_HOME,
-            // and add adb to path for session if not already there. bundletool.jar probably not
-            // required, can just run the app on device using dotnet anyway
-        }
-        catch {
-            Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
+        // Platform-specific setup
+        switch (testPlatform)
+        {
+            case "MauiAndroid": SetupAndroid(workspace, dotnetExe, nodeExe, appiumEntry); break;
+            default: throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.");
         }
 
         // Run appium in background
@@ -64,6 +62,8 @@ internal class Program
 
         // Configure appium cleanup
         Action cleanup = () => {
+            Console.WriteLine("\nStarting test cleanup...");
+
             appiumProcess.Kill();
             RunBinary(dotnetExe, "build-server shutdown");
 
@@ -84,46 +84,23 @@ internal class Program
         Console.CancelKeyPress += (sender, args) => cleanup();
 
         try {
-            // Configure build parameters
-            var buildParamsCommon = new List<string>() {
-                "-c Release",
-                "-p:ArtifactsPivots=TestBuild",
-                "-p:UseArtifactsOutput=true"
-            };
-
-            var androidFramework = "net10.0-android";
-            var buildParamsApp = new List<string>() {
-                $"-f {androidFramework}",
-                $"-p:TargetFrameworks={androidFramework}",
-                "-r android-arm64"
-            };
-            var releaseVersion = Environment.GetEnvironmentVariable("RELEASE_VERSION");
-            if (!String.IsNullOrWhiteSpace(releaseVersion)) {
-                buildParamsApp.Add($"-p:UseNugetPackage={releaseVersion}");
-            }
+            // Configure build settings
+            var buildSettings = GetBuildSettings(testPlatform, workspace);
+            var uiTestsPath = Path.Join(toolkitSrc, "Tests", "UITests");
 
             // Build app and runner
-            var appPath = Path.Join(toolkitSrc, "Tests", "UITests", "Toolkit.UITests.Maui.App", "Toolkit.UITests.Maui.App.csproj");
-            RunBinary(dotnetExe, $"build {appPath} {String.Join(" ", buildParamsCommon)} {String.Join(" ", buildParamsApp)}");
+            var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
+            RunBinary(dotnetExe, $"build {appPath} {String.Join(" ", buildSettings.BuildParamsCommon)} {String.Join(" ", buildSettings.BuildParamsApp)}");
 
-            var runnerPath = Path.Join(toolkitSrc, "Tests", "UITests", "Toolkit.UITests.MauiAndroid", "Toolkit.UITests.MauiAndroid.csproj");
-            RunBinary(dotnetExe, $"build {runnerPath} {String.Join(" ", buildParamsCommon)}");
+            var runnerPath = Path.Join(uiTestsPath, buildSettings.RunnerName, $"{buildSettings.RunnerName}.csproj");
+            RunBinary(dotnetExe, $"build {runnerPath} {String.Join(" ", buildSettings.BuildParamsCommon)}");
 
             // Run tests
-            var testResultsDir = Path.Join(workspace, "TestResults");
-            var testParams = new List<string>() {
-                "--report-trx",
-                $"--results-directory {testResultsDir}"
-            };
-            var trxFilename = Environment.GetEnvironmentVariable("TRX_FILENAME");
-            if (!String.IsNullOrWhiteSpace(trxFilename)) {
-                testParams.Add($"--report-trx-filename {trxFilename}");
-            }
-
-            var runnerExe = Path.Join(toolkitSrc, "Tests", "UITests", "artifacts", "bin", "Toolkit.UITests.MauiAndroid", "TestBuild", "Toolkit.UITests.MauiAndroid");
-            var appExe = Path.Join(toolkitSrc, "Tests", "UITests", "artifacts", "bin", "Toolkit.UITests.Maui.App", "TestBuild", "com.esri.toolkit.uitests.maui-Signed.apk");
+            var artifactsPath = Path.Join(uiTestsPath, "artifacts", "bin");
+            var runnerExe = Path.Join(artifactsPath, buildSettings.RunnerName, "TestBuild", buildSettings.RunnerName);
+            var appExe = Path.Join(artifactsPath, buildSettings.AppName, "TestBuild", buildSettings.BinaryName);
             Environment.SetEnvironmentVariable("TKUITEST_APP", appExe);
-            RunBinary(runnerExe, $"{String.Join(" ", testParams)}");
+            RunBinary(runnerExe, $"{String.Join(" ", buildSettings.TestParams)}");
         }
         finally {
             cleanup();
@@ -132,6 +109,27 @@ internal class Program
         return 0;
     }
 
+#region PlatformDependencies
+    private static void SetupAndroid(string workspace, string dotnetExe, string nodeExe, string appiumEntry)
+    {
+        // Install maui android
+        RunBinary(dotnetExe, "workload install maui-android");
+
+        // Install appium android driver
+        try {
+            RunBinary(nodeExe, $"\"{appiumEntry}\" driver install uiautomator2");
+        }
+        catch {
+            Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
+        }
+
+        // Additional setup for android? May need to have build task set ANDROID_HOME, JAVA_HOME,
+        // and add adb to path for session if not already there. bundletool.jar probably not
+        // required, can just run the app on device using dotnet anyway
+    }
+#endregion
+
+#region CommonDependencies
     private static void SetNugetSource(string workspace, string dotnetExe, string nugetRepo)
     {
         Console.WriteLine("\nConfiguring nuget...");
@@ -207,7 +205,84 @@ internal class Program
 
         return (nodeExe, npmExe);
     }
+#endregion
 
+#region BuildSettings
+    private static BuildSettings GetBuildSettings(string testPlatform, string workspace)
+    {
+        BuildSettings settings;
+        switch (testPlatform)
+        {
+            case "MauiAndroid":
+                settings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
+
+                var androidFramework = "net10.0-android";
+                settings.BuildParamsApp = new List<string>() {
+                    $"-f {androidFramework}",
+                    $"-p:TargetFrameworks={androidFramework}",
+                    "-r android-arm64"
+                };
+
+                settings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
+
+                break;
+            default:
+                throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.");
+        }
+
+        // Universal build parameters for the ci builds
+        settings.BuildParamsCommon.AddRange(new List<string>() {
+            "-c Release",
+            "-p:ArtifactsPivots=TestBuild",
+            "-p:UseArtifactsOutput=true"
+        });
+
+        // Release version config
+        var releaseVersion = Environment.GetEnvironmentVariable("RELEASE_VERSION");
+        if (!String.IsNullOrWhiteSpace(releaseVersion)) {
+            settings.BuildParamsApp.Add($"-p:UseNugetPackage={releaseVersion}");
+        }
+
+        // Configure the trx output for ci jobs
+        var testResultsDir = Path.Join(workspace, "TestResults");
+        settings.TestParams = new List<string>() {
+            "--report-trx",
+            $"--results-directory {testResultsDir}"
+        };
+        var trxFilename = Environment.GetEnvironmentVariable("TRX_FILENAME");
+        if (!String.IsNullOrWhiteSpace(trxFilename)) {
+            settings.TestParams.Add($"--report-trx-filename {trxFilename}");
+        }
+
+        return settings;
+    }
+
+    private class BuildSettings
+    {
+        private string? _binaryName;
+
+        public List<string> BuildParamsCommon = new();
+        public List<string> BuildParamsApp = new();
+        public List<string> TestParams = new();
+        public string AppName;
+        public string RunnerName;
+
+        /// <summary> Defaults to AppName if not explicitly set. </summary>
+        public string BinaryName
+        {
+            get => _binaryName ?? AppName;
+            set => _binaryName = value;
+        }
+
+        public BuildSettings(string appName, string runnerName)
+        {
+            AppName = appName;
+            RunnerName = runnerName;
+        }
+    }
+#endregion
+
+#region Helpers
     private static Process RunBinaryBackground(string binary, string arguments, List<string> standardOutput, List<string> standardError) {
         Console.WriteLine($"\nRunning {binary} {arguments}");
 
@@ -274,4 +349,5 @@ internal class Program
             throw new Exception($"Command failed with exit code {process.ExitCode}: {binary} {arguments}");
         }
     }
+#endregion
 }
