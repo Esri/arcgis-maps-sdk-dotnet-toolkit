@@ -127,7 +127,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FeatureFormView"/> class.
+        /// Initializes a new instance of the <see cref="OfflineMapAreasView"/> class.
         /// </summary>
         public OfflineMapAreasView()
             : base()
