@@ -121,13 +121,16 @@ namespace Esri.ArcGISRuntime.Toolkit
         private void InitManager()
         {
             // Clean up orphaned directories from previous runs that may not have been cleaned up properly
-            foreach (var oldDir in Directory.GetDirectories(GetOfflineManagerDirectory(), "*.delete", SearchOption.AllDirectories))
+            if (Directory.Exists(GetOfflineManagerDirectory()))
             {
-                try
+                foreach (var oldDir in Directory.GetDirectories(GetOfflineManagerDirectory(), "*.delete", SearchOption.AllDirectories))
                 {
-                    Directory.Delete(oldDir, recursive: true);
+                    try
+                    {
+                        Directory.Delete(oldDir, recursive: true);
+                    }
+                    catch { }
                 }
-                catch { }
             }
             ApplyConfiguration(_configuration);
             LoadOfflineMapInfos();
@@ -147,6 +150,9 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// </summary>
         /// <remarks>
         /// By default for packaged apps this will be the <see cref="Environment.SpecialFolder.LocalApplicationData" /> folder, and for unpackaged apps this will be a temp folder unique to the <see cref="Environment.ProcessPath" />.
+        /// <note>
+        /// The CacheFolder should be set on creation before any jobs have been queued or any data has been downloaded to the previous folder.
+        /// </note>
         /// </remarks>
         public string CacheFolder
         {
@@ -156,6 +162,8 @@ namespace Esri.ArcGISRuntime.Toolkit
                 ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
                 if (_cacheFolder != value)
                 {
+                    if (_observedJobs.Count > 0)
+                        throw new InvalidOperationException("Cannot change cache folder while jobs are in progress");
                     _cacheFolder = value;
                     InitManager();
                 }

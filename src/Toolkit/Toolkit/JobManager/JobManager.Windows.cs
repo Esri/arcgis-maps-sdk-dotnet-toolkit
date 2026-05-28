@@ -124,7 +124,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 // If the app is unpackaged, we'll generate a unique filename based on the process and assembly and place it in the temp folder
                 string location = Environment.ProcessPath + "|" + typeof(JobManager).Assembly.FullName + "|" + DefaultsKey;
-                return Path.Combine(Path.GetTempPath(), HashString(location) + ".json");
+                return Path.Combine(ArcGISRuntimeEnvironment.TempPath, HashString(location) + ".json");
             }
         }
 

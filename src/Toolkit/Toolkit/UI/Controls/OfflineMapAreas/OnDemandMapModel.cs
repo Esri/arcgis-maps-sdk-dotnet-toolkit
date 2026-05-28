@@ -96,7 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _title = title ?? string.Empty;
             _thumbnailData = thumbnailData;
             _onRemoveDownloadAction = onRemoveDownload;
-            _downloadCommand = new DelegateCommand((o) => _ = DownloadOnDemandMapAreaAsync(), () => false);
+            _downloadCommand = new DelegateCommand((o) => { }, () => false); // Currently doesn't allow re-download
             _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded || Error != null);
             _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync());
             _openMapCommand = openMapCommand;

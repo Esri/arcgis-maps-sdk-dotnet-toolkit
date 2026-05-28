@@ -23,7 +23,6 @@ using System.IO;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Tasks.Offline;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Microsoft.VisualBasic.FileIO;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
@@ -449,10 +448,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         onRemoveDownload, openCommand, dispatcher))
                     .ToList();
 
-                foreach (var model in models)
-                {
-                    await model.LoadAsync().ConfigureAwait(false);
-                }
+                await Task.WhenAll(models.Select(m => m.LoadAsync())).ConfigureAwait(false);
 
                 return new PreplannedMapModelsLoadResult(models, false, null);
             }
@@ -502,7 +498,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         false,
                         onRemoveDownload, openCommand, dispatcher);
 
-                    await model.LoadAsync().ConfigureAwait(false);
+                    await model.LoadAndUpdateMobileMapPackageAsync(mobileMapPackage).ConfigureAwait(false);
                     models.Add(model);
                 }
                 catch
