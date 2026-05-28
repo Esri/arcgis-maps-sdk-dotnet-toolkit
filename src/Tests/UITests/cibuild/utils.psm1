@@ -57,14 +57,15 @@ function Invoke-WindowsUITests {
     exit $LASTEXITCODE
   }
 
-  $driver_install_output = & $node_exe $appium_entry driver install windows 2>&1
-  $driver_already_installed = $driver_install_output | Select-String -Pattern "A driver named "".*"" is already installed" -Quiet
-  Write-Host $driver_install_output
-  if ($driver_already_installed) {
-    Write-Host "Appium driver already installed. Continuing build...`n"
+  $drivers_installed = & $node_exe $appium_entry driver list --installed 2>&1
+  if (!(Select-String -InputObject $drivers_installed -Pattern "windows" -Quiet)) {
+    & $node_exe $appium_entry driver install windows
   }
-  elseif ($LASTEXITCODE -ne 0) {
-    Write-Error "Error installing appium driver. See logs."
+  else {
+    & $node_exe $appium_entry driver update windows
+  }
+  if ($LASTEXITCODE -ne 0) {
+    Write-Error "Error installing or updating appium driver. See logs."
     exit $LASTEXITCODE
   }
 
