@@ -29,9 +29,9 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 #if __IOS__
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using BackgroundTasks;
 using Foundation;
 using ObjCRuntime;
@@ -573,7 +573,8 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <summary>
         /// Gets or sets the preferred schedule for performing status checks while the application is in the background.
         /// </summary>
-        public OfflineManagerBackgroundStatusCheckSchedule PreferredBackgroundStatusCheckSchedule { get; set; } = OfflineManagerBackgroundStatusCheckSchedule.Disabled;
+        [SupportedOSPlatform("ios1.0")]
+        public OfflineManagerBackgroundStatusCheckSchedule PreferredBackgroundStatusCheckSchedule { get; init; } = OfflineManagerBackgroundStatusCheckSchedule.Disabled;
 
         /// <summary>
         /// Gets or sets the update mode of any new on-demand map areas taken offline.
@@ -589,6 +590,7 @@ namespace Esri.ArcGISRuntime.Toolkit
     /// <summary>
     /// Defines a schedule for background status checks for the <see cref="OfflineManager"/>.
     /// </summary>
+    [SupportedOSPlatform("ios1.0")]
     public sealed class OfflineManagerBackgroundStatusCheckSchedule
     {
         private OfflineManagerBackgroundStatusCheckSchedule()
