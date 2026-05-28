@@ -19,7 +19,7 @@ internal class Program
         var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
         var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_EXE");
         var toolkitSrc = Environment.GetEnvironmentVariable("TOOLKIT_SRC");
-        if (String.IsNullOrWhiteSpace(workspace) || String.IsNullOrEmpty(dotnetExe) || String.IsNullOrEmpty(toolkitSrc)) {
+        if (string.IsNullOrWhiteSpace(workspace) || string.IsNullOrEmpty(dotnetExe) || string.IsNullOrEmpty(toolkitSrc)) {
             throw new ArgumentException("Environment variables WORKSPACE, DOTNET_DIR, and TOOLKIT_SRC must all be set.");
         }
         if (!Path.Exists(workspace) || !Path.Exists(dotnetExe) || !Path.Exists(toolkitSrc)) {
@@ -31,7 +31,7 @@ internal class Program
 
         // Configure nuget repo if set
         var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
-        if (!String.IsNullOrWhiteSpace(nugetRepo)) {
+        if (!string.IsNullOrWhiteSpace(nugetRepo)) {
             SetNugetSource(toolkitSrc, dotnetExe, nugetRepo);
         }
 
@@ -92,17 +92,17 @@ internal class Program
 
             // Build app and runner
             var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-            RunBinary(dotnetExe, $"build {appPath} {String.Join(" ", buildSettings.BuildParamsCommon)} {String.Join(" ", buildSettings.BuildParamsApp)}");
+            RunBinary(dotnetExe, $"build {appPath} {string.Join(" ", buildSettings.BuildParamsCommon)} {string.Join(" ", buildSettings.BuildParamsApp)}");
 
             var runnerPath = Path.Join(uiTestsPath, buildSettings.RunnerName, $"{buildSettings.RunnerName}.csproj");
-            RunBinary(dotnetExe, $"build {runnerPath} {String.Join(" ", buildSettings.BuildParamsCommon)}");
+            RunBinary(dotnetExe, $"build {runnerPath} {string.Join(" ", buildSettings.BuildParamsCommon)}");
 
             // Run tests
             var artifactsPath = Path.Join(uiTestsPath, "artifacts", "bin");
             var runnerExe = Path.Join(artifactsPath, buildSettings.RunnerName, "TestBuild", buildSettings.RunnerName);
             var appExe = Path.Join(artifactsPath, buildSettings.AppName, "TestBuild", buildSettings.BinaryName);
             Environment.SetEnvironmentVariable("TKUITEST_APP", appExe);
-            RunBinary(runnerExe, $"{String.Join(" ", buildSettings.TestParams)}");
+            RunBinary(runnerExe, $"{string.Join(" ", buildSettings.TestParams)}");
         }
         finally {
             cleanup();
@@ -241,7 +241,7 @@ internal class Program
 
         // Release version config
         var releaseVersion = Environment.GetEnvironmentVariable("RELEASE_VERSION");
-        if (!String.IsNullOrWhiteSpace(releaseVersion)) {
+        if (!string.IsNullOrWhiteSpace(releaseVersion)) {
             settings.BuildParamsApp.Add($"-p:UseNugetPackage={releaseVersion}");
         }
 
@@ -252,7 +252,7 @@ internal class Program
             $"--results-directory {testResultsDir}"
         ]);
         var trxFilename = Environment.GetEnvironmentVariable("TRX_FILENAME");
-        if (!String.IsNullOrWhiteSpace(trxFilename)) {
+        if (!string.IsNullOrWhiteSpace(trxFilename)) {
             settings.TestParams.Add($"--report-trx-filename {trxFilename}");
         }
 
