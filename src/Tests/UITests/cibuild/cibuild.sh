@@ -18,7 +18,7 @@ function main {
 
   install_dotnet "${WORKSPACE}" "${dotnet_version}" "${DOTNET_CACHE_FOLDER}"
 
-  export YAML_CONFIG="${yaml_config}"
+  export TOOLKIT_SRC=$(realpath "${script_dir}/../../../")
   "${DOTNET_EXE}" run "${script_dir}/utils.cs" -- $1
 }
 
