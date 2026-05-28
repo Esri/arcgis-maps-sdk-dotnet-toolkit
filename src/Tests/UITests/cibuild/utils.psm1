@@ -60,14 +60,21 @@ function Invoke-WindowsUITests {
   & $node_exe $appium_entry driver install windows
 
   # Extract and configure WindowsAppDriver for appium
-  $env:APPIUM_WAD_PATH = Join-Path $env:APPIUM_HOME 'WinAppDriver1.2.1\WinAppDriver.exe'
-  if (!(Test-Path $env:APPIUM_WAD_PATH)) {
-    $wap_zip = Join-Path $PSScriptRoot 'WinAppDriver1.2.1.zip'
-    Expand-Archive -Path $wap_zip -Destination $env:APPIUM_HOME
-    if (!$?) {
-      Write-Error 'Failed to extract WinAppDriver zip'
-      exit 1
-    }
+  $wad_installer = Join-Path $workspace 'WinAppDriver.msi'
+  & curl.exe -sSL https://github.com/microsoft/WinAppDriver/releases/download/v1.2.1/WindowsApplicationDriver_1.2.1.msi -o $wad_installer
+  if ($LASTEXITCODE -ne 0) {
+    Write-Output "Failed to download Windows App Driver installer."
+    & $dotnet_exe build-server shutdown
+    exit $LASTEXITCODE
+  }
+
+  $wad_install_dir = Join-Path $workspace '.WAD'
+  $env:APPIUM_WAD_PATH = Join-Path $wad_install_dir 'Windows Application Driver\WinAppDriver.exe'
+  & msiexec.exe /a $wad_installer TARGETDIR=$wad_install_dir /qn
+  if ($LASTEXITCODE -ne 0) {
+    Write-Output "Failed to install Windows App Driver."
+    & $dotnet_exe build-server shutdown
+    exit $LASTEXITCODE
   }
 
   # Set nuget source if provided
