@@ -18,16 +18,16 @@ internal class Program
 
         var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
         var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_EXE");
-        var yamlConfig = Environment.GetEnvironmentVariable("YAML_CONFIG");
-        if (String.IsNullOrWhiteSpace(workspace) || String.IsNullOrEmpty(dotnetExe) || String.IsNullOrEmpty(yamlConfig)) {
-            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_DIR, and YAML_CONFIG must all be set.");
+        var toolkitSrc = Environment.GetEnvironmentVariable("TOOLKIT_SRC");
+        if (String.IsNullOrWhiteSpace(workspace) || String.IsNullOrEmpty(dotnetExe) || String.IsNullOrEmpty(toolkitSrc)) {
+            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_DIR, and TOOLKIT_SRC must all be set.");
         }
-        if (!Path.Exists(workspace) || !Path.Exists(dotnetExe) || !Path.Exists(yamlConfig)) {
+        if (!Path.Exists(workspace) || !Path.Exists(dotnetExe) || !Path.Exists(toolkitSrc)) {
             throw new ArgumentException("Workspace and dotnet directory must be existing paths.");
         }
 
         // Derived variables
-        var toolkitSrc = Path.GetFullPath(Path.Join(Path.GetDirectoryName(yamlConfig), "..", "..", ".."));
+        var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
 
         // Configure nuget repo if set
         var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
