@@ -140,12 +140,13 @@ function Invoke-WindowsUITests {
   }
 
   $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
-  Set-Location -Path $toolkit_src_root
+  Push-Location -Path $toolkit_src_root
 
   $env:TKUITEST_APP = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
   & $dotnet_exe test $runner_project @build_parameters @test_run_params
 
-  # Kill the appium server process and build server
+  # Kill the appium server process and build server, and return to original location
+  Pop-Location
   Stop-Process -InputObject $appium_server_process
   & $dotnet_exe build-server shutdown
 }
