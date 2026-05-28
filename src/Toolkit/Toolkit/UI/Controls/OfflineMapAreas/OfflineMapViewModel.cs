@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -306,7 +307,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (!HasDownloadedMapAreas)
             {
-                OfflineManager.Shared.RemoveMapInfo(PortalItemId);
+                Dispatcher(() =>
+                {
+                    OfflineManager.Shared.RemoveMapInfo(PortalItemId);
+                });
             }
 
             if (IsShowingOnlyOfflineModels && !model.SupportsRedownloading)
@@ -317,12 +321,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnRemoveDownloadOfOnDemandArea(OnDemandMapModel model)
         {
-            Dispatcher(() => _onDemandMapModels.Remove(model));
-
-            if (!HasDownloadedMapAreas)
+            Dispatcher(() =>
             {
-                OfflineManager.Shared.RemoveMapInfo(PortalItemId);
-            }
+                _onDemandMapModels.Remove(model);
+
+                if (!HasDownloadedMapAreas)
+                {
+                    OfflineManager.Shared.RemoveMapInfo(PortalItemId);
+                }
+            });
         }
 
         private static void ReplaceCollection<T>(ObservableCollection<T> collection, IEnumerable<T> items)
@@ -352,6 +359,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public event PropertyChangedEventHandler? PropertyChanged;
         
         protected Action<Action> Dispatcher { get; }
+
+        protected Task DispatchAsync(Task task)
+        {
+            var tcs = new TaskCompletionSource();
+            Dispatcher(() =>
+            {
+                task.ContinueWith(t =>
+                {
+                    if (t.IsFaulted)
+                    {
+                        tcs.SetException(t.Exception!);
+                    }
+                    else if (t.IsCanceled)
+                    {
+                        tcs.SetCanceled();
+                    }
+                    else
+                    {
+                        tcs.SetResult();
+                    }
+                }, TaskScheduler.Default);
+            });
+            return tcs.Task;
+        }
 
         public OfflineBindableObject(Action<Action> dispatcher)
         {

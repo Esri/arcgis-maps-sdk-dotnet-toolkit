@@ -93,7 +93,6 @@ namespace Esri.ArcGISRuntime.Toolkit
         private readonly ObservableCollection<OfflineMapInfo> _offlineMapInfos = new ObservableCollection<OfflineMapInfo>();
         private readonly HashSet<IJob> _observedJobs = new HashSet<IJob>(ReferenceEqualityComparer<IJob>.Instance);
         private readonly object _observedJobsLock = new object();
-        private readonly SynchronizationContext? _synchronizationContext;
         private OfflineManagerConfiguration _configuration = new OfflineManagerConfiguration();
 
         private OfflineManager()
@@ -114,7 +113,6 @@ namespace Esri.ArcGISRuntime.Toolkit
                 _cacheFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 #endif
 
-            _synchronizationContext = SynchronizationContext.Current;
             OfflineMapInfos = new ReadOnlyObservableCollection<OfflineMapInfo>(_offlineMapInfos);
             InitManager();
         }
@@ -328,14 +326,11 @@ namespace Esri.ArcGISRuntime.Toolkit
             var portalItemAreasDirectory = Path.Combine(GetOfflineManagerDirectory(), MapAreasFolderName, offlineMapInfo.Id);
             OfflineMapAreaUtilities.TryDeleteDirectory(portalItemAreasDirectory);
 
-            RunOnCapturedContext(() =>
+            var existing = _offlineMapInfos.FirstOrDefault(info => string.Equals(info.Id, offlineMapInfo.Id, StringComparison.Ordinal));
+            if (existing is not null)
             {
-                var existing = _offlineMapInfos.FirstOrDefault(info => string.Equals(info.Id, offlineMapInfo.Id, StringComparison.Ordinal));
-                if (existing is not null)
-                {
-                    _offlineMapInfos.Remove(existing);
-                }
-            });
+                _offlineMapInfos.Remove(existing);
+            }
         }
 
         internal void RemoveMapInfo(string portalItemId)
@@ -345,14 +340,11 @@ namespace Esri.ArcGISRuntime.Toolkit
                 throw new ArgumentException("Portal item ID cannot be null or whitespace.", nameof(portalItemId));
             }
 
-            RunOnCapturedContext(() =>
+            var existing = _offlineMapInfos.FirstOrDefault(info => string.Equals(info.Id, portalItemId, StringComparison.Ordinal));
+            if (existing is not null)
             {
-                var existing = _offlineMapInfos.FirstOrDefault(info => string.Equals(info.Id, portalItemId, StringComparison.Ordinal));
-                if (existing is not null)
-                {
-                    _offlineMapInfos.Remove(existing);
-                }
-            });
+                _offlineMapInfos.Remove(existing);
+            }
 
             OfflineMapInfo.RemoveFromDirectory(GetOfflineManagerDirectory(), portalItemId);
         }
@@ -384,7 +376,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         {
             try
             {
-                await job.GetResultAsync().ConfigureAwait(false);
+                await job.GetResultAsync();
             }
             catch (Exception ex)
             {
@@ -409,7 +401,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                     HandlePendingMapInfo(job.Status == JobStatus.Succeeded, portalItem!.ItemId!);
                 }
 
-                RunOnCapturedContext(() => JobCompleted?.Invoke(this, new JobCompletedEventArgs(job)));
+                JobCompleted?.Invoke(this, new JobCompletedEventArgs(job));
             }
         }
 
@@ -483,29 +475,15 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 File.Move(pendingFilename, destination);
             }
-            
+
             var info = OfflineMapInfo.FromFile(destination);
             if (info is not null)
             {
-                RunOnCapturedContext(() =>
+                if (!_offlineMapInfos.Any(existing => string.Equals(existing.Id, info.Id, StringComparison.Ordinal)))
                 {
-                    if (!_offlineMapInfos.Any(existing => string.Equals(existing.Id, info.Id, StringComparison.Ordinal)))
-                    {
-                        _offlineMapInfos.Add(info);
-                    }
-                });
+                    _offlineMapInfos.Add(info);
+                }
             }
-        }
-
-        private void RunOnCapturedContext(Action action)
-        {
-            if (_synchronizationContext is null || SynchronizationContext.Current == _synchronizationContext)
-            {
-                action();
-                return;
-            }
-
-            _synchronizationContext.Post(static state => ((Action)state!).Invoke(), action);
         }
 
         internal string GetOfflineManagerDirectory()
