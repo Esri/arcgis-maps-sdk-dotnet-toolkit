@@ -111,7 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             mainView.Children.Add(loadingIndicator);
 
             Button addMapAreaButton = CreateActionButton(addMapArea, ToolkitIcons.Plus);
-            addMapAreaButton.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.IsOnDemandMode, source: RelativeBindingSource.TemplatedParent);
+            addMapAreaButton.SetBinding(IsVisibleProperty, static (OfflineMapAreasView view) => view.TemplateSettings.CanAddMapArea, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(addMapAreaButton, 1);
             mainView.Children.Add(addMapAreaButton);
             root.Children.Add(mainView);

@@ -102,6 +102,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool IsOnDemandMode =>  _vm is not null && !_vm.IsLoadingModels && !MapIsOfflineDisabled && (_vm.DisplayMode == OfflineMapViewModel.Mode.OnDemand || _vm.DisplayMode == OfflineMapViewModel.Mode.Ambiguous);
 
         /// <summary>
+        /// Gets a value indicating whether the offline map can add new map areas.
+        /// </summary>
+        public bool CanAddMapArea => _vm is not null && IsOnDemandMode && !IsInternetNotAvailable;
+
+        /// <summary>
         /// Gets a value indicating wheteher the Add On-Demand Map Area UI is currently active. This is used to toggle visibility of the Add On-Demand Map Area UI in the control template.
         /// </summary>
         public bool IsAddOnDemandMode
@@ -131,7 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets a value indicating whether there are no map areas available for the current map after it has loaded.
         /// </summary>
-        public bool HasNoAreas => MapAreas is not null && _vm?.IsLoadingModels == false && !MapIsOfflineDisabled && (MapAreas?.Count ??  0) == 0;
+        public bool HasNoAreas => MapAreas is not null && _vm?.IsLoadingModels == false && !IsInternetNotAvailable && !MapIsOfflineDisabled && (MapAreas?.Count ??  0) == 0;
 
         /// <summary>
         /// Gets the current map areas.
@@ -156,6 +161,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case nameof(OfflineMapViewModel.DisplayMode):
                     OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsInternetNotAvailable)));
                     OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsOnDemandMode)));
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(CanAddMapArea)));                    
                     OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsPreplannedMode)));
                     break;
                 case nameof(OfflineMapViewModel.MapIsOfflineDisabled):

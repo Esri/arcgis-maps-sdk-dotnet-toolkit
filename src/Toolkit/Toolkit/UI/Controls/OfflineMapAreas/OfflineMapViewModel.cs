@@ -78,18 +78,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 throw new ArgumentNullException(nameof(onlineMap));
             }
 
-            if (onlineMap.Item is null && onlineMap.Uri is not null && onlineMap.LoadStatus != LoadStatus.Loaded)
-            {
-                throw new ArgumentException("The map must be loaded or created with an item.", nameof(onlineMap));
+            string? itemId = onlineMap.Item?.ItemId;
+            if (string.IsNullOrWhiteSpace(itemId) && onlineMap.Uri is not null)
+            { 
+                // If map isn't loaded yet, look for Itme ID parameter in URL and extract it:
+                itemId = System.Web.HttpUtility.ParseQueryString(onlineMap.Uri.Query)["id"];
             }
-
-            if (string.IsNullOrWhiteSpace(onlineMap.Item?.ItemId))
+            if (string.IsNullOrWhiteSpace(itemId))
             {
                 throw new ArgumentException("The map must reference a portal item with an item ID.", nameof(onlineMap));
             }
-
             _onlineMap = onlineMap;
-            _portalItemId = onlineMap.Item!.ItemId!;
+            _portalItemId = itemId;
             _openMapCommand = openMapCommand;
             PreplannedMapModels = new ReadOnlyObservableCollection<PreplannedMapModel>(_preplannedMapModels);
             OnDemandMapModels = new ReadOnlyObservableCollection<OnDemandMapModel>(_onDemandMapModels);

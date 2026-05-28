@@ -292,20 +292,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private async void InitVM(Map map)
         {
             TemplateSettings.SetIsAddOnDemandMode(false);
-            if (map.Item is null && map.Uri is not null && map.LoadStatus != LoadStatus.Loaded)
-            {
-                try
-                {
-                    await map.LoadAsync();
-                }
-                catch { }
-            }
-
-            if (!string.IsNullOrWhiteSpace(map.Item?.ItemId))
-            {
-                _vm = new OfflineMapViewModel(map, DispatchAction, _openMapCommand);
-                SetVM(_vm);
-            }
+            _vm = new OfflineMapViewModel(map, DispatchAction, _openMapCommand);
+            SetVM(_vm);
         }
 
         private void SetVM(OfflineMapViewModel? vm)
