@@ -129,9 +129,6 @@ function Invoke-WindowsUITests {
       while ((Get-Date) -lt $deadline) {
           try {
               $r = Invoke-RestMethod -Uri 'http://127.0.0.1:4723/status' -TimeoutSec 2
-              Write-Host $r
-              Write-Host $r.value
-              Write-Host $r.value.ready
               if ($r.value.ready) { break }
           } catch { Start-Sleep -Milliseconds 500 }
       }
