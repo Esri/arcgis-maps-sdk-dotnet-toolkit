@@ -95,13 +95,6 @@ function Invoke-WindowsUITests {
     }
   }
 
-  # Start appium before build so it has time to initialize in the background
-  $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
-  if (!$?) {
-    & $dotnet_exe build-server shutdown
-    exit 1
-  }
-
   # Ensure predictable artifacts output layout for setting env:TKUITEST_APP later
   $build_params_artifacts = @('-p:ArtifactsPivots=TestBuild', '-p:UseArtifactsOutput=true')
   $build_parameters += $build_params_artifacts
@@ -119,6 +112,24 @@ function Invoke-WindowsUITests {
     Write-Error "Runner build failed. Aborting."
     & $dotnet_exe build-server shutdown
     exit $LASTEXITCODE
+  }
+
+  # Start appium server and wait for it to report as ready
+  $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
+  if (!$?) {
+    & $dotnet_exe build-server shutdown
+    exit 1
+  }
+
+  $deadline = (Get-Date).AddSeconds(60)
+  while ((Get-Date) -lt $deadline) {
+      try {
+          $r = Invoke-RestMethod -Uri 'http://127.0.0.1:4723/status' -TimeoutSec 2
+          Write-Host $r
+          Write-Host $r.value
+          Write-Host $r.value.ready
+          if ($r.value.ready) { break }
+      } catch { Start-Sleep -Milliseconds 500 }
   }
 
   # Run tests
