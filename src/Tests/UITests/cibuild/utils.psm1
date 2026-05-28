@@ -100,56 +100,62 @@ function Invoke-WindowsUITests {
   $build_params_artifacts = @('-p:ArtifactsPivots=TestBuild', '-p:UseArtifactsOutput=true')
   $build_parameters += $build_params_artifacts
 
-  # Build app and runner projects
-  & $dotnet_exe build $app_project @build_parameters @build_parameters_app
-  if ($LASTEXITCODE -ne 0) {
-    Write-Error "App build failed. Aborting."
+  try {
+    # Build app and runner projects
+    & $dotnet_exe build $app_project @build_parameters @build_parameters_app
+    if ($LASTEXITCODE -ne 0) {
+      Write-Error "App build failed. Aborting."
+      exit $LASTEXITCODE
+    }
+
+    & $dotnet_exe build $runner_project @build_parameters
+    if ($LASTEXITCODE -ne 0) {
+      Write-Error "Runner build failed. Aborting."
+      exit $LASTEXITCODE
+    }
+
+    # The tests seem to need to be run from the toolkit source root
+    $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
+    Push-Location -Path $toolkit_src_root
+
+    try {
+      # Start appium server and wait for it to report as ready
+      $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
+      if (!$?) {
+        exit 1
+      }
+
+      $deadline = (Get-Date).AddSeconds(60)
+      while ((Get-Date) -lt $deadline) {
+          try {
+              $r = Invoke-RestMethod -Uri 'http://127.0.0.1:4723/status' -TimeoutSec 2
+              Write-Host $r
+              Write-Host $r.value
+              Write-Host $r.value.ready
+              if ($r.value.ready) { break }
+          } catch { Start-Sleep -Milliseconds 500 }
+      }
+
+      # Run tests
+      $results_dir = Join-Path $workspace 'TestResults'
+      $test_run_params = @('--no-build', '--report-trx', '--results-directory', $results_dir)
+      if (![string]::IsNullOrWhiteSpace($trx_filename)) {
+        $test_run_params += @('--report-trx-filename', $trx_filename)
+      }
+
+      $env:TKUITEST_APP = Join-Path $PSScriptRoot "..\artifacts1\bin\${app_name}\TestBuild\${app_name}.exe"
+      & $dotnet_exe test $runner_project @build_parameters @test_run_params
+    }
+    finally {
+      # Kill appium and return to original location
+      Stop-Process -InputObject $appium_server_process
+      Pop-Location
+    }
+  }
+  finally {
+    # Kill dotnet build server
     & $dotnet_exe build-server shutdown
-    exit $LASTEXITCODE
   }
-
-  & $dotnet_exe build $runner_project @build_parameters
-  if ($LASTEXITCODE -ne 0) {
-    Write-Error "Runner build failed. Aborting."
-    & $dotnet_exe build-server shutdown
-    exit $LASTEXITCODE
-  }
-
-  # Start appium server and wait for it to report as ready
-  $appium_server_process = Start-Process -FilePath $node_exe -ArgumentList @($appium_entry) -PassThru
-  if (!$?) {
-    & $dotnet_exe build-server shutdown
-    exit 1
-  }
-
-  $deadline = (Get-Date).AddSeconds(60)
-  while ((Get-Date) -lt $deadline) {
-      try {
-          $r = Invoke-RestMethod -Uri 'http://127.0.0.1:4723/status' -TimeoutSec 2
-          Write-Host $r
-          Write-Host $r.value
-          Write-Host $r.value.ready
-          if ($r.value.ready) { break }
-      } catch { Start-Sleep -Milliseconds 500 }
-  }
-
-  # Run tests
-  $results_dir = Join-Path $workspace 'TestResults'
-  $test_run_params = @('--no-build', '--report-trx', '--results-directory', $results_dir)
-  if (![string]::IsNullOrWhiteSpace($trx_filename)) {
-    $test_run_params += @('--report-trx-filename', $trx_filename)
-  }
-
-  $toolkit_src_root = Join-Path $PSScriptRoot '..\..\..'
-  Push-Location -Path $toolkit_src_root
-
-  $env:TKUITEST_APP = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
-  & $dotnet_exe test $runner_project @build_parameters @test_run_params
-
-  # Kill the appium server process and build server, and return to original location
-  Pop-Location
-  Stop-Process -InputObject $appium_server_process
-  & $dotnet_exe build-server shutdown
 }
 
 function Get-YamlValue {
