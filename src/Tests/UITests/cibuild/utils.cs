@@ -46,9 +46,10 @@ internal class Program
         RunBinary(npmExe, $"install appium --prefix \"{nodeWorkspace}\"");
 
         // Platform-specific setup
+        var buildSettings = GetBuildSettings(testPlatform, workspace);
         switch (testPlatform)
         {
-            case "MauiAndroid": SetupAndroid(workspace, dotnetExe, nodeExe, appiumEntry); break;
+            case "MauiAndroid": SetupAndroid(dotnetExe, nodeExe, appiumEntry, toolkitSrc, buildSettings); break;
             default: throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.");
         }
 
@@ -86,8 +87,6 @@ internal class Program
         Console.CancelKeyPress += (sender, args) => cleanup();
 
         try {
-            // Configure build settings
-            var buildSettings = GetBuildSettings(testPlatform, workspace);
             var uiTestsPath = Path.Join(toolkitSrc, "Tests", "UITests");
 
             // Build app and runner
@@ -112,7 +111,7 @@ internal class Program
     }
 
 #region PlatformDependencies
-    private static void SetupAndroid(string workspace, string dotnetExe, string nodeExe, string appiumEntry)
+    private static void SetupAndroid(string dotnetExe, string nodeExe, string appiumEntry, string toolkitSrc, BuildSettings buildSettings)
     {
         // Install maui android
         RunBinary(dotnetExe, "workload install maui-android");
@@ -123,6 +122,17 @@ internal class Program
         }
         catch {
             Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
+        }
+
+        // Install jdk and android sdk
+        try
+        {
+            var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
+            RunBinary(dotnetExe, $"build {appPath} -t InstallAndroidDependencies {string.Join(" ", buildSettings.BuildParamsApp)}");
+        }
+        finally
+        {
+            RunBinary(dotnetExe, "build-server shutdown");
         }
 
         // Additional setup for android? May need to have build task set ANDROID_HOME, JAVA_HOME,
@@ -222,7 +232,10 @@ internal class Program
                 settings.BuildParamsApp.AddRange([
                     $"-f {androidFramework}",
                     $"-p:TargetFrameworks={androidFramework}",
-                    "-r android-arm64"
+                    "-r android-arm64",
+                    $"-p:JavaSdkDirectory={workspace}/jdk",
+                    $"-p:AndroidSdkDirectory={workspace}/android-sdk",
+                    "-p:AcceptAndroidSdkLicenses=true"
                 ]);
 
                 settings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
