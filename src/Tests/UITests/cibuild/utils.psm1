@@ -195,7 +195,7 @@ function Install-Dotnet {
     & curl.exe -sSL https://dot.net/v1/dotnet-install.ps1 -o $installerPath
     & $installerPath -Version $dotnet_version -InstallDir $dotnet_install_folder -NoPath
     if ($LASTEXITCODE -ne 0) {
-     exit 1
+      exit 1
     }
 
     Write-Host "Dotnet installed at $dotnet_exe`n"
