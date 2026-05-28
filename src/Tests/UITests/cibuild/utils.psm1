@@ -57,7 +57,16 @@ function Invoke-WindowsUITests {
     exit $LASTEXITCODE
   }
 
-  & $node_exe $appium_entry driver install windows
+  $driver_install_output = & $node_exe $appium_entry driver install windows 2>&1
+  $driver_already_installed = $driver_install_output | Select-String -Pattern "A driver named "".*"" is already installed" -Quiet
+  Write-Output $driver_install_output
+  if ($driver_already_installed) {
+    Write-Output "Appium driver already installed. Continuing build...`n"
+  }
+  elseif ($LASTEXITCODE -ne 0) {
+    Write-Output "Error installing appium driver. See logs."
+    exit $LASTEXITCODE
+  }
 
   # Extract and configure WindowsAppDriver for appium
   $wad_installer = Join-Path $workspace 'WinAppDriver.msi'
