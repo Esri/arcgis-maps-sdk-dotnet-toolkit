@@ -59,12 +59,12 @@ function Invoke-WindowsUITests {
 
   $driver_install_output = & $node_exe $appium_entry driver install windows 2>&1
   $driver_already_installed = $driver_install_output | Select-String -Pattern "A driver named "".*"" is already installed" -Quiet
-  Write-Output $driver_install_output
+  Write-Host $driver_install_output
   if ($driver_already_installed) {
-    Write-Output "Appium driver already installed. Continuing build...`n"
+    Write-Host "Appium driver already installed. Continuing build...`n"
   }
   elseif ($LASTEXITCODE -ne 0) {
-    Write-Output "Error installing appium driver. See logs."
+    Write-Error "Error installing appium driver. See logs."
     exit $LASTEXITCODE
   }
 
@@ -72,7 +72,7 @@ function Invoke-WindowsUITests {
   $wad_installer = Join-Path $workspace 'WinAppDriver.msi'
   & curl.exe -sSL https://github.com/microsoft/WinAppDriver/releases/download/v1.2.1/WindowsApplicationDriver_1.2.1.msi -o $wad_installer
   if ($LASTEXITCODE -ne 0) {
-    Write-Output "Failed to download Windows App Driver installer."
+    Write-Error "Failed to download Windows App Driver installer."
     & $dotnet_exe build-server shutdown
     exit $LASTEXITCODE
   }
@@ -81,7 +81,7 @@ function Invoke-WindowsUITests {
   $env:APPIUM_WAD_PATH = Join-Path $wad_install_dir 'Windows Application Driver\WinAppDriver.exe'
   & msiexec.exe /a $wad_installer TARGETDIR=$wad_install_dir /qn
   if ($LASTEXITCODE -ne 0) {
-    Write-Output "Failed to install Windows App Driver."
+    Write-Error "Failed to install Windows App Driver."
     & $dotnet_exe build-server shutdown
     exit $LASTEXITCODE
   }
@@ -109,14 +109,14 @@ function Invoke-WindowsUITests {
   # Build app and runner projects
   & $dotnet_exe build $app_project @build_parameters @build_parameters_app
   if ($LASTEXITCODE -ne 0) {
-    echo "App build failed. Aborting."
+    Write-Error "App build failed. Aborting."
     & $dotnet_exe build-server shutdown
     exit $LASTEXITCODE
   }
 
   & $dotnet_exe build $runner_project @build_parameters
   if ($LASTEXITCODE -ne 0) {
-    echo "Runner build failed. Aborting."
+    Write-Error "Runner build failed. Aborting."
     & $dotnet_exe build-server shutdown
     exit $LASTEXITCODE
   }
