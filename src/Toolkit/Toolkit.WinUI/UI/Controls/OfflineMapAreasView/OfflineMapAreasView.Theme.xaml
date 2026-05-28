@@ -137,7 +137,7 @@
                                     <ProgressRing Visibility="{x:Bind TemplateSettings.IsLoadingModels, Mode=OneWay}" IsHitTestVisible="False" />
 
                                     <Grid Grid.Row="1" Visibility="{x:Bind local:OfflineMapAreasViewResources.FalseToVisible(TemplateSettings.IsInternetNotAvailable), Mode=OneWay}" >
-                                        <Button HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.IsOnDemandMode, Mode=OneWay}" AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasAddMapArea}" x:Name="AddMapAreaButton" Margin="4" Padding="24,4">
+                                        <Button HorizontalAlignment="Center" Visibility="{x:Bind TemplateSettings.CanAddMapArea, Mode=OneWay}" AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasAddMapArea}" x:Name="AddMapAreaButton" Margin="4" Padding="24,4">
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="&#xE9F6;" FontFamily="{StaticResource toolkit-icons}" FontSize="20" VerticalAlignment="Center" Margin="0,2,0,0" />
                                                 <TextBlock Text="{internal:LocalizedString Key=OfflineMapAreasAddMapArea}" VerticalAlignment="Center" />
