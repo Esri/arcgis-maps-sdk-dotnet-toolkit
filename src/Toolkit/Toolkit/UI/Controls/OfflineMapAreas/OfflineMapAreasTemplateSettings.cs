@@ -104,7 +104,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets a value indicating whether the offline map can add new map areas.
         /// </summary>
-        public bool CanAddMapArea => _vm is not null && IsOnDemandMode && !IsInternetNotAvailable;
+        public bool CanAddMapArea => _vm is not null && !_vm.IsLoadingModels && IsOnDemandMode && !IsInternetNotAvailable;
 
         /// <summary>
         /// Gets a value indicating wheteher the Add On-Demand Map Area UI is currently active. This is used to toggle visibility of the Add On-Demand Map Area UI in the control template.
@@ -157,6 +157,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     OnPropertyChanged(new PropertyChangedEventArgs(nameof(HasNoAreas)));
                     OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsOnDemandMode)));
                     OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsPreplannedMode)));
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(CanAddMapArea)));
                     break;
                 case nameof(OfflineMapViewModel.DisplayMode):
                     OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsInternetNotAvailable)));
