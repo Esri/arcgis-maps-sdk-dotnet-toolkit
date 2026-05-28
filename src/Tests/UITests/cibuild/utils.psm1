@@ -140,7 +140,7 @@ function Invoke-WindowsUITests {
         $test_run_params += @('--report-trx-filename', $trx_filename)
       }
 
-      $env:TKUITEST_APP = Join-Path $PSScriptRoot "..\artifacts1\bin\${app_name}\TestBuild\${app_name}.exe"
+      $env:TKUITEST_APP = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
       & $dotnet_exe test $runner_project @build_parameters @test_run_params
     }
     finally {
