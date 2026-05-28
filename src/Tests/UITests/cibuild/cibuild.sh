@@ -1,5 +1,27 @@
 #!/usr/bin/env bash
 
+test_platform=$1
+if [ -z "${test_platform}" ]; then
+  echo "Error: No test platform argument was provided to cibuild.sh, the build will fail." 1>&2
+fi
+
+function main {
+  if [ -z "${WORKSPACE}" ]; then
+    echo "WORKSPACE not set. Aborting dotnet install." 1>&2
+    exit 1
+  fi
+
+  script_dir="$( realpath "$(dirname "${BASH_SOURCE[0]}")" )"
+
+  yaml_config="${script_dir}/variables.yml"
+  dotnet_version=$(read_yaml_var "${yaml_config}" "dotnet-version")
+
+  install_dotnet "${WORKSPACE}" "${dotnet_version}" "${DOTNET_CACHE_FOLDER}"
+
+  export YAML_CONFIG="${yaml_config}"
+  "${DOTNET_EXE}" run "${script_dir}/utils.cs" -- $1
+}
+
 function install_dotnet {
   workspace=$1
   dotnet_version=$2
@@ -27,3 +49,5 @@ function read_yaml_var {
   varname=$2
   grep "^${varname}" "${yml_file}" | sed -E "s/^${varname}: \"(.*)\"/\1/"
 }
+
+main "${test_platform}"
