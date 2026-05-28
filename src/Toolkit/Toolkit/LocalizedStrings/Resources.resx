@@ -625,6 +625,14 @@
     <value>Download</value>
     <comment>The text and tooltip for the action that downloads an offline map area.</comment>
   </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>Size: {0}</value>
+    <comment>The description shown for a downloaded on-demand offline map area. {0} is the localized file size.</comment>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>Area {0}</value>
+    <comment>The default title for a new on-demand offline map area. {0} is a unique number.</comment>
+  </data>
   <data name="OfflineMapAreasDownloaded" xml:space="preserve">
     <value>Downloaded</value>
     <comment>The status label shown for an offline map area that has already been downloaded.</comment>

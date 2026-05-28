@@ -194,7 +194,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool IsDownloaded => Status == OnDemandMapModelStatus.Downloaded;
 
         static IValueConverter _converter = new FileSizeConverter();
-        public string Description => SizeInBytes == 0 ? "" : $"Size: {_converter.Convert(SizeInBytes, typeof(string), null, null!)}";
+        public string Description => SizeInBytes == 0 ? string.Empty : string.Format(
+            Properties.Resources.GetString("OfflineMapAreasDownloadSize")!,
+            _converter.Convert(SizeInBytes, typeof(string), null, null!));
 
         public bool SupportsRedownloading => false;
         

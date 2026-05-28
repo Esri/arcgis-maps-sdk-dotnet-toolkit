@@ -204,7 +204,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public string NextOnDemandAreaTitle()
         {
-            static string MakeTitle(int index) => $"Area {index}";
+            static string MakeTitle(int index) => string.Format(
+                Properties.Resources.GetString("OfflineMapAreasDefaultAreaTitle")!,
+                index);
 
             var index = OnDemandMapModels.Count + 1;
             while (OnDemandMapModels.Any(model => string.Equals(model.Title, MakeTitle(index), StringComparison.Ordinal)))
