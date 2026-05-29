@@ -28,28 +28,29 @@ internal class Program
 
         // Derived variables
         var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
+        var dependencies = new CommonDependencies(dotnetExe);
 
         // Configure nuget repo if set
         var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
         if (!string.IsNullOrWhiteSpace(nugetRepo)) {
-            SetNugetSource(toolkitSrc, dotnetExe, nugetRepo);
+            SetNugetSource(toolkitSrc, dependencies.DotnetExe, nugetRepo);
         }
 
         // Install node
         var nodeWorkspace = Path.Join(workspace, ".node");
         var nodeVersion = ReadYamlValue(yamlConfig, "node-version");
-        var (nodeExe, npmExe) = InstallNode(nodeWorkspace, nodeVersion);
+        (dependencies.NodeExe, dependencies.NpmExe) = InstallNode(nodeWorkspace, nodeVersion);
+        dependencies.AppiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
 
         // Install appium
         Environment.SetEnvironmentVariable("APPIUM_HOME", Path.Join(workspace, ".appium"));
-        var appiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
-        RunBinary(npmExe, $"install appium --prefix \"{nodeWorkspace}\"");
+        RunBinary(dependencies.NpmExe, $"install appium --prefix \"{nodeWorkspace}\"");
 
         // Platform-specific setup
         var buildSettings = GetBuildSettings(testPlatform, workspace);
         switch (testPlatform)
         {
-            case "MauiAndroid": SetupAndroid(dotnetExe, nodeExe, appiumEntry, toolkitSrc, buildSettings); break;
+            case "MauiAndroid": SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, buildSettings); break;
             default: throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.");
         }
 
@@ -57,8 +58,8 @@ internal class Program
         var appiumStandardOutput = new List<string>();
         var appiumStandardError = new List<string>();
         var appiumProcess = RunBinaryBackground(
-            nodeExe,
-            appiumEntry,
+            dependencies.NodeExe,
+            dependencies.AppiumEntry,
             appiumStandardOutput,
             appiumStandardError
         );
@@ -68,7 +69,7 @@ internal class Program
             Console.WriteLine("\nStarting test cleanup...");
 
             appiumProcess.Kill();
-            RunBinary(dotnetExe, "build-server shutdown");
+            RunBinary(dependencies.DotnetExe, "build-server shutdown");
 
             if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
                 Console.WriteLine("\nAppium standard output logs:");
@@ -91,10 +92,10 @@ internal class Program
 
             // Build app and runner
             var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-            RunBinary(dotnetExe, $"build {appPath} {string.Join(" ", buildSettings.BuildParamsCommon)} {string.Join(" ", buildSettings.BuildParamsApp)}");
+            RunBinary(dependencies.DotnetExe, $"build {appPath} {string.Join(" ", buildSettings.BuildParamsCommon)} {string.Join(" ", buildSettings.BuildParamsApp)}");
 
             var runnerPath = Path.Join(uiTestsPath, buildSettings.RunnerName, $"{buildSettings.RunnerName}.csproj");
-            RunBinary(dotnetExe, $"build {runnerPath} {string.Join(" ", buildSettings.BuildParamsCommon)}");
+            RunBinary(dependencies.DotnetExe, $"build {runnerPath} {string.Join(" ", buildSettings.BuildParamsCommon)}");
 
             // Run tests
             var artifactsPath = Path.Join(uiTestsPath, "artifacts", "bin");
@@ -111,28 +112,30 @@ internal class Program
     }
 
 #region PlatformDependencies
-    private static void SetupAndroid(string dotnetExe, string nodeExe, string appiumEntry, string toolkitSrc, BuildSettings buildSettings)
+    private static void SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, BuildSettings buildSettings)
     {
         // Install maui android
-        RunBinary(dotnetExe, "workload install maui-android");
+        RunBinary(dependencies.DotnetExe, "workload install maui-android");
 
         // Install appium android driver
         try {
-            RunBinary(nodeExe, $"\"{appiumEntry}\" driver install uiautomator2");
+            RunBinary(dependencies.NodeExe, $"\"{dependencies.AppiumEntry}\" driver install uiautomator2");
         }
         catch {
             Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
         }
 
+        RunBinary(dependencies.NpmExe, $"install koffi --prefix \"{nodeWorkspace}\"");
+
         // Install jdk and android sdk
         try
         {
             var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-            RunBinary(dotnetExe, $"build {appPath} -t InstallAndroidDependencies {string.Join(" ", buildSettings.BuildParamsApp)}");
+            RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies {string.Join(" ", buildSettings.BuildParamsApp)}");
         }
         finally
         {
-            RunBinary(dotnetExe, "build-server shutdown");
+            RunBinary(dependencies.DotnetExe, "build-server shutdown");
         }
 
         // Additional setup for android? May need to have build task set ANDROID_HOME, JAVA_HOME,
@@ -216,6 +219,19 @@ internal class Program
         Environment.SetEnvironmentVariable("PATH", $"{nodeDir}{Path.PathSeparator}{currentPath}");
 
         return (nodeExe, npmExe);
+    }
+
+    private class CommonDependencies
+    {
+        public CommonDependencies(string dotnetExe)
+        {
+            DotnetExe = dotnetExe;
+        }
+
+        public string DotnetExe { get; }
+        public string NodeExe { get; set; } = string.Empty;
+        public string NpmExe { get; set; } = string.Empty;
+        public string AppiumEntry { get; set; } = string.Empty;
     }
 #endregion
 
