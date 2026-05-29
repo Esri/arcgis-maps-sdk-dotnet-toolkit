@@ -47,12 +47,11 @@ internal class Program
         RunBinary(dependencies.NpmExe, $"install appium --prefix \"{nodeWorkspace}\"");
 
         // Platform-specific setup
-        var buildSettings = GetBuildSettings(testPlatform, workspace);
-        switch (testPlatform)
+        BuildSettings buildSettings = testPlatform switch
         {
-            case "MauiAndroid": SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, buildSettings); break;
-            default: throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.");
-        }
+            "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
+            _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
+        };
 
         // Run appium in background
         var appiumStandardOutput = new List<string>();
@@ -112,8 +111,28 @@ internal class Program
     }
 
 #region PlatformDependencies
-    private static void SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, BuildSettings buildSettings)
+    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace)
     {
+        var jdkDirectory = $"{workspace}/jdk";
+        var androidSdkDirectory = $"{workspace}/android-sdk";
+
+        // Define build settings
+        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
+
+        var androidFramework = "net10.0-android";
+        buildSettings.BuildParamsApp.AddRange([
+            $"-f {androidFramework}",
+            $"-p:TargetFrameworks={androidFramework}",
+            "-r android-arm64",
+            $"-p:JavaSdkDirectory={jdkDirectory}",
+            $"-p:AndroidSdkDirectory={androidSdkDirectory}",
+            "-p:AcceptAndroidSdkLicenses=true"
+        ]);
+
+        buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
+
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+
         // Install maui android
         RunBinary(dependencies.DotnetExe, "workload install maui-android");
 
@@ -132,15 +151,15 @@ internal class Program
         {
             var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
             RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies {string.Join(" ", buildSettings.BuildParamsApp)}");
+            Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
+            Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
         }
         finally
         {
             RunBinary(dependencies.DotnetExe, "build-server shutdown");
         }
 
-        // Additional setup for android? May need to have build task set ANDROID_HOME, JAVA_HOME,
-        // and add adb to path for session if not already there. bundletool.jar probably not
-        // required, can just run the app on device using dotnet anyway
+        return buildSettings;
     }
 #endregion
 
@@ -236,31 +255,8 @@ internal class Program
 #endregion
 
 #region BuildSettings
-    private static BuildSettings GetBuildSettings(string testPlatform, string workspace)
+    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace)
     {
-        BuildSettings settings;
-        switch (testPlatform)
-        {
-            case "MauiAndroid":
-                settings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
-
-                var androidFramework = "net10.0-android";
-                settings.BuildParamsApp.AddRange([
-                    $"-f {androidFramework}",
-                    $"-p:TargetFrameworks={androidFramework}",
-                    "-r android-arm64",
-                    $"-p:JavaSdkDirectory={workspace}/jdk",
-                    $"-p:AndroidSdkDirectory={workspace}/android-sdk",
-                    "-p:AcceptAndroidSdkLicenses=true"
-                ]);
-
-                settings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
-
-                break;
-            default:
-                throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.");
-        }
-
         // Universal build parameters for the ci builds
         settings.BuildParamsCommon.AddRange([
             "-c Release",
@@ -284,8 +280,6 @@ internal class Program
         if (!string.IsNullOrWhiteSpace(trxFilename)) {
             settings.TestParams.Add($"--report-trx-filename {trxFilename}");
         }
-
-        return settings;
     }
 
     private class BuildSettings
