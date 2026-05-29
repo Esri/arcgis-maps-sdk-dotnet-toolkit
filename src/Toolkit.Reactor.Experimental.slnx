@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="Samples/Toolkit.SampleApp.Reactor/Toolkit.SampleApp.Reactor.csproj">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="Toolkit/Toolkit.Reactor/Esri.ArcGISRuntime.Toolkit.Reactor.csproj" />
+  <Project Path="Toolkit/Toolkit.WinUI/Esri.ArcGISRuntime.Toolkit.WinUI.csproj" />
+</Solution>
