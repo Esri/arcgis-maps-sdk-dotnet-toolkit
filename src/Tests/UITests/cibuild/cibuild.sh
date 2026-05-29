@@ -19,7 +19,7 @@ function main {
   install_dotnet "${WORKSPACE}" "${dotnet_version}" "${DOTNET_CACHE_FOLDER}"
 
   export TOOLKIT_SRC=$(realpath "${script_dir}/../../../")
-  "${DOTNET_EXE}" run "${script_dir}/cibuild.cs" -- $1
+  "${DOTNET_PATH}" run "${script_dir}/cibuild.cs" -- $1
 }
 
 function install_dotnet {
@@ -41,7 +41,7 @@ function install_dotnet {
   fi
 
   export DOTNET_ROOT="${dotnet_install_dir}"
-  export DOTNET_EXE="${dotnet_install_dir}"/dotnet
+  export DOTNET_PATH="${dotnet_install_dir}/dotnet"
 }
 
 function read_yaml_var {

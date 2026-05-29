@@ -17,10 +17,10 @@ internal class Program
             throw new ArgumentException($"Test platform '{testPlatform}' not recognized. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
 
         var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
-        var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_EXE");
+        var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_PATH");
         var toolkitSrc = Environment.GetEnvironmentVariable("TOOLKIT_SRC");
         if (string.IsNullOrWhiteSpace(workspace) || string.IsNullOrEmpty(dotnetExe) || string.IsNullOrEmpty(toolkitSrc)) {
-            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_DIR, and TOOLKIT_SRC must all be set.");
+            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_PATH, and TOOLKIT_SRC must all be set.");
         }
         if (!Path.Exists(workspace) || !Path.Exists(dotnetExe) || !Path.Exists(toolkitSrc)) {
             throw new ArgumentException("Workspace and dotnet directory must be existing paths.");
