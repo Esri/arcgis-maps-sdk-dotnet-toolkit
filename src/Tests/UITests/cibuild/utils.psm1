@@ -69,6 +69,13 @@ function Invoke-WindowsUITests {
     exit $LASTEXITCODE
   }
 
+  # Install koffi
+  & $npm_exe install koffi --prefix $node_workspace
+  if ($LASTEXITCODE -ne 0) {
+    Write-Error "Error installing koffi node module. Koffi is necessary to avoid reliance on node-ffi, which in turn requires a Visual Studio install."
+    exit $LASTEXITCODE
+  }
+
   # Extract and configure WindowsAppDriver for appium
   $wad_installer = Join-Path $workspace 'WinAppDriver.msi'
   & curl.exe -sSL https://github.com/microsoft/WinAppDriver/releases/download/v1.2.1/WindowsApplicationDriver_1.2.1.msi -o $wad_installer
