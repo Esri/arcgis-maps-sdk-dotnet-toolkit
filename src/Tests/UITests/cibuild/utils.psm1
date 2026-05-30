@@ -148,7 +148,7 @@ function Invoke-WindowsUITests {
       }
 
       $env:TKUITEST_APP = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
-      & $dotnet_exe test $runner_project @build_parameters @test_run_params
+      & $dotnet_exe test --project $runner_project @build_parameters @test_run_params
     }
     finally {
       # Kill appium and return to original location
