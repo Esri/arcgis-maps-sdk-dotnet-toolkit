@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.UI.Reactor" Version="0.1.0-experimental.0.541" />
+    <PackageReference Include="Microsoft.UI.Reactor" Version="0.1.0-experimental.0.552" />
     <PackageReference Include="Esri.ArcGISRuntime.WinUI">
       <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
