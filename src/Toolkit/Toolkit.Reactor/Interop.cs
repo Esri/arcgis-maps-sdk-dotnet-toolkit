@@ -28,6 +28,10 @@ public static class Interop
             {
                 if (oldElement.Map != newElement.Map)
                     mapView.Map = newElement.Map;
+                if(oldElement.LocationDisplay.IsEnabled != newElement.LocationDisplay.IsEnabled)
+                    mapView.LocationDisplay.IsEnabled = newElement.LocationDisplay.IsEnabled;
+                if(oldElement.LocationDisplay.AutoPanMode != newElement.LocationDisplay.AutoPanMode)
+                    mapView.LocationDisplay.AutoPanMode = newElement.LocationDisplay.AutoPanMode;
                 UpdateGeoview(oldElement, newElement, mapView);
                 Reconciler.ApplySetters(newElement.Setters, mapView);
                 return null;

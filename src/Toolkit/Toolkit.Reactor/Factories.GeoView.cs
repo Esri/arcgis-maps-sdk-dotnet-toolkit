@@ -43,6 +43,17 @@ public static partial class Factories
 
     public static T Basemap<T>(this T element, BasemapStyle basemap) where T : GeoViewElement => element.Basemap(new Basemap(basemap));
 
+    public static MapViewElement LocationDisplay(this MapViewElement element, bool enabled, LocationDisplayAutoPanMode autoPanMode = LocationDisplayAutoPanMode.Off)
+    {
+        return element with
+        {
+            LocationDisplay = new LocationDisplayElement()
+            {
+                IsEnabled = enabled,
+                AutoPanMode = autoPanMode
+            }
+        };
+    }
     public static MapViewElement MapView(Map? map = null, Action<GeoViewInputEventArgs>? onTapped = null) => new(map, onTapped);
 
     public static SceneViewElement SceneView(Scene? scene = null) => new(scene);

@@ -16,6 +16,13 @@ public abstract record GeoViewElement(Action<GeoViewInputEventArgs>? OnTapped = 
 
 public record MapViewElement(Map? Map, Action<GeoViewInputEventArgs>? OnTapped = null) : GeoViewElement(OnTapped)
 {
+    public LocationDisplayElement LocationDisplay { get; set; } = new LocationDisplayElement();
+}
+
+public record LocationDisplayElement : Element
+{
+    public bool IsEnabled { get; set; }
+    public LocationDisplayAutoPanMode AutoPanMode { get; set; } = LocationDisplayAutoPanMode.Off;
 }
 
 public record SceneViewElement(Scene? Scene, Action<GeoViewInputEventArgs>? OnTapped = null) : GeoViewElement(OnTapped)

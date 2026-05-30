@@ -15,6 +15,9 @@ internal static partial class Reconciler
                 element.OnTapped(e);
             };
         }
+        mapView.LocationDisplay.IsEnabled = element.LocationDisplay.IsEnabled;
+        mapView.LocationDisplay.AutoPanMode = element.LocationDisplay.AutoPanMode;
+
         ApplySetters(element.Setters, mapView);
         return mapView;
     }

@@ -2,9 +2,10 @@ namespace Toolkit.SampleApp.Reactor.Samples.Maps;
 
 public sealed class SimpleMapPage : Component
 {
+    private Map map = new Map(BasemapStyle.ArcGISStreets);
+
     public override Element Render()
     {
-        var map = UseMemo(() => new Map(BasemapStyle.ArcGISStreets));
         return MapView(map);
     }
 }
