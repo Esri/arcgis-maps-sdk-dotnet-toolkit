@@ -189,6 +189,12 @@ function Install-Dotnet {
     [string]$dotnet_cache_folder=$env:DOTNET_CACHE_FOLDER
   )
 
+  if (![string]::IsNullOrWhiteSpace($env:DOTNET_EXE)) {
+    Write-Host 'DOTNET_EXE provided as an environment variable. Skipping install.'
+    $env:DOTNET_ROOT = [System.IO.Path]::GetDirectoryName($env:DOTNET_EXE)
+    return $env:DOTNET_EXE
+  }
+
   Write-Host 'Starting dotnet install...'
 
   # Install the requested dotnet version if it is not already present.
