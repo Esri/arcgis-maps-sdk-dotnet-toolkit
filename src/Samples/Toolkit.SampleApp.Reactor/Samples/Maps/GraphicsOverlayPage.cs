@@ -14,18 +14,24 @@ public sealed class GraphicsOverlayPage : Component
         {
             var overlay = new Esri.ArcGISRuntime.UI.GraphicsOverlay()
             {
-                Renderer = new SimpleRenderer(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 20))
+                Renderer = new SimpleRenderer(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 12))
             };
             overlay.Graphics.Add(new Esri.ArcGISRuntime.UI.Graphic(new MapPoint(-122.431297, 37.773972, SpatialReferences.Wgs84)));
             return new GraphicsOverlayCollection
             {
                 overlay
-            }; ;
+            };
         });
 
-        return MapView(
+        return Grid(columns: [GridSize.Star()], rows: [GridSize.Star()],
+            MapView(
                 map: map,
                 onTapped: (args)=> overlays[0].Graphics.Add(new Graphic(args.Location)))
-            .GraphicsOverlays(overlays);
+               .GraphicsOverlays(overlays),
+            GalleryControls.ControlPanel(VStack(
+                Caption("Click the map to add graphics"),
+                Button("Clear Graphics", () => overlays[0].Graphics.Clear()).HorizontalAlignment(Microsoft.UI.Xaml.HorizontalAlignment.Stretch)
+                ))
+        );
     }
 }

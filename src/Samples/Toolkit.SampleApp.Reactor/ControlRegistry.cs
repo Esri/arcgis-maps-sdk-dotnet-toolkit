@@ -16,6 +16,7 @@ public static class ControlRegistry
         // Basic Maps
         new("Map", "The simplest bit of code to display a map.", "Maps", "\uE707", "map", "Map.png"),
         new("Scene", "The simplest bit of code to display a scene.", "Maps", "\uE774", "scene", "Scene.png"),
+        new("Local Scene", "The simplest bit of code to display a local scene.", "Maps", "\uE774", "localscene", "LocalScene.png"),
 
         new("Map Picker", "Demonstrates selecting a map from a dropdown", "Maps", "\uE707", "mappicker", "Map.png"),
         new("Basemap Picker", "Demonstrates selecting a basemap style from a dropdown and updating the active map", "Maps", "\uE707", "basemappicker", "Basemap.png"),

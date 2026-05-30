@@ -8,6 +8,13 @@ internal static partial class Reconciler
     internal static MapView CreateMapView(MapViewElement element)
     {
         var mapView = new MapView { Map = element.Map }.MountGeoView(element);
+        if (element.OnTapped != null)
+        {
+            mapView.GeoViewTapped += (s, e) =>
+            {
+                element.OnTapped(e);
+            };
+        }
         ApplySetters(element.Setters, mapView);
         return mapView;
     }

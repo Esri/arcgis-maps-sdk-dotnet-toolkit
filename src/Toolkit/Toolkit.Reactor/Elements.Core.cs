@@ -12,7 +12,6 @@ public abstract record GeoViewElement(Action<GeoViewInputEventArgs>? OnTapped = 
 {
     internal Action<GeoView>[] Setters { get; init; } = [];
     public GraphicsOverlayCollection? GraphicsOverlays { get; set; }
-
 }
 
 public record MapViewElement(Map? Map, Action<GeoViewInputEventArgs>? OnTapped = null) : GeoViewElement(OnTapped)

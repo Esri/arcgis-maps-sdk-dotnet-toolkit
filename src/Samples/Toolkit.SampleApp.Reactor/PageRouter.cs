@@ -14,6 +14,8 @@ static class PageRouter
         // Basic maps
         "map" => Component<Samples.Maps.SimpleMapPage>(),
         "scene" => Component<Samples.Maps.SimpleScenePage>(),
+        "localscene" => Component<Samples.Maps.SimpleLocalScenePage>(),
+
         "mappicker" => Component<Samples.Maps.MapPickerPage>(),
         "basemappicker" => Component<Samples.Maps.BasemapPickerPage>(),
         "graphicsoverlays" => Component<Samples.Maps.GraphicsOverlayPage>(),
