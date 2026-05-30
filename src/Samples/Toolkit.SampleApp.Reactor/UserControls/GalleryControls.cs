@@ -85,10 +85,10 @@ public static class GalleryControls
             gv.IsSwipeEnabled = false;
             // Disable GridView's internal ScrollViewer so it sizes to content
             // and wraps properly inside an outer ScrollView.
-            ScrollViewer.SetVerticalScrollMode(gv, ScrollMode.Disabled);
-            ScrollViewer.SetVerticalScrollBarVisibility(gv, ScrollBarVisibility.Disabled);
-            ScrollViewer.SetHorizontalScrollMode(gv, ScrollMode.Disabled);
-            ScrollViewer.SetHorizontalScrollBarVisibility(gv, ScrollBarVisibility.Disabled);
+            global::Microsoft.UI.Xaml.Controls.ScrollViewer.SetVerticalScrollMode(gv, ScrollMode.Disabled);
+            global::Microsoft.UI.Xaml.Controls.ScrollViewer.SetVerticalScrollBarVisibility(gv, ScrollBarVisibility.Disabled);
+            global::Microsoft.UI.Xaml.Controls.ScrollViewer.SetHorizontalScrollMode(gv, ScrollMode.Disabled);
+            global::Microsoft.UI.Xaml.Controls.ScrollViewer.SetHorizontalScrollBarVisibility(gv, ScrollBarVisibility.Disabled);
             // Set spacing on the ItemsWrapGrid panel so hover stays on the card, not the margin.
             if (gv.ItemsPanelRoot is ItemsWrapGrid wrapGrid)
             {
@@ -159,7 +159,7 @@ public static class GalleryControls
                 .Height(200)
                 .Background(Theme.SubtleFill),
                 isExpanded: false,
-                onExpandedChanged: null
+                onIsExpandedChanged: null
             )
             .OnMount(el =>
             {
@@ -180,5 +180,21 @@ public static class GalleryControls
                     .WithBorder(Theme.CardStroke)
                     .CornerRadius(OverlayRadius)
         );
+    }
+
+
+    /// <summary>
+    /// Renders a themed control panel card containing the control panel
+    /// </summary>
+    public static Element ControlPanel(Element panel)
+    {
+        return Border(panel)
+            .Padding(16)
+            .Margin(16)
+            .CornerRadius(12)
+            .VerticalAlignment(VerticalAlignment.Top)
+            .HorizontalAlignment(HorizontalAlignment.Left)
+            .WithBorder(new ThemeRef("CircleElevationBorderBrush"))
+            .Background(new ThemeRef("ControlSolidFillColorDefaultBrush"));
     }
 }

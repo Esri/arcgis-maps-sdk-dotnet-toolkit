@@ -24,7 +24,7 @@ class HomePage : Component<Action<string>>
 
         var recentControls = ControlRegistry.All.Take(8).ToArray();
 
-        return (ScrollView(
+        return (ScrollViewer(
             VStack(0,
                 // ── Hero section ────────────────────────────────────────
                 Border(
@@ -41,6 +41,14 @@ class HomePage : Component<Action<string>>
                     .HAlign(HorizontalAlignment.Left)
                 ),
 
+                TextBlock("Enter API Key"),
+                PasswordBox(Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey, (key) => {
+                        Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = key;
+                        _ = SecureStorage.SetAsync("APIKey", key);
+                    },
+                    "Enter API Key").AutomationName("API Key"),
+                Caption("Most samples require an ArcGIS Services API Key").Margin(0, 0, 0, 16),
+
                 // ── Category cards section ──────────────────────────────
                 VStack(16,
                     TextBlock("Browse by Category")
@@ -54,7 +62,7 @@ class HomePage : Component<Action<string>>
 
                     GalleryControls.ControlCardGrid(recentControls, navigate)
                 )
-            ).Margin(36,40,36,36)
+            ).Margin(36, 40, 36, 36)
         ) with
         {
             HorizontalScrollBarVisibility = Microsoft.UI.Xaml.Controls.ScrollBarVisibility.Disabled,

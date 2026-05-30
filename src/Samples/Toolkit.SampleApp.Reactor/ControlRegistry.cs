@@ -14,15 +14,23 @@ public static class ControlRegistry
     public static ControlInfo[] All { get; } = new ControlInfo[]
     {
         // Basic Maps
-        new("Map", "Simple Map.", "Maps", "\uE73A", "map", "Map.png"),
+        new("Map", "The simplest bit of code to display a map.", "Maps", "\uE707", "map", "Map.png"),
+        new("Scene", "The simplest bit of code to display a scene.", "Maps", "\uE774", "scene", "Scene.png"),
 
+        new("Map Picker", "Demonstrates selecting a map from a dropdown", "Maps", "\uE707", "mappicker", "Map.png"),
+        new("Basemap Picker", "Demonstrates selecting a basemap style from a dropdown and updating the active map", "Maps", "\uE707", "basemappicker", "Basemap.png"),
+
+        new("Graphics Overlays", "Working with graphics overlays", "Maps", "\uE707", "graphicsoverlays", "Graphicsoverlays.png"),
+
+        // Toolkit
+        new("Compass", "Compass.", "Toolkit", "\uEBE6", "compass", "Compass.png"),
+        new("Basemap Gallery", "Basemap Gallery.", "Toolkit", "\uEBE6", "basemapgallery", "BasemapGallery.png"),
     }
-    .OrderBy(c => c.Title, StringComparer.OrdinalIgnoreCase)
     .ToArray();
 
     public static string[] Categories { get; } = new[]
     {
-        "Maps",
+        "Maps", "Toolkit"
     };
 
     public static ControlInfo[] Search(string query)
