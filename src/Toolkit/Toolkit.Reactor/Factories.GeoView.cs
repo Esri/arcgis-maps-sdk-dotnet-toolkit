@@ -7,7 +7,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 
 public static partial class Factories
 {
-    public static GeoViewElement GraphicsOverlays(this GeoViewElement element, GraphicsOverlayCollection collection)
+    /// <summary>
+    /// Sets the GraphicsOverlays collection on the GeoView
+    /// </summary>
+    /// <param name="element">GeoView</param>
+    /// <param name="collection">GraphicsOverlayC</param>
+    /// <returns></returns>
+    public static T GraphicsOverlays<T>(this T element, GraphicsOverlayCollection collection) where T : GeoViewElement
     {
         return element with
         {
@@ -15,6 +21,13 @@ public static partial class Factories
         };
     }
 
+    /// <summary>
+    /// Replaces the basemap on the <see cref="Map"/> or <see cref="Scene"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="element"></param>
+    /// <param name="basemap"></param>
+    /// <returns></returns>
     public static T Basemap<T>(this T element, Basemap basemap) where T : GeoViewElement =>
         element.Set((gv) =>
         {
@@ -43,6 +56,17 @@ public static partial class Factories
 
     public static T Basemap<T>(this T element, BasemapStyle basemap) where T : GeoViewElement => element.Basemap(new Basemap(basemap));
 
+    private const string WorldElevationUri = "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer";
+    
+    public static Scene WorldElevation(this Scene scene)
+    {
+        var surface = scene.BaseSurface ?? new Surface();
+        if (surface.ElevationSources.OfType<ArcGISTiledElevationSource>().Any(es => es.Source?.OriginalString == WorldElevationUri))
+            return scene;
+        surface.ElevationSources.Insert(0, new ArcGISTiledElevationSource(new Uri(WorldElevationUri)));
+        scene.BaseSurface = surface;
+        return scene;
+    }
     public static MapViewElement LocationDisplay(this MapViewElement element, bool enabled, LocationDisplayAutoPanMode autoPanMode = LocationDisplayAutoPanMode.Off)
     {
         return element with

@@ -2,9 +2,10 @@ namespace Toolkit.SampleApp.Reactor.Samples.Maps;
 
 public sealed class SimpleScenePage : Component
 {
+    private Scene scene = new Scene(BasemapStyle.ArcGISImageryStandard).WorldElevation();
+
     public override Element Render()
     {
-        var scene = UseMemo(() => new Scene(BasemapStyle.ArcGISImageryStandard));
         return SceneView(scene);
     }
 }
