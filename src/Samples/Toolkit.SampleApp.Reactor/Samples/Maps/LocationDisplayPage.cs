@@ -19,7 +19,8 @@ public sealed class LocationDisplayPage : Component
              VStack(
                 ToggleSwitch(enableLocation, (e) => setEnableLocation(e), header: "Enable location"),
                 Caption("Auto Pan Mode:"),
-                ComboBox(new [] { "Off", "Recenter", "Navigation", "Compass" }, (int)autopanmode, (i) => setAutopanmode((LocationDisplayAutoPanMode)i))
+                ComboBox(new [] { "Off", "Recenter", "Navigation", "Compass" }, 
+                    (int)autopanmode, (i) => setAutopanmode((LocationDisplayAutoPanMode)i))
              )));
     }
 }
