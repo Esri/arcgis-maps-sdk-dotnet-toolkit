@@ -39,8 +39,21 @@ namespace Toolkit.Tests
         [TestMethod]
         public async Task PortalItemMustHaveID()
         {
-            var map = new Map(new Uri(naperville_preplanned));
+            var map = new Map(new Uri("https://www.arcgis.com/apps/mapviewer/index.html"));
             Assert.ThrowsExactly<ArgumentException>(() => new OfflineMapViewModel(map, a => a(), null!));
+        }
+
+        [TestMethod]
+        [DataRow("https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405")]
+        [DataRow("https://www.arcgis.com/home/webmap/viewer.html?webmap=55ebf90799fa4a3fa57562700a68c405")]
+        [DataRow("https://www.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405")]
+        [DataRow("https://www.arcgis.com/sharing/rest/content/items/55ebf90799fa4a3fa57562700a68c405/data")]
+        [DataRow("https://www.arcgis.com/sharing/rest/content/items/55ebf90799fa4a3fa57562700a68c405?f=json")]
+        public async Task ParseItemsIDs(string id)
+        {
+            var map = new Map(new Uri(id));
+            var vm = new OfflineMapViewModel(map, a => a(), null!);
+            Assert.AreEqual("55ebf90799fa4a3fa57562700a68c405", vm.PortalItemId); ;
         }
 
         [TestMethod]

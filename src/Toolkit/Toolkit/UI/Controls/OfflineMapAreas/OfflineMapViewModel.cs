@@ -80,9 +80,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             string? itemId = onlineMap.Item?.ItemId;
             if (string.IsNullOrWhiteSpace(itemId) && onlineMap.Uri is not null)
-            { 
-                // If map isn't loaded yet, look for Itme ID parameter in URL and extract it:
-                itemId = System.Web.HttpUtility.ParseQueryString(onlineMap.Uri.Query)["id"];
+            {
+                // If map isn't loaded yet, look for Item ID parameter in URL and extract it:
+                // Possible URLs with item id in different locations. The item id is a lower-case guid (e.g. 55ebf90799fa4a3fa57562700a68c405):
+                // https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405
+                // https://www.arcgis.com/home/webmap/viewer.html?webmap=55ebf90799fa4a3fa57562700a68c405
+                // https://www.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405
+                // https://www.arcgis.com/sharing/rest/content/items/55ebf90799fa4a3fa57562700a68c405/data
+                // https://www.arcgis.com/sharing/rest/content/items/55ebf90799fa4a3fa57562700a68c405?f=json
+                itemId = System.Web.HttpUtility.ParseQueryString(onlineMap.Uri.Query)["id"]
+                    ?? System.Web.HttpUtility.ParseQueryString(onlineMap.Uri.Query)["webmap"];
+                if (string.IsNullOrEmpty(itemId))
+                {
+                    // If not found in query parameters, attempt to extract from path segment after items:
+                    itemId = Regex.Match(onlineMap.Uri.AbsolutePath, @"(?:/items/|/id/)([a-f0-9]{32})(?:/|$)", RegexOptions.IgnoreCase).Groups[1].Value;
+                }
             }
             if (string.IsNullOrWhiteSpace(itemId))
             {
