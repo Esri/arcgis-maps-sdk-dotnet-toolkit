@@ -110,58 +110,6 @@ internal class Program
         return 0;
     }
 
-#region PlatformDependencies
-    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace)
-    {
-        var jdkDirectory = $"{workspace}/jdk";
-        var androidSdkDirectory = $"{workspace}/android-sdk";
-
-        // Define build settings
-        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
-
-        var androidFramework = "net10.0-android";
-        buildSettings.BuildParamsApp.AddRange([
-            $"-f {androidFramework}",
-            $"-p:TargetFrameworks={androidFramework}",
-            "-r android-arm64",
-            $"-p:JavaSdkDirectory={jdkDirectory}",
-            $"-p:AndroidSdkDirectory={androidSdkDirectory}"
-        ]);
-
-        buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
-
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
-
-        // Install maui android
-        RunBinary(dependencies.DotnetExe, "workload install maui-android");
-
-        // Install appium android driver
-        try {
-            RunBinary(dependencies.NodeExe, $"\"{dependencies.AppiumEntry}\" driver install uiautomator2");
-        }
-        catch {
-            Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
-        }
-
-        RunBinary(dependencies.NpmExe, $"install koffi --prefix \"{nodeWorkspace}\"");
-
-        // Install jdk and android sdk
-        try
-        {
-            var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-            RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildSettings.BuildParamsApp)}");
-            Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
-            Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
-        }
-        finally
-        {
-            RunBinary(dependencies.DotnetExe, "build-server shutdown");
-        }
-
-        return buildSettings;
-    }
-#endregion
-
 #region CommonDependencies
     private static void SetNugetSource(string workspace, string dotnetExe, string nugetRepo)
     {
@@ -250,6 +198,58 @@ internal class Program
         public string NodeExe { get; set; } = string.Empty;
         public string NpmExe { get; set; } = string.Empty;
         public string AppiumEntry { get; set; } = string.Empty;
+    }
+#endregion
+
+#region PlatformDependencies
+    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace)
+    {
+        var jdkDirectory = $"{workspace}/jdk";
+        var androidSdkDirectory = $"{workspace}/android-sdk";
+
+        // Define build settings
+        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
+
+        var androidFramework = "net10.0-android";
+        buildSettings.BuildParamsApp.AddRange([
+            $"-f {androidFramework}",
+            $"-p:TargetFrameworks={androidFramework}",
+            "-r android-arm64",
+            $"-p:JavaSdkDirectory={jdkDirectory}",
+            $"-p:AndroidSdkDirectory={androidSdkDirectory}"
+        ]);
+
+        buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
+
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+
+        // Install maui android
+        RunBinary(dependencies.DotnetExe, "workload install maui-android");
+
+        // Install appium android driver
+        try {
+            RunBinary(dependencies.NodeExe, $"\"{dependencies.AppiumEntry}\" driver install uiautomator2");
+        }
+        catch {
+            Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
+        }
+
+        RunBinary(dependencies.NpmExe, $"install koffi --prefix \"{nodeWorkspace}\"");
+
+        // Install jdk and android sdk
+        try
+        {
+            var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
+            RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildSettings.BuildParamsApp)}");
+            Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
+            Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
+        }
+        finally
+        {
+            RunBinary(dependencies.DotnetExe, "build-server shutdown");
+        }
+
+        return buildSettings;
     }
 #endregion
 
