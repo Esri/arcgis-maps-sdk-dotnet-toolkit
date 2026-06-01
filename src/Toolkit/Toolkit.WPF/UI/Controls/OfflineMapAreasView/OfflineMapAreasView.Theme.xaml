@@ -157,7 +157,8 @@
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Stretch"
                                     ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MapAreas}"
-                                    ItemTemplate="{TemplateBinding ItemTemplate}"/>
+                                    ItemTemplate="{TemplateBinding ItemTemplate}"
+                                    IsTabStop="False"/>
 
                                 <StackPanel Grid.Row="0">
                                     <StackPanel.Style>
