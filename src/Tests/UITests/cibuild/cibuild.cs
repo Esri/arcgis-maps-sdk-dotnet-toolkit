@@ -1,8 +1,10 @@
 using System.IO.Compression;
 using System.Diagnostics;
 using System.Formats.Tar;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-internal class Program
+internal partial class Program
 {
     // Supported test platforms
     private static string[] _testPlatforms = { "MauiAndroid" };
@@ -11,21 +13,50 @@ internal class Program
     {
         // Required inputs
         if (args.Length < 1)
-            throw new ArgumentException($"A test platform must be passed as the first and only command line argument. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
+            throw new ArgumentException($"A test platform must be passed as the first command line argument. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
         var testPlatform = args[0].Trim();
         if (!_testPlatforms.Contains(testPlatform))
             throw new ArgumentException($"Test platform '{testPlatform}' not recognized. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
 
+        var step = args.Length > 1 ? args[1].Trim() : "All";
+        step = step.ToLower();
+        if (!new[] { "all", "setup", "run" }.Contains(step))
+            throw new ArgumentException("The optional second command line argument must be one of [All, Setup, Run].");
+
         var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
-        var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_PATH");
-        var toolkitSrc = Environment.GetEnvironmentVariable("TOOLKIT_SRC");
-        if (string.IsNullOrWhiteSpace(workspace) || string.IsNullOrEmpty(dotnetExe) || string.IsNullOrEmpty(toolkitSrc)) {
-            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_PATH, and TOOLKIT_SRC must all be set.");
+        if (string.IsNullOrWhiteSpace(workspace)) {
+            throw new ArgumentException("Environment variable WORKSPACE must be set.");
         }
-        if (!Path.Exists(workspace) || !Path.Exists(dotnetExe) || !Path.Exists(toolkitSrc)) {
-            throw new ArgumentException("Workspace and dotnet directory must be existing paths.");
+        if (!Path.Exists(workspace)) {
+            throw new ArgumentException("Workspace must be an existing path.");
         }
 
+        // Logic
+        var stateFile = Path.Join(workspace, "cibuild-state.json");
+        var platformStateFile = Path.Join(workspace, $"cibuild-{testPlatform}-state.json");
+
+        if (step is "all" or "setup") {
+            var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_PATH");
+            var toolkitSrc = Environment.GetEnvironmentVariable("TOOLKIT_SRC");
+            if (string.IsNullOrWhiteSpace(dotnetExe) || string.IsNullOrEmpty(toolkitSrc)) {
+                throw new ArgumentException("Environment variables DOTNET_PATH and TOOLKIT_SRC must be set.");
+            }
+            if (!Path.Exists(dotnetExe) || !Path.Exists(toolkitSrc)) {
+                throw new ArgumentException("Dotnet and toolkit source must be existing paths.");
+            }
+
+            Setup(testPlatform, workspace, dotnetExe, toolkitSrc, stateFile, platformStateFile);
+        }
+
+        if (step is "all" or "run") {
+            RunTests(testPlatform, stateFile, platformStateFile);
+        }
+
+        return 0;
+    }
+
+    private static void Setup(string testPlatform, string workspace, string dotnetExe, string toolkitSrc, string stateFile, string platformStateFile)
+    {
         // Derived variables
         var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
         var dependencies = new CommonDependencies(dotnetExe);
@@ -47,9 +78,41 @@ internal class Program
         RunBinary(dependencies.NpmExe, $"install appium --prefix \"{nodeWorkspace}\"");
 
         // Platform-specific setup
-        BuildSettings buildSettings = testPlatform switch
+        switch (testPlatform)
         {
-            "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
+            case "MauiAndroid":
+                SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace, platformStateFile);
+                break;
+            default:
+                throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.");
+        }
+
+        var state = new CommonBuildState
+        {
+            TestPlatform = testPlatform,
+            Workspace = workspace,
+            ToolkitSrc = toolkitSrc,
+            NodeWorkspace = nodeWorkspace,
+            AppiumHome = Path.Join(workspace, ".appium"),
+            NuGetPackages = Environment.GetEnvironmentVariable("NUGET_PACKAGES") ?? string.Empty,
+            NuGetHttpCachePath = Environment.GetEnvironmentVariable("NUGET_HTTP_CACHE_PATH") ?? string.Empty,
+            Dependencies = dependencies
+        };
+        WriteCommonState(stateFile, state);
+    }
+
+    private static void RunTests(string testPlatform, string stateFile, string platformStateFile)
+    {
+        var state = ReadCommonState(stateFile);
+        if (state.TestPlatform != testPlatform) {
+            throw new ArgumentException($"State file was created for '{state.TestPlatform}', not '{testPlatform}'.");
+        }
+
+        ApplyState(state);
+        var dependencies = state.Dependencies;
+        var buildSettings = testPlatform switch
+        {
+            "MauiAndroid" => ApplyAndroidState(ReadAndroidState(platformStateFile)),
             _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
         };
 
@@ -87,7 +150,7 @@ internal class Program
         Console.CancelKeyPress += (sender, args) => cleanup();
 
         try {
-            var uiTestsPath = Path.Join(toolkitSrc, "Tests", "UITests");
+            var uiTestsPath = Path.Join(state.ToolkitSrc, "Tests", "UITests");
 
             // Build app and runner
             var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
@@ -106,12 +169,10 @@ internal class Program
         finally {
             cleanup();
         }
-        
-        return 0;
     }
 
 #region PlatformDependencies
-    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace)
+    private static void SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace, string stateFile)
     {
         var jdkDirectory = $"{workspace}/jdk";
         var androidSdkDirectory = $"{workspace}/android-sdk";
@@ -158,7 +219,13 @@ internal class Program
             RunBinary(dependencies.DotnetExe, "build-server shutdown");
         }
 
-        return buildSettings;
+        var state = new AndroidBuildState
+        {
+            JavaHome = jdkDirectory,
+            AndroidHome = androidSdkDirectory,
+            BuildSettings = buildSettings
+        };
+        WriteAndroidState(stateFile, state);
     }
 #endregion
 
@@ -190,6 +257,60 @@ internal class Program
             }
         }
         throw new Exception($"Could find variable ${name} in ${yamlFile}");
+    }
+
+    private static void WriteCommonState(string stateFile, CommonBuildState state)
+    {
+        Console.WriteLine($"\nWriting ci build state to {stateFile}");
+        var json = JsonSerializer.Serialize(state, CiBuildJsonContext.Default.CommonBuildState);
+        File.WriteAllText(stateFile, json);
+    }
+
+    private static void WriteAndroidState(string stateFile, AndroidBuildState state)
+    {
+        Console.WriteLine($"\nWriting ci build state to {stateFile}");
+        var json = JsonSerializer.Serialize(state, CiBuildJsonContext.Default.AndroidBuildState);
+        File.WriteAllText(stateFile, json);
+    }
+
+    private static CommonBuildState ReadCommonState(string stateFile)
+    {
+        if (!File.Exists(stateFile)) {
+            throw new FileNotFoundException($"Could not find ci build state file. Run Setup first: {stateFile}", stateFile);
+        }
+
+        var state = JsonSerializer.Deserialize(File.ReadAllText(stateFile), CiBuildJsonContext.Default.CommonBuildState);
+        return state ?? throw new Exception($"Could not read ci build state file: {stateFile}");
+    }
+
+    private static AndroidBuildState ReadAndroidState(string stateFile)
+    {
+        if (!File.Exists(stateFile)) {
+            throw new FileNotFoundException($"Could not find ci build state file. Run Setup first: {stateFile}", stateFile);
+        }
+
+        var state = JsonSerializer.Deserialize(File.ReadAllText(stateFile), CiBuildJsonContext.Default.AndroidBuildState);
+        return state ?? throw new Exception($"Could not read ci build state file: {stateFile}");
+    }
+
+    private static void ApplyState(CommonBuildState state)
+    {
+        Environment.SetEnvironmentVariable("APPIUM_HOME", state.AppiumHome);
+        Environment.SetEnvironmentVariable("NUGET_PACKAGES", state.NuGetPackages);
+        Environment.SetEnvironmentVariable("NUGET_HTTP_CACHE_PATH", state.NuGetHttpCachePath);
+
+        var nodeDir = Path.GetDirectoryName(state.Dependencies.NodeExe);
+        if (!string.IsNullOrWhiteSpace(nodeDir)) {
+            var currentPath = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+            Environment.SetEnvironmentVariable("PATH", $"{nodeDir}{Path.PathSeparator}{currentPath}");
+        }
+    }
+
+    private static BuildSettings ApplyAndroidState(AndroidBuildState state)
+    {
+        Environment.SetEnvironmentVariable("JAVA_HOME", state.JavaHome);
+        Environment.SetEnvironmentVariable("ANDROID_HOME", state.AndroidHome);
+        return state.BuildSettings;
     }
 
     private static (string NodeExe, string NpmExe) InstallNode(string workspace, string nodeVersion)
@@ -241,15 +362,43 @@ internal class Program
 
     private class CommonDependencies
     {
+        public CommonDependencies() { }
+
         public CommonDependencies(string dotnetExe)
         {
             DotnetExe = dotnetExe;
         }
 
-        public string DotnetExe { get; }
+        public string DotnetExe { get; set; } = string.Empty;
         public string NodeExe { get; set; } = string.Empty;
         public string NpmExe { get; set; } = string.Empty;
         public string AppiumEntry { get; set; } = string.Empty;
+    }
+
+    private class CommonBuildState
+    {
+        public string TestPlatform { get; set; } = string.Empty;
+        public string Workspace { get; set; } = string.Empty;
+        public string ToolkitSrc { get; set; } = string.Empty;
+        public string NodeWorkspace { get; set; } = string.Empty;
+        public string AppiumHome { get; set; } = string.Empty;
+        public string NuGetPackages { get; set; } = string.Empty;
+        public string NuGetHttpCachePath { get; set; } = string.Empty;
+        public CommonDependencies Dependencies { get; set; } = new();
+    }
+
+    private class AndroidBuildState
+    {
+        public string JavaHome { get; set; } = string.Empty;
+        public string AndroidHome { get; set; } = string.Empty;
+        public BuildSettings BuildSettings { get; set; } = new();
+    }
+
+    [JsonSourceGenerationOptions(WriteIndented = true, IncludeFields = true)]
+    [JsonSerializable(typeof(CommonBuildState))]
+    [JsonSerializable(typeof(AndroidBuildState))]
+    private partial class CiBuildJsonContext : JsonSerializerContext
+    {
     }
 #endregion
 
@@ -288,8 +437,8 @@ internal class Program
         public List<string> BuildParamsCommon = new();
         public List<string> BuildParamsApp = new();
         public List<string> TestParams = new();
-        public string AppName;
-        public string RunnerName;
+        public string AppName = string.Empty;
+        public string RunnerName = string.Empty;
 
         /// <summary> Defaults to AppName if not explicitly set. </summary>
         public string BinaryName
@@ -297,6 +446,8 @@ internal class Program
             get => _binaryName ?? AppName;
             set => _binaryName = value;
         }
+
+        public BuildSettings() { }
 
         public BuildSettings(string appName, string runnerName)
         {
