@@ -110,13 +110,13 @@
                                     Command="{Binding OpenCommand}"
                                     CommandParameter="{Binding Map}"
                                     Content="{internal:LocalizedString Key=OfflineMapAreasOpen}" />
-                                <Button Margin="8,0,0,0" VerticalAlignment="Center"
+                            </StackPanel>
+                            <Button Margin="8,0,0,0" VerticalAlignment="Center"
                                     AutomationProperties.HelpText="{Binding Error.Message, Mode=OneWay}"
                                     ToolTipService.ToolTip="{Binding Error.Message, Mode=OneWay}"
                                     Command="{Binding RemoveDownloadCommand, Mode=OneWay}" Visibility="{Binding Error, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
-                                    <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="16" Text="&#xE844;" />
-                                </Button>
-                            </StackPanel>
+                                <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="16" Text="&#xE844;" />
+                            </Button>
                         </Grid>
                         <ProgressBar
                              Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"
