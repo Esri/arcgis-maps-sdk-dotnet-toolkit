@@ -32,7 +32,8 @@
                     <Grid
                         Height="64"
                         Margin="0,4"
-                        AutomationProperties.HelpText="{Binding Title}">
+                        AutomationProperties.Name="{Binding Title}"
+                        AutomationProperties.HelpText="{Binding Decription}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="68" />
                             <ColumnDefinition Width="*" />
@@ -82,6 +83,7 @@
                         <Grid Grid.RowSpan="3" Grid.Column="2">
                             <Button
                                   AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasStop}"
+                                  AutomationProperties.HelpText="{Binding Title}"
                                   Command="{Binding StopDownloadCommand}" Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
                                   ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasStop}" Visibility="{Binding IsDownloading, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                                 <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xE7B3;" />
@@ -89,6 +91,7 @@
 
                             <Button
                                  AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasDownload}"
+                                 AutomationProperties.HelpText="{Binding Title}"
                                  Command="{Binding DownloadCommand}"
                                  ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasDownload}"
                                  Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
@@ -99,6 +102,7 @@
                             <StackPanel Orientation="Horizontal" Visibility="{Binding IsDownloaded, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                                 <Button
                                     AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasRemove}"
+                                    AutomationProperties.HelpText="{Binding Title}"
                                     Command="{Binding RemoveDownloadCommand}"
                                     Style="{StaticResource OfflineMapAreasViewIconButtonStyle}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasRemove}">
@@ -106,7 +110,7 @@
                                 </Button>
                                 <Button
                                     Margin="8,0,0,0" VerticalAlignment="Center"
-                                    AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasOpen}"
+                                    AutomationProperties.HelpText="{Binding Title}"
                                     Command="{Binding OpenCommand}"
                                     CommandParameter="{Binding Map}"
                                     Content="{internal:LocalizedString Key=OfflineMapAreasOpen}" />
@@ -145,7 +149,9 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <ItemsControl
+                                <ItemsControl 
+                                    AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
+                                    AutomationProperties.HelpText="{TemplateBinding AutomationProperties.HelpText}"
                                     x:Name="MapAreasView"
                                     Grid.Row="0"
                                     HorizontalAlignment="Stretch"

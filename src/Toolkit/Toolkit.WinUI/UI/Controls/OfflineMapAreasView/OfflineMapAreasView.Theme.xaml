@@ -25,7 +25,9 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate x:DataType="controls:IOfflineMapAreaItem">
-                    <Grid Height="64" Margin="0,4" AutomationProperties.Name="{x:Bind Title, Mode=OneWay}" AutomationProperties.FullDescription="{x:Bind Description, Mode=OneWay}">
+                    <Grid Height="64" Margin="0,4"
+                          AutomationProperties.Name="{x:Bind Title, Mode=OneWay}" 
+                          AutomationProperties.FullDescription="{x:Bind Description, Mode=OneWay}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="68" />
                             <ColumnDefinition Width="*" />
