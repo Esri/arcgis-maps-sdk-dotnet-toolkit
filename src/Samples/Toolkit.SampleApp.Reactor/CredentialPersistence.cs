@@ -1,6 +1,5 @@
 ﻿using Esri.ArcGISRuntime;
 using Esri.ArcGISRuntime.Security;
-using Microsoft.Diagnostics.Tracing.Parsers;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
