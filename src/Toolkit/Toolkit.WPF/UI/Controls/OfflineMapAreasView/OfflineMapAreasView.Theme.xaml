@@ -116,6 +116,7 @@
                                     Content="{internal:LocalizedString Key=OfflineMapAreasOpen}" />
                             </StackPanel>
                             <Button Margin="8,0,0,0" VerticalAlignment="Center"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasRemoveOnError}"
                                     AutomationProperties.HelpText="{Binding Error.Message, Mode=OneWay}"
                                     ToolTipService.ToolTip="{Binding Error.Message, Mode=OneWay}"
                                     Command="{Binding RemoveDownloadCommand, Mode=OneWay}" Visibility="{Binding Error, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">

@@ -58,7 +58,10 @@
                                 </Button>
                                 <Button Content="{internal:LocalizedString Key=OfflineMapAreasOpen}" AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasOpen}" Margin="8,0,0,0" Command="{x:Bind OpenCommand, Mode=OneWay}" CommandParameter="{x:Bind Map, Mode=OneWay}" />
                             </StackPanel>
-                            <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" AutomationProperties.HelpText="{x:Bind Error.Message, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Error.Message, Mode=OneWay}"
+                            <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasRemoveOnError}"
+                                    AutomationProperties.FullDescription="{x:Bind Error.Message, Mode=OneWay}"
+                                    ToolTipService.ToolTip="{x:Bind Error.Message, Mode=OneWay}"
                                     Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}" Visibility="{x:Bind local:OfflineMapAreasViewResources.VisibleIfNotNull(Error), Mode=OneWay}">
                                 <FontIcon Glyph="&#xE783;" />
                             </Button>
