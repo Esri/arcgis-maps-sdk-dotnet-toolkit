@@ -149,10 +149,6 @@ namespace Toolkit.Tests
                 Assert.AreEqual(PreplannedMapModelStatus.Downloading, vm.PreplannedMapModels[0].Status);
                 Assert.IsNotNull(vm.PreplannedMapModels[0].Job);
                 await AwaitDownload(vm.PreplannedMapModels[0]);
-                if (vm.PreplannedMapModels[0].Error is not null)
-                {
-                    System.Diagnostics.Debugger.Break();
-                }
                 Assert.AreEqual(PreplannedMapModelStatus.Downloaded, vm.PreplannedMapModels[0].Status);
                 Assert.IsNull(vm.PreplannedMapModels[0].Error);
                 Assert.IsTrue(vm.PreplannedMapModels[0].IsDownloaded);

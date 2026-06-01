@@ -160,8 +160,11 @@ namespace Esri.ArcGISRuntime.Toolkit
                 ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
                 if (_cacheFolder != value)
                 {
-                    if (_observedJobs.Count > 0)
-                        throw new InvalidOperationException("Cannot change cache folder while jobs are in progress");
+                    lock (_observedJobsLock)
+                    {
+                        if (_observedJobs.Count > 0)
+                            throw new InvalidOperationException("Cannot change cache folder while jobs are in progress");
+                    }
                     _cacheFolder = value;
                     InitManager();
                 }

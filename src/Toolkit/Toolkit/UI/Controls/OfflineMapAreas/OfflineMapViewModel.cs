@@ -362,26 +362,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         
         protected Action<Action> Dispatcher { get; }
 
-        protected Task DispatchAsync(Task task)
+        protected Task DispatchAsync(Func<Task> task)
         {
             var tcs = new TaskCompletionSource();
-            Dispatcher(() =>
+            Dispatcher(async () =>
             {
-                task.ContinueWith(t =>
+                try
                 {
-                    if (t.IsFaulted)
-                    {
-                        tcs.SetException(t.Exception!);
-                    }
-                    else if (t.IsCanceled)
-                    {
-                        tcs.SetCanceled();
-                    }
-                    else
-                    {
-                        tcs.SetResult();
-                    }
-                }, TaskScheduler.Default);
+                    await task();
+                    tcs.SetResult();
+                }
+                catch (System.Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
             });
             return tcs.Task;
         }
