@@ -224,6 +224,10 @@ internal class Program
             $"-p:TargetFrameworks={iosFramework}",
             "-r ios-arm64"
         ]);
+
+        // This particular setting only applies to the Runner, and is unused by the app
+        buildSettings.BuildParamsCommon.Add("-p:BuildApp");
+
         buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
         AppendPlatformIndependentBuildSettings(buildSettings, workspace);
 
