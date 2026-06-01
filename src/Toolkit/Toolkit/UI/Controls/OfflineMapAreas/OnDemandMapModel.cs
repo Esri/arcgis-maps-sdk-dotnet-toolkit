@@ -248,7 +248,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 var job = offlineMapTask.GenerateOfflineMap(parameters, _mmpkDirectoryPath);
                 var portalItem = offlineMapTask.PortalItem ?? throw new InvalidOperationException("The offline map task does not reference a portal item.");
-                await DispatchAsync(() => OfflineManager.Shared.StartJobAsync(job, portalItem, Title));
+                await OfflineManager.Shared.StartJobAsync(job, portalItem, Title);
                 ObserveJob(job);
             }
             catch (Exception ex)

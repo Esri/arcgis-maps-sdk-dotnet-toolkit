@@ -362,24 +362,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         
         protected Action<Action> Dispatcher { get; }
 
-        protected Task DispatchAsync(Func<Task> task)
-        {
-            var tcs = new TaskCompletionSource();
-            Dispatcher(async () =>
-            {
-                try
-                {
-                    await task();
-                    tcs.SetResult();
-                }
-                catch (System.Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            });
-            return tcs.Task;
-        }
-
         public OfflineBindableObject(Action<Action> dispatcher)
         {
             Dispatcher = dispatcher;
