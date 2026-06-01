@@ -125,8 +125,7 @@ internal class Program
             $"-p:TargetFrameworks={androidFramework}",
             "-r android-arm64",
             $"-p:JavaSdkDirectory={jdkDirectory}",
-            $"-p:AndroidSdkDirectory={androidSdkDirectory}",
-            "-p:AcceptAndroidSdkLicenses=true"
+            $"-p:AndroidSdkDirectory={androidSdkDirectory}"
         ]);
 
         buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
@@ -150,7 +149,7 @@ internal class Program
         try
         {
             var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-            RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies {string.Join(" ", buildSettings.BuildParamsApp)}");
+            RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildSettings.BuildParamsApp)}");
             Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
             Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
         }
