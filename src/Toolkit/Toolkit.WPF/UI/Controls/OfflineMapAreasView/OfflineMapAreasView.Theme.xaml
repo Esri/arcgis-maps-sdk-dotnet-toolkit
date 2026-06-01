@@ -81,14 +81,14 @@
 
                         <Grid Grid.RowSpan="3" Grid.Column="2">
                             <Button
-                                  AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasStop}"
+                                  AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasStop}"
                                   Command="{Binding StopDownloadCommand}" Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
                                   ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasStop}" Visibility="{Binding IsDownloading, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                                 <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xE7B3;" />
                             </Button>
 
                             <Button
-                                 AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasDownload}"
+                                 AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasDownload}"
                                  Command="{Binding DownloadCommand}"
                                  ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasDownload}"
                                  Style="{StaticResource OfflineMapAreasViewIconButtonStyle}" 
@@ -98,7 +98,7 @@
 
                             <StackPanel Orientation="Horizontal" Visibility="{Binding IsDownloaded, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}">
                                 <Button
-                                    AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasRemove}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasRemove}"
                                     Command="{Binding RemoveDownloadCommand}"
                                     Style="{StaticResource OfflineMapAreasViewIconButtonStyle}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasRemove}">
@@ -342,7 +342,7 @@
                                     Grid.Row="1"
                                     Margin="0,12,0,0"
                                     HorizontalAlignment="Center"
-                                    AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasAddMapArea}">
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasAddMapArea}">
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}">
                                             <Setter Property="Visibility" Value="Collapsed" />
@@ -382,10 +382,10 @@
                                     x:Name="AddAreaMapView" Grid.Row="1" IsAttributionTextVisible="False" BorderBrush="Black" BorderThickness="1" />
                                 <Border BorderBrush="Black" BorderThickness="20" IsHitTestVisible="False" Opacity=".5" />
                             </Grid>
-                            <TextBlock Grid.Row="2" Text="{internal:LocalizedString Key=OfflineMapAreasScaleLabel}" />
-                            <ComboBox Grid.Row="3" x:Name="AddOnDemandAreaScaleSelector" DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch" />
-                            <TextBlock Grid.Row="4" Text="{internal:LocalizedString Key=OfflineMapAreasAreaNamePlaceholder}" />
-                            <TextBox Grid.Row="5" x:Name="AddOnDemandAreaNameTextBox" />
+                            <TextBlock x:Name="OfflineMapAreasScaleLabel" Grid.Row="2" Text="{internal:LocalizedString Key=OfflineMapAreasScaleLabel}" />
+                            <ComboBox AutomationProperties.LabeledBy="{Binding ElementName=OfflineMapAreasScaleLabel}" Grid.Row="3" x:Name="AddOnDemandAreaScaleSelector" DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch" />
+                            <TextBlock x:Name="OfflineMapAreasAreaNamePlaceholder" Grid.Row="4" Text="{internal:LocalizedString Key=OfflineMapAreasAreaNamePlaceholder}" />
+                            <TextBox Grid.Row="5" x:Name="AddOnDemandAreaNameTextBox" AutomationProperties.LabeledBy="{Binding ElementName=OfflineMapAreasAreaNamePlaceholder}"/>
                             <Button Content="{internal:LocalizedString Key=OfflineMapAreasAdd}" Grid.Row="6" HorizontalAlignment="Stretch" x:Name="AcceptAddOnDemandAreaButton" Margin="0,8,0,0" />
                             <Button Content="{internal:LocalizedString Key=OfflineMapAreasCancel}" HorizontalAlignment="Right" x:Name="CancelAddOnDemandAreaButton" />
 
@@ -397,5 +397,6 @@
         </Setter>
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="IsTabStop" Value="False" />
     </Style>
 </ResourceDictionary>

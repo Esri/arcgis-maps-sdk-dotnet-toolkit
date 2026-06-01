@@ -311,7 +311,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             CalciteImageButton failedButton = CreateIconButton(ToolkitIcons.ExclamationMarkCircle, null);
             failedButton.SetBinding(ToolTipProperties.TextProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
-            failedButton.SetBinding(SemanticProperties.DescriptionProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
+            failedButton.SetBinding(SemanticProperties.HintProperty, static (IOfflineMapAreaItem item) => item.Error?.Message);
             failedButton.SetBinding(Button.CommandProperty, static (IOfflineMapAreaItem item) => item.RemoveDownloadCommand);
             failedButton.SetBinding(IsVisibleProperty, static (IOfflineMapAreaItem item) => item.Error, converter: EmptyToFalseConverter.Instance);
             actions.Children.Add(failedButton);
@@ -411,7 +411,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             };
             if (!string.IsNullOrEmpty(hint))
             {
-                SemanticProperties.SetHint(button, hint);
+                SemanticProperties.SetDescription(button, hint);
                 ToolTipProperties.SetText(button, hint);
             }
             return button;
