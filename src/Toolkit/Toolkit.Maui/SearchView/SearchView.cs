@@ -313,6 +313,9 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     {
         if (SearchViewModel != null)
         {
+            // Collapse the source-select dropdown when the user starts typing.
+            _sourceSelectToggled = false;
+            UpdateVisibility();
             SearchViewModel.CurrentQuery = e.NewTextValue;
         }
     }
