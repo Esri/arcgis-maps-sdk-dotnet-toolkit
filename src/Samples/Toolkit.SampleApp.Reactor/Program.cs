@@ -13,7 +13,6 @@ ReactorApp.Run<GalleryShell>("WinUI Gallery (Reactor)", width: 1200, height: 800
     {
         InitMapsSDK();
         XamlInterop.Register(host.Reconciler);
-        Esri.ArcGISRuntime.Toolkit.Reactor.Interop.Register(host.Reconciler);
     });
 
 async void InitMapsSDK()
