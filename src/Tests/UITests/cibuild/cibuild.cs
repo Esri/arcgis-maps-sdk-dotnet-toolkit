@@ -258,7 +258,7 @@ internal class Program
             var wdaProject = Path.Join(wdaRoot, "WebDriverAgent.xcodeproj");
             var wdaBuild = Path.Join(wdaRoot, "build");
             var bundleId = Environment.GetEnvironmentVariable("WDA_BUNDLE_ID") ?? "com.esri.wda";
-            RunBinary("xcodebuild", $"build-for-testing -project {wdaProject} -derivedDataPath {wdaBuild} -scheme WebDriverAgentRunner -destination \"platform=iOS,id={deviceUdid}\" DEVELOPMENT_TEAM={developmentTeam} PRODUCT_BUNDLE_IDENTIFIER={bundleId} PROVISIONING_PROFILE_SPECIFIER=\"{provisioningProfile}\" CODE_SIGN_STYLE=Manual");
+            RunBinary("xcodebuild", $"build-for-testing -project {wdaProject} -derivedDataPath {wdaBuild} -scheme WebDriverAgentRunner -destination \"platform=iOS,id={deviceUdid}\" DEVELOPMENT_TEAM={developmentTeam} PRODUCT_BUNDLE_IDENTIFIER={bundleId} PROVISIONING_PROFILE_SPECIFIER=\"{provisioningProfile}\" CODE_SIGN_STYLE=Manual -quiet");
 
             var wdaPath = Path.Join(wdaBuild, "Build", "Products", "Debug-iphoneos", "WebDriverAgentRunner-Runner.app");
 
