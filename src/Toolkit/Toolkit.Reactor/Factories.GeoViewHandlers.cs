@@ -372,7 +372,10 @@ public static partial class Factories
                 {
                     if (sender is LocalSceneView view)
                     {
-                        h(sender, view.Warnings);
+                        view.DispatcherQueue.TryEnqueue(() =>
+                        {
+                            h(sender, view.Warnings);
+                        });
                     }
                 },
                 unsubscribe: static (_, _) => { },
