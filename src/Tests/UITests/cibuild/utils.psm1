@@ -79,7 +79,7 @@ function Invoke-WindowsUITests {
 
   # Extract and configure WindowsAppDriver for appium
   $wad_installer = Join-Path $workspace 'WinAppDriver.msi'
-  & curl.exe -sSL https://github.com/microsoft/WinAppDriver/releases/download/v1.2.1/WindowsApplicationDriver_1.2.1.msi -o $wad_installer
+  & curl.exe -fsSL https://github.com/microsoft/WinAppDriver/releases/download/v1.2.1/WindowsApplicationDriver_1.2.1.msi -o $wad_installer
   if ($LASTEXITCODE -ne 0) {
     Write-Error "Failed to download Windows App Driver installer."
     & $dotnet_exe build-server shutdown
@@ -212,7 +212,7 @@ function Install-Dotnet {
 
   if ([string]::IsNullOrWhiteSpace($dotnet_cache_folder) -or !(Test-Path -Path $dotnet_exe)) {
     $installerPath = Join-Path $workspace 'dotnet-install.ps1'
-    & curl.exe -sSL https://dot.net/v1/dotnet-install.ps1 -o $installerPath
+    & curl.exe -fsSL https://dot.net/v1/dotnet-install.ps1 -o $installerPath
     & $installerPath -Version $dotnet_version -InstallDir $dotnet_install_folder -NoPath
     if ($LASTEXITCODE -ne 0) {
       exit 1
@@ -250,7 +250,7 @@ function Install-Nodejs {
     $node_url = "https://nodejs.org/dist/v${node_version}/node-v${node_version}-win-x64.zip"
     $node_zip = Join-Path $workspace "node.zip"
 
-    & curl.exe -sSL $node_url -o $node_zip --create-dirs
+    & curl.exe -fsSL $node_url -o $node_zip --create-dirs
     if ($LASTEXITCODE -ne 0) {
       Write-Error 'Failed to download Node.js zip'
       exit 1
