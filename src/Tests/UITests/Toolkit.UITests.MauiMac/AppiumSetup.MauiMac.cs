@@ -5,12 +5,16 @@ namespace Toolkit.UITest.Shared;
 
 public static partial class AppiumSetup
 {
+    private const string AppBundleIdentifier = @"com.esri.toolkit.uitests.maui";
+
     [AssemblyInitialize]
     public static async Task AssemblyInitialize(TestContext testContext)
     {
-        var MauiSamplesApp = @"com.esri.toolkit.uitests.maui";
-
-        driver = MakeMacDriver(MauiSamplesApp);
+        var appPath = Environment.GetEnvironmentVariable("TKUITEST_APP");
+        if (string.IsNullOrWhiteSpace(appPath))
+            driver = MakeMacDriver(appPath, true);
+        else
+            driver = MakeMacDriver(AppBundleIdentifier, false);
 
         try
         {

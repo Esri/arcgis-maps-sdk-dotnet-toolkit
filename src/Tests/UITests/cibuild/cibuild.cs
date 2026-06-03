@@ -9,7 +9,7 @@ using System.Text;
 internal class Program
 {
     // Supported test platforms
-    private static string[] _testPlatforms = { "MauiAndroid" };
+    private static string[] _testPlatforms = { "MauiAndroid", "MauiMac" };
 
 #region CleanupEvent
     private static event EventHandler? BuildEnding;
@@ -80,6 +80,7 @@ internal class Program
             BuildSettings buildSettings = testPlatform switch
             {
                 "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
+                "MauiMac" => SetupMac(dependencies, workspace),
                 _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
             };
 
@@ -213,6 +214,28 @@ internal class Program
 #endregion
 
 #region PlatformDependencies
+    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace)
+    {
+        // Define build settings
+        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiMac");
+        var macFramework = "net10.0-maccatalyst";
+        buildSettings.BuildParamsApp.AddRange([
+            $"-f {macFramework}",
+            $"-p:TargetFrameworks={macFramework}",
+            "-r maccatalyst-arm64"
+        ]);
+        buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+
+        // Install maui android
+        RunBinary(dependencies.DotnetExe, "workload install maui-maccatalyst");
+
+        // Install appium mac driver
+        InstallAppiumDriver(dependencies, "mac2");
+
+        return buildSettings;
+    }
+
     private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace)
     {
         var jdkDirectory = $"{workspace}/jdk";
