@@ -11,7 +11,7 @@ public static partial class AppiumSetup
     public static async Task AssemblyInitialize(TestContext testContext)
     {
         var appPath = Environment.GetEnvironmentVariable("TKUITEST_APP");
-        if (string.IsNullOrWhiteSpace(appPath))
+        if (!string.IsNullOrWhiteSpace(appPath))
             driver = MakeMacDriver(appPath, true);
         else
             driver = MakeMacDriver(AppBundleIdentifier, false);
