@@ -33,7 +33,7 @@
                         Height="64"
                         Margin="0,4"
                         AutomationProperties.Name="{Binding Title}"
-                        AutomationProperties.HelpText="{Binding Decription}">
+                        AutomationProperties.HelpText="{Binding Description}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="68" />
                             <ColumnDefinition Width="*" />
