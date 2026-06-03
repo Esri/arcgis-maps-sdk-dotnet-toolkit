@@ -226,7 +226,7 @@ internal class Program
         ]);
 
         // This particular setting only applies to the Runner, and is unused by the app
-        buildSettings.BuildParamsCommon.Add("-p:BuildApp");
+        buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
 
         buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
         AppendPlatformIndependentBuildSettings(buildSettings, workspace);
