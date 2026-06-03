@@ -29,12 +29,23 @@ class GalleryShell : Component
         var (selectedTag, setSelectedTag) = UseState("home");
         var (searchQuery, setSearchQuery) = UseState("");
         var (isDark, setIsDark) = UseState(false);
+        var (showSource, setShowSource) = UseState(false);
         var (isPaneOpen, setIsPaneOpen) = UseState(true);
         var (prevTag, setPrevTag) = UseState<string?>(null);
 
         var categoryTags = ControlRegistry.Categories
             .Select(c => c.ToLowerInvariant().Replace(" ", "-"))
             .ToHashSet();
+        Action<string> updateSearchQuery = query =>
+        {
+            setShowSource(false);
+            setSearchQuery(query);
+        };
+        Action<string> navigateToTag = tag =>
+        {
+            setShowSource(false);
+            setSelectedTag(tag);
+        };
 
         var controlNavItems = ControlRegistry.Categories
             .Select(cat =>
@@ -60,6 +71,11 @@ class GalleryShell : Component
         // Search filtering
         var searchResults = !string.IsNullOrWhiteSpace(searchQuery)
             ? ControlRegistry.Search(searchQuery) : null;
+        var isSamplePage = searchResults is null &&
+            selectedTag != "home" &&
+            selectedTag != "settings" &&
+            !categoryTags.Contains(selectedTag);
+        var hasSource = isSamplePage && SamplePageHost.HasSource(selectedTag);
 
         Element content;
         if (searchResults != null)
@@ -68,13 +84,13 @@ class GalleryShell : Component
                 GalleryControls.PageHeader("Search Results",
                     $"{searchResults.Length} controls matching \"{searchQuery}\"")
                     .Margin(36, 24, 36, 0),
-                GalleryControls.ControlCardGrid(searchResults, setSelectedTag)
+                GalleryControls.ControlCardGrid(searchResults, navigateToTag)
                     .Margin(36, 0, 0, 36)
             );
         }
         else if (selectedTag == "home")
         {
-            content = Component<HomePage, Action<string>>(setSelectedTag);
+            content = Component<HomePage, Action<string>>(navigateToTag);
         }
         else if (selectedTag == "settings")
         {
@@ -92,13 +108,15 @@ class GalleryShell : Component
                 GalleryControls.PageHeader(categoryName,
                     $"{controls.Length} controls in this category")
                     .Margin(36, 24, 36, 0),
-                GalleryControls.ControlCardGrid(controls, setSelectedTag)
+                GalleryControls.ControlCardGrid(controls, navigateToTag)
                     .Margin(36, 0, 0, 36)
             );
         }
         else
         {
-            content = PageRouter.Route(selectedTag);
+            content = showSource && hasSource
+                ? SamplePageHost.SourceView(selectedTag)
+                : PageRouter.Route(selectedTag);
         }
 
         var shell = Grid(
@@ -107,7 +125,7 @@ class GalleryShell : Component
             (TitleBar("Reactor WinUI Gallery") with
             {
                 Content = HStack(8,
-                    AutoSuggestBox(searchQuery, setSearchQuery)
+                    AutoSuggestBox(searchQuery, updateSearchQuery)
                         .Width(320)
                         .OnMount(el =>
                         {
@@ -116,8 +134,18 @@ class GalleryShell : Component
                             box.QueryIcon = new SymbolIcon(Symbol.Find);
                         })
                 ),
-                RightHeader =
-                    Button(isDark ? "\uE706" : "\uE708", () => setIsDark(!isDark))
+                RightHeader = hasSource
+                    ? HStack(8,
+                        Button(showSource ? "Sample" : "Source", () => setShowSource(!showSource))
+                            .Height(36)
+                            .ToolTip(showSource ? "Show the live sample" : "Show the source code")
+                            .AutomationName(showSource ? "Show sample" : "Show source"),
+                        Button(isDark ? "\uE706" : "\uE708", () => setIsDark(!isDark))
+                            .Set(b => b.FontFamily = new FontFamily("Segoe MDL2 Assets"))
+                            .Width(40).Height(36)
+                            .ToolTip(isDark ? "Switch to Light" : "Switch to Dark")
+                            .AutomationName(isDark ? "Switch to Light theme" : "Switch to Dark theme"))
+                    : Button(isDark ? "\uE706" : "\uE708", () => setIsDark(!isDark))
                         .Set(b => b.FontFamily = new FontFamily("Segoe MDL2 Assets"))
                         .Width(40).Height(36)
                         .ToolTip(isDark ? "Switch to Light" : "Switch to Dark")
@@ -131,6 +159,7 @@ class GalleryShell : Component
                     var back = prevTag;
                     setPrevTag(null);
                     setSearchQuery("");
+                    setShowSource(false);
                     if (back != null) setSelectedTag(back);
                 } : null,
             }).Grid(row: 0),
@@ -145,6 +174,7 @@ class GalleryShell : Component
                 OnSelectedTagChanged = tag =>
                 {
                     setSearchQuery("");
+                    setShowSource(false);
                     if (tag != null)
                     {
                         setPrevTag(selectedTag);
@@ -163,6 +193,7 @@ class GalleryShell : Component
                     if (args.IsSettingsSelected)
                     {
                         setSearchQuery("");
+                        setShowSource(false);
                         setPrevTag(selectedTag);
                         setSelectedTag("settings");
                     }
