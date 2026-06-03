@@ -153,8 +153,10 @@ function Invoke-WindowsUITests {
     }
     finally {
       # Kill appium and return to original location
-      Stop-Process -InputObject $appium_server_process
-      Pop-Location
+      if ($appium_server_process) {
+        & taskkill /T /F /PID $($appium_server_process.Id)
+        Pop-Location
+      }
     }
   }
   finally {
