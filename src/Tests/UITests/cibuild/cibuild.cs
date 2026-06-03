@@ -67,7 +67,8 @@ internal class Program
         Action cleanup = () => {
             Console.WriteLine("\nStarting test cleanup...");
 
-            appiumProcess.Kill();
+            appiumProcess.Kill(entireProcessTree: true);
+            appiumProcess.WaitForExit();
             RunBinary(dependencies.DotnetExe, "build-server shutdown");
 
             if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
