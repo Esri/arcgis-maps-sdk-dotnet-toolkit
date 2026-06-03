@@ -133,13 +133,15 @@ function Invoke-WindowsUITests {
         exit 1
       }
 
+      $ready = $false
       $deadline = (Get-Date).AddSeconds(60)
       while ((Get-Date) -lt $deadline) {
           try {
               $r = Invoke-RestMethod -Uri 'http://127.0.0.1:4723/status' -TimeoutSec 2
-              if ($r.value.ready) { break }
+              if ($r.value.ready) { $ready = $true; break }
           } catch { Start-Sleep -Milliseconds 500 }
       }
+      if (-not $ready) { Write-Error 'Appium did not become ready within 60s.'; exit 1 }
 
       # Run tests
       $results_dir = Join-Path $workspace 'TestResults'
