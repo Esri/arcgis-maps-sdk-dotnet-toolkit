@@ -89,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit
     /// </remarks>
     public sealed partial class OfflineManager
     {
-        private readonly JobManager _jobManager = JobManager.Create("offlineManager");
+        private JobManager _jobManager;
         private readonly ObservableCollection<OfflineMapInfo> _offlineMapInfos = new ObservableCollection<OfflineMapInfo>();
         private readonly HashSet<IJob> _observedJobs = new HashSet<IJob>(ReferenceEqualityComparer<IJob>.Instance);
         private readonly object _observedJobsLock = new object();
@@ -107,10 +107,13 @@ namespace Esri.ArcGISRuntime.Toolkit
                 var base64Hash = Convert.ToBase64String(hash).Replace('/', '_').Replace('+', '-'); // filesystem-safe
                 var foldername = base64Hash[..16];
                
-                _cacheFolder = Path.Combine(ArcGISRuntimeEnvironment.TempPath, foldername);
+                _cacheFolder = Path.Combine(ArcGISRuntimeEnvironment.TempPath, foldername, "offline_map_cache");
             }
             else
-                _cacheFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                _cacheFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "offline_map_cache");
+            _jobManager = JobManager.Create("offlineManager", Path.Combine(_cacheFolder, "jobs.json"));
+#else
+            _jobManager = JobManager.Create("offlineManager");
 #endif
 
             OfflineMapInfos = new ReadOnlyObservableCollection<OfflineMapInfo>(_offlineMapInfos);
@@ -162,8 +165,13 @@ namespace Esri.ArcGISRuntime.Toolkit
                 {
                     lock (_observedJobsLock)
                     {
-                        if (_observedJobs.Count > 0)
-                            throw new InvalidOperationException("Cannot change cache folder while jobs are in progress");
+                        _observedJobs.Clear();
+                        foreach (var job in _jobManager.Jobs)
+                        {
+                            job.Pause();
+                        }
+                        _jobManager.SaveState();
+                        _jobManager = JobManager.Create("offlineManager", Path.Combine(value, "jobs.json"));
                     }
                     _cacheFolder = value;
                     InitManager();
@@ -387,24 +395,27 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
             finally
             {
+                bool isJobStillValid;
                 lock (_observedJobsLock)
                 {
-                    _observedJobs.Remove(job);
+                    isJobStillValid = _observedJobs.Remove(job);
                 }
-
-                if (_jobManager.Jobs.Contains(job))
+                if (isJobStillValid) // Check if Job was already removed, likely due to CacheFolder being changed
                 {
-                    _jobManager.Jobs.Remove(job);
-                    _jobManager.SaveState();
-                }
+                    if (_jobManager.Jobs.Contains(job))
+                    {
+                        _jobManager.Jobs.Remove(job);
+                        _jobManager.SaveState();
+                    }
 
-                var portalItem = GetOnlineMapPortalItem(job);
-                if (!string.IsNullOrWhiteSpace(portalItem?.ItemId))
-                {
-                    HandlePendingMapInfo(job.Status == JobStatus.Succeeded, portalItem!.ItemId!);
-                }
+                    var portalItem = GetOnlineMapPortalItem(job);
+                    if (!string.IsNullOrWhiteSpace(portalItem?.ItemId))
+                    {
+                        HandlePendingMapInfo(job.Status == JobStatus.Succeeded, portalItem!.ItemId!);
+                    }
 
-                JobCompleted?.Invoke(this, new JobCompletedEventArgs(job));
+                    JobCompleted?.Invoke(this, new JobCompletedEventArgs(job));
+                }
             }
         }
 
@@ -492,8 +503,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         internal string GetOfflineManagerDirectory()
         {
 #if WINDOWS
-            var root = CacheFolder ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            return Path.Combine(root, "offline_map_cache");
+            return CacheFolder ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 #else
             var root = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             return Path.Combine(root, "Esri", "ArcGISToolkit", "OfflineManager");

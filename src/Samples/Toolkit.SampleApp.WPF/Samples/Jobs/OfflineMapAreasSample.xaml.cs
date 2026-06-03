@@ -26,6 +26,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Jobs
 
         public OfflineMapAreasSample()
         {
+            // You can change the cache folder that manages downloaded data and pending jobs
+            // OfflineManager.Shared.CacheFolder = "e:\\temp\\offlinecache\\";
             InitializeComponent();
             Maps = new List<MapAreaViewModel>();
             Maps.Add(new MapAreaViewModel() { Name = "Naperville - Preplanned", Map = new Map(new Uri(naperville_preplanned)) });
