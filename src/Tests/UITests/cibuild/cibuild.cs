@@ -7,8 +7,28 @@ internal class Program
     // Supported test platforms
     private static string[] _testPlatforms = { "MauiAndroid" };
 
+#region CleanupEvent
+    private static event EventHandler? BuildEnding;
+    private static Lock _cleanupLock = new Lock();
+    private static bool _startedCleanup = false;
+    private static void OnBuildEnding()
+    {
+        lock(_cleanupLock)
+        {
+            if (!_startedCleanup)
+            {
+                _startedCleanup = true;
+                BuildEnding?.Invoke(null, new EventArgs());
+            }
+        }
+    }
+#endregion
+
     static int Main(string[] args)
     {
+        // Handle CTRL+C gracefully
+        Console.CancelKeyPress += (sender, args) => OnBuildEnding();
+
         // Required inputs
         if (args.Length < 1)
             throw new ArgumentException($"A test platform must be passed as the first and only command line argument. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
@@ -30,64 +50,65 @@ internal class Program
         var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
         var dependencies = new CommonDependencies(dotnetExe);
 
-        // Configure nuget repo if set
-        var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
-        if (!string.IsNullOrWhiteSpace(nugetRepo)) {
-            SetNugetSource(toolkitSrc, dependencies.DotnetExe, nugetRepo);
-        }
-
-        // Install node
-        var nodeWorkspace = Path.Join(workspace, ".node");
-        var nodeVersion = ReadYamlValue(yamlConfig, "node-version");
-        (dependencies.NodeExe, dependencies.NpmExe) = InstallNode(nodeWorkspace, nodeVersion);
-        dependencies.AppiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
-
-        // Install appium
-        Environment.SetEnvironmentVariable("APPIUM_HOME", Path.Join(workspace, ".appium"));
-        RunBinary(dependencies.NpmExe, $"install appium --prefix \"{nodeWorkspace}\"");
-
-        // Platform-specific setup
-        BuildSettings buildSettings = testPlatform switch
-        {
-            "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
-            _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
-        };
-
-        // Run appium in background
-        var appiumStandardOutput = new List<string>();
-        var appiumStandardError = new List<string>();
-        var appiumProcess = RunBinaryBackground(
-            dependencies.NodeExe,
-            dependencies.AppiumEntry,
-            appiumStandardOutput,
-            appiumStandardError
-        );
-
-        // Configure appium cleanup
-        Action cleanup = () => {
-            Console.WriteLine("\nStarting test cleanup...");
-
-            appiumProcess.Kill(entireProcessTree: true);
-            appiumProcess.WaitForExit();
-            RunBinary(dependencies.DotnetExe, "build-server shutdown");
-
-            if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
-                Console.WriteLine("\nAppium standard output logs:");
-                foreach (var line in appiumStandardOutput) {
-                    Console.WriteLine(line);
-                }
-            }
-
-            if (appiumStandardError.Count > 0) {
-                Console.WriteLine("\nAppium standard error logs:");
-                foreach (var line in appiumStandardError) {
-                    Console.WriteLine(line);
-                }
-            }
-        };
-        Console.CancelKeyPress += (sender, args) => cleanup();
-
         try {
+            // Ensure dotnet will always shut down on failure
+            BuildEnding += (_,_) => RunBinary(dotnetExe, "build-server shutdown");
+
+            // Configure nuget repo if set
+            var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
+            if (!string.IsNullOrWhiteSpace(nugetRepo)) {
+                SetNugetSource(toolkitSrc, dependencies.DotnetExe, nugetRepo);
+            }
+
+            // Install node
+            var nodeWorkspace = Path.Join(workspace, ".node");
+            var nodeVersion = ReadYamlValue(yamlConfig, "node-version");
+            (dependencies.NodeExe, dependencies.NpmExe) = InstallNode(nodeWorkspace, nodeVersion);
+            dependencies.AppiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
+
+            // Install appium
+            Environment.SetEnvironmentVariable("APPIUM_HOME", Path.Join(workspace, ".appium"));
+            RunBinary(dependencies.NpmExe, $"install appium --prefix \"{nodeWorkspace}\"");
+
+            // Platform-specific setup
+            BuildSettings buildSettings = testPlatform switch
+            {
+                "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
+                _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
+            };
+
+            // Run appium in background
+            var appiumStandardOutput = new List<string>();
+            var appiumStandardError = new List<string>();
+            var appiumProcess = RunBinaryBackground(
+                dependencies.NodeExe,
+                dependencies.AppiumEntry,
+                appiumStandardOutput,
+                appiumStandardError
+            );
+
+            // Configure appium cleanup
+            BuildEnding += (_,_) => {
+                Console.WriteLine("\nStarting test cleanup...");
+
+                appiumProcess.Kill();
+                RunBinary(dependencies.DotnetExe, "build-server shutdown");
+
+                if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
+                    Console.WriteLine("\nAppium standard output logs:");
+                    foreach (var line in appiumStandardOutput) {
+                        Console.WriteLine(line);
+                    }
+                }
+
+                if (appiumStandardError.Count > 0) {
+                    Console.WriteLine("\nAppium standard error logs:");
+                    foreach (var line in appiumStandardError) {
+                        Console.WriteLine(line);
+                    }
+                }
+            };
+
             var uiTestsPath = Path.Join(toolkitSrc, "Tests", "UITests");
 
             // Build app and runner
@@ -105,7 +126,7 @@ internal class Program
             RunBinary(runnerExe, $"{string.Join(" ", buildSettings.TestParams)}");
         }
         finally {
-            cleanup();
+            OnBuildEnding();
         }
         
         return 0;
