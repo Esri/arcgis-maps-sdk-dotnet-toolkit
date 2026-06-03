@@ -224,7 +224,8 @@ internal class Program
             $"-p:TargetFrameworks={macFramework}",
             "-r maccatalyst-arm64"
         ]);
-        buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
+        var testAppPackage = "Toolkit.UITests.Maui.App.app";
+        buildSettings.BinaryName = testAppPackage;
         AppendPlatformIndependentBuildSettings(buildSettings, workspace);
 
         // Install maui android
@@ -232,6 +233,32 @@ internal class Program
 
         // Install appium mac driver
         InstallAppiumDriver(dependencies, "mac2");
+
+        // App cleanup since it doesn't seem to be included in the appium process tree for mac
+        BuildEnding += (_,_) =>
+        {
+            try
+            {
+                Console.WriteLine("\nAttempting to kill mac test app...");
+                var listProcesses = RunBinary("ps", $"-o pid=,command= -e", true, false);
+                var matches = Regex.Matches(listProcesses!.StandardOutput, @$"^(\d+) .*{Regex.Escape(testAppPackage)}.*$", RegexOptions.Multiline);
+                if (matches.Count < 1)
+                {
+                    Console.WriteLine($"No {testAppPackage} processes found. Skipping maui test app kill.");
+                    return;
+                }
+                foreach (Match match in matches)
+                {
+                    var pid = match.Groups[1].Value;
+                    RunBinary("kill", pid);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to kill Maui test app during cleanup. See below error.");
+                Console.WriteLine(ex);
+            }
+        };
 
         return buildSettings;
     }
