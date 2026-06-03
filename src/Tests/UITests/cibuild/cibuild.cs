@@ -360,8 +360,8 @@ internal class Program
         return process;
     }
 
-    private static void RunBinary(string binary, string arguments) {
-        Console.WriteLine($"\nRunning {binary} {arguments}");
+    private static string? RunBinary(string binary, string arguments, bool captureStdOut = false, bool throwOnError = true) {
+        Console.WriteLine($"Running {binary} {arguments}");
 
         var startInfo = new ProcessStartInfo
         {
@@ -374,6 +374,7 @@ internal class Program
 
         using var process = new Process();
         process.StartInfo = startInfo;
+
         process.OutputDataReceived += (sender, e) => {
             if (!string.IsNullOrEmpty(e.Data)) {
                 Console.WriteLine(e.Data);
@@ -386,14 +387,25 @@ internal class Program
         };
 
         process.Start();
-        process.BeginOutputReadLine();
-        process.BeginErrorReadLine();
+
+        string? stdOut = null;
+        if (captureStdOut)
+        {
+            stdOut = process.StandardOutput.ReadToEnd();
+        }
+        else
+        {
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+        }
         process.WaitForExit();
 
-        if (process.ExitCode != 0)
+        if (process.ExitCode != 0 && throwOnError)
         {
             throw new Exception($"Command failed with exit code {process.ExitCode}: {binary} {arguments}");
         }
+
+        return captureStdOut ? stdOut : null;
     }
 #endregion
 }
