@@ -1,8 +1,11 @@
+using Esri.ArcGISRuntime.Mapping;
+using Microsoft.UI.Reactor.Hooks;
+
 namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
 public sealed class BasemapGalleryPage : Component
 {
-    Map map = new Map(BasemapStyle.ArcGISStreets);
+    private readonly Map map = new(BasemapStyle.ArcGISStreets);
 
     public override Element Render()
     {

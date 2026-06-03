@@ -20,10 +20,24 @@ static class PageRouter
         "mappicker" => Component<Samples.Maps.MapPickerPage>(),
         "basemappicker" => Component<Samples.Maps.BasemapPickerPage>(),
         "graphicsoverlays" => Component<Samples.Maps.GraphicsOverlayPage>(),
+        "loadingmap" => Component<Samples.Maps.LoadingMapPage>(),        
 
         // Toolkit
         "compass" => Component<Samples.Toolkit.CompassPage>(),
         "basemapgallery" => Component<Samples.Toolkit.BasemapGalleryPage>(),
+        "bookmarksview" => Component<Samples.Toolkit.BookmarksViewPage>(),
+        "featuredatafield" => Component<Samples.Toolkit.FeatureDataFieldPage>(),
+        "featureformview" => Component<Samples.Toolkit.FeatureFormViewPage>(),
+        "floorfilter" => Component<Samples.Toolkit.FloorFilterPage>(),
+        "legend" => Component<Samples.Toolkit.LegendPage>(),
+        "measuretoolbar" => Component<Samples.Toolkit.MeasureToolbarPage>(),
+        "overviewmap" => Component<Samples.Toolkit.OverviewMapPage>(),
+        "popupviewer" => Component<Samples.Toolkit.PopupViewerPage>(),
+        "scaleline" => Component<Samples.Toolkit.ScaleLinePage>(),
+        "searchview" => Component<Samples.Toolkit.SearchViewPage>(),
+        "symboldisplay" => Component<Samples.Toolkit.SymbolDisplayPage>(),
+        "timeslider" => Component<Samples.Toolkit.TimeSliderPage>(),
+        "utilitynetworktracetool" => Component<Samples.Toolkit.UtilityNetworkTraceToolPage>(),
 
         _ => TextBlock($"Page not found: {tag}").Foreground(Theme.SecondaryText)
     };
