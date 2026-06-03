@@ -19,6 +19,8 @@ static class PageRouter
 
         "mappicker" => Component<Samples.Maps.MapPickerPage>(),
         "basemappicker" => Component<Samples.Maps.BasemapPickerPage>(),
+        "gridpicker" => Component<Samples.Maps.GridPickerPage>(),
+        "scenelighting" => Component<Samples.Maps.SceneLightingPage>(),
         "graphicsoverlays" => Component<Samples.Maps.GraphicsOverlayPage>(),
         "loadingmap" => Component<Samples.Maps.LoadingMapPage>(),        
 

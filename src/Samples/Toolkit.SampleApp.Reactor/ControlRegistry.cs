@@ -22,6 +22,8 @@ public static class ControlRegistry
 
         new("Map Picker", "Demonstrates selecting a map from a dropdown", "Maps", "\uE707", "mappicker", "Map.png"),
         new("Basemap Picker", "Demonstrates selecting a basemap style from a dropdown and updating the active map", "Maps", "\uE707", "basemappicker", "Basemap.png"),
+        new("Grid Picker", "Demonstrates selecting a coordinate grid and assigning it to the active map view.", "Maps", "\uE707", "gridpicker", "Map.png"),
+        new("Scene Lighting", "Demonstrates changing sun, atmosphere, space, and ambient lighting on a scene view.", "Maps", "\uE774", "scenelighting", "Scene.png"),
 
         new("Graphics Overlays", "Working with graphics overlays", "Maps", "\uE707", "graphicsoverlays", "Graphicsoverlays.png"),
 
