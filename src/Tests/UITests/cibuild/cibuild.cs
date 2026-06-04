@@ -224,14 +224,14 @@ internal class Program
             $"-p:TargetFrameworks={iosFramework}",
             "-r ios-arm64"
         ]);
+        buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
 
         // This particular setting only applies to the Runner, and is unused by the app
         buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
 
-        buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
-
-        // Install maui ios
+        // Install maui ios workload
+        Console.WriteLine("\nInstalling maui ios workload...");
         RunBinary(dependencies.DotnetExe, "workload install maui-ios");
 
         // Install appium ios driver
@@ -240,6 +240,8 @@ internal class Program
         var buildManual = Environment.GetEnvironmentVariable("BUILD_WDA_MANUAL");
         if (buildManual != null && buildManual == "true")
         {
+            Console.WriteLine("\nStarting manual WDA clone and build...");
+
             var deviceUdid = Environment.GetEnvironmentVariable("TKUITEST_DEVICE");
             var developmentTeam = Environment.GetEnvironmentVariable("DEVELOPMENT_TEAM");
             var provisioningProfile = Environment.GetEnvironmentVariable("PROVISIONING_PROFILE_SPECIFIER");
@@ -248,7 +250,7 @@ internal class Program
                 throw new ArgumentNullException("To run the MauiiOS cibuild with a manual WDA build, please set the TKUITEST_DEVICE, DEVELOPMENT_TEAM, and PROVISIONING_PROFILE_SPECIFIER environment variables.");
             }
 
-            // Build WDA (main reference: https://appium.github.io/appium-xcuitest-driver/11.8/guides/run-prebuilt-wda/)
+            // Clone and build WDA (main reference: https://appium.github.io/appium-xcuitest-driver/11.8/guides/run-prebuilt-wda/)
             var wdaRoot = Path.Join(workspace, "wda");
             var wdaVersion = "v13.2.0";
             if (Directory.Exists(wdaRoot))
