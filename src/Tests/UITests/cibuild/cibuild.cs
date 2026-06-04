@@ -20,6 +20,7 @@ internal class Program
         {
             if (!_startedCleanup)
             {
+                Console.WriteLine("\nStarting build cleanup...");
                 _startedCleanup = true;
                 BuildEnding?.Invoke(null, new EventArgs());
             }
@@ -70,6 +71,7 @@ internal class Program
             dependencies.AppiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
 
             // Install appium
+            Console.WriteLine("\nInstalling appium...");
             Environment.SetEnvironmentVariable("APPIUM_HOME", Path.Join(workspace, ".appium"));
             RunBinary(dependencies.NpmExe, ["install", "appium", "--prefix", nodeWorkspace]);
 
@@ -81,14 +83,17 @@ internal class Program
             };
 
             // Build app and runner
+            Console.WriteLine("\nBuilding test app...");
             var uiTestsPath = Path.Join(toolkitSrc, "Tests", "UITests");
             var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
             RunBinary(dependencies.DotnetExe, $"build {appPath} {string.Join(" ", buildSettings.BuildParamsCommon)} {string.Join(" ", buildSettings.BuildParamsApp)}");
 
+            Console.WriteLine("\nBuilding test runner...");
             var runnerPath = Path.Join(uiTestsPath, buildSettings.RunnerName, $"{buildSettings.RunnerName}.csproj");
             RunBinary(dependencies.DotnetExe, $"build {runnerPath} {string.Join(" ", buildSettings.BuildParamsCommon)}");
 
             // Run appium in background
+            Console.WriteLine("\nStarting appium...");
             var appiumStandardOutput = new List<string>();
             var appiumStandardError = new List<string>();
             var appiumProcess = RunBinaryBackground(
@@ -101,6 +106,7 @@ internal class Program
             BuildEnding += (_,_) => KillAppium(appiumProcess, appiumStandardOutput, appiumStandardError);
 
             // Run tests
+            Console.WriteLine("\nRunning tests...");
             var artifactsPath = Path.Join(uiTestsPath, "artifacts", "bin");
             var runnerExe = Path.Join(artifactsPath, buildSettings.RunnerName, "TestBuild", buildSettings.RunnerName);
             var appExe = Path.Join(artifactsPath, buildSettings.AppName, "TestBuild", buildSettings.BinaryName);
@@ -225,6 +231,7 @@ internal class Program
         AppendPlatformIndependentBuildSettings(buildSettings, workspace);
 
         // Install maui android
+        Console.WriteLine("\nInstalling maui android workload...");
         RunBinary(dependencies.DotnetExe, "workload install maui-android");
 
         // Install appium android driver
@@ -234,6 +241,7 @@ internal class Program
         RunBinary(dependencies.NpmExe, ["install", "koffi", "--prefix", nodeWorkspace]);
 
         // Install jdk and android sdk
+        Console.WriteLine("\nInstalling android and java sdks...");
         var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
         RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildSettings.BuildParamsApp)}");
         Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
@@ -244,7 +252,7 @@ internal class Program
 
     private static void InstallAppiumDriver(CommonDependencies dependencies, string driverName)
     {
-        Console.WriteLine("\nInstalling appium {drivername} driver...");
+        Console.WriteLine($"\nInstalling appium {driverName} driver...");
         var installCheck = RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "list", "--installed"], true);
         var driverInstalled = Regex.IsMatch(installCheck!.StandardOutput, Regex.Escape(driverName));
         if (driverInstalled)
@@ -316,17 +324,19 @@ internal class Program
         appiumProcess.WaitForExit();
 
         if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
-            Console.WriteLine("\nAppium standard output logs:");
+            Console.WriteLine("Appium standard output logs:");
             foreach (var line in appiumStandardOutput) {
                 Console.WriteLine(line);
             }
+            Console.WriteLine("End appium standard output logs\n");
         }
 
         if (appiumStandardError.Count > 0) {
-            Console.WriteLine("\nAppium standard error logs:");
+            Console.WriteLine("Appium standard error logs:");
             foreach (var line in appiumStandardError) {
                 Console.WriteLine(line);
             }
+            Console.WriteLine("End appium standard error logs");
         }
     }
 
@@ -349,7 +359,7 @@ internal class Program
     }
 
     private static Process RunBinaryBackground(string binary, string arguments, List<string> standardOutput, List<string> standardError) {
-        Console.WriteLine($"\nRunning {binary} {arguments}");
+        Console.WriteLine($"Running \"{binary} {arguments}\" in background");
 
         var startInfo = new ProcessStartInfo
         {
