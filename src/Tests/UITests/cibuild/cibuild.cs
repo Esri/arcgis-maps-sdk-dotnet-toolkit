@@ -244,12 +244,13 @@ internal class Program
 
     private static void InstallAppiumDriver(CommonDependencies dependencies, string driverName)
     {
-        var installedDrivers = RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "list", "--installed"], true);
-        var matches = Regex.Matches(installedDrivers!, @$"^- {driverName}@.*$", RegexOptions.Multiline);
-        if (matches.Count < 1)
-            RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "install", driverName]);
-        else
+        Console.WriteLine("\nInstalling appium {drivername} driver...");
+        var installCheck = RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "list", "--installed"], true);
+        var driverInstalled = Regex.IsMatch(installCheck!.StandardOutput, Regex.Escape(driverName));
+        if (driverInstalled)
             RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "update", driverName]);
+        else
+            RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "install", driverName]);
     }
 #endregion
 
@@ -378,21 +379,21 @@ internal class Program
         return process;
     }
 
-    private static string? RunBinary(string binary, Collection<string> arguments, bool captureStdOut = false, bool throwOnError = true) {
-        Console.WriteLine($"Running {binary} {string.Join(", ", arguments)}");
+    private static BinaryOutput? RunBinary(string binary, Collection<string> arguments, bool captureStdOut = false, bool throwOnError = true) {
+        Console.WriteLine($"Running {binary} {string.Join(" ", arguments)}");
 
         var startInfo = new ProcessStartInfo(binary, arguments);
         return RunBinary(startInfo, captureStdOut, throwOnError);
     }
 
-    private static string? RunBinary(string binary, string arguments, bool captureStdOut = false, bool throwOnError = true) {
+    private static BinaryOutput? RunBinary(string binary, string arguments, bool captureStdOut = false, bool throwOnError = true) {
         Console.WriteLine($"Running {binary} {arguments}");
 
         var startInfo = new ProcessStartInfo(binary, arguments);
         return RunBinary(startInfo, captureStdOut, throwOnError);
     }
 
-    private static string? RunBinary(ProcessStartInfo startInfo, bool captureStdOut = false, bool throwOnError = true) {
+    private static BinaryOutput? RunBinary(ProcessStartInfo startInfo, bool captureOutput = false, bool throwOnError = true) {
         startInfo.RedirectStandardOutput = true;
         startInfo.RedirectStandardError = true;
         startInfo.UseShellExecute = false;
@@ -400,29 +401,24 @@ internal class Program
         using var process = new Process();
         process.StartInfo = startInfo;
 
+        var stdOut = string.Empty;
+        var stdErr = string.Empty;
         process.OutputDataReceived += (sender, e) => {
             if (!string.IsNullOrEmpty(e.Data)) {
-                Console.WriteLine(e.Data);
+                if (captureOutput) { stdOut += e.Data + "\n"; }
+                else { Console.WriteLine(e.Data); }
             }
         };
         process.ErrorDataReceived += (sender, e) => {
             if (!string.IsNullOrEmpty(e.Data)) {
-                Console.Error.WriteLine(e.Data);
+                if (captureOutput) { stdOut += e.Data + "\n"; }
+                else { Console.Error.WriteLine(e.Data); }
             }
         };
 
         process.Start();
-
-        string? stdOut = null;
-        if (captureStdOut)
-        {
-            stdOut = process.StandardOutput.ReadToEnd();
-        }
-        else
-        {
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-        }
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
         process.WaitForExit();
 
         if (process.ExitCode != 0 && throwOnError)
@@ -430,7 +426,19 @@ internal class Program
             throw new Exception($"Call to {startInfo.FileName} failed with exit code {process.ExitCode}.");
         }
 
-        return captureStdOut ? stdOut : null;
+        return captureOutput ? new BinaryOutput(stdOut, stdErr) : null;
+    }
+
+    private class BinaryOutput
+    {
+        public string StandardOutput;
+        public string StandardError;
+
+        public BinaryOutput(string standardOut, string standardErr)
+        {
+            StandardOutput = standardOut;
+            StandardError = standardErr;
+        }
     }
 #endregion
 }
