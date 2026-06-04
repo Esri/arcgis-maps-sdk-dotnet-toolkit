@@ -2,6 +2,7 @@ using System.IO.Compression;
 using System.Diagnostics;
 using System.Formats.Tar;
 using System.Text.Json.Nodes;
+using System.Collections.ObjectModel;
 
 internal class Program
 {
@@ -69,7 +70,7 @@ internal class Program
 
             // Install appium
             Environment.SetEnvironmentVariable("APPIUM_HOME", Path.Join(workspace, ".appium"));
-            RunBinary(dependencies.NpmExe, $"install appium --prefix \"{nodeWorkspace}\"");
+            RunBinary(dependencies.NpmExe, ["install", "appium", "--prefix", nodeWorkspace]);
 
             // Platform-specific setup
             BuildSettings buildSettings = testPlatform switch
@@ -117,10 +118,10 @@ internal class Program
     {
         Console.WriteLine("\nConfiguring nuget...");
 
-        RunBinary(dotnetExe, $"new nugetconfig --force -o \"{workspace}\"");
+        RunBinary(dotnetExe, ["new", "nugetconfig", "--force", "-o", workspace]);
 
         var configFile = Path.Join(workspace, "nuget.config");
-        RunBinary(dotnetExe, $"nuget add source \"{nugetRepo}\" --configfile \"{configFile}\"");
+        RunBinary(dotnetExe, ["nuget", "add", "source", nugetRepo, "--configfile", configFile]);
 
         var nugetDir = Path.Join(workspace, ".nuget");
         Environment.SetEnvironmentVariable("NUGET_PACKAGES", Path.Join(nugetDir, "packages"));
@@ -230,13 +231,13 @@ internal class Program
 
         // Install appium android driver
         try {
-            RunBinary(dependencies.NodeExe, $"\"{dependencies.AppiumEntry}\" driver install uiautomator2");
+            RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "install", "uiautomator2"]);
         }
         catch {
             Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
         }
 
-        RunBinary(dependencies.NpmExe, $"install koffi --prefix \"{nodeWorkspace}\"");
+        RunBinary(dependencies.NpmExe, ["install", "koffi", "--prefix", nodeWorkspace]);
 
         // Install jdk and android sdk
         var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
@@ -373,17 +374,24 @@ internal class Program
         return process;
     }
 
+    private static string? RunBinary(string binary, Collection<string> arguments, bool captureStdOut = false, bool throwOnError = true) {
+        Console.WriteLine($"Running {binary} {string.Join(", ", arguments)}");
+
+        var startInfo = new ProcessStartInfo(binary, arguments);
+        return RunBinary(startInfo, captureStdOut, throwOnError);
+    }
+
     private static string? RunBinary(string binary, string arguments, bool captureStdOut = false, bool throwOnError = true) {
         Console.WriteLine($"Running {binary} {arguments}");
 
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = binary,
-            Arguments = arguments,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false
-        };
+        var startInfo = new ProcessStartInfo(binary, arguments);
+        return RunBinary(startInfo, captureStdOut, throwOnError);
+    }
+
+    private static string? RunBinary(ProcessStartInfo startInfo, bool captureStdOut = false, bool throwOnError = true) {
+        startInfo.RedirectStandardOutput = true;
+        startInfo.RedirectStandardError = true;
+        startInfo.UseShellExecute = false;
 
         using var process = new Process();
         process.StartInfo = startInfo;
@@ -415,7 +423,7 @@ internal class Program
 
         if (process.ExitCode != 0 && throwOnError)
         {
-            throw new Exception($"Command failed with exit code {process.ExitCode}: {binary} {arguments}");
+            throw new Exception($"Call to {startInfo.FileName} failed with exit code {process.ExitCode}.");
         }
 
         return captureStdOut ? stdOut : null;
