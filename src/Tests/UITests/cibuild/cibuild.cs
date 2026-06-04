@@ -139,7 +139,7 @@ internal class Program
                 }
             }
         }
-        throw new Exception($"Could find variable ${name} in ${yamlFile}");
+        throw new Exception($"Could not find variable {name} in {yamlFile}");
     }
 
     private static (string NodeExe, string NpmExe) InstallNode(string workspace, string nodeVersion)
