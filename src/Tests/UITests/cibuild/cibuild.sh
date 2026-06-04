@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 test_platform=$1
-if [ -z "${test_platform}" ]; then
-  echo "Error: No test platform argument was provided to cibuild.sh, the build will fail." 1>&2
-fi
 
 function main {
   if [ -z "${WORKSPACE}" ]; then
