@@ -239,17 +239,10 @@ internal class Program
         RunBinary(dependencies.NpmExe, $"install koffi --prefix \"{nodeWorkspace}\"");
 
         // Install jdk and android sdk
-        try
-        {
-            var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-            RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildSettings.BuildParamsApp)}");
-            Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
-            Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
-        }
-        finally
-        {
-            RunBinary(dependencies.DotnetExe, "build-server shutdown");
-        }
+        var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
+        RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildSettings.BuildParamsApp)}");
+        Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
+        Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
 
         return buildSettings;
     }
