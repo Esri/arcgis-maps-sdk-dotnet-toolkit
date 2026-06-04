@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Formats.Tar;
 using System.Text.Json.Nodes;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 internal class Program
 {
@@ -212,7 +213,6 @@ internal class Program
 
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
-
         var androidFramework = "net10.0-android";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {androidFramework}",
@@ -221,22 +221,16 @@ internal class Program
             $"-p:JavaSdkDirectory={jdkDirectory}",
             $"-p:AndroidSdkDirectory={androidSdkDirectory}"
         ]);
-
         buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
-
         AppendPlatformIndependentBuildSettings(buildSettings, workspace);
 
         // Install maui android
         RunBinary(dependencies.DotnetExe, "workload install maui-android");
 
         // Install appium android driver
-        try {
-            RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "install", "uiautomator2"]);
-        }
-        catch {
-            Console.WriteLine("Appium driver install failed. This may be a real error, or the driver may already be installed. Check preceeding logs for details.");
-        }
+        InstallAppiumDriver(dependencies, "uiautomator2");
 
+        // Manually install koffi to avoid appium using ffi, which would require us to also have Visual Studio installed
         RunBinary(dependencies.NpmExe, ["install", "koffi", "--prefix", nodeWorkspace]);
 
         // Install jdk and android sdk
@@ -246,6 +240,16 @@ internal class Program
         Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
 
         return buildSettings;
+    }
+
+    private static void InstallAppiumDriver(CommonDependencies dependencies, string driverName)
+    {
+        var installedDrivers = RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "list", "--installed"], true);
+        var matches = Regex.Matches(installedDrivers!, @$"^- {driverName}@.*$", RegexOptions.Multiline);
+        if (matches.Count < 1)
+            RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "install", driverName]);
+        else
+            RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "update", driverName]);
     }
 #endregion
 
