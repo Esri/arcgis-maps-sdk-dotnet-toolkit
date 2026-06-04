@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using System.Diagnostics;
 using System.Formats.Tar;
+using System.Text.Json.Nodes;
 
 internal class Program
 {
@@ -24,7 +25,7 @@ internal class Program
     }
 #endregion
 
-    static int Main(string[] args)
+    static async Task<int> Main(string[] args)
     {
         // Handle CTRL+C gracefully
         Console.CancelKeyPress += (sender, args) => OnBuildEnding();
@@ -77,6 +78,14 @@ internal class Program
                 _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
             };
 
+            // Build app and runner
+            var uiTestsPath = Path.Join(toolkitSrc, "Tests", "UITests");
+            var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
+            RunBinary(dependencies.DotnetExe, $"build {appPath} {string.Join(" ", buildSettings.BuildParamsCommon)} {string.Join(" ", buildSettings.BuildParamsApp)}");
+
+            var runnerPath = Path.Join(uiTestsPath, buildSettings.RunnerName, $"{buildSettings.RunnerName}.csproj");
+            RunBinary(dependencies.DotnetExe, $"build {runnerPath} {string.Join(" ", buildSettings.BuildParamsCommon)}");
+
             // Run appium in background
             var appiumStandardOutput = new List<string>();
             var appiumStandardError = new List<string>();
@@ -86,37 +95,8 @@ internal class Program
                 appiumStandardOutput,
                 appiumStandardError
             );
-
-            // Configure appium cleanup
-            BuildEnding += (_,_) => {
-                Console.WriteLine("\nStarting test cleanup...");
-
-                appiumProcess.Kill();
-                RunBinary(dependencies.DotnetExe, "build-server shutdown");
-
-                if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
-                    Console.WriteLine("\nAppium standard output logs:");
-                    foreach (var line in appiumStandardOutput) {
-                        Console.WriteLine(line);
-                    }
-                }
-
-                if (appiumStandardError.Count > 0) {
-                    Console.WriteLine("\nAppium standard error logs:");
-                    foreach (var line in appiumStandardError) {
-                        Console.WriteLine(line);
-                    }
-                }
-            };
-
-            var uiTestsPath = Path.Join(toolkitSrc, "Tests", "UITests");
-
-            // Build app and runner
-            var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-            RunBinary(dependencies.DotnetExe, $"build {appPath} {string.Join(" ", buildSettings.BuildParamsCommon)} {string.Join(" ", buildSettings.BuildParamsApp)}");
-
-            var runnerPath = Path.Join(uiTestsPath, buildSettings.RunnerName, $"{buildSettings.RunnerName}.csproj");
-            RunBinary(dependencies.DotnetExe, $"build {runnerPath} {string.Join(" ", buildSettings.BuildParamsCommon)}");
+            await WaitForAppiumReadyAsync("http://127.0.0.1:4723/status", TimeSpan.FromSeconds(30));
+            BuildEnding += (_,_) => KillAppium(appiumProcess, appiumStandardOutput, appiumStandardError);
 
             // Run tests
             var artifactsPath = Path.Join(uiTestsPath, "artifacts", "bin");
@@ -329,6 +309,46 @@ internal class Program
 #endregion
 
 #region Helpers
+    private static void KillAppium(Process appiumProcess, List<string> appiumStandardOutput, List<string> appiumStandardError)
+    {
+        Console.WriteLine("\nKilling appium...");
+
+        appiumProcess.Kill(entireProcessTree: true);
+        appiumProcess.WaitForExit();
+
+        if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
+            Console.WriteLine("\nAppium standard output logs:");
+            foreach (var line in appiumStandardOutput) {
+                Console.WriteLine(line);
+            }
+        }
+
+        if (appiumStandardError.Count > 0) {
+            Console.WriteLine("\nAppium standard error logs:");
+            foreach (var line in appiumStandardError) {
+                Console.WriteLine(line);
+            }
+        }
+    }
+
+    private static async Task WaitForAppiumReadyAsync(string statusUrl, TimeSpan timeout)
+    {
+        using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
+        var sw = Stopwatch.StartNew();
+        while (sw.Elapsed < timeout)
+        {
+            try
+            {
+                var body = await http.GetStringAsync(statusUrl);
+                if (JsonNode.Parse(body)?["value"]?["ready"]?.GetValue<bool>() == true)
+                    return;
+            }
+            catch { /* not up / not ready yet */ }
+            await Task.Delay(500);
+        }
+        throw new Exception($"Appium did not become ready within {timeout.TotalSeconds:0}s.");
+    }
+
     private static Process RunBinaryBackground(string binary, string arguments, List<string> standardOutput, List<string> standardError) {
         Console.WriteLine($"\nRunning {binary} {arguments}");
 
