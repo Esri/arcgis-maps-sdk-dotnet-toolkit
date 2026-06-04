@@ -64,7 +64,7 @@ internal class Program
             // Install node
             var nodeWorkspace = Path.Join(workspace, ".node");
             var nodeVersion = ReadYamlValue(yamlConfig, "node-version");
-            (dependencies.NodeExe, dependencies.NpmExe) = InstallNode(nodeWorkspace, nodeVersion);
+            (dependencies.NodeExe, dependencies.NpmExe) = await InstallNodeAsync(nodeWorkspace, nodeVersion);
             dependencies.AppiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
 
             // Install appium
@@ -142,7 +142,7 @@ internal class Program
         throw new Exception($"Could not find variable {name} in {yamlFile}");
     }
 
-    private static (string NodeExe, string NpmExe) InstallNode(string workspace, string nodeVersion)
+    private static async Task<(string NodeExe, string NpmExe)> InstallNodeAsync(string workspace, string nodeVersion)
     {
         Console.WriteLine("\nStarting Node.js install...");
 
@@ -157,12 +157,12 @@ internal class Program
             var nodeTarGz = Path.Combine(workspace, "node.tar.gz");
 
             using var httpClient = new HttpClient();
-            using var response = httpClient.GetAsync(nodeUrl).GetAwaiter().GetResult();
+            using var response = await httpClient.GetAsync(nodeUrl);
             response.EnsureSuccessStatusCode();
 
             using (var output = File.Create(nodeTarGz))
             {
-                response.Content.CopyToAsync(output).GetAwaiter().GetResult();
+                await response.Content.CopyToAsync(output);
             }
 
             var nodeTar = Path.Combine(workspace, "node.tar");
