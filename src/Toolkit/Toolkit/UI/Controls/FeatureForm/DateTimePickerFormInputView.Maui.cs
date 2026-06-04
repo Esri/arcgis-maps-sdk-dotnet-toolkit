@@ -17,6 +17,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private Button? _clearButton;
 #elif MACCATALYST
         private Switch? _hasValueSwitch;
+#elif WINDOWS
+        private Microsoft.UI.Xaml.Controls.CalendarDatePicker? _winDatePicker;
 #endif
 
         static DateTimePickerFormInputView()
@@ -127,12 +129,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         // and listen for native date changes (the MAUI DateSelected event alone is unreliable here).
         private void DatePicker_HandlerChanged(object? sender, EventArgs e)
         {
-            if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
+            if (_winDatePicker is not null)
+            {
+                _winDatePicker.DateChanged -= WinDatePicker_DateChanged;
+                _winDatePicker = null;
+            }
+            if (_datePicker?.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
             {
                 winPicker.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
-                winPicker.DateChanged += (s, e) => UpdateValue();
+                winPicker.DateChanged += WinDatePicker_DateChanged;
+                _winDatePicker = winPicker;
             }
         }
+
+        private void WinDatePicker_DateChanged(Microsoft.UI.Xaml.Controls.CalendarDatePicker sender, Microsoft.UI.Xaml.Controls.CalendarDatePickerDateChangedEventArgs args) => UpdateValue();
 #endif
 
         private void TimePicker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
