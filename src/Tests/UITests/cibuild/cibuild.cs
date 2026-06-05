@@ -228,7 +228,8 @@ internal class Program
         buildSettings.BinaryName = testAppPackage;
         AppendPlatformIndependentBuildSettings(buildSettings, workspace);
 
-        // Install maui android
+        // Install maui maccatalyst workload
+        Console.WriteLine("\nInstalling maui maccatalyst workload...");
         RunBinary(dependencies.DotnetExe, "workload install maui-maccatalyst");
 
         // Install appium mac driver
@@ -239,7 +240,7 @@ internal class Program
         {
             try
             {
-                Console.WriteLine("\nAttempting to kill mac test app...");
+                Console.WriteLine("\nKilling mac test app...");
                 var listProcesses = RunBinary("ps", $"-o pid=,command= -e", true, false);
                 var matches = Regex.Matches(listProcesses!.StandardOutput, @$"^(\d+) .*{Regex.Escape(testAppPackage)}.*$", RegexOptions.Multiline);
                 if (matches.Count < 1)
