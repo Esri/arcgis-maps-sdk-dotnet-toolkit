@@ -13,7 +13,7 @@ public static partial class AppiumSetup
 
         if (!String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TKUITEST_APP")))
         {
-            // If TKUITEST_APP is set it is assumed to be Release apk, and will be fully uninstalled an reinstalled each run
+            // If TKUITEST_APP is set it is assumed to be Release apk, and will be fully uninstalled and reinstalled each run
             settings["usePreinstalledApp"] = "false";
             settings["noReset"] = "false";
             settings["fullReset"] = "true";
