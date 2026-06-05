@@ -4,6 +4,7 @@ using System.Formats.Tar;
 using System.Text.Json.Nodes;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Text;
 
 internal class Program
 {
@@ -254,7 +255,7 @@ internal class Program
     {
         Console.WriteLine($"\nInstalling appium {driverName} driver...");
         var installCheck = RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "list", "--installed"], true);
-        var driverInstalled = Regex.IsMatch(installCheck!.StandardOutput, Regex.Escape(driverName));
+        var driverInstalled = Regex.IsMatch(installCheck!.StandardError, Regex.Escape(driverName));
         if (driverInstalled)
             RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "update", driverName]);
         else
@@ -411,17 +412,17 @@ internal class Program
         using var process = new Process();
         process.StartInfo = startInfo;
 
-        var stdOut = string.Empty;
-        var stdErr = string.Empty;
+        var stdOut = new StringBuilder();
+        var stdErr = new StringBuilder();
         process.OutputDataReceived += (sender, e) => {
             if (!string.IsNullOrEmpty(e.Data)) {
-                if (captureOutput) { stdOut += e.Data + "\n"; }
+                if (captureOutput) { stdOut.Append(e.Data).Append('\n'); }
                 else { Console.WriteLine(e.Data); }
             }
         };
         process.ErrorDataReceived += (sender, e) => {
             if (!string.IsNullOrEmpty(e.Data)) {
-                if (captureOutput) { stdOut += e.Data + "\n"; }
+                if (captureOutput) { stdErr.Append(e.Data).Append('\n'); }
                 else { Console.Error.WriteLine(e.Data); }
             }
         };
@@ -436,7 +437,7 @@ internal class Program
             throw new Exception($"Call to {startInfo.FileName} failed with exit code {process.ExitCode}.");
         }
 
-        return captureOutput ? new BinaryOutput(stdOut, stdErr) : null;
+        return captureOutput ? new BinaryOutput(stdOut.ToString(), stdErr.ToString()) : null;
     }
 
     private class BinaryOutput
