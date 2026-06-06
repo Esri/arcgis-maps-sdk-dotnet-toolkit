@@ -371,7 +371,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             // Honor the form-level error visibility policy, consistent with
             // FieldFormElementView.UpdateErrorMessages().
-            bool shouldShowError = (FeatureFormView.GetFeatureFormViewParent(this)?.ShouldShowError() ?? false) || _hadFocus;
+            bool shouldShowError = _hadFocus || FeatureFormView.GetFeatureFormViewParent(this)?.ShouldShowError() == true;
 
             if (err != null && err.Any() && Element?.IsEditable == true && shouldShowError)
             {
