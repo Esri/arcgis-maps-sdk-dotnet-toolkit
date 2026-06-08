@@ -234,5 +234,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 ? DisplayTitle
                 : $"{DisplayTitle}, {DisplaySubtitle}";
         }
+        internal string AutomationName => ToString();
     }
 }
