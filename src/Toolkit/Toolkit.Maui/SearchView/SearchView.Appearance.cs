@@ -171,7 +171,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         string selectSearchSourceDescription = GetLocalizedString("SearchViewSelectSearchSource");
-        string searchTextPlaceholder = GetLocalizedString("SearchViewSearchTextPlaceholder");
+        string searchTextPlaceholder = GetLocalizedString("SearchViewSearchPlaceholderText");
         string clearSearchDescription = GetLocalizedString("SearchViewClearSearchTooltip");
         string searchDescription = GetLocalizedString("SearchViewSearchTooltip");
         string searchSuggestionsDescription = GetLocalizedString("SearchViewSearchSuggestions");
