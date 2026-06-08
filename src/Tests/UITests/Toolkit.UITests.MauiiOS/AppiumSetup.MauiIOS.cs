@@ -9,7 +9,7 @@ public static partial class AppiumSetup
     public static void AssemblyInitialize(TestContext testContext)
     {
         var buildFile = GetBuildFile();
-        var buildSettings = buildFile == null ? new Dictionary<string, string>() : GetBuildSettings();
+        var buildSettings = Path.Exists(buildFile) ? GetBuildSettings() : new Dictionary<string, string>();
 
         var app = Environment.GetEnvironmentVariable("TKUITEST_APP") ?? buildSettings["app"];
         var udid = Environment.GetEnvironmentVariable("TKUITEST_DEVICE") ?? buildSettings["deviceUdid"];

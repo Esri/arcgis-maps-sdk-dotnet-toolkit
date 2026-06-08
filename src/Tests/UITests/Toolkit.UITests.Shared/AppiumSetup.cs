@@ -122,7 +122,7 @@ public static partial class AppiumSetup
     {
         // Find and read file
         var pathFile = GetBuildFile();
-        if (pathFile == null)
+        if (!Path.Exists(pathFile))
         {
             throw new FileNotFoundException(
                 $"Missing '{pathFile}'. Ensure the 'BuildTestApp' MSBuild target ran before tests."
@@ -152,13 +152,12 @@ public static partial class AppiumSetup
     /// <summary>
     /// Returns null if the build file does not exist.
     /// </summary>
-    private static string? GetBuildFile()
+    private static string GetBuildFile()
     {
         var testAssemblyDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             ?? throw new InvalidOperationException("Could not determine test assembly directory.");
 
-        var pathFile = Path.Combine(testAssemblyDir, "AppBuildInfo.txt");
-        return File.Exists(pathFile) ? pathFile : null;
+        return Path.Combine(testAssemblyDir, "AppBuildInfo.txt");
     }
 
     [AssemblyCleanup]

@@ -247,7 +247,7 @@ internal class Program
             var provisioningProfile = Environment.GetEnvironmentVariable("PROVISIONING_PROFILE_SPECIFIER");
             if (deviceUdid == null || developmentTeam == null || provisioningProfile == null)
             {
-                throw new ArgumentNullException("To run the MauiiOS cibuild with a manual WDA build, please set the TKUITEST_DEVICE, DEVELOPMENT_TEAM, and PROVISIONING_PROFILE_SPECIFIER environment variables.");
+                throw new ArgumentException("To run the MauiiOS cibuild with a manual WDA build, please set the TKUITEST_DEVICE, DEVELOPMENT_TEAM, and PROVISIONING_PROFILE_SPECIFIER environment variables.");
             }
 
             // Clone and build WDA (main reference: https://appium.github.io/appium-xcuitest-driver/11.8/guides/run-prebuilt-wda/)
