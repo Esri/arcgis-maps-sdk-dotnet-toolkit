@@ -572,7 +572,7 @@
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedSuggestion, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
                             AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
-                            AutomationProperties.AutomationId="SearchSuggestionsListFlat"
+                            AutomationProperties.AutomationId="SearchSuggestionsList"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}}" />
                         <ListView
                             x:Name="PART_SuggestionList"

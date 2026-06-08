@@ -173,9 +173,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         string selectSearchSourceDescription = GetLocalizedString("SearchViewSelectSearchSource");
         string clearSearchDescription = GetLocalizedString("SearchViewClearSearchTooltip");
         string searchDescription = GetLocalizedString("SearchViewSearchTooltip");
-        string searchSuggestionsDescription = GetLocalizedString("SearchViewSearchSuggestions");
-        string searchResultsDescription = GetLocalizedString("SearchViewSearchResults");
-        string searchSourcesDescription = GetLocalizedString("SearchViewSearchSources");
 
         string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
@@ -209,9 +206,9 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" SemanticProperties.Description=""{clearSearchDescription}"" AutomationProperties.AutomationId=""ClearSearchButton""/>
     <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" SemanticProperties.Description=""{searchDescription}"" AutomationProperties.AutomationId=""SearchButton"" />
     <Grid Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" >
-    <CollectionView x:Name=""{nameof(PART_SuggestionsView)}"" SelectionMode=""Single"" Grid.RowSpan=""2""  HeightRequest=""175"" SemanticProperties.Description=""{searchSuggestionsDescription}"" AutomationProperties.AutomationId=""SearchSuggestionsList""/>
-    <CollectionView x:Name=""{nameof(PART_ResultView)}"" SelectionMode=""Single"" Grid.RowSpan=""1"" HeightRequest=""200"" SemanticProperties.Description=""{searchResultsDescription}"" AutomationProperties.AutomationId=""SearchResultsList""/>
-    <CollectionView x:Name=""{nameof(PART_SourcesView)}"" SelectionMode=""Single"" HeightRequest=""150"" SemanticProperties.Description=""{searchSourcesDescription}"" AutomationProperties.AutomationId=""SearchSourcesList"" />
+    <CollectionView x:Name=""{nameof(PART_SuggestionsView)}"" SelectionMode=""Single"" Grid.RowSpan=""2""  HeightRequest=""175"" AutomationProperties.AutomationId=""SearchSuggestionsList""/>
+    <CollectionView x:Name=""{nameof(PART_ResultView)}"" SelectionMode=""Single"" Grid.RowSpan=""1"" HeightRequest=""200"" AutomationProperties.AutomationId=""SearchResultsList""/>
+    <CollectionView x:Name=""{nameof(PART_SourcesView)}"" SelectionMode=""Single"" HeightRequest=""150"" AutomationProperties.AutomationId=""SearchSourcesList"" />
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""  Style=""{{StaticResource SVDefaultGridStyle}}""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
 </Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2""  Style=""{{StaticResource SVDefaultGridStyle}}"">
