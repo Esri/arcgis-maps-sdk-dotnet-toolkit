@@ -18,6 +18,7 @@
   <ItemGroup>
     <None Remove="TestPages\CompassMap.xaml" />
     <None Remove="TestPages\ScaleLines.xaml" />
+	<None Remove="TestPages\SearchViewControlMap.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +47,11 @@
     <PackageReference Include="Esri.Calcite.WinUI" Version="1.0.0-rc.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7463" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260101001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="TestPages\SearchViewControlMap.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="TestPages\CompassMap.xaml">

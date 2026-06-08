@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CompassMap.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScaleLines.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SearchViewControlMap.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestPage.cs" />
   </ItemGroup>
 </Project>

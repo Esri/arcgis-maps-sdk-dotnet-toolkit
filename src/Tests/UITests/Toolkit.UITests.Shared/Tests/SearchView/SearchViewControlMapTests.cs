@@ -1,0 +1,93 @@
+using OpenQA.Selenium;
+
+namespace Toolkit.UITest.Shared.SearchViewControl;
+
+[TestClass]
+public class SearchViewControlMapTests : AppiumTestBase
+{
+    private const string SearchViewControlMapPage = "SearchViewControlMap";
+
+    [TestMethod]
+    public async Task SearchViewControl_InitialRendering()
+    {
+        OpenSample(SearchViewControlMapPage);
+
+        // Check the inital display of UI elements
+        Assert.IsTrue(ElementExistsByText("Find a place or address", TimeSpan.FromSeconds(5)), "Expected the search input placeholder to be visible.");
+        Assert.IsTrue(ElementExistsByName("Search"), "Expected the Search button to be visible.");
+        Assert.IsFalse(ElementExistsByName("Clear Search"), "Expected the Clear Search button to be hidden before search text is entered.");
+        Assert.IsFalse(ElementExistsByName("Search results"), "Expected search results to be hidden before a search is performed.");
+        Assert.IsFalse(ElementExistsByName("Search suggestions"), "Expected search suggestions to be hidden before search text is entered.");
+        Assert.IsFalse(ElementExistsByName("Search sources"), "Expected search sources to be hidden initially.");
+        Assert.IsFalse(ElementExistsByName("Select search source"), "Expected the source selector to be hidden initially.");
+    }
+
+    [TestMethod]
+    public async Task SearchViewControl_SearchSuggestionsResults()
+    {
+        OpenSample(SearchViewControlMapPage);
+
+        // Zoom to the extent of the United States so the entered query returns expected suggestions.
+        UpdateViewpoint(50000000, -95, 37);
+
+        // Enter a partial place name to trigger search suggestions.
+        SubmitText(FindElement("QueryEntry", TimeSpan.FromSeconds(5)), "onta");
+
+        // Verify the clear button appears once text has been entered.
+        Assert.IsTrue(ElementExistsByName("Clear Search", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
+
+        // Allow suggestions to populate, then verify the suggestions list is visible.
+        Assert.IsTrue(ElementExistsByName("Search suggestions", TimeSpan.FromSeconds(5)), "Expected to see the suggestions for the text entered");
+
+        // Select a known suggestion and wait for the map and search UI to update.
+        var selectSuggestion = FindElementByText("Ontario International Airport, Ontario, CA, USA", TimeSpan.FromSeconds(5));
+        selectSuggestion.Click();
+        
+        // Verify the search text and callout reflect the selected suggestion.
+        Assert.AreEqual("Ontario International Airport, Ontario, CA, USA", GetEntryText(FindElement("QueryEntry"), TimeSpan.FromSeconds(5)), "The text at search control should be updated");
+        Assert.IsTrue(ElementExistsByText("Ontario International Airport", TimeSpan.FromSeconds(5)), $"Callout title \"Ontario International Airport\" not found.");
+        Assert.IsTrue(ElementExistsByText("Ontario, California", TimeSpan.FromSeconds(5)), $"Callout description \"Ontario, California\" not found.");
+        
+        // Verify selecting the suggestion zoomed the map to the expected scale range.
+        var scaleText = GetEntryText(FindElement("ScaleTextBox"));
+
+        Assert.IsTrue(double.TryParse(scaleText, out var currentScale), $"Invalid scale value: {scaleText}");
+        Assert.IsLessThanOrEqualTo(100000, currentScale, $"Expected selecting a suggestion to zoom in. Actual scale: {currentScale}");
+
+        // Clear the current search before testing category suggestions.
+        FindElementByName("Clear Search").Click();
+
+        // Enter a partial category name to trigger category suggestions.
+        SubmitText(FindElement("QueryEntry"), "rest");
+        
+        // Select the Restaurants category suggestion and verify results are shown.
+        selectSuggestion = FindElementByName("Restaurants", TimeSpan.FromSeconds(5));
+        selectSuggestion.Click();
+
+        Assert.AreEqual("Restaurants", GetEntryText(FindElement("QueryEntry"), TimeSpan.FromSeconds(5)), "The search box value is not as expected.");
+        Assert.IsTrue(ElementExistsByName("Search results", TimeSpan.FromSeconds(5)));
+
+        // Select a known search result and verify its callout content.
+        var selectedResult = FindElementByName("Pizzas, Ontario, California, 91761", TimeSpan.FromSeconds(5));
+        selectedResult.Click();
+
+        Assert.IsTrue(ElementExistsByText("Pizzas", TimeSpan.FromSeconds(5)), "Callout title Pizzas is not visible");
+        Assert.IsTrue(ElementExistsByText("Ontario, California, 91761", TimeSpan.FromSeconds(5)), "Callout Description is not visible");
+    }
+
+    // Helper method to update the viewpoint by entering values in the text boxes and clicking the update button
+    private void UpdateViewpoint(int scale, double longitude, double latitude)
+    {
+        var scaleInputElement = FindElement("ScaleTextBox", TimeSpan.FromSeconds(5));
+        SubmitText(scaleInputElement, scale.ToString());
+
+        var longitudeInputElement = FindElement("LongitudeTextBox", TimeSpan.FromSeconds(5));
+        SubmitText(longitudeInputElement, longitude.ToString());
+
+        var latitudeInputElement = FindElement("LatitudeTextBox", TimeSpan.FromSeconds(5));
+        SubmitText(latitudeInputElement, latitude.ToString());
+
+        var updateButtonElement = FindElement("UpdateViewpoint", TimeSpan.FromSeconds(5));
+        Click(updateButtonElement);
+    } 
+}

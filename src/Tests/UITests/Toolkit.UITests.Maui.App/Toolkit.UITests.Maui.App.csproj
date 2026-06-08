@@ -86,6 +86,9 @@
     <MauiXaml Update="TestPages\ScaleLines.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="TestPages\SearchViewControlMap.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
   </ItemGroup>
 
   <Choose>
