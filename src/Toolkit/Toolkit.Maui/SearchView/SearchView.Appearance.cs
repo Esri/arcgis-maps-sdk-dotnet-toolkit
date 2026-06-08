@@ -171,7 +171,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         string selectSearchSourceDescription = GetLocalizedString("SearchViewSelectSearchSource");
-        string searchTextPlaceholder = GetLocalizedString("SearchViewSearchPlaceholderText");
         string clearSearchDescription = GetLocalizedString("SearchViewClearSearchTooltip");
         string searchDescription = GetLocalizedString("SearchViewSearchTooltip");
         string searchSuggestionsDescription = GetLocalizedString("SearchViewSearchSuggestions");
@@ -206,7 +205,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     </Grid.RowDefinitions>
     <Grid Grid.Row=""0"" Grid.ColumnSpan=""3"" Style=""{{StaticResource SVDefaultGridStyle}}""/>
     <ImageButton x:Name=""{nameof(PART_SourceSelectButton)}"" Grid.Column=""0"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" Margin=""0"" SemanticProperties.Description=""{selectSearchSourceDescription}"" AutomationProperties.AutomationId=""SourceSelectToggle""/>
-    <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" TextColor=""{{AppThemeBinding Light={FOREGROUND_LIGHT}, Dark={FOREGROUND_DARK}}}"" SemanticProperties.Description=""{searchTextPlaceholder}"" AutomationProperties.AutomationId=""QueryEntry""/>
+    <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" TextColor=""{{AppThemeBinding Light={FOREGROUND_LIGHT}, Dark={FOREGROUND_DARK}}}"" AutomationProperties.AutomationId=""QueryEntry""/>
     <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" SemanticProperties.Description=""{clearSearchDescription}"" AutomationProperties.AutomationId=""ClearSearchButton""/>
     <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" SemanticProperties.Description=""{searchDescription}"" AutomationProperties.AutomationId=""SearchButton"" />
     <Grid Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" >
