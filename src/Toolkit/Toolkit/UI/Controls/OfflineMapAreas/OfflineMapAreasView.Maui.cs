@@ -326,11 +326,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             CalciteImageButton removeButton = CreateIconButton(ToolkitIcons.Trash, Properties.Resources.GetString("OfflineMapAreasRemove"));
             removeButton.SetBinding(ImageButton.CommandProperty, static (IOfflineMapAreaItem item) => item.RemoveDownloadCommand);
+            removeButton.SetBinding(Button.IsVisibleProperty, static (IOfflineMapAreaItem item) => item.IsOpen, converter: InvertBoolConverter.Instance);
             downloadedActions.Children.Add(removeButton);
 
             Button openButton = new Button() { Text = Properties.Resources.GetString("OfflineMapAreasOpen") };
             openButton.SetBinding(Button.CommandProperty, static (IOfflineMapAreaItem item) => item.OpenCommand);
             openButton.SetBinding(Button.CommandParameterProperty, static (IOfflineMapAreaItem item) => item.Map);
+            openButton.SetBinding(Button.IsVisibleProperty, static (IOfflineMapAreaItem item) => item.IsOpen, converter: InvertBoolConverter.Instance);
             downloadedActions.Children.Add(openButton);
             actions.Children.Add(downloadedActions);
 

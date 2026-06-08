@@ -81,6 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Map? _map;
         private Exception? _error;
         private bool _supportsRedownloading;
+        private bool _isOpen;
         private readonly DelegateCommand _downloadCommand;
         private readonly DelegateCommand _removeDownloadCommand;
         private readonly DelegateCommand _stopDownloadCommand;
@@ -129,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _description = HtmlUtility.StripHtml(description);
             _supportsRedownloading = supportsRedownloading;
             _downloadCommand = new DelegateCommand((o) => _ = DownloadPreplannedMapAreaAsync(), () => _preplannedMapArea != null && AllowsDownload && Status != PreplannedMapModelStatus.Downloading);
-            _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded);
+            _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded && !IsOpen);
             _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync());
             _openMapCommand = openMapCommand;
             _onRemoveDownloadAction = onRemoveDownload;
@@ -225,6 +226,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool AllowsDownload => Status == PreplannedMapModelStatus.Packaged;
 
         public bool IsDownloaded => Status == PreplannedMapModelStatus.Downloaded;
+
+        public bool IsOpen
+        {
+            get { return _isOpen; }
+            internal set
+            {
+                if (_isOpen != value)
+                {
+                    SetProperty(ref _isOpen, value);
+                    _removeDownloadCommand.NotifyCanExecuteChanged();
+                }
+            }
+        }
+
 
         public System.Windows.Input.ICommand DownloadCommand => _downloadCommand;
         public System.Windows.Input.ICommand RemoveDownloadCommand => _removeDownloadCommand;
@@ -403,7 +418,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     await LoadAndUpdateMobileMapPackageAsync(result.MobileMapPackage).ConfigureAwait(false);
                 }
-                Status = PreplannedMapModelStatus.Downloaded;
             }
             catch (Exception ex)
             {

@@ -53,6 +53,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _vm.PropertyChanged -= OnVMPropertyChanged;
                         if(_vm.OnDemandMapModels is INotifyCollectionChanged incc)
                             incc.CollectionChanged -= OnDemandMapModels_CollectionChanged;
+                        foreach (var area in _vm.PreplannedMapModels)
+                            area.IsOpen = false;
+                        foreach (var area in _vm.OnDemandMapModels)
+                            area.IsOpen = false;
                     }
                     _vm = value;
                     if (_vm is not null)

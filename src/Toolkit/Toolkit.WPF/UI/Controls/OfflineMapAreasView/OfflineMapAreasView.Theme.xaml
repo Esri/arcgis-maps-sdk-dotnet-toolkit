@@ -30,7 +30,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <Grid
-                        Height="64"
+                        Height="68"
                         Margin="0,4"
                         AutomationProperties.Name="{Binding Title}"
                         AutomationProperties.HelpText="{Binding Description}">
@@ -44,7 +44,8 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-
+                        <Border Grid.ColumnSpan="3" Grid.RowSpan="3" Visibility="{Binding IsOpen, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, Mode=OneWay}"
+                                Background="#0067C0" CornerRadius="8" Opacity=".2" />
                         <Border
                             Grid.RowSpan="3"
                             Margin="0,0,4,0"
@@ -68,7 +69,7 @@
                         <TextBlock
                             Grid.Row="1"
                             Grid.Column="1"
-                            MaxHeight="42"
+                            MaxHeight="34"
                             Margin="0,2,0,0"
                             Foreground="#FF666666"
                             Text="{Binding Description}"
@@ -105,6 +106,7 @@
                                     AutomationProperties.HelpText="{Binding Title}"
                                     Command="{Binding RemoveDownloadCommand}"
                                     Style="{StaticResource OfflineMapAreasViewIconButtonStyle}"
+                                    Visibility="{Binding IsOpen, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, ConverterParameter=Reverse, Mode=OneWay}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasRemove}">
                                     <TextBlock FontFamily="{StaticResource ToolkitIconsFontFamily}" FontSize="14" Text="&#xEB04;" />
                                 </Button>
@@ -113,6 +115,7 @@
                                     AutomationProperties.HelpText="{Binding Title}"
                                     Command="{Binding OpenCommand}"
                                     CommandParameter="{Binding Map}"
+                                    Visibility="{Binding IsOpen, Converter={StaticResource OfflineMapAreasViewVisibilityConverter}, ConverterParameter=Reverse, Mode=OneWay}"
                                     Content="{internal:LocalizedString Key=OfflineMapAreasOpen}" />
                             </StackPanel>
                             <Button Margin="8,0,0,0" VerticalAlignment="Center"

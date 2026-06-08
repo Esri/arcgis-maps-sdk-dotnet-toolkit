@@ -48,6 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private MobileMapPackage? _mobileMapPackage;
         private Map? _map;
         private Exception? _error;
+        private bool _isOpen;
         private readonly DelegateCommand _downloadCommand;
         private readonly DelegateCommand _removeDownloadCommand;
         private readonly DelegateCommand _stopDownloadCommand;
@@ -97,7 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _thumbnailData = thumbnailData;
             _onRemoveDownloadAction = onRemoveDownload;
             _downloadCommand = new DelegateCommand((o) => { }, () => false); // Currently doesn't allow re-download
-            _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded || Error != null);
+            _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded && !IsOpen || Error != null);
             _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync());
             _openMapCommand = openMapCommand;
             _directoryPath = OfflineMapAreaStorage.GetOnDemandAreaDirectory(portalItemId, _areaId);
@@ -192,6 +193,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool AllowsDownload => Status == OnDemandMapModelStatus.Initialized;
 
         public bool IsDownloaded => Status == OnDemandMapModelStatus.Downloaded;
+
+        public bool IsOpen
+        {
+            get { return _isOpen; }
+            internal set
+            {
+                if (_isOpen != value)
+                {
+                    SetProperty(ref _isOpen, value);
+                    _removeDownloadCommand.NotifyCanExecuteChanged();
+                }
+            }
+        }
 
         static IValueConverter _converter = new FileSizeConverter();
         public string Description => SizeInBytes == 0 ? string.Empty : string.Format(
@@ -321,10 +335,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 var result = (GenerateOfflineMapResult)await job.GetResultAsync().ConfigureAwait(false);
                 Error = null;
-                Status = OnDemandMapModelStatus.Downloaded;
                 if (result.MobileMapPackage is not null)
                 {
                     await LoadAndUpdateMobileMapPackageAsync(result.MobileMapPackage).ConfigureAwait(false);
+                }
+                else
+                {
+                    Status = OnDemandMapModelStatus.DownloadFailure;
                 }
             }
             catch (Exception ex)

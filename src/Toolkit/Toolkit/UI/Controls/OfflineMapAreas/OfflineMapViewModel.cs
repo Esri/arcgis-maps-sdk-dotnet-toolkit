@@ -287,7 +287,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private async Task LoadOnDemandMapModelsAsync()
         {
             var models = await OnDemandMapModel.LoadOnDemandMapModelsAsync(PortalItemId, OnRemoveDownloadOfOnDemandArea, _openMapCommand, Dispatcher).ConfigureAwait(false);
-            Dispatcher(() => ReplaceCollection(_onDemandMapModels, models));
+            TaskCompletionSource tcs = new TaskCompletionSource();
+            Dispatcher(() =>
+            {
+                try
+                {
+                    ReplaceCollection(_onDemandMapModels, models);
+                }
+                finally
+                {
+                    tcs.SetResult();
+                }
+            });
+            await tcs.Task.ConfigureAwait(false);
         }
 
         private async Task<OfflineMapTask> GetOfflineMapTaskAsync()

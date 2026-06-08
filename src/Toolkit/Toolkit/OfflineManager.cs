@@ -440,10 +440,19 @@ namespace Esri.ArcGISRuntime.Toolkit
 
             foreach (var file in Directory.GetFiles(offlineManagerDirectory, "*.json"))
             {
-                var info = OfflineMapInfo.FromFile(file);
-                if (info is not null)
+                try
                 {
-                    _offlineMapInfos.Add(info);
+                    if (file.EndsWith("jobs.json"))
+                        continue;
+                    var info = OfflineMapInfo.FromFile(file);
+                    if (info is not null)
+                    {
+                        _offlineMapInfos.Add(info);
+                    }
+                }
+                catch
+                {
+                    continue;
                 }
             }
         }

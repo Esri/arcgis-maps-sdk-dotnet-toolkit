@@ -349,6 +349,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnSelectedMapPropertyChanged(Map? map)
         {
+            if(_vm is not null)
+            {
+                foreach(var preplanned in _vm.PreplannedMapModels)
+                {
+                    preplanned.IsOpen = map is not null && preplanned.Map == map;
+                }
+                foreach (var onDemand in _vm.OnDemandMapModels)
+                {
+                    onDemand.IsOpen = map is not null && onDemand.Map == map;
+                }
+            }
             _openMapCommand.NotifyCanExecuteChanged();
             _goOnlineCommand.NotifyCanExecuteChanged();
         }
@@ -499,6 +510,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets a value indicating whether the map area has been downloaded.
         /// </summary>
         bool IsDownloading { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the map area is currently the selected map.
+        /// </summary>
+        /// <seealso cref="OfflineMapAreasView.SelectedMap"/>
+        bool IsOpen { get; }
 
         /// <summary>
         /// Gets the current download progress as a value between 0 (nothing downloaded) and 1 (fully downloaded).

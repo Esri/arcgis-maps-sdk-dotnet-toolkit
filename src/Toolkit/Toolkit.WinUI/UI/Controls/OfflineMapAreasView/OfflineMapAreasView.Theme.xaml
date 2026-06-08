@@ -38,6 +38,9 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+                        <Border Grid.ColumnSpan="3" Grid.RowSpan="3" Visibility="{x:Bind IsOpen, Mode=OneWay}"
+                                Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                Margin="0,0" CornerRadius="8" Opacity=".2" />
                         <Border CornerRadius="8" Grid.RowSpan="3" BorderThickness="1" BorderBrush="LightGray" Margin="0,0,4,0">
                             <Image Source="{x:Bind local:OfflineMapAreasViewResources.BytesToImage(ThumbnailData), Mode=OneWay}" Width="64" Height="64" Stretch="UniformToFill"/>
                         </Border>
@@ -53,10 +56,12 @@
                             </Button>
                             <ProgressRing Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Minimum="0" Maximum="1" IsIndeterminate="False" Value="{x:Bind DownloadProgress, Mode=OneWay}" Visibility="{x:Bind IsDownloading, Mode=OneWay}" />
                             <StackPanel Orientation="Horizontal" Visibility="{x:Bind IsDownloaded, Mode=OneWay}" >
-                                <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasRemove}" AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasRemove}" Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}">
+                                <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}" ToolTipService.ToolTip="{internal:LocalizedString Key=OfflineMapAreasRemove}" AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasRemove}" Command="{x:Bind RemoveDownloadCommand, Mode=OneWay}"
+                                        Visibility="{x:Bind local:OfflineMapAreasViewResources.FalseToVisible(IsOpen), Mode=OneWay}" >
                                     <SymbolIcon Symbol="Delete" />
                                 </Button>
-                                <Button Content="{internal:LocalizedString Key=OfflineMapAreasOpen}" AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasOpen}" Margin="8,0,0,0" Command="{x:Bind OpenCommand, Mode=OneWay}" CommandParameter="{x:Bind Map, Mode=OneWay}" />
+                                <Button Content="{internal:LocalizedString Key=OfflineMapAreasOpen}" AutomationProperties.HelpText="{internal:LocalizedString Key=OfflineMapAreasOpen}" Margin="8,0,0,0" Command="{x:Bind OpenCommand, Mode=OneWay}" CommandParameter="{x:Bind Map, Mode=OneWay}"
+                                        Visibility="{x:Bind local:OfflineMapAreasViewResources.FalseToVisible(IsOpen), Mode=OneWay}" />
                             </StackPanel>
                             <Button Style="{StaticResource OfflineMapAreasViewButtonStyle}"
                                     AutomationProperties.Name="{internal:LocalizedString Key=OfflineMapAreasRemoveOnError}"
