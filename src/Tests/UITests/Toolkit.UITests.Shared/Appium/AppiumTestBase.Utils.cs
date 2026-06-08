@@ -83,6 +83,10 @@ public abstract partial class AppiumTestBase
     {
 #if ANDROID_TEST
         var action = () => Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().description(\"{name}\")"));
+#elif WINDOWS_TEST
+        var action = () => Driver.FindElement(MobileBy.Name(name));
+#elif MAC_TEST || IOS_TEST
+        var action = () => Driver.FindElement(MobileBy.XPath($"//*[@label=\"{name}\" or @name=\"{name}\"]"));
 #else
         var action = () => Driver.FindElement(MobileBy.Name(name));
 #endif
@@ -101,6 +105,8 @@ public abstract partial class AppiumTestBase
     {
 #if ANDROID_TEST
         var action = () => Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().text(\"{text}\")"));
+#elif MAC_TEST || IOS_TEST
+        var action = () => Driver.FindElement(MobileBy.XPath($"//*[@label=\"{text}\" or @value=\"{text}\" or @name=\"{text}\"]"));
 #else
         var action = () => Driver.FindElement(MobileBy.Name(text));
 #endif
@@ -120,6 +126,18 @@ public abstract partial class AppiumTestBase
         try
         {
             FindElementByName(name, timeout);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    protected bool ElementExistsById(string id, TimeSpan? timeout = null)
+    {
+        try
+        {
+            FindElement(id, timeout);
             return true;
         }
         catch
@@ -165,12 +183,23 @@ public abstract partial class AppiumTestBase
 
     protected string GetEntryText(AppiumElement element, TimeSpan? timeout = null)
     {
-#if WINDOWS_TEST
-        var action = () => element.GetAttribute("Value.Value");
-#elif ANDROID_TEST
+
+#if ANDROID_TEST
         var action = () =>  element.GetAttribute("text");
+#elif WINDOWS_TEST
+        var action = () => element.GetAttribute("Value.Value");
 #elif MAC_TEST || IOS_TEST
-        var action = () =>  element.GetAttribute("label");
+        var action = () =>
+        {
+            var value = element.GetAttribute("value");
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
+            var placeholder = element.GetAttribute("placeholderValue");
+            return string.IsNullOrWhiteSpace(placeholder) ? string.Empty : placeholder;
+        };
 #else
         throw new NotImplementedException("FindElement(AppiumElement,string) is not implemented for this platform.");
 #endif
