@@ -6,12 +6,13 @@ namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
 public sealed class OverviewMapPage : Component
 {
+    private readonly Map map = new Map(BasemapStyle.ArcGISImagery);
+
     public override Element Render()
     {
         var mapViewRef = this.UseElementRef<Esri.ArcGISRuntime.UI.Controls.GeoView>();
         var (alternateSymbols, setAlternateSymbols) = UseState(false);
         var (wideOverview, setWideOverview) = UseState(false);
-        var map = UseMemo(() => new Map(BasemapStyle.ArcGISImagery));
 
         var areaSymbol = alternateSymbols
             ? new SimpleFillSymbol(SimpleFillSymbolStyle.DiagonalCross, System.Drawing.Color.Orange, null)

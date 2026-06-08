@@ -6,10 +6,11 @@ using MapViewControl = Esri.ArcGISRuntime.UI.Controls.MapView;
 
 public sealed class CompassPage : Component
 {
+    private readonly Map map = new Map(BasemapStyle.ArcGISStreets);
+
     public override Element Render()
     {
         var (autoHide, setAutoHide) = UseState(false);
-        var map = UseMemo(() => new Map(BasemapStyle.ArcGISStreets));
         var mapViewRef = this.UseElementRef<Esri.ArcGISRuntime.UI.Controls.GeoView>();
         return Grid(columns: [GridSize.Star()], rows: [GridSize.Star()],
             MapView(map).Ref(mapViewRef),

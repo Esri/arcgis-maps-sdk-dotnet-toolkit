@@ -12,11 +12,12 @@ namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
 public sealed class PopupViewerPage : Component
 {
+    private readonly Map map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=9f3a674e998f461580006e626611f9ad"));
+
     public override Element Render()
     {
         var mapViewRef = this.UseElementRef<MapViewControl>();
         var (popup, setPopup) = UseState<Popup?>(null);
-        var map = UseMemo(() => new Map(new Uri("https://www.arcgis.com/home/item.html?id=9f3a674e998f461580006e626611f9ad")));
 
         return Grid(columns: [GridSize.Star(), GridSize.Px(360)], rows: [GridSize.Star()],
             MapView(

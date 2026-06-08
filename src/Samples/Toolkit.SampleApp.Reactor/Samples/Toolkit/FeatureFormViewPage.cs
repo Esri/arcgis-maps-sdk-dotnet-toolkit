@@ -9,11 +9,12 @@ namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
 public sealed class FeatureFormViewPage : Component
 {
+    private readonly Map map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=f72207ac170a40d8992b7a3507b44fad"));
+
     public override Element Render()
     {
         var mapViewRef = this.UseElementRef<MapViewControl>();
         var (featureForm, setFeatureForm) = UseState<FeatureForm?>(null);
-        var map = UseMemo(() => new Map(new Uri("https://www.arcgis.com/home/item.html?id=f72207ac170a40d8992b7a3507b44fad")));
 
         return Grid(columns: [GridSize.Star(), GridSize.Px(360)], rows: [GridSize.Star()],
             MapView(

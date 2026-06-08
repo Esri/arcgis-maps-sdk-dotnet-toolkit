@@ -4,13 +4,14 @@ namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
 public sealed class SearchViewPage : Component
 {
+    private readonly Map map = new Map(BasemapStyle.ArcGISImagery);
+
     public override Element Render()
     {
         var mapViewRef = this.UseElementRef<Esri.ArcGISRuntime.UI.Controls.GeoView>();
         var (showResultList, setShowResultList) = UseState(true);
         var (showRepeatSearch, setShowRepeatSearch) = UseState(true);
-        var map = UseMemo(() => new Map(BasemapStyle.ArcGISImagery));
-
+        
         return Grid(columns: [GridSize.Star()], rows: [GridSize.Star()],
             MapView(map)
                 .Ref(mapViewRef),

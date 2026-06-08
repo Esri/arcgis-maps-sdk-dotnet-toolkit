@@ -7,13 +7,14 @@ namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
 public sealed class LegendPage : Component
 {
+    private readonly Map map = new Map(new Uri("https://www.arcgis.com/home/webmap/viewer.html?webmap=df8bcc10430f48878b01c96e907a1fc3"));
+
     public override Element Render()
     {
         var geoViewRef = this.UseElementRef<GeoViewControl>();
         var (filterHidden, setFilterHidden) = UseState(true);
         var (filterScale, setFilterScale) = UseState(true);
         var (reverseOrder, setReverseOrder) = UseState(true);
-        var map = UseMemo(() => new Map(new Uri("https://www.arcgis.com/home/webmap/viewer.html?webmap=df8bcc10430f48878b01c96e907a1fc3")));
 
         return Grid(columns: [GridSize.Px(320), GridSize.Star()], rows: [GridSize.Star()],
             MapView(map)
