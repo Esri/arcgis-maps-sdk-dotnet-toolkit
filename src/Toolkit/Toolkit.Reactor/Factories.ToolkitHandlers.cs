@@ -5,6 +5,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 using Microsoft.UI.Reactor;
 using Microsoft.UI.Reactor.Core;
 using Microsoft.UI.Reactor.Core.V1Protocol;
+using WinRT;
 
 namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 
@@ -19,6 +20,7 @@ public static partial class Factories
         {
             var compass = new Compass
             {
+                GeoView = element.GeoView?.Current,
                 AutoHide = element.AutoHide,
                 Heading = element.Heading,
             };
@@ -28,6 +30,10 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, CompassElement oldEl, CompassElement newEl, Compass control)
         {
+            if (oldEl.GeoView?.Current != newEl.GeoView?.Current)
+            {
+                control.GeoView = newEl.GeoView?.Current;
+            }
             if (oldEl.AutoHide != newEl.AutoHide)
             {
                 control.AutoHide = newEl.AutoHide;
@@ -89,7 +95,7 @@ public static partial class Factories
         {
             var bookmarksView = new BookmarksView
             {
-                GeoView = element.GeoView,
+                GeoView = element.GeoView?.Current,
                 BookmarksOverride = element.BookmarksOverride,
             };
             var bind = ctx.BindFor(bookmarksView, element);
@@ -104,9 +110,9 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, BookmarksViewElement oldEl, BookmarksViewElement newEl, BookmarksView control)
         {
-            if (oldEl.GeoView != newEl.GeoView)
+            if (oldEl.GeoView?.Current != newEl.GeoView?.Current)
             {
-                control.GeoView = newEl.GeoView;
+                control.GeoView = newEl.GeoView?.Current;
             }
 
             if (oldEl.BookmarksOverride != newEl.BookmarksOverride)
@@ -179,7 +185,7 @@ public static partial class Factories
         {
             var floorFilter = new FloorFilter
             {
-                GeoView = element.GeoView,
+                GeoView = element.GeoView?.Current,
                 IsBrowseOpen = element.IsBrowseOpen,
             };
             ctx.ApplySetters(element.Setters, floorFilter);
@@ -188,9 +194,9 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, FloorFilterElement oldEl, FloorFilterElement newEl, FloorFilter control)
         {
-            if (oldEl.GeoView != newEl.GeoView)
+            if (oldEl.GeoView?.Current != newEl.GeoView?.Current)
             {
-                control.GeoView = newEl.GeoView;
+                control.GeoView = newEl.GeoView?.Current;
             }
 
             if (oldEl.IsBrowseOpen != newEl.IsBrowseOpen)
@@ -208,7 +214,7 @@ public static partial class Factories
         {
             var legend = new Legend
             {
-                GeoView = element.GeoView,
+                GeoView = element.GeoView?.Current,
                 FilterByVisibleScaleRange = element.FilterByVisibleScaleRange,
                 FilterHiddenLayers = element.FilterHiddenLayers,
                 ReverseLayerOrder = element.ReverseLayerOrder,
@@ -219,9 +225,9 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, LegendElement oldEl, LegendElement newEl, Legend control)
         {
-            if (oldEl.GeoView != newEl.GeoView)
+            if (oldEl.GeoView?.Current != newEl.GeoView?.Current)
             {
-                control.GeoView = newEl.GeoView;
+                control.GeoView = newEl.GeoView?.Current;
             }
 
             if (oldEl.FilterByVisibleScaleRange != newEl.FilterByVisibleScaleRange)
@@ -249,7 +255,7 @@ public static partial class Factories
         {
             var toolbar = new MeasureToolbar
             {
-                MapView = element.MapView,
+                MapView = element.MapView?.Current,
             };
             ctx.ApplySetters(element.Setters, toolbar);
             return toolbar;
@@ -257,9 +263,9 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, MeasureToolbarElement oldEl, MeasureToolbarElement newEl, MeasureToolbar control)
         {
-            if (oldEl.MapView != newEl.MapView)
+            if (oldEl.MapView?.Current != newEl.MapView?.Current)
             {
-                control.MapView = newEl.MapView;
+                control.MapView = newEl.MapView?.Current;
             }
 
             ctx.ApplySetters(newEl.Setters, control);
@@ -272,7 +278,7 @@ public static partial class Factories
         {
             var overviewMap = new OverviewMap
             {
-                GeoView = element.GeoView,
+                GeoView = element.GeoView?.Current,
                 ScaleFactor = element.ScaleFactor,
             };
             if (element.Map is not null)
@@ -296,9 +302,9 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, OverviewMapElement oldEl, OverviewMapElement newEl, OverviewMap control)
         {
-            if (oldEl.GeoView != newEl.GeoView)
+            if (oldEl.GeoView?.Current != newEl.GeoView?.Current)
             {
-                control.GeoView = newEl.GeoView;
+                control.GeoView = newEl.GeoView?.Current;
             }
 
             if (oldEl.Map != newEl.Map && newEl.Map is not null)
@@ -370,8 +376,9 @@ public static partial class Factories
         {
             var scaleLine = new ScaleLine
             {
-                MapView = element.MapView,
+                MapView = element.MapView?.Current,
             };
+
             if (!double.IsNaN(element.MapScale) || element.MapView is null)
             {
                 scaleLine.MapScale = element.MapScale;
@@ -388,9 +395,9 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, ScaleLineElement oldEl, ScaleLineElement newEl, ScaleLine control)
         {
-            if (oldEl.MapView != newEl.MapView)
+            if (oldEl.MapView?.Current != newEl.MapView?.Current)
             {
-                control.MapView = newEl.MapView;
+                control.MapView = newEl.MapView?.Current;
             }
 
             if (oldEl.MapScale != newEl.MapScale && (!double.IsNaN(newEl.MapScale) || control.MapView is null))
@@ -413,7 +420,7 @@ public static partial class Factories
         {
             var searchView = new SearchView
             {
-                GeoView = element.GeoView,
+                GeoView = element.GeoView?.Current,
                 EnableDefaultWorldGeocoder = element.EnableDefaultWorldGeocoder,
                 EnableRepeatSearchHereButton = element.EnableRepeatSearchHereButton,
                 EnableIndividualResultDisplay = element.EnableIndividualResultDisplay,
@@ -456,9 +463,9 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, SearchViewElement oldEl, SearchViewElement newEl, SearchView control)
         {
-            if (oldEl.GeoView != newEl.GeoView)
+            if (oldEl.GeoView?.Current != newEl.GeoView?.Current)
             {
-                control.GeoView = newEl.GeoView;
+                control.GeoView = newEl.GeoView?.Current;
             }
 
             if (oldEl.SearchViewModel != newEl.SearchViewModel && newEl.SearchViewModel is not null)
@@ -707,7 +714,7 @@ public static partial class Factories
         {
             var traceTool = new UtilityNetworkTraceTool
             {
-                GeoView = element.GeoView,
+                GeoView = element.GeoView?.Current,
                 AutoZoomToTraceResults = element.AutoZoomToTraceResults,
             };
             if (element.StartingPointSymbol is not null)
@@ -746,9 +753,9 @@ public static partial class Factories
 
         public void Update(UpdateContext ctx, UtilityNetworkTraceToolElement oldEl, UtilityNetworkTraceToolElement newEl, UtilityNetworkTraceTool control)
         {
-            if (oldEl.GeoView != newEl.GeoView)
+            if (oldEl.GeoView?.Current != newEl.GeoView?.Current)
             {
-                control.GeoView = newEl.GeoView;
+                control.GeoView = newEl.GeoView?.Current;
             }
 
             if (oldEl.AutoZoomToTraceResults != newEl.AutoZoomToTraceResults)

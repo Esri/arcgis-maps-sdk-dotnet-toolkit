@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using Esri.ArcGISRuntime.Mapping;
 using Microsoft.UI.Reactor.Hooks;
 using BookmarksViewControl = Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView;
-using MapViewControl = Esri.ArcGISRuntime.UI.Controls.MapView;
 
 namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
@@ -11,7 +10,7 @@ public sealed class BookmarksViewPage : Component
 {
     public override Element Render()
     {
-        var mapViewRef = this.UseElementRef<MapViewControl>();
+        var mapViewRef = this.UseElementRef<Esri.ArcGISRuntime.UI.Controls.GeoView>();
         var (useOverride, setUseOverride) = UseState(false);
         var (selectedBookmark, setSelectedBookmark) = UseState("None");
 
@@ -32,13 +31,17 @@ public sealed class BookmarksViewPage : Component
         });
 
         return Grid(columns: [GridSize.Px(280), GridSize.Star()], rows: [GridSize.Star()],
+
+            MapView(map)
+                .Ref(mapViewRef)
+                .Grid(column: 1),
+
             (VStack(12,
-                (BookmarksView() with
+                (BookmarksView(mapViewRef) with
                 {
                     BookmarksOverride = useOverride ? overrideBookmarks : null,
                     OnBookmarkSelected = bookmark => setSelectedBookmark(bookmark.Name),
                 })
-                .Set((BookmarksViewControl control) => control.GeoView = mapViewRef.Current)
                 .Width(260)
                 .HorizontalAlignment(Microsoft.UI.Xaml.HorizontalAlignment.Stretch),
 
@@ -47,10 +50,6 @@ public sealed class BookmarksViewPage : Component
             )
             .Margin(12))
             .Grid(column: 0),
-
-            MapView(map)
-                .Ref(mapViewRef)
-                .Grid(column: 1),
 
             GalleryControls.ControlPanel(
                 ToggleSwitch(

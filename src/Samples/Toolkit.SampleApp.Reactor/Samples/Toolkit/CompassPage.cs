@@ -10,12 +10,11 @@ public sealed class CompassPage : Component
     {
         var (autoHide, setAutoHide) = UseState(false);
         var map = UseMemo(() => new Map(BasemapStyle.ArcGISStreets));
-        var mapViewRef = this.UseElementRef<MapViewControl>();
+        var mapViewRef = this.UseElementRef<Esri.ArcGISRuntime.UI.Controls.GeoView>();
         var mapview = MapView(map).Ref(mapViewRef);
         return Grid(columns: [GridSize.Star()], rows: [GridSize.Star()],
             mapview,
-            Compass(geoView: null, autoHide)
-                .Set((CompassControl control) => control.GeoView = mapViewRef.Current)
+            Compass(geoView: mapViewRef, autoHide)
                 .Margin(20)
                 .HorizontalAlignment(Microsoft.UI.Xaml.HorizontalAlignment.Right)
                 .VerticalAlignment(Microsoft.UI.Xaml.VerticalAlignment.Top),

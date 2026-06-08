@@ -1,8 +1,6 @@
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Microsoft.UI.Reactor.Hooks;
-using MapViewControl = Esri.ArcGISRuntime.UI.Controls.MapView;
-using OverviewMapControl = Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap;
 
 namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
@@ -10,7 +8,7 @@ public sealed class OverviewMapPage : Component
 {
     public override Element Render()
     {
-        var mapViewRef = this.UseElementRef<MapViewControl>();
+        var mapViewRef = this.UseElementRef<Esri.ArcGISRuntime.UI.Controls.GeoView>();
         var (alternateSymbols, setAlternateSymbols) = UseState(false);
         var (wideOverview, setWideOverview) = UseState(false);
         var map = UseMemo(() => new Map(BasemapStyle.ArcGISImagery));
@@ -27,13 +25,12 @@ public sealed class OverviewMapPage : Component
             MapView(map)
                 .Ref(mapViewRef),
 
-            (OverviewMap() with
+            (OverviewMap(mapViewRef) with
             {
                 AreaSymbol = areaSymbol,
                 PointSymbol = pointSymbol,
                 ScaleFactor = wideOverview ? 50 : 25,
             })
-            .Set((OverviewMapControl control) => control.GeoView = mapViewRef.Current)
             .Width(260)
             .Height(180)
             .Margin(20)

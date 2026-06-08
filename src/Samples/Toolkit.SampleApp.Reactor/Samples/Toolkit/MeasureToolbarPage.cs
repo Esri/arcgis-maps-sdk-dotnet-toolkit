@@ -2,7 +2,6 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI;
 using Microsoft.UI.Reactor.Hooks;
 using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI.Editing;
 
 namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
@@ -47,8 +46,7 @@ public sealed class MeasureToolbarPage : Component
                 GeometryEditor = editor
             },
 
-            MeasureToolbar()
-                .Set((MeasureToolbar control) => control.MapView = mapViewRef.Current)
+            MeasureToolbar(mapViewRef)
                 .Margin(20)
                 .HorizontalAlignment(Microsoft.UI.Xaml.HorizontalAlignment.Left)
                 .VerticalAlignment(Microsoft.UI.Xaml.VerticalAlignment.Top)

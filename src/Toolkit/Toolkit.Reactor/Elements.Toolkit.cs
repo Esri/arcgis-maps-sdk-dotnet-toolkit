@@ -8,6 +8,7 @@ using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI.Controls;
 using Microsoft.UI.Reactor.Core;
+using Microsoft.UI.Reactor.Input;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Reactor;
@@ -17,7 +18,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 /// </summary>
 /// <param name="GeoView">The declarative geoview associated with the compass.</param>
 /// <param name="AutoHide"><see langword="true"/> to hide the compass when the geoview is north aligned; otherwise, <see langword="false"/>.</param>
-public record CompassElement(GeoViewElement? GeoView = null, bool AutoHide = true) : Element
+public record CompassElement(ElementRef<GeoView>? GeoView = null, bool AutoHide = true) : Element
 {
     /// <summary>
     /// Gets or sets the heading, in degrees, shown by the compass.
@@ -55,7 +56,7 @@ public record BasemapGalleryElement(GeoModel? GeoModel = null) : Element
 /// Represents a declarative <see cref="BookmarksView"/> element.
 /// </summary>
 /// <param name="GeoView">The geoview whose bookmarks are displayed and navigated.</param>
-public record BookmarksViewElement(GeoView? GeoView = null) : Element
+public record BookmarksViewElement(ElementRef<GeoView>? GeoView = null) : Element
 {
     /// <summary>
     /// Gets or sets the bookmark collection displayed by the view.
@@ -104,7 +105,7 @@ public record FeatureDataFieldElement(Feature? Feature = null, string? FieldName
 /// Represents a declarative <see cref="FloorFilter"/> element.
 /// </summary>
 /// <param name="GeoView">The floor-aware geoview associated with the filter.</param>
-public record FloorFilterElement(GeoView? GeoView = null) : Element
+public record FloorFilterElement(ElementRef<GeoView>? GeoView = null) : Element
 {
     /// <summary>
     /// Gets or sets a value indicating whether the browse view is open.
@@ -118,7 +119,7 @@ public record FloorFilterElement(GeoView? GeoView = null) : Element
 /// Represents a declarative <see cref="Legend"/> element.
 /// </summary>
 /// <param name="GeoView">The geoview whose legend is displayed.</param>
-public record LegendElement(GeoView? GeoView = null) : Element
+public record LegendElement(ElementRef<GeoView>? GeoView = null) : Element
 {
     /// <summary>
     /// Gets or sets a value indicating whether layers outside the visible scale range are filtered out.
@@ -142,7 +143,7 @@ public record LegendElement(GeoView? GeoView = null) : Element
 /// Represents a declarative <see cref="MeasureToolbar"/> element.
 /// </summary>
 /// <param name="MapView">The map view measured by the toolbar.</param>
-public record MeasureToolbarElement(MapView? MapView = null) : Element
+public record MeasureToolbarElement(ElementRef<MapView>? MapView = null) : Element
 {
     internal Action<MeasureToolbar>[] Setters { get; init; } = [];
 }
@@ -151,7 +152,7 @@ public record MeasureToolbarElement(MapView? MapView = null) : Element
 /// Represents a declarative <see cref="OverviewMap"/> element.
 /// </summary>
 /// <param name="GeoView">The geoview tracked by the overview map.</param>
-public record OverviewMapElement(GeoView? GeoView = null) : Element
+public record OverviewMapElement(ElementRef<GeoView>? GeoView = null) : Element
 {
     /// <summary>
     /// Gets or sets the map displayed in the overview map.
@@ -204,7 +205,7 @@ public record PopupViewerElement(Popup? Popup = null) : Element
 /// Represents a declarative <see cref="ScaleLine"/> element.
 /// </summary>
 /// <param name="MapView">The map view used to derive the scale.</param>
-public record ScaleLineElement(MapView? MapView = null) : Element
+public record ScaleLineElement(ElementRef<MapView>? MapView = null) : Element
 {
     /// <summary>
     /// Gets or sets the explicit map scale used by the control.
@@ -223,7 +224,7 @@ public record ScaleLineElement(MapView? MapView = null) : Element
 /// Represents a declarative <see cref="SearchView"/> element.
 /// </summary>
 /// <param name="GeoView">The geoview searched by the control.</param>
-public record SearchViewElement(GeoView? GeoView = null) : Element
+public record SearchViewElement(ElementRef<GeoView>? GeoView = null) : Element
 {
     /// <summary>
     /// Gets or sets the search view model.
@@ -403,7 +404,7 @@ public record FeatureFormViewElement(FeatureForm? FeatureForm = null) : Element
 /// Represents a declarative <see cref="UtilityNetworkTraceTool"/> element.
 /// </summary>
 /// <param name="GeoView">The geoview where starting points and results are displayed.</param>
-public record UtilityNetworkTraceToolElement(GeoView? GeoView = null) : Element
+public record UtilityNetworkTraceToolElement(ElementRef<GeoView>? GeoView = null) : Element
 {
     /// <summary>
     /// Gets or sets a value indicating whether the tool zooms to results automatically.

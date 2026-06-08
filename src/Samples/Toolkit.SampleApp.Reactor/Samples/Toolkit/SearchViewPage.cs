@@ -1,7 +1,4 @@
-using Esri.ArcGISRuntime.Mapping;
 using Microsoft.UI.Reactor.Hooks;
-using MapViewControl = Esri.ArcGISRuntime.UI.Controls.MapView;
-using SearchViewControl = Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView;
 
 namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
@@ -9,7 +6,7 @@ public sealed class SearchViewPage : Component
 {
     public override Element Render()
     {
-        var mapViewRef = this.UseElementRef<MapViewControl>();
+        var mapViewRef = this.UseElementRef<Esri.ArcGISRuntime.UI.Controls.GeoView>();
         var (showResultList, setShowResultList) = UseState(true);
         var (showRepeatSearch, setShowRepeatSearch) = UseState(true);
         var map = UseMemo(() => new Map(BasemapStyle.ArcGISImagery));
@@ -18,12 +15,11 @@ public sealed class SearchViewPage : Component
             MapView(map)
                 .Ref(mapViewRef),
 
-            (SearchView() with
+            (SearchView(mapViewRef) with
             {
                 EnableResultListView = showResultList,
                 EnableRepeatSearchHereButton = showRepeatSearch,
             })
-            .Set((SearchViewControl control) => control.GeoView = mapViewRef.Current)
             .Width(320)
             .Margin(20)
             .HorizontalAlignment(Microsoft.UI.Xaml.HorizontalAlignment.Right)

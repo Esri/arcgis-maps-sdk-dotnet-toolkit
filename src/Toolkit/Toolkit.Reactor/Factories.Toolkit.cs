@@ -5,6 +5,7 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI.Controls;
+using Microsoft.UI.Reactor.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 
@@ -16,7 +17,7 @@ public static partial class Factories
     /// <param name="geoView">The declarative geoview associated with the compass.</param>
     /// <param name="autoHide"><see langword="true"/> to hide the compass when the geoview is north aligned; otherwise, <see langword="false"/>.</param>
     /// <returns>A new <see cref="CompassElement"/> instance.</returns>
-    public static CompassElement Compass(GeoViewElement? geoView, bool autoHide = true) =>
+    public static CompassElement Compass(ElementRef<GeoView>? geoView, bool autoHide = true) =>
         new(geoView, autoHide);
 
     /// <summary>
@@ -32,7 +33,7 @@ public static partial class Factories
     /// </summary>
     /// <param name="geoView">The geoview whose bookmarks are displayed.</param>
     /// <returns>A new <see cref="BookmarksViewElement"/> instance.</returns>
-    public static BookmarksViewElement BookmarksView(GeoView? geoView = null) => new(geoView);
+    public static BookmarksViewElement BookmarksView(ElementRef<GeoView>? geoView = null) => new(geoView);
 
     /// <summary>
     /// Creates a declarative <see cref="FeatureDataFieldElement"/>.
@@ -47,28 +48,28 @@ public static partial class Factories
     /// </summary>
     /// <param name="geoView">The floor-aware geoview associated with the filter.</param>
     /// <returns>A new <see cref="FloorFilterElement"/> instance.</returns>
-    public static FloorFilterElement FloorFilter(GeoView? geoView = null) => new(geoView);
+    public static FloorFilterElement FloorFilter(ElementRef<GeoView>? geoView = null) => new(geoView);
 
     /// <summary>
     /// Creates a declarative <see cref="LegendElement"/>.
     /// </summary>
     /// <param name="geoView">The geoview whose legend is displayed.</param>
     /// <returns>A new <see cref="LegendElement"/> instance.</returns>
-    public static LegendElement Legend(GeoView? geoView = null) => new(geoView);
+    public static LegendElement Legend(ElementRef<GeoView>? geoView = null) => new(geoView);
 
     /// <summary>
     /// Creates a declarative <see cref="MeasureToolbarElement"/>.
     /// </summary>
     /// <param name="mapView">The map view measured by the toolbar.</param>
     /// <returns>A new <see cref="MeasureToolbarElement"/> instance.</returns>
-    public static MeasureToolbarElement MeasureToolbar(MapView? mapView = null) => new(mapView);
+    public static MeasureToolbarElement MeasureToolbar(ElementRef<MapView>? mapView = null) => new(mapView);
 
     /// <summary>
     /// Creates a declarative <see cref="OverviewMapElement"/>.
     /// </summary>
     /// <param name="geoView">The geoview tracked by the overview map.</param>
     /// <returns>A new <see cref="OverviewMapElement"/> instance.</returns>
-    public static OverviewMapElement OverviewMap(GeoView? geoView = null) => new(geoView);
+    public static OverviewMapElement OverviewMap(ElementRef<GeoView>? geoView = null) => new(geoView);
 
     /// <summary>
     /// Creates a declarative <see cref="PopupViewerElement"/>.
@@ -82,14 +83,14 @@ public static partial class Factories
     /// </summary>
     /// <param name="mapView">The map view used to derive the scale.</param>
     /// <returns>A new <see cref="ScaleLineElement"/> instance.</returns>
-    public static ScaleLineElement ScaleLine(MapView? mapView = null) => new(mapView);
+    public static ScaleLineElement ScaleLine(ElementRef<MapView>? mapView = null) => new(mapView);
 
     /// <summary>
     /// Creates a declarative <see cref="SearchViewElement"/>.
     /// </summary>
     /// <param name="geoView">The geoview searched by the control.</param>
     /// <returns>A new <see cref="SearchViewElement"/> instance.</returns>
-    public static SearchViewElement SearchView(GeoView? geoView = null) => new(geoView);
+    public static SearchViewElement SearchView(ElementRef<GeoView>? geoView = null) => new(geoView);
 
     /// <summary>
     /// Creates a declarative <see cref="SymbolDisplayElement"/>.
@@ -123,7 +124,7 @@ public static partial class Factories
     /// </summary>
     /// <param name="geoView">The geoview where starting points and results are displayed.</param>
     /// <returns>A new <see cref="UtilityNetworkTraceToolElement"/> instance.</returns>
-    public static UtilityNetworkTraceToolElement UtilityNetworkTraceTool(GeoView? geoView = null) => new(geoView);
+    public static UtilityNetworkTraceToolElement UtilityNetworkTraceTool(ElementRef<GeoView>? geoView = null) => new(geoView);
 
     /// <summary>
     /// Registers a custom configuration action that runs against the mounted <see cref="Compass"/>.
