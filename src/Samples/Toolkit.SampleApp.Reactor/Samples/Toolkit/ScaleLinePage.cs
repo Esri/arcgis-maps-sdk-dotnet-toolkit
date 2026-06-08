@@ -12,27 +12,35 @@ public sealed class ScaleLinePage : Component
     {
         var mapViewRef = this.UseElementRef<MapView>();
         var (wide, setWide) = UseState(false);
+        var (scale, setScale) = UseState(1d);
 
         return Grid(columns: [GridSize.Star()], rows: [GridSize.Star()],
-            MapView(map)
-                .Ref(mapViewRef),
-
-            (ScaleLine() with
+            MapView(map).Ref(mapViewRef) with
             {
-                TargetWidth = wide ? 240 : 140,
-            })
-            .Set((ScaleLine control) => control.MapView = mapViewRef.Current)
-            .Margin(20)
-            .HorizontalAlignment(Microsoft.UI.Xaml.HorizontalAlignment.Left)
-            .VerticalAlignment(Microsoft.UI.Xaml.VerticalAlignment.Bottom),
-
+                OnMapScaleChanged = (e) => setScale(e)
+            },
             GalleryControls.ControlPanel(
-                ToggleSwitch(
-                    wide,
-                    value => setWide(value),
-                    onContent: "Wide scale line",
-                    offContent: "Compact scale line",
-                    header: "Target width"))
+                VStack(
+                     TextBlock("Scale line bound to MapView"),
+                     (ScaleLine(mapView: mapViewRef) with
+                     {
+                         TargetWidth = wide ? 240 : 140,
+                     })
+                    .Margin(20),
+                      TextBlock("Scale line bound to MapView.MapScale"),
+                      (ScaleLine(mapView: null) with
+                      {
+                          TargetWidth = wide ? 240 : 140,
+                          MapScale = scale
+                      })
+                    .Margin(20),
+                    ToggleSwitch(
+                        wide,
+                        value => setWide(value),
+                        onContent: "Wide scale line",
+                        offContent: "Compact scale line",
+                        header: "Target width"))
+                )
         );
     }
 }

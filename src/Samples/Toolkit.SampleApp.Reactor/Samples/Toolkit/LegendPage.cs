@@ -1,8 +1,7 @@
 using System;
 using Esri.ArcGISRuntime.Mapping;
 using Microsoft.UI.Reactor.Hooks;
-using LegendControl = Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend;
-using MapViewControl = Esri.ArcGISRuntime.UI.Controls.MapView;
+using GeoViewControl = Esri.ArcGISRuntime.UI.Controls.GeoView;
 
 namespace Toolkit.SampleApp.Reactor.Samples.Toolkit;
 
@@ -10,26 +9,25 @@ public sealed class LegendPage : Component
 {
     public override Element Render()
     {
-        var mapViewRef = this.UseElementRef<MapViewControl>();
+        var geoViewRef = this.UseElementRef<GeoViewControl>();
         var (filterHidden, setFilterHidden) = UseState(true);
         var (filterScale, setFilterScale) = UseState(true);
         var (reverseOrder, setReverseOrder) = UseState(true);
         var map = UseMemo(() => new Map(new Uri("https://www.arcgis.com/home/webmap/viewer.html?webmap=df8bcc10430f48878b01c96e907a1fc3")));
 
         return Grid(columns: [GridSize.Px(320), GridSize.Star()], rows: [GridSize.Star()],
-            (Legend() with
+            MapView(map)
+                .Ref(geoViewRef) // Note: MapView should be defined first for this ref to be valid when used below
+                .Grid(column: 1),
+
+            (Legend(geoViewRef) with
             {
                 FilterHiddenLayers = filterHidden,
                 FilterByVisibleScaleRange = filterScale,
                 ReverseLayerOrder = reverseOrder,
             })
-            .Set((LegendControl control) => control.GeoView = mapViewRef.Current)
             .Margin(12)
             .Grid(column: 0),
-
-            MapView(map)
-                .Ref(mapViewRef)
-                .Grid(column: 1),
 
             GalleryControls.ControlPanel(
                 VStack(8,
