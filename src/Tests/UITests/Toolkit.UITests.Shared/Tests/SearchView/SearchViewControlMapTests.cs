@@ -13,12 +13,17 @@ public class SearchViewControlMapTests : AppiumTestBase
         OpenSample(SearchViewControlMapPage);
 
         // Check the inital display of UI elements
+        Assert.IsTrue(ElementExistsById("QueryEntry", TimeSpan.FromSeconds(5)), "Expected the search input to be visible.");
+#if MAC_TEST
+        Assert.AreEqual("Find a place or address", GetEntryText(FindElement("QueryEntry", TimeSpan.FromSeconds(5))), "Expected the search input placeholder to be visible.");
+#else
         Assert.IsTrue(ElementExistsByText("Find a place or address", TimeSpan.FromSeconds(5)), "Expected the search input placeholder to be visible.");
+#endif
         Assert.IsTrue(ElementExistsByName("Search"), "Expected the Search button to be visible.");
         Assert.IsFalse(ElementExistsByName("Clear Search"), "Expected the Clear Search button to be hidden before search text is entered.");
-        Assert.IsFalse(ElementExistsByName("Search results"), "Expected search results to be hidden before a search is performed.");
-        Assert.IsFalse(ElementExistsByName("Search suggestions"), "Expected search suggestions to be hidden before search text is entered.");
-        Assert.IsFalse(ElementExistsByName("Search sources"), "Expected search sources to be hidden initially.");
+        Assert.IsFalse(ElementExistsById("SearchResultsList"), "Expected search results to be hidden before a search is performed.");
+        Assert.IsFalse(ElementExistsById("SearchSuggestionsList"), "Expected search suggestions to be hidden before search text is entered.");
+        Assert.IsFalse(ElementExistsById("SearchSourcesList"), "Expected search sources to be hidden initially.");
         Assert.IsFalse(ElementExistsByName("Select search source"), "Expected the source selector to be hidden initially.");
     }
 
@@ -37,7 +42,7 @@ public class SearchViewControlMapTests : AppiumTestBase
         Assert.IsTrue(ElementExistsByName("Clear Search", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
 
         // Allow suggestions to populate, then verify the suggestions list is visible.
-        Assert.IsTrue(ElementExistsByName("Search suggestions", TimeSpan.FromSeconds(5)), "Expected to see the suggestions for the text entered");
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsList", TimeSpan.FromSeconds(5)), "Expected to see the suggestions for the text entered");
 
         // Select a known suggestion and wait for the map and search UI to update.
         var selectSuggestion = FindElementByText("Ontario International Airport, Ontario, CA, USA", TimeSpan.FromSeconds(5));
@@ -65,7 +70,7 @@ public class SearchViewControlMapTests : AppiumTestBase
         selectSuggestion.Click();
 
         Assert.AreEqual("Restaurants", GetEntryText(FindElement("QueryEntry"), TimeSpan.FromSeconds(5)), "The search box value is not as expected.");
-        Assert.IsTrue(ElementExistsByName("Search results", TimeSpan.FromSeconds(5)));
+        Assert.IsTrue(ElementExistsById("SearchResultsList", TimeSpan.FromSeconds(5)));
 
         // Select a known search result and verify its callout content.
         var selectedResult = FindElementByName("Pizzas, Ontario, California, 91761", TimeSpan.FromSeconds(5));
