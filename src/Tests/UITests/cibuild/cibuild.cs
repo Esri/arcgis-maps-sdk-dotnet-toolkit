@@ -242,7 +242,7 @@ internal class Program
             {
                 Console.WriteLine("\nKilling mac test app...");
                 var listProcesses = RunBinary("ps", $"-o pid=,command= -e", true, false);
-                var matches = Regex.Matches(listProcesses!.StandardOutput, @$"^(\d+) .*{Regex.Escape(testAppPackage)}.*$", RegexOptions.Multiline);
+                var matches = Regex.Matches(listProcesses!.StandardOutput, @$"^\s*(\d+) .*{Regex.Escape(testAppPackage)}.*$", RegexOptions.Multiline);
                 if (matches.Count < 1)
                 {
                     Console.WriteLine($"No {testAppPackage} processes found. Skipping maui test app kill.");
