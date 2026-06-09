@@ -243,11 +243,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                var offlineMapTask = await _offlineMapTaskFactory().ConfigureAwait(false);
+                var offlineMapTask = await _offlineMapTaskFactory();
                 var parameters = await offlineMapTask.CreateDefaultGenerateOfflineMapParametersAsync(
                     _configuration.AreaOfInterest,
                     _configuration.MinScale,
-                    _configuration.MaxScale).ConfigureAwait(false);
+                    _configuration.MaxScale);
 
                 parameters.UpdateMode = OfflineManager.Shared.Configuration.OnDemandUpdateMode;
                 parameters.ContinueOnErrors = false;

@@ -130,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _description = HtmlUtility.StripHtml(description);
             _supportsRedownloading = supportsRedownloading;
             _downloadCommand = new DelegateCommand((o) => _ = DownloadPreplannedMapAreaAsync(), () => _preplannedMapArea != null && AllowsDownload && Status != PreplannedMapModelStatus.Downloading);
-            _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded && !IsOpen);
+            _removeDownloadCommand = new DelegateCommand((o) => RemoveDownloadedArea(), () => IsDownloaded && !IsOpen || Error is not null);
             _stopDownloadCommand = new DelegateCommand((o) => Job?.CancelAsync());
             _openMapCommand = openMapCommand;
             _onRemoveDownloadAction = onRemoveDownload;
