@@ -49,8 +49,8 @@ public class ScaleLine : TemplatedView
                 </Grid.RowDefinitions>
                 <StackLayout Orientation=""Horizontal"" Grid.Row=""0"">
                     <Border Background=""Transparent"" WidthRequest=""{Binding Width, Source={ x:Reference MetricScaleLine}}"" StrokeThickness=""0""/>
-                    <Label x:Name=""MetricValue"" Text=""100"" TextColor=""{TemplateBinding Color}""/>
-                    <Label x:Name=""MetricUnit"" Text=""m"" TextColor=""{TemplateBinding Color}""/>
+                    <Label x:Name=""MetricValue"" Text=""100"" TextColor=""{TemplateBinding Color}"" AutomationId=""MetricValue""/>
+                    <Label x:Name=""MetricUnit"" Text=""m"" TextColor=""{TemplateBinding Color}"" AutomationId=""MetricUnit""/>
                 </StackLayout>
                 <StackLayout Orientation=""Horizontal"" Grid.Row=""1"">
                     <Rectangle WidthRequest=""2"" BackgroundColor=""{TemplateBinding Color}"" HeightRequest=""5"" StrokeThickness=""0""/>
@@ -64,8 +64,8 @@ public class ScaleLine : TemplatedView
                 </StackLayout>
                 <StackLayout Orientation=""Horizontal"" Grid.Row=""4"">
                     <Border Background=""Transparent"" WidthRequest=""{Binding Width, Source={ x:Reference UsScaleLine}}"" StrokeThickness=""0""/>
-                    <Label x:Name=""UsValue"" Text=""USValue"" TextColor=""{TemplateBinding Color}""/>
-                    <Label x:Name=""UsUnit"" Text=""UsUnit"" TextColor=""{TemplateBinding Color}""/>
+                    <Label x:Name=""UsValue"" Text=""USValue"" TextColor=""{TemplateBinding Color}"" AutomationId=""UsValue""/>
+                    <Label x:Name=""UsUnit"" Text=""UsUnit"" TextColor=""{TemplateBinding Color}"" AutomationId=""UsUnit""/>
                 </StackLayout>
                 <StackLayout Orientation=""Horizontal"" Grid.Row=""2"">
                     <Rectangle Background=""{TemplateBinding Color}"" HeightRequest=""2"" WidthRequest=""4"" StrokeThickness=""0""/>

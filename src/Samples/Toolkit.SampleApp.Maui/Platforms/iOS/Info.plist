@@ -30,5 +30,9 @@
 	<string>Assets.xcassets/appicon.appiconset</string>
     <key>NSCameraUsageDescription</key>
     <string>Adding attachments</string>
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>com.companyname.toolkit.sampleapp.maui.cpt.jobs.*</string>
+    </array>
 </dict>
 </plist>

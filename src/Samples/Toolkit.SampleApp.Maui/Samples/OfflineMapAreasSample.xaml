@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Toolkit.SampleApp.Maui.Samples.OfflineMapAreasSample"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+    xmlns:sample="clr-namespace:Toolkit.SampleApp.Maui.Samples"
+    xmlns:shapes="clr-namespace:Microsoft.Maui.Controls.Shapes;assembly=Microsoft.Maui.Controls"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+    xmlns:foldable="clr-namespace:Microsoft.Maui.Controls.Foldable;assembly=Microsoft.Maui.Controls.Foldable"
+    x:DataType="sample:OfflineMapAreasSample"
+    Title="Offline Map Areas">
+    <foldable:TwoPaneView x:DataType="sample:OfflineMapAreasSampleVM" MinWideModeWidth="800" Pane2Length="500">
+        <foldable:TwoPaneView.Pane1>
+            <Grid>
+                <esri:MapView Map="{Binding Source={x:Reference mapAreasView}, Path=SelectedMap}" />
+
+                <Border
+                     Background="{AppThemeBinding Dark=#1C1C1E, Light=White}"
+                     HorizontalOptions="Center"
+                     Margin="20"
+                     Padding="20"
+                     Stroke="{AppThemeBinding Dark=#3A3A3C, Light=#D1D1D6}"
+                     StrokeThickness="2"
+                     VerticalOptions="Start">
+                    <Border.StrokeShape>
+                        <shapes:RoundRectangle CornerRadius="8" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Select Online Map" />
+                        <Picker
+                             x:Name="MapSelector"
+                             ItemDisplayBinding="{Binding Name, x:DataType=sample:MapAreaViewModel}"
+                             ItemsSource="{Binding Maps}"
+                             SelectedItem="{Binding SelectedMap, Mode=TwoWay}"
+                             WidthRequest="250" SelectedIndex="0" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </foldable:TwoPaneView.Pane1>
+        <foldable:TwoPaneView.Pane2>
+            <Grid
+              Grid.Column="1"
+              Margin="4"
+              RowDefinitions="Auto,*,Auto">
+                <Label
+                      HorizontalOptions="Center"
+                      Text="Map Areas" />   
+                <toolkit:OfflineMapAreasView
+                    x:Name="mapAreasView"
+                    Grid.Row="1"
+                    OnlineMap="{Binding SelectedMap.Map, Mode=OneWay}" />
+                <Button
+                  Grid.Row="2"
+                  Command="{Binding Source={x:Reference mapAreasView}, Path=GoOnlineCommand}"
+                  HorizontalOptions="Fill"
+                  Text="Go Online" />
+            </Grid>
+        </foldable:TwoPaneView.Pane2>
+    </foldable:TwoPaneView>
+</ContentPage>

@@ -103,6 +103,16 @@ namespace Esri.ArcGISRuntime.Toolkit
             return new JobManager(id);
         }
 
+#if WINDOWS
+        internal static JobManager Create(string id, string? storageFile = null)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException("id cannot be null or whitespace", nameof(id));
+
+            return new JobManager(id, storageFile);
+        }
+#endif
+
         private void Init()
         {
             LoadState();

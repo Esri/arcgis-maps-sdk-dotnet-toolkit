@@ -26,6 +26,7 @@
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
     <IsSampleProject Condition="'$(IsSampleProject)'!='true'">$(MSBuildProjectName.Contains('.SampleApp.'))</IsSampleProject>
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
+    <IsTestProject Condition="'$(IsTestProject)' != 'true'">$(MSBuildProjectName.Contains('.UITest'))</IsTestProject>
     <IsTemplateProject>$(MSBuildProjectDirectory.Contains('ProjectTemplates'))</IsTemplateProject>
     <IsAnalyzerProject>$(MSBuildProjectDirectory.Contains('Analyzers'))</IsAnalyzerProject>
     
@@ -45,10 +46,14 @@
     <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst26.0</NetCatalystTargetFramework>
     <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios26.0</NetiOSTargetFramework>  
     <MauiVersion Condition="'$(MauiVersion)'==''">10.0.40</MauiVersion>
-    <WinAppSDKVersion Condition="'$(WinAppSDKVersion)'==''">1.8.250916003</WinAppSDKVersion>
+    <WinUIVersion Condition="'$(WinUIVersion)'==''">1.8.250906003</WinUIVersion>
+    <WinAppSDKVersion Condition="'$(WinAppSDKVersion)'==''">1.8.251003001</WinAppSDKVersion>
   </PropertyGroup>
   <PropertyGroup>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+
+    <!-- Disable FUTDC to avoid issues with unrecognized XAML updates -->
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>

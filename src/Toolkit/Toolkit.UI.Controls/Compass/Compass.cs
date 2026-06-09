@@ -18,6 +18,11 @@
 
 using System.ComponentModel;
 using Esri.ArcGISRuntime.UI.Controls;
+#if WINUI
+using Microsoft.UI.Xaml.Automation.Peers;
+#elif WPF
+using System.Windows.Automation.Peers;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -65,6 +70,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ResetRotation();
         }
 #endif
+
+        /// <inheritdoc />
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new FrameworkElementAutomationPeer(this);
+        }
 
         private void UpdateCompassRotation(bool useTransitions)
         {
