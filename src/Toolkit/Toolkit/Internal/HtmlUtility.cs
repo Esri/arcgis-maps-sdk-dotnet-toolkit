@@ -108,6 +108,18 @@ internal class MarkupNode
 /// </summary>
 internal class HtmlUtility
 {
+    private static readonly Regex HtmlTagExpression = new Regex("<[^>]+>", RegexOptions.Compiled);
+
+    /// <summary>
+    /// Strips HTML from a string
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static string? StripHtml(string? value)
+            => string.IsNullOrWhiteSpace(value) ? value : HtmlTagExpression.Replace(value, string.Empty);
+
+
+
     /// <summary>
     /// Parses a string with HTML attribute declarations into a dictionary.
     /// If the same key is declared multiple times, the last value is used.
