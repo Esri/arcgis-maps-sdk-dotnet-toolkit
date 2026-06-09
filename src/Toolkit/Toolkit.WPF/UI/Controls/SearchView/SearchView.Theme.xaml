@@ -418,7 +418,7 @@
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedSuggestion, Mode=OneWayToSource}"
                                 Style="{StaticResource ListStyle}"
                                 AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
-                                AutomationProperties.AutomationId="SearchSuggestionsListGrouped">
+                                AutomationProperties.AutomationId="SearchSuggestionsList">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchSuggestion}">
                                         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,0,0,1">

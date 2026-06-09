@@ -62,6 +62,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             textLabel.FontSize = 14;
             textLabel.VerticalTextAlignment = TextAlignment.Center;
             containingGrid.Children.Add(textLabel);
+            containingGrid.SetBinding(SemanticProperties.DescriptionProperty, static (IGrouping<ISearchSource, SearchSuggestion> group) => group.Key.DisplayName);
             return containingGrid;
         });
         DefaultSuggestionTemplate = new DataTemplate(() =>
@@ -71,6 +72,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
             containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            containingGrid.SetBinding(SemanticProperties.DescriptionProperty, static (SearchSuggestion suggestion) => suggestion.DisplayTitle);
 
             Grid textStack = new Grid();
             textStack.BackgroundColor = Colors.Transparent;
@@ -116,6 +118,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             Grid containingGrid = new Grid();
             containingGrid.Padding = new Thickness(2, 4, 2, 4);
             containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb(BACKGROUND_LIGHT), Color.FromArgb(BACKGROUND_DARK));
+            containingGrid.SetBinding(SemanticProperties.DescriptionProperty, static (SearchResult result) => result.AutomationName);
 
             containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
@@ -162,6 +165,15 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             return containingGrid;
         });
 
+        static string GetLocalizedString(string key)
+        {
+            return System.Security.SecurityElement.Escape(Properties.Resources.GetString(key));
+        }
+
+        string selectSearchSourceDescription = GetLocalizedString("SearchViewSelectSearchSource");
+        string clearSearchDescription = GetLocalizedString("SearchViewClearSearchTooltip");
+        string searchDescription = GetLocalizedString("SearchViewSearchTooltip");
+
         string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
@@ -189,14 +201,14 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     <RowDefinition Height=""Auto"" />
     </Grid.RowDefinitions>
     <Grid Grid.Row=""0"" Grid.ColumnSpan=""3"" Style=""{{StaticResource SVDefaultGridStyle}}""/>
-    <ImageButton x:Name=""{nameof(PART_SourceSelectButton)}"" Grid.Column=""0"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" Margin=""0"" />
-    <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" TextColor=""{{AppThemeBinding Light={FOREGROUND_LIGHT}, Dark={FOREGROUND_DARK}}}"" />
-    <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
-    <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
-<Grid Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" >
-    <CollectionView x:Name=""{nameof(PART_SuggestionsView)}"" SelectionMode=""Single"" Grid.RowSpan=""2""  HeightRequest=""175"" />
-    <CollectionView x:Name=""{nameof(PART_ResultView)}"" SelectionMode=""Single"" Grid.RowSpan=""1"" HeightRequest=""200"" />
-    <CollectionView x:Name=""{nameof(PART_SourcesView)}"" SelectionMode=""Single"" HeightRequest=""150"" />
+    <ImageButton x:Name=""{nameof(PART_SourceSelectButton)}"" Grid.Column=""0"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" Margin=""0"" SemanticProperties.Description=""{selectSearchSourceDescription}"" AutomationProperties.AutomationId=""SourceSelectToggle""/>
+    <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" TextColor=""{{AppThemeBinding Light={FOREGROUND_LIGHT}, Dark={FOREGROUND_DARK}}}"" AutomationProperties.AutomationId=""QueryEntry""/>
+    <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" SemanticProperties.Description=""{clearSearchDescription}"" AutomationProperties.AutomationId=""ClearSearchButton""/>
+    <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" SemanticProperties.Description=""{searchDescription}"" AutomationProperties.AutomationId=""SearchButton"" />
+    <Grid Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" >
+    <CollectionView x:Name=""{nameof(PART_SuggestionsView)}"" SelectionMode=""Single"" Grid.RowSpan=""2""  HeightRequest=""175"" AutomationProperties.AutomationId=""SearchSuggestionsList""/>
+    <CollectionView x:Name=""{nameof(PART_ResultView)}"" SelectionMode=""Single"" Grid.RowSpan=""1"" HeightRequest=""200"" AutomationProperties.AutomationId=""SearchResultsList""/>
+    <CollectionView x:Name=""{nameof(PART_SourcesView)}"" SelectionMode=""Single"" HeightRequest=""150"" AutomationProperties.AutomationId=""SearchSourcesList"" />
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""  Style=""{{StaticResource SVDefaultGridStyle}}""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
 </Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2""  Style=""{{StaticResource SVDefaultGridStyle}}"">
