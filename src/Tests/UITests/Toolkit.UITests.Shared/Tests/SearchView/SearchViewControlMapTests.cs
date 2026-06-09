@@ -28,7 +28,7 @@ public class SearchViewControlMapTests : AppiumTestBase
     }
 
     [TestMethod]
-    public async Task SearchViewControl_SearchSuggestionsResults()
+    public async Task SearchViewControl_SearchSuggestions()
     {
         OpenSample(SearchViewControlMapPage);
 
@@ -61,12 +61,25 @@ public class SearchViewControlMapTests : AppiumTestBase
 
         // Clear the current search before testing category suggestions.
         FindElementByName("Clear Search").Click();
+    }
+
+    [TestMethod]
+    public async Task SearchViewControl_SearchCategoryResults()
+    {
+        OpenSample(SearchViewControlMapPage);
+        UpdateViewpoint(60000, -117.602000, 34.055845);
 
         // Enter a partial category name to trigger category suggestions.
         SubmitText(FindElement("QueryEntry"), "rest");
 
+        // Verify the clear button appears once text has been entered.
+        Assert.IsTrue(ElementExistsByName("Clear Search", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
+
+        // Allow suggestions to populate, then verify the suggestions list is visible.
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsList", TimeSpan.FromSeconds(5)), "Expected to see the suggestions for the text entered");
+
         // Select the Restaurants category suggestion and verify results are shown.
-        selectSuggestion = FindElementByName("Restaurants", TimeSpan.FromSeconds(5));
+        var selectSuggestion = FindElementByName("Restaurants", TimeSpan.FromSeconds(5));
         selectSuggestion.Click();
 
         Assert.AreEqual("Restaurants", GetEntryText(FindElement("QueryEntry"), TimeSpan.FromSeconds(5)), "The search box value is not as expected.");
