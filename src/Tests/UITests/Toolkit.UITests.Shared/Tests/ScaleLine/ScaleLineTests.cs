@@ -93,15 +93,15 @@ public class ScaleLineTests : AppiumTestBase
         var scaleLineElement = GetScaleElement(type);
 
         var metricValueElement = FindElement(scaleLineElement, "MetricValue");
-        var metricValue = int.Parse(GetElementText(metricValueElement));
+        var metricValue = int.Parse(GetLabelText(metricValueElement));
         var metricUnitElement = FindElement(scaleLineElement, "MetricUnit");
-        var metricUnit = GetElementText(metricUnitElement);
+        var metricUnit = GetLabelText(metricUnitElement);
         var metricLineLength = metricValueElement.Location.X - scaleLineElement.Rect.Left;
 
         var usValueElement = FindElement(scaleLineElement, "UsValue");
-        var usValue = int.Parse(GetElementText(usValueElement));
+        var usValue = int.Parse(GetLabelText(usValueElement));
         var usUnitElement = FindElement(scaleLineElement, "UsUnit");
-        var usUnit = GetElementText(usUnitElement);
+        var usUnit = GetLabelText(usUnitElement);
         var usLineLength = usValueElement.Location.X - scaleLineElement.Rect.Left;
 
         return new ScaleLineInfo

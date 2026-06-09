@@ -17,6 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="TestPages\ScaleLines.xaml" />
+	<None Remove="TestPages\SearchViewControlMap.xaml" />
   </ItemGroup>
 
   <ItemGroup>
