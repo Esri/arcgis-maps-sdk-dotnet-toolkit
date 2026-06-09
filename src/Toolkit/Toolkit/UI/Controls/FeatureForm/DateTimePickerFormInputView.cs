@@ -32,12 +32,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private WeakEventListener<DateTimePickerFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
 
-#if MAUI && WINDOWS
-        // Works around dotnet/maui#35785: a null MaximumDate makes the WinUI handler overflow DateTimeOffset
-        // west of UTC. A Utc-kind MaxValue casts to CalendarDatePicker.MaxDate at offset 0, staying in range.
-        private static readonly DateTime s_winMaxDate = DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc);
-#endif
-
         /// <summary>
         /// Initializes an instance of the <see cref="DateTimePickerFormInputView"/> class.
         /// </summary>
@@ -181,9 +175,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // Min/Max are always converted to local time
                     _datePicker.MinimumDate = input.Min?.ToLocalTime();
 #if WINDOWS
-                    // Never pass a null MaximumDate on WinUI: it triggers dotnet/maui#35785 west of UTC (see
-                    // s_winMaxDate). Min has no such issue (the symmetric case was fixed by #30973). Remove when fixed.
-                    _datePicker.MaximumDate = input.Max?.ToLocalTime() ?? s_winMaxDate;
+                    // Works around dotnet/maui#35785: a null MaximumDate makes the WinUI handler overflow DateTimeOffset west of UTC.
+                    // A Utc-kind MaxValue casts to CalendarDatePicker.MaxDate at offset 0, staying in range.
+                    _datePicker.MaximumDate = input.Max?.ToLocalTime() ?? DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc);
 #else
                     _datePicker.MaximumDate = input.Max?.ToLocalTime();
 #endif
