@@ -573,11 +573,11 @@
     <value>Discard</value>
     <comment>The text on the Discard button of the unsaved-edits warning dialog</comment>
   </data>
-    <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
     <value>Error</value>
     <comment>The text on the dialog shown if saving edits to a feature form fails</comment>
   </data>
-    <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
     <value>You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes?</value>
     <comment>The content of the dialog when user is warned about unsaved edits</comment>
   </data>
@@ -597,12 +597,200 @@
     <value>Content</value>
     <comment>The text used to indicate the associated feature is non-visible content in a UtilityAssociationsFormElement's group result</comment>
   </data>
-    <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>
     <comment>The terminal name of utility element association</comment>
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>Locator</value>
     <comment>Default display name for LocatorSearchSource if locator name is not set.</comment>
+  </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>Add</value>
+    <comment>The text on the button that confirms adding a new on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>Add Map Area</value>
+    <comment>The text and accessibility label for the button that starts the on-demand offline map area workflow.</comment>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>Name</value>
+    <comment>The placeholder text for the input where the user names an on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The text on the button that cancels adding a new on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>Download</value>
+    <comment>The text and tooltip for the action that downloads an offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>Size: {0}</value>
+    <comment>The description shown for a downloaded on-demand offline map area. {0} is the localized file size.</comment>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>Area {0}</value>
+    <comment>The default title for a new on-demand offline map area. {0} is a unique number.</comment>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>Downloaded</value>
+    <comment>The status label shown for an offline map area that has already been downloaded.</comment>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>Could not retrieve map areas for this map</value>
+    <comment>The message shown when the toolkit cannot load offline map areas because internet access is unavailable.</comment>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>No Internet Connection</value>
+    <comment>The title shown when the toolkit cannot load offline map areas because internet access is unavailable.</comment>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>There are no map areas for this map. Tap the button below to get started.</value>
+    <comment>The message shown when an on-demand offline-enabled map has no local map areas yet.</comment>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>There are no map areas for this map.</value>
+    <comment>The message shown when a preplanned offline-enabled map has no map areas available.</comment>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>No Map Areas</value>
+    <comment>The title shown when no offline map areas are available for the current map.</comment>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>The map is not enabled for offline use</value>
+    <comment>The message shown when the current map does not support offline use.</comment>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>Offline Disabled</value>
+    <comment>The title shown when the current map does not support offline use.</comment>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>Open</value>
+    <comment>The text and accessibility label for the action that opens a downloaded offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>The text and accessibility label for the action that reloads offline map areas.</comment>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>Remove</value>
+    <comment>The text and tooltip for the action that removes a downloaded offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>Select Area</value>
+    <comment>The heading shown above the map used to select the extent of a new on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
+    <value>Scale</value>
+    <comment>The label shown above the drop-down used to select the cache scale for an on-demand offline map area.</comment>
+  </data>
+  <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
+    <value>Room</value>
+    <comment>Room (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
+    <value>Rooms</value>
+    <comment>Rooms (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
+    <value>House Property</value>
+    <comment>House Property (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
+    <value>Houses</value>
+    <comment>Houses (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
+    <value>Small Building</value>
+    <comment>Small Building (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
+    <value>Building</value>
+    <comment>Building (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
+    <value>Buildings</value>
+    <comment>Buildings (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
+    <value>Street</value>
+    <comment>Street (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
+    <value>Streets</value>
+    <comment>Streets (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
+    <value>Neighborhood</value>
+    <comment>Neighborhood (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleTown" xml:space="preserve">
+    <value>Town</value>
+    <comment>Town (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleCity" xml:space="preserve">
+    <value>City</value>
+    <comment>City (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleCities" xml:space="preserve">
+    <value>Cities</value>
+    <comment>Cities (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
+    <value>Metropolitan Area</value>
+    <comment>Metropolitan Area (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
+    <value>County</value>
+    <comment>County (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
+    <value>Counties</value>
+    <comment>Counties (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
+    <value>State/Province</value>
+    <comment>State/Province (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
+    <value>States/Provinces</value>
+    <comment>States/Provinces (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
+    <value>Countries (Small)</value>
+    <comment>Countries (Small) (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
+    <value>Countries (Big)</value>
+    <comment>Countries (Big) (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
+    <value>Continent</value>
+    <comment>Continent (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
+    <value>World (Small)</value>
+    <comment>World (Small) (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
+    <value>World (Big)</value>
+    <comment>World (Big) (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
+    <value>World</value>
+    <comment>World (Level of Detail)</comment>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>The text and tooltip for the action that stops an in-progress offline map area download.</comment>
+  </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>Offline Map</value>
+    <comment>The title to display on a background task while taking maps offline.</comment>
+  </data>
+  <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
+    <value>An error occured. Tap to remove.</value>
+    <comment>Accessibility text for error button</comment>
   </data>
 </root>

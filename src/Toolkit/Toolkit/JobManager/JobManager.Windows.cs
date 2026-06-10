@@ -20,10 +20,12 @@ namespace Esri.ArcGISRuntime.Toolkit
     {
         const string classGuid = "D998B238-C096-4181-B971-9CD1EB760547";
         private readonly object taskRegistrationLock = new object();
+        private readonly string? _storageFile;
 
-        private JobManager(string? id)
+        private JobManager(string? id, string? storageFile = null)
         {
             _id = id;
+            _storageFile = storageFile;
             Init();
         }
 
@@ -95,10 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit
                 }
                 var tmpFile = Path.GetTempFileName();
                 File.WriteAllText(tmpFile, json);
-                if (File.Exists(stateFile))
-                    File.Replace(tmpFile, stateFile, stateFile + ".bak");
-                else
-                    File.Move(tmpFile, stateFile, true);
+                File.Move(tmpFile, stateFile, true);
             }
         }
 
@@ -115,6 +114,9 @@ namespace Esri.ArcGISRuntime.Toolkit
 
         private string GetStateFilename()
         {
+            if (!string.IsNullOrEmpty(_storageFile))
+                return _storageFile;
+
             if (IsAppPackaged)
             {
                 var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -124,7 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 // If the app is unpackaged, we'll generate a unique filename based on the process and assembly and place it in the temp folder
                 string location = Environment.ProcessPath + "|" + typeof(JobManager).Assembly.FullName + "|" + DefaultsKey;
-                return Path.Combine(Path.GetTempPath(), HashString(location) + ".json");
+                return Path.Combine(ArcGISRuntimeEnvironment.TempPath, HashString(location) + ".json");
             }
         }
 

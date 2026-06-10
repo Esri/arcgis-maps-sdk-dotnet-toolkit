@@ -46,6 +46,6 @@
   <PropertyGroup>
     <TestRunnerNetVersion>net10.0</TestRunnerNetVersion>
     <AppiumWebDriverVersion>8.2.0</AppiumWebDriverVersion>
-    <MagickNetVersion>14.12.0</MagickNetVersion>
+    <MagickNetVersion>14.14.0</MagickNetVersion>
   </PropertyGroup>
 </Project>

@@ -1,0 +1,38 @@
+<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.Jobs.OfflineMapAreasSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:tk="clr-namespace:Esri.ArcGISRuntime.Toolkit;assembly=Esri.ArcGISRuntime.Toolkit.WPF"
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.Jobs"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="400" />
+        </Grid.ColumnDefinitions>
+        <esri:MapView Map="{Binding SelectedMap, ElementName=OfflineMapAreasView}" />
+
+        <Border HorizontalAlignment="Center" Margin="20" Padding="20" BorderThickness="2" VerticalAlignment="Top" CornerRadius="8"
+                Background="White" BorderBrush="Gray">
+            <ComboBox x:Name="MapSelector" ItemsSource="{Binding Maps}" SelectedIndex="0" Width="250" />
+        </Border>
+
+        <Grid Grid.Column="1" Margin="4" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Map Areas" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" />
+            <esri:OfflineMapAreasView x:Name="OfflineMapAreasView" Grid.Row="1"
+                                      AutomationProperties.Name="Offline Map Areas list"
+                                      OnlineMap="{Binding SelectedItem.Map, ElementName=MapSelector, Mode=OneWay}" />
+            <Button Command="{Binding ElementName=OfflineMapAreasView, Path=GoOnlineCommand}" Content="Go Online" Grid.Row="2" HorizontalAlignment="Stretch" />
+        </Grid>
+
+    </Grid>
+</UserControl>

@@ -32,6 +32,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 #elif WPF
         internal static void Dispatch(this System.Windows.Threading.DispatcherObject dObject, Action action)
         {
+            if (dObject.Dispatcher.HasShutdownStarted || dObject.Dispatcher.HasShutdownFinished)
+                return;
             if (dObject.Dispatcher.CheckAccess())
                 action();
             else
