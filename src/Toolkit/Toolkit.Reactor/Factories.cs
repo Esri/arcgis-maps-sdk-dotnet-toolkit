@@ -30,6 +30,7 @@ public static partial class Factories
         ControlRegistry.Register(static () => new FeatureDataFieldHandler());
         ControlRegistry.Register(static () => new FloorFilterHandler());
         ControlRegistry.Register(static () => new LegendHandler());
+        ControlRegistry.Register(static () => new OfflineMapAreasViewHandler());
         ControlRegistry.Register(static () => new MeasureToolbarHandler());
         ControlRegistry.Register(static () => new OverviewMapHandler());
         ControlRegistry.Register(static () => new PopupViewerHandler());

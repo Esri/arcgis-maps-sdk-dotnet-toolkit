@@ -33,6 +33,7 @@ static class PageRouter
         "featureformview" => Component<Samples.Toolkit.FeatureFormViewPage>(),
         "floorfilter" => Component<Samples.Toolkit.FloorFilterPage>(),
         "legend" => Component<Samples.Toolkit.LegendPage>(),
+        "offlinemapareasview" => Component<Samples.Toolkit.OfflineMapAreasViewPage>(),
         "measuretoolbar" => Component<Samples.Toolkit.MeasureToolbarPage>(),
         "overviewmap" => Component<Samples.Toolkit.OverviewMapPage>(),
         "popupviewer" => Component<Samples.Toolkit.PopupViewerPage>(),

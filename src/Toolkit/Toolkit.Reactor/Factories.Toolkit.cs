@@ -3,6 +3,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI.Controls;
 using Microsoft.UI.Reactor.Input;
@@ -56,6 +57,39 @@ public static partial class Factories
     /// <param name="geoView">The geoview whose legend is displayed.</param>
     /// <returns>A new <see cref="LegendElement"/> instance.</returns>
     public static LegendElement Legend(ElementRef<GeoView>? geoView = null) => new(geoView);
+
+    /// <summary>
+    /// Creates a declarative <see cref="OfflineMapAreasViewElement"/>.
+    /// </summary>
+    /// <param name="onlineMap">The online map whose offline areas are displayed.</param>
+    /// <returns>A new <see cref="OfflineMapAreasViewElement"/> instance.</returns>
+    public static OfflineMapAreasViewElement OfflineMapAreasView(Map onlineMap) => new(onlineMap, null);
+
+    /// <summary>
+    /// Creates a declarative <see cref="OfflineMapAreasViewElement"/> from an offline map.
+    /// </summary>
+    /// <param name="offlineMapInfo">The stored offline map info whose areas are displayed.</param>
+    /// <returns>A new <see cref="OfflineMapAreasViewElement"/> instance.</returns>
+    public static OfflineMapAreasViewElement OfflineMapAreasView(OfflineMapInfo offlineMapInfo) => new(null, offlineMapInfo);
+
+    /// <summary>
+    /// Creates a declarative <see cref="OfflineMapAreasViewElement"/>.
+    /// </summary>
+    /// <param name="onlineMap">The online map whose offline areas are displayed.</param>
+    /// <param name="offlineMapInfo">The stored offline map info whose areas are displayed.</param>
+    /// <returns>A new <see cref="OfflineMapAreasViewElement"/> instance.</returns>
+    public static OfflineMapAreasViewElement OfflineMapAreasView(Map? onlineMap = null, OfflineMapInfo? offlineMapInfo = null)
+    {
+        if(onlineMap is null && offlineMapInfo is null)
+        {
+            throw new ArgumentException("Either onlineMap or offlineMapInfo must be provided.");
+        }
+        if(onlineMap is not null && offlineMapInfo is not null)
+        {
+            throw new ArgumentException("Only one of onlineMap or offlineMapInfo can be provided.");
+        }
+        return new(onlineMap, offlineMapInfo);
+    }
 
     /// <summary>
     /// Creates a declarative <see cref="MeasureToolbarElement"/>.
@@ -160,6 +194,12 @@ public static partial class Factories
     /// Registers a custom configuration action that runs against the mounted <see cref="Legend"/>.
     /// </summary>
     public static LegendElement Set(this LegendElement element, Action<Legend> configure) =>
+        element with { Setters = [.. element.Setters, configure] };
+
+    /// <summary>
+    /// Registers a custom configuration action that runs against the mounted <see cref="OfflineMapAreasView"/>.
+    /// </summary>
+    public static OfflineMapAreasViewElement Set(this OfflineMapAreasViewElement element, Action<OfflineMapAreasView> configure) =>
         element with { Setters = [.. element.Setters, configure] };
 
     /// <summary>

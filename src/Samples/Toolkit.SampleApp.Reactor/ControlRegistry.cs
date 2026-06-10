@@ -36,6 +36,7 @@ public static class ControlRegistry
         new("Feature Form View", "Displays a feature form definition for editing feature attributes.", "Toolkit", "\uEBE6", "featureformview", SourcePath: @"Toolkit\FeatureFormViewPage.cs"),
         new("Floor Filter", "Browses floor-aware maps and filters by site, facility, and level.", "Toolkit", "\uEBE6", "floorfilter", SourcePath: @"Toolkit\FloorFilterPage.cs"),
         new("Legend", "Displays the legend for the current geoview.", "Toolkit", "\uEBE6", "legend", SourcePath: @"Toolkit\LegendPage.cs"),
+        new("Offline Map Areas View", "Browses, downloads, and opens offline map areas for an online map.", "Toolkit", "\uEBE6", "offlinemapareasview", SourcePath: @"Toolkit\OfflineMapAreasViewPage.cs"),
         new("Measure Toolbar", "Measures distance, area, and features in a map view.", "Toolkit", "\uEBE6", "measuretoolbar", SourcePath: @"Toolkit\MeasureToolbarPage.cs"),
         new("Overview Map", "Shows an inset map for the current viewpoint.", "Toolkit", "\uEBE6", "overviewmap", SourcePath: @"Toolkit\OverviewMapPage.cs"),
         new("Popup Viewer", "Displays popup content for identified features.", "Toolkit", "\uEBE6", "popupviewer", SourcePath: @"Toolkit\PopupViewerPage.cs"),

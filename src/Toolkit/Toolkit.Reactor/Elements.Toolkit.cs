@@ -4,11 +4,13 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit;
 using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI.Controls;
 using Microsoft.UI.Reactor.Core;
 using Microsoft.UI.Reactor.Input;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Reactor;
@@ -113,6 +115,26 @@ public record FloorFilterElement(ElementRef<GeoView>? GeoView = null) : Element
     public bool IsBrowseOpen { get; set; }
 
     internal Action<FloorFilter>[] Setters { get; init; } = [];
+}
+
+/// <summary>
+/// Represents a declarative <see cref="OfflineMapAreasView"/> element.
+/// </summary>
+/// <param name="OnlineMap">The online map whose offline areas are displayed.</param>
+/// <param name="OfflineMapInfo">The stored offline map info whose areas are displayed.</param>
+public record OfflineMapAreasViewElement(Map? OnlineMap = null, OfflineMapInfo? OfflineMapInfo = null) : Element
+{
+    /// <summary>
+    /// Gets or sets the vertical scrollbar visibility.
+    /// </summary>
+    public ScrollBarVisibility VerticalScrollBarVisibility { get; set; } = ScrollBarVisibility.Auto;
+
+    /// <summary>
+    /// Gets or sets the action invoked when the selected map changes.
+    /// </summary>
+    public Action<Map?>? OnSelectedMapChanged { get; init; }
+
+    internal Action<OfflineMapAreasView>[] Setters { get; init; } = [];
 }
 
 /// <summary>

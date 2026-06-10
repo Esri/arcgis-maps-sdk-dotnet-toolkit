@@ -5,6 +5,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 using Microsoft.UI.Reactor;
 using Microsoft.UI.Reactor.Core;
 using Microsoft.UI.Reactor.Core.V1Protocol;
+using Microsoft.UI.Xaml;
 using WinRT;
 
 namespace Esri.ArcGISRuntime.Toolkit.Reactor;
@@ -243,6 +244,50 @@ public static partial class Factories
             if (oldEl.ReverseLayerOrder != newEl.ReverseLayerOrder)
             {
                 control.ReverseLayerOrder = newEl.ReverseLayerOrder;
+            }
+
+            ctx.ApplySetters(newEl.Setters, control);
+        }
+    }
+
+    private sealed class OfflineMapAreasViewHandler : IElementHandler<OfflineMapAreasViewElement, OfflineMapAreasView>
+    {
+        public OfflineMapAreasView Mount(MountContext ctx, OfflineMapAreasViewElement element)
+        {
+            var offlineMapAreasView = new OfflineMapAreasView
+            {
+                OnlineMap = element.OnlineMap,
+                OfflineMapInfo = element.OfflineMapInfo,
+                VerticalScrollBarVisibility = element.VerticalScrollBarVisibility
+            };
+
+            var bind = ctx.BindFor(offlineMapAreasView, element);
+            bind.OnCustomEvent<Map?>(
+                subscribe: static (c, h) => _ = ((OfflineMapAreasView)c).RegisterPropertyChangedCallback(
+                    Esri.ArcGISRuntime.Toolkit.UI.Controls.OfflineMapAreasView.SelectedMapProperty,
+                    (d, _) => h(d, ((OfflineMapAreasView)d).SelectedMap)),
+                unsubscribe: static (_, _) => { },
+                handler: static (cur, map) => cur.OnSelectedMapChanged?.Invoke(map));
+
+            ctx.ApplySetters(element.Setters, offlineMapAreasView);
+            return offlineMapAreasView;
+        }
+
+        public void Update(UpdateContext ctx, OfflineMapAreasViewElement oldEl, OfflineMapAreasViewElement newEl, OfflineMapAreasView control)
+        {
+            if (oldEl.OnlineMap != newEl.OnlineMap)
+            {
+                control.OnlineMap = newEl.OnlineMap;
+            }
+
+            if (oldEl.OfflineMapInfo != newEl.OfflineMapInfo)
+            {
+                control.OfflineMapInfo = newEl.OfflineMapInfo;
+            }
+
+            if (oldEl.VerticalScrollBarVisibility != newEl.VerticalScrollBarVisibility)
+            {
+                control.VerticalScrollBarVisibility = newEl.VerticalScrollBarVisibility;
             }
 
             ctx.ApplySetters(newEl.Setters, control);
