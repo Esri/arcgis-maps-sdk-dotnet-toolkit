@@ -100,7 +100,7 @@ public static partial class AppiumSetup
         return iosDriver;
     }
 
-    private static MacDriver MakeMacDriver(string bundleId, string port = "4723", int timeoutSeconds = 60)
+    private static MacDriver MakeMacDriver(string app, bool useAppPath, string port = "4723", int timeoutSeconds = 60)
     {
         var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
         var driverOptions = new AppiumOptions()
@@ -108,7 +108,10 @@ public static partial class AppiumSetup
             PlatformName = "mac",
             AutomationName = "mac2",
         };
-        driverOptions.AddAdditionalAppiumOption("bundleId", bundleId);
+        if (useAppPath)
+            driverOptions.AddAdditionalAppiumOption("appPath", app);
+        else
+            driverOptions.AddAdditionalAppiumOption("bundleId", app);
 
         var macDriver = new MacDriver(serverUri, driverOptions, TimeSpan.FromSeconds(timeoutSeconds));
 

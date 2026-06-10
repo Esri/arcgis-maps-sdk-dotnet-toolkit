@@ -9,7 +9,7 @@ using System.Text;
 internal class Program
 {
     // Supported test platforms
-    private static string[] _testPlatforms = { "MauiAndroid", "MauiiOS" };
+    private static string[] _testPlatforms = { "MauiAndroid", "MauiMac", "MauiiOS" };
 
 #region CleanupEvent
     private static event EventHandler? BuildEnding;
@@ -80,6 +80,7 @@ internal class Program
             BuildSettings buildSettings = testPlatform switch
             {
                 "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
+                "MauiMac" => SetupMac(dependencies, workspace),
                 "MauiiOS" => SetupiOS(dependencies, workspace),
                 _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
             };
@@ -214,6 +215,56 @@ internal class Program
 #endregion
 
 #region PlatformDependencies
+    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace)
+    {
+        // Define build settings
+        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiMac");
+        var macFramework = "net10.0-maccatalyst";
+        buildSettings.BuildParamsApp.AddRange([
+            $"-f {macFramework}",
+            $"-p:TargetFrameworks={macFramework}",
+            "-r maccatalyst-arm64"
+        ]);
+        var testAppPackage = "Toolkit.UITests.Maui.App.app";
+        buildSettings.BinaryName = testAppPackage;
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+
+        // Install maui maccatalyst workload
+        Console.WriteLine("\nInstalling maui maccatalyst workload...");
+        RunBinary(dependencies.DotnetExe, "workload install maui-maccatalyst");
+
+        // Install appium mac driver
+        InstallAppiumDriver(dependencies, "mac2");
+
+        // App cleanup since it doesn't seem to be included in the appium process tree for mac
+        BuildEnding += (_,_) =>
+        {
+            try
+            {
+                Console.WriteLine("\nKilling mac test app...");
+                var listProcesses = RunBinary("ps", $"-o pid=,command= -e", true, false);
+                var matches = Regex.Matches(listProcesses!.StandardOutput, @$"^\s*(\d+) .*{Regex.Escape(testAppPackage)}.*$", RegexOptions.Multiline);
+                if (matches.Count < 1)
+                {
+                    Console.WriteLine($"No {testAppPackage} processes found. Skipping maui test app kill.");
+                    return;
+                }
+                foreach (Match match in matches)
+                {
+                    var pid = match.Groups[1].Value;
+                    RunBinary("kill", pid);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to kill Maui test app during cleanup. See below error.");
+                Console.WriteLine(ex);
+            }
+        };
+
+        return buildSettings;
+    }
+
     private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace)
     {
         // Define build settings

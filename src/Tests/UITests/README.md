@@ -105,7 +105,7 @@ Configuration can also be done at runtime by setting certain environment variabl
 
 | Variable | Description | Affected Tests | Usage Notes |
 |---|---|---|---|
-| `TKUITEST_APP` | Defines the path to or package identifier of the target `.App` program. | WPF, WinUI, MauiWinUI, Android, iOS | On Android:<br>- The file specified must be a `.apk` file built in `Release` mode.<br>- The app will be fully uninstalled then reinstalled each run. |
+| `TKUITEST_APP` | Defines the path to or package identifier of the target `.App` program. | All | On Android:<br>- The file specified must be a `.apk` file built in `Release` mode.<br>- The app will be fully uninstalled then reinstalled each run. |
 | `TKUITEST_DEVICE` | Identifier for the device to run tests on. | iOS | On iOS this value should be the device UDID. |
 | `TKUITEST_PARAM_*` | Any environment variable starting with the prefix `TKUITEST_PARAM_` will be treated as a wildcard driver parameter override. For example, the value of `TKUITEST_PARAM_prebuiltWDAPath` will be used for the XCUITest driver `prebuiltWDAPath` parameter. | iOS |  |
 
