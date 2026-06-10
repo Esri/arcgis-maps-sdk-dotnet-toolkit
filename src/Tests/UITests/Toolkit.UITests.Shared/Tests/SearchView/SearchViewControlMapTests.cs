@@ -19,12 +19,12 @@ public class SearchViewControlMapTests : AppiumTestBase
 #else
         Assert.IsTrue(ElementExistsByText("Find a place or address", TimeSpan.FromSeconds(5)), "Expected the search input placeholder to be visible.");
 #endif
-        Assert.IsTrue(ElementExistsByName("Search"), "Expected the Search button to be visible.");
-        Assert.IsFalse(ElementExistsByName("Clear Search"), "Expected the Clear Search button to be hidden before search text is entered.");
+        Assert.IsTrue(ElementExistsById("SearchButton"), "Expected the Search button to be visible.");
+        Assert.IsFalse(ElementExistsById("ClearSearchButton"), "Expected the Clear Search button to be hidden before search text is entered.");
         Assert.IsFalse(ElementExistsById("SearchResultsList"), "Expected search results to be hidden before a search is performed.");
         Assert.IsFalse(ElementExistsById("SearchSuggestionsList"), "Expected search suggestions to be hidden before search text is entered.");
         Assert.IsFalse(ElementExistsById("SearchSourcesList"), "Expected search sources to be hidden initially.");
-        Assert.IsFalse(ElementExistsByName("Select search source"), "Expected the source selector to be hidden initially.");
+        Assert.IsFalse(ElementExistsById("SelectSearchSourceButton"), "Expected the source selector to be hidden initially.");
     }
 
     [TestMethod]
@@ -33,13 +33,13 @@ public class SearchViewControlMapTests : AppiumTestBase
         OpenSample(SearchViewControlMapPage);
 
         // Zoom to the extent of the United States so the entered query returns expected suggestions.
-        UpdateViewpoint(50000000, -95, 37);
+        FindElement("UpdateViewpointExtentToUSA").Click();
 
         // Enter a partial place name to trigger search suggestions.
         SubmitText(FindElement("QueryEntry", TimeSpan.FromSeconds(5)), "onta");
 
         // Verify the clear button appears once text has been entered.
-        Assert.IsTrue(ElementExistsByName("Clear Search", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
+        Assert.IsTrue(ElementExistsById("ClearSearchButton", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
 
         // Allow suggestions to populate, then verify the suggestions list is visible.
         Assert.IsTrue(ElementExistsById("SearchSuggestionsList", TimeSpan.FromSeconds(5)), "Expected to see the suggestions for the text entered");
@@ -54,26 +54,26 @@ public class SearchViewControlMapTests : AppiumTestBase
         Assert.IsTrue(ElementExistsByText("Ontario, California", TimeSpan.FromSeconds(5)), $"Callout description \"Ontario, California\" not found.");
 
         // Verify selecting the suggestion zoomed the map to the expected scale range.
-        var scaleText = GetEntryText(FindElement("ScaleTextBox"));
+        var scaleText = GetLabelText(FindElement("ScaleTextBlock"));
 
         Assert.IsTrue(double.TryParse(scaleText, out var currentScale), $"Invalid scale value: {scaleText}");
         Assert.IsLessThanOrEqualTo(100000, currentScale, $"Expected selecting a suggestion to zoom in. Actual scale: {currentScale}");
 
         // Clear the current search before testing category suggestions.
-        FindElementByName("Clear Search").Click();
+        FindElement("ClearSearchButton").Click();
     }
 
     [TestMethod]
     public async Task SearchViewControl_SearchCategoryResults()
     {
         OpenSample(SearchViewControlMapPage);
-        UpdateViewpoint(60000, -117.602000, 34.055845);
+        FindElement("UpdateViewpointExtentToOntario").Click();
 
         // Enter a partial category name to trigger category suggestions.
         SubmitText(FindElement("QueryEntry"), "rest");
 
         // Verify the clear button appears once text has been entered.
-        Assert.IsTrue(ElementExistsByName("Clear Search", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
+        Assert.IsTrue(ElementExistsById("ClearSearchButton", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
 
         // Allow suggestions to populate, then verify the suggestions list is visible.
         Assert.IsTrue(ElementExistsById("SearchSuggestionsList", TimeSpan.FromSeconds(5)), "Expected to see the suggestions for the text entered");
@@ -98,14 +98,14 @@ public class SearchViewControlMapTests : AppiumTestBase
     {
         OpenSample(SearchViewControlMapPage);
 
-        // Zoom to the extent of California so the entered query returns expected category suggestions and results.
-        UpdateViewpoint(3000000, -105.143243, 38.888975);
+        // Zoom to the extent of Colorado so the entered query returns expected category suggestions and results.
+        FindElement("UpdateViewpointExtentToColorado").Click();
 
         // Enter a partial category name to trigger category suggestions.
         SubmitText(FindElement("QueryEntry"), "air");
 
         // Verify the clear button appears once text has been entered.
-        Assert.IsTrue(ElementExistsByName("Clear Search", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
+        Assert.IsTrue(ElementExistsById("ClearSearchButton", TimeSpan.FromSeconds(5)), "Expected clear search button to be visible after starting to enter the query");
 
         // Allow suggestions to populate, then verify the suggestions list is visible.
         Assert.IsTrue(ElementExistsById("SearchSuggestionsList", TimeSpan.FromSeconds(5)), "Expected to see the suggestions for the text entered");
@@ -128,34 +128,19 @@ public class SearchViewControlMapTests : AppiumTestBase
 
         // After selecting a result, the results list should be hidden and repeat search should not be shown yet.
         Assert.IsFalse(ElementExistsById("SearchResultsList"));
-        Assert.IsFalse(ElementExistsByName("Repeat Search Here"), "Expected 'Repeat Search Here' button to be hidden initially");
+        Assert.IsFalse(ElementExistsById("RepeatSearchHereButton"), "Expected 'Repeat Search Here' button to be hidden initially");
 
         // Move the map to a new location so the previous search can be repeated in the new visible extent.
-        UpdateViewpoint(107962, -117.593468, 34.069134);
+        FindElement("UpdateViewpointExtentToOntario").Click();
 
         // Wait for the map viewpoint update to complete and for the repeat search button to become available.;
-        Assert.IsTrue(ElementExistsByName("Repeat Search Here", TimeSpan.FromSeconds(5)), "Expected 'Repeat Search Here' button to be visible after moving the map");
+        Assert.IsTrue(ElementExistsById("RepeatSearchHereButton", TimeSpan.FromSeconds(5)), "Expected 'Repeat Search Here' button to be visible after moving the map");
 
         // Run the same search again using the new map extent.
-        FindElementByName("Repeat Search Here").Click();
+        FindElement("RepeatSearchHereButton").Click();
 
         // Verify new results are shown and are relevant to the updated map location.
         Assert.IsTrue(ElementExistsById("SearchResultsList", TimeSpan.FromSeconds(5)), "Expected search results to be visible after clicking 'Repeat Search Here'");
         Assert.IsTrue(ElementExistsByName("Ontario International Airport, Ontario, California", TimeSpan.FromSeconds(5)), "Expected to see search results relevant to the new map location after clicking 'Repeat Search Here'");
-    }
-    // Helper method to update the viewpoint by entering values in the text boxes and clicking the update button
-    private void UpdateViewpoint(int scale, double longitude, double latitude)
-    {
-        var scaleInputElement = FindElement("ScaleTextBox", TimeSpan.FromSeconds(5));
-        SubmitText(scaleInputElement, scale.ToString());
-
-        var longitudeInputElement = FindElement("LongitudeTextBox", TimeSpan.FromSeconds(5));
-        SubmitText(longitudeInputElement, longitude.ToString());
-
-        var latitudeInputElement = FindElement("LatitudeTextBox", TimeSpan.FromSeconds(5));
-        SubmitText(latitudeInputElement, latitude.ToString());
-
-        var updateButtonElement = FindElement("UpdateViewpoint", TimeSpan.FromSeconds(5));
-        Click(updateButtonElement);
     }
 }

@@ -21,45 +21,26 @@ public partial class SearchViewControlMap : TestPage
 
         var map = new Esri.ArcGISRuntime.Mapping.Map(BasemapStyle.ArcGISImagery);
         MyMapView.Map = map;
-
-        MyMapView.ViewpointChanged += (_, _) => UpdateCoordinateAndScaleTextBoxes();
-        MyMapView.Loaded += (_, _) => UpdateCoordinateAndScaleTextBoxes();
     }
 
-    private void UpdateViewpoint_Click(object sender, ClickEventArgs e)
+    private void UpdateViewpointExtentToUSA_Click(object sender, ClickEventArgs e)
     {
-        if (!double.TryParse(ScaleTextBox.Text, out var scale) ||
-            !double.TryParse(LongitudeTextBox.Text, out var longitude) ||
-            !double.TryParse(LatitudeTextBox.Text, out var latitude))
-        {
-            return;
-        }
+        UpdateViewpoint_Click(50000000, -95, 37);
+    }
 
+    private void UpdateViewpointExtentToOntario_Click(object sender, ClickEventArgs e)
+    {
+        UpdateViewpoint_Click(60000, -117.602000, 34.055845);
+    }
+
+    private void UpdateViewpointExtentToColorado_Click(object sender, ClickEventArgs e)
+    {
+        UpdateViewpoint_Click(3000000, -105.143243, 38.888975);
+    }
+
+    private void UpdateViewpoint_Click(double scale, double longitude, double latitude)
+    {
         var center = new MapPoint(longitude, latitude, SpatialReferences.Wgs84);
         MyMapView.SetViewpoint(new Viewpoint(center, scale));
-
-        UpdateCoordinateAndScaleTextBoxes();
-    }
-
-    private void UpdateCoordinateAndScaleTextBoxes()
-    {
-        var visibleArea = MyMapView.VisibleArea;
-        if (visibleArea is null)
-        {
-            return;
-        }
-
-        var center = visibleArea.Extent.GetCenter();
-        var wgs84Center = GeometryEngine.Project(center, SpatialReferences.Wgs84) as MapPoint;
-
-        if (wgs84Center is null)
-        {
-            return;
-        }
-
-        LongitudeTextBox.Text = wgs84Center.X.ToString("F6");
-        LatitudeTextBox.Text = wgs84Center.Y.ToString("F6");
-        ScaleTextBox.Text = MyMapView.MapScale.ToString("F0");
-
     }
 }

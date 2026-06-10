@@ -14,17 +14,11 @@
             <StackPanel Margin="5">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                     <TextBlock Text="Scale: 1 / " Margin="1,1,0,1" VerticalAlignment="Center"/>
-                    <TextBox x:Name="ScaleTextBox" MinWidth="60" FontSize="14" AutomationProperties.Name="ScaleTextBox"/>
+                    <TextBlock x:Name="ScaleTextBlock" MinWidth="60" FontSize="14" AutomationProperties.AutomationId="ScaleTextBlock" Text="{Binding ElementName=MyMapView, Path=MapScale, Mode=OneWay}"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                    <TextBlock Text="Longitude: " Margin="1,1,3,1" VerticalAlignment="Center"/>
-                    <TextBox x:Name="LongitudeTextBox" MinWidth="60" FontSize="14"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                    <TextBlock Text="Latitude: " Margin="1,1,3,1" VerticalAlignment="Center"/>
-                    <TextBox x:Name="LatitudeTextBox" MinWidth="60" FontSize="14"/>
-                </StackPanel>
-                <Button x:Name="UpdateViewpoint" Content="Update Viewpoint" Padding="1" Click="UpdateViewpoint_Click"/>
+                <Button x:Name="UpdateViewpointExtentToUSA" Content="Update Viewpoint to USA" Padding="1" Click="UpdateViewpointExtentToUSA_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToUSA"/>
+                <Button x:Name="UpdateViewpointExtentToOntario" Content="Update Viewpoint to Ontario" Padding="1" Click="UpdateViewpointExtentToOntario_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToOntario"/>
+                <Button x:Name="UpdateViewpointExtentToColorado" Content="Update Viewpoint to Colorado" Padding="1" Click="UpdateViewpointExtentToColorado_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToColorado"/>
             </StackPanel>
         </Border>
         <esri:SearchView GeoView="{Binding ElementName=MyMapView}" />

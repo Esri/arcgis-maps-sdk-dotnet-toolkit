@@ -17,17 +17,11 @@
                 <StackLayout Margin="5">
                     <StackLayout Orientation="Horizontal" Margin="0,0,0,5">
                         <Label Text="Scale: 1 / " Margin="1,1,0,1" VerticalOptions="Center" />
-                        <Entry x:Name="ScaleTextBox" AutomationId="ScaleTextBox" MinimumWidthRequest="60" />
+                        <Label x:Name="ScaleTextBlock" AutomationId="ScaleTextBlock" MinimumWidthRequest="60" Text="{Binding Source={x:Reference MyMapView}, Path=MapScale, Mode=OneWay}" />
                     </StackLayout>
-                    <StackLayout Orientation="Horizontal" Margin="0,0,0,5">
-                        <Label Text="Longitude: " Margin="1,1,3,1" VerticalOptions="Center" />
-                        <Entry x:Name="LongitudeTextBox" AutomationId="LongitudeTextBox" MinimumWidthRequest="60" />
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal" Margin="0,0,0,5">
-                        <Label Text="Latitude: " Margin="1,1,3,1" VerticalOptions="Center" />
-                        <Entry x:Name="LatitudeTextBox" AutomationId="LatitudeTextBox" MinimumWidthRequest="60" />
-                    </StackLayout>
-                    <Button x:Name="UpdateViewpoint" AutomationId="UpdateViewpoint" Text="Update Viewpoint" Clicked="UpdateViewpoint_Click" />
+                    <Button x:Name="UpdateViewpointExtentToUSA" Text="Update Viewpoint to USA" Padding="1" Clicked="UpdateViewpointExtentToUSA_Click" AutomationId="UpdateViewpointExtentToUSA"/>
+                    <Button x:Name="UpdateViewpointExtentToOntario" Text="Update Viewpoint to Ontario" Padding="1" Clicked="UpdateViewpointExtentToOntario_Click" AutomationId="UpdateViewpointExtentToOntario"/>
+                    <Button x:Name="UpdateViewpointExtentToColorado" Text="Update Viewpoint to Colorado" Padding="1" Clicked="UpdateViewpointExtentToColorado_Click" AutomationId="UpdateViewpointExtentToColorado"/>
                 </StackLayout>
             </Border>
             <toolkit:SearchView Grid.Column="1" GeoView="{Binding Source={x:Reference MyMapView}}" HorizontalOptions="End" />
