@@ -44,11 +44,12 @@ internal class Program
         var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
         var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_PATH");
         var toolkitSrc = Environment.GetEnvironmentVariable("TOOLKIT_SRC");
-        if (string.IsNullOrWhiteSpace(workspace) || string.IsNullOrEmpty(dotnetExe) || string.IsNullOrEmpty(toolkitSrc)) {
-            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_PATH, and TOOLKIT_SRC must all be set.");
+        var apiKey = Environment.GetEnvironmentVariable("ARCGIS_API_KEY");
+        if (string.IsNullOrWhiteSpace(workspace) || string.IsNullOrEmpty(dotnetExe) || string.IsNullOrEmpty(toolkitSrc) || string.IsNullOrEmpty(apiKey)) {
+            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_PATH, ARCGIS_API_KEY, and TOOLKIT_SRC must all be set.");
         }
         if (!Path.Exists(workspace) || !Path.Exists(dotnetExe) || !Path.Exists(toolkitSrc)) {
-            throw new ArgumentException("Workspace and dotnet directory must be existing paths.");
+            throw new ArgumentException("Workspace, dotnet executable, and toolkit source directory must be existing paths.");
         }
 
         // Derived variables
@@ -79,9 +80,9 @@ internal class Program
             // Platform-specific setup
             BuildSettings buildSettings = testPlatform switch
             {
-                "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
-                "MauiMac" => SetupMac(dependencies, workspace),
-                "MauiiOS" => SetupiOS(dependencies, workspace),
+                "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace, apiKey),
+                "MauiMac" => SetupMac(dependencies, workspace, apiKey),
+                "MauiiOS" => SetupiOS(dependencies, workspace, apiKey),
                 _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
             };
 
@@ -215,7 +216,7 @@ internal class Program
 #endregion
 
 #region PlatformDependencies
-    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace)
+    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace, string apiKey)
     {
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiMac");
@@ -227,7 +228,7 @@ internal class Program
         ]);
         var testAppPackage = "Toolkit.UITests.Maui.App.app";
         buildSettings.BinaryName = testAppPackage;
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
 
         // Install maui maccatalyst workload
         Console.WriteLine("\nInstalling maui maccatalyst workload...");
@@ -265,7 +266,7 @@ internal class Program
         return buildSettings;
     }
 
-    private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace)
+    private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace, string apiKey)
     {
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiiOS");
@@ -276,7 +277,7 @@ internal class Program
             "-r ios-arm64"
         ]);
         buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
 
         // This particular setting only applies to the Runner, and is unused by the app
         buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
@@ -332,7 +333,7 @@ internal class Program
         return buildSettings;
     }
 
-    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace)
+    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace, string apiKey)
     {
         var jdkDirectory = $"{workspace}/jdk";
         var androidSdkDirectory = $"{workspace}/android-sdk";
@@ -348,7 +349,7 @@ internal class Program
             $"-p:AndroidSdkDirectory={androidSdkDirectory}"
         ]);
         buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
 
         // Install maui android
         Console.WriteLine("\nInstalling maui android workload...");
@@ -383,7 +384,7 @@ internal class Program
 #endregion
 
 #region BuildSettings
-    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace)
+    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace, string apiKey)
     {
         // Universal build parameters for the ci builds
         settings.BuildParamsCommon.AddRange([
@@ -408,6 +409,9 @@ internal class Program
         if (!string.IsNullOrWhiteSpace(trxFilename)) {
             settings.TestParams.Add($"--report-trx-filename {trxFilename}");
         }
+
+        // API key
+        settings.BuildParamsApp.Add($"-p:TestAppApiKey={apiKey}");
     }
 
     private class BuildSettings

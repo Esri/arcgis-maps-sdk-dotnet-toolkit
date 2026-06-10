@@ -15,7 +15,13 @@ if (![string]::IsNullOrWhiteSpace($env:RELEASE_VERSION)) {
   $build_params += "-p:UseNugetPackage=$env:RELEASE_VERSION"
 }
 
+if ([string]::IsNullOrWhiteSpace($env:ARCGIS_API_KEY)) {
+  Write-Error "The environment variable ARCGIS_API_KEY must be supplied and set to a valid API key."
+  exit 1
+}
+$build_params_app = @("-p:TestAppApiKey=$env:ARCGIS_API_KEY")
+
 # Run tests
 $runner_name = 'Toolkit.UITests.WPF'
 $app_name = 'Toolkit.UITests.WPF.App'
-Invoke-WindowsUITests $env:WORKSPACE $runner_name $app_name $build_params $false $env:NUGET_REPO $env:TRX_FILENAME
+Invoke-WindowsUITests $env:WORKSPACE $runner_name $app_name $build_params $false $env:NUGET_REPO $env:TRX_FILENAME $build_params_app

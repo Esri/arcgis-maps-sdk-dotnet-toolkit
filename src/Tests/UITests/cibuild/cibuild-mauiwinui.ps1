@@ -24,6 +24,12 @@ $build_params_app = @("-p:MauiVersion=${dotnet_major_version}*")
 $framework = "net${dotnet_major_version}-windows$(Get-YamlValue $config_file 'windows-sdk-version')"
 $build_params_app += @('-f', $framework, "-p:TargetFrameworks=${framework}")
 
+if ([string]::IsNullOrWhiteSpace($env:ARCGIS_API_KEY)) {
+  Write-Error "The environment variable ARCGIS_API_KEY must be supplied and set to a valid API key."
+  exit 1
+}
+$build_params_app += "-p:TestAppApiKey=$env:ARCGIS_API_KEY"
+
 # Run tests
 $runner_name = 'Toolkit.UITests.MauiWinUI'
 $app_name = 'Toolkit.UITests.Maui.App'
