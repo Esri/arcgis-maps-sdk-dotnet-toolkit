@@ -133,8 +133,7 @@ public class SearchViewControlMapTests : AppiumTestBase
         // Move the map to a new location so the previous search can be repeated in the new visible extent.
         UpdateViewpoint(107962, -117.593468, 34.069134);
 
-        // Wait for the map viewpoint update to complete and for the repeat search button to become available.
-        await Task.Delay(1000);
+        // Wait for the map viewpoint update to complete and for the repeat search button to become available.;
         Assert.IsTrue(ElementExistsByName("Repeat Search Here", TimeSpan.FromSeconds(5)), "Expected 'Repeat Search Here' button to be visible after moving the map");
 
         // Run the same search again using the new map extent.

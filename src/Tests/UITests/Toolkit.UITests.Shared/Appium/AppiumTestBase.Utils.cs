@@ -83,8 +83,6 @@ public abstract partial class AppiumTestBase
     {
 #if ANDROID_TEST
         var action = () => Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().description(\"{name}\")"));
-#elif WINDOWS_TEST
-        var action = () => Driver.FindElement(MobileBy.Name(name));
 #elif MAC_TEST || IOS_TEST
         var action = () => Driver.FindElement(MobileBy.XPath($"//*[@label=\"{name}\" or @name=\"{name}\"]"));
 #else
