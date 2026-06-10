@@ -19,10 +19,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
     internal sealed class CalciteImageButton : ImageButton
     {
         private readonly string _glyph;
-        public CalciteImageButton(string glyph)
+        public CalciteImageButton(string glyph, double fontSize = 24)
         {
             _glyph = glyph;
-            Source = new FontImageSource() { Glyph = _glyph, FontFamily = ToolkitIcons.FontFamilyName, Color = Color };
+            Source = new FontImageSource() { Glyph = _glyph, FontFamily = ToolkitIcons.FontFamilyName, Color = Color, Size = fontSize };
             this.SetAppThemeColor(ColorProperty, Colors.Black, Colors.White);
         }
 
