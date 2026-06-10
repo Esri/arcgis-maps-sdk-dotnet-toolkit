@@ -364,7 +364,7 @@
                                     SelectionMode="Single"
                                     Style="{StaticResource ListStyle}" 
                                     AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"
-                                    AutomationProperties.AutomationId="SourceList"/>
+                                    AutomationProperties.AutomationId="SearchSourcesList"/>
                             </StackPanel>
                         </Border>
                     </Popup>
@@ -582,7 +582,8 @@
                     Foreground="White"
                     Style="{StaticResource ProminentButtonStyle}"
                     Template="{StaticResource FloatingButtonTemplate}"
-                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                    AutomationProperties.AutomationId="RepeatSearchHereButton"/>
             </Grid>
         </Grid>
     </ControlTemplate>
