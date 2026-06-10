@@ -40,7 +40,7 @@ function Invoke-WindowsUITests {
 
   # Install maui workload if required
   if ($install_maui) {
-    & $dotnet_exe workload install maui-windows
+    & $dotnet_exe workload install maui
     if ($LASTEXITCODE -ne 0) { Write-Error 'maui workload install failed.'; exit $LASTEXITCODE }
   }
 
