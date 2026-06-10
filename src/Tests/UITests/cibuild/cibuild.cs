@@ -223,7 +223,6 @@ internal class Program
         var macFramework = "net10.0-maccatalyst";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {macFramework}",
-            $"-p:TargetFrameworks={macFramework}",
             "-r maccatalyst-arm64"
         ]);
         var testAppPackage = "Toolkit.UITests.Maui.App.app";
@@ -231,8 +230,8 @@ internal class Program
         AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
 
         // Install maui maccatalyst workload
-        Console.WriteLine("\nInstalling maui maccatalyst workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui-maccatalyst");
+        Console.WriteLine("\nInstalling maui workload...");
+        RunBinary(dependencies.DotnetExe, "workload install maui");
 
         // Install appium mac driver
         InstallAppiumDriver(dependencies, "mac2");
@@ -273,7 +272,6 @@ internal class Program
         var iosFramework = "net10.0-ios";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {iosFramework}",
-            $"-p:TargetFrameworks={iosFramework}",
             "-r ios-arm64"
         ]);
         buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
@@ -283,8 +281,8 @@ internal class Program
         buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
 
         // Install maui ios workload
-        Console.WriteLine("\nInstalling maui ios workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui-ios");
+        Console.WriteLine("\nInstalling maui workload...");
+        RunBinary(dependencies.DotnetExe, "workload install maui");
 
         // Install appium ios driver
         InstallAppiumDriver(dependencies, "xcuitest");
@@ -343,7 +341,6 @@ internal class Program
         var androidFramework = "net10.0-android";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {androidFramework}",
-            $"-p:TargetFrameworks={androidFramework}",
             "-r android-arm64",
             $"-p:JavaSdkDirectory={jdkDirectory}",
             $"-p:AndroidSdkDirectory={androidSdkDirectory}"
@@ -352,8 +349,8 @@ internal class Program
         AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
 
         // Install maui android
-        Console.WriteLine("\nInstalling maui android workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui-android");
+        Console.WriteLine("\nInstalling maui maui workload...");
+        RunBinary(dependencies.DotnetExe, "workload install maui");
 
         // Install appium android driver
         InstallAppiumDriver(dependencies, "uiautomator2");
