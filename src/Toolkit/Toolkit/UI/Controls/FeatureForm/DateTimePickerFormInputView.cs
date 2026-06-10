@@ -54,22 +54,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // We display dates in local time but store them in UTC.
                 DateTime? date = null;
 #if MAUI
-                // MAUI's DatePicker does not have a way to determine if it's empty. Check the platform control instead.
-#if WINDOWS
-                if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
-                {
-                    date = winPicker.Date?.UtcDateTime;
-                }
-#elif IOS || ANDROID
-                if (_datePicker.Handler?.PlatformView is not Microsoft.Maui.Platform.MauiDatePicker nativePicker || !String.IsNullOrEmpty(nativePicker.Text))
-                {
-                    date = _datePicker.Date?.ToUniversalTime();
-                }
-#elif MACCATALYST
+#if MACCATALYST
+                // On Mac, MAUI's DatePicker always reports a value (no empty state); the
+                // has-value switch determines whether the field is considered set.
                 if (_hasValueSwitch?.IsToggled != false)
                 {
                     date = _datePicker.Date?.ToUniversalTime();
                 }
+#else
+                // DatePicker.Date is nullable (.NET 10+); null means no date is selected.
+                date = _datePicker.Date?.ToUniversalTime();
 #endif
 #elif WINDOWS_XAML
                 var doffset = _datePicker.SelectedDate?.Date;
@@ -180,27 +174,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                     // Min/Max are always converted to local time
                     _datePicker.MinimumDate = input.Min?.ToLocalTime();
-                    _datePicker.MaximumDate = input.Max?.ToLocalTime();
-
 #if WINDOWS
-                    if (selectedDate is DateTime date)
-                    {
-                       _datePicker.Date = selectedDate.Value;
-                    }
-                    else if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
-                    {
-                        winPicker.Date = selectedDate;
-                    }
-#elif IOS || ANDROID
-                    if (selectedDate is DateTime date)
-                    {
-                        _datePicker.Date = date;
-                    }
-                    else if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
-                    {
-                        nativePicker.Text = null;
-                    }
-#elif MACCATALYST
+                    // Works around dotnet/maui#35785: a null MaximumDate makes the WinUI handler overflow DateTimeOffset west of UTC.
+                    // A Utc-kind MaxValue casts to CalendarDatePicker.MaxDate at offset 0, staying in range.
+                    _datePicker.MaximumDate = input.Max?.ToLocalTime() ?? DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc);
+#else
+                    _datePicker.MaximumDate = input.Max?.ToLocalTime();
+#endif
+
+#if MACCATALYST
+                    // On Mac the DatePicker can't show an empty value, so only push a real date and
+                    // use the has-value switch to represent the null/empty state.
                     if (selectedDate is DateTime date)
                     {
                         _datePicker.Date = date;
@@ -209,6 +193,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         _hasValueSwitch.IsToggled = (selectedDate != null);
                     }
+#else
+                    // DatePicker.Date is nullable (.NET 10+); null renders as an unset picker.
+                    _datePicker.Date = selectedDate;
 #endif
 #else
                     _datePicker.SelectedDate = selectedDate;

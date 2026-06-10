@@ -9,7 +9,7 @@ using System.Text;
 internal class Program
 {
     // Supported test platforms
-    private static string[] _testPlatforms = { "MauiAndroid", "MauiMac" };
+    private static string[] _testPlatforms = { "MauiAndroid", "MauiMac", "MauiiOS" };
 
 #region CleanupEvent
     private static event EventHandler? BuildEnding;
@@ -81,6 +81,7 @@ internal class Program
             {
                 "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
                 "MauiMac" => SetupMac(dependencies, workspace),
+                "MauiiOS" => SetupiOS(dependencies, workspace),
                 _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
             };
 
@@ -260,6 +261,73 @@ internal class Program
                 Console.WriteLine(ex);
             }
         };
+
+        return buildSettings;
+    }
+
+    private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace)
+    {
+        // Define build settings
+        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiiOS");
+        var iosFramework = "net10.0-ios";
+        buildSettings.BuildParamsApp.AddRange([
+            $"-f {iosFramework}",
+            $"-p:TargetFrameworks={iosFramework}",
+            "-r ios-arm64"
+        ]);
+        buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+
+        // This particular setting only applies to the Runner, and is unused by the app
+        buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
+
+        // Install maui ios workload
+        Console.WriteLine("\nInstalling maui ios workload...");
+        RunBinary(dependencies.DotnetExe, "workload install maui-ios");
+
+        // Install appium ios driver
+        InstallAppiumDriver(dependencies, "xcuitest");
+
+        var buildManual = Environment.GetEnvironmentVariable("BUILD_WDA_MANUAL");
+        if (buildManual != null && buildManual == "true")
+        {
+            Console.WriteLine("\nStarting manual WDA clone and build...");
+
+            var deviceUdid = Environment.GetEnvironmentVariable("TKUITEST_DEVICE");
+            var developmentTeam = Environment.GetEnvironmentVariable("DEVELOPMENT_TEAM");
+            var provisioningProfile = Environment.GetEnvironmentVariable("PROVISIONING_PROFILE_SPECIFIER");
+            if (deviceUdid == null || developmentTeam == null || provisioningProfile == null)
+            {
+                throw new ArgumentException("To run the MauiiOS cibuild with a manual WDA build, please set the TKUITEST_DEVICE, DEVELOPMENT_TEAM, and PROVISIONING_PROFILE_SPECIFIER environment variables.");
+            }
+
+            // Clone and build WDA (main reference: https://appium.github.io/appium-xcuitest-driver/11.8/guides/run-prebuilt-wda/)
+            var wdaRoot = Path.Join(workspace, "wda");
+            var wdaVersion = "v13.2.0";
+            if (Directory.Exists(wdaRoot))
+                Directory.Delete(wdaRoot, true);
+            RunBinary("git", $"clone https://github.com/appium/WebDriverAgent.git --depth 1 --branch {wdaVersion} {wdaRoot}");
+
+            var wdaProject = Path.Join(wdaRoot, "WebDriverAgent.xcodeproj");
+            var wdaBuild = Path.Join(wdaRoot, "build");
+            var bundleId = Environment.GetEnvironmentVariable("WDA_BUNDLE_ID") ?? "com.esri.wda";
+            RunBinary("xcodebuild", $"build-for-testing -project {wdaProject} -derivedDataPath {wdaBuild} -scheme WebDriverAgentRunner -destination \"platform=iOS,id={deviceUdid}\" DEVELOPMENT_TEAM={developmentTeam} PRODUCT_BUNDLE_IDENTIFIER={bundleId} PROVISIONING_PROFILE_SPECIFIER=\"{provisioningProfile}\" CODE_SIGN_STYLE=Manual -quiet");
+
+            var wdaPath = Path.Join(wdaBuild, "Build", "Products", "Debug-iphoneos", "WebDriverAgentRunner-Runner.app");
+
+            // Remove embedded frameworks as per https://appium.github.io/appium-xcuitest-driver/11.8/guides/run-preinstalled-wda/#additional-requirement-for-real-devices-on-iostvos-17
+            foreach (var path in Directory.GetFileSystemEntries(Path.Join(wdaPath, "Frameworks"), "XC*"))
+            {
+                if (Directory.Exists(path))
+                    Directory.Delete(path, true);
+                else
+                    File.Delete(path);
+            }
+
+            Environment.SetEnvironmentVariable("TKUITEST_PARAM_prebuiltWDAPath", wdaPath);
+            Environment.SetEnvironmentVariable("TKUITEST_PARAM_usePreinstalledWDA", "true");
+            Environment.SetEnvironmentVariable("TKUITEST_PARAM_updatedWDABundleId", bundleId);
+        }
 
         return buildSettings;
     }
