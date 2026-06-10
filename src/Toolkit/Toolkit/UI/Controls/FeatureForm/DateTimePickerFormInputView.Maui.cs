@@ -4,9 +4,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls.Internals;
-using Microsoft.Maui.Platform;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -19,6 +17,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private Button? _clearButton;
 #elif MACCATALYST
         private Switch? _hasValueSwitch;
+#elif WINDOWS
+        private Microsoft.UI.Xaml.Controls.CalendarDatePicker? _winDatePicker;
 #endif
 
         static DateTimePickerFormInputView()
@@ -68,7 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var hasValueSwitch = new Switch();
             container.Children.Add(hasValueSwitch);
             nameScope.RegisterName("HasValueSwitch", hasValueSwitch);
-            
+
             container.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Auto });
             container.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Star });
             Grid.SetColumn(datePicker, 1);
@@ -102,7 +102,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (_datePicker is not null)
             {
                 _datePicker.DateSelected += DatePicker_DateSelected;
+#if WINDOWS
                 _datePicker.HandlerChanged += DatePicker_HandlerChanged;
+#endif
             }
             if (_timePicker is not null)
             {
@@ -122,29 +124,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
 #endif
 
+#if WINDOWS
+        // The MAUI DatePicker on Windows wraps a CalendarDatePicker. Stretch it to fill the row,
+        // and listen for native date changes (the MAUI DateSelected event alone is unreliable here).
         private void DatePicker_HandlerChanged(object? sender, EventArgs e)
         {
-            // Platform-specific workarounds are needed to allow selecting "no date",
-            // because MAUI's own DatePicker does not support empty values.
-            // See https://github.com/dotnet/maui/issues/1100
-#if WINDOWS
-            if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
+            if (_winDatePicker is not null)
+            {
+                _winDatePicker.DateChanged -= WinDatePicker_DateChanged;
+                _winDatePicker = null;
+            }
+            if (_datePicker?.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
             {
                 winPicker.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
-                winPicker.DateChanged += (s, e) => UpdateValue();
-                if (Element?.Value is null)
-                    winPicker.Date = null;
+                winPicker.DateChanged += WinDatePicker_DateChanged;
+                _winDatePicker = winPicker;
             }
-#elif IOS || ANDROID
-            if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
-            {
-                if (Element?.Value is null)
-                {
-                    nativePicker.Text = null;
-                }
-            }
-#endif
         }
+
+        private void WinDatePicker_DateChanged(Microsoft.UI.Xaml.Controls.CalendarDatePicker sender, Microsoft.UI.Xaml.Controls.CalendarDatePickerDateChangedEventArgs args) => UpdateValue();
+#endif
 
         private void TimePicker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -153,60 +152,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
 
         private void DatePicker_DateSelected(object? sender, DateChangedEventArgs e) => UpdateValue();
-
-
-#if MAUI && !NET10_0_OR_GREATER // Work around for breaking change in .NET MAUI 10.0
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_MinimumDate")]
-        extern static void SetMinimumDate(DatePicker p, DateTime? value);
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_MaximumDate")]
-        extern static void SetMaximumDate(DatePicker p, DateTime? value);
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Date")]
-        extern static void SetDate(DatePicker p, DateTime? value);
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "get_Date")]
-        extern static DateTime? GetDate(DatePicker p);
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Time")]
-        extern static void SetTime(TimePicker p, TimeSpan? value);
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "get_Time")]
-        extern static TimeSpan? GetTime(TimePicker p);
-
-        private static void SetMinMaxDate_Net9(DatePicker _datePicker, DateTime? minValue, DateTime? maxValue)
-        {
-            _datePicker.MinimumDate = minValue?.ToLocalTime().Date ?? DateTime.MinValue;
-            _datePicker.MaximumDate = maxValue?.ToLocalTime().Date ?? DateTime.MaxValue;
-        }
-        private static void SetMinMaxDate_Net10(DatePicker _datePicker, DateTime? minValue, DateTime? maxValue)
-        {
-#if WINDOWS
-            SetMinimumDate(_datePicker, minValue?.ToLocalTime().Date ?? DateTime.MinValue);
-            SetMaximumDate(_datePicker, maxValue?.ToLocalTime().Date ?? DateTime.MaxValue);
-#else
-            SetMinimumDate(_datePicker, minValue?.ToLocalTime().Date);
-            SetMaximumDate(_datePicker, maxValue?.ToLocalTime().Date);
-#endif
-        }
-        private static void SetDate_Net9(DatePicker datePicker, DateTime value) => datePicker.Date = value;
-        private static void SetDate_Net10(DatePicker datePicker, DateTime? value) => SetDate(datePicker, value);
-        private static DateTime? GetDateMAUI(DatePicker datePicker)
-        {
-            if (Environment.Version.Major < 10)
-                return GetDate_Net9(datePicker);
-            else
-                return GetDate_Net10(datePicker);
-        }
-        private static DateTime? GetDate_Net9(DatePicker datePicker) => datePicker.Date;
-        private static DateTime? GetDate_Net10(DatePicker datePicker) => GetDate(datePicker);
-        private static void SetTime_Net9(TimePicker timePicker, TimeSpan value) => timePicker.Time = value;
-        private static void SetTime_Net10(TimePicker timePicker, TimeSpan? value) => SetTime(timePicker, value);
-        private static TimeSpan? GetTimeMAUI(TimePicker timePicker)
-        {
-            if (Environment.Version.Major < 10)
-                return GetTime_Net9(timePicker);
-            else
-                return GetTime_Net10(timePicker);
-        }
-        private static TimeSpan? GetTime_Net9(TimePicker timePicker) => timePicker.Time;
-        private static TimeSpan? GetTime_Net10(TimePicker timePicker) => GetTime(timePicker);
-#endif
 
         }
     }
