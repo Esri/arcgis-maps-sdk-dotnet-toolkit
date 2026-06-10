@@ -121,14 +121,12 @@ public static partial class AppiumSetup
     private static Dictionary<string, string> GetBuildSettings()
     {
         // Find and read file
-        var testAssemblyDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            ?? throw new InvalidOperationException("Could not determine test assembly directory.");
-
-        var pathFile = Path.Combine(testAssemblyDir, "AppBuildInfo.txt");
-        if (!File.Exists(pathFile))
+        var pathFile = GetBuildFile();
+        if (!Path.Exists(pathFile))
         {
             throw new FileNotFoundException(
-                $"Missing '{pathFile}'. Ensure the 'BuildTestApp' MSBuild target ran before tests.");
+                $"Missing '{pathFile}'. Ensure the 'BuildTestApp' MSBuild target ran before tests."
+            );
         }
 
         var rawFile = File.ReadAllText(pathFile).Trim();
@@ -149,6 +147,17 @@ public static partial class AppiumSetup
             }
         }
         return metadata;
+    }
+
+    /// <summary>
+    /// Returns null if the build file does not exist.
+    /// </summary>
+    private static string GetBuildFile()
+    {
+        var testAssemblyDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            ?? throw new InvalidOperationException("Could not determine test assembly directory.");
+
+        return Path.Combine(testAssemblyDir, "AppBuildInfo.txt");
     }
 
     [AssemblyCleanup]
