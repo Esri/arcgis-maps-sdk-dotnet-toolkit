@@ -19,6 +19,7 @@ namespace Toolkit.UITests.WinUI.Puppet
         public App()
         {
             InitializeComponent();
+            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = ApiKeyProvider.Key;
         }
 
         /// <summary>

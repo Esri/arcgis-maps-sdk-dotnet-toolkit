@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Esri.ArcGISRuntime;
+using System.Windows;
 
 namespace Toolkit.UITests.Wpf.Puppet;
 
@@ -10,6 +11,9 @@ public partial class App : Application
     public App()
     {
         ControlPatcher.ApplyPatches();
-        Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
+        ArcGISRuntimeEnvironment.Initialize((config) =>
+        {
+            config.UseApiKey(ApiKeyProvider.Key);
+        });
     }
 }

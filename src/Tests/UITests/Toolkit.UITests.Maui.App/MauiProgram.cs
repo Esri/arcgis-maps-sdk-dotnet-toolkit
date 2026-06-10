@@ -1,4 +1,5 @@
-﻿using Esri.ArcGISRuntime.Maui;
+﻿using Esri.ArcGISRuntime;
+using Esri.ArcGISRuntime.Maui;
 using Esri.ArcGISRuntime.Toolkit.Maui;
 using Esri.Calcite.Maui;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,10 @@ namespace Toolkit.UITests.Maui.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 })
                 .UseWindowsAutomationTreeFix()
-                .UseArcGISRuntime()
+                .UseArcGISRuntime((config) =>
+                {
+                    config.UseApiKey(ApiKeyProvider.Key);
+                })
                 .UseArcGISToolkit()
                 .UseCalcite();
 
