@@ -10,7 +10,7 @@ if (-not $?) {
 }
 
 # Define build parameters
-$build_params = @('-c', 'Release')
+$build_params = @('-c', 'Release', "-p:BuildApp=false")
 if (![string]::IsNullOrWhiteSpace($env:RELEASE_VERSION)) {
   $build_params += "-p:UseNugetPackage=$env:RELEASE_VERSION"
 }
