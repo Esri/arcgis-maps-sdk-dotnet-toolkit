@@ -11,7 +11,7 @@ public partial class App : Application
     public App()
     {
         ControlPatcher.ApplyPatches();
-        ArcGISRuntimeEnvironment.Initialize((config) =>
+        ArcGISRuntimeEnvironment.Initialize(static (config) =>
         {
             config.UseApiKey(ApiKeyProvider.Key);
         });

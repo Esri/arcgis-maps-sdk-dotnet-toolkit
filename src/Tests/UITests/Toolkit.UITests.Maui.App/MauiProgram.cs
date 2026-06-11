@@ -20,7 +20,7 @@ namespace Toolkit.UITests.Maui.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 })
                 .UseWindowsAutomationTreeFix()
-                .UseArcGISRuntime((config) =>
+                .UseArcGISRuntime(static (config) =>
                 {
                     config.UseApiKey(ApiKeyProvider.Key);
                 })
