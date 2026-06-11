@@ -12,7 +12,10 @@ public class ApiKeyGenerator : IIncrementalGenerator
     {
         // Get API key property, see https://github.com/dotnet/roslyn/blob/eb789e2741f6f22d9e283e2049dc1378871323e0/docs/features/incremental-generators.cookbook.md#consume-msbuild-properties-and-metadata
         IncrementalValueProvider<string?> keyProvider = context.AnalyzerConfigOptionsProvider.Select((provider, ct) =>
-            provider.GlobalOptions.TryGetValue("build_property.TestAppApiKey", out var key) ? key : null);
+        {
+            provider.GlobalOptions.TryGetValue("build_property.TestAppApiKey", out var key);
+            return key;
+        });
 
         context.RegisterSourceOutput(keyProvider, (productionContext, key) =>
         {
