@@ -41,16 +41,10 @@ internal class Program
         if (!_testPlatforms.Contains(testPlatform))
             throw new ArgumentException($"Test platform '{testPlatform}' not recognized. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
 
-        var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
-        var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_PATH");
-        var toolkitSrc = Environment.GetEnvironmentVariable("TOOLKIT_SRC");
-        var apiKey = Environment.GetEnvironmentVariable("ARCGIS_API_KEY");
-        if (string.IsNullOrWhiteSpace(workspace) || string.IsNullOrEmpty(dotnetExe) || string.IsNullOrEmpty(toolkitSrc) || string.IsNullOrEmpty(apiKey)) {
-            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_PATH, ARCGIS_API_KEY, and TOOLKIT_SRC must all be set.");
-        }
-        if (!Path.Exists(workspace) || !Path.Exists(dotnetExe) || !Path.Exists(toolkitSrc)) {
-            throw new ArgumentException("Workspace, dotnet executable, and toolkit source directory must be existing paths.");
-        }
+        var workspace = GetRequiredEnvironmentPath("WORKSPACE");
+        var dotnetExe = GetRequiredEnvironmentPath("DOTNET_PATH");
+        var toolkitSrc = GetRequiredEnvironmentPath("TOOLKIT_SRC");
+        var apiKey = GetRequiredEnvironmentVariable("ARCGIS_API_KEY");
 
         // Derived variables
         var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
@@ -125,6 +119,28 @@ internal class Program
     }
 
 #region CommonDependencies
+    private static string GetRequiredEnvironmentVariable(string variableName)
+    {
+        var value = Environment.GetEnvironmentVariable(variableName);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new ArgumentException($"Environment variable '{variableName}' must be set.");
+        }
+
+        return value;
+    }
+
+    private static string GetRequiredEnvironmentPath(string variableName)
+    {
+        var path = GetRequiredEnvironmentVariable(variableName);
+        if (!Path.Exists(path))
+        {
+            throw new ArgumentException($"Environment variable '{variableName}' must point to an existing path. Current value: '{path}'.");
+        }
+
+        return path;
+    }
+
     private static void SetNugetSource(string workspace, string dotnetExe, string nugetRepo)
     {
         Console.WriteLine("\nConfiguring nuget...");
