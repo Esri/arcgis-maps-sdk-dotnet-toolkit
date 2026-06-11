@@ -17,14 +17,7 @@ public class ApiKeyGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(keyProvider, (productionContext, key) =>
         {
             if (string.IsNullOrWhiteSpace(key)) {
-                var descriptor = new DiagnosticDescriptor(
-                    id: "TKUITEST001",
-                    title: "Missing Toolkit.UITests api key",
-                    messageFormat: "The Toolkit.UITests are missing an API key, some tests will fail.",
-                    category: "Toolkit.UITests",
-                    defaultSeverity: DiagnosticSeverity.Warning,
-                    isEnabledByDefault: false);
-                productionContext.ReportDiagnostic(Diagnostic.Create(descriptor, null, new string[0]));
+                productionContext.ReportDiagnostic(Diagnostic.Create(ApiKeyWarningDescriptor, null, new string[0]));
             }
 
             productionContext.AddSource("ApiKeyProvider.Generated.cs",
@@ -34,4 +27,12 @@ public class ApiKeyGenerator : IIncrementalGenerator
 }}");
         });
     }
+
+    private static readonly DiagnosticDescriptor ApiKeyWarningDescriptor = new(
+        id: "TKUITEST001",
+        title: "Missing API key for Toolkit.UITests apps",
+        messageFormat: "The Toolkit.UITests are missing an API key. Some tests will fail unless the TestAppApiKey msbuild property is set.",
+        category: "Usage",
+        defaultSeverity: DiagnosticSeverity.Warning,
+        isEnabledByDefault: false);
 }
