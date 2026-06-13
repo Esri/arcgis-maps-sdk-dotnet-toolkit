@@ -63,10 +63,42 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             base.OnApplyTemplate();
             if (GetTemplateChild("RemoveAssociationButton") is Button button)
             {
-                // TODO: Ask user to confirm, then delete this association, and navigate back
-                // If the page navigated back to no longer has associations, then navigate one more page back.
+#if MAUI
+                button.Clicked += (s, e) => RemoveAssociation();
+#else
+                button.Click += (s, e) => RemoveAssociation();
+#endif
             }
             UpdateView();
+        }
+
+        private async void RemoveAssociation()
+        {
+            if (AssociationResult?.Association is null || !await ConfirmDeleteAssociationAsync())
+            {
+                return;
+            }
+
+            // If the page navigated back to no longer has associations, then navigate one more page back.
+            var formview = FeatureFormView.GetFeatureFormViewParent(this);
+            var form = formview?.CurrentFeatureForm;            
+            var result = formview?.GetNavigationStack().OfType<UtilityAssociationsFilterResult>().LastOrDefault();
+            var a = form?.Elements.OfType<UtilityAssociationsFormElement>().Where(e => e.AssociationsFilterResults.Contains(result))?.FirstOrDefault();
+            if (a is null || !a.IsEditable) return;  // TODO: we shouldn't show remove if it can't be edited
+
+            try
+            {
+                
+                a.DeleteAssociation(AssociationResult.Association);
+            }
+            catch
+            {
+                return; // TODO:...
+            }
+            await a.FetchAssociationsFilterResultsAsync();
+            //TODO: Refreshing it will replace all the collections, and the backstack will contain stale versions of the collections.
+            var previousPage = await (formview?.GoBackAsync());
+            // if(previousPage is )
         }
 
         /// <summary>
@@ -92,10 +124,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void UpdateView()
         {
             var title = GetTemplateChild("Title") as TextBlock;
+            var ffv = FeatureFormView.GetFeatureFormViewParent(this);
+
+            if (GetTemplateChild("RemoveAssociationButton") is Button button)
+            {
+                var form = ffv?.CurrentFeatureForm;
+                var result = ffv?.GetNavigationStack().OfType<UtilityAssociationsFilterResult>().LastOrDefault();
+                var a = form?.Elements.OfType<UtilityAssociationsFormElement>().Where(e => e.AssociationsFilterResults.Contains(result))?.FirstOrDefault();
+#if MAUI
+                button.IsVisible = a?.IsEditable == true;
+#else
+                button.Visibility = a?.IsEditable == true ? Visibility.Visible : Visibility.Collapsed;
+#endif
+            }
 
             if (GetTemplateChild("FromElementText") is TextBlock fromElementText)
             {
-                fromElementText.Text = FeatureFormView.GetFeatureFormViewParent(this)?.CurrentFeatureForm?.Title;
+                fromElementText.Text = ffv?.CurrentFeatureForm?.Title;
             }
 
             if (GetTemplateChild("ToElementText") is TextBlock toElementText)
@@ -122,6 +167,52 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 toTerminalText.Visibility = string.IsNullOrEmpty(toTerminalText.Text) ? Visibility.Collapsed : Visibility.Visible;
 #endif
             }
+        }
+
+        private async System.Threading.Tasks.Task<bool> ConfirmDeleteAssociationAsync()
+        {
+            string title = Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationTitle")!;
+            string message = Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationMessage")!;
+            string accept = Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationAccept")!;
+            string cancel = Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationCancel")!;
+#if WPF
+            System.Windows.MessageBoxResult result = System.Windows.MessageBox.Show(
+                System.Windows.Window.GetWindow(this),
+                message,
+                title,
+                System.Windows.MessageBoxButton.OKCancel,
+                System.Windows.MessageBoxImage.Warning,
+                System.Windows.MessageBoxResult.Cancel);
+            return result == System.Windows.MessageBoxResult.Yes;
+#elif WINDOWS_XAML
+            var dialog = new Microsoft.UI.Xaml.Controls.ContentDialog
+            {
+                XamlRoot = XamlRoot,
+                Title = title,
+                Content = message,
+                PrimaryButtonText = accept,
+                CloseButtonText = cancel,
+                DefaultButton = Microsoft.UI.Xaml.Controls.ContentDialogButton.Close,
+            };
+            return await dialog.ShowAsync() == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
+#elif MAUI
+            Microsoft.Maui.Controls.Page? page = Window?.Page;
+
+            if (page is null && Microsoft.Maui.Controls.Application.Current is not null)
+            {
+                foreach (Microsoft.Maui.Controls.Window window in Microsoft.Maui.Controls.Application.Current.Windows)
+                {
+                    if (window.Page is not null)
+                    {
+                        page = window.Page;
+                        break;
+                    }
+                }
+            }
+
+            return page is not null
+                && await page.DisplayAlert(title, message, accept, cancel);
+#endif
         }
     }
 }

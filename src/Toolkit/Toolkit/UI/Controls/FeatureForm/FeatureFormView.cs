@@ -781,6 +781,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        internal IEnumerable<object> GetNavigationStack()
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                return subView.NavigationStack;
+            }
+            return Enumerable.Empty<object>();
+        }
+
+        internal Task<object?> GoBackAsync()
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                return subView.GoBack();
+            }
+            return Task.FromResult<object?>(null);
+        }
+
         /// <summary>
         /// Gets the currently active feature form being edited
         /// </summary>

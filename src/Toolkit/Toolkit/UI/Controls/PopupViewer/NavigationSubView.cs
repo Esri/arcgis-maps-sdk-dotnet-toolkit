@@ -235,14 +235,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateView();
         }
 
-        private async Task GoBack()
+        public async Task<object?> GoBack()
         {
             if (!IsBackNavigationEnabled || _navigationStack.Count == 0)
-                return;
+                return null;
 
             if (!(await RaiseOnNavigatingAsync(_navigationStack.Peek().Item1, NavigationDirection.Backward)))
             {
-                return;
+                return null;
             }
             var previousPage = _navigationStack.Pop();
             var content = previousPage.Item1;
@@ -288,6 +288,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
             SetContent(content, additionalContent);
+            return content;
         }
 
         private async Task GoUp()
