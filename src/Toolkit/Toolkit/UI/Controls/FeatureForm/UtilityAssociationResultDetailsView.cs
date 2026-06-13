@@ -1,0 +1,127 @@
+// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using System.ComponentModel;
+using Esri.ArcGISRuntime.Mapping.FeatureForms;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.UtilityNetworks;
+using System.Text;
+using Esri.ArcGISRuntime.Data;
+
+#if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui;
+using TextBlock = Microsoft.Maui.Controls.Label;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
+
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
+#else
+namespace Esri.ArcGISRuntime.Toolkit.Primitives
+#endif
+{
+    /// <summary>
+    /// Supporting control for the <see cref="FeatureFormView"/> control,
+    /// used for rendering a <see cref="UtilityAssociationResult"/>.
+    /// </summary>
+    public partial class UtilityAssociationResultDetailsView
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UtilityAssociationResultDetailsView"/> class.
+        /// </summary>
+        public UtilityAssociationResultDetailsView()
+        {
+#if MAUI
+            ControlTemplate = DefaultControlTemplate;
+            this.ParentChanged += (s, e) => UpdateView();
+#else
+            DefaultStyleKey = typeof(UtilityAssociationResultDetailsView);
+#endif
+        }
+
+        /// <inheritdoc/>
+#if WINDOWS_XAML || MAUI
+        protected override void OnApplyTemplate()
+#else
+        public override void OnApplyTemplate()
+#endif
+        {
+            base.OnApplyTemplate();
+            if (GetTemplateChild("RemoveAssociationButton") is Button button)
+            {
+                // TODO: Ask user to confirm, then delete this association, and navigate back
+                // If the page navigated back to no longer has associations, then navigate one more page back.
+            }
+            UpdateView();
+        }
+
+        /// <summary>
+        /// Gets or sets the AssociationResult.
+        /// </summary>
+        public UtilityAssociationResult? AssociationResult
+        {
+            get => GetValue(AssociationResultProperty) as UtilityAssociationResult;
+            set => SetValue(AssociationResultProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="AssociationResult"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AssociationResultProperty =
+            PropertyHelper.CreateProperty<UtilityAssociationResult, UtilityAssociationResultDetailsView>(nameof(AssociationResult), null, (s, oldValue, newValue) => s.OnAssociationResultPropertyChanged());
+
+        private void OnAssociationResultPropertyChanged()
+        {
+            UpdateView();
+        }
+
+        private void UpdateView()
+        {
+            var title = GetTemplateChild("Title") as TextBlock;
+
+            if (GetTemplateChild("FromElementText") is TextBlock fromElementText)
+            {
+                fromElementText.Text = FeatureFormView.GetFeatureFormViewParent(this)?.CurrentFeatureForm?.Title;
+            }
+
+            if (GetTemplateChild("ToElementText") is TextBlock toElementText)
+            {
+                toElementText.Text = AssociationResult?.AssociatedFeature is null ? "" : new FeatureForm(AssociationResult?.AssociatedFeature!)?.Title;
+            }
+
+            if (GetTemplateChild("FromTerminalText") is TextBlock fromTerminalText)
+            {
+                fromTerminalText.Text = AssociationResult?.Association?.FromElement?.Terminal?.Name;
+#if MAUI
+                fromTerminalText.IsVisible = !string.IsNullOrEmpty(fromTerminalText.Text);
+#else
+                fromTerminalText.Visibility = string.IsNullOrEmpty(fromTerminalText.Text) ? Visibility.Collapsed : Visibility.Visible;
+#endif
+            }
+
+            if (GetTemplateChild("ToTerminalText") is TextBlock toTerminalText)
+            {
+                toTerminalText.Text = AssociationResult?.Association?.ToElement?.Terminal?.Name;
+#if MAUI
+                toTerminalText.IsVisible = !string.IsNullOrEmpty(toTerminalText.Text);
+#else
+                toTerminalText.Visibility = string.IsNullOrEmpty(toTerminalText.Text) ? Visibility.Collapsed : Visibility.Visible;
+#endif
+            }
+        }
+    }
+}

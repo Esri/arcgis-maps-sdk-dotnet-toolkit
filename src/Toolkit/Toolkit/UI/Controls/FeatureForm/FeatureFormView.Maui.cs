@@ -123,6 +123,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
                 return roottitle;
             });
+            selector.UtilityAssociationResultTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                roottitle.Style = GetFeatureFormHeaderStyle();
+                roottitle.Text = Properties.Resources.GetString("FeatureFormUtilityAssociationSettings");
+                return roottitle;
+            });
             return selector;
         }
 
@@ -160,6 +167,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 var view = new UtilityAssociationsFilterResultsView();
                 view.SetBinding(UtilityAssociationsFilterResultsView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
+                return view;
+            });
+            selector.UtilityAssociationResultTemplate = new DataTemplate(() =>
+            {
+                var view = new UtilityAssociationResultDetailsView();
+                view.SetBinding(UtilityAssociationResultDetailsView.AssociationResultProperty, static (UtilityNetworks.UtilityAssociationResult result) => result);
                 return view;
             });
             return selector;

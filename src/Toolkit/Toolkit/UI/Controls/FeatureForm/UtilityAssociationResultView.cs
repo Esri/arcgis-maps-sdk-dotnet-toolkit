@@ -89,7 +89,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateView()
         {
-            var title = GetTemplateChild("Title") as TextBlock;
+            if (GetTemplateChild("DetailsButton") is Button button)
+            {
+#if MAUI
+                button.Clicked += (s,e) =>
+#else
+                button.Click += (s,e) =>
+#endif
+                {
+#if WPF
+                    e.Handled = true;
+#endif
+                    FeatureFormView.GetFeatureFormViewParent(this)?.NavigateToItem(AssociationResult!);
+                };
+            }
+
 #if WINDOWS_XAML
             if (GetTemplateChild("Icon") is FontIcon icon)
             {

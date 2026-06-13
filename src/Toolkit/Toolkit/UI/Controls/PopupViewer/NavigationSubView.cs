@@ -78,7 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         internal bool ShowHomeButton { get; set; } = false;
 
-        private Stack<Tuple<object,double>> _navigationStack = new Stack<Tuple<object, double>>();
+        private Stack<Tuple<object, object?, double>> _navigationStack = new Stack<Tuple<object, object?, double>>();
 
         /// <summary>
         /// Gets the current navigation stack
@@ -168,7 +168,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return true;
         }
 
-        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false)
+        internal async Task<bool> Navigate(object? content, bool clearNavigationStack = false, object? additionalContent = null)
         {
             if (content is null && !clearNavigationStack)
                 throw new ArgumentNullException(nameof(content));
@@ -189,7 +189,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (clearNavigationStack)
                 _navigationStack.Clear();
             else if (Content is not null) // Move current content into the stack
-                _navigationStack.Push(new Tuple<object, double>(Content, offset));
+                _navigationStack.Push(new Tuple<object, object?, double>(Content, AdditionalContent, offset));
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection();
             ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("NavigationSubViewForwardAnimation");
@@ -204,7 +204,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 ContentTransitions.Add(new EntranceThemeTransition() { FromHorizontalOffset = 200, FromVerticalOffset = 0 });
             }
 #endif
-            SetContent(content);
+            SetContent(content, additionalContent);
 
 #if MAUI
             (GetTemplateChild("ScrollViewer") as ScrollViewer)?.ScrollToAsync(0,0,false);
@@ -216,7 +216,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return true;
         }
 
-        private void SetContent(object? content)
+        private void SetContent(object? content, object? additionalContent)
         {
             Content = content;
             if (GetTemplateChild("Header") is ContentControl cc1)
@@ -231,6 +231,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
                 cc2.Content = content;
 #endif
+            this.AdditionalContent = additionalContent;
             UpdateView();
         }
 
@@ -245,7 +246,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             var previousPage = _navigationStack.Pop();
             var content = previousPage.Item1;
-            var lastOffset = previousPage.Item2;
+            var additionalContent = previousPage.Item2;
+            var lastOffset = previousPage.Item3;
 
 #if WINDOWS_XAML
             ContentTransitions = new TransitionCollection
@@ -285,7 +287,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 sv.Content.SizeChanged += handler;
 #endif
             }
-            SetContent(content);
+            SetContent(content, additionalContent);
         }
 
         private async Task GoUp()
@@ -305,7 +307,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 new EntranceThemeTransition() { FromHorizontalOffset = 0, FromVerticalOffset = -200 }
             };
 #endif
-            SetContent(content.Item1);
+            SetContent(content.Item1, content.Item2);
         }
 
         /// <inheritdoc />
@@ -361,6 +363,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="Content"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ContentProperty = PropertyHelper.CreateProperty<object, NavigationSubView>(nameof(Content), null);
+
+
+
+        /// <summary>
+        /// Gets or sets the content.
+        /// </summary>
+        public object? AdditionalContent
+        {
+            get { return GetValue(AdditionalContentProperty); }
+            set { SetValue(AdditionalContentProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="AdditionalContent"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AdditionalContentProperty = PropertyHelper.CreateProperty<object, NavigationSubView>(nameof(AdditionalContent), null);
 
         /// <summary>
         /// Gets or sets the template selector for the content.

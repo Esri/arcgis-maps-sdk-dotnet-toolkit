@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
-           Grid layout = new Grid() { MinimumHeightRequest = 40 };
+            Grid layout = new Grid() { MinimumHeightRequest = 40 };
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
@@ -61,11 +61,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(connectionInfo, 1);
             layout.Add(connectionInfo);
 
-            Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
-            image.Source = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
-            Grid.SetColumn(image, 3);
-            Grid.SetRowSpan(image, 2);
-            layout.Add(image);
+            Button detailsButton = new Button() { Text = "...", VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center, WidthRequest = 32, Padding = 0, BackgroundColor = Colors.Transparent, BorderWidth = 0 };
+            detailsButton.SetAppThemeColor(Button.TextColorProperty, Colors.DarkGray, Color.FromRgb(225, 225, 225));
+            Grid.SetColumn(detailsButton, 3);
+            Grid.SetRowSpan(detailsButton, 2);
+            layout.Add(detailsButton);
             // TODO: Set theme-based background once https://github.com/dotnet/maui/issues/26620 is addressed
             // var g = new VisualStateGroup();
             // g.States.Add(new VisualState() { Name = "Normal" });
@@ -78,6 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("FractionAlong", fractionAlong);
             nameScope.RegisterName("Icon", icon);
             nameScope.RegisterName("ConnectionInfo", connectionInfo);
+            nameScope.RegisterName("DetailsButton", detailsButton);
             return layout;
         }
     }

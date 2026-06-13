@@ -773,11 +773,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
             }
 
-        internal void NavigateToItem(object item)
+        internal void NavigateToItem(object item, object? additionalContent = null)
         {
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                _ = subView.Navigate(content: item);
+                _ = subView.Navigate(content: item, additionalContent: additionalContent);
             }
         }
 
