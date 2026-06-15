@@ -329,7 +329,7 @@
                         Style="{StaticResource BarActionButtonStyle}"
                         Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}"
                         AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSelectSearchSource}"
-                        AutomationProperties.AutomationId="SelectSearchSourceToggle">
+                        AutomationProperties.AutomationId="SourceSelectToggle">
                         <Path
                             Width="12"
                             Height="12"
