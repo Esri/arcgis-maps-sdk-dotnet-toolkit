@@ -87,7 +87,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             get
             {
-                foreach(var t in _navigationStack)
+                if (Content is not null)
+                    yield return Content;
+                foreach (var t in _navigationStack)
                 {
                     yield return t.Item1;
                 }
@@ -458,6 +460,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 up.IsEnabled = IsBackNavigationEnabled;
             }
+        }
+
+        internal void ReplaceBackstackItem(int index, object? newItem)
+        {
+            if(index == 0) // 0 is current content
+            {
+                if (newItem is null)
+                    _ = GoBack();
+                else
+                    SetContent(newItem, AdditionalContent);
+                return;
+            }
+            // Replace in _navigationStack by pushing and repopping
+            Stack<Tuple<object, object?, double>> tempStack = new Stack<Tuple<object, object?, double>>();
+            for (int i = 0; i < index - 1; i++)
+            {
+                tempStack.Push(_navigationStack.Pop());
+            }
+            var oldItem = _navigationStack.Pop();
+            if (newItem is not null)
+                _navigationStack.Push(new Tuple<object, object?, double>(newItem, oldItem.Item2, oldItem.Item3));
+
+            foreach(var item in  tempStack) 
+                _navigationStack.Push(item);
         }
     }
 }

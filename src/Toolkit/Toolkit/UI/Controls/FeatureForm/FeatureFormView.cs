@@ -811,6 +811,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return Enumerable.Empty<object>();
         }
 
+        internal void ReplaceBackstackItem(int index, object? newItem)
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.ReplaceBackstackItem(index, newItem);
+            }
+        }
+
         internal Task<object?> GoBackAsync()
         {
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)

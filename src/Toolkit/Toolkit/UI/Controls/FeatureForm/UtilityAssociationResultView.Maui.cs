@@ -136,7 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             else if (action == removeAssociation)
             {
-                RemoveAssociation(parent);
+                _ = RemoveAssociation(AssociationResult.Association, parent);
             }
         }
 
@@ -176,7 +176,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     removeAssociation,
                     RemoveAssociationIconGlyph,
                     iconFontFamily,
-                    (s, e) => RemoveAssociation(parent),
+                    (s, e) => _ = RemoveAssociation(AssociationResult?.Association, parent),
                     foreground));
             }
 

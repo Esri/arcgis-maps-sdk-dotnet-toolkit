@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 contextMenu.Items.Add(CreateMenuItem(
                     Properties.Resources.GetString("FeatureFormUtilityAssociationsRemoveAssociation"),
                     RemoveAssociationIconGlyph,
-                    (s, e) => RemoveAssociation(parent),
+                    (s, e) => _ = RemoveAssociation(AssociationResult?.Association, parent),
                     Brushes.Red));
             }
 
@@ -86,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 contextMenu.Items.Add(CreateMenuFlyoutItem(
                     Properties.Resources.GetString("FeatureFormUtilityAssociationsRemoveAssociation"),
                     RemoveAssociationIconGlyph,
-                    (s, e) => RemoveAssociation(parent),
+                    (s, e) => _ = RemoveAssociation(AssociationResult?.Association, parent),
                     new SolidColorBrush(Colors.Red)));
             }
 

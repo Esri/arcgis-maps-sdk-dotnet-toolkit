@@ -74,31 +74,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async void RemoveAssociation()
         {
-            if (AssociationResult?.Association is null || !await ConfirmDeleteAssociationAsync())
+            if (AssociationResult?.Association is null)
             {
                 return;
             }
 
-            // If the page navigated back to no longer has associations, then navigate one more page back.
             var formview = FeatureFormView.GetFeatureFormViewParent(this);
-            var form = formview?.CurrentFeatureForm;            
-            var result = formview?.GetNavigationStack().OfType<UtilityAssociationsFilterResult>().LastOrDefault();
-            var a = form?.Elements.OfType<UtilityAssociationsFormElement>().Where(e => e.AssociationsFilterResults.Contains(result))?.FirstOrDefault();
-            if (a is null || !a.IsEditable) return;  // TODO: we shouldn't show remove if it can't be edited
-
-            try
-            {
-                
-                a.DeleteAssociation(AssociationResult.Association);
-            }
-            catch
-            {
-                return; // TODO:...
-            }
-            await a.FetchAssociationsFilterResultsAsync();
-            //TODO: Refreshing it will replace all the collections, and the backstack will contain stale versions of the collections.
-            var previousPage = await (formview?.GoBackAsync());
-            // if(previousPage is )
+            if (await UtilityAssociationResultView.RemoveAssociation(AssociationResult?.Association, formview))
+                formview?.GoBackAsync();
         }
 
         /// <summary>

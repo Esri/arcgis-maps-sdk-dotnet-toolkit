@@ -22,8 +22,6 @@ using Esri.ArcGISRuntime.Data;
 
 
 
-
-
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
 using TextBlock = Microsoft.Maui.Controls.Label;
@@ -206,22 +204,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return AssociationResult?.Association is not null &&
                 GetAssociationsFormElement(parent)?.IsEditable == true;
         }
-
-        private async void RemoveAssociation(FeatureFormView parent)
+        
+        internal static async Task<bool> RemoveAssociation(UtilityAssociation? association, FeatureFormView parent)
         {
-            if (AssociationResult?.Association is null ||
+            if (association is null ||
                 GetAssociationsFormElement(parent) is not UtilityAssociationsFormElement element ||
                 !element.IsEditable ||
-                !await ConfirmDeleteAssociationAsync())
+                !await ConfirmDeleteAssociationAsync(parent))
             {
-                return;
+                return false;
             }
+            // element.AssociationsFilterResults.IndexOf()
+            var stack = parent.GetNavigationStack();
+            var groupResult = stack.OfType<UtilityAssociationGroupResult>().FirstOrDefault();
+            var filterResult = stack.OfType<UtilityAssociationsFilterResult>().FirstOrDefault();
+            var filterIndex = filterResult is null ? -1 : element.AssociationsFilterResults.ToList().IndexOf(filterResult);
+            var groupIndex = groupResult is null ? -1 : filterResult?.GroupResults.ToList().IndexOf(groupResult) ?? -1;
 
-            element.DeleteAssociation(AssociationResult.Association);
-            await element.FetchAssociationsFilterResultsAsync();
+            element.DeleteAssociation(association);
+            try
+            {
+                await element.FetchAssociationsFilterResultsAsync();
+            }
+            catch { return true; }
+            var newFilterResult = filterIndex > -1 && element.AssociationsFilterResults.Count > filterIndex ? element.AssociationsFilterResults[filterIndex] : null;
+            var newGroupResult = groupIndex > -1 && newFilterResult?.GroupResults.Count > groupIndex ? newFilterResult.GroupResults[groupIndex] : null;
+
+            if (filterResult is not null)
+            {
+                var idx = stack.ToList().IndexOf(filterResult);
+                parent.ReplaceBackstackItem(idx, newFilterResult?.ResultCount == 0 ? null : newFilterResult);
+            }
+            if (groupResult is not null)
+            {
+                var idx = stack.ToList().IndexOf(groupResult);
+                parent.ReplaceBackstackItem(idx, newGroupResult);
+            }
+            return true;
         }
 
-        private UtilityAssociationsFormElement? GetAssociationsFormElement(FeatureFormView parent)
+        private static UtilityAssociationsFormElement? GetAssociationsFormElement(FeatureFormView parent)
         {
             var form = parent.CurrentFeatureForm;
             var result = parent.GetNavigationStack().OfType<UtilityAssociationsFilterResult>().LastOrDefault();
@@ -230,7 +252,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 : form.Elements.OfType<UtilityAssociationsFormElement>().FirstOrDefault(element => element.AssociationsFilterResults.Contains(result));
         }
 
-        private async System.Threading.Tasks.Task<bool> ConfirmDeleteAssociationAsync()
+        private static async System.Threading.Tasks.Task<bool> ConfirmDeleteAssociationAsync(FeatureFormView view)
         {
             string title = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationTitle")!;
             string message = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationMessage")!;
@@ -238,7 +260,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             string cancel = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationCancel")!;
 #if WPF
             System.Windows.MessageBoxResult result = System.Windows.MessageBox.Show(
-                System.Windows.Window.GetWindow(this),
+                System.Windows.Window.GetWindow(view),
                 message,
                 title,
                 System.Windows.MessageBoxButton.OKCancel,
@@ -248,7 +270,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif WINDOWS_XAML
             var dialog = new Microsoft.UI.Xaml.Controls.ContentDialog
             {
-                XamlRoot = XamlRoot,
+                XamlRoot = view.XamlRoot,
                 Title = title,
                 Content = message,
                 PrimaryButtonText = accept,
@@ -257,7 +279,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             };
             return await dialog.ShowAsync() == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
 #elif MAUI
-            Microsoft.Maui.Controls.Page? page = Window?.Page;
+            Microsoft.Maui.Controls.Page? page = view.Window?.Page;
 
             if (page is null && Microsoft.Maui.Controls.Application.Current is not null)
             {
