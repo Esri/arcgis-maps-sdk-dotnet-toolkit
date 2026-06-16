@@ -183,7 +183,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 System.Windows.MessageBoxButton.OKCancel,
                 System.Windows.MessageBoxImage.Warning,
                 System.Windows.MessageBoxResult.Cancel);
-            return result == System.Windows.MessageBoxResult.Yes;
+            return result == System.Windows.MessageBoxResult.OK;
 #elif WINDOWS_XAML
             var dialog = new Microsoft.UI.Xaml.Controls.ContentDialog
             {

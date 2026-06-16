@@ -241,6 +241,14 @@
     <value>Remove Association</value>
     <comment>Button text for removing a utility association in FeatureFormView.</comment>
   </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>Show on Map</value>
+    <comment>Menu text for centering the associated feature on the map in FeatureFormView.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>More Information</value>
+    <comment>Menu text for showing utility association details in FeatureFormView.</comment>
+  </data>
   <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
     <value>Association Settings</value>
     <comment>Title for the utility association settings/details in FeatureFormView.</comment>

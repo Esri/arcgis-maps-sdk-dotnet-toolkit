@@ -453,6 +453,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(FeatureFormView), new PropertyMetadata(ScrollBarVisibility.Auto));
 #endif
 
+
+        /// <summary>
+        /// Gets or sets the GeoView associated with the FeatureFormView.
+        /// </summary>
+        public GeoView? GeoView
+        {
+            get => (GeoView?)GetValue(GeoViewProperty);
+            set => SetValue(GeoViewProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="GeoView"/> dependency property.
+        /// </summary>
+#if MAUI
+        public static readonly BindableProperty GeoViewProperty =
+            BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(FeatureFormView), null);
+#else
+        public static readonly DependencyProperty GeoViewProperty =
+            DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(FeatureFormView), new PropertyMetadata(null));
+#endif
+
         /// <summary>
         /// Localizes a specific FeatureForm error message and adding contextual type/range/domain information to the error message.
         /// This error message should be displayed to the user.
