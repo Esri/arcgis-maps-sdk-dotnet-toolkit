@@ -41,15 +41,10 @@ internal class Program
         if (!_testPlatforms.Contains(testPlatform))
             throw new ArgumentException($"Test platform '{testPlatform}' not recognized. Supported platforms are [{string.Join(", ", _testPlatforms)}].");
 
-        var workspace = Environment.GetEnvironmentVariable("WORKSPACE");
-        var dotnetExe = Environment.GetEnvironmentVariable("DOTNET_PATH");
-        var toolkitSrc = Environment.GetEnvironmentVariable("TOOLKIT_SRC");
-        if (string.IsNullOrWhiteSpace(workspace) || string.IsNullOrEmpty(dotnetExe) || string.IsNullOrEmpty(toolkitSrc)) {
-            throw new ArgumentException("Environment variables WORKSPACE, DOTNET_PATH, and TOOLKIT_SRC must all be set.");
-        }
-        if (!Path.Exists(workspace) || !Path.Exists(dotnetExe) || !Path.Exists(toolkitSrc)) {
-            throw new ArgumentException("Workspace and dotnet directory must be existing paths.");
-        }
+        var workspace = GetRequiredEnvironmentPath("WORKSPACE");
+        var dotnetExe = GetRequiredEnvironmentPath("DOTNET_PATH");
+        var toolkitSrc = GetRequiredEnvironmentPath("TOOLKIT_SRC");
+        var apiKey = GetRequiredEnvironmentVariable("ARCGIS_API_KEY");
 
         // Derived variables
         var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
@@ -79,9 +74,9 @@ internal class Program
             // Platform-specific setup
             BuildSettings buildSettings = testPlatform switch
             {
-                "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace),
-                "MauiMac" => SetupMac(dependencies, workspace),
-                "MauiiOS" => SetupiOS(dependencies, workspace),
+                "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace, apiKey),
+                "MauiMac" => SetupMac(dependencies, workspace, apiKey),
+                "MauiiOS" => SetupiOS(dependencies, workspace, apiKey),
                 _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
             };
 
@@ -124,6 +119,28 @@ internal class Program
     }
 
 #region CommonDependencies
+    private static string GetRequiredEnvironmentVariable(string variableName)
+    {
+        var value = Environment.GetEnvironmentVariable(variableName);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new ArgumentException($"Environment variable '{variableName}' must be set.");
+        }
+
+        return value;
+    }
+
+    private static string GetRequiredEnvironmentPath(string variableName)
+    {
+        var path = GetRequiredEnvironmentVariable(variableName);
+        if (!Path.Exists(path))
+        {
+            throw new ArgumentException($"Environment variable '{variableName}' must point to an existing path. Current value: '{path}'.");
+        }
+
+        return path;
+    }
+
     private static void SetNugetSource(string workspace, string dotnetExe, string nugetRepo)
     {
         Console.WriteLine("\nConfiguring nuget...");
@@ -215,23 +232,22 @@ internal class Program
 #endregion
 
 #region PlatformDependencies
-    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace)
+    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace, string apiKey)
     {
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiMac");
         var macFramework = "net10.0-maccatalyst";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {macFramework}",
-            $"-p:TargetFrameworks={macFramework}",
             "-r maccatalyst-arm64"
         ]);
         var testAppPackage = "Toolkit.UITests.Maui.App.app";
         buildSettings.BinaryName = testAppPackage;
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
 
         // Install maui maccatalyst workload
-        Console.WriteLine("\nInstalling maui maccatalyst workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui-maccatalyst");
+        Console.WriteLine("\nInstalling maui workload...");
+        RunBinary(dependencies.DotnetExe, "workload install maui");
 
         // Install appium mac driver
         InstallAppiumDriver(dependencies, "mac2");
@@ -265,25 +281,24 @@ internal class Program
         return buildSettings;
     }
 
-    private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace)
+    private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace, string apiKey)
     {
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiiOS");
         var iosFramework = "net10.0-ios";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {iosFramework}",
-            $"-p:TargetFrameworks={iosFramework}",
             "-r ios-arm64"
         ]);
         buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
 
         // This particular setting only applies to the Runner, and is unused by the app
         buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
 
         // Install maui ios workload
-        Console.WriteLine("\nInstalling maui ios workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui-ios");
+        Console.WriteLine("\nInstalling maui workload...");
+        RunBinary(dependencies.DotnetExe, "workload install maui");
 
         // Install appium ios driver
         InstallAppiumDriver(dependencies, "xcuitest");
@@ -332,7 +347,7 @@ internal class Program
         return buildSettings;
     }
 
-    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace)
+    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace, string apiKey)
     {
         var jdkDirectory = $"{workspace}/jdk";
         var androidSdkDirectory = $"{workspace}/android-sdk";
@@ -342,17 +357,16 @@ internal class Program
         var androidFramework = "net10.0-android";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {androidFramework}",
-            $"-p:TargetFrameworks={androidFramework}",
             "-r android-arm64",
             $"-p:JavaSdkDirectory={jdkDirectory}",
             $"-p:AndroidSdkDirectory={androidSdkDirectory}"
         ]);
         buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
 
         // Install maui android
-        Console.WriteLine("\nInstalling maui android workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui-android");
+        Console.WriteLine("\nInstalling maui maui workload...");
+        RunBinary(dependencies.DotnetExe, "workload install maui");
 
         // Install appium android driver
         InstallAppiumDriver(dependencies, "uiautomator2");
@@ -383,7 +397,7 @@ internal class Program
 #endregion
 
 #region BuildSettings
-    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace)
+    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace, string apiKey)
     {
         // Universal build parameters for the ci builds
         settings.BuildParamsCommon.AddRange([
@@ -408,6 +422,9 @@ internal class Program
         if (!string.IsNullOrWhiteSpace(trxFilename)) {
             settings.TestParams.Add($"--report-trx-filename {trxFilename}");
         }
+
+        // API key
+        settings.BuildParamsApp.Add($"-p:TestAppApiKey={apiKey}");
     }
 
     private class BuildSettings

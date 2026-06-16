@@ -3,6 +3,9 @@
 
   <!-- General Settings -->
   <PropertyGroup>
+    <!-- Some tests will fail without an API key -->
+    <TestAppApiKey Condition="'$(TestAppApiKey)'==''"></TestAppApiKey>
+
     <!-- Be sure to delete the obj/ and bin/ folders in both App and Runner projects if updating this parameter -->
     <TestAppNetVersion>net10.0</TestAppNetVersion>
 
@@ -45,4 +48,9 @@
     <AppiumWebDriverVersion>8.2.0</AppiumWebDriverVersion>
     <MagickNetVersion>14.14.0</MagickNetVersion>
   </PropertyGroup>
+
+  <!-- Expose TestAppApiKey to the compiler for use in Toolkit.UITests.Generators\ApiKeyGenerator.cs -->
+  <ItemGroup>
+    <CompilerVisibleProperty Include="TestAppApiKey" />
+  </ItemGroup>
 </Project>

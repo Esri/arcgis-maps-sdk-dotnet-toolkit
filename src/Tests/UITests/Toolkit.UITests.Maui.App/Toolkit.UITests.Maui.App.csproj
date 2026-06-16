@@ -86,6 +86,10 @@
     </MauiXaml>
   </ItemGroup>
 
+  <!-- Shared test page view models -->
+  <Import Project="..\Toolkit.UITests.TestPages.Shared\Toolkit.UITests.TestPages.Shared.projitems" Label="Shared" />
+
+  <!-- Runtime and Toolkit References -->
   <Choose>
     <When Condition=" '$(UseNugetPackage)' == '' ">
       <ItemGroup>
@@ -101,6 +105,10 @@
     </Otherwise>
   </Choose>
 
-  <Import Project="..\Toolkit.UITests.TestPages.Shared\Toolkit.UITests.TestPages.Shared.projitems" Label="Shared" />
-
+  <!-- Source generators -->
+  <ItemGroup>
+    <ProjectReference Include="..\Toolkit.UITests.Generators\Toolkit.UITests.Generators.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
 </Project>

@@ -98,7 +98,10 @@ Please be sure to consult the `MauiiOS` section below as it requires additional 
 
 ### Configuration
 **Directory.Build.props**
-The [`UITests/Directory.Build.props`](./Directory.Build.props) file includes several configuration options, primarily targeted at the `MauiAndroid` and `MauiiOS` test runners.
+The [`UITests/Directory.Build.props`](./Directory.Build.props) file includes several configuration options. All tests use this file, but the `MauiAndroid` and `MauiiOS` test runners in particular have the most options.
+
+> [!IMPORTANT]
+> At minimum the `<TestAppApiKey>` property should be set in this file or else several tests will fail.
 
 **Environment Variables**
 Configuration can also be done at runtime by setting certain environment variables. The current list of environment variables is as follows:

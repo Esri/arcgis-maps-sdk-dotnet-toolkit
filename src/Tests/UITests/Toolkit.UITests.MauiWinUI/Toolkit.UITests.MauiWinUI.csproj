@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;WINDOWS_TEST;MAUI_TEST</DefineConstants>
+    <BuildApp Condition="'$(BuildApp)'==''">true</BuildApp>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,7 @@
   </Target>
 
   <!-- Build test app if needed and record build location to AppBuildInfo.txt -->
-  <Target Name="BuildTestApp" BeforeTargets="Build">
+  <Target Name="BuildTestApp" BeforeTargets="Build" Condition="'$(BuildApp)'=='true'">
     <PropertyGroup>
       <!-- Force Windows target when building the MAUI test app from the test project -->
       <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
