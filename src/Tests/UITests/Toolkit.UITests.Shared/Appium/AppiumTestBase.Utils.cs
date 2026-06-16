@@ -82,7 +82,9 @@ public abstract partial class AppiumTestBase
     protected AppiumElement FindElementByName(string name, TimeSpan? timeout = null)
     {
 #if ANDROID_TEST
-        var action = () => Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().text(\"{name}\")"));
+        var action = () => Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().description(\"{name}\")"));
+#elif MAC_TEST || IOS_TEST
+        var action = () => Driver.FindElement(MobileBy.XPath($"//*[@label=\"{name}\" or @name=\"{name}\"]"));
 #else
         var action = () => Driver.FindElement(MobileBy.Name(name));
 #endif
@@ -97,7 +99,65 @@ public abstract partial class AppiumTestBase
         }
     }
 
-    protected string GetElementText(AppiumElement element, TimeSpan? timeout = null)
+    protected AppiumElement FindElementByText(string text, TimeSpan? timeout = null)
+    {
+#if ANDROID_TEST
+        var action = () => Driver.FindElement(MobileBy.AndroidUIAutomator($"new UiSelector().text(\"{text}\")"));
+#elif MAC_TEST || IOS_TEST
+        var action = () => Driver.FindElement(MobileBy.XPath($"//*[@label=\"{text}\" or @value=\"{text}\" or @name=\"{text}\"]"));
+#else
+        var action = () => Driver.FindElement(MobileBy.Name(text));
+#endif
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"No elements found with text \"{text}\". See exception for details.");
+            throw;
+        }
+    }
+
+    protected bool ElementExistsByName(string name, TimeSpan? timeout = null)
+    {
+        try
+        {
+            FindElementByName(name, timeout);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    protected bool ElementExistsById(string id, TimeSpan? timeout = null)
+    {
+        try
+        {
+            FindElement(id, timeout);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    protected bool ElementExistsByText(string text, TimeSpan? timeout = null)
+    {
+        try
+        {
+            FindElementByText(text, timeout);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    protected string GetLabelText(AppiumElement element, TimeSpan? timeout = null)
     {
 #if WINDOWS_TEST
         var action = () => element.GetAttribute("Name");
@@ -105,6 +165,39 @@ public abstract partial class AppiumTestBase
         var action = () =>  element.GetAttribute("text");
 #elif MAC_TEST || IOS_TEST
         var action = () =>  element.GetAttribute("label");
+#else
+        throw new NotImplementedException("FindElement(AppiumElement,string) is not implemented for this platform.");
+#endif
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"Could not get text for element \"{element.Id}\". See exception for details.");
+            throw;
+        }
+    }
+
+    protected string GetEntryText(AppiumElement element, TimeSpan? timeout = null)
+    {
+
+#if ANDROID_TEST
+        var action = () =>  element.GetAttribute("text");
+#elif WINDOWS_TEST
+        var action = () => element.GetAttribute("Value.Value");
+#elif MAC_TEST || IOS_TEST
+        var action = () =>
+        {
+            var value = element.GetAttribute("value");
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
+            var placeholder = element.GetAttribute("placeholderValue");
+            return string.IsNullOrWhiteSpace(placeholder) ? string.Empty : placeholder;
+        };
 #else
         throw new NotImplementedException("FindElement(AppiumElement,string) is not implemented for this platform.");
 #endif

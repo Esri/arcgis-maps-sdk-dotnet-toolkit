@@ -329,7 +329,7 @@
                         Style="{StaticResource BarActionButtonStyle}"
                         Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}"
                         AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSelectSearchSource}"
-                        AutomationProperties.AutomationId="SelectSearchSourceToggle">
+                        AutomationProperties.AutomationId="SourceSelectToggle">
                         <Path
                             Width="12"
                             Height="12"
@@ -364,7 +364,7 @@
                                     SelectionMode="Single"
                                     Style="{StaticResource ListStyle}" 
                                     AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"
-                                    AutomationProperties.AutomationId="SourceList"/>
+                                    AutomationProperties.AutomationId="SearchSourcesList"/>
                             </StackPanel>
                         </Border>
                     </Popup>
@@ -418,7 +418,7 @@
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedSuggestion, Mode=OneWayToSource}"
                                 Style="{StaticResource ListStyle}"
                                 AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
-                                AutomationProperties.AutomationId="SearchSuggestionsListGrouped">
+                                AutomationProperties.AutomationId="SearchSuggestionsList">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchSuggestion}">
                                         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,0,0,1">
@@ -582,7 +582,8 @@
                     Foreground="White"
                     Style="{StaticResource ProminentButtonStyle}"
                     Template="{StaticResource FloatingButtonTemplate}"
-                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                    AutomationProperties.AutomationId="RepeatSearchHereButton"/>
             </Grid>
         </Grid>
     </ControlTemplate>

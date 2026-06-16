@@ -504,7 +504,7 @@
                         Style="{StaticResource BarActionButtonStyle}"
                         Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility}"
                         AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSelectSearchSource}"
-                        AutomationProperties.AutomationId="SelectSearchSourceToggle">
+                        AutomationProperties.AutomationId="SourceSelectToggle">
                         <Path
                             Data="M13.1 6L8 11.1 2.9 6z"
                             Fill="Transparent"
@@ -572,7 +572,7 @@
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedSuggestion, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
                             AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
-                            AutomationProperties.AutomationId="SearchSuggestionsListFlat"
+                            AutomationProperties.AutomationId="SearchSuggestionsList"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}}" />
                         <ListView
                             x:Name="PART_SuggestionList"
@@ -646,7 +646,7 @@
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
                             AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"
-                            AutomationProperties.AutomationId="SourceList"/>
+                            AutomationProperties.AutomationId="SearchSourcesList"/>
                     </StackPanel>
                 </Border>
             </Popup>
@@ -658,7 +658,8 @@
                     Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.RepeatSearchHereCommand, Mode=OneTime}"
                     Content="{TemplateBinding RepeatSearchButtonText}"
                     Style="{StaticResource FloatingButtonStyle}"
-                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
+                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay}"
+                    AutomationProperties.AutomationId="RepeatSearchHereButton"/>
             </StackPanel>
         </Grid>
     </ControlTemplate>
