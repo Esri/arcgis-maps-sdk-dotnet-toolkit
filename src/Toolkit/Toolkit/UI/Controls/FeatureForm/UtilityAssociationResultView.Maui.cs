@@ -23,10 +23,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
     public partial class UtilityAssociationResultView : TemplatedView
     {
-        private const string ShowOnMapIconGlyph = "\uE8AC";
-        private const string MoreInformationIconGlyph = "\uE8F9";
-        private const string RemoveAssociationIconGlyph = "\uEB04";
-
         private static readonly ControlTemplate DefaultControlTemplate;
 
         static UtilityAssociationResultView()
@@ -155,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 flyout.Items.Add(CreateNativeMenuFlyoutItem(
                     showOnMap,
-                    ShowOnMapIconGlyph,
+                    ToolkitIcons.CenterMap,
                     iconFontFamily,
                     (s, e) => ShowAssociationOnMap(parent)));
             }
@@ -164,7 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 flyout.Items.Add(CreateNativeMenuFlyoutItem(
                     moreInformation,
-                    MoreInformationIconGlyph,
+                    ToolkitIcons.MoreInformation,
                     iconFontFamily,
                     (s, e) => NavigateToAssociationDetails(parent)));
             }
@@ -174,7 +170,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 Microsoft.UI.Xaml.Media.SolidColorBrush foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Red);
                 flyout.Items.Add(CreateNativeMenuFlyoutItem(
                     removeAssociation,
-                    RemoveAssociationIconGlyph,
+                    ToolkitIcons.Delete,
                     iconFontFamily,
                     (s, e) => _ = RemoveAssociation(AssociationResult?.Association, parent),
                     foreground));

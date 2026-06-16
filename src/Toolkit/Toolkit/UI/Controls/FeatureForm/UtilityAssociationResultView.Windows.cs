@@ -34,10 +34,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class UtilityAssociationResultView : Control
     {
-        private const string ShowOnMapIconGlyph = "\uE8AC";
-        private const string MoreInformationIconGlyph = "\uE8F9";
-        private const string RemoveAssociationIconGlyph = "\uEB04";
-
         private partial void ShowDetailsFlyout(FeatureFormView parent, object? flyoutTarget)
         {
 #if WPF
@@ -46,20 +42,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 contextMenu.Items.Add(CreateMenuItem(
                     Properties.Resources.GetString("FeatureFormUtilityAssociationsShowOnMap"),
-                    ShowOnMapIconGlyph,
+                    ToolkitIcons.CenterMap,
                     (s, e) => ShowAssociationOnMap(parent)));
             }
 
             contextMenu.Items.Add(CreateMenuItem(
                 Properties.Resources.GetString("FeatureFormUtilityAssociationsMoreInformation"),
-                MoreInformationIconGlyph,
+                ToolkitIcons.MoreInformation,
                 (s, e) => NavigateToAssociationDetails(parent)));
 
             if (CanRemoveAssociation(parent))
             {
                 contextMenu.Items.Add(CreateMenuItem(
                     Properties.Resources.GetString("FeatureFormUtilityAssociationsRemoveAssociation"),
-                    RemoveAssociationIconGlyph,
+                    ToolkitIcons.Delete,
                     (s, e) => _ = RemoveAssociation(AssociationResult?.Association, parent),
                     Brushes.Red));
             }
@@ -72,20 +68,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 contextMenu.Items.Add(CreateMenuFlyoutItem(
                     Properties.Resources.GetString("FeatureFormUtilityAssociationsShowOnMap"),
-                    ShowOnMapIconGlyph,
+                    ToolkitIcons.CenterMap,
                     (s, e) => ShowAssociationOnMap(parent)));
             }
 
             contextMenu.Items.Add(CreateMenuFlyoutItem(
                 Properties.Resources.GetString("FeatureFormUtilityAssociationsMoreInformation"),
-                MoreInformationIconGlyph,
+                ToolkitIcons.MoreInformation,
                 (s, e) => NavigateToAssociationDetails(parent)));
 
             if (CanRemoveAssociation(parent))
             {
                 contextMenu.Items.Add(CreateMenuFlyoutItem(
                     Properties.Resources.GetString("FeatureFormUtilityAssociationsRemoveAssociation"),
-                    RemoveAssociationIconGlyph,
+                    ToolkitIcons.Delete,
                     (s, e) => _ = RemoveAssociation(AssociationResult?.Association, parent),
                     new SolidColorBrush(Colors.Red)));
             }

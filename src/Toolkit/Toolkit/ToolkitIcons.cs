@@ -55,4 +55,7 @@ internal static class ToolkitIcons
     public const string DownloadTo = "\uE81C";
     public const string Refresh = "\uEB66";
     public const string CircleStop = "\uE7B3";
+    public const string CenterMap = "\uE8AC";
+    public const string MoreInformation = "\uE8F9";
+    public const string Delete = "\uEB04";
 }
