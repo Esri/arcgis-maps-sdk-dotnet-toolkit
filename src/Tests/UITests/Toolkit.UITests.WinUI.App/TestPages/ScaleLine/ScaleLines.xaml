@@ -19,17 +19,18 @@
                 BorderBrush="{ThemeResource CalciteBorder1Color}"
                 BorderThickness="1">
             <StackPanel Margin="5">
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                    <TextBlock Text="Scale: 1 / " Margin="1,1,0,1" VerticalAlignment="Center"/>
-                    <TextBox x:Name="ScaleTextBox" Text="50000000" MinWidth="60" FontSize="14"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                    <TextBlock Text="Latitude: " Margin="1,1,3,1" VerticalAlignment="Center"/>
-                    <TextBox x:Name="LatitudeTextBox" Text="0" MinWidth="60" FontSize="14"/>
-                </StackPanel>
-
-                <Button x:Name="UpdateViewpoint" Content="Update Viewpoint" Click="UpdateViewpoint_Click" />
+                <Button x:Name="WorldEquatorViewpoint"
+                        AutomationProperties.AutomationId="WorldEquatorViewpoint"
+                        Content="World / Equator"
+                        Click="WorldEquatorViewpoint_Click" />
+                <Button x:Name="EquatorDetailViewpoint"
+                        AutomationProperties.AutomationId="EquatorDetailViewpoint"
+                        Content="Detail / Equator"
+                        Click="EquatorDetailViewpoint_Click" />
+                <Button x:Name="HighLatitudeDetailViewpoint"
+                        AutomationProperties.AutomationId="HighLatitudeDetailViewpoint"
+                        Content="Detail / Latitude 60"
+                        Click="HighLatitudeDetailViewpoint_Click" />
             </StackPanel>
         </Border>
 

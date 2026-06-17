@@ -14,6 +14,9 @@ namespace Toolkit.UITests.App.TestPages;
 
 public partial class ScaleLines : TestPage
 {
+    private const double WorldScale = 50000000;
+    private const double DetailScale = 5000000;
+
     public ScaleLines()
     {
         InitializeComponent();
@@ -23,11 +26,23 @@ public partial class ScaleLines : TestPage
         MainMapView.Map = map;
     }
 
-    private void UpdateViewpoint_Click(object sender, ClickEventArgs e)
+    private void WorldEquatorViewpoint_Click(object sender, ClickEventArgs e)
     {
-        var scale = double.Parse(ScaleTextBox.Text);
-        var latitude = double.Parse(LatitudeTextBox.Text);
+        SetViewpoint(WorldScale, 0);
+    }
 
+    private void EquatorDetailViewpoint_Click(object sender, ClickEventArgs e)
+    {
+        SetViewpoint(DetailScale, 0);
+    }
+
+    private void HighLatitudeDetailViewpoint_Click(object sender, ClickEventArgs e)
+    {
+        SetViewpoint(DetailScale, 60);
+    }
+
+    private void SetViewpoint(double scale, double latitude)
+    {
         var center = new MapPoint(0, latitude, SpatialReferences.Wgs84);
         MainMapView.SetViewpoint(new Viewpoint(center, scale));
     }
