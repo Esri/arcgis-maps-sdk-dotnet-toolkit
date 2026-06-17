@@ -352,7 +352,7 @@
                                     HorizontalContentAlignment="Left"
                                     BorderThickness="0"
                                     IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
-                                    Style="{StaticResource ProminentButtonStyle}">
+                                    Style="{StaticResource ProminentButtonStyle}" AutomationProperties.AutomationId="AllSourceButton">
                                     <TextBlock Text="{TemplateBinding AllSourceSelectText}" />
                                 </ToggleButton>
                                 <ListView
