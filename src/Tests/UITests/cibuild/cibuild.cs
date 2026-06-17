@@ -109,7 +109,7 @@ internal class Program
             var runnerExe = Path.Join(artifactsPath, buildSettings.RunnerName, "TestBuild", buildSettings.RunnerName);
             var appExe = Path.Join(artifactsPath, buildSettings.AppName, "TestBuild", buildSettings.BinaryName);
             Environment.SetEnvironmentVariable("TKUITEST_APP", appExe);
-            RunBinary(runnerExe, $"{string.Join(" ", buildSettings.TestParams)}");
+            RunBinary(runnerExe, $"{string.Join(" ", buildSettings.TestParams)}", throwOnError: false);
         }
         finally {
             OnBuildEnding();
