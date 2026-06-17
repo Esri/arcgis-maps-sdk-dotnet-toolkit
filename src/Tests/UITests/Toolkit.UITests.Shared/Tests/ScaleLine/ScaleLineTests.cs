@@ -118,9 +118,9 @@ public class ScaleLineTests : AppiumTestBase
     private AppiumElement GetScaleElement(ScaleLineType type)
     {
         if (type == ScaleLineType.Advanced)
-            return FindElement("AdvancedScaleLine");
+            return FindElement("AdvancedScaleLine", TimeSpan.FromSeconds(5));
         else if (type == ScaleLineType.Simple)
-            return FindElement("SimpleScaleLine");
+            return FindElement("SimpleScaleLine", TimeSpan.FromSeconds(5));
         else
             throw new ArgumentOutOfRangeException(nameof(type), type, "Invalid scale line type.");
     }
