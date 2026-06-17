@@ -49,6 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UITests", "UITests", "{78A5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.Wpf", "Tests\UITests\Toolkit.UITests.Wpf\Toolkit.UITests.Wpf.csproj", "{3046611A-ABBE-4433-A5A2-CFC98060C709}"
 	ProjectSection(ProjectDependencies) = postProject
+		{0091134B-D36A-89D1-563B-A85047EA0EEA} = {0091134B-D36A-89D1-563B-A85047EA0EEA}
 		{531B2297-2343-4692-8D66-878B0AD158CD} = {531B2297-2343-4692-8D66-878B0AD158CD}
 	EndProjectSection
 EndProject
@@ -64,6 +65,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.Maui.App", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.UITests.MauiWinUI", "Tests\UITests\Toolkit.UITests.MauiWinUI\Toolkit.UITests.MauiWinUI.csproj", "{F4979959-EA7D-452E-A673-87767F5F59E6}"
 	ProjectSection(ProjectDependencies) = postProject
+		{0091134B-D36A-89D1-563B-A85047EA0EEA} = {0091134B-D36A-89D1-563B-A85047EA0EEA}
 		{F7F98CE8-5304-460D-83A2-F4F7FE50B370} = {F7F98CE8-5304-460D-83A2-F4F7FE50B370}
 	EndProjectSection
 EndProject
