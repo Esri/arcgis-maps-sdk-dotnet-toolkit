@@ -74,9 +74,9 @@ internal class Program
             // Platform-specific setup
             BuildSettings buildSettings = testPlatform switch
             {
-                "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace, apiKey),
-                "MauiMac" => SetupMac(dependencies, workspace, apiKey),
-                "MauiiOS" => SetupiOS(dependencies, workspace, apiKey),
+                "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace, apiKey, args),
+                "MauiMac" => SetupMac(dependencies, workspace, apiKey, args),
+                "MauiiOS" => SetupiOS(dependencies, workspace, apiKey, args),
                 _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
             };
 
@@ -232,7 +232,7 @@ internal class Program
 #endregion
 
 #region PlatformDependencies
-    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace, string apiKey)
+    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace, string apiKey, string[] consoleArgs)
     {
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiMac");
@@ -243,7 +243,7 @@ internal class Program
         ]);
         var testAppPackage = "Toolkit.UITests.Maui.App.app";
         buildSettings.BinaryName = testAppPackage;
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
 
         // Install maui maccatalyst workload
         Console.WriteLine("\nInstalling maui workload...");
@@ -281,7 +281,7 @@ internal class Program
         return buildSettings;
     }
 
-    private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace, string apiKey)
+    private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace, string apiKey, string[] consoleArgs)
     {
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiiOS");
@@ -291,7 +291,7 @@ internal class Program
             "-r ios-arm64"
         ]);
         buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
 
         // This particular setting only applies to the Runner, and is unused by the app
         buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
@@ -347,7 +347,7 @@ internal class Program
         return buildSettings;
     }
 
-    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace, string apiKey)
+    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace, string apiKey, string[] consoleArgs)
     {
         var jdkDirectory = $"{workspace}/jdk";
         var androidSdkDirectory = $"{workspace}/android-sdk";
@@ -362,7 +362,7 @@ internal class Program
             $"-p:AndroidSdkDirectory={androidSdkDirectory}"
         ]);
         buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
 
         // Install maui android
         Console.WriteLine("\nInstalling maui maui workload...");
@@ -397,7 +397,7 @@ internal class Program
 #endregion
 
 #region BuildSettings
-    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace, string apiKey)
+    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace, string apiKey, string[] consoleArgs)
     {
         // Universal build parameters for the ci builds
         settings.BuildParamsCommon.AddRange([
@@ -421,6 +421,15 @@ internal class Program
         var trxFilename = Environment.GetEnvironmentVariable("TRX_FILENAME");
         if (!string.IsNullOrWhiteSpace(trxFilename)) {
             settings.TestParams.Add($"--report-trx-filename {trxFilename}");
+        }
+
+        // Append filter from console arguments if it exists
+        var filterArgIndex = consoleArgs.IndexOf("--filter");
+        if (filterArgIndex > -1)
+        {
+            if (filterArgIndex + 1 >= consoleArgs.Length)
+                throw new ArgumentException("Recieved '--filter' flag, but no argument was provided.");
+            settings.TestParams.AddRange(["--filter", consoleArgs[filterArgIndex+1]]);
         }
 
         // API key
