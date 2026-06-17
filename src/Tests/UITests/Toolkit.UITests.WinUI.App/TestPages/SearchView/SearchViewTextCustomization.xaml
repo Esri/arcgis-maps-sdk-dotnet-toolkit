@@ -1,0 +1,49 @@
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.SearchViewTextCustomization"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Toolkit.UITests.App.TestPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    x:Name="SearchViewTextCustomizationPage"
+    mc:Ignorable="d">
+
+    <Grid>
+        <esri:MapView x:Name="MyMapView" />
+        <toolkit:SearchView x:Name="MySearchView" />
+        <Border
+            Width="220"
+            Margin="8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="White"
+            Padding="8">
+
+            <StackPanel Spacing="8">
+                <Button x:Name="UpdateToCustomValuesButton"
+                        Content="Update to custom text"
+                        Click="UpdateToCustomValuesButton_Click"
+                        AutomationProperties.AutomationId="UpdateToCustomValuesButton"/>
+
+                <Button x:Name="UpdateViewpointExtentToOntario"
+                        Content="Update Viewpoint to Ontario"
+                        Click="UpdateViewpointExtentToOntario_Click"
+                        AutomationProperties.AutomationId="UpdateViewpointExtentToOntario"/>
+
+                <Button x:Name="UpdateViewpointExtentToColorado"
+                        Content="Update Viewpoint to Colorado"
+                        Click="UpdateViewpointExtentToColorado_Click"
+                        AutomationProperties.AutomationId="UpdateViewpointExtentToColorado"/>
+                
+                <Button x:Name="AddEventTestSourceButton"
+                        Content="Add Event Test Source"
+                        Click="AddEventTestSourceButton_Click"
+                        AutomationProperties.AutomationId="AddEventTestSourceButton"/>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+
+</local:TestPage>

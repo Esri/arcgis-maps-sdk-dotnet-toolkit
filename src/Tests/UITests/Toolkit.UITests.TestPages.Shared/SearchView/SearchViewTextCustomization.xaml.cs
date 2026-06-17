@@ -1,19 +1,22 @@
 #if MAUI_APP
 using ClickEventArgs = System.EventArgs;
+using Esri.ArcGISRuntime.Toolkit.Maui;
 #elif WINUI_APP
 using System;
 using ClickEventArgs = Microsoft.UI.Xaml.RoutedEventArgs;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Microsoft.UI.Xaml;
 #elif WPF_APP
 using System.Globalization;
 using ClickEventArgs = System.Windows.RoutedEventArgs;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Microsoft.UI.Xaml;
 #endif
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.UI;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,18 +24,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
+
 namespace Toolkit.UITests.App.TestPages;
 
-#if WPF_APP
+#if WPF_APP || WINUI_APP
+
+using System.Diagnostics;
+
+
+
 public partial class SearchViewTextCustomization : TestPage
 {
     public SearchViewTextCustomization()
     {
         InitializeComponent();
 
-        var map = new Map(BasemapStyle.ArcGISImagery);
-        MyMapView.Map = map;
-        AddDefaultLocatorWithName();
+        MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
+        MySearchView.GeoView = MyMapView;
+    }
+
+    private void AddEventTestSourceButton_Click(object sender, ClickEventArgs e)
+    {
+        MySearchView.SearchViewModel?.Sources.Add(new TestSearchSource());
     }
 
     private void UpdateViewpointExtentToOntario_Click(object sender, ClickEventArgs e)
@@ -47,12 +60,12 @@ public partial class SearchViewTextCustomization : TestPage
 
     private void UpdateToCustomValuesButton_Click(object sender, ClickEventArgs e)
     {
-        SearchTooltipText.Text = "Custom Search";
-        ClearSearchTooltipText.Text = "Custom Clear Search";
-        DefaultPlaceholderText.Text = "Custom Find a place or address";
-        RepeatSearchButtonText.Text = "Custom Repeat Search Here";
-        AllSourceButtonText.Text = "Custom All Sources";
-        NoResultMessageText.Text = "Custom No Results";
+        MySearchView.SearchTooltipText = "Custom Search";
+        MySearchView.ClearSearchTooltipText = "Custom Clear Search";
+        MySearchView.SearchViewModel?.DefaultPlaceholder = "Custom Find a place or address";
+        MySearchView.RepeatSearchButtonText = "Custom Repeat Search Here";
+        MySearchView.AllSourceSelectText = "Custom All Sources";
+        MySearchView.NoResultMessage = "Custom No Results";
     }
 
     private void UpdateViewpoint_Click(double scale, double longitude, double latitude)
@@ -60,17 +73,62 @@ public partial class SearchViewTextCustomization : TestPage
         var center = new MapPoint(longitude, latitude, SpatialReferences.Wgs84);
         MyMapView.SetViewpoint(new Viewpoint(center, scale));
     }
-    private async void AddDefaultLocatorWithName()
+
+private class TestSearchSource : ISearchSource
     {
-        try
+        public string DisplayName { get => "Event tester"; set => throw new NotImplementedException(); }
+        public string Placeholder { get => "Test placeholder"; set => throw new NotImplementedException(); }
+        public CalloutDefinition DefaultCalloutDefinition { get => null; set => throw new NotImplementedException(); }
+        public double DefaultZoomScale { get => 1000; set => throw new NotImplementedException(); }
+        public int MaximumResults { get => 3; set => throw new NotImplementedException(); }
+        public int MaximumSuggestions { get => 3; set => throw new NotImplementedException(); }
+        public Geometry SearchArea { get => null; set { } }
+        public MapPoint PreferredSearchLocation { get => null; set { } }
+
+        Esri.ArcGISRuntime.Symbology.Symbol ISearchSource.DefaultSymbol { get => null; set => throw new NotImplementedException(); }
+
+        public void NotifyDeselected(SearchResult result)
         {
-            var source = await LocatorSearchSource.CreateDefaultSourceAsync();
-            source.DisplayName = "source with name";
-            MySearchView.SearchViewModel?.Sources.Add(source);       
+           // _ = new MessageDialog($"Deselected {result?.DisplayTitle ?? "all results"}").ShowAsync();
         }
-        catch (Exception)
+
+        public void NotifySelected(SearchResult result)
         {
+            // _ = new MessageDialog($"Selected {result?.DisplayTitle}").ShowAsync();
         }
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken cancellationToken)
+        {
+            var list = new[] { "one", "two", "three", "four" };
+            return list.Select(m => new SearchResult($"repeat {m}", "repeat subtitle", this, null, null)).ToList();
+        }
+
+        public async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken)
+        {
+            var list = new[] { "one", "two", "three", "four" };
+            return list.Select(m => new SearchResult($"explicit search {m}", "repeat subtitle", this, null, null)).ToList();
+        }
+
+        public async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken)
+        {
+            if (suggestion.IsCollection)
+            {
+                var list = new[] { "one", "two", "three", "four" };
+                return list.Select(m => new SearchResult($"search from suggestion - res: {m}", suggestion.DisplayTitle, this, null, null)).ToList();
+            }
+            else
+            {
+                return new List<SearchResult>() { new SearchResult($"result from suggestion {suggestion.DisplayTitle}", "from suggestion", this, null, null) };
+            }
+        }
+
+        public async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken)
+        {
+            var list = new[] { "one", "two", "three", "four" };
+            return list.Select(m => new SearchSuggestion($"suggestion {m}", this) { IsCollection = m.Contains("w") }).ToList();
+        }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }
 #endif

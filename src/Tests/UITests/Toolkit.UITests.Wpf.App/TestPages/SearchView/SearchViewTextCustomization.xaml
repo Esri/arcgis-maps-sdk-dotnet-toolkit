@@ -10,7 +10,7 @@
     d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <esri:MapView x:Name="MyMapView" />
-        <esri:SearchView x:Name="MySearchView" GeoView="{Binding ElementName=MyMapView}"/>
+        <esri:SearchView x:Name="MySearchView"/>
         <Border
         Width="200"
         Margin="8"
@@ -18,28 +18,10 @@
         VerticalAlignment="Top"
         Background="White">
             <StackPanel>
-                <TextBlock FontWeight="SemiBold" Text="Text customization:" />
-                <GroupBox Header="Search Tooltip">
-                    <TextBox x:Name="SearchTooltipText" Text="{Binding ElementName=MySearchView, Path=SearchTooltipText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.AutomationId="SearchTooltipText"/>
-                </GroupBox>
-                <GroupBox Header="Clear Tooltip">
-                    <TextBox x:Name="ClearSearchTooltipText" Text="{Binding ElementName=MySearchView, Path=ClearSearchTooltipText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.AutomationId="ClearSearchTooltipText"/>
-                </GroupBox>
-                <GroupBox Header="All sources button text">
-                    <TextBox x:Name="AllSourceButtonText" Text="{Binding ElementName=MySearchView, Path=AllSourceSelectText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.AutomationId="AllSourceButtonText"/>
-                </GroupBox>
-                <GroupBox Header="Default placeholder">
-                    <TextBox x:Name="DefaultPlaceholderText" Text="{Binding ElementName=MySearchView, Path=SearchViewModel.DefaultPlaceholder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.AutomationId="DefaultPlaceholderText"/>
-                </GroupBox>
-                <GroupBox Header="No result message">
-                    <TextBox x:Name="NoResultMessageText" Text="{Binding ElementName=MySearchView, Path=NoResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.AutomationId="NoResultMessageText"/>
-                </GroupBox>
-                <GroupBox Header="Repeat search button text">
-                    <TextBox x:Name="RepeatSearchButtonText" Text="{Binding ElementName=MySearchView, Path=RepeatSearchButtonText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.AutomationId="RepeatSearchButtonText"/>
-                </GroupBox>
                 <Button x:Name="UpdateToCustomValuesButton" Content="Update to custom text" Padding="1" Click="UpdateToCustomValuesButton_Click" AutomationProperties.AutomationId="UpdateToCustomValuesButton"/>
                 <Button x:Name="UpdateViewpointExtentToOntario" Content="Update Viewpoint to Ontario" Padding="1" Click="UpdateViewpointExtentToOntario_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToOntario"/>
                 <Button x:Name="UpdateViewpointExtentToColorado" Content="Update Viewpoint to Colorado" Padding="1" Click="UpdateViewpointExtentToColorado_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToColorado"/>
+                <Button x:Name="AddEventTestSourceButton" Content="Add Event Test Source" Padding="1" Click="AddEventTestSourceButton_Click" AutomationProperties.AutomationId="AddEventTestSourceButton"/>
             </StackPanel>
         </Border>
     </Grid>

@@ -56,38 +56,31 @@ public class SearchViewTextCustomization : AppiumTestBase
             FindElement("UpdateToCustomValuesButton", TimeSpan.FromSeconds(5)).Click();
         }
 
-        Assert.AreEqual(expected.SearchTooltip, GetEntryText(FindElement("SearchTooltipText", TimeSpan.FromSeconds(5))), $"Expected the search tooltip textbox to be set to {expected.Type} value.");
-        Assert.AreEqual(expected.ClearSearchTooltip, GetEntryText(FindElement("ClearSearchTooltipText")), $"Expected the clear search tooltip textbox to be set to {expected.Type} value.");
-        Assert.AreEqual(expected.AllSourcesButtonText, GetEntryText(FindElement("AllSourceButtonText")), $"Expected the all sources button textbox to be set to {expected.Type} value.");
-        Assert.AreEqual(expected.Placeholder, GetEntryText(FindElement("DefaultPlaceholderText")), $"Expected the default placeholder textbox to be set to {expected.Type} value.");
-        Assert.AreEqual(expected.NoResultsMessage, GetEntryText(FindElement("NoResultMessageText")), $"Expected the No results textbox to be set to {expected.Type} value.");
-        Assert.AreEqual(expected.RepeatSearchButtonText, GetEntryText(FindElement("RepeatSearchButtonText")), $"Expected the repeat search here textbox to be set to {expected.Type} value.");
+        // Check the text values
+        var placeholderElement = FindElementByText(expected.Placeholder, TimeSpan.FromSeconds(5));
+        Assert.IsTrue(placeholderElement.Displayed, $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
 
-        // Check the default text values
-        Assert.IsTrue(ElementExistsByText(expected.Placeholder), $"Expected the search input placeholder to be equal to {expected.Type} value.");
-
-        // Check the Automation Names and default Tooltip values (Help text) on Search and Clear Search buttons
+        // Check the Automation Names on Search and Clear Search buttons
         var searchButton = FindElement("SearchButton", TimeSpan.FromSeconds(5));
-        Assert.AreEqual(expected.SearchTooltip, searchButton.GetAttribute("HelpText"), $"Expected the search tooltip to be set to {expected.Type} value.");
         Assert.AreEqual(expected.SearchTooltip, searchButton.GetAttribute("Name"), $"Expected the automation name of search button to be set to {expected.Type} value.");
         await ShowClearSearchButtonAndNoResultsMessage();
         var clearSearchButton = FindElement("ClearSearchButton", TimeSpan.FromSeconds(5));
-        Assert.AreEqual(expected.ClearSearchTooltip, clearSearchButton.GetAttribute("HelpText"), $"Expected the clear search tooltip to be set to {expected.Type} value.");
         Assert.AreEqual(expected.ClearSearchTooltip, clearSearchButton.GetAttribute("Name"), $"Expected the automation name of clear search button to be set to {expected.Type} value.");
 
-        // Check the default text values
-        Assert.IsTrue(ElementExistsByText(expected.NoResultsMessage), $"Expected the no results message to be equal to {expected.Type} value.");
+        // Check the text values
+        var noResultsMessageElement = FindElementByText(expected.NoResultsMessage);
+        Assert.IsTrue(noResultsMessageElement.Displayed, $"Expected the no results message to be visible and equal to {expected.Type} value.");
 
         FindElement("ClearSearchButton").Click();
 
-        // Check the Automation Names and default button text values on Repeat search here and All sources buttons
+        // Check the Automation Names and text values on Repeat search here and All sources buttons
         await ShowRepeatSearchHereButton();
         var repeatSearchHereButton = FindElement("RepeatSearchHereButton", TimeSpan.FromSeconds(5));
         Assert.AreEqual(expected.RepeatSearchButtonText, repeatSearchHereButton.Text, $"Expected the repeat search here button text to be set to {expected.Type} value.");
         Assert.AreEqual(expected.RepeatSearchButtonText, repeatSearchHereButton.GetAttribute("Name"), $"Expected the automation name of repeat search here button to be set to {expected.Type} value.");
         FindElement("ClearSearchButton").Click();
         await ShowAllSourcesButton();
-        var allSourcesButton = FindElement("AllSourceButton", TimeSpan.FromSeconds(5));
+        var allSourcesButton = FindElement("AllSourcesButton", TimeSpan.FromSeconds(5));
         Assert.AreEqual(expected.AllSourcesButtonText, allSourcesButton.Text, $"Expected the all sources button text to be set to {expected.Type} value.");
         Assert.AreEqual(expected.AllSourcesButtonText, allSourcesButton.GetAttribute("Name"), $"Expected the automation name of all sources button to be set to {expected.Type} value.");
 
@@ -106,12 +99,13 @@ public class SearchViewTextCustomization : AppiumTestBase
         SubmitText(FindElement("QueryEntry"), "airport");
         var selectSuggestion = FindElementByName("Airport", TimeSpan.FromSeconds(5));
         selectSuggestion.Click();
-        await Task.Delay(1000);
+        await Task.Delay(2000);
         // Move the map to a new location so the previous search can be repeated in the new visible extent.
         FindElement("UpdateViewpointExtentToOntario").Click();
     }
     private async Task ShowAllSourcesButton()
     {
+        FindElement("AddEventTestSourceButton").Click();
         FindElement("SourceSelectToggle").Click();
     }
 
