@@ -151,51 +151,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
         }
-
-        private async System.Threading.Tasks.Task<bool> ConfirmDeleteAssociationAsync()
-        {
-            string title = Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationTitle")!;
-            string message = Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationMessage")!;
-            string accept = Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationAccept")!;
-            string cancel = Esri.ArcGISRuntime.Toolkit.Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationCancel")!;
-#if WPF
-            System.Windows.MessageBoxResult result = System.Windows.MessageBox.Show(
-                System.Windows.Window.GetWindow(this),
-                message,
-                title,
-                System.Windows.MessageBoxButton.OKCancel,
-                System.Windows.MessageBoxImage.Warning,
-                System.Windows.MessageBoxResult.Cancel);
-            return result == System.Windows.MessageBoxResult.OK;
-#elif WINDOWS_XAML
-            var dialog = new Microsoft.UI.Xaml.Controls.ContentDialog
-            {
-                XamlRoot = XamlRoot,
-                Title = title,
-                Content = message,
-                PrimaryButtonText = accept,
-                CloseButtonText = cancel,
-                DefaultButton = Microsoft.UI.Xaml.Controls.ContentDialogButton.Close,
-            };
-            return await dialog.ShowAsync() == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
-#elif MAUI
-            Microsoft.Maui.Controls.Page? page = Window?.Page;
-
-            if (page is null && Microsoft.Maui.Controls.Application.Current is not null)
-            {
-                foreach (Microsoft.Maui.Controls.Window window in Microsoft.Maui.Controls.Application.Current.Windows)
-                {
-                    if (window.Page is not null)
-                    {
-                        page = window.Page;
-                        break;
-                    }
-                }
-            }
-
-            return page is not null
-                && await page.DisplayAlert(title, message, accept, cancel);
-#endif
-        }
     }
 }
