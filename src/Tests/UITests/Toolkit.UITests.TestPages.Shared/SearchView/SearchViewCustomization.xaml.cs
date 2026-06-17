@@ -33,9 +33,9 @@ using System.Diagnostics;
 
 
 
-public partial class SearchViewTextCustomization : TestPage
+public partial class SearchViewCustomization : TestPage
 {
-    public SearchViewTextCustomization()
+    public SearchViewCustomization()
     {
         InitializeComponent();
 

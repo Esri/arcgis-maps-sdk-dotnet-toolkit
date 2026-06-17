@@ -4,9 +4,9 @@ using OpenQA.Selenium.Appium.Enums;
 namespace Toolkit.UITest.Shared.SearchViewControl;
 
 [TestClass]
-public class SearchViewTextCustomization : AppiumTestBase
+public class SearchViewCustomization : AppiumTestBase
 {
-    private const string SearchViewTextCustomizationPage = "SearchViewTextCustomization";
+    private const string SearchViewCustomizationPage = "SearchViewCustomization";
 
     public enum TextConfiguration
     {
@@ -44,9 +44,9 @@ public class SearchViewTextCustomization : AppiumTestBase
     [TestMethod]
     [DataRow(TextConfiguration.Default)]
     [DataRow(TextConfiguration.Custom)]
-    public async Task SearchViewTextCustomization_VerifyValues(TextConfiguration type)
+    public async Task SearchViewTextCustomization(TextConfiguration type)
     {
-        OpenSample(SearchViewTextCustomizationPage);
+        OpenSample(SearchViewCustomizationPage);
 
         var expected = type == TextConfiguration.Default ? DefaultValues : CustomValues;
 

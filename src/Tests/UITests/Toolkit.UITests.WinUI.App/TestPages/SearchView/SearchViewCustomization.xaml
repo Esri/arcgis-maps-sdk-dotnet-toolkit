@@ -1,5 +1,5 @@
 <local:TestPage
-    x:Class="Toolkit.UITests.App.TestPages.SearchViewTextCustomization"
+    x:Class="Toolkit.UITests.App.TestPages.SearchViewCustomization"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Toolkit.UITests.App.TestPages"
@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    x:Name="SearchViewTextCustomizationPage"
+    x:Name="SearchViewCustomizationPage"
     mc:Ignorable="d">
 
     <Grid>
