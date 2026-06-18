@@ -254,7 +254,7 @@ public class SearchViewCustomization : AppiumTestBase
 
         // Select only the world geocoder source.
         await ShowAllSourcesButton();
-        FindElementByName("World Geocoder", TimeSpan.FromSeconds(5)).Click();
+        FindElementByText("World Geocoder", TimeSpan.FromSeconds(5)).Click();
 
         // Submit a query that should only return world geocoder suggestions.
         SubmitOntarioAddressQuery();
@@ -300,7 +300,7 @@ public class SearchViewCustomization : AppiumTestBase
 
         // Select only the event tester source.
         await ShowAllSourcesButton();
-        FindElementByName("Event tester", TimeSpan.FromSeconds(5)).Click();
+        FindElementByText("Event tester", TimeSpan.FromSeconds(5)).Click();
 
         // Submit a query that should only return event tester suggestions.
         SubmitOntarioAddressQuery();
