@@ -51,6 +51,10 @@
                           Content="Enable built-in repeat button"
                           IsChecked="{Binding ElementName=MySearchView, Path=EnableRepeatSearchHereButton, Mode=TwoWay}"
                           AutomationProperties.AutomationId="EnableRepeatSearchHereButtonCheck"/>
+                <CheckBox x:Name="EnableResultListViewBindingCheck" 
+                          Content="Enable built-in result list" 
+                          IsChecked="{Binding ElementName=MySearchView, Path=EnableResultListView, Mode=TwoWay}" 
+                          AutomationProperties.AutomationId="EnableResultListViewBindingCheck"/>
             </StackPanel>
         </Border>
     </Grid>

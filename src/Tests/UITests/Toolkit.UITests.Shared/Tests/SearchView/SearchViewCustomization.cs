@@ -143,6 +143,28 @@ public class SearchViewCustomization : AppiumTestBase
         await ShowRepeatSearchHereButton();
         Assert.IsFalse(ElementExistsById("RepeatSearchHereButton", TimeSpan.FromSeconds(5)), "Expected the repeat search here button to be hidden when disabled through binding.");
     }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_EnableResultListViewBinding()
+    {
+        // Open the SearchView customization sample page.
+        OpenSample(SearchViewCustomizationPage);
+
+        // Show the result list and verify it is visible by default.
+        await ShowResultListView();
+        Assert.IsTrue(ElementExistsById("SearchResultsList", TimeSpan.FromSeconds(5)), "Expected the results list to be visible");
+
+        // Clear the current search before changing the result list view binding setting.
+        FindElement("ClearSearchButton").Click();
+
+        // Toggle the binding setting that controls whether the result list view is enabled.
+        FindElement("EnableResultListViewBindingCheck").Click();
+
+        // Show the result list again and verify it is hidden after disabling the binding.
+        await ShowResultListView();
+        Assert.IsFalse(ElementExistsById("SearchResultsList", TimeSpan.FromSeconds(5)), "Expected the results list to be hidden");
+    }
+
     private async Task ShowClearSearchButtonAndNoResultsMessage()
     {
         // Enter text to show the clear search button
@@ -164,6 +186,14 @@ public class SearchViewCustomization : AppiumTestBase
     {
         FindElement("AddEventTestSourceButton").Click();
         FindElement("SourceSelectToggle").Click();
+    }
+    private async Task ShowResultListView()
+    {
+        // Zoom to the extent of Colorado so the entered query returns expected category suggestions and results.
+        FindElement("UpdateViewpointExtentToColorado").Click();
+        SubmitText(FindElement("QueryEntry"), "airport");
+        var selectSuggestion = FindElementByName("Airport", TimeSpan.FromSeconds(5));
+        selectSuggestion.Click();
     }
 
 }

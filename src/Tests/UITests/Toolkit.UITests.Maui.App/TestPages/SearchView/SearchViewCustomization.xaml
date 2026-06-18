@@ -65,6 +65,11 @@
                         x:Name="EnableRepeatSearchHereButtonCheck"
                         IsChecked="{Binding Source={Reference MySearchView}, Path=EnableRepeatSearchHereButton, Mode=TwoWay}"
                         AutomationId="EnableRepeatSearchHereButtonCheck"/>
+                        <Label Text="Enable built-in result list" />
+                        <CheckBox 
+                        x:Name="EnableResultListViewBindingCheck"
+                        IsChecked="{Binding Source={Reference MySearchView}, Path=EnableResultListView, Mode=TwoWay}" 
+                        AutomationId="EnableResultListViewBindingCheck"/>
                     </StackLayout>
                 </VerticalStackLayout>
 
