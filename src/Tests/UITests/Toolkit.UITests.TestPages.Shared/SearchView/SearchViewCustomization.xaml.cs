@@ -27,19 +27,13 @@ using System.Windows;
 
 namespace Toolkit.UITests.App.TestPages;
 
-#if WPF_APP || WINUI_APP
-
-using System.Diagnostics;
-
-
-
 public partial class SearchViewCustomization : TestPage
 {
     public SearchViewCustomization()
     {
         InitializeComponent();
 
-        MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
+        MyMapView.Map = new Esri.ArcGISRuntime.Mapping.Map(BasemapStyle.ArcGISImagery);
         MySearchView.GeoView = MyMapView;
     }
 
@@ -60,11 +54,15 @@ public partial class SearchViewCustomization : TestPage
 
     private void UpdateToCustomValuesButton_Click(object sender, ClickEventArgs e)
     {
+#if WINUI_APP || WPF_APP
         MySearchView.SearchTooltipText = "Custom Search";
         MySearchView.ClearSearchTooltipText = "Custom Clear Search";
+        MySearchView.AllSourceSelectText = "Custom All Sources";
+#elif MAUI_APP
+        MySearchView.AllSourcesSelectText = "Custom All Sources";
+#endif
         MySearchView.SearchViewModel?.DefaultPlaceholder = "Custom Find a place or address";
         MySearchView.RepeatSearchButtonText = "Custom Repeat Search Here";
-        MySearchView.AllSourceSelectText = "Custom All Sources";
         MySearchView.NoResultMessage = "Custom No Results";
     }
 
@@ -131,4 +129,3 @@ private class TestSearchSource : ISearchSource
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }
-#endif

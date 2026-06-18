@@ -60,13 +60,22 @@ public class SearchViewCustomization : AppiumTestBase
         var placeholderElement = FindElementByText(expected.Placeholder, TimeSpan.FromSeconds(5));
         Assert.IsTrue(placeholderElement.Displayed, $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
 
-        // Check the Automation Names on Search and Clear Search buttons
-        var searchButton = FindElement("SearchButton", TimeSpan.FromSeconds(5));
-        Assert.AreEqual(expected.SearchTooltip, searchButton.GetAttribute("Name"), $"Expected the automation name of search button to be set to {expected.Type} value.");
-        await ShowClearSearchButtonAndNoResultsMessage();
-        var clearSearchButton = FindElement("ClearSearchButton", TimeSpan.FromSeconds(5));
-        Assert.AreEqual(expected.ClearSearchTooltip, clearSearchButton.GetAttribute("Name"), $"Expected the automation name of clear search button to be set to {expected.Type} value.");
-
+#if MAUI_TEST
+        if (!string.Equals(expected.Type.ToString(), "Custom", StringComparison.OrdinalIgnoreCase))
+#endif
+        {
+            // Check the Automation Names on Search and Clear Search buttons
+            var searchButton = FindElement("SearchButton", TimeSpan.FromSeconds(5));
+            Assert.AreEqual(expected.SearchTooltip, searchButton.GetAttribute("Name"), $"Expected the automation name of search button to be set to {expected.Type} value.");
+        }
+            await ShowClearSearchButtonAndNoResultsMessage();
+#if MAUI_TEST
+        if (!string.Equals(expected.Type.ToString(), "Custom", StringComparison.OrdinalIgnoreCase))
+#endif
+        {
+            var clearSearchButton = FindElement("ClearSearchButton", TimeSpan.FromSeconds(5));
+                Assert.AreEqual(expected.ClearSearchTooltip, clearSearchButton.GetAttribute("Name"), $"Expected the automation name of clear search button to be set to {expected.Type} value.");
+        }
         // Check the text values
         var noResultsMessageElement = FindElementByText(expected.NoResultsMessage);
         Assert.IsTrue(noResultsMessageElement.Displayed, $"Expected the no results message to be visible and equal to {expected.Type} value.");
@@ -80,9 +89,13 @@ public class SearchViewCustomization : AppiumTestBase
         Assert.AreEqual(expected.RepeatSearchButtonText, repeatSearchHereButton.GetAttribute("Name"), $"Expected the automation name of repeat search here button to be set to {expected.Type} value.");
         FindElement("ClearSearchButton").Click();
         await ShowAllSourcesButton();
+#if !MAUI_TEST
         var allSourcesButton = FindElement("AllSourcesButton", TimeSpan.FromSeconds(5));
         Assert.AreEqual(expected.AllSourcesButtonText, allSourcesButton.Text, $"Expected the all sources button text to be set to {expected.Type} value.");
         Assert.AreEqual(expected.AllSourcesButtonText, allSourcesButton.GetAttribute("Name"), $"Expected the automation name of all sources button to be set to {expected.Type} value.");
+#else
+        Assert.IsTrue(ElementExistsByText(expected.AllSourcesButtonText, TimeSpan.FromSeconds(5)), $"Expected the all sources button text to be set to {expected.Type} value.");
+#endif
 
     }
 

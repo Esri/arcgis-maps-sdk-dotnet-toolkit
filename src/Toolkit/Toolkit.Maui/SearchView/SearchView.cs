@@ -230,6 +230,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             PART_RepeatButton = newRepeatButton;
             PART_RepeatButton.Text = RepeatSearchButtonText;
+            PART_RepeatButton.SetValue(SemanticProperties.DescriptionProperty, RepeatSearchButtonText);
             PART_RepeatButton.Clicked += PART_RepeatButton_Clicked;
         }
 
@@ -512,8 +513,14 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     private static void OnEnableResultListViewChanged(BindableObject sender, object? oldValue, object? newValue) =>
         (sender as SearchView)?.UpdateVisibility();
 
-    private static void OnRepeatSearchButtonTextChanged(BindableObject sender, object? oldValue, object? newValue) =>
-        (sender as SearchView)?.PART_RepeatButton?.SetValue(Button.TextProperty, newValue);
+    private static void OnRepeatSearchButtonTextChanged(BindableObject sender, object? oldValue, object? newValue)
+    {
+        if (sender is SearchView searchView)
+        {
+            searchView.PART_RepeatButton?.SetValue(Button.TextProperty, newValue);
+            searchView.PART_RepeatButton?.SetValue(SemanticProperties.DescriptionProperty, newValue);
+        }
+    }
 
     private static void OnNoResultMessagePropertyChanged(BindableObject sender, object? oldValue, object? newValue) =>
         (sender as SearchView)?.PART_ResultLabel?.SetValue(Label.TextProperty, newValue);
