@@ -151,8 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (AssociationResult.Association.AssociationType == UtilityAssociationType.Connectivity ||
                    AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan ||
                    AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityFromSide ||
-                   AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityToSide &&
-                   AssociationResult.AssociatedFeature is not null)
+                   AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityToSide)
                 {
                     fromTerminal = AssociationResult.Association.FromElement.Terminal?.Name;
                 }

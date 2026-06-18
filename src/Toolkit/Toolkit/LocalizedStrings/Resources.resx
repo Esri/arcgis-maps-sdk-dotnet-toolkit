@@ -257,14 +257,6 @@
     <value>Association Settings</value>
     <comment>Title for the utility association settings/details in FeatureFormView.</comment>
   </data>
-  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
-    <value>From Element</value>
-    <comment>Text Label for the utility association from connection.</comment>
-  </data>
-  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
-    <value>To Element</value>
-    <comment>Text Label for the utility association to connection.</comment>
-  </data>  
   <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
     <value>Remove Association?</value>
     <comment>Confirmation dialog title for the deleting the utility association.</comment>
