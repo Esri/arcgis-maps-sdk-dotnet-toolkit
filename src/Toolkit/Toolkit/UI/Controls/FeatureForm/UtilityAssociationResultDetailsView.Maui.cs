@@ -48,6 +48,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             fromGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             fromGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             fromGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            fromGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            fromGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             Label fromElementLabel = new Label() { FontAttributes = FontAttributes.Bold, Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsFromElement") };
             fromGrid.Add(fromElementLabel);
             Label fromElementText = new Label() { HorizontalTextAlignment = TextAlignment.End };
@@ -61,11 +63,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetRow(fromTerminalText, 1);
             Grid.SetColumn(fromTerminalText, 1);
             fromGrid.Add(fromTerminalText);
+            Label fromFractionLabel = new Label() { FontAttributes = FontAttributes.Bold, Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsPercentAlong"), IsVisible = false };
+            Grid.SetRow(fromFractionLabel, 2);
+            fromGrid.Add(fromFractionLabel);
+            Slider fromFraction = new Slider() { Minimum = 0, Maximum = 1, IsEnabled = false, IsVisible = false };
+            fromFractionLabel.SetBinding(Label.IsVisibleProperty, static (Slider view) => view.IsVisible, source: fromFraction);
+            Grid.SetRow(fromFraction, 3);
+            Grid.SetColumnSpan(fromFraction, 2);
+            fromGrid.Add(fromFraction);
             layout.Add(fromGrid);
 
             Grid toGrid = new Grid() { Margin = new Thickness(0, 8, 0, 0) };
             toGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             toGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            toGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            toGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             toGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             toGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             Label toElementLabel = new Label() { FontAttributes = FontAttributes.Bold, Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsToElement") };
@@ -81,6 +93,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetRow(toTerminalText, 1);
             Grid.SetColumn(toTerminalText, 1);
             toGrid.Add(toTerminalText);
+            Label toFractionLabel = new Label() { FontAttributes = FontAttributes.Bold, Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsPercentAlong"), IsVisible = false };
+            Grid.SetRow(toFractionLabel, 2);
+            toGrid.Add(toFractionLabel);
+            Slider toFraction = new Slider() { Minimum = 0, Maximum = 1, IsEnabled = false, IsVisible = false };
+            toFractionLabel.SetBinding(Label.IsVisibleProperty, static (Slider view) => view.IsVisible, source: toFraction);
+            Grid.SetRow(toFraction, 3);
+            Grid.SetColumnSpan(toFraction, 2);
+            toGrid.Add(toFraction);
             layout.Add(toGrid);
 
             Button removeAssociationButton = new Button() { Margin = new Thickness(0, 8, 0, 0), Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsRemoveAssociation") };
@@ -92,6 +112,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("ToElementText", toElementText);
             nameScope.RegisterName("FromTerminalText", fromTerminalText);
             nameScope.RegisterName("ToTerminalText", toTerminalText);
+            nameScope.RegisterName("FromFraction", fromFraction);
+            nameScope.RegisterName("ToFraction", toFraction);
             nameScope.RegisterName("RemoveAssociationButton", removeAssociationButton);
 
             return layout;

@@ -508,6 +508,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFromElement}" FontWeight="Bold" />
                             <TextBlock Grid.Column="1" x:Name="FromElementText" HorizontalAlignment="Right" />
@@ -517,6 +518,9 @@
                                        FontWeight="Bold"
                                        Visibility="{x:Bind FromTerminalText.Visibility, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="FromTerminalText" HorizontalAlignment="Right" />
+                            <Slider Grid.Row="2" Grid.Column="1" x:Name="FromFraction"
+                                    Header="{internal:LocalizedString Key=FeatureFormUtilityAssociationsPercentAlong}"
+                                    Minimum="0" Maximum="1" IsEnabled="False" Visibility="Collapsed" />
                         </Grid>
 
                         <Grid Margin="0,8,0,0">
@@ -525,6 +529,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
+                                <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
@@ -537,6 +542,9 @@
                                        FontWeight="Bold"
                                        Visibility="{x:Bind ToTerminalText.Visibility, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ToTerminalText" HorizontalAlignment="Right" />
+                            <Slider Grid.Row="2" Grid.ColumnSpan="2" x:Name="ToFraction" Margin="0,8,0,0"
+                                    Header="{internal:LocalizedString Key=FeatureFormUtilityAssociationsPercentAlong}"
+                                    Minimum="0" Maximum="1" IsEnabled="False" Visibility="Collapsed" />
                         </Grid>
 
                         <Button x:Name="RemoveAssociationButton"

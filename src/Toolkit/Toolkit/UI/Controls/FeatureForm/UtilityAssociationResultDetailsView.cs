@@ -121,19 +121,70 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
 
+            // If association Type is (Connectivity or JunctionEdgeObjectConnectivityMidspan or JunctionEdgeObjectConnectivityFromSide or JunctionEdgeObjectConnectivityToSide) and
+            // the terminal on the UN Element(feature) is not null, this terminal will also be displayed
+            // If Association Type isJunctionEdgeObjectConnectivityMidspan or JunctionEdgeObjectConnectivityFromSide or JunctionEdgeObjectConnectivityToSide,
+            // then we also want to display theFractionAlongEdgevalue of the association
+            // Following the above two rules, if the element we are showing(other side of association) is
+            // UtilityElement.UtilityNetworkSource.UtilityNetworkSourceType.Edgewe showFractionAlongEdge;
+            // if it isUtilityElement.UtilityNetworkSource.UtilityNetworkSourceType.Junction we show the terminal.
+
+            Guid? associatedFeatureGlobalId = null;
+            if (AssociationResult is not null &&
+                AssociationResult.AssociatedFeature is ArcGISFeature feature &&
+                feature.FeatureTable is ArcGISFeatureTable table &&
+                feature.GetAttributeValue(table.GlobalIdField) is Guid guid)
+            {
+                associatedFeatureGlobalId = guid;
+            }
+
+            double fromFractionAlongEdge = double.NaN;
+            double toFractionAlongEdge = double.NaN;
+            string? fromTitle = ffv?.CurrentFeatureForm?.Title;
+            string? toTitle = AssociationResult?.AssociatedFeature is null ? "" : new FeatureForm(AssociationResult?.AssociatedFeature!)?.Title;
+            string? fromTerminal = null;
+            string? toTerminal = null;
+
+            if (AssociationResult is not null)
+            {
+                // If association Type is (Connectivity or JunctionEdgeObjectConnectivityMidspan or JunctionEdgeObjectConnectivityFromSide or JunctionEdgeObjectConnectivityToSide) and the terminal on the UN Element(feature) is not null, this terminal will also be displayed
+                if (AssociationResult.Association.AssociationType == UtilityAssociationType.Connectivity ||
+                   AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan ||
+                   AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityFromSide ||
+                   AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityToSide &&
+                   AssociationResult.AssociatedFeature is not null)
+                {
+                    fromTerminal = AssociationResult.Association.FromElement.Terminal?.Name;
+                }
+
+                if (AssociationResult.Association.AssociationType == UtilityAssociationType.JunctionEdgeObjectConnectivityMidspan)
+                {
+                    fromFractionAlongEdge = AssociationResult.Association.FractionAlongEdge;
+                }
+
+                if(AssociationResult.Association.ToElement.NetworkSource.SourceType == UtilityNetworkSourceType.Edge)
+                {
+                    toFractionAlongEdge = 1 - AssociationResult.Association.FractionAlongEdge;
+                }
+                else if (AssociationResult.Association.ToElement.NetworkSource.SourceType == UtilityNetworkSourceType.Junction)
+                {
+                    toTerminal = AssociationResult?.Association?.ToElement?.Terminal?.Name;
+                }
+            }
+
             if (GetTemplateChild("FromElementText") is TextBlock fromElementText)
             {
-                fromElementText.Text = ffv?.CurrentFeatureForm?.Title;
+                fromElementText.Text = fromTitle;
             }
 
             if (GetTemplateChild("ToElementText") is TextBlock toElementText)
             {
-                toElementText.Text = AssociationResult?.AssociatedFeature is null ? "" : new FeatureForm(AssociationResult?.AssociatedFeature!)?.Title;
+                toElementText.Text = toTitle;
             }
-
+            
             if (GetTemplateChild("FromTerminalText") is TextBlock fromTerminalText)
             {
-                fromTerminalText.Text = AssociationResult?.Association?.FromElement?.Terminal?.Name;
+                fromTerminalText.Text = fromTerminal;
 #if MAUI
                 fromTerminalText.IsVisible = !string.IsNullOrEmpty(fromTerminalText.Text);
 #else
@@ -143,11 +194,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             if (GetTemplateChild("ToTerminalText") is TextBlock toTerminalText)
             {
-                toTerminalText.Text = AssociationResult?.Association?.ToElement?.Terminal?.Name;
+                toTerminalText.Text = toTerminal;
 #if MAUI
                 toTerminalText.IsVisible = !string.IsNullOrEmpty(toTerminalText.Text);
 #else
                 toTerminalText.Visibility = string.IsNullOrEmpty(toTerminalText.Text) ? Visibility.Collapsed : Visibility.Visible;
+#endif
+            }
+
+            if (GetTemplateChild("FromFraction") is Slider fromSlider)
+            {
+                bool showFromFraction = !double.IsNaN(fromFractionAlongEdge);
+                fromSlider.Value = showFromFraction ? fromFractionAlongEdge : 0;
+#if MAUI
+                fromSlider.IsVisible = showFromFraction;
+#else
+                fromSlider.Visibility = showFromFraction ? Visibility.Visible : Visibility.Collapsed;
+#endif
+            }
+
+            if (GetTemplateChild("ToFraction") is Slider toSlider)
+            {
+                bool showToFraction = !double.IsNaN(toFractionAlongEdge);
+                toSlider.Value = showToFraction ? toFractionAlongEdge : 0;
+#if MAUI
+                toSlider.IsVisible = showToFraction;
+#else
+                toSlider.Visibility = showToFraction ? Visibility.Visible : Visibility.Collapsed;
 #endif
             }
         }

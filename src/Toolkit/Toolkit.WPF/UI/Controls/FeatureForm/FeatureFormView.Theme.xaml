@@ -652,6 +652,8 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFromElement}" FontWeight="Bold" />
                             <TextBlock Grid.Column="1" x:Name="FromElementText" HorizontalAlignment="Right" />
@@ -659,6 +661,9 @@
                             <TextBlock Grid.Row="1" Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}" FontWeight="Bold"                                       
                                        Visibility="{Binding Visibility, ElementName=FromTerminalText, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="FromTerminalText" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="2" Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsPercentAlong}" FontWeight="Bold"
+                                       Visibility="{Binding Visibility, ElementName=FromFraction, Mode=OneWay}" />
+                            <Slider Grid.Row="3" Grid.ColumnSpan="2" x:Name="FromFraction" Minimum="0" Maximum="1" Margin="0,8,0,0" IsEnabled="False" Visibility="Collapsed" />
                         </Grid>
 
                         <Grid Margin="0,8,0,0">
@@ -669,6 +674,8 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsToElement}" FontWeight="Bold" />
                             <TextBlock Grid.Column="1" x:Name="ToElementText" HorizontalAlignment="Right" />
@@ -676,6 +683,9 @@
                             <TextBlock Grid.Row="1" Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}" FontWeight="Bold"
                                        Visibility="{Binding Visibility, ElementName=ToTerminalText, Mode=OneWay}"  />
                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ToTerminalText" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="2" Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsPercentAlong}" FontWeight="Bold"
+                                       Visibility="{Binding Visibility, ElementName=ToFraction, Mode=OneWay}" />
+                            <Slider Grid.Row="3" Grid.ColumnSpan="2" x:Name="ToFraction" Minimum="0" Maximum="1" IsEnabled="False" Visibility="Collapsed" />
                     </Grid>
 
                         <Button x:Name="RemoveAssociationButton" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
