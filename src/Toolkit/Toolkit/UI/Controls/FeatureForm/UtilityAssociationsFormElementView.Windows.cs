@@ -65,7 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if WINDOWS_XAML
             (sender as ListView)?.PrepareConnectedAnimation("NavigationSubViewForwardAnimation", item, "Title");
 #endif
-            parent?.NavigateToItem(item); 
+            parent?.NavigateToItem(item, parent?.CurrentFeatureForm); 
         }
 
         /// <summary>

@@ -35,6 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return UtilityAssociationsFilterResultTemplate;
             if (item is UtilityNetworks.UtilityAssociationGroupResult)
                 return UtilityAssociationGroupResultTemplate;
+            if (item is UtilityNetworks.UtilityAssociationResult)
+                return UtilityAssociationResultTemplate;            
 #if WINDOWS_XAML
             return base.SelectTemplateCore(item, container);
 #elif MAUI
@@ -58,5 +60,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Gets or sets the template used for rendering a <see cref="UtilityNetworks.UtilityAssociationGroupResult"/>
         /// </summary>
         public DataTemplate? UtilityAssociationGroupResultTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template used for rendering a <see cref="UtilityNetworks.UtilityAssociationResult"/>
+        /// </summary>
+        public DataTemplate? UtilityAssociationResultTemplate { get; set; }
     }
 }

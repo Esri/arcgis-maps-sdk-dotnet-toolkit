@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (cell?.BindingContext is UtilityNetworks.UtilityAssociationsFilterResult result)
             {
                 var parent = FeatureFormView.GetFeatureFormViewParent(cell);
-                parent?.NavigateToItem(result); 
+                parent?.NavigateToItem(result, parent?.CurrentFeatureForm); 
             }
         }
     }

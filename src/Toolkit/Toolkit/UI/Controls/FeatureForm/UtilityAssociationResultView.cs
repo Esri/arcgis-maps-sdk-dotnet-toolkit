@@ -18,10 +18,7 @@ using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UtilityNetworks;
-using System.Text;
 using Esri.ArcGISRuntime.Data;
-
-
 
 
 
@@ -89,7 +86,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateView()
         {
-            var title = GetTemplateChild("Title") as TextBlock;
+            if (_detailsButton is not null)
+            {
+#if MAUI
+                _detailsButton.Clicked -= DetailsButton_Clicked;
+#else
+                _detailsButton.Click -= DetailsButton_Clicked;
+#endif
+                _detailsButton = null;
+            }
+
+            if (GetTemplateChild("DetailsButton") is Button button)
+            {
+                _detailsButton = button;
+#if MAUI
+                button.Clicked += DetailsButton_Clicked;
+#else
+                button.Click += DetailsButton_Clicked;
+#endif
+            }
+
 #if WINDOWS_XAML
             if (GetTemplateChild("Icon") is FontIcon icon)
             {
@@ -137,6 +153,149 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 connectionInfo.Visibility = connectionInfo.Text?.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
 #endif
             }
+        }
+
+        private Button? _detailsButton;
+
+#if MAUI
+        private void DetailsButton_Clicked(object? sender, EventArgs e)
+#else
+        private void DetailsButton_Clicked(object sender, RoutedEventArgs e)
+#endif
+        {
+#if WPF
+            e.Handled = true;
+#endif
+            OnDetailsClick(sender);
+        }
+
+        private void OnDetailsClick(object? sender)
+        {
+            var parent = FeatureFormView.GetFeatureFormViewParent(this);
+            if (parent is null || AssociationResult is null)
+                return;
+
+            ShowDetailsFlyout(parent, sender);
+        }
+
+        private partial void ShowDetailsFlyout(FeatureFormView parent, object? flyoutTarget);
+
+        private void ShowAssociationOnMap(FeatureFormView parent)
+        {
+            if (parent.GeoView is null ||
+                AssociationResult?.AssociatedFeature?.Geometry is not Esri.ArcGISRuntime.Geometry.Geometry geometry)
+            {
+                return;
+            }
+
+            _ = parent.GeoView.SetViewpointAsync(new Esri.ArcGISRuntime.Mapping.Viewpoint(geometry));
+        }
+
+        private void NavigateToAssociationDetails(FeatureFormView parent)
+        {
+            if (AssociationResult is not null)
+            {
+                parent.NavigateToItem(AssociationResult);
+            }
+        }
+
+        private bool CanRemoveAssociation(FeatureFormView parent)
+        {
+            return AssociationResult?.Association is not null &&
+                GetAssociationsFormElement(parent)?.IsEditable == true;
+        }
+        
+        internal static async Task<bool> RemoveAssociation(UtilityAssociation? association, FeatureFormView parent)
+        {
+            if (association is null ||
+                GetAssociationsFormElement(parent) is not UtilityAssociationsFormElement element ||
+                !element.IsEditable ||
+                !await ConfirmDeleteAssociationAsync(parent))
+            {
+                return false;
+            }
+            // element.AssociationsFilterResults.IndexOf()
+            var stack = parent.GetNavigationStack();
+            var groupResult = stack.OfType<UtilityAssociationGroupResult>().FirstOrDefault();
+            var filterResult = stack.OfType<UtilityAssociationsFilterResult>().FirstOrDefault();
+            var filterIndex = filterResult is null ? -1 : element.AssociationsFilterResults.ToList().IndexOf(filterResult);
+            var groupIndex = groupResult is null ? -1 : filterResult?.GroupResults.ToList().IndexOf(groupResult) ?? -1;
+
+            element.DeleteAssociation(association);
+            try
+            {
+                await element.FetchAssociationsFilterResultsAsync();
+            }
+            catch { return true; }
+            var newFilterResult = filterIndex > -1 && element.AssociationsFilterResults.Count > filterIndex ? element.AssociationsFilterResults[filterIndex] : null;
+            var newGroupResult = groupIndex > -1 && newFilterResult?.GroupResults.Count > groupIndex ? newFilterResult.GroupResults[groupIndex] : null;
+
+            if (filterResult is not null)
+            {
+                var idx = stack.ToList().IndexOf(filterResult);
+                parent.ReplaceBackstackItem(idx, newFilterResult?.ResultCount == 0 ? null : newFilterResult);
+            }
+            if (groupResult is not null)
+            {
+                var idx = stack.ToList().IndexOf(groupResult);
+                parent.ReplaceBackstackItem(idx, newGroupResult);
+            }
+            return true;
+        }
+
+        private static UtilityAssociationsFormElement? GetAssociationsFormElement(FeatureFormView parent)
+        {
+            var form = parent.CurrentFeatureForm;
+            var result = parent.GetNavigationStack().OfType<UtilityAssociationsFilterResult>().LastOrDefault();
+            return form is null || result is null
+                ? null
+                : form.Elements.OfType<UtilityAssociationsFormElement>().FirstOrDefault(element => element.AssociationsFilterResults.Contains(result));
+        }
+
+        private static async System.Threading.Tasks.Task<bool> ConfirmDeleteAssociationAsync(FeatureFormView view)
+        {
+            string title = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationTitle")!;
+            string message = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationMessage")!;
+            string accept = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationAccept")!;
+            string cancel = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationCancel")!;
+#if WPF
+            System.Windows.MessageBoxResult result = System.Windows.MessageBox.Show(
+                System.Windows.Window.GetWindow(view),
+                message,
+                title,
+                System.Windows.MessageBoxButton.OKCancel,
+                System.Windows.MessageBoxImage.Warning,
+                System.Windows.MessageBoxResult.Cancel);
+            return result == System.Windows.MessageBoxResult.OK;
+#elif WINDOWS_XAML
+            var dialog = new Microsoft.UI.Xaml.Controls.ContentDialog
+            {
+                XamlRoot = view.XamlRoot,
+                Title = title,
+                Content = message,
+                PrimaryButtonText = accept,
+                CloseButtonText = cancel,
+                DefaultButton = Microsoft.UI.Xaml.Controls.ContentDialogButton.Close,
+            };
+            return await dialog.ShowAsync() == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
+#elif MAUI
+            Microsoft.Maui.Controls.Page? page = view.Window?.Page;
+
+            if (page is null && Microsoft.Maui.Controls.Application.Current is not null)
+            {
+                foreach (Microsoft.Maui.Controls.Window window in Microsoft.Maui.Controls.Application.Current.Windows)
+                {
+                    if (window.Page is not null)
+                    {
+                        page = window.Page;
+                        break;
+                    }
+                }
+            }
+
+            return page is not null
+                && await page.DisplayAlert(title, message, accept, cancel);
+#endif
         }
 
         private string GetAssociationProperty(UtilityAssociationResult? associationResult)
