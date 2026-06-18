@@ -305,6 +305,8 @@ public class SearchViewCustomization : AppiumTestBase
         // Submit a query that should only return event tester suggestions.
         SubmitOntarioAddressQuery();
 
+        //In Maui the source header is not visible when there is only one source
+#if !MAUI_TEST
         // Verify only the event tester source header is visible.
         Assert.IsTrue(ElementExistsByText("Event tester", TimeSpan.FromSeconds(5)));
         Assert.IsFalse(ElementExistsByText("World Geocoder"));
