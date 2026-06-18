@@ -165,6 +165,27 @@ public class SearchViewCustomization : AppiumTestBase
         Assert.IsFalse(ElementExistsById("SearchResultsList", TimeSpan.FromSeconds(5)), "Expected the results list to be hidden");
     }
 
+    [TestMethod]
+    public async Task SearchViewCustomization_EnableIndividualResultDisplayBinding()
+    {
+        // Open the SearchView customization sample page.
+        OpenSample(SearchViewCustomizationPage);
+
+        // Show the result list and verify it is visible by default.
+        await ShowIndividualResultList();
+        Assert.IsFalse(ElementExistsById("SearchResultsList", TimeSpan.FromSeconds(5)), "Expected the results list to be hidden");
+
+        // Clear the current search before changing the result list view binding setting.
+        FindElement("ClearSearchButton").Click();
+
+        // Toggle the binding setting that controls whether the result list view is enabled.
+        FindElement("EnableIndividualResultDisplayCheck").Click();
+
+        // Show the result list again and verify it is hidden after disabling the binding.
+        await ShowIndividualResultList();
+        Assert.IsTrue(ElementExistsById("SearchResultsList", TimeSpan.FromSeconds(5)), "Expected the results list to be visible");
+    }
+
     private async Task ShowClearSearchButtonAndNoResultsMessage()
     {
         // Enter text to show the clear search button
@@ -196,4 +217,12 @@ public class SearchViewCustomization : AppiumTestBase
         selectSuggestion.Click();
     }
 
+    private async Task ShowIndividualResultList()
+    {
+        await ShowResultListView();
+
+        // Select a known search result from the result list
+        var selectedResult = FindElementByName("Colorado Springs Airport, Colorado Springs, Colorado", TimeSpan.FromSeconds(5));
+        selectedResult.Click();
+    }
 }

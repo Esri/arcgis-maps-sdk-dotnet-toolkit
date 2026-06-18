@@ -70,6 +70,11 @@
                         x:Name="EnableResultListViewBindingCheck"
                         IsChecked="{Binding Source={Reference MySearchView}, Path=EnableResultListView, Mode=TwoWay}" 
                         AutomationId="EnableResultListViewBindingCheck"/>
+                        <Label Text="Enable individual result display" />
+                        <CheckBox
+                        x:Name="EnableIndividualResultDisplayCheck" 
+                        IsChecked="{Binding Source={Reference MySearchView}, Path=EnableIndividualResultDisplay, Mode=TwoWay}" 
+                        AutomationId="EnableIndividualResultDisplayCheck"/>
                     </StackLayout>
                 </VerticalStackLayout>
 
