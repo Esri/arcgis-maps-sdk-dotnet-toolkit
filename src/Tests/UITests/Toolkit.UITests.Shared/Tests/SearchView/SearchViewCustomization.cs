@@ -259,9 +259,12 @@ public class SearchViewCustomization : AppiumTestBase
         // Submit a query that should only return world geocoder suggestions.
         SubmitOntarioAddressQuery();
 
+        // In Maui the source header is not visible when there is only one source
+#if !MAUI_TEST
         // Verify only the world geocoder source header is visible.
         Assert.IsTrue(ElementExistsByText("World Geocoder", TimeSpan.FromSeconds(5)));
         Assert.IsFalse(ElementExistsByText("Event tester"));
+#endif
 
         // Verify the suggestions list is visible.
 #if WINUI_TEST
@@ -305,6 +308,7 @@ public class SearchViewCustomization : AppiumTestBase
         // Verify only the event tester source header is visible.
         Assert.IsTrue(ElementExistsByText("Event tester", TimeSpan.FromSeconds(5)));
         Assert.IsFalse(ElementExistsByText("World Geocoder"));
+#endif
 
         // Verify the suggestions list is visible.
 #if WINUI_TEST
