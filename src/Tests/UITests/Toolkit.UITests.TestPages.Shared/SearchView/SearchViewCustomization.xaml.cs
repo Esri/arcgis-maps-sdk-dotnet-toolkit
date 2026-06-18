@@ -72,7 +72,7 @@ public partial class SearchViewCustomization : TestPage
         MyMapView.SetViewpoint(new Viewpoint(center, scale));
     }
 
-private class TestSearchSource : ISearchSource
+    private class TestSearchSource : ISearchSource
     {
         public string DisplayName { get => "Event tester"; set => throw new NotImplementedException(); }
         public string Placeholder { get => "Test placeholder"; set => throw new NotImplementedException(); }
@@ -80,17 +80,17 @@ private class TestSearchSource : ISearchSource
         public double DefaultZoomScale { get => 1000; set => throw new NotImplementedException(); }
         public int MaximumResults { get => 3; set => throw new NotImplementedException(); }
         public int MaximumSuggestions { get => 3; set => throw new NotImplementedException(); }
-        public Geometry SearchArea { get => null; set { } }
-        public MapPoint PreferredSearchLocation { get => null; set { } }
+        public Geometry? SearchArea { get => null; set { } }
+        public MapPoint? PreferredSearchLocation { get => null; set { } }
 
-        Esri.ArcGISRuntime.Symbology.Symbol ISearchSource.DefaultSymbol { get => null; set => throw new NotImplementedException(); }
+        Esri.ArcGISRuntime.Symbology.Symbol? ISearchSource.DefaultSymbol { get => null; set => throw new NotImplementedException(); }
 
-        public void NotifyDeselected(SearchResult result)
+        public void NotifyDeselected(SearchResult? result)
         {
            // _ = new MessageDialog($"Deselected {result?.DisplayTitle ?? "all results"}").ShowAsync();
         }
 
-        public void NotifySelected(SearchResult result)
+        public void NotifySelected(SearchResult? result)
         {
             // _ = new MessageDialog($"Selected {result?.DisplayTitle}").ShowAsync();
         }

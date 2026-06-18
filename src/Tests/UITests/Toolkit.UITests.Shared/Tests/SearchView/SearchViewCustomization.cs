@@ -66,7 +66,7 @@ public class SearchViewCustomization : AppiumTestBase
         {
             // Check the Automation Names on Search and Clear Search buttons
             var searchButton = FindElement("SearchButton", TimeSpan.FromSeconds(5));
-            Assert.AreEqual(expected.SearchTooltip, searchButton.GetAttribute("Name"), $"Expected the automation name of search button to be set to {expected.Type} value.");
+            Assert.AreEqual(expected.SearchTooltip, GetAutomationName(searchButton), $"Expected the automation name of search button to be set to {expected.Type} value.");
         }
             await ShowClearSearchButtonAndNoResultsMessage();
 #if MAUI_TEST
@@ -74,7 +74,7 @@ public class SearchViewCustomization : AppiumTestBase
 #endif
         {
             var clearSearchButton = FindElement("ClearSearchButton", TimeSpan.FromSeconds(5));
-                Assert.AreEqual(expected.ClearSearchTooltip, clearSearchButton.GetAttribute("Name"), $"Expected the automation name of clear search button to be set to {expected.Type} value.");
+                Assert.AreEqual(expected.ClearSearchTooltip, GetAutomationName(clearSearchButton), $"Expected the automation name of clear search button to be set to {expected.Type} value.");
         }
         // Check the text values
         var noResultsMessageElement = FindElementByText(expected.NoResultsMessage);
@@ -86,13 +86,13 @@ public class SearchViewCustomization : AppiumTestBase
         await ShowRepeatSearchHereButton();
         var repeatSearchHereButton = FindElement("RepeatSearchHereButton", TimeSpan.FromSeconds(5));
         Assert.AreEqual(expected.RepeatSearchButtonText, repeatSearchHereButton.Text, $"Expected the repeat search here button text to be set to {expected.Type} value.");
-        Assert.AreEqual(expected.RepeatSearchButtonText, repeatSearchHereButton.GetAttribute("Name"), $"Expected the automation name of repeat search here button to be set to {expected.Type} value.");
+        Assert.AreEqual(expected.RepeatSearchButtonText, GetAutomationName(repeatSearchHereButton), $"Expected the automation name of repeat search here button to be set to {expected.Type} value.");
         FindElement("ClearSearchButton").Click();
         await ShowAllSourcesButton();
 #if !MAUI_TEST
         var allSourcesButton = FindElement("AllSourcesButton", TimeSpan.FromSeconds(5));
         Assert.AreEqual(expected.AllSourcesButtonText, allSourcesButton.Text, $"Expected the all sources button text to be set to {expected.Type} value.");
-        Assert.AreEqual(expected.AllSourcesButtonText, allSourcesButton.GetAttribute("Name"), $"Expected the automation name of all sources button to be set to {expected.Type} value.");
+        Assert.AreEqual(expected.AllSourcesButtonText, GetAutomationName(allSourcesButton), $"Expected the automation name of all sources button to be set to {expected.Type} value.");
 #else
         Assert.IsTrue(ElementExistsByText(expected.AllSourcesButtonText, TimeSpan.FromSeconds(5)), $"Expected the all sources button text to be set to {expected.Type} value.");
 #endif
