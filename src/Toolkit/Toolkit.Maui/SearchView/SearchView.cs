@@ -604,14 +604,13 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                     }
 
                     PART_SuggestionsView?.SetValue(CollectionView.ItemsSourceProperty, grouped ?? new IGrouping<ISearchSource, SearchSuggestion>[] {});
+                    PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, true);
                 }
                 else
                 {
+                    PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, false);
                     PART_SuggestionsView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Suggestions ?? new List<SearchSuggestion>());
                 }
-
-                // Update IsGrouped after ItemsSource has been set to avoid this Maui Windows bug: https://github.com/dotnet/maui/issues/28824
-                PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, groupingEnabled);
 
                 UpdateVisibility();
                 break;
