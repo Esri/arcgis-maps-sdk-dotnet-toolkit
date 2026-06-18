@@ -57,9 +57,12 @@ public class SearchViewCustomization : AppiumTestBase
         }
 
         // Check the text values
+#if MAC_TEST
+        Assert.AreEqual(expected.Placeholder, GetEntryText(FindElement("QueryEntry", TimeSpan.FromSeconds(5))), $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
+#else
         var placeholderElement = FindElementByText(expected.Placeholder, TimeSpan.FromSeconds(5));
         Assert.IsTrue(placeholderElement.Displayed, $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
-
+#endif
 #if MAUI_TEST
         if (!string.Equals(expected.Type.ToString(), "Custom", StringComparison.OrdinalIgnoreCase))
 #endif
