@@ -44,7 +44,7 @@ public class SearchViewCustomization : AppiumTestBase
     [TestMethod]
     [DataRow(TextConfiguration.Default)]
     [DataRow(TextConfiguration.Custom)]
-    public async Task SearchViewTextCustomization(TextConfiguration type)
+    public async Task SearchViewCustomization_Text(TextConfiguration type)
     {
         OpenSample(SearchViewCustomizationPage);
 
