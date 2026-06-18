@@ -125,6 +125,24 @@ public class SearchViewCustomization : AppiumTestBase
             "Expected to see search results relevant to the Ontario area when geoview binding is null");
     }
 
+    [TestMethod]
+    public async Task SearchViewCustomization_EnableRepeatSearchHereButtonBinding()
+    {
+        // Open the SearchView customization sample page.
+        OpenSample(SearchViewCustomizationPage);
+
+        // Verify the Repeat Search Here button is visible when enabled through binding.
+        await ShowRepeatSearchHereButton();
+        Assert.IsTrue(ElementExistsById("RepeatSearchHereButton", TimeSpan.FromSeconds(5)), "Expected the repeat search here button to be visible when enabled through binding.");
+
+        // Clear the current search and toggle the binding off.
+        FindElement("ClearSearchButton").Click();
+        FindElement("EnableRepeatSearchHereButtonCheck").Click();
+
+        // Verify the Repeat Search Here button is hidden when disabled through binding.
+        await ShowRepeatSearchHereButton();
+        Assert.IsFalse(ElementExistsById("RepeatSearchHereButton", TimeSpan.FromSeconds(5)), "Expected the repeat search here button to be hidden when disabled through binding.");
+    }
     private async Task ShowClearSearchButtonAndNoResultsMessage()
     {
         // Enter text to show the clear search button

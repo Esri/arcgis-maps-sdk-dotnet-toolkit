@@ -47,6 +47,10 @@
                           IsChecked="True"
                           Unchecked="GeoViewConnection_Checked"
                           AutomationProperties.AutomationId="EnableGeoViewBindingCheck"/>
+                <CheckBox x:Name="EnableRepeatSearchHereButtonCheck"
+                          Content="Enable built-in repeat button"
+                          IsChecked="{Binding ElementName=MySearchView, Path=EnableRepeatSearchHereButton, Mode=TwoWay}"
+                          AutomationProperties.AutomationId="EnableRepeatSearchHereButtonCheck"/>
             </StackPanel>
         </Border>
     </Grid>
