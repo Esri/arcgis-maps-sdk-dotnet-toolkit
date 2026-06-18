@@ -22,6 +22,7 @@
                 <Button x:Name="UpdateViewpointExtentToOntario" Content="Update Viewpoint to Ontario" Padding="1" Click="UpdateViewpointExtentToOntario_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToOntario"/>
                 <Button x:Name="UpdateViewpointExtentToColorado" Content="Update Viewpoint to Colorado" Padding="1" Click="UpdateViewpointExtentToColorado_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToColorado"/>
                 <Button x:Name="AddEventTestSourceButton" Content="Add Event Test Source" Padding="1" Click="AddEventTestSourceButton_Click" AutomationProperties.AutomationId="AddEventTestSourceButton"/>
+                <CheckBox x:Name="EnableGeoViewBindingCheck" Checked="GeoViewConnection_Checked" Content="Enable Binding to GeoView" IsChecked="True" Unchecked="GeoViewConnection_Checked" AutomationProperties.AutomationId="EnableGeoViewBindingCheck"/>
             </StackPanel>
         </Border>
     </Grid>

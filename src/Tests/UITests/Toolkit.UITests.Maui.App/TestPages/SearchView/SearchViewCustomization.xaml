@@ -53,6 +53,15 @@
                     Text="Add Event Test Source"
                     Clicked="AddEventTestSourceButton_Click" />
 
+                    <StackLayout Orientation="Horizontal" Spacing="2">
+                        <Label Text="Enable binding to GeoView:" />
+                        <CheckBox
+                        x:Name="EnableGeoViewBindingCheck"
+                        CheckedChanged="GeoViewConnection_Checked"
+                        IsChecked="True"
+                        AutomationId="EnableGeoViewBindingCheck" />
+                    </StackLayout>
+
                 </VerticalStackLayout>
 
             </Border>

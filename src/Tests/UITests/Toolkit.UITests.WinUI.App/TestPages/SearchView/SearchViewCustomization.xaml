@@ -41,7 +41,12 @@
                         Content="Add Event Test Source"
                         Click="AddEventTestSourceButton_Click"
                         AutomationProperties.AutomationId="AddEventTestSourceButton"/>
-
+                <CheckBox x:Name="EnableGeoViewBindingCheck"
+                          Checked="GeoViewConnection_Checked"
+                          Content="Enable Binding to GeoView"
+                          IsChecked="True"
+                          Unchecked="GeoViewConnection_Checked"
+                          AutomationProperties.AutomationId="EnableGeoViewBindingCheck"/>
             </StackPanel>
         </Border>
     </Grid>

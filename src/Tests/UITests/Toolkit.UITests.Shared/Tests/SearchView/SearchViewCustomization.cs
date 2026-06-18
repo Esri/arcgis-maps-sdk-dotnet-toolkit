@@ -102,6 +102,29 @@ public class SearchViewCustomization : AppiumTestBase
 
     }
 
+    [TestMethod]
+    public async Task SearchViewCustomization_GeoViewBinding()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Restrict the GeoView to Colorado so the query should not return results near Ontario, California.
+        FindElement("UpdateViewpointExtentToColorado").Click();
+        SubmitText(FindElement("QueryEntry", TimeSpan.FromSeconds(5)), "ontario international");
+
+        Assert.IsFalse(
+            ElementExistsByName("Ontario International Airport, Ontario, CA, USA", TimeSpan.FromSeconds(5)),
+            "Not Expected to see search results relevant to the Ontario area");
+
+        // Clear the previous search and disable GeoView binding so the search is no longer constrained by the current map extent.
+        FindElement("ClearSearchButton").Click();
+        FindElement("EnableGeoViewBindingCheck").Click();
+        SubmitText(FindElement("QueryEntry", TimeSpan.FromSeconds(5)), "ontario international");
+
+        Assert.IsTrue(
+            ElementExistsByName("Ontario International Airport, Ontario, CA, USA", TimeSpan.FromSeconds(5)),
+            "Expected to see search results relevant to the Ontario area when geoview binding is null");
+    }
+
     private async Task ShowClearSearchButtonAndNoResultsMessage()
     {
         // Enter text to show the clear search button
