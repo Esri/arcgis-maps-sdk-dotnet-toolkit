@@ -26,6 +26,7 @@
                 <CheckBox x:Name="EnableRepeatSearchHereButtonCheck" Content="Enable built-in repeat button" IsChecked="{Binding ElementName=MySearchView, Path=EnableRepeatSearchHereButton, Mode=TwoWay}" AutomationProperties.AutomationId="EnableRepeatSearchHereButtonCheck"/>
                 <CheckBox x:Name="EnableResultListViewBindingCheck" Content="Enable built-in result list" IsChecked="{Binding ElementName=MySearchView, Path=EnableResultListView, Mode=TwoWay}" AutomationProperties.AutomationId="EnableResultListViewBindingCheck"/>
                 <CheckBox x:Name="EnableIndividualResultDisplayCheck" Content="Enable individual result display" IsChecked="{Binding ElementName=MySearchView, Path=EnableIndividualResultDisplay, Mode=TwoWay}" AutomationProperties.AutomationId="EnableIndividualResultDisplayCheck"/>
+                <TextBlock x:Name="VerifyEventTextBlock" Text="Event verification text" AutomationProperties.AutomationId="VerifyEventTextBlock"/>
             </StackPanel>
         </Border>
     </Grid>

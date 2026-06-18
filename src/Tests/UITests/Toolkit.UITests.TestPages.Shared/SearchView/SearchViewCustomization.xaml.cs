@@ -39,7 +39,7 @@ public partial class SearchViewCustomization : TestPage
 
     private void AddEventTestSourceButton_Click(object sender, ClickEventArgs e)
     {
-        MySearchView.SearchViewModel?.Sources.Add(new TestSearchSource());
+        MySearchView.SearchViewModel?.Sources.Add(new TestSearchSource(text => VerifyEventTextBlock.Text = text));
     }
 
     private void UpdateViewpointExtentToOntario_Click(object sender, ClickEventArgs e)
@@ -99,6 +99,12 @@ public partial class SearchViewCustomization : TestPage
 
     private class TestSearchSource : ISearchSource
     {
+        private readonly System.Action<string> _updateEventText;
+
+        public TestSearchSource(System.Action<string> updateEventText)
+        {
+            _updateEventText = updateEventText;
+        }
         public string DisplayName { get => "Event tester"; set => throw new NotImplementedException(); }
         public string Placeholder { get => "Test placeholder"; set => throw new NotImplementedException(); }
         public CalloutDefinition DefaultCalloutDefinition { get => null; set => throw new NotImplementedException(); }
@@ -112,12 +118,12 @@ public partial class SearchViewCustomization : TestPage
 
         public void NotifyDeselected(SearchResult? result)
         {
-           // _ = new MessageDialog($"Deselected {result?.DisplayTitle ?? "all results"}").ShowAsync();
+            _updateEventText("Deselected event fired");
         }
 
         public void NotifySelected(SearchResult? result)
         {
-            // _ = new MessageDialog($"Selected {result?.DisplayTitle}").ShowAsync();
+            _updateEventText("Selected event fired");
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

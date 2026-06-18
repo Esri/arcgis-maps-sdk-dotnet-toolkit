@@ -63,7 +63,11 @@
                           Content="Enable individual result display" 
                           IsChecked="{Binding ElementName=MySearchView, Path=EnableIndividualResultDisplay, Mode=TwoWay}" 
                           AutomationProperties.AutomationId="EnableIndividualResultDisplayCheck"/>
-                
+
+                <TextBlock x:Name="VerifyEventTextBlock" 
+                           Text="Event verification text" 
+                           AutomationProperties.AutomationId="VerifyEventTextBlock"/>
+
             </StackPanel>
         </Border>
     </Grid>

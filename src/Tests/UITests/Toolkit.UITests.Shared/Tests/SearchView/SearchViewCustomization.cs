@@ -324,6 +324,28 @@ public class SearchViewCustomization : AppiumTestBase
                 "suggestion one"));
     }
 
+    [TestMethod]
+    public async Task SearchViewCustomization_EventTestSource_EventFired()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based source
+        await SearchWithEventSource();
+
+        Assert.AreEqual("Event verification text", GetLabelText(FindElement("VerifyEventTextBlock")));
+
+        // Submit a query to show search results.
+        SubmitText(FindElement("QueryEntry", TimeSpan.FromSeconds(5)), "sugg");
+
+        FindElementByName("suggestion one", TimeSpan.FromSeconds(5)).Click();
+
+        Assert.AreEqual("Selected event fired", GetLabelText(FindElement("VerifyEventTextBlock")));
+
+        FindElement("ClearSearchButton").Click();
+
+        Assert.AreEqual("Deselected event fired", GetLabelText(FindElement("VerifyEventTextBlock")));
+
+    }
 
 #region Helper methods
 

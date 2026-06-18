@@ -76,8 +76,10 @@
                         IsChecked="{Binding Source={Reference MySearchView}, Path=EnableIndividualResultDisplay, Mode=TwoWay}" 
                         AutomationId="EnableIndividualResultDisplayCheck"/>
                     </StackLayout>
-                </VerticalStackLayout>
 
+                    <Label x:Name="VerifyEventTextBlock" Text="Event verification text" AutomationId="VerifyEventTextBlock"/>
+
+                </VerticalStackLayout>
             </Border>
             <toolkit:SearchView x:Name="MySearchView" Grid.Column="1" HorizontalOptions="End" />
         </Grid>
