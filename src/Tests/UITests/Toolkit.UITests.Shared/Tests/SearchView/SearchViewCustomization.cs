@@ -91,6 +91,7 @@ public class SearchViewCustomization : AppiumTestBase
         Assert.AreEqual(expected.RepeatSearchButtonText, repeatSearchHereButton.Text, $"Expected the repeat search here button text to be set to {expected.Type} value.");
         Assert.AreEqual(expected.RepeatSearchButtonText, GetAutomationName(repeatSearchHereButton), $"Expected the automation name of repeat search here button to be set to {expected.Type} value.");
         FindElement("ClearSearchButton").Click();
+        FindElement("AddEventTestSourceButton").Click();
         await ShowAllSourcesButton();
 #if !MAUI_TEST
         var allSourcesButton = FindElement("AllSourcesButton", TimeSpan.FromSeconds(5));
@@ -186,6 +187,146 @@ public class SearchViewCustomization : AppiumTestBase
         Assert.IsTrue(ElementExistsById("SearchResultsList", TimeSpan.FromSeconds(5)), "Expected the results list to be visible");
     }
 
+    [TestMethod]
+    public async Task SearchViewCustomization_MultipleSources_Rendering()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based search source and open the source selector.
+        await SearchWithEventSource();
+        await ShowAllSourcesButton();
+
+        // Verify that all available sources are displayed in the source list.
+        Assert.IsTrue(ElementExistsById("SearchSourcesList", TimeSpan.FromSeconds(5)));
+        Assert.IsTrue(ElementExistsByText("All Sources"));
+        Assert.IsTrue(ElementExistsByText("World Geocoder"));
+        Assert.IsTrue(ElementExistsByText("Event tester"));
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_MultipleSources_AllSources()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based source while keeping all search sources selected.
+        await SearchWithEventSource();
+
+        // Submit a query that should return results from both configured sources.
+        SubmitOntarioAddressQuery();
+
+        // Verify source headers are shown for both source result groups.
+        Assert.IsTrue(ElementExistsByText("World Geocoder", TimeSpan.FromSeconds(5)));
+        Assert.IsTrue(ElementExistsByText("Event tester", TimeSpan.FromSeconds(5)));
+
+        // Verify the suggestions list is visible.
+#if WINUI_TEST
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsListGrouped", TimeSpan.FromSeconds(5)));
+#else
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsList", TimeSpan.FromSeconds(5)));
+#endif
+
+        // Verify the world geocoder result is displayed.
+        Assert.IsTrue(
+            ElementExistsByName(
+                "2000 E Convention Center Way, Ontario, CA, 91764, USA",
+                TimeSpan.FromSeconds(5)));
+
+        // Verify the event tester suggestion is displayed.
+        Assert.IsTrue(
+            ElementExistsByName(
+                "suggestion one",
+                TimeSpan.FromSeconds(5)));
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_MultipleSources_WorldGeocoderOnly()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based source so the source selector contains multiple options.
+        await SearchWithEventSource();
+
+        // Workaround for issue: https://devtopia.esri.com/runtime/dotnet-api/issues/14195
+        SubmitText(
+            FindElement("QueryEntry", TimeSpan.FromSeconds(5)),
+            "air");
+        FindElement("ClearSearchButton").Click();
+
+        // Select only the world geocoder source.
+        await ShowAllSourcesButton();
+        FindElementByName("World Geocoder", TimeSpan.FromSeconds(5)).Click();
+
+        // Submit a query that should only return world geocoder suggestions.
+        SubmitOntarioAddressQuery();
+
+        // Verify only the world geocoder source header is visible.
+        Assert.IsTrue(ElementExistsByText("World Geocoder", TimeSpan.FromSeconds(5)));
+        Assert.IsFalse(ElementExistsByText("Event tester"));
+
+        // Verify the suggestions list is visible.
+#if WINUI_TEST
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsListGrouped", TimeSpan.FromSeconds(5)));
+#else
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsList", TimeSpan.FromSeconds(5)));
+#endif
+
+        // Verify the world geocoder result is displayed.
+        Assert.IsTrue(
+            ElementExistsByName(
+                "2000 E Convention Center Way, Ontario, CA, 91764, USA"));
+
+        // Verify the event tester suggestion is not displayed.
+        Assert.IsFalse(
+            ElementExistsByName(
+                "suggestion one"));
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_MultipleSources_EventTesterOnly()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based source so the source selector contains multiple options.
+        await SearchWithEventSource();
+
+        // Workaround for issue: https://devtopia.esri.com/runtime/dotnet-api/issues/14195
+        SubmitText(
+            FindElement("QueryEntry", TimeSpan.FromSeconds(5)),
+            "air");
+        FindElement("ClearSearchButton").Click();
+
+        // Select only the event tester source.
+        await ShowAllSourcesButton();
+        FindElementByName("Event tester", TimeSpan.FromSeconds(5)).Click();
+
+        // Submit a query that should only return event tester suggestions.
+        SubmitOntarioAddressQuery();
+
+        // Verify only the event tester source header is visible.
+        Assert.IsTrue(ElementExistsByText("Event tester", TimeSpan.FromSeconds(5)));
+        Assert.IsFalse(ElementExistsByText("World Geocoder"));
+
+        // Verify the suggestions list is visible.
+#if WINUI_TEST
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsListGrouped", TimeSpan.FromSeconds(5)));
+#else
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsList", TimeSpan.FromSeconds(5)));
+#endif
+
+        // Verify the world geocoder result is not displayed.
+        Assert.IsFalse(
+            ElementExistsByName(
+                "2000 E Convention Center Way, Ontario, CA, 91764, USA"));
+
+        // Verify the event tester suggestion is displayed.
+        Assert.IsTrue(
+            ElementExistsByName(
+                "suggestion one"));
+    }
+
+
+#region Helper methods
+
     private async Task ShowClearSearchButtonAndNoResultsMessage()
     {
         // Enter text to show the clear search button
@@ -205,7 +346,6 @@ public class SearchViewCustomization : AppiumTestBase
     }
     private async Task ShowAllSourcesButton()
     {
-        FindElement("AddEventTestSourceButton").Click();
         FindElement("SourceSelectToggle").Click();
     }
     private async Task ShowResultListView()
@@ -225,4 +365,22 @@ public class SearchViewCustomization : AppiumTestBase
         var selectedResult = FindElementByName("Colorado Springs Airport, Colorado Springs, Colorado", TimeSpan.FromSeconds(5));
         selectedResult.Click();
     }
+
+    private const string OntarioAddress =
+    "2000 E Convention Center Way, Ontario, CA, 91764, USA";
+
+    private async Task SearchWithEventSource()
+    {
+        FindElement("AddEventTestSourceButton").Click();
+        FindElement("UpdateViewpointExtentToOntario").Click();
+    }
+
+    private void SubmitOntarioAddressQuery()
+    {
+        SubmitText(
+            FindElement("QueryEntry", TimeSpan.FromSeconds(5)),
+            OntarioAddress);
+    }
+
+#endregion
 }
