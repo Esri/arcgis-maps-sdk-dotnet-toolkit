@@ -20,6 +20,7 @@
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />
         <local:FeatureFormViewResources />
         <local:OfflineMapAreasViewResources />
+        <local:OrientedImageryResources />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

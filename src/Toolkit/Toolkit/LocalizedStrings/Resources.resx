@@ -1041,4 +1041,12 @@
     <value>An error occured. Tap to remove.</value>
     <comment>Accessibility text for error button</comment>
   </data>
+  <data name="OrientedImageDisplayAutomationName" xml:space="preserve">
+    <value>Oriented image viewer</value>
+    <comment>UIA AutomationProperties.Name for the OrientedImageDisplay control, used by screen readers to identify the control</comment>
+  </data>
+  <data name="OrientedImageDisplayImageAutomationNameFormat" xml:space="preserve">
+    <value>Oriented image, {0}</value>
+    <comment>UIA AutomationProperties.Name for the image shown by OrientedImageDisplay; {0} is the oriented image type (e.g. Nadir)</comment>
+  </data>
 </root>
