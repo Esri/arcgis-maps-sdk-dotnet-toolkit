@@ -516,7 +516,7 @@
                             <TextBlock Grid.Row="1"
                                        Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}"
                                        FontWeight="Bold"
-                                       Visibility="{x:Bind FromTerminalText.Visibility, Mode=OneWay}" />
+                                       Visibility="{Binding Visibility, ElementName=FromTerminalText, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="FromTerminalText" HorizontalAlignment="Right" />
                             <Slider Grid.Row="2" Grid.Column="1" x:Name="FromFraction"
                                     Header="{internal:LocalizedString Key=FeatureFormUtilityAssociationsPercentAlong}"
@@ -540,7 +540,7 @@
                                        Grid.Row="1"
                                        Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}"
                                        FontWeight="Bold"
-                                       Visibility="{x:Bind ToTerminalText.Visibility, Mode=OneWay}" />
+                                       Visibility="{Binding Visibility, ElementName=ToTerminalText, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ToTerminalText" HorizontalAlignment="Right" />
                             <Slider Grid.Row="2" Grid.ColumnSpan="2" x:Name="ToFraction" Margin="0,8,0,0"
                                     Header="{internal:LocalizedString Key=FeatureFormUtilityAssociationsPercentAlong}"
