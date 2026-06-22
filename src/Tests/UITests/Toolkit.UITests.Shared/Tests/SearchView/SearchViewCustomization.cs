@@ -64,11 +64,11 @@ public class SearchViewCustomization : AppiumTestBase
         Assert.IsTrue(placeholderElement.Displayed, $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
 #endif
 
+        // Check the Automation Names on Search and Clear Search buttons (customization of these elements is not supported on Maui)
         var shouldValidateButtonAutomationNames = ShouldValidateButtonAutomationNames(expected.Type);
 
         if (shouldValidateButtonAutomationNames)
         {
-            // Check the Automation Names on Search and Clear Search buttons
             var searchButton = FindElement("SearchButton", TimeSpan.FromSeconds(5));
             Assert.AreEqual(expected.SearchTooltip, GetAutomationName(searchButton), $"Expected the automation name of search button to be set to {expected.Type} value.");
         }
