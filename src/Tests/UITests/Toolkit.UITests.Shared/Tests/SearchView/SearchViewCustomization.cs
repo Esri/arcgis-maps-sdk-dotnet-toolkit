@@ -23,7 +23,7 @@ public class SearchViewCustomization : AppiumTestBase
         string NoResultsMessage,
         string RepeatSearchButtonText);
 
-    private static readonly SearchViewTextValues DefaultValues = new(
+    private static readonly SearchViewTextValues DefaultTextValues = new(
         TextConfiguration.Default,
         "Search",
         "Clear Search",
@@ -32,7 +32,7 @@ public class SearchViewCustomization : AppiumTestBase
         "No Results",
         "Repeat Search Here");
 
-    private static readonly SearchViewTextValues CustomValues = new(
+    private static readonly SearchViewTextValues CustomTextValues = new(
         TextConfiguration.Custom,
         "Custom Search",
         "Custom Clear Search",
@@ -48,7 +48,7 @@ public class SearchViewCustomization : AppiumTestBase
     {
         OpenSample(SearchViewCustomizationPage);
 
-        var expected = type == TextConfiguration.Default ? DefaultValues : CustomValues;
+        var expected = type == TextConfiguration.Default ? DefaultTextValues : CustomTextValues;
 
         // Apply custom values only when needed
         if (type == TextConfiguration.Custom)
