@@ -49,11 +49,11 @@ public partial class SearchViewCustomization : TestPage
 
     private void UpdateToCustomValuesButton_Click(object sender, ClickEventArgs e)
     {
-#if WINUI_APP || WPF_APP
+#if !MAUI_APP
         MySearchView.SearchTooltipText = "Custom Search";
         MySearchView.ClearSearchTooltipText = "Custom Clear Search";
         MySearchView.AllSourceSelectText = "Custom All Sources";
-#elif MAUI_APP
+#else
         MySearchView.AllSourcesSelectText = "Custom All Sources";
 #endif
         MySearchView.SearchViewModel?.DefaultPlaceholder = "Custom Find a place or address";
