@@ -63,22 +63,24 @@ public class SearchViewCustomization : AppiumTestBase
         var placeholderElement = FindElementByText(expected.Placeholder, TimeSpan.FromSeconds(5));
         Assert.IsTrue(placeholderElement.Displayed, $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
 #endif
-#if MAUI_TEST
-        if (expected.Type != TextConfiguration.Custom)
-#endif
+
+        var shouldValidateButtonAutomationNames = ShouldValidateButtonAutomationNames(expected.Type);
+
+        if (shouldValidateButtonAutomationNames)
         {
             // Check the Automation Names on Search and Clear Search buttons
             var searchButton = FindElement("SearchButton", TimeSpan.FromSeconds(5));
             Assert.AreEqual(expected.SearchTooltip, GetAutomationName(searchButton), $"Expected the automation name of search button to be set to {expected.Type} value.");
         }
-            await ShowClearSearchButtonAndNoResultsMessage();
-#if MAUI_TEST
-        if (expected.Type != TextConfiguration.Custom)
-#endif
+
+        await ShowClearSearchButtonAndNoResultsMessage();
+
+        if (shouldValidateButtonAutomationNames)
         {
             var clearSearchButton = FindElement("ClearSearchButton", TimeSpan.FromSeconds(5));
-                Assert.AreEqual(expected.ClearSearchTooltip, GetAutomationName(clearSearchButton), $"Expected the automation name of clear search button to be set to {expected.Type} value.");
+            Assert.AreEqual(expected.ClearSearchTooltip, GetAutomationName(clearSearchButton), $"Expected the automation name of clear search button to be set to {expected.Type} value.");
         }
+
         // Check the text values
         var noResultsMessageElement = FindElementByText(expected.NoResultsMessage);
         Assert.IsTrue(noResultsMessageElement.Displayed, $"Expected the no results message to be visible and equal to {expected.Type} value.");
@@ -408,6 +410,15 @@ public class SearchViewCustomization : AppiumTestBase
         SubmitText(
             FindElement("QueryEntry", TimeSpan.FromSeconds(5)),
             OntarioAddress);
+    }
+
+    private static bool ShouldValidateButtonAutomationNames(TextConfiguration type)
+    {
+#if MAUI_TEST
+        return type != TextConfiguration.Custom;
+#else
+        return true;
+#endif
     }
 
 #endregion
