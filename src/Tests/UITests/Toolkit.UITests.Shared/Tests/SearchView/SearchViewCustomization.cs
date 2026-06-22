@@ -91,7 +91,7 @@ public class SearchViewCustomization : AppiumTestBase
         Assert.AreEqual(expected.RepeatSearchButtonText, GetAutomationName(repeatSearchHereButton), $"Expected the automation name of repeat search here button to be set to {expected.Type} value.");
         FindElement("ClearSearchButton").Click();
         FindElement("AddEventTestSourceButton").Click();
-        await ShowAllSourcesButton();
+        await ExpandSourcesDropDown();
 #if !MAUI_TEST
         var allSourcesButton = FindElement("AllSourcesButton", TimeSpan.FromSeconds(5));
         Assert.AreEqual(expected.AllSourcesButtonText, allSourcesButton.Text, $"Expected the all sources button text to be set to {expected.Type} value.");
@@ -193,7 +193,7 @@ public class SearchViewCustomization : AppiumTestBase
 
         // Enable the event-based search source and open the source selector.
         await SearchWithEventSource();
-        await ShowAllSourcesButton();
+        await ExpandSourcesDropDown();
 
         // Verify that all available sources are displayed in the source list.
         Assert.IsTrue(ElementExistsById("SearchSourcesList", TimeSpan.FromSeconds(5)));
@@ -252,7 +252,7 @@ public class SearchViewCustomization : AppiumTestBase
         FindElement("ClearSearchButton").Click();
 
         // Select only the world geocoder source.
-        await ShowAllSourcesButton();
+        await ExpandSourcesDropDown();
         FindElementByText("World Geocoder", TimeSpan.FromSeconds(5)).Click();
 
         // Submit a query that should only return world geocoder suggestions.
@@ -298,7 +298,7 @@ public class SearchViewCustomization : AppiumTestBase
         FindElement("ClearSearchButton").Click();
 
         // Select only the event tester source.
-        await ShowAllSourcesButton();
+        await ExpandSourcesDropDown();
         FindElementByText("Event tester", TimeSpan.FromSeconds(5)).Click();
 
         // Submit a query that should only return event tester suggestions.
@@ -371,7 +371,7 @@ public class SearchViewCustomization : AppiumTestBase
         // Move the map to a new location so the previous search can be repeated in the new visible extent.
         FindElement("UpdateViewpointExtentToOntario").Click();
     }
-    private async Task ShowAllSourcesButton()
+    private async Task ExpandSourcesDropDown()
     {
         FindElement("SourceSelectToggle").Click();
     }
