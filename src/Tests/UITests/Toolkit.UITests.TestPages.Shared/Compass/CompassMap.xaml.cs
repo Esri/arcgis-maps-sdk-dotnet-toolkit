@@ -36,8 +36,19 @@ public partial class CompassMap : TestPage
     private async void RotateButton_Click(object sender, ClickEventArgs e)
     {
         var heading = double.Parse(RotateInput.Text);
-        Heading = heading;
+        Heading = NormalizeHeadingForCompass(heading);
         await MainMapView.SetViewpointRotationAsync(heading);
+    }
+
+    private static double NormalizeHeadingForCompass(double heading)
+    {
+        var normalized = heading % 360;
+        if (normalized <= -180)
+            normalized += 360;
+        else if (normalized > 180)
+            normalized -= 360;
+
+        return normalized;
     }
 
     private void ToggleAutoHideButton_Click(object sender, ClickEventArgs e)
