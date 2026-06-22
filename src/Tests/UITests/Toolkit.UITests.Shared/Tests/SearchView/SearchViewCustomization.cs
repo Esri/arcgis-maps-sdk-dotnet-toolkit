@@ -1,6 +1,3 @@
-using OpenQA.Selenium;
-using OpenQA.Selenium.Appium.Enums;
-
 namespace Toolkit.UITest.Shared.SearchViewControl;
 
 [TestClass]
@@ -190,7 +187,7 @@ public class SearchViewCustomization : AppiumTestBase
     }
 
     [TestMethod]
-    public async Task SearchViewCustomization_MultipleSources_Rendering()
+    public async Task SearchViewCustomization_MultipleSources_SourcesListRenders()
     {
         OpenSample(SearchViewCustomizationPage);
 
@@ -230,7 +227,7 @@ public class SearchViewCustomization : AppiumTestBase
         // Verify the world geocoder result is displayed.
         Assert.IsTrue(
             ElementExistsByName(
-                "2000 E Convention Center Way, Ontario, CA, 91764, USA",
+                OntarioAddress,
                 TimeSpan.FromSeconds(5)));
 
         // Verify the event tester suggestion is displayed.
@@ -278,7 +275,7 @@ public class SearchViewCustomization : AppiumTestBase
         // Verify the world geocoder result is displayed.
         Assert.IsTrue(
             ElementExistsByName(
-                "2000 E Convention Center Way, Ontario, CA, 91764, USA"));
+                OntarioAddress));
 
         // Verify the event tester suggestion is not displayed.
         Assert.IsFalse(
@@ -324,7 +321,7 @@ public class SearchViewCustomization : AppiumTestBase
         // Verify the world geocoder result is not displayed.
         Assert.IsFalse(
             ElementExistsByName(
-                "2000 E Convention Center Way, Ontario, CA, 91764, USA"));
+                OntarioAddress));
 
         // Verify the event tester suggestion is displayed.
         Assert.IsTrue(
