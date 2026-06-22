@@ -64,7 +64,7 @@ public class SearchViewCustomization : AppiumTestBase
         Assert.IsTrue(placeholderElement.Displayed, $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
 #endif
 #if MAUI_TEST
-        if (!string.Equals(expected.Type.ToString(), "Custom", StringComparison.OrdinalIgnoreCase))
+        if (expected.Type != TextConfiguration.Custom)
 #endif
         {
             // Check the Automation Names on Search and Clear Search buttons
@@ -73,7 +73,7 @@ public class SearchViewCustomization : AppiumTestBase
         }
             await ShowClearSearchButtonAndNoResultsMessage();
 #if MAUI_TEST
-        if (!string.Equals(expected.Type.ToString(), "Custom", StringComparison.OrdinalIgnoreCase))
+        if (expected.Type != TextConfiguration.Custom)
 #endif
         {
             var clearSearchButton = FindElement("ClearSearchButton", TimeSpan.FromSeconds(5));
