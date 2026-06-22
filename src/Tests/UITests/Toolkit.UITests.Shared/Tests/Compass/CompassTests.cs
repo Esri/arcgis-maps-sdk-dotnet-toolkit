@@ -180,7 +180,7 @@ public class CompassTests : AppiumTestBase
 
         do
         {
-            if (double.TryParse(GetElementText(mapRotationElement), out var mapRotation))
+            if (double.TryParse(GetLabelText(mapRotationElement), out var mapRotation))
             {
                 lastRotation = mapRotation;
                 if (Math.Abs(mapRotation - expectedRotation) <= 0.001)
