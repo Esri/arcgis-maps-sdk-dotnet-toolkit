@@ -3,26 +3,21 @@ using ClickEventArgs = System.EventArgs;
 using Esri.ArcGISRuntime.Toolkit.Maui;
 #elif WINUI_APP
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ClickEventArgs = Microsoft.UI.Xaml.RoutedEventArgs;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Microsoft.UI.Xaml;
 #elif WPF_APP
-using System.Globalization;
+using System.Windows;
 using ClickEventArgs = System.Windows.RoutedEventArgs;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
-using Microsoft.UI.Xaml;
 #endif
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.UI;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 
 namespace Toolkit.UITests.App.TestPages;
