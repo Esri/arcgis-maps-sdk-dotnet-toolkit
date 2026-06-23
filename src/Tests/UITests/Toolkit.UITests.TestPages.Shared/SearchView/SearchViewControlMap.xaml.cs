@@ -25,7 +25,7 @@ public partial class SearchViewControlMap : TestPage
 
     private void UpdateViewpointExtentToUSA_Click(object sender, ClickEventArgs e)
     {
-        UpdateViewpoint_Click(50000000, -95, 37);
+        UpdateViewpoint_Click(50000000, -115, 37);
     }
 
     private void UpdateViewpointExtentToOntario_Click(object sender, ClickEventArgs e)
