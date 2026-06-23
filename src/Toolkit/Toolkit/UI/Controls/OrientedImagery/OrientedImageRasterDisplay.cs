@@ -74,8 +74,6 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
 
     public event EventHandler<OrientedImageDisplay.ImageClickedEventArgs>? ImageClicked;
 
-    public event EventHandler<OrientedImageDisplay.MarkerClickedEventArgs>? MarkerClicked;
-
     internal OrientedImageRasterDisplay()
     {
         // Not a tab stop; the inner MapView is the focusable element. (MAUI containers aren't tab stops by default.)
@@ -384,25 +382,24 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
 
     private async void OnMapViewTapped(object? sender, GeoViewInputEventArgs e)
     {
-        // A marker hit takes priority over an image tap.
+        // Every tap on the image raises ImageClicked with the pixel populated; a hit marker (if any) rides on the args,
+        // so a marker's hit buffer never suppresses the underlying image click.
+        if (e.Location is not MapPoint location || _footprint?.OrientedImage is not OrientedImage image || MapToPixel(location) is not PointF imagePoint)
+            return;
+
+        OrientedImageMarker? marker = null;
         try
         {
             var result = await _mapView.IdentifyGraphicsOverlayAsync(_markersOverlay, e.Position, MarkerHitTolerance, false, 1);
-            if (result.Graphics.Count > 0 && _graphicMarkers.TryGetValue(result.Graphics[0], out OrientedImageMarker? marker))
-            {
-                MarkerClicked?.Invoke(this, new OrientedImageDisplay.MarkerClickedEventArgs(marker));
-                return;
-            }
+            if (result.Graphics.Count > 0)
+                _graphicMarkers.TryGetValue(result.Graphics[0], out marker);
         }
         catch
         {
-            // Identify can fail transiently (e.g. during map teardown); fall through to image-tap handling.
+            // Identify can fail transiently (e.g. during map teardown); report the image click without a marker.
         }
 
-        if (e.Location is MapPoint location && _footprint?.OrientedImage is OrientedImage image && MapToPixel(location) is PointF imagePoint)
-        {
-            ImageClicked?.Invoke(this, new OrientedImageDisplay.ImageClickedEventArgs(imagePoint, image));
-        }
+        ImageClicked?.Invoke(this, new OrientedImageDisplay.ImageClickedEventArgs(imagePoint, image, marker));
     }
 
     // Gives the focusable MapView a meaningful screen-reader label instead of a generic "map".
