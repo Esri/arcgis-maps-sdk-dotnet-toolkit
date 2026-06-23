@@ -61,9 +61,6 @@ internal interface IOrientedImageDisplay
     /// <summary>Occurs when <see cref="IsActive"/> or <see cref="Error"/> changes.</summary>
     event EventHandler? StateChanged;
 
-    /// <summary>Occurs when the user taps the image away from any marker.</summary>
+    /// <summary>Occurs when the user taps the image; a tapped marker (if any) is carried on the event args.</summary>
     event EventHandler<OrientedImageDisplay.ImageClickedEventArgs>? ImageClicked;
-
-    /// <summary>Occurs when the user taps a marker.</summary>
-    event EventHandler<OrientedImageDisplay.MarkerClickedEventArgs>? MarkerClicked;
 }
