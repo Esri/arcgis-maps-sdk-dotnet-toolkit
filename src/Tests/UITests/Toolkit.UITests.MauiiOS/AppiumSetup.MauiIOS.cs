@@ -19,9 +19,9 @@ public static partial class AppiumSetup
         var environmentVariables = Environment.GetEnvironmentVariables();
         foreach (DictionaryEntry variable in environmentVariables)
         {
-            if (variable.Key is string key && key.StartsWith("TKUITEST_PARAM_"))
+            if (variable.Key is string key && key.StartsWith("TKUITEST_PARAM_") && variable.Value is string value)
             {
-                buildSettings[key.Substring(15)] = (string)variable.Value;
+                buildSettings[key.Substring(15)] = value;
             }
         }
 

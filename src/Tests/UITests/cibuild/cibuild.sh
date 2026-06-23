@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-test_platform=$1
-
 function main {
   if [ -z "${WORKSPACE}" ]; then
     echo "WORKSPACE not set. Aborting dotnet install." 1>&2
@@ -16,7 +14,7 @@ function main {
   install_dotnet "${WORKSPACE}" "${dotnet_version}" "${DOTNET_CACHE_FOLDER}"
 
   export TOOLKIT_SRC=$(realpath "${script_dir}/../../../")
-  "${DOTNET_PATH}" run "${script_dir}/cibuild.cs" -- $1
+  "${DOTNET_PATH}" run "${script_dir}/cibuild.cs" -- $@
 }
 
 function install_dotnet {
@@ -47,4 +45,4 @@ function read_yaml_var {
   grep "^${varname}" "${yml_file}" | sed -E "s/^${varname}: \"(.*)\"/\1/"
 }
 
-main "${test_platform}"
+main "${@}"
