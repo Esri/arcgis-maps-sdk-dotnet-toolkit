@@ -64,6 +64,7 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
     private bool _autoUpdate;
     private CancellationTokenSource? _updateCts;
     private bool _isLoading;
+    private int _footprintGeneration;
 
     public bool IsActive { get; private set; }
 
@@ -80,6 +81,14 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
         // Not a tab stop; the inner MapView is the focusable element. (MAUI containers aren't tab stops by default.)
 #if !MAUI
         IsTabStop = false;
+        // ContentControl content defaults to Left/Top (notably on WinUI), leaving the MapView unsized; stretch it to fill.
+#if WPF
+        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch;
+        VerticalContentAlignment = System.Windows.VerticalAlignment.Stretch;
+#else
+        HorizontalContentAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
+        VerticalContentAlignment = Microsoft.UI.Xaml.VerticalAlignment.Stretch;
+#endif
 #endif
 
         _mapView = new MapView { IsAttributionTextVisible = false };
@@ -108,7 +117,8 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
     // drawing"; Error aggregates the image load error, the raster layer load error, and the layer's view-state error.
     private void UpdateState()
     {
-        bool active = _isLoading || _mapView.DrawStatus == DrawStatus.InProgress;
+        // A MapView with no Map sits at DrawStatus.InProgress forever, so only count drawing when there's a map.
+        bool active = _isLoading || (_mapView.Map is not null && _mapView.DrawStatus == DrawStatus.InProgress);
         Exception? error = ResolveError();
         if (active == IsActive && ReferenceEquals(error, Error))
             return;
@@ -128,7 +138,9 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
             if (layer.LoadError is Exception layerError)
                 return layerError;
 
-            if (_mapView.GetLayerViewState(layer)?.Error is Exception viewError)
+            // GetLayerViewState throws if the layer isn't in the current map (can happen transiently during a map swap).
+            if (_mapView.Map?.OperationalLayers.Contains(layer) == true &&
+                _mapView.GetLayerViewState(layer)?.Error is Exception viewError)
                 return viewError;
         }
 
@@ -137,6 +149,8 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
 
     public async void SetFootprint(OrientedImageFootprint? footprint)
     {
+        // Re-entrant (async void): stamp this call so a superseded one bails after each await instead of clobbering state.
+        int generation = ++_footprintGeneration;
         _footprint = footprint;
         UpdateAutomationName();
         OrientedImage? image = footprint?.OrientedImage;
@@ -144,6 +158,7 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
         {
             _mapView.Map = null;
             _rasterLayer = null;
+            _isLoading = false;
             UpdateState();
             return;
         }
@@ -153,15 +168,23 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
         try
         {
             await image.LoadAsync();
+            if (generation != _footprintGeneration)
+                return;
+
             RasterLayer layer = new RasterLayer(CreateRaster(uri));
             Map map = new Map();
             map.OperationalLayers.Add(layer);
             _mapView.Map = map;
             _rasterLayer = layer;
             await layer.LoadAsync();
+            if (generation != _footprintGeneration)
+                return;
+
             if (layer.Raster?.RasterInfo?.Extent is Envelope extent)
             {
                 await _mapView.SetViewpointGeometryAsync(extent);
+                if (generation != _footprintGeneration)
+                    return;
 
                 // Markers set before the raster loaded can now be placed (the pixel-map transform exists).
                 _ = RefreshMarkerGeometriesAsync();
@@ -173,8 +196,12 @@ internal partial class OrientedImageRasterDisplay : ContentControl, IOrientedIma
         }
         finally
         {
-            _isLoading = false;
-            UpdateState();
+            // Don't let a superseded call clear the loading flag a newer one set.
+            if (generation == _footprintGeneration)
+            {
+                _isLoading = false;
+                UpdateState();
+            }
         }
     }
 
