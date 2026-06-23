@@ -17,7 +17,7 @@
 #if WPF || WINDOWS_XAML
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-[TemplatePart(Name = "PART_ViewerHost", Type = typeof(ContentPresenter))]
+[TemplatePart(Name = "PART_DisplayHost", Type = typeof(ContentPresenter))]
 public partial class OrientedImageDisplay : Control
 {
 }
