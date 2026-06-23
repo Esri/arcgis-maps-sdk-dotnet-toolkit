@@ -6,6 +6,7 @@ namespace Toolkit.UITest.Shared.ScaleLine;
 public class ScaleLineTests : AppiumTestBase
 {
     private const string ScaleLinePage = "ScaleLines";
+    private readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(5);
 
     [TestMethod]
     [DataRow(ScaleLineType.Advanced)]
@@ -118,9 +119,9 @@ public class ScaleLineTests : AppiumTestBase
     private AppiumElement GetScaleElement(ScaleLineType type)
     {
         if (type == ScaleLineType.Advanced)
-            return FindElement("AdvancedScaleLine", TimeSpan.FromSeconds(5));
+            return FindElement("AdvancedScaleLine", _defaultTimeout);
         else if (type == ScaleLineType.Simple)
-            return FindElement("SimpleScaleLine", TimeSpan.FromSeconds(5));
+            return FindElement("SimpleScaleLine", _defaultTimeout);
         else
             throw new ArgumentOutOfRangeException(nameof(type), type, "Invalid scale line type.");
     }
@@ -132,7 +133,7 @@ public class ScaleLineTests : AppiumTestBase
             ViewpointPreset.WorldEquator => "WorldEquatorViewpoint",
             ViewpointPreset.DetailEquator => "EquatorDetailViewpoint",
             ViewpointPreset.DetailHighLatitude => "HighLatitudeDetailViewpoint",
-            _ => throw new ArgumentOutOfRangeException(nameof(preset), preset, "Invalid viewpoint preset.")
+            _ => throw new ArgumentOutOfRangeException(nameof(preset), "Invalid viewpoint preset.")
         };
 
         var button = FindElement(buttonAutomationId);
