@@ -8,7 +8,6 @@
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="controls:OrientedImageDisplay">
         <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Background" Value="{ThemeResource ControlBackground}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:OrientedImageDisplay">
