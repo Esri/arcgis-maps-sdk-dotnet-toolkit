@@ -81,15 +81,14 @@ public partial class OrientedImageDisplay
     }
 
     /// <summary>
-    /// Occurs when the user taps the oriented image away from any marker.
+    /// Occurs when the user taps the oriented image.
     /// </summary>
+    /// <remarks>
+    /// Raised for every tap on the image; the image coordinates are always populated. If the tap also hit a marker,
+    /// that marker is carried on <see cref="ImageClickedEventArgs.Marker"/> (a marker's hit buffer does not suppress
+    /// the underlying image click).
+    /// </remarks>
     public event EventHandler<ImageClickedEventArgs>? ImageClicked;
-
-    /// <summary>
-    /// Occurs when the user taps a marker rendered over the oriented image.
-    /// </summary>
-    /// <remarks>A marker tap raises this event instead of <see cref="ImageClicked"/>.</remarks>
-    public event EventHandler<MarkerClickedEventArgs>? MarkerClicked;
 
     /// <summary>
     /// Gets or sets the footprint of the oriented image to display.
@@ -250,7 +249,6 @@ public partial class OrientedImageDisplay
         {
             _activeDisplay.StateChanged -= OnDisplayStateChanged;
             _activeDisplay.ImageClicked -= OnDisplayImageClicked;
-            _activeDisplay.MarkerClicked -= OnDisplayMarkerClicked;
         }
 
         _activeDisplay = display;
@@ -264,7 +262,6 @@ public partial class OrientedImageDisplay
         {
             display.StateChanged += OnDisplayStateChanged;
             display.ImageClicked += OnDisplayImageClicked;
-            display.MarkerClicked += OnDisplayMarkerClicked;
         }
 
         UpdateState();
@@ -273,8 +270,6 @@ public partial class OrientedImageDisplay
     private void OnDisplayStateChanged(object? sender, EventArgs e) => UpdateState();
 
     private void OnDisplayImageClicked(object? sender, ImageClickedEventArgs e) => ImageClicked?.Invoke(this, e);
-
-    private void OnDisplayMarkerClicked(object? sender, MarkerClickedEventArgs e) => MarkerClicked?.Invoke(this, e);
 
     // Surfaces the active display's state as the control's own read-only IsActive/Error. An unsupported image type has
     // no display, so its error is reported here directly.
@@ -307,10 +302,12 @@ public partial class OrientedImageDisplay
         /// </summary>
         /// <param name="imagePoint">The clicked position in image (pixel) coordinates.</param>
         /// <param name="image">The oriented image that was clicked.</param>
-        public ImageClickedEventArgs(PointF imagePoint, OrientedImage image)
+        /// <param name="marker">The marker the tap hit, or <c>null</c> if it hit no marker.</param>
+        public ImageClickedEventArgs(PointF imagePoint, OrientedImage image, OrientedImageMarker? marker = null)
         {
             ImagePoint = imagePoint;
             Image = image;
+            Marker = marker;
         }
 
         /// <summary>
@@ -328,26 +325,15 @@ public partial class OrientedImageDisplay
         /// </summary>
         /// <value>The clicked oriented image.</value>
         public OrientedImage Image { get; }
-    }
-
-    /// <summary>
-    /// Event arguments for the <see cref="OrientedImageDisplay.MarkerClicked"/> event.
-    /// </summary>
-    public class MarkerClickedEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MarkerClickedEventArgs"/> class.
-        /// </summary>
-        /// <param name="marker">The marker that was clicked.</param>
-        public MarkerClickedEventArgs(OrientedImageMarker marker)
-        {
-            Marker = marker;
-        }
 
         /// <summary>
-        /// Gets the marker that was clicked.
+        /// Gets the marker the tap hit, or <c>null</c> if the tap did not hit a marker.
         /// </summary>
-        /// <value>The clicked marker.</value>
-        public OrientedImageMarker Marker { get; }
+        /// <remarks>
+        /// Inspect this to act on a marker tap (use case 4); ignore it to handle only raw image clicks. The image
+        /// coordinates are populated either way.
+        /// </remarks>
+        /// <value>The tapped marker, or <c>null</c>.</value>
+        public OrientedImageMarker? Marker { get; }
     }
 }
