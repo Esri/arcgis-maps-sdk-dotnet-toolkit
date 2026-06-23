@@ -6,6 +6,7 @@ namespace Toolkit.UITest.Shared.ScaleLine;
 public class ScaleLineTests : AppiumTestBase
 {
     private const string ScaleLinePage = "ScaleLines";
+    private readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(5);
 
     [TestMethod]
     [DataRow(ScaleLineType.Advanced)]
@@ -13,7 +14,7 @@ public class ScaleLineTests : AppiumTestBase
     public async Task ScaleLine_Renders(ScaleLineType scaleLineType)
     {
         OpenSample(ScaleLinePage);
-        UpdateViewpoint(50000000, 0);
+        SelectViewpoint(ViewpointPreset.WorldEquator);
 
         // Check initial render
         var scaleLineInfo = GetScaleLineInfo(scaleLineType);
@@ -36,10 +37,10 @@ public class ScaleLineTests : AppiumTestBase
     {
         OpenSample(ScaleLinePage);
 
-        UpdateViewpoint(50000000, 0);
+        SelectViewpoint(ViewpointPreset.WorldEquator);
         var initialScaleLineInfo = GetScaleLineInfo(scaleLineType);
 
-        UpdateViewpoint(5000000, 0);
+        SelectViewpoint(ViewpointPreset.DetailEquator);
         var finalScaleLineInfo = GetScaleLineInfo(scaleLineType);
 
         var scaleRatioMetric = finalScaleLineInfo.MetricScale / initialScaleLineInfo.MetricScale;
@@ -58,10 +59,10 @@ public class ScaleLineTests : AppiumTestBase
     {
         OpenSample(ScaleLinePage);
 
-        UpdateViewpoint(5000000, 0);
+        SelectViewpoint(ViewpointPreset.DetailEquator);
         var initialInfo = GetScaleLineInfo(scaleLineType);
 
-        UpdateViewpoint(5000000, 60);
+        SelectViewpoint(ViewpointPreset.DetailHighLatitude);
         var finalInfo = GetScaleLineInfo(scaleLineType);
 
         if (scaleLineType == ScaleLineType.Advanced)
@@ -118,23 +119,32 @@ public class ScaleLineTests : AppiumTestBase
     private AppiumElement GetScaleElement(ScaleLineType type)
     {
         if (type == ScaleLineType.Advanced)
-            return FindElement("AdvancedScaleLine");
+            return FindElement("AdvancedScaleLine", _defaultTimeout);
         else if (type == ScaleLineType.Simple)
-            return FindElement("SimpleScaleLine");
+            return FindElement("SimpleScaleLine", _defaultTimeout);
         else
             throw new ArgumentOutOfRangeException(nameof(type), type, "Invalid scale line type.");
     }
 
-    private void UpdateViewpoint(int scale, int latitude)
+    private void SelectViewpoint(ViewpointPreset preset)
     {
-        var scaleInputElement = FindElement("ScaleTextBox");
-        SubmitText(scaleInputElement, scale.ToString());
+        var buttonAutomationId = preset switch
+        {
+            ViewpointPreset.WorldEquator => "WorldEquatorViewpoint",
+            ViewpointPreset.DetailEquator => "EquatorDetailViewpoint",
+            ViewpointPreset.DetailHighLatitude => "HighLatitudeDetailViewpoint",
+            _ => throw new ArgumentOutOfRangeException(nameof(preset), "Invalid viewpoint preset.")
+        };
 
-        var latitudeInputElement = FindElement("LatitudeTextBox");
-        SubmitText(latitudeInputElement, latitude.ToString());
+        var button = FindElement(buttonAutomationId);
+        Click(button);
+    }
 
-        var updateButtonElement = FindElement("UpdateViewpoint");
-        Click(updateButtonElement);
+    private enum ViewpointPreset
+    {
+        WorldEquator,
+        DetailEquator,
+        DetailHighLatitude
     }
 
     public enum ScaleLineType
