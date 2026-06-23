@@ -17,4 +17,46 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type controls:OrientedImageryView}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:OrientedImageryView}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <WrapPanel Margin="4,4,4,0">
+                                <ToggleButton
+                                    Margin="0,0,4,4"
+                                    Padding="8,4"
+                                    Content="Auto update footprint"
+                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AutoUpdateFootprint, Mode=TwoWay}"
+                                    ToolTip="Update footprint" />
+                                <ToggleButton
+                                    Margin="0,0,4,4"
+                                    Padding="8,4"
+                                    Content="Show selected image footprint"
+                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ShowSelectedImageFootprint, Mode=TwoWay}"
+                                    ToolTip="Show selected image footprint" />
+                                <ToggleButton
+                                    Margin="0,0,4,4"
+                                    Padding="8,4"
+                                    Content="Show unselected images footprints"
+                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ShowUnselectedImagesFootprints, Mode=TwoWay}"
+                                    ToolTip="Show unselected images footprints" />
+                            </WrapPanel>
+                            <controls:OrientedImageViewport x:Name="PART_ImageDisplay" Grid.Row="1" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
