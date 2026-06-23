@@ -67,29 +67,24 @@ public partial class SearchViewCustomization : TestPage
         MyMapView.SetViewpoint(new Viewpoint(center, scale));
     }
 
-#if WPF_APP || WINUI_APP
-    private void GeoViewConnection_Checked(object sender, RoutedEventArgs e)
+    private void EnableGeoViewBindingButton_Click(object sender, ClickEventArgs e)
     {
-        if (EnableGeoViewBindingCheck.IsChecked ?? false)
-#elif MAUI_APP
-
-    private void GeoViewConnection_Checked(object sender, CheckedChangedEventArgs e)
-    {
-        // Guard against exception on iOS device
         if (MySearchView == null || MyMapView == null)
         {
             return;
         }
 
-        if (e.Value)
-#endif
+        MySearchView.GeoView = MyMapView;
+    }
+
+    private void DisableGeoViewBindingButton_Click(object sender, ClickEventArgs e)
+    {
+        if (MySearchView == null)
         {
-            MySearchView.GeoView = MyMapView;
+            return;
         }
-        else
-        {
-            MySearchView.GeoView = null;
-        }
+
+        MySearchView.GeoView = null;
     }
 
     private class TestSearchSource : ISearchSource

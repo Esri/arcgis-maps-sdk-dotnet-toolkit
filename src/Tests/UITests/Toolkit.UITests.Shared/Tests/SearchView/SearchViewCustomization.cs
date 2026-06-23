@@ -117,7 +117,7 @@ public class SearchViewCustomization : AppiumTestBase
 
         // Clear the previous search and disable GeoView binding so the search is no longer constrained by the current map extent.
         FindElement("ClearSearchButton").Click();
-        FindElement("EnableGeoViewBindingCheck").Click();
+        FindElement("DisableGeoViewBindingButton").Click();
         SubmitText(FindElement("QueryEntry", TimeSpan.FromSeconds(5)), "ontario international");
 
         Assert.IsTrue(
@@ -194,7 +194,6 @@ public class SearchViewCustomization : AppiumTestBase
         // Enable the event-based search source and open the source selector.
         await SearchWithEventSource();
         await ExpandSourcesDropDown();
-
         // Verify that all available sources are displayed in the source list.
         Assert.IsTrue(ElementExistsById("SearchSourcesList", TimeSpan.FromSeconds(5)));
         Assert.IsTrue(ElementExistsByText("All Sources"));

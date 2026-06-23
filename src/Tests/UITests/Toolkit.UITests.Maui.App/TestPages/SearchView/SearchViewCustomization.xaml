@@ -52,14 +52,18 @@
                     AutomationId="AddEventTestSourceButton"
                     Text="Add Event Test Source"
                     Clicked="AddEventTestSourceButton_Click" />
+                    
+                    <Button x:Name="EnableGeoViewBindingButton"
+                    Clicked="EnableGeoViewBindingButton_Click"
+                    Text="Enable Binding to GeoView"
+                    AutomationId="EnableGeoViewBindingButton"/>
+
+                    <Button x:Name="DisableGeoViewBindingButton" 
+                    Clicked="DisableGeoViewBindingButton_Click" 
+                    Text="Disable Binding to GeoView" 
+                    AutomationId="DisableGeoViewBindingButton"/>
 
                     <StackLayout Orientation="Vertical" Spacing="2" >
-                        <Label Text="Enable binding to GeoView:" />
-                        <CheckBox
-                        x:Name="EnableGeoViewBindingCheck"
-                        CheckedChanged="GeoViewConnection_Checked"
-                        IsChecked="True"
-                        AutomationId="EnableGeoViewBindingCheck" />
                         <Label Text="Enable built-in repeat button" />
                         <CheckBox
                         x:Name="EnableRepeatSearchHereButtonCheck"
