@@ -24,17 +24,21 @@ namespace Toolkit.UITests.App.TestPages;
 
 public partial class SearchViewCustomization : TestPage
 {
+    private int _selectedEventCount;
+    private int _deselectedEventCount;
+
     public SearchViewCustomization()
     {
         InitializeComponent();
 
         MyMapView.Map = new Esri.ArcGISRuntime.Mapping.Map(BasemapStyle.ArcGISImagery);
         MySearchView.GeoView = MyMapView;
+        UpdateEventText();
     }
 
     private void AddEventTestSourceButton_Click(object sender, ClickEventArgs e)
     {
-        MySearchView.SearchViewModel?.Sources.Add(new TestSearchSource(text => VerifyEventTextBlock.Text = text));
+        MySearchView.SearchViewModel?.Sources.Add(new TestSearchSource(OnSelectedEventFired, OnDeselectedEventFired));
     }
 
     private void UpdateViewpointExtentToOntario_Click(object sender, ClickEventArgs e)
@@ -87,13 +91,33 @@ public partial class SearchViewCustomization : TestPage
         MySearchView.GeoView = null;
     }
 
+    private void OnSelectedEventFired()
+    {
+        _selectedEventCount++;
+        UpdateEventText();
+    }
+
+    private void OnDeselectedEventFired()
+    {
+        _deselectedEventCount++;
+        UpdateEventText();
+    }
+
+    private void UpdateEventText()
+    {
+        SelectedEventCountValue.Text = _selectedEventCount.ToString();
+        DeselectedEventCountValue.Text = _deselectedEventCount.ToString();
+    }
+
     private class TestSearchSource : ISearchSource
     {
-        private readonly System.Action<string> _updateEventText;
+        private readonly System.Action _onSelected;
+        private readonly System.Action _onDeselected;
 
-        public TestSearchSource(System.Action<string> updateEventText)
+        public TestSearchSource(System.Action onSelected, System.Action onDeselected)
         {
-            _updateEventText = updateEventText;
+            _onSelected = onSelected;
+            _onDeselected = onDeselected;
         }
         public string DisplayName { get => "Event tester"; set => throw new NotImplementedException(); }
         public string Placeholder { get => "Test placeholder"; set => throw new NotImplementedException(); }
@@ -108,12 +132,12 @@ public partial class SearchViewCustomization : TestPage
 
         public void NotifyDeselected(SearchResult? result)
         {
-            _updateEventText("Deselected event fired");
+            _onDeselected();
         }
 
         public void NotifySelected(SearchResult? result)
         {
-            _updateEventText("Selected event fired");
+            _onSelected();
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

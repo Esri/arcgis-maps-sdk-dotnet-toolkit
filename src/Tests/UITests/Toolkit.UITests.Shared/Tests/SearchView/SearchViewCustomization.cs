@@ -336,18 +336,21 @@ public class SearchViewCustomization : AppiumTestBase
         // Enable the event-based source
         await SearchWithEventSource();
 
-        Assert.AreEqual("Event verification text", GetLabelText(FindElement("VerifyEventTextBlock")));
+        Assert.AreEqual("0", GetLabelText(FindElement("SelectedEventCountValue")));
+        Assert.AreEqual("0", GetLabelText(FindElement("DeselectedEventCountValue")));
 
         // Submit a query to show search results.
         SubmitText(FindElement("QueryEntry", TimeSpan.FromSeconds(5)), "sugg");
 
         FindElementByName("suggestion one", TimeSpan.FromSeconds(5)).Click();
 
-        Assert.AreEqual("Selected event fired", GetLabelText(FindElement("VerifyEventTextBlock")));
+        Assert.AreEqual("1", GetLabelText(FindElement("SelectedEventCountValue")));
+        Assert.AreEqual("0", GetLabelText(FindElement("DeselectedEventCountValue")));
 
         FindElement("ClearSearchButton").Click();
 
-        Assert.AreEqual("Deselected event fired", GetLabelText(FindElement("VerifyEventTextBlock")));
+        Assert.AreEqual("1", GetLabelText(FindElement("SelectedEventCountValue")));
+        Assert.AreEqual("1", GetLabelText(FindElement("DeselectedEventCountValue")));
 
     }
 

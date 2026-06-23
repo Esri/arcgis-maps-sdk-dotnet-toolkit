@@ -81,7 +81,17 @@
                         AutomationId="EnableIndividualResultDisplayCheck"/>
                     </StackLayout>
 
-                    <Label x:Name="VerifyEventTextBlock" Text="Event verification text" AutomationId="VerifyEventTextBlock"/>
+                    <VerticalStackLayout>
+                        <Label Text="Event counts" />
+                        <HorizontalStackLayout>
+                            <Label Text="Selected:" />
+                            <Label x:Name="SelectedEventCountValue" Text="0" AutomationId="SelectedEventCountValue" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout>
+                            <Label Text="Deselected:" />
+                            <Label x:Name="DeselectedEventCountValue" Text="0" AutomationId="DeselectedEventCountValue" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
 
                 </VerticalStackLayout>
             </Border>
