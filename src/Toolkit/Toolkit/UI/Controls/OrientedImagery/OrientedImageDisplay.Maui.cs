@@ -34,7 +34,7 @@ public partial class OrientedImageDisplay : TemplatedView
             };
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(host, nameScope);
-            nameScope.RegisterName("PART_ViewerHost", host);
+            nameScope.RegisterName("PART_DisplayHost", host);
             return host;
         });
     }
