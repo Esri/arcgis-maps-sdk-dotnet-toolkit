@@ -56,9 +56,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private bool _searchInProgress;
         private bool _suggestInProgress;
+        private LocatorSearchSource? _defaultWorldGeocoderSource;
 
         private CancellationTokenSource? _activeSearchCancellation;
         private CancellationTokenSource? _activeSuggestCancellation;
+        private readonly object _defaultSourceConfigurationSync = new();
 
         /// <summary>
         /// Gets or sets the active search source, if one is selected. If there is no selection, all sources will be used for the search.
@@ -546,8 +548,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="token">Token used for cancellation.</param>
         public async Task ConfigureDefaultWorldGeocoder(CancellationToken token = default)
         {
-            Sources.Clear();
-            Sources.Add(await LocatorSearchSource.CreateDefaultSourceAsync(token));
+            LocatorSearchSource? source;
+
+            lock (_defaultSourceConfigurationSync)
+            {
+                source = _defaultWorldGeocoderSource;
+            }
+
+            if (source == null)
+            {
+                source = await LocatorSearchSource.CreateDefaultSourceAsync(token);
+                token.ThrowIfCancellationRequested();
+
+                lock (_defaultSourceConfigurationSync)
+                {
+                    _defaultWorldGeocoderSource ??= source;
+                    source = _defaultWorldGeocoderSource;
+                }
+            }
+
+            lock (_defaultSourceConfigurationSync)
+            {
+                if (!Sources.Contains(source))
+                {
+                    Sources.Add(source);
+                }
+            }
         }
 
         private List<ISearchSource> SourcesToSearch()
