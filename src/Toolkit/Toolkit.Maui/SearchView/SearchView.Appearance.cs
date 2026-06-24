@@ -173,7 +173,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         string selectSearchSourceDescription = GetLocalizedString("SearchViewSelectSearchSource");
         string clearSearchDescription = GetLocalizedString("SearchViewClearSearchTooltip");
         string searchDescription = GetLocalizedString("SearchViewSearchTooltip");
-        string repeatSearchDescription = GetLocalizedString("SearchViewRepeatSearch");
 
         string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
@@ -213,7 +212,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""  Style=""{{StaticResource SVDefaultGridStyle}}""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
 </Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2""  Style=""{{StaticResource SVDefaultGridStyle}}"">
-        <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""{{AppThemeBinding Light=#007AC2, Dark=#00619B}}"" TextColor=""White"" CornerRadius=""0"" SemanticProperties.Description=""{repeatSearchDescription}"" AutomationProperties.AutomationId=""RepeatSearchHereButton""/>
+        <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""{{AppThemeBinding Light=#007AC2, Dark=#00619B}}"" TextColor=""White"" CornerRadius=""0"" AutomationProperties.AutomationId=""RepeatSearchHereButton""/>
     </Grid>
 </Grid>
 </ControlTemplate>";

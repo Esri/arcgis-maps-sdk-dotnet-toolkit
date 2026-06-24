@@ -639,7 +639,8 @@
                         <ToggleButton
                             Content="{TemplateBinding AllSourceSelectText}"
                             IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
-                            Style="{StaticResource AllSourceButtonStyle}" />
+                            Style="{StaticResource AllSourceButtonStyle}"
+                            AutomationProperties.AutomationId="AllSourcesButton"/>
                         <ListView
                             ItemTemplate="{StaticResource SourceTemplate}"
                             ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"

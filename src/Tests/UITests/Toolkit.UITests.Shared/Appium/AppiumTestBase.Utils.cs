@@ -179,6 +179,26 @@ public abstract partial class AppiumTestBase
         }
     }
 
+    protected string GetAutomationName(AppiumElement element, TimeSpan? timeout = null)
+    {
+#if IOS_TEST || MAC_TEST
+        var action = () => element.GetAttribute("label");
+#elif ANDROID_TEST
+        var action = () => element.GetAttribute("content-desc");
+#elif WINDOWS_TEST
+        var action = () => element.GetAttribute("Name");
+#endif
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"Could not get automation name for element \"{element.Id}\". See exception for details.");
+            throw;
+        }
+    }
+
     protected string GetEntryText(AppiumElement element, TimeSpan? timeout = null)
     {
 

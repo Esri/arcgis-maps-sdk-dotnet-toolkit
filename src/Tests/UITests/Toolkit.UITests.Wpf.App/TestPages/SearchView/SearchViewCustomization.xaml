@@ -1,0 +1,44 @@
+﻿<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.SearchViewCustomization"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:local="clr-namespace:Toolkit.UITests.App.TestPages"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <esri:MapView x:Name="MyMapView" />
+        <esri:SearchView x:Name="MySearchView"/>
+        <Border
+        Width="200"
+        Margin="8"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Background="White">
+            <StackPanel>
+                <Button x:Name="UpdateToCustomValuesButton" Content="Update to custom text" Padding="1" Click="UpdateToCustomValuesButton_Click" AutomationProperties.AutomationId="UpdateToCustomValuesButton"/>
+                <Button x:Name="UpdateViewpointExtentToOntario" Content="Update Viewpoint to Ontario" Padding="1" Click="UpdateViewpointExtentToOntario_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToOntario"/>
+                <Button x:Name="UpdateViewpointExtentToColorado" Content="Update Viewpoint to Colorado" Padding="1" Click="UpdateViewpointExtentToColorado_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToColorado"/>
+                <Button x:Name="AddEventTestSourceButton" Content="Add Event Test Source" Padding="1" Click="AddEventTestSourceButton_Click" AutomationProperties.AutomationId="AddEventTestSourceButton"/>
+                <Button x:Name="EnableGeoViewBindingButton" Click="EnableGeoViewBindingButton_Click" Content="Enable Binding to GeoView" AutomationProperties.AutomationId="EnableGeoViewBindingButton"/>
+                <Button x:Name="DisableGeoViewBindingButton" Click="DisableGeoViewBindingButton_Click" Content="Disable Binding to GeoView" AutomationProperties.AutomationId="DisableGeoViewBindingButton"/>
+                <CheckBox x:Name="EnableRepeatSearchHereButtonCheck" Content="Enable built-in repeat button" IsChecked="{Binding ElementName=MySearchView, Path=EnableRepeatSearchHereButton, Mode=TwoWay}" AutomationProperties.AutomationId="EnableRepeatSearchHereButtonCheck"/>
+                <CheckBox x:Name="EnableResultListViewBindingCheck" Content="Enable built-in result list" IsChecked="{Binding ElementName=MySearchView, Path=EnableResultListView, Mode=TwoWay}" AutomationProperties.AutomationId="EnableResultListViewBindingCheck"/>
+                <CheckBox x:Name="EnableIndividualResultDisplayCheck" Content="Enable individual result display" IsChecked="{Binding ElementName=MySearchView, Path=EnableIndividualResultDisplay, Mode=TwoWay}" AutomationProperties.AutomationId="EnableIndividualResultDisplayCheck"/>
+                <StackPanel>
+                    <TextBlock Text="Event counts" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Selected: " />
+                        <TextBlock x:Name="SelectedEventCountValue" Text="0" AutomationProperties.AutomationId="SelectedEventCountValue"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Deselected: " />
+                        <TextBlock x:Name="DeselectedEventCountValue" Text="0" AutomationProperties.AutomationId="DeselectedEventCountValue"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</local:TestPage>
