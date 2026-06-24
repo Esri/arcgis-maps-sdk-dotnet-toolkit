@@ -173,7 +173,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         string selectSearchSourceDescription = GetLocalizedString("SearchViewSelectSearchSource");
         string clearSearchDescription = GetLocalizedString("SearchViewClearSearchTooltip");
         string searchDescription = GetLocalizedString("SearchViewSearchTooltip");
-        string repeatSearchDescription = GetLocalizedString("SearchViewRepeatSearch");
 
         string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
