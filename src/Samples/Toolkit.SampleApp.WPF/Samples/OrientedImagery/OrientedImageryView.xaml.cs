@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using Esri.ArcGISRuntime.Mapping;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
@@ -27,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         {
             MainMapView.Map = new Mapping.Map(SpatialReferences.Wgs84);
             MainMapView.GeoViewTapped += MainMapView_GeoViewTapped;
-            MainOrientedImageryView.SelectedImage = new Mapping.OrientedImage();
+            MainOrientedImageryView.ViewModel.SelectedImage = new Mapping.OrientedImage();
             MainOrientedImageryView.OrientedImageryLayer = _oiLayer;
         }
 
@@ -36,8 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             var parameters = new OrientedImageSearchParameters();
             var images = await _oiLayer.SearchImagesAsync(e.Location, parameters);
             Collection<OrientedImage> manualImages = [new OrientedImage(), new OrientedImage(), new OrientedImage()];
-            MainOrientedImageryView.SetImages(manualImages, e.Location);
-            MainOrientedImageryView.SelectedImage = images.Count < 1 ? null : images[0];
+            MainOrientedImageryView.ViewModel.SetImages(manualImages, e.Location);
+            MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
         }
     }
 }
