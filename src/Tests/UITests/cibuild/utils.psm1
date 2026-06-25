@@ -150,6 +150,10 @@ function Invoke-WindowsUITests {
         $test_run_params += @('--report-trx-filename', $trx_filename)
       }
 
+      # Ignore exit code 2 in test results since it just means that one or more tests failed
+      # https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-troubleshooting
+      $test_run_params += @('--ignore-exit-code 2')
+
       $env:TKUITEST_APP = Join-Path $PSScriptRoot "..\artifacts\bin\${app_name}\TestBuild\${app_name}.exe"
       & $dotnet_exe test --project $runner_project @build_parameters @test_run_params
     }

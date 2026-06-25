@@ -423,6 +423,10 @@ internal class Program
             settings.TestParams.Add($"--report-trx-filename {trxFilename}");
         }
 
+        // Ignore exit code 2 in test results since it just means that one or more tests failed
+        // https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-troubleshooting
+        settings.TestParams.Add("--ignore-exit-code 2");
+
         // Append filter from console arguments if it exists
         var filterArgIndex = consoleArgs.IndexOf("--filter");
         if (filterArgIndex > -1)
