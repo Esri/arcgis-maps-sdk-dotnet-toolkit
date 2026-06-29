@@ -35,6 +35,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         SelectPreviousImageCommand = new Command(
             execute: () => SelectPreviousImage(),
             canExecute: () => _images.Count > 0 && (SelectedImage != null && _images.IndexOf(SelectedImage) > 0));
+        ClearMarkersCommand = new Command(
+            execute: () => ClearMarkers(),
+            canExecute: () => true);
     }
 
     private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e)
@@ -247,9 +250,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Clears all markers on the image. Saves the search point marker if it exists.
+    /// Clears all extant markers save the search point marker.
     /// </summary>
-    public void ClearMarkers()
+    public ICommand ClearMarkersCommand { get; private set; }
+
+    private void ClearMarkers()
     {
         var searchPointMarker = _markers.FirstOrDefault((marker) => marker.Tag is string tag && tag == SearchPointMarkerTag);
         _markers.Clear();
