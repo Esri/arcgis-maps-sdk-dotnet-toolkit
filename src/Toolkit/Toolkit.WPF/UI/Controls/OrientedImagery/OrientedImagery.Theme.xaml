@@ -22,6 +22,13 @@
 
     <Style TargetType="{x:Type controls:OrientedImageryView}">
         <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:OrientedImageryView}">
@@ -53,6 +60,7 @@
                                     Content="Show unselected images footprints"
                                     IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ShowUnselectedImagesFootprints, Mode=TwoWay}"
                                     ToolTip="Show unselected images footprints" />
+                                <ItemsPresenter />
                             </WrapPanel>
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
