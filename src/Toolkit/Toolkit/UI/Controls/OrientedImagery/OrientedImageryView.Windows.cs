@@ -3,7 +3,7 @@
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 [TemplatePart(Name = ImageDisplayName, Type = typeof(OrientedImageDisplay))]
-public partial class OrientedImageryView : Control
+public partial class OrientedImageryView : ItemsControl
 {
 }
 
