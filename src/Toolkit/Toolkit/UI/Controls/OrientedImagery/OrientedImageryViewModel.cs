@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Input;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -27,6 +28,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _markers = new ObservableCollection<OrientedImageMarker>();
         _markers.CollectionChanged += (_, _) => UpdateMarkerGraphics();
         _images = new List<OrientedImage>();
+
+        SelectNextImageCommand = new Command(
+            execute: () => SelectNextImage(),
+            canExecute: () => _images.Count > 0 && (SelectedImage == null || _images.IndexOf(SelectedImage) < _images.Count - 1));
+        SelectPreviousImageCommand = new Command(
+            execute: () => SelectPreviousImage(),
+            canExecute: () => _images.Count > 0 && (SelectedImage != null && _images.IndexOf(SelectedImage) > 0));
     }
 
     private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e)
@@ -71,6 +79,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _images = images.ToList();
         _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
         UpdateVisibleFootprints();
+        ((Command)SelectNextImageCommand).ChangeCanExecute();
+        ((Command)SelectPreviousImageCommand).ChangeCanExecute();
     }
 
     private OrientedImage? _selectedImage;
@@ -93,6 +103,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 SelectedImageFootprint = null;
             }
             UpdateVisibleFootprints();
+            ((Command)SelectNextImageCommand).ChangeCanExecute();
+            ((Command)SelectPreviousImageCommand).ChangeCanExecute();
         }
     }
 
@@ -107,7 +119,46 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         private set => SetProperty(ref _selectedImageFootprint, value);
     }
 
-    // Commands for move to next/previous image. Use Images.IndexOf, no need to track index as a field
+    /// <summary>
+    /// Selects the next image in the list of images.
+    /// </summary>
+    /// <remarks>
+    /// If the currently selected image is either <c>null</c> or not in the list, this command will select the first image in the list.
+    /// </remarks>
+    public ICommand SelectNextImageCommand { get; private set; }
+
+    /// <summary>
+    /// Selects the previous image in the list of images.
+    /// </summary>
+    /// <remarks>
+    /// This command will not select an image if the currently selected image is either <c>null</c> or not in the list.
+    /// </remarks>
+    public ICommand SelectPreviousImageCommand { get; private set; }
+
+    private void SelectNextImage()
+    {
+        if (_images.Count == 0)
+            return;
+
+        var currentIndex = SelectedImage != null ? _images.IndexOf(SelectedImage) : -1;
+        if (currentIndex < _images.Count - 1)
+        {
+            SelectedImage = _images[currentIndex + 1];
+        }
+    }
+
+    private void SelectPreviousImage()
+    {
+        if (_images.Count == 0)
+            return;
+
+        var currentIndex = SelectedImage != null ? _images.IndexOf(SelectedImage) : _images.Count;
+        if (currentIndex > 0)
+        {
+            SelectedImage = _images[currentIndex - 1];
+        }
+    }
+
     #endregion ImageManagement
 
     #region FootprintManagement
