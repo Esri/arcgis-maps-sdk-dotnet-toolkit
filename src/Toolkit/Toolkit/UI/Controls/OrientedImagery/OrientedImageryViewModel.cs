@@ -64,7 +64,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// <summary>
     /// Sets the images to display in the control. Optionally, a search point can be provided to indicate the origin of the search.
     /// </summary>
-    public void SetImages(Collection<OrientedImage> images, MapPoint? searchPoint = null)
+    public void SetImages(List<OrientedImage> images, MapPoint? searchPoint = null)
     {
         UpdateSearchPointMarker(searchPoint);
 
