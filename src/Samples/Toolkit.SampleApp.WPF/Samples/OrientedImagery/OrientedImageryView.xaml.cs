@@ -30,6 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             MainMapView.Map = new Mapping.Map(BasemapStyle.ArcGISTopographic);
             MainMapView.Map.OperationalLayers.Add(_oiLayer);
             MainMapView.GeoViewTapped += MainMapView_GeoViewTapped;
+            var itemsSouce = new Collection<object>() { new DemoOilToolbarControl() };
+            MainOrientedImageryView.ItemsSource = itemsSouce;
             MainOrientedImageryView.ViewModel.SelectedImage = new Mapping.OrientedImage();
             MainOrientedImageryView.OrientedImageryLayer = _oiLayer;
             MainMapView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
