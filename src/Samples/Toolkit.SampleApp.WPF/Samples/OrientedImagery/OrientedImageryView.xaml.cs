@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Esri.ArcGISRuntime.Mapping;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 {
@@ -18,24 +19,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         {
             InitializeComponent();
 
-            _oiLayer = new OrientedImageryLayer(new Uri("https://arcgis.com/"));
             _ = Initialize();
         }
 
         private async Task Initialize()
         {
-            MainMapView.Map = new Mapping.Map(SpatialReferences.Wgs84);
+            _oiLayer = new OrientedImageryLayer(new Uri("https://services8.arcgis.com/joda3ARQ9znLf0hf/arcgis/rest/services/RedRocks/FeatureServer/0"));
+            await _oiLayer.LoadAsync();
+
+            MainMapView.Map = new Mapping.Map(BasemapStyle.ArcGISTopographic);
+            MainMapView.Map.OperationalLayers.Add(_oiLayer);
             MainMapView.GeoViewTapped += MainMapView_GeoViewTapped;
             MainOrientedImageryView.ViewModel.SelectedImage = new Mapping.OrientedImage();
             MainOrientedImageryView.OrientedImageryLayer = _oiLayer;
+            MainMapView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
         }
 
         private async void MainMapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
             var parameters = new OrientedImageSearchParameters();
             var images = await _oiLayer.SearchImagesAsync(e.Location, parameters);
-            Collection<OrientedImage> manualImages = [new OrientedImage(), new OrientedImage(), new OrientedImage()];
-            MainOrientedImageryView.ViewModel.SetImages(manualImages, e.Location);
+            MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
             MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
         }
     }
