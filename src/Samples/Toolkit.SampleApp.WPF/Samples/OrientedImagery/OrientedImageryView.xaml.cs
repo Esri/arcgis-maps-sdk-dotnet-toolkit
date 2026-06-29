@@ -1,10 +1,12 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
-using System;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 {
@@ -30,8 +32,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             MainMapView.Map = new Mapping.Map(BasemapStyle.ArcGISTopographic);
             MainMapView.Map.OperationalLayers.Add(_oiLayer);
             MainMapView.GeoViewTapped += MainMapView_GeoViewTapped;
-            var itemsSouce = new Collection<object>() { new DemoOilToolbarControl() };
+
+            var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<MarkerSymbol>()
+            {
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Blue, 10),
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Yellow, 10),
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 10)
+            });
+            var itemsSouce = new Collection<object>() { new AutoUpdateFootprintVM(), new ShowSelectedFootprintVM(), new ShowUnselectedFootprintsVM(), new ShowCameraMarkersVM(), markerSymbolPickerVM, new ClearMarkersVM(), new DemoOilToolbarVM() };
             MainOrientedImageryView.ItemsSource = itemsSouce;
+
             MainOrientedImageryView.ViewModel.SelectedImage = new Mapping.OrientedImage();
             MainOrientedImageryView.OrientedImageryLayer = _oiLayer;
             MainMapView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));

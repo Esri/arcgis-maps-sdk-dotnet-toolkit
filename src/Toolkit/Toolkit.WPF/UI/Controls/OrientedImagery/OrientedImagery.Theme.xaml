@@ -25,7 +25,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" />
+                    <WrapPanel Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -41,27 +41,9 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <WrapPanel Margin="4,4,4,0">
-                                <ToggleButton
-                                    Margin="0,0,4,4"
-                                    Padding="8,4"
-                                    Content="Auto update footprint"
-                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AutoUpdateFootprint, Mode=TwoWay}"
-                                    ToolTip="Update footprint" />
-                                <ToggleButton
-                                    Margin="0,0,4,4"
-                                    Padding="8,4"
-                                    Content="Show selected image footprint"
-                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ShowSelectedImageFootprint, Mode=TwoWay}"
-                                    ToolTip="Show selected image footprint" />
-                                <ToggleButton
-                                    Margin="0,0,4,4"
-                                    Padding="8,4"
-                                    Content="Show unselected images footprints"
-                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ShowUnselectedImagesFootprints, Mode=TwoWay}"
-                                    ToolTip="Show unselected images footprints" />
-                                <ItemsPresenter />
-                            </WrapPanel>
+
+                            <ItemsPresenter />
+
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
