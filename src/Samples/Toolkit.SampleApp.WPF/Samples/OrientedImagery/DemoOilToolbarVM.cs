@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery;
 
-internal class DemoOilToolbarControl
+internal class DemoOilToolbarVM
 {
-    public string Message { get; set; } = "Demo Oil Toolbar Control";
+    public string Message { get; set; } = "Demo user-implemented Oil Toolbar Control";
 }
