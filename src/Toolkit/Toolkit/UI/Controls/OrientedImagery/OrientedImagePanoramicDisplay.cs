@@ -1,0 +1,639 @@
+// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+#if WPF || WINDOWS_XAML
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.UI;
+using Color = System.Drawing.Color;
+using PointF = System.Drawing.PointF;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
+#if WPF
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using VerticalAlignment = System.Windows.VerticalAlignment;
+#else
+using System.Runtime.InteropServices.WindowsRuntime;
+using HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment;
+using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
+#endif
+
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+
+// Panoramic (360/equirectangular) inner display for OrientedImageDisplay.
+// Only supports Windows heads (WPF + WinUI) for now.
+// Hosts the shared Direct3D PanoramicSurface and implements the IOrientedImageDisplay contract
+// by loading the OrientedImage, decoding it to a texture, and surfacing state/clicks.
+internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IOrientedImageDisplay
+{
+    private const double MarkerHitTolerance = 12d;
+
+    private readonly PanoramicSurface _surface;
+    private readonly List<ResolvedMarker> _resolvedMarkers = [];
+    private readonly List<OrientedImageMarker> _subscribedMarkers = [];
+    private OrientedImageFootprint? _footprint;
+    private ObservableCollection<OrientedImageMarker>? _markers;
+    private WeakEventListener<OrientedImagePanoramicDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
+    private int _markerGeneration;
+    private bool _autoUpdate;
+    private CancellationTokenSource? _updateCts;
+    private bool _isLoading;
+    private int _footprintGeneration;
+    private int _imageWidth;
+    private int _imageHeight;
+    private Exception? _renderError;
+
+    internal OrientedImagePanoramicDisplay()
+    {
+        _surface = new PanoramicSurface();
+        HorizontalContentAlignment = HorizontalAlignment.Stretch;
+        VerticalContentAlignment = VerticalAlignment.Stretch;
+        IsTabStop = false;
+        Content = _surface;
+        _surface.SurfaceTapped += OnSurfaceTapped;
+        _surface.RenderFailed += OnRenderFailed;
+        _surface.DeviceRecreated += OnDeviceRecreated;
+    }
+
+    // Present-layer (device/bridge/render) failures happen outside the load path; surface them as Error.
+    private void OnRenderFailed(Exception ex)
+    {
+        _renderError = ex;
+        UpdateState();
+    }
+
+    // After a device-lost rebuild the GPU texture + markers are gone (the surface does not keep a CPU copy, to avoid a
+    // large idle duplicate). Re-decode the current image and re-supply texture + markers; the camera is preserved
+    // because it lives on the surface and is untouched by the rebuild.
+    private async void OnDeviceRecreated()
+    {
+        OrientedImageFootprint? footprint = _footprint;
+        OrientedImage? image = footprint?.OrientedImage;
+        if (image is null)
+            return; // nothing loaded, or an in-flight load will upload once it completes
+
+        // The rebuilt surface has no texture yet (it blanks until re-supply). Invalidate dimensions so a click on the
+        // blank surface isn't reported against the old pixel space while the re-decode is in flight.
+        _imageWidth = 0;
+        _imageHeight = 0;
+
+        try
+        {
+            await image.RetryLoadAsync(); // idempotent; covers the image being unloaded/cancelled during teardown
+            if (!ReferenceEquals(_footprint, footprint) || image.DataUri is not Uri uri)
+                return;
+
+            PanoramaFrame? decoded = await DecodeAsync(uri, CancellationToken.None);
+            if (!ReferenceEquals(_footprint, footprint) || decoded is not PanoramaFrame frame)
+                return;
+
+            _imageWidth = frame.Width;
+            _imageHeight = frame.Height;
+            _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
+            _surface.RequestRender();
+            _ = ResolveMarkersAsync();
+
+            // Recovery succeeded: clear any error latched while the device was lost (the loss itself is recoverable).
+            _renderError = null;
+            UpdateState();
+        }
+        catch (Exception ex)
+        {
+            _renderError = ex;
+            UpdateState();
+        }
+    }
+
+    public bool IsActive { get; private set; }
+
+    public Exception? Error { get; private set; }
+
+    public event EventHandler? StateChanged;
+
+    public event EventHandler<OrientedImageDisplay.ImageClickedEventArgs>? ImageClicked;
+
+    public void SetFootprint(OrientedImageFootprint? footprint) => _ = SetFootprintAsync(footprint);
+
+    public void SetMarkers(ObservableCollection<OrientedImageMarker>? markers)
+    {
+        if (ReferenceEquals(_markers, markers))
+            return;
+
+        _markersListener?.Detach();
+        _markersListener = null;
+        _markers = markers;
+
+        if (markers is INotifyCollectionChanged incc)
+        {
+            _markersListener = new WeakEventListener<OrientedImagePanoramicDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
+            {
+                OnEventAction = static (instance, source, eventArgs) => instance.RebuildMarkers(),
+                OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
+            };
+            incc.CollectionChanged += _markersListener.OnEvent;
+        }
+
+        RebuildMarkers();
+    }
+
+    // Re-subscribes to each current marker's PropertyChanged and re-resolves the whole set. Called when the collection
+    // is replaced or changes; a marker's own property change re-resolves without re-subscribing.
+    private void RebuildMarkers()
+    {
+        foreach (OrientedImageMarker marker in _subscribedMarkers)
+        {
+            marker.PropertyChanged -= OnMarkerPropertyChanged;
+        }
+
+        _subscribedMarkers.Clear();
+
+        if (_markers is not null)
+        {
+            foreach (OrientedImageMarker marker in _markers)
+            {
+                marker.PropertyChanged += OnMarkerPropertyChanged;
+                _subscribedMarkers.Add(marker);
+            }
+        }
+
+        _ = ResolveMarkersAsync();
+    }
+
+    // Dispatch so the snapshot of the app-owned marker is taken on the UI thread (the app may raise PropertyChanged off it).
+    private void OnMarkerPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.Dispatch(() => _ = ResolveMarkersAsync());
+
+    // Resolves every visible marker to a normalized (u,v) and a rasterized swatch, then pushes the set to the surface.
+    // Re-entrant: a generation counter discards a resolve superseded by a newer one. Resolution runs off the UI thread;
+    // only the final apply (texture upload) marshals back.
+    private async Task ResolveMarkersAsync()
+    {
+        int generation = Interlocked.Increment(ref _markerGeneration);
+        OrientedImageFootprint? footprint = _footprint;
+        OrientedImage? image = footprint?.OrientedImage;
+        int imageWidth = _imageWidth;
+        int imageHeight = _imageHeight;
+
+        // Snapshot the app-owned markers on the UI thread (Position/Symbol/IsVisible) before going async.
+        var pending = new List<(OrientedImageMarker Marker, OrientedImageMarkerPosition Position, Symbol Symbol)>();
+        if (_markers is not null && image is not null && imageWidth > 0 && imageHeight > 0)
+        {
+            foreach (OrientedImageMarker marker in _markers)
+            {
+                if (marker.IsVisible)
+                {
+                    pending.Add((marker, marker.Position, marker.Symbol ?? OrientedImageDisplay.DefaultMarkerSymbol));
+                }
+            }
+        }
+
+        double scale = GetScaleFactor();
+        var resolved = new List<ResolvedMarker>(pending.Count);
+        var swatches = new List<PanoramicSurface.MarkerSwatch>(pending.Count);
+        foreach ((OrientedImageMarker marker, OrientedImageMarkerPosition position, Symbol symbol) in pending)
+        {
+            (float U, float V)? uv = await ResolveUvAsync(position, image!, imageWidth, imageHeight).ConfigureAwait(false);
+            if (uv is not (float u, float v))
+                continue;
+
+            (byte[] Bgra, int Width, int Height)? swatch = await CreateSwatchAsync(symbol, scale).ConfigureAwait(false);
+            if (swatch is not (byte[] bgra, int width, int height))
+                continue;
+
+            resolved.Add(new ResolvedMarker(marker, u, v));
+            swatches.Add(new PanoramicSurface.MarkerSwatch(u, v, bgra, width, height));
+        }
+
+        this.Dispatch(() =>
+        {
+            // Discard if superseded (newer resolve) or if the footprint changed while resolving (stale image's markers).
+            if (generation != _markerGeneration || !ReferenceEquals(_footprint, footprint))
+                return;
+
+            _resolvedMarkers.Clear();
+            _resolvedMarkers.AddRange(resolved);
+            _surface.SetMarkers(swatches);
+            _surface.RequestRender();
+        });
+    }
+
+    // Image-anchored markers use their pixel directly; world-anchored markers project through the camera model.
+    private static async Task<(float U, float V)?> ResolveUvAsync(OrientedImageMarkerPosition position, OrientedImage image, int imageWidth, int imageHeight)
+    {
+        PointF pixel;
+        if (position.ImagePoint is PointF imagePoint)
+        {
+            pixel = imagePoint;
+        }
+        else if (position.Location is MapPoint location)
+        {
+            try
+            {
+                pixel = await image.LocationToImageAsync(location).ConfigureAwait(false);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return null;
+        }
+
+        return (pixel.X / imageWidth, pixel.Y / imageHeight);
+    }
+
+    // Rasterizes a symbol to a tightly-packed BGRA8 swatch via RuntimeImage. The raw buffer is a publicly-visible,
+    // exact-size MemoryStream, so it can be used without a copy; a Read fallback covers any future change to that.
+    private static async Task<(byte[] Bgra, int Width, int Height)?> CreateSwatchAsync(Symbol symbol, double scale)
+    {
+        try
+        {
+            RuntimeImage? image = await symbol.CreateSwatchAsync(scale * 96).ConfigureAwait(false);
+            if (image is null)
+                return null;
+
+            Stream raw = await image.GetRawBufferAsync().ConfigureAwait(false);
+            byte[] bytes;
+            if (raw is MemoryStream memory && memory.TryGetBuffer(out ArraySegment<byte> segment) &&
+                segment.Array is byte[] array && segment.Offset == 0 && segment.Count == array.Length)
+            {
+                bytes = array; // GetRawBufferAsync returns a fresh, exact-size, publicly-visible buffer: own it directly.
+            }
+            else
+            {
+                using (raw)
+                {
+                    bytes = ReadAllBytes(raw);
+                }
+            }
+
+            return (bytes, image.Width, image.Height);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static byte[] ReadAllBytes(Stream stream)
+    {
+        if (stream is MemoryStream memory)
+            return memory.ToArray();
+
+        using var buffer = new MemoryStream();
+        stream.CopyTo(buffer);
+        return buffer.ToArray();
+    }
+
+    private double GetScaleFactor()
+    {
+#if WINDOWS_XAML
+        // Rasterize swatches at the SwapChainPanel's CompositionScale (the same factor that sizes the back buffer) so
+        // marker pixels match the physical-pixel viewport. Fall back when the panel is not yet composed.
+        float compositionScale = _surface.CompositionScaleX;
+        if (compositionScale > 0)
+            return compositionScale;
+
+        return XamlRoot?.RasterizationScale ?? 1.0;
+#else
+        return System.Windows.PresentationSource.FromVisual(this)?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
+#endif
+    }
+
+    public void SetAutoUpdateFootprint(bool enabled)
+    {
+        if (enabled == _autoUpdate)
+            return;
+
+        _autoUpdate = enabled;
+        if (enabled)
+        {
+            _surface.CameraChanged += OnCameraChanged;
+            UpdateFootprintCorners(); // push the current view immediately; the camera may be static until interaction
+        }
+        else
+        {
+            _surface.CameraChanged -= OnCameraChanged;
+        }
+    }
+
+    private void OnCameraChanged() => UpdateFootprintCorners();
+
+    // Projects the current view onto the image and pushes the visible corners to OrientedImageFootprint.
+    // Runs on each camera change while auto-update is enabled; cancel-prior so a stale view never wins a race.
+    private async void UpdateFootprintCorners()
+    {
+        if (!_autoUpdate)
+            return;
+
+        OrientedImageFootprint? footprint = _footprint;
+        double width = _surface.ActualWidth;
+        double height = _surface.ActualHeight;
+        if (footprint is null || _imageWidth <= 0 || _imageHeight <= 0 || width <= 0 || height <= 0)
+            return;
+
+        var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
+        if (!TryProjectViewCorners(camera, width, height, out OrientedImagePixelCorners corners))
+            return;
+
+        _updateCts?.Cancel();
+        CancellationTokenSource cts = new();
+        _updateCts = cts;
+        try
+        {
+            await footprint.UpdateFootprintAsync(corners, cts.Token);
+        }
+        catch
+        {
+            // Skeleton UpdateFootprintAsync is a no-op; ignore cancellation/failures.
+        }
+    }
+
+    // Projects the four view corners (clockwise from top-left) back onto the equirectangular image as pixel corners.
+    // Returns false if any corner can't be projected. Caveat: near the poles (looking straight up/down) or across the
+    // u=0/1 wrap seam the four-corner quad poorly approximates the visible spherical region; corners can fold or span
+    // most of the image width. Refining that (multi-segment / clamped region) is a follow-up.
+    private bool TryProjectViewCorners(PanoramaCameraState camera, double width, double height, out OrientedImagePixelCorners corners)
+    {
+        corners = null!;
+        if (TryCornerPixel(camera, 0, 0, width, height, out PointF topLeft) &&
+            TryCornerPixel(camera, width, 0, width, height, out PointF topRight) &&
+            TryCornerPixel(camera, width, height, width, height, out PointF bottomRight) &&
+            TryCornerPixel(camera, 0, height, width, height, out PointF bottomLeft))
+        {
+            corners = new OrientedImagePixelCorners(topLeft, topRight, bottomRight, bottomLeft);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryCornerPixel(PanoramaCameraState camera, double screenX, double screenY, double width, double height, out PointF pixel)
+    {
+        if (camera.TryScreenToNormalizedUv(screenX, screenY, width, height, out float u, out float v))
+        {
+            pixel = new PointF(u * _imageWidth, v * _imageHeight);
+            return true;
+        }
+
+        pixel = default;
+        return false;
+    }
+
+    public void SetBackgroundColor(System.Drawing.Color color)
+    {
+        if (color.IsEmpty)
+            _surface.SetClearColor(0.02f, 0.02f, 0.02f, 1f); // keep the renderer's default backdrop
+        else
+            _surface.SetClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+
+        _surface.RequestRender();
+    }
+
+    private async Task SetFootprintAsync(OrientedImageFootprint? footprint)
+    {
+        // Re-entrant (can be called again before a prior load finishes); a generation counter ignores stale results.
+        int generation = Interlocked.Increment(ref _footprintGeneration);
+        OrientedImage? image = footprint?.OrientedImage;
+        bool imageChanged = !ReferenceEquals(_footprint?.OrientedImage, image);
+
+        if (imageChanged)
+            _footprint?.OrientedImage?.CancelLoad();
+
+        _footprint = footprint;
+        _renderError = null;
+
+        // When the image changes, blank the old texture and invalidate its dimensions immediately (before awaiting the
+        // new load) so the user never sees the old panorama, nor has a click reported against the new image using the
+        // old image's pixel space, during the transition. (ClearTexture + RequestRender presents a blank backdrop frame;
+        // _imageWidth/Height = 0 makes OnSurfaceTapped a no-op until the new texture and dimensions are ready.)
+        if (imageChanged)
+        {
+            _surface.ClearTexture();
+            _imageWidth = 0;
+            _imageHeight = 0;
+
+            // Drop the old image's markers immediately, and invalidate any in-flight resolve from it (generation bump),
+            // so stale markers neither render on the new texture nor hit-test against it before the new resolve lands.
+            Interlocked.Increment(ref _markerGeneration);
+            _resolvedMarkers.Clear();
+            _surface.SetMarkers(Array.Empty<PanoramicSurface.MarkerSwatch>());
+
+            _surface.RequestRender();
+        }
+
+        if (image is null)
+        {
+            _isLoading = false;
+            _ = ResolveMarkersAsync();
+            UpdateState();
+            return;
+        }
+
+        _isLoading = true;
+        UpdateState();
+        try
+        {
+            await image.RetryLoadAsync();
+            if (generation != _footprintGeneration)
+                return;
+
+            if (image.DataUri is not Uri uri)
+            {
+                // Loaded with nothing displayable (e.g. attachment without image, or a load failure surfaced via Error).
+                _surface.ClearTexture();
+                _imageWidth = 0;
+                _imageHeight = 0;
+                _surface.RequestRender();
+                return;
+            }
+
+            PanoramaFrame? decoded = await DecodeAsync(uri, CancellationToken.None);
+            if (generation != _footprintGeneration)
+                return;
+
+            if (decoded is not PanoramaFrame frame)
+            {
+                _surface.ClearTexture();
+                _imageWidth = 0;
+                _imageHeight = 0;
+                _surface.RequestRender();
+                return;
+            }
+
+            _imageWidth = frame.Width;
+            _imageHeight = frame.Height;
+            _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
+
+            // Orient the initial view to the image's geographic heading (JS reference: yaw = -CameraHeading).
+            // The exact convention relative to the sphere's theta origin needs runtime tuning.
+            _surface.Yaw = -ReadHeadingRadians(image);
+            _surface.Pitch = 0f;
+            _surface.RequestRender();
+        }
+        catch (OperationCanceledException)
+        {
+            // Load/decode was superseded by a newer footprint or the control was torn down; not an error to surface.
+        }
+        catch (Exception ex)
+        {
+            _renderError = ex;
+        }
+        finally
+        {
+            if (generation == _footprintGeneration)
+            {
+                _isLoading = false;
+                UpdateState();
+
+                // Re-resolve markers now that the image and its pixel dimensions are settled (world-anchored markers
+                // reproject onto the new image; image-anchored markers re-scale to the new dimensions).
+                _ = ResolveMarkersAsync();
+            }
+        }
+    }
+
+    private void OnSurfaceTapped(double x, double y)
+    {
+        if (_footprint?.OrientedImage is not OrientedImage image || _imageWidth <= 0 || _imageHeight <= 0)
+            return;
+
+        var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
+        if (!camera.TryScreenToNormalizedUv(x, y, _surface.ActualWidth, _surface.ActualHeight, out float u, out float v))
+            return;
+
+        var pixel = new PointF(u * _imageWidth, v * _imageHeight);
+        OrientedImageMarker? marker = HitTestMarker(camera, x, y);
+        ImageClicked?.Invoke(this, new OrientedImageDisplay.ImageClickedEventArgs(pixel, image, marker));
+    }
+
+    // Returns the nearest visible marker whose projected screen position is within the hit tolerance of the tap, or null.
+    private OrientedImageMarker? HitTestMarker(PanoramaCameraState camera, double x, double y)
+    {
+        OrientedImageMarker? hit = null;
+        double best = MarkerHitTolerance;
+        foreach (ResolvedMarker resolved in _resolvedMarkers)
+        {
+            if (!camera.TryNormalizedUvToScreen(resolved.U, resolved.V, _surface.ActualWidth, _surface.ActualHeight, out double sx, out double sy))
+                continue;
+
+            double distance = Math.Sqrt(((sx - x) * (sx - x)) + ((sy - y) * (sy - y)));
+            if (distance <= best)
+            {
+                best = distance;
+                hit = resolved.Marker;
+            }
+        }
+
+        return hit;
+    }
+
+    // Busy while decoding/uploading; Error aggregates the image load error and any decode/render failure.
+    private void UpdateState()
+    {
+        Exception? error = _footprint?.OrientedImage?.LoadError ?? _renderError;
+        if (_isLoading == IsActive && ReferenceEquals(error, Error))
+            return;
+
+        IsActive = _isLoading;
+        Error = error;
+        StateChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    private static float ReadHeadingRadians(OrientedImage image)
+    {
+        if (image.Attributes.TryGetValue("CameraHeading", out object? raw) && raw is double degrees && !double.IsNaN(degrees))
+            return (float)(degrees * Math.PI / 180.0);
+
+        return 0f;
+    }
+
+#if WINDOWS_XAML
+    private static async Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    {
+        Windows.Storage.Streams.IRandomAccessStream? stream = null;
+        try
+        {
+            if (uri.IsFile)
+            {
+                Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(uri.LocalPath);
+                stream = await file.OpenReadAsync();
+            }
+            else if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+            {
+                using var httpClient = new System.Net.Http.HttpClient();
+                byte[] bytes = await httpClient.GetByteArrayAsync(uri, token);
+                var memory = new Windows.Storage.Streams.InMemoryRandomAccessStream();
+                await memory.WriteAsync(bytes.AsBuffer());
+                memory.Seek(0);
+                stream = memory;
+            }
+
+            if (stream is null)
+                return null;
+
+            Windows.Graphics.Imaging.BitmapDecoder decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+            Windows.Graphics.Imaging.PixelDataProvider pixels = await decoder.GetPixelDataAsync(
+                Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
+                Windows.Graphics.Imaging.BitmapAlphaMode.Ignore,
+                new Windows.Graphics.Imaging.BitmapTransform(),
+                Windows.Graphics.Imaging.ExifOrientationMode.IgnoreExifOrientation,
+                Windows.Graphics.Imaging.ColorManagementMode.DoNotColorManage);
+            return new PanoramaFrame(pixels.DetachPixelData(), (int)decoder.PixelWidth, (int)decoder.PixelHeight);
+        }
+        finally
+        {
+            stream?.Dispose();
+        }
+    }
+#elif WPF
+    private static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    {
+        return Task.Run(
+            () =>
+            {
+                var decoder = System.Windows.Media.Imaging.BitmapDecoder.Create(uri, System.Windows.Media.Imaging.BitmapCreateOptions.None, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
+                System.Windows.Media.Imaging.BitmapFrame frame = decoder.Frames[0];
+                var converted = new System.Windows.Media.Imaging.FormatConvertedBitmap(frame, System.Windows.Media.PixelFormats.Bgra32, null, 0);
+                int width = converted.PixelWidth;
+                int height = converted.PixelHeight;
+                int stride = width * 4;
+                byte[] bytes = new byte[height * stride];
+                converted.CopyPixels(bytes, stride, 0);
+                return (PanoramaFrame?)new PanoramaFrame(bytes, width, height);
+            },
+            token);
+    }
+#endif
+
+    // The decoded equirectangular image as tightly-packed BGRA8 plus its pixel dimensions. This is also the seam
+    // where a future 360-video source would provide frames over time instead of a single decode.
+    private readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
+
+    // A marker resolved to a normalized (u,v), kept on the UI side for tap hit-testing (the surface owns the GPU side).
+    private readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V);
+}
+#endif
