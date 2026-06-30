@@ -336,7 +336,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// Gets or sets the symbol to use for the current camera marker.
     /// </summary>
     public MarkerSymbol CurrentCameraMarkerSymbol { get; set; }
-    private const string CurrentCameraMarkerTag = "CurrentCamerasMarker";
 
     /// <summary>
     /// Gets or sets the symbol to use for all camera markers.
@@ -407,13 +406,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private void ClearMarkers()
     {
         var searchPointMarker = _markers.FirstOrDefault((marker) => marker.Tag is string tag && tag == SearchPointMarkerTag);
-        var currentCameraMarker = _markers.FirstOrDefault((marker) => marker.Tag is string tag && tag == CurrentCameraMarkerTag);
         _markers.Clear();
         UpdateCameraMarkers();
         if (searchPointMarker != null)
             _markers.Add(searchPointMarker);
-        if (currentCameraMarker != null)
-            _markers.Add(currentCameraMarker);
     }
 
     private void UpdateCameraMarkers()
@@ -428,27 +424,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             foreach (var img in _images.Where((img) => img.Geometry is MapPoint))
             {
-                _markers.Add(new OrientedImageMarker( OrientedImageMarkerPosition.FromLocation((MapPoint)img.Geometry!), AllCamerasMarkerSymbol)
+                _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation((MapPoint)img.Geometry!), AllCamerasMarkerSymbol)
                 {
                     Tag = SelectedCamerasMarkerTag,
                     IsVisible = ShowSelectedCameraLocationsOnDisplay
                 });
             }
-        }
-
-        UpdateSelectedImageMarker();
-    }
-
-    private void UpdateSelectedImageMarker()
-    {
-        var existingMarker = _markers.FirstOrDefault((marker) => marker?.Tag is string tag && tag == CurrentCameraMarkerTag, null);
-
-        if (existingMarker != null)
-            _markers.Remove(existingMarker);
-
-        if (SelectedImage?.Geometry is MapPoint point)
-        {
-            _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(point), CurrentCameraMarkerSymbol) { Tag = CurrentCameraMarkerTag });
         }
     }
 
@@ -458,7 +439,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _markersOverlay.Graphics.AddRange(_markers.Select((mk) => new Graphic(mk.Position.Location!, mk.Symbol)));
 
         if (SelectedImage?.Geometry is MapPoint currentImageLocation)
-            _markersOverlay.Graphics.Add(new Graphic(currentImageLocation, CurrentCameraMarkerSymbol));
+            _markersOverlay.Graphics.Add(new Graphic(currentImageLocation, CurrentCameraMarkerSymbol) { ZIndex = int.MaxValue });
     }
     #endregion Markers
 
