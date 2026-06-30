@@ -24,7 +24,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="controls:ShowCameraMarkersVM">
-        <ToggleButton Content="Cameras" />
+        <ToggleButton Content="Cameras" IsChecked="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
