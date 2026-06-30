@@ -31,6 +31,7 @@ public abstract class OrientedImageryViewToolbarViewModelBase : INotifyPropertyC
             if (value == _mainViewModel) return;
             var oldValue = _mainViewModel;
             _mainViewModel = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainViewModel)));
             OnMainViewModelChanged(oldValue, value);
         }
     }
@@ -60,6 +61,11 @@ public abstract class OrientedImageryViewToolbarViewModelBase : INotifyPropertyC
 /// View model for the "Auto Update Footprint" toolbar control in the Oriented Imagery View.
 /// </summary>
 public class AutoUpdateFootprintVM : OrientedImageryViewToolbarViewModelBase { }
+
+/// <summary>
+/// View model for the "Allow Adding Markers" toolbar control in the Oriented Imagery View.
+/// </summary>
+public class AllowAddingMarkersVM : OrientedImageryViewToolbarViewModelBase { }
 
 /// <summary>
 /// View model for the "Show Selected Footprint" toolbar control in the Oriented Imagery View.
