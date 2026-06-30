@@ -173,9 +173,39 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     #region FootprintManagement
     private List<OrientedImageFootprint> _footprints = new();
 
-    // These booleans need to be bindable
-    public bool ShowSelectedFootprint = true;
-    public bool ShowUnselectedFootprints = false;
+    private bool _showSelectedFootprint = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to show the footprint for the selected oriented image.
+    /// </summary>
+    public bool ShowSelectedFootprint
+    {
+        get => _showSelectedFootprint;
+        set
+        {
+            if (_showSelectedFootprint == value) { return; }
+
+            SetProperty(ref _showSelectedFootprint, value);
+            UpdateVisibleFootprints();
+        }
+    }
+
+    private bool _showUnselectedFootprints;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to show footprints for non-selected oriented images.
+    /// </summary>
+    public bool ShowUnselectedFootprints
+    {
+        get => _showUnselectedFootprints;
+        set
+        {
+            if (_showUnselectedFootprints == value) { return; }
+
+            SetProperty(ref _showUnselectedFootprints, value);
+            UpdateVisibleFootprints();
+        }
+    }
 
     private bool _autoUpdateFootprint;
     public bool AutoUpdateFootprint
