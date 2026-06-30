@@ -17,6 +17,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
     {
         private OrientedImageryLayer _oiLayer;
 
+        private bool _toolbarIsUsingDefaultStyle = true;
+
         public OrientedImageryView()
         {
             InitializeComponent();
@@ -26,25 +28,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
         private async Task Initialize()
         {
-            _oiLayer = new OrientedImageryLayer(new Uri("https://services8.arcgis.com/joda3ARQ9znLf0hf/arcgis/rest/services/RedRocks/FeatureServer/0"));
-            await _oiLayer.LoadAsync();
+            await ApplyLayer(new Uri(LayerUriTextBox.Text));
 
             MainMapView.Map = new Mapping.Map(BasemapStyle.ArcGISTopographic);
-            MainMapView.Map.OperationalLayers.Add(_oiLayer);
             MainMapView.GeoViewTapped += MainMapView_GeoViewTapped;
+        }
 
-            var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<MarkerSymbol>()
-            {
-                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Blue, 10),
-                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Yellow, 10),
-                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 10)
-            });
-            var itemsSouce = new Collection<object>() { new AutoUpdateFootprintVM(), new ShowSelectedFootprintVM(), new ShowUnselectedFootprintsVM(), new ShowCameraMarkersVM(), markerSymbolPickerVM, new ClearMarkersVM(), new DemoOilToolbarVM() };
-            MainOrientedImageryView.ItemsSource = itemsSouce;
+        private async Task ApplyLayer(Uri layerUri)
+        {
+            _oiLayer = new OrientedImageryLayer(layerUri);
+            await _oiLayer.LoadAsync();
+
+            MainMapView.Map ??= new Mapping.Map(BasemapStyle.ArcGISTopographic);
+            MainMapView.Map.OperationalLayers.Clear();
+            MainMapView.Map.OperationalLayers.Add(_oiLayer);
 
             MainOrientedImageryView.ViewModel.SelectedImage = new Mapping.OrientedImage();
             MainOrientedImageryView.OrientedImageryLayer = _oiLayer;
             MainMapView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
+        }
+
+        private async void ApplyLayerButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            await ApplyLayer(new Uri(LayerUriTextBox.Text));
         }
 
         private async void MainMapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
@@ -53,6 +59,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             var images = await _oiLayer.SearchImagesAsync(e.Location, parameters);
             MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
             MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
+
+            var test = await _oiLayer.GetSelectedFeaturesAsync();
+        }
+
+        private void ToggleToolbarStyleButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (_toolbarIsUsingDefaultStyle)
+            {
+                MainOrientedImageryView.ItemsSource = new ObservableCollection<object>
+                {
+                    new AutoUpdateFootprintVM(),
+                    new ShowSelectedFootprintVM(),
+                    new ExampleOIViewerToolbarVM()
+                };
+
+                var selector = MainOrientedImageryView.ItemTemplateSelector as OrientedImageryViewTemplateSelector;
+                selector.TypeTemplatePairs.Add(FindResource("DemoOilToolbarSelectorItem") as OrientedImageryViewTemplateSelectorItem);
+                selector.TypeTemplatePairs.Add(FindResource("AlternateAutoUpdateFootprintSelectorItem") as OrientedImageryViewTemplateSelectorItem);
+            }
+            else
+            {
+                MainOrientedImageryView.ItemsSource = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryView.GetDefaultToolbarItems();
+            }
+            _toolbarIsUsingDefaultStyle = !_toolbarIsUsingDefaultStyle;
         }
     }
 }
