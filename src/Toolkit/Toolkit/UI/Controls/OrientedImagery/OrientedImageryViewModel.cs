@@ -27,6 +27,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         SearchPointMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 20);
         AllCamerasMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.FromArgb(200,0,0,255), 15);
         CurrentCameraMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Yellow, 15);
+
+        SelectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Orange);
+        SelectedFootprintOutlineColor = System.Drawing.Color.Orange;
+        UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Blue);
+        UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
+
         _markers = new ObservableCollection<OrientedImageMarker>();
         _markers.CollectionChanged += (_, _) => UpdateMarkerGraphics();
         _images = new List<OrientedImage>();
@@ -214,11 +220,73 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         set => SetProperty(ref _autoUpdateFootprint, value);
     }
 
-    // These colors should be bindable
-    public System.Drawing.Color SelectedFootprintFillColor = System.Drawing.Color.Orange;
-    public System.Drawing.Color SelectedFootprintOutlineColor = System.Drawing.Color.Black;
-    public System.Drawing.Color UnselectedFootprintFillColor = System.Drawing.Color.Blue;
-    public System.Drawing.Color UnselectedFootprintOutlineColor = System.Drawing.Color.Orange;
+    private System.Drawing.Color _selectedFootprintFillColor;
+
+    /// <summary>
+    /// Gets or sets the fill color used for the selected image footprint.
+    /// </summary>
+    public System.Drawing.Color SelectedFootprintFillColor
+    {
+        get => _selectedFootprintFillColor;
+        set
+        {
+            if (_selectedFootprintFillColor == value) { return; }
+
+            SetProperty(ref _selectedFootprintFillColor, value);
+            UpdateVisibleFootprints();
+        }
+    }
+
+    private System.Drawing.Color _selectedFootprintOutlineColor;
+
+    /// <summary>
+    /// Gets or sets the outline color used for the selected image footprint.
+    /// </summary>
+    public System.Drawing.Color SelectedFootprintOutlineColor
+    {
+        get => _selectedFootprintOutlineColor;
+        set
+        {
+            if (_selectedFootprintOutlineColor == value) { return; }
+
+            SetProperty(ref _selectedFootprintOutlineColor, value);
+            UpdateVisibleFootprints();
+        }
+    }
+
+    private System.Drawing.Color _unselectedFootprintFillColor;
+
+    /// <summary>
+    /// Gets or sets the fill color used for unselected image footprints.
+    /// </summary>
+    public System.Drawing.Color UnselectedFootprintFillColor
+    {
+        get => _unselectedFootprintFillColor;
+        set
+        {
+            if (_unselectedFootprintFillColor == value) { return; }
+
+            SetProperty(ref _unselectedFootprintFillColor, value);
+            UpdateVisibleFootprints();
+        }
+    }
+
+    private System.Drawing.Color _unselectedFootprintOutlineColor;
+
+    /// <summary>
+    /// Gets or sets the outline color used for unselected image footprints.
+    /// </summary>
+    public System.Drawing.Color UnselectedFootprintOutlineColor
+    {
+        get => _unselectedFootprintOutlineColor;
+        set
+        {
+            if (_unselectedFootprintOutlineColor == value) { return; }
+
+            SetProperty(ref _unselectedFootprintOutlineColor, value);
+            UpdateVisibleFootprints();
+        }
+    }
 
     private void UpdateVisibleFootprints()
     {
@@ -238,6 +306,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         if (ShowSelectedFootprint && SelectedImageFootprint != null)
         {
+            SelectedImageFootprint.FillColor = SelectedFootprintFillColor;
+            SelectedImageFootprint.OutlineColor = SelectedFootprintOutlineColor;
             OrientedImageryLayer.VisibleFootprints.Add(SelectedImageFootprint);
         }
     }
