@@ -390,8 +390,9 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
 
     private void OnManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
     {
-        Yaw -= (float)e.Delta.Translation.X * MouseRotationScale;
-        Pitch = Math.Clamp(Pitch - ((float)e.Delta.Translation.Y * MouseRotationScale), MinPitch, MaxPitch);
+        float scale = DragRotationScale();
+        Yaw -= (float)e.Delta.Translation.X * scale;
+        Pitch = Math.Clamp(Pitch - ((float)e.Delta.Translation.Y * scale), MinPitch, MaxPitch);
         if (e.Delta.Scale != 0 && e.Delta.Scale != 1f)
             FieldOfView = Math.Clamp(FieldOfView / e.Delta.Scale, MinFieldOfView, MaxFieldOfView);
 
