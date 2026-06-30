@@ -199,6 +199,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
             }
 
             RasterLayer layer = new(CreateRaster(uri));
+            layer.ResamplingType = RasterResamplingType.BilinearInterpolation;
             Map map = new();
             map.OperationalLayers.Add(layer);
             _mapView.Map = map;
