@@ -4,31 +4,163 @@
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
 
+    <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
+    <internal:ColorToColorConverter x:Key="ColorToColorConverter" />
+
+    <Style x:Key="ToolbarButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#FFEFEFEF" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#FFD3D3D3" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ToolbarToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#FFEFEFEF" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#FFD3D3D3" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#FFC0C0C0" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="#FFD3D3D3" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- Toolbar data templates -->
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
-        <Button Command="{Binding SelectNextSymbol}">
-            <controls:SymbolDisplay Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
+        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}">
+            <Viewbox Width="20" Height="20" Stretch="Uniform">
+                <controls:SymbolDisplay Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
+            </Viewbox>
         </Button>
     </DataTemplate>
 
     <DataTemplate x:Key="AutoUpdateFootprintToolbarTemplate" DataType="controls:AutoUpdateFootprintVM">
-        <ToggleButton Content="AU" IsChecked="{Binding MainViewModel.AutoUpdateFootprint}"/>
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.AutoUpdateFootprint}">
+            <Viewbox Width="20" Height="20" Stretch="Uniform">
+                <Grid Width="32" Height="32">
+                    <Path Fill="Black" Opacity="0.25" Data="M20 23.672 3.962 7.225l3.243-5.019 15.574 4.727L20 8.6z" />
+                    <Path Fill="Black" Data="M1.456 1.696a.47.47 0 0 1 .283-.362 7.03 7.03 0 0 1 5.351.782c.043.027.078.062.12.09L4.866 5.827c-.03-.017-.06-.03-.088-.048a1.835 1.835 0 0 1-.687-2.62 2.57 2.57 0 0 1 1.067-.905 5.1 5.1 0 0 0-2.856-.011A4.58 4.58 0 0 0 4.53 6.346l-.572.884a5.15 5.15 0 0 1-2.503-5.534zM32 30v1H0v-1h1V18h14v12h5V8.6L31 2v28zm-18 0V19H2v11zm16 0V3.767l-9 5.399V30zM6 9V8H5v1zm3-7H8v1h1zm3 1h-1v1h1zm3 1h-1v1h1zm3 1h-1v1h1zm3 1h-1v1h1zM7 11h1v-1H7zm2 2h1v-1H9zm3 1h-1v1h1zm2 2h-1v1h1zm9 12h2v-2h-2zm3 0h2v-2h-2zM7 28h2v-2H7zm-3 0h2v-2H4zm6 0h2v-2h-2zm-3-3h2v-2H7zm-3 0h2v-2H4zm6 0h2v-2h-2zm-3-3h2v-2H7zm-3 0h2v-2H4zm6 0h2v-2h-2zm13 3h2v-2h-2zm3 0h2v-2h-2zm-3-3h2v-2h-2zm3 0h2v-2h-2zm-3-3h2v-2h-2zm3 0h2v-2h-2zm-3-3h2v-2h-2zm3 0h2v-2h-2zm-3-3h2v-2h-2zm3 0h2v-2h-2zm0-3h2V8h-2z" />
+                </Grid>
+            </Viewbox>
+        </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
-        <ToggleButton Content="FA" IsChecked="{Binding MainViewModel.ShowSelectedFootprint}"/>
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowSelectedFootprint}">
+            <Viewbox Width="20" Height="20" Stretch="Uniform">
+                <Grid Width="16" Height="16">
+                    <Path Data="M12.382 14H3.618L.345 2h15.31zm-8-1h7.236l2.727-10H1.655z" StrokeThickness="0.7">
+                        <Path.Stroke>
+                            <SolidColorBrush Color="{Binding MainViewModel.SelectedFootprintOutlineColor, Converter={StaticResource ColorToColorConverter}}" />
+                        </Path.Stroke>
+                    </Path>
+                    <Path Data="M14.35 3l-2.73 10H4.38L1.65 3z">
+                        <Path.Fill>
+                            <SolidColorBrush Color="{Binding MainViewModel.SelectedFootprintFillColor, Converter={StaticResource ColorToColorConverter}}" />
+                        </Path.Fill>
+                    </Path>
+                </Grid>
+            </Viewbox>
+        </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
-        <ToggleButton Content="FA" IsChecked="{Binding MainViewModel.ShowUnselectedFootprints}"/>
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowUnselectedFootprints}">
+            <Viewbox Width="20" Height="20" Stretch="Uniform">
+                <Grid Width="16" Height="16">
+                    <Path Data="M12.382 14H3.618L.345 2h15.31zm-8-1h7.236l2.727-10H1.655z" StrokeThickness="0.7">
+                        <Path.Stroke>
+                            <SolidColorBrush Color="{Binding MainViewModel.UnselectedFootprintOutlineColor, Converter={StaticResource ColorToColorConverter}}" />
+                        </Path.Stroke>
+                    </Path>
+                    <Path Data="M14.35 3l-2.73 10H4.38L1.65 3z">
+                        <Path.Fill>
+                            <SolidColorBrush Color="{Binding MainViewModel.UnselectedFootprintFillColor, Converter={StaticResource ColorToColorConverter}}" />
+                        </Path.Fill>
+                    </Path>
+                </Grid>
+            </Viewbox>
+        </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="controls:ShowCameraMarkersVM">
-        <ToggleButton Content="Cameras" IsChecked="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}"/>
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}">
+            <Viewbox Width="20" Height="20" Stretch="Uniform">
+                <Grid Width="32" Height="32">
+                    <Path Fill="Black" Data="M11 12.5v.5H6v-1h5zm19 11v-12A2.503 2.503 0 0 0 27.5 9H27a1 1 0 0 1-1-1 2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2 1 1 0 0 1-1 1h-2V8H6v1H4.5A2.503 2.503 0 0 0 2 11.5v12A2.503 2.503 0 0 0 4.5 26h23a2.503 2.503 0 0 0 2.5-2.5M7 10V9h3v1h3a2 2 0 0 0 2-2 1 1 0 0 1 1-1h8a1 1 0 0 1 1 1 2 2 0 0 0 2 2h.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-23A1.5 1.5 0 0 1 3 23.5v-12A1.5 1.5 0 0 1 4.5 10zm18.8 7a5.8 5.8 0 1 0-5.8 5.8 5.806 5.806 0 0 0 5.8-5.8m-1 0a4.8 4.8 0 1 1-4.8-4.8 4.805 4.805 0 0 1 4.8 4.8" />
+                </Grid>
+            </Viewbox>
+        </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
-        <Button Content="❌" Command="{Binding MainViewModel.ClearMarkersCommand}"/>
+        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding MainViewModel.ClearMarkersCommand}">
+            <Viewbox Width="20" Height="20" Stretch="Uniform">
+                <Grid Width="32" Height="32">
+                    <Path Fill="Black" Data="M16.5 3.2a13.3 13.3 0 1 0 13.3 13.3A13.3 13.3 0 0 0 16.5 3.2m0 1a12.24 12.24 0 0 1 8.323 3.27L7.47 24.823A12.28 12.28 0 0 1 16.5 4.2m0 24.6a12.24 12.24 0 0 1-8.323-3.27L25.53 8.177A12.28 12.28 0 0 1 16.5 28.8" />
+                </Grid>
+            </Viewbox>
+        </Button>
     </DataTemplate>
 
     <Style TargetType="{x:Type controls:OrientedImageDisplay}">
@@ -66,7 +198,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
+                    <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
