@@ -1,8 +1,10 @@
 #if WPF
 
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
+using System.Collections.ObjectModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -19,6 +21,8 @@ public partial class OrientedImageryView
 
         ViewModel = new OrientedImageryViewModel();
         ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+        ItemsSource = GetDefaultToolbarItems();
 
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -52,6 +56,20 @@ public partial class OrientedImageryView
         _display.Markers = ViewModel.Markers;
         _display.Footprint = ViewModel.SelectedImageFootprint;
         _display.ImageClicked += Display_ImageClicked;
+    }
+
+    /// <summary>
+    /// Gets the default toolbar items for the OrientedImageryView.
+    /// </summary>
+    public static Collection<object> GetDefaultToolbarItems()
+    {
+        var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<MarkerSymbol>()
+        {
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Blue, 10),
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Yellow, 10),
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 10)
+        });
+        return new() { new AutoUpdateFootprintVM(), new ShowSelectedFootprintVM(), new ShowUnselectedFootprintsVM(), new ShowCameraMarkersVM(), markerSymbolPickerVM, new ClearMarkersVM() };
     }
 
     // Setter should eventually be public and handle event wiring
