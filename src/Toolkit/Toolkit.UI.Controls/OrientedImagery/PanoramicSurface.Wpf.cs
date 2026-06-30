@@ -566,8 +566,9 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         bool pressed = e.LeftButton == MouseButtonState.Pressed;
         if (pressed && _wasDragging)
         {
-            Yaw -= (float)(position.X - _lastMousePosition.X) * MouseRotationScale;
-            Pitch = Math.Clamp(Pitch - ((float)(position.Y - _lastMousePosition.Y) * MouseRotationScale), MinPitch, MaxPitch);
+            float scale = DragRotationScale();
+            Yaw -= (float)(position.X - _lastMousePosition.X) * scale;
+            Pitch = Math.Clamp(Pitch - ((float)(position.Y - _lastMousePosition.Y) * scale), MinPitch, MaxPitch);
             RequestRender();
         }
 
