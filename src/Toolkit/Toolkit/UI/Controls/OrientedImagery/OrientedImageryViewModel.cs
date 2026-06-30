@@ -33,6 +33,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
+        _allowAddingMarkers = false;
         _markers = new ObservableCollection<OrientedImageMarker>();
         _markers.CollectionChanged += (_, _) => UpdateMarkerGraphics();
         _images = new List<OrientedImage>();
@@ -46,15 +47,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         ClearMarkersCommand = new Command(
             execute: () => ClearMarkers(),
             canExecute: () => true);
-    }
-
-    private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e)
-    {
-        if (e.Marker != null)
-            return; // do not add a new marker if there is already one in proximity to the click location
-
-        var location = await SelectedImage!.ImageToLocationAsync(e.ImagePoint);
-        _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), NewMarkerSymbol));
     }
 
     #region GeoViewStuff
@@ -218,6 +210,17 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     {
         get => _autoUpdateFootprint;
         set => SetProperty(ref _autoUpdateFootprint, value);
+    }
+
+    private bool _allowAddingMarkers;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether image clicks can add markers.
+    /// </summary>
+    public bool AllowAddingMarkers
+    {
+        get => _allowAddingMarkers;
+        set => SetProperty(ref _allowAddingMarkers, value);
     }
 
     private System.Drawing.Color _selectedFootprintFillColor;
@@ -390,12 +393,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Add a marker from a geographic location. The new marker is added uses the <cref="NewMarkerSymbol"/> unless
+    /// Add a marker from a geographic location. The new marker is added with <see cref="NewMarkerSymbol"/> unless
     /// overriden using the <paramref name="symbol"/> parameter.
     /// </summary>
     public void AddMarkerLocation(MapPoint location, MarkerSymbol? symbol = null)
     {
-        _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), symbol ?? NewMarkerSymbol));
+        if (AllowAddingMarkers)
+            _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), symbol ?? NewMarkerSymbol));
     }
 
     /// <summary>

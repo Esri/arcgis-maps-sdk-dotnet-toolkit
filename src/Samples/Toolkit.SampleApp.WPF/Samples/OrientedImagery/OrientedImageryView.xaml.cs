@@ -58,12 +58,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             if (e.Location == null)
                 return;
 
-            var parameters = new OrientedImageSearchParameters();
-            var images = await _oiLayer.SearchImagesAsync(e.Location, parameters);
-            MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
-            MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
-
-            var test = await _oiLayer.GetSelectedFeaturesAsync();
+            // In this case we are choosing to interpret OrientedImageryViewModel.AllowAddingMarkers as mutually exclusive with image searching.
+            if (!MainOrientedImageryView.ViewModel.AllowAddingMarkers)
+            {
+                var parameters = new OrientedImageSearchParameters();
+                var images = await _oiLayer.SearchImagesAsync(e.Location, parameters);
+                MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
+                MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
+            }
+            else
+            {
+                MainOrientedImageryView.ViewModel.AddMarkerLocation(e.Location);
+            }
         }
 
         private void ToggleToolbarStyleButton_Click(object sender, System.Windows.RoutedEventArgs e)
