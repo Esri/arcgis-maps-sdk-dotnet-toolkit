@@ -55,6 +55,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
         private async void MainMapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
+            if (e.Location == null)
+                return;
+
             var parameters = new OrientedImageSearchParameters();
             var images = await _oiLayer.SearchImagesAsync(e.Location, parameters);
             MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
