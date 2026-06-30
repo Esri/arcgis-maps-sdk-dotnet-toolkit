@@ -102,7 +102,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         // Default symbol for markers without their own; a marker's own Symbol overrides this renderer.
         _markersOverlay = new GraphicsOverlay
         {
-            Renderer = new SimpleRenderer(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.FromArgb(255, 0, 122, 194), 10)),
+            Renderer = new SimpleRenderer(OrientedImageDisplay.DefaultMarkerSymbol),
         };
         _mapView.GraphicsOverlays ??= new GraphicsOverlayCollection();
         _mapView.GraphicsOverlays.Add(_markersOverlay);

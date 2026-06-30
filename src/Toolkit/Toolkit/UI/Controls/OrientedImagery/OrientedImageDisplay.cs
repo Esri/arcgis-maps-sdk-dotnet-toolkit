@@ -17,10 +17,12 @@
 using System;
 using System.Collections.ObjectModel;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 
-// Disambiguate from Microsoft.Maui.Graphics.PointF (a MAUI global using); image coordinates use System.Drawing.PointF.
+// Disambiguate from MAUI types from global usings
 using PointF = System.Drawing.PointF;
+using Color = System.Drawing.Color;
 
 // The host element that presents the active inner display differs per platform.
 #if WPF
@@ -41,11 +43,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// A control that displays an oriented image and allows interaction with it.
 /// </summary>
 /// <remarks>
-/// <para>
-/// The control presents one of several inner displays chosen by the <see cref="Mapping.OrientedImageType"/> of the
-/// image referenced by the assigned <see cref="Footprint"/>. This release implements the raster display (a map view
-/// hosting the image as a raster layer); panoramic/360 and video displays are not yet available.
-/// </para>
+/// Set the <see cref="Footprint"/> to display the associated image.
+/// Supports planar and panoramic/360 images. Does not support video.
 /// </remarks>
 public partial class OrientedImageDisplay
 {
@@ -53,8 +52,15 @@ public partial class OrientedImageDisplay
 
     private DisplayHostElement? _displayHost;
     private OrientedImageRasterDisplay? _rasterDisplay;
+#if WPF || WINDOWS_XAML
+    private OrientedImagePanoramicDisplay? _panoramicDisplay;
+#endif
     private IOrientedImageDisplay? _activeDisplay;
     private Exception? _unsupportedError;
+
+    // Default marker symbol: a filled blue circle used when a marker has no Symbol.
+    internal static readonly SimpleMarkerSymbol DefaultMarkerSymbol =
+        new(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(255, 0, 122, 194), 10);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageDisplay"/> class.
@@ -84,9 +90,8 @@ public partial class OrientedImageDisplay
     /// Occurs when the user taps the oriented image.
     /// </summary>
     /// <remarks>
-    /// Raised for every tap on the image; the image coordinates are always populated. If the tap also hit a marker,
-    /// that marker is carried on <see cref="ImageClickedEventArgs.Marker"/> (a marker's hit buffer does not suppress
-    /// the underlying image click).
+    /// Raised for every tap on the image; the image coordinates are always populated.
+    /// If the tap also hit a marker, that marker is carried on <see cref="ImageClickedEventArgs.Marker"/>.
     /// </remarks>
     public event EventHandler<ImageClickedEventArgs>? ImageClicked;
 
@@ -215,16 +220,12 @@ public partial class OrientedImageDisplay
             return; // Template not applied yet; OnApplyTemplate will call again.
 
         OrientedImageType? type = Footprint?.OrientedImage?.Type;
-        bool supported = type is null || IsPlanar(type.Value);
+        IOrientedImageDisplay? display = SelectDisplay(type);
 
-        // Panoramic/360 and video displays are not implemented yet; surface those types as an explicit error so a host
-        // can tell "unsupported type" apart from "nothing loaded" (both otherwise show no content).
-        _unsupportedError = supported
-            ? null
-            : new NotSupportedException($"Oriented image type '{type}' is not supported by this control yet.");
-
-        IOrientedImageDisplay? display = supported
-            ? _rasterDisplay ??= new OrientedImageRasterDisplay()
+        // A non-null image type with no display is an unsupported type (video, or panoramic on platforms without a
+        // panoramic display yet); surface it as an explicit error so a host can tell that apart from "nothing loaded".
+        _unsupportedError = display is null && type is not null
+            ? new NotSupportedException($"Oriented image type '{type}' is not supported by this control yet.")
             : null;
 
         SetActiveDisplay(display);
@@ -249,6 +250,11 @@ public partial class OrientedImageDisplay
         {
             _activeDisplay.StateChanged -= OnDisplayStateChanged;
             _activeDisplay.ImageClicked -= OnDisplayImageClicked;
+
+            // Release the outgoing display's content so an inactive display doesn't retain its load, map/device content,
+            // or marker subscriptions. Each display's null-footprint/markers path clears itself (see the raster display).
+            _activeDisplay.SetMarkers(null);
+            _activeDisplay.SetFootprint(null);
         }
 
         _activeDisplay = display;
@@ -271,12 +277,25 @@ public partial class OrientedImageDisplay
 
     private void OnDisplayImageClicked(object? sender, ImageClickedEventArgs e) => ImageClicked?.Invoke(this, e);
 
-    // Surfaces the active display's state as the control's own read-only IsActive/Error. An unsupported image type has
-    // no display, so its error is reported here directly.
+    // Surfaces the active display's state as the control's own read-only IsActive/Error.
+    // An unsupported image type has no display, so its error is reported here directly.
     private void UpdateState()
     {
         SetValue(IsActiveProperty, _unsupportedError is null && (_activeDisplay?.IsActive ?? false));
         SetValue(ErrorProperty, _unsupportedError ?? _activeDisplay?.Error);
+    }
+
+    // Selects the inner display for an image type: planar -> raster, panoramic -> panoramic (Windows only for now),
+    // video (and panoramic where no panoramic display exists yet) -> none (surfaced as an unsupported-type error).
+    private IOrientedImageDisplay? SelectDisplay(OrientedImageType? type)
+    {
+        if (type is null || IsPlanar(type.Value))
+            return _rasterDisplay ??= new OrientedImageRasterDisplay();
+#if WPF || WINDOWS_XAML
+        if (type.Value == OrientedImageType.Panoramic)
+            return _panoramicDisplay ??= new OrientedImagePanoramicDisplay();
+#endif
+        return null;
     }
 
     /// <summary>

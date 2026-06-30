@@ -53,5 +53,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\ToolkitColorPalette.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\UtilityNetworkTraceTool.Appearance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\UtilityNetworkTraceTool.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OrientedImagery\PanoramicSurface.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OrientedImagery\PanoramicSurface.WinUI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OrientedImagery\PanoramicSurface.Wpf.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- CsWin32 D3D11/DXGI interop config for the panoramic renderer -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)OrientedImagery\NativeMethods.txt" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)OrientedImagery\NativeMethods.json" />
   </ItemGroup>
 </Project>
