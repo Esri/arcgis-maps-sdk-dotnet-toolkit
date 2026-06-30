@@ -8,53 +8,40 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="esri:DemoOilToolbarVM">
+        <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIViewerToolbarVM">
             <TextBlock Text="{Binding Message}" />
         </DataTemplate>
 
-        <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="esri:SelectNewMarkerSymbolVM">
-            <Button Command="{Binding SelectNextSymbol}">
-                <esri:SymbolDisplay Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
-            </Button>
+        <DataTemplate x:Key="AlternateAutoUpdateFootprintTemplate" DataType="esri:AutoUpdateFootprintVM">
+            <ToggleButton Foreground="Red" Content="Auto Update Footprint" IsChecked="{Binding MainViewModel.AutoUpdateFootprint, Mode=TwoWay}" />
         </DataTemplate>
 
-        <DataTemplate x:Key="AutoUpdateFootprintToolbarTemplate" DataType="esri:AutoUpdateFootprintVM">
-            <ToggleButton Content="AU" IsChecked="{Binding MainViewModel.AutoUpdateFootprint}"/>
-        </DataTemplate>
-
-        <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="esri:ShowSelectedFootprintVM">
-            <ToggleButton Content="FA" IsChecked="{Binding MainViewModel.ShowSelectedFootprint}"/>
-        </DataTemplate>
-
-        <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="esri:ShowUnselectedFootprintsVM">
-            <ToggleButton Content="FA" IsChecked="{Binding MainViewModel.ShowUnselectedFootprints}"/>
-        </DataTemplate>
-
-        <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="esri:ShowCameraMarkersVM">
-            <ToggleButton Content="Cameras" />
-        </DataTemplate>
-
-        <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="esri:ClearMarkersVM">
-            <Button Content="❌" Command="{Binding MainViewModel.ClearMarkersCommand}"/>
-        </DataTemplate>
-
-        <esri:OrientedImageryViewTemplateSelector x:Key="OIViewSelector">
-            <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:DemoOilToolbarVM}" Template="{StaticResource DemoOilToolbarControlTemplate}" />
-            <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type esri:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
-            <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type esri:AutoUpdateFootprintVM}" Template="{StaticResource AutoUpdateFootprintToolbarTemplate}" />
-            <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type esri:ShowSelectedFootprintVM}" Template="{StaticResource ShowSelectedFootprintToolbarTemplate}" />
-            <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type esri:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
-            <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type esri:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
-            <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type esri:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
-        </esri:OrientedImageryViewTemplateSelector>
+        <esri:OrientedImageryViewTemplateSelectorItem x:Key="DemoOilToolbarSelectorItem" Type="{x:Type local:ExampleOIViewerToolbarVM}" Template="{StaticResource DemoOilToolbarControlTemplate}" />
+        <esri:OrientedImageryViewTemplateSelectorItem x:Key="AlternateAutoUpdateFootprintSelectorItem" Type="{x:Type esri:AutoUpdateFootprintVM}" Template="{StaticResource AlternateAutoUpdateFootprintTemplate}" />
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <esri:MapView x:Name="MainMapView" />
-        <esri:OrientedImageryView x:Name="MainOrientedImageryView" GeoView="{Binding ElementName=MainMapView}" ItemTemplateSelector="{StaticResource OIViewSelector}" Grid.Column="1"/>
+
+        <Grid x:Name="ControlPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="LayerUriTextBox" Text="https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0" />
+            <Button Grid.Column="1" Content="Apply Layer" Click="ApplyLayerButton_Click" />
+            <Button Grid.Column="2" Content="Toggle Default/Custom Toolbar" Click="ToggleToolbarStyleButton_Click" />
+        </Grid>
+
+        <esri:MapView x:Name="MainMapView" Grid.Row="1" Grid.Column="0"/>
+        <esri:OrientedImageryView x:Name="MainOrientedImageryView" GeoView="{Binding ElementName=MainMapView}" Grid.Row="1" Grid.Column="1"/>
     </Grid>
 </UserControl>

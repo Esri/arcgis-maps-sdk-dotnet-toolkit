@@ -13,12 +13,12 @@ public partial class OrientedImageryView : ItemsControl
     {
         base.OnItemsChanged(e);
 
-        foreach (var toolbarVM in e.OldItems?.OfType<OrientedImageryViewToolbarVM>() ?? [])
+        foreach (var toolbarVM in e.OldItems?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
         {
             toolbarVM.MainViewModel = null;
         }
 
-        foreach (var toolbarVM in e.NewItems?.OfType<OrientedImageryViewToolbarVM>() ?? [])
+        foreach (var toolbarVM in e.NewItems?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
         {
             toolbarVM.MainViewModel = this.ViewModel;
         }
@@ -32,12 +32,12 @@ public partial class OrientedImageryView : ItemsControl
         try
         {
 
-            foreach (var toolbarVM in oldValue?.OfType<OrientedImageryViewToolbarVM>() ?? [])
+            foreach (var toolbarVM in oldValue?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
             {
                 toolbarVM.MainViewModel = null;
             }
 
-            foreach (var toolbarVM in newValue?.OfType<OrientedImageryViewToolbarVM>() ?? [])
+            foreach (var toolbarVM in newValue?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
             {
                 toolbarVM.MainViewModel = this.ViewModel;
             }

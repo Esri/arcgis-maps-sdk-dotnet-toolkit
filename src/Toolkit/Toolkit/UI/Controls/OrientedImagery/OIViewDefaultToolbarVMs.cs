@@ -11,12 +11,17 @@ using System.Windows.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-public abstract class OrientedImageryViewToolbarVM : INotifyPropertyChanged
+/// <summary>
+/// Base class for view models that are used in the toolbar of the <see cref="OrientedImageryView"/>.
+/// Derive from this class to automatically get access to the main view model of the oriented imagery view via the <see cref="MainViewModel"/> property.
+/// </summary>
+public abstract class OrientedImageryViewToolbarViewModelBase : INotifyPropertyChanged
 {
     private OrientedImageryViewModel? _mainViewModel;
 
     /// <summary>
-    /// Gets or sets the main view model for the oriented imagery view. This property will be set automatically when the toolbar is added to <see cref="OrientedImageryView.ItemsSource"/>.
+    /// Gets or sets the main view model for the oriented imagery view. This property will be set automatically when the toolbar is added to the
+    /// <see cref="ItemsControl.ItemsSource"/> of the <see cref="OrientedImageryView"/>.
     /// </summary>
     public OrientedImageryViewModel? MainViewModel
     {
@@ -51,20 +56,36 @@ public abstract class OrientedImageryViewToolbarVM : INotifyPropertyChanged
     }
 }
 
-public class AutoUpdateFootprintVM : OrientedImageryViewToolbarVM { }
-
-public class ShowSelectedFootprintVM : OrientedImageryViewToolbarVM { }
-
-public class ShowUnselectedFootprintsVM : OrientedImageryViewToolbarVM { }
-
-public class ShowCameraMarkersVM : OrientedImageryViewToolbarVM { }
-
-public class ClearMarkersVM : OrientedImageryViewToolbarVM { }
+/// <summary>
+/// View model for the "Auto Update Footprint" toolbar control in the Oriented Imagery View.
+/// </summary>
+public class AutoUpdateFootprintVM : OrientedImageryViewToolbarViewModelBase { }
 
 /// <summary>
-/// View model for the "Select New Marker Symbol" toolbar control in the Oriented Imagery View. This control allows the user to loop through a collection of marker symbols and select one to be used for new markers in the oriented imagery view.
+/// View model for the "Show Selected Footprint" toolbar control in the Oriented Imagery View.
 /// </summary>
-public class SelectNewMarkerSymbolVM : OrientedImageryViewToolbarVM
+public class ShowSelectedFootprintVM : OrientedImageryViewToolbarViewModelBase { }
+
+/// <summary>
+/// View model for the "Show Unselected Footprints" toolbar control in the Oriented Imagery View.
+/// </summary>
+public class ShowUnselectedFootprintsVM : OrientedImageryViewToolbarViewModelBase { }
+
+/// <summary>
+/// View model for the "Show Camera Markers" toolbar control in the Oriented Imagery View.
+/// </summary>
+public class ShowCameraMarkersVM : OrientedImageryViewToolbarViewModelBase { }
+
+/// <summary>
+/// View model for the "Clear Markers" toolbar control in the Oriented Imagery View.
+/// </summary>
+public class ClearMarkersVM : OrientedImageryViewToolbarViewModelBase { }
+
+/// <summary>
+/// View model for the "Select New Marker Symbol" toolbar control in the Oriented Imagery View.
+/// This control allows the user to loop through a collection of marker symbols and select one to be used for new markers in the oriented imagery view.
+/// </summary>
+public class SelectNewMarkerSymbolVM : OrientedImageryViewToolbarViewModelBase
 {
     private static readonly MarkerSymbol DefaultSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 10);
 

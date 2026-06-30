@@ -4,6 +4,33 @@
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
 
+    <!-- Toolbar data templates -->
+    <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
+        <Button Command="{Binding SelectNextSymbol}">
+            <controls:SymbolDisplay Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="AutoUpdateFootprintToolbarTemplate" DataType="controls:AutoUpdateFootprintVM">
+        <ToggleButton Content="AU" IsChecked="{Binding MainViewModel.AutoUpdateFootprint}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
+        <ToggleButton Content="FA" IsChecked="{Binding MainViewModel.ShowSelectedFootprint}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
+        <ToggleButton Content="FA" IsChecked="{Binding MainViewModel.ShowUnselectedFootprints}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="controls:ShowCameraMarkersVM">
+        <ToggleButton Content="Cameras" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
+        <Button Content="❌" Command="{Binding MainViewModel.ClearMarkersCommand}"/>
+    </DataTemplate>
+
     <Style TargetType="{x:Type controls:OrientedImageDisplay}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
@@ -22,6 +49,20 @@
 
     <Style TargetType="{x:Type controls:OrientedImageryView}">
         <Setter Property="IsTabStop" Value="False" />
+
+        <Setter Property="ItemTemplateSelector">
+            <Setter.Value>
+                <controls:OrientedImageryViewTemplateSelector>
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:AutoUpdateFootprintVM}" Template="{StaticResource AutoUpdateFootprintToolbarTemplate}" />
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowSelectedFootprintVM}" Template="{StaticResource ShowSelectedFootprintToolbarTemplate}" />
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
+                </controls:OrientedImageryViewTemplateSelector>
+            </Setter.Value>
+        </Setter>
+
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -29,6 +70,7 @@
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:OrientedImageryView}">
@@ -66,4 +108,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+
 </ResourceDictionary>
