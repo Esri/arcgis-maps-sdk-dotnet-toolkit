@@ -8,18 +8,34 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <esri:OrientedImageryViewModel x:Key="MainOrientedImageryVM" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OrientedImagery/OrientedImagery.Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIViewerToolbarVM">
-            <TextBlock Text="{Binding Message}" />
-        </DataTemplate>
+            <esri:OrientedImageryViewModel x:Key="MainOrientedImageryVM" />
 
-        <DataTemplate x:Key="AlternateAutoUpdateFootprintTemplate" DataType="esri:AutoUpdateFootprintVM">
-            <ToggleButton Foreground="Red" Content="Auto Update Footprint" IsChecked="{Binding MainViewModel.AutoUpdateFootprint, Mode=TwoWay}" />
-        </DataTemplate>
+            <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIViewerToolbarVM">
+                <Button Click="OpenSelectedImagePopupButton_Click" ToolTip="Open popup for selected image">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MainViewModel.SelectedImage}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Viewbox Width="20" Height="20" Stretch="Uniform">
+                        <Grid Width="32" Height="32">
+                            <Path Fill="Black" Data="M7 10h18v10H7zm17 9v-8H8v8zM15 7H7v1h8zm9 1h1V7h-1zm5 14a2 2 0 0 1-2 2h-6.69l-4.277 6.33L11.757 24H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2zM28 5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v17a1 1 0 0 0 1 1h7.289l3.744 5.543L19.778 23H27a1 1 0 0 0 1-1z" />
+                        </Grid>
+                    </Viewbox>
+                </Button>
+            </DataTemplate>
 
-        <esri:OrientedImageryViewTemplateSelectorItem x:Key="DemoOilToolbarSelectorItem" Type="{x:Type local:ExampleOIViewerToolbarVM}" Template="{StaticResource DemoOilToolbarControlTemplate}" />
-        <esri:OrientedImageryViewTemplateSelectorItem x:Key="AlternateAutoUpdateFootprintSelectorItem" Type="{x:Type esri:AutoUpdateFootprintVM}" Template="{StaticResource AlternateAutoUpdateFootprintTemplate}" />
+            <esri:OrientedImageryViewTemplateSelectorItem x:Key="DemoOilToolbarSelectorItem" Type="{x:Type local:ExampleOIViewerToolbarVM}" Template="{StaticResource DemoOilToolbarControlTemplate}" />
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
@@ -36,11 +52,9 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBox x:Name="LayerUriTextBox" Text="https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0" />
             <Button Grid.Column="1" Content="Apply Layer" Click="ApplyLayerButton_Click" />
-            <Button Grid.Column="2" Content="Toggle Default/Custom Toolbar" Click="ToggleToolbarStyleButton_Click" />
         </Grid>
 
         <esri:MapView x:Name="MainMapView" Grid.Row="1" Grid.Column="0"/>
@@ -48,5 +62,20 @@
                                   GeoView="{Binding ElementName=MainMapView}"
                                   ViewModel="{StaticResource MainOrientedImageryVM}"
                                   Grid.Row="1" Grid.Column="1"/>
+
+        <Grid x:Name="SelectedImagePopupBackground"
+              Grid.RowSpan="2"
+              Grid.ColumnSpan="2"
+              Background="#AA333333"
+              Visibility="Collapsed"
+              MouseDown="SelectedImagePopupBackground_MouseDown">
+            <Border BorderBrush="Black"
+                    BorderThickness="1"
+                    Background="White"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <esri:PopupViewer x:Name="SelectedImagePopupViewer" Margin="5" Width="400" MaxHeight="500" />
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
