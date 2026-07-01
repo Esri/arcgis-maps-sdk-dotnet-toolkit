@@ -8,6 +8,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = ImageDisplayName, Type = typeof(OrientedImageDisplay))]
 public partial class OrientedImageryView : ItemsControl
 {
+    private void SetToolbarViewModels(OrientedImageryViewModel? viewModel)
+    {
+        foreach (var toolbarVM in Items.OfType<OrientedImageryViewToolbarViewModelBase>())
+        {
+            toolbarVM.MainViewModel = viewModel;
+        }
+    }
+
     /// <inheritdoc />
     protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
     {
@@ -18,10 +26,7 @@ public partial class OrientedImageryView : ItemsControl
             toolbarVM.MainViewModel = null;
         }
 
-        foreach (var toolbarVM in e.NewItems?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
-        {
-            toolbarVM.MainViewModel = this.ViewModel;
-        }
+        SetToolbarViewModels(ViewModel);
     }
 
     /// <inheritdoc />
@@ -29,22 +34,12 @@ public partial class OrientedImageryView : ItemsControl
     {
         base.OnItemsSourceChanged(oldValue, newValue);
 
-        try
+        foreach (var toolbarVM in oldValue?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
         {
-
-            foreach (var toolbarVM in oldValue?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
-            {
-                toolbarVM.MainViewModel = null;
-            }
-
-            foreach (var toolbarVM in newValue?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
-            {
-                toolbarVM.MainViewModel = this.ViewModel;
-            }
+            toolbarVM.MainViewModel = null;
         }
-        catch (Exception ex) {
-            var hi = 1;
-        }
+
+        SetToolbarViewModels(ViewModel);
     }
 }
 
