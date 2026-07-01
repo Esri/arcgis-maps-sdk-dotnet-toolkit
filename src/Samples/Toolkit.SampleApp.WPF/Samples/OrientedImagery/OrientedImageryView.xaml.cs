@@ -1,11 +1,13 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Esri.ArcGISRuntime.UI;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
@@ -17,13 +19,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
     {
         private OrientedImageryLayer _oiLayer;
 
-        private bool _toolbarIsUsingDefaultStyle = true;
-
         public OrientedImageryView()
         {
             InitializeComponent();
+            ConfigureToolbar();
 
             _ = Initialize();
+        }
+
+        private void ConfigureToolbar()
+        {
+            var toolbarItems = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryView.GetDefaultToolbarItems();
+            toolbarItems.Add(new ExampleOIViewerToolbarVM());
+            MainOrientedImageryView.ItemsSource = toolbarItems;
+
+            if (MainOrientedImageryView.ItemTemplateSelector is OrientedImageryViewTemplateSelector selector &&
+                FindResource("DemoOilToolbarSelectorItem") is OrientedImageryViewTemplateSelectorItem selectorItem)
+            {
+                selector.TypeTemplatePairs.Add(selectorItem);
+            }
         }
 
         private async Task Initialize()
@@ -43,7 +57,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             MainMapView.Map.OperationalLayers.Clear();
             MainMapView.Map.OperationalLayers.Add(_oiLayer);
 
-            MainOrientedImageryView.ViewModel.SelectedImage = new Mapping.OrientedImage();
             MainOrientedImageryView.OrientedImageryLayer = _oiLayer;
             MainMapView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
         }
@@ -72,26 +85,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             }
         }
 
-        private void ToggleToolbarStyleButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void OpenSelectedImagePopupButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_toolbarIsUsingDefaultStyle)
-            {
-                MainOrientedImageryView.ItemsSource = new ObservableCollection<object>
-                {
-                    new AutoUpdateFootprintVM(),
-                    new ShowSelectedFootprintVM(),
-                    new ExampleOIViewerToolbarVM()
-                };
+            var selectedImage = MainOrientedImageryView.ViewModel.SelectedImage;
+            if (selectedImage == null)
+                return;
 
-                var selector = MainOrientedImageryView.ItemTemplateSelector as OrientedImageryViewTemplateSelector;
-                selector.TypeTemplatePairs.Add(FindResource("DemoOilToolbarSelectorItem") as OrientedImageryViewTemplateSelectorItem);
-                selector.TypeTemplatePairs.Add(FindResource("AlternateAutoUpdateFootprintSelectorItem") as OrientedImageryViewTemplateSelectorItem);
-            }
-            else
+            SelectedImagePopupViewer.Popup = CreatePopup(selectedImage);
+            SelectedImagePopupBackground.Visibility = Visibility.Visible;
+        }
+
+        private static Popup CreatePopup(Mapping.OrientedImage orientedImage)
+        {
+            var graphic = new Graphic(orientedImage.Geometry);
+            foreach (var attribute in orientedImage.Attributes)
             {
-                MainOrientedImageryView.ItemsSource = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryView.GetDefaultToolbarItems();
+                graphic.Attributes[attribute.Key] = attribute.Value;
             }
-            _toolbarIsUsingDefaultStyle = !_toolbarIsUsingDefaultStyle;
+
+            return Popup.FromGeoElement(graphic);
+        }
+
+        private void SelectedImagePopupBackground_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            SelectedImagePopupBackground.Visibility = Visibility.Collapsed;
+            SelectedImagePopupViewer.Popup = null;
         }
     }
 }
