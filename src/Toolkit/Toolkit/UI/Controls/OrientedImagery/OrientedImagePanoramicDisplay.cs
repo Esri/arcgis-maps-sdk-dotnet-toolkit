@@ -126,7 +126,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         }
     }
 
-    public bool IsActive { get; private set; }
+    public bool IsBusy { get; private set; }
+
+    public bool IsInteractive { get; private set; }
 
     public Exception? Error { get; private set; }
 
@@ -567,14 +569,17 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         return hit;
     }
 
-    // Busy while decoding/uploading; Error aggregates the image load error and any decode/render failure.
+    // IsBusy while decoding/uploading; IsInteractive once a panorama is decoded and shown with no error (the sphere is
+    // then navigable). Error aggregates the image load error and any decode/render failure.
     private void UpdateState()
     {
         Exception? error = _footprint?.OrientedImage?.LoadError ?? _renderError;
-        if (_isLoading == IsActive && ReferenceEquals(error, Error))
+        bool interactive = _imageWidth > 0 && _imageHeight > 0 && !_isLoading && error is null;
+        if (_isLoading == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
             return;
 
-        IsActive = _isLoading;
+        IsBusy = _isLoading;
+        IsInteractive = interactive;
         Error = error;
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
