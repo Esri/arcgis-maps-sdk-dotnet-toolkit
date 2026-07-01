@@ -49,7 +49,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             canExecute: () => true);
     }
 
-    #region GeoViewStuff
+    #region GeoModel
     private OrientedImageryLayer _oiLayer;
     public OrientedImageryLayer OrientedImageryLayer
     {
@@ -63,11 +63,15 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 _oiLayer.VisibleFootprints.Clear();
             }
 
+            _images.Clear();
+            SelectedImage = null;
+            _markers.Clear();
+
             _oiLayer = value;
             UpdateVisibleFootprints();
         }
     }
-    #endregion
+    #endregion GeoModel
 
     #region ImageManagement
     private List<OrientedImage> _images;
