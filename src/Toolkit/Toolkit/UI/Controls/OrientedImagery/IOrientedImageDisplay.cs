@@ -52,13 +52,23 @@ internal interface IOrientedImageDisplay
     /// <param name="color">The background color, or <see cref="System.Drawing.Color.Empty"/> to keep the display's default.</param>
     void SetBackgroundColor(System.Drawing.Color color);
 
-    /// <summary>Gets a value indicating whether the display is loading or drawing (not in a steady state).</summary>
-    bool IsActive { get; }
+    /// <summary>
+    /// Gets a value indicating whether the display is busy loading, initializing, or drawing (not in a steady state).
+    /// Use it to show progress.
+    /// </summary>
+    bool IsBusy { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether the display is ready to interact with: it has a loaded image, the view can be
+    /// panned/zoomed, and there is no critical <see cref="Error"/>. Independent of <see cref="IsBusy"/>;
+    /// a loaded display stays interactive while it redraws.
+    /// </summary>
+    bool IsInteractive { get; }
 
     /// <summary>Gets the error that prevents the display from showing its image, or <c>null</c> when there is none.</summary>
     Exception? Error { get; }
 
-    /// <summary>Occurs when <see cref="IsActive"/> or <see cref="Error"/> changes.</summary>
+    /// <summary>Occurs when <see cref="IsBusy"/>, <see cref="IsInteractive"/>, or <see cref="Error"/> changes.</summary>
     event EventHandler? StateChanged;
 
     /// <summary>Occurs when the user taps the image; a tapped marker (if any) is carried on the event args.</summary>
