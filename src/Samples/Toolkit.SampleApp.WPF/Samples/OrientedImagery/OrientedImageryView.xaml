@@ -8,6 +8,8 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <esri:OrientedImageryViewModel x:Key="MainOrientedImageryVM" />
+
         <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIViewerToolbarVM">
             <TextBlock Text="{Binding Message}" />
         </DataTemplate>
@@ -42,6 +44,9 @@
         </Grid>
 
         <esri:MapView x:Name="MainMapView" Grid.Row="1" Grid.Column="0"/>
-        <esri:OrientedImageryView x:Name="MainOrientedImageryView" GeoView="{Binding ElementName=MainMapView}" Grid.Row="1" Grid.Column="1"/>
+        <esri:OrientedImageryView x:Name="MainOrientedImageryView"
+                                  GeoView="{Binding ElementName=MainMapView}"
+                                  ViewModel="{StaticResource MainOrientedImageryVM}"
+                                  Grid.Row="1" Grid.Column="1"/>
     </Grid>
 </UserControl>
