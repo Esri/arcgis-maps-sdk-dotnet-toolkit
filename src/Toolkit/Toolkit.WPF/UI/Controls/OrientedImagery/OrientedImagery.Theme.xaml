@@ -237,7 +237,49 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <controls:OrientedImageDisplay Grid.ColumnSpan="3" x:Name="PART_ImageDisplay" />
+                                <controls:OrientedImageDisplay Grid.ColumnSpan="3"
+                                                               x:Name="PART_ImageDisplay"
+                                                               DisplayBackgroundColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayBackgroundColor}" />
+
+                                <Border Grid.ColumnSpan="3"
+                                        Background="#80FFFFFF">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageDisplay, Path=IsActive}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Text="Loading..." />
+                                </Border>
+
+                                <Popup PlacementTarget="{Binding ElementName=PART_ImageDisplay}"
+                                       Placement="Center"
+                                       StaysOpen="True">
+                                    <Popup.Style>
+                                        <Style TargetType="{x:Type Popup}">
+                                            <Setter Property="IsOpen" Value="True" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageDisplay, Path=Error}" Value="{x:Null}">
+                                                    <Setter Property="IsOpen" Value="False" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Popup.Style>
+                                    <Border Background="White"
+                                            BorderBrush="Gray"
+                                            BorderThickness="1"
+                                            Padding="8">
+                                        <TextBlock MaxWidth="300"
+                                                   Text="{Binding ElementName=PART_ImageDisplay, Path=Error.Message}"
+                                                   TextWrapping="Wrap" />
+                                    </Border>
+                                </Popup>
 
                                 <Button Content="&lt;"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
