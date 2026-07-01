@@ -86,6 +86,41 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="ImageNavigationButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="25" />
+        <Setter Property="MinHeight" Value="60" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="#40FFFFFF" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#DFFFFFFF" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#FFFFFFFF" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.35" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Toolbar data templates -->
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
         <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding MainViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -155,13 +190,45 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="controls:ShowCameraMarkersVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}">
+        <Button Command="{Binding ToggleCameraMarkerDisplayMode}">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocations}" Value="True">
+                            <Setter Property="Background" Value="#FFD3D3D3" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
             <Viewbox Width="20" Height="20" Stretch="Uniform">
                 <Grid Width="32" Height="32">
-                    <Path Fill="Black" Data="M11 12.5v.5H6v-1h5zm19 11v-12A2.503 2.503 0 0 0 27.5 9H27a1 1 0 0 1-1-1 2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2 1 1 0 0 1-1 1h-2V8H6v1H4.5A2.503 2.503 0 0 0 2 11.5v12A2.503 2.503 0 0 0 4.5 26h23a2.503 2.503 0 0 0 2.5-2.5M7 10V9h3v1h3a2 2 0 0 0 2-2 1 1 0 0 1 1-1h8a1 1 0 0 1 1 1 2 2 0 0 0 2 2h.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-23A1.5 1.5 0 0 1 3 23.5v-12A1.5 1.5 0 0 1 4.5 10zm18.8 7a5.8 5.8 0 1 0-5.8 5.8 5.806 5.806 0 0 0 5.8-5.8m-1 0a4.8 4.8 0 1 1-4.8-4.8 4.805 4.805 0 0 1 4.8 4.8" />
+                    <Path Fill="Black" Data="M11 12.5v.5H6v-1h5zm19 11v-12A2.503 2.503 0 0 0 27.5 9H27a1 1 0 0 1-1-1 2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2 1 1 0 0 1-1 1h-2V8H6v1H4.5A2.503 2.503 0 0 0 2 11.5v12A2.503 2.503 0 0 0 4.5 26h23a2.503 2.503 0 0 0 2.5-2.5M7 10V9h3v1h3a2 2 0 0 0 2-2 1 1 0 0 1 1-1h8a1 1 0 0 1 1 1 2 2 0 0 0 2 2h.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-23A1.5 1.5 0 0 1 3 23.5v-12A1.5 1.5 0 0 1 4.5 10zm18.8 7a5.8 5.8 0 1 0-5.8 5.8 5.806 5.806 0 0 0 5.8-5.8m-1 0a4.8 4.8 0 1 1-4.8-4.8 4.805 4.805 0 0 1 4.8 4.8">
+                        <Path.Style>
+                            <Style TargetType="{x:Type Path}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                    </Path>
+                    <Path Fill="Black" Data="M11 13H6v-1h5zm16.5 13a2.503 2.503 0 0 0 2.5-2.5v-12A2.503 2.503 0 0 0 27.5 9H27a1 1 0 0 1-1-1 2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2 1 1 0 0 1-1 1h-2V8H6v1H4.5A2.503 2.503 0 0 0 2 11.5V22h1V11.5A1.5 1.5 0 0 1 4.5 10H7V9h3v1h3a2 2 0 0 0 2-2 1 1 0 0 1 1-1h8a1 1 0 0 1 1 1 2 2 0 0 0 2 2h.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H15v.999zm-13.3-9a5.8 5.8 0 1 1 5.8 5.8 5.806 5.806 0 0 1-5.8-5.8m1 0a4.8 4.8 0 1 0 4.8-4.8 4.805 4.805 0 0 0-4.8 4.8M8 24.999h5V24H8v-5H7v5H2v.999h5V30h1z">
+                        <Path.Style>
+                            <Style TargetType="{x:Type Path}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                    </Path>
                 </Grid>
             </Viewbox>
-        </ToggleButton>
+        </Button>
     </DataTemplate>
 
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
@@ -281,12 +348,32 @@
                                     </Border>
                                 </Popup>
 
-                                <Button Content="&lt;"
+                                <Button Style="{StaticResource ImageNavigationButtonStyle}"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
-                                        VerticalAlignment="Center"/>
-                                <Button Content="&gt;"
+                                        VerticalAlignment="Center">
+                                    <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                        <Grid Width="32" Height="32">
+                                            <Path Fill="Black" Data="M20 26.1 9.9 16 20 5.9z">
+                                                <Path.RenderTransform>
+                                                    <TranslateTransform X="-3" Y="3" />
+                                                </Path.RenderTransform>
+                                            </Path>
+                                        </Grid>
+                                    </Viewbox>
+                                </Button>
+                                <Button Style="{StaticResource ImageNavigationButtonStyle}"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
-                                        Grid.Column="2" VerticalAlignment="Center" />
+                                        Grid.Column="2" VerticalAlignment="Center">
+                                    <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                        <Grid Width="32" Height="32">
+                                            <Path Fill="Black" Data="M12 5.9 22.1 16 12 26.1z">
+                                                <Path.RenderTransform>
+                                                    <TranslateTransform Y="2" />
+                                                </Path.RenderTransform>
+                                            </Path>
+                                        </Grid>
+                                    </Viewbox>
+                                </Button>
                             </Grid>
                         </Grid>
                     </Border>

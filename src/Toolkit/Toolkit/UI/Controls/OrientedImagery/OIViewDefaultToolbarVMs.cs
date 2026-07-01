@@ -80,7 +80,73 @@ public class ShowUnselectedFootprintsVM : OrientedImageryViewToolbarViewModelBas
 /// <summary>
 /// View model for the "Show Camera Markers" toolbar control in the Oriented Imagery View.
 /// </summary>
-public class ShowCameraMarkersVM : OrientedImageryViewToolbarViewModelBase { }
+public class ShowCameraMarkersVM : OrientedImageryViewToolbarViewModelBase
+{
+    private CameraMarkerDisplayMode DisplayMode
+    {
+        get
+        {
+            if (MainViewModel == null || !MainViewModel.ShowSelectedCameraLocations)
+                return CameraMarkerDisplayMode.Off;
+
+            return MainViewModel.ShowSelectedCameraLocationsOnDisplay ? CameraMarkerDisplayMode.All : CameraMarkerDisplayMode.GeoView;
+        }
+        set
+        {
+            if (MainViewModel == null)
+                return;
+
+            switch (value)
+            {
+                case CameraMarkerDisplayMode.Off:
+                    MainViewModel.ShowSelectedCameraLocations = false;
+                    MainViewModel.ShowSelectedCameraLocationsOnDisplay = false;
+                    break;
+                case CameraMarkerDisplayMode.GeoView:
+                    MainViewModel.ShowSelectedCameraLocations = true;
+                    MainViewModel.ShowSelectedCameraLocationsOnDisplay = false;
+                    break;
+                case CameraMarkerDisplayMode.All:
+                    MainViewModel.ShowSelectedCameraLocations = true;
+                    MainViewModel.ShowSelectedCameraLocationsOnDisplay = true;
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Advances to the next camera marker display mode.
+    /// </summary>
+    public ICommand ToggleCameraMarkerDisplayMode { get; }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="ShowCameraMarkersVM" /> class.
+    /// </summary>
+    public ShowCameraMarkersVM()
+    {
+        ToggleCameraMarkerDisplayMode = new Command(
+        execute: () =>
+        {
+            if (MainViewModel == null)
+                return;
+
+            DisplayMode = DisplayMode switch
+            {
+                CameraMarkerDisplayMode.Off => CameraMarkerDisplayMode.GeoView,
+                CameraMarkerDisplayMode.GeoView => CameraMarkerDisplayMode.All,
+                _ => CameraMarkerDisplayMode.Off,
+            };
+        },
+        canExecute: () => true);
+    }
+
+    private enum CameraMarkerDisplayMode
+    {
+        Off,
+        GeoView,
+        All,
+    }
+}
 
 /// <summary>
 /// View model for the "Clear Markers" toolbar control in the Oriented Imagery View.
