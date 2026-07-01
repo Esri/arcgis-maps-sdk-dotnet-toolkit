@@ -45,10 +45,11 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="ControlPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
+        <Grid x:Name="ControlPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -58,14 +59,17 @@
         </Grid>
 
         <esri:MapView x:Name="MainMapView" Grid.Row="1" Grid.Column="0"/>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="5"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      ResizeBehavior="PreviousAndNext" />
         <esri:OrientedImageryView x:Name="MainOrientedImageryView"
                                   GeoView="{Binding ElementName=MainMapView}"
                                   ViewModel="{StaticResource MainOrientedImageryVM}"
-                                  Grid.Row="1" Grid.Column="1"/>
+                                  Grid.Row="1" Grid.Column="2"/>
 
         <Grid x:Name="SelectedImagePopupBackground"
               Grid.RowSpan="2"
-              Grid.ColumnSpan="2"
+              Grid.ColumnSpan="3"
               Background="#AA333333"
               Visibility="Collapsed"
               MouseDown="SelectedImagePopupBackground_MouseDown">
