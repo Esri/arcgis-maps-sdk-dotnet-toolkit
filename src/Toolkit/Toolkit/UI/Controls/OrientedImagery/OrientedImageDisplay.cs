@@ -136,17 +136,34 @@ public partial class OrientedImageDisplay
     }
 
     /// <summary>
-    /// Gets a value indicating whether the control is loading or drawing its image (that is, not in a steady state).
+    /// Gets a value indicating whether the control is busy loading, initializing, or drawing its image
+    /// (that is, not in a steady state).
     /// </summary>
-    /// <value><c>true</c> while the active display is loading or drawing; otherwise <c>false</c>.</value>
-    public bool IsActive => (bool)GetValue(IsActiveProperty);
+    /// <remarks>
+    /// Use this to show progress (for example, a busy indicator). It is independent of <see cref="IsInteractive"/>:
+    /// a loaded image can be interacted with while it redraws, so both can be <c>true</c> at once.
+    /// </remarks>
+    /// <value><c>true</c> while the active display is loading, initializing, or drawing; otherwise <c>false</c>.</value>
+    public bool IsBusy => (bool)GetValue(IsBusyProperty);
+
+    /// <summary>
+    /// Gets a value indicating whether the control is ready to interact with: it has a loaded image,
+    /// its view can be panned/zoomed, and there is no critical <see cref="Error"/>.
+    /// </summary>
+    /// <remarks>
+    /// Use this to enable or disable UI that acts on the displayed image (for example, controls that add markers).
+    /// It is <c>false</c> before an image is loaded, while an unsupported image type or a load/render error is present,
+    /// and becomes <c>true</c> once the image is shown and the view is unlocked.
+    /// </remarks>
+    /// <value><c>true</c> when the image is loaded and the view can be interacted with; otherwise <c>false</c>.</value>
+    public bool IsInteractive => (bool)GetValue(IsInteractiveProperty);
 
     /// <summary>
     /// Gets the error preventing the image from being shown, or <c>null</c> when there is none.
     /// </summary>
     /// <remarks>
     /// Surfaces the active display's failure (for example, an <see cref="OrientedImage"/> load error or a layer
-    /// rendering error). A non-<c>null</c> <see cref="Error"/> and <see cref="IsActive"/> are mutually exclusive.
+    /// rendering error). While <see cref="Error"/> is non-<c>null</c>, <see cref="IsInteractive"/> is <c>false</c>.
     /// </remarks>
     /// <value>The current error, or <c>null</c>.</value>
     public Exception? Error => GetValue(ErrorProperty) as Exception;
@@ -182,10 +199,16 @@ public partial class OrientedImageDisplay
         PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(AutoUpdateFootprint), false, (s, oldValue, newValue) => s._activeDisplay?.SetAutoUpdateFootprint(newValue));
 
     /// <summary>
-    /// Identifies the <see cref="IsActive"/> dependency property.
+    /// Identifies the <see cref="IsBusy"/> dependency property.
     /// </summary>
-    public static readonly DependencyProperty IsActiveProperty =
-        PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(IsActive));
+    public static readonly DependencyProperty IsBusyProperty =
+        PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(IsBusy));
+
+    /// <summary>
+    /// Identifies the <see cref="IsInteractive"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty IsInteractiveProperty =
+        PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(IsInteractive));
 
     /// <summary>
     /// Identifies the <see cref="Error"/> dependency property.
@@ -277,11 +300,12 @@ public partial class OrientedImageDisplay
 
     private void OnDisplayImageClicked(object? sender, ImageClickedEventArgs e) => ImageClicked?.Invoke(this, e);
 
-    // Surfaces the active display's state as the control's own read-only IsActive/Error.
+    // Surfaces the active display's state as the control's own read-only IsBusy/IsInteractive/Error.
     // An unsupported image type has no display, so its error is reported here directly.
     private void UpdateState()
     {
-        SetValue(IsActiveProperty, _unsupportedError is null && (_activeDisplay?.IsActive ?? false));
+        SetValue(IsBusyProperty, _unsupportedError is null && (_activeDisplay?.IsBusy ?? false));
+        SetValue(IsInteractiveProperty, _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false));
         SetValue(ErrorProperty, _unsupportedError ?? _activeDisplay?.Error);
     }
 
