@@ -1,8 +1,11 @@
-﻿using Esri.ArcGISRuntime.Mapping;
+﻿#nullable enable
+
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,7 +18,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
     /// </summary>
     public partial class OrientedImageryView : UserControl
     {
-        private OrientedImageryLayer _oiLayer;
+        private const string BasemapUri = "https://runtime.maps.arcgis.com/home/item.html?id=d8c5e76fb2cc4bb6955a6783a5f577b7";
+
+        private OrientedImageryLayer? _oiLayer;
 
         public OrientedImageryView()
         {
@@ -42,21 +47,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         {
             await ApplyLayer(new Uri(LayerUriTextBox.Text));
 
-            MainMapView.Map = new Map(BasemapStyle.ArcGISStreets);
+            MainMapView.Map = new Map(new Uri(BasemapUri));
             MainMapView.GeoViewTapped += MainMapView_GeoViewTapped;
         }
 
         private async Task ApplyLayer(Uri layerUri)
         {
-            _oiLayer = new OrientedImageryLayer(layerUri);
-            await _oiLayer.LoadAsync();
+            var oiLayer = new OrientedImageryLayer(layerUri);
+            await oiLayer.LoadAsync();
+            if (oiLayer.LoadStatus == LoadStatus.FailedToLoad)
+                return;
 
-            MainMapView.Map ??= new Mapping.Map(BasemapStyle.ArcGISTopographic);
+            _oiLayer = oiLayer;
+
+            if (MainMapView.Map == null)
+                MainMapView.Map = new Map(new Uri(BasemapUri));
+
             MainMapView.Map.OperationalLayers.Clear();
             MainMapView.Map.OperationalLayers.Add(_oiLayer);
 
             MainOrientedImageryView.OrientedImageryLayer = _oiLayer;
-            MainMapView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
+            if (_oiLayer.FullExtent != null)
+                MainMapView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
         }
 
         private async void ApplyLayerButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -64,22 +76,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             await ApplyLayer(new Uri(LayerUriTextBox.Text));
         }
 
-        private async void MainMapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
+        private async void MainMapView_GeoViewTapped(object? sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
-            if (e.Location == null)
+            if (e.Location == null || _oiLayer == null)
                 return;
 
             // In this case we are choosing to interpret OrientedImageryViewModel.AllowAddingMarkers as mutually exclusive with image searching.
-            if (!MainOrientedImageryView.ViewModel.AllowAddingMarkers)
+            if (MainOrientedImageryView.ViewModel.AllowAddingMarkers)
             {
-                var parameters = new OrientedImageSearchParameters();
-                var images = await _oiLayer.SearchImagesAsync(e.Location, parameters);
-                MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
-                MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
+                MainOrientedImageryView.ViewModel.AddMarkerLocation(e.Location);
             }
             else
             {
-                MainOrientedImageryView.ViewModel.AddMarkerLocation(e.Location);
+                var parameters = new OrientedImageSearchParameters();
+                var images = await _oiLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
+                MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
+                MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
             }
         }
 
