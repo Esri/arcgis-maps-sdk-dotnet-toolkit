@@ -74,9 +74,12 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
     private bool _autoUpdate;
     private CancellationTokenSource? _updateCts;
     private bool _isLoading;
+    private bool _interactive;
     private int _footprintGeneration;
 
-    public bool IsActive { get; private set; }
+    public bool IsBusy { get; private set; }
+
+    public bool IsInteractive { get; private set; }
 
     public Exception? Error { get; private set; }
 
@@ -114,17 +117,20 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
     }
 
     // Resolves the display's state from its sources and raises StateChanged when it changes.
-    // IsActive means "loading or drawing".
+    // IsBusy means "loading or drawing"; IsInteractive means "image loaded, map unlocked, no error".
+    // A loaded raster stays interactive while it redraws during a pan.
     // Error aggregates the image load error, the raster layer load error, and the layer's view-state error.
     private void UpdateState()
     {
         // A MapView with no Map sits at DrawStatus.InProgress forever, so only count drawing when there's a map.
-        bool active = _isLoading || (_mapView.Map is not null && _mapView.DrawStatus == DrawStatus.InProgress);
+        bool busy = _isLoading || (_mapView.Map is not null && _mapView.DrawStatus == DrawStatus.InProgress);
         Exception? error = ResolveError();
-        if (active == IsActive && ReferenceEquals(error, Error))
+        bool interactive = _interactive && error is null;
+        if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
             return;
 
-        IsActive = active;
+        IsBusy = busy;
+        IsInteractive = interactive;
         Error = error;
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -294,8 +300,10 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
 
     // Locks/unlocks MapView user interaction (programmatic SetViewpoint still works while locked).
     // Replace the whole MapViewInteractionOptions object (an in-place IsEnabled flip would be ignored).
+    // Tracks the enabled state in _interactive; each caller follows this with UpdateState, which surfaces it as IsInteractive.
     private void SetInteractive(bool enabled)
     {
+        _interactive = enabled;
         if (_mapView.InteractionOptions?.IsEnabled == enabled)
             return;
 
