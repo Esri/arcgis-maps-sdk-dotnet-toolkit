@@ -318,8 +318,11 @@
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=PART_ImageDisplay, Path=IsActive}" Value="True">
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageDisplay, Path=IsInteractive}" Value="False">
                                                     <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -328,6 +331,25 @@
                                                VerticalAlignment="Center"
                                                Text="Loading..." />
                                 </Border>
+
+                                <ProgressBar Grid.ColumnSpan="3"
+                                             Height="2"
+                                             VerticalAlignment="Top"
+                                             IsIndeterminate="True">
+                                    <ProgressBar.Style>
+                                        <Style TargetType="{x:Type ProgressBar}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageDisplay, Path=IsBusy}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ProgressBar.Style>
+                                </ProgressBar>
 
                                 <Popup PlacementTarget="{Binding ElementName=PART_ImageDisplay}"
                                        Placement="Center"
