@@ -1,7 +1,8 @@
 ﻿
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+
 namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery;
 
-internal class ExampleOIViewerToolbarVM
+internal class ExampleOIViewerToolbarVM : OrientedImageryViewToolbarViewModelBase
 {
-    public string Message { get; set; } = "Demo user-implemented Oil Toolbar Control";
 }
