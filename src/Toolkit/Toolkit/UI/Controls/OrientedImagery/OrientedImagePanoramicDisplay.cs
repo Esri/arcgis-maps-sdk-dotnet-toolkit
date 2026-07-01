@@ -356,7 +356,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
             return;
 
         var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
-        if (!TryProjectViewCorners(camera, width, height, out OrientedImagePixelCorners corners))
+        if (!TryProjectViewRing(camera, width, height, out IReadOnlyList<PointF> corners))
             return;
 
         _updateCts?.Cancel();
@@ -368,39 +368,55 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         }
         catch
         {
-            // Skeleton UpdateFootprintAsync is a no-op; ignore cancellation/failures.
+            // Ignore cancellation/failures from a superseded update.
         }
     }
 
-    // Projects the four view corners (clockwise from top-left) back onto the equirectangular image as pixel corners.
-    // Returns false if any corner can't be projected. Caveat: near the poles (looking straight up/down) or across the
-    // u=0/1 wrap seam the four-corner quad poorly approximates the visible spherical region; corners can fold or span
-    // most of the image width. Refining that (multi-segment / clamped region) is a follow-up.
-    private bool TryProjectViewCorners(PanoramaCameraState camera, double width, double height, out OrientedImagePixelCorners corners)
+    // Projects the screen-view boundary onto the equirectangular image as an ordered ring of pixel vertices.
+    // The updated OrientedImageFootprint API takes the full vertex list (not a fixed quad), so the boundary is
+    // densified (several samples per screen edge): a panorama's straight screen edges map to curved arcs on the
+    // image, which four corners approximate poorly. Horizontal coordinates are unwrapped across the u = 0/1 seam so
+    // the ring stays continuous — pixels may fall below 0 or above the image width, which core maps back onto the
+    // sphere. Returns false when any sample can't be projected (e.g. looking past a pole), leaving the footprint as-is.
+    private bool TryProjectViewRing(PanoramaCameraState camera, double width, double height, out IReadOnlyList<PointF> ring)
     {
-        corners = null!;
-        if (TryCornerPixel(camera, 0, 0, width, height, out PointF topLeft) &&
-            TryCornerPixel(camera, width, 0, width, height, out PointF topRight) &&
-            TryCornerPixel(camera, width, height, width, height, out PointF bottomRight) &&
-            TryCornerPixel(camera, 0, height, width, height, out PointF bottomLeft))
+        ring = System.Array.Empty<PointF>();
+        const int samplesPerEdge = 8;
+
+        // Screen boundary sampled clockwise from the top-left corner, without repeating the shared corners.
+        var boundary = new List<(double X, double Y)>(samplesPerEdge * 4);
+        for (int i = 0; i < samplesPerEdge; i++)
+            boundary.Add(((double)i / samplesPerEdge * width, 0));                    // top edge, left → right
+        for (int i = 0; i < samplesPerEdge; i++)
+            boundary.Add((width, (double)i / samplesPerEdge * height));               // right edge, top → bottom
+        for (int i = 0; i < samplesPerEdge; i++)
+            boundary.Add((width - ((double)i / samplesPerEdge * width), height));     // bottom edge, right → left
+        for (int i = 0; i < samplesPerEdge; i++)
+            boundary.Add((0, height - ((double)i / samplesPerEdge * height)));        // left edge, bottom → top
+
+        var pixels = new List<PointF>(boundary.Count);
+        double seamOffset = 0;
+        float previousU = 0;
+        for (int i = 0; i < boundary.Count; i++)
         {
-            corners = new OrientedImagePixelCorners(topLeft, topRight, bottomRight, bottomLeft);
-            return true;
+            if (!camera.TryScreenToNormalizedUv(boundary[i].X, boundary[i].Y, width, height, out float u, out float v))
+                return false;
+
+            if (i != 0)
+            {
+                float delta = u - previousU;
+                if (delta > 0.5f)
+                    seamOffset -= 1.0;
+                else if (delta < -0.5f)
+                    seamOffset += 1.0;
+            }
+
+            previousU = u;
+            pixels.Add(new PointF((float)((u + seamOffset) * _imageWidth), v * _imageHeight));
         }
 
-        return false;
-    }
-
-    private bool TryCornerPixel(PanoramaCameraState camera, double screenX, double screenY, double width, double height, out PointF pixel)
-    {
-        if (camera.TryScreenToNormalizedUv(screenX, screenY, width, height, out float u, out float v))
-        {
-            pixel = new PointF(u * _imageWidth, v * _imageHeight);
-            return true;
-        }
-
-        pixel = default;
-        return false;
+        ring = pixels;
+        return true;
     }
 
     public void SetBackgroundColor(System.Drawing.Color color)
