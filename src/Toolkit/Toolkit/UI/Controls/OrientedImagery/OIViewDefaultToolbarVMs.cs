@@ -86,10 +86,10 @@ public class ShowCameraMarkersVM : OrientedImageryViewToolbarViewModelBase
     {
         get
         {
-            if (MainViewModel == null || !MainViewModel.ShowSelectedCameraLocations)
+            if (MainViewModel == null || !MainViewModel.ShowCameraLocations)
                 return CameraMarkerDisplayMode.Off;
 
-            return MainViewModel.ShowSelectedCameraLocationsOnDisplay ? CameraMarkerDisplayMode.All : CameraMarkerDisplayMode.GeoView;
+            return MainViewModel.ShowCameraLocationsOnDisplay ? CameraMarkerDisplayMode.All : CameraMarkerDisplayMode.GeoView;
         }
         set
         {
@@ -99,16 +99,16 @@ public class ShowCameraMarkersVM : OrientedImageryViewToolbarViewModelBase
             switch (value)
             {
                 case CameraMarkerDisplayMode.Off:
-                    MainViewModel.ShowSelectedCameraLocations = false;
-                    MainViewModel.ShowSelectedCameraLocationsOnDisplay = false;
+                    MainViewModel.ShowCameraLocations = false;
+                    MainViewModel.ShowCameraLocationsOnDisplay = false;
                     break;
                 case CameraMarkerDisplayMode.GeoView:
-                    MainViewModel.ShowSelectedCameraLocations = true;
-                    MainViewModel.ShowSelectedCameraLocationsOnDisplay = false;
+                    MainViewModel.ShowCameraLocations = true;
+                    MainViewModel.ShowCameraLocationsOnDisplay = false;
                     break;
                 case CameraMarkerDisplayMode.All:
-                    MainViewModel.ShowSelectedCameraLocations = true;
-                    MainViewModel.ShowSelectedCameraLocationsOnDisplay = true;
+                    MainViewModel.ShowCameraLocations = true;
+                    MainViewModel.ShowCameraLocationsOnDisplay = true;
                     break;
             }
         }
