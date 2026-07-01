@@ -122,7 +122,7 @@
 
     <!-- Toolbar data templates -->
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
-        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding MainViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding MainViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="Select marker symbol">
             <Viewbox Width="20" Height="20" Stretch="Uniform">
                 <controls:SymbolDisplay Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
             </Viewbox>
@@ -130,7 +130,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.AllowAddingMarkers}">
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.AllowAddingMarkers}" ToolTip="Toggle add markers">
             <Viewbox Width="20" Height="20" Stretch="Uniform">
                 <Grid Width="32" Height="32">
                     <Path Fill="Black" Data="M29 8v15.247l-3.997-3.669a.65.65 0 0 0-.926-.033L21 22.293l-4.554-4.131a.65.65 0 0 0-.857-.013l-5.139 4.268-.826-.391a.64.64 0 0 0-.72.117L5 25.248V20.56l-1-1.006V29h26V7H14v1zm0 20H5v-1.474l4.401-3.5 1.198.567L16 19.106l5 4.531 3.506-3.123L29 24.581zm-8-12a2 2 0 1 0-2-2 2 2 0 0 0 2 2m0-3a1 1 0 1 1-1 1 1 1 0 0 1 1-1M7 19.735l5-5.032V6.038c0-2.493-1.776-3.865-5-3.865-3.178 0-5 1.445-5 3.964v8.566zM3 6.137c0-2.45 2.175-2.964 4-2.964 2.654 0 4 .964 4 2.864v8.254l-4 4.026-4-4.026zM5 8a2 2 0 1 0 2-2 2 2 0 0 0-2 2m3 0a1 1 0 1 1-1-1 1 1 0 0 1 1 1" />
@@ -140,7 +140,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="AutoUpdateFootprintToolbarTemplate" DataType="controls:AutoUpdateFootprintVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.AutoUpdateFootprint}">
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.AutoUpdateFootprint}" ToolTip="Auto-update footprint">
             <Viewbox Width="20" Height="20" Stretch="Uniform">
                 <Grid Width="32" Height="32">
                     <Path Fill="Black" Opacity="0.25" Data="M20 23.672 3.962 7.225l3.243-5.019 15.574 4.727L20 8.6z" />
@@ -151,7 +151,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowSelectedFootprint}">
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowSelectedFootprint}" ToolTip="Show selected image footprint">
             <Viewbox Width="20" Height="20" Stretch="Uniform">
                 <Grid Width="16" Height="16">
                     <Path Data="M12.382 14H3.618L.345 2h15.31zm-8-1h7.236l2.727-10H1.655z" StrokeThickness="0.7">
@@ -170,7 +170,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowUnselectedFootprints}">
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowUnselectedFootprints}" ToolTip="Show unselected image footprints">
             <Viewbox Width="20" Height="20" Stretch="Uniform">
                 <Grid Width="16" Height="16">
                     <Path Data="M12.382 14H3.618L.345 2h15.31zm-8-1h7.236l2.727-10H1.655z" StrokeThickness="0.7">
@@ -192,9 +192,14 @@
         <Button Command="{Binding ToggleCameraMarkerDisplayMode}">
             <Button.Style>
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+                    <Setter Property="ToolTip" Value="Show camera markers on geo view" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocations}" Value="True">
                             <Setter Property="Background" Value="#FFD3D3D3" />
+                            <Setter Property="ToolTip" Value="Show camera markers in geo view and image display" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}" Value="True">
+                            <Setter Property="ToolTip" Value="Clear camera markers" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -231,7 +236,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
-        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding MainViewModel.ClearMarkersCommand}">
+        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding MainViewModel.ClearMarkersCommand}" ToolTip="Clear markers">
             <Viewbox Width="20" Height="20" Stretch="Uniform">
                 <Grid Width="32" Height="32">
                     <Path Fill="Black" Data="M16.5 3.2a13.3 13.3 0 1 0 13.3 13.3A13.3 13.3 0 0 0 16.5 3.2m0 1a12.24 12.24 0 0 1 8.323 3.27L7.47 24.823A12.28 12.28 0 0 1 16.5 4.2m0 24.6a12.24 12.24 0 0 1-8.323-3.27L25.53 8.177A12.28 12.28 0 0 1 16.5 28.8" />
