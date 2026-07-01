@@ -13,14 +13,12 @@ public partial class OrientedImageryView
     private const string ImageDisplayName = "PART_ImageDisplay";
 
     private OrientedImageDisplay? _display;
-    private OrientedImageryViewModel _viewModel;
 
     public OrientedImageryView() : base()
     {
         _display = new OrientedImageDisplay();
 
         ViewModel = new OrientedImageryViewModel();
-        ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
         ItemsSource = GetDefaultToolbarItems();
 
@@ -41,7 +39,7 @@ public partial class OrientedImageryView
     {
         base.OnApplyTemplate();
 
-        DataContext = _viewModel;
+        DataContext = ViewModel;
 
         if (_display != null)
             _display.ImageClicked -= Display_ImageClicked;
@@ -51,11 +49,8 @@ public partial class OrientedImageryView
         if (_display == null)
             return;
 
-        // These should probably be proper bindings
-        _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
-        _display.Markers = ViewModel.Markers;
-        _display.Footprint = ViewModel.SelectedImageFootprint;
         _display.ImageClicked += Display_ImageClicked;
+        WireDisplayToViewModel();
     }
 
     /// <summary>
@@ -72,11 +67,59 @@ public partial class OrientedImageryView
         return new() { new AutoUpdateFootprintVM(), new ShowSelectedFootprintVM(), new ShowUnselectedFootprintsVM(), new ShowCameraMarkersVM(), new AllowAddingMarkersVM(), markerSymbolPickerVM, new ClearMarkersVM() };
     }
 
-    // Setter should eventually be public and handle event wiring
+    /// <summary>
+    /// Gets or sets the view model for the oriented imagery view.
+    /// </summary>
     public OrientedImageryViewModel ViewModel
     {
-        get { return _viewModel; }
-        private set { _viewModel = value; }
+        get => (OrientedImageryViewModel)GetValue(ViewModelProperty);
+        set => SetValue(ViewModelProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="ViewModel" /> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty ViewModelProperty =
+        PropertyHelper.CreateProperty<OrientedImageryViewModel?, OrientedImageryView>(nameof(ViewModel), null, (s, oldValue, newValue) => s.OnViewModelChanged(oldValue, newValue));
+
+    private void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    {
+        if (oldValue != null)
+        {
+            oldValue.PropertyChanged -= ViewModel_PropertyChanged;
+
+            if (GeoView?.GraphicsOverlays != null)
+                GeoView.GraphicsOverlays.Remove(oldValue.MarkersOverlay);
+        }
+
+        if (newValue == null)
+        {
+            SetCurrentValue(ViewModelProperty, new OrientedImageryViewModel());
+            return;
+        }
+
+        newValue.PropertyChanged += ViewModel_PropertyChanged;
+        DataContext = newValue;
+        SetToolbarViewModels(newValue);
+
+        if (GeoView != null)
+        {
+            if (GeoView.GraphicsOverlays == null)
+                GeoView.GraphicsOverlays = new GraphicsOverlayCollection();
+            GeoView.GraphicsOverlays.Add(newValue.MarkersOverlay);
+        }
+
+        WireDisplayToViewModel();
+    }
+
+    private void WireDisplayToViewModel()
+    {
+        if (_display == null)
+            return;
+
+        _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
+        _display.Markers = ViewModel.Markers;
+        _display.Footprint = ViewModel.SelectedImageFootprint;
     }
 
     // This should be overridable, probably as an Action dependency property or something. Or maybe it should be its own event with this as the default handler.
@@ -93,7 +136,6 @@ public partial class OrientedImageryView
     }
 
     #region GisProperties
-    // This should be made a dependency property
     public OrientedImageryLayer OrientedImageryLayer
     {
         get => ViewModel.OrientedImageryLayer;
