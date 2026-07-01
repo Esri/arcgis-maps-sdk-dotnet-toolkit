@@ -382,6 +382,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
     {
         MapPoint? mapPoint = await ResolveMarkerMapPointAsync(marker);
         // The marker set may have changed while awaiting; only apply if this graphic is still the marker's graphic.
+        // A null point (unprojectable location, see PixelToMap) clears the geometry.
         if (_markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
             graphic.Geometry = mapPoint;
     }
@@ -548,9 +549,26 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
 
         double cellX = info.CellSizeX == 0 ? 1 : Math.Abs(info.CellSizeX);
         double cellY = info.CellSizeY == 0 ? 1 : Math.Abs(info.CellSizeY);
+
+        // Drop a non-finite or wildly off-image pixels (e.g. projecting camera's own location to itself)
+        if (!IsPlaceablePixel(pixel.X, extent.Width / cellX) || !IsPlaceablePixel(pixel.Y, extent.Height / cellY))
+            return null;
+
         double x = extent.XMin + (pixel.X * cellX);
         double y = extent.YMax - (pixel.Y * cellY);
         return new MapPoint(x, y, extent.SpatialReference);
+    }
+
+    // Placeable if finite and within a generous margin of the image bounds
+    private static bool IsPlaceablePixel(double value, double max)
+    {
+        if (!double.IsFinite(value))
+            return false;
+
+        // Pixels beyond this many image-sizes off the raster are treated as unplaceable
+        const double MarkerPlacementMarginFactor = 100d;
+        double margin = Math.Max(Math.Abs(max), 1d) * MarkerPlacementMarginFactor;
+        return value >= -margin && value <= max + margin;
     }
 
     // Maps a point in the display's map space back to an image pixel (to report ImageClicked in image coordinates).
@@ -592,7 +610,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
     private void UpdateAutomationName()
     {
         string name = _footprint?.OrientedImage?.Type is OrientedImageType type
-            ? string.Format(CultureInfo.CurrentCulture, Properties.Resources.GetString("OrientedImageDisplayImageAutomationNameFormat") ?? "Oriented image, {0}", type)
+            ? string.Format(Properties.Resources.GetString("OrientedImageDisplayImageAutomationNameFormat") ?? "Oriented image, {0}", type)
             : Properties.Resources.GetString("OrientedImageDisplayAutomationName") ?? "Oriented image display";
 #if WPF
         System.Windows.Automation.AutomationProperties.SetName(_mapView, name);
@@ -630,7 +648,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         }
         catch
         {
-            // Skeleton UpdateAsync is a no-op; ignore cancellation/failures.
+            // Skeleton UpdateFootprintAsync is a no-op; ignore cancellation/failures.
         }
     }
 
