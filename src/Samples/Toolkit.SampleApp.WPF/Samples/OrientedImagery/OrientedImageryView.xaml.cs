@@ -1,7 +1,5 @@
-﻿using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Mapping;
+﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using System;
@@ -44,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         {
             await ApplyLayer(new Uri(LayerUriTextBox.Text));
 
-            MainMapView.Map = new Mapping.Map(BasemapStyle.ArcGISTopographic);
+            MainMapView.Map = new Map(BasemapStyle.ArcGISStreets);
             MainMapView.GeoViewTapped += MainMapView_GeoViewTapped;
         }
 
