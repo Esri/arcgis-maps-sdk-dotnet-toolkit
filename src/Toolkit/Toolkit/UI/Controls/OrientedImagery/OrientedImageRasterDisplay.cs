@@ -637,7 +637,9 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         if (_mapView.VisibleArea is not Polygon visibleArea || visibleArea.Parts.Count == 0)
             return;
 
-        OrientedImagePixelCorners corners = ComputeCorners(visibleArea, extent, info.CellSizeX, info.CellSizeY);
+        List<PointF> corners = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY);
+        if (corners.Count < 3)
+            return;
 
         _updateCts?.Cancel();
         CancellationTokenSource cts = new();
@@ -648,58 +650,29 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         }
         catch
         {
-            // Skeleton UpdateFootprintAsync is a no-op; ignore cancellation/failures.
+            // Ignore cancellation/failures from a superseded update.
         }
     }
 
-    // Converts the map-space visible-area quadrilateral into image pixel corners,
-    // classified by sum/difference so the result survives view rotation.
-    private static OrientedImagePixelCorners ComputeCorners(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
+    // Converts the map-space visible-area ring into an ordered list of image pixel vertices. The updated
+    // OrientedImageFootprint API takes the full vertex list (not a fixed quad), so a rotated or clipped
+    // visible area is passed through as-is instead of being reduced to four axis-classified corners.
+    private static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
     {
         double cellX = cellSizeX == 0 ? 1 : Math.Abs(cellSizeX);
         double cellY = cellSizeY == 0 ? 1 : Math.Abs(cellSizeY);
         double maxCol = extent.Width / cellX;
         double maxRow = extent.Height / cellY;
 
-        PointF topLeft = default, topRight = default, bottomRight = default, bottomLeft = default;
-        double minSum = 0, maxSum = 0, maxDiff = 0, minDiff = 0;
-        bool any = false;
-
-        foreach (MapPoint point in visibleArea.Parts[0].Points)
+        IReadOnlyList<MapPoint> points = visibleArea.Parts[0].Points;
+        var pixels = new List<PointF>(points.Count);
+        foreach (MapPoint point in points)
         {
             double col = Math.Clamp((point.X - extent.XMin) / cellX, 0, maxCol);
             double row = Math.Clamp((extent.YMax - point.Y) / cellY, 0, maxRow);
-            PointF pixel = new((float)col, (float)row);
-            double sum = col + row;
-            double diff = col - row;
-
-            if (!any || sum < minSum)
-            {
-                minSum = sum;
-                topLeft = pixel;
-            }
-
-            if (!any || sum > maxSum)
-            {
-                maxSum = sum;
-                bottomRight = pixel;
-            }
-
-            if (!any || diff > maxDiff)
-            {
-                maxDiff = diff;
-                topRight = pixel;
-            }
-
-            if (!any || diff < minDiff)
-            {
-                minDiff = diff;
-                bottomLeft = pixel;
-            }
-
-            any = true;
+            pixels.Add(new PointF((float)col, (float)row));
         }
 
-        return new OrientedImagePixelCorners(topLeft, topRight, bottomRight, bottomLeft);
+        return pixels;
     }
 }
