@@ -35,7 +35,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         _allowAddingMarkers = false;
         _markers = new ObservableCollection<OrientedImageMarker>();
-        _markers.CollectionChanged += (_, _) => UpdateMarkerGraphics();
+        _markers.CollectionChanged += (_, _) => UpdateGraphicsOverlay();
         _images = new List<OrientedImage>();
 
         SelectNextImageCommand = new Command(
@@ -110,6 +110,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             }
             UpdateCameraMarkers();
             UpdateVisibleFootprints();
+            // UpdateCameraMarkers will not trigger a graphics overlay update if ShowSelectedCameraLocations is false.
+            // The function must trigger to update the selected camera location
+            if (!ShowCameraLocations)
+                UpdateGraphicsOverlay();
+
             ((Command)SelectNextImageCommand).ChangeCanExecute();
             ((Command)SelectPreviousImageCommand).ChangeCanExecute();
         }
@@ -344,40 +349,40 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// Gets or sets the symbol to use for all camera markers.
     /// </summary>
     public MarkerSymbol AllCamerasMarkerSymbol { get; set; }
-    private const string SelectedCamerasMarkerTag = "SelectedCamerasMarker";
+    private const string AllCamerasMarkerTag = "AllSelectedCamerasMarker";
 
     /// <summary>
     /// Gets or sets a value indicating whether to show markers for the locations of the cameras associated with the images in the control.
     /// </summary>
-    public bool ShowSelectedCameraLocations
+    public bool ShowCameraLocations
     {
-        get => _showSelectedCameraLocations;
+        get => _showCameraLocations;
         set
         {
-            if (_showSelectedCameraLocations == value) { return; }
+            if (_showCameraLocations == value) { return; }
 
-            SetProperty(ref _showSelectedCameraLocations, value);
+            SetProperty(ref _showCameraLocations, value);
             UpdateCameraMarkers();
         }
     }
-    private bool _showSelectedCameraLocations = true;
+    private bool _showCameraLocations = true;
 
 
     /// <summary>
-    /// Gets or sets a value indicating whether to show camera locations on the display. This property only has an effect if <see cref="ShowSelectedCameraLocations"/> is set to <c>true</c>.
+    /// Gets or sets a value indicating whether to show camera locations on the display. This property only has an effect if <see cref="ShowCameraLocations"/> is set to <c>true</c>.
     /// </summary>
-    public bool ShowSelectedCameraLocationsOnDisplay
+    public bool ShowCameraLocationsOnDisplay
     {
-        get => _showSelectedCameraLocationsOnDisplay;
+        get => _showCameraLocationsOnDisplay;
         set
         {
-            if (_showSelectedCameraLocationsOnDisplay == value) { return; }
+            if (_showCameraLocationsOnDisplay == value) { return; }
 
-            SetProperty(ref _showSelectedCameraLocationsOnDisplay, value);
+            SetProperty(ref _showCameraLocationsOnDisplay, value);
             UpdateCameraMarkers();
         }
     }
-    private bool _showSelectedCameraLocationsOnDisplay = false;
+    private bool _showCameraLocationsOnDisplay = false;
 
     private void UpdateSearchPointMarker(MapPoint? location)
     {
@@ -418,26 +423,26 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void UpdateCameraMarkers()
     {
-        var existingCameraMarkers = _markers.Where((marker) => marker.Tag is string tag && tag == SelectedCamerasMarkerTag).ToList();
+        var existingCameraMarkers = _markers.Where((marker) => marker.Tag is string tag && tag == AllCamerasMarkerTag).ToList();
         foreach (var mrk in existingCameraMarkers)
         {
             _markers.Remove(mrk);
         }
 
-        if (ShowSelectedCameraLocations)
+        if (ShowCameraLocations)
         {
             foreach (var img in _images.Where((img) => img.Geometry is MapPoint))
             {
                 _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation((MapPoint)img.Geometry!), AllCamerasMarkerSymbol)
                 {
-                    Tag = SelectedCamerasMarkerTag,
-                    IsVisible = ShowSelectedCameraLocationsOnDisplay
+                    Tag = AllCamerasMarkerTag,
+                    IsVisible = ShowCameraLocationsOnDisplay
                 });
             }
         }
     }
 
-    private void UpdateMarkerGraphics()
+    private void UpdateGraphicsOverlay()
     {
         _markersOverlay.Graphics.Clear();
         _markersOverlay.Graphics.AddRange(_markers.Select((mk) => new Graphic(mk.Position.Location!, mk.Symbol)));

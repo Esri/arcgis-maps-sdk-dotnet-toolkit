@@ -194,11 +194,11 @@
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
                     <Setter Property="ToolTip" Value="Show camera markers on geo view" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocations}" Value="True">
+                        <DataTrigger Binding="{Binding MainViewModel.ShowCameraLocations}" Value="True">
                             <Setter Property="Background" Value="#FFD3D3D3" />
                             <Setter Property="ToolTip" Value="Show camera markers in geo view and image display" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}" Value="True">
+                        <DataTrigger Binding="{Binding MainViewModel.ShowCameraLocationsOnDisplay}" Value="True">
                             <Setter Property="ToolTip" Value="Clear camera markers" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -211,7 +211,7 @@
                             <Style TargetType="{x:Type Path}">
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}" Value="True">
+                                    <DataTrigger Binding="{Binding MainViewModel.ShowCameraLocationsOnDisplay}" Value="True">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -223,7 +223,7 @@
                             <Style TargetType="{x:Type Path}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MainViewModel.ShowSelectedCameraLocationsOnDisplay}" Value="True">
+                                    <DataTrigger Binding="{Binding MainViewModel.ShowCameraLocationsOnDisplay}" Value="True">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
