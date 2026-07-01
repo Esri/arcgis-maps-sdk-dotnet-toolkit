@@ -50,7 +50,7 @@ public partial class OrientedImageryView
             return;
 
         _display.ImageClicked += Display_ImageClicked;
-        WireDisplayToViewModel();
+        WireDisplayProperties();
     }
 
     /// <summary>
@@ -109,10 +109,10 @@ public partial class OrientedImageryView
             GeoView.GraphicsOverlays.Add(newValue.MarkersOverlay);
         }
 
-        WireDisplayToViewModel();
+        WireDisplayProperties();
     }
 
-    private void WireDisplayToViewModel()
+    private void WireDisplayProperties()
     {
         if (_display == null)
             return;
@@ -120,6 +120,7 @@ public partial class OrientedImageryView
         _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
         _display.Markers = ViewModel.Markers;
         _display.Footprint = ViewModel.SelectedImageFootprint;
+        _display.DisplayBackgroundColor = DisplayBackgroundColor;
     }
 
     // This should be overridable, probably as an Action dependency property or something. Or maybe it should be its own event with this as the default handler.
@@ -136,6 +137,27 @@ public partial class OrientedImageryView
     }
 
     #region GisProperties
+    /// <summary>
+    /// Gets or sets the background color shown where the image does not fill the display.
+    /// </summary>
+    public System.Drawing.Color DisplayBackgroundColor
+    {
+        get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
+        set => SetValue(DisplayBackgroundColorProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="DisplayBackgroundColor" /> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty DisplayBackgroundColorProperty =
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+
+    private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
+    {
+        if (_display != null)
+            _display.DisplayBackgroundColor = displayBackgroundColor;
+    }
+
     public OrientedImageryLayer OrientedImageryLayer
     {
         get => ViewModel.OrientedImageryLayer;
