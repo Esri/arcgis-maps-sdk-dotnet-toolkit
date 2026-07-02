@@ -316,7 +316,7 @@ public partial class OrientedImageDisplay
         if (type is null || IsPlanar(type.Value))
             return _rasterDisplay ??= new OrientedImageRasterDisplay();
 #if WPF || WINDOWS_XAML
-        if (type.Value == OrientedImageType.Panoramic)
+        if (type.Value == OrientedImageType.Image360)
             return _panoramicDisplay ??= new OrientedImagePanoramicDisplay();
 #endif
         return null;
@@ -327,7 +327,7 @@ public partial class OrientedImageDisplay
     /// </summary>
     private static bool IsPlanar(OrientedImageType type) => type switch
     {
-        OrientedImageType.Panoramic => false,
+        OrientedImageType.Image360 => false,
         OrientedImageType.Aerial360Video => false,
         OrientedImageType.AerialFrameVideo => false,
         OrientedImageType.Terrestrial360Video => false,
