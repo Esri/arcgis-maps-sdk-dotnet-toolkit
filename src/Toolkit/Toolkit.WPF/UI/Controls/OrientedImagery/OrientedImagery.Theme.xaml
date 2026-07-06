@@ -351,6 +351,23 @@
                                     </ProgressBar.Style>
                                 </ProgressBar>
 
+                                <Border Grid.ColumnSpan="3"
+                                        Background="#80FFFFFF">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Text="No images selected" />
+                                </Border>
+
                                 <Popup PlacementTarget="{Binding ElementName=PART_ImageDisplay}"
                                        Placement="Center"
                                        StaysOpen="True">
