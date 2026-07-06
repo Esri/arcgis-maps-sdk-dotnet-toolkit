@@ -120,8 +120,8 @@ public partial class SearchViewCustomization : TestPage
             _onDeselected = onDeselected;
         }
         public string DisplayName { get => "Event tester"; set => throw new NotImplementedException(); }
-        public string Placeholder { get => "Test placeholder"; set => throw new NotImplementedException(); }
-        public CalloutDefinition DefaultCalloutDefinition { get => null; set => throw new NotImplementedException(); }
+        public string? Placeholder { get => "Test placeholder"; set => throw new NotImplementedException(); }
+        public CalloutDefinition? DefaultCalloutDefinition { get => null; set => throw new NotImplementedException(); }
         public double DefaultZoomScale { get => 1000; set => throw new NotImplementedException(); }
         public int MaximumResults { get => 3; set => throw new NotImplementedException(); }
         public int MaximumSuggestions { get => 3; set => throw new NotImplementedException(); }
