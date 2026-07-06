@@ -54,6 +54,10 @@ public partial class MainPage : ContentPage
         var toolkitTypeInfo = typeof(Esri.ArcGISRuntime.Toolkit.Maui.ScaleLine).GetTypeInfo();
         var toolkitVersion = FileVersionInfo.GetVersionInfo(toolkitTypeInfo.Assembly.Location);
         ToolkitVersionLabel.Text = toolkitVersion.FileVersion;
+
+        var mauiTypeInfo = typeof(Microsoft.Maui.Controls.Application).GetTypeInfo();
+        var mauiVersion = FileVersionInfo.GetVersionInfo(mauiTypeInfo.Assembly.Location);
+        MauiVersionLabel.Text = mauiVersion.FileVersion;
 #pragma warning restore IL3000
 #else
         RuntimeVersionLabel.Text = "Not available in Android Release mode";
