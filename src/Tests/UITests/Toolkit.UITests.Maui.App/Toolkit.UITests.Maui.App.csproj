@@ -19,6 +19,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <DefineConstants>$(DefineConstants);MAUI_APP</DefineConstants>
+    <DefineConstants Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' And $([MSBuild]::VersionLessThanOrEquals('$(MauiVersion)', '10.0.71'))">$(DefineConstants);NEED_WINDOWS_AUTOMATION_TREE_FIX</DefineConstants>
 
     <!-- Display name -->
     <ApplicationTitle>Toolkit.UITests.Maui.App</ApplicationTitle>
