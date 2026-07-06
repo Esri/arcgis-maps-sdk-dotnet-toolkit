@@ -116,7 +116,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             UpdateVisibleFootprints();
             // UpdateCameraMarkers will not trigger a graphics overlay update if ShowSelectedCameraLocations is false.
             // The function must trigger to update the selected camera location
-            if (!ShowCameraLocations)
+            if (!ShowCameraLocations || !ShowCameraLocationsOnDisplay)
                 UpdateGraphicsOverlay();
 
             ((Command)SelectNextImageCommand).ChangeCanExecute();
