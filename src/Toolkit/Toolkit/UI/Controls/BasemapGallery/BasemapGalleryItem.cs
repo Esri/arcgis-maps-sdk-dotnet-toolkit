@@ -322,9 +322,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 return true;
 
             // Two AGOL items may still be equivalent if their URLs are the same but refer to different orgs. For example,
-            // https://runtime.maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405, https://maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405,
-            // and https://arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405 all point to the same item
-            // despite having different hostnames
+            // https://runtime.maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405 and
+            // https://maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405 point to the same item
             if (IsArcGisComHost(source1) && IsArcGisComHost(source2) && source1?.PathAndQuery == source2?.PathAndQuery)
             {
                 return true;
