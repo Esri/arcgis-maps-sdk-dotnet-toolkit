@@ -325,9 +325,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             // https://runtime.maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405 and
             // https://maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405 point to the same item
             if (IsArcGisComHost(source1) && IsArcGisComHost(source2) && source1?.PathAndQuery == source2?.PathAndQuery)
-            {
                 return true;
-            }
+
             return false;
         }
 
