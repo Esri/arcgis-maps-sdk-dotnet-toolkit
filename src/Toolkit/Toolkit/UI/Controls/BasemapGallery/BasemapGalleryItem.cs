@@ -279,31 +279,67 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             // This method can be extended to handle more specific layer comparisons if needed
             if (layer1.GetType() != layer2.GetType()) return false;
 
-            return layer1 switch
+            switch (layer1)
             {
-                AnnotationLayer annotationLayer => annotationLayer.Source == ((AnnotationLayer)layer2).Source,
-                ArcGISMapImageLayer arcGISMapImageLayer => arcGISMapImageLayer.Source == ((ArcGISMapImageLayer)layer2).Source,
-                ArcGISSceneLayer sceneLayer => sceneLayer.Source == ((ArcGISSceneLayer)layer2).Source,
-                ArcGISTiledLayer tiledLayer => tiledLayer.Source == ((ArcGISTiledLayer)layer2).Source,
-                ArcGISVectorTiledLayer vectorTiledLayer => vectorTiledLayer.Source == ((ArcGISVectorTiledLayer)layer2).Source,
+                case FeatureCollectionLayer featureCollectionLayer:
+                    return featureCollectionLayer.FeatureCollection == ((FeatureCollectionLayer)layer2).FeatureCollection;
+                case GroupLayer groupLayer:
+                    return groupLayer.Layers.Count == ((GroupLayer)layer2).Layers.Count;
+                case OpenStreetMapLayer openStreetMapLayer:
+                    return true; // OpenStreetMap layers are considered equal if types match
+                case ServiceImageTiledLayer serviceImageTiledLayer:
+                    return serviceImageTiledLayer.TileInfo == ((ServiceImageTiledLayer)layer2).TileInfo;
+                case SubtypeFeatureLayer subtypeFeatureLayer:
+                    return subtypeFeatureLayer.FeatureTable == ((SubtypeFeatureLayer)layer2).FeatureTable;
+                case FeatureLayer featureLayer:
+                    return featureLayer.FeatureTable == ((FeatureLayer)layer2).FeatureTable;
+            }
+
+            var (source1, source2) = layer1 switch
+            {
+                AnnotationLayer annotationLayer => (annotationLayer.Source, ((AnnotationLayer)layer2).Source),
+                ArcGISMapImageLayer arcGISMapImageLayer => (arcGISMapImageLayer.Source, ((ArcGISMapImageLayer)layer2).Source),
+                ArcGISSceneLayer sceneLayer => (sceneLayer.Source, ((ArcGISSceneLayer)layer2).Source),
+                ArcGISTiledLayer tiledLayer => (tiledLayer.Source, ((ArcGISTiledLayer)layer2).Source),
+                ArcGISVectorTiledLayer vectorTiledLayer => (vectorTiledLayer.Source, ((ArcGISVectorTiledLayer)layer2).Source),
 #pragma warning disable CS0618 // Type or member is obsolete
-                BingMapsLayer imageServiceLayer => imageServiceLayer.Portal?.Uri == ((BingMapsLayer)layer2).Portal?.Uri,
+                BingMapsLayer imageServiceLayer => (imageServiceLayer.Portal?.Uri, ((BingMapsLayer)layer2).Portal?.Uri),
 #pragma warning restore CS0618 // Type or member is obsolete
-                DimensionLayer dimensionLayer => dimensionLayer.Source == ((DimensionLayer)layer2).Source,
-                FeatureCollectionLayer featureCollectionLayer => featureCollectionLayer.FeatureCollection == ((FeatureCollectionLayer)layer2).FeatureCollection,
-                GroupLayer groupLayer => groupLayer.Layers.Count == ((GroupLayer)layer2).Layers.Count && LayersEqual(groupLayer.Layers, ((GroupLayer)layer2).Layers),
-                IntegratedMeshLayer integratedMeshLayer => integratedMeshLayer.Source == ((IntegratedMeshLayer)layer2).Source,
-                KmlLayer kmlLayer => kmlLayer.Dataset?.Source == ((KmlLayer)layer2).Dataset?.Source,
-                Ogc3DTilesLayer ogc3DTilesLayer => ogc3DTilesLayer.Source == ((Ogc3DTilesLayer)layer2).Source,
-                OpenStreetMapLayer openStreetMapLayer => true, // OpenStreetMap layers are considered equal if types match
-                PointCloudLayer pointCloudLayer => pointCloudLayer.Source == ((PointCloudLayer)layer2).Source,
-                WebTiledLayer webTiledLayer => webTiledLayer.TemplateUri == ((WebTiledLayer)layer2).TemplateUri,
-                ServiceImageTiledLayer serviceImageTiledLayer => serviceImageTiledLayer.TileInfo == ((ServiceImageTiledLayer)layer2).TileInfo && serviceImageTiledLayer.FullExtent == ((ServiceImageTiledLayer)layer2).FullExtent,
-                SubtypeFeatureLayer subtypeFeatureLayer => subtypeFeatureLayer.FeatureTable == ((SubtypeFeatureLayer)layer2).FeatureTable,
-                WmsLayer wmsLayer => wmsLayer.Source == ((WmsLayer)layer2).Source,
-                WmtsLayer wmtsLayer => wmtsLayer.Source == ((WmtsLayer)layer2).Source,
-                _ => false,
+                DimensionLayer dimensionLayer => (dimensionLayer.Source, ((DimensionLayer)layer2).Source),
+                IntegratedMeshLayer integratedMeshLayer => (integratedMeshLayer.Source, ((IntegratedMeshLayer)layer2).Source),
+                KmlLayer kmlLayer => (kmlLayer.Dataset?.Source, ((KmlLayer)layer2).Dataset?.Source),
+                Ogc3DTilesLayer ogc3DTilesLayer => (ogc3DTilesLayer.Source, ((Ogc3DTilesLayer)layer2).Source),
+                PointCloudLayer pointCloudLayer => (pointCloudLayer.Source, ((PointCloudLayer)layer2).Source),
+                WebTiledLayer webTiledLayer => (new Uri(webTiledLayer.TemplateUri), new Uri(((WebTiledLayer)layer2).TemplateUri)),
+                WmsLayer wmsLayer => (wmsLayer.Source, ((WmsLayer)layer2).Source),
+                WmtsLayer wmtsLayer => (wmtsLayer.Source, ((WmtsLayer)layer2).Source),
+                _ => (null, null),
             };
+
+            if (source1 == null || source2 == null)
+                return false;
+            if (source1 == source2)
+                return true;
+
+            // Two AGOL items may still be equivalent if their URLs are the same but refer to different orgs. For example,
+            // https://runtime.maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405, https://maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405,
+            // and https://arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405 all point to the same item
+            // despite having different hostnames
+            if (IsArcGisComHost(source1) && IsArcGisComHost(source2) && source1?.PathAndQuery == source2?.PathAndQuery)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private static bool IsArcGisComHost(Uri? uri)
+        {
+            if (uri == null)
+                return false;
+
+            var host = uri.Host;
+            return host.Equals("arcgis.com", StringComparison.OrdinalIgnoreCase)
+                || host.EndsWith(".arcgis.com", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <inheritdoc />
