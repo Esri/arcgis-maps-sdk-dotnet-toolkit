@@ -19,7 +19,6 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <DefineConstants>$(DefineConstants);MAUI_APP</DefineConstants>
-    <DefineConstants Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' And $([MSBuild]::VersionLessThanOrEquals('$(MauiVersion)', '10.0.71'))">$(DefineConstants);NEED_WINDOWS_AUTOMATION_TREE_FIX</DefineConstants>
 
     <!-- Display name -->
     <ApplicationTitle>Toolkit.UITests.Maui.App</ApplicationTitle>
@@ -44,6 +43,19 @@
     <MauiEnableXamlCBindingWithSourceCompilation>false</MauiEnableXamlCBindingWithSourceCompilation>
     <NoWarn>$(NoWarn);XC0025</NoWarn>
   </PropertyGroup>
+
+  <!-- Somewhat complex way to set the NEED_WINDOWS_AUTOMATION_TREE_FIX preprocessor constant based on the resolved Maui Controls package version.
+       This can be removed once the toolkit-wide MauiVersion is updated past 10.0.71 (likely when .NET 11 gets released) -->
+  <Target Name="_SetWindowsAutomationTreeFixFlag" BeforeTargets="CoreCompile" DependsOnTargets="ResolvePackageDependenciesDesignTime" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+    <ItemGroup>
+      <_ResolvedMauiControlsPackage Include="@(_PackageDependenciesDesignTime)" Condition="'%(_PackageDependenciesDesignTime.Name)' == 'Microsoft.Maui.Controls' And '%(_PackageDependenciesDesignTime.Resolved)' == 'True'" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'@(_ResolvedMauiControlsPackage)' != ''">
+      <ResolvedMauiControlsPackageVersion>%(_ResolvedMauiControlsPackage.Version)</ResolvedMauiControlsPackageVersion>
+      <DefineConstants Condition="$([MSBuild]::VersionLessThanOrEquals('$(ResolvedMauiControlsPackageVersion)', '10.0.71'))">$(DefineConstants);NEED_WINDOWS_AUTOMATION_TREE_FIX</DefineConstants>
+    </PropertyGroup>
+  </Target>
 
   <!-- Current workaround for building with .NET 10 until toolkit itself is compiled for .NET 10: https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/issues/707 -->
   <ItemGroup Condition="'$(TargetFramework)'=='net10.0-android'">
