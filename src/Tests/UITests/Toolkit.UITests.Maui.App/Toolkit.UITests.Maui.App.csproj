@@ -44,7 +44,7 @@
     <NoWarn>$(NoWarn);XC0025</NoWarn>
   </PropertyGroup>
 
-  <!-- Somewhat complex way to set the NEED_WINDOWS_AUTOMATION_TREE_FIX preprocessor constant based on the resolved Maui Controls package version.
+  <!-- Set the NEED_WINDOWS_AUTOMATION_TREE_FIX preprocessor constant based on the resolved Maui Controls package version.
        This can be removed once the toolkit-wide MauiVersion is updated past 10.0.71 (likely when .NET 11 gets released) -->
   <Target Name="_SetWindowsAutomationTreeFixFlag" BeforeTargets="CoreCompile" DependsOnTargets="ResolvePackageDependenciesDesignTime" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
     <ItemGroup>
