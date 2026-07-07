@@ -124,9 +124,6 @@ public class CompassTests : AppiumTestBase
 
     private static CompassAnalysis AnalyzeCompassOrientation(MagickImage compassScreenshot)
     {
-        // Make sure exif rotation metadata does not skew results
-        compassScreenshot.AutoOrient();
-
         // Mask to only red pixels (aka the north arrow).
         compassScreenshot.ColorThreshold(new MagickColor(100, 0, 0), new MagickColor(255, 80, 80));
 

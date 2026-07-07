@@ -16,7 +16,12 @@ public abstract partial class AppiumTestBase
     protected MagickImage GetScreenshot(AppiumElement element)
     {
         var screenshot = element.GetScreenshot();
-        return new MagickImage(screenshot.AsByteArray);
+        var magickScreenshot = new MagickImage(screenshot.AsByteArray);
+
+        // Make sure exif rotation metadata does not skew results
+        magickScreenshot.AutoOrient();
+
+        return magickScreenshot;
     }
 
     /// <summary>
