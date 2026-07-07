@@ -125,7 +125,7 @@ public class CompassTests : AppiumTestBase
     private static CompassAnalysis AnalyzeCompassOrientation(MagickImage compassScreenshot)
     {
         // Mask to only red pixels (aka the north arrow).
-        compassScreenshot.ColorThreshold(new MagickColor(128, 0, 0), new MagickColor(255, 80, 80));
+        compassScreenshot.ColorThreshold(new MagickColor(100, 0, 0), new MagickColor(255, 80, 80));
 
         var connectedComponents = compassScreenshot.ConnectedComponents(4);
         var componentCount = Math.Max(0, connectedComponents.Count - 1);
