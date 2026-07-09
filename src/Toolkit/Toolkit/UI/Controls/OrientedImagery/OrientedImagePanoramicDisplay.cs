@@ -600,8 +600,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         {
             if (uri.IsFile)
             {
-                Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(uri.LocalPath);
-                stream = await file.OpenReadAsync();
+                // Core keeps the image file open and StorageFile has no share-mode option, so open a FileShare.ReadWrite
+                // FileStream and adapt it to the IRandomAccessStream BitmapDecoder needs.
+                stream = new FileStream(uri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).AsRandomAccessStream();
             }
             else if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
             {
@@ -636,7 +637,19 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         return Task.Run(
             () =>
             {
-                var decoder = System.Windows.Media.Imaging.BitmapDecoder.Create(uri, System.Windows.Media.Imaging.BitmapCreateOptions.None, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
+                System.Windows.Media.Imaging.BitmapDecoder decoder;
+                if (uri.IsFile)
+                {
+                    // Core keeps the image file open, so open it FileShare.ReadWrite (a Uri-based decoder can't) to avoid
+                    // a sharing violation. OnLoad reads the image fully, so the stream can be disposed right after.
+                    using var fileStream = new FileStream(uri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    decoder = System.Windows.Media.Imaging.BitmapDecoder.Create(fileStream, System.Windows.Media.Imaging.BitmapCreateOptions.None, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
+                }
+                else
+                {
+                    decoder = System.Windows.Media.Imaging.BitmapDecoder.Create(uri, System.Windows.Media.Imaging.BitmapCreateOptions.None, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
+                }
+
                 System.Windows.Media.Imaging.BitmapFrame frame = decoder.Frames[0];
                 var converted = new System.Windows.Media.Imaging.FormatConvertedBitmap(frame, System.Windows.Media.PixelFormats.Bgra32, null, 0);
                 int width = converted.PixelWidth;

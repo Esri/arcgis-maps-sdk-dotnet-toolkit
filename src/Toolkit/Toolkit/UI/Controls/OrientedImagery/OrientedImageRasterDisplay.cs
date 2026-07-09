@@ -455,7 +455,8 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         // Minimal metadata parser inspired by https://stackoverflow.com/q/7584794/383361
         try
         {
-            using FileStream stream = File.OpenRead(dataUri.LocalPath);
+            // Core keeps the image file open, so open shared to avoid a sharing violation on this best-effort read.
+            using FileStream stream = new FileStream(dataUri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             if (stream.ReadByte() != 0xFF || stream.ReadByte() != 0xD8)
                 return 0; // not a JPEG
 
