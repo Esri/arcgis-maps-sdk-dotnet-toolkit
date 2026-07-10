@@ -24,6 +24,7 @@ using Windows.Win32.Graphics.Direct3D11;
 using Windows.Win32.Graphics.Dxgi;
 using Windows.Win32.Graphics.Dxgi.Common;
 using Windows.Win32.System.Com;
+using static Esri.ArcGISRuntime.Toolkit.UI.Controls.PanoramaCameraState;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -48,13 +49,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     private const uint D3DFmtA8R8G8B8 = 21;
     private const uint D3DPoolDefault = 0;
     private const uint D3DUsageRenderTarget = 0x1;
-
-    private const float MinPitch = -(MathF.PI / 2f) + 0.01f;
-    private const float MaxPitch = (MathF.PI / 2f) - 0.01f;
-    private const float MinFieldOfView = 50f * MathF.PI / 180f;
-    private const float MaxFieldOfView = 120f * MathF.PI / 180f;
-    private const float MouseRotationScale = 0.0035f;
-    private const float KeyboardRotationDelta = MathF.PI / 90f;
 
     private D3DImage? _d3dImage;
     private nint _d3d9;        // IDirect3D9Ex*
@@ -566,7 +560,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         bool pressed = e.LeftButton == MouseButtonState.Pressed;
         if (pressed && _wasDragging)
         {
-            float scale = DragRotationScale();
+            float scale = DragRotationScale(FieldOfView, ActualHeight);
             Yaw -= (float)(position.X - _lastMousePosition.X) * scale;
             Pitch = Math.Clamp(Pitch - ((float)(position.Y - _lastMousePosition.Y) * scale), MinPitch, MaxPitch);
             RequestRender();
