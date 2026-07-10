@@ -23,6 +23,7 @@ using Windows.Win32.Graphics.Dxgi;
 using Windows.Win32.Graphics.Dxgi.Common;
 using Windows.Win32.System.Com;
 using WinRT;
+using static Esri.ArcGISRuntime.Toolkit.UI.Controls.PanoramaCameraState;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -30,13 +31,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 // composition swap chain and an on-demand render pump. The core renders the panorama into the swap-chain back buffer.
 internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
 {
-    private const float MinPitch = -(MathF.PI / 2f) + 0.01f;
-    private const float MaxPitch = (MathF.PI / 2f) - 0.01f;
-    private const float MinFieldOfView = 50f * MathF.PI / 180f;
-    private const float MaxFieldOfView = 120f * MathF.PI / 180f;
-    private const float MouseRotationScale = 0.0035f;
-    private const float KeyboardRotationDelta = MathF.PI / 90f;
-
     private IDXGISwapChain1* _swapchain;
     private ID3D11RenderTargetView* _backBufferView;
     private bool _renderHooked;
@@ -390,7 +384,7 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
 
     private void OnManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
     {
-        float scale = DragRotationScale();
+        float scale = DragRotationScale(FieldOfView, ActualHeight);
         Yaw -= (float)e.Delta.Translation.X * scale;
         Pitch = Math.Clamp(Pitch - ((float)e.Delta.Translation.Y * scale), MinPitch, MaxPitch);
         if (e.Delta.Scale != 0 && e.Delta.Scale != 1f)
