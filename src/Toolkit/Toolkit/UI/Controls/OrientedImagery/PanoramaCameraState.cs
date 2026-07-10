@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || WINDOWS_XAML
+#if WPF || WINDOWS_XAML || MAUI
 using System;
 using System.Numerics;
 
@@ -23,10 +23,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 // Platform-neutral inverse of the panorama render projection: converts between a screen point and a normalized
 // equirectangular texture coordinate (u,v) in [0,1]. Pair (u,v) with the source image pixel dimensions
 // to reach the image-pixel space the SDK's OrientedImage.ImageToLocationAsync / contract clicks use.
+//
+// This type is the AUTHORITATIVE definition of the panorama coordinate conventions. Every platform renderer
+// (D3D11 on Windows, GLES on Android, SceneKit on Apple) must generate its sphere mesh and camera matrices to
+// match, or screen<->pixel math (clicks, markers, footprints) is mirrored or offset on that platform:
+//   - Sphere: unit sphere around the camera, parameterized x = sin(phi)*cos(theta), y = cos(phi),
+//     z = sin(phi)*sin(theta), with equirectangular UV u = theta/2pi (wrap), v = phi/pi (clamp).
+//     v = 0 is up (phi = 0), v = 1 is down; the horizon is v = 0.5.
+//   - Camera: right-handed, at the origin looking down -Z; world = RotationY(Yaw) * RotationX(Pitch)
+//     (System.Numerics row-vector convention). Yaw/Pitch/FieldOfView are radians; FieldOfView is vertical.
+//     At Yaw = 0, Pitch = 0 the view center is (u, v) = (0.75, 0.5); u_center = 0.75 + Yaw/2pi (mod 1)
+//     and v_center = 0.5 + Pitch/pi (positive pitch looks below the horizon). The initial view heading is
+//     set by the display as Yaw = -CameraHeading (see OrientedImagePanoramicDisplay).
+//   - Screen: element/DIP coordinates, origin top-left, +Y down.
+// GL note: System.Numerics matrices are row-major with row-vector math (clip = v * M). A GLSL mat4 uniform
+// reads the same bytes column-major, i.e. as M-transposed, and computes M^T * v == v * M - so upload the raw
+// floats with transpose = false; do not transpose them yourself.
 internal readonly struct PanoramaCameraState
 {
     private const float NearPlane = 0.1f;
     private const float FarPlane = 10f;
+
+    // Shared camera limits and input tuning, used by every platform's camera/gesture layer.
+    public const float MinPitch = -(MathF.PI / 2f) + 0.01f;
+    public const float MaxPitch = (MathF.PI / 2f) - 0.01f;
+    public const float MinFieldOfView = 50f * MathF.PI / 180f;
+    public const float MaxFieldOfView = 120f * MathF.PI / 180f;
+    public const float MouseRotationScale = 0.0035f; // fallback drag scale while the view size is unknown
+    public const float KeyboardRotationDelta = MathF.PI / 90f;
+
+    // The viewport spans fieldOfView (vertical, radians) across viewHeight DIPs.
+    // Drag rotation in rad-per-DIP so the grabbed point tracks the pointer at screen center,
+    // independent of control size, zoom and DPI. Same factor for yaw (the aspect's width cancels).
+    public static float DragRotationScale(float fieldOfView, double viewHeight)
+    {
+        if (viewHeight <= 0)
+            return MouseRotationScale; // defensive: dragging is not really reachable before size is known
+
+        return (float)(2.0 * Math.Tan(fieldOfView / 2.0) / viewHeight);
+    }
 
     public PanoramaCameraState(float yaw, float pitch, float fieldOfView)
     {

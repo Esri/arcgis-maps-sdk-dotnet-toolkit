@@ -166,17 +166,6 @@ internal sealed unsafe partial class PanoramicSurface
         CameraChanged?.Invoke();
     }
 
-    // The viewport spans FieldOfView across ActualHeight DIPs.
-    // Compute drag rotation in rad-per-DIP, so the grabbed point tracks the cursor at screen center.
-    private float DragRotationScale()
-    {
-        double heightDip = ActualHeight;
-        if (heightDip <= 0)
-            return MouseRotationScale; // defensive: dragging is not really reachable before size is known
-
-        return (float)(2.0 * Math.Tan(FieldOfView / 2.0) / heightDip);
-    }
-
     // Raised when the camera (yaw/pitch/field of view) changes, so the hosting display can recompute the visible
     // footprint while auto-update is enabled.
     internal event Action? CameraChanged;
