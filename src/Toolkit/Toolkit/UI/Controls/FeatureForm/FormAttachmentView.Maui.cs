@@ -69,6 +69,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst")]
+        private void FormAttachmentView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Element))
+            {
+                ConfigureFlyout();
+            }
+        }
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst")]
         private void ConfigureFlyout()
         {
             MenuFlyout flyout = new MenuFlyout();
@@ -77,15 +87,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 Text = Properties.Resources.GetString("FeatureFormRemoveAttachmentMenuItem"),
                 IconImageSource = new FontImageSource { Glyph = ToolkitIcons.Trash, FontFamily = ToolkitIcons.FontFamilyName, Size = 32, Color = Colors.Gray }
             });
-            flyout.Add(new MenuFlyoutItem()
+            var renameItem = new MenuFlyoutItem()
             {
                 Text = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem"),
                 IconImageSource = new FontImageSource { Glyph = ToolkitIcons.Pencil, FontFamily = ToolkitIcons.FontFamilyName, Size = 32, Color = Colors.Gray }
-            });
+            };
+            if (Element?.AllowUserRename == true)
+            {
+                flyout.Add(renameItem);
+            }
 
             ((MenuFlyoutItem)flyout[0]).Clicked += (s, e) => DeleteAttachment();
 
-            ((MenuFlyoutItem)flyout[1]).Clicked += async (s, e) =>
+            renameItem.Clicked += async (s, e) =>
             {
                 if (Attachment is not null && Element is not null && GetPage() is Page page)
                 {
@@ -233,14 +247,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (page is null) return false;
 
             string delete = Properties.Resources.GetString("FeatureFormRemoveAttachmentMenuItem")!;
-            string rename = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem")!;
             string open = Properties.Resources.GetString("FeatureFormOpenAttachmentMenuItem")!;
-            var result = await page.DisplayActionSheet(Attachment.Name, null, null, delete, rename, open);
+            string? rename = Element?.AllowUserRename == true ? Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem")! : null;
+            var result = rename is not null
+                ? await page.DisplayActionSheet(Attachment.Name, null, null, delete, rename, open)
+                : await page.DisplayActionSheet(Attachment.Name, null, null, delete, open);
             if (result == delete)
             {
                 DeleteAttachment();
             }
-            else if(result == rename)
+            else if(rename is not null && result == rename)
             {
                 try
                 {
