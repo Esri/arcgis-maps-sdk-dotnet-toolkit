@@ -52,7 +52,7 @@ public partial class OrientedImageDisplay
 
     private DisplayHostElement? _displayHost;
     private OrientedImageRasterDisplay? _rasterDisplay;
-#if WPF || WINDOWS_XAML
+#if WPF || WINDOWS_XAML || __ANDROID__ || (MAUI && WINDOWS)
     private OrientedImagePanoramicDisplay? _panoramicDisplay;
 #endif
     private IOrientedImageDisplay? _activeDisplay;
@@ -309,13 +309,13 @@ public partial class OrientedImageDisplay
         SetValue(ErrorProperty, _unsupportedError ?? _activeDisplay?.Error);
     }
 
-    // Selects the inner display for an image type: planar -> raster, panoramic -> panoramic (Windows only for now),
-    // video (and panoramic where no panoramic display exists yet) -> none (surfaced as an unsupported-type error).
+    // Selects the inner display for an image type: planar -> raster, panoramic -> panoramic (Windows + Android for
+    // now), video (and panoramic where no panoramic display exists yet) -> none (surfaced as an unsupported-type error).
     private IOrientedImageDisplay? SelectDisplay(OrientedImageType? type)
     {
         if (type is null || IsPlanar(type.Value))
             return _rasterDisplay ??= new OrientedImageRasterDisplay();
-#if WPF || WINDOWS_XAML
+#if WPF || WINDOWS_XAML || __ANDROID__ || (MAUI && WINDOWS)
         if (type.Value == OrientedImageType.Image360)
             return _panoramicDisplay ??= new OrientedImagePanoramicDisplay();
 #endif

@@ -18,6 +18,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #if WINDOWS || __IOS__
             builder.ConfigureMauiHandlers(handler => handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>());
 #endif
+#if __ANDROID__ || WINDOWS
+            // Hosts the platform panorama surface (GLES on Android, D3D11 on Windows) of OrientedImageDisplay's
+            // panoramic inner display.
+            builder.ConfigureMauiHandlers(handler => handler.AddHandler<Primitives.PanoramicSurfaceView, Primitives.PanoramicSurfaceViewHandler>());
+#endif
             builder.ConfigureFonts(fonts => fonts
                 .AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "toolkit-icons.ttf", ToolkitIcons.FontFamilyName)
                 );
