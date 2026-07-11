@@ -46,6 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Border nameBackground = new Border() { BackgroundColor = Colors.Transparent, Padding = new Thickness(2), VerticalOptions = LayoutOptions.End, StrokeThickness = 0 };
             var nameLabel = new Label() { HorizontalOptions = LayoutOptions.Center, FontSize = 10, MaxLines = 1, LineBreakMode = LineBreakMode.TailTruncation };
             nameBackground.Content = nameLabel;
+            nameBackground.SetBinding(VisualElement.IsVisibleProperty, static (FormAttachmentView view) => view.Element?.DisplayFilename, source: RelativeBindingSource.TemplatedParent, converter: BoolOrNullToBoolConverter.Instance);
             nameLabel.SetBinding(Label.TextProperty, static (FormAttachmentView view) => view.Attachment?.Name, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(nameBackground);
             var sizeLabel = new Label() { VerticalOptions = LayoutOptions.Start, HorizontalOptions = LayoutOptions.Center, FontSize = 10, MaxLines = 1 };

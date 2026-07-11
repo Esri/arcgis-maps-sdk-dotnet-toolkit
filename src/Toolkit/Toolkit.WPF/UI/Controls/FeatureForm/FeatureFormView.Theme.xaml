@@ -430,7 +430,8 @@
                         </VisualStateManager.VisualStateGroups>
                         <Grid>
                             <Image x:Name="ThumbnailImage" />
-                            <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2">
+                            <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2"
+                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.DisplayFilename, Converter={StaticResource FeatureFormViewVisibilityConverter}}">
                                 <TextBlock x:Name="AttachmentName" Text="{Binding Name}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" TextTrimming="CharacterEllipsis" />
                             </Border>
                             <TextBlock x:Name="FileSizeText" Text="{Binding Size, Converter={StaticResource FeatureFormFileSizeConverter}}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="10" />
