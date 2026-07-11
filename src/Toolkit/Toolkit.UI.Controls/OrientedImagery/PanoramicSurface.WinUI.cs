@@ -14,10 +14,17 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WINDOWS_XAML
+#if WINDOWS_XAML || (MAUI && WINDOWS)
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using Windows.System;
+#if MAUI
+// The WinUI head supplies these as project-level usings; the MAUI head does not.
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+#endif
 using Windows.Win32.Graphics.Direct3D11;
 using Windows.Win32.Graphics.Dxgi;
 using Windows.Win32.Graphics.Dxgi.Common;

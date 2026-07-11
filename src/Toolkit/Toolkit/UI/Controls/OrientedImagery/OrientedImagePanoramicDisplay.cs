@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || WINDOWS_XAML
+#if WPF || WINDOWS_XAML || __ANDROID__ || (MAUI && WINDOWS)
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,23 +34,42 @@ using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 #if WPF
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using VerticalAlignment = System.Windows.VerticalAlignment;
-#else
+#elif WINDOWS_XAML
 using System.Runtime.InteropServices.WindowsRuntime;
 using HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment;
 using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
+#elif MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#if WINDOWS
+using System.Runtime.InteropServices.WindowsRuntime;
+#endif
 #endif
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 // Panoramic (360/equirectangular) inner display for OrientedImageDisplay.
-// Only supports Windows heads (WPF + WinUI) for now.
-// Hosts the shared Direct3D PanoramicSurface and implements the IOrientedImageDisplay contract
-// by loading the OrientedImage, decoding it to a texture, and surfacing state/clicks.
+// Supports the Windows heads (WPF + WinUI, hosting the shared Direct3D PanoramicSurface) and Android
+// (hosting the GLES PanoramicSurface through the PanoramicSurfaceView handler); iOS/MacCatalyst pending.
+// Implements the IOrientedImageDisplay contract by loading the OrientedImage, decoding it to a texture,
+// and surfacing state/clicks. All screen<->pixel math goes through the shared PanoramaCameraState.
+#if MAUI
+internal sealed partial class OrientedImagePanoramicDisplay : ContentView, IOrientedImageDisplay
+#else
 internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IOrientedImageDisplay
+#endif
 {
     private const double MarkerHitTolerance = 12d;
 
+#if MAUI
+    private readonly PanoramicSurfaceView _surface;
+#else
     private readonly PanoramicSurface _surface;
+#endif
     private readonly List<ResolvedMarker> _resolvedMarkers = [];
     private readonly List<OrientedImageMarker> _subscribedMarkers = [];
     private OrientedImageFootprint? _footprint;
@@ -67,11 +86,16 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
 
     internal OrientedImagePanoramicDisplay()
     {
+#if MAUI
+        _surface = new PanoramicSurfaceView();
+        Content = _surface;
+#else
         _surface = new PanoramicSurface();
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
         VerticalContentAlignment = VerticalAlignment.Stretch;
         IsTabStop = false;
         Content = _surface;
+#endif
         _surface.SurfaceTapped += OnSurfaceTapped;
         _surface.RenderFailed += OnRenderFailed;
         _surface.DeviceRecreated += OnDeviceRecreated;
@@ -111,7 +135,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
 
             _imageWidth = frame.Width;
             _imageHeight = frame.Height;
-            _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
+            ApplyTexture(frame);
             _surface.RequestRender();
             _ = ResolveMarkersAsync();
 
@@ -310,6 +334,17 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         return buffer.ToArray();
     }
 
+#if MAUI
+    private static double GetScaleFactor()
+    {
+        // Swatches are rasterized in physical pixels to match the physical-pixel GL viewport (Android) or the
+        // composition-scaled back buffer (MAUI-Windows). On Windows the main display's density approximates the
+        // panel's per-monitor CompositionScale that the WinUI head uses; exact parity would need a reach into
+        // the platform view.
+        double density = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Density;
+        return density > 0 ? density : 1.0;
+    }
+#else
     private double GetScaleFactor()
     {
 #if WINDOWS_XAML
@@ -324,6 +359,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         return System.Windows.PresentationSource.FromVisual(this)?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
 #endif
     }
+#endif
 
     public void SetAutoUpdateFootprint(bool enabled)
     {
@@ -504,7 +540,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
 
             _imageWidth = frame.Width;
             _imageHeight = frame.Height;
-            _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
+            ApplyTexture(frame);
 
             // Orient the initial view to the image's geographic heading (JS reference: yaw = -CameraHeading).
             // The exact convention relative to the sphere's theta origin needs runtime tuning.
@@ -553,6 +589,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
     {
         OrientedImageMarker? hit = null;
         double best = MarkerHitTolerance;
+#if __ANDROID__
+        best *= GetScaleFactor(); // Android taps and view sizes are physical pixels; the tolerance is DIP-defined
+#endif
         foreach (ResolvedMarker resolved in _resolvedMarkers)
         {
             if (!camera.TryNormalizedUvToScreen(resolved.U, resolved.V, _surface.ActualWidth, _surface.ActualHeight, out double sx, out double sy))
@@ -592,7 +631,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         return 0f;
     }
 
-#if WINDOWS_XAML
+#if WINDOWS_XAML || (MAUI && WINDOWS)
     private static async Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         Windows.Storage.Streams.IRandomAccessStream? stream = null;
@@ -661,11 +700,80 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
             },
             token);
     }
+#elif __ANDROID__
+    // Decodes with a power-of-two downsample so the longest side fits the device memory budget (isLowRamDevice:
+    // 4096, else 8192). Width/Height report the ORIGINAL pixel dimensions - the SDK transforms, markers and clicks
+    // all work in the original image pixel space; only the GPU texture is downsampled (uv is normalized, so the
+    // sphere samples identically). A residual GL_MAX_TEXTURE_SIZE clamp happens at upload inside the surface.
+    private static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    {
+        return Task.Run(
+            async () =>
+            {
+                string? path = null;
+                byte[]? downloaded = null;
+                if (uri.IsFile)
+                {
+                    path = uri.LocalPath;
+                }
+                else if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+                {
+                    using var httpClient = new System.Net.Http.HttpClient();
+                    downloaded = await httpClient.GetByteArrayAsync(uri, token).ConfigureAwait(false);
+                }
+                else
+                {
+                    return (PanoramaFrame?)null;
+                }
+
+                var bounds = new Android.Graphics.BitmapFactory.Options { InJustDecodeBounds = true };
+                if (path is not null)
+                    Android.Graphics.BitmapFactory.DecodeFile(path, bounds);
+                else
+                    Android.Graphics.BitmapFactory.DecodeByteArray(downloaded, 0, downloaded!.Length, bounds);
+
+                int width = bounds.OutWidth;
+                int height = bounds.OutHeight;
+                if (width <= 0 || height <= 0)
+                    return (PanoramaFrame?)null;
+
+                bool lowRam = (Android.App.Application.Context.GetSystemService(Android.Content.Context.ActivityService)
+                    as Android.App.ActivityManager)?.IsLowRamDevice == true;
+                int budget = lowRam ? 4096 : 8192;
+                int sample = 1;
+                while (Math.Max(width, height) / sample > budget)
+                    sample *= 2;
+
+                var options = new Android.Graphics.BitmapFactory.Options
+                {
+                    InSampleSize = sample,
+                    InPreferredConfig = Android.Graphics.Bitmap.Config.Argb8888,
+                };
+                Android.Graphics.Bitmap? bitmap = path is not null
+                    ? Android.Graphics.BitmapFactory.DecodeFile(path, options)
+                    : Android.Graphics.BitmapFactory.DecodeByteArray(downloaded, 0, downloaded!.Length, options);
+                if (bitmap is null)
+                    return (PanoramaFrame?)null;
+
+                return (PanoramaFrame?)new PanoramaFrame(bitmap, width, height);
+            },
+            token);
+    }
 #endif
 
+#if __ANDROID__
+    // The decoded (possibly downsampled) panorama bitmap plus the ORIGINAL pixel dimensions of the source image.
+    // This is also the seam where a future 360-video source would provide frames over time instead of a single decode.
+    private readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height);
+
+    private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bitmap);
+#else
     // The decoded equirectangular image as tightly-packed BGRA8 plus its pixel dimensions. This is also the seam
     // where a future 360-video source would provide frames over time instead of a single decode.
     private readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
+
+    private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
+#endif
 
     // A marker resolved to a normalized (u,v), kept on the UI side for tap hit-testing (the surface owns the GPU side).
     private readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V);
