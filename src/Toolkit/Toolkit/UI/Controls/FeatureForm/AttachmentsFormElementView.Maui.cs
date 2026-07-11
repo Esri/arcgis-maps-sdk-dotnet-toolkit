@@ -32,6 +32,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static readonly ControlTemplate DefaultControlTemplate;
         private const string AttachmentsListViewName = "AttachmentsListView";
         private const string AddAttachmentButtonName = "AddAttachmentButton";
+        private static readonly Color EnabledAddAttachmentColor = Colors.CornflowerBlue;
+        private static readonly Color DisabledAddAttachmentColor = Colors.Gray;
 
         private Button? _addAttachmentButton;
 
@@ -80,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 BorderWidth = 0,
                 FontSize = 24,
                 BackgroundColor = Colors.Transparent,
-                TextColor = Colors.CornflowerBlue,
+                TextColor = EnabledAddAttachmentColor,
                 HorizontalOptions = new LayoutOptions(LayoutAlignment.Start, true),
                 VerticalOptions = new LayoutOptions(LayoutAlignment.Start, true),
                 Padding = new Thickness(5)
@@ -139,11 +141,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 _addAttachmentButton.Clicked += AddAttachmentButton_Click;
             }
+            UpdateAddAttachmentButtonState();
             UpdateVisibility();
         }
 
         private async void AddAttachmentButton_Click(object? sender, EventArgs e)
         {
+            if (!CanAddAttachment())
+            {
+                return;
+            }
+
             var page = GetParent<Page>();
             if(page != null && MediaPicker.IsCaptureSupported)
             {
@@ -183,6 +191,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         var photo = await MediaPicker.CapturePhotoAsync();
                         if (photo != null && Element != null)
                         {
+                            if (!CanAddAttachment())
+                            {
+                                return;
+                            }
+
                             using (var stream = await photo.OpenReadAsync())
                             {
                                 using var sr = new BinaryReader(stream);
@@ -195,6 +208,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                                 await Element.AddAttachmentAsync(photo.FileName, contentType, data);
                             }
                             EvaluateExpressions();
+                            UpdateAddAttachmentButtonState();
                             (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
                         }
                     }
@@ -214,20 +228,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private async void AddAttachmentFromFile()
         {
-            if (Element is null) return;
+            if (!CanAddAttachment()) return;
             try
             {
                 var result = await FilePicker.Default.PickAsync(new());
-                if (result != null)
+                if (result != null && CanAddAttachment())
                 {
                     await Element.AddAttachmentAsync(result.FileName, MimeTypeMap.GetMimeType(new FileInfo(result.FileName).Extension), File.ReadAllBytes(result.FullPath));
                     EvaluateExpressions();
+                    UpdateAddAttachmentButtonState();
                     (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
                 }
             }
             catch (System.Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+            }
+        }
+
+        private partial void UpdateAddAttachmentButtonState()
+        {
+            if (_addAttachmentButton is not null)
+            {
+                bool canAddAttachment = CanAddAttachment();
+                _addAttachmentButton.IsEnabled = canAddAttachment;
+                _addAttachmentButton.Opacity = canAddAttachment ? 1.0 : 0.45;
+                _addAttachmentButton.TextColor = canAddAttachment ? EnabledAddAttachmentColor : DisabledAddAttachmentColor;
             }
         }
     }
