@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || WINDOWS_XAML
+#if WPF || WINDOWS_XAML || (MAUI && WINDOWS)
 using System;
 using System.Collections.Generic;
 using System.Numerics;
