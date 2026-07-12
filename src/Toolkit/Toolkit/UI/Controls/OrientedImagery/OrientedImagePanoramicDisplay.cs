@@ -71,13 +71,14 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
     private readonly PanoramicSurface _surface;
 #endif
     private readonly List<ResolvedMarker> _resolvedMarkers = [];
-    private readonly List<OrientedImageMarker> _subscribedMarkers = [];
+    private readonly List<WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
     private OrientedImageFootprint? _footprint;
     private ObservableCollection<OrientedImageMarker>? _markers;
     private WeakEventListener<OrientedImagePanoramicDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private int _markerGeneration;
     private bool _autoUpdate;
     private CancellationTokenSource? _updateCts;
+    private CancellationTokenSource? _decodeCts;
     private bool _isLoading;
     private int _footprintGeneration;
     private int _imageWidth;
@@ -129,8 +130,15 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
             if (!ReferenceEquals(_footprint, footprint) || image.DataUri is not Uri uri)
                 return;
 
-            PanoramaFrame? decoded = await DecodeAsync(uri, CancellationToken.None);
-            if (!ReferenceEquals(_footprint, footprint) || decoded is not PanoramaFrame frame)
+            // A newer SetFootprintAsync cancels this token, aborting a now-pointless re-decode.
+            PanoramaFrame? decoded = await DecodeAsync(uri, _decodeCts?.Token ?? CancellationToken.None);
+            if (!ReferenceEquals(_footprint, footprint))
+            {
+                DiscardFrame(decoded);
+                return;
+            }
+
+            if (decoded is not PanoramaFrame frame)
                 return;
 
             _imageWidth = frame.Width;
@@ -143,10 +151,18 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
             _renderError = null;
             UpdateState();
         }
+        catch (OperationCanceledException)
+        {
+            // Superseded by a newer footprint; its own load re-supplies the surface.
+        }
         catch (Exception ex)
         {
-            _renderError = ex;
-            UpdateState();
+            // A footprint swapped in mid-recovery owns the display state now; don't overwrite it.
+            if (ReferenceEquals(_footprint, footprint))
+            {
+                _renderError = ex;
+                UpdateState();
+            }
         }
     }
 
@@ -188,19 +204,26 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
     // is replaced or changes; a marker's own property change re-resolves without re-subscribing.
     private void RebuildMarkers()
     {
-        foreach (OrientedImageMarker marker in _subscribedMarkers)
+        foreach (var listener in _markerListeners)
         {
-            marker.PropertyChanged -= OnMarkerPropertyChanged;
+            listener.Detach();
         }
 
-        _subscribedMarkers.Clear();
+        _markerListeners.Clear();
 
         if (_markers is not null)
         {
             foreach (OrientedImageMarker marker in _markers)
             {
-                marker.PropertyChanged += OnMarkerPropertyChanged;
-                _subscribedMarkers.Add(marker);
+                // Weak, like the collection subscription in SetMarkers: an app-owned long-lived marker must not
+                // keep the display (and through it the control and its GPU surface) alive after the control is gone.
+                var listener = new WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                marker.PropertyChanged += listener.OnEvent;
+                _markerListeners.Add(listener);
             }
         }
 
@@ -287,6 +310,11 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         {
             return null;
         }
+
+        // A location that doesn't project (e.g. at or behind the camera position) can come back non-finite; never
+        // let NaN/Infinity into the marker pipeline (screen projection, GPU quad vertices, hit-test distances).
+        if (!float.IsFinite(pixel.X) || !float.IsFinite(pixel.Y))
+            return null;
 
         return (pixel.X / imageWidth, pixel.Y / imageHeight);
     }
@@ -477,6 +505,12 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         if (imageChanged)
             _footprint?.OrientedImage?.CancelLoad();
 
+        // Abort a superseded footprint's decode (the download is the expensive part during rapid paging);
+        // the stale completion paths below are additionally generation-guarded.
+        _decodeCts?.Cancel();
+        CancellationTokenSource decodeCts = new();
+        _decodeCts = decodeCts;
+
         _footprint = footprint;
         _renderError = null;
 
@@ -525,9 +559,12 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
                 return;
             }
 
-            PanoramaFrame? decoded = await DecodeAsync(uri, CancellationToken.None);
+            PanoramaFrame? decoded = await DecodeAsync(uri, decodeCts.Token);
             if (generation != _footprintGeneration)
+            {
+                DiscardFrame(decoded); // never applied; release promptly rather than via finalizers
                 return;
+            }
 
             if (decoded is not PanoramaFrame frame)
             {
@@ -554,7 +591,10 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         }
         catch (Exception ex)
         {
-            _renderError = ex;
+            // Only the load that still owns the display may record a failure; a superseded load's late
+            // exception must not mark the newer image's state as failed.
+            if (generation == _footprintGeneration)
+                _renderError = ex;
         }
         finally
         {
@@ -767,12 +807,21 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
     private readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height);
 
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bitmap);
+
+    // A frame that lost a generation race is never applied; release its bitmap promptly instead of waiting
+    // for finalizers (full-size panorama bitmaps add up fast during rapid paging).
+    private static void DiscardFrame(PanoramaFrame? frame) => frame?.Bitmap.Recycle();
 #else
     // The decoded equirectangular image as tightly-packed BGRA8 plus its pixel dimensions. This is also the seam
     // where a future 360-video source would provide frames over time instead of a single decode.
     private readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
 
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
+
+    // byte[]-backed frames are plain managed memory; nothing to release eagerly.
+    private static void DiscardFrame(PanoramaFrame? frame)
+    {
+    }
 #endif
 
     // A marker resolved to a normalized (u,v), kept on the UI side for tap hit-testing (the surface owns the GPU side).
