@@ -85,6 +85,11 @@ internal readonly struct PanoramaCameraState
         if (viewWidth <= 0 || viewHeight <= 0)
             return false;
 
+        // NaN passes every subsequent comparison (all are false), so it would flow through to a "successful"
+        // NaN result; reject non-finite inputs up front (finite inputs keep the math finite throughout).
+        if (!double.IsFinite(screenX) || !double.IsFinite(screenY))
+            return false;
+
         if (!Matrix4x4.Invert(GetWorldViewProjection((float)(viewWidth / viewHeight)), out Matrix4x4 inverse))
             return false;
 
@@ -111,6 +116,11 @@ internal readonly struct PanoramaCameraState
         screenX = 0;
         screenY = 0;
         if (viewWidth <= 0 || viewHeight <= 0)
+            return false;
+
+        // NaN(u,v) would sail past the behind-camera test (NaN <= 0 is false) and "succeed" with NaN screen
+        // coordinates; reject non-finite inputs up front (finite inputs keep the math finite throughout).
+        if (!float.IsFinite(u) || !float.IsFinite(v))
             return false;
 
         float phi = v * MathF.PI;

@@ -121,6 +121,30 @@ public sealed class PanoramaCameraStateTests
     }
 
     [TestMethod]
+    public void TransformsRejectNonFiniteInputs()
+    {
+        // NaN passes every comparison in the projection math (all comparisons with NaN are false), so without
+        // explicit guards both transforms would "succeed" and hand NaN coordinates to markers and GPU vertices.
+        var camera = new PanoramaCameraState(yaw: 0.3f, pitch: 0.1f, fieldOfView: Fov90);
+
+        foreach (float bad in new[] { float.NaN, float.PositiveInfinity, float.NegativeInfinity })
+        {
+            Assert.IsFalse(camera.TryNormalizedUvToScreen(bad, 0.5f, ViewWidth, ViewHeight, out double sx, out double sy), $"u={bad}");
+            Assert.AreEqual(0d, sx, $"screenX must stay at its failure value for u={bad}");
+            Assert.AreEqual(0d, sy, $"screenY must stay at its failure value for u={bad}");
+            Assert.IsFalse(camera.TryNormalizedUvToScreen(0.75f, bad, ViewWidth, ViewHeight, out _, out _), $"v={bad}");
+        }
+
+        foreach (double bad in new[] { double.NaN, double.PositiveInfinity, double.NegativeInfinity })
+        {
+            Assert.IsFalse(camera.TryScreenToNormalizedUv(bad, ViewHeight / 2, ViewWidth, ViewHeight, out float u, out float v), $"x={bad}");
+            Assert.AreEqual(0f, u, $"u must stay at its failure value for x={bad}");
+            Assert.AreEqual(0f, v, $"v must stay at its failure value for x={bad}");
+            Assert.IsFalse(camera.TryScreenToNormalizedUv(ViewWidth / 2, bad, ViewWidth, ViewHeight, out _, out _), $"y={bad}");
+        }
+    }
+
+    [TestMethod]
     public void DragRotationScaleMatchesFormulaAndFallsBackWhenSizeUnknown()
     {
         // 2 * tan(fov/2) / height: at fov=90deg, height=1000 DIP -> 0.002 rad/DIP.
