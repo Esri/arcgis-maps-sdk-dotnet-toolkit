@@ -341,12 +341,15 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         _viewportHeight = height;
         PostToRenderThread(() =>
         {
+            // Snapshot BEFORE CreateWindowSurface sets the flag, or the very first surface reads as a
+            // "recreation" and triggers a redundant second load/decode while the initial one is in flight.
+            bool hadContext = _contextEverCreated;
             EnsureEglContext();
             CreateWindowSurface(surface);
             bool recreated;
             lock (_pendingLock)
             {
-                recreated = _contextEverCreated && !_hasTexture && _pendingBitmap is null;
+                recreated = hadContext && !_hasTexture && _pendingBitmap is null;
             }
 
             _surfaceReady = true;

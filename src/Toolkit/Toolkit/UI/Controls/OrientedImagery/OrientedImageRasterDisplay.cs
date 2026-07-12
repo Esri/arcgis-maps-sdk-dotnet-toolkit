@@ -71,6 +71,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
     private WeakEventListener<OrientedImageRasterDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private readonly Dictionary<OrientedImageMarker, Graphic> _markerGraphics = [];
     private readonly Dictionary<Graphic, OrientedImageMarker> _graphicMarkers = [];
+    private readonly List<WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
     private bool _autoUpdate;
     private CancellationTokenSource? _updateCts;
     private bool _isLoading;
@@ -165,9 +166,10 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         // Use a generation counter to ignore stale completions.
         int generation = Interlocked.Increment(ref _footprintGeneration);
         OrientedImage? image = footprint?.OrientedImage;
+        bool imageChanged = !ReferenceEquals(_footprint?.OrientedImage, image);
 
         // If we are replacing a still-loading image, cancel it. It's no-op if already loaded.
-        if (!ReferenceEquals(_footprint?.OrientedImage, image))
+        if (imageChanged)
             _footprint?.OrientedImage?.CancelLoad();
         _rasterLayer?.CancelLoad();
 
@@ -182,6 +184,15 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
             SetInteractive(false);
             UpdateState();
             return;
+        }
+
+        if (imageChanged)
+        {
+            // Blank the outgoing image immediately - before awaiting the new image's load - so a slow or failed
+            // replacement can't leave the previous image visible while Footprint/Error/interaction all describe
+            // the new one (mirrors the panoramic display's immediate ClearTexture).
+            _mapView.Map = null;
+            _rasterLayer = null;
         }
 
         // Lock the view while loading so the user can't accidentally pan/zoom away from the incoming image.
@@ -327,11 +338,12 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         List<OrientedImageMarker>? snapshot = _markers is null ? null : new(_markers);
         this.Dispatch(() =>
         {
-            foreach (OrientedImageMarker existing in _markerGraphics.Keys)
+            foreach (var listener in _markerListeners)
             {
-                existing.PropertyChanged -= OnMarkerPropertyChanged;
+                listener.Detach();
             }
 
+            _markerListeners.Clear();
             _markerGraphics.Clear();
             _graphicMarkers.Clear();
             _markersOverlay.Graphics.Clear();
@@ -344,7 +356,16 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
                     _markerGraphics[marker] = graphic;
                     _graphicMarkers[graphic] = marker;
                     _markersOverlay.Graphics.Add(graphic);
-                    marker.PropertyChanged += OnMarkerPropertyChanged;
+
+                    // Weak, like the collection subscription in SetMarkers: an app-owned long-lived marker must not
+                    // keep the display (and through it the control and its MapView) alive after the control is gone.
+                    var listener = new WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
+                    {
+                        OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
+                        OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                    };
+                    marker.PropertyChanged += listener.OnEvent;
+                    _markerListeners.Add(listener);
                 }
             }
 
@@ -388,10 +409,13 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
 
     private async Task ResolveAndApplyMarkerGeometryAsync(OrientedImageMarker marker, Graphic graphic)
     {
+        int generation = _footprintGeneration;
         MapPoint? mapPoint = await ResolveMarkerMapPointAsync(marker);
-        // The marker set may have changed while awaiting; only apply if this graphic is still the marker's graphic.
-        // A null point (unprojectable location, see PixelToMap) clears the geometry.
-        if (_markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
+        // The marker set or the image may have changed while awaiting; only apply if this graphic is still the
+        // marker's graphic AND the footprint generation is unchanged (a pixel projected through the old image's
+        // camera model must not be placed on the new raster). A null point (unprojectable location, see PixelToMap)
+        // clears the geometry.
+        if (generation == _footprintGeneration && _markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
             graphic.Geometry = mapPoint;
     }
 
@@ -619,7 +643,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
     private void UpdateAutomationName()
     {
         string name = _footprint?.OrientedImage?.Type is OrientedImageType type
-            ? string.Format(Properties.Resources.GetString("OrientedImageDisplayImageAutomationNameFormat") ?? "Oriented image, {0}", type)
+            ? string.Format(CultureInfo.CurrentCulture, Properties.Resources.GetString("OrientedImageDisplayImageAutomationNameFormat") ?? "Oriented image, {0}", type)
             : Properties.Resources.GetString("OrientedImageDisplayAutomationName") ?? "Oriented image display";
 #if WPF
         System.Windows.Automation.AutomationProperties.SetName(_mapView, name);

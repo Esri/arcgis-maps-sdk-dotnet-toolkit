@@ -230,7 +230,14 @@ public partial class OrientedImageDisplay
 #endif
     {
         base.OnApplyTemplate();
+        DisplayHostElement? previousHost = _displayHost;
         _displayHost = GetTemplateChild(DisplayHostName) as DisplayHostElement;
+
+        // On a template re-apply the active display is still parented to the discarded template's host; release
+        // it there or the new host cannot adopt it (re-hosting happens in UpdateDisplay -> SetActiveDisplay).
+        if (previousHost is not null && !ReferenceEquals(previousHost, _displayHost))
+            previousHost.Content = null;
+
         UpdateDisplay();
     }
 
@@ -267,7 +274,11 @@ public partial class OrientedImageDisplay
     private void SetActiveDisplay(IOrientedImageDisplay? display)
     {
         if (ReferenceEquals(_activeDisplay, display))
+        {
+            // Same display, but the template may have been re-applied: the fresh host starts with no content.
+            HostActiveDisplay();
             return;
+        }
 
         if (_activeDisplay is not null)
         {
@@ -281,11 +292,7 @@ public partial class OrientedImageDisplay
         }
 
         _activeDisplay = display;
-#if MAUI
-        _displayHost!.Content = display as Microsoft.Maui.Controls.View;
-#else
-        _displayHost!.Content = display;
-#endif
+        HostActiveDisplay();
 
         if (display is not null)
         {
@@ -294,6 +301,17 @@ public partial class OrientedImageDisplay
         }
 
         UpdateState();
+    }
+
+    // Presents the active display in the current template's host. Idempotent: called on display swap and on
+    // template re-apply (same display, new host).
+    private void HostActiveDisplay()
+    {
+#if MAUI
+        _displayHost!.Content = _activeDisplay as Microsoft.Maui.Controls.View;
+#else
+        _displayHost!.Content = _activeDisplay;
+#endif
     }
 
     private void OnDisplayStateChanged(object? sender, EventArgs e) => UpdateState();
