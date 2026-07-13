@@ -400,7 +400,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// instance.
         /// </summary>
         /// <remarks>This method updates the state of the clear button based on the <see
-        /// cref="GeometryEditor.Geometry"/> property. The <paramref
+        /// cref="GeometryEditor.Geometry"/> property and displays the updated geometry result. The <paramref
         /// name="sender"/> must be a <see cref="GeometryEditor"/>  instance for the method to function
         /// correctly.</remarks>
         /// <param name="sender">The source of the event, expected to be a <see cref="GeometryEditor"/> instance.</param>
@@ -414,6 +414,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _clearButton.IsEnabled = editor?.Geometry is Geometry.Geometry geometry && !geometry.IsEmpty;
                 }
+                DisplayResult(editor?.Geometry);
             }
             if (e.PropertyName is nameof(GeometryEditor.IsStarted) && _geometryEditor is not null && !_geometryEditor.IsStarted)
             {
