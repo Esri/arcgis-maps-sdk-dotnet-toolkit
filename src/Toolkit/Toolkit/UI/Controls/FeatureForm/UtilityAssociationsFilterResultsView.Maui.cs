@@ -31,16 +31,49 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
+            var root = new Grid();
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+
             var border = new Border() { StrokeThickness = 1, Margin = new Thickness(0, 4), VerticalOptions = LayoutOptions.Start };
             border.SetAppThemeColor(Border.StrokeProperty, Colors.Black, Colors.White);
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (UtilityAssociationsFilterResultsView view) => view.AssociationsFilterResult?.GroupResults, source: RelativeBindingSource.TemplatedParent);
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             border.Content = cv;
+
+            Button addAssociationButton = new Button()
+            {
+                Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsAddAssociation"),
+                ImageSource = new FontImageSource()
+                {
+                    Glyph = ToolkitIcons.Plus,
+                    Color = Color.FromArgb("#007AC2"),
+                    FontFamily = ToolkitIcons.FontFamilyName,
+                    Size = 16,
+                },
+                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 6),
+                BackgroundColor = Colors.Transparent,
+                BorderWidth = 0,
+                Padding = new Thickness(6, 4),
+                TextColor = Color.FromArgb("#007AC2"),
+                IsVisible = false,
+#if __IOS__ || MACCATALYST
+                HorizontalOptions = LayoutOptions.Start,
+#else
+                HorizontalOptions = LayoutOptions.Center,
+#endif
+            };
+            Grid.SetRow(addAssociationButton, 1);
+
+            root.Add(border);
+            root.Add(addAssociationButton);
+
             INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(border, nameScope);
+            NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName("ResultsList", cv);
-            return border;
+            nameScope.RegisterName("AddAssociationButton", addAssociationButton);
+            return root;
         }
 
         private static object BuildDefaultItemTemplate()
@@ -72,6 +105,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return layout;
         }
 
+        /// <inheritdoc />
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            UpdateAddAssociationButton();
+        }
+
         private static void Result_Tapped(object? sender, EventArgs e)
         {
             var cell = sender as View;
@@ -80,6 +120,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 var parent = FeatureFormView.GetFeatureFormViewParent(cell);
                 parent?.NavigateToItem(result, FeatureFormView.GetParent<UtilityAssociationsFilterResultsView>(cell)?.AssociationsFilterResult); 
             }
+        }
+
+        private async partial void ShowAddAssociationMenu(object? flyoutTarget)
+        {
+            string? onMap = CanSelectAssociationOnMap()
+                ? Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap")
+                : null;
+            string fromNetworkDataSource = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectFromNetworkDataSource")!;
+
+#if WINDOWS
+            if (flyoutTarget is Button button &&
+                button.Handler?.PlatformView is Microsoft.UI.Xaml.FrameworkElement nativeButton)
+            {
+                Microsoft.UI.Xaml.Controls.MenuFlyout flyout = new Microsoft.UI.Xaml.Controls.MenuFlyout();
+                if (onMap is not null)
+                {
+                    flyout.Items.Add(new Microsoft.UI.Xaml.Controls.MenuFlyoutItem() { Text = onMap });
+                }
+                flyout.Items.Add(new Microsoft.UI.Xaml.Controls.MenuFlyoutItem() { Text = fromNetworkDataSource });
+                flyout.ShowAt(nativeButton);
+                return;
+            }
+#endif
+
+            Page? page = Window?.Page;
+            if (page is null)
+            {
+                return;
+            }
+
+            var actions = new List<string>();
+            if (onMap is not null)
+            {
+                actions.Add(onMap);
+            }
+            actions.Add(fromNetworkDataSource);
+
+            string? title = Properties.Resources.GetString("FeatureFormUtilityAssociationsChooseAddMethod");
+            string cancel = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationCancel")!;
+            await page.DisplayActionSheetAsync(title, cancel, null, actions.ToArray());
         }
     }
 }

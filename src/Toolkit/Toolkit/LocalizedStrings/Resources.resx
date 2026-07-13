@@ -277,6 +277,10 @@
     <value>Add Association</value>
     <comment>Button text for starting or completing the add association workflow in FeatureFormView.</comment>
   </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>Choose how to add the feature</value>
+    <comment>Title for the action sheet used to choose how to select a feature for a new association.</comment>
+  </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
     <value>Association type</value>
     <comment>Label for the association type shown on the add association review screen.</comment>
@@ -342,11 +346,11 @@
     <comment>Description shown on the screen used to choose a network data source for a new association.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>Select from Network Data Source</value>
+    <value>From Network Data Source</value>
     <comment>Action sheet option for browsing candidates from a network data source.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>Select on Map</value>
+    <value>On Map</value>
     <comment>Action sheet option for selecting the associated feature from a map.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">

@@ -407,14 +407,34 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:UtilityAssociationsFilterResultsView">
-                    <ListView VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding AssociationsFilterResult.GroupResults, RelativeSource={RelativeSource Mode=TemplatedParent}}" x:Name="ResultsList" ItemContainerTransitions="{x:Null}" Background="{ThemeResource SystemChromeAltHighColor}" CornerRadius="4" SelectionMode="None" IsItemClickEnabled="True" Margin="0,12,0,8">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ListView VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding AssociationsFilterResult.GroupResults, RelativeSource={RelativeSource Mode=TemplatedParent}}" x:Name="ResultsList" ItemContainerTransitions="{x:Null}" Background="{ThemeResource SystemChromeAltHighColor}" CornerRadius="4" SelectionMode="None" IsItemClickEnabled="True" Margin="0,12,0,8">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                        <Button x:Name="AddAssociationButton"
+                                AutomationProperties.AutomationId="AddAssociationButton"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Foreground="{StaticResource FeatureFormAccentBrush}"
+                                Grid.Row="1"
+                                HorizontalAlignment="Left"
+                                Padding="6,4"
+                                Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE9F6;" FontFamily="{StaticResource toolkit-icons}" Margin="0,0,6,0" />
+                                <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsAddAssociation}" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

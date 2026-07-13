@@ -51,6 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _resultsListView.SelectionChanged += AssociationsListView_SelectionChanged;
 #endif
             }
+            UpdateAddAssociationButton();
         }
 
 #if WPF
@@ -88,6 +89,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFilterResultsView), new PropertyMetadata(null));
+
+        private partial void ShowAddAssociationMenu(object? flyoutTarget)
+        {
+            string? onMap = CanSelectAssociationOnMap()
+                ? Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap")
+                : null;
+            string fromNetworkDataSource = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectFromNetworkDataSource")!;
+
+#if WPF
+            ContextMenu contextMenu = new ContextMenu
+            {
+                PlacementTarget = flyoutTarget as UIElement ?? this,
+            };
+            if (onMap is not null)
+            {
+                contextMenu.Items.Add(new MenuItem() { Header = onMap });
+            }
+            contextMenu.Items.Add(new MenuItem() { Header = fromNetworkDataSource });
+            contextMenu.IsOpen = true;
+#elif WINDOWS_XAML
+            MenuFlyout contextMenu = new MenuFlyout();
+            if (onMap is not null)
+            {
+                contextMenu.Items.Add(new MenuFlyoutItem() { Text = onMap });
+            }
+            contextMenu.Items.Add(new MenuFlyoutItem() { Text = fromNetworkDataSource });
+            contextMenu.ShowAt(flyoutTarget as FrameworkElement ?? this);
+#endif
+        }
     }
 }
 #endif
