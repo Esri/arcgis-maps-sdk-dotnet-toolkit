@@ -22,6 +22,7 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Portal;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
@@ -284,10 +285,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 case FeatureCollectionLayer featureCollectionLayer:
                     return featureCollectionLayer.FeatureCollection == ((FeatureCollectionLayer)layer2).FeatureCollection;
                 case GroupLayer groupLayer:
-                    return groupLayer.Layers.Count == ((GroupLayer)layer2).Layers.Count;
+                    return groupLayer.Layers.Count == ((GroupLayer)layer2).Layers.Count && LayersEqual(groupLayer.Layers, ((GroupLayer)layer2).Layers);
                 case OpenStreetMapLayer openStreetMapLayer:
                     return true; // OpenStreetMap layers are considered equal if types match
+                case WebTiledLayer webTiledLayer:
+                    return webTiledLayer.TemplateUri == ((WebTiledLayer)layer2).TemplateUri && webTiledLayer.SubDomains.SequenceEqual(((WebTiledLayer)layer2).SubDomains);
                 case ServiceImageTiledLayer serviceImageTiledLayer:
+#pragma warning disable CS0618 // Type or member is obsolete
+                    if (layer1 is not BingMapsLayer)
+                        return false;
+#pragma warning restore CS0618 // Type or member is obsolete
                     return serviceImageTiledLayer.TileInfo == ((ServiceImageTiledLayer)layer2).TileInfo;
                 case SubtypeFeatureLayer subtypeFeatureLayer:
                     return subtypeFeatureLayer.FeatureTable == ((SubtypeFeatureLayer)layer2).FeatureTable;
@@ -310,7 +317,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 KmlLayer kmlLayer => (kmlLayer.Dataset?.Source, ((KmlLayer)layer2).Dataset?.Source),
                 Ogc3DTilesLayer ogc3DTilesLayer => (ogc3DTilesLayer.Source, ((Ogc3DTilesLayer)layer2).Source),
                 PointCloudLayer pointCloudLayer => (pointCloudLayer.Source, ((PointCloudLayer)layer2).Source),
-                WebTiledLayer webTiledLayer => (new Uri(webTiledLayer.TemplateUri), new Uri(((WebTiledLayer)layer2).TemplateUri)),
                 WmsLayer wmsLayer => (wmsLayer.Source, ((WmsLayer)layer2).Source),
                 WmtsLayer wmtsLayer => (wmtsLayer.Source, ((WmtsLayer)layer2).Source),
                 _ => (null, null),
@@ -326,6 +332,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             // https://maps.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405 point to the same item
             if (IsArcGisComHost(source1) && IsArcGisComHost(source2) && source1?.PathAndQuery == source2?.PathAndQuery)
                 return true;
+
+            if (layer1.Item != null && layer2.Item != null)
+            {
+                if (layer1.Item.ItemId == layer2.Item.ItemId || PortalUtils.GetPortalItemId((layer1.Item as PortalItem)?.Url) == PortalUtils.GetPortalItemId((layer2.Item as PortalItem)?.Url))
+                    return true;
+            }
 
             return false;
         }
