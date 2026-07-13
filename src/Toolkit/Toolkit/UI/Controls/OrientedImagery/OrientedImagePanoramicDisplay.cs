@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,13 +56,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 // Panoramic (360/equirectangular) inner display for OrientedImageDisplay.
 // Supports the Windows heads (WPF + WinUI, hosting the shared Direct3D PanoramicSurface) and Android
 // (hosting the GLES PanoramicSurface through the PanoramicSurfaceView handler); iOS/MacCatalyst pending.
-// Implements the IOrientedImageDisplay contract by loading the OrientedImage, decoding it to a texture,
-// and surfacing state/clicks. All screen<->pixel math goes through the shared PanoramaCameraState.
-#if MAUI
-internal sealed partial class OrientedImagePanoramicDisplay : ContentView, IOrientedImageDisplay
-#else
-internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IOrientedImageDisplay
-#endif
+// The shared OrientedImageInnerDisplay skeleton owns the load/session/state plumbing; this class decodes the
+// image to a texture and surfaces clicks. All screen<->pixel math goes through the shared PanoramaCameraState.
+internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInnerDisplay
 {
     private const double MarkerHitTolerance = 12d;
 
@@ -72,40 +69,43 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
 #endif
     private readonly List<ResolvedMarker> _resolvedMarkers = [];
     private readonly List<WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
-    private OrientedImageFootprint? _footprint;
-    private ObservableCollection<OrientedImageMarker>? _markers;
-    private WeakEventListener<OrientedImagePanoramicDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private int _markerGeneration;
-    private bool _autoUpdate;
-    private CancellationTokenSource? _updateCts;
-    private CancellationTokenSource? _decodeCts;
-    private bool _isLoading;
-    private int _footprintGeneration;
     private int _imageWidth;
     private int _imageHeight;
-    private Exception? _renderError;
+    private bool _recovering;
 
     internal OrientedImagePanoramicDisplay()
     {
 #if MAUI
         _surface = new PanoramicSurfaceView();
-        Content = _surface;
 #else
         _surface = new PanoramicSurface();
-        HorizontalContentAlignment = HorizontalAlignment.Stretch;
-        VerticalContentAlignment = VerticalAlignment.Stretch;
-        IsTabStop = false;
-        Content = _surface;
 #endif
+        Content = _surface;
         _surface.SurfaceTapped += OnSurfaceTapped;
         _surface.RenderFailed += OnRenderFailed;
         _surface.DeviceRecreated += OnDeviceRecreated;
+        UpdateAutomationName();
     }
+
+#if MAUI
+    protected override View AutomationNameTarget => _surface;
+#elif WPF
+    protected override System.Windows.DependencyObject AutomationNameTarget => _surface;
+#else
+    protected override Microsoft.UI.Xaml.DependencyObject AutomationNameTarget => _surface;
+#endif
+
+    // Interactive once a panorama is decoded and shown (the sphere is then navigable).
+    protected override bool IsPresentationInteractive => _imageWidth > 0 && _imageHeight > 0;
+
+    // A device-lost re-decode is presentation work: the surface is blank until it re-supplies.
+    protected override bool IsPresentationBusy => _recovering;
 
     // Present-layer (device/bridge/render) failures happen outside the load path; surface them as Error.
     private void OnRenderFailed(Exception ex)
     {
-        _renderError = ex;
+        PresentationError = ex;
         UpdateState();
     }
 
@@ -114,25 +114,28 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
     // because it lives on the surface and is untouched by the rebuild.
     private async void OnDeviceRecreated()
     {
-        OrientedImageFootprint? footprint = _footprint;
-        OrientedImage? image = footprint?.OrientedImage;
-        if (image is null)
+        OrientedImage? image = Footprint?.OrientedImage;
+        CancellationToken token = SessionToken;
+        if (image is null || token.IsCancellationRequested)
             return; // nothing loaded, or an in-flight load will upload once it completes
 
         // The rebuilt surface has no texture yet (it blanks until re-supply). Invalidate dimensions so a click on the
-        // blank surface isn't reported against the old pixel space while the re-decode is in flight.
+        // blank surface isn't reported against the old pixel space, and surface the recovery immediately as
+        // busy/non-interactive - commands bound to IsInteractive must not stay enabled over a blank panorama.
         _imageWidth = 0;
         _imageHeight = 0;
+        _recovering = true;
+        UpdateState();
 
         try
         {
             await image.RetryLoadAsync(); // idempotent; covers the image being unloaded/cancelled during teardown
-            if (!ReferenceEquals(_footprint, footprint) || image.DataUri is not Uri uri)
+            if (token.IsCancellationRequested || image.DataUri is not Uri uri)
                 return;
 
-            // A newer SetFootprintAsync cancels this token, aborting a now-pointless re-decode.
-            PanoramaFrame? decoded = await DecodeAsync(uri, _decodeCts?.Token ?? CancellationToken.None);
-            if (!ReferenceEquals(_footprint, footprint))
+            // A newer SetFootprint cancels the session token, aborting a now-pointless re-decode.
+            PanoramaFrame? decoded = await DecodeAsync(uri, token);
+            if (token.IsCancellationRequested)
             {
                 DiscardFrame(decoded);
                 return;
@@ -148,8 +151,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
             _ = ResolveMarkersAsync();
 
             // Recovery succeeded: clear any error latched while the device was lost (the loss itself is recoverable).
-            _renderError = null;
-            UpdateState();
+            PresentationError = null;
         }
         catch (OperationCanceledException)
         {
@@ -158,47 +160,19 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         catch (Exception ex)
         {
             // A footprint swapped in mid-recovery owns the display state now; don't overwrite it.
-            if (ReferenceEquals(_footprint, footprint))
-            {
-                _renderError = ex;
-                UpdateState();
-            }
+            if (!token.IsCancellationRequested)
+                PresentationError = ex;
         }
-    }
-
-    public bool IsBusy { get; private set; }
-
-    public bool IsInteractive { get; private set; }
-
-    public Exception? Error { get; private set; }
-
-    public event EventHandler? StateChanged;
-
-    public event EventHandler<OrientedImageDisplay.ImageClickedEventArgs>? ImageClicked;
-
-    public void SetFootprint(OrientedImageFootprint? footprint) => _ = SetFootprintAsync(footprint);
-
-    public void SetMarkers(ObservableCollection<OrientedImageMarker>? markers)
-    {
-        if (ReferenceEquals(_markers, markers))
-            return;
-
-        _markersListener?.Detach();
-        _markersListener = null;
-        _markers = markers;
-
-        if (markers is INotifyCollectionChanged incc)
+        finally
         {
-            _markersListener = new WeakEventListener<OrientedImagePanoramicDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
-            {
-                OnEventAction = static (instance, source, eventArgs) => instance.RebuildMarkers(),
-                OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
-            };
-            incc.CollectionChanged += _markersListener.OnEvent;
+            // Recompute on every completion/cancellation/failure path (safe when superseded: UpdateState only
+            // reads the current session's state).
+            _recovering = false;
+            UpdateState();
         }
-
-        RebuildMarkers();
     }
+
+    protected override void OnMarkersChanged() => RebuildMarkers();
 
     // Re-subscribes to each current marker's PropertyChanged and re-resolves the whole set. Called when the collection
     // is replaced or changes; a marker's own property change re-resolves without re-subscribing.
@@ -211,9 +185,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
 
         _markerListeners.Clear();
 
-        if (_markers is not null)
+        if (Markers is not null)
         {
-            foreach (OrientedImageMarker marker in _markers)
+            foreach (OrientedImageMarker marker in Markers)
             {
                 // Weak, like the collection subscription in SetMarkers: an app-owned long-lived marker must not
                 // keep the display (and through it the control and its GPU surface) alive after the control is gone.
@@ -239,16 +213,16 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
     private async Task ResolveMarkersAsync()
     {
         int generation = Interlocked.Increment(ref _markerGeneration);
-        OrientedImageFootprint? footprint = _footprint;
-        OrientedImage? image = footprint?.OrientedImage;
+        CancellationToken token = SessionToken;
+        OrientedImage? image = Footprint?.OrientedImage;
         int imageWidth = _imageWidth;
         int imageHeight = _imageHeight;
 
         // Snapshot the app-owned markers on the UI thread (Position/Symbol/IsVisible) before going async.
         var pending = new List<(OrientedImageMarker Marker, OrientedImageMarkerPosition Position, Symbol Symbol)>();
-        if (_markers is not null && image is not null && imageWidth > 0 && imageHeight > 0)
+        if (Markers is not null && image is not null && imageWidth > 0 && imageHeight > 0)
         {
-            foreach (OrientedImageMarker marker in _markers)
+            foreach (OrientedImageMarker marker in Markers)
             {
                 if (marker.IsVisible)
                 {
@@ -276,8 +250,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
 
         this.Dispatch(() =>
         {
-            // Discard if superseded (newer resolve) or if the footprint changed while resolving (stale image's markers).
-            if (generation != _markerGeneration || !ReferenceEquals(_footprint, footprint))
+            // Discard if superseded (newer resolve) or if the session ended while resolving (stale image's markers).
+            if (generation != _markerGeneration || token.IsCancellationRequested)
                 return;
 
             _resolvedMarkers.Clear();
@@ -389,61 +363,33 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
     }
 #endif
 
-    public void SetAutoUpdateFootprint(bool enabled)
+    protected override void OnAutoUpdateFootprintChanged(bool enabled)
     {
-        if (enabled == _autoUpdate)
-            return;
-
-        _autoUpdate = enabled;
         if (enabled)
-        {
             _surface.CameraChanged += OnCameraChanged;
-            UpdateFootprintCorners(); // push the current view immediately; the camera may be static until interaction
-        }
         else
-        {
             _surface.CameraChanged -= OnCameraChanged;
-        }
     }
 
     private void OnCameraChanged() => UpdateFootprintCorners();
 
-    // Projects the current view onto the image and pushes the visible corners to OrientedImageFootprint.
-    // Runs on each camera change while auto-update is enabled; cancel-prior so a stale view never wins a race.
-    private async void UpdateFootprintCorners()
+    protected override bool TryGetFootprintCorners(out IReadOnlyList<PointF> corners)
     {
-        if (!_autoUpdate)
-            return;
-
-        OrientedImageFootprint? footprint = _footprint;
+        corners = Array.Empty<PointF>();
         double width = _surface.ActualWidth;
         double height = _surface.ActualHeight;
-        if (footprint is null || _imageWidth <= 0 || _imageHeight <= 0 || width <= 0 || height <= 0)
-            return;
+        if (_imageWidth <= 0 || _imageHeight <= 0 || width <= 0 || height <= 0)
+            return false;
 
         var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
-        if (!TryProjectViewRing(camera, width, height, out IReadOnlyList<PointF> corners))
-            return;
-
-        _updateCts?.Cancel();
-        CancellationTokenSource cts = new();
-        _updateCts = cts;
-        try
-        {
-            await footprint.UpdateFootprintAsync(corners, cts.Token);
-        }
-        catch
-        {
-            // Ignore cancellation/failures from a superseded update.
-        }
+        return TryProjectViewRing(camera, width, height, out corners);
     }
 
-    // Projects the screen-view boundary onto the equirectangular image as an ordered ring of pixel vertices.
-    // The updated OrientedImageFootprint API takes the full vertex list (not a fixed quad), so the boundary is
-    // densified (several samples per screen edge): a panorama's straight screen edges map to curved arcs on the
-    // image, which four corners approximate poorly. Horizontal coordinates are unwrapped across the u = 0/1 seam so
-    // the ring stays continuous — pixels may fall below 0 or above the image width, which core maps back onto the
-    // sphere. Returns false when any sample can't be projected (e.g. looking past a pole), leaving the footprint as-is.
+    // Projects the screen-view boundary onto the equirectangular image as an ordered ring of pixel vertices,
+    // densified (several samples per screen edge) because a panorama's straight screen edges map to curved arcs
+    // on the image, which four corners approximate poorly. Horizontal coordinates are unwrapped across the
+    // u = 0/1 seam so the ring stays continuous — pixels may fall outside [0, width], which core maps back onto
+    // the sphere. Returns false when any sample can't be projected (e.g. looking past a pole).
     private bool TryProjectViewRing(PanoramaCameraState camera, double width, double height, out IReadOnlyList<PointF> ring)
     {
         ring = System.Array.Empty<PointF>();
@@ -485,7 +431,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         return true;
     }
 
-    public void SetBackgroundColor(System.Drawing.Color color)
+    public override void SetBackgroundColor(System.Drawing.Color color)
     {
         if (color.IsEmpty)
             _surface.SetClearColor(0.02f, 0.02f, 0.02f, 1f); // keep the renderer's default backdrop
@@ -495,124 +441,62 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         _surface.RequestRender();
     }
 
-    private async Task SetFootprintAsync(OrientedImageFootprint? footprint)
+    protected override async Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token)
     {
-        // Re-entrant (can be called again before a prior load finishes); a generation counter ignores stale results.
-        int generation = Interlocked.Increment(ref _footprintGeneration);
-        OrientedImage? image = footprint?.OrientedImage;
-        bool imageChanged = !ReferenceEquals(_footprint?.OrientedImage, image);
-
-        if (imageChanged)
-            _footprint?.OrientedImage?.CancelLoad();
-
-        // Abort a superseded footprint's decode (the download is the expensive part during rapid paging);
-        // the stale completion paths below are additionally generation-guarded.
-        _decodeCts?.Cancel();
-        CancellationTokenSource decodeCts = new();
-        _decodeCts = decodeCts;
-
-        _footprint = footprint;
-        _renderError = null;
-
-        // When the image changes, blank the old texture and invalidate its dimensions immediately (before awaiting the
-        // new load) so the user never sees the old panorama, nor has a click reported against the new image using the
-        // old image's pixel space, during the transition. (ClearTexture + RequestRender presents a blank backdrop frame;
-        // _imageWidth/Height = 0 makes OnSurfaceTapped a no-op until the new texture and dimensions are ready.)
-        if (imageChanged)
+        PanoramaFrame? decoded = await DecodeAsync(dataUri, token);
+        if (token.IsCancellationRequested)
         {
-            _surface.ClearTexture();
-            _imageWidth = 0;
-            _imageHeight = 0;
-
-            // Drop the old image's markers immediately, and invalidate any in-flight resolve from it (generation bump),
-            // so stale markers neither render on the new texture nor hit-test against it before the new resolve lands.
-            Interlocked.Increment(ref _markerGeneration);
-            _resolvedMarkers.Clear();
-            _surface.SetMarkers(Array.Empty<PanoramicSurface.MarkerSwatch>());
-
-            _surface.RequestRender();
-        }
-
-        if (image is null)
-        {
-            _isLoading = false;
-            _ = ResolveMarkersAsync();
-            UpdateState();
+            DiscardFrame(decoded); // never applied; release promptly rather than via finalizers
             return;
         }
 
-        _isLoading = true;
-        UpdateState();
-        try
+        if (decoded is not PanoramaFrame frame)
         {
-            await image.RetryLoadAsync();
-            if (generation != _footprintGeneration)
-                return;
-
-            if (image.DataUri is not Uri uri)
-            {
-                // Loaded with nothing displayable (e.g. attachment without image, or a load failure surfaced via Error).
-                _surface.ClearTexture();
-                _imageWidth = 0;
-                _imageHeight = 0;
-                _surface.RequestRender();
-                return;
-            }
-
-            PanoramaFrame? decoded = await DecodeAsync(uri, decodeCts.Token);
-            if (generation != _footprintGeneration)
-            {
-                DiscardFrame(decoded); // never applied; release promptly rather than via finalizers
-                return;
-            }
-
-            if (decoded is not PanoramaFrame frame)
-            {
-                _surface.ClearTexture();
-                _imageWidth = 0;
-                _imageHeight = 0;
-                _surface.RequestRender();
-                return;
-            }
-
-            _imageWidth = frame.Width;
-            _imageHeight = frame.Height;
-            ApplyTexture(frame);
-
-            // Orient the initial view to the image's geographic heading (JS reference: yaw = -CameraHeading).
-            // The exact convention relative to the sphere's theta origin needs runtime tuning.
-            _surface.Yaw = -ReadHeadingRadians(image);
-            _surface.Pitch = 0f;
-            _surface.RequestRender();
+            ClearPresentation(); // decoded to nothing displayable
+            return;
         }
-        catch (OperationCanceledException)
-        {
-            // Load/decode was superseded by a newer footprint or the control was torn down; not an error to surface.
-        }
-        catch (Exception ex)
-        {
-            // Only the load that still owns the display may record a failure; a superseded load's late
-            // exception must not mark the newer image's state as failed.
-            if (generation == _footprintGeneration)
-                _renderError = ex;
-        }
-        finally
-        {
-            if (generation == _footprintGeneration)
-            {
-                _isLoading = false;
-                UpdateState();
 
-                // Re-resolve markers now that the image and its pixel dimensions are settled (world-anchored markers
-                // reproject onto the new image; image-anchored markers re-scale to the new dimensions).
-                _ = ResolveMarkersAsync();
-            }
-        }
+        _imageWidth = frame.Width;
+        _imageHeight = frame.Height;
+        ApplyTexture(frame);
+
+        // Orient the initial view to look NORTH (JS viewer parity). The image maps
+        // azimuth = CameraHeading + (u - 0.5) * 2pi, i.e. the center column faces the camera heading, while the
+        // identity camera centers u = 0.75 - so re-anchor by -pi/2 before subtracting the heading.
+        _surface.Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image);
+        _surface.Pitch = 0f;
+        _surface.RequestRender();
+
+        // Push the initial footprint explicitly: auto-update is usually enabled before this load completes
+        // (image dimensions were still zero on its immediate push), and if the camera assignments above happen
+        // not to change the values they raise no CameraChanged either.
+        UpdateFootprintCorners();
     }
+
+    // Blank the texture and invalidate dimensions NOW, so the user never sees the old panorama and clicks are
+    // suppressed (zero dimensions) until a new texture is ready.
+    protected override void ClearPresentation()
+    {
+        _surface.ClearTexture();
+        _imageWidth = 0;
+        _imageHeight = 0;
+
+        // Drop the on-image markers immediately, and invalidate any in-flight resolve (generation bump), so stale
+        // markers neither render on the next texture nor hit-test against it before a fresh resolve lands.
+        Interlocked.Increment(ref _markerGeneration);
+        _resolvedMarkers.Clear();
+        _surface.SetMarkers(Array.Empty<PanoramicSurface.MarkerSwatch>());
+
+        _surface.RequestRender();
+    }
+
+    // Re-resolve markers now that the image and its pixel dimensions are settled (world-anchored markers
+    // reproject onto the new image; image-anchored markers re-scale to the new dimensions).
+    protected override void OnPresentCompleted() => _ = ResolveMarkersAsync();
 
     private void OnSurfaceTapped(double x, double y)
     {
-        if (_footprint?.OrientedImage is not OrientedImage image || _imageWidth <= 0 || _imageHeight <= 0)
+        if (Footprint?.OrientedImage is not OrientedImage image || _imageWidth <= 0 || _imageHeight <= 0)
             return;
 
         var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
@@ -621,7 +505,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
 
         var pixel = new PointF(u * _imageWidth, v * _imageHeight);
         OrientedImageMarker? marker = HitTestMarker(camera, x, y);
-        ImageClicked?.Invoke(this, new OrientedImageDisplay.ImageClickedEventArgs(pixel, image, marker));
+        RaiseImageClicked(new OrientedImageDisplay.ImageClickedEventArgs(pixel, image, marker));
     }
 
     // Returns the nearest visible marker whose projected screen position is within the hit tolerance of the tap, or null.
@@ -646,21 +530,6 @@ internal sealed partial class OrientedImagePanoramicDisplay : ContentControl, IO
         }
 
         return hit;
-    }
-
-    // IsBusy while decoding/uploading; IsInteractive once a panorama is decoded and shown with no error (the sphere is
-    // then navigable). Error aggregates the image load error and any decode/render failure.
-    private void UpdateState()
-    {
-        Exception? error = _footprint?.OrientedImage?.LoadError ?? _renderError;
-        bool interactive = _imageWidth > 0 && _imageHeight > 0 && !_isLoading && error is null;
-        if (_isLoading == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
-            return;
-
-        IsBusy = _isLoading;
-        IsInteractive = interactive;
-        Error = error;
-        StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private static float ReadHeadingRadians(OrientedImage image)
