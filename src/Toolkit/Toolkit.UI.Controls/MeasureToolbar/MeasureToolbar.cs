@@ -400,7 +400,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// instance.
         /// </summary>
         /// <remarks>This method updates the state of the clear button based on the <see
-        /// cref="GeometryEditor.Geometry"/> property and displays the updated geometry result. The <paramref
+        /// cref="GeometryEditor.Geometry"/> property. The <paramref
         /// name="sender"/> must be a <see cref="GeometryEditor"/>  instance for the method to function
         /// correctly.</remarks>
         /// <param name="sender">The source of the event, expected to be a <see cref="GeometryEditor"/> instance.</param>
@@ -414,12 +414,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _clearButton.IsEnabled = editor?.Geometry is Geometry.Geometry geometry && !geometry.IsEmpty;
                 }
-                DisplayResult(editor?.Geometry);
             }
             if (e.PropertyName is nameof(GeometryEditor.IsStarted) && _geometryEditor is not null && !_geometryEditor.IsStarted)
             {
                 EndMeasureSession();
             }
+        }
+
+        /// <summary>
+        /// Handles the <see cref="GeometryEditor.InteractionPreviewChanged"/> event for the <see cref="GeometryEditor"/>
+        /// </summary>
+        /// <remarks> This method updates the measurement result based on the <see cref="GeometryEditorInteractionPreviewEventArgs.InteractionPreview"/> property. 
+        /// If the <see cref="GeometryEditorInteractionPreviewEventArgs.InteractionPreview"/> is null, the method uses the current geometry of the <see cref="GeometryEditor"/> instance.</remarks>
+        /// <param name="sender">The source of the event, expected to be a <see cref="GeometryEditor"/> instance.</param>
+        /// <param name="e">The event data containing information about the interaction preview change.</param>
+        private void OnGeometryEditorInteractionPreviewChanged(object? sender, GeometryEditorInteractionPreviewEventArgs e)
+        {
+            if (_geometryEditor is null)
+            {
+                return;
+            }
+
+            var geometry = e.InteractionPreview?.PreviewGeometry ?? _geometryEditor.Geometry;
+#if WINUI
+            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
+#else
+            Dispatcher.Invoke(() =>
+#endif
+            {
+                DisplayResult(geometry);
+            });
         }
 
         private void StartMeasureSession(GeometryType creationMode)
@@ -431,6 +455,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _originalTool = geometryEditor.Tool;
                     geometryEditor.Tool = MeasureTool ?? _originalTool;
                     _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
+                    _geometryEditor.InteractionPreviewChanged += OnGeometryEditorInteractionPreviewChanged;
                     _isGeometryEditorHooked = true;
                 }
                 _geometryEditor.Start(creationMode);
@@ -452,6 +477,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _originalTool = null;
                     }
                     _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
+                    _geometryEditor.InteractionPreviewChanged -= OnGeometryEditorInteractionPreviewChanged;
                     _isGeometryEditorHooked = false; 
                 }
             }
