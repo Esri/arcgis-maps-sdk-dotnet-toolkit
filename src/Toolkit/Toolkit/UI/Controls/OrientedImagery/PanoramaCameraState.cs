@@ -85,8 +85,7 @@ internal readonly struct PanoramaCameraState
         if (viewWidth <= 0 || viewHeight <= 0)
             return false;
 
-        // NaN passes every subsequent comparison (all are false), so it would flow through to a "successful"
-        // NaN result; reject non-finite inputs up front (finite inputs keep the math finite throughout).
+        // Reject non-finite inputs: NaN passes every comparison below (finite inputs keep the math finite).
         if (!double.IsFinite(screenX) || !double.IsFinite(screenY))
             return false;
 
@@ -118,8 +117,7 @@ internal readonly struct PanoramaCameraState
         if (viewWidth <= 0 || viewHeight <= 0)
             return false;
 
-        // NaN(u,v) would sail past the behind-camera test (NaN <= 0 is false) and "succeed" with NaN screen
-        // coordinates; reject non-finite inputs up front (finite inputs keep the math finite throughout).
+        // Reject non-finite inputs: NaN passes every comparison below, including the behind-camera test.
         if (!float.IsFinite(u) || !float.IsFinite(v))
             return false;
 
