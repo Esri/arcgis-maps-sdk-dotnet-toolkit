@@ -121,6 +121,19 @@ public sealed class PanoramaCameraStateTests
     }
 
     [TestMethod]
+    public void YawOfNegativeQuarterTurnCentersUvHalf()
+    {
+        // The identity camera centers u = 0.75, so re-anchoring the view to the image center (u = 0.5, the column
+        // that faces the camera heading) takes yaw = -pi/2. The panoramic display's initial view builds on this:
+        // yaw = -pi/2 - heading looks north, since azimuth(u) = heading + (u - 0.5) * 2pi.
+        var camera = new PanoramaCameraState(yaw: -MathF.PI / 2f, pitch: 0f, fieldOfView: Fov90);
+
+        Assert.IsTrue(camera.TryScreenToNormalizedUv(ViewWidth / 2, ViewHeight / 2, ViewWidth, ViewHeight, out float u, out float v));
+        Assert.AreEqual(0.5f, u, 1e-4f);
+        Assert.AreEqual(0.5f, v, 1e-4f);
+    }
+
+    [TestMethod]
     public void TransformsRejectNonFiniteInputs()
     {
         // NaN passes every comparison in the projection math (all comparisons with NaN are false), so without

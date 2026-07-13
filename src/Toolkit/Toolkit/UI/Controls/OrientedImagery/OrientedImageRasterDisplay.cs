@@ -54,39 +54,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 // Raster inner display for OrientedImageDisplay: hosts a MapView showing the oriented image as a raster layer,
 // renders markers, and (when enabled) recomputes the visible footprint corners as the viewport changes.
-#if MAUI
-internal sealed partial class OrientedImageRasterDisplay : ContentView, IOrientedImageDisplay
-#else
-internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrientedImageDisplay
-#endif
+// The shared OrientedImageInnerDisplay skeleton owns the load/session/state plumbing.
+internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDisplay
 {
     private readonly MapView _mapView;
     private readonly GraphicsOverlay _markersOverlay;
 
     private const double MarkerHitTolerance = 12d;
 
-    private OrientedImageFootprint? _footprint;
     private RasterLayer? _rasterLayer;
-    private ObservableCollection<OrientedImageMarker>? _markers;
-    private WeakEventListener<OrientedImageRasterDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private readonly Dictionary<OrientedImageMarker, Graphic> _markerGraphics = [];
     private readonly Dictionary<Graphic, OrientedImageMarker> _graphicMarkers = [];
     private readonly List<WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
-    private bool _autoUpdate;
-    private CancellationTokenSource? _updateCts;
-    private bool _isLoading;
     private bool _interactive;
-    private int _footprintGeneration;
-
-    public bool IsBusy { get; private set; }
-
-    public bool IsInteractive { get; private set; }
-
-    public Exception? Error { get; private set; }
-
-    public event EventHandler? StateChanged;
-
-    public event EventHandler<OrientedImageDisplay.ImageClickedEventArgs>? ImageClicked;
 
     internal OrientedImageRasterDisplay()
     {
@@ -95,12 +75,6 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
 #if MAUI
         _mapView.HorizontalOptions = LayoutOptions.Fill;
         _mapView.VerticalOptions = LayoutOptions.Fill;
-#else
-        // ContentControl content defaults to Left/Top; MapView has to be stretched to fill.
-        HorizontalContentAlignment = HorizontalAlignment.Stretch;
-        VerticalContentAlignment = VerticalAlignment.Stretch;
-        // The inner MapView is the focusable element
-        IsTabStop = false;
 #endif
 
         // Default symbol for markers without their own; a marker's own Symbol overrides this renderer.
@@ -112,33 +86,40 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         _mapView.GraphicsOverlays.Add(_markersOverlay);
         _mapView.GeoViewTapped += OnMapViewTapped;
         _mapView.LayerViewStateChanged += (s, e) => UpdateState();
-        _mapView.DrawStatusChanged += (s, e) => UpdateState();
+        _mapView.DrawStatusChanged += (s, e) =>
+        {
+            UpdateState();
+
+            // The initial framing's ViewpointChanged can fire while drawing is still in progress - where
+            // TryGetFootprintCorners rejects it - and no further viewpoint event is guaranteed afterwards, so
+            // push the footprint once drawing settles. No-op unless auto-update is enabled, and the base's
+            // latest-wins cancellation makes redundant pushes safe.
+            if (e.Status == DrawStatus.Completed)
+                UpdateFootprintCorners();
+        };
         Content = _mapView;
         UpdateAutomationName();
     }
 
-    // Resolves the display's state from its sources and raises StateChanged when it changes.
-    // IsBusy means "loading or drawing"; IsInteractive means "image loaded, map unlocked, no error".
-    // A loaded raster stays interactive while it redraws during a pan.
-    // Error aggregates the image load error, the raster layer load error, and the layer's view-state error.
-    private void UpdateState()
-    {
-        // A MapView with no Map sits at DrawStatus.InProgress forever, so only count drawing when there's a map.
-        bool busy = _isLoading || (_mapView.Map is not null && _mapView.DrawStatus == DrawStatus.InProgress);
-        Exception? error = ResolveError();
-        bool interactive = _interactive && error is null;
-        if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
-            return;
+#if MAUI
+    protected override View AutomationNameTarget => _mapView;
+#elif WPF
+    protected override System.Windows.DependencyObject AutomationNameTarget => _mapView;
+#else
+    protected override Microsoft.UI.Xaml.DependencyObject AutomationNameTarget => _mapView;
+#endif
 
-        IsBusy = busy;
-        IsInteractive = interactive;
-        Error = error;
-        StateChanged?.Invoke(this, EventArgs.Empty);
-    }
+    // A loaded raster stays interactive while it redraws during a pan (busy and interactive can both be true).
+    // A MapView with no Map sits at DrawStatus.InProgress forever, so only count drawing when there's a map.
+    protected override bool IsPresentationBusy => _mapView.Map is not null && _mapView.DrawStatus == DrawStatus.InProgress;
 
-    private Exception? ResolveError()
+    protected override bool IsPresentationInteractive => _interactive;
+
+    // Error precedence: the image load error, the raster layer load error, the layer's view-state error, then
+    // anything the load skeleton captured (e.g. a raster/layer construction failure that produces no LoadError).
+    protected override Exception? ResolveError()
     {
-        if (_footprint?.OrientedImage?.LoadError is Exception imageError)
+        if (Footprint?.OrientedImage?.LoadError is Exception imageError)
             return imageError;
 
         if (_rasterLayer is RasterLayer layer)
@@ -152,143 +133,64 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
                 return viewError;
         }
 
-        return null;
+        return PresentationError;
     }
 
-    public void SetFootprint(OrientedImageFootprint? footprint)
+    protected override async Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token)
     {
-        _ = SetFootprintAsync(footprint);
-    }
-
-    private async Task SetFootprintAsync(OrientedImageFootprint? footprint)
-    {
-        // Thread safety warning! This async-method is re-entrant (can be called again before we're done with first call).
-        // Use a generation counter to ignore stale completions.
-        int generation = Interlocked.Increment(ref _footprintGeneration);
-        OrientedImage? image = footprint?.OrientedImage;
-        bool imageChanged = !ReferenceEquals(_footprint?.OrientedImage, image);
-
-        // If we are replacing a still-loading image, cancel it. It's no-op if already loaded.
-        if (imageChanged)
-            _footprint?.OrientedImage?.CancelLoad();
+        // A same-image re-present: abort the previous layer's in-flight load. Lock the view while loading so the
+        // user can't accidentally pan/zoom away from the incoming image.
         _rasterLayer?.CancelLoad();
-
-        _footprint = footprint;
-        UpdateAutomationName();
-        if (image is null)
-        {
-            // We were given a null footprint; clear the view.
-            _mapView.Map = null;
-            _rasterLayer = null;
-            _isLoading = false;
-            SetInteractive(false);
-            UpdateState();
-            return;
-        }
-
-        if (imageChanged)
-        {
-            // Blank the outgoing image immediately - before awaiting the new image's load - so a slow or failed
-            // replacement can't leave the previous image visible while Footprint/Error/interaction all describe
-            // the new one (mirrors the panoramic display's immediate ClearTexture).
-            _mapView.Map = null;
-            _rasterLayer = null;
-        }
-
-        // Lock the view while loading so the user can't accidentally pan/zoom away from the incoming image.
         SetInteractive(false);
-        _isLoading = true;
-        UpdateState();
-        try
-        {
-            // The image resolves its DataUri during load (downloads the image file or first attachment).
-            await image.RetryLoadAsync();
-            if (generation != _footprintGeneration)
-                return;
 
-            if (image.DataUri is not Uri uri)
+        RasterLayer layer = new(CreateRaster(dataUri));
+        layer.ResamplingType = RasterResamplingType.BilinearInterpolation;
+        Map map = new();
+        map.OperationalLayers.Add(layer);
+        _mapView.Map = map;
+        _rasterLayer = layer;
+        await layer.LoadAsync();
+        token.ThrowIfCancellationRequested();
+
+        if (layer.Raster?.RasterInfo?.Extent is Envelope extent)
+        {
+            // The effective rotation formula (from ArcGIS JS API) is clockwise,
+            // but MapView rotation is counter-clockwise; negate it.
+            // Only the view (not the raster) rotates, so marker placement and hit-testing stays in native pixel space.
+            double viewRotation = -GetEffectiveRotationDegrees(image);
+            try
             {
-                // Loaded with nothing displayable (attachment without image, MRF/UNC/video, or a load failure
-                // surfaced via Error). Clear the view; the finally clause resets the loading flag.
-                _mapView.Map = null;
-                _rasterLayer = null;
-                return;
+                // Zoom and rotate in one quick animation-free viewpoint set. The extent may have a null spatial
+                // reference (a plain image map has none); the Viewpoint constructor accepts that.
+                _mapView.SetViewpoint(new Viewpoint(extent, viewRotation));
+            }
+            catch
+            {
+                // Framing is best-effort; never let it block the unlock below.
             }
 
-            RasterLayer layer = new(CreateRaster(uri));
-            layer.ResamplingType = RasterResamplingType.BilinearInterpolation;
-            Map map = new();
-            map.OperationalLayers.Add(layer);
-            _mapView.Map = map;
-            _rasterLayer = layer;
-            await layer.LoadAsync();
-            if (generation != _footprintGeneration)
+            if (token.IsCancellationRequested)
                 return;
 
-            if (layer.Raster?.RasterInfo?.Extent is Envelope extent)
-            {
-                // The effective rotation formula (from ArcGIS JS API) is clockwise,
-                // but MapView rotation is counter-clockwise; negate it.
-                // Only the view (not the raster) rotates, so marker placement and hit-testing stays in native pixel space.
-                double viewRotation = -GetEffectiveRotationDegrees(image);
-                try
-                {
-                    // Zoom and rotate in one quick animation-free viewpoint set. The extent may have a null spatial
-                    // reference (a plain image map has none); the Viewpoint constructor accepts that.
-                    _mapView.SetViewpoint(new Viewpoint(extent, viewRotation));
-                }
-                catch
-                {
-                    // Framing is best-effort; never let it block the unlock below.
-                }
-
-                if (generation != _footprintGeneration)
-                    return;
-
-                // Markers set before the raster loaded can now be placed (the pixel-map transform exists).
-                _ = RefreshMarkerGeometriesAsync();
-            }
-
-            // Unlock once the raster has loaded.
-            SetInteractive(true);
+            // Markers set before the raster loaded can now be placed (the pixel-map transform exists).
+            _ = RefreshMarkerGeometriesAsync();
         }
-        catch
-        {
-            // The image URI or raster may be unreachable; failures surface via Error.
-        }
-        finally
-        {
-            // Don't let a superseded call clear the loading flag a newer one set.
-            if (generation == _footprintGeneration)
-            {
-                _isLoading = false;
-                UpdateState();
-            }
-        }
+
+        // Unlock once the raster has loaded.
+        SetInteractive(true);
     }
 
-    public void SetMarkers(ObservableCollection<OrientedImageMarker>? markers)
+    protected override void ClearPresentation()
     {
-        if (ReferenceEquals(_markers, markers))
-            return;
-
-        _markersListener?.Detach();
-        _markersListener = null;
-        _markers = markers;
-        RebuildMarkers();
-
-        if (markers is INotifyCollectionChanged incc)
-        {
-            _markersListener = new WeakEventListener<OrientedImageRasterDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
-            {
-                OnEventAction = static (instance, source, eventArgs) => instance.RebuildMarkers(),
-                OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
-            };
-            incc.CollectionChanged += _markersListener.OnEvent;
-        }
+        _rasterLayer?.CancelLoad();
+        _mapView.Map = null;
+        _rasterLayer = null;
+        SetInteractive(false);
     }
 
-    public void SetBackgroundColor(System.Drawing.Color color)
+    protected override void OnMarkersChanged() => RebuildMarkers();
+
+    public override void SetBackgroundColor(System.Drawing.Color color)
     {
         // Empty restores the MapView's default grid (gray with black grid lines).
         // Otherwise sets it to a solid color (no grid lines).
@@ -297,12 +199,8 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
             : new BackgroundGrid(color, System.Drawing.Color.Transparent, 0f, 16f);
     }
 
-    public void SetAutoUpdateFootprint(bool enabled)
+    protected override void OnAutoUpdateFootprintChanged(bool enabled)
     {
-        if (enabled == _autoUpdate)
-            return;
-
-        _autoUpdate = enabled;
         if (enabled)
             _mapView.ViewpointChanged += OnViewpointChanged;
         else
@@ -335,7 +233,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
     // then does the overlay/dictionary work on the UI thread.
     private void RebuildMarkers()
     {
-        List<OrientedImageMarker>? snapshot = _markers is null ? null : new(_markers);
+        List<OrientedImageMarker>? snapshot = Markers is null ? null : new(Markers);
         this.Dispatch(() =>
         {
             foreach (var listener in _markerListeners)
@@ -409,13 +307,13 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
 
     private async Task ResolveAndApplyMarkerGeometryAsync(OrientedImageMarker marker, Graphic graphic)
     {
-        int generation = _footprintGeneration;
+        CancellationToken token = SessionToken;
         MapPoint? mapPoint = await ResolveMarkerMapPointAsync(marker);
         // The marker set or the image may have changed while awaiting; only apply if this graphic is still the
-        // marker's graphic AND the footprint generation is unchanged (a pixel projected through the old image's
-        // camera model must not be placed on the new raster). A null point (unprojectable location, see PixelToMap)
-        // clears the geometry.
-        if (generation == _footprintGeneration && _markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
+        // marker's graphic AND the session is unchanged (a pixel projected through the old image's camera model
+        // must not be placed on the new raster). A null point (unprojectable location, see PixelToMap) clears the
+        // geometry.
+        if (!token.IsCancellationRequested && _markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
             graphic.Geometry = mapPoint;
     }
 
@@ -430,7 +328,7 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         {
             pixel = imagePoint;
         }
-        else if (position.Location is MapPoint location && _footprint?.OrientedImage is OrientedImage image)
+        else if (position.Location is MapPoint location && Footprint?.OrientedImage is OrientedImage image)
         {
             try
             {
@@ -621,9 +519,10 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
     {
         // Every tap on the image raises ImageClicked with the pixel populated.
         // Clicking a marker still counts as an image click, but also puts the hit marker into the event args.
-        if (e.Location is not MapPoint location || _footprint?.OrientedImage is not OrientedImage image || MapToPixel(location) is not PointF imagePoint)
+        if (e.Location is not MapPoint location || Footprint?.OrientedImage is not OrientedImage image || MapToPixel(location) is not PointF imagePoint)
             return;
 
+        CancellationToken token = SessionToken;
         OrientedImageMarker? marker = null;
         try
         {
@@ -636,61 +535,41 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
             // Identify can fail during map teardown. Report the image click without a marker.
         }
 
-        ImageClicked?.Invoke(this, new OrientedImageDisplay.ImageClickedEventArgs(imagePoint, image, marker));
-    }
+        // The image may have been replaced while identifying; don't report the previous image's click (its captured
+        // pixel is in the old image's space, and the marker would come from the new overlay).
+        if (token.IsCancellationRequested)
+            return;
 
-    // Gives the focusable MapView a meaningful screen-reader label instead of a generic "map".
-    private void UpdateAutomationName()
-    {
-        string name = _footprint?.OrientedImage?.Type is OrientedImageType type
-            ? string.Format(CultureInfo.CurrentCulture, Properties.Resources.GetString("OrientedImageDisplayImageAutomationNameFormat") ?? "Oriented image, {0}", type)
-            : Properties.Resources.GetString("OrientedImageDisplayAutomationName") ?? "Oriented image display";
-#if WPF
-        System.Windows.Automation.AutomationProperties.SetName(_mapView, name);
-#elif WINDOWS_XAML
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(_mapView, name);
-#elif MAUI
-        SemanticProperties.SetDescription(_mapView, name);
-#endif
+        RaiseImageClicked(new OrientedImageDisplay.ImageClickedEventArgs(imagePoint, image, marker));
     }
 
     private void OnViewpointChanged(object? sender, EventArgs e) => UpdateFootprintCorners();
 
-    private async void UpdateFootprintCorners()
+    protected override bool TryGetFootprintCorners(out IReadOnlyList<PointF> corners)
     {
-        if (!_autoUpdate || _footprint is null)
-            return;
-
+        corners = Array.Empty<PointF>();
         if (_mapView.DrawStatus != DrawStatus.Completed)
-            return;
+            return false;
 
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
-            return;
+            return false;
 
         if (_mapView.VisibleArea is not Polygon visibleArea || visibleArea.Parts.Count == 0)
-            return;
+            return false;
 
-        List<PointF> corners = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY);
-        if (corners.Count < 3)
-            return;
+        List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY);
+        if (pixels.Count < 3)
+            return false;
 
-        _updateCts?.Cancel();
-        CancellationTokenSource cts = new();
-        _updateCts = cts;
-        try
-        {
-            await _footprint.UpdateFootprintAsync(corners, cts.Token);
-        }
-        catch
-        {
-            // Ignore cancellation/failures from a superseded update.
-        }
+        corners = pixels;
+        return true;
     }
 
-    // Converts the map-space visible-area ring into an ordered list of image pixel vertices. The updated
-    // OrientedImageFootprint API takes the full vertex list (not a fixed quad), so a rotated or clipped
-    // visible area is passed through as-is instead of being reduced to four axis-classified corners.
-    private static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
+    // Converts the map-space visible-area ring into an ordered list of image pixel vertices, clipped to the image
+    // rectangle. The clip must be a true polygon intersection: clamping each vertex independently distorts any
+    // ring with vertices outside the image (a rotated view enclosing the whole image would collapse to the
+    // diamond of the edge midpoints). Internal (not private) for unit tests.
+    internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
     {
         double cellX = cellSizeX == 0 ? 1 : Math.Abs(cellSizeX);
         double cellY = cellSizeY == 0 ? 1 : Math.Abs(cellSizeY);
@@ -698,14 +577,53 @@ internal sealed partial class OrientedImageRasterDisplay : ContentControl, IOrie
         double maxRow = extent.Height / cellY;
 
         IReadOnlyList<MapPoint> points = visibleArea.Parts[0].Points;
-        var pixels = new List<PointF>(points.Count);
+        var ring = new List<(double X, double Y)>(points.Count);
         foreach (MapPoint point in points)
-        {
-            double col = Math.Clamp((point.X - extent.XMin) / cellX, 0, maxCol);
-            double row = Math.Clamp((extent.YMax - point.Y) / cellY, 0, maxRow);
-            pixels.Add(new PointF((float)col, (float)row));
-        }
+            ring.Add(((point.X - extent.XMin) / cellX, (extent.YMax - point.Y) / cellY));
+
+        List<(double X, double Y)> clipped = ClipToRectangle(ring, maxCol, maxRow);
+        var pixels = new List<PointF>(clipped.Count);
+        foreach ((double x, double y) in clipped)
+            pixels.Add(new PointF((float)x, (float)y));
 
         return pixels;
     }
+
+    // Sutherland-Hodgman intersection of a polygon ring with the axis-aligned rectangle [0,maxX]x[0,maxY].
+    // The clip region is convex, so this is exact for any simple subject ring. Empty when fully outside.
+    private static List<(double X, double Y)> ClipToRectangle(List<(double X, double Y)> ring, double maxX, double maxY)
+    {
+        List<(double X, double Y)> output = ring;
+        output = ClipEdge(output, p => p.X >= 0, (a, b) => IntersectAtX(a, b, 0));
+        output = ClipEdge(output, p => p.X <= maxX, (a, b) => IntersectAtX(a, b, maxX));
+        output = ClipEdge(output, p => p.Y >= 0, (a, b) => IntersectAtY(a, b, 0));
+        output = ClipEdge(output, p => p.Y <= maxY, (a, b) => IntersectAtY(a, b, maxY));
+        return output;
+    }
+
+    private static List<(double X, double Y)> ClipEdge(
+        List<(double X, double Y)> input,
+        Func<(double X, double Y), bool> inside,
+        Func<(double X, double Y), (double X, double Y), (double X, double Y)> intersect)
+    {
+        var output = new List<(double X, double Y)>(input.Count + 2);
+        for (int i = 0; i < input.Count; i++)
+        {
+            (double X, double Y) current = input[i];
+            (double X, double Y) previous = input[(i + input.Count - 1) % input.Count];
+            bool currentInside = inside(current);
+            if (currentInside != inside(previous))
+                output.Add(intersect(previous, current));
+            if (currentInside)
+                output.Add(current);
+        }
+
+        return output;
+    }
+
+    private static (double X, double Y) IntersectAtX((double X, double Y) a, (double X, double Y) b, double x)
+        => (x, a.Y + ((b.Y - a.Y) * ((x - a.X) / (b.X - a.X))));
+
+    private static (double X, double Y) IntersectAtY((double X, double Y) a, (double X, double Y) b, double y)
+        => (a.X + ((b.X - a.X) * ((y - a.Y) / (b.Y - a.Y))), y);
 }

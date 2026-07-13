@@ -44,7 +44,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// </summary>
 /// <remarks>
 /// Set the <see cref="Footprint"/> to display the associated image.
-/// Supports planar and panoramic/360 images. Does not support video.
+/// Supports planar images on all platforms, and panoramic/360 images on WPF, WinUI, and MAUI Windows and
+/// Android (not yet on MAUI iOS/Mac Catalyst, where a panoramic image surfaces an unsupported-type
+/// <see cref="Error"/>). Does not support video.
 /// </remarks>
 public partial class OrientedImageDisplay
 {
@@ -55,7 +57,7 @@ public partial class OrientedImageDisplay
 #if WPF || WINDOWS_XAML || __ANDROID__ || (MAUI && WINDOWS)
     private OrientedImagePanoramicDisplay? _panoramicDisplay;
 #endif
-    private IOrientedImageDisplay? _activeDisplay;
+    private OrientedImageInnerDisplay? _activeDisplay;
     private Exception? _unsupportedError;
 
     // Default marker symbol: a filled blue circle used when a marker has no Symbol.
@@ -198,6 +200,58 @@ public partial class OrientedImageDisplay
     public static readonly DependencyProperty AutoUpdateFootprintProperty =
         PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(AutoUpdateFootprint), false, (s, oldValue, newValue) => s._activeDisplay?.SetAutoUpdateFootprint(newValue));
 
+    // IsBusy/IsInteractive/Error are control-owned computed state: registered read-only where the platform
+    // supports it, so external SetValue/ClearValue can't overwrite them (bindings/triggers still read them).
+    // WinUI has no read-only dependency-property registration; an ordinary property is the platform compromise.
+#if WPF
+    private static readonly System.Windows.DependencyPropertyKey IsBusyPropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsBusy));
+
+    private static readonly System.Windows.DependencyPropertyKey IsInteractivePropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsInteractive));
+
+    private static readonly System.Windows.DependencyPropertyKey ErrorPropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<Exception, OrientedImageDisplay>(nameof(Error));
+
+    /// <summary>
+    /// Identifies the <see cref="IsBusy"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty IsBusyProperty = IsBusyPropertyKey.DependencyProperty;
+
+    /// <summary>
+    /// Identifies the <see cref="IsInteractive"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty IsInteractiveProperty = IsInteractivePropertyKey.DependencyProperty;
+
+    /// <summary>
+    /// Identifies the <see cref="Error"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty ErrorProperty = ErrorPropertyKey.DependencyProperty;
+#elif MAUI
+    private static readonly Microsoft.Maui.Controls.BindablePropertyKey IsBusyPropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsBusy));
+
+    private static readonly Microsoft.Maui.Controls.BindablePropertyKey IsInteractivePropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsInteractive));
+
+    private static readonly Microsoft.Maui.Controls.BindablePropertyKey ErrorPropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<Exception, OrientedImageDisplay>(nameof(Error));
+
+    /// <summary>
+    /// Identifies the <see cref="IsBusy"/> bindable property.
+    /// </summary>
+    public static readonly DependencyProperty IsBusyProperty = IsBusyPropertyKey.BindableProperty;
+
+    /// <summary>
+    /// Identifies the <see cref="IsInteractive"/> bindable property.
+    /// </summary>
+    public static readonly DependencyProperty IsInteractiveProperty = IsInteractivePropertyKey.BindableProperty;
+
+    /// <summary>
+    /// Identifies the <see cref="Error"/> bindable property.
+    /// </summary>
+    public static readonly DependencyProperty ErrorProperty = ErrorPropertyKey.BindableProperty;
+#else
     /// <summary>
     /// Identifies the <see cref="IsBusy"/> dependency property.
     /// </summary>
@@ -215,6 +269,7 @@ public partial class OrientedImageDisplay
     /// </summary>
     public static readonly DependencyProperty ErrorProperty =
         PropertyHelper.CreateProperty<Exception, OrientedImageDisplay>(nameof(Error));
+#endif
 
     /// <summary>
     /// Identifies the <see cref="DisplayBackgroundColor"/> dependency property.
@@ -234,11 +289,21 @@ public partial class OrientedImageDisplay
         _displayHost = GetTemplateChild(DisplayHostName) as DisplayHostElement;
 
         // On a template re-apply the active display is still parented to the discarded template's host; release
-        // it there or the new host cannot adopt it (re-hosting happens in UpdateDisplay -> SetActiveDisplay).
+        // it there or the new host cannot adopt it.
         if (previousHost is not null && !ReferenceEquals(previousHost, _displayHost))
             previousHost.Content = null;
 
-        UpdateDisplay();
+        if (_displayHost is null)
+            return; // a template without the host part shows nothing; a later template can re-host
+
+        // Hosting and presentation are separate concerns: the FIRST host runs the full selection/presentation
+        // pipeline (a footprint assigned before the template existed was deferred by UpdateDisplay's host guard);
+        // a RE-applied template only needs the active display moved into the new host - re-presenting would
+        // reload the image and cancel valid in-flight work.
+        if (previousHost is null)
+            UpdateDisplay();
+        else
+            HostActiveDisplay();
     }
 
     /// <summary>
@@ -250,7 +315,7 @@ public partial class OrientedImageDisplay
             return; // Template not applied yet; OnApplyTemplate will call again.
 
         OrientedImageType? type = Footprint?.OrientedImage?.Type;
-        IOrientedImageDisplay? display = SelectDisplay(type);
+        OrientedImageInnerDisplay? display = SelectDisplay(type);
 
         // A non-null image type with no display is an unsupported type (video, or panoramic on platforms without a
         // panoramic display yet); surface it as an explicit error so a host can tell that apart from "nothing loaded".
@@ -271,12 +336,15 @@ public partial class OrientedImageDisplay
 
     // Swaps the active display: moves host content and event subscriptions. Subscribes before the caller pushes state
     // in, so the display's first state/interaction notifications aren't missed.
-    private void SetActiveDisplay(IOrientedImageDisplay? display)
+    private void SetActiveDisplay(OrientedImageInnerDisplay? display)
     {
         if (ReferenceEquals(_activeDisplay, display))
         {
-            // Same display, but the template may have been re-applied: the fresh host starts with no content.
+            // Same display (including null -> null, e.g. an unsupported image type while no display was ever
+            // active): still re-host and publish state - this is the only path that surfaces a just-recomputed
+            // _unsupportedError.
             HostActiveDisplay();
+            UpdateState();
             return;
         }
 
@@ -285,8 +353,9 @@ public partial class OrientedImageDisplay
             _activeDisplay.StateChanged -= OnDisplayStateChanged;
             _activeDisplay.ImageClicked -= OnDisplayImageClicked;
 
-            // Release the outgoing display's content so an inactive display doesn't retain its load, map/device content,
-            // or marker subscriptions. Each display's null-footprint/markers path clears itself (see the raster display).
+            // Release the outgoing display's content so an inactive display doesn't retain its load, map/device
+            // content, or marker subscriptions. SetFootprint(null) supersedes its in-flight session and clears
+            // the presentation.
             _activeDisplay.SetMarkers(null);
             _activeDisplay.SetFootprint(null);
         }
@@ -307,11 +376,7 @@ public partial class OrientedImageDisplay
     // template re-apply (same display, new host).
     private void HostActiveDisplay()
     {
-#if MAUI
-        _displayHost!.Content = _activeDisplay as Microsoft.Maui.Controls.View;
-#else
         _displayHost!.Content = _activeDisplay;
-#endif
     }
 
     private void OnDisplayStateChanged(object? sender, EventArgs e) => UpdateState();
@@ -322,14 +387,20 @@ public partial class OrientedImageDisplay
     // An unsupported image type has no display, so its error is reported here directly.
     private void UpdateState()
     {
+#if WPF || MAUI
+        SetValue(IsBusyPropertyKey, _unsupportedError is null && (_activeDisplay?.IsBusy ?? false));
+        SetValue(IsInteractivePropertyKey, _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false));
+        SetValue(ErrorPropertyKey, _unsupportedError ?? _activeDisplay?.Error);
+#else
         SetValue(IsBusyProperty, _unsupportedError is null && (_activeDisplay?.IsBusy ?? false));
         SetValue(IsInteractiveProperty, _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false));
         SetValue(ErrorProperty, _unsupportedError ?? _activeDisplay?.Error);
+#endif
     }
 
     // Selects the inner display for an image type: planar -> raster, panoramic -> panoramic (Windows + Android for
     // now), video (and panoramic where no panoramic display exists yet) -> none (surfaced as an unsupported-type error).
-    private IOrientedImageDisplay? SelectDisplay(OrientedImageType? type)
+    private OrientedImageInnerDisplay? SelectDisplay(OrientedImageType? type)
     {
         if (type is null || IsPlanar(type.Value))
             return _rasterDisplay ??= new OrientedImageRasterDisplay();

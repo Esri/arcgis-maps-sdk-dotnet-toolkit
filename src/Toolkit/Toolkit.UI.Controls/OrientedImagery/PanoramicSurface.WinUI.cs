@@ -92,6 +92,15 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         }
         catch (Exception ex)
         {
+            // A removed device is recoverable: flag it so the render loop rebuilds via TryRecoverDevice instead of
+            // stranding with released resources behind a one-shot RenderFailed (same rule as the render catch).
+            if (IsDeviceRemoved)
+            {
+                _deviceLost = true;
+                _needsRender = true;
+                return;
+            }
+
             RenderFailed?.Invoke(ex);
         }
     }
@@ -101,8 +110,11 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         Safe(() =>
         {
             bool isReload = _deviceEverCreated;
-            EnsureResources();
+
+            // Hook the render pump BEFORE resource creation: if creation fails with a removed device, recovery
+            // runs on composition ticks - which only happen once hooked.
             HookRendering();
+            EnsureResources();
             RequestRender();
             if (IsDeviceInitialized)
                 _deviceEverCreated = true;
@@ -238,6 +250,9 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
             _backBufferView = null;
         }
 
+        // These generated wrappers throw on failure - e.g. a device-loss HRESULT from ResizeBuffers, leaving
+        // _backBufferView released and null. The throw lands in the caller's Safe, which routes device-loss
+        // to the render loop's recovery.
         _swapchain->ResizeBuffers(2, width, height, DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_UNORM, 0);
 
         ID3D11Texture2D* backBuffer;

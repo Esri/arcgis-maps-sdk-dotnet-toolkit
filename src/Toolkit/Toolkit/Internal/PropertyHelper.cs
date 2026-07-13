@@ -44,6 +44,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                     propertyChanged is null ? null :
                     (s, e) => propertyChanged?.Invoke((OwnerType)s, e.OldValue is null ? default : (ValueType)e.OldValue, e.NewValue is null ? default : (ValueType)e.NewValue)));
 #endif
+
+#if WPF || MAUI
+        /// <summary>
+        /// Read-only variant of <see cref="CreateProperty{ValueType, OwnerType}"/> for control-owned computed state:
+        /// external SetValue/ClearValue are rejected by the property system; the owner writes through the returned
+        /// key. WinUI has no read-only registration, so callers keep an ordinary property there.
+        /// </summary>
+#if WPF
+        public static System.Windows.DependencyPropertyKey CreateReadOnlyProperty<ValueType, OwnerType>(string propertyName,
+            ValueType? defaultValue = default,
+            Action<OwnerType, ValueType?, ValueType?>? propertyChanged = null) where OwnerType : DependencyObject
+            => DependencyProperty.RegisterReadOnly(propertyName, typeof(ValueType), typeof(OwnerType),
+                new PropertyMetadata(defaultValue,
+                    propertyChanged is null ? null :
+                    (s, e) => propertyChanged?.Invoke((OwnerType)s, e.OldValue is null ? default : (ValueType)e.OldValue, e.NewValue is null ? default : (ValueType)e.NewValue)));
+#else
+        public static Microsoft.Maui.Controls.BindablePropertyKey CreateReadOnlyProperty<ValueType, OwnerType>(string propertyName,
+            ValueType? defaultValue = default,
+            Action<OwnerType, ValueType?, ValueType?>? propertyChanged = null) where OwnerType : DependencyObject
+            => DependencyProperty.CreateReadOnly(propertyName, typeof(ValueType), typeof(OwnerType), defaultValue, propertyChanged: propertyChanged is null ? null :
+                (s, oldValue, newValue) => propertyChanged?.Invoke((OwnerType)s, oldValue is null ? default : (ValueType)oldValue, newValue is null ? default : (ValueType)newValue));
+#endif
+#endif
     }
 }
 
