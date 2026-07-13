@@ -195,6 +195,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return parent?.GeoView is MapView mapView && mapView.Map is not null;
         }
 
+        private void SelectFromNetworkDataSource()
+        {
+            var parent = FeatureFormView.GetFeatureFormViewParent(this);
+            var form = parent?.CurrentFeatureForm;
+            var element = _associationsFormElement;
+            var filter = AssociationsFilterResult?.Filter;
+            if (parent is null || form is null || element is null || filter is null)
+            {
+                return;
+            }
+
+            parent.NavigateToItem(new UtilityAssociationFeatureSourceSelection(
+                form,
+                element,
+                filter,
+                parent.NavigateToItem));
+        }
+
         private partial void ShowAddAssociationMenu(object? flyoutTarget);
     }
 }

@@ -124,9 +124,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private async partial void ShowAddAssociationMenu(object? flyoutTarget)
         {
-            string? onMap = CanSelectAssociationOnMap()
-                ? Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap")
-                : null;
             string fromNetworkDataSource = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectFromNetworkDataSource")!;
 
 #if WINDOWS
@@ -134,11 +131,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 button.Handler?.PlatformView is Microsoft.UI.Xaml.FrameworkElement nativeButton)
             {
                 Microsoft.UI.Xaml.Controls.MenuFlyout flyout = new Microsoft.UI.Xaml.Controls.MenuFlyout();
-                if (onMap is not null)
-                {
-                    flyout.Items.Add(new Microsoft.UI.Xaml.Controls.MenuFlyoutItem() { Text = onMap });
-                }
-                flyout.Items.Add(new Microsoft.UI.Xaml.Controls.MenuFlyoutItem() { Text = fromNetworkDataSource });
+                // Add the On Map option here when map-based association selection is implemented.
+                // if (CanSelectAssociationOnMap())
+                // {
+                //     flyout.Items.Add(new Microsoft.UI.Xaml.Controls.MenuFlyoutItem() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap") });
+                // }
+                var fromNetworkDataSourceItem = new Microsoft.UI.Xaml.Controls.MenuFlyoutItem() { Text = fromNetworkDataSource };
+                fromNetworkDataSourceItem.Click += (_, _) => SelectFromNetworkDataSource();
+                flyout.Items.Add(fromNetworkDataSourceItem);
                 flyout.ShowAt(nativeButton);
                 return;
             }
@@ -150,16 +150,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 return;
             }
 
-            var actions = new List<string>();
-            if (onMap is not null)
-            {
-                actions.Add(onMap);
-            }
-            actions.Add(fromNetworkDataSource);
+            // Add the On Map option here when map-based association selection is implemented.
+            // var onMap = CanSelectAssociationOnMap()
+            //     ? Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap")
+            //     : null;
+            var actions = new List<string>() { fromNetworkDataSource };
 
             string? title = Properties.Resources.GetString("FeatureFormUtilityAssociationsChooseAddMethod");
             string cancel = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationCancel")!;
-            await page.DisplayActionSheetAsync(title, cancel, null, actions.ToArray());
+            var selectedAction = await page.DisplayActionSheetAsync(title, cancel, null, actions.ToArray());
+            if (selectedAction == fromNetworkDataSource)
+            {
+                SelectFromNetworkDataSource();
+            }
         }
     }
 }

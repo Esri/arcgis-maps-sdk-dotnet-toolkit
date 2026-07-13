@@ -142,6 +142,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 roottitle.Text = Properties.Resources.GetString("FeatureFormUtilityAssociationSettings");
                 return roottitle;
             });
+            var workflowHeaderTemplate = new DataTemplate(() =>
+            {
+                VerticalStackLayout root = new VerticalStackLayout() { VerticalOptions = LayoutOptions.Center };
+                Label title = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                title.Style = GetFeatureFormHeaderStyle();
+                title.SetBinding(Label.TextProperty, static (UtilityAssociationWorkflowPage page) => page.Title);
+                root.Add(title);
+                Label subtitle = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                subtitle.Style = GetFeatureFormTitleStyle();
+                subtitle.SetBinding(Label.TextProperty, static (UtilityAssociationWorkflowPage page) => page.Subtitle);
+                subtitle.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationWorkflowPage page) => page.Subtitle, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Add(subtitle);
+                return root;
+            });
+            selector.UtilityAssociationFeatureSourceSelectionTemplate = workflowHeaderTemplate;
+            selector.UtilityAssociationAssetTypeSelectionTemplate = workflowHeaderTemplate;
+            selector.UtilityAssociationFeatureCandidateSelectionTemplate = workflowHeaderTemplate;
+            selector.UtilityAssociationCreationTemplate = new DataTemplate(() =>
+            {
+                Label title = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                title.Style = GetFeatureFormHeaderStyle();
+                title.SetBinding(Label.TextProperty, static (UtilityAssociationCreation creation) => creation.Title);
+                return title;
+            });
             return selector;
         }
 
@@ -187,7 +211,213 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 view.SetBinding(UtilityAssociationResultDetailsView.AssociationResultProperty, static (UtilityNetworks.UtilityAssociationResult result) => result);
                 return view;
             });
+            selector.UtilityAssociationFeatureSourceSelectionTemplate = BuildFeatureSourceSelectionTemplate();
+            selector.UtilityAssociationAssetTypeSelectionTemplate = BuildAssetTypeSelectionTemplate();
+            selector.UtilityAssociationFeatureCandidateSelectionTemplate = BuildFeatureCandidateSelectionTemplate();
+            selector.UtilityAssociationCreationTemplate = BuildAssociationCreationTemplate();
             return selector;
+        }
+
+        private static DataTemplate BuildFeatureSourceSelectionTemplate()
+        {
+            return new DataTemplate(() =>
+            {
+                var root = new VerticalStackLayout() { Spacing = 8 };
+                var search = new Entry() { Placeholder = Properties.Resources.GetString("FeatureFormUtilityAssociationsSearch") };
+                search.SetBinding(Entry.TextProperty, static (UtilityAssociationFeatureSourceSelection selection) => selection.SearchText, mode: BindingMode.TwoWay);
+                root.Add(search);
+                var count = new Label() { HorizontalOptions = LayoutOptions.End };
+                count.Style = GetFeatureFormCaptionStyle();
+                count.SetBinding(Label.TextProperty, static (UtilityAssociationFeatureSourceSelection selection) => selection.CountText);
+                root.Add(count);
+                var list = new CollectionView() { SelectionMode = SelectionMode.Single };
+                list.SetBinding(ItemsView.ItemsSourceProperty, static (UtilityAssociationFeatureSourceSelection selection) => selection.FilteredFeatureSources, mode: BindingMode.OneWay);
+                list.SetBinding(SelectableItemsView.SelectedItemProperty, static (UtilityAssociationFeatureSourceSelection selection) => selection.SelectedFeatureSource, mode: BindingMode.TwoWay);
+                list.ItemTemplate = new DataTemplate(() =>
+                {
+                    var label = new Label() { Padding = new Thickness(12), LineBreakMode = LineBreakMode.TailTruncation };
+                    label.Style = GetFeatureFormTitleStyle();
+                    label.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationFeatureSource source) => source.Name);
+                    return label;
+                });
+                root.Add(list);
+                var empty = new Label()
+                {
+                    Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsNoFeatureSources"),
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    Margin = new Thickness(12),
+                };
+                empty.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationFeatureSourceSelection selection) => selection.HasNoResults);
+                root.Add(empty);
+                var error = new Label() { TextColor = Colors.Red, Margin = new Thickness(12) };
+                error.SetBinding(Label.TextProperty, static (UtilityAssociationFeatureSourceSelection selection) => selection.ErrorMessage, mode: BindingMode.OneWay);
+                root.Add(error);
+                return root;
+            });
+        }
+
+        private static DataTemplate BuildAssetTypeSelectionTemplate()
+        {
+            return new DataTemplate(() =>
+            {
+                var root = new VerticalStackLayout() { Spacing = 8 };
+                var search = new Entry() { Placeholder = Properties.Resources.GetString("FeatureFormUtilityAssociationsSearch") };
+                search.SetBinding(Entry.TextProperty, static (UtilityAssociationAssetTypeSelection selection) => selection.SearchText, mode: BindingMode.TwoWay);
+                root.Add(search);
+                var heading = new Grid();
+                heading.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                heading.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+                var available = new Label() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsAvailableAssetTypes") };
+                available.Style = GetFeatureFormCaptionStyle();
+                heading.Add(available);
+                var count = new Label();
+                count.Style = GetFeatureFormCaptionStyle();
+                count.SetBinding(Label.TextProperty, static (UtilityAssociationAssetTypeSelection selection) => selection.CountText);
+                Grid.SetColumn(count, 1);
+                heading.Add(count);
+                root.Add(heading);
+                var list = new CollectionView() { SelectionMode = SelectionMode.Single };
+                list.SetBinding(ItemsView.ItemsSourceProperty, static (UtilityAssociationAssetTypeSelection selection) => selection.FilteredAssetTypes, mode: BindingMode.OneWay);
+                list.SetBinding(SelectableItemsView.SelectedItemProperty, static (UtilityAssociationAssetTypeSelection selection) => selection.SelectedAssetType, mode: BindingMode.TwoWay);
+                list.ItemTemplate = new DataTemplate(() =>
+                {
+                    var layout = new VerticalStackLayout() { Padding = new Thickness(12, 8) };
+                    var name = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                    name.Style = GetFeatureFormTitleStyle();
+                    name.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssetType assetType) => assetType.Name);
+                    layout.Add(name);
+                    var group = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                    group.Style = GetFeatureFormCaptionStyle();
+                    group.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssetType assetType) => assetType.AssetGroup.Name);
+                    layout.Add(group);
+                    return layout;
+                });
+                root.Add(list);
+                var empty = new Label()
+                {
+                    Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsNoAssetTypes"),
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    Margin = new Thickness(12),
+                };
+                empty.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationAssetTypeSelection selection) => selection.HasNoResults);
+                root.Add(empty);
+                return root;
+            });
+        }
+
+        private static DataTemplate BuildFeatureCandidateSelectionTemplate()
+        {
+            return new DataTemplate(() =>
+            {
+                var root = new VerticalStackLayout() { Spacing = 8 };
+                var search = new Entry() { Placeholder = Properties.Resources.GetString("FeatureFormUtilityAssociationsSearchFeatures") };
+                search.SetBinding(Entry.TextProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.SearchText, mode: BindingMode.TwoWay);
+                root.Add(search);
+                var heading = new Label() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsChooseToAdd") };
+                heading.Style = GetFeatureFormCaptionStyle();
+                root.Add(heading);
+                var list = new CollectionView() { SelectionMode = SelectionMode.Single };
+                list.SetBinding(ItemsView.ItemsSourceProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.FilteredCandidates, mode: BindingMode.OneWay);
+                list.SetBinding(SelectableItemsView.SelectedItemProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.SelectedCandidate, mode: BindingMode.TwoWay);
+                list.ItemTemplate = new DataTemplate(() =>
+                {
+                    var label = new Label() { Padding = new Thickness(12), LineBreakMode = LineBreakMode.TailTruncation };
+                    label.Style = GetFeatureFormTitleStyle();
+                    label.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationFeatureCandidate candidate) => candidate.Title);
+                    return label;
+                });
+                root.Add(list);
+                var loadMore = new Button() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsLoadMore") };
+                loadMore.SetBinding(Button.CommandProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.LoadMoreCommand);
+                loadMore.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.HasMore);
+                root.Add(loadMore);
+                var empty = new Label()
+                {
+                    Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsNoCandidates"),
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    Margin = new Thickness(12),
+                };
+                empty.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.HasNoResults);
+                root.Add(empty);
+                var error = new Label() { TextColor = Colors.Red, Margin = new Thickness(12) };
+                error.SetBinding(Label.TextProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.ErrorMessage, mode: BindingMode.OneWay);
+                root.Add(error);
+                return root;
+            });
+        }
+
+        private static DataTemplate BuildAssociationCreationTemplate()
+        {
+            return new DataTemplate(() =>
+            {
+                var root = new VerticalStackLayout() { Spacing = 12 };
+                root.Add(BuildAssociationValueRow("FeatureFormUtilityAssociationsAssociationType", UtilityAssociationValue.AssociationType));
+                var visibility = new HorizontalStackLayout() { Spacing = 8 };
+                visibility.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationCreation creation) => creation.ShowContentVisibility);
+                visibility.Add(new Label() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsContentVisibility"), VerticalOptions = LayoutOptions.Center });
+                var visibilitySwitch = new Switch();
+                visibilitySwitch.SetBinding(Switch.IsToggledProperty, static (UtilityAssociationCreation creation) => creation.ContentIsVisible, mode: BindingMode.TwoWay);
+                visibility.Add(visibilitySwitch);
+                root.Add(visibility);
+                root.Add(BuildAssociationValueRow("FeatureFormUtilityAssociationsFromElement", UtilityAssociationValue.FromElement));
+                var fromTerminal = new Picker() { Title = Properties.Resources.GetString("FeatureFormUtilityAssociationsCurrentFeatureTerminal") };
+                fromTerminal.SetBinding(Picker.ItemsSourceProperty, static (UtilityAssociationCreation creation) => creation.FromTerminalNames);
+                fromTerminal.SetBinding(Picker.SelectedIndexProperty, static (UtilityAssociationCreation creation) => creation.SelectedFromTerminalIndex, mode: BindingMode.TwoWay);
+                fromTerminal.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationCreation creation) => creation.ShowFromTerminals);
+                root.Add(fromTerminal);
+                root.Add(BuildAssociationValueRow("FeatureFormUtilityAssociationsToElement", UtilityAssociationValue.ToElement));
+                var toTerminal = new Picker() { Title = Properties.Resources.GetString("FeatureFormUtilityAssociationsOtherFeatureTerminal") };
+                toTerminal.SetBinding(Picker.ItemsSourceProperty, static (UtilityAssociationCreation creation) => creation.ToTerminalNames);
+                toTerminal.SetBinding(Picker.SelectedIndexProperty, static (UtilityAssociationCreation creation) => creation.SelectedToTerminalIndex, mode: BindingMode.TwoWay);
+                toTerminal.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationCreation creation) => creation.ShowToTerminals);
+                root.Add(toTerminal);
+                var fraction = new VerticalStackLayout();
+                fraction.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationCreation creation) => creation.ShowFractionAlongEdge);
+                var fractionLabel = new Label() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsFractionAlongEdgePercent") };
+                fraction.Add(fractionLabel);
+                var slider = new Slider() { Minimum = 0, Maximum = 100 };
+                slider.SetBinding(Slider.ValueProperty, static (UtilityAssociationCreation creation) => creation.FractionAlongEdgePercent, mode: BindingMode.TwoWay);
+                fraction.Add(slider);
+                root.Add(fraction);
+                var error = new Label() { TextColor = Colors.Red };
+                error.SetBinding(Label.TextProperty, static (UtilityAssociationCreation creation) => creation.ErrorMessage, mode: BindingMode.OneWay);
+                root.Add(error);
+                var add = new Button() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsAdd") };
+                add.SetBinding(Button.CommandProperty, static (UtilityAssociationCreation creation) => creation.AddCommand);
+                root.Add(add);
+                return root;
+            });
+        }
+
+        private enum UtilityAssociationValue
+        {
+            AssociationType,
+            FromElement,
+            ToElement,
+        }
+
+        private static View BuildAssociationValueRow(string labelResourceKey, UtilityAssociationValue value)
+        {
+            var grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            grid.Add(new Label() { Text = Properties.Resources.GetString(labelResourceKey), FontAttributes = FontAttributes.Bold });
+            var valueLabel = new Label() { HorizontalTextAlignment = TextAlignment.End };
+            if (value == UtilityAssociationValue.AssociationType)
+            {
+                valueLabel.SetBinding(Label.TextProperty, static (UtilityAssociationCreation creation) => creation.AssociationType, mode: BindingMode.OneWay);
+            }
+            else if (value == UtilityAssociationValue.FromElement)
+            {
+                valueLabel.SetBinding(Label.TextProperty, static (UtilityAssociationCreation creation) => creation.FromElement, mode: BindingMode.OneWay);
+            }
+            else
+            {
+                valueLabel.SetBinding(Label.TextProperty, static (UtilityAssociationCreation creation) => creation.ToElement, mode: BindingMode.OneWay);
+            }
+            Grid.SetColumn(valueLabel, 1);
+            grid.Add(valueLabel);
+            return grid;
         }
 
         internal static Style GetStyle(string resourceKey, Style defaultStyle)

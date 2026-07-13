@@ -17,6 +17,7 @@
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Data;
 
 #if MAUI
@@ -798,9 +799,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
+                if ((item is UtilityAssociationWorkflowPage || item is UtilityAssociationCreation) &&
+                    !UtilityAssociationWorkflowOwners.TryGetValue(item, out _))
+                {
+                    UtilityAssociationWorkflowOwners.Add(item, this);
+                }
                 _ = subView.Navigate(content: item, additionalContent: additionalContent);
             }
         }
+
+        internal static async Task GetFeatureFormViewParentFromWorkflowAsync(object workflowPage, int pageCount)
+        {
+            if (UtilityAssociationWorkflowOwners.TryGetValue(workflowPage, out var owner) &&
+                owner.GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                for (var index = 0; index < pageCount; index++)
+                {
+                    await subView.GoBack();
+                }
+            }
+        }
+
+        // Maps each utility association workflow page model to the FeatureFormView displaying it.
+        // The creation model has no visual parent reference, but after successfully adding an
+        // association it must retrieve the owning NavigationSubView and navigate back through the
+        // four workflow pages to the association filter results. ConditionalWeakTable provides that
+        // lookup without keeping either the workflow model or FeatureFormView alive solely for it.
+        private static readonly ConditionalWeakTable<object, FeatureFormView> UtilityAssociationWorkflowOwners = new();
 
         internal IEnumerable<object> GetNavigationStack()
         {

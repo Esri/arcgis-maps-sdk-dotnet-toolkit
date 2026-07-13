@@ -92,9 +92,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private partial void ShowAddAssociationMenu(object? flyoutTarget)
         {
-            string? onMap = CanSelectAssociationOnMap()
-                ? Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap")
-                : null;
             string fromNetworkDataSource = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectFromNetworkDataSource")!;
 
 #if WPF
@@ -102,19 +99,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 PlacementTarget = flyoutTarget as UIElement ?? this,
             };
-            if (onMap is not null)
-            {
-                contextMenu.Items.Add(new MenuItem() { Header = onMap });
-            }
-            contextMenu.Items.Add(new MenuItem() { Header = fromNetworkDataSource });
+            // Add the On Map option here when map-based association selection is implemented.
+            // if (CanSelectAssociationOnMap())
+            // {
+            //     contextMenu.Items.Add(new MenuItem() { Header = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap") });
+            // }
+            var fromNetworkDataSourceItem = new MenuItem() { Header = fromNetworkDataSource };
+            fromNetworkDataSourceItem.Click += (_, _) => SelectFromNetworkDataSource();
+            contextMenu.Items.Add(fromNetworkDataSourceItem);
             contextMenu.IsOpen = true;
 #elif WINDOWS_XAML
             MenuFlyout contextMenu = new MenuFlyout();
-            if (onMap is not null)
-            {
-                contextMenu.Items.Add(new MenuFlyoutItem() { Text = onMap });
-            }
-            contextMenu.Items.Add(new MenuFlyoutItem() { Text = fromNetworkDataSource });
+            // Add the On Map option here when map-based association selection is implemented.
+            // if (CanSelectAssociationOnMap())
+            // {
+            //     contextMenu.Items.Add(new MenuFlyoutItem() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap") });
+            // }
+            var fromNetworkDataSourceItem = new MenuFlyoutItem() { Text = fromNetworkDataSource };
+            fromNetworkDataSourceItem.Click += (_, _) => SelectFromNetworkDataSource();
+            contextMenu.Items.Add(fromNetworkDataSourceItem);
             contextMenu.ShowAt(flyoutTarget as FrameworkElement ?? this);
 #endif
         }

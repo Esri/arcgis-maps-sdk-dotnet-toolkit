@@ -620,6 +620,29 @@
                                             <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationSettings}" Style="{StaticResource FeatureFormViewHeaderStyle}" />
                                         </DataTemplate>
                                     </primitives:FeatureFormContentTemplateSelector.UtilityAssociationResultTemplate>
+                                    <primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureSourceSelectionTemplate>
+                                        <DataTemplate x:DataType="primitives:UtilityAssociationFeatureSourceSelection">
+                                            <TextBlock Text="{x:Bind Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" />
+                                        </DataTemplate>
+                                    </primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureSourceSelectionTemplate>
+                                    <primitives:FeatureFormContentTemplateSelector.UtilityAssociationAssetTypeSelectionTemplate>
+                                        <DataTemplate x:DataType="primitives:UtilityAssociationAssetTypeSelection">
+                                            <TextBlock Text="{x:Bind Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" />
+                                        </DataTemplate>
+                                    </primitives:FeatureFormContentTemplateSelector.UtilityAssociationAssetTypeSelectionTemplate>
+                                    <primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureCandidateSelectionTemplate>
+                                        <DataTemplate x:DataType="primitives:UtilityAssociationFeatureCandidateSelection">
+                                            <StackPanel>
+                                                <TextBlock Text="{x:Bind Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" />
+                                                <TextBlock Text="{x:Bind Subtitle, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureCandidateSelectionTemplate>
+                                    <primitives:FeatureFormContentTemplateSelector.UtilityAssociationCreationTemplate>
+                                        <DataTemplate x:DataType="primitives:UtilityAssociationCreation">
+                                            <TextBlock Text="{x:Bind Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" />
+                                        </DataTemplate>
+                                    </primitives:FeatureFormContentTemplateSelector.UtilityAssociationCreationTemplate>
                                 </primitives:FeatureFormContentTemplateSelector>
                             </primitives:NavigationSubView.HeaderTemplateSelector>
                             <primitives:NavigationSubView.ContentTemplateSelector>
@@ -694,6 +717,142 @@
                                             <primitives:UtilityAssociationResultDetailsView AssociationResult="{Binding}" />
                                         </DataTemplate>
                                     </primitives:FeatureFormContentTemplateSelector.UtilityAssociationResultTemplate>
+                                    <primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureSourceSelectionTemplate>
+                                        <DataTemplate x:DataType="primitives:UtilityAssociationFeatureSourceSelection">
+                                            <StackPanel Spacing="8" Margin="0,8">
+                                                <TextBox Text="{x:Bind SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         PlaceholderText="{internal:LocalizedString Key=FeatureFormUtilityAssociationsSearch}" />
+                                                <TextBlock Text="{x:Bind CountText, Mode=OneWay}" Style="{StaticResource FeatureFormViewCaptionStyle}" HorizontalAlignment="Right" />
+                                                <ListView ItemsSource="{x:Bind FilteredFeatureSources, Mode=OneWay}"
+                                                          SelectedItem="{x:Bind SelectedFeatureSource, Mode=TwoWay}"
+                                                          IsItemClickEnabled="False">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate x:DataType="un:UtilityAssociationFeatureSource">
+                                                            <TextBlock Text="{x:Bind Name}" Style="{StaticResource FeatureFormViewTitleStyle}" Margin="8" />
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                                <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsNoFeatureSources}"
+                                                           Visibility="{x:Bind HasNoResults, Mode=OneWay}"
+                                                           TextAlignment="Center" Margin="8" />
+                                                <TextBlock Text="{x:Bind ErrorMessage, Mode=OneWay}" Foreground="Red" TextWrapping="Wrap" Margin="8" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureSourceSelectionTemplate>
+                                    <primitives:FeatureFormContentTemplateSelector.UtilityAssociationAssetTypeSelectionTemplate>
+                                        <DataTemplate x:DataType="primitives:UtilityAssociationAssetTypeSelection">
+                                            <StackPanel Spacing="8" Margin="0,8">
+                                                <TextBox Text="{x:Bind SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         PlaceholderText="{internal:LocalizedString Key=FeatureFormUtilityAssociationsSearch}" />
+                                                <Grid>
+                                                    <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsAvailableAssetTypes}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                                                    <TextBlock Text="{x:Bind CountText, Mode=OneWay}" Style="{StaticResource FeatureFormViewCaptionStyle}" HorizontalAlignment="Right" />
+                                                </Grid>
+                                                <ListView ItemsSource="{x:Bind FilteredAssetTypes, Mode=OneWay}"
+                                                          SelectedItem="{x:Bind SelectedAssetType, Mode=TwoWay}"
+                                                          IsItemClickEnabled="False">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate x:DataType="un:UtilityAssetType">
+                                                            <StackPanel Margin="8">
+                                                                <TextBlock Text="{x:Bind Name}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                                                                <TextBlock Text="{x:Bind AssetGroup.Name}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                                <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsNoAssetTypes}"
+                                                           Visibility="{x:Bind HasNoResults, Mode=OneWay}"
+                                                           TextAlignment="Center" Margin="8" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </primitives:FeatureFormContentTemplateSelector.UtilityAssociationAssetTypeSelectionTemplate>
+                                    <primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureCandidateSelectionTemplate>
+                                        <DataTemplate x:DataType="primitives:UtilityAssociationFeatureCandidateSelection">
+                                            <StackPanel Spacing="8" Margin="0,8">
+                                                <TextBox Text="{x:Bind SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         PlaceholderText="{internal:LocalizedString Key=FeatureFormUtilityAssociationsSearchFeatures}" />
+                                                <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsChooseToAdd}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                                                <ListView ItemsSource="{x:Bind FilteredCandidates, Mode=OneWay}"
+                                                          SelectedItem="{x:Bind SelectedCandidate, Mode=TwoWay}"
+                                                          IsItemClickEnabled="False">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate x:DataType="un:UtilityAssociationFeatureCandidate">
+                                                            <TextBlock Text="{x:Bind Title}" Style="{StaticResource FeatureFormViewTitleStyle}" Margin="8" TextTrimming="CharacterEllipsis" />
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                                <Button Content="{internal:LocalizedString Key=FeatureFormUtilityAssociationsLoadMore}"
+                                                        Command="{x:Bind LoadMoreCommand}"
+                                                        Visibility="{x:Bind HasMore, Mode=OneWay}"
+                                                        HorizontalAlignment="Center" />
+                                                <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsNoCandidates}"
+                                                           Visibility="{x:Bind HasNoResults, Mode=OneWay}"
+                                                           TextAlignment="Center" Margin="8" />
+                                                <TextBlock Text="{x:Bind ErrorMessage, Mode=OneWay}" Foreground="Red" TextWrapping="Wrap" Margin="8" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureCandidateSelectionTemplate>
+                                    <primitives:FeatureFormContentTemplateSelector.UtilityAssociationCreationTemplate>
+                                        <DataTemplate x:DataType="primitives:UtilityAssociationCreation">
+                                            <StackPanel Spacing="8" Margin="0,8">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsAssociationType}" FontWeight="Bold" />
+                                                    <TextBlock Grid.Column="1" Text="{x:Bind AssociationType}" HorizontalAlignment="Right" />
+                                                </Grid>
+                                                <ToggleSwitch Header="{internal:LocalizedString Key=FeatureFormUtilityAssociationsContentVisibility}"
+                                                              IsOn="{x:Bind ContentIsVisible, Mode=TwoWay}"
+                                                              Visibility="{x:Bind ShowContentVisibility}" />
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFromElement}" FontWeight="Bold" />
+                                                    <TextBlock Grid.Column="1" Text="{x:Bind FromElement}" HorizontalAlignment="Right" TextWrapping="Wrap" />
+                                                </Grid>
+                                                <ComboBox ItemsSource="{x:Bind FromTerminals}"
+                                                          SelectedItem="{x:Bind SelectedFromTerminal, Mode=TwoWay}"
+                                                          Visibility="{x:Bind ShowFromTerminals}"
+                                                          HorizontalAlignment="Stretch">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate x:DataType="un:UtilityTerminal">
+                                                            <TextBlock Text="{x:Bind Name}" />
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsToElement}" FontWeight="Bold" />
+                                                    <TextBlock Grid.Column="1" Text="{x:Bind ToElement}" HorizontalAlignment="Right" TextWrapping="Wrap" />
+                                                </Grid>
+                                                <ComboBox ItemsSource="{x:Bind ToTerminals}"
+                                                          SelectedItem="{x:Bind SelectedToTerminal, Mode=TwoWay}"
+                                                          Visibility="{x:Bind ShowToTerminals}"
+                                                          HorizontalAlignment="Stretch">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate x:DataType="un:UtilityTerminal">
+                                                            <TextBlock Text="{x:Bind Name}" />
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                                <StackPanel Visibility="{x:Bind ShowFractionAlongEdge}">
+                                                    <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFractionAlongEdgePercent}" />
+                                                    <Slider Minimum="0" Maximum="100" Value="{x:Bind FractionAlongEdgePercent, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <TextBlock Text="{x:Bind ErrorMessage, Mode=OneWay}" Foreground="Red" TextWrapping="Wrap" />
+                                                <Button Content="{internal:LocalizedString Key=FeatureFormUtilityAssociationsAdd}"
+                                                        Command="{x:Bind AddCommand}"
+                                                        HorizontalAlignment="Stretch" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </primitives:FeatureFormContentTemplateSelector.UtilityAssociationCreationTemplate>
                                 </primitives:FeatureFormContentTemplateSelector>
                             </primitives:NavigationSubView.ContentTemplateSelector>
                         </primitives:NavigationSubView>
