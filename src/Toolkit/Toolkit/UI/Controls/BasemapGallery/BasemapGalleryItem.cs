@@ -335,7 +335,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (layer1.Item != null && layer2.Item != null)
             {
-                if (layer1.Item.ItemId == layer2.Item.ItemId || PortalUtils.GetPortalItemId((layer1.Item as PortalItem)?.Url) == PortalUtils.GetPortalItemId((layer2.Item as PortalItem)?.Url))
+                if (layer1.Item.ItemId == layer2.Item.ItemId || PortalHelper.GetPortalItemId((layer1.Item as PortalItem)?.Url) == PortalHelper.GetPortalItemId((layer2.Item as PortalItem)?.Url))
                     return true;
             }
 

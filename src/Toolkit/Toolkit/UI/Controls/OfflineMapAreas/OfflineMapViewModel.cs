@@ -82,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             string? itemId = onlineMap.Item?.ItemId;
             if (string.IsNullOrWhiteSpace(itemId))
             {
-                itemId = PortalUtils.GetPortalItemId(onlineMap.Uri);
+                itemId = PortalHelper.GetPortalItemId(onlineMap.Uri);
 
                 if (string.IsNullOrWhiteSpace(itemId))
                 {
