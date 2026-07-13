@@ -349,7 +349,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             var host = uri.Host;
             return host.Equals("arcgis.com", StringComparison.OrdinalIgnoreCase)
-                || host.EndsWith(".arcgis.com", StringComparison.OrdinalIgnoreCase);
+                || host.Equals("www.arcgis.com", StringComparison.OrdinalIgnoreCase)
+                || host.Equals("cdn.arcgis.com", StringComparison.OrdinalIgnoreCase)
+                || host.Equals("maps.arcgis.com", StringComparison.OrdinalIgnoreCase)
+                || host.EndsWith(".maps.arcgis.com", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <inheritdoc />
