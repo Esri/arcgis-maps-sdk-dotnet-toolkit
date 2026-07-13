@@ -174,7 +174,7 @@ internal sealed unsafe partial class PanoramicSurface
     internal event Action<double, double>? SurfaceTapped;
 
     // Raised when device creation, the present bridge, or a render fails inside a present layer
-    // (outside the load path), so the hosting display can surface it as IOrientedImageDisplay.Error
+    // (outside the load path), so the hosting display can surface it as its Error
     // instead of failing silently.
     internal event Action<Exception>? RenderFailed;
 
