@@ -94,6 +94,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateVisibility();
+            UpdateAddAttachmentButtonState();
+            UpdateMinMaxAttachmentText();
             if (newValue != null)
             {
                 try
@@ -110,6 +112,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 this.Dispatch(UpdateVisibility);
             }
+
+            if (e.PropertyName == nameof(AttachmentsFormElement.IsEditable) ||
+                e.PropertyName == nameof(AttachmentsFormElement.MaxAttachmentCount) ||
+                e.PropertyName == nameof(AttachmentsFormElement.Attachments))
+            {
+                this.Dispatch(UpdateAddAttachmentButtonState);
+            }
+
+            if (e.PropertyName == nameof(AttachmentsFormElement.MinAttachmentCount) ||
+                e.PropertyName == nameof(AttachmentsFormElement.MaxAttachmentCount))
+            {
+                this.Dispatch(UpdateMinMaxAttachmentText);
+            }
+        }
+
+        private void Attachments_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            this.Dispatch(UpdateAddAttachmentButtonState);
+        }
+
+        private bool CanAddAttachment()
+        {
+            if (Element is null || !Element.IsEditable)
+            {
+                return false;
+            }
+
+            return Element.MaxAttachmentCount < 0 || Element.Attachments.Count < Element.MaxAttachmentCount;
         }
 
         private void UpdateVisibility()
@@ -120,5 +150,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             this.Visibility = Element?.IsVisible == true ? Visibility.Visible : Visibility.Collapsed;
 #endif
         }
+
+        private void UpdateMinMaxAttachmentText()
+        {
+            if (Element is null)
+            {
+                UpdateMinMaxAttachmentTextCore(0u, 0u);
+                return;
+            }
+
+            UpdateMinMaxAttachmentTextCore(Element.MinAttachmentCount, Element.MaxAttachmentCount);
+        }
+
+        private partial void UpdateAddAttachmentButtonState();
+
+        private static bool HasConfiguredMaxAttachmentCount(uint maxAttachmentCount)
+        {
+            return maxAttachmentCount > 0 && maxAttachmentCount < uint.MaxValue;
+        }
+
+        private partial void UpdateMinMaxAttachmentTextCore(uint minAttachmentCount, uint maxAttachmentCount);
     }
 }

@@ -32,6 +32,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class AttachmentsFormElementView : Control
     {
         private ButtonBase? _addAttachmentButton;
+        private FrameworkElement? _minAttachmentBadge;
+        private TextBlock? _minAttachmentBadgeText;
+        private FrameworkElement? _maxAttachmentBadge;
+        private TextBlock? _maxAttachmentBadgeText;
         private bool _scrollToEnd;
 
         /// <inheritdoc />
@@ -51,6 +55,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _addAttachmentButton.Click += AddAttachmentButton_Click;
             }
+            _minAttachmentBadge = GetTemplateChild("MinAttachmentBadge") as FrameworkElement;
+            _minAttachmentBadgeText = GetTemplateChild("MinAttachmentBadgeText") as TextBlock;
+            _maxAttachmentBadge = GetTemplateChild("MaxAttachmentBadge") as FrameworkElement;
+            _maxAttachmentBadgeText = GetTemplateChild("MaxAttachmentBadgeText") as TextBlock;
+            UpdateAddAttachmentButtonState();
+            UpdateMinMaxAttachmentText();
             if (GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
             {
 #if WPF
@@ -135,6 +145,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             catch (System.Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+            }
+        }
+
+        private partial void UpdateAddAttachmentButtonState()
+        {
+            if (_addAttachmentButton is not null)
+            {
+                _addAttachmentButton.IsEnabled = CanAddAttachment();
+            }
+        }
+
+        private partial void UpdateMinMaxAttachmentTextCore(uint minAttachmentCount, uint maxAttachmentCount)
+        {
+            if (_minAttachmentBadge is not null)
+            {
+                _minAttachmentBadge.Visibility = minAttachmentCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_minAttachmentBadgeText is not null)
+            {
+                _minAttachmentBadgeText.Text = $"Min: {minAttachmentCount}";
+            }
+
+            if (_maxAttachmentBadge is not null)
+            {
+                _maxAttachmentBadge.Visibility = HasConfiguredMaxAttachmentCount(maxAttachmentCount) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_maxAttachmentBadgeText is not null)
+            {
+                _maxAttachmentBadgeText.Text = $"Max: {maxAttachmentCount}";
             }
         }
     }
