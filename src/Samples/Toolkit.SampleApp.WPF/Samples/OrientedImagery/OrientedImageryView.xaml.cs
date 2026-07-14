@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -85,10 +86,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             if (MainOrientedImageryView.ViewModel.AllowAddingMarkers)
             {
                 MainOrientedImageryView.ViewModel.AddMarkerLocation(e.Location);
+                return;
+            }
+
+            var identifyResult = await MainMapView.IdentifyLayerAsync(_oiLayer, e.Position, 0, false);
+            if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
+            {
+                MainOrientedImageryView.ViewModel.SelectedImage = await _oiLayer.FetchImageForFeatureAsync(feature);
             }
             else
             {
-                var parameters = new OrientedImageSearchParameters();
+                var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
                 var images = await _oiLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
                 MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
                 MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
