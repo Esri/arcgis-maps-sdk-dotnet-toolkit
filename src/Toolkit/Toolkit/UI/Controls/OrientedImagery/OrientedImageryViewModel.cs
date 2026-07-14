@@ -22,21 +22,22 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 {
     public OrientedImageryViewModel() : base()
     {
+        _allowAddingMarkers = false;
+        _markers = new ObservableCollection<OrientedImageMarker>();
+        _markers.CollectionChanged -= Markers_CollectionChanged;
+
         _markersOverlay = new GraphicsOverlay() { Id = "OrientedImageryView_Markers_Overlay" };
         NewMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 15);
         SearchPointMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 12);
         AllCamerasMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.FromArgb(200,0,0,255), 15);
         CurrentCameraMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Yellow, 15);
 
+        _images = new List<OrientedImage>();
+
         SelectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Orange);
         SelectedFootprintOutlineColor = System.Drawing.Color.Orange;
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
-
-        _allowAddingMarkers = false;
-        _markers = new ObservableCollection<OrientedImageMarker>();
-        _markers.CollectionChanged += (_, _) => UpdateGraphicsOverlay();
-        _images = new List<OrientedImage>();
 
         SelectNextImageCommand = new Command(
             execute: () => SelectNextImage(),
@@ -65,7 +66,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
             _images.Clear();
             SelectedImage = null;
-            _markers.Clear();
+            Markers.Clear();
 
             _oiLayer = value;
             UpdateVisibleFootprints();
@@ -328,7 +329,23 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     #region Markers
     // This viewmodel manages the markers collection and graphics overlay, the view is responsible for connecting them to displays
     private ObservableCollection<OrientedImageMarker> _markers;
-    public ObservableCollection<OrientedImageMarker> Markers => _markers;
+    public ObservableCollection<OrientedImageMarker> Markers
+    {
+        get { return _markers; }
+        private set
+        {
+            if (value == _markers)
+                return;
+            _markers.CollectionChanged -= Markers_CollectionChanged;
+            value.CollectionChanged += Markers_CollectionChanged;
+            SetProperty(ref _markers, value);
+        }
+    }
+
+    private void Markers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        UpdateGraphicsOverlay();
+    }
 
     private GraphicsOverlay _markersOverlay;
     public GraphicsOverlay MarkersOverlay => _markersOverlay;
@@ -390,14 +407,14 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void UpdateSearchPointMarker(MapPoint? location)
     {
-        var existingMarker = _markers.FirstOrDefault((marker) => marker?.Tag is string tag && tag == SearchPointMarkerTag, null);
+        var existingMarker = Markers.FirstOrDefault((marker) => marker?.Tag is string tag && tag == SearchPointMarkerTag, null);
 
         if (existingMarker != null)
-            _markers.Remove(existingMarker);
+            Markers.Remove(existingMarker);
 
         if (location != null)
         {
-            _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), SearchPointMarkerSymbol) { Tag = SearchPointMarkerTag });
+            Markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), SearchPointMarkerSymbol) { Tag = SearchPointMarkerTag });
         }
     }
 
@@ -408,7 +425,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public void AddMarkerLocation(MapPoint location, MarkerSymbol? symbol = null)
     {
         if (AllowAddingMarkers)
-            _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), symbol ?? NewMarkerSymbol));
+            Markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), symbol ?? NewMarkerSymbol));
     }
 
     /// <summary>
@@ -418,38 +435,37 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void ClearMarkers()
     {
-        var searchPointMarker = _markers.FirstOrDefault((marker) => marker.Tag is string tag && tag == SearchPointMarkerTag);
-        _markers.Clear();
+        var searchPointMarker = Markers.FirstOrDefault((marker) => marker.Tag is string tag && tag == SearchPointMarkerTag);
+        Markers.Clear();
         UpdateCameraMarkers();
         if (searchPointMarker != null)
-            _markers.Add(searchPointMarker);
+            Markers.Add(searchPointMarker);
     }
 
     private void UpdateCameraMarkers()
     {
-        var existingCameraMarkers = _markers.Where((marker) => marker.Tag is string tag && tag == AllCamerasMarkerTag).ToList();
-        foreach (var mrk in existingCameraMarkers)
-        {
-            _markers.Remove(mrk);
-        }
+        var currentMarkers = Markers.ToList();
+        var existingCameraMarkers = currentMarkers.RemoveAll((marker) => marker.Tag is string tag && tag == AllCamerasMarkerTag);
 
         if (ShowCameraLocations)
         {
-            foreach (var img in _images.Where((img) => img.Geometry is MapPoint))
-            {
-                _markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation((MapPoint)img.Geometry!), AllCamerasMarkerSymbol)
-                {
-                    Tag = AllCamerasMarkerTag,
-                    IsVisible = ShowCameraLocationsOnDisplay
-                });
-            }
+            currentMarkers.AddRange(
+                _images.Where((img) => img.Geometry is MapPoint)
+                       .Select(img => new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation((MapPoint)img.Geometry!), AllCamerasMarkerSymbol)
+                       {
+                           Tag = AllCamerasMarkerTag,
+                           IsVisible = ShowCameraLocationsOnDisplay
+                       }));
         }
+
+        Markers = new ObservableCollection<OrientedImageMarker>(currentMarkers);
+        UpdateGraphicsOverlay();
     }
 
     private void UpdateGraphicsOverlay()
     {
         _markersOverlay.Graphics.Clear();
-        _markersOverlay.Graphics.AddRange(_markers.Select((mk) => new Graphic(mk.Position.Location!, mk.Symbol)));
+        _markersOverlay.Graphics.AddRange(Markers.Select((mk) => new Graphic(mk.Position.Location!, mk.Symbol)));
 
         if (SelectedImage?.Geometry is MapPoint currentImageLocation)
             _markersOverlay.Graphics.Add(new Graphic(currentImageLocation, CurrentCameraMarkerSymbol) { ZIndex = int.MaxValue });
