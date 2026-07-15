@@ -188,8 +188,6 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         SetInteractive(false);
     }
 
-    protected override void OnMarkersChanged() => RebuildMarkers();
-
     public override void SetBackgroundColor(System.Drawing.Color color)
     {
         // Empty restores the MapView's default grid (gray with black grid lines).
@@ -231,7 +229,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     // Rebuilds the marker-to-graphic mapping from scratch and observes each marker for live updates.
     // Snapshots the app-owned collection on the calling thread (so it's never enumerated off its mutating thread),
     // then does the overlay/dictionary work on the UI thread.
-    private void RebuildMarkers()
+    protected override void RebuildMarkers()
     {
         List<OrientedImageMarker>? snapshot = Markers is null ? null : new(Markers);
         this.Dispatch(() =>
@@ -246,29 +244,89 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             _graphicMarkers.Clear();
             _markersOverlay.Graphics.Clear();
 
-            if (snapshot != null)
-            {
-                foreach (OrientedImageMarker marker in snapshot)
-                {
-                    Graphic graphic = new() { Symbol = marker.Symbol, IsVisible = marker.IsVisible };
-                    _markerGraphics[marker] = graphic;
-                    _graphicMarkers[graphic] = marker;
-                    _markersOverlay.Graphics.Add(graphic);
+            AddMarkers(snapshot ?? []);
+        });
+    }
 
-                    // Weak, like the collection subscription in SetMarkers: an app-owned long-lived marker must not
-                    // keep the display (and through it the control and its MapView) alive after the control is gone.
-                    var listener = new WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
-                    {
-                        OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
-                        OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
-                    };
-                    marker.PropertyChanged += listener.OnEvent;
-                    _markerListeners.Add(listener);
-                }
+    protected override void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers)
+    {
+        this.Dispatch(() =>
+        {
+            foreach (OrientedImageMarker marker in newMarkers)
+            {
+                Graphic graphic = new() { Symbol = marker.Symbol, IsVisible = marker.IsVisible };
+                _markerGraphics[marker] = graphic;
+                _graphicMarkers[graphic] = marker;
+                _markersOverlay.Graphics.Add(graphic);
+
+                SetMarkerListener(marker, out var listener);
+                _markerListeners.Add(listener);
             }
 
-            _ = RefreshMarkerGeometriesAsync();
+            _ = RefreshMarkerGeometriesAsync(newMarkers);
         });
+    }
+
+    protected override void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index)
+    {
+        this.Dispatch(() =>
+        {
+            var oldGraphic = _markersOverlay.Graphics[index];
+            _markerGraphics.Remove(oldMarker);
+            _graphicMarkers.Remove(oldGraphic);
+            _markerListeners[index].Detach();
+
+            Graphic newGraphic = new() { Symbol = newMarker.Symbol, IsVisible = newMarker.IsVisible };
+            _markerGraphics[newMarker] = newGraphic;
+            _graphicMarkers[newGraphic] = newMarker;
+            _markersOverlay.Graphics[index] = newGraphic;
+
+            SetMarkerListener(newMarker, out var listener);
+            _markerListeners[index] = listener;
+
+            _ = RefreshMarkerGeometriesAsync(new List<OrientedImageMarker> { newMarker });
+        });
+    }
+
+    protected override void RemoveMarkers(int _, IEnumerable<OrientedImageMarker> removedMarkers)
+    {
+        this.Dispatch(() =>
+        {
+            foreach (OrientedImageMarker marker in removedMarkers)
+            {
+                var graphic = _markerGraphics[marker];
+                _markerGraphics.Remove(marker);
+                _graphicMarkers.Remove(graphic);
+
+                var index = _markersOverlay.Graphics.IndexOf(graphic);
+                _markerListeners[index].Detach();
+                _markerListeners.RemoveAt(index);
+                _markersOverlay.Graphics.RemoveAt(index);
+            }
+        });
+    }
+
+    protected override void MoveMarkers(int oldIndex, int newIndex)
+    {
+        this.Dispatch(() =>
+        {
+            var temp = _markerListeners[oldIndex];
+            _markerListeners[oldIndex] = _markerListeners[newIndex];
+            _markerListeners[newIndex] = temp;
+            _markersOverlay.Graphics.Move(oldIndex, newIndex);
+        });
+    }
+
+    private void SetMarkerListener(OrientedImageMarker marker, out WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs> listener)
+    {
+        // Weak, like the collection subscription in SetMarkers: an app-owned long-lived marker must not
+        // keep the display (and through it the control and its MapView) alive after the control is gone.
+        listener = new WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
+        {
+            OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
+            OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+        };
+        marker.PropertyChanged += listener.OnEvent;
     }
 
     // Dispatch so marker updates can't touch the graphic/dictionaries off the UI thread.
@@ -296,12 +354,24 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
     // Recomputes the map-space geometry for every current marker.
     // Called after the raster loads (so markers set before load get placed) and whenever the marker set changes.
-    private async Task RefreshMarkerGeometriesAsync()
+    // Pass a subset of markers to refresh only those; otherwise refresh all.
+    private async Task RefreshMarkerGeometriesAsync(IEnumerable<OrientedImageMarker>? markers = null)
     {
-        var markerGraphicsSnapshot = new Dictionary<OrientedImageMarker, Graphic>(_markerGraphics);
-        foreach (KeyValuePair<OrientedImageMarker, Graphic> pair in markerGraphicsSnapshot)
+        if (markers == null)
         {
-            await ResolveAndApplyMarkerGeometryAsync(pair.Key, pair.Value);
+            var markerGraphicsSnapshot = new Dictionary<OrientedImageMarker, Graphic>(_markerGraphics);
+            foreach (KeyValuePair<OrientedImageMarker, Graphic> pair in markerGraphicsSnapshot)
+            {
+                await ResolveAndApplyMarkerGeometryAsync(pair.Key, pair.Value);
+            }
+        }
+        else
+        {
+            foreach (OrientedImageMarker marker in markers)
+            {
+                if (_markerGraphics.TryGetValue(marker, out Graphic? graphic))
+                    await ResolveAndApplyMarkerGeometryAsync(marker, graphic);
+            }
         }
     }
 
