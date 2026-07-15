@@ -107,6 +107,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var fromNetworkDataSourceItem = new MenuItem() { Header = fromNetworkDataSource };
             fromNetworkDataSourceItem.Click += (_, _) => SelectFromNetworkDataSource();
             contextMenu.Items.Add(fromNetworkDataSourceItem);
+            if (contextMenu.Items.Count == 1)
+            {
+                // If there's only one entry, no reason to ask users to pick from a menu, just go straight to the action.
+                SelectFromNetworkDataSource();
+                return;
+            }
             contextMenu.IsOpen = true;
 #elif WINDOWS_XAML
             MenuFlyout contextMenu = new MenuFlyout();
@@ -118,6 +124,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var fromNetworkDataSourceItem = new MenuFlyoutItem() { Text = fromNetworkDataSource };
             fromNetworkDataSourceItem.Click += (_, _) => SelectFromNetworkDataSource();
             contextMenu.Items.Add(fromNetworkDataSourceItem);
+            if (contextMenu.Items.Count == 1)
+            {
+                // If there's only one entry, no reason to ask users to pick from a menu, just go straight to the action.
+                SelectFromNetworkDataSource();
+                return;
+            }
             contextMenu.ShowAt(flyoutTarget as FrameworkElement ?? this);
 #endif
         }

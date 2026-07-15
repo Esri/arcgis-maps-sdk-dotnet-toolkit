@@ -139,23 +139,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 var fromNetworkDataSourceItem = new Microsoft.UI.Xaml.Controls.MenuFlyoutItem() { Text = fromNetworkDataSource };
                 fromNetworkDataSourceItem.Click += (_, _) => SelectFromNetworkDataSource();
                 flyout.Items.Add(fromNetworkDataSourceItem);
+                if (flyout.Items.Count == 1)
+                {
+                    // If there's only one entry, no reason to ask users to pick from a menu, just go straight to the action.
+                    SelectFromNetworkDataSource();
+                    return;
+                }
                 flyout.ShowAt(nativeButton);
+            }
+#else
+            // Add the On Map option here when map-based association selection is implemented.
+            // var onMap = CanSelectAssociationOnMap()
+            //     ? Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap")
+            //     : null;
+            var actions = new List<string>() { fromNetworkDataSource };
+            if (actions.Count == 1)
+            {
+                // If there's only one entry, no reason to ask users to pick from a menu, just go straight to the action.
+                SelectFromNetworkDataSource();
                 return;
             }
-#endif
 
             Page? page = Window?.Page;
             if (page is null)
             {
                 return;
             }
-
-            // Add the On Map option here when map-based association selection is implemented.
-            // var onMap = CanSelectAssociationOnMap()
-            //     ? Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap")
-            //     : null;
-            var actions = new List<string>() { fromNetworkDataSource };
-
             string? title = Properties.Resources.GetString("FeatureFormUtilityAssociationsChooseAddMethod");
             string cancel = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationCancel")!;
             var selectedAction = await page.DisplayActionSheetAsync(title, cancel, null, actions.ToArray());
@@ -163,6 +172,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 SelectFromNetworkDataSource();
             }
+#endif
         }
     }
 }
