@@ -29,6 +29,12 @@ using FeatureFormView = Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView;
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
+    /// <summary>
+    /// Provides the bindable state and creation logic for the final step of the add-association workflow.
+    /// It loads the options supported by the selected utility network feature, exposes the applicable
+    /// terminal, fraction-along-edge, and content-visibility choices, and creates the association before
+    /// refreshing the form results and returning to the feature form.
+    /// </summary>
     internal sealed class UtilityAssociationCreation : INotifyPropertyChanged
     {
         private readonly UtilityAssociationFeatureCandidate _candidate;

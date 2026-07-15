@@ -28,6 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
+    /// <summary>
+    /// Provides shared bindable state and navigation services for pages in the network-source
+    /// association workflow. Derived pages use it to retain the feature form context and report
+    /// loading and error states consistently while guiding the user through association selection.
+    /// </summary>
     internal abstract class UtilityAssociationWorkflowPage : INotifyPropertyChanged
     {
         private string? _errorMessage;
@@ -87,6 +92,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
+    /// <summary>
+    /// Represents the first workflow page, where the user searches and selects a utility network
+    /// feature source that can participate in the requested association.
+    /// </summary>
     internal sealed class UtilityAssociationFeatureSourceSelection : UtilityAssociationWorkflowPage
     {
         private readonly ObservableCollection<UtilityAssociationFeatureSource> _featureSources = new();
@@ -187,6 +196,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 
+    /// <summary>
+    /// Represents the workflow page for searching and selecting an asset type from the chosen
+    /// feature source before candidate features are queried.
+    /// </summary>
     internal sealed class UtilityAssociationAssetTypeSelection : UtilityAssociationWorkflowPage
     {
         private readonly UtilityAssociationFeatureSource _source;
@@ -270,6 +283,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 .ToList();
     }
 
+    /// <summary>
+    /// Represents the workflow page that queries, filters, and pages through candidate features for
+    /// the selected source and asset type, then opens the association creation step for a candidate.
+    /// </summary>
     internal sealed class UtilityAssociationFeatureCandidateSelection : UtilityAssociationWorkflowPage
     {
         private readonly UtilityAssociationFeatureSource _source;
@@ -468,6 +485,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 
+    /// <summary>
+    /// Adapts asynchronous workflow operations to <see cref="ICommand"/> so views can bind actions
+    /// such as loading more candidates and creating an association while honoring their enabled state.
+    /// </summary>
     internal sealed class UtilityAssociationAsyncCommand : ICommand
     {
         private readonly Func<Task> _execute;
