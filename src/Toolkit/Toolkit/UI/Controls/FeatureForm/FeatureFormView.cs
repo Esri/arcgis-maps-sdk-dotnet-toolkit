@@ -242,7 +242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void FeatureForm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(FeatureForm.ValidationErrors))
+            if (e.PropertyName == nameof(FeatureForm.ElementValidationErrors))
             {
                 this.Dispatch(UpdateIsValidProperty);
             }
@@ -282,7 +282,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void UpdateIsValidProperty()
         {
-            IsValid = CurrentFeatureForm?.ValidationErrors?.Any() != true;
+            IsValid = CurrentFeatureForm?.ElementValidationErrors?.Any() != true;
         }
 
         /// <summary>
@@ -720,7 +720,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var deferral = e.GetDeferral();
                     try
                     {
-                        string action = await page.DisplayActionSheet(title, cancelText, null, applyText, discardText);
+                        string action = await page.DisplayActionSheetAsync(title, cancelText, null, applyText, discardText);
                         if (action == applyText)
                         {
                             await FinishEditingAsync();
@@ -779,7 +779,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var page = GetParent<Page>(this);
             if (page is not null)
             {
-                await page.DisplayAlert(title, content, Properties.Resources.GetString("FeatureFormPendingEditsCancel")!);
+                await page.DisplayAlertAsync(title, content, Properties.Resources.GetString("FeatureFormPendingEditsCancel")!);
             }
 #elif WINDOWS_XAML
             var dialog = new ContentDialog

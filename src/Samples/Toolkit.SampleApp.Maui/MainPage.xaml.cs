@@ -35,9 +35,9 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private async void SamplesList_ItemSelected(object? sender, SelectedItemChangedEventArgs e)
+    private async void SamplesList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        var sample = e.SelectedItem as Sample;
+        var sample = e.CurrentSelection.FirstOrDefault() as Sample;
         if (sample != null)
         {
             SamplesList.SelectedItem = null;
@@ -92,7 +92,7 @@ public partial class MainPage : ContentPage
             }
             catch (System.Exception ex)
             {
-                _ = DisplayAlert("Invalid API Key", ex.Message, "OK");
+                _ = DisplayAlertAsync("Invalid API Key", ex.Message, "OK");
             }
         }
     }

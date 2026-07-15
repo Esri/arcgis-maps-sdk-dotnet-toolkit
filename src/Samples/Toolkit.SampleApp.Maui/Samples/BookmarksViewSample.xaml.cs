@@ -139,7 +139,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private void BookmarkSelected(object? sender, Bookmark bookmark)
         {
-            DisplayAlert("Bookmark selected", $"Selected {bookmark.Name}", "Ok");
+            _ = DisplayAlertAsync("Bookmark selected", $"Selected {bookmark.Name}", "Ok");
         }
     }
 }
