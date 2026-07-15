@@ -15,8 +15,6 @@ public partial class OrientedImageryView
 {
     private const string ImageDisplayName = "PART_ImageDisplay";
 
-    private OrientedImageDisplay? _display;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
     /// </summary>
@@ -59,6 +57,7 @@ public partial class OrientedImageryView
         WireDisplayProperties();
     }
 
+#region ViewModel
     /// <summary>
     /// Gets the default toolbar items for the OrientedImageryView.
     /// </summary>
@@ -118,6 +117,29 @@ public partial class OrientedImageryView
         WireDisplayProperties();
     }
 
+    private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(OrientedImageryViewModel.SelectedImageFootprint):
+                if (_display != null)
+                    _display.Footprint = ViewModel.SelectedImageFootprint;
+                break;
+            case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
+                if (_display != null)
+                    _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
+                break;
+            case nameof(OrientedImageryViewModel.Markers):
+                if (_display != null)
+                    _display.Markers = ViewModel.Markers;
+                break;
+        }
+    }
+#endregion ViewModel
+
+#region Display
+    private OrientedImageDisplay? _display;
+
     private void WireDisplayProperties()
     {
         if (_display == null)
@@ -142,7 +164,6 @@ public partial class OrientedImageryView
         }
     }
 
-    #region GisProperties
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
     /// </summary>
@@ -164,13 +185,16 @@ public partial class OrientedImageryView
             _display.DisplayBackgroundColor = displayBackgroundColor;
     }
 
+#endregion Display
+
+#region GeoModel
     /// <summary>
     /// Gets or sets the oriented imagery layer associated with this view.
     /// </summary>
     /// <remarks>
     /// This is a thin wrapper over the <see cref="OrientedImageryViewModel.OrientedImageryLayer"/> property.
     /// </remarks>
-    public OrientedImageryLayer OrientedImageryLayer
+    public OrientedImageryLayer? OrientedImageryLayer
     {
         get => ViewModel.OrientedImageryLayer;
         set { ViewModel.OrientedImageryLayer = value; }
@@ -207,28 +231,7 @@ public partial class OrientedImageryView
             newGeoView.GraphicsOverlays.Add(ViewModel.MarkersOverlay);
         }
     }
-    #endregion GisProperties
-
-    #region ViewModelPropertyHandling
-    private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
-            case nameof(OrientedImageryViewModel.SelectedImageFootprint):
-                if (_display != null)
-                    _display.Footprint = ViewModel.SelectedImageFootprint;
-                break;
-            case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
-                if (_display != null)
-                    _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
-                break;
-            case nameof(OrientedImageryViewModel.Markers):
-                if (_display != null)
-                    _display.Markers = ViewModel.Markers;
-                break;
-        }
-    }
-    #endregion ViewModelPropertyHandling
+#endregion GeoModel
 }
 
 #endif
