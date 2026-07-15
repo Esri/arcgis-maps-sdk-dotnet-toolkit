@@ -250,8 +250,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             string open = Properties.Resources.GetString("FeatureFormOpenAttachmentMenuItem")!;
             string? rename = Element?.AllowUserRename == true ? Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem")! : null;
             var result = rename is not null
-                ? await page.DisplayActionSheet(Attachment.Name, null, null, delete, rename, open)
-                : await page.DisplayActionSheet(Attachment.Name, null, null, delete, open);
+                ? await page.DisplayActionSheetAsync(Attachment.Name, null, null, delete, rename, open)
+                : await page.DisplayActionSheetAsync(Attachment.Name, null, null, delete, open);
+
             if (result == delete)
             {
                 DeleteAttachment();

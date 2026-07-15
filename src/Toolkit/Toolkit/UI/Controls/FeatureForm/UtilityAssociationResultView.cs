@@ -294,7 +294,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
 
             return page is not null
-                && await page.DisplayAlert(title, message, accept, cancel);
+                && await page.DisplayAlertAsync(title, message, accept, cancel);
 #endif
         }
 

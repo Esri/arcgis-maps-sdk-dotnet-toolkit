@@ -206,14 +206,14 @@ public class Compass : TemplatedView
             {
                 _isVisible = false;
                 var root = GetTemplateChild("Root") as VisualElement;
-                root?.FadeTo(0, 500);
+                _ = root?.FadeToAsync(0, 500);
             }
         }
         else if (!_isVisible)
         {
             _isVisible = true;
             var root = GetTemplateChild("Root") as VisualElement;
-            root?.FadeTo(1, 500);
+            _ = root?.FadeToAsync(1, 500);
         }
     }
 

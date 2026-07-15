@@ -3,13 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Toolkit.SampleApp.Maui.MainPage">
     <Grid>
-        <ListView x:Name="SamplesList" ItemSelected="SamplesList_ItemSelected" Margin="{OnPlatform 0, WinUI=20}" RowHeight="{OnPlatform 60, WinUI=45}" >
-            <ListView.ItemTemplate>
+        <CollectionView x:Name="SamplesList" SelectionChanged="SamplesList_SelectionChanged" Margin="{OnPlatform 0, WinUI=20}" SelectionMode="Single">
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding Name}" Detail="{Binding Description}" TextColor="CornflowerBlue" DetailColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                    <Grid Padding="10,6" HeightRequest="{OnPlatform 60, WinUI=45}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label Text="{Binding Name}" TextColor="CornflowerBlue" />
+                        <Label Grid.Row="1" Text="{Binding Description}" TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" FontSize="12" />
+                    </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <Grid x:Name="ApiKeyWindow" Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" IsVisible="false">
             <Grid HorizontalOptions="Center" VerticalOptions="Center">

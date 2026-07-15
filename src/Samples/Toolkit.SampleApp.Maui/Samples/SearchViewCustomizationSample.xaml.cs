@@ -2,6 +2,7 @@
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Maui;
 using Esri.ArcGISRuntime.UI;
+using System.Linq;
 
 namespace Toolkit.SampleApp.Maui.Samples
 {
@@ -55,7 +56,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", ex.Message, "Ok");
+                await DisplayAlertAsync("Error", ex.Message, "Ok");
             }
         }
 
@@ -105,12 +106,12 @@ namespace Toolkit.SampleApp.Maui.Samples
 
             public void NotifyDeselected(SearchResult? result)
             {
-                App.Current?.MainPage?.DisplayAlert("Deselected", $"Deselected {result?.DisplayTitle ?? "all results"}", "Ok");
+                _ = Application.Current?.Windows.FirstOrDefault()?.Page?.DisplayAlertAsync("Deselected", $"Deselected {result?.DisplayTitle ?? "all results"}", "Ok");
             }
 
             public void NotifySelected(SearchResult result)
             {
-                App.Current?.MainPage?.DisplayAlert("Selected", $"Selected {result?.DisplayTitle}", "Ok");
+                _ = Application.Current?.Windows.FirstOrDefault()?.Page?.DisplayAlertAsync("Selected", $"Selected {result?.DisplayTitle}", "Ok");
             }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
