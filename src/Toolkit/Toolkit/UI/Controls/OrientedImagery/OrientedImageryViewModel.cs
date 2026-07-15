@@ -19,8 +19,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 #if WPF
+/// <summary>
+/// Manages oriented imagery selection, footprints, and map markers for an oriented imagery view.
+/// </summary>
 public class OrientedImageryViewModel : INotifyPropertyChanged
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OrientedImageryViewModel"/> class.
+    /// </summary>
     public OrientedImageryViewModel() : base()
     {
         _allowAddingMarkers = false;
@@ -53,6 +59,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     #region GeoModel
     private OrientedImageryLayer _oiLayer;
+
+    /// <summary>
+    /// Gets or sets the oriented imagery layer whose visible footprints are managed by this view model.
+    /// </summary>
     public OrientedImageryLayer OrientedImageryLayer
     {
         get => _oiLayer;
@@ -79,8 +89,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private List<OrientedImage> _images;
 
     /// <summary>
-    /// Sets the images to display in the control. Optionally, a search point can be provided to indicate the origin of the search.
+    /// Sets the images to display in the control.
     /// </summary>
+    /// <remarks>
+    /// Pass the <paramref name="searchPoint"/> parameter to display a marker at the location from which the images were searched.
+    /// </remarks>
+    /// <param name="images">The oriented images to display.</param>
+    /// <param name="searchPoint">The point from which the images were searched.</param>
     public void SetImages(List<OrientedImage> images, MapPoint? searchPoint = null)
     {
 
@@ -97,6 +112,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private OrientedImage? _selectedImage;
 
+    /// <summary>
+    /// Gets or sets the currently selected oriented image.
+    /// </summary>
     public OrientedImage? SelectedImage
     {
         get => _selectedImage;
@@ -214,6 +232,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     }
 
     private bool _autoUpdateFootprint;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the selected image footprint is automatically updated.
+    /// </summary>
     public bool AutoUpdateFootprint
     {
         get => _autoUpdateFootprint;
@@ -223,7 +245,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _allowAddingMarkers;
 
     /// <summary>
-    /// Gets or sets a value indicating whether image clicks can add markers.
+    /// Gets or sets a value indicating whether new markers may be added.
     /// </summary>
     public bool AllowAddingMarkers
     {
@@ -327,6 +349,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     #region Markers
     // This viewmodel manages the markers collection and graphics overlay, the view is responsible for connecting them to displays
     private ObservableCollection<OrientedImageMarker> _markers;
+
+    /// <summary>
+    /// Gets the collection of markers managed by this view model.
+    /// </summary>
     public ObservableCollection<OrientedImageMarker> Markers
     {
         get { return _markers; }
@@ -364,6 +390,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     }
 
     private GraphicsOverlay _markersOverlay;
+
+    /// <summary>
+    /// Gets the graphics overlay that contains the marker graphics.
+    /// </summary>
     public GraphicsOverlay MarkersOverlay => _markersOverlay;
 
     /// <summary>
@@ -407,8 +437,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
 
     /// <summary>
-    /// Gets or sets a value indicating whether to show camera locations on the display. This property only has an effect if <see cref="ShowCameraLocations"/> is set to <c>true</c>.
+    /// Gets or sets a value indicating whether to show camera locations on the display.
     /// </summary>
+    /// <remarks>
+    /// This property only has an effect if <see cref="ShowCameraLocations"/> is set to <c>true</c>.
+    /// </remarks>
     public bool ShowCameraLocationsOnDisplay
     {
         get => _showCameraLocationsOnDisplay;
@@ -423,9 +456,14 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _showCameraLocationsOnDisplay = false;
 
     /// <summary>
-    /// Add a marker from a geographic location. The new marker is added with <see cref="NewMarkerSymbol"/> unless
-    /// overriden using the <paramref name="symbol"/> parameter.
+    /// Adds a marker at a geographic location. The marker uses <see cref="NewMarkerSymbol"/> unless
+    /// overridden using the <paramref name="symbol"/> parameter.
     /// </summary>
+    /// <remarks>
+    /// New markers will be discarded if <see cref="AllowAddingMarkers"/> is <c>false</c>.
+    /// </remarks>
+    /// <param name="location">The geographic location of the marker.</param>
+    /// <param name="symbol">The optional symbol to use for the marker.</param>
     public void AddMarkerLocation(MapPoint location, MarkerSymbol? symbol = null)
     {
         if (AllowAddingMarkers)
