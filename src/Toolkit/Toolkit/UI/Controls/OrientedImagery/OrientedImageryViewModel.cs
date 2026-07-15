@@ -57,13 +57,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             canExecute: () => true);
     }
 
-    #region GeoModel
-    private OrientedImageryLayer _oiLayer;
+#region GeoModel
+    private OrientedImageryLayer? _oiLayer;
 
     /// <summary>
     /// Gets or sets the oriented imagery layer whose visible footprints are managed by this view model.
     /// </summary>
-    public OrientedImageryLayer OrientedImageryLayer
+    public OrientedImageryLayer? OrientedImageryLayer
     {
         get => _oiLayer;
         set
@@ -83,34 +83,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             UpdateVisibleFootprints();
         }
     }
-    #endregion GeoModel
+#endregion GeoModel
 
-    #region ImageManagement
+#region Images
     private List<OrientedImage> _images;
-
-    /// <summary>
-    /// Sets the images to display in the control.
-    /// </summary>
-    /// <remarks>
-    /// Pass the <paramref name="searchPoint"/> parameter to display a marker at the location from which the images were searched.
-    /// </remarks>
-    /// <param name="images">The oriented images to display.</param>
-    /// <param name="searchPoint">The point from which the images were searched.</param>
-    public void SetImages(List<OrientedImage> images, MapPoint? searchPoint = null)
-    {
-
-        _images = images.ToList();
-        _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
-
-        UpdateSearchPointMarker(searchPoint);
-        UpdateCameraMarkers();
-        UpdateVisibleFootprints();
-
-        ((Command)SelectNextImageCommand).ChangeCanExecute();
-        ((Command)SelectPreviousImageCommand).ChangeCanExecute();
-    }
-
     private OrientedImage? _selectedImage;
+    private OrientedImageFootprint? _selectedImageFootprint;
 
     /// <summary>
     /// Gets or sets the currently selected oriented image.
@@ -141,8 +119,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         }
     }
 
-    private OrientedImageFootprint? _selectedImageFootprint;
-
     /// <summary>
     /// Gets the footprint of the currently selected image. This is updated based on the <see cref="SelectedImage"/> property.
     /// </summary>
@@ -168,6 +144,28 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </remarks>
     public ICommand SelectPreviousImageCommand { get; private set; }
 
+    /// <summary>
+    /// Sets the images to display in the control.
+    /// </summary>
+    /// <remarks>
+    /// Pass the <paramref name="searchPoint"/> parameter to display a marker at the location from which the images were searched.
+    /// </remarks>
+    /// <param name="images">The oriented images to display.</param>
+    /// <param name="searchPoint">The point from which the images were searched.</param>
+    public void SetImages(List<OrientedImage> images, MapPoint? searchPoint = null)
+    {
+
+        _images = images.ToList();
+        _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
+
+        UpdateSearchPointMarker(searchPoint);
+        UpdateCameraMarkers();
+        UpdateVisibleFootprints();
+
+        ((Command)SelectNextImageCommand).ChangeCanExecute();
+        ((Command)SelectPreviousImageCommand).ChangeCanExecute();
+    }
+
     private void SelectNextImage()
     {
         if (_images.Count == 0)
@@ -192,9 +190,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         }
     }
 
-    #endregion ImageManagement
+#endregion Images
 
-    #region FootprintManagement
+#region Footprints
     private List<OrientedImageFootprint> _footprints = new();
 
     private bool _showSelectedFootprint = true;
@@ -344,11 +342,17 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             OrientedImageryLayer.VisibleFootprints.Add(SelectedImageFootprint);
         }
     }
-    #endregion FootprintManagement
+#endregion Footprints
 
-    #region Markers
+#region Markers
     // This viewmodel manages the markers collection and graphics overlay, the view is responsible for connecting them to displays
     private ObservableCollection<OrientedImageMarker> _markers;
+    private GraphicsOverlay _markersOverlay;
+    private bool _showCameraLocations = true;
+    private bool _showCameraLocationsOnDisplay = false;
+    private static readonly MarkerTag SearchPointMarkerTag = new MarkerTag("SearchPointMarker");
+    private static readonly MarkerTag SelectedImageMarkerTag = new MarkerTag("SelectedImageMarker", int.MaxValue);
+    private static readonly MarkerTag AllCamerasMarkerTag = new MarkerTag("AllSelectedCamerasMarker");
 
     /// <summary>
     /// Gets the collection of markers managed by this view model.
@@ -356,6 +360,84 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public ObservableCollection<OrientedImageMarker> Markers
     {
         get { return _markers; }
+    }
+
+    /// <summary>
+    /// Gets the graphics overlay that contains the marker graphics.
+    /// </summary>
+    public GraphicsOverlay MarkersOverlay => _markersOverlay;
+
+    /// <summary>
+    /// Gets or sets the default symbology to use when adding new markers.
+    /// </summary>
+    public MarkerSymbol NewMarkerSymbol { get; set; }
+
+    /// <summary>
+    /// Gets or sets the symbol to use for the search point marker.
+    /// </summary>
+    public MarkerSymbol SearchPointMarkerSymbol { get; set; }
+
+    /// <summary>
+    /// Gets or sets the symbol to use for the current camera marker.
+    /// </summary>
+    public MarkerSymbol SelectedCameraMarkerSymbol { get; set; }
+
+    /// <summary>
+    /// Gets or sets the symbol to use for all camera markers.
+    /// </summary>
+    public MarkerSymbol AllCamerasMarkerSymbol { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to show markers for the locations of the cameras associated with the images in the control.
+    /// </summary>
+    public bool ShowCameraLocations
+    {
+        get => _showCameraLocations;
+        set
+        {
+            if (_showCameraLocations == value) { return; }
+
+            SetProperty(ref _showCameraLocations, value);
+            UpdateCameraMarkers();
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to show camera locations on the display.
+    /// </summary>
+    /// <remarks>
+    /// This property only has an effect if <see cref="ShowCameraLocations"/> is set to <c>true</c>.
+    /// </remarks>
+    public bool ShowCameraLocationsOnDisplay
+    {
+        get => _showCameraLocationsOnDisplay;
+        set
+        {
+            if (_showCameraLocationsOnDisplay == value) { return; }
+
+            SetProperty(ref _showCameraLocationsOnDisplay, value);
+            UpdateCameraMarkers();
+        }
+    }
+
+    /// <summary>
+    /// Clears all extant markers save the search point marker.
+    /// </summary>
+    public ICommand ClearMarkersCommand { get; private set; }
+
+    /// <summary>
+    /// Adds a marker at a geographic location. The marker uses <see cref="NewMarkerSymbol"/> unless
+    /// overridden using the <paramref name="symbol"/> parameter.
+    /// </summary>
+    /// <remarks>
+    /// New markers will be discarded if <see cref="AllowAddingMarkers"/> is <c>false</c>.
+    /// </remarks>
+    /// <param name="location">The geographic location of the marker.</param>
+    /// <param name="symbol">The optional symbol to use for the marker.</param>
+    public void AddMarkerLocation(MapPoint location, MarkerSymbol? symbol = null)
+    {
+        if (AllowAddingMarkers)
+            Markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), symbol ?? NewMarkerSymbol));
     }
 
     private void Markers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -388,92 +470,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 break;
         }
     }
-
-    private GraphicsOverlay _markersOverlay;
-
-    /// <summary>
-    /// Gets the graphics overlay that contains the marker graphics.
-    /// </summary>
-    public GraphicsOverlay MarkersOverlay => _markersOverlay;
-
-    /// <summary>
-    /// Gets or sets the default symbology to use when adding new markers.
-    /// </summary>
-    public MarkerSymbol NewMarkerSymbol { get; set; }
-
-    /// <summary>
-    /// Gets or sets the symbol to use for the search point marker.
-    /// </summary>
-    public MarkerSymbol SearchPointMarkerSymbol { get; set; }
-    private static readonly MarkerTag SearchPointMarkerTag = new MarkerTag("SearchPointMarker");
-
-    /// <summary>
-    /// Gets or sets the symbol to use for the current camera marker.
-    /// </summary>
-    public MarkerSymbol SelectedCameraMarkerSymbol { get; set; }
-    private static readonly MarkerTag SelectedImageMarkerTag = new MarkerTag("SelectedImageMarker", int.MaxValue);
-
-    /// <summary>
-    /// Gets or sets the symbol to use for all camera markers.
-    /// </summary>
-    public MarkerSymbol AllCamerasMarkerSymbol { get; set; }
-    private static readonly MarkerTag AllCamerasMarkerTag = new MarkerTag("AllSelectedCamerasMarker");
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to show markers for the locations of the cameras associated with the images in the control.
-    /// </summary>
-    public bool ShowCameraLocations
-    {
-        get => _showCameraLocations;
-        set
-        {
-            if (_showCameraLocations == value) { return; }
-
-            SetProperty(ref _showCameraLocations, value);
-            UpdateCameraMarkers();
-        }
-    }
-    private bool _showCameraLocations = true;
-
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to show camera locations on the display.
-    /// </summary>
-    /// <remarks>
-    /// This property only has an effect if <see cref="ShowCameraLocations"/> is set to <c>true</c>.
-    /// </remarks>
-    public bool ShowCameraLocationsOnDisplay
-    {
-        get => _showCameraLocationsOnDisplay;
-        set
-        {
-            if (_showCameraLocationsOnDisplay == value) { return; }
-
-            SetProperty(ref _showCameraLocationsOnDisplay, value);
-            UpdateCameraMarkers();
-        }
-    }
-    private bool _showCameraLocationsOnDisplay = false;
-
-    /// <summary>
-    /// Adds a marker at a geographic location. The marker uses <see cref="NewMarkerSymbol"/> unless
-    /// overridden using the <paramref name="symbol"/> parameter.
-    /// </summary>
-    /// <remarks>
-    /// New markers will be discarded if <see cref="AllowAddingMarkers"/> is <c>false</c>.
-    /// </remarks>
-    /// <param name="location">The geographic location of the marker.</param>
-    /// <param name="symbol">The optional symbol to use for the marker.</param>
-    public void AddMarkerLocation(MapPoint location, MarkerSymbol? symbol = null)
-    {
-        if (AllowAddingMarkers)
-            Markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), symbol ?? NewMarkerSymbol));
-    }
-
-    /// <summary>
-    /// Clears all extant markers save the search point marker.
-    /// </summary>
-    public ICommand ClearMarkersCommand { get; private set; }
 
     private void ClearMarkers()
     {
@@ -545,9 +541,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         public string Identifier = identifier;
         public int ZIndex = zIndex;
     }
-    #endregion Markers
+#endregion Markers
 
-    #region INotifyPropertyChanged
+#region INotifyPropertyChanged
     /// <inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -559,6 +555,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-    #endregion INotifyPropertyChanged
+#endregion INotifyPropertyChanged
 }
 #endif
