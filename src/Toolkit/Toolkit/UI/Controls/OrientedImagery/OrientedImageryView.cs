@@ -8,12 +8,18 @@ using System.Collections.ObjectModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
+/// <summary>
+/// Displays oriented imagery and provides controls for managing image selection, footprints, and markers.
+/// </summary>
 public partial class OrientedImageryView
 {
     private const string ImageDisplayName = "PART_ImageDisplay";
 
     private OrientedImageDisplay? _display;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
+    /// </summary>
     public OrientedImageryView() : base()
     {
         _display = new OrientedImageDisplay();
@@ -158,18 +164,30 @@ public partial class OrientedImageryView
             _display.DisplayBackgroundColor = displayBackgroundColor;
     }
 
+    /// <summary>
+    /// Gets or sets the oriented imagery layer associated with this view.
+    /// </summary>
+    /// <remarks>
+    /// This is a thin wrapper over the <see cref="OrientedImageryViewModel.OrientedImageryLayer"/> property.
+    /// </remarks>
     public OrientedImageryLayer OrientedImageryLayer
     {
         get => ViewModel.OrientedImageryLayer;
         set { ViewModel.OrientedImageryLayer = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/> on which marker graphics are displayed.
+    /// </summary>
     public GeoView? GeoView
     {
         get => (GeoView?)GetValue(GeoViewProperty);
         set => SetValue(GeoViewProperty, value);
     }
 
+    /// <summary>
+    /// Identifies the <see cref="GeoView"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty GeoViewProperty =
         PropertyHelper.CreateProperty<GeoView?, OrientedImageryView>(nameof(GeoView), null, (s, oldValue, newValue) => s.UpdateGeoView(oldValue, newValue));
 
