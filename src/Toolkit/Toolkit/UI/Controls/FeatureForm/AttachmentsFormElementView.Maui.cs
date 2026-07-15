@@ -169,7 +169,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 var addAttachment = Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromFile");
                 var camera = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithCamera");
                 
-                var result = await page.DisplayActionSheet(addAttachment, null, null, camera, addAttachment);
+                var result = await page.DisplayActionSheetAsync(addAttachment, null, null, camera, addAttachment);
                 if (result == camera)
                 {
                     try
@@ -192,7 +192,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                                 if (!contentType.Contains('/'))
                                     contentType = "image/" + contentType;
 #endif
-                                Element.AddAttachment(photo.FileName, contentType, data);
+                                await Element.AddAttachmentAsync(photo.FileName, contentType, data);
                             }
                             EvaluateExpressions();
                             (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
@@ -220,7 +220,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 var result = await FilePicker.Default.PickAsync(new());
                 if (result != null)
                 {
-                    Element.AddAttachment(result.FileName, MimeTypeMap.GetMimeType(new FileInfo(result.FileName).Extension), File.ReadAllBytes(result.FullPath));
+                    await Element.AddAttachmentAsync(result.FileName, MimeTypeMap.GetMimeType(new FileInfo(result.FileName).Extension), File.ReadAllBytes(result.FullPath));
                     EvaluateExpressions();
                     (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
                 }

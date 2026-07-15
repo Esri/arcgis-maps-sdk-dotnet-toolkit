@@ -42,7 +42,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 
             }
             if (error != null)
-                await DisplayAlert(error.GetType().Name, error.Message, "OK");
+                await DisplayAlertAsync(error.GetType().Name, error.Message, "OK");
         }
         public IEnumerable<GeoElement> GetGeoElements(IEnumerable<IdentifyLayerResult> results)
         {
