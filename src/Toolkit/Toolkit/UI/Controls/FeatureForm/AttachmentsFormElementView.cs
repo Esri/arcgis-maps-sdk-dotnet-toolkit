@@ -40,6 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private WeakEventListener<AttachmentsFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
         private WeakEventListener<AttachmentsFormElementView, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _attachmentsCollectionChangedListener;
+        private bool _isAttachmentsLoaded;
 
         /// <summary>
         /// Initializes an instance of the <see cref="AttachmentsFormElementView"/> class.
@@ -81,6 +82,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async void OnElementPropertyChanged(AttachmentsFormElement? oldValue, AttachmentsFormElement? newValue)
         {
+            _isAttachmentsLoaded = newValue is null;
+
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
@@ -118,6 +121,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     await newValue.FetchAttachmentsAsync();
                 }
                 catch (System.Exception) { }
+                finally
+                {
+                    _isAttachmentsLoaded = true;
+                    UpdateAddAttachmentButtonState();
+                }
             }
         }
 
@@ -143,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private bool CanAddAttachment()
         {
-            if (Element is null || !Element.IsEditable)
+            if (Element is null || !Element.IsEditable || !_isAttachmentsLoaded)
             {
                 return false;
             }
