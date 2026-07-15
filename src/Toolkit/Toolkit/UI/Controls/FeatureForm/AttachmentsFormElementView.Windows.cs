@@ -87,11 +87,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 #endif
 
-        private
-#if WINDOWS_XAML
-            async
-#endif
-            void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
+        private async void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
             if (Element is null || !Element.IsEditable) return;
             try
@@ -104,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (fileInfo.Exists)
                     {
                         _scrollToEnd = true;
-                        Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                        await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
                         EvaluateExpressions();
                     }
                 }
@@ -128,9 +124,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     using var ms = new MemoryStream();
                     using var filestream = await file.OpenStreamForReadAsync();
                     await filestream.CopyToAsync(ms);
-                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
+                    await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
 #else
-                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                    await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
 #endif
                     EvaluateExpressions();
                 }
