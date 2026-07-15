@@ -172,11 +172,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
     }
 
-    protected override void OnMarkersChanged() => RebuildMarkers();
-
     // Re-subscribes to each current marker's PropertyChanged and re-resolves the whole set. Called when the collection
     // is replaced or changes; a marker's own property change re-resolves without re-subscribing.
-    private void RebuildMarkers()
+    protected override void RebuildMarkers()
     {
         foreach (var listener in _markerListeners)
         {
@@ -184,24 +182,57 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
 
         _markerListeners.Clear();
+        AddMarkers(Markers ?? []);
+    }
 
-        if (Markers is not null)
+    protected override void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers)
+    {
+        foreach (OrientedImageMarker marker in newMarkers)
         {
-            foreach (OrientedImageMarker marker in Markers)
-            {
-                // Weak, like the collection subscription in SetMarkers: an app-owned long-lived marker must not
-                // keep the display (and through it the control and its GPU surface) alive after the control is gone.
-                var listener = new WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
-                {
-                    OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
-                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
-                };
-                marker.PropertyChanged += listener.OnEvent;
-                _markerListeners.Add(listener);
-            }
+            SetMarkerListener(marker, out var listener);
+            _markerListeners.Add(listener);
         }
 
         _ = ResolveMarkersAsync();
+    }
+
+    protected override void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index)
+    {
+        _markerListeners[index].Detach();
+        SetMarkerListener(newMarker, out var listener);
+        _markerListeners[index] = listener;
+
+        _ = ResolveMarkersAsync();
+    }
+
+    protected override void RemoveMarkers(int startingIndex, IEnumerable<OrientedImageMarker> removedMarkers)
+    {
+        foreach (var marker in removedMarkers)
+        {
+            _markerListeners[startingIndex].Detach();
+            _markerListeners.RemoveAt(startingIndex);
+        }
+
+        _ = ResolveMarkersAsync();
+    }
+
+    protected override void MoveMarkers(int oldIndex, int newIndex)
+    {
+        var temp = _markerListeners[oldIndex];
+        _markerListeners[oldIndex] = _markerListeners[newIndex];
+        _markerListeners[newIndex] = temp;
+
+        _ = ResolveMarkersAsync();
+    }
+
+    private void SetMarkerListener(OrientedImageMarker marker, out WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs> listener)
+    {
+        listener = new WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
+        {
+            OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
+            OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+        };
+        marker.PropertyChanged += listener.OnEvent;
     }
 
     // Dispatch so the snapshot of the app-owned marker is taken on the UI thread (the app may raise PropertyChanged off it).

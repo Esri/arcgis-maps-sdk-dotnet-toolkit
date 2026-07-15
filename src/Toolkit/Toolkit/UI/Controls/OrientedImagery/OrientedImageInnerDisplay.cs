@@ -158,13 +158,36 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
             // Weak: the app-owned collection must not keep a discarded display alive through this subscription.
             _markersListener = new WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
             {
-                OnEventAction = static (instance, source, eventArgs) => instance.OnMarkersChanged(),
+                OnEventAction = static (instance, source, eventArgs) => instance.OnMarkersCollectionChanged(source, eventArgs),
                 OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
             };
             incc.CollectionChanged += _markersListener.OnEvent;
         }
 
-        OnMarkersChanged();
+        RebuildMarkers();
+    }
+
+    internal void OnMarkersCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                AddMarkers(e.NewItems!.OfType<OrientedImageMarker>());
+                break;
+            case NotifyCollectionChangedAction.Replace:
+                if (e.OldItems![0] is OrientedImageMarker oldMarker && e.NewItems![0] is OrientedImageMarker newMarker)
+                    ReplaceMarker(oldMarker, newMarker, e.OldStartingIndex);
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                RemoveMarkers(e.OldStartingIndex, e.OldItems!.OfType<OrientedImageMarker>());
+                break;
+            case NotifyCollectionChangedAction.Move:
+                MoveMarkers(e.OldStartingIndex, e.NewStartingIndex);
+                break;
+            case NotifyCollectionChangedAction.Reset:
+                RebuildMarkers();
+                break;
+        }
     }
 
     /// <summary>Enables or disables automatic recomputation of the footprint as the view changes.</summary>
@@ -194,8 +217,20 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     // image changes or goes away, and by derived code when a present attempt yields nothing displayable.
     protected abstract void ClearPresentation();
 
-    // A new marker collection was set or the current one changed; rebuild subscriptions and re-render.
-    protected abstract void OnMarkersChanged();
+    // A new marker collection was set; rebuild subscriptions and re-render.
+    protected abstract void RebuildMarkers();
+
+    // Markers were added to the collection; add and subscribe them then re-render.
+    protected abstract void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers);
+
+    // A marker was replaced in the collection; remove and unsubscribe the old marker, add and subscribe the new one, then re-render.
+    protected abstract void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index);
+
+    // Markers were removed from the collection; remove and unsubscribe markers then re-render.
+    protected abstract void RemoveMarkers(int startingIndex, IEnumerable<OrientedImageMarker> removedMarkers);
+
+    // A marker was moved the collection; move internal markers collection to match.
+    protected abstract void MoveMarkers(int oldIndex, int newIndex);
 
     // Subscribe/unsubscribe the platform view-change event that should drive UpdateFootprintCorners.
     protected abstract void OnAutoUpdateFootprintChanged(bool enabled);
