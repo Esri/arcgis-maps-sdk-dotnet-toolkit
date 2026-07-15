@@ -78,10 +78,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             label.SetBinding(Label.TextProperty, static (AttachmentsFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             label.SetBinding(Label.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
+            label.Opacity = 0.7;
 
             var chipRow = new HorizontalStackLayout() { Spacing = 6, Margin = new Thickness(0, 2, 0, 0) };
-            var minBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false };
-            var maxBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false };
+            var minBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Opacity = .7 };
+            var maxBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Opacity = .7 };
             var minBadgeBorder = new Border()
             {
                 Stroke = new SolidColorBrush(Colors.Gray),

@@ -474,7 +474,7 @@
                             </Button>
                         </Grid>
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" x:Name="ItemsScrollView">
-                            <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}">
+                          <ItemsControl MinHeight="75" ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />

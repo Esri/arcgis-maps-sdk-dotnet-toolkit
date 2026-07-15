@@ -325,7 +325,7 @@
                             </Button>
                         </Grid>
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" x:Name="ItemsScrollView">
-                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Attachments}" IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable}">
+                            <ItemsControl x:Name="AttachmentItemsControl" MinHeight="75" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Attachments}" IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
