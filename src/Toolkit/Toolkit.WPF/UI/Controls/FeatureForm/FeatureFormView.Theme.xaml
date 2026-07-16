@@ -793,6 +793,11 @@
                                                 <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                             </DataTemplate>
                                         </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                        <primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
+                                          <DataTemplate>
+                                            <primitives:AttachmentsFormElementView Element="{Binding}" />
+                                          </DataTemplate>
+                                        </primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
                                         <primitives:FormElementItemsControl.GroupFormElementTemplate>
                                             <DataTemplate>
                                                 <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
@@ -819,6 +824,11 @@
                                                                     <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                                                 </DataTemplate>
                                                             </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                                            <primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
+                                                              <DataTemplate>
+                                                                <primitives:AttachmentsFormElementView Element="{Binding}" />
+                                                              </DataTemplate>
+                                                            </primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
                                                         </primitives:FormElementItemsControl>
                                                     </Expander>
                                                 </StackPanel>

@@ -320,7 +320,7 @@
                                 </StackPanel>
                                 <TextBlock x:Name="AttachmentErrorLabel" Foreground="Red" Margin="0,2,0,0" TextWrapping="Wrap" Visibility="Collapsed" />
                             </StackPanel>
-                            <Button x:Name="AddAttachmentButton" BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
+                            <Button x:Name="AddAttachmentButton" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
                                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Padding="5" Grid.Column="1" Grid.RowSpan="2">
                                 <TextBlock Text="" FontFamily="Segoe MDL2 Assets" />
                             </Button>
@@ -634,6 +634,11 @@
                                                             <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                                         </DataTemplate>
                                                     </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                                    <primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
+                                                        <DataTemplate>
+                                                            <primitives:AttachmentsFormElementView Element="{Binding}" />
+                                                        </DataTemplate>
+                                                    </primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
                                                     <primitives:FormElementItemsControl.GroupFormElementTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
@@ -660,6 +665,11 @@
                                                                                 <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                                                             </DataTemplate>
                                                                         </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                                                        <primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
+                                                                            <DataTemplate>
+                                                                                <primitives:AttachmentsFormElementView Element="{Binding}" />
+                                                                            </DataTemplate>
+                                                                        </primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
                                                                     </primitives:FormElementItemsControl>
                                                                 </Expander>
                                                             </StackPanel>

@@ -39,6 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class AttachmentsFormElementView
     {
         private WeakEventListener<AttachmentsFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
+        private WeakEventListener<AttachmentsFormElementView, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _attachmentsCollectionChangedListener;
+        private bool _isAttachmentsLoaded;
 
         /// <summary>
         /// Initializes an instance of the <see cref="AttachmentsFormElementView"/> class.
@@ -80,15 +82,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async void OnElementPropertyChanged(AttachmentsFormElement? oldValue, AttachmentsFormElement? newValue)
         {
-            if (oldValue?.Attachments is INotifyCollectionChanged oldAttachments)
-            {
-                oldAttachments.CollectionChanged -= Attachments_CollectionChanged;
-            }
+            _isAttachmentsLoaded = newValue is null;
 
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
                 _elementPropertyChangedListener = null;
+            }
+            if (oldValue?.Attachments is INotifyCollectionChanged oldAttachments)
+            {
+                _attachmentsCollectionChangedListener?.Detach();
+                _attachmentsCollectionChangedListener = null;
             }
             if (newValue is INotifyPropertyChanged inpcNew)
             {
@@ -99,13 +103,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 };
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
-
             if (newValue?.Attachments is INotifyCollectionChanged newAttachments)
             {
-                newAttachments.CollectionChanged -= Attachments_CollectionChanged;
-                newAttachments.CollectionChanged += Attachments_CollectionChanged;
+                _attachmentsCollectionChangedListener = new WeakEventListener<AttachmentsFormElementView, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, newAttachments)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.Attachments_CollectionChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
+                };
+                newAttachments.CollectionChanged += _attachmentsCollectionChangedListener.OnEvent;
             }
-
             UpdateVisibility();
             UpdateAddAttachmentButtonState();
             UpdateMinMaxAttachmentText();
@@ -116,6 +122,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     await newValue.FetchAttachmentsAsync();
                 }
                 catch (System.Exception) { }
+                finally
+                {
+                    _isAttachmentsLoaded = true;
+                    UpdateAddAttachmentButtonState();
+                }
             }
         }
 
@@ -164,7 +175,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private bool CanAddAttachment()
         {
-            if (Element is null || !Element.IsEditable)
+            if (Element is null || !Element.IsEditable || !_isAttachmentsLoaded)
             {
                 return false;
             }

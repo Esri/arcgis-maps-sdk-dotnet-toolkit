@@ -101,7 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Element is null || !Element.IsEditable) return;
+            if (!CanAddAttachment()) return;
             try
             {
 #if WPF
@@ -109,11 +109,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (openFileDialog.ShowDialog() == true)
                 {
                     var fileInfo = new FileInfo(openFileDialog.FileName);
-                    if (fileInfo.Exists)
+                    if (fileInfo.Exists && CanAddAttachment())
                     {
                         _scrollToEnd = true;
                         await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
                         EvaluateExpressions();
+                        UpdateAddAttachmentButtonState();
                     }
                 }
 #elif WINDOWS_XAML
@@ -132,6 +133,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     var fileInfo = new FileInfo(file.Path);
                     _scrollToEnd = true;
+                    if (!CanAddAttachment())
+                    {
+                        return;
+                    }
 #if WINDOWS_UWP
                     using var ms = new MemoryStream();
                     using var filestream = await file.OpenStreamForReadAsync();
@@ -141,6 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
 #endif
                     EvaluateExpressions();
+                    UpdateAddAttachmentButtonState();
                 }
 #endif
             }
