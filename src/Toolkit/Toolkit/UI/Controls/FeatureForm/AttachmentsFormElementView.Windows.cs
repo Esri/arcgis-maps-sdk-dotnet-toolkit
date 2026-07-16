@@ -51,6 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _addAttachmentButton.Click += AddAttachmentButton_Click;
             }
+            UpdateAddAttachmentButtonState();
             if (GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
             {
 #if WPF
@@ -87,13 +88,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 #endif
 
-        private
-#if WINDOWS_XAML
-            async
-#endif
-            void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
+        private async void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Element is null || !Element.IsEditable) return;
+            if (!CanAddAttachment()) return;
             try
             {
 #if WPF
@@ -101,11 +98,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (openFileDialog.ShowDialog() == true)
                 {
                     var fileInfo = new FileInfo(openFileDialog.FileName);
-                    if (fileInfo.Exists)
+                    if (fileInfo.Exists && CanAddAttachment())
                     {
                         _scrollToEnd = true;
-                        Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                        await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
                         EvaluateExpressions();
+                        UpdateAddAttachmentButtonState();
                     }
                 }
 #elif WINDOWS_XAML
@@ -124,21 +122,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     var fileInfo = new FileInfo(file.Path);
                     _scrollToEnd = true;
+                    if (!CanAddAttachment())
+                    {
+                        return;
+                    }
 #if WINDOWS_UWP
                     using var ms = new MemoryStream();
                     using var filestream = await file.OpenStreamForReadAsync();
                     await filestream.CopyToAsync(ms);
-                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
+                    await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
 #else
-                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                    await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
 #endif
                     EvaluateExpressions();
+                    UpdateAddAttachmentButtonState();
                 }
 #endif
             }
             catch (System.Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+            }
+        }
+
+        private partial void UpdateAddAttachmentButtonState()
+        {
+            if (_addAttachmentButton is not null)
+            {
+                _addAttachmentButton.IsEnabled = CanAddAttachment();
             }
         }
     }
