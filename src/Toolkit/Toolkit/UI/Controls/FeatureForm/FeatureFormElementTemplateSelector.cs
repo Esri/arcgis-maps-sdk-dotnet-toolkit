@@ -28,6 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private static DataTemplate DefaultGroupElementTemplate;
         private static DataTemplate DefaultTextFormElementTemplate;
         private static DataTemplate DefaultUtilityAssociationsFormElementTemplate;
+        private static DataTemplate DefaultAttachmentsFormElementTemplate;
         private static DataTemplate UnsupportedFormElementTemplate;
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
@@ -62,6 +63,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 view.SetBinding(UtilityAssociationsFormElementView.ElementProperty, Binding.SelfPath);
                 return view;
             });
+            DefaultAttachmentsFormElementTemplate = new DataTemplate(() =>
+            {
+                var view = new AttachmentsFormElementView() { Margin = new Thickness(0, 0, 0, 10) };
+                view.SetBinding(AttachmentsFormElementView.ElementProperty, Binding.SelfPath);
+                return view;
+            });
             UnsupportedFormElementTemplate = new DataTemplate(() =>
             {
                 return new Grid() { IsVisible = false };
@@ -74,6 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             GroupFormElementTemplate = DefaultGroupElementTemplate;
             TextFormElementTemplate = DefaultTextFormElementTemplate;
             UtilityAssociationsFormElementTemplate = DefaultUtilityAssociationsFormElementTemplate;
+            AttachmentsFormElementTemplate = DefaultAttachmentsFormElementTemplate;
         }
 
         public DataTemplate FieldFormElementTemplate { get; set; }
@@ -83,6 +91,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         public DataTemplate TextFormElementTemplate { get; set; }
 
         public DataTemplate UtilityAssociationsFormElementTemplate { get; set; }
+
+        public DataTemplate AttachmentsFormElementTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
@@ -101,6 +111,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             else if (item is UtilityAssociationsFormElement)
             {
                 return UtilityAssociationsFormElementTemplate;
+            }
+            else if (item is AttachmentsFormElement)
+            {
+                return AttachmentsFormElementTemplate;
             }
             return UnsupportedFormElementTemplate; // Renders empty / skips
         }

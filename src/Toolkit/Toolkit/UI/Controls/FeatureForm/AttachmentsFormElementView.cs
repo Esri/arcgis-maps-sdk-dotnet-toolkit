@@ -18,6 +18,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Collections.Specialized;
 using System.ComponentModel;
 #if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -38,6 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class AttachmentsFormElementView
     {
         private WeakEventListener<AttachmentsFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
+        private WeakEventListener<AttachmentsFormElementView, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _attachmentsCollectionChangedListener;
+        private bool _isAttachmentsLoaded;
 
         /// <summary>
         /// Initializes an instance of the <see cref="AttachmentsFormElementView"/> class.
@@ -79,10 +82,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async void OnElementPropertyChanged(AttachmentsFormElement? oldValue, AttachmentsFormElement? newValue)
         {
+            _isAttachmentsLoaded = newValue is null;
+
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
                 _elementPropertyChangedListener = null;
+            }
+            if (oldValue?.Attachments is INotifyCollectionChanged oldAttachments)
+            {
+                _attachmentsCollectionChangedListener?.Detach();
+                _attachmentsCollectionChangedListener = null;
             }
             if (newValue is INotifyPropertyChanged inpcNew)
             {
@@ -93,7 +103,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 };
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
+            if (newValue?.Attachments is INotifyCollectionChanged newAttachments)
+            {
+                _attachmentsCollectionChangedListener = new WeakEventListener<AttachmentsFormElementView, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, newAttachments)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.Attachments_CollectionChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
+                };
+                newAttachments.CollectionChanged += _attachmentsCollectionChangedListener.OnEvent;
+            }
             UpdateVisibility();
+            UpdateAddAttachmentButtonState();
             if (newValue != null)
             {
                 try
@@ -101,6 +121,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     await newValue.FetchAttachmentsAsync();
                 }
                 catch (System.Exception) { }
+                finally
+                {
+                    _isAttachmentsLoaded = true;
+                    UpdateAddAttachmentButtonState();
+                }
             }
         }
 
@@ -110,6 +135,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 this.Dispatch(UpdateVisibility);
             }
+
+            if (e.PropertyName == nameof(AttachmentsFormElement.IsEditable) ||
+                e.PropertyName == nameof(AttachmentsFormElement.MaxAttachmentCount) ||
+                e.PropertyName == nameof(AttachmentsFormElement.Attachments))
+            {
+                this.Dispatch(UpdateAddAttachmentButtonState);
+            }
+        }
+
+        private void Attachments_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            this.Dispatch(UpdateAddAttachmentButtonState);
+        }
+
+        private bool CanAddAttachment()
+        {
+            if (Element is null || !Element.IsEditable || !_isAttachmentsLoaded)
+            {
+                return false;
+            }
+
+            return Element.MaxAttachmentCount < 0 || Element.Attachments.Count < Element.MaxAttachmentCount;
         }
 
         private void UpdateVisibility()
@@ -120,5 +167,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             this.Visibility = Element?.IsVisible == true ? Visibility.Visible : Visibility.Collapsed;
 #endif
         }
+
+        private partial void UpdateAddAttachmentButtonState();
     }
 }
