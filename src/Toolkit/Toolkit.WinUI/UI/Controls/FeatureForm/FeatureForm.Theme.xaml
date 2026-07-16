@@ -323,8 +323,8 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <primitives:FormAttachmentView Attachment="{Binding}" Element="{Binding ElementName=AttachmentItemsControl, Path=DataContext}" />
+                                    <DataTemplate x:DataType="forms:FormAttachment">
+                                        <primitives:FormAttachmentView Attachment="{x:Bind}" Element="{Binding ElementName=AttachmentItemsControl, Path=DataContext}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
