@@ -193,6 +193,22 @@
     <value>Less than minimum value</value>
     <comment>Input validation of entered number is below the minimum require value</comment>
   </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>The maximum number of attachments allowed is {0}.</value>
+    <comment>Validation error shown when the number of attachments exceeds the allowed maximum of {0}.</comment>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>Max: {0}</value>
+    <comment>Caption badge showing the maximum allowed number of attachments, where {0} is the count.</comment>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>Min: {0}</value>
+    <comment>Caption badge showing the minimum required number of attachments, where {0} is the count.</comment>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>At least {0} attachment(s) required.</value>
+    <comment>Validation error shown when fewer than the minimum required attachments are present, where {0} is the required count.</comment>
+  </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>No attachments</value>
     <comment>The text displayed in the attachment list when there are no attachments.</comment>

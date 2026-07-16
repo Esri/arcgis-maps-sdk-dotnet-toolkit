@@ -318,6 +318,7 @@
                                         <TextBlock x:Name="MaxAttachmentBadgeText" FontSize="11" Foreground="{ThemeResource TextFillColorPrimaryBrush}" Opacity=".7"/>
                                     </Border>
                                 </StackPanel>
+                                <TextBlock x:Name="AttachmentErrorLabel" Foreground="Red" Margin="0,2,0,0" TextWrapping="Wrap" Visibility="Collapsed" />
                             </StackPanel>
                             <Button x:Name="AddAttachmentButton" BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
                                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Padding="5" Grid.Column="1" Grid.RowSpan="2">

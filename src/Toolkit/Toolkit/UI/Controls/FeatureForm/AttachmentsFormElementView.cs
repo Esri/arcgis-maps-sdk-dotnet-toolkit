@@ -18,6 +18,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Collections.Specialized;
 using System.ComponentModel;
 #if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -79,6 +80,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async void OnElementPropertyChanged(AttachmentsFormElement? oldValue, AttachmentsFormElement? newValue)
         {
+            if (oldValue?.Attachments is INotifyCollectionChanged oldAttachments)
+            {
+                oldAttachments.CollectionChanged -= Attachments_CollectionChanged;
+            }
+
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
@@ -93,6 +99,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 };
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
+
+            if (newValue?.Attachments is INotifyCollectionChanged newAttachments)
+            {
+                newAttachments.CollectionChanged -= Attachments_CollectionChanged;
+                newAttachments.CollectionChanged += Attachments_CollectionChanged;
+            }
+
             UpdateVisibility();
             UpdateAddAttachmentButtonState();
             UpdateMinMaxAttachmentText();
@@ -120,8 +133,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 this.Dispatch(UpdateAddAttachmentButtonState);
             }
 
+            if (e.PropertyName == nameof(AttachmentsFormElement.Attachments))
+            {
+                if (sender is AttachmentsFormElement element && element.Attachments is INotifyCollectionChanged collection)
+                {
+                    collection.CollectionChanged -= Attachments_CollectionChanged;
+                    collection.CollectionChanged += Attachments_CollectionChanged;
+                }
+
+                this.Dispatch(UpdateMinMaxAttachmentText);
+            }
+
             if (e.PropertyName == nameof(AttachmentsFormElement.MinAttachmentCount) ||
                 e.PropertyName == nameof(AttachmentsFormElement.MaxAttachmentCount))
+            {
+                this.Dispatch(UpdateMinMaxAttachmentText);
+            }
+
+            if (e.PropertyName == "ValidationErrors")
             {
                 this.Dispatch(UpdateMinMaxAttachmentText);
             }
@@ -130,6 +159,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void Attachments_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             this.Dispatch(UpdateAddAttachmentButtonState);
+            this.Dispatch(UpdateMinMaxAttachmentText);
         }
 
         private bool CanAddAttachment()
@@ -155,11 +185,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (Element is null)
             {
-                UpdateMinMaxAttachmentTextCore(0u, 0u);
+                UpdateMinMaxAttachmentTextCore(string.Empty, false, string.Empty, false, string.Empty, false);
                 return;
             }
 
-            UpdateMinMaxAttachmentTextCore(Element.MinAttachmentCount, Element.MaxAttachmentCount);
+            uint minAttachmentCount = Element.MinAttachmentCount;
+            uint maxAttachmentCount = Element.MaxAttachmentCount;
+            uint attachmentCount = (uint)Element.Attachments.Count;
+            var validationErrors = GetValidationErrors(Element);
+
+            bool minVisible = minAttachmentCount > 0;
+            bool maxVisible = HasConfiguredMaxAttachmentCount(maxAttachmentCount);
+            bool hasMinError = minVisible && (HasMinimumAttachmentCountError(validationErrors) || attachmentCount < minAttachmentCount);
+            bool hasMaxError = maxVisible && (HasMaximumAttachmentCountError(validationErrors) || attachmentCount > maxAttachmentCount);
+            bool hasError = hasMinError || hasMaxError;
+
+            string minText = GetMinimumAttachmentCountLabel(minAttachmentCount);
+            string maxText = GetMaximumAttachmentCountLabel(maxAttachmentCount);
+            string errorText = GetAttachmentCountErrorMessage(hasMinError, minAttachmentCount, hasMaxError, maxAttachmentCount);
+
+            UpdateMinMaxAttachmentTextCore(minText, minVisible && !hasError, maxText, maxVisible && !hasError, errorText, hasError);
         }
 
         private partial void UpdateAddAttachmentButtonState();
@@ -169,6 +214,77 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return maxAttachmentCount > 0 && maxAttachmentCount < uint.MaxValue;
         }
 
-        private partial void UpdateMinMaxAttachmentTextCore(uint minAttachmentCount, uint maxAttachmentCount);
+        private static IEnumerable<Exception> GetValidationErrors(AttachmentsFormElement element)
+        {
+            return element.ValidationErrors;
+        }
+
+        private static bool HasMinimumAttachmentCountError(IEnumerable<Exception> errors)
+        {
+            foreach (var error in errors)
+            {
+                if (error is FeatureFormLessThanMinimumAttachmentCountException)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool HasMaximumAttachmentCountError(IEnumerable<Exception> errors)
+        {
+            foreach (var error in errors)
+            {
+                if (error is FeatureFormExceedsMaximumAttachmentCountException)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static string GetMinimumAttachmentCountErrorMessage(uint minAttachmentCount)
+        {
+            return string.Format(Properties.Resources.GetString("FeatureFormMinimumAttachmentCountRequired")!, minAttachmentCount);
+        }
+
+        private static string GetMaximumAttachmentCountErrorMessage(uint maxAttachmentCount)
+        {
+            return string.Format(Properties.Resources.GetString("FeatureFormMaximumAttachmentCountAllowed")!, maxAttachmentCount);
+        }
+
+        private static string GetMinimumAttachmentCountLabel(uint minAttachmentCount)
+        {
+            return string.Format(Properties.Resources.GetString("FeatureFormMinimumAttachmentCountLabel")!, minAttachmentCount);
+        }
+
+        private static string GetMaximumAttachmentCountLabel(uint maxAttachmentCount)
+        {
+            return string.Format(Properties.Resources.GetString("FeatureFormMaximumAttachmentCountLabel")!, maxAttachmentCount);
+        }
+
+        private static string GetAttachmentCountErrorMessage(bool hasMinError, uint minAttachmentCount, bool hasMaxError, uint maxAttachmentCount)
+        {
+            if (hasMinError && hasMaxError)
+            {
+                return $"{GetMinimumAttachmentCountErrorMessage(minAttachmentCount)} {GetMaximumAttachmentCountErrorMessage(maxAttachmentCount)}";
+            }
+
+            if (hasMinError)
+            {
+                return GetMinimumAttachmentCountErrorMessage(minAttachmentCount);
+            }
+
+            if (hasMaxError)
+            {
+                return GetMaximumAttachmentCountErrorMessage(maxAttachmentCount);
+            }
+
+            return string.Empty;
+        }
+
+        private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible);
     }
 }

@@ -129,6 +129,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Children.Add(header);
             root.Children.Add(label);
             root.Children.Add(chipRow);
+            root.Children.Add(errorLabel);
 
             CollectionView itemsView = new CollectionView()
             {
