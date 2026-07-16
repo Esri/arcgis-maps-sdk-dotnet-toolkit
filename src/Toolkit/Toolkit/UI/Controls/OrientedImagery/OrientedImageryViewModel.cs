@@ -41,9 +41,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         _images = new List<OrientedImage>();
 
-        SelectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Orange);
-        SelectedFootprintOutlineColor = System.Drawing.Color.Orange;
-        UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Blue);
+        SelectedFootprintFillColor = System.Drawing.Color.FromArgb(32, System.Drawing.Color.Red);
+        SelectedFootprintOutlineColor = System.Drawing.Color.Red;
+        UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(16, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
         SelectNextImageCommand = new Command(
@@ -352,7 +352,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _showCameraLocationsOnDisplay = false;
     private static readonly MarkerTag SearchPointMarkerTag = new MarkerTag("SearchPointMarker");
     private static readonly MarkerTag SelectedImageMarkerTag = new MarkerTag("SelectedImageMarker", int.MaxValue);
-    private static readonly MarkerTag AllCamerasMarkerTag = new MarkerTag("AllSelectedCamerasMarker");
+    private static readonly MarkerTag AllCamerasMarkerTag = new MarkerTag("AllSelectedCamerasMarker", -1);
 
     /// <summary>
     /// Gets the collection of markers managed by this view model.
