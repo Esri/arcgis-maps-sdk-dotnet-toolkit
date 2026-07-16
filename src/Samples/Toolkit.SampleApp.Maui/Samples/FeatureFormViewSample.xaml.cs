@@ -33,7 +33,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
             catch (Exception ex)
             {
-                await DisplayAlert(ex.GetType().Name, ex.Message, "OK");
+                await DisplayAlertAsync(ex.GetType().Name, ex.Message, "OK");
             }
         }
 

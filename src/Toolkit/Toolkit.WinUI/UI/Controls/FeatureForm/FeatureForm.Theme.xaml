@@ -309,7 +309,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Label}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
                             <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" Grid.Row="1" />
-                            <Button x:Name="AddAttachmentButton" BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
+                            <Button x:Name="AddAttachmentButton" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
                                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Padding="5" Grid.Column="1" Grid.RowSpan="2">
                                 <TextBlock Text="" FontFamily="Segoe MDL2 Assets" />
                             </Button>
