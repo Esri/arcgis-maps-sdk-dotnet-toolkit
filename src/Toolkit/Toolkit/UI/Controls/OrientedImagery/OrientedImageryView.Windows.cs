@@ -8,9 +8,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = ImageDisplayName, Type = typeof(OrientedImageDisplay))]
 public partial class OrientedImageryView : ItemsControl
 {
+    private OrientedImageryViewTemplateSelector? _defaultItemTemplateSelector;
+
     private void SetToolbarViewModels(OrientedImageryViewModel? viewModel)
     {
-        foreach (var toolbarVM in Items.OfType<OrientedImageryViewToolbarViewModelBase>())
+        foreach (var toolbarVM in Items.OfType<OrientedImageryToolbarItemBase>())
         {
             toolbarVM.MainViewModel = viewModel;
         }
@@ -21,7 +23,7 @@ public partial class OrientedImageryView : ItemsControl
     {
         base.OnItemsChanged(e);
 
-        foreach (var toolbarVM in e.OldItems?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
+        foreach (var toolbarVM in e.OldItems?.OfType<OrientedImageryToolbarItemBase>() ?? [])
         {
             toolbarVM.MainViewModel = null;
         }
@@ -34,12 +36,31 @@ public partial class OrientedImageryView : ItemsControl
     {
         base.OnItemsSourceChanged(oldValue, newValue);
 
-        foreach (var toolbarVM in oldValue?.OfType<OrientedImageryViewToolbarViewModelBase>() ?? [])
+        foreach (var toolbarVM in oldValue?.OfType<OrientedImageryToolbarItemBase>() ?? [])
         {
             toolbarVM.MainViewModel = null;
         }
 
         SetToolbarViewModels(ViewModel);
+    }
+
+    /// <inheritdoc />
+    protected override void OnItemTemplateSelectorChanged(DataTemplateSelector oldItemTemplateSelector, DataTemplateSelector newItemTemplateSelector)
+    {
+        if (newItemTemplateSelector is not OrientedImageryViewTemplateSelector newSelector)
+        {
+            return;
+        }
+
+        // Save and in the future merge the default selector so the default styles are always available unless overridden.
+        if (ReadLocalValue(ItemTemplateSelectorProperty) == DependencyProperty.UnsetValue)
+        {
+            _defaultItemTemplateSelector = newSelector;
+        }
+        else if (_defaultItemTemplateSelector is not null)
+        {
+            newSelector.Merge(_defaultItemTemplateSelector);
+        }
     }
 }
 

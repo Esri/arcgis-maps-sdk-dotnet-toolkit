@@ -8,6 +8,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// <summary>
 /// A <see cref="DataTemplateSelector"/> to define explicit type-template pairs for the toolbar view models used in the <see cref="OrientedImageryView"/>.
 /// </summary>
+/// <remarks>
+/// An <see cref="OrientedImageryView"/> ensures that its <see cref="OrientedImageryViewTemplateSelector"/> always contains the type-template pairs
+/// for the default toolbar items unless they have been overridden by the user.
+/// </remarks>
 [ContentProperty(nameof(TypeTemplatePairs))]
 public class OrientedImageryViewTemplateSelector : DataTemplateSelector
 {
@@ -49,6 +53,23 @@ public class OrientedImageryViewTemplateSelector : DataTemplateSelector
         }
 
         return base.SelectTemplate(item, container);
+    }
+
+    /// <summary>
+    /// Merges the type-template pairs from another <see cref="OrientedImageryViewTemplateSelector"/> into this instance.
+    /// </summary>
+    /// <remarks>
+    /// If a type on <paramref name="other"/> is already registered on this instance, it will be skipped.
+    /// </remarks>
+    public void Merge(OrientedImageryViewTemplateSelector other)
+    {
+        foreach (var pair in other.TypeTemplatePairs)
+        {
+            if (!TypeTemplatePairs.Any(p => p.Type == pair.Type))
+            {
+                TypeTemplatePairs.Add(pair);
+            }
+        }
     }
 }
 
