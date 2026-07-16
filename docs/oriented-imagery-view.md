@@ -1,8 +1,8 @@
 # OrientedImageryView
 
-`OrientedImageryView` displays oriented imagery with a built-in toolbar for image navigation, footprint visibility, camera location markers, and image markers. It works with an `OrientedImageryLayer` and `GeoView`. The control manages footprints and marker overlays, while your app remains responsible for searching for images and choosing which image is selected.
+The `OrientedImageryView` displays oriented imagery with a built-in toolbar for image navigation, footprint visibility, camera location markers, and image markers. It works with an `OrientedImageryLayer` and `GeoView`. The control manages footprints and marker overlays, while your app remains responsible for searching for images and choosing which image is selected.
 
-![Example Image](images/oriented-imagery.png)
+<img width="1108" height="656" alt="oriented-imagery" src="https://github.com/user-attachments/assets/d1199b2b-a9e5-4fce-89e6-0a3d85d05457" />
 
 ## Minimal implementation
 
