@@ -7,6 +7,7 @@
     <internal:ColorToColorConverter x:Key="ColorToColorConverter" />
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
+    <!-- Helper styles -->
     <Style x:Key="ToolbarButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="MinWidth" Value="40" />
         <Setter Property="MinHeight" Value="40" />
@@ -243,6 +244,7 @@
         </Button>
     </DataTemplate>
 
+    <!-- Display style -->
     <Style TargetType="{x:Type controls:OrientedImageDisplay}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
@@ -259,6 +261,7 @@
         </Setter>
     </Style>
 
+    <!-- Main view style -->
     <Style TargetType="{x:Type controls:OrientedImageryView}">
         <Setter Property="IsTabStop" Value="False" />
 
@@ -266,7 +269,7 @@
             <Setter.Value>
                 <controls:OrientedImageryViewTemplateSelector>
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
-                        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:AllowAddingMarkersVM}" Template="{StaticResource AllowAddingMarkersToolbarTemplate}" />
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:AllowAddingMarkersVM}" Template="{StaticResource AllowAddingMarkersToolbarTemplate}" />
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:AutoUpdateFootprintVM}" Template="{StaticResource AutoUpdateFootprintToolbarTemplate}" />
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowSelectedFootprintVM}" Template="{StaticResource ShowSelectedFootprintToolbarTemplate}" />
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />

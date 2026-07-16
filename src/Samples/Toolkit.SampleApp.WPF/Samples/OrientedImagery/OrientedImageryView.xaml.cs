@@ -34,14 +34,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private void ConfigureToolbar()
         {
             var toolbarItems = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryView.GetDefaultToolbarItems();
-            toolbarItems.Add(new ExampleOIViewerToolbarVM());
+            toolbarItems.Add(new ExampleOIToolbarItem());
             MainOrientedImageryView.ItemsSource = toolbarItems;
-
-            if (MainOrientedImageryView.ItemTemplateSelector is OrientedImageryViewTemplateSelector selector &&
-                FindResource("DemoOilToolbarSelectorItem") is OrientedImageryViewTemplateSelectorItem selectorItem)
-            {
-                selector.TypeTemplatePairs.Add(selectorItem);
-            }
         }
 
         private async Task Initialize()
