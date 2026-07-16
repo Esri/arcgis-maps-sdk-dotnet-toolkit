@@ -75,69 +75,72 @@ See the `OrientedImageryView` sample for a full example implementation.
 
 ## Customizing the toolbar
 
-`OrientedImageryView` is structured as an `ItemsControl` whose toolbar items are defined by its `ItemsSource` property. The default toolbar items are defined by `OrientedImageryView.GetDefaultToolbarItems()`, which includes controls for auto-updating the footprint, showing selected and unselected footprints, cycling camera marker display modes, enabling marker creation, selecting the marker symbol, and clearing markers.
+`OrientedImageryView` is structured as an `ItemsControl` whose toolbar items are defined by its `ItemsSource` property. The default toolbar items are returned by `OrientedImageryView.GetDefaultToolbarItems()`, which includes controls for auto-updating the footprint, showing selected and unselected footprints, cycling camera marker display modes, enabling marker creation, selecting the marker symbol, and clearing markers.
 
-Toolbar items are styled using the `OrientedImageryViewTemplateSelector` which maps object types to data templates. Custom toolbar items can be any type, but users may choose to derive from `OrientedImageryViewToolbarViewModelBase` to automatically gain access to the current `OrientedImageryViewModel` via the `OrientedImageryViewToolbarViewModelBase.MainViewModel` property.
+Toolbar items are rendered by the `ItemTemplateSelector`. Use an `OrientedImageryViewTemplateSelector` to map toolbar item types to data templates. When you assign a custom selector to `OrientedImageryView.ItemTemplateSelector`, the control merges in the default toolbar templates so built-in toolbar items continue to render unless you override their templates.
+
+Custom toolbar items can be any type, but deriving from `OrientedImageryToolbarItemBase` automatically provides access to the current `OrientedImageryViewModel` through the `MainViewModel` property.
 
 ### Example
 
-Define a toolbar item class deriving from `OrientedImageryViewToolbarViewModelBase`.
+Define a toolbar item class deriving from `OrientedImageryToolbarItemBase`.
 
 ```cs
-internal sealed class ShowImageDetailsToolbarItem : OrientedImageryViewToolbarViewModelBase { }
+internal sealed class ShowImageDetailsToolbarItem : OrientedImageryToolbarItemBase
+{
+}
 ```
 
-Define a data template for the custom toolbar item and create a new `OrientedImageyViewTemplateSelector` item to map it to the `ShowImageDetailsToolbarItem` type.
+Define a data template for the custom toolbar item, then create an `OrientedImageryViewTemplateSelector` that maps the item type to the template.
 
 ```xml
 <UserControl.Resources>
-    <DataTemplate x:Key="ShowImageDetailsToolbarTemplate"
-                  DataType="{x:Type local:ShowImageDetailsToolbarItem}">
-        <Button Content="Info"
-                MinWidth="48"
-                Padding="8,4"
-                ToolTip="Show selected image details"
-                Click="ShowImageDetails_Click">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding MainViewModel.SelectedImage}" Value="{x:Null}">
-                            <Setter Property="IsEnabled" Value="False" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-    </DataTemplate>
+    <ResourceDictionary>
+        <DataTemplate x:Key="ShowImageDetailsToolbarTemplate"
+                      DataType="{x:Type local:ShowImageDetailsToolbarItem}">
+            <Button Click="ShowImageDetails_Click"
+                    ToolTip="Show selected image details">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MainViewModel.SelectedImage}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <TextBlock Text="Info" />
+            </Button>
+        </DataTemplate>
 
-    <esri:OrientedImageryViewTemplateSelectorItem x:Key="ShowImageDetailsToolbarSelectorItem"
-                                                  Type="{x:Type local:ShowImageDetailsToolbarItem}"
-                                                  Template="{StaticResource ShowImageDetailsToolbarTemplate}" />
+        <esri:OrientedImageryViewTemplateSelector x:Key="CustomToolbarSelector">
+            <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:ShowImageDetailsToolbarItem}"
+                                                          Template="{StaticResource ShowImageDetailsToolbarTemplate}" />
+        </esri:OrientedImageryViewTemplateSelector>
+    </ResourceDictionary>
 </UserControl.Resources>
 ```
 
-Add the custom item to the toolbar collection and register its template after the control has loaded.
+Assign the custom selector to `OrientedImageryView.ItemTemplateSelector`.
+
+```xml
+<esri:OrientedImageryView x:Name="MainOrientedImageryView"
+                          GeoView="{Binding ElementName=MainMapView}"
+                          ItemTemplateSelector="{StaticResource CustomToolbarSelector}" />
+```
+
+Add the custom item to the toolbar collection.
 
 ```cs
 public OrientedImagerySample()
 {
     InitializeComponent();
-    MainOrientedImageryView.Loaded += (_, _) => ConfigureToolbar();
+    ConfigureToolbar();
 }
 
 private void ConfigureToolbar()
 {
-    // Register the selector item.
-    if (MainOrientedImageryView.ItemTemplateSelector is OrientedImageryViewTemplateSelector selector &&
-        TryFindResource("ShowImageDetailsToolbarSelectorItem") is OrientedImageryViewTemplateSelectorItem selectorItem)
-    {
-        selector.TypeTemplatePairs.Add(selectorItem);
-    }
-
-    // Reuse the default toolbar items (optional).
     var toolbarItems = OrientedImageryView.GetDefaultToolbarItems();
-
-    // Add the custom item to the list.
     toolbarItems.Add(new ShowImageDetailsToolbarItem());
     MainOrientedImageryView.ItemsSource = toolbarItems;
 }

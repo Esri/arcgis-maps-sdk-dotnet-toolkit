@@ -10,12 +10,15 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- Import styles from the default OrientedImageryView theme -->
                 <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OrientedImagery/OrientedImagery.Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <!-- Define the main OrientedImageryViewModel -->
             <esri:OrientedImageryViewModel x:Key="MainOrientedImageryVM" />
 
-            <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIViewerToolbarVM">
+            <!-- Define a data template for a custom toolbar item type -->
+            <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIToolbarItem">
                 <Button Click="OpenSelectedImagePopupButton_Click" ToolTip="Open popup for selected image">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
@@ -34,7 +37,10 @@
                 </Button>
             </DataTemplate>
 
-            <esri:OrientedImageryViewTemplateSelectorItem x:Key="DemoOilToolbarSelectorItem" Type="{x:Type local:ExampleOIViewerToolbarVM}" Template="{StaticResource DemoOilToolbarControlTemplate}" />
+            <!-- Register the toolbar data template with a selector -->
+            <esri:OrientedImageryViewTemplateSelector x:Key="CustomToolbarSelector">
+                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:ExampleOIToolbarItem}" Template="{StaticResource DemoOilToolbarControlTemplate}" />
+            </esri:OrientedImageryViewTemplateSelector>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -65,6 +71,7 @@
         <esri:OrientedImageryView x:Name="MainOrientedImageryView"
                                   GeoView="{Binding ElementName=MainMapView}"
                                   ViewModel="{StaticResource MainOrientedImageryVM}"
+                                  ItemTemplateSelector="{StaticResource CustomToolbarSelector}"
                                   Grid.Row="1" Grid.Column="2"/>
 
         <Grid x:Name="SelectedImagePopupBackground"
