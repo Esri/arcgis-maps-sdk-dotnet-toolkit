@@ -126,6 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     _isAttachmentsLoaded = true;
                     UpdateAddAttachmentButtonState();
+                    UpdateMinMaxAttachmentText();
                 }
             }
         }
@@ -204,11 +205,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             uint maxAttachmentCount = Element.MaxAttachmentCount;
             uint attachmentCount = (uint)Element.Attachments.Count;
             var (minErrorFromValidation, maxErrorFromValidation) = GetAttachmentCountValidationErrors(Element.ValidationErrors);
+            bool canEvaluateAttachmentCount = _isAttachmentsLoaded;
 
             bool minVisible = minAttachmentCount > 0;
             bool maxVisible = HasConfiguredMaxAttachmentCount(maxAttachmentCount);
-            bool hasMinError = minVisible && (minErrorFromValidation || attachmentCount < minAttachmentCount);
-            bool hasMaxError = maxVisible && (maxErrorFromValidation || attachmentCount > maxAttachmentCount);
+            bool hasMinError = canEvaluateAttachmentCount && minVisible && (minErrorFromValidation || attachmentCount < minAttachmentCount);
+            bool hasMaxError = canEvaluateAttachmentCount && maxVisible && (maxErrorFromValidation || attachmentCount > maxAttachmentCount);
             bool hasError = hasMinError || hasMaxError;
 
             string minText = GetMinimumAttachmentCountLabel(minAttachmentCount);
