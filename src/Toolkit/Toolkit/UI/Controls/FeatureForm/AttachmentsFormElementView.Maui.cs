@@ -35,12 +35,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private const string AddAttachmentButtonName = "AddAttachmentButton";
         private const string MinAttachmentBadgeName = "MinAttachmentBadge";
         private const string MaxAttachmentBadgeName = "MaxAttachmentBadge";
+        private const string AttachmentErrorLabelName = "AttachmentErrorLabel";
         private static readonly Color EnabledAddAttachmentColor = Colors.CornflowerBlue;
         private static readonly Color DisabledAddAttachmentColor = Colors.Gray;
 
         private Button? _addAttachmentButton;
         private Label? _minAttachmentBadge;
         private Label? _maxAttachmentBadge;
+        private Label? _attachmentErrorLabel;
 
         static AttachmentsFormElementView()
         {
@@ -83,6 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var chipRow = new HorizontalStackLayout() { Spacing = 6, Margin = new Thickness(0, 2, 0, 0) };
             var minBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Opacity = .7 };
             var maxBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Opacity = .7 };
+            var errorLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, TextColor = Colors.Red, Margin = new Thickness(0, 2, 0, 0), LineBreakMode = LineBreakMode.WordWrap };
             var minBadgeBorder = new Border()
             {
                 Stroke = new SolidColorBrush(Colors.Gray),
@@ -161,6 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName(AttachmentsListViewName, itemsView);
             nameScope.RegisterName(MinAttachmentBadgeName, minBadge);
             nameScope.RegisterName(MaxAttachmentBadgeName, maxBadge);
+            nameScope.RegisterName(AttachmentErrorLabelName, errorLabel);
             return root;
         }
 
@@ -180,6 +184,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             _minAttachmentBadge = GetTemplateChild(MinAttachmentBadgeName) as Label;
             _maxAttachmentBadge = GetTemplateChild(MaxAttachmentBadgeName) as Label;
+            _attachmentErrorLabel = GetTemplateChild(AttachmentErrorLabelName) as Label;
             UpdateAddAttachmentButtonState();
             UpdateMinMaxAttachmentText();
             UpdateVisibility();
@@ -285,19 +290,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private partial void UpdateMinMaxAttachmentTextCore(uint minAttachmentCount, uint maxAttachmentCount)
+        private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible)
         {
-
             if (_minAttachmentBadge is not null)
             {
-                _minAttachmentBadge.Text = $"Min: {minAttachmentCount}";
-                _minAttachmentBadge.IsVisible = minAttachmentCount > 0;
+                _minAttachmentBadge.Text = minAttachmentText;
+                _minAttachmentBadge.IsVisible = minVisible;
             }
 
             if (_maxAttachmentBadge is not null)
             {
-                _maxAttachmentBadge.Text = $"Max: {maxAttachmentCount}";
-                _maxAttachmentBadge.IsVisible = HasConfiguredMaxAttachmentCount(maxAttachmentCount);
+                _maxAttachmentBadge.Text = maxAttachmentText;
+                _maxAttachmentBadge.IsVisible = maxVisible;
+            }
+
+            if (_attachmentErrorLabel is not null)
+            {
+                _attachmentErrorLabel.Text = errorText;
+                _attachmentErrorLabel.IsVisible = errorVisible;
             }
         }
     }

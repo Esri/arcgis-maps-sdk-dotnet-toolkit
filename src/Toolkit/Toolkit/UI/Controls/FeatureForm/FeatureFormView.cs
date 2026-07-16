@@ -492,13 +492,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     item.ResetValidationState();
                 }
-               ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
-                if (requireAllErrorsResolved && HasAttachmentCountError())
-                {
-                    _ = ScrollToFirstError();
-
-                    return false;
-                }
+                ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
 
                 if (requireAllErrorsResolved && ScrollToFirstError()) return false;
                 await FinishEditingAsync();

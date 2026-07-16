@@ -192,12 +192,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             uint minAttachmentCount = Element.MinAttachmentCount;
             uint maxAttachmentCount = Element.MaxAttachmentCount;
             uint attachmentCount = (uint)Element.Attachments.Count;
-            var validationErrors = GetValidationErrors(Element);
+            var (minErrorFromValidation, maxErrorFromValidation) = GetAttachmentCountValidationErrors(Element.ValidationErrors);
 
             bool minVisible = minAttachmentCount > 0;
             bool maxVisible = HasConfiguredMaxAttachmentCount(maxAttachmentCount);
-            bool hasMinError = minVisible && (HasMinimumAttachmentCountError(validationErrors) || attachmentCount < minAttachmentCount);
-            bool hasMaxError = maxVisible && (HasMaximumAttachmentCountError(validationErrors) || attachmentCount > maxAttachmentCount);
+            bool hasMinError = minVisible && (minErrorFromValidation || attachmentCount < minAttachmentCount);
+            bool hasMaxError = maxVisible && (maxErrorFromValidation || attachmentCount > maxAttachmentCount);
             bool hasError = hasMinError || hasMaxError;
 
             string minText = GetMinimumAttachmentCountLabel(minAttachmentCount);
@@ -214,35 +214,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return maxAttachmentCount > 0 && maxAttachmentCount < uint.MaxValue;
         }
 
-        private static IEnumerable<Exception> GetValidationErrors(AttachmentsFormElement element)
+        private static (bool HasMinimumError, bool HasMaximumError) GetAttachmentCountValidationErrors(IEnumerable<Exception> errors)
         {
-            return element.ValidationErrors;
-        }
+            bool hasMinimumError = false;
+            bool hasMaximumError = false;
 
-        private static bool HasMinimumAttachmentCountError(IEnumerable<Exception> errors)
-        {
             foreach (var error in errors)
             {
                 if (error is FeatureFormLessThanMinimumAttachmentCountException)
                 {
-                    return true;
+                    hasMinimumError = true;
                 }
-            }
-
-            return false;
-        }
-
-        private static bool HasMaximumAttachmentCountError(IEnumerable<Exception> errors)
-        {
-            foreach (var error in errors)
-            {
-                if (error is FeatureFormExceedsMaximumAttachmentCountException)
+                else if (error is FeatureFormExceedsMaximumAttachmentCountException)
                 {
-                    return true;
+                    hasMaximumError = true;
+                }
+
+                if (hasMinimumError && hasMaximumError)
+                {
+                    break;
                 }
             }
 
-            return false;
+            return (hasMinimumError, hasMaximumError);
         }
 
         private static string GetMinimumAttachmentCountErrorMessage(uint minAttachmentCount)
