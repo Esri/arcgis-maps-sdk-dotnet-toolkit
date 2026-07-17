@@ -328,7 +328,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return Properties.Resources.GetString("FeatureFormAttachmentSizeValidationErrorFallback")!;
             }
 
-            const double bytesPerMegabyte = 1024d * 1024d;
+            // Use decimal MB (1,000,000 bytes) to match FeatureForm attachment size configuration units.
+            const double bytesPerMegabyte = 1000d * 1000d;
             double maxSizeInMbValue = documentInput.MaxFileSize / bytesPerMegabyte;
             string maxSizeInMb = maxSizeInMbValue.ToString("0.##", CultureInfo.CurrentCulture);
             return string.Format(Properties.Resources.GetString("FeatureFormAttachmentSizeValidationError")!, maxSizeInMb);
