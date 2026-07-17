@@ -280,7 +280,8 @@
                         </VisualStateManager.VisualStateGroups>
                         <Grid>
                             <Image x:Name="ThumbnailImage" />
-                            <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2">
+                            <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2"
+                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.DisplayFilename, Converter={StaticResource FeatureFormViewVisibilityConverter}}">
                                 <TextBlock x:Name="AttachmentName" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Attachment.Name}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" TextTrimming="CharacterEllipsis" />
                             </Border>
                             <TextBlock x:Name="FileSizeText" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Attachment.Size, Converter={StaticResource FeatureFormFileSizeConverter}}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="10" />
@@ -315,15 +316,15 @@
                             </Button>
                         </Grid>
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" x:Name="ItemsScrollView">
-                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Attachments}" IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable}">
+                            <ItemsControl x:Name="AttachmentItemsControl" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Attachments}" IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <primitives:FormAttachmentView Attachment="{Binding}" Element="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element}" />
+                                    <DataTemplate x:DataType="forms:FormAttachment">
+                                        <primitives:FormAttachmentView Attachment="{x:Bind}" Element="{Binding ElementName=AttachmentItemsControl, Path=DataContext}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
