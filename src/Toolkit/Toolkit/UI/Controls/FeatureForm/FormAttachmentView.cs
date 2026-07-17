@@ -55,6 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
             GestureRecognizers.Add(tapGestureRecognizer);
 #if WINDOWS || MACCATALYST
+            PropertyChanged += FormAttachmentView_PropertyChanged;
             ConfigureFlyout();
 #endif
 #else
@@ -109,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void RenameAttachment(string newName)
         {
-            if (Attachment != null && Attachment.Name != newName)
+            if (Element?.AllowUserRename == true && Attachment != null && Attachment.Name != newName)
             {
                 Attachment.Name = newName;
                 var view = FeatureFormView.GetFeatureFormViewParent(this);
