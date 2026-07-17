@@ -20,6 +20,7 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 #if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #elif MAUI
@@ -291,6 +292,107 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             return string.Empty;
         }
+
+        private bool TryHandleAttachmentValidationException(Exception ex)
+        {
+            Exception? current = ex;
+            while (current is not null)
+            {
+                if (current is FeatureFormIncorrectAttachmentTypeException)
+                {
+                    string allowedTypes = GetAllowedAttachmentTypesForCurrentInputs();
+                    string message = string.Format(Properties.Resources.GetString("FeatureFormAttachmentTypeValidationError")!, allowedTypes);
+                    _ = ShowAttachmentValidationAlertAsync(message);
+                    return true;
+                }
+
+                if (current is FeatureFormExceedsMaximumAttachmentSizeException)
+                {
+                    string message = GetMaximumAttachmentSizeErrorMessage();
+                    _ = ShowAttachmentValidationAlertAsync(message);
+                    return true;
+                }
+
+                current = current.InnerException;
+            }
+
+            return false;
+        }
+
+        private string GetMaximumAttachmentSizeErrorMessage()
+        {
+            var documentInput = GetDocumentInputForCurrentInputs();
+            if (documentInput is null)
+            {
+                return Properties.Resources.GetString("FeatureFormAttachmentSizeValidationErrorFallback")!;
+            }
+
+            const double bytesPerMegabyte = 1024d * 1024d;
+            double maxSizeInMbValue = documentInput.MaxFileSize / bytesPerMegabyte;
+            string maxSizeInMb = maxSizeInMbValue.ToString("0.##", CultureInfo.CurrentCulture);
+            return string.Format(Properties.Resources.GetString("FeatureFormAttachmentSizeValidationError")!, maxSizeInMb);
+        }
+
+        private DocumentFormInput? GetDocumentInputForCurrentInputs()
+        {
+            var element = Element;
+            if (element is null)
+            {
+                return null;
+            }
+
+            foreach (var input in element.Inputs)
+            {
+                if (input is DocumentFormInput documentInput)
+                {
+                    return documentInput;
+                }
+            }
+
+            return null;
+        }
+
+        private string GetAllowedAttachmentTypesForCurrentInputs()
+        {
+            var element = Element;
+            if (element is null)
+            {
+                return string.Empty;
+            }
+
+            List<string> allowedTypes = new List<string>();
+            foreach (var input in element.Inputs)
+            {
+                if (input is AudioFormInput)
+                {
+                    AddAllowedType(allowedTypes, "audio");
+                }
+                else if (input is DocumentFormInput)
+                {
+                    AddAllowedType(allowedTypes, "document");
+                }
+                else if (input is ImageFormInput)
+                {
+                    AddAllowedType(allowedTypes, "image");
+                }
+                else if (input is VideoFormInput)
+                {
+                    AddAllowedType(allowedTypes, "video");
+                }
+            }
+
+            return string.Join(", ", allowedTypes);
+        }
+
+        private static void AddAllowedType(List<string> allowedTypes, string allowedType)
+        {
+            if (!allowedTypes.Contains(allowedType, StringComparer.OrdinalIgnoreCase))
+            {
+                allowedTypes.Add(allowedType);
+            }
+        }
+
+        private partial Task ShowAttachmentValidationAlertAsync(string message);
 
         private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible);
     }
