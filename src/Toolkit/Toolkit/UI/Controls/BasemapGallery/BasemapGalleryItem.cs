@@ -292,8 +292,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     return webTiledLayer.TemplateUri == ((WebTiledLayer)layer2).TemplateUri && webTiledLayer.SubDomains.SequenceEqual(((WebTiledLayer)layer2).SubDomains);
                 case ServiceImageTiledLayer serviceImageTiledLayer:
 #pragma warning disable CS0618 // Type or member is obsolete
-                    if (layer1 is not BingMapsLayer)
-                        return false;
+                    // Handle BingMapsLayer in URL comparisons below
+                    if (layer1 is BingMapsLayer)
+                        break;
 #pragma warning restore CS0618 // Type or member is obsolete
                     return serviceImageTiledLayer.TileInfo == ((ServiceImageTiledLayer)layer2).TileInfo;
                 case SubtypeFeatureLayer subtypeFeatureLayer:
@@ -335,7 +336,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (layer1.Item != null && layer2.Item != null)
             {
-                if (layer1.Item.ItemId == layer2.Item.ItemId || PortalHelper.GetPortalItemId((layer1.Item as PortalItem)?.Url) == PortalHelper.GetPortalItemId((layer2.Item as PortalItem)?.Url))
+                var id1 = PortalHelper.GetPortalItemId((layer1.Item as PortalItem)?.Url);
+                if (layer1.Item.ItemId == layer2.Item.ItemId || (id1 != null && id1 == PortalHelper.GetPortalItemId((layer2.Item as PortalItem)?.Url)))
                     return true;
             }
 
