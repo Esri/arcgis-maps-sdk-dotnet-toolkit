@@ -14,8 +14,15 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <esri:MapView x:Name="mapView"
-               Map="{x:Bind Map}"
                GeoViewTapped="mapView_GeoViewTapped"/>
+
+        <ComboBox x:Name="mapSelector"
+                  Width="220"
+                  Margin="10"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  DisplayMemberPath="Title"
+                  SelectionChanged="mapSelector_SelectionChanged" />
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" BorderThickness="1" BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}">
             <Border Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity=".8" />
@@ -29,7 +36,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <toolkit:FeatureFormView x:Name="formViewer" Margin="5,5,5,0" VerticalScrollBarVisibility="Hidden" Grid.ColumnSpan="3" />
+                    <toolkit:FeatureFormView x:Name="formViewer" GeoView="{x:Bind mapView}" Margin="5,5,5,0" VerticalScrollBarVisibility="Hidden" Grid.ColumnSpan="3" />
                     <Border BorderThickness="0,1,0,0" BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Grid.Row="1" Grid.ColumnSpan="3" Padding="5">
                         <Grid>
                             <Grid.ColumnDefinitions >
