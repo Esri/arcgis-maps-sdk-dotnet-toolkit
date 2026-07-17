@@ -313,6 +313,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     return true;
                 }
 
+                if (current is FeatureFormExceedsMaximumAttachmentDurationException)
+                {
+                    string message = GetMaximumAttachmentDurationErrorMessage();
+                    _ = ShowAttachmentValidationAlertAsync(message);
+                    return true;
+                }
+
                 current = current.InnerException;
             }
 
@@ -332,6 +339,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             double maxSizeInMbValue = documentInput.MaxFileSize / bytesPerMegabyte;
             string maxSizeInMb = maxSizeInMbValue.ToString("0.##", CultureInfo.CurrentCulture);
             return string.Format(Properties.Resources.GetString("FeatureFormAttachmentSizeValidationError")!, maxSizeInMb);
+        }
+
+        private string GetMaximumAttachmentDurationErrorMessage()
+        {
+            string allowedDurations = GetAllowedMediaDurationsForCurrentInputs();
+            if (string.IsNullOrWhiteSpace(allowedDurations))
+            {
+                return Properties.Resources.GetString("FeatureFormAttachmentDurationValidationErrorFallback")!;
+            }
+
+            return string.Format(Properties.Resources.GetString("FeatureFormAttachmentDurationValidationError")!, allowedDurations);
+        }
+
+        private string GetAllowedMediaDurationsForCurrentInputs()
+        {
+            var element = Element;
+            if (element is null)
+            {
+                return string.Empty;
+            }
+
+            foreach (var input in element.Inputs)
+            {
+                if (input is AudioFormInput audioInput)
+                {
+                    return audioInput.MaxDuration.ToString("0.##", CultureInfo.CurrentCulture);
+                }
+                else if (input is VideoFormInput videoInput)
+                {
+                    return videoInput.MaxDuration.ToString("0.##", CultureInfo.CurrentCulture);
+                }
+            }
+
+            return string.Empty;
         }
 
         private DocumentFormInput? GetDocumentInputForCurrentInputs()
