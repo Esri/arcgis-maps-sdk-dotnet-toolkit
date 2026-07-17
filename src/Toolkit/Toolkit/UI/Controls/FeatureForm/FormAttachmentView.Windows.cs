@@ -92,54 +92,58 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Header = Properties.Resources.GetString("FeatureFormRemoveAttachmentMenuItem"),
                 Icon = new TextBlock() { Text = "\uE74D", HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, FontFamily = new FontFamily("Segoe MDL2 Assets") }
             });
-            contextMenu.Items.Add(new MenuItem()
-            {
-                Header = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem"),
-                Icon = new TextBlock() { Text = "\uE70F", HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, FontFamily = new FontFamily("Segoe MDL2 Assets") }
-            });
             
             ((MenuItem)contextMenu.Items[0]).Click += (s, e) =>
             {
                 DeleteAttachment();
             };
-            
-            ((MenuItem)contextMenu.Items[1]).Click += (s, e) =>
+
+            if (Element?.AllowUserRename == true)
             {
-                if (Attachment is not null && Element is not null)
+                var renameItem = new MenuItem()
                 {
-                    Window renameDialog = new Window()
+                    Header = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem"),
+                    Icon = new TextBlock() { Text = "\uE70F", HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, FontFamily = new FontFamily("Segoe MDL2 Assets") }
+                };
+                renameItem.Click += (s, e) =>
+                {
+                    if (Attachment is not null && Element is not null)
                     {
-                        SizeToContent = SizeToContent.Height,
-                        WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                        Owner = Window.GetWindow(this),
-                        WindowStyle = WindowStyle.ToolWindow, Width = 250,
-                        Title = Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle")
-                    };
-                    StackPanel panel = new StackPanel() { Margin = new Thickness(10) };
-                    TextBox textBox = new TextBox() { Text = Attachment.Name };
-                    panel.Children.Add(textBox);
+                        Window renameDialog = new Window()
+                        {
+                            SizeToContent = SizeToContent.Height,
+                            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                            Owner = Window.GetWindow(this),
+                            WindowStyle = WindowStyle.ToolWindow, Width = 250,
+                            Title = Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle")
+                        };
+                        StackPanel panel = new StackPanel() { Margin = new Thickness(10) };
+                        TextBox textBox = new TextBox() { Text = Attachment.Name };
+                        panel.Children.Add(textBox);
 
-                    StackPanel panel2 = new StackPanel() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 10, 0, 0) };
-                    Button okButton = new Button() { Content = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK"), MinWidth = 75, IsDefault = true, Margin = new Thickness(0, 0, 10, 0), IsEnabled = false };
-                    okButton.Click += (s,e) => renameDialog.DialogResult = true;
-                    Button cancelButton = new Button() { Content = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"), MinWidth = 75, IsCancel = true };
-                    panel2.Children.Add(okButton);
-                    panel2.Children.Add(cancelButton);
-                    panel.Children.Add(panel2);
-                    renameDialog.Content = panel;
+                        StackPanel panel2 = new StackPanel() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 10, 0, 0) };
+                        Button okButton = new Button() { Content = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK"), MinWidth = 75, IsDefault = true, Margin = new Thickness(0, 0, 10, 0), IsEnabled = false };
+                        okButton.Click += (s,e) => renameDialog.DialogResult = true;
+                        Button cancelButton = new Button() { Content = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"), MinWidth = 75, IsCancel = true };
+                        panel2.Children.Add(okButton);
+                        panel2.Children.Add(cancelButton);
+                        panel.Children.Add(panel2);
+                        renameDialog.Content = panel;
 
-                    textBox.TextChanged += (s, e) =>
-                    {
-                        okButton.IsEnabled = !string.IsNullOrEmpty(textBox.Text.Trim()) && textBox.Text.Trim() != Attachment.Name;
-                    };
-                    bool? ok = renameDialog.ShowDialog();
+                        textBox.TextChanged += (s, e) =>
+                        {
+                            okButton.IsEnabled = !string.IsNullOrEmpty(textBox.Text.Trim()) && textBox.Text.Trim() != Attachment.Name;
+                        };
+                        bool? ok = renameDialog.ShowDialog();
 
-                    if(ok.HasValue && ok.Value == true && !string.IsNullOrEmpty(textBox.Text.Trim()))
-                    {
-                        RenameAttachment(textBox.Text.Trim());
+                        if(ok.HasValue && ok.Value == true && !string.IsNullOrEmpty(textBox.Text.Trim()))
+                        {
+                            RenameAttachment(textBox.Text.Trim());
+                        }
                     }
-                }
-            };
+                };
+                contextMenu.Items.Add(renameItem);
+            }
             contextMenu.PlacementTarget = this;
             contextMenu.IsOpen = true;
 #elif WINDOWS_XAML
@@ -151,38 +155,41 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             };
             delete.Click += (s, e) => DeleteAttachment();
             contextMenu.Items.Add(delete);
-            var rename = new MenuFlyoutItem()
+            if (Element?.AllowUserRename == true)
             {
-                Text = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem"),
-                Icon = new SymbolIcon(Symbol.Rename),
-            };
-            contextMenu.Items.Add(rename);
-            rename.Click += (s,e) => {
-                if (Attachment is not null && Element is not null)
+                var rename = new MenuFlyoutItem()
                 {
-                    var dialog = new ContentDialog()
+                    Text = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem"),
+                    Icon = new SymbolIcon(Symbol.Rename),
+                };
+                contextMenu.Items.Add(rename);
+                rename.Click += (s,e) => {
+                    if (Attachment is not null && Element is not null)
                     {
-                        Title = Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle"),
-                        PrimaryButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK"),
-                        SecondaryButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"),
-                        DefaultButton = ContentDialogButton.Primary,
-                        Content = new TextBox() { Text = Attachment.Name },
+                        var dialog = new ContentDialog()
+                        {
+                            Title = Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle"),
+                            PrimaryButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK"),
+                            SecondaryButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"),
+                            DefaultButton = ContentDialogButton.Primary,
+                            Content = new TextBox() { Text = Attachment.Name },
 #if WINDOWS_XAML
-                        XamlRoot = this.XamlRoot
+                            XamlRoot = this.XamlRoot
 #endif
-                    };
-                    var textBox = (TextBox)dialog.Content;
-                    textBox.TextChanged += (s, e) =>
-                    {
-                        dialog.IsPrimaryButtonEnabled = !string.IsNullOrEmpty(textBox.Text.Trim()) && textBox.Text.Trim() != Attachment.Name;
-                    };
-                    dialog.PrimaryButtonClick += (s, e) =>
-                    {
-                        RenameAttachment(textBox.Text.Trim());
-                    };
-                    _ = dialog.ShowAsync();
-                }
-            };
+                        };
+                        var textBox = (TextBox)dialog.Content;
+                        textBox.TextChanged += (s, e) =>
+                        {
+                            dialog.IsPrimaryButtonEnabled = !string.IsNullOrEmpty(textBox.Text.Trim()) && textBox.Text.Trim() != Attachment.Name;
+                        };
+                        dialog.PrimaryButtonClick += (s, e) =>
+                        {
+                            RenameAttachment(textBox.Text.Trim());
+                        };
+                        _ = dialog.ShowAsync();
+                    }
+                };
+            }
 
             contextMenu.ShowAt(this);
 #endif
