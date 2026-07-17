@@ -18,6 +18,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 #if WPF || WINDOWS_XAML
@@ -291,6 +292,67 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             return string.Empty;
         }
+
+        private bool TryHandleUnsupportedTypeException(Exception ex)
+        {
+            Exception? current = ex;
+            while (current is not null)
+            {
+                if (current is FeatureFormIncorrectAttachmentTypeException)
+                {
+                    string allowedTypes = GetAllowedAttachmentTypesForCurrentInputs();
+                    string message = string.Format(Properties.Resources.GetString("FeatureFormAttachmentTypeValidationError")!, allowedTypes);
+                    _ = ShowAttachmentValidationAlertAsync(message);
+                    return true;
+                }
+
+                current = current.InnerException;
+            }
+
+            return false;
+        }
+
+        private string GetAllowedAttachmentTypesForCurrentInputs()
+        {
+            var element = Element;
+            if (element is null)
+            {
+                return string.Empty;
+            }
+
+            List<string> allowedTypes = new List<string>();
+            foreach (var input in element.Inputs)
+            {
+                if (input is AudioFormInput)
+                {
+                    AddAllowedType(allowedTypes, "audio");
+                }
+                else if (input is DocumentFormInput)
+                {
+                    AddAllowedType(allowedTypes, "document");
+                }
+                else if (input is ImageFormInput)
+                {
+                    AddAllowedType(allowedTypes, "image");
+                }
+                else if (input is VideoFormInput)
+                {
+                    AddAllowedType(allowedTypes, "video");
+                }
+            }
+
+            return string.Join(", ", allowedTypes);
+        }
+
+        private static void AddAllowedType(List<string> allowedTypes, string allowedType)
+        {
+            if (!allowedTypes.Contains(allowedType, StringComparer.OrdinalIgnoreCase))
+            {
+                allowedTypes.Add(allowedType);
+            }
+        }
+
+        private partial Task ShowAttachmentValidationAlertAsync(string message);
 
         private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible);
     }

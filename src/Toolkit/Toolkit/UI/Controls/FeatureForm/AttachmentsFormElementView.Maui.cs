@@ -259,7 +259,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     }
                     catch (System.Exception ex)
                     {
-                        Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
+                        if (!TryHandleUnsupportedTypeException(ex))
+                        {
+                            Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
+                        }
                     }
                 }
                 if (result == addAttachment)
@@ -287,7 +290,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             catch (System.Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+                if (!TryHandleUnsupportedTypeException(ex))
+                {
+                    System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+                }
+            }
+        }
+
+        private async partial Task ShowAttachmentValidationAlertAsync(string message)
+        {
+            if (GetParent<Page>() is Page page)
+            {
+                await page.DisplayAlertAsync(
+                    Properties.Resources.GetString("FeatureFormAttachmentValidationErrorTitle")!,
+                    message,
+                    Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK")!);
             }
         }
 

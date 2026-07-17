@@ -133,6 +133,14 @@
     <value>Take Photo</value>
     <comment>Menu text for adding an attachment by taking a photo</comment>
   </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>This file type is not supported. Allowed types: {0}</value>
+    <comment>Validation error shown when the selected attachment file type is unsupported; {0} is a comma-separated list of allowed types.</comment>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>Attachment upload failed</value>
+    <comment>Title text for the attachment validation alert dialog.</comment>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
     <comment>Input validation of entered date must be before or on the maximum allowed date {0}</comment>
