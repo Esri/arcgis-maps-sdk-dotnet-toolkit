@@ -21,6 +21,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 #if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #elif MAUI
@@ -293,7 +294,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return string.Empty;
         }
 
-        private bool TryHandleUnsupportedTypeException(Exception ex)
+        private bool TryHandleAttachmentValidationException(Exception ex)
         {
             Exception? current = ex;
             while (current is not null)
@@ -306,10 +307,50 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     return true;
                 }
 
+                if (current is FeatureFormExceedsMaximumAttachmentSizeException)
+                {
+                    string message = GetMaximumAttachmentSizeErrorMessage();
+                    _ = ShowAttachmentValidationAlertAsync(message);
+                    return true;
+                }
+
                 current = current.InnerException;
             }
 
             return false;
+        }
+
+        private string GetMaximumAttachmentSizeErrorMessage()
+        {
+            var documentInput = GetDocumentInputForCurrentInputs();
+            if (documentInput is null)
+            {
+                return Properties.Resources.GetString("FeatureFormAttachmentSizeValidationErrorFallback")!;
+            }
+
+            const double bytesPerMegabyte = 1024d * 1024d;
+            double maxSizeInMbValue = documentInput.MaxFileSize / bytesPerMegabyte;
+            string maxSizeInMb = maxSizeInMbValue.ToString("0.##", CultureInfo.CurrentCulture);
+            return string.Format(Properties.Resources.GetString("FeatureFormAttachmentSizeValidationError")!, maxSizeInMb);
+        }
+
+        private DocumentFormInput? GetDocumentInputForCurrentInputs()
+        {
+            var element = Element;
+            if (element is null)
+            {
+                return null;
+            }
+
+            foreach (var input in element.Inputs)
+            {
+                if (input is DocumentFormInput documentInput)
+                {
+                    return documentInput;
+                }
+            }
+
+            return null;
         }
 
         private string GetAllowedAttachmentTypesForCurrentInputs()

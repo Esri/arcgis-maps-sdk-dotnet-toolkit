@@ -152,7 +152,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             catch (System.Exception ex)
             {
-                if (!TryHandleUnsupportedTypeException(ex))
+                if (!TryHandleAttachmentValidationException(ex))
                 {
                     System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
                 }

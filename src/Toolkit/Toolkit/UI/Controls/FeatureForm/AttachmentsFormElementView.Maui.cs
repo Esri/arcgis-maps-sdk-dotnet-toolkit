@@ -259,7 +259,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     }
                     catch (System.Exception ex)
                     {
-                        if (!TryHandleUnsupportedTypeException(ex))
+                        if (!TryHandleAttachmentValidationException(ex))
                         {
                             Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                         }
@@ -290,7 +290,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             catch (System.Exception ex)
             {
-                if (!TryHandleUnsupportedTypeException(ex))
+                if (!TryHandleAttachmentValidationException(ex))
                 {
                     System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
                 }
