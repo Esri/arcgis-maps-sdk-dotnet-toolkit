@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -32,10 +33,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static readonly ControlTemplate DefaultControlTemplate;
         private const string AttachmentsListViewName = "AttachmentsListView";
         private const string AddAttachmentButtonName = "AddAttachmentButton";
+        private const string MinAttachmentBadgeName = "MinAttachmentBadge";
+        private const string MaxAttachmentBadgeName = "MaxAttachmentBadge";
+        private const string AttachmentErrorLabelName = "AttachmentErrorLabel";
         private static readonly Color EnabledAddAttachmentColor = Colors.CornflowerBlue;
         private static readonly Color DisabledAddAttachmentColor = Colors.Gray;
 
         private Button? _addAttachmentButton;
+        private Label? _minAttachmentBadge;
+        private Label? _maxAttachmentBadge;
+        private Label? _attachmentErrorLabel;
 
         static AttachmentsFormElementView()
         {
@@ -68,12 +75,41 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             label.SetBinding(View.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             header.Children.Add(label);
+
             label = new Label();
             label.SetBinding(Label.TextProperty, static (AttachmentsFormElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             label.SetBinding(Label.IsVisibleProperty, static (Label label) => label.Text, source: RelativeBindingSource.Self, converter: EmptyStringToBoolConverter.Instance);
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
-            Grid.SetRow(label, 1);
-            header.Children.Add(label);
+            label.Opacity = 0.7;
+
+            var chipRow = new HorizontalStackLayout() { Spacing = 6, Margin = new Thickness(0, 2, 0, 0) };
+            var minBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Opacity = .7 };
+            var maxBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Opacity = .7 };
+            var errorLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, TextColor = Colors.Red, Margin = new Thickness(0, 2, 0, 0), LineBreakMode = LineBreakMode.WordWrap };
+            var minBadgeBorder = new Border()
+            {
+                Stroke = new SolidColorBrush(Colors.Gray),
+                StrokeThickness = 1,
+                StrokeShape = new RoundRectangle() { CornerRadius = 8 },
+                Padding = new Thickness(8, 2),
+                BackgroundColor = Colors.Transparent,
+                Content = minBadge,
+            };
+            minBadgeBorder.SetBinding(IsVisibleProperty, static (Label value) => value.IsVisible, source: minBadge);
+
+            var maxBadgeBorder = new Border()
+            {
+                Stroke = new SolidColorBrush(Colors.Gray),
+                StrokeThickness = 1,
+                StrokeShape = new RoundRectangle() { CornerRadius = 8 },
+                Padding = new Thickness(8, 2),
+                BackgroundColor = Colors.Transparent,
+                Content = maxBadge,
+            };
+            maxBadgeBorder.SetBinding(IsVisibleProperty, static (Label value) => value.IsVisible, source: maxBadge);
+
+            chipRow.Children.Add(minBadgeBorder);
+            chipRow.Children.Add(maxBadgeBorder);
             Button addButton = new Button()
             {
                 Margin = new Thickness(0, -5, 0, 0),
@@ -90,11 +126,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
            
             
             Grid.SetColumn(addButton, 1);
-            Grid.SetRowSpan(addButton, 2);
             addButton.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsFormElementView view) => view.Element?.IsEditable, source: RelativeBindingSource.TemplatedParent, converter: BoolOrNullToBoolConverter.Instance);
             header.Children.Add(addButton);
 
             root.Children.Add(header);
+            root.Children.Add(label);
+            root.Children.Add(chipRow);
+            root.Children.Add(errorLabel);
 
             CollectionView itemsView = new CollectionView()
             {
@@ -124,6 +162,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(AddAttachmentButtonName, addButton);
             nameScope.RegisterName(AttachmentsListViewName, itemsView);
+            nameScope.RegisterName(MinAttachmentBadgeName, minBadge);
+            nameScope.RegisterName(MaxAttachmentBadgeName, maxBadge);
+            nameScope.RegisterName(AttachmentErrorLabelName, errorLabel);
             return root;
         }
 
@@ -141,7 +182,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 _addAttachmentButton.Clicked += AddAttachmentButton_Click;
             }
+            _minAttachmentBadge = GetTemplateChild(MinAttachmentBadgeName) as Label;
+            _maxAttachmentBadge = GetTemplateChild(MaxAttachmentBadgeName) as Label;
+            _attachmentErrorLabel = GetTemplateChild(AttachmentErrorLabelName) as Label;
             UpdateAddAttachmentButtonState();
+            UpdateMinMaxAttachmentText();
             UpdateVisibility();
         }
 
@@ -254,6 +299,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 _addAttachmentButton.IsEnabled = canAddAttachment;
                 _addAttachmentButton.Opacity = canAddAttachment ? 1.0 : 0.45;
                 _addAttachmentButton.TextColor = canAddAttachment ? EnabledAddAttachmentColor : DisabledAddAttachmentColor;
+            }
+        }
+
+        private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible)
+        {
+            if (_minAttachmentBadge is not null)
+            {
+                _minAttachmentBadge.Text = minAttachmentText;
+                _minAttachmentBadge.IsVisible = minVisible;
+            }
+
+            if (_maxAttachmentBadge is not null)
+            {
+                _maxAttachmentBadge.Text = maxAttachmentText;
+                _maxAttachmentBadge.IsVisible = maxVisible;
+            }
+
+            if (_attachmentErrorLabel is not null)
+            {
+                _attachmentErrorLabel.Text = errorText;
+                _attachmentErrorLabel.IsVisible = errorVisible;
             }
         }
     }
