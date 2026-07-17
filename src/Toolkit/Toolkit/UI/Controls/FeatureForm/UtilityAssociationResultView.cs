@@ -19,6 +19,7 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UtilityNetworks;
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Mapping;
 
 
 
@@ -41,6 +42,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public partial class UtilityAssociationResultView
     {
+        private Feature? _selectedFeature;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UtilityAssociationResultView"/> class.
         /// </summary>
@@ -51,6 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
             DefaultStyleKey = typeof(UtilityAssociationResultView);
 #endif
+            Unloaded += UtilityAssociationResultView_Unloaded;
         }
 
         /// <inheritdoc/>
@@ -81,7 +85,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnAssociationResultPropertyChanged()
         {
+            ClearSelectedFeature();
             UpdateView();
+        }
+
+#if MAUI
+        private void UtilityAssociationResultView_Unloaded(object? sender, EventArgs e)
+#else
+        private void UtilityAssociationResultView_Unloaded(object sender, RoutedEventArgs e)
+#endif
+        {
+            ClearSelectedFeature();
         }
 
         private void UpdateView()
@@ -180,15 +194,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private partial void ShowDetailsFlyout(FeatureFormView parent, object? flyoutTarget);
 
-        private void ShowAssociationOnMap(FeatureFormView parent)
+        private async void ShowAssociationOnMap()
         {
-            if (parent.GeoView is null ||
-                AssociationResult?.AssociatedFeature?.Geometry is not Esri.ArcGISRuntime.Geometry.Geometry geometry)
+            FeatureFormView? parent = FeatureFormView.GetFeatureFormViewParent(this);
+            if (parent?.GeoView is not { } geoView ||
+                AssociationResult?.AssociatedFeature is not Feature feature ||
+                feature.Geometry is not Geometry.Geometry geometry ||
+                geometry.Extent is not Geometry.Envelope extent)
             {
                 return;
             }
 
-            _ = parent.GeoView.SetViewpointAsync(new Esri.ArcGISRuntime.Mapping.Viewpoint(geometry));
+            ClearSelectedFeature();
+            if (feature.FeatureTable?.Layer is FeatureLayer layer)
+            {
+                layer.SelectFeature(feature);
+                _selectedFeature = feature;
+            }
+
+            Viewpoint? currentViewpoint = geoView.GetCurrentViewpoint(ViewpointType.CenterAndScale);
+            Viewpoint viewpoint = currentViewpoint is null
+                ? new Viewpoint(geometry)
+                : new Viewpoint(extent.GetCenter(), currentViewpoint.TargetScale);
+            await geoView.SetViewpointAsync(viewpoint);
+        }
+
+        private void ClearSelectedFeature()
+        {
+            if (_selectedFeature?.FeatureTable?.Layer is FeatureLayer layer)
+            {
+                layer.UnselectFeature(_selectedFeature);
+            }
+
+            _selectedFeature = null;
         }
 
         private void NavigateToAssociationDetails(FeatureFormView parent)

@@ -772,12 +772,29 @@
                                                 <TextBox Text="{x:Bind SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                          PlaceholderText="{internal:LocalizedString Key=FeatureFormUtilityAssociationsSearchFeatures}" />
                                                 <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsChooseToAdd}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
-                                                <ListView ItemsSource="{x:Bind FilteredCandidates, Mode=OneWay}"
-                                                          SelectedItem="{x:Bind SelectedCandidate, Mode=TwoWay}"
+                                                <ListView ItemsSource="{x:Bind FilteredCandidateItems, Mode=OneWay}"
+                                                          SelectionMode="None"
                                                           IsItemClickEnabled="False">
                                                     <ListView.ItemTemplate>
-                                                        <DataTemplate x:DataType="un:UtilityAssociationFeatureCandidate">
-                                                            <TextBlock Text="{x:Bind Title}" Style="{StaticResource FeatureFormViewTitleStyle}" Margin="8" TextTrimming="CharacterEllipsis" />
+                                                        <DataTemplate x:DataType="primitives:UtilityAssociationFeatureCandidateItem">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <Button Command="{x:Bind SelectCommand}" HorizontalContentAlignment="Left"
+                                                                        Background="Transparent" BorderThickness="0" Padding="8">
+                                                                    <TextBlock Text="{x:Bind Title}" Style="{StaticResource FeatureFormViewTitleStyle}" TextTrimming="CharacterEllipsis" />
+                                                                </Button>
+                                                                <Button Grid.Column="1" Command="{x:Bind ShowOnMapCommand}"
+                                                                        Visibility="{x:Bind CanShowOnMap, Mode=OneWay}"
+                                                                        ToolTipService.ToolTip="{internal:LocalizedString Key=FeatureFormUtilityAssociationsShowOnMap}"
+                                                                        AutomationProperties.Name="{internal:LocalizedString Key=FeatureFormUtilityAssociationsShowOnMap}"
+                                                                        AutomationProperties.HelpText="{internal:LocalizedString Key=FeatureFormUtilityAssociationsShowOnMap}"
+                                                                        Background="Transparent" BorderThickness="0" Padding="8">
+                                                                    <FontIcon Glyph="&#xE8AC;" FontFamily="{StaticResource toolkit-icons}" />
+                                                                </Button>
+                                                            </Grid>
                                                         </DataTemplate>
                                                     </ListView.ItemTemplate>
                                                 </ListView>

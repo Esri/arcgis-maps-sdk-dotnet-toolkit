@@ -19,12 +19,15 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.UtilityNetworks;
 
 #if MAUI
+using FeatureFormView = Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView;
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #else
+using FeatureFormView = Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView;
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
@@ -291,12 +294,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private readonly UtilityAssociationFeatureSource _source;
         private readonly UtilityAssetType _assetType;
-        private readonly ObservableCollection<UtilityAssociationFeatureCandidate> _candidates = new();
-        private IReadOnlyList<UtilityAssociationFeatureCandidate> _filteredCandidates = Array.Empty<UtilityAssociationFeatureCandidate>();
+        private readonly ObservableCollection<UtilityAssociationFeatureCandidateItem> _candidateItems = new();
+        private IReadOnlyList<UtilityAssociationFeatureCandidateItem> _filteredCandidateItems = Array.Empty<UtilityAssociationFeatureCandidateItem>();
         private bool _isQuerying;
         private QueryParameters? _nextQueryParameters;
         private int _searchVersion;
-        private UtilityAssociationFeatureCandidate? _selectedCandidate;
+        private UtilityAssociationFeatureCandidateItem? _selectedCandidateItem;
+        private Feature? _selectedFeature;
         private string _searchText = string.Empty;
 
         internal UtilityAssociationFeatureCandidateSelection(
@@ -319,7 +323,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             : string.Format(
                 System.Globalization.CultureInfo.CurrentCulture,
                 Properties.Resources.GetString("FeatureFormUtilityAssociationsAvailableFeatures")!,
-                FilteredCandidates.Count);
+                FilteredCandidateItems.Count);
 
         public override string Subtitle => _assetType.Name;
 
@@ -339,12 +343,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        public IReadOnlyList<UtilityAssociationFeatureCandidate> FilteredCandidates
+        public IReadOnlyList<UtilityAssociationFeatureCandidateItem> FilteredCandidateItems
         {
-            get => _filteredCandidates;
+            get => _filteredCandidateItems;
             internal set
             {
-                if (SetProperty(ref _filteredCandidates, value))
+                if (SetProperty(ref _filteredCandidateItems, value))
                 {
                     OnPropertyChanged(nameof(Title));
                     OnPropertyChanged(nameof(HasNoResults));
@@ -354,22 +358,62 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         public bool HasMore => _nextQueryParameters is not null && string.IsNullOrWhiteSpace(SearchText);
 
-        public bool HasNoResults => !IsLoading && FilteredCandidates.Count == 0;
+        public bool HasNoResults => !IsLoading && FilteredCandidateItems.Count == 0;
 
-        public UtilityAssociationFeatureCandidate? SelectedCandidate
+        public UtilityAssociationFeatureCandidateItem? SelectedCandidateItem
         {
-            get => _selectedCandidate;
+            get => _selectedCandidateItem;
             set
             {
-                if (value is null || !SetProperty(ref _selectedCandidate, value))
+                if (value is null || !SetProperty(ref _selectedCandidateItem, value))
                 {
                     return;
                 }
 
-                Navigate(new UtilityAssociationCreation(Form, Element, Filter, value), null);
-                _selectedCandidate = null;
+                SelectCandidate(value.Candidate);
+                _selectedCandidateItem = null;
                 OnPropertyChanged();
             }
+        }
+
+        internal void SelectCandidate(UtilityAssociationFeatureCandidate candidate)
+        {
+            ClearSelectedFeature();
+            Navigate(new UtilityAssociationCreation(Form, Element, Filter, candidate), null);
+        }
+
+        internal async Task ShowOnMapAsync(Feature feature)
+        {
+            var geoView = FeatureFormView.GetUtilityAssociationWorkflowGeoView(this);
+            if (geoView is null ||
+                feature.Geometry is not Geometry.Geometry geometry ||
+                geometry.Extent is not Geometry.Envelope extent)
+            {
+                return;
+            }
+
+            ClearSelectedFeature();
+            if (feature.FeatureTable?.Layer is FeatureLayer layer)
+            {
+                layer.SelectFeature(feature);
+                _selectedFeature = feature;
+            }
+
+            Viewpoint? currentViewpoint = geoView.GetCurrentViewpoint(ViewpointType.CenterAndScale);
+            Viewpoint viewpoint = currentViewpoint is null
+                ? new Viewpoint(geometry)
+                : new Viewpoint(extent.GetCenter(), currentViewpoint.TargetScale);
+            await geoView.SetViewpointAsync(viewpoint);
+        }
+
+        internal void ClearSelectedFeature()
+        {
+            if (_selectedFeature?.FeatureTable?.Layer is FeatureLayer layer)
+            {
+                layer.UnselectFeature(_selectedFeature);
+            }
+
+            _selectedFeature = null;
         }
 
         private async Task LoadFirstPageAsync()
@@ -414,7 +458,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             await Task.Delay(500);
             while (searchVersion == _searchVersion &&
                 !string.IsNullOrWhiteSpace(SearchText) &&
-                FilteredCandidates.Count == 0 &&
+                FilteredCandidateItems.Count == 0 &&
                 _nextQueryParameters is not null)
             {
                 await QueryNextPageAsync(CancellationToken.None);
@@ -460,7 +504,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             foreach (var candidate in result.Candidates)
             {
-                _candidates.Add(candidate);
+                _candidateItems.Add(new UtilityAssociationFeatureCandidateItem(this, candidate));
             }
 
             _nextQueryParameters = result.NextQueryParams;
@@ -469,9 +513,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateFilteredCandidates()
         {
-            FilteredCandidates = string.IsNullOrWhiteSpace(SearchText)
-                ? _candidates.ToList()
-                : _candidates.Where(candidate => candidate.Title.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            FilteredCandidateItems = string.IsNullOrWhiteSpace(SearchText)
+                ? _candidateItems.ToList()
+                : _candidateItems.Where(item => item.Title.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
             OnPropertyChanged(nameof(HasMore));
             (LoadMoreCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
         }
@@ -483,6 +527,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             OnPropertyChanged(nameof(HasMore));
             (LoadMoreCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
         }
+    }
+
+    internal sealed class UtilityAssociationFeatureCandidateItem
+    {
+        private readonly UtilityAssociationFeatureCandidateSelection _owner;
+
+        internal UtilityAssociationFeatureCandidateItem(
+            UtilityAssociationFeatureCandidateSelection owner,
+            UtilityAssociationFeatureCandidate candidate)
+        {
+            _owner = owner;
+            Candidate = candidate;
+            SelectCommand = new UtilityAssociationAsyncCommand(
+                () =>
+                {
+                    _owner.SelectCandidate(Candidate);
+                    return Task.CompletedTask;
+                });
+            ShowOnMapCommand = new UtilityAssociationAsyncCommand(
+                () => _owner.ShowOnMapAsync(Candidate.Feature),
+                () => CanShowOnMap);
+        }
+
+        public UtilityAssociationFeatureCandidate Candidate { get; }
+
+        public string Title => Candidate.Title;
+
+        public ICommand SelectCommand { get; }
+
+        public ICommand ShowOnMapCommand { get; }
+
+        public bool CanShowOnMap => Candidate.Feature.Geometry is not null &&
+            FeatureFormView.GetUtilityAssociationWorkflowGeoView(_owner) is not null;
     }
 
     /// <summary>

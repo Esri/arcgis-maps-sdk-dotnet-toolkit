@@ -316,15 +316,51 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 var heading = new Label() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsChooseToAdd") };
                 heading.Style = GetFeatureFormCaptionStyle();
                 root.Add(heading);
-                var list = new CollectionView() { SelectionMode = SelectionMode.Single };
-                list.SetBinding(ItemsView.ItemsSourceProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.FilteredCandidates, mode: BindingMode.OneWay);
-                list.SetBinding(SelectableItemsView.SelectedItemProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.SelectedCandidate, mode: BindingMode.TwoWay);
+                var list = new CollectionView() { SelectionMode = SelectionMode.None };
+                list.SetBinding(ItemsView.ItemsSourceProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.FilteredCandidateItems, mode: BindingMode.OneWay);
                 list.ItemTemplate = new DataTemplate(() =>
                 {
-                    var label = new Label() { Padding = new Thickness(12), LineBreakMode = LineBreakMode.TailTruncation };
-                    label.Style = GetFeatureFormTitleStyle();
-                    label.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationFeatureCandidate candidate) => candidate.Title);
-                    return label;
+                    var layout = new Grid();
+                    layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                    layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+
+                    var select = new Grid()
+                    {
+                        HorizontalOptions = LayoutOptions.Fill,
+                        BackgroundColor = Colors.Transparent,
+                        Padding = new Thickness(12),
+                    };
+                    var title = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                    title.Style = GetFeatureFormTitleStyle();
+                    title.SetBinding(Label.TextProperty, static (UtilityAssociationFeatureCandidateItem item) => item.Title);
+                    select.Add(title);
+                    var selectGesture = new TapGestureRecognizer();
+                    selectGesture.SetBinding(TapGestureRecognizer.CommandProperty, static (UtilityAssociationFeatureCandidateItem item) => item.SelectCommand);
+                    select.GestureRecognizers.Add(selectGesture);
+                    layout.Add(select);
+
+                    var showOnMap = new ImageButton()
+                    {
+                        Source = new FontImageSource
+                        {
+                            Glyph = "\uE8AC",
+                            FontFamily = ToolkitIcons.FontFamilyName,
+                            Size = 18,
+                            Color = Colors.Gray,
+                        },
+                        BackgroundColor = Colors.Transparent,
+                        WidthRequest = 40,
+                        HeightRequest = 40,
+                    };
+                    showOnMap.SetBinding(ImageButton.CommandProperty, static (UtilityAssociationFeatureCandidateItem item) => item.ShowOnMapCommand);
+                    showOnMap.SetBinding(VisualElement.IsVisibleProperty, static (UtilityAssociationFeatureCandidateItem item) => item.CanShowOnMap);
+                    string? showOnMapText = Properties.Resources.GetString("FeatureFormUtilityAssociationsShowOnMap");
+                    SemanticProperties.SetDescription(showOnMap, showOnMapText);
+                    SemanticProperties.SetHint(showOnMap, showOnMapText);
+                    ToolTipProperties.SetText(showOnMap, showOnMapText);
+                    Grid.SetColumn(showOnMap, 1);
+                    layout.Add(showOnMap);
+                    return layout;
                 });
                 root.Add(list);
                 var loadMore = new Button() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsLoadMore") };

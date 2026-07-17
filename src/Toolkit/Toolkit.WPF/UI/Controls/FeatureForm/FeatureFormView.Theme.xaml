@@ -928,17 +928,34 @@
                         </primitives:FeatureFormContentTemplateSelector.UtilityAssociationAssetTypeSelectionTemplate>
                         <primitives:FeatureFormContentTemplateSelector.UtilityAssociationFeatureCandidateSelectionTemplate>
                             <DataTemplate>
-                                <StackPanel Margin="0,8">
+                                <StackPanel>
                                     <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                              ToolTip="{internal:LocalizedString Key=FeatureFormUtilityAssociationsSearchFeatures}" />
                                     <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsChooseToAdd}"
                                                Style="{StaticResource FeatureFormViewCaptionStyle}" Margin="0,8,0,4" />
-                                    <ListView ItemsSource="{Binding FilteredCandidates}"
-                                              SelectedItem="{Binding SelectedCandidate}"
+                                    <ListView ItemsSource="{Binding FilteredCandidateItems}"
+                                              SelectedItem="{Binding SelectedCandidateItem}"
+                                              SelectionMode="Single"
                                               BorderThickness="0">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewTitleStyle}" Margin="8" TextTrimming="CharacterEllipsis" />
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewTitleStyle}"
+                                                               TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                                    <Button Grid.Column="1" Command="{Binding ShowOnMapCommand}"
+                                                            Visibility="{Binding CanShowOnMap, Converter={StaticResource FeatureFormViewVisibilityConverter}}"
+                                                            ToolTip="{internal:LocalizedString Key=FeatureFormUtilityAssociationsShowOnMap}"
+                                                            AutomationProperties.Name="{internal:LocalizedString Key=FeatureFormUtilityAssociationsShowOnMap}"
+                                                            AutomationProperties.HelpText="{internal:LocalizedString Key=FeatureFormUtilityAssociationsShowOnMap}"
+                                                            Background="Transparent" BorderThickness="0" Padding="0,8"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="&#xE8AC;" FontFamily="{StaticResource ToolkitIconsFontFamily}" />
+                                                    </Button>
+                                                </Grid>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>
