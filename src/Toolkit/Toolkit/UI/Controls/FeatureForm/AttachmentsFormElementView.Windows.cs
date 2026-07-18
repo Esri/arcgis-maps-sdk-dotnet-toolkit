@@ -167,6 +167,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+        private async partial Task ShowAttachmentValidationAlertAsync(string message)
+        {
+            string title = Properties.Resources.GetString("FeatureFormAttachmentValidationErrorTitle")!;
+#if WPF
+            System.Windows.MessageBox.Show(message, title);
+            await Task.CompletedTask;
+#elif WINDOWS_XAML
+            var dialog = new ContentDialog
+            {
+                Title = title,
+                Content = message,
+                CloseButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK")!
+            };
+            dialog.XamlRoot = this.XamlRoot;
+            await dialog.ShowAsync();
+#endif
+        }
+
         private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible)
         {
             if (_minAttachmentBadge is not null)
