@@ -18,7 +18,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-#if WPF
+#if WPF || WINDOWS_XAML
 /// <summary>
 /// Manages oriented imagery selection, footprints, and map markers for an oriented imagery view.
 /// </summary>

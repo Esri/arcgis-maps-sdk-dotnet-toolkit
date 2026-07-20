@@ -1,0 +1,88 @@
+<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OrientedImagery.OrientedImageryViewSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OrientedImagery"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <toolkit:OrientedImageryViewModel x:Key="MainOrientedImageryViewModel" />
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.ColumnSpan="2" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBox
+                x:Name="LayerUriTextBox"
+                Text="https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0" />
+            <Button
+                Grid.Column="1"
+                Click="ApplyLayerButton_Click"
+                Content="Apply Layer" />
+            <Button
+                Grid.Column="2"
+                Click="OpenSelectedImagePopupButton_Click"
+                Content="Open selected image popup"
+                IsEnabled="{x:Bind local:OrientedImageryViewSample.HasSelectedImage(MainOrientedImageryView.ViewModel.SelectedImage), Mode=OneWay}" />
+            <TextBlock
+                x:Name="StatusTextBlock"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Margin="4"
+                Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                TextWrapping="Wrap" />
+        </Grid>
+
+        <esri:MapView
+            x:Name="MainMapView"
+            Grid.Row="1"
+            GeoViewTapped="MainMapView_GeoViewTapped" />
+
+        <toolkit:OrientedImageryView
+            x:Name="MainOrientedImageryView"
+            Grid.Row="1"
+            Grid.Column="1"
+            GeoView="{x:Bind MainMapView, Mode=OneTime}"
+            ViewModel="{StaticResource MainOrientedImageryViewModel}" />
+
+        <Grid
+            x:Name="SelectedImagePopupBackground"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            Background="#AA333333"
+            Tapped="SelectedImagePopupBackground_Tapped"
+            Visibility="Collapsed">
+            <Border
+                Width="400"
+                MaxHeight="500"
+                Padding="5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                <toolkit:PopupViewer x:Name="SelectedImagePopupViewer" />
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

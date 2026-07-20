@@ -1,4 +1,4 @@
-#if WPF
+#if WPF || WINDOWS_XAML
 
 using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
@@ -21,9 +21,15 @@ public partial class OrientedImageryView
     /// </summary>
     public OrientedImageryView() : base()
     {
+#if WINDOWS_XAML
+        InitializePlatform();
+#endif
+
         ViewModel = new OrientedImageryViewModel();
 
+#if WPF
         ItemsSource = GetDefaultToolbarItems();
+#endif
 
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -44,10 +50,15 @@ public partial class OrientedImageryView
 
         DataContext = ViewModel;
 
-        if (_display != null)
-            _display.ImageClicked -= Display_ImageClicked;
+        var oldDisplay = _display;
+        if (oldDisplay != null)
+            oldDisplay.ImageClicked -= Display_ImageClicked;
 
         _display = GetTemplateChild(ImageDisplayName) as OrientedImageDisplay;
+
+#if WINDOWS_XAML
+        UpdateDisplayStateSubscriptions(oldDisplay, _display);
+#endif
 
         if (_display == null)
             return;
@@ -98,7 +109,7 @@ public partial class OrientedImageryView
 
         if (newValue == null)
         {
-            SetCurrentValue(ViewModelProperty, new OrientedImageryViewModel());
+            SetValue(ViewModelProperty, new OrientedImageryViewModel());
             return;
         }
 

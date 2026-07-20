@@ -677,6 +677,50 @@
     <value>Loading...</value>
     <comment>The status message when loading contents of this control.</comment>
   </data>
+  <data name="OrientedImageryViewAutoUpdateFootprint" xml:space="preserve">
+    <value>Auto-update footprint</value>
+    <comment>The tooltip for toggling automatic footprint updates in the oriented imagery view.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkers" xml:space="preserve">
+    <value>Clear markers</value>
+    <comment>The tooltip for clearing markers in the oriented imagery view.</comment>
+  </data>
+  <data name="OrientedImageryViewLoading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>The status message while an oriented image is loading.</comment>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>Next image</value>
+    <comment>The tooltip for selecting the next oriented image.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImagesSelected" xml:space="preserve">
+    <value>No images selected</value>
+    <comment>The status message when no oriented image is selected.</comment>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>Previous image</value>
+    <comment>The tooltip for selecting the previous oriented image.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>Select marker symbol</value>
+    <comment>The tooltip for selecting a marker symbol in the oriented imagery view.</comment>
+  </data>
+  <data name="OrientedImageryViewShowSelectedFootprint" xml:space="preserve">
+    <value>Show selected image footprint</value>
+    <comment>The tooltip for toggling the selected image footprint.</comment>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedFootprints" xml:space="preserve">
+    <value>Show unselected image footprints</value>
+    <comment>The tooltip for toggling unselected image footprints.</comment>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>Toggle add markers</value>
+    <comment>The tooltip for toggling marker creation in the oriented imagery view.</comment>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>Change camera marker display</value>
+    <comment>The tooltip for cycling through camera marker display modes.</comment>
+  </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
     <value>There are more starting points than required for the selected trace type.</value>
     <comment>The warning message when there are more starting points than the selected trace type requires.</comment>

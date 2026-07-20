@@ -1,4 +1,4 @@
-#if WPF // Limiting this to WPF for now to keep things simple
+#if WPF
 
 using System.Collections;
 using System.Collections.Specialized;
