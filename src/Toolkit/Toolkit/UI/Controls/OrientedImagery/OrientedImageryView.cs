@@ -1,8 +1,10 @@
-#if WPF
+#if WPF || WINDOWS_XAML
 
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
+#if WPF
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -39,23 +41,34 @@ public partial class OrientedImageryView
     {
         base.OnApplyTemplate();
 
-        if (_display != null)
-            UnwireDisplay(_display);
+        var oldDisplay = _display;
+        if (oldDisplay != null)
+            UnwireDisplay(oldDisplay);
+#if WPF
         if (_toolbarContainer != null)
             UnwireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged -= Paginator_SelectedPageIndexChanged;
+#endif
 
         _display = GetTemplateChild(ImageDisplayName) as OrientedImageDisplay;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
+#if WPF
         _paginator = GetTemplateChild(PaginatorName) as Paginator;
+#endif
+
+#if WINDOWS_XAML
+        UpdateDisplayStateSubscriptions(oldDisplay, _display);
+#endif
 
         if (_display != null)
             WireDisplay(_display);
+#if WPF
         if (_toolbarContainer != null)
             WireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
+#endif
     }
 
 #region ViewModel
@@ -87,7 +100,7 @@ public partial class OrientedImageryView
 
         if (newValue == null)
         {
-            SetCurrentValue(ViewModelProperty, new OrientedImageryViewModel());
+            SetValue(ViewModelProperty, new OrientedImageryViewModel());
             return;
         }
 
@@ -102,6 +115,12 @@ public partial class OrientedImageryView
 
         if (_display != null)
             WireDisplayToViewModel(_display);
+
+#if WINDOWS_XAML
+        // Temporary workaround to avoid doing full toolbar implementation
+        MarkerSymbolPicker = ViewModel.ToolbarItems.OfType<SelectNewMarkerSymbolVM>().Single();
+        CameraMarkers = ViewModel.ToolbarItems.OfType<ShowCameraMarkersVM>().Single();
+#endif
     }
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -115,6 +134,7 @@ public partial class OrientedImageryView
                     UpdateSelectedImageReady();
                 }
                 break;
+#if WPF
             case nameof(OrientedImageryViewModel.SelectedImage):
                 UpdatePaginatorSelection();
                 break;
@@ -122,6 +142,7 @@ public partial class OrientedImageryView
                 if (_paginator != null)
                     _paginator.TotalPages = ViewModel.Images.Count;
                 break;
+#endif
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
                 if (_display != null)
                     _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
@@ -232,6 +253,7 @@ public partial class OrientedImageryView
 
 #region Toolbar
     private ItemsControl? _toolbarContainer;
+#if WPF
     private OrientedImageryViewTemplateSelector? _defaultItemTemplateSelector;
 
     /// <summary>
@@ -283,8 +305,10 @@ public partial class OrientedImageryView
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
     }
+#endif
 #endregion Toolbar
 
+#if WPF
 #region Pagination
     private Paginator? _paginator;
 
@@ -307,6 +331,7 @@ public partial class OrientedImageryView
             ViewModel.SelectedImage = ViewModel.Images[newPageIndex];
     }
 #endregion
+#endif
 }
 
 #endif
