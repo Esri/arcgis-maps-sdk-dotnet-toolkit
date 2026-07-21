@@ -12,6 +12,7 @@
     <internal:VisibilityConverter x:Key="VisibilityConverter" />
     <internal:ListSizeVisibilityConverter x:Key="ListSizeVisibilityConverter" />
     <internal:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    <internal:EmptyStringToVisibilityConverter x:Key="PlaceholderVisibilityConverter" />
 
     <Style x:Key="UNTraceIcon32Info" TargetType="Path">
         <Setter Property="Fill" Value="{StaticResource UNTraceTintNormal}" />
@@ -214,11 +215,19 @@
                                                         Grid.Column="0"
                                                         Margin="2"
                                                         Style="{StaticResource UNTraceBasicText}"
-                                                        Text="{Binding Function.FunctionType, Mode=OneTime}" />
+                                                        Text="{Binding Function.FunctionType, Mode=OneTime}"
+                                                        Visibility="{Binding Function.FunctionName, Converter={StaticResource PlaceholderVisibilityConverter}}" />
                                                     <TextBlock
                                                         Margin="2"
                                                         Style="{StaticResource UNTraceBoldText}"
-                                                        Text="{Binding Function.NetworkAttribute.Name}" />
+                                                        Text="{Binding Function.NetworkAttribute.Name}"
+                                                        Visibility="{Binding Function.FunctionName, Converter={StaticResource PlaceholderVisibilityConverter}}" />
+                                                    <TextBlock
+                                                        Margin="2"
+                                                        Grid.RowSpan="2"
+                                                        Style="{StaticResource UNTraceBoldText}"
+                                                        Text="{Binding Function.FunctionName}"
+                                                        Visibility="{Binding Function.FunctionName, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
                                                     <TextBlock
                                                         Grid.RowSpan="2"
                                                         Grid.Column="1"
