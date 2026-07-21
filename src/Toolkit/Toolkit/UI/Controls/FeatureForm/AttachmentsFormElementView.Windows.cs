@@ -36,6 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private TextBlock? _minAttachmentBadgeText;
         private FrameworkElement? _maxAttachmentBadge;
         private TextBlock? _maxAttachmentBadgeText;
+        private TextBlock? _captureMethodUnsupportedLabel;
         private TextBlock? _attachmentErrorLabel;
         private bool _scrollToEnd;
 
@@ -60,7 +61,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             _minAttachmentBadgeText = GetTemplateChild("MinAttachmentBadgeText") as TextBlock;
             _maxAttachmentBadge = GetTemplateChild("MaxAttachmentBadge") as FrameworkElement;
             _maxAttachmentBadgeText = GetTemplateChild("MaxAttachmentBadgeText") as TextBlock;
+            _captureMethodUnsupportedLabel = GetTemplateChild("CaptureMethodUnsupportedLabel") as TextBlock;
             _attachmentErrorLabel = GetTemplateChild("AttachmentErrorLabel") as TextBlock;
+            UpdateCaptureMethodUnsupportedState();
             UpdateAddAttachmentButtonState();
             UpdateMinMaxAttachmentText();
             if (GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
@@ -164,6 +167,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (_addAttachmentButton is not null)
             {
                 _addAttachmentButton.IsEnabled = CanAddAttachment();
+            }
+        }
+
+        private partial void UpdateCaptureMethodUnsupportedTextCore(string warningText, bool warningVisible)
+        {
+            if (_captureMethodUnsupportedLabel is not null)
+            {
+                _captureMethodUnsupportedLabel.Text = warningText;
+                _captureMethodUnsupportedLabel.Visibility = warningVisible ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 

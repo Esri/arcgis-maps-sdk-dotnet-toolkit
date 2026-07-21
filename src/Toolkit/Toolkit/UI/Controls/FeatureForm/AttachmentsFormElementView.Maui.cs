@@ -35,6 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private const string AddAttachmentButtonName = "AddAttachmentButton";
         private const string MinAttachmentBadgeName = "MinAttachmentBadge";
         private const string MaxAttachmentBadgeName = "MaxAttachmentBadge";
+        private const string CaptureMethodUnsupportedLabelName = "CaptureMethodUnsupportedLabel";
         private const string AttachmentErrorLabelName = "AttachmentErrorLabel";
         private static readonly Color EnabledAddAttachmentColor = Colors.CornflowerBlue;
         private static readonly Color DisabledAddAttachmentColor = Colors.Gray;
@@ -42,6 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private Button? _addAttachmentButton;
         private Label? _minAttachmentBadge;
         private Label? _maxAttachmentBadge;
+        private Label? _captureMethodUnsupportedLabel;
         private Label? _attachmentErrorLabel;
 
         static AttachmentsFormElementView()
@@ -85,6 +87,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var chipRow = new HorizontalStackLayout() { Spacing = 6, Margin = new Thickness(0, 2, 0, 0) };
             var minBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Opacity = .7 };
             var maxBadge = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Opacity = .7 };
+            var captureMethodUnsupportedLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, Margin = new Thickness(0, 2, 0, 0), LineBreakMode = LineBreakMode.WordWrap };
+            captureMethodUnsupportedLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#B16800"), Color.FromArgb("#FFC900"));
             var errorLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle(), IsVisible = false, TextColor = Colors.Red, Margin = new Thickness(0, 2, 0, 0), LineBreakMode = LineBreakMode.WordWrap };
             var minBadgeBorder = new Border()
             {
@@ -132,6 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Children.Add(header);
             root.Children.Add(label);
             root.Children.Add(chipRow);
+            root.Children.Add(captureMethodUnsupportedLabel);
             root.Children.Add(errorLabel);
 
             CollectionView itemsView = new CollectionView()
@@ -164,6 +169,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName(AttachmentsListViewName, itemsView);
             nameScope.RegisterName(MinAttachmentBadgeName, minBadge);
             nameScope.RegisterName(MaxAttachmentBadgeName, maxBadge);
+            nameScope.RegisterName(CaptureMethodUnsupportedLabelName, captureMethodUnsupportedLabel);
             nameScope.RegisterName(AttachmentErrorLabelName, errorLabel);
             return root;
         }
@@ -184,7 +190,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             _minAttachmentBadge = GetTemplateChild(MinAttachmentBadgeName) as Label;
             _maxAttachmentBadge = GetTemplateChild(MaxAttachmentBadgeName) as Label;
+            _captureMethodUnsupportedLabel = GetTemplateChild(CaptureMethodUnsupportedLabelName) as Label;
             _attachmentErrorLabel = GetTemplateChild(AttachmentErrorLabelName) as Label;
+            UpdateCaptureMethodUnsupportedState();
             UpdateAddAttachmentButtonState();
             UpdateMinMaxAttachmentText();
             UpdateVisibility();
@@ -316,6 +324,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 _addAttachmentButton.IsEnabled = canAddAttachment;
                 _addAttachmentButton.Opacity = canAddAttachment ? 1.0 : 0.45;
                 _addAttachmentButton.TextColor = canAddAttachment ? EnabledAddAttachmentColor : DisabledAddAttachmentColor;
+            }
+        }
+
+        private partial void UpdateCaptureMethodUnsupportedTextCore(string warningText, bool warningVisible)
+        {
+            if (_captureMethodUnsupportedLabel is not null)
+            {
+                _captureMethodUnsupportedLabel.Text = warningText;
+                _captureMethodUnsupportedLabel.IsVisible = warningVisible;
             }
         }
 
