@@ -225,6 +225,10 @@
     <value>Max: {0}</value>
     <comment>Caption badge showing the maximum allowed number of attachments, where {0} is the count.</comment>
   </data>
+  <data name="FeatureFormCaptureMethodNotSupported" xml:space="preserve">
+    <value>Capture method is not supported</value>
+    <comment>Warning shown when the capture input method is configured for an unsupported platform and attachment type.</comment>
+  </data>
   <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
     <value>Min: {0}</value>
     <comment>Caption badge showing the minimum required number of attachments, where {0} is the count.</comment>
