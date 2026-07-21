@@ -234,7 +234,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     }
                     catch (System.Exception ex)
                     {
-                        System.Diagnostics.Trace.WriteLine($"Failed to save file to disk: " + ex.Message);
+                        System.Diagnostics.Trace.WriteLine($"Failed to save file to disk: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                     }
                 }
 #elif WINDOWS_XAML

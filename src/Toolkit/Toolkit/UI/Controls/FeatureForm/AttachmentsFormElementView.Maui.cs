@@ -292,7 +292,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 if (!TryHandleAttachmentValidationException(ex))
                 {
-                    System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+                    System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                 }
             }
         }

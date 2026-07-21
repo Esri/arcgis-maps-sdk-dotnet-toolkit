@@ -154,7 +154,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 if (!TryHandleAttachmentValidationException(ex))
                 {
-                    System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+                    System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                 }
             }
         }
