@@ -205,6 +205,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 return;
             }
 
+#if WINDOWS || MACCATALYST
+            AddAttachmentFromFile();
+            return;
+#endif
+
             var page = GetParent<Page>();
             if(page != null && MediaPicker.IsCaptureSupported)
             {
