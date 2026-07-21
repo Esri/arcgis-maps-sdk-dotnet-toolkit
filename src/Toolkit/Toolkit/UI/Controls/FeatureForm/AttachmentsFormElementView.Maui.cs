@@ -287,7 +287,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (!CanAddAttachment()) return;
             try
             {
-                var result = await FilePicker.Default.PickAsync(new());
+                var result = await FilePicker.Default.PickAsync(CreatePickOptionsForCurrentInputs());
                 if (result != null && CanAddAttachment())
                 {
                     await Element.AddAttachmentAsync(result.FileName, MimeTypeMap.GetMimeType(new FileInfo(result.FileName).Extension), File.ReadAllBytes(result.FullPath));
@@ -303,6 +303,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
                 }
             }
+        }
+
+        private PickOptions CreatePickOptionsForCurrentInputs()
+        {
+            var options = new PickOptions();
+            var allowedMimeTypes = GetAllowedMimeTypesForCurrentInputs();
+            if (allowedMimeTypes.Count == 0)
+            {
+                return options;
+            }
+
+#if WINDOWS
+            var allowedExtensions = GetAllowedFileExtensionsForCurrentInputs();
+            if (allowedExtensions.Count > 0)
+            {
+                options.FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+                {
+                    { DevicePlatform.WinUI, allowedExtensions },
+                });
+            }
+#elif MACCATALYST
+            options.FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.MacCatalyst, allowedMimeTypes },
+            });
+#endif
+
+            return options;
         }
 
         private async partial Task ShowAttachmentValidationAlertAsync(string message)

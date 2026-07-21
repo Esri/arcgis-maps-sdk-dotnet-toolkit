@@ -22,6 +22,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 #if WPF
 using System.Windows.Controls.Primitives;
 #endif
@@ -109,13 +110,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
 #if WPF
                 OpenFileDialog openFileDialog = new OpenFileDialog();
+                var allowedExtensions = GetAllowedFileExtensionsForCurrentInputs();
+                if (allowedExtensions.Count > 0)
+                {
+                    string filterName = Properties.Resources.GetString("FeatureFormAttachmentPickerSupportedFiles") ?? "Supported files";
+                    openFileDialog.Filter = $"{filterName}|{string.Join(";", allowedExtensions.Select(static extension => $"*{extension}"))}";
+                }
                 if (openFileDialog.ShowDialog() == true)
                 {
                     var fileInfo = new FileInfo(openFileDialog.FileName);
                     if (fileInfo.Exists && CanAddAttachment())
                     {
+                        var element = Element;
+                        if (element is null)
+                        {
+                            return;
+                        }
                         _scrollToEnd = true;
-                        await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                        await element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
                         EvaluateExpressions();
                         UpdateAddAttachmentButtonState();
                     }
@@ -130,7 +142,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if WINUI
                 WinRT.Interop.InitializeWithWindow.Initialize(openPicker, (nint)hwnd);
 #endif
-                openPicker.FileTypeFilter.Add("*");
+                var allowedExtensions = GetAllowedFileExtensionsForCurrentInputs();
+                if (allowedExtensions.Count > 0)
+                {
+#if WINUI
+                    openPicker.FileTypeFilter.Add("*");
+#else
+                    foreach (var extension in allowedExtensions)
+                    {
+                        openPicker.FileTypeFilter.Add(extension);
+                    }
+#endif
+                }
+                else
+                {
+                    openPicker.FileTypeFilter.Add("*");
+                }
                 var file = await openPicker.PickSingleFileAsync();
                 if (file != null)
                 {
@@ -140,13 +167,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         return;
                     }
+                    var element = Element;
+                    if (element is null)
+                    {
+                        return;
+                    }
 #if WINDOWS_UWP
                     using var ms = new MemoryStream();
                     using var filestream = await file.OpenStreamForReadAsync();
                     await filestream.CopyToAsync(ms);
-                    await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
+                    await element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
 #else
-                    await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                    await element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
 #endif
                     EvaluateExpressions();
                     UpdateAddAttachmentButtonState();
