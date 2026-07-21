@@ -114,5 +114,47 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
             return "application/octet-stream";
         }
+
+        public static IReadOnlyList<string> GetExtensionsForMimeTypePatterns(IEnumerable<string> mimeTypePatterns)
+        {
+            HashSet<string> extensions = new(StringComparer.OrdinalIgnoreCase);
+            foreach (string pattern in mimeTypePatterns)
+            {
+                foreach (string extension in GetExtensionsForMimeTypePattern(pattern))
+                {
+                    extensions.Add(extension);
+                }
+            }
+
+            return extensions.ToList();
+        }
+
+        public static IReadOnlyList<string> GetExtensionsForMimeTypePattern(string mimeTypePattern)
+        {
+            if (string.IsNullOrWhiteSpace(mimeTypePattern))
+            {
+                return Array.Empty<string>();
+            }
+
+            string pattern = mimeTypePattern.Trim();
+            bool isWildcard = pattern.EndsWith("/*", StringComparison.Ordinal);
+            string prefix = isWildcard ? pattern[..^1] : pattern;
+
+            List<string> matchingExtensions = new();
+            foreach (var mapping in _mappings.Value)
+            {
+                string mimeType = mapping.Value;
+                bool isMatch = isWildcard
+                    ? mimeType.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+                    : string.Equals(mimeType, pattern, StringComparison.OrdinalIgnoreCase);
+
+                if (isMatch)
+                {
+                    matchingExtensions.Add(mapping.Key);
+                }
+            }
+
+            return matchingExtensions;
+        }
     }
 }
