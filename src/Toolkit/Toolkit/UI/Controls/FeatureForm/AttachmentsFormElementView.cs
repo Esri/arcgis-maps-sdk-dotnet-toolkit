@@ -114,6 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 newAttachments.CollectionChanged += _attachmentsCollectionChangedListener.OnEvent;
             }
             UpdateVisibility();
+            UpdateCaptureMethodUnsupportedState();
             UpdateAddAttachmentButtonState();
             UpdateMinMaxAttachmentText();
             if (newValue != null)
@@ -126,6 +127,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 finally
                 {
                     _isAttachmentsLoaded = true;
+                    UpdateCaptureMethodUnsupportedState();
                     UpdateAddAttachmentButtonState();
                     UpdateMinMaxAttachmentText();
                 }
@@ -141,8 +143,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             if (e.PropertyName == nameof(AttachmentsFormElement.IsEditable) ||
                 e.PropertyName == nameof(AttachmentsFormElement.MaxAttachmentCount) ||
-                e.PropertyName == nameof(AttachmentsFormElement.Attachments))
+                e.PropertyName == nameof(AttachmentsFormElement.Attachments) ||
+                e.PropertyName == nameof(AttachmentsFormElement.Inputs))
             {
+                this.Dispatch(UpdateCaptureMethodUnsupportedState);
                 this.Dispatch(UpdateAddAttachmentButtonState);
             }
 
@@ -177,7 +181,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private bool CanAddAttachment()
         {
-            if (Element is null || !Element.IsEditable || !_isAttachmentsLoaded)
+            if (Element is null || !Element.IsEditable || !_isAttachmentsLoaded || IsCaptureMethodUnsupported())
             {
                 return false;
             }
@@ -219,6 +223,71 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             string errorText = GetAttachmentCountErrorMessage(hasMinError, minAttachmentCount, hasMaxError, maxAttachmentCount);
 
             UpdateMinMaxAttachmentTextCore(minText, minVisible && !hasError, maxText, maxVisible && !hasError, errorText, hasError);
+        }
+
+        private void UpdateCaptureMethodUnsupportedState()
+        {
+            bool isUnsupported = IsCaptureMethodUnsupported();
+            string warningText = isUnsupported ? Properties.Resources.GetString("FeatureFormCaptureMethodNotSupported") ?? string.Empty : string.Empty;
+            UpdateCaptureMethodUnsupportedTextCore(warningText, isUnsupported);
+        }
+
+        private bool IsCaptureMethodUnsupported()
+        {
+            var element = Element;
+            if (element is null)
+            {
+                return false;
+            }
+
+            foreach (var input in element.Inputs)
+            {
+                if (input is null || !IsCaptureInput(input))
+                {
+                    continue;
+                }
+
+#if WPF || WINDOWS_XAML
+                if (input is AudioFormInput || input is VideoFormInput || input is ImageFormInput)
+                {
+                    return true;
+                }
+#elif MAUI
+#if WINDOWS || MACCATALYST
+                if (input is AudioFormInput || input is VideoFormInput || input is ImageFormInput)
+                {
+                    return true;
+                }
+#elif ANDROID || IOS
+                if (input is AudioFormInput)
+                {
+                    return true;
+                }
+#endif
+#endif
+            }
+
+            return false;
+        }
+
+        private static bool IsCaptureInput(AttachmentsFormInput input)
+        {
+            if (input is AudioFormInput audioInput)
+            {
+                return audioInput.InputMethod == AttachmentInputMethod.Capture;
+            }
+
+            if (input is VideoFormInput videoInput)
+            {
+                return videoInput.InputMethod == AttachmentInputMethod.Capture;
+            }
+
+            if (input is ImageFormInput imageInput)
+            {
+                return imageInput.InputMethod == AttachmentInputMethod.Capture;
+            }
+
+            return false;
         }
 
         private partial void UpdateAddAttachmentButtonState();
@@ -435,6 +504,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         private partial Task ShowAttachmentValidationAlertAsync(string message);
+
+        private partial void UpdateCaptureMethodUnsupportedTextCore(string warningText, bool warningVisible);
 
         private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible);
     }
