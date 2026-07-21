@@ -463,6 +463,50 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return null;
         }
 
+        private IReadOnlyList<string> GetAllowedMimeTypesForCurrentInputs()
+        {
+            var element = Element;
+            if (element is null)
+            {
+                return Array.Empty<string>();
+            }
+
+            List<string> allowedMimeTypes = new List<string>();
+            foreach (var input in element.Inputs)
+            {
+                if (input is AudioFormInput)
+                {
+                    AddAllowedType(allowedMimeTypes, "audio/*");
+                }
+                else if (input is DocumentFormInput)
+                {
+                    AddAllowedType(allowedMimeTypes, "application/*");
+                    AddAllowedType(allowedMimeTypes, "text/*");
+                }
+                else if (input is ImageFormInput)
+                {
+                    AddAllowedType(allowedMimeTypes, "image/*");
+                }
+                else if (input is VideoFormInput)
+                {
+                    AddAllowedType(allowedMimeTypes, "video/*");
+                }
+            }
+
+            return allowedMimeTypes;
+        }
+
+        private IReadOnlyList<string> GetAllowedFileExtensionsForCurrentInputs()
+        {
+            var mimeTypes = GetAllowedMimeTypesForCurrentInputs();
+            if (mimeTypes.Count == 0)
+            {
+                return Array.Empty<string>();
+            }
+
+            return MimeTypeMap.GetExtensionsForMimeTypePatterns(mimeTypes);
+        }
+
         private string GetAllowedAttachmentTypesForCurrentInputs()
         {
             var element = Element;
