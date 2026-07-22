@@ -21,6 +21,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 #if WPF
@@ -133,56 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     }
                 }
 #elif WINDOWS_XAML
-#if WINUI
-                var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
-                if (hwnd == 0)
-                    return; // Can't show dialog without a root window
-#endif
-                var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
-#if WINUI
-                WinRT.Interop.InitializeWithWindow.Initialize(openPicker, (nint)hwnd);
-#endif
-                var allowedExtensions = GetAllowedFileExtensionsForCurrentInputs();
-                if (allowedExtensions.Count > 0)
-                {
-#if WINUI
-                    openPicker.FileTypeFilter.Add("*");
-#else
-                    foreach (var extension in allowedExtensions)
-                    {
-                        openPicker.FileTypeFilter.Add(extension);
-                    }
-#endif
-                }
-                else
-                {
-                    openPicker.FileTypeFilter.Add("*");
-                }
-                var file = await openPicker.PickSingleFileAsync();
-                if (file != null)
-                {
-                    var fileInfo = new FileInfo(file.Path);
-                    _scrollToEnd = true;
-                    if (!CanAddAttachment())
-                    {
-                        return;
-                    }
-                    var element = Element;
-                    if (element is null)
-                    {
-                        return;
-                    }
-#if WINDOWS_UWP
-                    using var ms = new MemoryStream();
-                    using var filestream = await file.OpenStreamForReadAsync();
-                    await filestream.CopyToAsync(ms);
-                    await element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
-#else
-                    await element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
-#endif
-                    EvaluateExpressions();
-                    UpdateAddAttachmentButtonState();
-                }
+                await ShowWinUiAttachmentActionsAsync(sender as ButtonBase);
 #endif
             }
             catch (System.Exception ex)
@@ -193,6 +145,326 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
             }
         }
+
+#if WINDOWS_XAML
+        private sealed class WinUiAttachmentAction
+        {
+            public required string Title { get; init; }
+
+            public required Func<Task> ExecuteAsync { get; init; }
+        }
+
+        private sealed class WinUiAttachmentCapabilities
+        {
+            public bool CanCaptureImage { get; set; }
+
+            public bool CanCaptureVideo { get; set; }
+
+            public bool CanCaptureAudio { get; set; }
+
+            public bool CanChooseFromFiles { get; set; }
+
+            public bool SupportsCapture => CanCaptureImage || CanCaptureVideo || CanCaptureAudio;
+        }
+
+        private WinUiAttachmentCapabilities GetWinUiAttachmentCapabilities()
+        {
+            var capabilities = new WinUiAttachmentCapabilities();
+            var element = Element;
+            if (element is null)
+            {
+                return capabilities;
+            }
+
+            foreach (var input in element.Inputs)
+            {
+                switch (input)
+                {
+                    case ImageFormInput imageInput:
+                        if (imageInput.InputMethod is AttachmentInputMethod.Any or AttachmentInputMethod.Capture)
+                        {
+                            capabilities.CanCaptureImage = true;
+                        }
+
+                        if (imageInput.InputMethod is AttachmentInputMethod.Any or AttachmentInputMethod.Upload)
+                        {
+                            capabilities.CanChooseFromFiles = true;
+                        }
+                        break;
+
+                    case VideoFormInput videoInput:
+                        if (videoInput.InputMethod is AttachmentInputMethod.Any or AttachmentInputMethod.Capture)
+                        {
+                            capabilities.CanCaptureVideo = true;
+                        }
+
+                        if (videoInput.InputMethod is AttachmentInputMethod.Any or AttachmentInputMethod.Upload)
+                        {
+                            capabilities.CanChooseFromFiles = true;
+                        }
+                        break;
+
+                    case AudioFormInput audioInput:
+                        if (audioInput.InputMethod is AttachmentInputMethod.Any or AttachmentInputMethod.Capture)
+                        {
+                            capabilities.CanCaptureAudio = true;
+                        }
+
+                        if (audioInput.InputMethod is AttachmentInputMethod.Any or AttachmentInputMethod.Upload)
+                        {
+                            capabilities.CanChooseFromFiles = true;
+                        }
+                        break;
+
+                    case DocumentFormInput:
+                        capabilities.CanChooseFromFiles = true;
+                        break;
+                }
+            }
+
+            return capabilities;
+        }
+
+        private List<WinUiAttachmentAction> BuildWinUiAttachmentActions()
+        {
+            var actions = new List<WinUiAttachmentAction>();
+            var capabilities = GetWinUiAttachmentCapabilities();
+
+            if (capabilities.SupportsCapture)
+            {
+                if (capabilities.CanCaptureImage)
+                {
+                    actions.Add(new WinUiAttachmentAction
+                    {
+                        Title = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithCamera")!,
+                        ExecuteAsync = CapturePhotoWinUiAsync,
+                    });
+                }
+
+                if (capabilities.CanCaptureVideo)
+                {
+                    actions.Add(new WinUiAttachmentAction
+                    {
+                        Title = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithVideoCamera")!,
+                        ExecuteAsync = CaptureVideoWinUiAsync,
+                    });
+                }
+
+                if (capabilities.CanCaptureAudio)
+                {
+                    actions.Add(new WinUiAttachmentAction
+                    {
+                        Title = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithMicrophone")!,
+                        ExecuteAsync = CaptureAudioWinUiAsync,
+                    });
+                }
+            }
+
+            if (capabilities.CanChooseFromFiles)
+            {
+                actions.Add(new WinUiAttachmentAction
+                {
+                    Title = Properties.Resources.GetString("FeatureFormAddAttachmentMenuChooseFromFiles")!,
+                    ExecuteAsync = ChooseFromFilesWinUiAsync,
+                });
+            }
+
+            return actions;
+        }
+
+        private async Task ShowWinUiAttachmentActionsAsync(ButtonBase? sourceButton)
+        {
+            var actions = BuildWinUiAttachmentActions();
+            if (actions.Count == 0)
+            {
+                return;
+            }
+
+            if (sourceButton is null)
+            {
+                await actions[0].ExecuteAsync();
+                return;
+            }
+
+            var flyout = new MenuFlyout();
+            foreach (var action in actions)
+            {
+                var item = new MenuFlyoutItem { Text = action.Title };
+                item.Click += async (_, __) => await action.ExecuteAsync();
+                flyout.Items.Add(item);
+            }
+
+            flyout.ShowAt(sourceButton);
+        }
+
+        private async Task<Windows.Storage.StorageFile?> PickSingleWindowsFileAsync()
+        {
+            var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
+            if (hwnd == 0)
+            {
+                return null;
+            }
+
+            var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
+            WinRT.Interop.InitializeWithWindow.Initialize(openPicker, (nint)hwnd);
+
+            var allowedExtensions = GetAllowedFileExtensionsForCurrentInputs();
+            if (allowedExtensions.Count > 0)
+            {
+                foreach (var extension in allowedExtensions)
+                {
+                    openPicker.FileTypeFilter.Add(extension);
+                }
+            }
+            else
+            {
+                openPicker.FileTypeFilter.Add("*");
+            }
+
+            return await openPicker.PickSingleFileAsync();
+        }
+
+        private async Task ChooseFromFilesWinUiAsync()
+        {
+            var file = await PickSingleWindowsFileAsync();
+            if (file is not null)
+            {
+                await AddPickedWindowsFileAsync(file);
+            }
+        }
+
+        private async Task AddPickedWindowsFileAsync(Windows.Storage.StorageFile file)
+        {
+            var fileInfo = new FileInfo(file.Path);
+            _scrollToEnd = true;
+            if (!CanAddAttachment())
+            {
+                return;
+            }
+
+            var element = Element;
+            if (element is null)
+            {
+                return;
+            }
+
+            await element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+            EvaluateExpressions();
+            UpdateAddAttachmentButtonState();
+        }
+
+        private async Task CapturePhotoWinUiAsync()
+        {
+            var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
+            if (hwnd == 0)
+            {
+                return;
+            }
+
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow((nint)hwnd);
+            var captureUi = new Microsoft.Windows.Media.Capture.CameraCaptureUI(windowId);
+            var file = await captureUi.CaptureFileAsync(Microsoft.Windows.Media.Capture.CameraCaptureUIMode.Photo);
+            if (file is not null)
+            {
+                await AddPickedWindowsFileAsync(file);
+            }
+        }
+
+        private async Task CaptureVideoWinUiAsync()
+        {
+            var hwnd = this.XamlRoot?.ContentIslandEnvironment?.AppWindowId.Value ?? 0;
+            if (hwnd == 0)
+            {
+                return;
+            }
+
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow((nint)hwnd);
+            var captureUi = new Microsoft.Windows.Media.Capture.CameraCaptureUI(windowId);
+            var file = await captureUi.CaptureFileAsync(Microsoft.Windows.Media.Capture.CameraCaptureUIMode.Video);
+            if (file is not null)
+            {
+                await AddPickedWindowsFileAsync(file);
+            }
+        }
+
+        private async Task CaptureAudioWinUiAsync()
+        {
+            Windows.Media.Capture.MediaCapture? mediaCapture = null;
+            Windows.Storage.StorageFile? file = null;
+            bool isRecording = false;
+            bool shouldSave = false;
+
+            try
+            {
+                mediaCapture = new Windows.Media.Capture.MediaCapture();
+                await mediaCapture.InitializeAsync(new Windows.Media.Capture.MediaCaptureInitializationSettings
+                {
+                    StreamingCaptureMode = Windows.Media.Capture.StreamingCaptureMode.Audio,
+                });
+
+                file = await Windows.Storage.ApplicationData.Current.TemporaryFolder.CreateFileAsync(
+                    $"audio-{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}.m4a",
+                    Windows.Storage.CreationCollisionOption.GenerateUniqueName);
+
+                var dialog = new ContentDialog
+                {
+                    Title = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithMicrophone")!,
+                    Content = Properties.Resources.GetString("FeatureFormAudioCaptureReady")!,
+                    PrimaryButtonText = Properties.Resources.GetString("FeatureFormAudioCaptureRecord")!,
+                    CloseButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel")!,
+                    XamlRoot = this.XamlRoot,
+                };
+
+                dialog.PrimaryButtonClick += async (_, args) =>
+                {
+                    var deferral = args.GetDeferral();
+                    try
+                    {
+                        if (!isRecording)
+                        {
+                            var profile = Windows.Media.MediaProperties.MediaEncodingProfile.CreateM4a(Windows.Media.MediaProperties.AudioEncodingQuality.Auto);
+                            await mediaCapture.StartRecordToStorageFileAsync(profile, file);
+                            isRecording = true;
+                            args.Cancel = true;
+                            dialog.Content = Properties.Resources.GetString("FeatureFormAudioCaptureInProgress")!;
+                            dialog.PrimaryButtonText = Properties.Resources.GetString("FeatureFormAudioCaptureStop")!;
+                        }
+                        else
+                        {
+                            await mediaCapture.StopRecordAsync();
+                            isRecording = false;
+                            shouldSave = true;
+                        }
+                    }
+                    finally
+                    {
+                        deferral.Complete();
+                    }
+                };
+
+                var result = await dialog.ShowAsync();
+
+                if (isRecording)
+                {
+                    await mediaCapture.StopRecordAsync();
+                    isRecording = false;
+                }
+
+                if (result == ContentDialogResult.Primary && shouldSave && file is not null)
+                {
+                    await AddPickedWindowsFileAsync(file);
+                }
+                else if (file is not null)
+                {
+                    await file.DeleteAsync();
+                }
+            }
+            finally
+            {
+                mediaCapture?.Dispose();
+            }
+        }
+#endif
 
         private partial void UpdateAddAttachmentButtonState()
         {
