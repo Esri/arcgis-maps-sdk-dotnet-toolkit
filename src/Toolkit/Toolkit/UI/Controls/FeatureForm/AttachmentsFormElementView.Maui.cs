@@ -264,6 +264,37 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
+        private async Task AddSelectedMediaAsync(IEnumerable<FileResult>? files)
+        {
+            if (!CanAddAttachment() || Element is null || files is null)
+            {
+                return;
+            }
+
+            try
+            {
+                var file = files.FirstOrDefault();
+                if (file is null)
+                {
+                    return;
+                }
+
+                if (Element is null || !CanAddAttachment())
+                {
+                    return;
+                }
+
+                await AddAttachmentFromResultAsync(file);
+            }
+            catch (System.Exception ex)
+            {
+                if (!TryHandleAttachmentValidationException(ex))
+                {
+                    Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
+                }
+            }
+        }
+
         private async Task AddAttachmentFromResultAsync(FileResult result)
         {
             if (Element is null || !CanAddAttachment())
@@ -337,7 +368,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         Title = capabilities.CanPickVideoFromLibrary
                             ? Properties.Resources.GetString("FeatureFormAddAttachmentMenuChoosePhotoFromLibrary")!
                             : Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromLibrary")!,
-                        ExecuteAsync = () => AddSelectedMediaAsync(MediaPicker.PickPhotoAsync()),
+                        ExecuteAsync = async () =>
+                        {
+                            var files = await MediaPicker.PickPhotosAsync();
+                            await AddSelectedMediaAsync(files);
+                        },
                     });
                 }
 
@@ -348,7 +383,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         Title = capabilities.CanPickImageFromLibrary
                             ? Properties.Resources.GetString("FeatureFormAddAttachmentMenuChooseVideoFromLibrary")!
                             : Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromLibrary")!,
-                        ExecuteAsync = () => AddSelectedMediaAsync(MediaPicker.PickVideoAsync()),
+                        ExecuteAsync = async () =>
+                        {
+                            var files = await MediaPicker.PickVideosAsync();
+                            await AddSelectedMediaAsync(files);
+                        },
                     });
                 }
 #endif
