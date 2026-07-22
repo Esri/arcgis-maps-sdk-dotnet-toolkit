@@ -100,8 +100,6 @@ namespace Toolkit.SampleApp.Maui.Samples
                     return feature;
                 }
             }
-            var subresults = results.Where(r => r.SublayerResults.Any()).SelectMany(r => r.SublayerResults);
-
             foreach (var s in results.SelectMany(r => r.SublayerResults).Where(r => r.LayerContent is SubtypeSublayer layer))
             {
                 var feature = s.GeoElements?.OfType<ArcGISFeature>()?.FirstOrDefault();
@@ -110,6 +108,7 @@ namespace Toolkit.SampleApp.Maui.Samples
                     return feature;
                 }
             }
+            var subresults = results.Where(r => r.SublayerResults.Any()).SelectMany(r => r.SublayerResults);
             foreach (var sub in subresults)
             {
                 var elm = sub.GeoElements;
