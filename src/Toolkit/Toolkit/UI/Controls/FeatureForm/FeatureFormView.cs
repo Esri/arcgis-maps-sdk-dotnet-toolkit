@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.UtilityNetworks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Data;
@@ -950,11 +951,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        internal static async Task GetFeatureFormViewParentFromWorkflowAsync(object workflowPage, int pageCount)
+        internal static async Task NavigateBackFromUtilityAssociationWorkflowAsync(
+            object workflowPage,
+            int pageCount,
+            UtilityAssociationsFilterResult refreshedFilterResult)
         {
             if (UtilityAssociationWorkflowOwners.TryGetValue(workflowPage, out var owner) &&
                 owner.GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
+                subView.ReplaceBackstackItem(pageCount, refreshedFilterResult);
                 for (var index = 0; index < pageCount; index++)
                 {
                     await subView.GoBack();
@@ -964,9 +969,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         // Maps each utility association workflow page model to the FeatureFormView displaying it.
         // The creation model has no visual parent reference, but after successfully adding an
-        // association it must retrieve the owning NavigationSubView and navigate back through the
-        // four workflow pages to the association filter results. ConditionalWeakTable provides that
-        // lookup without keeping either the workflow model or FeatureFormView alive solely for it.
+        // association it must retrieve the owning NavigationSubView, refresh the filter-result
+        // backstack item, and navigate back through the workflow pages. ConditionalWeakTable
+        // provides that lookup without keeping either object alive solely for it.
         private static readonly ConditionalWeakTable<object, FeatureFormView> UtilityAssociationWorkflowOwners = new();
 
         internal static GeoView? GetUtilityAssociationWorkflowGeoView(object workflowPage)

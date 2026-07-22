@@ -227,6 +227,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             ErrorMessage = null;
             try
             {
+                var filterResult = _element.AssociationsFilterResults.First(result => ReferenceEquals(result.Filter, _filter));
+                var filterIndex = _element.AssociationsFilterResults.ToList().IndexOf(filterResult);
                 if (!await _element.CanAddAssociationAsync(_candidate.Feature, _filter))
                 {
                     ErrorMessage = Properties.Resources.GetString("FeatureFormUtilityAssociationsCannotAddAssociation");
@@ -266,7 +268,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
 
                 await _element.FetchAssociationsFilterResultsAsync();
-                await FeatureFormView.GetFeatureFormViewParentFromWorkflowAsync(this, 4);
+                var refreshedFilterResult = _element.AssociationsFilterResults[filterIndex];
+                await FeatureFormView.NavigateBackFromUtilityAssociationWorkflowAsync(this, 4, refreshedFilterResult);
             }
             catch (Exception ex)
             {
