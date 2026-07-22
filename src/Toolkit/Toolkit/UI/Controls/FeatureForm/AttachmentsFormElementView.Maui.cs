@@ -273,18 +273,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             try
             {
-                var file = files.FirstOrDefault();
-                if (file is null)
+                foreach (var file in files)
                 {
-                    return;
-                }
+                    if (Element is null || !CanAddAttachment())
+                    {
+                        return;
+                    }
 
-                if (Element is null || !CanAddAttachment())
-                {
-                    return;
+                    await AddAttachmentFromResultAsync(file);
                 }
-
-                await AddAttachmentFromResultAsync(file);
             }
             catch (System.Exception ex)
             {
@@ -370,7 +367,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                             : Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromLibrary")!,
                         ExecuteAsync = async () =>
                         {
-                            var files = await MediaPicker.PickPhotosAsync();
+                            int selectionLimit = GetRemainingAttachmentSelectionLimit();
+                            if (selectionLimit <= 0 || !CanAddAttachment())
+                            {
+                                return;
+                            }
+
+                            var files = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
+                            {
+                                SelectionLimit = selectionLimit,
+                            });
                             await AddSelectedMediaAsync(files);
                         },
                     });
@@ -385,7 +391,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                             : Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromLibrary")!,
                         ExecuteAsync = async () =>
                         {
-                            var files = await MediaPicker.PickVideosAsync();
+                            int selectionLimit = GetRemainingAttachmentSelectionLimit();
+                            if (selectionLimit <= 0 || !CanAddAttachment())
+                            {
+                                return;
+                            }
+
+                            var files = await MediaPicker.PickVideosAsync(new MediaPickerOptions
+                            {
+                                SelectionLimit = selectionLimit,
+                            });
                             await AddSelectedMediaAsync(files);
                         },
                     });
@@ -407,6 +422,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
 
             return actions;
+        }
+
+        private int GetRemainingAttachmentSelectionLimit()
+        {
+            long remaining = Element.MaxAttachmentCount - Element.Attachments.Count;
+            if (remaining <= 0)
+            {
+                return 0;
+            }
+
+            return remaining > int.MaxValue ? int.MaxValue : (int)remaining;
         }
 
         private async Task CapturePhotoAsync()
