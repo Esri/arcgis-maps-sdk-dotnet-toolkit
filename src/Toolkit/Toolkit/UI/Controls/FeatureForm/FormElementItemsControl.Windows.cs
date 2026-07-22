@@ -50,6 +50,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     presenter.ContentTemplate = UtilityAssociationsFormElementTemplate;
                 }
+                else if (item is AttachmentsFormElement)
+                {
+                    presenter.ContentTemplate = AttachmentsFormElementTemplate;
+                }
                 else
                 {
                     presenter.ContentTemplate = UnsupportedFormElementTemplate; // Renders empty / skips
@@ -122,6 +126,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty UtilityAssociationsFormElementTemplateProperty =
             DependencyProperty.Register(nameof(UtilityAssociationsFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Template used for rendering an <see cref="AttachmentsFormElement"/>.
+        /// </summary>
+        /// <seealso cref="AttachmentsFormElement"/>
+        /// <seealso cref="AttachmentsFormElementView"/>
+        public DataTemplate AttachmentsFormElementTemplate
+        {
+            get { return (DataTemplate)GetValue(AttachmentsFormElementTemplateProperty); }
+            set { SetValue(AttachmentsFormElementTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="AttachmentsFormElementTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AttachmentsFormElementTemplateProperty =
+            DependencyProperty.Register(nameof(AttachmentsFormElementTemplate), typeof(DataTemplate), typeof(FormElementItemsControl), new PropertyMetadata(null));
     }
 }
 #endif

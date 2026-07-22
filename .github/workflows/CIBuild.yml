@@ -46,7 +46,7 @@ jobs:
         name: NuGet Packages
         path: Output/NuGet/Release
 
-    - name: Publish to Esri Nuget Repo
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: |
-        dotnet nuget push Output\NuGet\Release\*.nupkg --api-key  ${{ secrets.GithubPushPackagesSecret }} --source https://nuget.pkg.github.com/esri/index.json 
+#    - name: Publish to Esri Nuget Repo
+#      if: ${{ github.ref == 'refs/heads/main' }}
+#      run: |
+#        dotnet nuget push Output\NuGet\Release\*.nupkg --api-key  ${{ secrets.GithubPushPackagesSecret }} --source https://nuget.pkg.github.com/esri/index.json 

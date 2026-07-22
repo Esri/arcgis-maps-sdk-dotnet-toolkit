@@ -422,6 +422,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Handles the <see cref="GeometryEditor.InteractionPreviewChanged"/> event for the <see cref="GeometryEditor"/>
+        /// </summary>
+        /// <remarks> This method updates the measurement result based on the <see cref="GeometryEditorInteractionPreviewEventArgs.InteractionPreview"/> property. 
+        /// If the <see cref="GeometryEditorInteractionPreviewEventArgs.InteractionPreview"/> is null, the method uses the current geometry of the <see cref="GeometryEditor"/> instance.</remarks>
+        /// <param name="sender">The source of the event, expected to be a <see cref="GeometryEditor"/> instance.</param>
+        /// <param name="e">The event data containing information about the interaction preview change.</param>
+        private void OnGeometryEditorInteractionPreviewChanged(object? sender, GeometryEditorInteractionPreviewEventArgs e)
+        {
+            if (_geometryEditor is null)
+            {
+                return;
+            }
+
+            var geometry = e.InteractionPreview?.PreviewGeometry ?? _geometryEditor.Geometry;
+#if WINUI
+            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
+#else
+            Dispatcher.Invoke(() =>
+#endif
+            {
+                DisplayResult(geometry);
+            });
+        }
+
         private void StartMeasureSession(GeometryType creationMode)
         {
             if (_geometryEditor is GeometryEditor geometryEditor)
@@ -431,6 +456,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _originalTool = geometryEditor.Tool;
                     geometryEditor.Tool = MeasureTool ?? _originalTool;
                     _geometryEditor.PropertyChanged += OnGeometryEditorPropertyChanged;
+                    _geometryEditor.InteractionPreviewChanged += OnGeometryEditorInteractionPreviewChanged;
                     _isGeometryEditorHooked = true;
                 }
                 _geometryEditor.Start(creationMode);
@@ -452,6 +478,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _originalTool = null;
                     }
                     _geometryEditor.PropertyChanged -= OnGeometryEditorPropertyChanged;
+                    _geometryEditor.InteractionPreviewChanged -= OnGeometryEditorInteractionPreviewChanged;
                     _isGeometryEditorHooked = false; 
                 }
             }

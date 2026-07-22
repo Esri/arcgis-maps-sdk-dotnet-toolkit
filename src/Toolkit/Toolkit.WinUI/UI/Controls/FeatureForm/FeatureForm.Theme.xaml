@@ -280,7 +280,8 @@
                         </VisualStateManager.VisualStateGroups>
                         <Grid>
                             <Image x:Name="ThumbnailImage" />
-                            <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2">
+                            <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2"
+                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.DisplayFilename, Converter={StaticResource FeatureFormViewVisibilityConverter}}">
                                 <TextBlock x:Name="AttachmentName" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Attachment.Name}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" TextTrimming="CharacterEllipsis" />
                             </Border>
                             <TextBlock x:Name="FileSizeText" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Attachment.Size, Converter={StaticResource FeatureFormFileSizeConverter}}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="10" />
@@ -308,22 +309,33 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Label}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
-                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
-                            <Button x:Name="AddAttachmentButton" BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
+                            <StackPanel Grid.Row="1">
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                                <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,2,0,0">
+                                    <Border x:Name="MinAttachmentBadge" Background="Transparent" BorderBrush="Gray" BorderThickness="1" CornerRadius="8" Padding="8,2" Visibility="Collapsed">
+                                        <TextBlock x:Name="MinAttachmentBadgeText" FontSize="11" Foreground="{ThemeResource TextFillColorPrimaryBrush}" Opacity=".7"/>
+                                    </Border>
+                                    <Border x:Name="MaxAttachmentBadge" Background="Transparent" BorderBrush="Gray" BorderThickness="1" CornerRadius="8" Padding="8,2" Visibility="Collapsed">
+                                        <TextBlock x:Name="MaxAttachmentBadgeText" FontSize="11" Foreground="{ThemeResource TextFillColorPrimaryBrush}" Opacity=".7"/>
+                                    </Border>
+                                </StackPanel>
+                                <TextBlock x:Name="AttachmentErrorLabel" Foreground="Red" Margin="0,2,0,0" TextWrapping="Wrap" Visibility="Collapsed" />
+                            </StackPanel>
+                            <Button x:Name="AddAttachmentButton" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
                                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Padding="5" Grid.Column="1" Grid.RowSpan="2">
                                 <TextBlock Text="" FontFamily="Segoe MDL2 Assets" />
                             </Button>
                         </Grid>
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" x:Name="ItemsScrollView">
-                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Attachments}" IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable}">
+                            <ItemsControl x:Name="AttachmentItemsControl" MinHeight="75" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.Attachments}" IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element.IsEditable}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <primitives:FormAttachmentView Attachment="{Binding}" Element="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Element}" />
+                                    <DataTemplate x:DataType="forms:FormAttachment">
+                                        <primitives:FormAttachmentView Attachment="{x:Bind}" Element="{Binding ElementName=AttachmentItemsControl, Path=DataContext}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -666,6 +678,11 @@
                                                             <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                                         </DataTemplate>
                                                     </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                                    <primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
+                                                        <DataTemplate>
+                                                            <primitives:AttachmentsFormElementView Element="{Binding}" />
+                                                        </DataTemplate>
+                                                    </primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
                                                     <primitives:FormElementItemsControl.GroupFormElementTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
@@ -692,6 +709,11 @@
                                                                                 <primitives:UtilityAssociationsFormElementView Element="{Binding}" />
                                                                             </DataTemplate>
                                                                         </primitives:FormElementItemsControl.UtilityAssociationsFormElementTemplate>
+                                                                        <primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
+                                                                            <DataTemplate>
+                                                                                <primitives:AttachmentsFormElementView Element="{Binding}" />
+                                                                            </DataTemplate>
+                                                                        </primitives:FormElementItemsControl.AttachmentsFormElementTemplate>
                                                                     </primitives:FormElementItemsControl>
                                                                 </Expander>
                                                             </StackPanel>

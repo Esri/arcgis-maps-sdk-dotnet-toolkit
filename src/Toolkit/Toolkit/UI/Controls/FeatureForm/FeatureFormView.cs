@@ -283,7 +283,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void UpdateIsValidProperty()
         {
-            IsValid = CurrentFeatureForm?.ElementValidationErrors?.Any() != true;
+            bool hasElementErrors = CurrentFeatureForm?.ElementValidationErrors?.Any() == true;
+            bool hasAttachmentErrors = HasAttachmentCountError();
+            IsValid = !hasElementErrors && !hasAttachmentErrors;
         }
 
         /// <summary>
@@ -322,7 +324,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return ErrorsVisibility == ValidationErrorVisibility.Visible || _wasFinishEditingAttempted;
         }
 
-        private IEnumerable<FieldFormElement> EnumerateVisibleElements(IEnumerable<FormElement>? elements)
+        private IEnumerable<FormElement> EnumerateVisibleElements(IEnumerable<FormElement>? elements)
         {
             if (elements is not null)
             {
@@ -330,11 +332,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     if (element.IsVisible)
                     {
-                        if (element is FieldFormElement field) yield return field;
-                        else if (element is GroupFormElement group)
+                        if (element is GroupFormElement group)
                         {
                             foreach (var elm in EnumerateVisibleElements(group.Elements))
                                 yield return elm;
+                        }
+                        else
+                        {
+                            yield return element;
                         }
                     }
                 }
@@ -349,13 +354,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             foreach (var item in EnumerateVisibleElements(CurrentFeatureForm?.Elements))
             {
-                bool elementHasVisibleError = item.ValidationErrors.Any() && item.IsEditable == true;
-                if (elementHasVisibleError)
+                if (item is FieldFormElement fieldElement)
                 {
-                    ScrollTo(item);
-                    return true;
+                    bool elementHasVisibleError = fieldElement.ValidationErrors.Any() && fieldElement.IsEditable == true;
+                    if (elementHasVisibleError)
+                    {
+                        ScrollTo(fieldElement);
+                        return true;
+                    }
+                }
+                else if (item is AttachmentsFormElement attachmentsElement)
+                {
+                    if (HasAttachmentElementError(attachmentsElement))
+                    {
+                        ScrollTo(attachmentsElement);
+                        return true;
+                    }
                 }
             }
+
+            var defaultAttachmentsElement = CurrentFeatureForm?.DefaultAttachmentsElement;
+            if (defaultAttachmentsElement?.IsVisible == true &&
+                HasAttachmentElementError(defaultAttachmentsElement))
+            {
+                ScrollTo(defaultAttachmentsElement);
+                return true;
+            }
+
             return false;
         }
 
@@ -365,6 +390,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="element">Form element to scrollto.</param>
         public void ScrollTo(FormElement element)
         {
+            bool didScroll = false;
+
             foreach (var item in GetDescendentsOfType<FieldFormElementView>(this))
             {
                 if (item.Element == element)
@@ -379,8 +406,48 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _ = subView.ScrollToAsync(item, ScrollToPosition.MakeVisible, true);
                     }
 #endif
+                    didScroll = true;
+                    break;
                 }
             }
+
+            foreach (var item in GetDescendentsOfType<AttachmentsFormElementView>(this))
+            {
+                if (item.Element == element)
+                {
+                    ScrollToAttachmentView(item);
+                    didScroll = true;
+                    break;
+                }
+            }
+
+            // Fallback: if reference matching fails for an attachment element, scroll to the first visible
+            // attachment view currently in an error state so the user still lands on actionable UI.
+            if (!didScroll && element is AttachmentsFormElement)
+            {
+                foreach (var item in GetDescendentsOfType<AttachmentsFormElementView>(this))
+                {
+                    if (item.Element is AttachmentsFormElement attachmentElement && HasAttachmentElementError(attachmentElement))
+                    {
+                        ScrollToAttachmentView(item);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void ScrollToAttachmentView(AttachmentsFormElementView item)
+        {
+#if WINDOWS_XAML
+            item.StartBringIntoView();
+#elif WPF
+            item.BringIntoView();
+#elif MAUI
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                _ = subView.ScrollToAsync(item, ScrollToPosition.MakeVisible, true);
+            }
+#endif
         }
 
         /// <summary>
@@ -427,11 +494,71 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     item.ResetValidationState();
                 }
-               ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
+                ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
+
                 if (requireAllErrorsResolved && ScrollToFirstError()) return false;
                 await FinishEditingAsync();
                 return true;
             }
+            return false;
+        }
+
+        private bool HasAttachmentCountError()
+        {
+            foreach (var attachmentsElement in EnumerateVisibleAttachmentElements())
+            {
+                if (HasAttachmentElementError(attachmentsElement))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private IEnumerable<AttachmentsFormElement> EnumerateVisibleAttachmentElements()
+        {
+            foreach (var element in EnumerateVisibleElements(CurrentFeatureForm?.Elements))
+            {
+                if (element is AttachmentsFormElement attachmentsElement)
+                {
+                    yield return attachmentsElement;
+                }
+            }
+
+            if (CurrentFeatureForm?.DefaultAttachmentsElement is AttachmentsFormElement defaultAttachmentsElement &&
+                defaultAttachmentsElement.IsVisible)
+            {
+                yield return defaultAttachmentsElement;
+            }
+        }
+
+        private static bool HasAttachmentElementError(AttachmentsFormElement attachmentsElement)
+        {
+            if (!attachmentsElement.IsVisible)
+            {
+                return false;
+            }
+
+            if (attachmentsElement.ValidationErrors.Any(error =>
+                error is FeatureFormLessThanMinimumAttachmentCountException ||
+                error is FeatureFormExceedsMaximumAttachmentCountException))
+            {
+                return true;
+            }
+
+            uint count = (uint)attachmentsElement.Attachments.Count;
+            if (attachmentsElement.MinAttachmentCount > 0 && count < attachmentsElement.MinAttachmentCount)
+            {
+                return true;
+            }
+
+            bool hasConfiguredMax = attachmentsElement.MaxAttachmentCount > 0 && attachmentsElement.MaxAttachmentCount < uint.MaxValue;
+            if (hasConfiguredMax && count > attachmentsElement.MaxAttachmentCount)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -674,7 +801,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var result = await dialog.ShowAsync();
                     if (result == ContentDialogResult.Primary)
                     {
-                        await FinishEditingAsync();
+                        if (!await FinishEditingAsync(true))
+                        {
+                            e.Cancel = true;
+                        }
                     }
                     else if (result == ContentDialogResult.Secondary)
                     {
@@ -700,7 +830,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     try
                     {
-                        await FinishEditingAsync();
+                        if (!await FinishEditingAsync(true))
+                        {
+                            e.Cancel = true;
+                        }
                     }
                     catch(System.Exception ex)
                     {
@@ -724,7 +857,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         string action = await page.DisplayActionSheetAsync(title, cancelText, null, applyText, discardText);
                         if (action == applyText)
                         {
-                            await FinishEditingAsync();
+                            if (!await FinishEditingAsync(true))
+                            {
+                                e.Cancel = true;
+                            }
                         }
                         else if (action == discardText)
                         {
