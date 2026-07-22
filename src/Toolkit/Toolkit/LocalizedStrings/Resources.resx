@@ -133,6 +133,30 @@
     <value>Take Photo</value>
     <comment>Menu text for adding an attachment by taking a photo</comment>
   </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>This file type is not supported. Allowed types: {0}</value>
+    <comment>Validation error shown when the selected attachment file type is unsupported; {0} is a comma-separated list of allowed types.</comment>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>This file is too large. Maximum allowed size is {0} MB.</value>
+    <comment>Validation error shown when the selected attachment exceeds the maximum allowed size; {0} is the maximum size in megabytes.</comment>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>This file is too large.</value>
+    <comment>Validation error shown when the selected attachment exceeds the maximum allowed size but no size value is available.</comment>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>This media is too long. Maximum allowed duration is {0} seconds.</value>
+    <comment>Validation error shown when selected audio or video exceeds the maximum duration; {0} is the allowed duration or durations in seconds.</comment>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>This media is too long.</value>
+    <comment>Validation error shown when selected audio or video exceeds the maximum duration but no limit value is available.</comment>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>Attachment upload failed</value>
+    <comment>Title text for the attachment validation alert dialog.</comment>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
     <comment>Input validation of entered date must be before or on the maximum allowed date {0}</comment>

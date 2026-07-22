@@ -152,7 +152,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             catch (System.Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+                if (!TryHandleAttachmentValidationException(ex))
+                {
+                    System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
+                }
             }
         }
 
@@ -162,6 +165,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _addAttachmentButton.IsEnabled = CanAddAttachment();
             }
+        }
+
+        private async partial Task ShowAttachmentValidationAlertAsync(string message)
+        {
+            string title = Properties.Resources.GetString("FeatureFormAttachmentValidationErrorTitle")!;
+#if WPF
+            System.Windows.MessageBox.Show(message, title);
+            await Task.CompletedTask;
+#elif WINDOWS_XAML
+            var dialog = new ContentDialog
+            {
+                Title = title,
+                Content = message,
+                CloseButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK")!
+            };
+            dialog.XamlRoot = this.XamlRoot;
+            await dialog.ShowAsync();
+#endif
         }
 
         private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible)
