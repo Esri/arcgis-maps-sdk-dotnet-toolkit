@@ -137,6 +137,10 @@
     <value>Take Video</value>
     <comment>Menu text for adding an attachment by recording a video</comment>
   </data>
+  <data name="FeatureFormAddAttachmentMenuWithMicrophone" xml:space="preserve">
+    <value>Record Audio</value>
+    <comment>Menu text for adding an attachment by recording audio</comment>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromLibrary" xml:space="preserve">
     <value>Choose from Library</value>
     <comment>Menu text for selecting an attachment from the photo/video library.</comment>
@@ -176,6 +180,22 @@
   <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
     <value>Attachment upload failed</value>
     <comment>Title text for the attachment validation alert dialog.</comment>
+  </data>
+  <data name="FeatureFormAudioCaptureInProgress" xml:space="preserve">
+    <value>Recording audio. Select Stop to finish.</value>
+    <comment>Content text shown while audio capture is in progress.</comment>
+  </data>
+  <data name="FeatureFormAudioCaptureReady" xml:space="preserve">
+    <value>Select Record to start audio capture.</value>
+    <comment>Content text shown before audio capture starts.</comment>
+  </data>
+  <data name="FeatureFormAudioCaptureRecord" xml:space="preserve">
+    <value>Record</value>
+    <comment>Button text for starting audio capture.</comment>
+  </data>
+  <data name="FeatureFormAudioCaptureStop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>Button text for stopping audio capture.</comment>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
