@@ -301,6 +301,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private readonly UtilityAssociationFeatureSource _source;
         private readonly UtilityAssetType _assetType;
         private readonly ObservableCollection<UtilityAssociationFeatureCandidateItem> _candidateItems = new();
+        private string _committedSearchText = string.Empty;
         private IReadOnlyList<UtilityAssociationFeatureCandidateItem> _filteredCandidateItems = Array.Empty<UtilityAssociationFeatureCandidateItem>();
         private bool _isQuerying;
         private QueryParameters? _nextQueryParameters;
@@ -350,7 +351,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 if (SetProperty(ref _searchText, value ?? string.Empty))
                 {
-                    UpdateFilteredCandidates();
+                    (SearchCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -368,7 +369,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        public bool HasMore => _nextQueryParameters is not null && string.IsNullOrWhiteSpace(SearchText);
+        public bool HasMore => _nextQueryParameters is not null && string.IsNullOrWhiteSpace(_committedSearchText);
 
         public bool HasNoResults => !IsLoading && ErrorMessage is null && FilteredCandidateItems.Count == 0;
 
@@ -463,14 +464,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private bool CanSearch() =>
             !IsLoading &&
-            !string.IsNullOrWhiteSpace(SearchText) &&
-            FilteredCandidateItems.Count == 0 &&
-            _nextQueryParameters is not null;
+            (!string.Equals(SearchText, _committedSearchText, StringComparison.Ordinal) ||
+                (!string.IsNullOrWhiteSpace(_committedSearchText) &&
+                    FilteredCandidateItems.Count == 0 &&
+                    _nextQueryParameters is not null));
 
         private async Task CompleteSearchAsync()
         {
             var submittedSearchText = SearchText;
+            _committedSearchText = submittedSearchText;
+            UpdateFilteredCandidates();
             while (SearchText == submittedSearchText &&
+                !string.IsNullOrWhiteSpace(_committedSearchText) &&
                 FilteredCandidateItems.Count == 0 &&
                 _nextQueryParameters is not null)
             {
@@ -526,9 +531,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateFilteredCandidates()
         {
-            FilteredCandidateItems = string.IsNullOrWhiteSpace(SearchText)
+            FilteredCandidateItems = string.IsNullOrWhiteSpace(_committedSearchText)
                 ? _candidateItems.ToList()
-                : _candidateItems.Where(item => item.Title.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                : _candidateItems.Where(item => item.Title.Contains(_committedSearchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
             OnPropertyChanged(nameof(HasMore));
             (LoadMoreCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
             (SearchCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
