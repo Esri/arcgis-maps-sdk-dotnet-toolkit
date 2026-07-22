@@ -133,6 +133,26 @@
     <value>Take Photo</value>
     <comment>Menu text for adding an attachment by taking a photo</comment>
   </data>
+  <data name="FeatureFormAddAttachmentMenuWithVideoCamera" xml:space="preserve">
+    <value>Take Video</value>
+    <comment>Menu text for adding an attachment by recording a video</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuFromLibrary" xml:space="preserve">
+    <value>Choose from Library</value>
+    <comment>Menu text for selecting an attachment from the photo/video library.</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuChoosePhotoFromLibrary" xml:space="preserve">
+    <value>Choose Photo from Library</value>
+    <comment>Menu text for selecting a photo from the device library.</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuChooseVideoFromLibrary" xml:space="preserve">
+    <value>Choose Video from Library</value>
+    <comment>Menu text for selecting a video from the device library.</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuChooseFromFiles" xml:space="preserve">
+    <value>Choose from Files</value>
+    <comment>Menu text for selecting an attachment using the file picker.</comment>
+  </data>
   <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
     <value>This file type is not supported. Allowed types: {0}</value>
     <comment>Validation error shown when the selected attachment file type is unsupported; {0} is a comma-separated list of allowed types.</comment>

@@ -247,23 +247,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     continue;
                 }
 
-#if WPF || WINDOWS_XAML
+#if WPF
                 if (input is AudioFormInput || input is VideoFormInput || input is ImageFormInput)
                 {
                     return true;
                 }
 #elif MAUI
-#if WINDOWS || MACCATALYST
-                if (input is AudioFormInput || input is VideoFormInput || input is ImageFormInput)
-                {
-                    return true;
-                }
-#elif ANDROID || IOS
                 if (input is AudioFormInput)
                 {
                     return true;
                 }
-#endif
 #endif
             }
 
