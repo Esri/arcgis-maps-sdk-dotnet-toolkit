@@ -60,7 +60,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             _element = element;
             _filter = filter;
             _candidate = candidate;
-            AddCommand = new UtilityAssociationAsyncCommand(AddAsync, () => _options is not null && !IsAdding);
+            AddCommand = new UtilityAssociationAsyncCommand(
+                AddAsync,
+                () => _options is not null && !IsAdding,
+                ex => ErrorMessage = ex.Message);
             _ = LoadOptionsAsync();
         }
 
@@ -70,8 +73,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         public string AssociationType => _filter.FilterType switch
         {
-            UtilityAssociationsFilterType.Attachment or UtilityAssociationsFilterType.Structure
+            UtilityAssociationsFilterType.Attachment
                 => Properties.Resources.GetString("FeatureFormUtilityAssociationsAttachmentType")!,
+            UtilityAssociationsFilterType.Structure
+                => Properties.Resources.GetString("FeatureFormUtilityAssociationsStructureAttachmentType")!,
             UtilityAssociationsFilterType.Container or UtilityAssociationsFilterType.Content
                 => Properties.Resources.GetString("FeatureFormUtilityAssociationsContainmentType")!,
             _ => Properties.Resources.GetString("FeatureFormUtilityAssociationsConnectivityType")!,

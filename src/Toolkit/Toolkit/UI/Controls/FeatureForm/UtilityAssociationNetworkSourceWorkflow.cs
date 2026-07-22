@@ -62,7 +62,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public string? ErrorMessage
         {
             get => _errorMessage;
-            internal set => SetProperty(ref _errorMessage, value);
+            internal set
+            {
+                if (SetProperty(ref _errorMessage, value))
+                {
+                    OnPropertyChanged("HasNoResults");
+                }
+            }
         }
 
         public bool IsLoading
@@ -148,7 +154,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             Properties.Resources.GetString("FeatureFormUtilityAssociationsResultCount")!,
             FilteredFeatureSources.Count);
 
-        public bool HasNoResults => !IsLoading && FilteredFeatureSources.Count == 0;
+        public bool HasNoResults => !IsLoading && ErrorMessage is null && FilteredFeatureSources.Count == 0;
 
         public UtilityAssociationFeatureSource? SelectedFeatureSource
         {
@@ -314,7 +320,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             _source = source;
             _assetType = assetType;
-            LoadMoreCommand = new UtilityAssociationAsyncCommand(LoadMoreAsync, () => HasMore && !IsLoading);
+            LoadMoreCommand = new UtilityAssociationAsyncCommand(
+                LoadMoreAsync,
+                () => HasMore && !IsLoading,
+                ex => ErrorMessage = ex.Message);
             _ = LoadFirstPageAsync();
         }
 
@@ -358,7 +367,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         public bool HasMore => _nextQueryParameters is not null && string.IsNullOrWhiteSpace(SearchText);
 
-        public bool HasNoResults => !IsLoading && FilteredCandidateItems.Count == 0;
+        public bool HasNoResults => !IsLoading && ErrorMessage is null && FilteredCandidateItems.Count == 0;
 
         public UtilityAssociationFeatureCandidateItem? SelectedCandidateItem
         {
@@ -544,10 +553,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     _owner.SelectCandidate(Candidate);
                     return Task.CompletedTask;
-                });
+                },
+                onError: ex => _owner.ErrorMessage = ex.Message);
             ShowOnMapCommand = new UtilityAssociationAsyncCommand(
                 () => _owner.ShowOnMapAsync(Candidate.Feature),
-                () => CanShowOnMap);
+                () => CanShowOnMap,
+                ex => _owner.ErrorMessage = ex.Message);
         }
 
         public UtilityAssociationFeatureCandidate Candidate { get; }
@@ -570,12 +581,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private readonly Func<Task> _execute;
         private readonly Func<bool> _canExecute;
+        private readonly Action<Exception>? _onError;
         private bool _isExecuting;
 
-        internal UtilityAssociationAsyncCommand(Func<Task> execute, Func<bool>? canExecute = null)
+        internal UtilityAssociationAsyncCommand(
+            Func<Task> execute,
+            Func<bool>? canExecute = null,
+            Action<Exception>? onError = null)
         {
             _execute = execute;
             _canExecute = canExecute ?? (() => true);
+            _onError = onError;
         }
 
         public event EventHandler? CanExecuteChanged;
@@ -594,6 +610,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             try
             {
                 await _execute();
+            }
+            catch (Exception ex) when (_onError is not null)
+            {
+                _onError(ex);
             }
             finally
             {
