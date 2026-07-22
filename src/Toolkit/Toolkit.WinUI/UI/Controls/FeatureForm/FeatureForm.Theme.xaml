@@ -798,6 +798,11 @@
                                                 <ListView ItemsSource="{x:Bind FilteredCandidateItems, Mode=OneWay}"
                                                           SelectionMode="None"
                                                           IsItemClickEnabled="False">
+                                                   <ListView.ItemContainerStyle>
+                                                       <Style TargetType="ListViewItem">
+                                                           <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                       </Style>
+                                                   </ListView.ItemContainerStyle>
                                                     <ListView.ItemTemplate>
                                                         <DataTemplate x:DataType="primitives:UtilityAssociationFeatureCandidateItem">
                                                             <Grid>
@@ -805,7 +810,9 @@
                                                                     <ColumnDefinition Width="*" />
                                                                     <ColumnDefinition Width="Auto" />
                                                                 </Grid.ColumnDefinitions>
-                                                                <Button Command="{x:Bind SelectCommand}" HorizontalContentAlignment="Left"
+                                                                <Button Command="{x:Bind SelectCommand}"
+                                                                        HorizontalAlignment="Stretch"
+                                                                        HorizontalContentAlignment="Left"
                                                                         Background="Transparent" BorderThickness="0" Padding="8">
                                                                     <TextBlock Text="{x:Bind Title}" Style="{StaticResource FeatureFormViewTitleStyle}" TextTrimming="CharacterEllipsis" />
                                                                 </Button>
