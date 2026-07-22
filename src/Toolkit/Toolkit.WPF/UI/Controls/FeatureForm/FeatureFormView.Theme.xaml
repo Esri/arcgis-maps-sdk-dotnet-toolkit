@@ -1019,10 +1019,18 @@
                                         <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFromElement}" FontWeight="Bold" />
                                         <TextBlock Grid.Column="1" Text="{Binding FromElement}" HorizontalAlignment="Right" TextWrapping="Wrap" />
                                     </Grid>
-                                    <ComboBox ItemsSource="{Binding FromTerminals}" SelectedItem="{Binding SelectedFromTerminal}"
-                                              DisplayMemberPath="Name"
-                                              Visibility="{Binding ShowFromTerminals, Converter={StaticResource FeatureFormViewVisibilityConverter}}"
-                                              Margin="0,4" />
+                                    <Grid Visibility="{Binding ShowFromTerminals, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}" FontWeight="Bold" />
+                                        <ComboBox Grid.Column="1"
+                                                  ItemsSource="{Binding FromTerminals}"
+                                                  SelectedItem="{Binding SelectedFromTerminal}"
+                                                  DisplayMemberPath="Name"
+                                                  HorizontalAlignment="Right" />
+                                    </Grid>
                                     <Grid Margin="0,4">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
@@ -1031,10 +1039,18 @@
                                         <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsToElement}" FontWeight="Bold" />
                                         <TextBlock Grid.Column="1" Text="{Binding ToElement}" HorizontalAlignment="Right" TextWrapping="Wrap" />
                                     </Grid>
-                                    <ComboBox ItemsSource="{Binding ToTerminals}" SelectedItem="{Binding SelectedToTerminal}"
-                                              DisplayMemberPath="Name"
-                                              Visibility="{Binding ShowToTerminals, Converter={StaticResource FeatureFormViewVisibilityConverter}}"
-                                              Margin="0,4" />
+                                    <Grid Visibility="{Binding ShowToTerminals, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}" FontWeight="Bold" />
+                                        <ComboBox Grid.Column="1"
+                                                  ItemsSource="{Binding ToTerminals}"
+                                                  SelectedItem="{Binding SelectedToTerminal}"
+                                                  DisplayMemberPath="Name"
+                                                  HorizontalAlignment="Right" />
+                                    </Grid>
                                     <StackPanel Visibility="{Binding ShowFractionAlongEdge, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Margin="0,4">
                                         <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFractionAlongEdgePercent}" />
                                         <Slider Minimum="0" Maximum="100" Value="{Binding FractionAlongEdgePercent}" />

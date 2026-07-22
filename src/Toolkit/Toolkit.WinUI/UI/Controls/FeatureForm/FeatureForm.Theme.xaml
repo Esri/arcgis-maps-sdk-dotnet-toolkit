@@ -854,16 +854,23 @@
                                                     <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFromElement}" FontWeight="Bold" />
                                                     <TextBlock Grid.Column="1" Text="{x:Bind FromElement}" HorizontalAlignment="Right" TextWrapping="Wrap" />
                                                 </Grid>
-                                                <ComboBox ItemsSource="{x:Bind FromTerminals}"
-                                                          SelectedItem="{x:Bind SelectedFromTerminal, Mode=TwoWay}"
-                                                          Visibility="{x:Bind ShowFromTerminals}"
-                                                          HorizontalAlignment="Stretch">
-                                                    <ComboBox.ItemTemplate>
-                                                        <DataTemplate x:DataType="un:UtilityTerminal">
-                                                            <TextBlock Text="{x:Bind Name}" />
-                                                        </DataTemplate>
-                                                    </ComboBox.ItemTemplate>
-                                                </ComboBox>
+                                                <Grid Visibility="{x:Bind ShowFromTerminals}">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}" FontWeight="Bold" />
+                                                    <ComboBox Grid.Column="1"
+                                                              ItemsSource="{x:Bind FromTerminals}"
+                                                              SelectedItem="{x:Bind SelectedFromTerminal, Mode=TwoWay}"
+                                                              HorizontalAlignment="Right">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate x:DataType="un:UtilityTerminal">
+                                                                <TextBlock Text="{x:Bind Name}" />
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                </Grid>
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto" />
@@ -872,16 +879,23 @@
                                                     <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsToElement}" FontWeight="Bold" />
                                                     <TextBlock Grid.Column="1" Text="{x:Bind ToElement}" HorizontalAlignment="Right" TextWrapping="Wrap" />
                                                 </Grid>
-                                                <ComboBox ItemsSource="{x:Bind ToTerminals}"
-                                                          SelectedItem="{x:Bind SelectedToTerminal, Mode=TwoWay}"
-                                                          Visibility="{x:Bind ShowToTerminals}"
-                                                          HorizontalAlignment="Stretch">
-                                                    <ComboBox.ItemTemplate>
-                                                        <DataTemplate x:DataType="un:UtilityTerminal">
-                                                            <TextBlock Text="{x:Bind Name}" />
-                                                        </DataTemplate>
-                                                    </ComboBox.ItemTemplate>
-                                                </ComboBox>
+                                                <Grid Visibility="{x:Bind ShowToTerminals}">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}" FontWeight="Bold" />
+                                                    <ComboBox Grid.Column="1"
+                                                              ItemsSource="{x:Bind ToTerminals}"
+                                                              SelectedItem="{x:Bind SelectedToTerminal, Mode=TwoWay}"
+                                                              HorizontalAlignment="Right">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate x:DataType="un:UtilityTerminal">
+                                                                <TextBlock Text="{x:Bind Name}" />
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                </Grid>
                                                 <StackPanel Visibility="{x:Bind ShowFractionAlongEdge}">
                                                     <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFractionAlongEdgePercent}" />
                                                     <Slider Minimum="0" Maximum="100" Value="{x:Bind FractionAlongEdgePercent, Mode=TwoWay}" />
