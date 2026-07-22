@@ -25,6 +25,10 @@ using System.Diagnostics;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls.Shapes;
+using System.Linq;
+#if IOS || MACCATALYST
+using UniformTypeIdentifiers;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -204,87 +208,312 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 return;
             }
-
-#if WINDOWS || MACCATALYST
-            AddAttachmentFromFile();
-            return;
-#endif
-
             var page = GetParent<Page>();
-            if(page != null && MediaPicker.IsCaptureSupported)
+            if (page is null)
             {
-#if ANDROID
-                // Check if manifest allows camera access.
-                if (!Permissions.IsDeclaredInManifest("android.permission.CAMERA"))
-                {
-                    Trace.WriteLine("**Microsoft.Maui.ApplicationModel.PermissionException:** 'You need to declare using the permission: `android.permission.CAMERA` in your AndroidManifest.xml'", "ArcGIS Maps SDK Toolkit");
-                    // Fallback to just adding a file
-                    AddAttachmentFromFile();
-                    return;
-                }
-#elif IOS
-                // Check if manifest allows camera access.
-                if (!Permissions.IsKeyDeclaredInInfoPlist("NSCameraUsageDescription"))
-                {
-                    Trace.WriteLine("You must set `NSCameraUsageDescription` in your Info.plist file to use the Permission: Camera.", "ArcGIS Maps SDK Toolkit");
-                    // Fallback to just adding a file
-                    AddAttachmentFromFile();
-                    return;
-                }
-#endif
-                var addAttachment = Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromFile");
-                var camera = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithCamera");
-                
-                var result = await page.DisplayActionSheetAsync(addAttachment, null, null, camera, addAttachment);
-                if (result == camera)
-                {
-                    try
-                    {
-                        var status = await Permissions.RequestAsync<Permissions.Camera>();
-                        if (status != PermissionStatus.Granted)
-                        {
-                            return;
-                        }
-                        // Note: iOS returns a PNG image. See https://github.com/dotnet/maui/issues/8251
-                        var photo = await MediaPicker.CapturePhotoAsync();
-                        if (photo != null && Element != null)
-                        {
-                            if (!CanAddAttachment())
-                            {
-                                return;
-                            }
+                return;
+            }
 
-                            using (var stream = await photo.OpenReadAsync())
-                            {
-                                using var sr = new BinaryReader(stream);
-                                var data = sr.ReadBytes((int)stream.Length);
-                                var contentType = photo.ContentType;
-#if IOS                         // Workaround https://github.com/dotnet/maui/issues/15562
-                                if (!contentType.Contains('/'))
-                                    contentType = "image/" + contentType;
-#endif
-                                await Element.AddAttachmentAsync(photo.FileName, contentType, data);
-                            }
-                            EvaluateExpressions();
-                            UpdateAddAttachmentButtonState();
-                            (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
-                        }
-                    }
-                    catch (System.Exception ex)
-                    {
-                        if (!TryHandleAttachmentValidationException(ex))
-                        {
-                            Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
-                        }
-                    }
-                }
-                if (result == addAttachment)
+            var actions = BuildMobileAttachmentActions();
+            if (actions.Count == 0)
+            {
+                return;
+            }
+
+            string? result = await page.DisplayActionSheetAsync(
+                Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromFile"),
+                Properties.Resources.GetString("FeatureFormRenameAttachmentDialogCancel"),
+                null,
+                actions.Select(static a => a.Title).ToArray());
+
+            if (string.IsNullOrEmpty(result))
+            {
+                return;
+            }
+
+            var selectedAction = actions.FirstOrDefault(action => string.Equals(action.Title, result, StringComparison.Ordinal));
+            if (selectedAction is not null)
+            {
+                await selectedAction.ExecuteAsync();
+            }
+        }
+
+        private async Task AddSelectedMediaAsync(Task<FileResult?> mediaTask)
+        {
+            if (!CanAddAttachment())
+            {
+                return;
+            }
+
+            try
+            {
+                var file = await mediaTask;
+                if (file is null || Element is null || !CanAddAttachment())
                 {
-                    AddAttachmentFromFile();
+                    return;
+                }
+
+                await AddAttachmentFromResultAsync(file);
+            }
+            catch (System.Exception ex)
+            {
+                if (!TryHandleAttachmentValidationException(ex))
+                {
+                    Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                 }
             }
-            else
-                AddAttachmentFromFile();
+        }
+
+        private async Task AddAttachmentFromResultAsync(FileResult result)
+        {
+            if (Element is null || !CanAddAttachment())
+            {
+                return;
+            }
+
+            await using var stream = await result.OpenReadAsync();
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+
+            var extension = System.IO.Path.GetExtension(result.FileName);
+            var contentType = string.IsNullOrWhiteSpace(result.ContentType)
+                ? MimeTypeMap.GetMimeType(extension)
+                : result.ContentType;
+
+#if IOS
+            // Workaround https://github.com/dotnet/maui/issues/15562
+            if (!string.IsNullOrEmpty(contentType) && !contentType.Contains('/'))
+            {
+                contentType = "image/" + contentType;
+            }
+#endif
+
+            await Element.AddAttachmentAsync(result.FileName, contentType, memoryStream.ToArray());
+            EvaluateExpressions();
+            UpdateAddAttachmentButtonState();
+            (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
+        }
+
+        private sealed class MobileAttachmentAction
+        {
+            public required string Title { get; init; }
+
+            public required Func<Task> ExecuteAsync { get; init; }
+        }
+
+        private List<MobileAttachmentAction> BuildMobileAttachmentActions()
+        {
+            var actions = new List<MobileAttachmentAction>();
+            var capabilities = GetMobileAttachmentCapabilities();
+
+            if (capabilities.SupportsCapture && MediaPicker.IsCaptureSupported)
+            {
+                if (capabilities.CanCaptureImage)
+                {
+                    actions.Add(new MobileAttachmentAction
+                    {
+                        Title = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithCamera")!,
+                        ExecuteAsync = CapturePhotoAsync,
+                    });
+                }
+
+                if (capabilities.CanCaptureVideo)
+                {
+                    actions.Add(new MobileAttachmentAction
+                    {
+                        Title = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithVideoCamera")!,
+                        ExecuteAsync = CaptureVideoAsync,
+                    });
+                }
+            }
+
+            if (capabilities.SupportsLibrary)
+            {
+#if !WINDOWS
+                if (capabilities.CanPickImageFromLibrary)
+                {
+                    actions.Add(new MobileAttachmentAction
+                    {
+                        Title = capabilities.CanPickVideoFromLibrary
+                            ? Properties.Resources.GetString("FeatureFormAddAttachmentMenuChoosePhotoFromLibrary")!
+                            : Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromLibrary")!,
+                        ExecuteAsync = () => AddSelectedMediaAsync(MediaPicker.PickPhotoAsync()),
+                    });
+                }
+
+                if (capabilities.CanPickVideoFromLibrary)
+                {
+                    actions.Add(new MobileAttachmentAction
+                    {
+                        Title = capabilities.CanPickImageFromLibrary
+                            ? Properties.Resources.GetString("FeatureFormAddAttachmentMenuChooseVideoFromLibrary")!
+                            : Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromLibrary")!,
+                        ExecuteAsync = () => AddSelectedMediaAsync(MediaPicker.PickVideoAsync()),
+                    });
+                }
+#endif
+            }
+
+            if (capabilities.CanChooseFromFiles)
+            {
+                actions.Add(new MobileAttachmentAction
+                {
+                    Title = Properties.Resources.GetString("FeatureFormAddAttachmentMenuChooseFromFiles")!,
+                    ExecuteAsync = () =>
+                    {
+                        AddAttachmentFromFile();
+                        return Task.CompletedTask;
+                    },
+                });
+            }
+
+            return actions;
+        }
+
+        private async Task CapturePhotoAsync()
+        {
+            if (!MediaPicker.IsCaptureSupported)
+            {
+                return;
+            }
+
+#if ANDROID
+            if (!Permissions.IsDeclaredInManifest("android.permission.CAMERA"))
+            {
+                Trace.WriteLine("**Microsoft.Maui.ApplicationModel.PermissionException:** 'You need to declare using the permission: `android.permission.CAMERA` in your AndroidManifest.xml'", "ArcGIS Maps SDK Toolkit");
+                return;
+            }
+
+#elif IOS
+            // Check if manifest allows camera access.
+            if (!Permissions.IsKeyDeclaredInInfoPlist("NSCameraUsageDescription"))
+            {
+                Trace.WriteLine("You must set `NSCameraUsageDescription` in your Info.plist file to use the Permission: Camera.", "ArcGIS Maps SDK Toolkit");
+                return;
+            }
+
+            if (!Permissions.IsKeyDeclaredInInfoPlist("NSPhotoLibraryAddUsageDescription"))
+            {
+                Trace.WriteLine("You must set `NSPhotoLibraryAddUsageDescription` in your Info.plist file to use the Permission: PhotosAddOnly.", "ArcGIS Maps SDK Toolkit");
+                return;
+            }
+#endif
+
+            await AddSelectedMediaAsync(MediaPicker.CapturePhotoAsync());
+        }
+
+        private async Task CaptureVideoAsync()
+        {
+            if (!MediaPicker.IsCaptureSupported)
+            {
+                return;
+            }
+
+#if ANDROID
+            if (!Permissions.IsDeclaredInManifest("android.permission.CAMERA"))
+            {
+                Trace.WriteLine("**Microsoft.Maui.ApplicationModel.PermissionException:** 'You need to declare using the permission: `android.permission.CAMERA` in your AndroidManifest.xml'", "ArcGIS Maps SDK Toolkit");
+                return;
+            }
+#elif IOS
+            if (!Permissions.IsKeyDeclaredInInfoPlist("NSCameraUsageDescription"))
+            {
+                Trace.WriteLine("You must set `NSCameraUsageDescription` in your Info.plist file to use the Permission: Camera.", "ArcGIS Maps SDK Toolkit");
+                return;
+            }
+
+            if (!Permissions.IsKeyDeclaredInInfoPlist("NSMicrophoneUsageDescription"))
+            {
+                Trace.WriteLine("You must set `NSMicrophoneUsageDescription` in your Info.plist file to use the Permission: Microphone.", "ArcGIS Maps SDK Toolkit");
+                return;
+            }
+
+            if (!Permissions.IsKeyDeclaredInInfoPlist("NSPhotoLibraryAddUsageDescription"))
+            {
+                Trace.WriteLine("You must set `NSPhotoLibraryAddUsageDescription` in your Info.plist file to use the Permission: PhotosAddOnly.", "ArcGIS Maps SDK Toolkit");
+                return;
+            }
+#endif
+
+            await AddSelectedMediaAsync(MediaPicker.CaptureVideoAsync());
+        }
+
+        private MobileAttachmentCapabilities GetMobileAttachmentCapabilities()
+        {
+            var capabilities = new MobileAttachmentCapabilities();
+            if (Element is null)
+            {
+                return capabilities;
+            }
+
+            foreach (var input in Element.Inputs)
+            {
+                switch (input)
+                {
+                    case ImageFormInput image:
+                        ApplyImageInputMethod(capabilities, image.InputMethod);
+                        break;
+                    case VideoFormInput video:
+                        ApplyVideoInputMethod(capabilities, video.InputMethod);
+                        break;
+                    case AudioFormInput audio:
+                        if (audio.InputMethod is AttachmentInputMethod.Any or AttachmentInputMethod.Upload)
+                        {
+                            capabilities.CanChooseFromFiles = true;
+                        }
+                        break;
+                    case DocumentFormInput:
+                        capabilities.CanChooseFromFiles = true;
+                        break;
+                }
+            }
+
+            return capabilities;
+        }
+
+        private static void ApplyImageInputMethod(MobileAttachmentCapabilities capabilities, AttachmentInputMethod method)
+        {
+            if (method is AttachmentInputMethod.Any or AttachmentInputMethod.Capture)
+            {
+                capabilities.CanCaptureImage = true;
+            }
+
+            if (method is AttachmentInputMethod.Any or AttachmentInputMethod.Upload)
+            {
+                capabilities.CanPickImageFromLibrary = true;
+                capabilities.CanChooseFromFiles = true;
+            }
+        }
+
+        private static void ApplyVideoInputMethod(MobileAttachmentCapabilities capabilities, AttachmentInputMethod method)
+        {
+            if (method is AttachmentInputMethod.Any or AttachmentInputMethod.Capture)
+            {
+                capabilities.CanCaptureVideo = true;
+            }
+
+            if (method is AttachmentInputMethod.Any or AttachmentInputMethod.Upload)
+            {
+                capabilities.CanPickVideoFromLibrary = true;
+                capabilities.CanChooseFromFiles = true;
+            }
+        }
+
+        private sealed class MobileAttachmentCapabilities
+        {
+            public bool CanCaptureImage { get; set; }
+
+            public bool CanCaptureVideo { get; set; }
+
+            public bool CanPickImageFromLibrary { get; set; }
+
+            public bool CanPickVideoFromLibrary { get; set; }
+
+            public bool CanChooseFromFiles { get; set; }
+
+            public bool SupportsCapture => CanCaptureImage || CanCaptureVideo;
+
+            public bool SupportsLibrary => CanPickImageFromLibrary || CanPickVideoFromLibrary;
         }
 
         private async void AddAttachmentFromFile()
@@ -319,8 +548,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 return options;
             }
 
-#if WINDOWS
             var allowedExtensions = GetAllowedFileExtensionsForCurrentInputs();
+
+#if WINDOWS
             if (allowedExtensions.Count > 0)
             {
                 options.FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
@@ -328,14 +558,128 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     { DevicePlatform.WinUI, allowedExtensions },
                 });
             }
-#elif MACCATALYST
+#elif ANDROID
             options.FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.MacCatalyst, allowedMimeTypes },
+                { DevicePlatform.Android, allowedMimeTypes },
+            });
+#elif IOS
+            var iosFileTypes = GetApplePickerTypes(allowedExtensions, allowedMimeTypes);
+            options.FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.iOS, iosFileTypes },
+            });
+#elif MACCATALYST
+            var macFileTypes = GetApplePickerTypes(allowedExtensions, allowedMimeTypes);
+            options.FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.MacCatalyst, macFileTypes },
             });
 #endif
 
             return options;
+        }
+
+        private static IReadOnlyList<string> GetApplePickerTypes(IReadOnlyList<string> allowedExtensions, IReadOnlyList<string> allowedMimeTypes)
+        {
+#if IOS || MACCATALYST
+            var pickerTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var extension in allowedExtensions)
+            {
+                if (string.IsNullOrWhiteSpace(extension))
+                {
+                    continue;
+                }
+
+                var extensionWithoutDot = extension.StartsWith('.') ? extension[1..] : extension;
+                var type = UTType.CreateFromExtension(extensionWithoutDot) ?? UTType.CreateFromExtension(extension);
+                if (type is not null && !string.IsNullOrWhiteSpace(type.Identifier))
+                {
+                    pickerTypes.Add(type.Identifier);
+                }
+            }
+
+            if (pickerTypes.Count > 0)
+            {
+                // Keep extension-based filters strict. Add only narrow text fallback for plain text files.
+                if (allowedMimeTypes.Contains("text/*", StringComparer.OrdinalIgnoreCase))
+                {
+                    pickerTypes.Add("public.plain-text");
+                    pickerTypes.Add("public.text");
+                }
+
+                return pickerTypes.ToList();
+            }
+
+            foreach (var uti in GetIosUtiTypesForMimeTypes(allowedMimeTypes))
+            {
+                pickerTypes.Add(uti);
+            }
+
+            if (pickerTypes.Count > 0)
+            {
+                return pickerTypes.ToList();
+            }
+#endif
+
+            return GetIosUtiTypesForMimeTypes(allowedMimeTypes).ToList();
+        }
+
+        private static IEnumerable<string> GetIosUtiTypesForMimeTypes(IReadOnlyList<string> mimeTypes)
+        {
+            var utiTypes = new List<string>();
+            foreach (var mimeType in mimeTypes)
+            {
+                switch (mimeType)
+                {
+                    case "image/*":
+                        if (!utiTypes.Contains("public.image", StringComparer.OrdinalIgnoreCase))
+                        {
+                            utiTypes.Add("public.image");
+                        }
+                        break;
+                    case "video/*":
+                        if (!utiTypes.Contains("public.movie", StringComparer.OrdinalIgnoreCase))
+                        {
+                            utiTypes.Add("public.movie");
+                        }
+                        break;
+                    case "audio/*":
+                        if (!utiTypes.Contains("public.audio", StringComparer.OrdinalIgnoreCase))
+                        {
+                            utiTypes.Add("public.audio");
+                        }
+                        break;
+                    case "text/*":
+                        if (!utiTypes.Contains("public.plain-text", StringComparer.OrdinalIgnoreCase))
+                        {
+                            utiTypes.Add("public.plain-text");
+                        }
+                        if (!utiTypes.Contains("public.text", StringComparer.OrdinalIgnoreCase))
+                        {
+                            utiTypes.Add("public.text");
+                        }
+                        break;
+                    case "application/*":
+                        if (!utiTypes.Contains("com.adobe.pdf", StringComparer.OrdinalIgnoreCase))
+                        {
+                            utiTypes.Add("com.adobe.pdf");
+                        }
+                        if (!utiTypes.Contains("public.composite-content", StringComparer.OrdinalIgnoreCase))
+                        {
+                            utiTypes.Add("public.composite-content");
+                        }
+                        break;
+                    default:
+                        if (!utiTypes.Contains("public.data", StringComparer.OrdinalIgnoreCase))
+                        {
+                            utiTypes.Add("public.data");
+                        }
+                        break;
+                }
+            }
+
+            return utiTypes;
         }
 
         private async partial Task ShowAttachmentValidationAlertAsync(string message)
