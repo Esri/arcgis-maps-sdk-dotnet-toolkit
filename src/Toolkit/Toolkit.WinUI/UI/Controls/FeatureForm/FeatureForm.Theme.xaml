@@ -792,6 +792,7 @@
                                         <DataTemplate x:DataType="primitives:UtilityAssociationFeatureCandidateSelection">
                                             <StackPanel Spacing="8" Margin="0,8">
                                                 <TextBox Text="{x:Bind SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         KeyDown="FeatureCandidateSearch_KeyDown"
                                                          PlaceholderText="{internal:LocalizedString Key=FeatureFormUtilityAssociationsSearchFeatures}" />
                                                 <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsChooseToAdd}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                                                 <ListView ItemsSource="{x:Bind FilteredCandidateItems, Mode=OneWay}"

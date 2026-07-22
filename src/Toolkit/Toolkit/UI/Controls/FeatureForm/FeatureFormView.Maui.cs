@@ -310,8 +310,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return new DataTemplate(() =>
             {
                 var root = new VerticalStackLayout() { Spacing = 8 };
-                var search = new Entry() { Placeholder = Properties.Resources.GetString("FeatureFormUtilityAssociationsSearchFeatures") };
+                var search = new Entry()
+                {
+                    Placeholder = Properties.Resources.GetString("FeatureFormUtilityAssociationsSearchFeatures"),
+                    ReturnType = ReturnType.Search,
+                };
                 search.SetBinding(Entry.TextProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.SearchText, mode: BindingMode.TwoWay);
+                search.SetBinding(Entry.ReturnCommandProperty, static (UtilityAssociationFeatureCandidateSelection selection) => selection.SearchCommand, mode: BindingMode.OneWay);
                 root.Add(search);
                 var heading = new Label() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsChooseToAdd") };
                 heading.Style = GetFeatureFormCaptionStyle();

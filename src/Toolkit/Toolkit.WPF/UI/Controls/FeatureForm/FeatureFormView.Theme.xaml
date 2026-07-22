@@ -952,7 +952,11 @@
                             <DataTemplate>
                                 <StackPanel>
                                     <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                                             ToolTip="{internal:LocalizedString Key=FeatureFormUtilityAssociationsSearchFeatures}" />
+                                             ToolTip="{internal:LocalizedString Key=FeatureFormUtilityAssociationsSearchFeatures}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
                                     <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsChooseToAdd}"
                                                Style="{StaticResource FeatureFormViewCaptionStyle}" Margin="0,8,0,4" />
                                     <ListView ItemsSource="{Binding FilteredCandidateItems}"

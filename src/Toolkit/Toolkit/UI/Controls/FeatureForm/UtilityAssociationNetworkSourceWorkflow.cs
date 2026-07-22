@@ -304,7 +304,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private IReadOnlyList<UtilityAssociationFeatureCandidateItem> _filteredCandidateItems = Array.Empty<UtilityAssociationFeatureCandidateItem>();
         private bool _isQuerying;
         private QueryParameters? _nextQueryParameters;
-        private int _searchVersion;
         private UtilityAssociationFeatureCandidateItem? _selectedCandidateItem;
         private Feature? _selectedFeature;
         private string _searchText = string.Empty;
@@ -324,6 +323,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 LoadMoreAsync,
                 () => HasMore && !IsLoading,
                 ex => ErrorMessage = ex.Message);
+            SearchCommand = new UtilityAssociationAsyncCommand(
+                CompleteSearchAsync,
+                CanSearch,
+                ex => ErrorMessage = ex.Message);
             _ = LoadFirstPageAsync();
         }
 
@@ -338,6 +341,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         public ICommand LoadMoreCommand { get; }
 
+        public ICommand SearchCommand { get; }
+
         public string SearchText
         {
             get => _searchText;
@@ -346,8 +351,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (SetProperty(ref _searchText, value ?? string.Empty))
                 {
                     UpdateFilteredCandidates();
-                    _searchVersion++;
-                    _ = CompleteSearchAsync(_searchVersion);
                 }
             }
         }
@@ -445,10 +448,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 IsLoading = false;
                 _isQuerying = false;
                 NotifyQueryStateChanged();
-                if (!string.IsNullOrWhiteSpace(SearchText))
-                {
-                    _ = CompleteSearchAsync(_searchVersion);
-                }
             }
         }
 
@@ -462,11 +461,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             await QueryNextPageAsync(CancellationToken.None);
         }
 
-        private async Task CompleteSearchAsync(int searchVersion)
+        private bool CanSearch() =>
+            !IsLoading &&
+            !string.IsNullOrWhiteSpace(SearchText) &&
+            FilteredCandidateItems.Count == 0 &&
+            _nextQueryParameters is not null;
+
+        private async Task CompleteSearchAsync()
         {
-            await Task.Delay(500);
-            while (searchVersion == _searchVersion &&
-                !string.IsNullOrWhiteSpace(SearchText) &&
+            var submittedSearchText = SearchText;
+            while (SearchText == submittedSearchText &&
                 FilteredCandidateItems.Count == 0 &&
                 _nextQueryParameters is not null)
             {
@@ -527,6 +531,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 : _candidateItems.Where(item => item.Title.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
             OnPropertyChanged(nameof(HasMore));
             (LoadMoreCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
+            (SearchCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
         }
 
         private void NotifyQueryStateChanged()
@@ -535,6 +540,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             OnPropertyChanged(nameof(HasNoResults));
             OnPropertyChanged(nameof(HasMore));
             (LoadMoreCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
+            (SearchCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
         }
     }
 
