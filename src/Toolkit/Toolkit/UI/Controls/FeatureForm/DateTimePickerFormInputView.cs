@@ -70,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (doffset.HasValue)
                     date = new DateTime(doffset.Value.Ticks, DateTimeKind.Local);
 #else
-                date = _datePicker.SelectedDate?.ToUniversalTime();
+                date = _datePicker.SelectedDate?.Date.ToUniversalTime();
 #endif
                 TimeSpan? timePicked = _timePicker?.Time;
                 if (date is DateTime newDate && input.IncludeTime && timePicked is TimeSpan time
