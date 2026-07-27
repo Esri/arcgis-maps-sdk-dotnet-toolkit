@@ -51,6 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _resultsListView.SelectionChanged += AssociationsListView_SelectionChanged;
 #endif
             }
+            UpdateAddAssociationButton();
         }
 
 #if WPF
@@ -88,6 +89,50 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(UtilityAssociationsFilterResultsView), new PropertyMetadata(null));
+
+        private partial void ShowAddAssociationMenu(object? flyoutTarget)
+        {
+            string fromNetworkDataSource = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectFromNetworkDataSource")!;
+
+#if WPF
+            ContextMenu contextMenu = new ContextMenu
+            {
+                PlacementTarget = flyoutTarget as UIElement ?? this,
+            };
+            // Add the On Map option here when map-based association selection is implemented.
+            // if (CanSelectAssociationOnMap())
+            // {
+            //     contextMenu.Items.Add(new MenuItem() { Header = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap") });
+            // }
+            var fromNetworkDataSourceItem = new MenuItem() { Header = fromNetworkDataSource };
+            fromNetworkDataSourceItem.Click += (_, _) => SelectFromNetworkDataSource();
+            contextMenu.Items.Add(fromNetworkDataSourceItem);
+            if (contextMenu.Items.Count == 1)
+            {
+                // If there's only one entry, no reason to ask users to pick from a menu, just go straight to the action.
+                SelectFromNetworkDataSource();
+                return;
+            }
+            contextMenu.IsOpen = true;
+#elif WINDOWS_XAML
+            MenuFlyout contextMenu = new MenuFlyout();
+            // Add the On Map option here when map-based association selection is implemented.
+            // if (CanSelectAssociationOnMap())
+            // {
+            //     contextMenu.Items.Add(new MenuFlyoutItem() { Text = Properties.Resources.GetString("FeatureFormUtilityAssociationsSelectOnMap") });
+            // }
+            var fromNetworkDataSourceItem = new MenuFlyoutItem() { Text = fromNetworkDataSource };
+            fromNetworkDataSourceItem.Click += (_, _) => SelectFromNetworkDataSource();
+            contextMenu.Items.Add(fromNetworkDataSourceItem);
+            if (contextMenu.Items.Count == 1)
+            {
+                // If there's only one entry, no reason to ask users to pick from a menu, just go straight to the action.
+                SelectFromNetworkDataSource();
+                return;
+            }
+            contextMenu.ShowAt(flyoutTarget as FrameworkElement ?? this);
+#endif
+        }
     }
 }
 #endif

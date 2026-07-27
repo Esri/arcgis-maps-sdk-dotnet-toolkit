@@ -16,7 +16,9 @@
 
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.UtilityNetworks;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Data;
 
 #if MAUI
@@ -65,6 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
                 }
             }, () => CurrentFeatureForm?.HasEdits == true);
+            Unloaded += (s, e) => ClearUtilityAssociationCandidateSelection();
         }
 
         private class Command : System.Windows.Input.ICommand
@@ -885,6 +888,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (e.Cancel)
                 return;
 
+            if (e.NavigatingFrom is UtilityAssociationFeatureCandidateSelection candidateSelection)
+            {
+                candidateSelection.ClearSelectedFeature();
+            }
+
             if (e.NavigatingTo is FeatureForm toff)
             {
                 SetCurrentFeatureForm(toff);
@@ -934,7 +942,47 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
+                if ((item is UtilityAssociationWorkflowPage || item is UtilityAssociationCreation) &&
+                    !UtilityAssociationWorkflowOwners.TryGetValue(item, out _))
+                {
+                    UtilityAssociationWorkflowOwners.Add(item, this);
+                }
                 _ = subView.Navigate(content: item, additionalContent: additionalContent);
+            }
+        }
+
+        internal static async Task NavigateBackFromUtilityAssociationWorkflowAsync(
+            object workflowPage,
+            int pageCount,
+            UtilityAssociationsFilterResult refreshedFilterResult)
+        {
+            if (UtilityAssociationWorkflowOwners.TryGetValue(workflowPage, out var owner) &&
+                owner.GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.ReplaceBackstackItem(pageCount, refreshedFilterResult);
+                for (var index = 0; index < pageCount; index++)
+                {
+                    await subView.GoBack();
+                }
+            }
+        }
+
+        // Maps each utility association workflow page model to the FeatureFormView displaying it.
+        // The creation model has no visual parent reference, but after successfully adding an
+        // association it must retrieve the owning NavigationSubView, refresh the filter-result
+        // backstack item, and navigate back through the workflow pages. ConditionalWeakTable
+        // provides that lookup without keeping either object alive solely for it.
+        private static readonly ConditionalWeakTable<object, FeatureFormView> UtilityAssociationWorkflowOwners = new();
+
+        internal static GeoView? GetUtilityAssociationWorkflowGeoView(object workflowPage)
+            => UtilityAssociationWorkflowOwners.TryGetValue(workflowPage, out var owner) ? owner.GeoView : null;
+
+        private void ClearUtilityAssociationCandidateSelection()
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView &&
+                subView.Content is UtilityAssociationFeatureCandidateSelection candidateSelection)
+            {
+                candidateSelection.ClearSelectedFeature();
             }
         }
 
