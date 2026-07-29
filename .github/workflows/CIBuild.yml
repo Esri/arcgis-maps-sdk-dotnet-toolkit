@@ -12,7 +12,10 @@ on:
     - main
     paths-ignore:
     - 'docs/**'
-    
+
+permissions:
+  contents: read
+
 jobs:
   build:
 
@@ -46,7 +49,23 @@ jobs:
         name: NuGet Packages
         path: Output/NuGet/Release
 
-#    - name: Publish to Esri Nuget Repo
-#      if: ${{ github.ref == 'refs/heads/main' }}
-#      run: |
-#        dotnet nuget push Output\NuGet\Release\*.nupkg --api-key  ${{ secrets.GithubPushPackagesSecret }} --source https://nuget.pkg.github.com/esri/index.json 
+  publish:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: build
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Download NuGet packages
+      uses: actions/download-artifact@v4
+      with:
+        name: NuGet Packages
+        path: Output/NuGet/Release
+
+    - name: Publish to Esri Nuget Repo
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        dotnet nuget push Output\NuGet\Release\*.nupkg --api-key $env:GITHUB_TOKEN --source https://nuget.pkg.github.com/esri/index.json
