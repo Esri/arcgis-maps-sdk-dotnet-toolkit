@@ -129,6 +129,24 @@
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
     <value>التقاط صورة</value>
   </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>بيت_This file type is not supported. Allowed types: {0}___________________________لاحقة</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>بيت_This file is too large. Maximum allowed size is {0} MB_____________________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>بيت_This file is too large________________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>بيت_This media is too long. Maximum allowed duration is {0} seconds_________________________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>بيت_This media is too long________________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>بيت_Attachment upload failed_________________________لاحقة</value>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>يجب أن يكون التاريخ في {0} أو قبله</value>
   </data>
@@ -174,6 +192,18 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>أقل من أدنى قيمة</value>
   </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>بيت_The maximum number of attachments allowed is {0}__________________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>بيت_Max: {0}_________________لاحقة</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>بيت_Min: {0}_________________لاحقة</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>بيت_At least {0} attachment(s) required___________________لاحقة.</value>
+  </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>لا توجد مرفقات</value>
   </data>
@@ -206,6 +236,147 @@
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>العدد المطلوب للرموز: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
+    <value>بيت_Remove Association___________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>بيت_Show on Map____________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>بيت_More Information_________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
+    <value>بيت_Percent Along______________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
+    <value>بيت_Association Settings_____________________لاحقة</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
+    <value>بيت_Remove Association____________________لاحقة?</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
+    <value>بيت_This will only remove the association. The feature remains_______________________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
+    <value>بيت_Remove_____________لاحقة</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
+    <value>بيت_Cancel_____________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
+    <value>بيت_Add Association________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>بيت_Add_______لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>بيت_Choose how to add the feature______________________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>بيت_Choose to add______________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>بيت_{0} Features Identified________________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
+    <value>بيت_Association type_________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
+    <value>بيت_Attachment_____________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
+    <value>بيت_This association can't be added_________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
+    <value>بيت_Connectivity_____________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
+    <value>بيت_Containment____________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
+    <value>بيت_Content visibility___________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
+    <value>بيت_Current feature terminal_________________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
+    <value>بيت_Enter a percentage from 0 to 100__________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
+    <value>بيت_Fraction along edge (%)________________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
+    <value>بيت_From element_____________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
+    <value>بيت_No matches found__________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
+    <value>بيت_No network data sources available__________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>بيت_New Association________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
+    <value>بيت_Associations can't be edited for this feature________________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
+    <value>بيت_Other feature terminal_______________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
+    <value>بيت_Review association___________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>بيت_Search features________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>بيت_Search_____________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>بيت_Network Data Source____________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>بيت_{0} results____________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>بيت_Available Asset Types______________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>بيت_Available Features ({0})_________________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>بيت_Loading_____________________لاحقة...</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>بيت_No asset types available__________________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>بيت_Load more___________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
+    <value>بيت_Select a network data source_____________________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
+    <value>بيت_From Network Data Source_________________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
+    <value>بيت_On Map_____________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>بيت_Select features by tapping on the map____________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
+    <value>بيت_Select a terminal___________________لاحقة.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
+    <value>بيت_Structure attachment_____________________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>بيت_Tap Selection______________لاحقة</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
+    <value>بيت_To element_____________________لاحقة</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>جميع المواقع</value>
@@ -308,6 +479,18 @@
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
     <value>بحث</value>
+  </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>بيت_Select search source_____________________لاحقة</value>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>بيت_Search sources_______________لاحقة</value>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>بيت_Search suggestions___________________لاحقة</value>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>بيت_Search results_______________لاحقة</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>إضافة نقطة بدء</value>
@@ -482,5 +665,146 @@
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>محدد موقع</value>
+  </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>بيت_Add_______لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>بيت_Add Map Area_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>بيت_Name_________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>بيت_Cancel_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>بيت_Download_________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>بيت_Size: {0}___________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>بيت_Area {0}_________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>بيت_Downloaded_____________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>بيت_Could not retrieve map areas for this map______________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>بيت_No Internet Connection_______________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>بيت_There are no map areas for this map. Tap the button below to get started______________________________________لاحقة.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>بيت_There are no map areas for this map___________________لاحقة.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>بيت_No Map Areas_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>بيت_The map is not enabled for offline use____________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>بيت_Offline Disabled_________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>بيت_Open_________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>بيت_Refresh_______________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>بيت_Remove_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>بيت_Select Area____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
+    <value>بيت_Scale___________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
+    <value>بيت_Room_________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
+    <value>بيت_Rooms___________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
+    <value>بيت_House Property_______________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
+    <value>بيت_Houses_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
+    <value>بيت_Small Building_______________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
+    <value>بيت_Building_________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
+    <value>بيت_Buildings___________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
+    <value>بيت_Street_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
+    <value>بيت_Streets_______________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
+    <value>بيت_Neighborhood_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleTown" xml:space="preserve">
+    <value>بيت_Town_________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleCity" xml:space="preserve">
+    <value>بيت_City_________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleCities" xml:space="preserve">
+    <value>بيت_Cities_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
+    <value>بيت_Metropolitan Area__________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
+    <value>بيت_County_____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
+    <value>بيت_Counties_________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
+    <value>بيت_State/Province_______________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
+    <value>بيت_States/Provinces_________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
+    <value>بيت_Countries (Small)__________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
+    <value>بيت_Countries (Big)________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
+    <value>بيت_Continent___________________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
+    <value>بيت_World (Small)______________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
+    <value>بيت_World (Big)____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
+    <value>بيت_World___________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>بيت_Stop_________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>بيت_Offline Map____________لاحقة</value>
+  </data>
+  <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
+    <value>بيت_An error occured. Tap to remove_________________لاحقة.</value>
   </data>
 </root>
