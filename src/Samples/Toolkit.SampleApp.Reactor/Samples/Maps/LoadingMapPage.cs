@@ -18,7 +18,7 @@ public sealed class LoadingMapPage : Component
             TextBox(mapUri, (t) => setMapUri(t)).PlaceholderText("Enter Map URI").AutomationName("Map URL"),
             mapResource.Match<Element>(
                 loading: () => Heading("Loading map...").Center(),
-                data: (map) => MapView(map),
+                loaded: (map) => MapView(map),
                 error: (e) => TextBlock($"Error loading map\n{e.Message}").Foreground(new ThemeRef("SystemFillColorCriticalBrush")),
                 reloading: (map) => Heading("Loading map...").Center()
 
