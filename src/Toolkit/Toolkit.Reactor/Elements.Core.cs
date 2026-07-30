@@ -120,6 +120,9 @@ public abstract record GeoViewElement(Action<GeoViewInputEventArgs>? OnTapped = 
 /// <param name="OnTapped">The action invoked when the underlying <see cref="MapView"/> is tapped.</param>
 public record MapViewElement(Map? Map, Action<GeoViewInputEventArgs>? OnTapped = null) : GeoViewElement(OnTapped)
 {
+    static MapViewElement() =>
+        Factories.Register<MapViewElement, MapView>(static () => new Factories.MapViewHandler());
+
     /// <summary>
     /// Gets or sets the geometry editor used by the underlying <see cref="MapView"/>.
     /// </summary>
@@ -189,6 +192,9 @@ public record LocationDisplayElement : Element
 /// <param name="OnTapped">The action invoked when the underlying <see cref="SceneView"/> is tapped.</param>
 public record SceneViewElement(Scene? Scene, Action<GeoViewInputEventArgs>? OnTapped = null) : GeoViewElement(OnTapped)
 {
+    static SceneViewElement() =>
+        Factories.Register<SceneViewElement, SceneView>(static () => new Factories.SceneViewHandler());
+
     /// <summary>
     /// Gets or sets the camera controller that manages the scene view camera.
     /// </summary>
@@ -232,6 +238,9 @@ public record SceneViewElement(Scene? Scene, Action<GeoViewInputEventArgs>? OnTa
 /// <param name="OnTapped">The action invoked when the underlying <see cref="LocalSceneView"/> is tapped.</param>
 public record LocalSceneViewElement(Scene? Scene, Action<GeoViewInputEventArgs>? OnTapped = null) : GeoViewElement(OnTapped)
 {
+    static LocalSceneViewElement() =>
+        Factories.Register<LocalSceneViewElement, LocalSceneView>(static () => new Factories.LocalSceneViewHandler());
+
     /// <summary>
     /// Gets or sets the interaction options that control user interaction with the local scene view.
     /// </summary>

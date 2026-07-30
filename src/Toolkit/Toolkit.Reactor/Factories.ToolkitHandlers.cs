@@ -15,7 +15,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 /// </summary>
 public static partial class Factories
 {
-    private sealed class CompassHandler : IElementHandler<CompassElement, Compass>
+    internal sealed class CompassHandler : IElementHandler<CompassElement, Compass>
     {
         public Compass Mount(MountContext ctx, CompassElement element)
         {
@@ -49,7 +49,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class BasemapGalleryHandler : IElementHandler<BasemapGalleryElement, BasemapGallery>
+    internal sealed class BasemapGalleryHandler : IElementHandler<BasemapGalleryElement, BasemapGallery>
     {
         public BasemapGallery Mount(MountContext ctx, BasemapGalleryElement element)
         {
@@ -83,14 +83,14 @@ public static partial class Factories
 
             if (oldEl.SelectedBasemap != newEl.SelectedBasemap)
             {
-                control.SelectedBasemap = newEl.SelectedBasemap;
+                ctx.BindFor(control, newEl).WriteSuppressed(() => control.SelectedBasemap = newEl.SelectedBasemap);
             }
 
             ctx.ApplySetters(newEl.Setters, control);
         }
     }
 
-    private sealed class BookmarksViewHandler : IElementHandler<BookmarksViewElement, BookmarksView>
+    internal sealed class BookmarksViewHandler : IElementHandler<BookmarksViewElement, BookmarksView>
     {
         public BookmarksView Mount(MountContext ctx, BookmarksViewElement element)
         {
@@ -125,7 +125,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class FeatureDataFieldHandler : IElementHandler<FeatureDataFieldElement, FeatureDataField>
+    internal sealed class FeatureDataFieldHandler : IElementHandler<FeatureDataFieldElement, FeatureDataField>
     {
         public FeatureDataField Mount(MountContext ctx, FeatureDataFieldElement element)
         {
@@ -180,7 +180,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class FloorFilterHandler : IElementHandler<FloorFilterElement, FloorFilter>
+    internal sealed class FloorFilterHandler : IElementHandler<FloorFilterElement, FloorFilter>
     {
         public FloorFilter Mount(MountContext ctx, FloorFilterElement element)
         {
@@ -209,7 +209,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class LegendHandler : IElementHandler<LegendElement, Legend>
+    internal sealed class LegendHandler : IElementHandler<LegendElement, Legend>
     {
         public Legend Mount(MountContext ctx, LegendElement element)
         {
@@ -250,7 +250,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class OfflineMapAreasViewHandler : IElementHandler<OfflineMapAreasViewElement, OfflineMapAreasView>
+    internal sealed class OfflineMapAreasViewHandler : IElementHandler<OfflineMapAreasViewElement, OfflineMapAreasView>
     {
         public OfflineMapAreasView Mount(MountContext ctx, OfflineMapAreasViewElement element)
         {
@@ -294,7 +294,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class MeasureToolbarHandler : IElementHandler<MeasureToolbarElement, MeasureToolbar>
+    internal sealed class MeasureToolbarHandler : IElementHandler<MeasureToolbarElement, MeasureToolbar>
     {
         public MeasureToolbar Mount(MountContext ctx, MeasureToolbarElement element)
         {
@@ -317,7 +317,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class OverviewMapHandler : IElementHandler<OverviewMapElement, OverviewMap>
+    internal sealed class OverviewMapHandler : IElementHandler<OverviewMapElement, OverviewMap>
     {
         public OverviewMap Mount(MountContext ctx, OverviewMapElement element)
         {
@@ -376,7 +376,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class PopupViewerHandler : IElementHandler<PopupViewerElement, PopupViewer>
+    internal sealed class PopupViewerHandler : IElementHandler<PopupViewerElement, PopupViewer>
     {
         public PopupViewer Mount(MountContext ctx, PopupViewerElement element)
         {
@@ -415,7 +415,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class ScaleLineHandler : IElementHandler<ScaleLineElement, ScaleLine>
+    internal sealed class ScaleLineHandler : IElementHandler<ScaleLineElement, ScaleLine>
     {
         public ScaleLine Mount(MountContext ctx, ScaleLineElement element)
         {
@@ -459,7 +459,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class SearchViewHandler : IElementHandler<SearchViewElement, SearchView>
+    internal sealed class SearchViewHandler : IElementHandler<SearchViewElement, SearchView>
     {
         public SearchView Mount(MountContext ctx, SearchViewElement element)
         {
@@ -572,7 +572,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class SymbolDisplayHandler : IElementHandler<SymbolDisplayElement, SymbolDisplay>
+    internal sealed class SymbolDisplayHandler : IElementHandler<SymbolDisplayElement, SymbolDisplay>
     {
         public SymbolDisplay Mount(MountContext ctx, SymbolDisplayElement element)
         {
@@ -595,7 +595,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class TimeSliderHandler : IElementHandler<TimeSliderElement, TimeSlider>
+    internal sealed class TimeSliderHandler : IElementHandler<TimeSliderElement, TimeSlider>
     {
         public TimeSlider Mount(MountContext ctx, TimeSliderElement element)
         {
@@ -650,7 +650,7 @@ public static partial class Factories
 
             if (oldEl.CurrentExtent != newEl.CurrentExtent)
             {
-                control.CurrentExtent = newEl.CurrentExtent;
+                ctx.BindFor(control, newEl).WriteSuppressed(() => control.CurrentExtent = newEl.CurrentExtent);
             }
 
             if (oldEl.PlaybackDirection != newEl.PlaybackDirection)
@@ -702,7 +702,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class FeatureFormViewHandler : IElementHandler<FeatureFormViewElement, FeatureFormView>
+    internal sealed class FeatureFormViewHandler : IElementHandler<FeatureFormViewElement, FeatureFormView>
     {
         public FeatureFormView Mount(MountContext ctx, FeatureFormViewElement element)
         {
@@ -753,7 +753,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class UtilityNetworkTraceToolHandler : IElementHandler<UtilityNetworkTraceToolElement, UtilityNetworkTraceTool>
+    internal sealed class UtilityNetworkTraceToolHandler : IElementHandler<UtilityNetworkTraceToolElement, UtilityNetworkTraceTool>
     {
         public UtilityNetworkTraceTool Mount(MountContext ctx, UtilityNetworkTraceToolElement element)
         {

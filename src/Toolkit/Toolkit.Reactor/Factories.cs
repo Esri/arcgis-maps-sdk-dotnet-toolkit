@@ -5,6 +5,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 using Microsoft.UI.Reactor;
 using Microsoft.UI.Reactor.Core;
 using Microsoft.UI.Reactor.Core.V1Protocol;
+using Microsoft.UI.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 
@@ -13,32 +14,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 /// </summary>
 public static partial class Factories
 {
-    static Factories()
+    internal static void Register<TElement, TControl>(Func<IElementHandler<TElement, TControl>> handlerFactory)
+        where TElement : Element
+        where TControl : UIElement
     {
-        ReactorApp.RegisterControlAssembly(new Esri_ArcGISRuntime_WinUI_XamlTypeInfo.XamlMetaDataProvider());
-        ReactorApp.RegisterControlAssembly(new Esri_ArcGISRuntime_Toolkit_WinUI_XamlTypeInfo.XamlMetaDataProvider());
+        _ = MetadataRegistration.Done;
+        ControlRegistry.Register(handlerFactory);
+    }
 
-        // Core
-        ControlRegistry.Register(static () => new MapViewHandler());
-        ControlRegistry.Register(static () => new SceneViewHandler());
-        ControlRegistry.Register(static () => new LocalSceneViewHandler());
+    private static class MetadataRegistration
+    {
+        internal static readonly byte Done = Register();
 
-        // Toolkit
-        ControlRegistry.Register(static () => new CompassHandler());
-        ControlRegistry.Register(static () => new BasemapGalleryHandler());
-        ControlRegistry.Register(static () => new BookmarksViewHandler());
-        ControlRegistry.Register(static () => new FeatureDataFieldHandler());
-        ControlRegistry.Register(static () => new FloorFilterHandler());
-        ControlRegistry.Register(static () => new LegendHandler());
-        ControlRegistry.Register(static () => new OfflineMapAreasViewHandler());
-        ControlRegistry.Register(static () => new MeasureToolbarHandler());
-        ControlRegistry.Register(static () => new OverviewMapHandler());
-        ControlRegistry.Register(static () => new PopupViewerHandler());
-        ControlRegistry.Register(static () => new ScaleLineHandler());
-        ControlRegistry.Register(static () => new SearchViewHandler());
-        ControlRegistry.Register(static () => new SymbolDisplayHandler());
-        ControlRegistry.Register(static () => new TimeSliderHandler());
-        ControlRegistry.Register(static () => new FeatureFormViewHandler());
-        ControlRegistry.Register(static () => new UtilityNetworkTraceToolHandler());
+        private static byte Register()
+        {
+            ReactorApp.RegisterControlAssembly(new Esri_ArcGISRuntime_WinUI_XamlTypeInfo.XamlMetaDataProvider());
+            ReactorApp.RegisterControlAssembly(new Esri_ArcGISRuntime_Toolkit_WinUI_XamlTypeInfo.XamlMetaDataProvider());
+            return 1;
+        }
     }
 }

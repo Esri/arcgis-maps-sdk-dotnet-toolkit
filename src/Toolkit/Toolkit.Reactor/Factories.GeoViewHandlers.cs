@@ -14,7 +14,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 
 public static partial class Factories
 {
-    private abstract class GeoViewHandler<TElement, TControl> : IElementHandler<TElement, TControl>
+    internal abstract class GeoViewHandler<TElement, TControl> : IElementHandler<TElement, TControl>
         where TElement : GeoViewElement
         where TControl : GeoView
     {
@@ -151,7 +151,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class MapViewHandler : GeoViewHandler<MapViewElement, MapView>
+    internal sealed class MapViewHandler : GeoViewHandler<MapViewElement, MapView>
     {
         protected override MapView Mount(MountContext ctx, MapViewElement element)
         {
@@ -261,7 +261,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class SceneViewHandler : GeoViewHandler<SceneViewElement, SceneView>
+    internal sealed class SceneViewHandler : GeoViewHandler<SceneViewElement, SceneView>
     {
         protected override SceneView Mount(MountContext ctx, SceneViewElement element)
         {
@@ -355,7 +355,7 @@ public static partial class Factories
         }
     }
 
-    private sealed class LocalSceneViewHandler : GeoViewHandler<LocalSceneViewElement, LocalSceneView>
+    internal sealed class LocalSceneViewHandler : GeoViewHandler<LocalSceneViewElement, LocalSceneView>
     {
         protected override LocalSceneView Mount(MountContext ctx, LocalSceneViewElement element)
         {

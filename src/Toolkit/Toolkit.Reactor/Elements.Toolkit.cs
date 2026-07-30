@@ -22,6 +22,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Reactor;
 /// <param name="AutoHide"><see langword="true"/> to hide the compass when the geoview is north aligned; otherwise, <see langword="false"/>.</param>
 public record CompassElement(ElementRef<GeoView>? GeoView = null, bool AutoHide = true) : Element
 {
+    static CompassElement() =>
+        Factories.Register<CompassElement, Compass>(static () => new Factories.CompassHandler());
+
     /// <summary>
     /// Gets or sets the heading, in degrees, shown by the compass.
     /// </summary>
@@ -36,6 +39,9 @@ public record CompassElement(ElementRef<GeoView>? GeoView = null, bool AutoHide 
 /// <param name="GeoModel">The geo model whose basemap is displayed and updated by the gallery.</param>
 public record BasemapGalleryElement(GeoModel? GeoModel = null) : Element
 {
+    static BasemapGalleryElement() =>
+        Factories.Register<BasemapGalleryElement, BasemapGallery>(static () => new Factories.BasemapGalleryHandler());
+
     /// <summary>
     /// Gets or sets the visual style used to present gallery items.
     /// </summary>
@@ -60,6 +66,9 @@ public record BasemapGalleryElement(GeoModel? GeoModel = null) : Element
 /// <param name="GeoView">The geoview whose bookmarks are displayed and navigated.</param>
 public record BookmarksViewElement(ElementRef<GeoView>? GeoView = null) : Element
 {
+    static BookmarksViewElement() =>
+        Factories.Register<BookmarksViewElement, BookmarksView>(static () => new Factories.BookmarksViewHandler());
+
     /// <summary>
     /// Gets or sets the bookmark collection displayed by the view.
     /// </summary>
@@ -80,6 +89,9 @@ public record BookmarksViewElement(ElementRef<GeoView>? GeoView = null) : Elemen
 /// <param name="FieldName">The field name to display or edit.</param>
 public record FeatureDataFieldElement(Feature? Feature = null, string? FieldName = null) : Element
 {
+    static FeatureDataFieldElement() =>
+        Factories.Register<FeatureDataFieldElement, FeatureDataField>(static () => new Factories.FeatureDataFieldHandler());
+
     /// <summary>
     /// Gets or sets a value indicating whether the field is read-only.
     /// </summary>
@@ -109,6 +121,9 @@ public record FeatureDataFieldElement(Feature? Feature = null, string? FieldName
 /// <param name="GeoView">The floor-aware geoview associated with the filter.</param>
 public record FloorFilterElement(ElementRef<GeoView>? GeoView = null) : Element
 {
+    static FloorFilterElement() =>
+        Factories.Register<FloorFilterElement, FloorFilter>(static () => new Factories.FloorFilterHandler());
+
     /// <summary>
     /// Gets or sets a value indicating whether the browse view is open.
     /// </summary>
@@ -124,6 +139,9 @@ public record FloorFilterElement(ElementRef<GeoView>? GeoView = null) : Element
 /// <param name="OfflineMapInfo">The stored offline map info whose areas are displayed.</param>
 public record OfflineMapAreasViewElement(Map? OnlineMap = null, OfflineMapInfo? OfflineMapInfo = null) : Element
 {
+    static OfflineMapAreasViewElement() =>
+        Factories.Register<OfflineMapAreasViewElement, OfflineMapAreasView>(static () => new Factories.OfflineMapAreasViewHandler());
+
     /// <summary>
     /// Gets or sets the vertical scrollbar visibility.
     /// </summary>
@@ -143,6 +161,9 @@ public record OfflineMapAreasViewElement(Map? OnlineMap = null, OfflineMapInfo? 
 /// <param name="GeoView">The geoview whose legend is displayed.</param>
 public record LegendElement(ElementRef<GeoView>? GeoView = null) : Element
 {
+    static LegendElement() =>
+        Factories.Register<LegendElement, Legend>(static () => new Factories.LegendHandler());
+
     /// <summary>
     /// Gets or sets a value indicating whether layers outside the visible scale range are filtered out.
     /// </summary>
@@ -167,6 +188,9 @@ public record LegendElement(ElementRef<GeoView>? GeoView = null) : Element
 /// <param name="MapView">The map view measured by the toolbar.</param>
 public record MeasureToolbarElement(ElementRef<MapView>? MapView = null) : Element
 {
+    static MeasureToolbarElement() =>
+        Factories.Register<MeasureToolbarElement, MeasureToolbar>(static () => new Factories.MeasureToolbarHandler());
+
     internal Action<MeasureToolbar>[] Setters { get; init; } = [];
 }
 
@@ -176,6 +200,9 @@ public record MeasureToolbarElement(ElementRef<MapView>? MapView = null) : Eleme
 /// <param name="GeoView">The geoview tracked by the overview map.</param>
 public record OverviewMapElement(ElementRef<GeoView>? GeoView = null) : Element
 {
+    static OverviewMapElement() =>
+        Factories.Register<OverviewMapElement, OverviewMap>(static () => new Factories.OverviewMapHandler());
+
     /// <summary>
     /// Gets or sets the map displayed in the overview map.
     /// </summary>
@@ -205,6 +232,9 @@ public record OverviewMapElement(ElementRef<GeoView>? GeoView = null) : Element
 /// <param name="Popup">The popup displayed by the viewer.</param>
 public record PopupViewerElement(Popup? Popup = null) : Element
 {
+    static PopupViewerElement() =>
+        Factories.Register<PopupViewerElement, PopupViewer>(static () => new Factories.PopupViewerHandler());
+
     /// <summary>
     /// Gets or sets the vertical scrollbar visibility for popup content.
     /// </summary>
@@ -229,6 +259,9 @@ public record PopupViewerElement(Popup? Popup = null) : Element
 /// <param name="MapView">The map view used to derive the scale.</param>
 public record ScaleLineElement(ElementRef<MapView>? MapView = null) : Element
 {
+    static ScaleLineElement() =>
+        Factories.Register<ScaleLineElement, ScaleLine>(static () => new Factories.ScaleLineHandler());
+
     /// <summary>
     /// Gets or sets the explicit map scale used by the control.
     /// </summary>
@@ -248,6 +281,9 @@ public record ScaleLineElement(ElementRef<MapView>? MapView = null) : Element
 /// <param name="GeoView">The geoview searched by the control.</param>
 public record SearchViewElement(ElementRef<GeoView>? GeoView = null) : Element
 {
+    static SearchViewElement() =>
+        Factories.Register<SearchViewElement, SearchView>(static () => new Factories.SearchViewHandler());
+
     /// <summary>
     /// Gets or sets the search view model.
     /// </summary>
@@ -312,6 +348,9 @@ public record SearchViewElement(ElementRef<GeoView>? GeoView = null) : Element
 /// <param name="Symbol">The symbol rendered by the control.</param>
 public record SymbolDisplayElement(Symbology.Symbol? Symbol = null) : Element
 {
+    static SymbolDisplayElement() =>
+        Factories.Register<SymbolDisplayElement, SymbolDisplay>(static () => new Factories.SymbolDisplayHandler());
+
     internal Action<SymbolDisplay>[] Setters { get; init; } = [];
 }
 
@@ -320,6 +359,9 @@ public record SymbolDisplayElement(Symbology.Symbol? Symbol = null) : Element
 /// </summary>
 public record TimeSliderElement : Element
 {
+    static TimeSliderElement() =>
+        Factories.Register<TimeSliderElement, TimeSlider>(static () => new Factories.TimeSliderHandler());
+
     /// <summary>
     /// Gets or sets the current time extent.
     /// </summary>
@@ -394,6 +436,9 @@ public record TimeSliderElement : Element
 /// <param name="FeatureForm">The feature form displayed by the control.</param>
 public record FeatureFormViewElement(FeatureForm? FeatureForm = null) : Element
 {
+    static FeatureFormViewElement() =>
+        Factories.Register<FeatureFormViewElement, FeatureFormView>(static () => new Factories.FeatureFormViewHandler());
+
     /// <summary>
     /// Gets or sets when validation errors are shown.
     /// </summary>
@@ -428,6 +473,9 @@ public record FeatureFormViewElement(FeatureForm? FeatureForm = null) : Element
 /// <param name="GeoView">The geoview where starting points and results are displayed.</param>
 public record UtilityNetworkTraceToolElement(ElementRef<GeoView>? GeoView = null) : Element
 {
+    static UtilityNetworkTraceToolElement() =>
+        Factories.Register<UtilityNetworkTraceToolElement, UtilityNetworkTraceTool>(static () => new Factories.UtilityNetworkTraceToolHandler());
+
     /// <summary>
     /// Gets or sets a value indicating whether the tool zooms to results automatically.
     /// </summary>
