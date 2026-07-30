@@ -71,7 +71,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if WINDOWS_XAML
             _resultsListView?.PrepareConnectedAnimation("NavigationSubViewForwardAnimation", item, "Title");
 #endif
-            parent?.NavigateToItem(item); 
+            parent?.NavigateToItem(item, this.DataContext); 
         }
 
         /// <summary>

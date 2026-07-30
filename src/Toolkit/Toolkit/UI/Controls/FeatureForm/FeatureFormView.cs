@@ -453,6 +453,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(FeatureFormView), new PropertyMetadata(ScrollBarVisibility.Auto));
 #endif
 
+
+        /// <summary>
+        /// Gets or sets the GeoView associated with the FeatureFormView.
+        /// </summary>
+        public GeoView? GeoView
+        {
+            get => (GeoView?)GetValue(GeoViewProperty);
+            set => SetValue(GeoViewProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="GeoView"/> dependency property.
+        /// </summary>
+#if MAUI
+        public static readonly BindableProperty GeoViewProperty =
+            BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(FeatureFormView), null);
+#else
+        public static readonly DependencyProperty GeoViewProperty =
+            DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(FeatureFormView), new PropertyMetadata(null));
+#endif
+
         /// <summary>
         /// Localizes a specific FeatureForm error message and adding contextual type/range/domain information to the error message.
         /// This error message should be displayed to the user.
@@ -773,12 +794,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
             }
 
-        internal void NavigateToItem(object item)
+        internal void NavigateToItem(object item, object? additionalContent = null)
         {
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
-                _ = subView.Navigate(content: item);
+                _ = subView.Navigate(content: item, additionalContent: additionalContent);
             }
+        }
+
+        internal IEnumerable<object> GetNavigationStack()
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                return subView.NavigationStack;
+            }
+            return Enumerable.Empty<object>();
+        }
+
+        internal void ReplaceBackstackItem(int index, object? newItem)
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                subView.ReplaceBackstackItem(index, newItem);
+            }
+        }
+
+        internal Task<object?> GoBackAsync()
+        {
+            if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
+            {
+                return subView.GoBack();
+            }
+            return Task.FromResult<object?>(null);
         }
 
         /// <summary>

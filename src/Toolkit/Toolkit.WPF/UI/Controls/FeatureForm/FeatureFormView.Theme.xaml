@@ -558,7 +558,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationsFilterResultsView}">
                     <ListView VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding AssociationsFilterResult.GroupResults, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
-                        SelectionMode="Single" x:Name="ResultsList" Margin="0,12,0,8">
+                        SelectionMode="Single" x:Name="ResultsList" Margin="0,12,0,8" BorderThickness="0" Background="Transparent">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -620,8 +620,78 @@
                                    VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" />
                         <TextBlock x:Name="FractionAlong" Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=FractionAlong, Path=Text}" />
                         <TextBlock x:Name="ConnectionInfo" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=ConnectionInfo, Path=Text}" />
-                        <TextBlock Text="&#xE76C;" Grid.Column="3" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" FontFamily="Segoe MDL2 Assets" />
+                        <Button Grid.Column="3" VerticalAlignment="Center" Margin="4,0" Background="Transparent" Grid.RowSpan="2" x:Name="DetailsButton" Width="32" Height="32" Padding="0" >
+                            <TextBlock Text="&#xE712;" FontFamily="Segoe MDL2 Assets" FontSize="18" />
+                        </Button>
                     </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type primitives:UtilityAssociationResultDetailsView}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:UtilityAssociationResultDetailsView}">
+                    <StackPanel>
+
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsAssociationType}" FontWeight="Bold" />
+                            <TextBlock Grid.Column="1" x:Name="AssociationTypeText" 
+                                       Text="{Binding AssociationResult.Association.AssociationType, RelativeSource={RelativeSource Mode=TemplatedParent}}" HorizontalAlignment="Right" />
+                        </Grid>
+
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsFromElement}" FontWeight="Bold" />
+                            <TextBlock Grid.Column="1" x:Name="FromElementText" HorizontalAlignment="Right" />
+
+                            <TextBlock Grid.Row="1" Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}" FontWeight="Bold"                                       
+                                       Visibility="{Binding Visibility, ElementName=FromTerminalText, Mode=OneWay}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="FromTerminalText" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="2" Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsPercentAlong}" FontWeight="Bold"
+                                       Visibility="{Binding Visibility, ElementName=FromFraction, Mode=OneWay}" />
+                            <Slider Grid.Row="3" Grid.ColumnSpan="2" x:Name="FromFraction" Minimum="0" Maximum="1" Margin="0,8,0,0" IsEnabled="False" Visibility="Collapsed" />
+                        </Grid>
+
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsToElement}" FontWeight="Bold" />
+                            <TextBlock Grid.Column="1" x:Name="ToElementText" HorizontalAlignment="Right" />
+
+                            <TextBlock Grid.Row="1" Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}" FontWeight="Bold"
+                                       Visibility="{Binding Visibility, ElementName=ToTerminalText, Mode=OneWay}"  />
+                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ToTerminalText" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="2" Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationsPercentAlong}" FontWeight="Bold"
+                                       Visibility="{Binding Visibility, ElementName=ToFraction, Mode=OneWay}" />
+                            <Slider Grid.Row="3" Grid.ColumnSpan="2" x:Name="ToFraction" Minimum="0" Maximum="1" IsEnabled="False" Visibility="Collapsed" />
+                    </Grid>
+
+                        <Button x:Name="RemoveAssociationButton" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Margin="0,8,0,0"
+                                    Content="{internal:LocalizedString Key=FeatureFormUtilityAssociationsRemoveAssociation}" />
+                    </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -668,7 +738,8 @@
                             <DataTemplate>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" Visibility="{Binding Filter.Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
-                                    <TextBlock Text="{Binding Filter.Description, Mode=OneWay}" Style="{StaticResource FeatureFormViewTitleStyle}" Visibility="{Binding Filter.Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                    <TextBlock Text="{Binding AdditionalContent.Title, Mode=OneWay, RelativeSource={RelativeSource AncestorType=primitives:NavigationSubView}}" Style="{StaticResource FeatureFormViewTitleStyle}"
+                                               Visibility="{Binding AdditionalContent.Title, Mode=OneWay, RelativeSource={RelativeSource AncestorType=primitives:NavigationSubView}, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </primitives:FeatureFormContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
@@ -676,9 +747,18 @@
                             <DataTemplate>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Name, Mode=OneWay}" Style="{StaticResource FeatureFormViewHeaderStyle}" />
+                                    <TextBlock Text="{Binding AdditionalContent.Filter.Title, Mode=OneWay, RelativeSource={RelativeSource AncestorType=primitives:NavigationSubView}}"
+                                               Style="{StaticResource FeatureFormViewTitleStyle}"
+                                               Visibility="{Binding AdditionalContent.Filter.Title, Mode=OneWay, RelativeSource={RelativeSource AncestorType=primitives:NavigationSubView}, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                        <primitives:FeatureFormContentTemplateSelector.UtilityAssociationResultTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{internal:LocalizedString Key=FeatureFormUtilityAssociationSettings}"
+                                           Style="{StaticResource FeatureFormViewHeaderStyle}" />
+                            </DataTemplate>
+                        </primitives:FeatureFormContentTemplateSelector.UtilityAssociationResultTemplate>
                     </primitives:FeatureFormContentTemplateSelector>
                 </primitives:NavigationSubView.HeaderTemplateSelector>
                 <primitives:NavigationSubView.ContentTemplateSelector>
@@ -748,6 +828,11 @@
                                 <primitives:UtilityAssociationGroupResultView GroupResult="{Binding}" />
                             </DataTemplate>
                         </primitives:FeatureFormContentTemplateSelector.UtilityAssociationGroupResultTemplate>
+                        <primitives:FeatureFormContentTemplateSelector.UtilityAssociationResultTemplate>
+                            <DataTemplate>
+                                <primitives:UtilityAssociationResultDetailsView AssociationResult="{Binding}" />
+                            </DataTemplate>
+                        </primitives:FeatureFormContentTemplateSelector.UtilityAssociationResultTemplate>
                     </primitives:FeatureFormContentTemplateSelector>
                 </primitives:NavigationSubView.ContentTemplateSelector>
             </primitives:NavigationSubView>

@@ -84,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         {
             NavigationSubView root = new NavigationSubView();
             root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (FeatureFormView viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
-            root.HeaderTemplateSelector = BuildHeaderTemplateSelector();
+            root.HeaderTemplateSelector = BuildHeaderTemplateSelector(root);
             root.ContentTemplateSelector = BuildContentTemplateSelector();
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return root;
         }
 
-        private static DataTemplateSelector BuildHeaderTemplateSelector()
+        private static DataTemplateSelector BuildHeaderTemplateSelector(NavigationSubView subFrameView)
         {
             FeatureFormContentTemplateSelector selector = new FeatureFormContentTemplateSelector();
             selector.FeatureFormTemplate = new DataTemplate(() =>
@@ -110,17 +110,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
                 root.Children.Add(title);
                 Label desc = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
-                desc.Style = GetFeatureFormCaptionStyle();
-                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
-                desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
+                desc.Style = GetFeatureFormTitleStyle();
+                desc.SetBinding(Label.TextProperty, static (NavigationSubView view) => (view.AdditionalContent as FeatureForm)?.Title, source: subFrameView);
+                desc.SetBinding(VisualElement.IsVisibleProperty, static (NavigationSubView view) => (view.AdditionalContent as FeatureForm)?.Title, source: subFrameView, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(desc);
+                Label description = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                description.Style = GetFeatureFormCaptionStyle();
+                description.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
+                description.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(description);
                 return root;
             });
             selector.UtilityAssociationGroupResultTemplate = new DataTemplate(() =>
             {
-                Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                VerticalStackLayout root = new VerticalStackLayout() { VerticalOptions = LayoutOptions.Center };
+                Label roottitle = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 roottitle.Style = GetFeatureFormHeaderStyle();
                 roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
+                root.Children.Add(roottitle);
+                Label desc = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
+                desc.Style = GetFeatureFormTitleStyle();
+                desc.SetBinding(Label.TextProperty, static (NavigationSubView view) => (view.AdditionalContent as UtilityNetworks.UtilityAssociationsFilterResult)?.Filter.Title, source: subFrameView);
+                desc.SetBinding(VisualElement.IsVisibleProperty, static (NavigationSubView view) => (view.AdditionalContent as UtilityNetworks.UtilityAssociationsFilterResult)?.Filter.Title, source: subFrameView, converter: Internal.EmptyToFalseConverter.Instance);
+                root.Children.Add(desc);
+                return root;
+            });
+            selector.UtilityAssociationResultTemplate = new DataTemplate(() =>
+            {
+                Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
+                roottitle.Style = GetFeatureFormHeaderStyle();
+                roottitle.Text = Properties.Resources.GetString("FeatureFormUtilityAssociationSettings");
                 return roottitle;
             });
             return selector;
@@ -160,6 +179,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 var view = new UtilityAssociationsFilterResultsView();
                 view.SetBinding(UtilityAssociationsFilterResultsView.AssociationsFilterResultProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result);
+                return view;
+            });
+            selector.UtilityAssociationResultTemplate = new DataTemplate(() =>
+            {
+                var view = new UtilityAssociationResultDetailsView();
+                view.SetBinding(UtilityAssociationResultDetailsView.AssociationResultProperty, static (UtilityNetworks.UtilityAssociationResult result) => result);
                 return view;
             });
             return selector;

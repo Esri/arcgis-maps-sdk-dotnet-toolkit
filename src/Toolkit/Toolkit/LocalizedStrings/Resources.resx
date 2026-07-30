@@ -237,6 +237,130 @@
     <value>Number of characters required: {0}</value>
     <comment>Input validation of entered text must be exactly {0} characters long</comment>
   </data>
+  <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
+    <value>Remove Association</value>
+    <comment>Button text for removing a utility association in FeatureFormView.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>Show on Map</value>
+    <comment>Menu text for centering the associated feature on the map in FeatureFormView.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>More Information</value>
+    <comment>Menu text for showing utility association details in FeatureFormView.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
+    <value>Percent Along</value>
+    <comment>Label for the fraction along edge slider in utility association details.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
+    <value>Association Settings</value>
+    <comment>Title for the utility association settings/details in FeatureFormView.</comment>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
+    <value>Remove Association?</value>
+    <comment>Confirmation dialog title for the deleting the utility association.</comment>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
+    <value>This will only remove the association. The feature remains.</value>
+    <comment>Confirmation dialog text for the deleting the utility association.</comment>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
+    <value>Remove</value>
+    <comment>Text Label accepting utility association deletion.</comment>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Text Label cancelling utility association deletion.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
+    <value>Add Association</value>
+    <comment>Button text for starting or completing the add association workflow in FeatureFormView.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
+    <value>Association type</value>
+    <comment>Label for the association type shown on the add association review screen.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
+    <value>Attachment</value>
+    <comment>Association type display name for an attachment association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
+    <value>This association can't be added.</value>
+    <comment>Error shown when the selected feature is not a valid candidate for the association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
+    <value>Connectivity</value>
+    <comment>Association type display name for a connectivity association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
+    <value>Containment</value>
+    <comment>Association type display name for a containment association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
+    <value>Content visibility</value>
+    <comment>Label for the containment visibility setting on the add association review screen.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
+    <value>Current feature terminal</value>
+    <comment>Label for the terminal selector of the feature being edited.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
+    <value>Enter a percentage from 0 to 100.</value>
+    <comment>Error shown when the fraction along edge value is outside the allowed range.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
+    <value>Fraction along edge (%)</value>
+    <comment>Label for the fraction along edge setting on the add association review screen.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
+    <value>From element</value>
+    <comment>Label for the current feature on the add association review screen.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
+    <value>No matching features available.</value>
+    <comment>Message shown when no candidate features are available for the selected source or asset type.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
+    <value>No network data sources available.</value>
+    <comment>Message shown when no network data sources can be used to create an association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
+    <value>Associations can't be edited for this feature.</value>
+    <comment>Message shown when the utility associations form element is read-only.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
+    <value>Other feature terminal</value>
+    <comment>Label for the terminal selector of the feature being associated.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
+    <value>Review association</value>
+    <comment>Title for the final add association review screen.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
+    <value>Select a network data source</value>
+    <comment>Description shown on the screen used to choose a network data source for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
+    <value>Select from Network Data Source</value>
+    <comment>Action sheet option for browsing candidates from a network data source.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
+    <value>Select on Map</value>
+    <comment>Action sheet option for selecting the associated feature from a map.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
+    <value>Select a terminal.</value>
+    <comment>Error shown when a required terminal selection is missing.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
+    <value>Structure attachment</value>
+    <comment>Association type display name for a structural attachment association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
+    <value>To element</value>
+    <comment>Label for the selected associated feature on the add association review screen.</comment>
+  </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>All Sites</value>
     <comment>The label and tooltip shown for the button that is used to navigate to the list of location sites in all facilities when the site browsing view is open</comment>
@@ -573,11 +697,11 @@
     <value>Discard</value>
     <comment>The text on the Discard button of the unsaved-edits warning dialog</comment>
   </data>
-  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+    <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
     <value>Error</value>
     <comment>The text on the dialog shown if saving edits to a feature form fails</comment>
   </data>
-  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+    <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
     <value>You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes?</value>
     <comment>The content of the dialog when user is warned about unsaved edits</comment>
   </data>
@@ -597,7 +721,7 @@
     <value>Content</value>
     <comment>The text used to indicate the associated feature is non-visible content in a UtilityAssociationsFormElement's group result</comment>
   </data>
-  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+    <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>
     <comment>The terminal name of utility element association</comment>
   </data>

@@ -169,16 +169,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private bool _rentrancyFlag;
 
+        // Converts a FieldFormElement.Value to a local-time DateTime for the pickers.
+        // A DateTimeOffset value (from a TimestampOffset field) is reduced to its UTC instant
+        // to avoid applying the offset twice during conversion to local time.
+        internal static DateTime? ConvertToLocalDisplayValue(object? value) // internal so it can be unit-tested
+        {
+            DateTime? utc = value switch
+            {
+                DateTime dt => dt,
+                DateTimeOffset dto => dto.UtcDateTime,
+                _ => null,
+            };
+            return utc?.ToLocalTime();
+        }
+
         private void ConfigurePickers()
         {
             if (_rentrancyFlag) return;
             _rentrancyFlag = true;
-            DateTime? selectedDate = Element?.Value as DateTime? ?? (Element?.Value as DateTimeOffset?)?.DateTime;
+            // Dates are always displayed in local time, even if IncludeTime is false.
+            DateTime? selectedDate = ConvertToLocalDisplayValue(Element?.Value);
 
             if (Element?.Input is DateTimePickerFormInput input)
             {
-                // Dates are always converted to local time, even if IncludeTime is false
-                selectedDate = selectedDate?.ToLocalTime();
                 if (_datePicker != null)
                 {
 #if MAUI

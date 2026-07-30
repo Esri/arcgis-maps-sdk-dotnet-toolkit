@@ -638,7 +638,7 @@ public partial class FloorFilter : TemplatedView
 
             const int maxHeight = 320;
             var desiredHeight = (_displayLevels?.Count ?? 0) * 48;
-#if _IOS__ || __MACCATALYST__
+#if __IOS__ || __MACCATALYST__
             var limitedHeight = Math.Min(maxHeight, desiredHeight);
             PART_LevelListView.VerticalOptions = LayoutOptions.End;
             PART_LevelListView.HeightRequest = limitedHeight;
