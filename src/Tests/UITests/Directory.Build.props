@@ -46,7 +46,7 @@
   <PropertyGroup>
     <TestRunnerNetVersion>net10.0</TestRunnerNetVersion>
     <AppiumWebDriverVersion>8.3.2</AppiumWebDriverVersion>
-    <MagickNetVersion>14.15.0</MagickNetVersion>
+    <MagickNetVersion>14.16.0</MagickNetVersion>
   </PropertyGroup>
 
   <!-- Expose TestAppApiKey to the compiler for use in Toolkit.UITests.Generators\ApiKeyGenerator.cs -->
