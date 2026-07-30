@@ -133,6 +133,30 @@
     <value>Take Photo</value>
     <comment>Menu text for adding an attachment by taking a photo</comment>
   </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>This file type is not supported. Allowed types: {0}</value>
+    <comment>Validation error shown when the selected attachment file type is unsupported; {0} is a comma-separated list of allowed types.</comment>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>This file is too large. Maximum allowed size is {0} MB.</value>
+    <comment>Validation error shown when the selected attachment exceeds the maximum allowed size; {0} is the maximum size in megabytes.</comment>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>This file is too large.</value>
+    <comment>Validation error shown when the selected attachment exceeds the maximum allowed size but no size value is available.</comment>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>This media is too long. Maximum allowed duration is {0} seconds.</value>
+    <comment>Validation error shown when selected audio or video exceeds the maximum duration; {0} is the allowed duration or durations in seconds.</comment>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>This media is too long.</value>
+    <comment>Validation error shown when selected audio or video exceeds the maximum duration but no limit value is available.</comment>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>Attachment upload failed</value>
+    <comment>Title text for the attachment validation alert dialog.</comment>
+  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
     <comment>Input validation of entered date must be before or on the maximum allowed date {0}</comment>
@@ -192,6 +216,22 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Less than minimum value</value>
     <comment>Input validation of entered number is below the minimum require value</comment>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>The maximum number of attachments allowed is {0}.</value>
+    <comment>Validation error shown when the number of attachments exceeds the allowed maximum of {0}.</comment>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>Max: {0}</value>
+    <comment>Caption badge showing the maximum allowed number of attachments, where {0} is the count.</comment>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>Min: {0}</value>
+    <comment>Caption badge showing the minimum required number of attachments, where {0} is the count.</comment>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>At least {0} attachment(s) required.</value>
+    <comment>Validation error shown when fewer than the minimum required attachments are present, where {0} is the required count.</comment>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>No attachments</value>
@@ -277,6 +317,22 @@
     <value>Add Association</value>
     <comment>Button text for starting or completing the add association workflow in FeatureFormView.</comment>
   </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>Add</value>
+    <comment>Button text for confirming a new utility association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>Choose how to add the feature</value>
+    <comment>Title for the action sheet used to choose how to select a feature for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>Choose to add</value>
+    <comment>Heading shown above utility association candidate features.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>{0} Features Identified</value>
+    <comment>Summary shown after identifying utility association candidate features on the map.</comment>
+  </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
     <value>Association type</value>
     <comment>Label for the association type shown on the add association review screen.</comment>
@@ -318,12 +374,16 @@
     <comment>Label for the current feature on the add association review screen.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
-    <value>No matching features available.</value>
+    <value>No matches found.</value>
     <comment>Message shown when no candidate features are available for the selected source or asset type.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
     <value>No network data sources available.</value>
     <comment>Message shown when no network data sources can be used to create an association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>New Association</value>
+    <comment>Title for reviewing and confirming a new utility association.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
     <value>Associations can't be edited for this feature.</value>
@@ -337,17 +397,57 @@
     <value>Review association</value>
     <comment>Title for the final add association review screen.</comment>
   </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>Search features</value>
+    <comment>Placeholder for filtering identified utility association candidate features by title.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>Search</value>
+    <comment>Placeholder for filtering network data sources or utility asset types.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>Network Data Source</value>
+    <comment>Title for selecting a network data source for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>{0} results</value>
+    <comment>Number of matching network data sources or utility asset types.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>Available Asset Types</value>
+    <comment>Heading shown above utility asset types available for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>Available Features ({0})</value>
+    <comment>Title showing the number of candidate features available for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>Status shown while utility association candidates are loading.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>No asset types available.</value>
+    <comment>Message shown when no utility asset types match the current search.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>Load more</value>
+    <comment>Button text for loading the next page of utility association candidates.</comment>
+  </data>
   <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
     <value>Select a network data source</value>
     <comment>Description shown on the screen used to choose a network data source for a new association.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>Select from Network Data Source</value>
+    <value>From Network Data Source</value>
     <comment>Action sheet option for browsing candidates from a network data source.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>Select on Map</value>
+    <value>On Map</value>
     <comment>Action sheet option for selecting the associated feature from a map.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>Select features by tapping on the map.</value>
+    <comment>Instruction shown while waiting for utility association candidates to be identified on a map.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
     <value>Select a terminal.</value>
@@ -356,6 +456,10 @@
   <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
     <value>Structure attachment</value>
     <comment>Association type display name for a structural attachment association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>Tap Selection</value>
+    <comment>Title for the page used to identify utility association candidates by tapping on a map.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
     <value>To element</value>
@@ -496,6 +600,22 @@
   <data name="SearchViewSearchTooltip" xml:space="preserve">
     <value>Search</value>
     <comment>The tooltip text to display for the search button.</comment>
+  </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>Select search source</value>
+    <comment>UIA AutomationProperties.Name for the button to display search sources, used by screen readers to identify the control</comment>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>Search sources</value>
+    <comment>UIA AutomationProperties.Name for the list view control displaying search sources, used by screen readers to identify the control</comment>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>Search suggestions</value>
+    <comment>UIA AutomationProperties.Name for the list view control displaying search suggestions, used by screen readers to identify the control</comment>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>Search results</value>
+    <comment>UIA AutomationProperties.Name for the list view control displaying search results, used by screen readers to identify the control</comment>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Add starting point</value>
@@ -697,11 +817,11 @@
     <value>Discard</value>
     <comment>The text on the Discard button of the unsaved-edits warning dialog</comment>
   </data>
-    <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
+  <data name="FeatureFormApplyEditsErrorTitle" xml:space="preserve">
     <value>Error</value>
     <comment>The text on the dialog shown if saving edits to a feature form fails</comment>
   </data>
-    <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
+  <data name="FeatureFormPendingEditsMessage" xml:space="preserve">
     <value>You need to apply or discard edits of the current feature before moving to another feature. Do you want to apply the changes?</value>
     <comment>The content of the dialog when user is warned about unsaved edits</comment>
   </data>
@@ -721,7 +841,7 @@
     <value>Content</value>
     <comment>The text used to indicate the associated feature is non-visible content in a UtilityAssociationsFormElement's group result</comment>
   </data>
-    <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
+  <data name="FeatureFormUtilityElementTerminalName" xml:space="preserve">
     <value>Terminal: {0}</value>
     <comment>The terminal name of utility element association</comment>
   </data>

@@ -15,10 +15,6 @@
     <LangVersion>latest</LangVersion>
     <DefineConstants>$(DefineConstants);WINUI_APP</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="TestPages\CompassMap.xaml" />
-    <None Remove="TestPages\ScaleLines.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -47,16 +43,17 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7463" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260101001" />
   </ItemGroup>
+
+  <!-- Test Pages -->
   <ItemGroup>
-    <Page Update="TestPages\CompassMap.xaml">
+    <None Remove="TestPages\**\*.xaml" />
+    <Page Update="TestPages\**\*.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Page Update="TestPages\ScaleLines.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+
+  <!-- Shared test page view models -->
+  <Import Project="..\Toolkit.UITests.TestPages.Shared\Toolkit.UITests.TestPages.Shared.projitems" Label="Shared" />
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
@@ -91,6 +88,10 @@
     </Otherwise>
   </Choose>
   
-  <!-- Shared view models -->
-  <Import Project="..\Toolkit.UITests.TestPages.Shared\Toolkit.UITests.TestPages.Shared.projitems" Label="Shared" />
+  <!-- Source generators -->
+  <ItemGroup>
+    <ProjectReference Include="..\Toolkit.UITests.Generators\Toolkit.UITests.Generators.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
 </Project>

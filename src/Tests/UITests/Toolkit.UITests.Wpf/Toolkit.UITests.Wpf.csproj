@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DefineConstants>$(DefineConstants);WINDOWS_RUNNER;WINDOWS_TEST;WPF_TEST</DefineConstants>
+    <BuildApp Condition="'$(BuildApp)'==''">true</BuildApp>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,7 @@
   </Target>
 
   <!-- Build test app if needed and record build location to SampleAppBuildInfo.txt -->
-  <Target Name="BuildTestApp" BeforeTargets="Build">
+  <Target Name="BuildTestApp" BeforeTargets="Build" Condition="'$(BuildApp)'=='true'">
     <MSBuild Projects="..\..\UITests\Toolkit.UITests.Wpf.App\Toolkit.UITests.Wpf.App.csproj" Targets="Build" Properties="Configuration=$(Configuration)">
       <Output TaskParameter="TargetOutputs" ItemName="_TestAppTargetOutputs" />
     </MSBuild>

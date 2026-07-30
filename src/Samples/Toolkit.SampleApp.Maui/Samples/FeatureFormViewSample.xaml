@@ -11,8 +11,15 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <esri:MapView x:Name="mapView"
-                          Map="https://www.arcgis.com/home/item.html?id=f72207ac170a40d8992b7a3507b44fad"
                           GeoViewTapped="mapView_GeoViewTapped" />
+
+            <Picker x:Name="mapSelector"
+                    WidthRequest="220"
+                    Margin="10"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    ItemDisplayBinding="{Binding Title}"
+                    SelectedIndexChanged="mapSelector_SelectedIndexChanged" />
 
             <Border HorizontalOptions="Center" VerticalOptions="Start" Background="{AppThemeBinding Dark=#99000000, Light=#99ffffff}" Padding="5" Margin="10" StrokeThickness="1" Stroke="Black">
                 <Label Text="Click a feature to open its FeatureFormView" FontSize="18" />
@@ -25,7 +32,7 @@
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <esri:FeatureFormView Background="Transparent" x:Name="formViewer" Padding="12" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Default"
+                        <esri:FeatureFormView Background="Transparent" x:Name="formViewer" GeoView="{x:Reference mapView}" Padding="12" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Default"
                                               FormAttachmentClicked="FormAttachmentClicked" />
                         <Border Grid.Row="1" StrokeThickness="0" Padding="5" Background="{AppThemeBinding Dark=Black, Light=White}">
                             <Grid>

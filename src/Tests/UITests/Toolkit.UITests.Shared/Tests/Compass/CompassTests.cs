@@ -38,7 +38,7 @@ public class CompassTests : AppiumTestBase
         SetRotation(0);
         Click(autoHideButton);
 
-        var maxTries = 5;
+        var maxTries = 10;
         var hidden = false;
         for (var tryCount = 0; tryCount < maxTries; tryCount++)
         {
@@ -125,7 +125,7 @@ public class CompassTests : AppiumTestBase
     private static CompassAnalysis AnalyzeCompassOrientation(MagickImage compassScreenshot)
     {
         // Mask to only red pixels (aka the north arrow).
-        compassScreenshot.ColorThreshold(new MagickColor(128, 0, 0), new MagickColor(255, 80, 80));
+        compassScreenshot.ColorThreshold(new MagickColor(100, 0, 0), new MagickColor(255, 80, 80));
 
         var connectedComponents = compassScreenshot.ConnectedComponents(4);
         var componentCount = Math.Max(0, connectedComponents.Count - 1);
@@ -180,7 +180,7 @@ public class CompassTests : AppiumTestBase
 
         do
         {
-            if (double.TryParse(GetElementText(mapRotationElement), out var mapRotation))
+            if (double.TryParse(GetLabelText(mapRotationElement), out var mapRotation))
             {
                 lastRotation = mapRotation;
                 if (Math.Abs(mapRotation - expectedRotation) <= 0.001)

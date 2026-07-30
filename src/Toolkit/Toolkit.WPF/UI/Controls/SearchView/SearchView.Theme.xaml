@@ -273,6 +273,9 @@
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Template" Value="{StaticResource ListItemTemplate}" />
     </Style>
+    <Style x:Key="SearchSourcesStyle" TargetType="ListViewItem" BasedOn="{StaticResource ListContainerStyle}">
+        <Setter Property="AutomationProperties.Name" Value="{Binding Path=DisplayName}"/>
+    </Style>
     <Style x:Key="ListStyle" TargetType="ListView">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -324,7 +327,9 @@
                         BorderThickness="0,0,1,0"
                         IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
                         Style="{StaticResource BarActionButtonStyle}"
-                        Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}">
+                        Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}"
+                        AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSelectSearchSource}"
+                        AutomationProperties.AutomationId="SourceSelectToggle">
                         <Path
                             Width="12"
                             Height="12"
@@ -347,17 +352,19 @@
                                     HorizontalContentAlignment="Left"
                                     BorderThickness="0"
                                     IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
-                                    Style="{StaticResource ProminentButtonStyle}">
+                                    Style="{StaticResource ProminentButtonStyle}" AutomationProperties.AutomationId="AllSourcesButton">
                                     <TextBlock Text="{TemplateBinding AllSourceSelectText}" />
                                 </ToggleButton>
                                 <ListView
                                     x:Name="sourceList"
-                                    ItemContainerStyle="{StaticResource ListContainerStyle}"
+                                    ItemContainerStyle="{StaticResource SearchSourcesStyle}"
                                     ItemTemplate="{StaticResource SourceTemplate}"
                                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"
                                     SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay}"
                                     SelectionMode="Single"
-                                    Style="{StaticResource ListStyle}" />
+                                    Style="{StaticResource ListStyle}" 
+                                    AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"
+                                    AutomationProperties.AutomationId="SearchSourcesList"/>
                             </StackPanel>
                         </Border>
                     </Popup>
@@ -365,7 +372,9 @@
                         x:Name="QueryEntry"
                         Grid.Column="1"
                         Style="{StaticResource QueryEntryStyle}"
-                        Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.Name="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActivePlaceholder, Mode=OneWay}" 
+                        AutomationProperties.AutomationId="QueryEntry"/>
                     <TextBlock
                         Grid.Column="1"
                         Style="{StaticResource QueryPlaceholderStyle}"
@@ -376,6 +385,8 @@
                         Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.ClearCommand}"
                         Style="{StaticResource BarActionButtonStyle}"
                         ToolTip="{TemplateBinding ClearSearchTooltipText}"
+                        AutomationProperties.Name="{TemplateBinding ClearSearchTooltipText}"
+                        AutomationProperties.AutomationId="ClearSearchButton"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}">
                         <Path
                             Width="12"
@@ -405,7 +416,9 @@
                                 ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding Source={StaticResource GroupedSuggestions}}"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedSuggestion, Mode=OneWayToSource}"
-                                Style="{StaticResource ListStyle}">
+                                Style="{StaticResource ListStyle}"
+                                AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
+                                AutomationProperties.AutomationId="SearchSuggestionsList">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchSuggestion}">
                                         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,0,0,1">
@@ -445,6 +458,13 @@
                                                 <StackPanel Margin="-5,0,0,0" />
                                             </ItemsPanelTemplate>
                                         </GroupStyle.Panel>
+                                        
+                                        <GroupStyle.ContainerStyle>
+                                            <Style TargetType="GroupItem">
+                                                <Setter Property="AutomationProperties.Name" Value="{Binding Name.DisplayName}" />
+                                            </Style>
+                                        </GroupStyle.ContainerStyle>
+
                                         <GroupStyle.HeaderTemplate>
 
                                             <DataTemplate>
@@ -472,7 +492,9 @@
                         BorderThickness="1,0,0,0"
                         Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SearchCommand, Mode=OneTime}"
                         Style="{StaticResource BarActionButtonStyle}"
-                        ToolTip="{TemplateBinding SearchTooltipText}">
+                        ToolTip="{TemplateBinding SearchTooltipText}"
+                        AutomationProperties.Name="{TemplateBinding SearchTooltipText}"
+                        AutomationProperties.AutomationId="SearchButton">
                         <Path
                             Width="14"
                             Height="14"
@@ -495,7 +517,9 @@
                                 ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Results, Mode=OneWay}"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.SelectedResult, Mode=OneWayToSource}"
                                 SelectionMode="Single"
-                                Style="{StaticResource ListStyle}">
+                                Style="{StaticResource ListStyle}"
+                                AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchResults}"
+                                AutomationProperties.AutomationId="SearchResultsList">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchResult}">
                                         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
@@ -558,7 +582,8 @@
                     Foreground="White"
                     Style="{StaticResource ProminentButtonStyle}"
                     Template="{StaticResource FloatingButtonTemplate}"
-                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                    AutomationProperties.AutomationId="RepeatSearchHereButton"/>
             </Grid>
         </Grid>
     </ControlTemplate>

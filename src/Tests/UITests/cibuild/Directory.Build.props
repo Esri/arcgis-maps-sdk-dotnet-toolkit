@@ -1,0 +1,3 @@
+<Project>
+<!-- Empty Directory.Build.props so that the stand-alone C# scripts run without interference. -->
+</Project>

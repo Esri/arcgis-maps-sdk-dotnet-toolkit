@@ -121,10 +121,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             
             string cancel = Properties.Resources.GetString("FeatureFormDeleteAssociationConfirmationCancel")!;
-            string? action = await page.DisplayActionSheet(AssociationResult?.Title, cancel, null, actions.ToArray());
+            string? action = await page.DisplayActionSheetAsync(AssociationResult?.Title, cancel, null, actions.ToArray());
             if (action == showOnMap)
             {
-                ShowAssociationOnMap(parent);
+                ShowAssociationOnMap();
             }
             else if (action == moreInformation)
             {
@@ -153,7 +153,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     showOnMap,
                     ToolkitIcons.CenterMap,
                     iconFontFamily,
-                    (s, e) => ShowAssociationOnMap(parent)));
+                    (s, e) => ShowAssociationOnMap()));
             }
 
             if (moreInformation is not null)

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.SearchViewControlMap"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Toolkit.UITests.App.TestPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    x:Name="SearchViewControlMapPage"
+    mc:Ignorable="d">
+
+    <Grid>
+        <esri:MapView x:Name="MyMapView" />
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1"  Background="{ThemeResource CalciteBackground1Color}" BorderBrush="{ThemeResource CalciteBorder1Color}">
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <TextBlock Text="Scale: 1 / " Margin="1,1,0,1" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="ScaleTextBlock" MinWidth="60" Text="{Binding ElementName=MyMapView, Path=MapScale, Mode=OneWay}" AutomationProperties.AutomationId="ScaleTextBlock"/>
+                </StackPanel>
+                <Button x:Name="UpdateViewpointExtentToUSA" Content="Update Viewpoint to USA" Padding="1" Click="UpdateViewpointExtentToUSA_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToUSA"/>
+                <Button x:Name="UpdateViewpointExtentToOntario" Content="Update Viewpoint to Ontario" Padding="1" Click="UpdateViewpointExtentToOntario_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToOntario"/>
+                <Button x:Name="UpdateViewpointExtentToColorado" Content="Update Viewpoint to Colorado" Padding="1" Click="UpdateViewpointExtentToColorado_Click" AutomationProperties.AutomationId="UpdateViewpointExtentToColorado"/>
+            </StackPanel>
+        </Border>
+        <toolkit:SearchView GeoView="{Binding ElementName=MyMapView}" Padding="10" />
+    </Grid>
+</local:TestPage>

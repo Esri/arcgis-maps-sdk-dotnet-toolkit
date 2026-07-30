@@ -32,6 +32,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class AttachmentsFormElementView : Control
     {
         private ButtonBase? _addAttachmentButton;
+        private FrameworkElement? _minAttachmentBadge;
+        private TextBlock? _minAttachmentBadgeText;
+        private FrameworkElement? _maxAttachmentBadge;
+        private TextBlock? _maxAttachmentBadgeText;
+        private TextBlock? _attachmentErrorLabel;
         private bool _scrollToEnd;
 
         /// <inheritdoc />
@@ -51,6 +56,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _addAttachmentButton.Click += AddAttachmentButton_Click;
             }
+            _minAttachmentBadge = GetTemplateChild("MinAttachmentBadge") as FrameworkElement;
+            _minAttachmentBadgeText = GetTemplateChild("MinAttachmentBadgeText") as TextBlock;
+            _maxAttachmentBadge = GetTemplateChild("MaxAttachmentBadge") as FrameworkElement;
+            _maxAttachmentBadgeText = GetTemplateChild("MaxAttachmentBadgeText") as TextBlock;
+            _attachmentErrorLabel = GetTemplateChild("AttachmentErrorLabel") as TextBlock;
+            UpdateAddAttachmentButtonState();
+            UpdateMinMaxAttachmentText();
             if (GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
             {
 #if WPF
@@ -87,13 +99,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 #endif
 
-        private
-#if WINDOWS_XAML
-            async
-#endif
-            void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
+        private async void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Element is null || !Element.IsEditable) return;
+            if (!CanAddAttachment()) return;
             try
             {
 #if WPF
@@ -101,11 +109,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (openFileDialog.ShowDialog() == true)
                 {
                     var fileInfo = new FileInfo(openFileDialog.FileName);
-                    if (fileInfo.Exists)
+                    if (fileInfo.Exists && CanAddAttachment())
                     {
                         _scrollToEnd = true;
-                        Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                        await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
                         EvaluateExpressions();
+                        UpdateAddAttachmentButtonState();
                     }
                 }
 #elif WINDOWS_XAML
@@ -124,21 +133,81 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     var fileInfo = new FileInfo(file.Path);
                     _scrollToEnd = true;
+                    if (!CanAddAttachment())
+                    {
+                        return;
+                    }
 #if WINDOWS_UWP
                     using var ms = new MemoryStream();
                     using var filestream = await file.OpenStreamForReadAsync();
                     await filestream.CopyToAsync(ms);
-                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
+                    await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), ms.ToArray());
 #else
-                    Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                    await Element.AddAttachmentAsync(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
 #endif
                     EvaluateExpressions();
+                    UpdateAddAttachmentButtonState();
                 }
 #endif
             }
             catch (System.Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
+                if (!TryHandleAttachmentValidationException(ex))
+                {
+                    System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
+                }
+            }
+        }
+
+        private partial void UpdateAddAttachmentButtonState()
+        {
+            if (_addAttachmentButton is not null)
+            {
+                _addAttachmentButton.IsEnabled = CanAddAttachment();
+            }
+        }
+
+        private async partial Task ShowAttachmentValidationAlertAsync(string message)
+        {
+            string title = Properties.Resources.GetString("FeatureFormAttachmentValidationErrorTitle")!;
+#if WPF
+            System.Windows.MessageBox.Show(message, title);
+            await Task.CompletedTask;
+#elif WINDOWS_XAML
+            var dialog = new ContentDialog
+            {
+                Title = title,
+                Content = message,
+                CloseButtonText = Properties.Resources.GetString("FeatureFormRenameAttachmentDialogOK")!
+            };
+            dialog.XamlRoot = this.XamlRoot;
+            await dialog.ShowAsync();
+#endif
+        }
+
+        private partial void UpdateMinMaxAttachmentTextCore(string minAttachmentText, bool minVisible, string maxAttachmentText, bool maxVisible, string errorText, bool errorVisible)
+        {
+            if (_minAttachmentBadge is not null)
+            {
+                _minAttachmentBadge.Visibility = minVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_minAttachmentBadgeText is not null)
+            {
+                _minAttachmentBadgeText.Text = minAttachmentText;
+            }
+
+            if (_maxAttachmentBadge is not null)
+            {
+                _maxAttachmentBadge.Visibility = maxVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_maxAttachmentBadgeText is not null)
+            {
+                _maxAttachmentBadgeText.Text = maxAttachmentText;
+            }
+            if (_attachmentErrorLabel is not null)
+            {
+                _attachmentErrorLabel.Text = errorText;
+                _attachmentErrorLabel.Visibility = errorVisible ? Visibility.Visible : Visibility.Collapsed;
             }
         }
     }

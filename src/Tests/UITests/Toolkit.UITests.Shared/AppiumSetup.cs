@@ -100,7 +100,7 @@ public static partial class AppiumSetup
         return iosDriver;
     }
 
-    private static MacDriver MakeMacDriver(string bundleId, string port = "4723", int timeoutSeconds = 60)
+    private static MacDriver MakeMacDriver(string app, bool useAppPath, string port = "4723", int timeoutSeconds = 60)
     {
         var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
         var driverOptions = new AppiumOptions()
@@ -108,7 +108,10 @@ public static partial class AppiumSetup
             PlatformName = "mac",
             AutomationName = "mac2",
         };
-        driverOptions.AddAdditionalAppiumOption("bundleId", bundleId);
+        if (useAppPath)
+            driverOptions.AddAdditionalAppiumOption("appPath", app);
+        else
+            driverOptions.AddAdditionalAppiumOption("bundleId", app);
 
         var macDriver = new MacDriver(serverUri, driverOptions, TimeSpan.FromSeconds(timeoutSeconds));
 
@@ -121,14 +124,12 @@ public static partial class AppiumSetup
     private static Dictionary<string, string> GetBuildSettings()
     {
         // Find and read file
-        var testAssemblyDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            ?? throw new InvalidOperationException("Could not determine test assembly directory.");
-
-        var pathFile = Path.Combine(testAssemblyDir, "AppBuildInfo.txt");
-        if (!File.Exists(pathFile))
+        var pathFile = GetBuildFile();
+        if (!Path.Exists(pathFile))
         {
             throw new FileNotFoundException(
-                $"Missing '{pathFile}'. Ensure the 'BuildTestApp' MSBuild target ran before tests.");
+                $"Missing '{pathFile}'. Ensure the 'BuildTestApp' MSBuild target ran before tests."
+            );
         }
 
         var rawFile = File.ReadAllText(pathFile).Trim();
@@ -149,6 +150,17 @@ public static partial class AppiumSetup
             }
         }
         return metadata;
+    }
+
+    /// <summary>
+    /// Returns null if the build file does not exist.
+    /// </summary>
+    private static string GetBuildFile()
+    {
+        var testAssemblyDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            ?? throw new InvalidOperationException("Could not determine test assembly directory.");
+
+        return Path.Combine(testAssemblyDir, "AppBuildInfo.txt");
     }
 
     [AssemblyCleanup]

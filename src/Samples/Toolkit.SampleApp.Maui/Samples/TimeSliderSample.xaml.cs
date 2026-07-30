@@ -56,7 +56,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
             catch (Exception ex)
             {
-                this.DisplayAlert("Error", ex.Message, "Ok");
+                _ = this.DisplayAlertAsync("Error", ex.Message, "Ok");
             }
         }
 
@@ -69,7 +69,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
             catch (Exception ex)
             {
-                this.DisplayAlert("Error", ex.Message, "Ok");
+                _ = this.DisplayAlertAsync("Error", ex.Message, "Ok");
             }
         }
 
@@ -82,7 +82,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
             catch (Exception ex)
             {
-                this.DisplayAlert("Error", ex.Message, "Ok");
+                _ = this.DisplayAlertAsync("Error", ex.Message, "Ok");
             }
         }
     }

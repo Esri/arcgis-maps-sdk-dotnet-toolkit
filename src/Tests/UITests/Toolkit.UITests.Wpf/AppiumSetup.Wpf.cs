@@ -9,9 +9,10 @@ public static partial class AppiumSetup
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext testContext)
     {
-        var wpfSamplesApp = GetBuildSettings()["app"];
+        var envAppPath = Environment.GetEnvironmentVariable("TKUITEST_APP");
+        var testApp = String.IsNullOrWhiteSpace(envAppPath) ? GetBuildSettings()["app"] : envAppPath;
 
-        driver = MakeWindowsDriver(wpfSamplesApp);
+        driver = MakeWindowsDriver(testApp);
 
         driver.Manage().Window.Maximize();
 
