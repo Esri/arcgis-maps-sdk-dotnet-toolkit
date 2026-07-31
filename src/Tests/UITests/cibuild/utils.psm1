@@ -70,8 +70,8 @@ function Invoke-WindowsUITests {
     exit $LASTEXITCODE
   }
 
-  # Install koffi
-  & $npm_exe install koffi --prefix $node_workspace
+  # Install koffi where the Windows driver can resolve it.
+  & $npm_exe install koffi --prefix $env:APPIUM_HOME
   if ($LASTEXITCODE -ne 0) {
     Write-Error "Error installing koffi node module. Koffi is necessary to avoid reliance on node-ffi, which in turn requires a Visual Studio install."
     exit $LASTEXITCODE
