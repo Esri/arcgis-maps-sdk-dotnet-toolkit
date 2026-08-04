@@ -48,7 +48,7 @@ internal class Program
 
         // Derived variables
         var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
-        var settings = new CommonSettings(workspace, dotnetExe, toolkitSrc, apiKey);
+        var settings = new CommonSettings(workspace, dotnetExe, toolkitSrc, apiKey, args);
 
         try {
             // Ensure dotnet will always shut down on failure
@@ -219,12 +219,13 @@ internal class Program
 
     private class CommonSettings
     {
-        public CommonSettings(string workspace, string dotnetExe, string toolkitSource, string apiKey)
+        public CommonSettings(string workspace, string dotnetExe, string toolkitSource, string apiKey, string[] args)
         {
             Workspace = workspace;
             DotnetExe = dotnetExe;
             ToolkitSource = toolkitSource;
             ApiKey = apiKey;
+            ConsoleArgs = args;
         }
 
         public string Workspace { get; set; }
@@ -388,7 +389,7 @@ internal class Program
         // Install jdk and android sdk
         Console.WriteLine("\nInstalling android and java sdks...");
         var appPath = Path.Join(settings.ToolkitSource, "Tests", "UITests", buildParameters.AppName, $"{buildParameters.AppName}.csproj");
-        RunBinary(settings.DotnetExe, $"build {appPath} -t InstallAndroidsettings -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildParameters.BuildParamsApp)}");
+        RunBinary(settings.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildParameters.BuildParamsApp)}");
         Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
         Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
 
