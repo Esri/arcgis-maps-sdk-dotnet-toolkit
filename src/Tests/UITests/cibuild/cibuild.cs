@@ -48,7 +48,7 @@ internal class Program
 
         // Derived variables
         var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
-        var dependencies = new CommonDependencies(dotnetExe);
+        var settings = new CommonSettings(workspace, dotnetExe, toolkitSrc, apiKey);
 
         try {
             // Ensure dotnet will always shut down on failure
@@ -57,46 +57,46 @@ internal class Program
             // Configure nuget repo if set
             var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
             if (!string.IsNullOrWhiteSpace(nugetRepo)) {
-                SetNugetSource(toolkitSrc, dependencies.DotnetExe, nugetRepo);
+                SetNugetSource(settings, nugetRepo);
             }
 
             // Install node
             var nodeWorkspace = Path.Join(workspace, ".node");
             var nodeVersion = ReadYamlValue(yamlConfig, "node-version");
-            (dependencies.NodeExe, dependencies.NpmExe) = await InstallNodeAsync(nodeWorkspace, nodeVersion);
-            dependencies.AppiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
+            (settings.NodeExe, settings.NpmExe) = await InstallNodeAsync(nodeWorkspace, nodeVersion);
+            settings.AppiumEntry = Path.Join(nodeWorkspace, "node_modules", "appium", "index.js");
 
             // Install appium
             Console.WriteLine("\nInstalling appium...");
-            Environment.SetEnvironmentVariable("APPIUM_HOME", Path.Join(workspace, ".appium"));
-            RunBinary(dependencies.NpmExe, ["install", "appium", "--prefix", nodeWorkspace]);
+            Environment.SetEnvironmentVariable("APPIUM_HOME", settings.AppiumHome);
+            RunBinary(settings.NpmExe, ["install", "appium", "--prefix", nodeWorkspace]);
 
             // Platform-specific setup
-            BuildSettings buildSettings = testPlatform switch
+            BuildParameters buildParameters = testPlatform switch
             {
-                "MauiAndroid" => SetupAndroid(dependencies, nodeWorkspace, toolkitSrc, workspace, apiKey, args),
-                "MauiMac" => SetupMac(dependencies, workspace, apiKey, args),
-                "MauiiOS" => SetupiOS(dependencies, workspace, apiKey, args),
+                "MauiAndroid" => SetupAndroid(settings),
+                "MauiMac" => SetupMac(settings),
+                "MauiiOS" => SetupiOS(settings),
                 _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Aborting tests.")
             };
 
             // Build app and runner
             Console.WriteLine("\nBuilding test app...");
             var uiTestsPath = Path.Join(toolkitSrc, "Tests", "UITests");
-            var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-            RunBinary(dependencies.DotnetExe, $"build {appPath} {string.Join(" ", buildSettings.BuildParamsCommon)} {string.Join(" ", buildSettings.BuildParamsApp)}");
+            var appPath = Path.Join(uiTestsPath, buildParameters.AppName, $"{buildParameters.AppName}.csproj");
+            RunBinary(settings.DotnetExe, $"build {appPath} {string.Join(" ", buildParameters.BuildParamsCommon)} {string.Join(" ", buildParameters.BuildParamsApp)}");
 
             Console.WriteLine("\nBuilding test runner...");
-            var runnerPath = Path.Join(uiTestsPath, buildSettings.RunnerName, $"{buildSettings.RunnerName}.csproj");
-            RunBinary(dependencies.DotnetExe, $"build {runnerPath} {string.Join(" ", buildSettings.BuildParamsCommon)}");
+            var runnerPath = Path.Join(uiTestsPath, buildParameters.RunnerName, $"{buildParameters.RunnerName}.csproj");
+            RunBinary(settings.DotnetExe, $"build {runnerPath} {string.Join(" ", buildParameters.BuildParamsCommon)}");
 
             // Run appium in background
             Console.WriteLine("\nStarting appium...");
             var appiumStandardOutput = new List<string>();
             var appiumStandardError = new List<string>();
             var appiumProcess = RunBinaryBackground(
-                dependencies.NodeExe,
-                dependencies.AppiumEntry,
+                settings.NodeExe,
+                settings.AppiumEntry,
                 appiumStandardOutput,
                 appiumStandardError
             );
@@ -106,10 +106,10 @@ internal class Program
             // Run tests
             Console.WriteLine("\nRunning tests...");
             var artifactsPath = Path.Join(uiTestsPath, "artifacts", "bin");
-            var runnerExe = Path.Join(artifactsPath, buildSettings.RunnerName, "TestBuild", buildSettings.RunnerName);
-            var appExe = Path.Join(artifactsPath, buildSettings.AppName, "TestBuild", buildSettings.BinaryName);
+            var runnerExe = Path.Join(artifactsPath, buildParameters.RunnerName, "TestBuild", buildParameters.RunnerName);
+            var appExe = Path.Join(artifactsPath, buildParameters.AppName, "TestBuild", buildParameters.BinaryName);
             Environment.SetEnvironmentVariable("TKUITEST_APP", appExe);
-            RunBinary(runnerExe, $"{string.Join(" ", buildSettings.TestParams)}", throwOnError: false);
+            RunBinary(runnerExe, $"{string.Join(" ", buildParameters.TestParams)}", throwOnError: false);
         }
         finally {
             OnBuildEnding();
@@ -141,16 +141,16 @@ internal class Program
         return path;
     }
 
-    private static void SetNugetSource(string workspace, string dotnetExe, string nugetRepo)
+    private static void SetNugetSource(CommonSettings settings, string nugetRepo)
     {
         Console.WriteLine("\nConfiguring nuget...");
 
-        RunBinary(dotnetExe, ["new", "nugetconfig", "--force", "-o", workspace]);
+        RunBinary(settings.DotnetExe, ["new", "nugetconfig", "--force", "-o", settings.Workspace]);
 
-        var configFile = Path.Join(workspace, "nuget.config");
-        RunBinary(dotnetExe, ["nuget", "add", "source", nugetRepo, "--configfile", configFile]);
+        var configFile = Path.Join(settings.Workspace, "nuget.config");
+        RunBinary(settings.DotnetExe, ["nuget", "add", "source", nugetRepo, "--configfile", configFile]);
 
-        var nugetDir = Path.Join(workspace, ".nuget");
+        var nugetDir = Path.Join(settings.Workspace, ".nuget");
         Environment.SetEnvironmentVariable("NUGET_PACKAGES", Path.Join(nugetDir, "packages"));
         Environment.SetEnvironmentVariable("NUGET_HTTP_CACHE_PATH", Path.Join(nugetDir, "cache"));
 
@@ -217,40 +217,51 @@ internal class Program
         return (nodeExe, npmExe);
     }
 
-    private class CommonDependencies
+    private class CommonSettings
     {
-        public CommonDependencies(string dotnetExe)
+        public CommonSettings(string workspace, string dotnetExe, string toolkitSource, string apiKey)
         {
+            Workspace = workspace;
             DotnetExe = dotnetExe;
+            ToolkitSource = toolkitSource;
+            ApiKey = apiKey;
         }
+
+        public string Workspace { get; set; }
+        public string ToolkitSource { get; set; }
 
         public string DotnetExe { get; }
         public string NodeExe { get; set; } = string.Empty;
         public string NpmExe { get; set; } = string.Empty;
         public string AppiumEntry { get; set; } = string.Empty;
+
+        public string ApiKey { get; set; }
+        public string[] ConsoleArgs { get; set; } = [];
+
+        public string AppiumHome => Path.Join(Workspace, ".appium");
     }
 #endregion
 
 #region PlatformDependencies
-    private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace, string apiKey, string[] consoleArgs)
+    private static BuildParameters SetupMac(CommonSettings settings)
     {
         // Define build settings
-        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiMac");
+        var buildParameters = new BuildParameters("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiMac");
         var macFramework = "net10.0-maccatalyst";
-        buildSettings.BuildParamsApp.AddRange([
+        buildParameters.BuildParamsApp.AddRange([
             $"-f {macFramework}",
             "-r maccatalyst-arm64"
         ]);
         var testAppPackage = "Toolkit.UITests.Maui.App.app";
-        buildSettings.BinaryName = testAppPackage;
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
+        buildParameters.BinaryName = testAppPackage;
+        AppendPlatformIndependentBuildParameters(buildParameters, settings);
 
         // Install maui maccatalyst workload
         Console.WriteLine("\nInstalling maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        RunBinary(settings.DotnetExe, "workload install maui");
 
         // Install appium mac driver
-        InstallAppiumDriver(dependencies, "mac2");
+        InstallAppiumDriver(settings, "mac2");
 
         // App cleanup since it doesn't seem to be included in the appium process tree for mac
         BuildEnding += (_,_) =>
@@ -278,30 +289,30 @@ internal class Program
             }
         };
 
-        return buildSettings;
+        return buildParameters;
     }
 
-    private static BuildSettings SetupiOS(CommonDependencies dependencies, string workspace, string apiKey, string[] consoleArgs)
+    private static BuildParameters SetupiOS(CommonSettings settings)
     {
         // Define build settings
-        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiiOS");
+        var buildParameters = new BuildParameters("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiiOS");
         var iosFramework = "net10.0-ios";
-        buildSettings.BuildParamsApp.AddRange([
+        buildParameters.BuildParamsApp.AddRange([
             $"-f {iosFramework}",
             "-r ios-arm64"
         ]);
-        buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
+        buildParameters.BinaryName = "Toolkit.UITests.Maui.App.app";
+        AppendPlatformIndependentBuildParameters(buildParameters, settings);
 
         // This particular setting only applies to the Runner, and is unused by the app
-        buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
+        buildParameters.BuildParamsCommon.Add("-p:BuildApp=false");
 
         // Install maui ios workload
         Console.WriteLine("\nInstalling maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        RunBinary(settings.DotnetExe, "workload install maui");
 
         // Install appium ios driver
-        InstallAppiumDriver(dependencies, "xcuitest");
+        InstallAppiumDriver(settings, "xcuitest");
 
         var buildManual = Environment.GetEnvironmentVariable("BUILD_WDA_MANUAL");
         if (buildManual != null && buildManual == "true")
@@ -317,7 +328,7 @@ internal class Program
             }
 
             // Clone and build WDA (main reference: https://appium.github.io/appium-xcuitest-driver/11.8/guides/run-prebuilt-wda/)
-            var wdaRoot = Path.Join(workspace, "wda");
+            var wdaRoot = Path.Join(settings.Workspace, "wda");
             var wdaVersion = "v13.2.0";
             if (Directory.Exists(wdaRoot))
                 Directory.Delete(wdaRoot, true);
@@ -344,63 +355,63 @@ internal class Program
             Environment.SetEnvironmentVariable("TKUITEST_PARAM_updatedWDABundleId", bundleId);
         }
 
-        return buildSettings;
+        return buildParameters;
     }
 
-    private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace, string apiKey, string[] consoleArgs)
+    private static BuildParameters SetupAndroid(CommonSettings settings)
     {
-        var jdkDirectory = $"{workspace}/jdk";
-        var androidSdkDirectory = $"{workspace}/android-sdk";
+        var jdkDirectory = $"{settings.Workspace}/jdk";
+        var androidSdkDirectory = $"{settings.Workspace}/android-sdk";
 
         // Define build settings
-        var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
+        var buildParameters = new BuildParameters("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
         var androidFramework = "net10.0-android";
-        buildSettings.BuildParamsApp.AddRange([
+        buildParameters.BuildParamsApp.AddRange([
             $"-f {androidFramework}",
             "-r android-arm64",
             $"-p:JavaSdkDirectory={jdkDirectory}",
             $"-p:AndroidSdkDirectory={androidSdkDirectory}"
         ]);
-        buildSettings.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
-        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
+        buildParameters.BinaryName = "com.esri.toolkit.uitests.maui-Signed.apk";
+        AppendPlatformIndependentBuildParameters(buildParameters, settings);
 
         // Install maui android
         Console.WriteLine("\nInstalling maui maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        RunBinary(settings.DotnetExe, "workload install maui");
 
         // Install appium android driver
-        InstallAppiumDriver(dependencies, "uiautomator2");
+        InstallAppiumDriver(settings, "uiautomator2");
 
         // Manually install koffi to avoid appium using ffi, which would require us to also have Visual Studio installed
-        RunBinary(dependencies.NpmExe, ["install", "koffi", "--prefix", nodeWorkspace]);
+        RunBinary(settings.NpmExe, ["install", "koffi", "--prefix", settings.Workspace]);
 
         // Install jdk and android sdk
         Console.WriteLine("\nInstalling android and java sdks...");
-        var appPath = Path.Join(toolkitSrc, "Tests", "UITests", buildSettings.AppName, $"{buildSettings.AppName}.csproj");
-        RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildSettings.BuildParamsApp)}");
+        var appPath = Path.Join(settings.ToolkitSource, "Tests", "UITests", buildParameters.AppName, $"{buildParameters.AppName}.csproj");
+        RunBinary(settings.DotnetExe, $"build {appPath} -t InstallAndroidsettings -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildParameters.BuildParamsApp)}");
         Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
         Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
 
-        return buildSettings;
+        return buildParameters;
     }
 
-    private static void InstallAppiumDriver(CommonDependencies dependencies, string driverName)
+    private static void InstallAppiumDriver(CommonSettings settings, string driverName)
     {
         Console.WriteLine($"\nInstalling appium {driverName} driver...");
-        var installCheck = RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "list", "--installed"], true);
+        var installCheck = RunBinary(settings.NodeExe, [settings.AppiumEntry, "driver", "list", "--installed"], true);
         var driverInstalled = Regex.IsMatch(installCheck!.StandardError, Regex.Escape(driverName));
         if (driverInstalled)
-            RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "update", driverName]);
+            RunBinary(settings.NodeExe, [settings.AppiumEntry, "driver", "update", driverName]);
         else
-            RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "install", driverName]);
+            RunBinary(settings.NodeExe, [settings.AppiumEntry, "driver", "install", driverName]);
     }
 #endregion
 
 #region BuildSettings
-    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace, string apiKey, string[] consoleArgs)
+    private static void AppendPlatformIndependentBuildParameters(BuildParameters baseParams, CommonSettings settings)
     {
         // Universal build parameters for the ci builds
-        settings.BuildParamsCommon.AddRange([
+        baseParams.BuildParamsCommon.AddRange([
             "-c Release",
             "-p:ArtifactsPivots=TestBuild",
             "-p:UseArtifactsOutput=true"
@@ -409,38 +420,38 @@ internal class Program
         // Release version config
         var releaseVersion = Environment.GetEnvironmentVariable("RELEASE_VERSION");
         if (!string.IsNullOrWhiteSpace(releaseVersion)) {
-            settings.BuildParamsApp.Add($"-p:UseNugetPackage={releaseVersion}");
+            baseParams.BuildParamsApp.Add($"-p:UseNugetPackage={releaseVersion}");
         }
 
         // Configure the trx output for ci jobs
-        var testResultsDir = Path.Join(workspace, "TestResults");
-        settings.TestParams.AddRange([
+        var testResultsDir = Path.Join(settings.Workspace, "TestResults");
+        baseParams.TestParams.AddRange([
             "--report-trx",
             $"--results-directory {testResultsDir}"
         ]);
         var trxFilename = Environment.GetEnvironmentVariable("TRX_FILENAME");
         if (!string.IsNullOrWhiteSpace(trxFilename)) {
-            settings.TestParams.Add($"--report-trx-filename {trxFilename}");
+            baseParams.TestParams.Add($"--report-trx-filename {trxFilename}");
         }
 
         // Ignore exit code 2 in test results since it just means that one or more tests failed
         // https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-troubleshooting
-        settings.TestParams.Add("--ignore-exit-code 2");
+        baseParams.TestParams.Add("--ignore-exit-code 2");
 
         // Append filter from console arguments if it exists
-        var filterArgIndex = consoleArgs.IndexOf("--filter");
+        var filterArgIndex = settings.ConsoleArgs.IndexOf("--filter");
         if (filterArgIndex > -1)
         {
-            if (filterArgIndex + 1 >= consoleArgs.Length)
+            if (filterArgIndex + 1 >= settings.ConsoleArgs.Length)
                 throw new ArgumentException("Recieved '--filter' flag, but no argument was provided.");
-            settings.TestParams.AddRange(["--filter", consoleArgs[filterArgIndex+1]]);
+            baseParams.TestParams.AddRange(["--filter", settings.ConsoleArgs[filterArgIndex+1]]);
         }
 
         // API key
-        settings.BuildParamsApp.Add($"-p:TestAppApiKey={apiKey}");
+        baseParams.BuildParamsApp.Add($"-p:TestAppApiKey={settings.ApiKey}");
     }
 
-    private class BuildSettings
+    private class BuildParameters
     {
         private string? _binaryName;
 
@@ -457,7 +468,7 @@ internal class Program
             set => _binaryName = value;
         }
 
-        public BuildSettings(string appName, string runnerName)
+        public BuildParameters(string appName, string runnerName)
         {
             AppName = appName;
             RunnerName = runnerName;
