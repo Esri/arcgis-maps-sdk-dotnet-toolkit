@@ -383,7 +383,7 @@ internal class Program
         InstallAppiumDriver(settings, "uiautomator2");
 
         // Manually install koffi to avoid appium using ffi, which would require us to also have Visual Studio installed
-        RunBinary(settings.NpmExe, ["install", "koffi", "--prefix", settings.Workspace]);
+        RunBinary(settings.NpmExe, ["install", "koffi", "--prefix", settings.AppiumHome]);
 
         // Install jdk and android sdk
         Console.WriteLine("\nInstalling android and java sdks...");
