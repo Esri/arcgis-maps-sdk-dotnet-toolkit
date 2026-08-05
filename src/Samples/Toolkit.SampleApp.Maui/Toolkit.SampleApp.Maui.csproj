@@ -28,8 +28,6 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
-
-    <SamplesMauiVersion>10.0.90</SamplesMauiVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -64,10 +62,10 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="14.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="$(SamplesMauiVersion)" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(SamplesMauiVersion)" />
-    <PackageReference Include="Microsoft.Maui.Controls.Foldable" Version="$(SamplesMauiVersion)" />
-    <PackageReference Include="Esri.Calcite.Maui" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Foldable" Version="$(MauiVersion)" />  
+    <PackageReference Include="Esri.Calcite.Maui" Version="1.0.0-rc.1" />
   </ItemGroup>
 
   <Choose>
