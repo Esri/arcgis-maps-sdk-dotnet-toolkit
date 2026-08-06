@@ -68,7 +68,7 @@
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(SamplesMauiVersion)" />
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(SamplesMauiVersion)" />
     <PackageReference Include="Microsoft.Maui.Controls.Foldable" Version="$(SamplesMauiVersion)" />
-    <PackageReference Include="Esri.Calcite.Maui" Version="1.1.0" />
+    <PackageReference Include="Esri.Calcite.Maui" Version="1.0.0-rc.1" />
   </ItemGroup>
 
   <Choose>
