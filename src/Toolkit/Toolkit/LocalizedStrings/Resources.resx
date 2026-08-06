@@ -133,6 +133,30 @@
     <value>Take Photo</value>
     <comment>Menu text for adding an attachment by taking a photo</comment>
   </data>
+  <data name="FeatureFormAddAttachmentMenuWithVideoCamera" xml:space="preserve">
+    <value>Take Video</value>
+    <comment>Menu text for adding an attachment by recording a video</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuWithMicrophone" xml:space="preserve">
+    <value>Record Audio</value>
+    <comment>Menu text for adding an attachment by recording audio</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuFromLibrary" xml:space="preserve">
+    <value>Choose from Library</value>
+    <comment>Menu text for selecting an attachment from the photo/video library.</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuChoosePhotoFromLibrary" xml:space="preserve">
+    <value>Choose Photo from Library</value>
+    <comment>Menu text for selecting a photo from the device library.</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuChooseVideoFromLibrary" xml:space="preserve">
+    <value>Choose Video from Library</value>
+    <comment>Menu text for selecting a video from the device library.</comment>
+  </data>
+  <data name="FeatureFormAddAttachmentMenuChooseFromFiles" xml:space="preserve">
+    <value>Choose from Files</value>
+    <comment>Menu text for selecting an attachment using the file picker.</comment>
+  </data>
   <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
     <value>This file type is not supported. Allowed types: {0}</value>
     <comment>Validation error shown when the selected attachment file type is unsupported; {0} is a comma-separated list of allowed types.</comment>
@@ -156,6 +180,22 @@
   <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
     <value>Attachment upload failed</value>
     <comment>Title text for the attachment validation alert dialog.</comment>
+  </data>
+  <data name="FeatureFormAudioCaptureInProgress" xml:space="preserve">
+    <value>Recording audio. Select Stop to finish.</value>
+    <comment>Content text shown while audio capture is in progress.</comment>
+  </data>
+  <data name="FeatureFormAudioCaptureReady" xml:space="preserve">
+    <value>Select Record to start audio capture.</value>
+    <comment>Content text shown before audio capture starts.</comment>
+  </data>
+  <data name="FeatureFormAudioCaptureRecord" xml:space="preserve">
+    <value>Record</value>
+    <comment>Button text for starting audio capture.</comment>
+  </data>
+  <data name="FeatureFormAudioCaptureStop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>Button text for stopping audio capture.</comment>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
@@ -224,6 +264,14 @@
   <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
     <value>Max: {0}</value>
     <comment>Caption badge showing the maximum allowed number of attachments, where {0} is the count.</comment>
+  </data>
+  <data name="FeatureFormCaptureMethodNotSupported" xml:space="preserve">
+    <value>Capture method is not supported</value>
+    <comment>Warning shown when the capture input method is configured for an unsupported platform and attachment type.</comment>
+  </data>
+  <data name="FeatureFormAttachmentPickerSupportedFiles" xml:space="preserve">
+    <value>Supported files</value>
+    <comment>Filter label for supported attachment types in file picker dialogs.</comment>
   </data>
   <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
     <value>Min: {0}</value>
