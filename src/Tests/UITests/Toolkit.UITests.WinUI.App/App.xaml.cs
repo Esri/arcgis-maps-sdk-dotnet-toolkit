@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Esri.ArcGISRuntime;
+using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -19,6 +20,10 @@ namespace Toolkit.UITests.WinUI.Puppet
         public App()
         {
             InitializeComponent();
+            ArcGISRuntimeEnvironment.Initialize(static (config) =>
+            {
+                config.UseApiKey(ApiKeyProvider.Key);
+            });
         }
 
         /// <summary>

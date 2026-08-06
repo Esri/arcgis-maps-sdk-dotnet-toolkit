@@ -226,5 +226,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(DisplaySubtitle)
+                ? DisplayTitle
+                : $"{DisplayTitle}, {DisplaySubtitle}";
+        }
+        internal string AutomationName => ToString();
     }
 }

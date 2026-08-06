@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.SearchViewCustomization"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Toolkit.UITests.App.TestPages"
+    xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui">
+
+    <Grid>
+
+        <esri:MapView
+            x:Name="MyMapView"
+            AutomationId="MyMapView" />
+
+        <Grid Padding="10" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border
+                WidthRequest="220"
+                Margin="8"
+                Padding="8"
+                HorizontalOptions="Start"
+                VerticalOptions="Start"
+                BackgroundColor="White">
+
+                <VerticalStackLayout Spacing="1">
+
+                    <Button
+                    x:Name="UpdateToCustomValuesButton"
+                    AutomationId="UpdateToCustomValuesButton"
+                    Text="Update to custom text"
+                    Clicked="UpdateToCustomValuesButton_Click" />
+
+                    <Button
+                    x:Name="UpdateViewpointExtentToOntario"
+                    AutomationId="UpdateViewpointExtentToOntario"
+                    Text="Update Viewpoint to Ontario"
+                    Clicked="UpdateViewpointExtentToOntario_Click" />
+
+                    <Button
+                    x:Name="UpdateViewpointExtentToColorado"
+                    AutomationId="UpdateViewpointExtentToColorado"
+                    Text="Update Viewpoint to Colorado"
+                    Clicked="UpdateViewpointExtentToColorado_Click" />
+
+                    <Button
+                    x:Name="AddEventTestSourceButton"
+                    AutomationId="AddEventTestSourceButton"
+                    Text="Add Event Test Source"
+                    Clicked="AddEventTestSourceButton_Click" />
+                    
+                    <Button x:Name="EnableGeoViewBindingButton"
+                    Clicked="EnableGeoViewBindingButton_Click"
+                    Text="Enable Binding to GeoView"
+                    AutomationId="EnableGeoViewBindingButton"/>
+
+                    <Button x:Name="DisableGeoViewBindingButton" 
+                    Clicked="DisableGeoViewBindingButton_Click" 
+                    Text="Disable Binding to GeoView" 
+                    AutomationId="DisableGeoViewBindingButton"/>
+
+                    <StackLayout Orientation="Vertical" Spacing="2" >
+                        <Label Text="Enable built-in repeat button" />
+                        <CheckBox
+                        x:Name="EnableRepeatSearchHereButtonCheck"
+                        IsChecked="{Binding Source={Reference MySearchView}, Path=EnableRepeatSearchHereButton, Mode=TwoWay}"
+                        AutomationId="EnableRepeatSearchHereButtonCheck"/>
+                        <Label Text="Enable built-in result list" />
+                        <CheckBox 
+                        x:Name="EnableResultListViewBindingCheck"
+                        IsChecked="{Binding Source={Reference MySearchView}, Path=EnableResultListView, Mode=TwoWay}" 
+                        AutomationId="EnableResultListViewBindingCheck"/>
+                        <Label Text="Enable individual result display" />
+                        <CheckBox
+                        x:Name="EnableIndividualResultDisplayCheck" 
+                        IsChecked="{Binding Source={Reference MySearchView}, Path=EnableIndividualResultDisplay, Mode=TwoWay}" 
+                        AutomationId="EnableIndividualResultDisplayCheck"/>
+                    </StackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="Event counts" />
+                        <HorizontalStackLayout>
+                            <Label Text="Selected:" />
+                            <Label x:Name="SelectedEventCountValue" Text="0" AutomationId="SelectedEventCountValue" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout>
+                            <Label Text="Deselected:" />
+                            <Label x:Name="DeselectedEventCountValue" Text="0" AutomationId="DeselectedEventCountValue" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+            <toolkit:SearchView x:Name="MySearchView" Grid.Column="1" HorizontalOptions="End" />
+        </Grid>
+    </Grid>
+
+</local:TestPage>

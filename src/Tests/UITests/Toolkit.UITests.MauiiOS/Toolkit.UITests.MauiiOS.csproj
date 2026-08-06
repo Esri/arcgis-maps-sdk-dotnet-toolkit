@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DefineConstants>$(DefineConstants);MAC_RUNNER;IOS_TEST;MAUI_TEST</DefineConstants>
+    <BuildApp Condition="'$(BuildApp)'==''">true</BuildApp>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +23,7 @@
   </Target>
 
   <!-- Build test app if needed and record build location to AppBuildInfo.txt -->
-  <Target Name="BuildTestApp">
+  <Target Name="BuildTestApp" Condition="'$(BuildApp)'=='true'">
     <PropertyGroup>
       <!-- Force iOS target when building the MAUI test app from the test project -->
       <_MauiTestAppTfm>$(TestAppNetVersion)-ios</_MauiTestAppTfm>

@@ -1,0 +1,419 @@
+namespace Toolkit.UITest.Shared.SearchViewControl;
+
+[TestClass]
+public class SearchViewCustomization : AppiumTestBase
+{
+    private const string SearchViewCustomizationPage = "SearchViewCustomization";
+    
+    private const string OntarioConventionCenterAddress =
+    "2000 E Convention Center Way, Ontario, CA, 91764, USA";
+
+    private const string OntarioInternationalAirportAddress =
+        "Ontario International Airport, Ontario, CA, USA";
+
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(5);
+
+    public enum TextConfiguration
+    {
+        Default,
+        Custom
+    }
+
+    public record SearchViewTextValues(
+        TextConfiguration Type,
+        string SearchTooltip,
+        string ClearSearchTooltip,
+        string AllSourcesButtonText,
+        string Placeholder,
+        string NoResultsMessage,
+        string RepeatSearchButtonText);
+
+    private static readonly SearchViewTextValues DefaultTextValues = new(
+        TextConfiguration.Default,
+        "Search",
+        "Clear Search",
+        "All Sources",
+        "Find a place or address",
+        "No Results",
+        "Repeat Search Here");
+
+    private static readonly SearchViewTextValues CustomTextValues = new(
+        TextConfiguration.Custom,
+        "Custom Search",
+        "Custom Clear Search",
+        "Custom All Sources",
+        "Custom Find a place or address",
+        "Custom No Results",
+        "Custom Repeat Search Here");
+
+    [TestMethod]
+    [DataRow(TextConfiguration.Default)]
+    [DataRow(TextConfiguration.Custom)]
+    public async Task SearchViewCustomization_Text(TextConfiguration type)
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        var expected = type == TextConfiguration.Default ? DefaultTextValues : CustomTextValues;
+
+        // Apply custom values only when needed
+        if (type == TextConfiguration.Custom)
+        {
+            FindElement("UpdateToCustomValuesButton", DefaultTimeout).Click();
+        }
+
+        // Check the text values
+#if MAC_TEST
+        Assert.AreEqual(expected.Placeholder, GetEntryText(FindElement("QueryEntry", DefaultTimeout)), $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
+#else
+        var placeholderElement = FindElementByText(expected.Placeholder, DefaultTimeout);
+        Assert.IsTrue(placeholderElement.Displayed, $"Expected the placeholder text to be visible and equal to {expected.Type} value.");
+#endif
+
+        // Check the Automation Names on Search and Clear Search buttons (customization of these elements is not supported on Maui)
+        var shouldValidateButtonAutomationNames = true;
+#if MAUI_TEST
+    shouldValidateButtonAutomationNames = expected.Type != TextConfiguration.Custom;
+#endif
+
+        if (shouldValidateButtonAutomationNames)
+        {
+            var searchButton = FindElement("SearchButton", DefaultTimeout);
+            Assert.AreEqual(expected.SearchTooltip, GetAutomationName(searchButton), $"Expected the automation name of search button to be set to {expected.Type} value.");
+        }
+
+        await ShowClearSearchButtonAndNoResultsMessage();
+
+        if (shouldValidateButtonAutomationNames)
+        {
+            var clearSearchButton = FindElement("ClearSearchButton", DefaultTimeout);
+            Assert.AreEqual(expected.ClearSearchTooltip, GetAutomationName(clearSearchButton), $"Expected the automation name of clear search button to be set to {expected.Type} value.");
+        }
+
+        // Check the text values
+        var noResultsMessageElement = FindElementByText(expected.NoResultsMessage);
+        Assert.IsTrue(noResultsMessageElement.Displayed, $"Expected the no results message to be visible and equal to {expected.Type} value.");
+
+        FindElement("ClearSearchButton").Click();
+
+        // Check the Automation Names and text values on Repeat search here and All sources buttons
+        await ShowRepeatSearchHereButton();
+        var repeatSearchHereButton = FindElement("RepeatSearchHereButton", DefaultTimeout);
+        Assert.AreEqual(expected.RepeatSearchButtonText, repeatSearchHereButton.Text, $"Expected the repeat search here button text to be set to {expected.Type} value.");
+        Assert.AreEqual(expected.RepeatSearchButtonText, GetAutomationName(repeatSearchHereButton), $"Expected the automation name of repeat search here button to be set to {expected.Type} value.");
+        FindElement("ClearSearchButton").Click();
+        FindElement("AddEventTestSourceButton").Click();
+        await ExpandSourcesDropDown();
+        Assert.IsTrue(ElementExistsByText(expected.AllSourcesButtonText, DefaultTimeout), $"Expected the all sources button text to be set to {expected.Type} value.");
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_GeoViewBinding()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Restrict the GeoView to Colorado so the query should not return results near Ontario, California.
+        FindElement("UpdateViewpointExtentToColorado", DefaultTimeout).Click();
+        SubmitText(FindElement("QueryEntry", DefaultTimeout), "ontario international");
+
+        Assert.IsFalse(
+            ElementExistsByName(OntarioInternationalAirportAddress, DefaultTimeout),
+            "Not Expected to see search results relevant to the Ontario area");
+
+        // Clear the previous search and disable GeoView binding so the search is no longer constrained by the current map extent.
+        FindElement("ClearSearchButton").Click();
+        FindElement("DisableGeoViewBindingButton").Click();
+        SubmitText(FindElement("QueryEntry", DefaultTimeout), "ontario international");
+
+        Assert.IsTrue(
+            ElementExistsByName(OntarioInternationalAirportAddress, DefaultTimeout),
+            "Expected to see search results relevant to the Ontario area when geoview binding is null");
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_EnableRepeatSearchHereButtonBinding()
+    {
+        // Open the SearchView customization sample page.
+        OpenSample(SearchViewCustomizationPage);
+
+        // Verify the Repeat Search Here button is visible when enabled through binding.
+        await ShowRepeatSearchHereButton();
+        Assert.IsTrue(ElementExistsById("RepeatSearchHereButton", DefaultTimeout), "Expected the repeat search here button to be visible when enabled through binding.");
+
+        // Clear the current search and toggle the binding off.
+        FindElement("ClearSearchButton").Click();
+        FindElement("EnableRepeatSearchHereButtonCheck").Click();
+
+        // Verify the Repeat Search Here button is hidden when disabled through binding.
+        await ShowRepeatSearchHereButton();
+        Assert.IsFalse(ElementExistsById("RepeatSearchHereButton", DefaultTimeout), "Expected the repeat search here button to be hidden when disabled through binding.");
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_EnableResultListViewBinding()
+    {
+        // Open the SearchView customization sample page.
+        OpenSample(SearchViewCustomizationPage);
+
+        // Show the result list and verify it is visible by default.
+        await ShowResultListView(DefaultTimeout);
+        Assert.IsTrue(ElementExistsById("SearchResultsList", DefaultTimeout), "Expected the results list to be visible");
+
+        // Clear the current search before changing the result list view binding setting.
+        FindElement("ClearSearchButton").Click();
+
+        // Toggle the binding setting that controls whether the result list view is enabled.
+        FindElement("EnableResultListViewBindingCheck").Click();
+
+        // Show the result list again and verify it is hidden after disabling the binding.
+        await ShowResultListView(DefaultTimeout);
+        Assert.IsFalse(ElementExistsById("SearchResultsList", DefaultTimeout), "Expected the results list to be hidden");
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_EnableIndividualResultDisplayBinding()
+    {
+        // Open the SearchView customization sample page.
+        OpenSample(SearchViewCustomizationPage);
+
+        // Show the result list and verify it is visible by default.
+        await ShowIndividualResultList(DefaultTimeout);
+        Assert.IsFalse(ElementExistsById("SearchResultsList", DefaultTimeout), "Expected the results list to be hidden");
+
+        // Clear the current search before changing the result list view binding setting.
+        FindElement("ClearSearchButton").Click();
+
+        // Toggle the binding setting that controls whether the result list view is enabled.
+        FindElement("EnableIndividualResultDisplayCheck").Click();
+
+        // Show the result list again and verify it is hidden after disabling the binding.
+        await ShowIndividualResultList(DefaultTimeout);
+        Assert.IsTrue(ElementExistsById("SearchResultsList", DefaultTimeout), "Expected the results list to be visible");
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_MultipleSources_SourcesListRenders()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based search source and open the source selector.
+        await SearchWithEventSource(DefaultTimeout);
+        await ExpandSourcesDropDown();
+        // Verify that all available sources are displayed in the source list.
+        Assert.IsTrue(ElementExistsById("SearchSourcesList", DefaultTimeout));
+        Assert.IsTrue(ElementExistsByText("All Sources"));
+        Assert.IsTrue(ElementExistsByText("World Geocoder"));
+        Assert.IsTrue(ElementExistsByText("Event tester"));
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_MultipleSources_AllSources()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based source while keeping all search sources selected.
+        await SearchWithEventSource(DefaultTimeout);
+
+        // Submit a query that should return results from both configured sources.
+        SubmitOntarioConventionCenterAddressQuery();
+
+        // Verify source headers are shown for both source result groups.
+        Assert.IsTrue(ElementExistsByText("World Geocoder", DefaultTimeout));
+        Assert.IsTrue(ElementExistsByText("Event tester", DefaultTimeout));
+
+        // Verify the suggestions list is visible.
+#if WINUI_TEST
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsListGrouped", DefaultTimeout));
+#else
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsList", DefaultTimeout));
+#endif
+
+        // Verify the world geocoder result is displayed.
+        Assert.IsTrue(
+            ElementExistsByName(
+                OntarioConventionCenterAddress,
+                DefaultTimeout));
+
+        // Verify the event tester suggestion is displayed.
+        Assert.IsTrue(
+            ElementExistsByName(
+                "suggestion one",
+                DefaultTimeout));
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_MultipleSources_WorldGeocoderOnly()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based source so the source selector contains multiple options.
+        await SearchWithEventSource(DefaultTimeout);
+
+        // Workaround for issue: https://devtopia.esri.com/runtime/dotnet-api/issues/14195
+        SubmitText(
+            FindElement("QueryEntry", DefaultTimeout),
+            "air");
+        FindElement("ClearSearchButton").Click();
+
+        // Select only the world geocoder source.
+        await ExpandSourcesDropDown();
+        FindElementByText("World Geocoder", DefaultTimeout).Click();
+
+        // Submit a query that should only return world geocoder suggestions.
+        SubmitOntarioConventionCenterAddressQuery();
+
+        // In Maui the source header is not visible when there is only one source
+#if !MAUI_TEST
+        // Verify only the world geocoder source header is visible.
+        Assert.IsTrue(ElementExistsByText("World Geocoder", DefaultTimeout));
+        Assert.IsFalse(ElementExistsByText("Event tester"));
+#endif
+
+        // Verify the suggestions list is visible.
+#if WINUI_TEST
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsListGrouped", DefaultTimeout));
+#else
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsList", DefaultTimeout));
+#endif
+
+        // Verify the world geocoder result is displayed.
+        Assert.IsTrue(
+            ElementExistsByName(
+                OntarioConventionCenterAddress));
+
+        // Verify the event tester suggestion is not displayed.
+        Assert.IsFalse(
+            ElementExistsByName(
+                "suggestion one"));
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_MultipleSources_EventTesterOnly()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based source so the source selector contains multiple options.
+        await SearchWithEventSource(DefaultTimeout);
+
+        // Workaround for issue: https://devtopia.esri.com/runtime/dotnet-api/issues/14195
+        SubmitText(
+            FindElement("QueryEntry", DefaultTimeout),
+            "air");
+        FindElement("ClearSearchButton").Click();
+
+        // Select only the event tester source.
+        await ExpandSourcesDropDown();
+        FindElementByText("Event tester", DefaultTimeout).Click();
+
+        // Submit a query that should only return event tester suggestions.
+        SubmitOntarioConventionCenterAddressQuery();
+
+        //In Maui the source header is not visible when there is only one source
+#if !MAUI_TEST
+        // Verify only the event tester source header is visible.
+        Assert.IsTrue(ElementExistsByText("Event tester", DefaultTimeout));
+        Assert.IsFalse(ElementExistsByText("World Geocoder"));
+#endif
+
+        // Verify the suggestions list is visible.
+#if WINUI_TEST
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsListGrouped", DefaultTimeout));
+#else
+        Assert.IsTrue(ElementExistsById("SearchSuggestionsList", DefaultTimeout));
+#endif
+
+        // Verify the world geocoder result is not displayed.
+        Assert.IsFalse(
+            ElementExistsByName(
+                OntarioConventionCenterAddress));
+
+        // Verify the event tester suggestion is displayed.
+        Assert.IsTrue(
+            ElementExistsByName(
+                "suggestion one"));
+    }
+
+    [TestMethod]
+    public async Task SearchViewCustomization_EventTestSource_EventFired()
+    {
+        OpenSample(SearchViewCustomizationPage);
+
+        // Enable the event-based source
+        await SearchWithEventSource(DefaultTimeout);
+
+        Assert.AreEqual("0", GetLabelText(FindElement("SelectedEventCountValue")));
+        Assert.AreEqual("0", GetLabelText(FindElement("DeselectedEventCountValue")));
+
+        // Submit a query to show search results.
+        SubmitText(FindElement("QueryEntry", DefaultTimeout), "sugg");
+
+        FindElementByName("suggestion one", DefaultTimeout).Click();
+
+        Assert.AreEqual("1", GetLabelText(FindElement("SelectedEventCountValue")));
+        Assert.AreEqual("0", GetLabelText(FindElement("DeselectedEventCountValue")));
+
+        FindElement("ClearSearchButton").Click();
+
+        Assert.AreEqual("1", GetLabelText(FindElement("SelectedEventCountValue")));
+        Assert.AreEqual("1", GetLabelText(FindElement("DeselectedEventCountValue")));
+
+    }
+
+#region Helper methods
+
+    private async Task ShowClearSearchButtonAndNoResultsMessage()
+    {
+        // Enter text to show the clear search button
+        SubmitText(FindElement("QueryEntry", DefaultTimeout), "testSearchview");
+    }
+
+    private async Task ShowRepeatSearchHereButton()
+    {
+        // Zoom to the extent of Colorado so the entered query returns expected category suggestions and results.
+        FindElement("UpdateViewpointExtentToColorado", DefaultTimeout).Click();
+        SubmitText(FindElement("QueryEntry"), "airport");
+        var selectSuggestion = FindElementByName("Airport", DefaultTimeout);
+        selectSuggestion.Click();
+        // After selecting a result, SearchView starts auto-navigation and sets IgnoreAreaChangesFlag.
+        // The flag remains set while navigation is awaited and for an additional 1s delay before it is cleared.
+        // If automation pans during that window, requery eligibility updates are ignored and RepeatSearchHereButton may never appear.
+        await Task.Delay(2000);
+        // Move the map to a new location so the previous search can be repeated in the new visible extent.
+        FindElement("UpdateViewpointExtentToOntario").Click();
+    }
+    private async Task ExpandSourcesDropDown()
+    {
+        FindElement("SourceSelectToggle").Click();
+    }
+    private async Task ShowResultListView(TimeSpan timeout)
+    {
+        // Zoom to the extent of Colorado so the entered query returns expected category suggestions and results.
+        FindElement("UpdateViewpointExtentToColorado", timeout).Click();
+        SubmitText(FindElement("QueryEntry", timeout), "airport");
+        var selectSuggestion = FindElementByName("Airport", timeout);
+        selectSuggestion.Click();
+    }
+
+    private async Task ShowIndividualResultList(TimeSpan timeout)
+    {
+        await ShowResultListView(timeout);
+
+        // Select a known search result from the result list
+        var selectedResult = FindElementByName("Colorado Springs Airport, Colorado Springs, Colorado", DefaultTimeout);
+        selectedResult.Click();
+    }
+
+    private async Task SearchWithEventSource(TimeSpan timeout)
+    {
+        FindElement("AddEventTestSourceButton", timeout).Click();
+        FindElement("UpdateViewpointExtentToOntario", timeout).Click();
+    }
+
+    private void SubmitOntarioConventionCenterAddressQuery()
+    {
+        SubmitText(
+            FindElement("QueryEntry", DefaultTimeout),
+            OntarioConventionCenterAddress);
+    }
+
+#endregion
+}

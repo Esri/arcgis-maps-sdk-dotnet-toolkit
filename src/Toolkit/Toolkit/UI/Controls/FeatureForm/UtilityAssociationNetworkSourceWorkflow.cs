@@ -1,0 +1,638 @@
+/*
+ * Copyright 2026 Esri
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Mapping.FeatureForms;
+using Esri.ArcGISRuntime.UtilityNetworks;
+
+#if MAUI
+using FeatureFormView = Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView;
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
+#else
+using FeatureFormView = Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView;
+namespace Esri.ArcGISRuntime.Toolkit.Primitives
+#endif
+{
+    /// <summary>
+    /// Provides shared bindable state and navigation services for pages in the network-source
+    /// association workflow. Derived pages use it to retain the feature form context and report
+    /// loading and error states consistently while guiding the user through association selection.
+    /// </summary>
+    internal abstract class UtilityAssociationWorkflowPage : INotifyPropertyChanged
+    {
+        private string? _errorMessage;
+        private bool _isLoading;
+
+        protected UtilityAssociationWorkflowPage(
+            FeatureForm form,
+            UtilityAssociationsFormElement element,
+            UtilityAssociationsFilter filter,
+            Action<object, object?> navigate)
+        {
+            Form = form;
+            Element = element;
+            Filter = filter;
+            Navigate = navigate;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public abstract string Title { get; }
+
+        public virtual string? Subtitle => null;
+
+        public string? ErrorMessage
+        {
+            get => _errorMessage;
+            internal set
+            {
+                if (SetProperty(ref _errorMessage, value))
+                {
+                    OnPropertyChanged("HasNoResults");
+                }
+            }
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            protected set => SetProperty(ref _isLoading, value);
+        }
+
+        protected FeatureForm Form { get; }
+
+        protected UtilityAssociationsFormElement Element { get; }
+
+        protected UtilityAssociationsFilter Filter { get; }
+
+        protected Action<object, object?> Navigate { get; }
+
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+            {
+                return false;
+            }
+
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    /// <summary>
+    /// Represents the first workflow page, where the user searches and selects a utility network
+    /// feature source that can participate in the requested association.
+    /// </summary>
+    internal sealed class UtilityAssociationFeatureSourceSelection : UtilityAssociationWorkflowPage
+    {
+        private readonly ObservableCollection<UtilityAssociationFeatureSource> _featureSources = new();
+        private IReadOnlyList<UtilityAssociationFeatureSource> _filteredFeatureSources = Array.Empty<UtilityAssociationFeatureSource>();
+        private UtilityAssociationFeatureSource? _selectedFeatureSource;
+        private string _searchText = string.Empty;
+
+        internal UtilityAssociationFeatureSourceSelection(
+            FeatureForm form,
+            UtilityAssociationsFormElement element,
+            UtilityAssociationsFilter filter,
+            Action<object, object?> navigate)
+            : base(form, element, filter, navigate)
+        {
+            _ = LoadAsync();
+        }
+
+        public override string Title => Properties.Resources.GetString("FeatureFormUtilityAssociationsNetworkDataSource")!;
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (SetProperty(ref _searchText, value ?? string.Empty))
+                {
+                    UpdateFilteredSources();
+                }
+            }
+        }
+
+        public IReadOnlyList<UtilityAssociationFeatureSource> FilteredFeatureSources
+        {
+            get => _filteredFeatureSources;
+            internal set
+            {
+                if (SetProperty(ref _filteredFeatureSources, value))
+                {
+                    OnPropertyChanged(nameof(CountText));
+                    OnPropertyChanged(nameof(HasNoResults));
+                }
+            }
+        }
+
+        public string CountText => string.Format(
+            System.Globalization.CultureInfo.CurrentCulture,
+            Properties.Resources.GetString("FeatureFormUtilityAssociationsResultCount")!,
+            FilteredFeatureSources.Count);
+
+        public bool HasNoResults => !IsLoading && ErrorMessage is null && FilteredFeatureSources.Count == 0;
+
+        public UtilityAssociationFeatureSource? SelectedFeatureSource
+        {
+            get => _selectedFeatureSource;
+            set
+            {
+                if (value is null || !SetProperty(ref _selectedFeatureSource, value))
+                {
+                    return;
+                }
+
+                Navigate(new UtilityAssociationAssetTypeSelection(Form, Element, Filter, value, Navigate), null);
+                _selectedFeatureSource = null;
+                OnPropertyChanged();
+            }
+        }
+
+        private async Task LoadAsync()
+        {
+            IsLoading = true;
+            ErrorMessage = null;
+            OnPropertyChanged(nameof(HasNoResults));
+            try
+            {
+                foreach (var source in await Element.GetAssociationFeatureSourcesAsync(Filter))
+                {
+                    _featureSources.Add(source);
+                }
+
+                UpdateFilteredSources();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            finally
+            {
+                IsLoading = false;
+                OnPropertyChanged(nameof(HasNoResults));
+            }
+        }
+
+        private void UpdateFilteredSources()
+        {
+            FilteredFeatureSources = string.IsNullOrWhiteSpace(SearchText)
+                ? _featureSources.ToList()
+                : _featureSources.Where(source => source.Name.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        }
+    }
+
+    /// <summary>
+    /// Represents the workflow page for searching and selecting an asset type from the chosen
+    /// feature source before candidate features are queried.
+    /// </summary>
+    internal sealed class UtilityAssociationAssetTypeSelection : UtilityAssociationWorkflowPage
+    {
+        private readonly UtilityAssociationFeatureSource _source;
+        private IReadOnlyList<UtilityAssetType> _filteredAssetTypes;
+        private UtilityAssetType? _selectedAssetType;
+        private string _searchText = string.Empty;
+
+        internal UtilityAssociationAssetTypeSelection(
+            FeatureForm form,
+            UtilityAssociationsFormElement element,
+            UtilityAssociationsFilter filter,
+            UtilityAssociationFeatureSource source,
+            Action<object, object?> navigate)
+            : base(form, element, filter, navigate)
+        {
+            _source = source;
+            _filteredAssetTypes = OrderAssetTypes(source.AssetTypes);
+        }
+
+        public override string Title => _source.Name;
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (SetProperty(ref _searchText, value ?? string.Empty))
+                {
+                    UpdateFilteredAssetTypes();
+                }
+            }
+        }
+
+        public IReadOnlyList<UtilityAssetType> FilteredAssetTypes
+        {
+            get => _filteredAssetTypes;
+            internal set
+            {
+                if (SetProperty(ref _filteredAssetTypes, value))
+                {
+                    OnPropertyChanged(nameof(CountText));
+                    OnPropertyChanged(nameof(HasNoResults));
+                }
+            }
+        }
+
+        public string CountText => string.Format(
+            System.Globalization.CultureInfo.CurrentCulture,
+            Properties.Resources.GetString("FeatureFormUtilityAssociationsResultCount")!,
+            FilteredAssetTypes.Count);
+
+        public bool HasNoResults => FilteredAssetTypes.Count == 0;
+
+        public UtilityAssetType? SelectedAssetType
+        {
+            get => _selectedAssetType;
+            set
+            {
+                if (value is null || !SetProperty(ref _selectedAssetType, value))
+                {
+                    return;
+                }
+
+                Navigate(new UtilityAssociationFeatureCandidateSelection(Form, Element, Filter, _source, value, Navigate), null);
+                _selectedAssetType = null;
+                OnPropertyChanged();
+            }
+        }
+
+        private void UpdateFilteredAssetTypes()
+        {
+            var assetTypes = string.IsNullOrWhiteSpace(SearchText)
+                ? _source.AssetTypes
+                : _source.AssetTypes.Where(assetType => assetType.Name.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase));
+            FilteredAssetTypes = OrderAssetTypes(assetTypes);
+        }
+
+        private static IReadOnlyList<UtilityAssetType> OrderAssetTypes(IEnumerable<UtilityAssetType> assetTypes)
+            => assetTypes.OrderBy(assetType => assetType.Name, StringComparer.CurrentCultureIgnoreCase)
+                .ThenBy(assetType => assetType.AssetGroup.Name, StringComparer.CurrentCultureIgnoreCase)
+                .ToList();
+    }
+
+    /// <summary>
+    /// Represents the workflow page that queries, filters, and pages through candidate features for
+    /// the selected source and asset type, then opens the association creation step for a candidate.
+    /// </summary>
+    internal sealed class UtilityAssociationFeatureCandidateSelection : UtilityAssociationWorkflowPage
+    {
+        private readonly UtilityAssociationFeatureSource _source;
+        private readonly UtilityAssetType _assetType;
+        private readonly ObservableCollection<UtilityAssociationFeatureCandidateItem> _candidateItems = new();
+        private string _committedSearchText = string.Empty;
+        private IReadOnlyList<UtilityAssociationFeatureCandidateItem> _filteredCandidateItems = Array.Empty<UtilityAssociationFeatureCandidateItem>();
+        private bool _isQuerying;
+        private QueryParameters? _nextQueryParameters;
+        private UtilityAssociationFeatureCandidateItem? _selectedCandidateItem;
+        private Feature? _selectedFeature;
+        private string _searchText = string.Empty;
+
+        internal UtilityAssociationFeatureCandidateSelection(
+            FeatureForm form,
+            UtilityAssociationsFormElement element,
+            UtilityAssociationsFilter filter,
+            UtilityAssociationFeatureSource source,
+            UtilityAssetType assetType,
+            Action<object, object?> navigate)
+            : base(form, element, filter, navigate)
+        {
+            _source = source;
+            _assetType = assetType;
+            LoadMoreCommand = new UtilityAssociationAsyncCommand(
+                LoadMoreAsync,
+                () => HasMore && !IsLoading,
+                ex => ErrorMessage = ex.Message);
+            SearchCommand = new UtilityAssociationAsyncCommand(
+                CompleteSearchAsync,
+                CanSearch,
+                ex => ErrorMessage = ex.Message);
+            _ = LoadFirstPageAsync();
+        }
+
+        public override string Title => IsLoading
+            ? Properties.Resources.GetString("FeatureFormUtilityAssociationsLoading")!
+            : string.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                Properties.Resources.GetString("FeatureFormUtilityAssociationsAvailableFeatures")!,
+                FilteredCandidateItems.Count);
+
+        public override string Subtitle => _assetType.Name;
+
+        public ICommand LoadMoreCommand { get; }
+
+        public ICommand SearchCommand { get; }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (SetProperty(ref _searchText, value ?? string.Empty))
+                {
+                    (SearchCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public IReadOnlyList<UtilityAssociationFeatureCandidateItem> FilteredCandidateItems
+        {
+            get => _filteredCandidateItems;
+            internal set
+            {
+                if (SetProperty(ref _filteredCandidateItems, value))
+                {
+                    OnPropertyChanged(nameof(Title));
+                    OnPropertyChanged(nameof(HasNoResults));
+                }
+            }
+        }
+
+        public bool HasMore => _nextQueryParameters is not null && string.IsNullOrWhiteSpace(_committedSearchText);
+
+        public bool HasNoResults => !IsLoading && ErrorMessage is null && FilteredCandidateItems.Count == 0;
+
+        public UtilityAssociationFeatureCandidateItem? SelectedCandidateItem
+        {
+            get => _selectedCandidateItem;
+            set
+            {
+                if (value is null || !SetProperty(ref _selectedCandidateItem, value))
+                {
+                    return;
+                }
+
+                SelectCandidate(value.Candidate);
+                _selectedCandidateItem = null;
+                OnPropertyChanged();
+            }
+        }
+
+        internal void SelectCandidate(UtilityAssociationFeatureCandidate candidate)
+        {
+            ClearSelectedFeature();
+            Navigate(new UtilityAssociationCreation(Form, Element, Filter, candidate), null);
+        }
+
+        internal async Task ShowOnMapAsync(Feature feature)
+        {
+            var geoView = FeatureFormView.GetUtilityAssociationWorkflowGeoView(this);
+            if (geoView is null ||
+                feature.Geometry is not Geometry.Geometry geometry ||
+                geometry.Extent is not Geometry.Envelope extent)
+            {
+                return;
+            }
+
+            ClearSelectedFeature();
+            if (feature.FeatureTable?.Layer is FeatureLayer layer)
+            {
+                layer.SelectFeature(feature);
+                _selectedFeature = feature;
+            }
+
+            Viewpoint? currentViewpoint = geoView.GetCurrentViewpoint(ViewpointType.CenterAndScale);
+            Viewpoint viewpoint = currentViewpoint is null
+                ? new Viewpoint(geometry)
+                : new Viewpoint(extent.GetCenter(), currentViewpoint.TargetScale);
+            await geoView.SetViewpointAsync(viewpoint);
+        }
+
+        internal void ClearSelectedFeature()
+        {
+            if (_selectedFeature?.FeatureTable?.Layer is FeatureLayer layer)
+            {
+                layer.UnselectFeature(_selectedFeature);
+            }
+
+            _selectedFeature = null;
+        }
+
+        private async Task LoadFirstPageAsync()
+        {
+            _isQuerying = true;
+            IsLoading = true;
+            ErrorMessage = null;
+            NotifyQueryStateChanged();
+            try
+            {
+                var result = await _source.QueryFeaturesAsync(_assetType);
+                AppendResult(result);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            finally
+            {
+                IsLoading = false;
+                _isQuerying = false;
+                NotifyQueryStateChanged();
+            }
+        }
+
+        private async Task LoadMoreAsync()
+        {
+            if (_nextQueryParameters is null)
+            {
+                return;
+            }
+
+            await QueryNextPageAsync(CancellationToken.None);
+        }
+
+        private bool CanSearch() =>
+            !IsLoading &&
+            (!string.Equals(SearchText, _committedSearchText, StringComparison.Ordinal) ||
+                (!string.IsNullOrWhiteSpace(_committedSearchText) &&
+                    FilteredCandidateItems.Count == 0 &&
+                    _nextQueryParameters is not null));
+
+        private async Task CompleteSearchAsync()
+        {
+            var submittedSearchText = SearchText;
+            _committedSearchText = submittedSearchText;
+            UpdateFilteredCandidates();
+            while (SearchText == submittedSearchText &&
+                !string.IsNullOrWhiteSpace(_committedSearchText) &&
+                FilteredCandidateItems.Count == 0 &&
+                _nextQueryParameters is not null)
+            {
+                await QueryNextPageAsync(CancellationToken.None);
+            }
+        }
+
+        private async Task QueryNextPageAsync(CancellationToken cancellationToken)
+        {
+            if (_isQuerying)
+            {
+                return;
+            }
+
+            _isQuerying = true;
+            try
+            {
+                var parameters = _nextQueryParameters;
+                if (parameters is null)
+                {
+                    return;
+                }
+
+                IsLoading = true;
+                ErrorMessage = null;
+                NotifyQueryStateChanged();
+                var result = await _source.QueryFeaturesAsync(_assetType, parameters, cancellationToken);
+                AppendResult(result);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+                _nextQueryParameters = null;
+            }
+            finally
+            {
+                IsLoading = false;
+                NotifyQueryStateChanged();
+                _isQuerying = false;
+            }
+        }
+
+        private void AppendResult(UtilityAssociationFeatureSourceQueryResult result)
+        {
+            foreach (var candidate in result.Candidates)
+            {
+                _candidateItems.Add(new UtilityAssociationFeatureCandidateItem(this, candidate));
+            }
+
+            _nextQueryParameters = result.NextQueryParams;
+            UpdateFilteredCandidates();
+        }
+
+        private void UpdateFilteredCandidates()
+        {
+            FilteredCandidateItems = string.IsNullOrWhiteSpace(_committedSearchText)
+                ? _candidateItems.ToList()
+                : _candidateItems.Where(item => item.Title.Contains(_committedSearchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            OnPropertyChanged(nameof(HasMore));
+            (LoadMoreCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
+            (SearchCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
+        }
+
+        private void NotifyQueryStateChanged()
+        {
+            OnPropertyChanged(nameof(Title));
+            OnPropertyChanged(nameof(HasNoResults));
+            OnPropertyChanged(nameof(HasMore));
+            (LoadMoreCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
+            (SearchCommand as UtilityAssociationAsyncCommand)?.RaiseCanExecuteChanged();
+        }
+    }
+
+    internal sealed class UtilityAssociationFeatureCandidateItem
+    {
+        private readonly UtilityAssociationFeatureCandidateSelection _owner;
+
+        internal UtilityAssociationFeatureCandidateItem(
+            UtilityAssociationFeatureCandidateSelection owner,
+            UtilityAssociationFeatureCandidate candidate)
+        {
+            _owner = owner;
+            Candidate = candidate;
+            SelectCommand = new UtilityAssociationAsyncCommand(
+                () =>
+                {
+                    _owner.SelectCandidate(Candidate);
+                    return Task.CompletedTask;
+                },
+                onError: ex => _owner.ErrorMessage = ex.Message);
+            ShowOnMapCommand = new UtilityAssociationAsyncCommand(
+                () => _owner.ShowOnMapAsync(Candidate.Feature),
+                () => CanShowOnMap,
+                ex => _owner.ErrorMessage = ex.Message);
+        }
+
+        public UtilityAssociationFeatureCandidate Candidate { get; }
+
+        public string Title => Candidate.Title;
+
+        public ICommand SelectCommand { get; }
+
+        public ICommand ShowOnMapCommand { get; }
+
+        public bool CanShowOnMap => Candidate.Feature.Geometry is not null &&
+            FeatureFormView.GetUtilityAssociationWorkflowGeoView(_owner) is not null;
+    }
+
+    /// <summary>
+    /// Adapts asynchronous workflow operations to <see cref="ICommand"/> so views can bind actions
+    /// such as loading more candidates and creating an association while honoring their enabled state.
+    /// </summary>
+    internal sealed class UtilityAssociationAsyncCommand : ICommand
+    {
+        private readonly Func<Task> _execute;
+        private readonly Func<bool> _canExecute;
+        private readonly Action<Exception>? _onError;
+        private bool _isExecuting;
+
+        internal UtilityAssociationAsyncCommand(
+            Func<Task> execute,
+            Func<bool>? canExecute = null,
+            Action<Exception>? onError = null)
+        {
+            _execute = execute;
+            _canExecute = canExecute ?? (() => true);
+            _onError = onError;
+        }
+
+        public event EventHandler? CanExecuteChanged;
+
+        public bool CanExecute(object? parameter) => !_isExecuting && _canExecute();
+
+        public async void Execute(object? parameter)
+        {
+            if (!CanExecute(parameter))
+            {
+                return;
+            }
+
+            _isExecuting = true;
+            RaiseCanExecuteChanged();
+            try
+            {
+                await _execute();
+            }
+            catch (Exception ex) when (_onError is not null)
+            {
+                _onError(ex);
+            }
+            finally
+            {
+                _isExecuting = false;
+                RaiseCanExecuteChanged();
+            }
+        }
+
+        internal void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
+}

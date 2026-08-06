@@ -35,14 +35,14 @@ internal static class AppBuilderExtensions
     /// </summary>
     public static MauiAppBuilder UseWindowsAutomationTreeFix(this MauiAppBuilder builder)
     {
-#if WINDOWS
+#if NEED_WINDOWS_AUTOMATION_TREE_FIX
         Microsoft.Maui.Handlers.ViewHandler.ViewMapper.AppendToMapping(nameof(IView.AutomationId), MapAutomationId);
 #endif
         return builder;
     }
 
 
-#if WINDOWS
+#if NEED_WINDOWS_AUTOMATION_TREE_FIX
     private static void MapAutomationId(IViewHandler handler, IView view)
     {
         // Workaround for https://github.com/dotnet/maui/issues/4715; Layouts, Pages and ContentViews are not exposed in AutomationTree

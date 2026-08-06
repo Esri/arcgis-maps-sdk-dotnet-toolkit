@@ -67,6 +67,7 @@ public partial class UtilityNetworkTraceTool
     [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityNetworkAttribute.Name), "Esri.ArcGISRuntime.UtilityNetworks.UtilityNetworkAttribute", "Esri.ArcGISRuntime")]
     [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction.FunctionType), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction", "Esri.ArcGISRuntime")]
     [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction.NetworkAttribute), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction.FunctionName), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction", "Esri.ArcGISRuntime")]
     static UtilityNetworkTraceTool()
     {
         const string backgroundColor = "{AppThemeBinding Dark=#353535, Light=#F8F8F8}";
@@ -188,9 +189,37 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                                             <RowDefinition Height=""Auto"" />
                                             <RowDefinition Height=""Auto"" />
                                         </Grid.RowDefinitions>
-                                        <Label Text=""{{Binding Function.NetworkAttribute.Name}}"" FontAttributes=""Bold"" TextColor=""{foregroundColor}""  />
+                                        <Label Text=""{{Binding Function.NetworkAttribute.Name}}"" FontAttributes=""Bold"" TextColor=""{foregroundColor}"" IsVisible=""False"">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType=""Label"" Binding=""{{Binding Function.FunctionName}}"" Value="""">
+                                                    <Setter Property=""IsVisible"" Value=""True"" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType=""Label"" Binding=""{{Binding Function.FunctionName}}"" Value=""{{x:Null}}"">
+                                                    <Setter Property=""IsVisible"" Value=""True"" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
                                         <Label Text=""{{Binding Result}}"" Grid.Column=""1"" TextColor=""{foregroundColor}""  />
-                                        <Label Text=""{{Binding Function.FunctionType}}"" Grid.Row=""1"" Grid.ColumnSpan=""2"" TextColor=""{foregroundColor}""  />
+                                        <Label Text=""{{Binding Function.FunctionType}}"" Grid.Row=""1"" Grid.ColumnSpan=""2"" TextColor=""{foregroundColor}"" IsVisible=""False"">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType=""Label"" Binding=""{{Binding Function.FunctionName}}"" Value="""">
+                                                    <Setter Property=""IsVisible"" Value=""True"" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType=""Label"" Binding=""{{Binding Function.FunctionName}}"" Value=""{{x:Null}}"">
+                                                    <Setter Property=""IsVisible"" Value=""True"" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                        <Label Text=""{{Binding Function.FunctionName}}"" Grid.RowSpan=""2"" FontAttributes=""Bold"" TextColor=""{foregroundColor}"" IsVisible=""True"">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType=""Label"" Binding=""{{Binding Function.FunctionName}}"" Value="""">
+                                                    <Setter Property=""IsVisible"" Value=""False"" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType=""Label"" Binding=""{{Binding Function.FunctionName}}"" Value=""{{x:Null}}"">
+                                                    <Setter Property=""IsVisible"" Value=""False"" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
                                     </Grid>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>

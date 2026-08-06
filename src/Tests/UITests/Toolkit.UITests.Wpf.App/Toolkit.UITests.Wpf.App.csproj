@@ -31,4 +31,10 @@
 
   <Import Project="..\Toolkit.UITests.TestPages.Shared\Toolkit.UITests.TestPages.Shared.projitems" Label="Shared" />
 
+  <ItemGroup>
+    <ProjectReference Include="..\Toolkit.UITests.Generators\Toolkit.UITests.Generators.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
 </Project>

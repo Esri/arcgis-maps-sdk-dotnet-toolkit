@@ -339,7 +339,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return root;
         }
 
-        private OfflineMapAreasTemplateSettings TemplateSettings { get; } = new OfflineMapAreasTemplateSettings();
+        internal OfflineMapAreasTemplateSettings TemplateSettings { get; } = new OfflineMapAreasTemplateSettings();
 
         private static VerticalStackLayout CreateStateLayout(string icon, string title, string message, Button? actionButton = null)
         {

@@ -36,7 +36,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (item is UtilityNetworks.UtilityAssociationGroupResult)
                 return UtilityAssociationGroupResultTemplate;
             if (item is UtilityNetworks.UtilityAssociationResult)
-                return UtilityAssociationResultTemplate;            
+                return UtilityAssociationResultTemplate;
+            if (item is UtilityAssociationFeatureSourceSelection)
+                return UtilityAssociationFeatureSourceSelectionTemplate;
+            if (item is UtilityAssociationAssetTypeSelection)
+                return UtilityAssociationAssetTypeSelectionTemplate;
+            if (item is UtilityAssociationFeatureCandidateSelection)
+                return UtilityAssociationFeatureCandidateSelectionTemplate;
+            if (item is UtilityAssociationCreation)
+                return UtilityAssociationCreationTemplate;
 #if WINDOWS_XAML
             return base.SelectTemplateCore(item, container);
 #elif MAUI
@@ -65,5 +73,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Gets or sets the template used for rendering a <see cref="UtilityNetworks.UtilityAssociationResult"/>
         /// </summary>
         public DataTemplate? UtilityAssociationResultTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template used for selecting a utility association feature source.
+        /// </summary>
+        public DataTemplate? UtilityAssociationFeatureSourceSelectionTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template used for selecting a utility association asset type.
+        /// </summary>
+        public DataTemplate? UtilityAssociationAssetTypeSelectionTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template used for selecting a utility association feature candidate.
+        /// </summary>
+        public DataTemplate? UtilityAssociationFeatureCandidateSelectionTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template used for configuring a new utility association.
+        /// </summary>
+        public DataTemplate? UtilityAssociationCreationTemplate { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 contextMenu.Items.Add(CreateMenuItem(
                     Properties.Resources.GetString("FeatureFormUtilityAssociationsShowOnMap"),
                     ToolkitIcons.CenterMap,
-                    (s, e) => ShowAssociationOnMap(parent)));
+                    (s, e) => ShowAssociationOnMap()));
             }
 
             contextMenu.Items.Add(CreateMenuItem(
@@ -69,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 contextMenu.Items.Add(CreateMenuFlyoutItem(
                     Properties.Resources.GetString("FeatureFormUtilityAssociationsShowOnMap"),
                     ToolkitIcons.CenterMap,
-                    (s, e) => ShowAssociationOnMap(parent)));
+                    (s, e) => ShowAssociationOnMap()));
             }
 
             contextMenu.Items.Add(CreateMenuFlyoutItem(

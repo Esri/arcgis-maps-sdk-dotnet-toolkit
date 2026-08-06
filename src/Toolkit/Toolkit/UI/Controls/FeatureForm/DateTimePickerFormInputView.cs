@@ -54,35 +54,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // We display dates in local time but store them in UTC.
                 DateTime? date = null;
 #if MAUI
-                // MAUI's DatePicker does not have a way to determine if it's empty. Check the platform control instead.
-#if WINDOWS
-                if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
-                {
-                    date = winPicker.Date?.UtcDateTime;
-                }
-#elif IOS || ANDROID
-                if (_datePicker.Handler?.PlatformView is not Microsoft.Maui.Platform.MauiDatePicker nativePicker || !String.IsNullOrEmpty(nativePicker.Text))
-                {
-                    date = GetDateMAUI(_datePicker)?.ToUniversalTime();
-                }
-#elif MACCATALYST
+#if MACCATALYST
+                // On Mac, MAUI's DatePicker always reports a value (no empty state); the
+                // has-value switch determines whether the field is considered set.
                 if (_hasValueSwitch?.IsToggled != false)
                 {
-                    date = GetDateMAUI(_datePicker)?.ToUniversalTime();
+                    date = _datePicker.Date?.ToUniversalTime();
                 }
+#else
+                // DatePicker.Date is nullable (.NET 10+); null means no date is selected.
+                date = _datePicker.Date?.ToUniversalTime();
 #endif
 #elif WINDOWS_XAML
                 var doffset = _datePicker.SelectedDate?.Date;
                 if (doffset.HasValue)
                     date = new DateTime(doffset.Value.Ticks, DateTimeKind.Local);
 #else
-                date = _datePicker.SelectedDate?.ToUniversalTime();
+                date = _datePicker.SelectedDate?.Date.ToUniversalTime();
 #endif
-#if MAUI
-                TimeSpan? timePicked = GetTimeMAUI(_timePicker);
-#else
                 TimeSpan? timePicked = _timePicker?.Time;
-#endif
                 if (date is DateTime newDate && input.IncludeTime && timePicked is TimeSpan time
 #if WINDOWS_XAML
                     && time.Ticks != -1 // TimePicker.SelectedTime is Ticks=-1 when the time is empty
@@ -196,51 +186,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
 #if MAUI
                     // Min/Max are always converted to local time
-                    if (Environment.Version.Major < 10)
-                    {
-                        SetMinMaxDate_Net9(_datePicker, input.Min, input.Max);
-                    }
-                    else
-                    {
-                        SetMinMaxDate_Net10(_datePicker, input.Min, input.Max);
-                    }
-
+                    _datePicker.MinimumDate = input.Min?.ToLocalTime();
 #if WINDOWS
+                    // Works around dotnet/maui#35785: a null MaximumDate makes the WinUI handler overflow DateTimeOffset west of UTC.
+                    // A Utc-kind MaxValue casts to CalendarDatePicker.MaxDate at offset 0, staying in range.
+                    _datePicker.MaximumDate = input.Max?.ToLocalTime() ?? DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc);
+#else
+                    _datePicker.MaximumDate = input.Max?.ToLocalTime();
+#endif
+
+#if MACCATALYST
+                    // On Mac the DatePicker can't show an empty value, so only push a real date and
+                    // use the has-value switch to represent the null/empty state.
                     if (selectedDate is DateTime date)
                     {
-                        if (Environment.Version.Major < 10)
-                            SetDate_Net9(_datePicker, selectedDate.Value);
-                        else
-                            SetDate_Net10(_datePicker, selectedDate);
-                    }
-                    else if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
-                    {
-                        winPicker.Date = selectedDate;
-                    }
-#elif IOS || ANDROID
-                    if (selectedDate is DateTime date)
-                    {
-                        if (Environment.Version.Major < 10)
-                            SetDate_Net9(_datePicker, date);
-                        else
-                            SetDate_Net10(_datePicker, date);
-                    }
-                    else if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
-                    {
-                        nativePicker.Text = null;
-                    }
-#elif MACCATALYST
-                    if (selectedDate is DateTime date)
-                    {
-                        if (Environment.Version.Major < 10)
-                            SetDate_Net9(_datePicker, date);
-                        else
-                            SetDate(_datePicker, date);
+                        _datePicker.Date = date;
                     }
                     if (_hasValueSwitch != null)
                     {
                         _hasValueSwitch.IsToggled = (selectedDate != null);
                     }
+#else
+                    // DatePicker.Date is nullable (.NET 10+); null renders as an unset picker.
+                    _datePicker.Date = selectedDate;
 #endif
 #else
                     _datePicker.SelectedDate = selectedDate;
@@ -257,10 +225,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
 #if MAUI
                     _timePicker.IsVisible = input.IncludeTime;
-                    if (Environment.Version.Major < 10)
-                        SetTime_Net9(_timePicker, selectedDate?.TimeOfDay ?? TimeSpan.Zero);
-                    else
-                        SetTime_Net10(_timePicker, selectedDate?.TimeOfDay);
+                    _timePicker.Time = selectedDate?.TimeOfDay;
 #else
                     _timePicker.Visibility = input.IncludeTime ? Visibility.Visible : Visibility.Collapsed;
 #if WINDOWS_XAML

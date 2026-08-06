@@ -15,8 +15,6 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Floor;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 using ListView = Microsoft.Maui.Controls.ListView;
 using SearchBar = Microsoft.Maui.Controls.SearchBar;
 
@@ -38,7 +36,7 @@ internal class FloorFilterBrowseFacilitiesPage : ContentPage
 
     internal FloorFilterBrowseFacilitiesPage(FloorFilter ff, bool isAllSites, bool shouldShowBack)
     {
-        On<iOS>().SetUseSafeArea(true);
+        SafeAreaEdges = SafeAreaEdges.All;
 
         _ff = ff;
         this.SetAppThemeColor(ContentPage.BackgroundColorProperty, Color.FromArgb("#fff"), Color.FromArgb("#353535"));

@@ -46,6 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Border nameBackground = new Border() { BackgroundColor = Colors.Transparent, Padding = new Thickness(2), VerticalOptions = LayoutOptions.End, StrokeThickness = 0 };
             var nameLabel = new Label() { HorizontalOptions = LayoutOptions.Center, FontSize = 10, MaxLines = 1, LineBreakMode = LineBreakMode.TailTruncation };
             nameBackground.Content = nameLabel;
+            nameBackground.SetBinding(VisualElement.IsVisibleProperty, static (FormAttachmentView view) => view.Element?.DisplayFilename, source: RelativeBindingSource.TemplatedParent, converter: BoolOrNullToBoolConverter.Instance);
             nameLabel.SetBinding(Label.TextProperty, static (FormAttachmentView view) => view.Attachment?.Name, source: RelativeBindingSource.TemplatedParent);
             root.Children.Add(nameBackground);
             var sizeLabel = new Label() { VerticalOptions = LayoutOptions.Start, HorizontalOptions = LayoutOptions.Center, FontSize = 10, MaxLines = 1 };
@@ -69,6 +70,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst")]
+        private void FormAttachmentView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Element))
+            {
+                ConfigureFlyout();
+            }
+        }
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst")]
         private void ConfigureFlyout()
         {
             MenuFlyout flyout = new MenuFlyout();
@@ -77,15 +88,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 Text = Properties.Resources.GetString("FeatureFormRemoveAttachmentMenuItem"),
                 IconImageSource = new FontImageSource { Glyph = ToolkitIcons.Trash, FontFamily = ToolkitIcons.FontFamilyName, Size = 32, Color = Colors.Gray }
             });
-            flyout.Add(new MenuFlyoutItem()
+            var renameItem = new MenuFlyoutItem()
             {
                 Text = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem"),
                 IconImageSource = new FontImageSource { Glyph = ToolkitIcons.Pencil, FontFamily = ToolkitIcons.FontFamilyName, Size = 32, Color = Colors.Gray }
-            });
+            };
+            if (Element?.AllowUserRename == true)
+            {
+                flyout.Add(renameItem);
+            }
 
             ((MenuFlyoutItem)flyout[0]).Clicked += (s, e) => DeleteAttachment();
 
-            ((MenuFlyoutItem)flyout[1]).Clicked += async (s, e) =>
+            renameItem.Clicked += async (s, e) =>
             {
                 if (Attachment is not null && Element is not null && GetPage() is Page page)
                 {
@@ -233,14 +248,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (page is null) return false;
 
             string delete = Properties.Resources.GetString("FeatureFormRemoveAttachmentMenuItem")!;
-            string rename = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem")!;
             string open = Properties.Resources.GetString("FeatureFormOpenAttachmentMenuItem")!;
-            var result = await page.DisplayActionSheet(Attachment.Name, null, null, delete, rename, open);
+            string? rename = Element?.AllowUserRename == true ? Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem")! : null;
+            var result = Element?.AllowUserRename == true
+                ? await page.DisplayActionSheetAsync(Attachment.Name, null, null, delete, rename, open)
+                : await page.DisplayActionSheetAsync(Attachment.Name, null, null, delete, open);
+
             if (result == delete)
             {
                 DeleteAttachment();
             }
-            else if(result == rename)
+            else if(rename is not null && result == rename)
             {
                 try
                 {

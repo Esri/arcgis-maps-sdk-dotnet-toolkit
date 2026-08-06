@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:TestPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+                xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+                xmlns:local="clr-namespace:Toolkit.UITests.App.TestPages"
+                x:Class="Toolkit.UITests.App.TestPages.SearchViewControlMap"
+                x:Name="SearchViewControlMapPage">
+    <Grid>
+        <esri:MapView x:Name="MyMapView" />
+        <Grid Padding="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Start" StrokeThickness="1" Background="{StaticResource CalciteBackground1Brush}" Stroke="{StaticResource CalciteBorder1Brush}">
+                <StackLayout Margin="5">
+                    <StackLayout Orientation="Horizontal" Margin="0,0,0,5">
+                        <Label Text="Scale: 1 / " Margin="1,1,0,1" VerticalOptions="Center" />
+                        <Label x:Name="ScaleTextBlock" AutomationId="ScaleTextBlock" MinimumWidthRequest="60" Text="{Binding Source={x:Reference MyMapView}, Path=MapScale, Mode=OneWay}" />
+                    </StackLayout>
+                    <Button x:Name="UpdateViewpointExtentToUSA" Text="Update Viewpoint to USA" Padding="1" Clicked="UpdateViewpointExtentToUSA_Click" AutomationId="UpdateViewpointExtentToUSA"/>
+                    <Button x:Name="UpdateViewpointExtentToOntario" Text="Update Viewpoint to Ontario" Padding="1" Clicked="UpdateViewpointExtentToOntario_Click" AutomationId="UpdateViewpointExtentToOntario"/>
+                    <Button x:Name="UpdateViewpointExtentToColorado" Text="Update Viewpoint to Colorado" Padding="1" Clicked="UpdateViewpointExtentToColorado_Click" AutomationId="UpdateViewpointExtentToColorado"/>
+                </StackLayout>
+            </Border>
+            <toolkit:SearchView Grid.Column="1" GeoView="{Binding Source={x:Reference MyMapView}}" HorizontalOptions="End" />
+        </Grid>
+    </Grid>
+</local:TestPage>
