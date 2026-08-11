@@ -130,22 +130,22 @@
     <value>Ota valokuva</value>
   </data>
   <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
-    <value>Å_This file type is not supported. Allowed types: {0}___________________________ö</value>
+    <value>Tiedostotyyppiä ei tueta. Sallitut tyypit: {0}</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
-    <value>Å_This file is too large. Maximum allowed size is {0} MB_____________________________ö.</value>
+    <value>Tiedosto on liian suuri. Sallittu enimmäiskoko on {0} Mt.</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
-    <value>Å_This file is too large________________________ö.</value>
+    <value>Tiedosto on liian suuri.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
-    <value>Å_This media is too long. Maximum allowed duration is {0} seconds_________________________________ö.</value>
+    <value>Media on liian pitkä. Sallittu enimmäiskesto on {0} sekuntia.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
-    <value>Å_This media is too long________________________ö.</value>
+    <value>Media on liian pitkä.</value>
   </data>
   <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
-    <value>Å_Attachment upload failed_________________________ö</value>
+    <value>Liitteen lataus palveluun epäonnistui</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Päivämäärän on oltava {0} tai sitä ennen</value>
@@ -193,16 +193,16 @@
     <value>Pienempi kuin vähimmäisarvo</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
-    <value>Å_The maximum number of attachments allowed is {0}__________________________ö.</value>
+    <value>Suurin sallittu liitemäärä on {0}.</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
-    <value>Å_Max: {0}_________________ö</value>
+    <value>Maksimi: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
-    <value>Å_Min: {0}_________________ö</value>
+    <value>Minimi: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
-    <value>Å_At least {0} attachment(s) required___________________ö.</value>
+    <value>Vähintään {0} liitettä vaaditaan.</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Ei liitteitä</value>
@@ -238,145 +238,145 @@
     <value>Vaadittu merkkien määrä: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
-    <value>Å_Remove Association___________________ö</value>
+    <value>Poista liitos</value>
   </data>
   <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
-    <value>Å_Show on Map____________ö</value>
+    <value>Näytä kartassa</value>
   </data>
   <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
-    <value>Å_More Information_________________ö</value>
+    <value>Lisätietoja</value>
   </data>
   <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
-    <value>Å_Percent Along______________ö</value>
+    <value>Prosenttiosuus</value>
   </data>
   <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
-    <value>Å_Association Settings_____________________ö</value>
+    <value>Liitosasetukset</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
-    <value>Å_Remove Association____________________ö?</value>
+    <value>Poistetaanko liitos?</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
-    <value>Å_This will only remove the association. The feature remains_______________________________ö.</value>
+    <value>Tämä poistaa vain liitoksen. Kohde pysyy.</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
-    <value>Å_Remove_____________ö</value>
+    <value>Poista</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
-    <value>Å_Cancel_____________ö</value>
+    <value>Peruuta</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
-    <value>Å_Add Association________________ö</value>
+    <value>Lisää liitos</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
-    <value>Å_Add_______ö</value>
+    <value>Lisää</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
-    <value>Å_Choose how to add the feature______________________________ö</value>
+    <value>Valitse, miten kohde lisätään</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
-    <value>Å_Choose to add______________ö</value>
+    <value>Lisää valitsemalla</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
-    <value>Å_{0} Features Identified________________________ö</value>
+    <value>{0} kohdetta tunnistettu</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
-    <value>Å_Association type_________________ö</value>
+    <value>Liitostyyppi</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
-    <value>Å_Attachment_____________________ö</value>
+    <value>Liite</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
-    <value>Å_This association can't be added_________________ö.</value>
+    <value>Liitosta ei voi lisätä.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
-    <value>Å_Connectivity_____________ö</value>
+    <value>Yhdistyvyys</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
-    <value>Å_Containment____________ö</value>
+    <value>Sisältyvyys</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
-    <value>Å_Content visibility___________________ö</value>
+    <value>Sisällön näkyvyys</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
-    <value>Å_Current feature terminal_________________________ö</value>
+    <value>Nykyinen kohteen pääte</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
-    <value>Å_Enter a percentage from 0 to 100__________________ö.</value>
+    <value>Anna prosenttiluku 0–100.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
-    <value>Å_Fraction along edge (%)________________________ö</value>
+    <value>Osuus reunaa pitkin (%)</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
-    <value>Å_From element_____________ö</value>
+    <value>Elementistä</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
-    <value>Å_No matches found__________________ö.</value>
+    <value>Vastaavuuksia ei löytynyt.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
-    <value>Å_No network data sources available__________________ö.</value>
+    <value>Verkkoaineistolähteitä ei käytettävissä.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
-    <value>Å_New Association________________ö</value>
+    <value>Uusi liitos</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
-    <value>Å_Associations can't be edited for this feature________________________ö.</value>
+    <value>Kohteen liitoksia ei voi muokata.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
-    <value>Å_Other feature terminal_______________________ö</value>
+    <value>Muu kohteen pääte</value>
   </data>
   <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
-    <value>Å_Review association___________________ö</value>
+    <value>Tarkista liitos</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
-    <value>Å_Search features________________ö</value>
+    <value>Hae kohteita</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
-    <value>Å_Search_____________ö</value>
+    <value>Hae</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
-    <value>Å_Network Data Source____________________ö</value>
+    <value>Verkkoaineistolähde</value>
   </data>
   <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
-    <value>Å_{0} results____________ö</value>
+    <value>{0} tulosta</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
-    <value>Å_Available Asset Types______________________ö</value>
+    <value>Käytettävissä olevat omaisuustyypit</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
-    <value>Å_Available Features ({0})_________________________ö</value>
+    <value>Käytettävissä olevat kohteet ({0})</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
-    <value>Å_Loading_____________________ö...</value>
+    <value>Ladataan...</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
-    <value>Å_No asset types available__________________________ö.</value>
+    <value>Omaisuustyyppejä ei käytettävissä.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
-    <value>Å_Load more___________________ö</value>
+    <value>Lataa lisää</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
-    <value>Å_Select a network data source_____________________________ö</value>
+    <value>Valitse verkkoaineistolähde</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>Å_From Network Data Source_________________________ö</value>
+    <value>Verkkoaineistolähteestä</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>Å_On Map_____________ö</value>
+    <value>Kartassa</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
-    <value>Å_Select features by tapping on the map____________________ö.</value>
+    <value>Valitse kohteita napauttamalla kartassa.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
-    <value>Å_Select a terminal___________________ö.</value>
+    <value>Valitse pääte</value>
   </data>
   <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
-    <value>Å_Structure attachment_____________________ö</value>
+    <value>Rakenneliite</value>
   </data>
   <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
-    <value>Å_Tap Selection______________ö</value>
+    <value>Napauta valintaa</value>
   </data>
   <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
-    <value>Å_To element_____________________ö</value>
+    <value>Elementtiin</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Kaikki sijainnit</value>
@@ -481,16 +481,16 @@
     <value>Hae</value>
   </data>
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
-    <value>Å_Select search source_____________________ö</value>
+    <value>Valitse hakulähde</value>
   </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
-    <value>Å_Search sources_______________ö</value>
+    <value>Hakulähteet</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
-    <value>Å_Search suggestions___________________ö</value>
+    <value>Hakuehdotukset</value>
   </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
-    <value>Å_Search results_______________ö</value>
+    <value>Hakutulokset</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Lisää aloituspiste</value>
@@ -667,144 +667,144 @@
     <value>Paikannin</value>
   </data>
   <data name="OfflineMapAreasAdd" xml:space="preserve">
-    <value>Å_Add_______ö</value>
+    <value>Lisää</value>
   </data>
   <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
-    <value>Å_Add Map Area_____________ö</value>
+    <value>Lisää kartta-alue</value>
   </data>
   <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
-    <value>Å_Name_________ö</value>
+    <value>Nimi</value>
   </data>
   <data name="OfflineMapAreasCancel" xml:space="preserve">
-    <value>Å_Cancel_____________ö</value>
+    <value>Peruuta</value>
   </data>
   <data name="OfflineMapAreasDownload" xml:space="preserve">
-    <value>Å_Download_________________ö</value>
+    <value>Lataa</value>
   </data>
   <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
-    <value>Å_Size: {0}___________________ö</value>
+    <value>Koko: {0}</value>
   </data>
   <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
-    <value>Å_Area {0}_________________ö</value>
+    <value>Alue {0}</value>
   </data>
   <data name="OfflineMapAreasDownloaded" xml:space="preserve">
-    <value>Å_Downloaded_____________________ö</value>
+    <value>Ladattu</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
-    <value>Å_Could not retrieve map areas for this map______________________ö</value>
+    <value>Kartta-alueita ei voi noutaa tälle kartalle.</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
-    <value>Å_No Internet Connection_______________________ö</value>
+    <value>Ei Internet-yhteyttä</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
-    <value>Å_There are no map areas for this map. Tap the button below to get started______________________________________ö.</value>
+    <value>Tälle kartalle ei ole kartta-alueita. Aloita napauttamalla alla olevaa painiketta.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
-    <value>Å_There are no map areas for this map___________________ö.</value>
+    <value>Tälle kartalle ei ole kartta-alueita.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
-    <value>Å_No Map Areas_____________ö</value>
+    <value>Ei kartta-alueita</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
-    <value>Å_The map is not enabled for offline use____________________ö</value>
+    <value>Karttaa ei voi käyttää offline-tilassa</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
-    <value>Å_Offline Disabled_________________ö</value>
+    <value>Offline-tila poistettu käytöstä</value>
   </data>
   <data name="OfflineMapAreasOpen" xml:space="preserve">
-    <value>Å_Open_________ö</value>
+    <value>Avaa</value>
   </data>
   <data name="OfflineMapAreasRefresh" xml:space="preserve">
-    <value>Å_Refresh_______________ö</value>
+    <value>Päivitä</value>
   </data>
   <data name="OfflineMapAreasRemove" xml:space="preserve">
-    <value>Å_Remove_____________ö</value>
+    <value>Poista</value>
   </data>
   <data name="OfflineMapAreasSelectArea" xml:space="preserve">
-    <value>Å_Select Area____________ö</value>
+    <value>Valitse alue</value>
   </data>
   <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
-    <value>Å_Scale___________ö</value>
+    <value>Mittakaava</value>
   </data>
   <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
-    <value>Å_Room_________ö</value>
+    <value>Huone</value>
   </data>
   <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
-    <value>Å_Rooms___________ö</value>
+    <value>Huoneet</value>
   </data>
   <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
-    <value>Å_House Property_______________ö</value>
+    <value>Talo-omaisuus</value>
   </data>
   <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
-    <value>Å_Houses_____________ö</value>
+    <value>Talot</value>
   </data>
   <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
-    <value>Å_Small Building_______________ö</value>
+    <value>Pieni rakennus</value>
   </data>
   <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
-    <value>Å_Building_________________ö</value>
+    <value>Rakennus</value>
   </data>
   <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
-    <value>Å_Buildings___________________ö</value>
+    <value>Rakennukset</value>
   </data>
   <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
-    <value>Å_Street_____________ö</value>
+    <value>Katu</value>
   </data>
   <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
-    <value>Å_Streets_______________ö</value>
+    <value>Kadut</value>
   </data>
   <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
-    <value>Å_Neighborhood_____________ö</value>
+    <value>Naapurusto</value>
   </data>
   <data name="OfflineMapAreasScaleTown" xml:space="preserve">
-    <value>Å_Town_________ö</value>
+    <value>Pieni kaupunki</value>
   </data>
   <data name="OfflineMapAreasScaleCity" xml:space="preserve">
-    <value>Å_City_________ö</value>
+    <value>Kaupunki</value>
   </data>
   <data name="OfflineMapAreasScaleCities" xml:space="preserve">
-    <value>Å_Cities_____________ö</value>
+    <value>Kaupungit</value>
   </data>
   <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
-    <value>Å_Metropolitan Area__________________ö</value>
+    <value>Suurkaupunkialue</value>
   </data>
   <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
-    <value>Å_County_____________ö</value>
+    <value>Maakunta</value>
   </data>
   <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
-    <value>Å_Counties_________________ö</value>
+    <value>Maakunnat</value>
   </data>
   <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
-    <value>Å_State/Province_______________ö</value>
+    <value>Osavaltio/Provinssi</value>
   </data>
   <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
-    <value>Å_States/Provinces_________________ö</value>
+    <value>Osavaltiot/Provinssit</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
-    <value>Å_Countries (Small)__________________ö</value>
+    <value>Maat (pienet)</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
-    <value>Å_Countries (Big)________________ö</value>
+    <value>Maat (suuret)</value>
   </data>
   <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
-    <value>Å_Continent___________________ö</value>
+    <value>Maanosa</value>
   </data>
   <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
-    <value>Å_World (Small)______________ö</value>
+    <value>Maailma (pieni)</value>
   </data>
   <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
-    <value>Å_World (Big)____________ö</value>
+    <value>Maailma (suuri)</value>
   </data>
   <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
-    <value>Å_World___________ö</value>
+    <value>Maailma</value>
   </data>
   <data name="OfflineMapAreasStop" xml:space="preserve">
-    <value>Å_Stop_________ö</value>
+    <value>Lopeta</value>
   </data>
   <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
-    <value>Å_Offline Map____________ö</value>
+    <value>Offline-kartta</value>
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
-    <value>Å_An error occured. Tap to remove_________________ö.</value>
+    <value>Tapahtui virhe. Poista napauttamalla.</value>
   </data>
 </root>

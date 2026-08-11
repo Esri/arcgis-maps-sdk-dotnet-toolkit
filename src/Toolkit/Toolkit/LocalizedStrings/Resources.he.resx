@@ -130,22 +130,22 @@
     <value>צלם תמונה</value>
   </data>
   <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
-    <value>כן_This file type is not supported. Allowed types: {0}___________________________ש</value>
+    <value>אין תמיכה בסוג קובץ זה. סוגים מותרים: {0}</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
-    <value>כן_This file is too large. Maximum allowed size is {0} MB_____________________________ש.</value>
+    <value>קובץ זה גדול מדי. הגודל המרבי המותר הוא {0} ‎MB.</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
-    <value>כן_This file is too large________________________ש.</value>
+    <value>קובץ זה גדול מדי.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
-    <value>כן_This media is too long. Maximum allowed duration is {0} seconds_________________________________ש.</value>
+    <value>מדיה זו ארוכה מדי. האורך המרבי המותר הוא {0} שניות.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
-    <value>כן_This media is too long________________________ש.</value>
+    <value>מדיה זו ארוכה מדי.</value>
   </data>
   <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
-    <value>כן_Attachment upload failed_________________________ש</value>
+    <value>העלאת צרופה נכשלה</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>התאריך חייב להיות {0} או לפני</value>
@@ -193,16 +193,16 @@
     <value>פחות מהערך המינימלי</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
-    <value>כן_The maximum number of attachments allowed is {0}__________________________ש.</value>
+    <value>המספר המרבי המותר של צרופות הוא {0}.</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
-    <value>כן_Max: {0}_________________ש</value>
+    <value>מקסימום: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
-    <value>כן_Min: {0}_________________ש</value>
+    <value>מינימום: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
-    <value>כן_At least {0} attachment(s) required___________________ש.</value>
+    <value>נדרשות לפחות {0} צרופות.</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>אין צורפות</value>
@@ -238,145 +238,145 @@
     <value>מספר התווים הנדרש: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
-    <value>כן_Remove Association___________________ש</value>
+    <value>הסר שיוך</value>
   </data>
   <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
-    <value>כן_Show on Map____________ש</value>
+    <value>הצג במפה</value>
   </data>
   <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
-    <value>כן_More Information_________________ש</value>
+    <value>מידע נוסף</value>
   </data>
   <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
-    <value>כן_Percent Along______________ש</value>
+    <value>אחוז לאורך</value>
   </data>
   <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
-    <value>כן_Association Settings_____________________ש</value>
+    <value>הגדרות שיוך</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
-    <value>כן_Remove Association____________________ש?</value>
+    <value>להסיר שיוך?</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
-    <value>כן_This will only remove the association. The feature remains_______________________________ש.</value>
+    <value>פעולה זו תסיר את השיוך בלבד. היישות נותרת.</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
-    <value>כן_Remove_____________ש</value>
+    <value>הסר</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
-    <value>כן_Cancel_____________ש</value>
+    <value>ביטול</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
-    <value>כן_Add Association________________ש</value>
+    <value>הוסף שיוך</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
-    <value>כן_Add_______ש</value>
+    <value>הוסף</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
-    <value>כן_Choose how to add the feature______________________________ש</value>
+    <value>בחר כיצד להוסיף את היישות</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
-    <value>כן_Choose to add______________ש</value>
+    <value>בחר להוסיף</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
-    <value>כן_{0} Features Identified________________________ש</value>
+    <value>זוהו {0} ישויות</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
-    <value>כן_Association type_________________ש</value>
+    <value>סוג שיוך</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
-    <value>כן_Attachment_____________________ש</value>
+    <value>קובץ מצורף</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
-    <value>כן_This association can't be added_________________ש.</value>
+    <value>לא ניתן להוסיף סוג שיוך זה.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
-    <value>כן_Connectivity_____________ש</value>
+    <value>קישוריות</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
-    <value>כן_Containment____________ש</value>
+    <value>הכלה</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
-    <value>כן_Content visibility___________________ש</value>
+    <value>נראות תוכן</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
-    <value>כן_Current feature terminal_________________________ש</value>
+    <value>מסוף הישות הנוכחית</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
-    <value>כן_Enter a percentage from 0 to 100__________________ש.</value>
+    <value>הזן אחוז בין 0 ל־100.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
-    <value>כן_Fraction along edge (%)________________________ש</value>
+    <value>חלק יחסי לאורך קשת (%)</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
-    <value>כן_From element_____________ש</value>
+    <value>מאלמנט</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
-    <value>כן_No matches found__________________ש.</value>
+    <value>לא נמצאו התאמות.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
-    <value>כן_No network data sources available__________________ש.</value>
+    <value>אין מקורות נתוני רשת זמינים.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
-    <value>כן_New Association________________ש</value>
+    <value>שיוך חדש</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
-    <value>כן_Associations can't be edited for this feature________________________ש.</value>
+    <value>לא ניתן לערוך שיוכים עבור ישות זו.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
-    <value>כן_Other feature terminal_______________________ש</value>
+    <value>מסוף היישות האחרת</value>
   </data>
   <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
-    <value>כן_Review association___________________ש</value>
+    <value>סקור שיוך</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
-    <value>כן_Search features________________ש</value>
+    <value>חפש ישויות</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
-    <value>כן_Search_____________ש</value>
+    <value>חיפוש</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
-    <value>כן_Network Data Source____________________ש</value>
+    <value>מקור נתוני רשת</value>
   </data>
   <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
-    <value>כן_{0} results____________ש</value>
+    <value>{0} תוצאות</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
-    <value>כן_Available Asset Types______________________ש</value>
+    <value>סוגי נכסים זמינים</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
-    <value>כן_Available Features ({0})_________________________ש</value>
+    <value>ישויות זמינות ({0})</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
-    <value>כן_Loading_____________________ש...</value>
+    <value>טוען...</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
-    <value>כן_No asset types available__________________________ש.</value>
+    <value>אין סוגי נכס זמינים.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
-    <value>כן_Load more___________________ש</value>
+    <value>טען עוד</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
-    <value>כן_Select a network data source_____________________________ש</value>
+    <value>בחר מקור נתוני רשת</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>כן_From Network Data Source_________________________ש</value>
+    <value>ממקור נתוני רשת</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>כן_On Map_____________ש</value>
+    <value>במפה</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
-    <value>כן_Select features by tapping on the map____________________ש.</value>
+    <value>בחר ישויות על ידי הקשה במפה.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
-    <value>כן_Select a terminal___________________ש.</value>
+    <value>בחר מסוף.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
-    <value>כן_Structure attachment_____________________ש</value>
+    <value>צרופת מבנה</value>
   </data>
   <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
-    <value>כן_Tap Selection______________ש</value>
+    <value>הקש על הבחירה</value>
   </data>
   <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
-    <value>כן_To element_____________________ש</value>
+    <value>לאלמנט</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>כל האתרים</value>
@@ -481,16 +481,16 @@
     <value>חיפוש</value>
   </data>
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
-    <value>כן_Select search source_____________________ש</value>
+    <value>בחר מקור חיפוש</value>
   </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
-    <value>כן_Search sources_______________ש</value>
+    <value>מקורות חיפוש</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
-    <value>כן_Search suggestions___________________ש</value>
+    <value>הצעות חיפוש</value>
   </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
-    <value>כן_Search results_______________ש</value>
+    <value>תוצאות חיפוש</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>הוסף נקודת התחלה</value>
@@ -667,144 +667,144 @@
     <value>מגדיר עיגון כתובות</value>
   </data>
   <data name="OfflineMapAreasAdd" xml:space="preserve">
-    <value>כן_Add_______ש</value>
+    <value>הוסף</value>
   </data>
   <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
-    <value>כן_Add Map Area_____________ש</value>
+    <value>הוסף אזור מפה</value>
   </data>
   <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
-    <value>כן_Name_________ש</value>
+    <value>שם</value>
   </data>
   <data name="OfflineMapAreasCancel" xml:space="preserve">
-    <value>כן_Cancel_____________ש</value>
+    <value>ביטול</value>
   </data>
   <data name="OfflineMapAreasDownload" xml:space="preserve">
-    <value>כן_Download_________________ש</value>
+    <value>הורד</value>
   </data>
   <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
-    <value>כן_Size: {0}___________________ש</value>
+    <value>גודל: {0}</value>
   </data>
   <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
-    <value>כן_Area {0}_________________ש</value>
+    <value>שטח {0}</value>
   </data>
   <data name="OfflineMapAreasDownloaded" xml:space="preserve">
-    <value>כן_Downloaded_____________________ש</value>
+    <value>הורדה הושלמה</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
-    <value>כן_Could not retrieve map areas for this map______________________ש</value>
+    <value>לא ניתן לאחזר אזורי מפה עבור מפה זו</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
-    <value>כן_No Internet Connection_______________________ש</value>
+    <value>אין חיבור לאינטרנט</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
-    <value>כן_There are no map areas for this map. Tap the button below to get started______________________________________ש.</value>
+    <value>אין אזורי מפה עבור מפה זו. הקש על הלחצן להלן כדי להתחיל.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
-    <value>כן_There are no map areas for this map___________________ש.</value>
+    <value>אין אזורי מפה עבור מפה זו.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
-    <value>כן_No Map Areas_____________ש</value>
+    <value>אין אזורי מפה</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
-    <value>כן_The map is not enabled for offline use____________________ש</value>
+    <value>המפה אינה מופעלת לשימוש במצב לא-מקוון</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
-    <value>כן_Offline Disabled_________________ש</value>
+    <value>מצב לא מקוון מושבת</value>
   </data>
   <data name="OfflineMapAreasOpen" xml:space="preserve">
-    <value>כן_Open_________ש</value>
+    <value>פתוח</value>
   </data>
   <data name="OfflineMapAreasRefresh" xml:space="preserve">
-    <value>כן_Refresh_______________ש</value>
+    <value>רענן</value>
   </data>
   <data name="OfflineMapAreasRemove" xml:space="preserve">
-    <value>כן_Remove_____________ש</value>
+    <value>הסר</value>
   </data>
   <data name="OfflineMapAreasSelectArea" xml:space="preserve">
-    <value>כן_Select Area____________ש</value>
+    <value>בחר אזור</value>
   </data>
   <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
-    <value>כן_Scale___________ש</value>
+    <value>קנה מידה</value>
   </data>
   <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
-    <value>כן_Room_________ש</value>
+    <value>חדר</value>
   </data>
   <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
-    <value>כן_Rooms___________ש</value>
+    <value>חדרים</value>
   </data>
   <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
-    <value>כן_House Property_______________ש</value>
+    <value>מאפיין בית</value>
   </data>
   <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
-    <value>כן_Houses_____________ש</value>
+    <value>בתים</value>
   </data>
   <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
-    <value>כן_Small Building_______________ש</value>
+    <value>בניין קטן</value>
   </data>
   <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
-    <value>כן_Building_________________ש</value>
+    <value>מבנה</value>
   </data>
   <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
-    <value>כן_Buildings___________________ש</value>
+    <value>מבנים</value>
   </data>
   <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
-    <value>כן_Street_____________ש</value>
+    <value>רחוב</value>
   </data>
   <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
-    <value>כן_Streets_______________ש</value>
+    <value>רחובות</value>
   </data>
   <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
-    <value>כן_Neighborhood_____________ש</value>
+    <value>שכונה</value>
   </data>
   <data name="OfflineMapAreasScaleTown" xml:space="preserve">
-    <value>כן_Town_________ש</value>
+    <value>עיר</value>
   </data>
   <data name="OfflineMapAreasScaleCity" xml:space="preserve">
-    <value>כן_City_________ש</value>
+    <value>עיר</value>
   </data>
   <data name="OfflineMapAreasScaleCities" xml:space="preserve">
-    <value>כן_Cities_____________ש</value>
+    <value>ערים</value>
   </data>
   <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
-    <value>כן_Metropolitan Area__________________ש</value>
+    <value>אזור מטרופוליני</value>
   </data>
   <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
-    <value>כן_County_____________ש</value>
+    <value>מחוז</value>
   </data>
   <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
-    <value>כן_Counties_________________ש</value>
+    <value>מחוזות</value>
   </data>
   <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
-    <value>כן_State/Province_______________ש</value>
+    <value>מדינה/מחוז</value>
   </data>
   <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
-    <value>כן_States/Provinces_________________ש</value>
+    <value>מדינות/מחוזות</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
-    <value>כן_Countries (Small)__________________ש</value>
+    <value>ארצות (קטן)</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
-    <value>כן_Countries (Big)________________ש</value>
+    <value>ארצות (גדול)</value>
   </data>
   <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
-    <value>כן_Continent___________________ש</value>
+    <value>יבשת</value>
   </data>
   <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
-    <value>כן_World (Small)______________ש</value>
+    <value>עולם (קטן)</value>
   </data>
   <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
-    <value>כן_World (Big)____________ש</value>
+    <value>עולם (גדול)</value>
   </data>
   <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
-    <value>כן_World___________ש</value>
+    <value>עולם</value>
   </data>
   <data name="OfflineMapAreasStop" xml:space="preserve">
-    <value>כן_Stop_________ש</value>
+    <value>עצור</value>
   </data>
   <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
-    <value>כן_Offline Map____________ש</value>
+    <value>מפה לא מקוונת</value>
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
-    <value>כן_An error occured. Tap to remove_________________ש.</value>
+    <value>אירעה שגיאה. הקש כדי להסיר.</value>
   </data>
 </root>

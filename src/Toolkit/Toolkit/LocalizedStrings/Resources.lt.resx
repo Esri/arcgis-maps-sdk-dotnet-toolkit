@@ -130,22 +130,22 @@
     <value>Fotografuoti</value>
   </data>
   <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
-    <value>Į_This file type is not supported. Allowed types: {0}___________________________š</value>
+    <value>Šis failo tipas nepalaikomas. Leidžiami tipai: {0}</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
-    <value>Į_This file is too large. Maximum allowed size is {0} MB_____________________________š.</value>
+    <value>Šis failas per didelis. Didžiausias leistinas dydis yra {0} MB.</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
-    <value>Į_This file is too large________________________š.</value>
+    <value>Šis failas per didelis.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
-    <value>Į_This media is too long. Maximum allowed duration is {0} seconds_________________________________š.</value>
+    <value>Ši medija per ilga. Didžiausia leistina trukmė yra {0} sek.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
-    <value>Į_This media is too long________________________š.</value>
+    <value>Ši medija per ilga.</value>
   </data>
   <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
-    <value>Į_Attachment upload failed_________________________š</value>
+    <value>Priedo įkelti nepavyko</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Data turi būti {0} arba ankstesnė</value>
@@ -193,16 +193,16 @@
     <value>Mažiau negu minimali reikšmė</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
-    <value>Į_The maximum number of attachments allowed is {0}__________________________š.</value>
+    <value>Didžiausias leistinas priedų skaičius yra {0}.</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
-    <value>Į_Max: {0}_________________š</value>
+    <value>Daugiausia: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
-    <value>Į_Min: {0}_________________š</value>
+    <value>Mažiausia: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
-    <value>Į_At least {0} attachment(s) required___________________š.</value>
+    <value>Būtinas priedų skaičius: {0}.</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Nėra priedų</value>
@@ -238,145 +238,145 @@
     <value>Būtinas simbolių skaičius: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
-    <value>Į_Remove Association___________________š</value>
+    <value>Pašalinti susiejimą</value>
   </data>
   <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
-    <value>Į_Show on Map____________š</value>
+    <value>Rodyti žemėlapyje</value>
   </data>
   <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
-    <value>Į_More Information_________________š</value>
+    <value>Daugiau informacijos</value>
   </data>
   <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
-    <value>Į_Percent Along______________š</value>
+    <value>Proc. palei</value>
   </data>
   <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
-    <value>Į_Association Settings_____________________š</value>
+    <value>Susiejimo nustatymai</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
-    <value>Į_Remove Association____________________š?</value>
+    <value>Pašalinti susiejimą?</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
-    <value>Į_This will only remove the association. The feature remains_______________________________š.</value>
+    <value>Atlikus šį veiksmą bus tik pašalintas susiejimas. Elementas išlieka.</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
-    <value>Į_Remove_____________š</value>
+    <value>Pašalinti</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
-    <value>Į_Cancel_____________š</value>
+    <value>Atšaukti</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
-    <value>Į_Add Association________________š</value>
+    <value>Pridėti susiejimą</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
-    <value>Į_Add_______š</value>
+    <value>Pridėti</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
-    <value>Į_Choose how to add the feature______________________________š</value>
+    <value>Pasirinkite, kaip pradėti elementą</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
-    <value>Į_Choose to add______________š</value>
+    <value>Pasirinkti norint pridėti</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
-    <value>Į_{0} Features Identified________________________š</value>
+    <value>Rasta elementų: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
-    <value>Į_Association type_________________š</value>
+    <value>Susiejimo tipas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
-    <value>Į_Attachment_____________________š</value>
+    <value>Priedas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
-    <value>Į_This association can't be added_________________š.</value>
+    <value>Šio susiejimo nepavyksta pridėti.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
-    <value>Į_Connectivity_____________š</value>
+    <value>Jungimas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
-    <value>Į_Containment____________š</value>
+    <value>Apribojimas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
-    <value>Į_Content visibility___________________š</value>
+    <value>Turinio matomumas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
-    <value>Į_Current feature terminal_________________________š</value>
+    <value>Dabartinio elemento terminalas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
-    <value>Į_Enter a percentage from 0 to 100__________________š.</value>
+    <value>Įveskite procentinę reikšmę nuo 0 iki 100.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
-    <value>Į_Fraction along edge (%)________________________š</value>
+    <value>Trupmena išilgai krašto (%)</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
-    <value>Į_From element_____________š</value>
+    <value>Iš elemento</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
-    <value>Į_No matches found__________________š.</value>
+    <value>Jokių atitikimų nerasta.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
-    <value>Į_No network data sources available__________________š.</value>
+    <value>Nėra jokių tinklo duomenų šaltinių.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
-    <value>Į_New Association________________š</value>
+    <value>Naujas susiejimas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
-    <value>Į_Associations can't be edited for this feature________________________š.</value>
+    <value>Šio elemento susiejimų negalima redaguoti.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
-    <value>Į_Other feature terminal_______________________š</value>
+    <value>Kitas elemento terminalas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
-    <value>Į_Review association___________________š</value>
+    <value>Peržiūrėti susiejimą</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
-    <value>Į_Search features________________š</value>
+    <value>Ieškoti elementų</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
-    <value>Į_Search_____________š</value>
+    <value>Ieškoti</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
-    <value>Į_Network Data Source____________________š</value>
+    <value>Tinklo duomenų šaltinis</value>
   </data>
   <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
-    <value>Į_{0} results____________š</value>
+    <value>Rezultatų: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
-    <value>Į_Available Asset Types______________________š</value>
+    <value>Prieinamų išteklių tipai</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
-    <value>Į_Available Features ({0})_________________________š</value>
+    <value>Galimi elementai ({0})</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
-    <value>Į_Loading_____________________š...</value>
+    <value>Įkeliama...</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
-    <value>Į_No asset types available__________________________š.</value>
+    <value>Nėra prieinamų išteklių tipų.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
-    <value>Į_Load more___________________š</value>
+    <value>Įkelti daugiau</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
-    <value>Į_Select a network data source_____________________________š</value>
+    <value>Pasirinkite tinklo duomenų šaltinį</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>Į_From Network Data Source_________________________š</value>
+    <value>Iš tinklo duomenų šaltinio</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>Į_On Map_____________š</value>
+    <value>Žemėlapyje</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
-    <value>Į_Select features by tapping on the map____________________š.</value>
+    <value>Pasirinkite elementus bakstelėdami žemėlapyje.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
-    <value>Į_Select a terminal___________________š.</value>
+    <value>Pasirinkite terminalą.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
-    <value>Į_Structure attachment_____________________š</value>
+    <value>Struktūros priedas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
-    <value>Į_Tap Selection______________š</value>
+    <value>Bakstelėkite pasirinkimą</value>
   </data>
   <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
-    <value>Į_To element_____________________š</value>
+    <value>Į elementą</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Visos vietovės</value>
@@ -481,16 +481,16 @@
     <value>Ieškoti</value>
   </data>
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
-    <value>Į_Select search source_____________________š</value>
+    <value>Pasirinkite paieškos šaltinį</value>
   </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
-    <value>Į_Search sources_______________š</value>
+    <value>Paieškos šaltiniai</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
-    <value>Į_Search suggestions___________________š</value>
+    <value>Paieškos pasiūlymai</value>
   </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
-    <value>Į_Search results_______________š</value>
+    <value>Paieškos rezultatai</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Pridėti pradžios tašką</value>
@@ -667,144 +667,144 @@
     <value>Lokatorius</value>
   </data>
   <data name="OfflineMapAreasAdd" xml:space="preserve">
-    <value>Į_Add_______š</value>
+    <value>Pridėti</value>
   </data>
   <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
-    <value>Į_Add Map Area_____________š</value>
+    <value>Pridėti žemėlapio teritoriją</value>
   </data>
   <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
-    <value>Į_Name_________š</value>
+    <value>Pavadinimas</value>
   </data>
   <data name="OfflineMapAreasCancel" xml:space="preserve">
-    <value>Į_Cancel_____________š</value>
+    <value>Atšaukti</value>
   </data>
   <data name="OfflineMapAreasDownload" xml:space="preserve">
-    <value>Į_Download_________________š</value>
+    <value>Atsisiųsti</value>
   </data>
   <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
-    <value>Į_Size: {0}___________________š</value>
+    <value>Dydis: {0}</value>
   </data>
   <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
-    <value>Į_Area {0}_________________š</value>
+    <value>Plotas {0}</value>
   </data>
   <data name="OfflineMapAreasDownloaded" xml:space="preserve">
-    <value>Į_Downloaded_____________________š</value>
+    <value>Atsisiųsta</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
-    <value>Į_Could not retrieve map areas for this map______________________š</value>
+    <value>Nepavyko gauti šio žemėlapio teritorijų</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
-    <value>Į_No Internet Connection_______________________š</value>
+    <value>Nėra interneto ryšio</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
-    <value>Į_There are no map areas for this map. Tap the button below to get started______________________________________š.</value>
+    <value>Nėra šio žemėlapio teritorijų. Norėdami pradėti, bakstelėkite toliau esantį mygtuką.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
-    <value>Į_There are no map areas for this map___________________š.</value>
+    <value>Nėra šio žemėlapio teritorijų.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
-    <value>Į_No Map Areas_____________š</value>
+    <value>Nėra žemėlapio teritorijų</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
-    <value>Į_The map is not enabled for offline use____________________š</value>
+    <value>Žemėlapio negalima naudoti neprisijungus</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
-    <value>Į_Offline Disabled_________________š</value>
+    <value>Darbo neprisijungus prie interneto režimas išjungtas</value>
   </data>
   <data name="OfflineMapAreasOpen" xml:space="preserve">
-    <value>Į_Open_________š</value>
+    <value>Atverti</value>
   </data>
   <data name="OfflineMapAreasRefresh" xml:space="preserve">
-    <value>Į_Refresh_______________š</value>
+    <value>Atnaujinti</value>
   </data>
   <data name="OfflineMapAreasRemove" xml:space="preserve">
-    <value>Į_Remove_____________š</value>
+    <value>Pašalinti</value>
   </data>
   <data name="OfflineMapAreasSelectArea" xml:space="preserve">
-    <value>Į_Select Area____________š</value>
+    <value>Pasirinkite teritoriją</value>
   </data>
   <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
-    <value>Į_Scale___________š</value>
+    <value>Mastelis</value>
   </data>
   <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
-    <value>Į_Room_________š</value>
+    <value>Kambarys</value>
   </data>
   <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
-    <value>Į_Rooms___________š</value>
+    <value>Kambariai</value>
   </data>
   <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
-    <value>Į_House Property_______________š</value>
+    <value>Namų nuosavybė</value>
   </data>
   <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
-    <value>Į_Houses_____________š</value>
+    <value>Namai</value>
   </data>
   <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
-    <value>Į_Small Building_______________š</value>
+    <value>Mažas pastatas</value>
   </data>
   <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
-    <value>Į_Building_________________š</value>
+    <value>Pastatas</value>
   </data>
   <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
-    <value>Į_Buildings___________________š</value>
+    <value>Pastatai</value>
   </data>
   <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
-    <value>Į_Street_____________š</value>
+    <value>Gatvė</value>
   </data>
   <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
-    <value>Į_Streets_______________š</value>
+    <value>Gatvės</value>
   </data>
   <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
-    <value>Į_Neighborhood_____________š</value>
+    <value>Apylinkė</value>
   </data>
   <data name="OfflineMapAreasScaleTown" xml:space="preserve">
-    <value>Į_Town_________š</value>
+    <value>Miestelis</value>
   </data>
   <data name="OfflineMapAreasScaleCity" xml:space="preserve">
-    <value>Į_City_________š</value>
+    <value>Miestas</value>
   </data>
   <data name="OfflineMapAreasScaleCities" xml:space="preserve">
-    <value>Į_Cities_____________š</value>
+    <value>Miestai</value>
   </data>
   <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
-    <value>Į_Metropolitan Area__________________š</value>
+    <value>Didmiesčio sritis</value>
   </data>
   <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
-    <value>Į_County_____________š</value>
+    <value>Apygarda</value>
   </data>
   <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
-    <value>Į_Counties_________________š</value>
+    <value>Apygardos</value>
   </data>
   <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
-    <value>Į_State/Province_______________š</value>
+    <value>Valstija / provincija</value>
   </data>
   <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
-    <value>Į_States/Provinces_________________š</value>
+    <value>Valstijos / provincijos</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
-    <value>Į_Countries (Small)__________________š</value>
+    <value>Šalys (mažos)</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
-    <value>Į_Countries (Big)________________š</value>
+    <value>Šalys (didelės)</value>
   </data>
   <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
-    <value>Į_Continent___________________š</value>
+    <value>Žemynas</value>
   </data>
   <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
-    <value>Į_World (Small)______________š</value>
+    <value>Pasaulis (mažas)</value>
   </data>
   <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
-    <value>Į_World (Big)____________š</value>
+    <value>Pasaulis (didelis)</value>
   </data>
   <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
-    <value>Į_World___________š</value>
+    <value>Pasaulis</value>
   </data>
   <data name="OfflineMapAreasStop" xml:space="preserve">
-    <value>Į_Stop_________š</value>
+    <value>Stabdyti</value>
   </data>
   <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
-    <value>Į_Offline Map____________š</value>
+    <value>Neprisijungus prie interneto naudojamas žemėlapis</value>
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
-    <value>Į_An error occured. Tap to remove_________________š.</value>
+    <value>Įvyko klaida. Bakstelėkite, kad galėtumėte pašalinti.</value>
   </data>
 </root>

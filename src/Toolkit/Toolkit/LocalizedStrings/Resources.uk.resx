@@ -130,22 +130,22 @@
     <value>Зробити фото</value>
   </data>
   <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
-    <value>ґ_This file type is not supported. Allowed types: {0}___________________________Ї</value>
+    <value>Цей тип файлу не підтримується. Дозволені типи: {0}</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
-    <value>ґ_This file is too large. Maximum allowed size is {0} MB_____________________________Ї.</value>
+    <value>Занадто великий розмір цього файлу. Максимально допустимий розмір — {0} МБ.</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
-    <value>ґ_This file is too large________________________Ї.</value>
+    <value>Занадто великий розмір цього файлу.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
-    <value>ґ_This media is too long. Maximum allowed duration is {0} seconds_________________________________Ї.</value>
+    <value>Цей медіафайл задовгий. Максимально дозволена тривалість — {0} секунд.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
-    <value>ґ_This media is too long________________________Ї.</value>
+    <value>Цей медіафайл задовгий.</value>
   </data>
   <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
-    <value>ґ_Attachment upload failed_________________________Ї</value>
+    <value>Не вдалося завантажити вкладення.</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Дата має бути не раніше {0}</value>
@@ -193,16 +193,16 @@
     <value>Менше мінімального значення</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
-    <value>ґ_The maximum number of attachments allowed is {0}__________________________Ї.</value>
+    <value>Максимальна дозволена кількість вкладень — {0}.</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
-    <value>ґ_Max: {0}_________________Ї</value>
+    <value>Макс.: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
-    <value>ґ_Min: {0}_________________Ї</value>
+    <value>Мін.: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
-    <value>ґ_At least {0} attachment(s) required___________________Ї.</value>
+    <value>Потрібно додати щонайменше {0} вкладень.</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Немає прикріплень</value>
@@ -238,145 +238,145 @@
     <value>Необхідна кількість символів: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
-    <value>ґ_Remove Association___________________Ї</value>
+    <value>Видалити зʼєднання</value>
   </data>
   <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
-    <value>ґ_Show on Map____________Ї</value>
+    <value>Показати на карті</value>
   </data>
   <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
-    <value>ґ_More Information_________________Ї</value>
+    <value>Додаткова інформація</value>
   </data>
   <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
-    <value>ґ_Percent Along______________Ї</value>
+    <value>Відсоток вздовж</value>
   </data>
   <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
-    <value>ґ_Association Settings_____________________Ї</value>
+    <value>Параметри зʼєднання</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
-    <value>ґ_Remove Association____________________Ї?</value>
+    <value>Видалити з'єднання?</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
-    <value>ґ_This will only remove the association. The feature remains_______________________________Ї.</value>
+    <value>Буде видалено лише з'єднання. Обʼєкт залишається.</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
-    <value>ґ_Remove_____________Ї</value>
+    <value>Вилучити</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
-    <value>ґ_Cancel_____________Ї</value>
+    <value>Скасувати</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
-    <value>ґ_Add Association________________Ї</value>
+    <value>Додати зʼєднання</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
-    <value>ґ_Add_______Ї</value>
+    <value>Додати</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
-    <value>ґ_Choose how to add the feature______________________________Ї</value>
+    <value>Виберіть, як додати об'єкт</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
-    <value>ґ_Choose to add______________Ї</value>
+    <value>Оберіть для додавання</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
-    <value>ґ_{0} Features Identified________________________Ї</value>
+    <value>Виявлені об'єкти: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
-    <value>ґ_Association type_________________Ї</value>
+    <value>Тип з'єднання</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
-    <value>ґ_Attachment_____________________Ї</value>
+    <value>Прикріплення</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
-    <value>ґ_This association can't be added_________________Ї.</value>
+    <value>Не вдалося додати це з'єднання.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
-    <value>ґ_Connectivity_____________Ї</value>
+    <value>Звʼязність</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
-    <value>ґ_Containment____________Ї</value>
+    <value>Включення</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
-    <value>ґ_Content visibility___________________Ї</value>
+    <value>Видимість змісту</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
-    <value>ґ_Current feature terminal_________________________Ї</value>
+    <value>Поточний термінал об’єкта</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
-    <value>ґ_Enter a percentage from 0 to 100__________________Ї.</value>
+    <value>Введіть значення від 0 до 100.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
-    <value>ґ_Fraction along edge (%)________________________Ї</value>
+    <value>Частка вздовж ребра (%)</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
-    <value>ґ_From element_____________Ї</value>
+    <value>Від елемента</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
-    <value>ґ_No matches found__________________Ї.</value>
+    <value>Збігів не знайдено.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
-    <value>ґ_No network data sources available__________________Ї.</value>
+    <value>Немає доступних джерел мережевих даних.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
-    <value>ґ_New Association________________Ї</value>
+    <value>Новий звʼязок</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
-    <value>ґ_Associations can't be edited for this feature________________________Ї.</value>
+    <value>Для цього об’єкта не можна редагувати з'єднання.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
-    <value>ґ_Other feature terminal_______________________Ї</value>
+    <value>Термінал іншого об’єкта</value>
   </data>
   <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
-    <value>ґ_Review association___________________Ї</value>
+    <value>Переглянути з'єднання</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
-    <value>ґ_Search features________________Ї</value>
+    <value>Обʼєкти пошуку</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
-    <value>ґ_Search_____________Ї</value>
+    <value>Пошук</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
-    <value>ґ_Network Data Source____________________Ї</value>
+    <value>Джерело мережевих даних</value>
   </data>
   <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
-    <value>ґ_{0} results____________Ї</value>
+    <value>Результати {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
-    <value>ґ_Available Asset Types______________________Ї</value>
+    <value>Доступні типи активів</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
-    <value>ґ_Available Features ({0})_________________________Ї</value>
+    <value>Доступні об’єкти ({0})</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
-    <value>ґ_Loading_____________________Ї...</value>
+    <value>Виконується завантаження...</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
-    <value>ґ_No asset types available__________________________Ї.</value>
+    <value>Немає доступних типів активів.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
-    <value>ґ_Load more___________________Ї</value>
+    <value>Завантажити більше</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
-    <value>ґ_Select a network data source_____________________________Ї</value>
+    <value>Виберіть джерело даних мережі</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>ґ_From Network Data Source_________________________Ї</value>
+    <value>Із джерела мережевих даних</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>ґ_On Map_____________Ї</value>
+    <value>На карті</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
-    <value>ґ_Select features by tapping on the map____________________Ї.</value>
+    <value>Торкніться карти, щоб вибрати об’єкти.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
-    <value>ґ_Select a terminal___________________Ї.</value>
+    <value>Виберіть термінал.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
-    <value>ґ_Structure attachment_____________________Ї</value>
+    <value>Прикріплення до конструкції</value>
   </data>
   <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
-    <value>ґ_Tap Selection______________Ї</value>
+    <value>Вибір дотиком</value>
   </data>
   <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
-    <value>ґ_To element_____________________Ї</value>
+    <value>До елемента</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Всі сайти</value>
@@ -481,16 +481,16 @@
     <value>Пошук</value>
   </data>
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
-    <value>ґ_Select search source_____________________Ї</value>
+    <value>Виберіть джерело пошуку</value>
   </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
-    <value>ґ_Search sources_______________Ї</value>
+    <value>Джерела пошуку</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
-    <value>ґ_Search suggestions___________________Ї</value>
+    <value>Підказки для пошуку</value>
   </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
-    <value>ґ_Search results_______________Ї</value>
+    <value>Результати пошуку</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Додати початкову точку</value>
@@ -667,144 +667,144 @@
     <value>Локатор</value>
   </data>
   <data name="OfflineMapAreasAdd" xml:space="preserve">
-    <value>ґ_Add_______Ї</value>
+    <value>Додати</value>
   </data>
   <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
-    <value>ґ_Add Map Area_____________Ї</value>
+    <value>Додати область карти</value>
   </data>
   <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
-    <value>ґ_Name_________Ї</value>
+    <value>Назва</value>
   </data>
   <data name="OfflineMapAreasCancel" xml:space="preserve">
-    <value>ґ_Cancel_____________Ї</value>
+    <value>Скасувати</value>
   </data>
   <data name="OfflineMapAreasDownload" xml:space="preserve">
-    <value>ґ_Download_________________Ї</value>
+    <value>Завантажити</value>
   </data>
   <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
-    <value>ґ_Size: {0}___________________Ї</value>
+    <value>Розмір: {0}</value>
   </data>
   <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
-    <value>ґ_Area {0}_________________Ї</value>
+    <value>Площа {0}</value>
   </data>
   <data name="OfflineMapAreasDownloaded" xml:space="preserve">
-    <value>ґ_Downloaded_____________________Ї</value>
+    <value>Завантажено</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
-    <value>ґ_Could not retrieve map areas for this map______________________Ї</value>
+    <value>Не вдалося отримати області карти для цієї карти.</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
-    <value>ґ_No Internet Connection_______________________Ї</value>
+    <value>Немає підключення до мережі Інтернет</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
-    <value>ґ_There are no map areas for this map. Tap the button below to get started______________________________________Ї.</value>
+    <value>Для цієї карти немає областей карти. Натисніть кнопку нижче, щоб розпочати.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
-    <value>ґ_There are no map areas for this map___________________Ї.</value>
+    <value>Для цієї карти немає областей карти.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
-    <value>ґ_No Map Areas_____________Ї</value>
+    <value>Немає областей карти</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
-    <value>ґ_The map is not enabled for offline use____________________Ї</value>
+    <value>Ця карта не підтримує роботу в автономному режимі.</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
-    <value>ґ_Offline Disabled_________________Ї</value>
+    <value>Автономний режим деактивовано</value>
   </data>
   <data name="OfflineMapAreasOpen" xml:space="preserve">
-    <value>ґ_Open_________Ї</value>
+    <value>Відкрити</value>
   </data>
   <data name="OfflineMapAreasRefresh" xml:space="preserve">
-    <value>ґ_Refresh_______________Ї</value>
+    <value>Оновити</value>
   </data>
   <data name="OfflineMapAreasRemove" xml:space="preserve">
-    <value>ґ_Remove_____________Ї</value>
+    <value>Вилучити</value>
   </data>
   <data name="OfflineMapAreasSelectArea" xml:space="preserve">
-    <value>ґ_Select Area____________Ї</value>
+    <value>Вибрати область</value>
   </data>
   <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
-    <value>ґ_Scale___________Ї</value>
+    <value>Масштаб</value>
   </data>
   <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
-    <value>ґ_Room_________Ї</value>
+    <value>Кімната</value>
   </data>
   <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
-    <value>ґ_Rooms___________Ї</value>
+    <value>Кімнати</value>
   </data>
   <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
-    <value>ґ_House Property_______________Ї</value>
+    <value>Властивість будинку</value>
   </data>
   <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
-    <value>ґ_Houses_____________Ї</value>
+    <value>Будинки</value>
   </data>
   <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
-    <value>ґ_Small Building_______________Ї</value>
+    <value>Невелика будівля</value>
   </data>
   <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
-    <value>ґ_Building_________________Ї</value>
+    <value>Будівля</value>
   </data>
   <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
-    <value>ґ_Buildings___________________Ї</value>
+    <value>Будівлі</value>
   </data>
   <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
-    <value>ґ_Street_____________Ї</value>
+    <value>Вулиця</value>
   </data>
   <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
-    <value>ґ_Streets_______________Ї</value>
+    <value>Вулиці</value>
   </data>
   <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
-    <value>ґ_Neighborhood_____________Ї</value>
+    <value>Околиця</value>
   </data>
   <data name="OfflineMapAreasScaleTown" xml:space="preserve">
-    <value>ґ_Town_________Ї</value>
+    <value>Містечко</value>
   </data>
   <data name="OfflineMapAreasScaleCity" xml:space="preserve">
-    <value>ґ_City_________Ї</value>
+    <value>Місто</value>
   </data>
   <data name="OfflineMapAreasScaleCities" xml:space="preserve">
-    <value>ґ_Cities_____________Ї</value>
+    <value>Міста</value>
   </data>
   <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
-    <value>ґ_Metropolitan Area__________________Ї</value>
+    <value>Місто з передмістями</value>
   </data>
   <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
-    <value>ґ_County_____________Ї</value>
+    <value>Округ</value>
   </data>
   <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
-    <value>ґ_Counties_________________Ї</value>
+    <value>Округи</value>
   </data>
   <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
-    <value>ґ_State/Province_______________Ї</value>
+    <value>Штат/провінція</value>
   </data>
   <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
-    <value>ґ_States/Provinces_________________Ї</value>
+    <value>Штати/провінції</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
-    <value>ґ_Countries (Small)__________________Ї</value>
+    <value>Країни (малі)</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
-    <value>ґ_Countries (Big)________________Ї</value>
+    <value>Країни (великі)</value>
   </data>
   <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
-    <value>ґ_Continent___________________Ї</value>
+    <value>Континент</value>
   </data>
   <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
-    <value>ґ_World (Small)______________Ї</value>
+    <value>Світ (малий)</value>
   </data>
   <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
-    <value>ґ_World (Big)____________Ї</value>
+    <value>Світ (великий)</value>
   </data>
   <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
-    <value>ґ_World___________Ї</value>
+    <value>Світ</value>
   </data>
   <data name="OfflineMapAreasStop" xml:space="preserve">
-    <value>ґ_Stop_________Ї</value>
+    <value>Стоп</value>
   </data>
   <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
-    <value>ґ_Offline Map____________Ї</value>
+    <value>Офлайн-карта</value>
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
-    <value>ґ_An error occured. Tap to remove_________________Ї.</value>
+    <value>Сталася помилка. Торкніться, щоб видалити.</value>
   </data>
 </root>

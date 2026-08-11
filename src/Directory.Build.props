@@ -1,8 +1,13 @@
 <Project>
 
   <PropertyGroup>
+<<<<<<< HEAD
     <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">300.1.0</ArcGISRuntimeToolkitPackageVersion>
     <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">300.1.0</ArcGISRuntimePackageVersion>
+=======
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">300.2.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">300.2.0</ArcGISRuntimePackageVersion>
+>>>>>>> origin/v.next
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -39,7 +44,11 @@
     <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">19041</ArcGISRuntime_MinimumSupportedWindowsBuild>
     <WindowsSDKTargetBuild Condition="'$(WindowsSDKTargetBuild)'==''">19041</WindowsSDKTargetBuild>
     <DotNetTargetFramework>net472</DotNetTargetFramework>
+<<<<<<< HEAD
     <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">net8.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
+=======
+    <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">net10.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
+>>>>>>> origin/v.next
     <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net10.0</NETMauiTarget>
     <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
     <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android36.0</NetAndroidTargetFramework>

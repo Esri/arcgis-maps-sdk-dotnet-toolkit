@@ -130,22 +130,22 @@
     <value>Ta bilde</value>
   </data>
   <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
-    <value>å_This file type is not supported. Allowed types: {0}___________________________ø</value>
+    <value>Denne filtypen støttes ikke. Tillatte typer: {0}</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
-    <value>å_This file is too large. Maximum allowed size is {0} MB_____________________________ø.</value>
+    <value>Denne filen er for stor. Maksimal tillatte størrelse er {0} MB.</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
-    <value>å_This file is too large________________________ø.</value>
+    <value>Denne filen er for stor.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
-    <value>å_This media is too long. Maximum allowed duration is {0} seconds_________________________________ø.</value>
+    <value>Dette mediet er for langt. Maksimalt tillatt varighet er {0} sekunder.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
-    <value>å_This media is too long________________________ø.</value>
+    <value>Dette mediet er for langt.</value>
   </data>
   <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
-    <value>å_Attachment upload failed_________________________ø</value>
+    <value>Opplastingen av vedlegget mislyktes</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Datoen må være den eller før {0}</value>
@@ -193,16 +193,16 @@
     <value>Mindre enn minimumsverdi</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
-    <value>å_The maximum number of attachments allowed is {0}__________________________ø.</value>
+    <value>Maksimalt antall tillatte vedlegg er {0}.</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
-    <value>å_Max: {0}_________________ø</value>
+    <value>Maks: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
-    <value>å_Min: {0}_________________ø</value>
+    <value>Min.: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
-    <value>å_At least {0} attachment(s) required___________________ø.</value>
+    <value>Minst {0} vedlegg er påkrevd.</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Ingen vedlegg</value>
@@ -238,145 +238,145 @@
     <value>Antall obligatoriske tegn: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
-    <value>å_Remove Association___________________ø</value>
+    <value>Fjern tilknytning</value>
   </data>
   <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
-    <value>å_Show on Map____________ø</value>
+    <value>Vis på kart</value>
   </data>
   <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
-    <value>å_More Information_________________ø</value>
+    <value>Mer informasjon</value>
   </data>
   <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
-    <value>å_Percent Along______________ø</value>
+    <value>Prosent langs</value>
   </data>
   <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
-    <value>å_Association Settings_____________________ø</value>
+    <value>Tilknytningsinnstillinger</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
-    <value>å_Remove Association____________________ø?</value>
+    <value>Fjerne tilknytning?</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
-    <value>å_This will only remove the association. The feature remains_______________________________ø.</value>
+    <value>Dette fjerner bare tilknytningen. Geoobjektet blir værende.</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
-    <value>å_Remove_____________ø</value>
+    <value>Fjern</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
-    <value>å_Cancel_____________ø</value>
+    <value>Avbryt</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
-    <value>å_Add Association________________ø</value>
+    <value>Legg til tilknytning</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
-    <value>å_Add_______ø</value>
+    <value>Legg til</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
-    <value>å_Choose how to add the feature______________________________ø</value>
+    <value>Velg hvordan du vil legge til geoobjektet</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
-    <value>å_Choose to add______________ø</value>
+    <value>Velg for å legge til</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
-    <value>å_{0} Features Identified________________________ø</value>
+    <value>{0} geoobjekter identifisert</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
-    <value>å_Association type_________________ø</value>
+    <value>Tilknytningstype</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
-    <value>å_Attachment_____________________ø</value>
+    <value>Vedlegg</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
-    <value>å_This association can't be added_________________ø.</value>
+    <value>Denne tilknytningen kan ikke legges til.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
-    <value>å_Connectivity_____________ø</value>
+    <value>Tilkobling</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
-    <value>å_Containment____________ø</value>
+    <value>Inneslutning</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
-    <value>å_Content visibility___________________ø</value>
+    <value>Innholdssynlighet</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
-    <value>å_Current feature terminal_________________________ø</value>
+    <value>Nåværende geoobjektterminal</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
-    <value>å_Enter a percentage from 0 to 100__________________ø.</value>
+    <value>Oppgi en prosentandel fra 0 til 100.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
-    <value>å_Fraction along edge (%)________________________ø</value>
+    <value>Fraksjon langs kant (%)</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
-    <value>å_From element_____________ø</value>
+    <value>Fra element</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
-    <value>å_No matches found__________________ø.</value>
+    <value>Ingen matcher funnet.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
-    <value>å_No network data sources available__________________ø.</value>
+    <value>Ingen nettverksdatakilder tilgjengelige.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
-    <value>å_New Association________________ø</value>
+    <value>Ny tilknytning</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
-    <value>å_Associations can't be edited for this feature________________________ø.</value>
+    <value>Tilknytninger kan ikke redigeres for dette geoobjektet.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
-    <value>å_Other feature terminal_______________________ø</value>
+    <value>Annen geoobjektterminal</value>
   </data>
   <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
-    <value>å_Review association___________________ø</value>
+    <value>Gjennomgå tilknytning</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
-    <value>å_Search features________________ø</value>
+    <value>Søk i geoobjektene</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
-    <value>å_Search_____________ø</value>
+    <value>Søk</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
-    <value>å_Network Data Source____________________ø</value>
+    <value>Nettverksdatakilde</value>
   </data>
   <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
-    <value>å_{0} results____________ø</value>
+    <value>{0} resultater</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
-    <value>å_Available Asset Types______________________ø</value>
+    <value>Tilgjengelige ressurstyper</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
-    <value>å_Available Features ({0})_________________________ø</value>
+    <value>Tilgjengelige geoobjekter ({0})</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
-    <value>å_Loading_____________________ø...</value>
+    <value>Laster inn...</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
-    <value>å_No asset types available__________________________ø.</value>
+    <value>Ingen ressurstyper tilgjengelige.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
-    <value>å_Load more___________________ø</value>
+    <value>Last inn flere</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
-    <value>å_Select a network data source_____________________________ø</value>
+    <value>Velg en nettverksdatakilde</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>å_From Network Data Source_________________________ø</value>
+    <value>Fra nettverksdatakilde</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>å_On Map_____________ø</value>
+    <value>På kart</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
-    <value>å_Select features by tapping on the map____________________ø.</value>
+    <value>Velg geoobjekter ved å trykke på kartet.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
-    <value>å_Select a terminal___________________ø.</value>
+    <value>Velg en terminal.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
-    <value>å_Structure attachment_____________________ø</value>
+    <value>Strukturvedlegg</value>
   </data>
   <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
-    <value>å_Tap Selection______________ø</value>
+    <value>Velg ved å trykke</value>
   </data>
   <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
-    <value>å_To element_____________________ø</value>
+    <value>Til element</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Alle nettsteder</value>
@@ -481,16 +481,16 @@
     <value>Søk</value>
   </data>
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
-    <value>å_Select search source_____________________ø</value>
+    <value>Velg søkekilde</value>
   </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
-    <value>å_Search sources_______________ø</value>
+    <value>Søkekilder</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
-    <value>å_Search suggestions___________________ø</value>
+    <value>Søkeforslag</value>
   </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
-    <value>å_Search results_______________ø</value>
+    <value>Søkeresultater</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Legg til startpunkt</value>
@@ -667,144 +667,144 @@
     <value>Posisjonsindikator</value>
   </data>
   <data name="OfflineMapAreasAdd" xml:space="preserve">
-    <value>å_Add_______ø</value>
+    <value>Legg til</value>
   </data>
   <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
-    <value>å_Add Map Area_____________ø</value>
+    <value>Legg til kartområde</value>
   </data>
   <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
-    <value>å_Name_________ø</value>
+    <value>Navn</value>
   </data>
   <data name="OfflineMapAreasCancel" xml:space="preserve">
-    <value>å_Cancel_____________ø</value>
+    <value>Avbryt</value>
   </data>
   <data name="OfflineMapAreasDownload" xml:space="preserve">
-    <value>å_Download_________________ø</value>
+    <value>Last ned</value>
   </data>
   <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
-    <value>å_Size: {0}___________________ø</value>
+    <value>Størrelse: {0}</value>
   </data>
   <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
-    <value>å_Area {0}_________________ø</value>
+    <value>Område {0}</value>
   </data>
   <data name="OfflineMapAreasDownloaded" xml:space="preserve">
-    <value>å_Downloaded_____________________ø</value>
+    <value>Lastet ned</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
-    <value>å_Could not retrieve map areas for this map______________________ø</value>
+    <value>Kan ikke hente kartområder for dette kartet</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
-    <value>å_No Internet Connection_______________________ø</value>
+    <value>Ingen internettilkobling</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
-    <value>å_There are no map areas for this map. Tap the button below to get started______________________________________ø.</value>
+    <value>Det er ingen kartområder for dette kartet. Trykk på knappen nedenfor for å komme i gang.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
-    <value>å_There are no map areas for this map___________________ø.</value>
+    <value>Det er ingen kartområder for dette kartet.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
-    <value>å_No Map Areas_____________ø</value>
+    <value>Ingen kartområder</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
-    <value>å_The map is not enabled for offline use____________________ø</value>
+    <value>Kartet er ikke aktivert for bruk i frakoblet modus</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
-    <value>å_Offline Disabled_________________ø</value>
+    <value>Frakoblet modus deaktivert</value>
   </data>
   <data name="OfflineMapAreasOpen" xml:space="preserve">
-    <value>å_Open_________ø</value>
+    <value>Åpne</value>
   </data>
   <data name="OfflineMapAreasRefresh" xml:space="preserve">
-    <value>å_Refresh_______________ø</value>
+    <value>Oppdater</value>
   </data>
   <data name="OfflineMapAreasRemove" xml:space="preserve">
-    <value>å_Remove_____________ø</value>
+    <value>Fjern</value>
   </data>
   <data name="OfflineMapAreasSelectArea" xml:space="preserve">
-    <value>å_Select Area____________ø</value>
+    <value>Velg område</value>
   </data>
   <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
-    <value>å_Scale___________ø</value>
+    <value>Målestokk</value>
   </data>
   <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
-    <value>å_Room_________ø</value>
+    <value>Rom</value>
   </data>
   <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
-    <value>å_Rooms___________ø</value>
+    <value>Rom</value>
   </data>
   <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
-    <value>å_House Property_______________ø</value>
+    <value>Huseiendom</value>
   </data>
   <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
-    <value>å_Houses_____________ø</value>
+    <value>Hus</value>
   </data>
   <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
-    <value>å_Small Building_______________ø</value>
+    <value>Liten bygning</value>
   </data>
   <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
-    <value>å_Building_________________ø</value>
+    <value>Bygning</value>
   </data>
   <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
-    <value>å_Buildings___________________ø</value>
+    <value>Bygninger</value>
   </data>
   <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
-    <value>å_Street_____________ø</value>
+    <value>Gate</value>
   </data>
   <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
-    <value>å_Streets_______________ø</value>
+    <value>Gater</value>
   </data>
   <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
-    <value>å_Neighborhood_____________ø</value>
+    <value>Nabolag</value>
   </data>
   <data name="OfflineMapAreasScaleTown" xml:space="preserve">
-    <value>å_Town_________ø</value>
+    <value>By</value>
   </data>
   <data name="OfflineMapAreasScaleCity" xml:space="preserve">
-    <value>å_City_________ø</value>
+    <value>Storby</value>
   </data>
   <data name="OfflineMapAreasScaleCities" xml:space="preserve">
-    <value>å_Cities_____________ø</value>
+    <value>Storbyer</value>
   </data>
   <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
-    <value>å_Metropolitan Area__________________ø</value>
+    <value>Storbyområde</value>
   </data>
   <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
-    <value>å_County_____________ø</value>
+    <value>Fylke</value>
   </data>
   <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
-    <value>å_Counties_________________ø</value>
+    <value>Fylker</value>
   </data>
   <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
-    <value>å_State/Province_______________ø</value>
+    <value>Delstat/provins</value>
   </data>
   <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
-    <value>å_States/Provinces_________________ø</value>
+    <value>Delstater/provinser</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
-    <value>å_Countries (Small)__________________ø</value>
+    <value>Land (små)</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
-    <value>å_Countries (Big)________________ø</value>
+    <value>Land (store)</value>
   </data>
   <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
-    <value>å_Continent___________________ø</value>
+    <value>Kontinent</value>
   </data>
   <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
-    <value>å_World (Small)______________ø</value>
+    <value>Verden (liten)</value>
   </data>
   <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
-    <value>å_World (Big)____________ø</value>
+    <value>Verden (stor)</value>
   </data>
   <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
-    <value>å_World___________ø</value>
+    <value>Verden</value>
   </data>
   <data name="OfflineMapAreasStop" xml:space="preserve">
-    <value>å_Stop_________ø</value>
+    <value>Stopp</value>
   </data>
   <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
-    <value>å_Offline Map____________ø</value>
+    <value>Frakoblet kart</value>
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
-    <value>å_An error occured. Tap to remove_________________ø.</value>
+    <value>Det oppstod en feil. Trykk for å fjerne.</value>
   </data>
 </root>

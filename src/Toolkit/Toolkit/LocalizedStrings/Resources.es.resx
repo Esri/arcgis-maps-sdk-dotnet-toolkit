@@ -130,22 +130,22 @@
     <value>Tomar foto</value>
   </data>
   <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
-    <value>á_This file type is not supported. Allowed types: {0}___________________________Ó</value>
+    <value>Este tipo de archivo no es compatible. Tipos permitidos: {0}</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
-    <value>á_This file is too large. Maximum allowed size is {0} MB_____________________________Ó.</value>
+    <value>El archivo es demasiado grande. El tamaño de archivo máximo permitido es de {0} MB.</value>
   </data>
   <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
-    <value>á_This file is too large________________________Ó.</value>
+    <value>El archivo es demasiado grande.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
-    <value>á_This media is too long. Maximum allowed duration is {0} seconds_________________________________Ó.</value>
+    <value>Este contenido multimedia es demasiado largo. La duración máxima permitida es de {0} segundos.</value>
   </data>
   <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
-    <value>á_This media is too long________________________Ó.</value>
+    <value>Este contenido multimedia es demasiado largo.</value>
   </data>
   <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
-    <value>á_Attachment upload failed_________________________Ó</value>
+    <value>Error al cargar el archivo adjunto</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>La fecha debe ser el {0} o antes</value>
@@ -193,16 +193,16 @@
     <value>Inferior al valor mínimo</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
-    <value>á_The maximum number of attachments allowed is {0}__________________________Ó.</value>
+    <value>El número máximo de archivos adjuntos permitido es {0}.</value>
   </data>
   <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
-    <value>á_Max: {0}_________________Ó</value>
+    <value>Máx.: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
-    <value>á_Min: {0}_________________Ó</value>
+    <value>Mín.: {0}</value>
   </data>
   <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
-    <value>á_At least {0} attachment(s) required___________________Ó.</value>
+    <value>Se requiere al menos {0} archivo adjunto.</value>
   </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Ningún adjunto</value>
@@ -238,145 +238,145 @@
     <value>Número de caracteres requerido: {0}</value>
   </data>
   <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
-    <value>á_Remove Association___________________Ó</value>
+    <value>Eliminar asociación</value>
   </data>
   <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
-    <value>á_Show on Map____________Ó</value>
+    <value>Mostrar en mapa</value>
   </data>
   <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
-    <value>á_More Information_________________Ó</value>
+    <value>Más información</value>
   </data>
   <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
-    <value>á_Percent Along______________Ó</value>
+    <value>Porcentaje a lo largo</value>
   </data>
   <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
-    <value>á_Association Settings_____________________Ó</value>
+    <value>Configuración de asociación</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
-    <value>á_Remove Association____________________Ó?</value>
+    <value>¿Eliminar asociación?</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
-    <value>á_This will only remove the association. The feature remains_______________________________Ó.</value>
+    <value>Esto solo eliminará la asociación. La entidad se conserva.</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
-    <value>á_Remove_____________Ó</value>
+    <value>Eliminar</value>
   </data>
   <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
-    <value>á_Cancel_____________Ó</value>
+    <value>Cancelar</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
-    <value>á_Add Association________________Ó</value>
+    <value>Agregar asociación</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
-    <value>á_Add_______Ó</value>
+    <value>Agregar</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
-    <value>á_Choose how to add the feature______________________________Ó</value>
+    <value>Elegir cómo agregar la entidad</value>
   </data>
   <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
-    <value>á_Choose to add______________Ó</value>
+    <value>Elegir para agregar</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
-    <value>á_{0} Features Identified________________________Ó</value>
+    <value>{0} entidades identificadas</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
-    <value>á_Association type_________________Ó</value>
+    <value>Tipo de asociación</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
-    <value>á_Attachment_____________________Ó</value>
+    <value>Adjunto</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
-    <value>á_This association can't be added_________________Ó.</value>
+    <value>Esta asociación no se puede agregar.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
-    <value>á_Connectivity_____________Ó</value>
+    <value>Conectividad</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
-    <value>á_Containment____________Ó</value>
+    <value>Contención</value>
   </data>
   <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
-    <value>á_Content visibility___________________Ó</value>
+    <value>Visibilidad del contenido</value>
   </data>
   <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
-    <value>á_Current feature terminal_________________________Ó</value>
+    <value>Terminal actual de la entidad</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
-    <value>á_Enter a percentage from 0 to 100__________________Ó.</value>
+    <value>Introduzca un porcentaje entre 0 y 100.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
-    <value>á_Fraction along edge (%)________________________Ó</value>
+    <value>Fracción a lo largo del eje (%)</value>
   </data>
   <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
-    <value>á_From element_____________Ó</value>
+    <value>Desde el elemento</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
-    <value>á_No matches found__________________Ó.</value>
+    <value>No se han encontrado coincidencias.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
-    <value>á_No network data sources available__________________Ó.</value>
+    <value>No hay fuentes de datos de red disponibles.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
-    <value>á_New Association________________Ó</value>
+    <value>Nueva asociación</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
-    <value>á_Associations can't be edited for this feature________________________Ó.</value>
+    <value>No se pueden editar las asociaciones de esta entidad.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
-    <value>á_Other feature terminal_______________________Ó</value>
+    <value>Otro terminal de la entidad</value>
   </data>
   <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
-    <value>á_Review association___________________Ó</value>
+    <value>Revisar asociación</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
-    <value>á_Search features________________Ó</value>
+    <value>Buscar entidades</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
-    <value>á_Search_____________Ó</value>
+    <value>Buscar</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
-    <value>á_Network Data Source____________________Ó</value>
+    <value>Fuente de datos de red</value>
   </data>
   <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
-    <value>á_{0} results____________Ó</value>
+    <value>{0} resultados</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
-    <value>á_Available Asset Types______________________Ó</value>
+    <value>Tipos de activos disponibles</value>
   </data>
   <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
-    <value>á_Available Features ({0})_________________________Ó</value>
+    <value>Entidades disponibles ({0})</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
-    <value>á_Loading_____________________Ó...</value>
+    <value>Cargando...</value>
   </data>
   <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
-    <value>á_No asset types available__________________________Ó.</value>
+    <value>No hay tipos de activos disponibles.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
-    <value>á_Load more___________________Ó</value>
+    <value>Cargar más</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
-    <value>á_Select a network data source_____________________________Ó</value>
+    <value>Seleccionar una fuente de datos de red</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>á_From Network Data Source_________________________Ó</value>
+    <value>Desde fuente de datos de red</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>á_On Map_____________Ó</value>
+    <value>En mapa</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
-    <value>á_Select features by tapping on the map____________________Ó.</value>
+    <value>Seleccione entidades tocando el mapa.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
-    <value>á_Select a terminal___________________Ó.</value>
+    <value>Seleccione un terminal.</value>
   </data>
   <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
-    <value>á_Structure attachment_____________________Ó</value>
+    <value>Adjunto de estructura</value>
   </data>
   <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
-    <value>á_Tap Selection______________Ó</value>
+    <value>Tocar para seleccionar</value>
   </data>
   <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
-    <value>á_To element_____________________Ó</value>
+    <value>Hasta elemento</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Todos los sitios</value>
@@ -481,16 +481,16 @@
     <value>Buscar</value>
   </data>
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
-    <value>á_Select search source_____________________Ó</value>
+    <value>Seleccionar fuente de búsqueda</value>
   </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
-    <value>á_Search sources_______________Ó</value>
+    <value>Fuentes de búsqueda</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
-    <value>á_Search suggestions___________________Ó</value>
+    <value>Sugerencias de búsqueda</value>
   </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
-    <value>á_Search results_______________Ó</value>
+    <value>Resultados de búsqueda</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Agregar punto de partida</value>
@@ -667,144 +667,144 @@
     <value>Localizador</value>
   </data>
   <data name="OfflineMapAreasAdd" xml:space="preserve">
-    <value>á_Add_______Ó</value>
+    <value>Agregar</value>
   </data>
   <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
-    <value>á_Add Map Area_____________Ó</value>
+    <value>Agregar área de mapa</value>
   </data>
   <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
-    <value>á_Name_________Ó</value>
+    <value>Nombre</value>
   </data>
   <data name="OfflineMapAreasCancel" xml:space="preserve">
-    <value>á_Cancel_____________Ó</value>
+    <value>Cancelar</value>
   </data>
   <data name="OfflineMapAreasDownload" xml:space="preserve">
-    <value>á_Download_________________Ó</value>
+    <value>Descargar</value>
   </data>
   <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
-    <value>á_Size: {0}___________________Ó</value>
+    <value>Tamaño: {0}</value>
   </data>
   <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
-    <value>á_Area {0}_________________Ó</value>
+    <value>Área {0}</value>
   </data>
   <data name="OfflineMapAreasDownloaded" xml:space="preserve">
-    <value>á_Downloaded_____________________Ó</value>
+    <value>Descargado</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
-    <value>á_Could not retrieve map areas for this map______________________Ó</value>
+    <value>No se ha podido recuperar áreas de este mapa</value>
   </data>
   <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
-    <value>á_No Internet Connection_______________________Ó</value>
+    <value>Sin conexión a internet</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
-    <value>á_There are no map areas for this map. Tap the button below to get started______________________________________Ó.</value>
+    <value>No hay áreas de mapa correspondientes a este mapa. Toque el botón siguiente para empezar.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
-    <value>á_There are no map areas for this map___________________Ó.</value>
+    <value>No hay áreas de mapa correspondientes a este mapa.</value>
   </data>
   <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
-    <value>á_No Map Areas_____________Ó</value>
+    <value>Ningún área de mapa</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
-    <value>á_The map is not enabled for offline use____________________Ó</value>
+    <value>El mapa no está habilitado para el uso sin conexión</value>
   </data>
   <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
-    <value>á_Offline Disabled_________________Ó</value>
+    <value>Sin conexión deshabilitado</value>
   </data>
   <data name="OfflineMapAreasOpen" xml:space="preserve">
-    <value>á_Open_________Ó</value>
+    <value>Abrir</value>
   </data>
   <data name="OfflineMapAreasRefresh" xml:space="preserve">
-    <value>á_Refresh_______________Ó</value>
+    <value>Actualizar</value>
   </data>
   <data name="OfflineMapAreasRemove" xml:space="preserve">
-    <value>á_Remove_____________Ó</value>
+    <value>Eliminar</value>
   </data>
   <data name="OfflineMapAreasSelectArea" xml:space="preserve">
-    <value>á_Select Area____________Ó</value>
+    <value>Seleccionar área</value>
   </data>
   <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
-    <value>á_Scale___________Ó</value>
+    <value>Escala</value>
   </data>
   <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
-    <value>á_Room_________Ó</value>
+    <value>Habitación</value>
   </data>
   <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
-    <value>á_Rooms___________Ó</value>
+    <value>Habitaciones</value>
   </data>
   <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
-    <value>á_House Property_______________Ó</value>
+    <value>Propiedad horizontal</value>
   </data>
   <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
-    <value>á_Houses_____________Ó</value>
+    <value>Casas</value>
   </data>
   <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
-    <value>á_Small Building_______________Ó</value>
+    <value>Edificio pequeño</value>
   </data>
   <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
-    <value>á_Building_________________Ó</value>
+    <value>Edificio</value>
   </data>
   <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
-    <value>á_Buildings___________________Ó</value>
+    <value>Edificios</value>
   </data>
   <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
-    <value>á_Street_____________Ó</value>
+    <value>Calle</value>
   </data>
   <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
-    <value>á_Streets_______________Ó</value>
+    <value>Calles</value>
   </data>
   <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
-    <value>á_Neighborhood_____________Ó</value>
+    <value>Vecindad</value>
   </data>
   <data name="OfflineMapAreasScaleTown" xml:space="preserve">
-    <value>á_Town_________Ó</value>
+    <value>Población</value>
   </data>
   <data name="OfflineMapAreasScaleCity" xml:space="preserve">
-    <value>á_City_________Ó</value>
+    <value>Ciudad</value>
   </data>
   <data name="OfflineMapAreasScaleCities" xml:space="preserve">
-    <value>á_Cities_____________Ó</value>
+    <value>Ciudades</value>
   </data>
   <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
-    <value>á_Metropolitan Area__________________Ó</value>
+    <value>Área metropolitana</value>
   </data>
   <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
-    <value>á_County_____________Ó</value>
+    <value>Condado</value>
   </data>
   <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
-    <value>á_Counties_________________Ó</value>
+    <value>Condados</value>
   </data>
   <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
-    <value>á_State/Province_______________Ó</value>
+    <value>Estado/provincia</value>
   </data>
   <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
-    <value>á_States/Provinces_________________Ó</value>
+    <value>Estados/provincias</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
-    <value>á_Countries (Small)__________________Ó</value>
+    <value>Países (pequeño)</value>
   </data>
   <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
-    <value>á_Countries (Big)________________Ó</value>
+    <value>Países (grande)</value>
   </data>
   <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
-    <value>á_Continent___________________Ó</value>
+    <value>Continente</value>
   </data>
   <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
-    <value>á_World (Small)______________Ó</value>
+    <value>Mundo (pequeño)</value>
   </data>
   <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
-    <value>á_World (Big)____________Ó</value>
+    <value>Mundo (grande)</value>
   </data>
   <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
-    <value>á_World___________Ó</value>
+    <value>Mundo</value>
   </data>
   <data name="OfflineMapAreasStop" xml:space="preserve">
-    <value>á_Stop_________Ó</value>
+    <value>Detener</value>
   </data>
   <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
-    <value>á_Offline Map____________Ó</value>
+    <value>Mapa sin conexión</value>
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
-    <value>á_An error occured. Tap to remove_________________Ó.</value>
+    <value>Se ha producido un error. Toque para eliminarlo.</value>
   </data>
 </root>

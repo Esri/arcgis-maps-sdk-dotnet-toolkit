@@ -34,7 +34,11 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="$(WinAppSDKVersion)" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
+<<<<<<< HEAD
     <PackageReference Include="Esri.Calcite.WinUI" Version="1.0.0-rc.1" />
+=======
+    <PackageReference Include="Esri.Calcite.WinUI" Version="1.1.0" />
+>>>>>>> origin/v.next
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
