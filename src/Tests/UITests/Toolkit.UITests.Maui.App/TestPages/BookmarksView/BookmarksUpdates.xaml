@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.BookmarksUpdates"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:local="clr-namespace:Toolkit.UITests.App.TestPages"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui">
+    <Grid>
+        <Grid>
+            <esri:SceneView x:Name="MainSceneView" />
+            <esri:MapView x:Name="MainMapView" />
+        </Grid>
+        <Border Background="{StaticResource CalciteBackground1Brush}"
+                HeightRequest="320"
+                HorizontalOptions="Center"
+                Margin="8"
+                MaximumHeightRequest="320"
+                MaximumWidthRequest="300"
+                MinimumHeightRequest="320"
+                MinimumWidthRequest="300"
+                Padding="8"
+                Stroke="{StaticResource CalciteBorder1Brush}"
+                StrokeThickness="1"
+                VerticalOptions="End"
+                WidthRequest="300">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*" RowSpacing="4">
+                <Grid Grid.Row="0" ColumnDefinitions="72,*" ColumnSpacing="4">
+                    <Label FontAttributes="Bold" Text="Document" VerticalTextAlignment="Center" />
+                    <Button Grid.Column="1" AutomationId="AddDocumentBookmarkButton" Clicked="AddDocumentBookmarkButton_Click" Text="Add" />
+                </Grid>
+                <BoxView Grid.Row="1" HeightRequest="1" Background="{StaticResource CalciteBorder1Brush}" />
+                <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="4">
+                    <Label FontAttributes="Bold" Text="Override" />
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*,*" ColumnSpacing="4">
+                        <Button Grid.Column="0" AutomationId="UseOverrideButton" Clicked="UseOverrideButton_Click" Text="Use" />
+                        <Button Grid.Column="1" AutomationId="AddOverrideButton" Clicked="AddOverrideButton_Click" Text="Add" />
+                        <Button Grid.Column="2" AutomationId="ClearOverrideButton" Clicked="ClearOverrideButton_Click" Text="Clear" />
+                    </Grid>
+                </Grid>
+                <BoxView Grid.Row="3" HeightRequest="1" Background="{StaticResource CalciteBorder1Brush}" />
+                <Grid Grid.Row="4" RowDefinitions="Auto,Auto" RowSpacing="4">
+                    <Label FontAttributes="Bold" Text="GeoView" />
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="4">
+                        <Button Grid.Column="0" AutomationId="UseMapBButton" Clicked="UseMapBButton_Click" Text="Map B" />
+                        <Button Grid.Column="1" AutomationId="UseSceneButton" Clicked="UseSceneButton_Click" Text="Scene" />
+                    </Grid>
+                </Grid>
+                <BoxView Grid.Row="5" HeightRequest="1" Background="{StaticResource CalciteBorder1Brush}" />
+                <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="6" />
+            </Grid>
+        </Border>
+    </Grid>
+</local:TestPage>

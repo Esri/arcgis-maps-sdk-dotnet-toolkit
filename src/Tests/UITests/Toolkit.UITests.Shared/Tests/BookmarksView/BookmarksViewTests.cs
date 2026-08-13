@@ -10,6 +10,7 @@ public class BookmarksViewTests : AppiumTestBase
     private const string BookmarksOnlineMapPage = "BookmarksOnlineMap";
     private const string BookmarksScenePage = "BookmarksScene";
     private const string BookmarksTemplateMapPage = "BookmarksTemplateMap";
+    private const string BookmarksUpdatesPage = "BookmarksUpdates";
 
     [TestMethod]
     public void BookmarksView_Map()
@@ -93,6 +94,70 @@ public class BookmarksViewTests : AppiumTestBase
         FindElementByText("-12147304.5,4388705.4", TimeSpan.FromSeconds(30));
         var selectedBookmarkText = FindElement("SelectedBookmarkText", TimeSpan.FromSeconds(5));
         Assert.AreEqual("Red sands", GetLabelText(selectedBookmarkText), "The BookmarkSelected event should identify the selected bookmark.");
+    }
+
+    [TestMethod]
+    public void BookmarksView_TracksDocumentBookmarks()
+    {
+        OpenSample(BookmarksUpdatesPage);
+        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+
+        var addBookmarkButton = FindElement("AddDocumentBookmarkButton", TimeSpan.FromSeconds(5));
+        addBookmarkButton.Click();
+        var addedBookmark = FindElementByName("Added map bookmark", TimeSpan.FromSeconds(5));
+
+        addedBookmark.Click();
+        FindElementByName("Renamed map bookmark", TimeSpan.FromSeconds(5));
+        Assert.IsFalse(ElementExistsByName("Added map bookmark", TimeSpan.FromSeconds(1)));
+    }
+
+    [TestMethod]
+    public void BookmarksView_TracksBookmarksOverride()
+    {
+        OpenSample(BookmarksUpdatesPage);
+        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+
+        // Change the current map before overriding it, then verify its latest bookmarks are restored below.
+        FindElement("AddDocumentBookmarkButton", TimeSpan.FromSeconds(5)).Click();
+        FindElementByName("Added map bookmark", TimeSpan.FromSeconds(5));
+
+        // Set BookmarksOverride to an observable collection, replacing the map's bookmarks.
+        FindElement("UseOverrideButton", TimeSpan.FromSeconds(5)).Click();
+        FindElementByName("Override bookmark", TimeSpan.FromSeconds(5));
+        Assert.IsFalse(ElementExistsByName("Map A bookmark", TimeSpan.FromSeconds(1)));
+        Assert.IsFalse(ElementExistsByName("Added map bookmark", TimeSpan.FromSeconds(1)));
+
+        // Add a bookmark to the active override collection.
+        FindElement("AddOverrideButton", TimeSpan.FromSeconds(5)).Click();
+        FindElementByName("Added override bookmark", TimeSpan.FromSeconds(5));
+
+        // Clear BookmarksOverride so the current map's bookmarks are shown again.
+        FindElement("ClearOverrideButton", TimeSpan.FromSeconds(5)).Click();
+        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+        FindElementByName("Added map bookmark", TimeSpan.FromSeconds(5));
+        Assert.IsFalse(ElementExistsByName("Override bookmark", TimeSpan.FromSeconds(1)));
+    }
+
+    [TestMethod]
+    public void BookmarksView_TracksGeoViewDocument()
+    {
+        OpenSample(BookmarksUpdatesPage);
+        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+
+        FindElement("UseMapBButton", TimeSpan.FromSeconds(5)).Click();
+        FindElementByName("Map B bookmark", TimeSpan.FromSeconds(5));
+        Assert.IsFalse(ElementExistsByName("Map A bookmark", TimeSpan.FromSeconds(1)));
+    }
+
+    [TestMethod]
+    public void BookmarksView_TracksGeoView()
+    {
+        OpenSample(BookmarksUpdatesPage);
+        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+
+        FindElement("UseSceneButton", TimeSpan.FromSeconds(5)).Click();
+        FindElementByName("Scene bookmark", TimeSpan.FromSeconds(5));
+        Assert.IsFalse(ElementExistsByName("Map A bookmark", TimeSpan.FromSeconds(1)));
     }
 
     private void AssertSelectedMarkerIsVisible(AppiumElement map, string bookmarkName)
