@@ -9,6 +9,7 @@ public class BookmarksViewTests : AppiumTestBase
     private const string BookmarksMapPage = "BookmarksMap";
     private const string BookmarksOnlineMapPage = "BookmarksOnlineMap";
     private const string BookmarksScenePage = "BookmarksScene";
+    private const string BookmarksTemplateMapPage = "BookmarksTemplateMap";
 
     [TestMethod]
     public void BookmarksView_Map()
@@ -36,6 +37,27 @@ public class BookmarksViewTests : AppiumTestBase
             var selectedBookmarkText = FindElement("SelectedBookmarkText", TimeSpan.FromSeconds(5));
             Assert.AreEqual(name, GetLabelText(selectedBookmarkText), "The BookmarkSelected event should identify the selected bookmark.");
             AssertSelectedMarkerIsVisible(map, name);
+        }
+    }
+
+    [TestMethod]
+    public void BookmarksView_Style()
+    {
+        OpenSample(BookmarksTemplateMapPage);
+
+        foreach (var bookmarkName in new[] { "Red bookmark", "Green bookmark", "Blue bookmark" })
+        {
+            FindElementByText($"Custom: {bookmarkName}", TimeSpan.FromSeconds(5));
+#if WPF_TEST || WINUI_TEST
+            FindElementByName(bookmarkName, TimeSpan.FromSeconds(5));
+#endif
+        }
+
+        FindElement("SetRuntimeTemplateButton", TimeSpan.FromSeconds(5)).Click();
+        foreach (var bookmarkName in new[] { "Red bookmark", "Green bookmark", "Blue bookmark" })
+        {
+            FindElementByText($"Runtime: {bookmarkName}", TimeSpan.FromSeconds(5));
+            Assert.IsFalse(ElementExistsByText($"Custom: {bookmarkName}", TimeSpan.FromSeconds(1)), "The previous item template should no longer be rendered.");
         }
     }
 
