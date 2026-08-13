@@ -7,6 +7,7 @@ namespace Toolkit.UITest.Shared.BookmarksView;
 public class BookmarksViewTests : AppiumTestBase
 {
     private const string BookmarksMapPage = "BookmarksMap";
+    private const string BookmarksOnlineMapPage = "BookmarksOnlineMap";
 
     [TestMethod]
     public void BookmarksView_Map()
@@ -35,6 +36,17 @@ public class BookmarksViewTests : AppiumTestBase
             Assert.AreEqual(name, GetLabelText(selectedBookmarkText), "The BookmarkSelected event should identify the selected bookmark.");
             AssertSelectedMarkerIsVisible(map, name);
         }
+    }
+
+    [TestMethod]
+    public void BookmarksView_OnlineMap()
+    {
+        OpenSample(BookmarksOnlineMapPage);
+
+        FindElementByName("Red sands", TimeSpan.FromSeconds(30)).Click();
+        FindElementByText("-12147304.5,4388705.4", TimeSpan.FromSeconds(30));
+        var selectedBookmarkText = FindElement("SelectedBookmarkText", TimeSpan.FromSeconds(5));
+        Assert.AreEqual("Red sands", GetLabelText(selectedBookmarkText), "The BookmarkSelected event should identify the selected bookmark.");
     }
 
     private void AssertSelectedMarkerIsVisible(AppiumElement map, string bookmarkName)

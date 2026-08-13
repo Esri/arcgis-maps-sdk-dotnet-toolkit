@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.BookmarksOnlineMap"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:local="clr-namespace:Toolkit.UITests.App.TestPages"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui">
+    <Grid>
+        <esri:MapView x:Name="MainMapView" />
+        <Border Background="{StaticResource CalciteBackground1Brush}"
+                HeightRequest="200"
+                HorizontalOptions="Center"
+                Margin="8"
+                MaximumHeightRequest="200"
+                MaximumWidthRequest="300"
+                MinimumHeightRequest="200"
+                MinimumWidthRequest="300"
+                Padding="8"
+                Stroke="{StaticResource CalciteBorder1Brush}"
+                StrokeThickness="1"
+                VerticalOptions="End"
+                WidthRequest="300">
+            <Grid RowDefinitions="*,24,24">
+                <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="0" GeoView="{Binding Source={x:Reference MainMapView}}" />
+                <Label x:Name="SelectedBookmarkText" Grid.Row="1" AutomationId="SelectedBookmarkText" LineBreakMode="TailTruncation" />
+                <Label x:Name="MapCenterText" Grid.Row="2" AutomationId="MapCenterText" LineBreakMode="TailTruncation" />
+            </Grid>
+        </Border>
+    </Grid>
+</local:TestPage>
