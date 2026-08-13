@@ -1,0 +1,23 @@
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.BookmarksMap"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:local="using:Toolkit.UITests.App.TestPages"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <Grid>
+        <esri:MapView x:Name="MainMapView" AutomationProperties.AutomationId="BookmarksMap" />
+        <Border Background="White" BorderBrush="Black" BorderThickness="1" Height="200" HorizontalAlignment="Center" Margin="8" Padding="8" VerticalAlignment="Bottom" Width="300">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="24" />
+                    <RowDefinition Height="24" />
+                </Grid.RowDefinitions>
+                <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="0" GeoView="{Binding ElementName=MainMapView}" />
+                <TextBlock x:Name="SelectedBookmarkText" Grid.Row="1" AutomationProperties.AutomationId="SelectedBookmarkText" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                <TextBlock x:Name="MapCenterText" Grid.Row="2" AutomationProperties.AutomationId="MapCenterText" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
+</local:TestPage>
