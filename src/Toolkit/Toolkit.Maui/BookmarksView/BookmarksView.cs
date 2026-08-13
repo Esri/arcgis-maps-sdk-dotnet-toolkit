@@ -36,15 +36,16 @@ public class BookmarksView : TemplatedView
     {
         string dataTemplate =
             @"<DataTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"">
-                <Label Text=""{Binding Name}"" />
+                <Label Text=""{Binding Name}"" SemanticProperties.Description=""{Binding Name}"" />
               </DataTemplate>";
         DefaultDataTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new DataTemplate(), dataTemplate);
 
+        // A semantic description makes the CollectionView an accessibility leaf on iOS, hiding its bookmark items.
         string template =
             $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui""
                                 xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
                                 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
-                <CollectionView x:Name=""{_presentingViewName}"" SelectionMode=""Single"" ItemTemplate=""{{TemplateBinding ItemTemplate}}"" />
+                 <CollectionView x:Name=""{_presentingViewName}"" SelectionMode=""Single"" ItemTemplate=""{{TemplateBinding ItemTemplate}}"" AutomationProperties.AutomationId=""BookmarksListView"" />
              </ControlTemplate>";
         DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
     }
