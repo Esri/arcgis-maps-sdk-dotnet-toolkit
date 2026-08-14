@@ -47,6 +47,8 @@ public abstract partial class AppiumTestBase
     {
 #if WINDOWS_TEST
         var action = () => Driver.FindElement(MobileBy.AccessibilityId(id));
+#elif MAC_TEST
+        var action = () => Driver.FindElement(MobileBy.XPath($"//*[@identifier='{id}']"));
 #else
         var action = () => Driver.FindElement(MobileBy.Id(id));
 #endif
@@ -65,6 +67,8 @@ public abstract partial class AppiumTestBase
     {
 #if WINDOWS_TEST
         var action = () => parent.FindElement(MobileBy.AccessibilityId(id));
+#elif MAC_TEST
+        var action = () => parent.FindElement(MobileBy.XPath($".//*[@identifier='{id}']"));
 #else
         var action = () => parent.FindElement(MobileBy.Id(id));
 #endif
