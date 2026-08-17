@@ -1,0 +1,9 @@
+.breadcrumb>li>a{color: #f8f8f8;}
+.navbar-default{background-color:#8338CF;border-color:#e7e7e7}
+
+.article 
+{  
+    position: relative;
+    left:120px;
+    width: 1000px;
+}
