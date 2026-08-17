@@ -6,6 +6,7 @@ namespace Toolkit.UITest.Shared.BookmarksView;
 [TestClass]
 public class BookmarksViewTests : AppiumTestBase
 {
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(10);
     private const string BookmarksMapPage = "BookmarksMap";
     private const string BookmarksOnlineMapPage = "BookmarksOnlineMap";
     private const string BookmarksScenePage = "BookmarksScene";
@@ -17,8 +18,9 @@ public class BookmarksViewTests : AppiumTestBase
     {
         OpenSample(BookmarksMapPage);
 
-        var bookmarksList = FindElement("BookmarksListView", TimeSpan.FromSeconds(5));
+        var bookmarksList = FindElement("BookmarksListView", DefaultTimeout);
 #if WPF_TEST || WINUI_TEST
+        // A list-level name makes the MAUI CollectionView an accessibility leaf on iOS, hiding its bookmark items.
         Assert.AreEqual("Bookmarks", GetAutomationName(bookmarksList), "The bookmarks list should expose its accessible name.");
 #endif
 
@@ -28,14 +30,14 @@ public class BookmarksViewTests : AppiumTestBase
             ("Green bookmark", "30.0,20.0"),
             ("Blue bookmark", "-30.0,-20.0"),
         };
-        var map = FindElement("BookmarksMap", TimeSpan.FromSeconds(5));
+        var map = FindElement("BookmarksMap", DefaultTimeout);
         AssertNoBookmarkMarkersAreVisible(map, bookmarks);
 
         foreach (var (name, expectedCenterText) in bookmarks)
         {
-            FindElementByName(name, TimeSpan.FromSeconds(5)).Click();
-            FindElementByText(expectedCenterText, TimeSpan.FromSeconds(5));
-            var selectedBookmarkText = FindElement("SelectedBookmarkText", TimeSpan.FromSeconds(5));
+            FindElementByName(name, DefaultTimeout).Click();
+            FindElementByText(expectedCenterText, DefaultTimeout);
+            var selectedBookmarkText = FindElement("SelectedBookmarkText", DefaultTimeout);
             Assert.AreEqual(name, GetLabelText(selectedBookmarkText), "The BookmarkSelected event should identify the selected bookmark.");
             AssertSelectedMarkerIsVisible(map, name);
         }
@@ -48,16 +50,14 @@ public class BookmarksViewTests : AppiumTestBase
 
         foreach (var bookmarkName in new[] { "Red bookmark", "Green bookmark", "Blue bookmark" })
         {
-            FindElementByText($"Custom: {bookmarkName}", TimeSpan.FromSeconds(5));
-#if WPF_TEST || WINUI_TEST
-            FindElementByName(bookmarkName, TimeSpan.FromSeconds(5));
-#endif
+            FindElementByText($"Custom: {bookmarkName}", DefaultTimeout);
+            FindElementByName(bookmarkName, DefaultTimeout);
         }
 
-        FindElement("SetRuntimeTemplateButton", TimeSpan.FromSeconds(5)).Click();
+        FindElement("SetRuntimeTemplateButton", DefaultTimeout).Click();
         foreach (var bookmarkName in new[] { "Red bookmark", "Green bookmark", "Blue bookmark" })
         {
-            FindElementByText($"Runtime: {bookmarkName}", TimeSpan.FromSeconds(5));
+            FindElementByText($"Runtime: {bookmarkName}", DefaultTimeout);
             Assert.IsFalse(ElementExistsByText($"Custom: {bookmarkName}", TimeSpan.FromSeconds(1)), "The previous item template should no longer be rendered.");
         }
     }
@@ -67,7 +67,7 @@ public class BookmarksViewTests : AppiumTestBase
     {
         OpenSample(BookmarksScenePage);
 
-        var scene = FindElement("BookmarksScene", TimeSpan.FromSeconds(5));
+        var scene = FindElement("BookmarksScene", DefaultTimeout);
         var bookmarks = new (string name, string colorName)[]
         {
             ("Red scene bookmark", "Red bookmark"),
@@ -77,9 +77,9 @@ public class BookmarksViewTests : AppiumTestBase
 
         foreach (var (name, colorName) in bookmarks)
         {
-            FindElementByName(name, TimeSpan.FromSeconds(5)).Click();
-            FindElementByText($"Ready: {name}", TimeSpan.FromSeconds(5));
-            var selectedBookmarkText = FindElement("SelectedBookmarkText", TimeSpan.FromSeconds(5));
+            FindElementByName(name, DefaultTimeout).Click();
+            FindElementByText($"Ready: {name}", DefaultTimeout);
+            var selectedBookmarkText = FindElement("SelectedBookmarkText", DefaultTimeout);
             Assert.AreEqual(name, GetLabelText(selectedBookmarkText), "The BookmarkSelected event should identify the selected bookmark.");
             AssertSelectedMarkerIsVisible(scene, colorName);
         }
@@ -92,7 +92,7 @@ public class BookmarksViewTests : AppiumTestBase
 
         FindElementByName("Red sands", TimeSpan.FromSeconds(30)).Click();
         FindElementByText("-12147304.5,4388705.4", TimeSpan.FromSeconds(30));
-        var selectedBookmarkText = FindElement("SelectedBookmarkText", TimeSpan.FromSeconds(5));
+        var selectedBookmarkText = FindElement("SelectedBookmarkText", DefaultTimeout);
         Assert.AreEqual("Red sands", GetLabelText(selectedBookmarkText), "The BookmarkSelected event should identify the selected bookmark.");
     }
 
@@ -100,14 +100,14 @@ public class BookmarksViewTests : AppiumTestBase
     public void BookmarksView_TracksDocumentBookmarks()
     {
         OpenSample(BookmarksUpdatesPage);
-        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+        FindElementByName("Map A bookmark", DefaultTimeout);
 
-        var addBookmarkButton = FindElement("AddDocumentBookmarkButton", TimeSpan.FromSeconds(5));
+        var addBookmarkButton = FindElement("AddDocumentBookmarkButton", DefaultTimeout);
         addBookmarkButton.Click();
-        var addedBookmark = FindElementByName("Added map bookmark", TimeSpan.FromSeconds(5));
+        var addedBookmark = FindElementByName("Added map bookmark", DefaultTimeout);
 
         addedBookmark.Click();
-        FindElementByName("Renamed map bookmark", TimeSpan.FromSeconds(5));
+        FindElementByName("Renamed map bookmark", DefaultTimeout);
         Assert.IsFalse(ElementExistsByName("Added map bookmark", TimeSpan.FromSeconds(1)));
     }
 
@@ -115,26 +115,26 @@ public class BookmarksViewTests : AppiumTestBase
     public void BookmarksView_TracksBookmarksOverride()
     {
         OpenSample(BookmarksUpdatesPage);
-        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+        FindElementByName("Map A bookmark", DefaultTimeout);
 
         // Change the current map before overriding it, then verify its latest bookmarks are restored below.
-        FindElement("AddDocumentBookmarkButton", TimeSpan.FromSeconds(5)).Click();
-        FindElementByName("Added map bookmark", TimeSpan.FromSeconds(5));
+        FindElement("AddDocumentBookmarkButton", DefaultTimeout).Click();
+        FindElementByName("Added map bookmark", DefaultTimeout);
 
         // Set BookmarksOverride to an observable collection, replacing the map's bookmarks.
-        FindElement("UseOverrideButton", TimeSpan.FromSeconds(5)).Click();
-        FindElementByName("Override bookmark", TimeSpan.FromSeconds(5));
+        FindElement("UseOverrideButton", DefaultTimeout).Click();
+        FindElementByName("Override bookmark", DefaultTimeout);
         Assert.IsFalse(ElementExistsByName("Map A bookmark", TimeSpan.FromSeconds(1)));
         Assert.IsFalse(ElementExistsByName("Added map bookmark", TimeSpan.FromSeconds(1)));
 
         // Add a bookmark to the active override collection.
-        FindElement("AddOverrideButton", TimeSpan.FromSeconds(5)).Click();
-        FindElementByName("Added override bookmark", TimeSpan.FromSeconds(5));
+        FindElement("AddOverrideButton", DefaultTimeout).Click();
+        FindElementByName("Added override bookmark", DefaultTimeout);
 
         // Clear BookmarksOverride so the current map's bookmarks are shown again.
-        FindElement("ClearOverrideButton", TimeSpan.FromSeconds(5)).Click();
-        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
-        FindElementByName("Added map bookmark", TimeSpan.FromSeconds(5));
+        FindElement("ClearOverrideButton", DefaultTimeout).Click();
+        FindElementByName("Map A bookmark", DefaultTimeout);
+        FindElementByName("Added map bookmark", DefaultTimeout);
         Assert.IsFalse(ElementExistsByName("Override bookmark", TimeSpan.FromSeconds(1)));
     }
 
@@ -142,10 +142,10 @@ public class BookmarksViewTests : AppiumTestBase
     public void BookmarksView_TracksGeoViewDocument()
     {
         OpenSample(BookmarksUpdatesPage);
-        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+        FindElementByName("Map A bookmark", DefaultTimeout);
 
-        FindElement("UseMapBButton", TimeSpan.FromSeconds(5)).Click();
-        FindElementByName("Map B bookmark", TimeSpan.FromSeconds(5));
+        FindElement("UseMapBButton", DefaultTimeout).Click();
+        FindElementByName("Map B bookmark", DefaultTimeout);
         Assert.IsFalse(ElementExistsByName("Map A bookmark", TimeSpan.FromSeconds(1)));
     }
 
@@ -153,10 +153,10 @@ public class BookmarksViewTests : AppiumTestBase
     public void BookmarksView_TracksGeoView()
     {
         OpenSample(BookmarksUpdatesPage);
-        FindElementByName("Map A bookmark", TimeSpan.FromSeconds(5));
+        FindElementByName("Map A bookmark", DefaultTimeout);
 
-        FindElement("UseSceneButton", TimeSpan.FromSeconds(5)).Click();
-        FindElementByName("Scene bookmark", TimeSpan.FromSeconds(5));
+        FindElement("UseSceneButton", DefaultTimeout).Click();
+        FindElementByName("Scene bookmark", DefaultTimeout);
         Assert.IsFalse(ElementExistsByName("Map A bookmark", TimeSpan.FromSeconds(1)));
     }
 

@@ -12,7 +12,7 @@
     </local:TestPage.Resources>
     <Grid>
         <esri:MapView x:Name="MainMapView" />
-        <Border Background="White" BorderBrush="Black" BorderThickness="1" Height="220" HorizontalAlignment="Center" Margin="8" Padding="8" VerticalAlignment="Bottom" Width="300">
+        <Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" BorderThickness="1" Height="220" HorizontalAlignment="Center" Margin="8" Padding="8" VerticalAlignment="Bottom" Width="300">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -27,7 +27,7 @@
                     </toolkit:BookmarksView.ItemContainerStyle>
                     <toolkit:BookmarksView.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="Gold" Padding="4" Margin="2">
+                            <Border Padding="4" Margin="2">
                                 <TextBlock Text="{Binding Name, StringFormat=Custom: {0}}" />
                             </Border>
                         </DataTemplate>

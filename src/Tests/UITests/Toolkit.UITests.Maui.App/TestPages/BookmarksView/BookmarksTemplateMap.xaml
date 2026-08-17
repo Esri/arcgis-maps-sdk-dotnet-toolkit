@@ -32,7 +32,7 @@
                 <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="1">
                     <toolkit:BookmarksView.ItemTemplate>
                         <DataTemplate x:DataType="mapping:Bookmark">
-                            <Border Background="Gold" Padding="4" Margin="2">
+                            <Border Padding="4" Margin="2">
                                 <Label Text="{Binding Name, StringFormat='Custom: {0}'}" />
                             </Border>
                         </DataTemplate>

@@ -28,7 +28,7 @@
                     </toolkit:BookmarksView.ItemContainerStyle>
                     <toolkit:BookmarksView.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="Gold" Padding="4" Margin="2">
+                            <Border Padding="4" Margin="2">
                                 <TextBlock Text="{Binding Name, Converter={StaticResource BookmarkTemplateNameConverter}, ConverterParameter=Custom}" />
                             </Border>
                         </DataTemplate>

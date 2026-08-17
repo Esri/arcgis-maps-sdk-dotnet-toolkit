@@ -7,7 +7,7 @@
     xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls;assembly=Esri.ArcGISRuntime.Toolkit.WPF">
     <Grid>
         <esri:SceneView x:Name="MainSceneView" AutomationProperties.AutomationId="BookmarksScene" />
-        <Border Background="White" BorderBrush="Black" BorderThickness="1" Height="200" HorizontalAlignment="Center" Margin="8" Padding="8" VerticalAlignment="Bottom" Width="300">
+        <Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" BorderThickness="1" Height="200" HorizontalAlignment="Center" Margin="8" Padding="8" VerticalAlignment="Bottom" Width="300">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
