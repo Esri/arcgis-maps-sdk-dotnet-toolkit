@@ -125,6 +125,10 @@
     <value>Displays a list of available basemaps. Select a basemap to use it for the current map or scene.</value>
     <comment>UIA AutomationProperties.HelpText for the BasemapGallery control, providing context for accessibility tools</comment>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>Bookmarks</value>
+    <comment>Accessible name for the BookmarksView list, used by accessibility tools to identify the control</comment>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Add Attachment</value>
     <comment>Menu text for adding a file attachment</comment>

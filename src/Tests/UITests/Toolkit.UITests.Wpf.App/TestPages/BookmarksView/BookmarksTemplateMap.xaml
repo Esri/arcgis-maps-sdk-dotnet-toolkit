@@ -1,0 +1,39 @@
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.BookmarksTemplateMap"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:local="clr-namespace:Toolkit.UITests.App.TestPages"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls;assembly=Esri.ArcGISRuntime.Toolkit.WPF">
+    <local:TestPage.Resources>
+        <DataTemplate x:Key="RuntimeItemTemplate">
+            <TextBlock Text="{Binding Name, StringFormat=Runtime: {0}}" />
+        </DataTemplate>
+    </local:TestPage.Resources>
+    <Grid>
+        <esri:MapView x:Name="MainMapView" />
+        <Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" BorderThickness="1" Height="220" HorizontalAlignment="Center" Margin="8" Padding="8" VerticalAlignment="Bottom" Width="300">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Button AutomationProperties.AutomationId="SetRuntimeTemplateButton" Click="SetRuntimeTemplateButton_Click" Content="Apply runtime" />
+                <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="1">
+                    <toolkit:BookmarksView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="4" />
+                        </Style>
+                    </toolkit:BookmarksView.ItemContainerStyle>
+                    <toolkit:BookmarksView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="4" Margin="2">
+                                <TextBlock Text="{Binding Name, StringFormat=Custom: {0}}" />
+                            </Border>
+                        </DataTemplate>
+                    </toolkit:BookmarksView.ItemTemplate>
+                </toolkit:BookmarksView>
+            </Grid>
+        </Border>
+    </Grid>
+</local:TestPage>

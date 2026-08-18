@@ -40,11 +40,12 @@ public class BookmarksView : TemplatedView
               </DataTemplate>";
         DefaultDataTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new DataTemplate(), dataTemplate);
 
+        // A semantic description makes the CollectionView an accessibility leaf on iOS, hiding its bookmark items.
         string template =
             $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui""
                                 xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
                                 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
-                <CollectionView x:Name=""{_presentingViewName}"" SelectionMode=""Single"" ItemTemplate=""{{TemplateBinding ItemTemplate}}"" />
+                 <CollectionView x:Name=""{_presentingViewName}"" SelectionMode=""Single"" AutomationProperties.AutomationId=""BookmarksListView"" />
              </ControlTemplate>";
         DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
     }
@@ -74,6 +75,7 @@ public class BookmarksView : TemplatedView
         {
             _presentingView.SelectionChanged += Internal_bookmarkSelected;
             _presentingView.ItemsSource = _dataSource;
+            _presentingView.ItemTemplate = CreateAccessibleItemTemplate(ItemTemplate);
         }
     }
 
@@ -127,7 +129,35 @@ public class BookmarksView : TemplatedView
     /// Identifies the <see cref="ItemTemplate" /> bindable property.
     /// </summary>
     public static readonly BindableProperty ItemTemplateProperty =
-        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(BookmarksView), DefaultDataTemplate, BindingMode.OneWay, null);
+        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(BookmarksView), DefaultDataTemplate, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
+
+    private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
+    {
+        BookmarksView bookmarksView = (BookmarksView)sender;
+        if (bookmarksView._presentingView is not null)
+        {
+            bookmarksView._presentingView.ItemTemplate = CreateAccessibleItemTemplate(newValue as DataTemplate);
+        }
+    }
+
+    private static DataTemplate? CreateAccessibleItemTemplate(DataTemplate? itemTemplate)
+    {
+        if (itemTemplate is null)
+        {
+            return null;
+        }
+
+        return new DataTemplate(() =>
+        {
+            ContentView container = new()
+            {
+                Content = itemTemplate.CreateContent() as View
+                    ?? throw new InvalidOperationException("The bookmark item template must create a View."),
+            };
+            container.SetBinding(SemanticProperties.DescriptionProperty, static (Bookmark bookmark) => bookmark.Name);
+            return container;
+        });
+    }
 
     /// <summary>
     /// Handles property changes for the <see cref="BookmarksOverride" /> bindable property.

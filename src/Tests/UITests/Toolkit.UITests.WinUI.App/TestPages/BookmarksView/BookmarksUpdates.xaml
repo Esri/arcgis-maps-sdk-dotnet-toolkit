@@ -1,0 +1,71 @@
+<local:TestPage
+    x:Class="Toolkit.UITests.App.TestPages.BookmarksUpdates"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:local="using:Toolkit.UITests.App.TestPages"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <Grid>
+        <Grid>
+            <esri:SceneView x:Name="MainSceneView" />
+            <esri:MapView x:Name="MainMapView" />
+        </Grid>
+        <Border Background="White" BorderBrush="Black" BorderThickness="1" Height="320" HorizontalAlignment="Center" Margin="8" Padding="8" VerticalAlignment="Bottom" Width="300">
+            <Grid RowSpacing="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" ColumnSpacing="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="72" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontWeight="SemiBold" Text="Document" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" AutomationProperties.AutomationId="AddDocumentBookmarkButton" Click="AddDocumentBookmarkButton_Click" Content="Add" />
+                </Grid>
+                <Border Grid.Row="1" Background="Gray" Height="1" Margin="0,4" />
+                <Grid Grid.Row="2" RowSpacing="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock FontWeight="SemiBold" Text="Override" />
+                    <Grid Grid.Row="1" ColumnSpacing="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" AutomationProperties.AutomationId="UseOverrideButton" Click="UseOverrideButton_Click" Content="Use" />
+                        <Button Grid.Column="1" AutomationProperties.AutomationId="AddOverrideButton" Click="AddOverrideButton_Click" Content="Add" />
+                        <Button Grid.Column="2" AutomationProperties.AutomationId="ClearOverrideButton" Click="ClearOverrideButton_Click" Content="Clear" />
+                    </Grid>
+                </Grid>
+                <Border Grid.Row="3" Background="Gray" Height="1" Margin="0,4" />
+                <Grid Grid.Row="4" RowSpacing="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock FontWeight="SemiBold" Text="GeoView" />
+                    <Grid Grid.Row="1" ColumnSpacing="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" AutomationProperties.AutomationId="UseMapBButton" Click="UseMapBButton_Click" Content="Map B" />
+                        <Button Grid.Column="1" AutomationProperties.AutomationId="UseSceneButton" Click="UseSceneButton_Click" Content="Scene" />
+                    </Grid>
+                </Grid>
+                <Border Grid.Row="5" Background="Gray" Height="1" Margin="0,4" />
+                <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="6" />
+            </Grid>
+        </Border>
+    </Grid>
+</local:TestPage>
