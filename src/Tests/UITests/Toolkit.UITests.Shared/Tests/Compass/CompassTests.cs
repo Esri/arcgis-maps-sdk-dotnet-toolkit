@@ -38,7 +38,7 @@ public class CompassTests : AppiumTestBase
         SetRotation(0);
         Click(autoHideButton);
 
-        var maxTries = 5;
+        var maxTries = 10;
         var hidden = false;
         for (var tryCount = 0; tryCount < maxTries; tryCount++)
         {

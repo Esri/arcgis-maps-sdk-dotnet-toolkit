@@ -365,6 +365,22 @@
     <value>Add Association</value>
     <comment>Button text for starting or completing the add association workflow in FeatureFormView.</comment>
   </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>Add</value>
+    <comment>Button text for confirming a new utility association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>Choose how to add the feature</value>
+    <comment>Title for the action sheet used to choose how to select a feature for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>Choose to add</value>
+    <comment>Heading shown above utility association candidate features.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>{0} Features Identified</value>
+    <comment>Summary shown after identifying utility association candidate features on the map.</comment>
+  </data>
   <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
     <value>Association type</value>
     <comment>Label for the association type shown on the add association review screen.</comment>
@@ -406,12 +422,16 @@
     <comment>Label for the current feature on the add association review screen.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
-    <value>No matching features available.</value>
+    <value>No matches found.</value>
     <comment>Message shown when no candidate features are available for the selected source or asset type.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
     <value>No network data sources available.</value>
     <comment>Message shown when no network data sources can be used to create an association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>New Association</value>
+    <comment>Title for reviewing and confirming a new utility association.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
     <value>Associations can't be edited for this feature.</value>
@@ -425,17 +445,57 @@
     <value>Review association</value>
     <comment>Title for the final add association review screen.</comment>
   </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>Search features</value>
+    <comment>Placeholder for filtering identified utility association candidate features by title.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>Search</value>
+    <comment>Placeholder for filtering network data sources or utility asset types.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>Network Data Source</value>
+    <comment>Title for selecting a network data source for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>{0} results</value>
+    <comment>Number of matching network data sources or utility asset types.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>Available Asset Types</value>
+    <comment>Heading shown above utility asset types available for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>Available Features ({0})</value>
+    <comment>Title showing the number of candidate features available for a new association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>Status shown while utility association candidates are loading.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>No asset types available.</value>
+    <comment>Message shown when no utility asset types match the current search.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>Load more</value>
+    <comment>Button text for loading the next page of utility association candidates.</comment>
+  </data>
   <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
     <value>Select a network data source</value>
     <comment>Description shown on the screen used to choose a network data source for a new association.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
-    <value>Select from Network Data Source</value>
+    <value>From Network Data Source</value>
     <comment>Action sheet option for browsing candidates from a network data source.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
-    <value>Select on Map</value>
+    <value>On Map</value>
     <comment>Action sheet option for selecting the associated feature from a map.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>Select features by tapping on the map.</value>
+    <comment>Instruction shown while waiting for utility association candidates to be identified on a map.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
     <value>Select a terminal.</value>
@@ -444,6 +504,10 @@
   <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
     <value>Structure attachment</value>
     <comment>Association type display name for a structural attachment association.</comment>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>Tap Selection</value>
+    <comment>Title for the page used to identify utility association candidates by tapping on a map.</comment>
   </data>
   <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
     <value>To element</value>
