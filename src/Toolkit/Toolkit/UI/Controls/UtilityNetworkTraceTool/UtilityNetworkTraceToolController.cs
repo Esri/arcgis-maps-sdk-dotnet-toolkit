@@ -623,7 +623,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
 
             // Skip adding duplicate barriers.
-            if (BarrierGraphicsOverlay.Graphics.Any(g => g.Attributes["GlobalId"] is Guid guid && guid.Equals(element.GlobalId)))
+            if (Barriers.Any(barrier => barrier.Barrier.GlobalId == element.GlobalId))
             {
                 return;
             }

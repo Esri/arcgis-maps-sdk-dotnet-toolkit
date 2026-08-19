@@ -621,6 +621,10 @@
     <value>Search results</value>
     <comment>UIA AutomationProperties.Name for the list view control displaying search results, used by screen readers to identify the control</comment>
   </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>Add barrier</value>
+    <comment>The text on button for adding barriers.</comment>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Add starting point</value>
     <comment>The text on button for adding starting points.</comment>
@@ -632,6 +636,10 @@
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Asset details</value>
     <comment>The text for listing the asset information of the starting point.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>Barriers</value>
+    <comment>The text for listing barriers.</comment>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Cancel</value>
@@ -664,6 +672,10 @@
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Function results</value>
     <comment>The text for expanding function result collection.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>Identifying barriers...</value>
+    <comment>The status message when tapping on features to add as barriers.</comment>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Identifying starting points...</value>
@@ -721,6 +733,10 @@
     <value>Previous</value>
     <comment>The text on button for navigating to the previous starting point's information.</comment>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>Remove all</value>
+    <comment>The text on button for removing all barriers.</comment>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Remove all</value>
     <comment>The text on button for removing all starting points.</comment>
@@ -761,6 +777,10 @@
     <value>Starting points</value>
     <comment>The text for listing starting points.</comment>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>Tap on the map to identify barriers.</value>
+    <comment>The instruction text for identifying barriers on the map.</comment>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Tap on the map to identify starting points.</value>
     <comment>The instruction text for identifying starting points on the map.</comment>
@@ -792,6 +812,10 @@
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Utility networks</value>
     <comment>The text for listing utility networks.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>Use as filter barrier</value>
+    <comment>The text for choosing whether to use the barrier as a filter barrier.</comment>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Visualization options</value>

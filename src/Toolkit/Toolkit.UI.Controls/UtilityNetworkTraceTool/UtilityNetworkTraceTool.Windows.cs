@@ -56,6 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller.Results.CollectionChanged += Results_CollectionChanged;
             _controller.TraceTypes.CollectionChanged += TraceTypes_CollectionChanged;
             _controller.StartingPoints.CollectionChanged += StartingPoints_CollectionChanged;
+            _controller.Barriers.CollectionChanged += Barriers_CollectionChanged;
             _controller.UtilityNetworks.CollectionChanged += UtilityNetworks_CollectionChanged;
             ResultFillSymbol = _controller.ResultFillSymbol;
             ResultLineSymbol = _controller.ResultLineSymbol;
@@ -72,10 +73,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _part_resetStartingPointsButton?.SetValue(VisibilityProperty, _controller.StartingPoints.Any() ? Visibility.Visible : Visibility.Collapsed);
         }
 
+        private void Barriers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            _part_resetBarriersButton?.SetValue(VisibilityProperty, _controller.Barriers.Any() ? Visibility.Visible : Visibility.Collapsed);
+        }
+
         private void TraceTypes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             _part_noNamedTraceConfigurationsWarningContainer?.SetValue(VisibilityProperty, _controller.TraceTypes.Any() ? Visibility.Collapsed : Visibility.Visible);
             _part_startingPointsSectionContainer?.SetValue(VisibilityProperty, _controller.TraceTypes.Any() ? Visibility.Visible : Visibility.Collapsed);
+            _part_barriersSectionContainer?.SetValue(VisibilityProperty, _controller.TraceTypes.Any() ? Visibility.Visible : Visibility.Collapsed);
             _part_traceConfigurationsContainer?.SetValue(VisibilityProperty, _controller.TraceTypes.Any() ? Visibility.Visible : Visibility.Collapsed);
         }
 
@@ -89,6 +96,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller.AddStartingPoint(feature, location);
         }
 
+        /// <summary>
+        /// Adds a barrier.
+        /// </summary>
+        /// <param name="feature">The feature to use as the basis for the barrier.</param>
+        /// <param name="location">Optional location to use, which will be used to specify the location along the line for line features.</param>
+        /// <param name="useAsFilterBarrier">A value indicating whether to use the barrier as a filter barrier.</param>
+        public void AddBarrier(ArcGISFeature feature, MapPoint? location, bool? useAsFilterBarrier = false)
+        {
+            _controller.AddBarrier(feature, location, useAsFilterBarrier);
+        }
+
         #region Command implementations
 
         private void HandleZoomToStartingPointCommand(object? parameter)
@@ -98,6 +116,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 GeoView?.SetViewpoint(new Viewpoint(zoomEnvelope));
             }
             else if (_part_startingPointsList?.SelectedItem is StartingPointModel selectedSP && selectedSP.ZoomToExtent is Envelope selectedZoomEnvelope)
+            {
+                GeoView?.SetViewpoint(new Viewpoint(selectedZoomEnvelope));
+            }
+        }
+
+        private void HandleZoomToBarrierCommand(object? parameter)
+        {
+            if (parameter is BarrierModel selectedBarrier && selectedBarrier.ZoomToExtent is Envelope zoomEnvelope)
+            {
+                GeoView?.SetViewpoint(new Viewpoint(zoomEnvelope));
+            }
+            else if (_part_barriersList?.SelectedItem is BarrierModel selectedBarrierItem && selectedBarrierItem.ZoomToExtent is Envelope selectedZoomEnvelope)
             {
                 GeoView?.SetViewpoint(new Viewpoint(selectedZoomEnvelope));
             }
@@ -217,6 +247,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case nameof(_controller.SelectedStartingPoint):
                     _part_startingPointsList?.SetValue(ListView.SelectedItemProperty, _controller.SelectedStartingPoint);
                     break;
+                case nameof(_controller.SelectedBarrier):
+                    _part_barriersList?.SetValue(ListView.SelectedItemProperty, _controller.SelectedBarrier);
+                    break;
                 case nameof(_controller.TraceName):
                     _part_resultNamedTextBox?.SetValue(TextBox.TextProperty, _controller.TraceName ?? "");
                     break;
@@ -240,6 +273,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case nameof(_controller.IsAddingStartingPoints):
                     _part_addRemoveStartingPointsButtonContainer?.SetValue(VisibilityProperty, _controller.IsAddingStartingPoints ? Visibility.Collapsed : Visibility.Visible);
                     _part_cancelAddStartingPointsButton?.SetValue(VisibilityProperty, _controller.IsAddingStartingPoints ? Visibility.Visible : Visibility.Collapsed);
+                    break;
+                case nameof(_controller.IsAddingBarriers):
+                    _part_addRemoveBarriersButtonContainer?.SetValue(VisibilityProperty, _controller.IsAddingBarriers ? Visibility.Collapsed : Visibility.Visible);
+                    _part_cancelAddBarriersButton?.SetValue(VisibilityProperty, _controller.IsAddingBarriers ? Visibility.Visible : Visibility.Collapsed);
                     break;
                 case nameof(_controller.StartingPointSymbol):
                     StartingPointSymbol = _controller.StartingPointSymbol;
@@ -267,7 +304,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async void OnGeoViewTapped(object? sender, GeoViewInputEventArgs e)
         {
-            if (e.Handled || !_controller.IsAddingStartingPoints || _controller.SelectedUtilityNetwork == null)
+            if (e.Handled || (!_controller.IsAddingStartingPoints && !_controller.IsAddingBarriers) || _controller.SelectedUtilityNetwork == null)
             {
                 return;
             }
@@ -290,7 +327,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         if (GetFeature(identifyResult) is ArcGISFeature feature)
                         {
-                            _controller.AddStartingPoint(feature, e.Location);
+                            if (_controller.IsAddingBarriers)
+                            {
+                                _controller.AddBarrier(feature, e.Location);
+                            }
+                            else
+                            {
+                                _controller.AddStartingPoint(feature, e.Location);
+                            }
                         }
                     }
                 }
@@ -389,6 +433,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        private static void OnBarrierSymbolChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is UtilityNetworkTraceTool traceTool)
+            {
+                traceTool._controller.BarrierSymbol = e.NewValue as Symbol;
+                traceTool._controller.HandleBarrierSymbolChanged();
+            }
+        }
+
         private static void OnResultPointSymbolChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is UtilityNetworkTraceTool traceTool)
@@ -415,7 +468,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _controller.IsRunningTrace = true;
 
-            var graphicsOverlays = new[] { _controller.StartingPointGraphicsOverlay };
+            var graphicsOverlays = new[] { _controller.StartingPointGraphicsOverlay, _controller.BarrierGraphicsOverlay };
 
             if (oldGeoView != null)
             {
@@ -513,9 +566,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         #region Convenience Properties
 
         /// <summary>
-        /// Gets or sets the <see cref="GeoView"/> where starting points and trace results are displayed.
+        /// Gets or sets the <see cref="GeoView"/> where starting points, barriers, and trace results are displayed.
         /// </summary>
-        /// <value>A <see cref="GeoView"/> where starting points and trace results are displayed.</value>
+        /// <value>A <see cref="GeoView"/> where starting points, barriers, and trace results are displayed.</value>
         public GeoView? GeoView
         {
             get => GetValue(GeoViewProperty) as GeoView;
@@ -544,6 +597,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get => GetValue(StartingPointSymbolProperty) as Symbol;
             set => SetValue(StartingPointSymbolProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a <see cref="Symbol"/> that represents a barrier.
+        /// </summary>
+        /// <value>
+        /// A <see cref="Symbol"/> that represents a barrier.
+        /// </value>
+        public Symbol? BarrierSymbol
+        {
+            get => GetValue(BarrierSymbolProperty) as Symbol;
+            set => SetValue(BarrierSymbolProperty, value);
         }
 
         /// <summary>
@@ -603,6 +668,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty StartingPointSymbolProperty =
             DependencyProperty.Register(nameof(StartingPointSymbol), typeof(Symbol), typeof(UtilityNetworkTraceTool), new PropertyMetadata(null, OnStartingPointSymbolChanged));
+
+        /// <summary>
+        /// Identifies the <see cref="BarrierSymbol"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty BarrierSymbolProperty =
+            DependencyProperty.Register(nameof(BarrierSymbol), typeof(Symbol), typeof(UtilityNetworkTraceTool), new PropertyMetadata(null, OnBarrierSymbolChanged));
 
         /// <summary>
         /// Identifies the <see cref="ResultPointSymbol"/> dependency property.
