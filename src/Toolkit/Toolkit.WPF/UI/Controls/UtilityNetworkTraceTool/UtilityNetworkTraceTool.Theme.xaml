@@ -523,6 +523,127 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="BarrierItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <controls:SymbolDisplay
+                            Grid.RowSpan="2"
+                            Width="32"
+                            Height="32"
+                            Margin="0,0,4,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Focusable="False"
+                            Symbol="{Binding Symbol, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="2"
+                            Text="{Binding Barrier.NetworkSource.Name}"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="2"
+                            FontWeight="SemiBold"
+                            Text="{Binding Barrier.AssetGroup.Name}"
+                            TextWrapping="Wrap" />
+                        <ComboBox
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="5"
+                            ItemContainerStyle="{StaticResource UNTraceComboBoxItem}"
+                            ItemsSource="{Binding Barrier.AssetType.TerminalConfiguration.Terminals}"
+                            KeyboardNavigation.TabIndex="8"
+                            SelectedItem="{Binding Barrier.Terminal, Mode=TwoWay}"
+                            Style="{StaticResource UNTraceTaggedComboBox}"
+                            Tag="Terminal"
+                            Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Slider
+                            x:Name="FractionAlongSlider"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Margin="2"
+                            VerticalAlignment="Center"
+                            KeyboardNavigation.TabIndex="9"
+                            Style="{StaticResource UNTraceSlider}"
+                            Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}"
+                            Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Grid.ColumnSpan="2"
+                            Margin="4,0,0,0"
+                            KeyboardNavigation.TabIndex="10"
+                            Style="{StaticResource UNTraceTextBoxCompact}"
+                            Text="{Binding ElementName=FractionAlongSlider, Path=Value, Mode=TwoWay, StringFormat=0.00}"
+                            Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}" />
+                        <CheckBox
+                            Grid.Row="3"
+                            Grid.ColumnSpan="5"
+                            Margin="2"
+                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolUseAsFilterBarrier}"
+                            IsChecked="{Binding UseAsFilterBarrier, Mode=TwoWay}"
+                            Style="{StaticResource UNTraceCheckBox}" />
+                        <Button
+                            Grid.RowSpan="2"
+                            Grid.Column="2"
+                            Margin="8,4,0,4"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=internal:StartingPointListView}, Path=ZoomToCommand}"
+                            CommandParameter="{Binding}"
+                            KeyboardNavigation.TabIndex="1"
+                            Style="{StaticResource UNTraceIconButton}">
+                            <Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTracePathCommandIconStyle}" />
+                        </Button>
+                        <Button
+                            Grid.RowSpan="2"
+                            Grid.Column="3"
+                            Margin="8,4,0,4"
+                            VerticalAlignment="Center"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=internal:StartingPointListView}, Path=OpenInspectorCommand}"
+                            CommandParameter="{Binding}"
+                            KeyboardNavigation.TabIndex="2"
+                            Style="{StaticResource UNTraceIconButton}">
+                            <Path Data="{StaticResource UNTraceIconInspect}" Style="{StaticResource UNTracePathCommandIconStyle}" />
+                        </Button>
+                        <Button
+                            Grid.RowSpan="2"
+                            Grid.Column="4"
+                            Margin="8,4,0,4"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=internal:StartingPointListView}, Path=DeleteSelectedCommand}"
+                            CommandParameter="{Binding}"
+                            KeyboardNavigation.TabIndex="3"
+                            Style="{StaticResource UNTraceIconButton}">
+                            <Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTracePathCommandIconStyle}" />
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -669,6 +790,117 @@
                                                         </UniformGrid>
 
                                                         <Button x:Name="PART_CancelAddStartingPointsButton"
+                                                            Margin="4"
+                                                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolCancel}"
+                                                            Style="{StaticResource UNTracePrimaryButton}" />
+                                                    </StackPanel>
+                                                </GroupBox>
+                                                <GroupBox x:Name="PART_BarriersSectionContainer"
+                                                    Header="{internal:LocalizedString Key=UtilityNetworkTraceToolBarriers}"
+                                                    Style="{StaticResource UNTraceGroupBox}">
+                                                    <StackPanel Orientation="Vertical">
+                                                        <internal:StartingPointListView x:Name="PART_BarriersList"
+                                                            ItemTemplate="{TemplateBinding BarrierItemTemplate}">
+                                                            <internal:StartingPointListView.InspectorViewTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Background="Transparent">
+                                                                        <StackPanel>
+                                                                            <Grid>
+                                                                                <Grid.ColumnDefinitions>
+                                                                                    <ColumnDefinition Width="*" />
+                                                                                    <ColumnDefinition Width="Auto" />
+                                                                                </Grid.ColumnDefinitions>
+                                                                                <Grid.RowDefinitions>
+                                                                                    <RowDefinition Height="Auto" />
+                                                                                    <RowDefinition Height="Auto" />
+                                                                                </Grid.RowDefinitions>
+                                                                                <TextBlock
+                                                                                    Grid.Row="0"
+                                                                                    Grid.Column="0"
+                                                                                    Margin="4"
+                                                                                    FontSize="14"
+                                                                                    FontWeight="SemiBold"
+                                                                                    Text="{Binding Barrier.NetworkSource.Name}" />
+                                                                                <TextBlock
+                                                                                    Grid.Row="1"
+                                                                                    Grid.Column="0"
+                                                                                    Margin="4"
+                                                                                    FontWeight="SemiBold"
+                                                                                    Text="{Binding Barrier.AssetGroup.Name}" />
+                                                                                <controls:SymbolDisplay
+                                                                                    Grid.RowSpan="2"
+                                                                                    Grid.Column="1"
+                                                                                    Width="32"
+                                                                                    Height="32"
+                                                                                    Margin="4"
+                                                                                    VerticalAlignment="Center"
+                                                                                    Focusable="False"
+                                                                                    Symbol="{Binding Symbol, Mode=OneTime}" />
+                                                                            </Grid>
+                                                                            <CheckBox
+                                                                                Margin="4"
+                                                                                Content="{internal:LocalizedString Key=UtilityNetworkTraceToolUseAsFilterBarrier}"
+                                                                                IsChecked="{Binding UseAsFilterBarrier, Mode=TwoWay}" />
+                                                                            <GroupBox
+                                                                                BorderBrush="{StaticResource UNTraceBorder1}"
+                                                                                BorderThickness="0,1,0,0"
+                                                                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}"
+                                                                                Style="{StaticResource UNTraceGroupBox}"
+                                                                                Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
+                                                                                <ComboBox
+                                                                                    DisplayMemberPath="Name"
+                                                                                    ItemsSource="{Binding Barrier.AssetType.TerminalConfiguration.Terminals}"
+                                                                                    SelectedItem="{Binding Barrier.Terminal, Mode=TwoWay}"
+                                                                                    Style="{StaticResource UNTraceComboBox}" />
+                                                                            </GroupBox>
+                                                                            <GroupBox
+                                                                                BorderBrush="{StaticResource UNTraceBorder1}"
+                                                                                BorderThickness="0,1,0,0"
+                                                                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
+                                                                                Style="{StaticResource UNTraceGroupBox}"
+                                                                                Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}">
+                                                                                <Slider Style="{StaticResource UNTraceSlider}" Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
+                                                                            </GroupBox>
+                                                                            <GroupBox
+                                                                                BorderBrush="{StaticResource UNTraceBorder1}"
+                                                                                BorderThickness="0,1,0,0"
+                                                                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolAssetDetails}"
+                                                                                Style="{StaticResource UNTraceGroupBox}">
+                                                                                <controls:PopupViewer Popup="{Binding Popup}" />
+                                                                            </GroupBox>
+                                                                        </StackPanel>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </internal:StartingPointListView.InspectorViewTemplate>
+                                                        </internal:StartingPointListView>
+                                                        <TextBlock x:Name="PART_IsAddingBarriersIndicator"
+                                                            Margin="2"
+                                                            FontWeight="SemiBold"
+                                                            Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTapToIdentifyBarriers}"
+                                                            TextAlignment="Center" />
+                                                        <UniformGrid x:Name="PART_AddRemoveBarrierButtonsContainer"
+                                                            Margin="0,4,0,0"
+                                                            Rows="1">
+                                                            <Button x:Name="PART_ResetBarriersButton"
+                                                                Margin="0,0,4,0"
+                                                                Style="{StaticResource UNTraceSecondaryButton}">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Path Data="{StaticResource UNTraceIconReset}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
+                                                                    <TextBlock Margin="0,0,4,0" Text="{internal:LocalizedString Key=UtilityNetworkTraceToolRemoveAllBarriers}" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                            <Button x:Name="PART_AddBarriersButton"
+                                                                Grid.Column="1"
+                                                                Margin="0"
+                                                                Style="{StaticResource UNTracePrimaryButton}">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Path Data="{StaticResource UNTraceIconPlus}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
+                                                                    <TextBlock Text="{internal:LocalizedString Key=UtilityNetworkTraceToolAddBarrier}" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </UniformGrid>
+
+                                                        <Button x:Name="PART_CancelAddBarriersButton"
                                                             Margin="4"
                                                             Content="{internal:LocalizedString Key=UtilityNetworkTraceToolCancel}"
                                                             Style="{StaticResource UNTracePrimaryButton}" />
