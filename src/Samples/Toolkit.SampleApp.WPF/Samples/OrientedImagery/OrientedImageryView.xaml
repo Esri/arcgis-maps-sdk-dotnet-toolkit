@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery.OrientedImageryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Import styles from the default OrientedImageryView theme -->
+                <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OrientedImagery/OrientedImagery.Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Define the main OrientedImageryViewModel -->
+            <esri:OrientedImageryViewModel x:Key="MainOrientedImageryVM" />
+
+            <!-- Define a data template for a custom toolbar item type -->
+            <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIToolbarItem">
+                <Button Click="OpenSelectedImagePopupButton_Click" ToolTip="Open popup for selected image">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MainViewModel.SelectedImage}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Viewbox Width="32" Height="32" Stretch="Uniform">
+                        <Grid Width="32" Height="32">
+                            <Path Fill="Black" Data="M7 10h18v10H7zm17 9v-8H8v8zM15 7H7v1h8zm9 1h1V7h-1zm5 14a2 2 0 0 1-2 2h-6.69l-4.277 6.33L11.757 24H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2zM28 5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v17a1 1 0 0 0 1 1h7.289l3.744 5.543L19.778 23H27a1 1 0 0 0 1-1z" />
+                        </Grid>
+                    </Viewbox>
+                </Button>
+            </DataTemplate>
+
+            <!-- Register the toolbar data template with a selector -->
+            <esri:OrientedImageryViewTemplateSelector x:Key="CustomToolbarSelector">
+                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:ExampleOIToolbarItem}" Template="{StaticResource DemoOilToolbarControlTemplate}" />
+            </esri:OrientedImageryViewTemplateSelector>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="ControlPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="LayerUriTextBox" Text="https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0" />
+            <Button Grid.Column="1" Content="Apply Layer" Click="ApplyLayerButton_Click" />
+        </Grid>
+
+        <esri:MapView x:Name="MainMapView" Grid.Row="1" Grid.Column="0"/>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="5"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      ResizeBehavior="PreviousAndNext" />
+        <esri:OrientedImageryView x:Name="MainOrientedImageryView"
+                                  GeoView="{Binding ElementName=MainMapView}"
+                                  ViewModel="{StaticResource MainOrientedImageryVM}"
+                                  ItemTemplateSelector="{StaticResource CustomToolbarSelector}"
+                                  Grid.Row="1" Grid.Column="2"/>
+
+        <Grid x:Name="SelectedImagePopupBackground"
+              Grid.RowSpan="2"
+              Grid.ColumnSpan="3"
+              Background="#AA333333"
+              Visibility="Collapsed"
+              MouseDown="SelectedImagePopupBackground_MouseDown">
+            <Border BorderBrush="Black"
+                    BorderThickness="1"
+                    Background="White"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <esri:PopupViewer x:Name="SelectedImagePopupViewer" Margin="5" Width="400" MaxHeight="500" />
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
