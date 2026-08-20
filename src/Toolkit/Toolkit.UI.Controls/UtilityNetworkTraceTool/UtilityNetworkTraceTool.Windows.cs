@@ -107,6 +107,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller.AddBarrier(feature, location, useAsFilterBarrier);
         }
 
+        /// <summary>
+        /// Reloads the named trace configurations available for the selected utility network, filtered by name.
+        /// </summary>
+        /// <param name="availableTraces">The names of the trace configurations to load.</param>
+        /// <returns>A task that represents the asynchronous load operation.</returns>
+        public Task LoadNamedTracesAsync(IEnumerable<string> availableTraces)
+        {
+            return _controller.LoadNamedTracesAsync(availableTraces);
+        }
+
         #region Command implementations
 
         private void HandleZoomToStartingPointCommand(object? parameter)

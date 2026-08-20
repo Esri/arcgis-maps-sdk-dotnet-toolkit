@@ -285,38 +285,106 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
+        /// <summary>
+        /// Reloads the named trace configurations available for the selected utility network, filtered by name.
+        /// </summary>
+        /// <param name="availableTraces">The names of the trace configurations to load.</param>
+        /// <returns>A task that represents the asynchronous load operation.</returns>
+        public async Task LoadNamedTracesAsync(IEnumerable<string> availableTraces)
+        {
+            ArgumentNullException.ThrowIfNull(availableTraces);
+
+            var requestedNames = availableTraces.ToArray();
+            if (requestedNames.Length == 0 || requestedNames.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new ArgumentException("At least one valid trace configuration name is required.", nameof(availableTraces));
+            }
+
+            requestedNames = requestedNames.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+
+            if (Map is not Map map || SelectedUtilityNetwork is not UtilityNetwork utilityNetwork)
+            {
+                throw new InvalidOperationException("A map and utility network must be selected before loading named traces.");
+            }
+
+            await LoadTraceTypesAsync(map, utilityNetwork, requestedNames);
+        }
+
         private async Task LoadTraceTypesAsync()
         {
             try
             {
-                IsLoadingNetwork = true;
-
-                if (Map != null
-                    && SelectedUtilityNetwork is UtilityNetwork utilityNetwork)
+                if (Map is Map map && SelectedUtilityNetwork is UtilityNetwork utilityNetwork)
                 {
-                    if (_getTraceTypesCts != null)
-                    {
-                        _getTraceTypesCts.Cancel();
-                    }
-
-                    _getTraceTypesCts = new CancellationTokenSource();
-                    var traceTypes = await Map.GetNamedTraceConfigurationsFromUtilityNetworkAsync(utilityNetwork, _getTraceTypesCts.Token);
-                    foreach (var traceType in traceTypes.OrderBy(tt => tt.Name))
-                    {
-                        TraceTypes.Add(traceType);
-                    }
+                    await LoadTraceTypesAsync(map, utilityNetwork, requestedNames: null);
                 }
-            }
-            catch (TaskCanceledException)
-            {
-                // Do nothing when canceled
+                else
+                {
+                    IsLoadingNetwork = false;
+                }
             }
             catch (Exception)
             {
             }
+        }
+
+        private async Task LoadTraceTypesAsync(Map map, UtilityNetwork utilityNetwork, IReadOnlyCollection<string>? requestedNames)
+        {
+            var requestCts = new CancellationTokenSource();
+            var previousRequestCts = _getTraceTypesCts;
+            _getTraceTypesCts = requestCts;
+            previousRequestCts?.Cancel();
+
+            SelectedTraceType = null;
+            TraceTypes.Clear();
+            EnableTrace = false;
+            InsufficientStartingPointsWarning = false;
+            TooManyStartingPointsWarning = false;
+            DuplicatedTraceWarning = false;
+            IsLoadingNetwork = true;
+
+            try
+            {
+                IEnumerable<UtilityNamedTraceConfiguration> traceTypes;
+                if (requestedNames == null || map.Item != null)
+                {
+                    traceTypes = await map.GetNamedTraceConfigurationsFromUtilityNetworkAsync(utilityNetwork, requestCts.Token);
+                    if (requestedNames != null)
+                    {
+                        traceTypes = traceTypes.Where(traceType => requestedNames.Any(name => string.Equals(name, traceType.Name, StringComparison.OrdinalIgnoreCase)));
+                    }
+                }
+                else
+                {
+                    var queryParameters = new UtilityNamedTraceConfigurationQueryParameters();
+                    foreach (var requestedName in requestedNames)
+                    {
+                        queryParameters.Names.Add(requestedName);
+                    }
+
+                    traceTypes = await utilityNetwork.QueryNamedTraceConfigurationsAsync(queryParameters, requestCts.Token);
+                }
+
+                requestCts.Token.ThrowIfCancellationRequested();
+                if (!ReferenceEquals(_getTraceTypesCts, requestCts))
+                {
+                    throw new OperationCanceledException(requestCts.Token);
+                }
+
+                foreach (var traceType in traceTypes.OrderBy(traceType => traceType.Name))
+                {
+                    TraceTypes.Add(traceType);
+                }
+            }
             finally
             {
-                IsLoadingNetwork = false;
+                if (ReferenceEquals(_getTraceTypesCts, requestCts))
+                {
+                    _getTraceTypesCts = null;
+                    IsLoadingNetwork = false;
+                }
+
+                requestCts.Dispose();
             }
         }
 
@@ -931,7 +999,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             BarrierGraphicsOverlay.Graphics.Clear();
             IsAddingBarriers = false;
 
-            _getTraceTypesCts?.Cancel();
+            var getTraceTypesCts = _getTraceTypesCts;
+            _getTraceTypesCts = null;
+            getTraceTypesCts?.Cancel();
             _traceCts?.Cancel();
             _getFeaturesForElementsCts?.Cancel();
 

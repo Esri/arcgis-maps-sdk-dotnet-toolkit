@@ -55,6 +55,16 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         _controller.UtilityNetworks.CollectionChanged += UtilityNetworks_CollectionChanged;
     }
 
+    /// <summary>
+    /// Reloads the named trace configurations available for the selected utility network, filtered by name.
+    /// </summary>
+    /// <param name="availableTraces">The names of the trace configurations to load.</param>
+    /// <returns>A task that represents the asynchronous load operation.</returns>
+    public Task LoadNamedTracesAsync(IEnumerable<string> availableTraces)
+    {
+        return _controller.LoadNamedTracesAsync(availableTraces);
+    }
+
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
     {
