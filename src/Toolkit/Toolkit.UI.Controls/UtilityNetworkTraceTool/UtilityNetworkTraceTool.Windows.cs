@@ -439,6 +439,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (d is UtilityNetworkTraceTool traceTool)
             {
+                traceTool._controller.StartingPointSymbol = e.NewValue as Symbol;
                 traceTool._controller.HandleStartingPointSymbolChanged();
             }
         }
