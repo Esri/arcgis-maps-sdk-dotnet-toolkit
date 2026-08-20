@@ -134,14 +134,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private void TraceTypes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (TraceTypes.Count == 1)
-            {
-                SelectedTraceType = TraceTypes[0];
-            }
-        }
-
         private void Results_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             ApplyWarnings();
@@ -236,7 +228,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             // Automatically select sole items in lists.
             UtilityNetworks.CollectionChanged += UtilityNetworks_CollectionChanged;
-            TraceTypes.CollectionChanged += TraceTypes_CollectionChanged;
 
             // Automatically update warnings
             Results.CollectionChanged += Results_CollectionChanged;
@@ -374,6 +365,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 foreach (var traceType in traceTypes.OrderBy(traceType => traceType.Name))
                 {
                     TraceTypes.Add(traceType);
+                }
+
+                if (TraceTypes.Count > 0)
+                {
+                    SelectedTraceType = TraceTypes[0];
                 }
             }
             finally
