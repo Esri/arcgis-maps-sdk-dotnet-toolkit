@@ -1,4 +1,4 @@
-#if WPF
+#if WPF || MAUI
 
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
@@ -6,7 +6,11 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using System.Collections.ObjectModel;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 /// <summary>
 /// Displays oriented imagery and provides controls for managing image selection, footprints, and markers.
@@ -24,13 +28,12 @@ public partial class OrientedImageryView
 
         ViewModel = new OrientedImageryViewModel();
 
+#if WPF
         ItemsSource = GetDefaultToolbarItems();
-
-#if MAUI
+        DefaultStyleKey = typeof(OrientedImageryView);
+#elif MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
         ControlTemplate = DefaultControlTemplate;
-#else
-        DefaultStyleKey = typeof(OrientedImageryView);
 #endif
     }
 
@@ -41,9 +44,16 @@ public partial class OrientedImageryView
     public override void OnApplyTemplate()
 #endif
     {
+#if MAUI
+        BeforeApplyMauiTemplate();
+#endif
         base.OnApplyTemplate();
 
+#if MAUI
+        BindingContext = ViewModel;
+#else
         DataContext = ViewModel;
+#endif
 
         if (_display != null)
             _display.ImageClicked -= Display_ImageClicked;
@@ -55,9 +65,18 @@ public partial class OrientedImageryView
 
         _display.ImageClicked += Display_ImageClicked;
         WireDisplayProperties();
+#if MAUI
+        AfterApplyMauiTemplate();
+#endif
     }
 
+#if MAUI
+    partial void BeforeApplyMauiTemplate();
+    partial void AfterApplyMauiTemplate();
+#endif
+
 #region ViewModel
+#if WPF
     /// <summary>
     /// Gets the default toolbar items for the OrientedImageryView.
     /// </summary>
@@ -71,6 +90,7 @@ public partial class OrientedImageryView
         });
         return new() { new AutoUpdateFootprintVM(), new ShowSelectedFootprintVM(), new ShowUnselectedFootprintsVM(), new ShowCameraMarkersVM(), new AllowAddingMarkersVM(), markerSymbolPickerVM, new ClearMarkersVM() };
     }
+#endif
 
     /// <summary>
     /// Gets or sets the view model for the oriented imagery view.
@@ -99,13 +119,22 @@ public partial class OrientedImageryView
 
         if (newValue == null)
         {
+#if MAUI
+            SetValue(ViewModelProperty, new OrientedImageryViewModel());
+#else
             SetCurrentValue(ViewModelProperty, new OrientedImageryViewModel());
+#endif
             return;
         }
 
         newValue.PropertyChanged += ViewModel_PropertyChanged;
+#if MAUI
+        BindingContext = newValue;
+        UpdateMauiVisualState();
+#else
         DataContext = newValue;
         SetToolbarViewModels(newValue);
+#endif
 
         if (GeoView != null)
         {
@@ -134,6 +163,9 @@ public partial class OrientedImageryView
                     _display.Markers = ViewModel.Markers;
                 break;
         }
+#if MAUI
+        UpdateMauiVisualState();
+#endif
     }
 #endregion ViewModel
 
