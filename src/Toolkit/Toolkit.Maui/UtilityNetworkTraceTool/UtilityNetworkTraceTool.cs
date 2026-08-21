@@ -80,13 +80,20 @@ public partial class UtilityNetworkTraceTool : TemplatedView
     }
 
     /// <summary>
-    /// Reloads the named trace configurations available for the selected utility network, filtered by name.
+    /// Reloads the named trace configurations available for the selected utility network
+    /// and updates the list of trace configurations displayed by the tool.
     /// </summary>
-    /// <param name="availableTraces">The names of the trace configurations to load.</param>
-    /// <returns>A task that represents the asynchronous load operation.</returns>
-    public Task LoadNamedTracesAsync(IEnumerable<string> availableTraces)
+    /// <param name="visibleTraceNames">
+    /// The names of trace configurations to display. Only configurations with matching
+    /// names are included. Name matching is case-insensitive. If <c>null</c> or empty,
+    /// all available trace configurations are displayed.
+    /// </param>
+    /// <returns>
+    /// A task that represents the asynchronous load operation.
+    /// </returns>
+    public Task LoadAsync(IEnumerable<string>? visibleTraceNames)
     {
-        return _controller.LoadNamedTracesAsync(availableTraces);
+        return _controller.LoadAsync(visibleTraceNames);
     }
 
     /// <inheritdoc/>

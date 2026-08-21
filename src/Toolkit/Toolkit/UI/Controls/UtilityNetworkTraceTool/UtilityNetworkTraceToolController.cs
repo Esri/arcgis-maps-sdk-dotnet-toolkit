@@ -277,28 +277,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Reloads the named trace configurations available for the selected utility network, filtered by name.
+        /// Reloads the named trace configurations available for the selected utility network
+        /// and updates the list of trace configurations displayed by the tool.
         /// </summary>
-        /// <param name="availableTraces">The names of the trace configurations to load.</param>
-        /// <returns>A task that represents the asynchronous load operation.</returns>
-        public async Task LoadNamedTracesAsync(IEnumerable<string> availableTraces)
+        /// <param name="visibleTraceNames">
+        /// The names of trace configurations to display. Only configurations with matching
+        /// names are included. Name matching is case-insensitive. If <c>null</c> or empty,
+        /// all available trace configurations are displayed.
+        /// </param>
+        /// <returns>
+        /// A task that represents the asynchronous load operation.
+        /// </returns>
+        public Task LoadAsync(IEnumerable<string>? visibleTraceNames)
         {
-            ArgumentNullException.ThrowIfNull(availableTraces);
-
-            var requestedNames = availableTraces.ToArray();
-            if (requestedNames.Length == 0 || requestedNames.Any(string.IsNullOrWhiteSpace))
-            {
-                throw new ArgumentException("At least one valid trace configuration name is required.", nameof(availableTraces));
-            }
-
-            requestedNames = requestedNames.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
-
+            var requestedNames = visibleTraceNames?.ToArray() ?? Array.Empty<string>();
             if (Map is not Map map || SelectedUtilityNetwork is not UtilityNetwork utilityNetwork)
             {
                 throw new InvalidOperationException("A map and utility network must be selected before loading named traces.");
             }
 
-            await LoadTraceTypesAsync(map, utilityNetwork, requestedNames);
+            return LoadTraceTypesAsync(map, utilityNetwork, requestedNames);
         }
 
         private async Task LoadTraceTypesAsync()
@@ -337,10 +335,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             try
             {
                 IEnumerable<UtilityNamedTraceConfiguration> traceTypes;
-                if (requestedNames == null || map.Item != null)
+                if (map.Item != null)
                 {
                     traceTypes = await map.GetNamedTraceConfigurationsFromUtilityNetworkAsync(utilityNetwork, requestCts.Token);
-                    if (requestedNames != null)
+                    if (requestedNames?.Any(n => !string.IsNullOrWhiteSpace(n)) == true)
                     {
                         traceTypes = traceTypes.Where(traceType => requestedNames.Any(name => string.Equals(name, traceType.Name, StringComparison.OrdinalIgnoreCase)));
                     }
@@ -348,9 +346,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 else
                 {
                     var queryParameters = new UtilityNamedTraceConfigurationQueryParameters();
-                    foreach (var requestedName in requestedNames)
+                    if (requestedNames != null)
                     {
-                        queryParameters.Names.Add(requestedName);
+                        foreach (var requestedName in requestedNames)
+                        {
+                            queryParameters.Names.Add(requestedName);
+                        }
                     }
 
                     traceTypes = await utilityNetwork.QueryNamedTraceConfigurationsAsync(queryParameters, requestCts.Token);
