@@ -39,9 +39,11 @@ public partial class UtilityNetworkTraceTool
     // Configure section
     private Layout? PART_ConfigureContainer;
     private Button? PART_ButtonAddStartingPoint;
+    private Button? PART_ButtonRemoveAllStartingPoints;
     private Button? PART_ButtonCancelAddStartingPoint;
     private CollectionView? PART_ListViewStartingPoints;
     private Button? PART_ButtonAddBarrier;
+    private Button? PART_ButtonRemoveAllBarriers;
     private Button? PART_ButtonCancelAddBarrier;
     private CollectionView? PART_ListViewBarriers;
 
@@ -88,7 +90,9 @@ public partial class UtilityNetworkTraceTool
         var utilityNetworks = Properties.Resources.GetString("UtilityNetworkTraceToolUtilityNetworks");
         var traceTypes = Properties.Resources.GetString("UtilityNetworkTraceToolTraceTypes");
         var addStartingPoint = Properties.Resources.GetString("UtilityNetworkTraceToolAddStartingPoint");
+        var removeAllStartingPoints = Properties.Resources.GetString("UtilityNetworkTraceToolRemoveAllStartingPoints");
         var addBarrier = Properties.Resources.GetString("UtilityNetworkTraceToolAddBarrier");
+        var removeAllBarriers = Properties.Resources.GetString("UtilityNetworkTraceToolRemoveAllBarriers");
         var cancel = Properties.Resources.GetString("UtilityNetworkTraceToolCancel");
         var notEnoughStartingPoints = Properties.Resources.GetString("UtilityNetworkTraceToolNotEnoughStartingPoints");
         var moreThanRequiredStartingPoints = Properties.Resources.GetString("UtilityNetworkTraceToolMoreThanRequiredStartingPoints");
@@ -137,11 +141,25 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
             <RowDefinition Height=""Auto"" />
             <RowDefinition Height=""*"" />
         </Grid.RowDefinitions>
-        <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""{addStartingPoint}"" IsVisible=""false"" Grid.Row=""0"" />
-        <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""{cancel}"" IsVisible=""false"" Grid.Row=""0""/>
+        <Grid Grid.Row=""0"" ColumnSpacing=""4"">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=""*"" />
+                <ColumnDefinition Width=""*"" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name=""{nameof(PART_ButtonRemoveAllStartingPoints)}"" Text=""{removeAllStartingPoints}"" IsVisible=""false"" />
+            <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""{addStartingPoint}"" IsVisible=""false"" Grid.Column=""1"" />
+            <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""{cancel}"" IsVisible=""false"" Grid.ColumnSpan=""2"" />
+        </Grid>
         <CollectionView x:Name=""{nameof(PART_ListViewStartingPoints)}"" Background=""{backgroundColor}"" SelectionMode=""Single"" IsVisible=""false"" Grid.Row=""1"" />
-        <Button x:Name=""{nameof(PART_ButtonAddBarrier)}"" Text=""{addBarrier}"" IsVisible=""false"" Grid.Row=""2"" />
-        <Button x:Name=""{nameof(PART_ButtonCancelAddBarrier)}"" Text=""{cancel}"" IsVisible=""false"" Grid.Row=""2"" />
+        <Grid Grid.Row=""2"" ColumnSpacing=""4"">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=""*"" />
+                <ColumnDefinition Width=""*"" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name=""{nameof(PART_ButtonRemoveAllBarriers)}"" Text=""{removeAllBarriers}"" IsVisible=""false"" />
+            <Button x:Name=""{nameof(PART_ButtonAddBarrier)}"" Text=""{addBarrier}"" IsVisible=""false"" Grid.Column=""1"" />
+            <Button x:Name=""{nameof(PART_ButtonCancelAddBarrier)}"" Text=""{cancel}"" IsVisible=""false"" Grid.ColumnSpan=""2"" />
+        </Grid>
         <CollectionView x:Name=""{nameof(PART_ListViewBarriers)}"" Background=""{backgroundColor}"" SelectionMode=""Single"" IsVisible=""false"" Grid.Row=""3"" />
     </Grid>
     <Grid x:Name=""{nameof(PART_RunContainer)}"" Grid.Row=""2"">
