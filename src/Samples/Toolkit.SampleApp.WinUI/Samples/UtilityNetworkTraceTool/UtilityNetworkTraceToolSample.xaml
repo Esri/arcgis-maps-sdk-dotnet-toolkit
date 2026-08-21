@@ -10,11 +10,74 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
     <Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="300" />
-		</Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
         <esri:MapView x:Name="MyMapView" />
-        <toolkit:UtilityNetworkTraceTool Grid.Column="1" GeoView="{x:Bind MyMapView}" />
+        <Border
+            Width="280"
+            Margin="8"
+            Padding="8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="{ThemeResource ControlOnImageFillColorDefaultBrush}"
+            BorderBrush="{StaticResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="4">
+            <StackPanel Spacing="4">
+                <TextBox
+                    x:Name="NamedTraceNamesTextBox"
+                    Text="Connected Trace, Downstream Trace"
+                    ToolTipService.ToolTip="Comma-separated named trace configurations" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Click="LoadNamedTracesButton_Click"
+                    Content="Load named traces" />
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="12">
+                    <RadioButton
+                        x:Name="PortalMapRadioButton"
+                        Click="MapSourceRadioButton_Click"
+                        Content="Portal map"
+                        GroupName="MapSource"
+                        IsChecked="True" />
+                    <RadioButton
+                        Click="MapSourceRadioButton_Click"
+                        Content="Non-portal map"
+                        GroupName="MapSource" />
+                </StackPanel>
+                <TextBox
+                    x:Name="DeviceWhereClauseTextBox"
+                    Margin="0,4,0,0"
+                    Text="assetgroup = 5"
+                    ToolTipService.ToolTip="Device feature where clause" />
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="12">
+                    <RadioButton
+                        x:Name="StartingPointRadioButton"
+                        Content="Starting point"
+                        GroupName="TraceLocationType"
+                        IsChecked="True" />
+                    <RadioButton
+                        Content="Barrier"
+                        GroupName="TraceLocationType" />
+                </StackPanel>
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Click="AddTraceLocationButton_Click"
+                    Content="Add queried feature" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Click="UpdateSymbolButton_Click"
+                    Content="Update selected symbol" />
+            </StackPanel>
+        </Border>
+        <toolkit:UtilityNetworkTraceTool
+            x:Name="UtilityNetworkTraceTool"
+            Grid.Column="1"
+            GeoView="{x:Bind MyMapView}" />
     </Grid>
 </Page>
