@@ -17,6 +17,60 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <esriUI:MapView x:Name="MyMapView" />
+        <Border
+            Grid.Row="0"
+            ZIndex="1"
+            WidthRequest="280"
+            Margin="8"
+            Padding="8"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            Background="{AppThemeBinding Dark=#DD242424, Light=#EEFFFFFF}"
+            Stroke="{AppThemeBinding Dark=#8AFFFFFF, Light=#8A000000}"
+            StrokeThickness="1">
+            <VerticalStackLayout Spacing="4">
+                <Entry
+                    x:Name="NamedTraceNamesEntry"
+                    Placeholder="Named trace configurations"
+                    Text="Connected Trace, Downstream Trace" />
+                <Button
+                    Clicked="LoadNamedTracesButton_Clicked"
+                    Text="Load named traces" />
+                <HorizontalStackLayout Spacing="12">
+                    <RadioButton
+                        x:Name="PortalMapRadioButton"
+                        CheckedChanged="MapSourceRadioButton_CheckedChanged"
+                        Content="Portal map"
+                        GroupName="MapSource"
+                        IsChecked="True" />
+                    <RadioButton
+                        CheckedChanged="MapSourceRadioButton_CheckedChanged"
+                        Content="Non-portal map"
+                        GroupName="MapSource" />
+                </HorizontalStackLayout>
+                <Entry
+                    x:Name="DeviceWhereClauseEntry"
+                    Margin="0,4,0,0"
+                    Placeholder="Device feature where clause"
+                    Text="assetgroup = 5" />
+                <HorizontalStackLayout Spacing="12">
+                    <RadioButton
+                        x:Name="StartingPointRadioButton"
+                        Content="Starting point"
+                        GroupName="TraceLocationType"
+                        IsChecked="True" />
+                    <RadioButton
+                        Content="Barrier"
+                        GroupName="TraceLocationType" />
+                </HorizontalStackLayout>
+                <Button
+                    Clicked="AddTraceLocationButton_Clicked"
+                    Text="Add queried feature" />
+                <Button
+                    Clicked="UpdateSymbolButton_Clicked"
+                    Text="Update selected symbol" />
+            </VerticalStackLayout>
+        </Border>
         <esriTK:UtilityNetworkTraceTool x:Name="MyTraceTool" Grid.Row="1" GeoView="{Binding Source={x:Reference MyMapView}}" />
     </Grid>
 </ContentPage>
