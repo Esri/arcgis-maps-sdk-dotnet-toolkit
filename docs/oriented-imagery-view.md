@@ -1,6 +1,6 @@
 # OrientedImageryView
 
-The `OrientedImageryView` displays oriented imagery with a built-in toolbar for image navigation, footprint visibility, camera location markers, and image markers. It works with an `OrientedImageryLayer` and `GeoView`. The control manages footprints and marker overlays, while your app remains responsible for searching for images and choosing which image is selected.
+The `OrientedImageryView` displays oriented imagery with a built-in toolbar for image navigation, footprint visibility, camera location markers, and image markers on WPF and .NET MAUI. It works with an `OrientedImageryLayer` and `GeoView`. The control manages footprints and marker overlays, while your app remains responsible for searching for images and choosing which image is selected.
 
 <img width="1108" height="656" alt="oriented-imagery" src="https://github.com/user-attachments/assets/d1199b2b-a9e5-4fce-89e6-0a3d85d05457" />
 
@@ -73,7 +73,9 @@ private async void MainMapView_GeoViewTapped(object? sender, GeoViewInputEventAr
 
 See the `OrientedImageryView` sample for a full example implementation.
 
-## Customizing the toolbar
+## Customizing the WPF toolbar
+
+The .NET MAUI control currently uses a fixed toolbar with the same built-in actions.
 
 `OrientedImageryView` is structured as an `ItemsControl` whose toolbar items are defined by its `ItemsSource` property. The default toolbar items are returned by `OrientedImageryView.GetDefaultToolbarItems()`, which includes controls for auto-updating the footprint, showing selected and unselected footprints, cycling camera marker display modes, enabling marker creation, selecting the marker symbol, and clearing markers.
 

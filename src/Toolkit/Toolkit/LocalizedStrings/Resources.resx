@@ -701,6 +701,46 @@
     <value>No results found.</value>
     <comment>The warning message when trace returned an empty result.</comment>
   </data>
+  <data name="OrientedImageryAllowAddingMarkers" xml:space="preserve">
+    <value>Toggle add markers</value>
+    <comment>The accessible label for enabling marker placement in the oriented imagery view.</comment>
+  </data>
+  <data name="OrientedImageryAutoUpdateFootprint" xml:space="preserve">
+    <value>Auto-update footprint</value>
+    <comment>The accessible label for automatically updating the selected image footprint.</comment>
+  </data>
+  <data name="OrientedImageryClearMarkers" xml:space="preserve">
+    <value>Clear markers</value>
+    <comment>The accessible label for clearing oriented imagery markers.</comment>
+  </data>
+  <data name="OrientedImageryNextImage" xml:space="preserve">
+    <value>Next image</value>
+    <comment>The accessible label for navigating to the next oriented image.</comment>
+  </data>
+  <data name="OrientedImageryNoImagesSelected" xml:space="preserve">
+    <value>No images selected</value>
+    <comment>The message shown when the oriented imagery view has no selected image.</comment>
+  </data>
+  <data name="OrientedImageryPreviousImage" xml:space="preserve">
+    <value>Previous image</value>
+    <comment>The accessible label for navigating to the previous oriented image.</comment>
+  </data>
+  <data name="OrientedImagerySelectMarkerSymbol" xml:space="preserve">
+    <value>Select marker symbol</value>
+    <comment>The accessible label for changing the marker symbol.</comment>
+  </data>
+  <data name="OrientedImageryShowCameraMarkers" xml:space="preserve">
+    <value>Change camera marker display</value>
+    <comment>The accessible label for changing where camera markers are displayed.</comment>
+  </data>
+  <data name="OrientedImageryShowSelectedFootprint" xml:space="preserve">
+    <value>Show selected image footprint</value>
+    <comment>The accessible label for toggling the selected image footprint.</comment>
+  </data>
+  <data name="OrientedImageryShowUnselectedFootprints" xml:space="preserve">
+    <value>Show unselected image footprints</value>
+    <comment>The accessible label for toggling unselected image footprints.</comment>
+  </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
     <value>The selected trace type requires additional starting points.</value>
     <comment>The warning message when there are fewer starting points than the selected trace type requires.</comment>
