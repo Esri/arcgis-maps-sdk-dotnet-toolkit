@@ -9,6 +9,10 @@
         <DataTemplate x:Key="RuntimeItemTemplate">
             <TextBlock Text="{Binding Name, StringFormat=Runtime: {0}}" />
         </DataTemplate>
+        <Style x:Key="RuntimeItemContainerStyle" TargetType="ListViewItem">
+            <Setter Property="AutomationProperties.Name" Value="{Binding Name, StringFormat=Runtime: {0}}" />
+            <Setter Property="Padding" Value="4" />
+        </Style>
     </local:TestPage.Resources>
     <Grid>
         <esri:MapView x:Name="MainMapView" />
@@ -22,6 +26,7 @@
                 <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="1">
                     <toolkit:BookmarksView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
+                            <Setter Property="AutomationProperties.Name" Value="{Binding Name, StringFormat=Custom: {0}}" />
                             <Setter Property="Padding" Value="4" />
                         </Style>
                     </toolkit:BookmarksView.ItemContainerStyle>

@@ -34,5 +34,8 @@ public partial class BookmarksTemplateMap : TestPage
     private void SetRuntimeTemplateButton_Click(object sender, ClickEventArgs e)
     {
         BookmarksView.ItemTemplate = Resources["RuntimeItemTemplate"] as DataTemplate;
+#if WPF_APP
+        BookmarksView.ItemContainerStyle = Resources["RuntimeItemContainerStyle"] as Style;
+#endif
     }
 }

@@ -51,7 +51,7 @@ public class BookmarksViewTests : AppiumTestBase
         foreach (var bookmarkName in new[] { "Red bookmark", "Green bookmark", "Blue bookmark" })
         {
             FindElementByText($"Custom: {bookmarkName}", DefaultTimeout);
-            FindElementByName(bookmarkName, DefaultTimeout);
+            FindElementByName($"Custom: {bookmarkName}", DefaultTimeout);
         }
 
         FindElement("SetRuntimeTemplateButton", DefaultTimeout).Click();
@@ -59,6 +59,7 @@ public class BookmarksViewTests : AppiumTestBase
         {
             FindElementByText($"Runtime: {bookmarkName}", DefaultTimeout);
             Assert.IsFalse(ElementExistsByText($"Custom: {bookmarkName}", TimeSpan.FromSeconds(1)), "The previous item template should no longer be rendered.");
+            Assert.IsFalse(ElementExistsByName($"Custom: {bookmarkName}", TimeSpan.FromSeconds(1)), "The previous item template should no longer be rendered.");
         }
     }
 

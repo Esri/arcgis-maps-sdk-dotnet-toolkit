@@ -9,7 +9,7 @@
     xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui">
     <local:TestPage.Resources>
         <DataTemplate x:Key="RuntimeItemTemplate" x:DataType="mapping:Bookmark">
-            <Label Text="{Binding Name, StringFormat='Runtime: {0}'}" />
+            <Label Text="{Binding Name, StringFormat='Runtime: {0}'}" SemanticProperties.Description="{Binding Name, StringFormat='Runtime: {0}'}"/>
         </DataTemplate>
     </local:TestPage.Resources>
     <Grid>
@@ -32,7 +32,7 @@
                 <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="1">
                     <toolkit:BookmarksView.ItemTemplate>
                         <DataTemplate x:DataType="mapping:Bookmark">
-                            <Border Padding="4" Margin="2">
+                            <Border Padding="4" Margin="2" SemanticProperties.Description="{Binding Name, StringFormat='Custom: {0}'}">
                                 <Label Text="{Binding Name, StringFormat='Custom: {0}'}" />
                             </Border>
                         </DataTemplate>

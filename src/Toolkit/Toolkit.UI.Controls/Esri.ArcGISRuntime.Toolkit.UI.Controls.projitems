@@ -11,7 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BasemapGallery\BasemapGallery.Appearance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BasemapGallery\BasemapGallery.Windows.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BookmarksView\BookmarksListView.Windows.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BookmarksView\BookmarksView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BookmarksView\BookmarksView.Windows.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Compass\Compass.cs" />

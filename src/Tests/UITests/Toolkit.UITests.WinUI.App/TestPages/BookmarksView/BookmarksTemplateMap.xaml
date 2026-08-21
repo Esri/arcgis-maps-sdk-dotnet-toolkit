@@ -8,7 +8,7 @@
     <local:TestPage.Resources>
         <local:BookmarkTemplateNameConverter x:Key="BookmarkTemplateNameConverter" />
         <DataTemplate x:Key="RuntimeItemTemplate">
-            <TextBlock Text="{Binding Name, Converter={StaticResource BookmarkTemplateNameConverter}, ConverterParameter=Runtime}" />
+            <TextBlock Text="{Binding Name, Converter={StaticResource BookmarkTemplateNameConverter}, ConverterParameter=Runtime}" AutomationProperties.Name="{Binding Name, Converter={StaticResource BookmarkTemplateNameConverter}, ConverterParameter=Runtime}" />
         </DataTemplate>
     </local:TestPage.Resources>
     <Grid>
@@ -28,7 +28,7 @@
                     </toolkit:BookmarksView.ItemContainerStyle>
                     <toolkit:BookmarksView.ItemTemplate>
                         <DataTemplate>
-                            <Border Padding="4" Margin="2">
+                            <Border Padding="4" Margin="2" AutomationProperties.Name="{Binding Name, Converter={StaticResource BookmarkTemplateNameConverter}, ConverterParameter=Custom}">
                                 <TextBlock Text="{Binding Name, Converter={StaticResource BookmarkTemplateNameConverter}, ConverterParameter=Custom}" />
                             </Border>
                         </DataTemplate>
