@@ -8,12 +8,237 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate x:Key="AlternateStartingPointItemTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <esri:SymbolDisplay
+                    Grid.RowSpan="2"
+                    Width="32"
+                    Height="32"
+                    Margin="0,0,4,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Focusable="False"
+                    Symbol="{Binding Symbol, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="2"
+                    FontWeight="Bold"
+                    Foreground="Blue"
+                    Text="{Binding Element.AssetGroup.Name}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="2"
+                    FontStyle="Italic"
+                    Foreground="Black"
+                    Text="{Binding Element.NetworkSource.Name}"
+                    TextWrapping="Wrap" />
+                <Button
+                    Grid.RowSpan="2"
+                    Grid.Column="2"
+                    Width="32"
+                    Height="32"
+                    Margin="8,4,0,4"
+                    VerticalAlignment="Center"
+                    Command="{Binding DeleteCommand}"
+                    ToolTip="Delete">
+                    <TextBlock
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="16"
+                        Foreground="Red"
+                        Text="&#xE74D;" />
+                </Button>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="AlternateBarrierItemTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <esri:SymbolDisplay
+                    Grid.RowSpan="2"
+                    Width="32"
+                    Height="32"
+                    Margin="0,0,4,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Focusable="False"
+                    Symbol="{Binding Symbol, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="2"
+                    FontWeight="Bold"
+                    Foreground="Red"
+                    Text="{Binding Element.AssetGroup.Name}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="2"
+                    FontStyle="Italic"
+                    Foreground="Black"
+                    Text="{Binding Element.NetworkSource.Name}"
+                    TextWrapping="Wrap" />
+                <Button
+                    Grid.RowSpan="2"
+                    Grid.Column="2"
+                    Width="32"
+                    Height="32"
+                    Margin="8,4,0,4"
+                    VerticalAlignment="Center"
+                    Command="{Binding DeleteCommand}"
+                    ToolTip="Delete">
+                    <TextBlock
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="16"
+                        Foreground="Red"
+                        Text="&#xE74D;" />
+                </Button>
+                <ToggleButton
+                    Grid.Row="2"
+                    Grid.ColumnSpan="3"
+                    Margin="2,4,2,2"
+                    HorizontalAlignment="Stretch"
+                    IsChecked="{Binding UseAsFilterBarrier, Mode=TwoWay}">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Background" Value="White" />
+                            <Setter Property="BorderBrush" Value="Gray" />
+                            <Setter Property="Content" Value="Filter barrier: OFF" />
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="Padding" Value="8,5" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border
+                                            x:Name="ToggleBorder"
+                                            Padding="{TemplateBinding Padding}"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="2">
+                                            <ContentPresenter
+                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                VerticalAlignment="Center"
+                                                TextElement.Foreground="{TemplateBinding Foreground}" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Background" Value="Green" />
+                                                <Setter Property="BorderBrush" Value="DarkGreen" />
+                                                <Setter Property="Content" Value="Filter barrier: ON" />
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="FontWeight" Value="SemiBold" />
+                                            </Trigger>
+                                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                                <Setter TargetName="ToggleBorder" Property="BorderThickness" Value="2" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
         <esri:MapView x:Name="MyMapView" />
+        <Border
+            Width="280"
+            Margin="8"
+            Padding="8"
+            Panel.ZIndex="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="White"
+            BorderBrush="Gray"
+            BorderThickness="1">
+            <StackPanel Margin="8">
+                <TextBox
+                    x:Name="NamedTraceNamesTextBox"
+                    Text="Connected Trace, Downstream Trace"
+                    ToolTip="Comma-separated named trace configurations" />
+                <Button
+                    Margin="0,4,0,0"
+                    Click="LoadNamedTracesButton_Click"
+                    Content="Load named traces" />
+                <StackPanel
+                    Margin="0,4,0,0"
+                    Orientation="Horizontal">
+                    <RadioButton
+                        x:Name="PortalMapRadioButton"
+                        VerticalAlignment="Center"
+                        Click="MapSourceRadioButton_Click"
+                        Content="Portal map"
+                        GroupName="MapSource"
+                        IsChecked="True" />
+                    <RadioButton
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        Click="MapSourceRadioButton_Click"
+                        Content="Non-portal map"
+                        GroupName="MapSource" />
+                </StackPanel>
+                <TextBox
+                    x:Name="DeviceWhereClauseTextBox"
+                    Margin="0,8,0,0"
+                    Text="assetgroup = 5"
+                    ToolTip="Device feature where clause" />
+                <StackPanel
+                    Margin="0,4,0,0"
+                    Orientation="Horizontal">
+                    <RadioButton
+                        x:Name="StartingPointRadioButton"
+                        VerticalAlignment="Center"
+                        Content="Starting point"
+                        GroupName="TraceLocationType"
+                        IsChecked="True" />
+                    <RadioButton
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="Barrier"
+                        GroupName="TraceLocationType" />
+                </StackPanel>
+                <Button
+                    Margin="0,4,0,0"
+                    Click="AddTraceLocationButton_Click"
+                    Content="Add queried feature" />
+                <Button
+                    Margin="0,4,0,0"
+                    Click="UpdateSymbolButton_Click"
+                    Content="Update selected symbol" />
+                <Button
+                    Margin="0,4,0,0"
+                    Click="ToggleItemTemplateButton_Click"
+                    Content="Toggle selected template" />
+            </StackPanel>
+        </Border>
         <esri:UtilityNetworkTraceTool
             x:Name="UtilityNetworkTraceTool"
             Grid.Column="1"
