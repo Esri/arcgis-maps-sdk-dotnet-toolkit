@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,8 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.UtilityNetworks;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -39,6 +41,9 @@ public partial class UtilityNetworkTraceTool
     private Button? PART_ButtonAddStartingPoint;
     private Button? PART_ButtonCancelAddStartingPoint;
     private CollectionView? PART_ListViewStartingPoints;
+    private Button? PART_ButtonAddBarrier;
+    private Button? PART_ButtonCancelAddBarrier;
+    private CollectionView? PART_ListViewBarriers;
 
     // Run section
     private Layout? PART_RunContainer;
@@ -60,7 +65,13 @@ public partial class UtilityNetworkTraceTool
     private Button? PART_ButtonCancelActivity;
 #pragma warning restore SA1310, SX1309, SA1306
 
+    private DataTemplate? _defaultStartingPointItemTemplate;
+    private DataTemplate? _defaultBarrierItemTemplate;
     private static readonly ControlTemplate DefaultControlTemplate;
+
+    private DataTemplate DefaultStartingPointItemTemplate => _defaultStartingPointItemTemplate ??= CreateUtilityElementItemTemplate(false);
+
+    private DataTemplate DefaultBarrierItemTemplate => _defaultBarrierItemTemplate ??= CreateUtilityElementItemTemplate(true);
 
     [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunctionOutput.Function), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunctionOutput", "Esri.ArcGISRuntime")]
     [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunctionOutput.Result), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunctionOutput", "Esri.ArcGISRuntime")]
@@ -77,6 +88,7 @@ public partial class UtilityNetworkTraceTool
         var utilityNetworks = Properties.Resources.GetString("UtilityNetworkTraceToolUtilityNetworks");
         var traceTypes = Properties.Resources.GetString("UtilityNetworkTraceToolTraceTypes");
         var addStartingPoint = Properties.Resources.GetString("UtilityNetworkTraceToolAddStartingPoint");
+        var addBarrier = Properties.Resources.GetString("UtilityNetworkTraceToolAddBarrier");
         var cancel = Properties.Resources.GetString("UtilityNetworkTraceToolCancel");
         var notEnoughStartingPoints = Properties.Resources.GetString("UtilityNetworkTraceToolNotEnoughStartingPoints");
         var moreThanRequiredStartingPoints = Properties.Resources.GetString("UtilityNetworkTraceToolMoreThanRequiredStartingPoints");
@@ -122,32 +134,15 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
         <Grid.RowDefinitions>
             <RowDefinition Height=""Auto"" />
             <RowDefinition Height=""*"" />
+            <RowDefinition Height=""Auto"" />
+            <RowDefinition Height=""*"" />
         </Grid.RowDefinitions>
         <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""{addStartingPoint}"" IsVisible=""false"" Grid.Row=""0"" />
         <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""{cancel}"" IsVisible=""false"" Grid.Row=""0""/>
-        <CollectionView x:Name=""{nameof(PART_ListViewStartingPoints)}"" Background=""{backgroundColor}"" SelectionMode=""Single"" IsVisible=""false"" Grid.Row=""1"">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding=""4"">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height=""Auto"" />
-                            <RowDefinition Height=""Auto"" />
-                            <RowDefinition Height=""Auto"" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width=""40"" />
-                            <ColumnDefinition Width=""*"" />
-                            <ColumnDefinition Width=""40"" />
-                        </Grid.ColumnDefinitions>
-                        <esriTK:SymbolDisplay Symbol=""{{Binding Symbol}}"" Grid.RowSpan=""2"" />
-                        <Label Grid.Column=""1"" Text=""{{Binding StartingPoint.NetworkSource.Name}}"" FontAttributes=""Bold"" TextColor=""{foregroundColor}""  />
-                        <Label Grid.Column=""1"" Grid.Row=""1"" Text=""{{Binding StartingPoint.AssetGroup.Name}}"" TextColor=""{foregroundColor}""  />
-                        <Button Grid.Column=""2"" Grid.RowSpan=""2"" Text=""X"" Command=""{{Binding DeleteCommand}}"" Padding=""2"" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
+        <CollectionView x:Name=""{nameof(PART_ListViewStartingPoints)}"" Background=""{backgroundColor}"" SelectionMode=""Single"" IsVisible=""false"" Grid.Row=""1"" />
+        <Button x:Name=""{nameof(PART_ButtonAddBarrier)}"" Text=""{addBarrier}"" IsVisible=""false"" Grid.Row=""2"" />
+        <Button x:Name=""{nameof(PART_ButtonCancelAddBarrier)}"" Text=""{cancel}"" IsVisible=""false"" Grid.Row=""2"" />
+        <CollectionView x:Name=""{nameof(PART_ListViewBarriers)}"" Background=""{backgroundColor}"" SelectionMode=""Single"" IsVisible=""false"" Grid.Row=""3"" />
     </Grid>
     <Grid x:Name=""{nameof(PART_RunContainer)}"" Grid.Row=""2"">
         <Grid.RowDefinitions>
@@ -276,5 +271,161 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
 </Grid>
 </ControlTemplate>";
         DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
+    }
+
+    private DataTemplate CreateUtilityElementItemTemplate(bool isBarrier)
+    {
+        var terminal = Properties.Resources.GetString("UtilityNetworkTraceToolTerminal") ?? string.Empty;
+        var fractionAlongEdge = Properties.Resources.GetString("UtilityNetworkTraceToolFractionAlongEdge") ?? string.Empty;
+        var zoom = Properties.Resources.GetString("UtilityNetworkTraceToolZoomStartingPoint") ?? string.Empty;
+        var useAsFilterBarrier = Properties.Resources.GetString("UtilityNetworkTraceToolUseAsFilterBarrier") ?? string.Empty;
+
+        return new DataTemplate(() =>
+        {
+            var itemGrid = new Grid { Padding = 4, RowSpacing = 4, ColumnSpacing = 4 };
+            for (var row = 0; row < 5; row++)
+            {
+                itemGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            }
+
+            itemGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = 40 });
+            itemGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            itemGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = 40 });
+            itemGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = 40 });
+
+            var symbolDisplay = new SymbolDisplay
+            {
+                WidthRequest = 32,
+                HeightRequest = 32,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+            };
+            symbolDisplay.SetBinding(SymbolDisplay.SymbolProperty, static (UtilityElementModel element) => element.Symbol);
+            Grid.SetRowSpan(symbolDisplay, 2);
+
+            var networkSourceLabel = new Label { FontAttributes = FontAttributes.Bold };
+            networkSourceLabel.SetBinding(Label.TextProperty, static (UtilityElementModel element) => element.Element.NetworkSource.Name);
+            networkSourceLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#151515"), Colors.White);
+            Grid.SetColumn(networkSourceLabel, 1);
+
+            var assetGroupLabel = new Label();
+            assetGroupLabel.SetBinding(Label.TextProperty, static (UtilityElementModel element) => element.Element.AssetGroup.Name);
+            assetGroupLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#151515"), Colors.White);
+            Grid.SetRow(assetGroupLabel, 1);
+            Grid.SetColumn(assetGroupLabel, 1);
+
+            var zoomButton = new Button
+            {
+                Text = ToolkitIcons.ZoomToObject,
+                FontFamily = ToolkitIcons.FontFamilyName,
+                FontSize = 18,
+                Padding = 2,
+                WidthRequest = 40,
+                HeightRequest = 40,
+            };
+            ToolTipProperties.SetText(zoomButton, zoom);
+            zoomButton.Clicked += OnZoomToUtilityElementClicked;
+            Grid.SetColumn(zoomButton, 2);
+            Grid.SetRowSpan(zoomButton, 2);
+
+            var deleteButton = new Button { Text = "X", Padding = 2, WidthRequest = 40, HeightRequest = 40 };
+            deleteButton.SetBinding(Button.CommandProperty, static (UtilityElementModel element) => element.DeleteCommand);
+            Grid.SetColumn(deleteButton, 3);
+            Grid.SetRowSpan(deleteButton, 2);
+
+            var terminalGrid = new Grid { ColumnSpacing = 8 };
+            terminalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            terminalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            terminalGrid.SetBinding(VisualElement.IsVisibleProperty, static (UtilityElementModel element) => element.TerminalPickerVisible);
+
+            var terminalLabel = new Label { Text = terminal, VerticalOptions = LayoutOptions.Center };
+            terminalLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#151515"), Colors.White);
+
+            var terminalPicker = new Picker { Title = terminal };
+            terminalPicker.SetBinding(Picker.ItemsSourceProperty, static (UtilityElementModel element) => element.Element.AssetType?.TerminalConfiguration?.Terminals);
+            terminalPicker.SetBinding(Picker.SelectedItemProperty, static (UtilityElementModel element) => element.Element.Terminal);
+            terminalPicker.ItemDisplayBinding = BindingBase.Create(static (UtilityTerminal item) => item.Name);
+            terminalPicker.SelectedIndexChanged += OnTerminalSelected;
+            terminalPicker.SetAppThemeColor(Picker.BackgroundColorProperty, Color.FromArgb("#eaeaea"), Color.FromArgb("#151515"));
+            Grid.SetColumn(terminalPicker, 1);
+
+            terminalGrid.Children.Add(terminalLabel);
+            terminalGrid.Children.Add(terminalPicker);
+            Grid.SetRow(terminalGrid, 2);
+            Grid.SetColumnSpan(terminalGrid, 4);
+
+            var fractionGrid = new Grid { RowSpacing = 0 };
+            fractionGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            fractionGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            fractionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            fractionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            fractionGrid.SetBinding(VisualElement.IsVisibleProperty, static (UtilityElementModel element) => element.FractionSliderVisible);
+
+            var fractionLabel = new Label { Text = fractionAlongEdge };
+            fractionLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#151515"), Colors.White);
+
+            var fractionValueLabel = new Label { HorizontalTextAlignment = TextAlignment.End };
+            fractionValueLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#151515"), Colors.White);
+            Grid.SetColumn(fractionValueLabel, 1);
+
+            var fractionSlider = new Slider { Minimum = 0, Maximum = 1 };
+            fractionSlider.SetBinding(Slider.ValueProperty, static (UtilityElementModel element) => element.FractionAlongEdge);
+            fractionSlider.ValueChanged += OnFractionAlongEdgeChanged;
+            Grid.SetRow(fractionSlider, 1);
+            Grid.SetColumnSpan(fractionSlider, 2);
+            fractionValueLabel.SetBinding(Label.TextProperty, static (Slider slider) => slider.Value, stringFormat: "{0:0.00}", source: fractionSlider);
+
+            fractionGrid.Children.Add(fractionLabel);
+            fractionGrid.Children.Add(fractionValueLabel);
+            fractionGrid.Children.Add(fractionSlider);
+            Grid.SetRow(fractionGrid, 3);
+            Grid.SetColumnSpan(fractionGrid, 4);
+
+            itemGrid.Children.Add(symbolDisplay);
+            itemGrid.Children.Add(networkSourceLabel);
+            itemGrid.Children.Add(assetGroupLabel);
+            itemGrid.Children.Add(zoomButton);
+            itemGrid.Children.Add(deleteButton);
+            itemGrid.Children.Add(terminalGrid);
+            itemGrid.Children.Add(fractionGrid);
+
+            if (isBarrier)
+            {
+                var filterBarrierCheckBox = new CheckBox();
+                filterBarrierCheckBox.SetBinding(CheckBox.IsCheckedProperty, static (BarrierModel barrier) => barrier.UseAsFilterBarrier, BindingMode.TwoWay);
+                var filterBarrierLabel = new Label { Text = useAsFilterBarrier, VerticalOptions = LayoutOptions.Center };
+                filterBarrierLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#151515"), Colors.White);
+                var filterBarrierLayout = new HorizontalStackLayout { Spacing = 4, Children = { filterBarrierCheckBox, filterBarrierLabel } };
+                Grid.SetRow(filterBarrierLayout, 4);
+                Grid.SetColumnSpan(filterBarrierLayout, 4);
+                itemGrid.Children.Add(filterBarrierLayout);
+            }
+
+            return itemGrid;
+        });
+    }
+
+    private void OnZoomToUtilityElementClicked(object? sender, EventArgs e)
+    {
+        if (sender is Button { BindingContext: UtilityElementModel element } && element.ZoomToExtent is { } zoomExtent)
+        {
+            GeoView?.SetViewpoint(new Viewpoint(zoomExtent));
+        }
+    }
+
+    private static void OnTerminalSelected(object? sender, EventArgs e)
+    {
+        if (sender is Picker { BindingContext: UtilityElementModel element, SelectedItem: UtilityTerminal terminal })
+        {
+            element.Element.Terminal = terminal;
+        }
+    }
+
+    private static void OnFractionAlongEdgeChanged(object? sender, ValueChangedEventArgs e)
+    {
+        if (sender is Slider { BindingContext: UtilityElementModel element })
+        {
+            element.FractionAlongEdge = e.NewValue;
+        }
     }
 }

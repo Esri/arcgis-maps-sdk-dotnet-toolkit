@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using Esri.ArcGISRuntime.UI;
@@ -47,12 +48,35 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         ResultLineSymbol = _controller.ResultLineSymbol;
         ResultPointSymbol = _controller.ResultPointSymbol;
         StartingPointSymbol = _controller.StartingPointSymbol;
+        BarrierSymbol = _controller.BarrierSymbol;
         ControlTemplate = DefaultControlTemplate;
         _controller.AutoZoomToTraceResults = AutoZoomToTraceResults;
         _controller.PropertyChanged += Controller_PropertyChanged;
         _controller.Results.CollectionChanged += Results_CollectionChanged;
         _controller.StartingPoints.CollectionChanged += StartingPoints_CollectionChanged;
+        _controller.Barriers.CollectionChanged += Barriers_CollectionChanged;
         _controller.UtilityNetworks.CollectionChanged += UtilityNetworks_CollectionChanged;
+    }
+
+    /// <summary>
+    /// Adds a starting point.
+    /// </summary>
+    /// <param name="feature">The feature to use as the basis for the starting point.</param>
+    /// <param name="location">Optional location to use, which will be used to specify the location along the line for line features.</param>
+    public void AddStartingPoint(ArcGISFeature feature, MapPoint? location)
+    {
+        _controller.AddStartingPoint(feature, location);
+    }
+
+    /// <summary>
+    /// Adds a barrier.
+    /// </summary>
+    /// <param name="feature">The feature to use as the basis for the barrier.</param>
+    /// <param name="location">Optional location to use, which will be used to specify the location along the line for line features.</param>
+    /// <param name="useAsFilterBarrier">A value indicating whether to use the barrier as a filter barrier.</param>
+    public void AddBarrier(ArcGISFeature feature, MapPoint? location, bool? useAsFilterBarrier = false)
+    {
+        _controller.AddBarrier(feature, location, useAsFilterBarrier);
     }
 
     /// <summary>
@@ -85,10 +109,31 @@ public partial class UtilityNetworkTraceTool : TemplatedView
             PART_ButtonAddStartingPoint.Clicked -= OnAddStartingPointClicked;
         }
 
+        if (PART_ButtonRemoveAllStartingPoints != null)
+        {
+            PART_ButtonRemoveAllStartingPoints.Clicked -= OnRemoveAllStartingPointsClicked;
+        }
+
         if (PART_ListViewStartingPoints != null)
         {
             PART_ListViewStartingPoints.SelectionChanged -= OnStartingPointSelected;
             PART_ListViewStartingPoints.ItemsSource = null;
+        }
+
+        if (PART_ButtonAddBarrier != null)
+        {
+            PART_ButtonAddBarrier.Clicked -= OnAddBarrierClicked;
+        }
+
+        if (PART_ButtonRemoveAllBarriers != null)
+        {
+            PART_ButtonRemoveAllBarriers.Clicked -= OnRemoveAllBarriersClicked;
+        }
+
+        if (PART_ListViewBarriers != null)
+        {
+            PART_ListViewBarriers.SelectionChanged -= OnBarrierSelected;
+            PART_ListViewBarriers.ItemsSource = null;
         }
 
         if (PART_ButtonRunTrace != null)
@@ -104,6 +149,11 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         if (PART_ButtonCancelAddStartingPoint != null)
         {
             PART_ButtonCancelAddStartingPoint.Clicked -= OnAddStartingPointCancelClicked;
+        }
+
+        if (PART_ButtonCancelAddBarrier != null)
+        {
+            PART_ButtonCancelAddBarrier.Clicked -= OnAddBarrierCancelClicked;
         }
 
         if (PART_ButtonCancelActivity != null)
@@ -138,11 +188,38 @@ public partial class UtilityNetworkTraceTool : TemplatedView
             PART_ButtonAddStartingPoint.Clicked += OnAddStartingPointClicked;
         }
 
+        if (GetTemplateChild(nameof(PART_ButtonRemoveAllStartingPoints)) is Button removeAllStartingPointsButton)
+        {
+            PART_ButtonRemoveAllStartingPoints = removeAllStartingPointsButton;
+            PART_ButtonRemoveAllStartingPoints.Clicked += OnRemoveAllStartingPointsClicked;
+        }
+
         if (GetTemplateChild(nameof(PART_ListViewStartingPoints)) is CollectionView startingPointListView)
         {
             PART_ListViewStartingPoints = startingPointListView;
             PART_ListViewStartingPoints.ItemsSource = _controller.StartingPoints;
+            PART_ListViewStartingPoints.ItemTemplate ??= DefaultStartingPointItemTemplate;
             PART_ListViewStartingPoints.SelectionChanged += OnStartingPointSelected;
+        }
+
+        if (GetTemplateChild(nameof(PART_ButtonAddBarrier)) is Button barrierButton)
+        {
+            PART_ButtonAddBarrier = barrierButton;
+            PART_ButtonAddBarrier.Clicked += OnAddBarrierClicked;
+        }
+
+        if (GetTemplateChild(nameof(PART_ButtonRemoveAllBarriers)) is Button removeAllBarriersButton)
+        {
+            PART_ButtonRemoveAllBarriers = removeAllBarriersButton;
+            PART_ButtonRemoveAllBarriers.Clicked += OnRemoveAllBarriersClicked;
+        }
+
+        if (GetTemplateChild(nameof(PART_ListViewBarriers)) is CollectionView barrierListView)
+        {
+            PART_ListViewBarriers = barrierListView;
+            PART_ListViewBarriers.ItemsSource = _controller.Barriers;
+            PART_ListViewBarriers.ItemTemplate ??= DefaultBarrierItemTemplate;
+            PART_ListViewBarriers.SelectionChanged += OnBarrierSelected;
         }
 
         if (GetTemplateChild(nameof(PART_ButtonRunTrace)) is Button runTraceButton)
@@ -161,6 +238,12 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         {
             PART_ButtonCancelAddStartingPoint = cancelAdd;
             PART_ButtonCancelAddStartingPoint.Clicked += OnAddStartingPointCancelClicked;
+        }
+
+        if (GetTemplateChild(nameof(PART_ButtonCancelAddBarrier)) is Button cancelAddBarrier)
+        {
+            PART_ButtonCancelAddBarrier = cancelAddBarrier;
+            PART_ButtonCancelAddBarrier.Clicked += OnAddBarrierCancelClicked;
         }
 
         if (GetTemplateChild(nameof(PART_DuplicateTraceWarning)) is View duplicateWarning)
@@ -198,6 +281,7 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         {
             PART_ListViewTraceTypes = picker;
             PART_ListViewTraceTypes.ItemsSource = _controller.TraceTypes;
+            PART_ListViewTraceTypes.SelectedItem = _controller.SelectedTraceType;
             PART_ListViewTraceTypes.SelectedIndexChanged += OnTraceTypeSelected;
         }
 
@@ -243,6 +327,8 @@ public partial class UtilityNetworkTraceTool : TemplatedView
 
     private void OnStartingPointSelected(object? sender, SelectionChangedEventArgs e) => _controller.SelectedStartingPoint = e.CurrentSelection.FirstOrDefault() as StartingPointModel;
 
+    private void OnBarrierSelected(object? sender, SelectionChangedEventArgs e) => _controller.SelectedBarrier = e.CurrentSelection.FirstOrDefault() as BarrierModel;
+
     private void OnTraceTypeSelected(object? sender, EventArgs e)
     {
         if (PART_ListViewTraceTypes?.SelectedItem is UtilityNamedTraceConfiguration config)
@@ -252,6 +338,8 @@ public partial class UtilityNetworkTraceTool : TemplatedView
     }
 
     private void OnAddStartingPointCancelClicked(object? sender, EventArgs e) => _controller.IsAddingStartingPoints = false;
+
+    private void OnAddBarrierCancelClicked(object? sender, EventArgs e) => _controller.IsAddingBarriers = false;
 
     private void OnSectionNavigated(object? sender, PropertyChangedEventArgs e)
     {
@@ -284,10 +372,15 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         PART_ButtonRunTrace?.SetValue(IsVisibleProperty, false);
         PART_GridResultsDisplay?.SetValue(View.IsVisibleProperty, false);
         PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, false);
+        PART_ButtonCancelAddBarrier?.SetValue(IsVisibleProperty, false);
         PART_LabelTraceTypes?.SetValue(IsVisibleProperty, false);
         PART_ListViewTraceTypes?.SetValue(IsVisibleProperty, false);
         PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, false);
+        PART_ButtonRemoveAllStartingPoints?.SetValue(IsVisibleProperty, false);
+        PART_ButtonAddBarrier?.SetValue(IsVisibleProperty, false);
+        PART_ButtonRemoveAllBarriers?.SetValue(IsVisibleProperty, false);
         PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, false);
+        PART_ListViewBarriers?.SetValue(IsVisibleProperty, false);
         PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, false);
         PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, false);
         if (PART_NavigationSegment == null)
@@ -308,9 +401,7 @@ public partial class UtilityNetworkTraceTool : TemplatedView
 
             // Configure
             case 1:
-                PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, true);
-                PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, _controller.IsAddingStartingPoints);
-                PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, !_controller.IsAddingStartingPoints);
+                ApplyConfigureAddModeState();
                 PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.TooManyStartingPointsWarning);
                 PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.InsufficientStartingPointsWarning);
                 PART_ConfigureContainer?.SetValue(IsVisibleProperty, true);
@@ -351,6 +442,45 @@ public partial class UtilityNetworkTraceTool : TemplatedView
 
     private void OnAddStartingPointClicked(object? sender, EventArgs e) => _controller.IsAddingStartingPoints = !_controller.IsAddingStartingPoints;
 
+    private void OnRemoveAllStartingPointsClicked(object? sender, EventArgs e) => _controller.StartingPoints.Clear();
+
+    private void OnAddBarrierClicked(object? sender, EventArgs e) => _controller.IsAddingBarriers = !_controller.IsAddingBarriers;
+
+    private void OnRemoveAllBarriersClicked(object? sender, EventArgs e) => _controller.Barriers.Clear();
+
+    private void ApplyConfigureAddModeState()
+    {
+        var isAddingTraceLocation = _controller.IsAddingStartingPoints || _controller.IsAddingBarriers;
+        PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, !isAddingTraceLocation);
+        PART_ButtonAddBarrier?.SetValue(IsVisibleProperty, !isAddingTraceLocation);
+        PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, _controller.IsAddingStartingPoints);
+        PART_ButtonCancelAddBarrier?.SetValue(IsVisibleProperty, _controller.IsAddingBarriers);
+        PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, !isAddingTraceLocation);
+        PART_ListViewBarriers?.SetValue(IsVisibleProperty, !isAddingTraceLocation);
+        UpdateRemoveAllButtonState();
+    }
+
+    private void UpdateRemoveAllButtonState()
+    {
+        var isAddingTraceLocation = _controller.IsAddingStartingPoints || _controller.IsAddingBarriers;
+        var hasStartingPoints = _controller.StartingPoints.Count > 0;
+        var hasBarriers = _controller.Barriers.Count > 0;
+        PART_ButtonRemoveAllStartingPoints?.SetValue(IsVisibleProperty, !isAddingTraceLocation && hasStartingPoints);
+        PART_ButtonRemoveAllBarriers?.SetValue(IsVisibleProperty, !isAddingTraceLocation && hasBarriers);
+
+        if (PART_ButtonAddStartingPoint != null)
+        {
+            Grid.SetColumn(PART_ButtonAddStartingPoint, hasStartingPoints ? 1 : 0);
+            Grid.SetColumnSpan(PART_ButtonAddStartingPoint, hasStartingPoints ? 1 : 2);
+        }
+
+        if (PART_ButtonAddBarrier != null)
+        {
+            Grid.SetColumn(PART_ButtonAddBarrier, hasBarriers ? 1 : 0);
+            Grid.SetColumnSpan(PART_ButtonAddBarrier, hasBarriers ? 1 : 2);
+        }
+    }
+
     private void PART_NetworksCollectionView_SelectionChanged(object? sender, EventArgs e)
     {
         _controller.SelectedUtilityNetwork = PART_ListViewNetworks?.SelectedItem as UtilityNetwork;
@@ -362,7 +492,17 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         PART_LabelNetworks?.SetValue(IsVisibleProperty, _controller.UtilityNetworks.Count > 1);
     }
 
-    private void StartingPoints_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => GeoView?.DismissCallout();
+    private void StartingPoints_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        GeoView?.DismissCallout();
+        UpdateRemoveAllButtonState();
+    }
+
+    private void Barriers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        GeoView?.DismissCallout();
+        UpdateRemoveAllButtonState();
+    }
 
     private void Results_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
@@ -409,7 +549,7 @@ public partial class UtilityNetworkTraceTool : TemplatedView
                     _resultOverlays.Add(item.ResultOverlay);
                     GeoView.GraphicsOverlays.Insert(0, item.ResultOverlay);
                 }
-                                
+
                 if (item.Error != null)
                 {
                     UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(item.Parameters, item.Error));
@@ -432,23 +572,19 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         switch (e.PropertyName)
         {
             case nameof(_controller.IsAddingStartingPoints):
-                if (_controller.IsAddingStartingPoints)
+            case nameof(_controller.IsAddingBarriers):
+                if (_controller.IsAddingStartingPoints || _controller.IsAddingBarriers)
                 {
                     PART_NavigationSegment?.SetValue(SegmentedControl.SelectedSegmentIndexProperty, 1);
-                    PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, false);
-                    PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, false);
-                    PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, true);
-                }
-                else
-                {
-                    PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, true);
-                    PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, true);
-                    PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, false);
                 }
 
+                ApplyConfigureAddModeState();
                 break;
             case nameof(_controller.EnableTrace):
                 PART_ButtonRunTrace?.SetValue(IsEnabledProperty, _controller.EnableTrace);
+                break;
+            case nameof(_controller.SelectedTraceType):
+                PART_ListViewTraceTypes?.SetValue(Picker.SelectedItemProperty, _controller.SelectedTraceType);
                 break;
             case nameof(_controller.RequestedViewpoint):
                 if (GeoView != null && _controller.RequestedViewpoint != null)
@@ -492,7 +628,7 @@ public partial class UtilityNetworkTraceTool : TemplatedView
 
             sendingView._controller.IsRunningTrace = true;
 
-            var graphicsOverlays = new[] { sendingView._controller.StartingPointGraphicsOverlay };
+            var graphicsOverlays = new[] { sendingView._controller.StartingPointGraphicsOverlay, sendingView._controller.BarrierGraphicsOverlay };
 
             if (oldValue is GeoView oldGeoView)
             {
@@ -549,7 +685,7 @@ public partial class UtilityNetworkTraceTool : TemplatedView
 
     private async void OnGeoViewTapped(object? sender, GeoViewInputEventArgs e)
     {
-        if (e.Handled || !_controller.IsAddingStartingPoints || _controller.SelectedUtilityNetwork == null)
+        if (e.Handled || (!_controller.IsAddingStartingPoints && !_controller.IsAddingBarriers) || _controller.SelectedUtilityNetwork == null)
         {
             return;
         }
@@ -573,7 +709,14 @@ public partial class UtilityNetworkTraceTool : TemplatedView
                 {
                     if (GetFeature(identifyResult) is ArcGISFeature feature)
                     {
-                        _controller.AddStartingPoint(feature, e.Location);
+                        if (_controller.IsAddingBarriers)
+                        {
+                            _controller.AddBarrier(feature, e.Location);
+                        }
+                        else
+                        {
+                            _controller.AddStartingPoint(feature, e.Location);
+                        }
                     }
                 }
             }
@@ -650,6 +793,18 @@ public partial class UtilityNetworkTraceTool : TemplatedView
     }
 
     /// <summary>
+    /// Gets or sets a <see cref="Symbol"/> that represents a barrier.
+    /// </summary>
+    /// <value>
+    /// A <see cref="Symbol"/> that represents a barrier.
+    /// </value>
+    public Symbol? BarrierSymbol
+    {
+        get => GetValue(BarrierSymbolProperty) as Symbol;
+        set => SetValue(BarrierSymbolProperty, value);
+    }
+
+    /// <summary>
     /// Gets or sets a <see cref="Symbol"/> that represents an aggregated multipoint trace result.
     /// </summary>
     /// <value>
@@ -719,6 +874,12 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         BindableProperty.Create(nameof(StartingPointSymbol), typeof(Symbol), typeof(UtilityNetworkTraceTool), propertyChanged: OnStartingPointSymbolPropertyChanged);
 
     /// <summary>
+    /// Identifies the <see cref="BarrierSymbol"/> bindable property.
+    /// </summary>
+    public static readonly BindableProperty BarrierSymbolProperty =
+        BindableProperty.Create(nameof(BarrierSymbol), typeof(Symbol), typeof(UtilityNetworkTraceTool), propertyChanged: OnBarrierSymbolPropertyChanged);
+
+    /// <summary>
     /// Identifies the <see cref="ResultFillSymbol"/> bindable property.
     /// </summary>
     public static readonly BindableProperty ResultFillSymbolProperty =
@@ -737,6 +898,16 @@ public partial class UtilityNetworkTraceTool : TemplatedView
         if (sender is UtilityNetworkTraceTool untt && untt._controller is UtilityNetworkTraceToolController controller)
         {
             controller.StartingPointSymbol = newValue as Symbol;
+            controller.HandleStartingPointSymbolChanged();
+        }
+    }
+
+    private static void OnBarrierSymbolPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
+    {
+        if (sender is UtilityNetworkTraceTool untt && untt._controller is UtilityNetworkTraceToolController controller)
+        {
+            controller.BarrierSymbol = newValue as Symbol;
+            controller.HandleBarrierSymbolChanged();
         }
     }
 
