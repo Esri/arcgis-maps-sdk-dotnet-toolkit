@@ -8,14 +8,14 @@
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate x:DataType="mapping:Bookmark">
-            <TextBlock Text="{x:Bind Name, Mode=OneWay}" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Bind Name, Mode=OneWay}" VerticalAlignment="Center" AutomationProperties.Name="{x:Bind Name, Mode=OneWay}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="controls:BookmarksView">
-            <controls:BookmarksListView x:Name="List"
+            <ListView x:Name="List"
                 AutomationProperties.AutomationId="BookmarksListView"
                 AutomationProperties.Name="{internal:LocalizedString Key=BookmarksViewAutomationName}"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
