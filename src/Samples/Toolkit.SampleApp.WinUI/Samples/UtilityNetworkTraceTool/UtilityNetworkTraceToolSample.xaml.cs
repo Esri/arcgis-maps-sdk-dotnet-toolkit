@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.UtilityNetworkTraceTool
             try
             {
                 var traceNames = NamedTraceNamesTextBox.Text.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-                await UtilityNetworkTraceTool.LoadNamedTracesAsync(traceNames);
+                await UtilityNetworkTraceTool.LoadAsync(traceNames);
             }
             catch (Exception ex)
             {

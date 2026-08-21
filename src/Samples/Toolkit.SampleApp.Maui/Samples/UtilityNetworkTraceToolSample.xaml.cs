@@ -58,7 +58,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             {
                 var traceNames = NamedTraceNamesEntry.Text?.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
                     ?? Array.Empty<string>();
-                await MyTraceTool.LoadNamedTracesAsync(traceNames);
+                await MyTraceTool.LoadAsync(traceNames);
             }
             catch (Exception ex)
             {
