@@ -129,8 +129,14 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
             // GetLayerViewState throws if the layer isn't in the current map (can happen during a map swap).
             if (_mapView.Map?.OperationalLayers.Contains(layer) == true &&
-                _mapView.GetLayerViewState(layer)?.Error is Exception viewError)
-                return viewError;
+                _mapView.GetLayerViewState(layer) is LayerViewState layerViewState &&
+                layerViewState.Error is Exception viewError)
+            {
+                // It's now standard for core to raise a warning on RasterLayers whenever pedata hasn't been set, which doesn't apply to most oriented image rasters
+                // since most don't have a spatial reference in the first place
+                if (!(layerViewState.Status.HasFlag(LayerViewStatus.Warning) && viewError.Message.Contains("The pedata directory has not been set.")))
+                    return viewError;
+            }
         }
 
         return PresentationError;
