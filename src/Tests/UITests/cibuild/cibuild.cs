@@ -381,6 +381,11 @@ internal class Program
         Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
         Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
 
+        // Enforce vertical orientation since some tests can fail on phones in landscape mode
+        var adb = Path.Join(androidSdkDirectory, "platform-tools", "adb");
+        RunBinary(adb, "shell settings put system accelerometer_rotation 0");
+        RunBinary(adb, "shell settings put system user-rotation 0");
+
         return buildSettings;
     }
 
