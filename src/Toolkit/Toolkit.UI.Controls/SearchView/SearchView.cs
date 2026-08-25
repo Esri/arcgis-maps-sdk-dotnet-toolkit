@@ -353,6 +353,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _ = Dispatcher.BeginInvoke(new Action(() => FocusListItem(_resultList, 0)), System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
+        {
+            if (SearchViewModel == null)
+            {
+                return;
+            }
+
+            await SearchViewModel.RepeatSearchHere();
+            if (SearchViewModel.Results?.Count > 0)
+            {
+                // The search has completed; now wait for bindings and item containers before moving focus.
+                await Dispatcher.InvokeAsync(() => FocusListItem(_resultList, 0), System.Windows.Threading.DispatcherPriority.Loaded);
+            }
+        }
+
         private bool MoveFocusPastSearchView()
         {
             if (_searchButton == null)
@@ -720,7 +734,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleRepeatSearchHereCommand()
         {
+#if WPF
+            _ = RepeatSearchAndFocusResults();
+#else
             SearchViewModel?.RepeatSearchHere();
+#endif
         }
 #endregion commands
 
