@@ -343,12 +343,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void FocusResultsWhenAvailable()
         {
-            if (!_focusResultsWhenAvailable || SearchViewModel?.Results?.Count < 1)
+            if (!_focusResultsWhenAvailable || SearchViewModel?.Results == null)
             {
                 return;
             }
 
             _focusResultsWhenAvailable = false;
+
+            if (SearchViewModel.Results.Count == 0)
+            {
+                return;
+            }
             // Defer until layout completes so the first result container exists and can receive focus.
             _ = Dispatcher.BeginInvoke(new Action(() => FocusListItem(_resultList, 0)), System.Windows.Threading.DispatcherPriority.Loaded);
         }
