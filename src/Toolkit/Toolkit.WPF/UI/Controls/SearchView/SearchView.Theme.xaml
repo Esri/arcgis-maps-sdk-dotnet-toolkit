@@ -175,8 +175,11 @@
         <Border
             x:Name="Border"
             Margin="0,0,0,0"
-            Background="{StaticResource DefaultControlBackgroundBrush}"
             SnapsToDevicePixels="true">
+            <Border.Background>
+                <!-- Storyboards cannot animate the shared frozen brush resource; each item needs its own brush. -->
+                <SolidColorBrush Color="White" />
+            </Border.Background>
             <ContentPresenter />
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
@@ -204,7 +207,6 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="{StaticResource HoverBrush}" />
                 <Setter TargetName="Border" Property="BorderThickness" Value="2,0,0,0" />
                 <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BlueButtonBrush}" />
             </Trigger>
@@ -321,8 +323,8 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom"
                         Visibility="Hidden" />
-                    <ToggleButton
-                        x:Name="SourceSelectToggle"
+                    <controls:SourceSelectToggleButton
+                        x:Name="PART_SourceSelectToggle"
                         Grid.Column="0"
                         BorderThickness="0,0,1,0"
                         IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
@@ -337,8 +339,9 @@
                             Stretch="Uniform"
                             Stroke="{StaticResource CommonGrayBrush}"
                             StrokeThickness="1" />
-                    </ToggleButton>
+                    </controls:SourceSelectToggleButton>
                     <Popup
+                        x:Name="PART_SourcePopup"
                         Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
                         HorizontalOffset="-1"
                         IsOpen="{TemplateBinding IsSourceSelectOpen}"
@@ -347,16 +350,17 @@
                         StaysOpen="False">
                         <Border Style="{StaticResource ResultAreaBorderStyle}">
                             <StackPanel>
-                                <ToggleButton
-                                    Width="{Binding ElementName=sourceList, Path=ActualWidth, Mode=OneWay}"
+                                <controls:AllSourcesToggleButton
+                                    x:Name="PART_AllSourcesButton"
+                                    Width="{Binding ElementName=PART_SourceList, Path=ActualWidth, Mode=OneWay}"
                                     HorizontalContentAlignment="Left"
                                     BorderThickness="0"
                                     IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
                                     Style="{StaticResource ProminentButtonStyle}" AutomationProperties.AutomationId="AllSourcesButton">
                                     <TextBlock Text="{TemplateBinding AllSourceSelectText}" />
-                                </ToggleButton>
+                                </controls:AllSourcesToggleButton>
                                 <ListView
-                                    x:Name="sourceList"
+                                    x:Name="PART_SourceList"
                                     ItemContainerStyle="{StaticResource SearchSourcesStyle}"
                                     ItemTemplate="{StaticResource SourceTemplate}"
                                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"
@@ -413,6 +417,7 @@
                         </Popup.Resources>
                         <Border BorderThickness="1,1,1,0" Style="{StaticResource ResultAreaBorderStyle}">
                             <ListView
+                                x:Name="PART_SuggestionList"
                                 ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding Source={StaticResource GroupedSuggestions}}"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedSuggestion, Mode=OneWayToSource}"
@@ -488,6 +493,7 @@
                         </Border>
                     </Popup>
                     <Button
+                        x:Name="PART_SearchButton"
                         Grid.Column="3"
                         BorderThickness="1,0,0,0"
                         Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SearchCommand, Mode=OneTime}"
@@ -511,6 +517,7 @@
                         Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.ResultViewVisibility, Mode=OneWay}">
                         <Grid>
                             <ListView
+                                x:Name="PART_ResultList"
                                 MaxHeight="300"
                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
                                 ItemContainerStyle="{StaticResource ListContainerStyle}"

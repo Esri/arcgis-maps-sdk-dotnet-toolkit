@@ -22,6 +22,10 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 
+#if WPF
+using System.Windows.Controls.Primitives;
+#endif
+
 #if WINDOWS_XAML
 using Microsoft.UI.Xaml.Automation;
 using Windows.Foundation;
@@ -37,6 +41,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </note></remarks>
 #if WINDOWS_XAML
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
+#elif WPF
+    [TemplatePart(Name = "PART_SourceSelectToggle", Type = typeof(ToggleButton))]
+    [TemplatePart(Name = "PART_SourcePopup", Type = typeof(Popup))]
+    [TemplatePart(Name = "PART_AllSourcesButton", Type = typeof(ToggleButton))]
+    [TemplatePart(Name = "PART_SourceList", Type = typeof(ListView))]
+    [TemplatePart(Name = "QueryEntry", Type = typeof(TextBox))]
+    [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
+    [TemplatePart(Name = "PART_ResultList", Type = typeof(ListView))]
+    [TemplatePart(Name = "PART_SearchButton", Type = typeof(Button))]
 #endif
 #pragma warning disable IDE0079
 #pragma warning disable CA1001
@@ -137,6 +150,229 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_suggestionList != null)
             {
                 _suggestionList.SelectedIndex = -1;
+            }
+        }
+#elif WPF
+        // These template parts are wired for manual keyboard traversal because WPF Popup creates a separate focus scope.
+        private ToggleButton? _sourceSelectToggle;
+        private Popup? _sourcePopup;
+        private ToggleButton? _allSourcesButton;
+        private ListView? _sourceList;
+        private TextBox? _queryEntry;
+        private ListView? _suggestionList;
+        private ListView? _resultList;
+        private Button? _searchButton;
+        private IInputElement? _focusTargetAfterSuggestions;
+        private bool _focusResultsWhenAvailable;
+
+        /// <inheritdoc/>
+        public override void OnApplyTemplate()
+        {
+            // OnApplyTemplate can run multiple times; remove old handlers before attaching to new template instances.
+            if (_sourceSelectToggle != null)
+            {
+                _sourceSelectToggle.Checked -= SourceSelectToggle_Checked;
+            }
+
+            if (_sourcePopup != null)
+            {
+                _sourcePopup.Closed -= SourcePopup_Closed;
+            }
+
+            if (_allSourcesButton != null)
+            {
+                _allSourcesButton.PreviewKeyDown -= AllSourcesButton_PreviewKeyDown;
+            }
+
+            if (_sourceList != null)
+            {
+                _sourceList.PreviewKeyDown -= SourceList_PreviewKeyDown;
+            }
+
+            if (_searchButton != null)
+            {
+                _searchButton.PreviewKeyDown -= SearchButton_PreviewKeyDown;
+                _searchButton.PreviewGotKeyboardFocus -= SearchButton_PreviewGotKeyboardFocus;
+            }
+
+            if (_suggestionList != null)
+            {
+                _suggestionList.PreviewKeyDown -= SuggestionList_PreviewKeyDown;
+            }
+
+            base.OnApplyTemplate();
+
+            _sourceSelectToggle = GetTemplateChild("PART_SourceSelectToggle") as ToggleButton;
+            _sourcePopup = GetTemplateChild("PART_SourcePopup") as Popup;
+            _allSourcesButton = GetTemplateChild("PART_AllSourcesButton") as ToggleButton;
+            _sourceList = GetTemplateChild("PART_SourceList") as ListView;
+            _queryEntry = GetTemplateChild("QueryEntry") as TextBox;
+            _searchButton = GetTemplateChild("PART_SearchButton") as Button;
+            _suggestionList = GetTemplateChild("PART_SuggestionList") as ListView;
+            _resultList = GetTemplateChild("PART_ResultList") as ListView;
+
+            if (_sourceSelectToggle != null)
+            {
+                _sourceSelectToggle.Checked += SourceSelectToggle_Checked;
+            }
+
+            if (_sourcePopup != null)
+            {
+                _sourcePopup.Closed += SourcePopup_Closed;
+            }
+
+            if (_allSourcesButton != null)
+            {
+                _allSourcesButton.PreviewKeyDown += AllSourcesButton_PreviewKeyDown;
+            }
+
+            if (_sourceList != null)
+            {
+                _sourceList.PreviewKeyDown += SourceList_PreviewKeyDown;
+            }
+
+            if (_searchButton != null)
+            {
+                _searchButton.PreviewKeyDown += SearchButton_PreviewKeyDown;
+                _searchButton.PreviewGotKeyboardFocus += SearchButton_PreviewGotKeyboardFocus;
+            }
+
+            if (_suggestionList != null)
+            {
+                _suggestionList.PreviewKeyDown += SuggestionList_PreviewKeyDown;
+            }
+        }
+
+        private void SourceSelectToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            // When the popup opens, move focus explicitly to its first action; Tab does not automatically cross into Popup.
+            _ = Dispatcher.BeginInvoke(new Action(() => _allSourcesButton?.Focus()), System.Windows.Threading.DispatcherPriority.Input);
+        }
+
+        private void SourcePopup_Closed(object? sender, EventArgs e)
+        {
+            // Light-dismiss can close the popup directly, so force the bound IsSourceSelectOpen state back to false.
+            IsSourceSelectOpen = false;
+        }
+
+        private void AllSourcesButton_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // Enter the list by focusing the first item container so keyboard navigation starts on an actual option.
+            if (e.Key == Key.Tab && (Keyboard.Modifiers & ModifierKeys.Shift) == 0 && FocusListItem(_sourceList, 0))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void SourceList_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Tab)
+            {
+                return;
+            }
+
+            // Keep Tab traversal inside the popup region: Shift+Tab returns to All sources; Tab exits to query.
+            var focused = (Keyboard.Modifiers & ModifierKeys.Shift) != 0
+                ? _allSourcesButton?.Focus() == true
+                : CloseSourcePopupAndFocusQuery();
+
+            if (focused)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private bool CloseSourcePopupAndFocusQuery()
+        {
+            IsSourceSelectOpen = false;
+            return _queryEntry?.Focus() == true;
+        }
+
+        private void SearchButton_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // Suggestions are rendered in a Popup, so move focus directly to the first suggestion container.
+            if (e.Key == Key.Tab && (Keyboard.Modifiers & ModifierKeys.Shift) == 0 && FocusListItem(_suggestionList, 0))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void SearchButton_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            // If Shift+Tab comes from the element after SearchView, re-enter suggestions instead of skipping the popup.
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0 &&
+                ReferenceEquals(e.OldFocus, _focusTargetAfterSuggestions) &&
+                FocusListItem(_suggestionList, 0))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void SuggestionList_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Space)
+            {
+                // Remember intent to move to results after suggestion acceptance triggers async result generation.
+                _focusResultsWhenAvailable = true;
+                return;
+            }
+
+            if (e.Key != Key.Tab)
+            {
+                return;
+            }
+
+            e.Handled = (Keyboard.Modifiers & ModifierKeys.Shift) != 0
+                ? _searchButton?.Focus() == true
+                : MoveFocusPastSearchView();
+        }
+
+        private static bool FocusListItem(ListView? listView, int index)
+        {
+            if (listView == null || !listView.IsVisible || !listView.IsEnabled || index < 0 || index >= listView.Items.Count)
+            {
+                return false;
+            }
+
+            var item = listView.Items[index];
+            listView.ScrollIntoView(item);
+            // Realize virtualized item containers before focusing, otherwise ContainerFromItem can return null.
+            listView.UpdateLayout();
+            return (listView.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem)?.Focus() == true;
+        }
+
+        private void FocusResultsWhenAvailable()
+        {
+            if (!_focusResultsWhenAvailable || SearchViewModel?.Results?.Count < 1)
+            {
+                return;
+            }
+
+            _focusResultsWhenAvailable = false;
+            // Defer until layout completes so the first result container exists and can receive focus.
+            _ = Dispatcher.BeginInvoke(new Action(() => FocusListItem(_resultList, 0)), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+        private bool MoveFocusPastSearchView()
+        {
+            if (_searchButton == null)
+            {
+                return false;
+            }
+
+            // Temporarily disable internal tab cycling so Tab leaves SearchView, then restore the original navigation mode.
+            var tabNavigation = KeyboardNavigation.GetTabNavigation(this);
+            KeyboardNavigation.SetTabNavigation(this, KeyboardNavigationMode.None);
+            try
+            {
+                var moved = _searchButton.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                // Store the external destination so reverse traversal can re-enter suggestions from that exact element.
+                _focusTargetAfterSuggestions = moved ? Keyboard.FocusedElement : null;
+                return moved;
+            }
+            finally
+            {
+                KeyboardNavigation.SetTabNavigation(this, tabNavigation);
             }
         }
 #endif
@@ -425,6 +661,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             TemplateSettings.OnResultViewVisibilityChanged();
             TemplateSettings.OnResultMessageVisibilityChanged();
+#if WPF
+            FocusResultsWhenAvailable();
+#endif
 
             if (SearchViewModel.Results == null)
             {
