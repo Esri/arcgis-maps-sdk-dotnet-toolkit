@@ -353,6 +353,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _ = Dispatcher.BeginInvoke(new Action(() => FocusListItem(_resultList, 0)), System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
+        private async Task RepeatSearchAndFocusResults()
         {
             if (SearchViewModel == null)
             {
