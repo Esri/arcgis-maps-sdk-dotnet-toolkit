@@ -164,6 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Button? _searchButton;
         private IInputElement? _focusTargetAfterSuggestions;
         private bool _focusResultsWhenAvailable;
+        private bool _sourceSelectionByKeyboard;
 
         /// <inheritdoc/>
         public override void OnApplyTemplate()
@@ -182,11 +183,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_allSourcesButton != null)
             {
                 _allSourcesButton.PreviewKeyDown -= AllSourcesButton_PreviewKeyDown;
+                _allSourcesButton.Click -= AllSourcesButton_Click;
+                _allSourcesButton.PreviewMouseDown -= SourceSelection_PreviewMouseDown;
             }
 
             if (_sourceList != null)
             {
                 _sourceList.PreviewKeyDown -= SourceList_PreviewKeyDown;
+                _sourceList.SelectionChanged -= SourceList_SelectionChanged;
+                _sourceList.PreviewMouseDown -= SourceSelection_PreviewMouseDown;
             }
 
             if (_searchButton != null)
@@ -224,11 +229,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_allSourcesButton != null)
             {
                 _allSourcesButton.PreviewKeyDown += AllSourcesButton_PreviewKeyDown;
+                _allSourcesButton.Click += AllSourcesButton_Click;
+                _allSourcesButton.PreviewMouseDown += SourceSelection_PreviewMouseDown;
             }
 
             if (_sourceList != null)
             {
                 _sourceList.PreviewKeyDown += SourceList_PreviewKeyDown;
+                _sourceList.SelectionChanged += SourceList_SelectionChanged;
+                _sourceList.PreviewMouseDown += SourceSelection_PreviewMouseDown;
             }
 
             if (_searchButton != null)
@@ -257,6 +266,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void AllSourcesButton_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Enter || e.Key == Key.Space)
+            {
+                _sourceSelectionByKeyboard = true;
+            }
+
             // Enter the list by focusing the first item container so keyboard navigation starts on an actual option.
             if (e.Key == Key.Tab && (Keyboard.Modifiers & ModifierKeys.Shift) == 0 && FocusListItem(_sourceList, 0))
             {
@@ -264,22 +278,51 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void SourceList_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void AllSourcesButton_Click(object sender, RoutedEventArgs e)
         {
-            if (e.Key != Key.Tab)
+            if (!_sourceSelectionByKeyboard)
             {
                 return;
             }
 
-            // Keep Tab traversal inside the popup region: Shift+Tab returns to All sources; Tab exits to query.
-            var focused = (Keyboard.Modifiers & ModifierKeys.Shift) != 0
-                ? _allSourcesButton?.Focus() == true
-                : CloseSourcePopupAndFocusQuery();
+            _sourceSelectionByKeyboard = false;
+            _ = Dispatcher.BeginInvoke(new Action(() => _queryEntry?.Focus()), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
 
-            if (focused)
+        private void SourceList_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
             {
-                e.Handled = true;
+                // Keep Tab traversal inside the popup region: Shift+Tab returns to All sources; Tab exits to query.
+                var focused = (Keyboard.Modifiers & ModifierKeys.Shift) != 0
+                    ? _allSourcesButton?.Focus() == true
+                    : CloseSourcePopupAndFocusQuery();
+
+                if (focused)
+                {
+                    e.Handled = true;
+                }
+
+                return;
             }
+
+            _sourceSelectionByKeyboard = true;
+        }
+
+        private void SourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0 || !_sourceSelectionByKeyboard)
+            {
+                return;
+            }
+
+            _sourceSelectionByKeyboard = false;
+            _ = Dispatcher.BeginInvoke(new Action(() => _queryEntry?.Focus()), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+        private void SourceSelection_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _sourceSelectionByKeyboard = false;
         }
 
         private bool CloseSourcePopupAndFocusQuery()
