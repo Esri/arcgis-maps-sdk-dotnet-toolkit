@@ -91,6 +91,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     if (object.Equals(cv.Code, Element?.Value))
                         isChecked = true;
+#if WPF
+                    System.Windows.Automation.AutomationProperties.SetName(radio, cv.Name);
+#endif
                 }
                 else if(item is RadioButtonNullValue && Element?.Value is null)
                 {
