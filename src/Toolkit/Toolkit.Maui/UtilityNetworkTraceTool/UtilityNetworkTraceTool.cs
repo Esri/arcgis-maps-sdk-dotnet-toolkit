@@ -692,6 +692,8 @@ public partial class UtilityNetworkTraceTool : TemplatedView
 
     private async void OnGeoViewTapped(object? sender, GeoViewInputEventArgs e)
     {
+        _controller.DismissCallout();
+
         if (e.Handled || (!_controller.IsAddingStartingPoints && !_controller.IsAddingBarriers) || _controller.SelectedUtilityNetwork == null)
         {
             return;

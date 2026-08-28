@@ -62,6 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_RunTraceButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_CancelTraceButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_IdentifyInProgressIndicator", Type = typeof(UIElement))]
+    [TemplatePart(Name = "PART_IdentifyInProgressText", Type = typeof(TextBlock))]
     [TemplatePart(Name = "PART_CancelIdentifyButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_ResultsTabItem", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_ResultsItemControl", Type = typeof(ItemsControl))]
@@ -106,6 +107,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ButtonBase? _part_runTraceButton;
         private ButtonBase? _part_cancelTraceButton;
         private UIElement? _part_identifyInProgressIndicator;
+        private TextBlock? _part_identifyInProgressText;
         private ButtonBase? _part_cancelIdentifyButton;
         private UIElement? _part_resultsTabItem;
         private ItemsControl? _part_resultsItemControl;
@@ -321,6 +323,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _part_identifyInProgressIndicator = identifyInProgressIndicator;
                 _part_identifyInProgressIndicator.Visibility = Visibility.Collapsed;
+            }
+
+            if (GetTemplateChild("PART_IdentifyInProgressText") is TextBlock identifyInProgressText)
+            {
+                _part_identifyInProgressText = identifyInProgressText;
+                UpdateIdentifyInProgressText();
             }
 
             if (GetTemplateChild("PART_CancelIdentifyButton") is ButtonBase cancelIdentifyButton)

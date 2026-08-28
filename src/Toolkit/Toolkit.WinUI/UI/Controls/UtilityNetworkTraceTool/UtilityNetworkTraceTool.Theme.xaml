@@ -459,6 +459,7 @@
                             Grid.ColumnSpan="2"
                             Margin="2"
                             VerticalAlignment="Center"
+                            AutomationProperties.Name="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
                             Maximum="1"
                             Minimum="0"
                             StepFrequency="0.05"
@@ -469,6 +470,7 @@
                             Grid.Row="2"
                             Grid.Column="2"
                             VerticalAlignment="Center"
+                            AutomationProperties.Name="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
                             Style="{StaticResource UNTraceFractionTextBoxStyle}"
                             Text="{Binding ElementName=FractionAlongSlider, Path=Value, Mode=TwoWay}"
                             Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}" />
@@ -537,6 +539,7 @@
                             Grid.ColumnSpan="2"
                             Margin="2"
                             VerticalAlignment="Center"
+                            AutomationProperties.Name="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
                             Maximum="1"
                             Minimum="0"
                             StepFrequency="0.05"
@@ -546,6 +549,7 @@
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="2"
+                            AutomationProperties.Name="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
                             Style="{StaticResource UNTraceFractionTextBoxStyle}"
                             Text="{x:Bind FractionAlongEdge, Mode=TwoWay}"
                             Visibility="{x:Bind FractionSliderVisible, Mode=OneWay, Converter={StaticResource VisibilityConverter}}" />
@@ -721,7 +725,10 @@
                                                                                 Header="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
                                                                                 Style="{StaticResource UNTraceGroupBox}"
                                                                                 Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}">
-                                                                                <Slider Style="{StaticResource UNTraceSlider}" Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
+                                                                                <Slider
+                                                                                    AutomationProperties.Name="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
+                                                                                    Style="{StaticResource UNTraceSlider}"
+                                                                                    Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
                                                                             </internal:GroupBox>
                                                                             <internal:GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
@@ -858,6 +865,7 @@
                                                                                 Style="{StaticResource UNTraceGroupBox}"
                                                                                 Visibility="{x:Bind FractionSliderVisible, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
                                                                                 <Slider
+                                                                                    AutomationProperties.Name="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
                                                                                     Style="{StaticResource UNTraceSlider}"
                                                                                     Value="{x:Bind FractionAlongEdge, Mode=TwoWay}" />
                                                                             </internal:GroupBox>
@@ -1007,6 +1015,7 @@
                                                 Orientation="Vertical"
                                                 Spacing="4">
                                                 <TextBlock
+                                                    x:Name="PART_IdentifyInProgressText"
                                                     HorizontalAlignment="Center"
                                                     Style="{StaticResource UNTraceBasicText}"
                                                     Text="{internal:LocalizedString Key=UtilityNetworkTraceToolRuningTrace}"

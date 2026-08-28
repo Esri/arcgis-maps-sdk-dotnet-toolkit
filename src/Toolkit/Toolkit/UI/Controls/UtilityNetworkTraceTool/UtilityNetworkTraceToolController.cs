@@ -93,6 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         // Interaction
         private Viewpoint? _viewpoint;
         private Tuple<CalloutDefinition, MapPoint>? _requestedCallout;
+        private int _calloutRequestVersion;
 
         private INotifyCollectionChanged? _lastObservedNetworkCollection;
 
@@ -623,7 +624,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     OnPropertyChanged();
 
                     // Update selection and show callout.
-                    RequestedCallout = null;
+                    DismissCallout();
 
                     if (SelectedStartingPoint?.StartingPoint is UtilityElement startingPoint
                      && StartingPointGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
@@ -642,6 +643,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private async Task SetCallout(StartingPointModel selectedStartingPoint, MapPoint location)
         {
+            var calloutRequestVersion = ++_calloutRequestVersion;
             var calloutDefinition = new CalloutDefinition(selectedStartingPoint.StartingPoint.NetworkSource.Name, selectedStartingPoint.StartingPoint.AssetGroup.Name);
             try
             {
@@ -652,7 +654,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 // Ignore
             }
 
-            RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
+            if (calloutRequestVersion == _calloutRequestVersion)
+            {
+                RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
+            }
         }
 
         public Tuple<CalloutDefinition, MapPoint>? RequestedCallout
@@ -666,6 +671,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     OnPropertyChanged();
                 }
             }
+        }
+
+        public void DismissCallout()
+        {
+            _calloutRequestVersion++;
+            _requestedCallout = null;
+            OnPropertyChanged(nameof(RequestedCallout));
         }
         #endregion Starting Points
 
@@ -752,7 +764,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     _selectedBarrier = value;
                     OnPropertyChanged();
 
-                    RequestedCallout = null;
+                    DismissCallout();
 
                     if (SelectedBarrier?.Barrier is UtilityElement barrier
                      && BarrierGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
@@ -771,6 +783,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private async Task SetCallout(BarrierModel selectedBarrier, MapPoint location)
         {
+            var calloutRequestVersion = ++_calloutRequestVersion;
             var calloutDefinition = new CalloutDefinition(selectedBarrier.Barrier.NetworkSource.Name, selectedBarrier.Barrier.AssetGroup.Name);
             try
             {
@@ -781,7 +794,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 // Ignore
             }
 
-            RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
+            if (calloutRequestVersion == _calloutRequestVersion)
+            {
+                RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
+            }
         }
 
         internal void HandleBarrierChanged()

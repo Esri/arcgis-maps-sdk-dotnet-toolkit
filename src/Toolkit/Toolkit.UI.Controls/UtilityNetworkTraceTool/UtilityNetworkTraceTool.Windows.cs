@@ -321,6 +321,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async void OnGeoViewTapped(object? sender, GeoViewInputEventArgs e)
         {
+            _controller.DismissCallout();
+
             if (e.Handled || (!_controller.IsAddingStartingPoints && !_controller.IsAddingBarriers) || _controller.SelectedUtilityNetwork == null)
             {
                 return;
@@ -328,6 +330,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
+                UpdateIdentifyInProgressText();
                 _part_identifyInProgressIndicator?.SetValue(VisibilityProperty, Visibility.Visible);
 
                 if (sender is GeoView geoView)
@@ -366,6 +369,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             finally
             {
                 _part_identifyInProgressIndicator?.SetValue(VisibilityProperty, Visibility.Collapsed);
+            }
+        }
+
+        private void UpdateIdentifyInProgressText()
+        {
+            if (_part_identifyInProgressText != null)
+            {
+                var resourceKey = _controller.IsAddingBarriers
+                    ? "UtilityNetworkTraceToolIdentifyingBarriers"
+                    : "UtilityNetworkTraceToolIdentifyingStartingPoints";
+                _part_identifyInProgressText.Text = Properties.Resources.GetString(resourceKey);
             }
         }
 
