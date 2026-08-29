@@ -624,17 +624,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     OnPropertyChanged();
 
                     // Update selection and show callout.
-                    DismissCallout();
+                    ClearRequestedCallout();
+                    StartingPointGraphicsOverlay.ClearSelection();
 
-                    if (SelectedStartingPoint?.StartingPoint is UtilityElement startingPoint
-                     && StartingPointGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
-                     && guid.Equals(startingPoint.GlobalId)) is Graphic graphic)
+                    if (SelectedStartingPoint is StartingPointModel selectedStartingPoint)
                     {
-                        StartingPointGraphicsOverlay.ClearSelection();
+                        SelectedBarrier = null;
+                        BarrierGraphicsOverlay.ClearSelection();
+                        var graphic = selectedStartingPoint.SelectionGraphic;
                         graphic.IsSelected = true;
                         if (graphic.Geometry is MapPoint location)
                         {
-                            _ = SetCallout(SelectedStartingPoint, location);
+                            _ = SetCallout(selectedStartingPoint, location);
                         }
                     }
                 }
@@ -674,6 +675,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         public void DismissCallout()
+        {
+            ClearRequestedCallout();
+            SelectedStartingPoint = null;
+            SelectedBarrier = null;
+        }
+
+        private void ClearRequestedCallout()
         {
             _calloutRequestVersion++;
             _requestedCallout = null;
@@ -764,17 +772,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     _selectedBarrier = value;
                     OnPropertyChanged();
 
-                    DismissCallout();
+                    ClearRequestedCallout();
+                    BarrierGraphicsOverlay.ClearSelection();
 
-                    if (SelectedBarrier?.Barrier is UtilityElement barrier
-                     && BarrierGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
-                     && guid.Equals(barrier.GlobalId)) is Graphic graphic)
+                    if (SelectedBarrier is BarrierModel selectedBarrier)
                     {
-                        BarrierGraphicsOverlay.ClearSelection();
+                        SelectedStartingPoint = null;
+                        StartingPointGraphicsOverlay.ClearSelection();
+                        var graphic = selectedBarrier.SelectionGraphic;
                         graphic.IsSelected = true;
                         if (graphic.Geometry is MapPoint location)
                         {
-                            _ = SetCallout(SelectedBarrier, location);
+                            _ = SetCallout(selectedBarrier, location);
                         }
                     }
                 }

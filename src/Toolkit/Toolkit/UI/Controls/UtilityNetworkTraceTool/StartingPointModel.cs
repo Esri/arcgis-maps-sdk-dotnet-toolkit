@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI;
@@ -29,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Models a starting point used for a utility network trace.
     /// </summary>
-    internal class StartingPointModel : UtilityElementModel, IEquatable<StartingPointModel>
+    internal class StartingPointModel : UtilityElementModel
     {
         internal StartingPointModel(UtilityNetworkTraceToolController controller, UtilityElement element, Graphic selectionGraphic, Feature feature, Envelope? zoomToExtent)
             : base(element, selectionGraphic, feature, zoomToExtent, model => controller.StartingPoints.Remove((StartingPointModel)model))
@@ -41,23 +40,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public UtilityElement StartingPoint => Element;
 
-        /// <inheritdoc />
-        /// <remarks>
-        /// This is used internally to enable appropriate warnings for duplicate trace operations.
-        /// </remarks>
-        public bool Equals(StartingPointModel? other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            if (other.FractionAlongEdge == FractionAlongEdge && other.TerminalPickerVisible == TerminalPickerVisible && other.StartingPoint.ObjectId == StartingPoint.ObjectId)
-            {
-                return true;
-            }
-
-            return false;
-        }
     }
 }

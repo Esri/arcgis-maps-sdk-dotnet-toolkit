@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Data;
@@ -15,7 +14,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Models a barrier used for a utility network trace.
     /// </summary>
-    internal class BarrierModel : UtilityElementModel, IEquatable<BarrierModel>, INotifyPropertyChanged
+    internal class BarrierModel : UtilityElementModel, INotifyPropertyChanged
     {
         private readonly UtilityNetworkTraceToolController _controller;
         private bool _useAsFilterBarrier;
@@ -47,15 +46,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     _controller.HandleBarrierChanged();
                 }
             }
-        }
-
-        /// <inheritdoc />
-        public bool Equals(BarrierModel? other)
-        {
-            return other != null
-                && other.FractionAlongEdge == FractionAlongEdge
-                && other.Barrier.Terminal == Barrier.Terminal
-                && other.Barrier.GlobalId == Barrier.GlobalId;
         }
 
         /// <inheritdoc />

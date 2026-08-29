@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Models a utility element used as an input to a utility network trace.
     /// </summary>
-    internal abstract class UtilityElementModel
+    internal abstract class UtilityElementModel : IEquatable<UtilityElementModel>
     {
         private Action<UtilityElementModel>? _deleteAction;
 
@@ -142,5 +142,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 return Element?.NetworkSource?.SourceType == UtilityNetworkSourceType.Edge;
             }
         }
+
+        /// <inheritdoc />
+        public bool Equals(UtilityElementModel? other)
+        {
+            return other != null
+                && other.GetType() == GetType()
+                && other.FractionAlongEdge == FractionAlongEdge
+                && other.Element.Terminal == Element.Terminal
+                && other.Element.GlobalId == Element.GlobalId;
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(object? obj) => Equals(obj as UtilityElementModel);
+
+        /// <inheritdoc />
+        public override int GetHashCode() => HashCode.Combine(GetType(), FractionAlongEdge, Element.Terminal, Element.GlobalId);
     }
 }
