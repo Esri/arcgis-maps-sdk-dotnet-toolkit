@@ -31,11 +31,31 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.UtilityNetworkTraceTool
                 AuthenticationManager.Current.AddCredential(portal1Credential);
 
                 MyMapView.Map = new Map(new Uri(WebmapURL));
+                UtilityNetworkTraceTool.UtilityNetworkTraceCompleted += UtilityNetworkTraceTool_UtilityNetworkTraceCompleted;
             }
             catch (Exception ex)
             {
                 await new MessageDialog($"Initializing sample failed: {ex.Message}").ShowAsync();
             }
+        }
+
+        private async void UtilityNetworkTraceTool_UtilityNetworkTraceCompleted(object? sender, Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs e)
+        {
+            if (!DispatcherQueue.HasThreadAccess)
+            {
+                _ = DispatcherQueue.TryEnqueue(() => UtilityNetworkTraceTool_UtilityNetworkTraceCompleted(sender, e));
+                return;
+            }
+
+            await new ContentDialog
+            {
+                XamlRoot = XamlRoot,
+                Title = "Trace completed",
+                Content = $"Trace completed with {e.Parameters.StartingLocations.Count} starting points, " +
+                    $"{e.Parameters.Barriers.Count} barriers, and " +
+                    $"{e.Parameters.FilterBarriers.Count} filter barriers.",
+                CloseButtonText = "OK",
+            }.ShowAsync();
         }
 
         private async void LoadNamedTracesButton_Click(object sender, RoutedEventArgs e)

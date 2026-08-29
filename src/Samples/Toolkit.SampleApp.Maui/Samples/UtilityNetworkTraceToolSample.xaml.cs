@@ -26,9 +26,20 @@ namespace Toolkit.SampleApp.Maui.Samples
             Initialize();
         }
 
-        private void MyTraceTool_UtilityNetworkTraceCompleted(object? sender, Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs e)
+        private async void MyTraceTool_UtilityNetworkTraceCompleted(object? sender, Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"Trace completed {e}");
+            if (Dispatcher.IsDispatchRequired)
+            {
+                Dispatcher.Dispatch(() => MyTraceTool_UtilityNetworkTraceCompleted(sender, e));
+                return;
+            }
+
+            await DisplayAlertAsync(
+                "Trace completed",
+                $"Trace completed with {e.Parameters.StartingLocations.Count} starting points, " +
+                    $"{e.Parameters.Barriers.Count} barriers, and " +
+                    $"{e.Parameters.FilterBarriers.Count} filter barriers.",
+                "OK");
         }
 
         private void MyTraceTool_UtilityNetworkChanged(object? sender, Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkChangedEventArgs e)
