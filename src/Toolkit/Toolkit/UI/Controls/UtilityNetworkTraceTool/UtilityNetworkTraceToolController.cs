@@ -56,16 +56,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private bool _isReadyToConfigure;
         private bool _isRunningTrace;
         private bool _isAddingStartingPoints;
+        private bool _isAddingBarriers;
         private bool _enableTrace;
 
         // Symbology
         private System.Drawing.Color _resultColor = System.Drawing.Color.Blue;
         private Symbol? _startingPointSymbol;
+        private Symbol? _barrierSymbol;
         private Symbol? _resultPointSymbol;
         private Symbol? _resultLineSymbol;
         private Symbol? _resultFillSymbol;
 
         public GraphicsOverlay StartingPointGraphicsOverlay { get; } = new GraphicsOverlay();
+
+        public GraphicsOverlay BarrierGraphicsOverlay { get; } = new GraphicsOverlay();
 
         // Cancellation
         private CancellationTokenSource? _getTraceTypesCts;
@@ -78,6 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private UtilityNetwork? _selectedUtilityNetwork;
         private UtilityNamedTraceConfiguration? _selectedTraceType;
         private StartingPointModel? _selectedStartingPoint;
+        private BarrierModel? _selectedBarrier;
 
         // Trace configuration
         private string? _activeTraceName;
@@ -88,6 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         // Interaction
         private Viewpoint? _viewpoint;
         private Tuple<CalloutDefinition, MapPoint>? _requestedCallout;
+        private int _calloutRequestVersion;
 
         private INotifyCollectionChanged? _lastObservedNetworkCollection;
 
@@ -113,6 +119,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public ObservableCollection<StartingPointModel> StartingPoints { get; } = new ObservableCollection<StartingPointModel>();
 
+        /// <summary>
+        /// Gets the collection of barriers.
+        /// </summary>
+        public ObservableCollection<BarrierModel> Barriers { get; } = new ObservableCollection<BarrierModel>();
+
         private void UtilityNetworks_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (UtilityNetworks.Count == 1)
@@ -121,14 +132,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     SelectedUtilityNetwork = UtilityNetworks[0];
                 });
-            }
-        }
-
-        private void TraceTypes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (TraceTypes.Count == 1)
-            {
-                SelectedTraceType = TraceTypes[0];
             }
         }
 
@@ -175,6 +178,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             });
         }
 
+        private void Barriers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            RunOnUIThread(() =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Reset)
+                {
+                    BarrierGraphicsOverlay.Graphics.Clear();
+                }
+
+                if (e.OldItems != null)
+                {
+                    foreach (var item in e.OldItems.OfType<BarrierModel>().Where(m => m.SelectionGraphic != null))
+                    {
+                        if (item.SelectionGraphic != null)
+                        {
+                            BarrierGraphicsOverlay.Graphics.Remove(item.SelectionGraphic);
+                        }
+                    }
+                }
+
+                if (e.NewItems != null)
+                {
+                    foreach (var item in e.NewItems.OfType<BarrierModel>())
+                    {
+                        if (item.SelectionGraphic != null && !BarrierGraphicsOverlay.Graphics.Contains(item.SelectionGraphic))
+                        {
+                            BarrierGraphicsOverlay.Graphics.Add(item.SelectionGraphic);
+                        }
+                    }
+
+                    IsAddingBarriers = false;
+                }
+
+                ApplyWarnings();
+            });
+        }
+
         #endregion Observable collections
 
         /// <summary>
@@ -189,13 +229,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             // Automatically select sole items in lists.
             UtilityNetworks.CollectionChanged += UtilityNetworks_CollectionChanged;
-            TraceTypes.CollectionChanged += TraceTypes_CollectionChanged;
 
             // Automatically update warnings
             Results.CollectionChanged += Results_CollectionChanged;
 
             // Automatically update warnings, keep graphics overlay in sync
             StartingPoints.CollectionChanged += StartingPoints_CollectionChanged;
+            Barriers.CollectionChanged += Barriers_CollectionChanged;
         }
 
         #region Utility Network and Trace Type Selection
@@ -237,38 +277,112 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
+        /// <summary>
+        /// Reloads the named trace configurations available for the selected utility network
+        /// and updates the list of trace configurations displayed by the tool.
+        /// </summary>
+        /// <param name="visibleTraceNames">
+        /// The names of trace configurations to display. Only configurations with matching
+        /// names are included. Name matching is case-insensitive. If <c>null</c> or empty,
+        /// all available trace configurations are displayed.
+        /// </param>
+        /// <returns>
+        /// A task that represents the asynchronous load operation.
+        /// </returns>
+        public Task LoadAsync(IEnumerable<string>? visibleTraceNames)
+        {
+            var requestedNames = visibleTraceNames?.ToArray() ?? Array.Empty<string>();
+            if (Map is not Map map || SelectedUtilityNetwork is not UtilityNetwork utilityNetwork)
+            {
+                throw new InvalidOperationException("A map and utility network must be selected before loading named traces.");
+            }
+
+            return LoadTraceTypesAsync(map, utilityNetwork, requestedNames);
+        }
+
         private async Task LoadTraceTypesAsync()
         {
             try
             {
-                IsLoadingNetwork = true;
-
-                if (Map != null
-                    && SelectedUtilityNetwork is UtilityNetwork utilityNetwork)
+                if (Map is Map map && SelectedUtilityNetwork is UtilityNetwork utilityNetwork)
                 {
-                    if (_getTraceTypesCts != null)
-                    {
-                        _getTraceTypesCts.Cancel();
-                    }
-
-                    _getTraceTypesCts = new CancellationTokenSource();
-                    var traceTypes = await Map.GetNamedTraceConfigurationsFromUtilityNetworkAsync(utilityNetwork, _getTraceTypesCts.Token);
-                    foreach (var traceType in traceTypes.OrderBy(tt => tt.Name))
-                    {
-                        TraceTypes.Add(traceType);
-                    }
+                    await LoadTraceTypesAsync(map, utilityNetwork, requestedNames: null);
                 }
-            }
-            catch (TaskCanceledException)
-            {
-                // Do nothing when canceled
+                else
+                {
+                    IsLoadingNetwork = false;
+                }
             }
             catch (Exception)
             {
             }
+        }
+
+        private async Task LoadTraceTypesAsync(Map map, UtilityNetwork utilityNetwork, IReadOnlyCollection<string>? requestedNames)
+        {
+            var requestCts = new CancellationTokenSource();
+            var previousRequestCts = _getTraceTypesCts;
+            _getTraceTypesCts = requestCts;
+            previousRequestCts?.Cancel();
+
+            SelectedTraceType = null;
+            TraceTypes.Clear();
+            EnableTrace = false;
+            InsufficientStartingPointsWarning = false;
+            TooManyStartingPointsWarning = false;
+            DuplicatedTraceWarning = false;
+            IsLoadingNetwork = true;
+
+            try
+            {
+                IEnumerable<UtilityNamedTraceConfiguration> traceTypes;
+                if (map.Item != null)
+                {
+                    traceTypes = await map.GetNamedTraceConfigurationsFromUtilityNetworkAsync(utilityNetwork, requestCts.Token);
+                    if (requestedNames?.Any(n => !string.IsNullOrWhiteSpace(n)) == true)
+                    {
+                        traceTypes = traceTypes.Where(traceType => requestedNames.Any(name => string.Equals(name, traceType.Name, StringComparison.OrdinalIgnoreCase)));
+                    }
+                }
+                else
+                {
+                    var queryParameters = new UtilityNamedTraceConfigurationQueryParameters();
+                    if (requestedNames != null)
+                    {
+                        foreach (var requestedName in requestedNames)
+                        {
+                            queryParameters.Names.Add(requestedName);
+                        }
+                    }
+
+                    traceTypes = await utilityNetwork.QueryNamedTraceConfigurationsAsync(queryParameters, requestCts.Token);
+                }
+
+                requestCts.Token.ThrowIfCancellationRequested();
+                if (!ReferenceEquals(_getTraceTypesCts, requestCts))
+                {
+                    throw new OperationCanceledException(requestCts.Token);
+                }
+
+                foreach (var traceType in traceTypes.OrderBy(traceType => traceType.Name))
+                {
+                    TraceTypes.Add(traceType);
+                }
+
+                if (TraceTypes.Count > 0)
+                {
+                    SelectedTraceType = TraceTypes[0];
+                }
+            }
             finally
             {
-                IsLoadingNetwork = false;
+                if (ReferenceEquals(_getTraceTypesCts, requestCts))
+                {
+                    _getTraceTypesCts = null;
+                    IsLoadingNetwork = false;
+                }
+
+                requestCts.Dispose();
             }
         }
 
@@ -497,7 +611,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         /// <summary>
         /// Gets or sets the selected starting point.
-        /// Selecting a starting point selects the <see cref="StartingPointModel.SelectionGraphic"/> and updates <see cref="RequestedCallout"/> and <see cref="RequestedViewpoint"/>.
+        /// Selecting a starting point selects the <see cref="UtilityElementModel.SelectionGraphic"/> and updates <see cref="RequestedCallout"/> and <see cref="RequestedViewpoint"/>.
         /// </summary>
         public StartingPointModel? SelectedStartingPoint
         {
@@ -510,17 +624,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     OnPropertyChanged();
 
                     // Update selection and show callout.
-                    RequestedCallout = null;
+                    ClearRequestedCallout();
+                    StartingPointGraphicsOverlay.ClearSelection();
 
-                    if (SelectedStartingPoint?.StartingPoint is UtilityElement startingPoint
-                     && StartingPointGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
-                     && guid.Equals(startingPoint.GlobalId)) is Graphic graphic)
+                    if (SelectedStartingPoint is StartingPointModel selectedStartingPoint)
                     {
-                        StartingPointGraphicsOverlay.ClearSelection();
+                        SelectedBarrier = null;
+                        BarrierGraphicsOverlay.ClearSelection();
+                        var graphic = selectedStartingPoint.SelectionGraphic;
                         graphic.IsSelected = true;
                         if (graphic.Geometry is MapPoint location)
                         {
-                            _ = SetCallout(SelectedStartingPoint, location);
+                            _ = SetCallout(selectedStartingPoint, location);
                         }
                     }
                 }
@@ -529,6 +644,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private async Task SetCallout(StartingPointModel selectedStartingPoint, MapPoint location)
         {
+            var calloutRequestVersion = ++_calloutRequestVersion;
             var calloutDefinition = new CalloutDefinition(selectedStartingPoint.StartingPoint.NetworkSource.Name, selectedStartingPoint.StartingPoint.AssetGroup.Name);
             try
             {
@@ -539,7 +655,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 // Ignore
             }
 
-            RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
+            if (calloutRequestVersion == _calloutRequestVersion)
+            {
+                RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
+            }
         }
 
         public Tuple<CalloutDefinition, MapPoint>? RequestedCallout
@@ -554,7 +673,147 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
             }
         }
+
+        public void DismissCallout()
+        {
+            ClearRequestedCallout();
+            SelectedStartingPoint = null;
+            SelectedBarrier = null;
+        }
+
+        private void ClearRequestedCallout()
+        {
+            _calloutRequestVersion++;
+            _requestedCallout = null;
+            OnPropertyChanged(nameof(RequestedCallout));
+        }
         #endregion Starting Points
+
+        #region Barriers
+        public void AddBarrier(ArcGISFeature feature, MapPoint? location = null, bool? useAsFilterBarrier = false)
+        {
+            Geometry.Geometry? geometry = feature.Geometry;
+            UtilityElement? element = null;
+            try
+            {
+                element = SelectedUtilityNetwork?.CreateElement(feature);
+            }
+            catch (Exception)
+            {
+            }
+
+            if (element == null)
+            {
+                return;
+            }
+
+            // Skip adding duplicate barriers.
+            if (Barriers.Any(barrier => barrier.Barrier.GlobalId == element.GlobalId))
+            {
+                return;
+            }
+
+            // Apply fraction along edge based on identify location.
+            if (element.NetworkSource.SourceType == UtilityNetworkSourceType.Edge && feature.Geometry is Polyline polyline)
+            {
+                if (polyline.HasZ && GeometryEngine.RemoveZ(polyline) is Polyline polyline2d)
+                {
+                    polyline = polyline2d;
+                }
+
+                if (location?.SpatialReference is SpatialReference sr && !sr.IsEqual(polyline?.SpatialReference)
+                    && polyline != null && GeometryEngine.Project(polyline, sr) is Polyline projectedPolyline)
+                {
+                    polyline = projectedPolyline;
+                }
+
+                geometry = polyline;
+
+                if (polyline != null && location != null && GeometryEngine.FractionAlong(polyline, location, double.NaN) is double fractionAlongEdge
+                    && !double.IsNaN(fractionAlongEdge))
+                {
+                    element.FractionAlongEdge = fractionAlongEdge;
+                }
+
+                if (location == null && polyline?.Parts?.FirstOrDefault()?.StartPoint is MapPoint startPoint)
+                {
+                    location = startPoint;
+                }
+            }
+
+            // Apply terminal settings.
+            else if (element.NetworkSource.SourceType == UtilityNetworkSourceType.Junction
+                && element.AssetType?.TerminalConfiguration?.Terminals.Count > 1)
+            {
+                element.Terminal = element.AssetType.TerminalConfiguration.Terminals[0];
+            }
+
+            var graphic = new Graphic { Geometry = geometry as MapPoint ?? location, Symbol = BarrierSymbol ?? _defaultBarrierSymbol };
+            graphic.Attributes["GlobalId"] = element.GlobalId;
+            graphic.Attributes["NetworkSource"] = element.NetworkSource.Name;
+            graphic.Attributes["AssetGroup"] = element.AssetGroup.Name;
+            graphic.Attributes["AssetType"] = element.AssetType?.Name;
+            graphic.Attributes["Geometry"] = geometry?.ToJson();
+
+            Barriers.Add(new BarrierModel(this, element, graphic, feature, geometry?.Extent, useAsFilterBarrier));
+        }
+
+        /// <summary>
+        /// Gets or sets the selected barrier.
+        /// Selecting a barrier selects the <see cref="UtilityElementModel.SelectionGraphic"/> and updates <see cref="RequestedCallout"/> and <see cref="RequestedViewpoint"/>.
+        /// </summary>
+        public BarrierModel? SelectedBarrier
+        {
+            get => _selectedBarrier;
+            set
+            {
+                if (_selectedBarrier != value)
+                {
+                    _selectedBarrier = value;
+                    OnPropertyChanged();
+
+                    ClearRequestedCallout();
+                    BarrierGraphicsOverlay.ClearSelection();
+
+                    if (SelectedBarrier is BarrierModel selectedBarrier)
+                    {
+                        SelectedStartingPoint = null;
+                        StartingPointGraphicsOverlay.ClearSelection();
+                        var graphic = selectedBarrier.SelectionGraphic;
+                        graphic.IsSelected = true;
+                        if (graphic.Geometry is MapPoint location)
+                        {
+                            _ = SetCallout(selectedBarrier, location);
+                        }
+                    }
+                }
+            }
+        }
+
+        private async Task SetCallout(BarrierModel selectedBarrier, MapPoint location)
+        {
+            var calloutRequestVersion = ++_calloutRequestVersion;
+            var calloutDefinition = new CalloutDefinition(selectedBarrier.Barrier.NetworkSource.Name, selectedBarrier.Barrier.AssetGroup.Name);
+            try
+            {
+                calloutDefinition.Icon = selectedBarrier.Symbol is null ? null : await selectedBarrier.Symbol.CreateSwatchAsync();
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
+
+            if (calloutRequestVersion == _calloutRequestVersion)
+            {
+                RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
+            }
+        }
+
+        internal void HandleBarrierChanged()
+        {
+            ApplyWarnings();
+        }
+        #endregion Barriers
 
         #region Tracing
 
@@ -569,8 +828,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
 
             var traceParameters = new UtilityTraceParameters(SelectedTraceType, StartingPoints.Select(sp => sp.StartingPoint));
+            foreach (var barrier in Barriers)
+            {
+                if (barrier.UseAsFilterBarrier)
+                {
+                    traceParameters.FilterBarriers.Add(barrier.Barrier);
+                }
+                else
+                {
+                    traceParameters.Barriers.Add(barrier.Barrier);
+                }
+            }
 
-            UtilityTraceOperationResult resultInProgress = new UtilityTraceOperationResult(this, SelectedTraceType, traceParameters, StartingPoints.ToList()) { GraphicVisualizationColor = ResultColor };
+            UtilityTraceOperationResult resultInProgress = new UtilityTraceOperationResult(this, SelectedTraceType, traceParameters, StartingPoints.ToList(), Barriers.ToList()) { GraphicVisualizationColor = ResultColor };
 
             try
             {
@@ -747,8 +1017,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             StartingPoints.Clear();
             StartingPointGraphicsOverlay.Graphics.Clear();
+            Barriers.Clear();
+            BarrierGraphicsOverlay.Graphics.Clear();
+            IsAddingBarriers = false;
 
-            _getTraceTypesCts?.Cancel();
+            var getTraceTypesCts = _getTraceTypesCts;
+            _getTraceTypesCts = null;
+            getTraceTypesCts?.Cancel();
             _traceCts?.Cancel();
             _getFeaturesForElementsCts?.Cancel();
 
@@ -801,6 +1076,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         // Fallback symbols
         private readonly Symbol _defaultStartingLocationSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.LimeGreen, 20d);
+        private readonly Symbol _defaultBarrierSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 20d);
         private readonly Symbol _defaultResultPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Blue, 20d);
         private readonly Symbol _defaultResultLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Dot, System.Drawing.Color.Blue, 5d);
         private readonly Symbol _defaultResultFillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.ForwardDiagonal, System.Drawing.Color.Blue,
@@ -817,6 +1093,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 if (value != _startingPointSymbol)
                 {
                     _startingPointSymbol = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the barrier symbol.
+        /// </summary>
+        public Symbol? BarrierSymbol
+        {
+            get => _barrierSymbol;
+            set
+            {
+                if (value != _barrierSymbol)
+                {
+                    _barrierSymbol = value;
                     OnPropertyChanged();
                 }
             }
@@ -939,6 +1231,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 graphic.Symbol = StartingPointSymbol;
             }
         }
+
+        public void HandleBarrierSymbolChanged()
+        {
+            foreach (var graphic in BarrierGraphicsOverlay.Graphics)
+            {
+                graphic.Symbol = BarrierSymbol ?? _defaultBarrierSymbol;
+            }
+        }
         #endregion Symbology
 
         #region Status
@@ -949,7 +1249,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 if (value != _isAddingStartingPoints)
                 {
+                    if (value)
+                    {
+                        IsAddingBarriers = false;
+                    }
+
                     _isAddingStartingPoints = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsAddingBarriers
+        {
+            get => _isAddingBarriers;
+            set
+            {
+                if (value != _isAddingBarriers)
+                {
+                    if (value)
+                    {
+                        IsAddingStartingPoints = false;
+                    }
+
+                    _isAddingBarriers = value;
                     OnPropertyChanged();
                 }
             }
@@ -1064,7 +1387,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             bool hasDuplicated = false;
             foreach (var result in Results)
             {
-                if (result.Configuration == SelectedTraceType && (result.StartingPoints?.SequenceEqual(StartingPoints) ?? false))
+                if (result.Configuration == SelectedTraceType
+                    && (result.StartingPoints?.SequenceEqual(StartingPoints) ?? false)
+                    && result.Barriers.SequenceEqual(Barriers.Where(barrier => !barrier.UseAsFilterBarrier))
+                    && result.FilterBarriers.SequenceEqual(Barriers.Where(barrier => barrier.UseAsFilterBarrier)))
                 {
                     hasDuplicated = true;
                     break;

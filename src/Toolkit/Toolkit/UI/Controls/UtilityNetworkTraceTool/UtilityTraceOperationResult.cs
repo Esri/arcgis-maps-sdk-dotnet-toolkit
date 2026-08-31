@@ -97,6 +97,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         internal IList<StartingPointModel> StartingPoints { get; }
 
         /// <summary>
+        /// Gets the regular barrier inputs to the trace.
+        /// </summary>
+        internal IList<BarrierModel> Barriers { get; }
+
+        /// <summary>
+        /// Gets the filter barrier inputs to the trace.
+        /// </summary>
+        internal IList<BarrierModel> FilterBarriers { get; }
+
+        /// <summary>
         /// Gets teh parameters used to create this result.
         /// </summary>
         public UtilityTraceParameters Parameters { get; }
@@ -116,12 +126,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Initializes a new instance of the <see cref="UtilityTraceOperationResult"/> class.
         /// </summary>
-        internal UtilityTraceOperationResult(UtilityNetworkTraceToolController controller, UtilityNamedTraceConfiguration configuration, UtilityTraceParameters parameters, IList<StartingPointModel> startingPoints)
+        internal UtilityTraceOperationResult(UtilityNetworkTraceToolController controller, UtilityNamedTraceConfiguration configuration, UtilityTraceParameters parameters, IList<StartingPointModel> startingPoints, IList<BarrierModel> barriers)
         {
             _controller = controller;
             Configuration = configuration;
             Parameters = parameters;
             StartingPoints = startingPoints;
+            Barriers = barriers.Where(barrier => !barrier.UseAsFilterBarrier).ToList();
+            FilterBarriers = barriers.Where(barrier => barrier.UseAsFilterBarrier).ToList();
             AreGraphicsShown = true;
             ZoomToCommand = new DelegateCommand(HandleZoomToResultCommand);
             DeleteCommand = new DelegateCommand(HandleDeleteCommand);
