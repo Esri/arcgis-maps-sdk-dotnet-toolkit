@@ -566,9 +566,11 @@
                                 Style="{StaticResource ResultAreaBorderStyle}"
                                 Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.ResultMessageVisibility, Mode=OneWay}">
                                 <TextBlock
+                                    x:Name="PART_ResultMessage"
                                     Margin="8"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
+                                    AutomationProperties.LiveSetting="Polite"
                                     Text="{TemplateBinding NoResultMessage}" />
                             </Border>
                         </Grid>
