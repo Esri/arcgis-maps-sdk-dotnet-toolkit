@@ -87,6 +87,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     #if WINDOWS_XAML
         private readonly KeyEventHandler _suggestionItemKeyDownHandler;
         private readonly KeyEventHandler _focusTargetAfterSuggestionsKeyDownHandler;
+        private readonly KeyEventHandler _allSourcesButtonKeyDownHandler;
     #endif
 
         /// <summary>
@@ -97,6 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if WINDOWS_XAML
             _suggestionItemKeyDownHandler = SuggestionItem_KeyDown;
             _focusTargetAfterSuggestionsKeyDownHandler = FocusTargetAfterSuggestions_KeyDown;
+            _allSourcesButtonKeyDownHandler = AllSourcesButton_KeyDown;
 #endif
             DefaultStyleKey = typeof(SearchView);
             DataContext = this;
@@ -143,7 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_allSourcesButton != null)
             {
-                _allSourcesButton.KeyDown -= AllSourcesButton_KeyDown;
+                _allSourcesButton.RemoveHandler(UIElement.KeyDownEvent, _allSourcesButtonKeyDownHandler);
                 _allSourcesButton.Click -= AllSourcesButton_Click;
                 _allSourcesButton.PointerPressed -= SourceList_PointerPressed;
             }
@@ -187,7 +189,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_allSourcesButton != null)
             {
-                _allSourcesButton.KeyDown += AllSourcesButton_KeyDown;
+                _allSourcesButton.AddHandler(UIElement.KeyDownEvent, _allSourcesButtonKeyDownHandler, true);
                 _allSourcesButton.Click += AllSourcesButton_Click;
                 _allSourcesButton.PointerPressed += SourceList_PointerPressed;
             }
@@ -241,6 +243,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (e.Key == VirtualKey.Tab && FocusFirstVisibleItem(_sourceList))
             {
+                _sourceSelectionByKeyboard = true;
                 e.Handled = true;
             }
             else if (e.Key == VirtualKey.Enter || e.Key == VirtualKey.Space)
@@ -265,6 +268,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     ? _allSourcesButton?.Focus(FocusState.Keyboard) == true
                     : CloseSourcePopupAndFocusQuery();
                 e.Handled = focused;
+                if (focused)
+                {
+                    _sourceSelectionByKeyboard = false;
+                }
             }
             else
             {
