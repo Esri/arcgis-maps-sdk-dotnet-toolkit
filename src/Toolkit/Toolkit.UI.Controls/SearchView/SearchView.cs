@@ -83,11 +83,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Button? _searchButton;
         private bool _focusResultsWhenAvailable;
         private bool _sourceSelectionByKeyboard;
+        private bool _sourceSelectOpenedByPointer;
 
     #if WINDOWS_XAML
         private readonly KeyEventHandler _suggestionItemKeyDownHandler;
         private readonly KeyEventHandler _focusTargetAfterSuggestionsKeyDownHandler;
         private readonly KeyEventHandler _allSourcesButtonKeyDownHandler;
+        private readonly PointerEventHandler _sourceSelectTogglePointerPressedHandler;
     #endif
 
         /// <summary>
@@ -99,6 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _suggestionItemKeyDownHandler = SuggestionItem_KeyDown;
             _focusTargetAfterSuggestionsKeyDownHandler = FocusTargetAfterSuggestions_KeyDown;
             _allSourcesButtonKeyDownHandler = AllSourcesButton_KeyDown;
+            _sourceSelectTogglePointerPressedHandler = SourceSelectToggle_PointerPressed;
 #endif
             DefaultStyleKey = typeof(SearchView);
             DataContext = this;
@@ -143,6 +146,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _sourcePopup.Opened -= SourcePopup_Opened;
             }
 
+            if (_sourceSelectToggle != null)
+            {
+                _sourceSelectToggle.RemoveHandler(UIElement.PointerPressedEvent, _sourceSelectTogglePointerPressedHandler);
+            }
+
             if (_allSourcesButton != null)
             {
                 _allSourcesButton.RemoveHandler(UIElement.KeyDownEvent, _allSourcesButtonKeyDownHandler);
@@ -185,6 +193,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_sourcePopup != null)
             {
                 _sourcePopup.Opened += SourcePopup_Opened;
+            }
+
+            if (_sourceSelectToggle != null)
+            {
+                _sourceSelectToggle.AddHandler(UIElement.PointerPressedEvent, _sourceSelectTogglePointerPressedHandler, true);
             }
 
             if (_allSourcesButton != null)
@@ -232,7 +245,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void SourcePopup_Opened(object? sender, object e)
         {
+            if (_sourceSelectOpenedByPointer)
+            {
+                _sourceSelectOpenedByPointer = false;
+                return;
+            }
+
             _ = DispatcherQueue.TryEnqueue(() => _allSourcesButton?.Focus(FocusState.Keyboard));
+        }
+
+        private void SourceSelectToggle_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            _sourceSelectOpenedByPointer = !IsSourceSelectOpen;
         }
 
         private void AllSourcesButton_KeyDown(object sender, KeyRoutedEventArgs e)
