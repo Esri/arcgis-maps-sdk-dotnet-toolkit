@@ -1,8 +1,16 @@
 using System.Globalization;
+
+#if WPF
+using System.Windows.Automation;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
+using System.Windows.Controls.Primitives;
+#elif WINUI
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Automation.Peers;
 using Microsoft.UI.Xaml.Automation.Provider;
 using Microsoft.UI.Xaml.Controls.Primitives;
+#endif
 
 #pragma warning disable CS1591
 
@@ -23,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void AllSourcesToggleButton_CheckedChanged(object sender, RoutedEventArgs e)
         {
             var isSelected = IsChecked == true;
-            if (isSelected != _lastIsSelected && FrameworkElementAutomationPeer.FromElement(this) is AllSourcesToggleButtonAutomationPeer peer)
+            if (isSelected != _lastIsSelected && GetAutomationPeer() is AllSourcesToggleButtonAutomationPeer peer)
             {
                 peer.RaiseSelectionNameChanged(_lastIsSelected, isSelected);
             }
@@ -32,6 +40,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         protected override AutomationPeer OnCreateAutomationPeer() => new AllSourcesToggleButtonAutomationPeer(this);
+
+        private AutomationPeer? GetAutomationPeer()
+        {
+#if WPF
+            return UIElementAutomationPeer.FromElement(this);
+#elif WINUI
+            return FrameworkElementAutomationPeer.FromElement(this);
+#endif
+        }
     }
 
     internal sealed partial class AllSourcesToggleButtonAutomationPeer : ToggleButtonAutomationPeer, IInvokeProvider
@@ -53,13 +70,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         protected override string GetNameCore() => GetAccessibleName(((ToggleButton)Owner).IsChecked == true);
 
+#if WPF
+        public override object? GetPattern(PatternInterface patternInterface)
+#elif WINUI
         protected override object? GetPatternCore(PatternInterface patternInterface)
+#endif
         {
             return patternInterface switch
             {
                 PatternInterface.Invoke => this,
                 PatternInterface.Toggle => null,
+#if WPF
+                _ => base.GetPattern(patternInterface),
+#elif WINUI
                 _ => base.GetPatternCore(patternInterface),
+#endif
             };
         }
 
@@ -91,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void SourceSelectToggleButton_CheckedChanged(object sender, RoutedEventArgs e)
         {
             var newState = GetExpandCollapseState(IsChecked);
-            if (newState != _lastExpandCollapseState && FrameworkElementAutomationPeer.FromElement(this) is SourceSelectToggleButtonAutomationPeer peer)
+            if (newState != _lastExpandCollapseState && GetAutomationPeer() is SourceSelectToggleButtonAutomationPeer peer)
             {
                 peer.RaiseExpandCollapseStateChanged(_lastExpandCollapseState, newState);
             }
@@ -104,6 +129,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         internal static ExpandCollapseState GetExpandCollapseState(bool? isChecked) => isChecked == true
             ? ExpandCollapseState.Expanded
             : ExpandCollapseState.Collapsed;
+
+        private AutomationPeer? GetAutomationPeer()
+        {
+#if WPF
+            return UIElementAutomationPeer.FromElement(this);
+#elif WINUI
+            return FrameworkElementAutomationPeer.FromElement(this);
+#endif
+        }
     }
 
     internal sealed partial class SourceSelectToggleButtonAutomationPeer : ToggleButtonAutomationPeer, IExpandCollapseProvider
@@ -124,13 +158,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             RaisePropertyChangedEvent(ExpandCollapsePatternIdentifiers.ExpandCollapseStateProperty, oldState, newState);
         }
 
+#if WPF
+        public override object? GetPattern(PatternInterface patternInterface)
+#elif WINUI
         protected override object? GetPatternCore(PatternInterface patternInterface)
+#endif
         {
             return patternInterface switch
             {
                 PatternInterface.ExpandCollapse => this,
                 PatternInterface.Toggle => null,
+#if WPF
+                _ => base.GetPattern(patternInterface),
+#elif WINUI
                 _ => base.GetPatternCore(patternInterface),
+#endif
             };
         }
 
