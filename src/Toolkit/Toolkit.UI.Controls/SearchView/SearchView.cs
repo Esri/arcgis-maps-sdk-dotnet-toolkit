@@ -49,10 +49,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_ResultList", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_SearchButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_SourceSelectToggle", Type = typeof(ToggleButton))]
 #if WINDOWS_XAML
     [TemplatePart(Name = "PART_SuggestionListUnGrouped", Type = typeof(ListView))]
-#elif WPF
-    [TemplatePart(Name = "PART_SourceSelectToggle", Type = typeof(ToggleButton))]
 #endif
 #pragma warning disable IDE0079
 #pragma warning disable CA1001
@@ -127,6 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ListView? _ungroupedSuggestionList;
         private UIElement? _focusTargetAfterSuggestions;
         private ListViewItem? _focusSourceSuggestion;
+        private ToggleButton? _sourceSelectToggle;
 
         // UWP listview automatically selects first item when doing grouping; using this flag to be able to ignore that first selection.
         private bool _groupListSelectionFlag;
@@ -178,6 +178,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             GetCommonTemplateParts();
             _ungroupedSuggestionList = GetTemplateChild("PART_SuggestionListUnGrouped") as ListView;
+            _sourceSelectToggle = GetTemplateChild("PART_SourceSelectToggle") as ToggleButton;
 
             if (_sourcePopup != null)
             {
@@ -234,7 +235,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void AllSourcesButton_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (e.Key == VirtualKey.Tab && !IsShiftPressed() && FocusFirstVisibleItem(_sourceList))
+            if (e.Key == VirtualKey.Tab && IsShiftPressed())
+            {
+                e.Handled = CloseSourcePopupAndFocusToggle();
+            }
+            else if (e.Key == VirtualKey.Tab && FocusFirstVisibleItem(_sourceList))
             {
                 e.Handled = true;
             }
@@ -281,6 +286,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             IsSourceSelectOpen = false;
             return _queryEntry?.Focus(FocusState.Keyboard) == true;
+        }
+
+        private bool CloseSourcePopupAndFocusToggle()
+        {
+            IsSourceSelectOpen = false;
+            return _sourceSelectToggle?.Focus(FocusState.Keyboard) == true;
         }
 
         private static bool IsShiftPressed() => IsKeyPressed(VirtualKey.Shift);
@@ -560,6 +571,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void AllSourcesButton_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Escape || (e.Key == Key.Tab && (Keyboard.Modifiers & ModifierKeys.Shift) != 0))
+            {
+                e.Handled = CloseSourcePopupAndFocusToggle();
+                return;
+            }
+
             if (e.Key == Key.Enter || e.Key == Key.Space)
             {
                 _sourceSelectionByKeyboard = true;
@@ -584,6 +601,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void SourceList_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = CloseSourcePopupAndFocusToggle();
+                return;
+            }
+
             if (e.Key == Key.Tab)
             {
                 // Keep Tab traversal inside the popup region: Shift+Tab returns to All sources; Tab exits to query.
@@ -621,6 +644,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             IsSourceSelectOpen = false;
             return _queryEntry?.Focus() == true;
+        }
+
+        private bool CloseSourcePopupAndFocusToggle()
+        {
+            IsSourceSelectOpen = false;
+            return _sourceSelectToggle?.Focus() == true;
         }
 
         private void SearchButton_PreviewKeyDown(object sender, KeyEventArgs e)
