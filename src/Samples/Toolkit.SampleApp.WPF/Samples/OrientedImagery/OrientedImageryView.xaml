@@ -59,17 +59,18 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBox x:Name="LayerUriTextBox" Text="https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0" />
             <Button Grid.Column="1" Content="Apply Layer" Click="ApplyLayerButton_Click" />
+            <Button Grid.Column="2" Content="2D/3D" Click="Toggle2DButton_Click" />
         </Grid>
 
-        <esri:MapView x:Name="MainMapView" Grid.Row="1" Grid.Column="0"/>
+        <Grid x:Name="GeoViewContainer" Grid.Row="1" Grid.Column="0" />
         <GridSplitter Grid.Row="1" Grid.Column="1" Width="5"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       ResizeBehavior="PreviousAndNext" />
         <esri:OrientedImageryView x:Name="MainOrientedImageryView"
-                                  GeoView="{Binding ElementName=MainMapView}"
                                   ViewModel="{StaticResource MainOrientedImageryVM}"
                                   ItemTemplateSelector="{StaticResource CustomToolbarSelector}"
                                   Grid.Row="1" Grid.Column="2"/>
