@@ -27,8 +27,11 @@ using System.Windows.Controls.Primitives;
 #endif
 
 #if WINDOWS_XAML
+using Microsoft.UI.Input;
 using Microsoft.UI.Xaml.Automation;
 using Windows.Foundation;
+using Windows.System;
+using Windows.UI.Core;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -39,10 +42,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <remarks><note type="caution">
     /// If a <see cref="LocalSceneView"/> is set as the <see cref="GeoView"/>, the current search results will not currently be shown on the scene.
     /// </note></remarks>
-#if WINDOWS_XAML
-    [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
-#elif WPF
-    [TemplatePart(Name = "PART_SourceSelectToggle", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "PART_SourcePopup", Type = typeof(Popup))]
     [TemplatePart(Name = "PART_AllSourcesButton", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "PART_SourceList", Type = typeof(ListView))]
@@ -50,6 +49,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_ResultList", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_SearchButton", Type = typeof(Button))]
+#if WINDOWS_XAML
+    [TemplatePart(Name = "PART_SuggestionListUnGrouped", Type = typeof(ListView))]
+#elif WPF
+    [TemplatePart(Name = "PART_SourceSelectToggle", Type = typeof(ToggleButton))]
 #endif
 #pragma warning disable IDE0079
 #pragma warning disable CA1001
@@ -72,11 +75,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Flag indicating that query text is changing as a result of selecting a suggestion; view should not request suggestions in response to the user suggesting a selection.
         private bool _acceptingSuggestionFlag;
 
+        private Popup? _sourcePopup;
+        private ToggleButton? _allSourcesButton;
+        private ListView? _sourceList;
+        private TextBox? _queryEntry;
+        private ListView? _suggestionList;
+        private ListView? _resultList;
+        private Button? _searchButton;
+        private bool _focusResultsWhenAvailable;
+        private bool _sourceSelectionByKeyboard;
+
+    #if WINDOWS_XAML
+        private readonly KeyEventHandler _suggestionItemKeyDownHandler;
+        private readonly KeyEventHandler _focusTargetAfterSuggestionsKeyDownHandler;
+    #endif
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchView"/> class.
         /// </summary>
         public SearchView()
         {
+#if WINDOWS_XAML
+            _suggestionItemKeyDownHandler = SuggestionItem_KeyDown;
+            _focusTargetAfterSuggestionsKeyDownHandler = FocusTargetAfterSuggestions_KeyDown;
+#endif
             DefaultStyleKey = typeof(SearchView);
             DataContext = this;
             SearchViewModel = new SearchViewModel();
@@ -102,7 +124,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if WINDOWS_XAML
-        private ListView? _suggestionList;
+        private ListView? _ungroupedSuggestionList;
+        private UIElement? _focusTargetAfterSuggestions;
+        private ListViewItem? _focusSourceSuggestion;
 
         // UWP listview automatically selects first item when doing grouping; using this flag to be able to ignore that first selection.
         private bool _groupListSelectionFlag;
@@ -110,26 +134,310 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         protected override void OnApplyTemplate()
         {
-            base.OnApplyTemplate();
+            ClearFocusTargetAfterSuggestions();
+
+            if (_sourcePopup != null)
+            {
+                _sourcePopup.Opened -= SourcePopup_Opened;
+            }
+
+            if (_allSourcesButton != null)
+            {
+                _allSourcesButton.KeyDown -= AllSourcesButton_KeyDown;
+                _allSourcesButton.Click -= AllSourcesButton_Click;
+                _allSourcesButton.PointerPressed -= SourceList_PointerPressed;
+            }
+
+            if (_sourceList != null)
+            {
+                _sourceList.KeyDown -= SourceList_KeyDown;
+                _sourceList.SelectionChanged -= SourceList_SelectionChanged;
+                _sourceList.PointerPressed -= SourceList_PointerPressed;
+            }
 
             if (_suggestionList != null)
             {
                 _suggestionList.SelectionChanged -= SuggestionList_SelectionChanged;
                 _suggestionList.ChoosingGroupHeaderContainer -= ListView_ChoosingGroupHeaderContainer;
-                _suggestionList = null;
+                _suggestionList.ContainerContentChanging -= SuggestionList_ContainerContentChanging;
+                RemoveSuggestionItemHandlers(_suggestionList);
             }
 
-            var listview = GetTemplateChild("PART_SuggestionList");
-
-            if (listview is ListView newlistview)
+            if (_ungroupedSuggestionList != null)
             {
-                _suggestionList = newlistview;
+                _ungroupedSuggestionList.ContainerContentChanging -= SuggestionList_ContainerContentChanging;
+                RemoveSuggestionItemHandlers(_ungroupedSuggestionList);
+            }
+
+            if (_searchButton != null)
+            {
+                _searchButton.KeyDown -= SearchButton_KeyDown;
+            }
+
+            base.OnApplyTemplate();
+
+            GetCommonTemplateParts();
+            _ungroupedSuggestionList = GetTemplateChild("PART_SuggestionListUnGrouped") as ListView;
+
+            if (_sourcePopup != null)
+            {
+                _sourcePopup.Opened += SourcePopup_Opened;
+            }
+
+            if (_allSourcesButton != null)
+            {
+                _allSourcesButton.KeyDown += AllSourcesButton_KeyDown;
+                _allSourcesButton.Click += AllSourcesButton_Click;
+                _allSourcesButton.PointerPressed += SourceList_PointerPressed;
+            }
+
+            if (_sourceList != null)
+            {
+                _sourceList.KeyDown += SourceList_KeyDown;
+                _sourceList.SelectionChanged += SourceList_SelectionChanged;
+                _sourceList.PointerPressed += SourceList_PointerPressed;
+            }
+
+            if (_suggestionList != null)
+            {
                 _suggestionList.SelectedIndex = -1;
+                _suggestionList.IsTabStop = false;
                 _suggestionList.SelectionChanged += SuggestionList_SelectionChanged;
                 _suggestionList.ChoosingGroupHeaderContainer += ListView_ChoosingGroupHeaderContainer;
+                _suggestionList.ContainerContentChanging += SuggestionList_ContainerContentChanging;
             }
 
+            if (_ungroupedSuggestionList != null)
+            {
+                _ungroupedSuggestionList.IsTabStop = false;
+                _ungroupedSuggestionList.ContainerContentChanging += SuggestionList_ContainerContentChanging;
+            }
+
+            if (_searchButton != null)
+            {
+                _searchButton.KeyDown += SearchButton_KeyDown;
+            }
         }
+
+        private void SearchButton_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Tab && !IsShiftPressed() && FocusFirstVisibleItem(_ungroupedSuggestionList, _suggestionList))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void SourcePopup_Opened(object? sender, object e)
+        {
+            _ = DispatcherQueue.TryEnqueue(() => _allSourcesButton?.Focus(FocusState.Keyboard));
+        }
+
+        private void AllSourcesButton_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Tab && !IsShiftPressed() && FocusFirstVisibleItem(_sourceList))
+            {
+                e.Handled = true;
+            }
+            else if (e.Key == VirtualKey.Enter || e.Key == VirtualKey.Space)
+            {
+                _sourceSelectionByKeyboard = true;
+            }
+        }
+
+        private void AllSourcesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (TakeKeyboardSourceSelection())
+            {
+                _ = DispatcherQueue.TryEnqueue(() => _queryEntry?.Focus(FocusState.Keyboard));
+            }
+        }
+
+        private void SourceList_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Tab)
+            {
+                var focused = IsShiftPressed()
+                    ? _allSourcesButton?.Focus(FocusState.Keyboard) == true
+                    : CloseSourcePopupAndFocusQuery();
+                e.Handled = focused;
+            }
+            else
+            {
+                _sourceSelectionByKeyboard = true;
+            }
+        }
+
+        private void SourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && TakeKeyboardSourceSelection())
+            {
+                _ = DispatcherQueue.TryEnqueue(() => _queryEntry?.Focus(FocusState.Keyboard));
+            }
+        }
+
+        private void SourceList_PointerPressed(object sender, PointerRoutedEventArgs e) => _sourceSelectionByKeyboard = false;
+
+        private bool CloseSourcePopupAndFocusQuery()
+        {
+            IsSourceSelectOpen = false;
+            return _queryEntry?.Focus(FocusState.Keyboard) == true;
+        }
+
+        private static bool IsShiftPressed() => IsKeyPressed(VirtualKey.Shift);
+
+        private static bool IsKeyPressed(VirtualKey key) =>
+            InputKeyboardSource.GetKeyStateForCurrentThread(key).HasFlag(CoreVirtualKeyStates.Down);
+
+        private static bool IsSuggestionAcceptKeyPressed() =>
+            IsKeyPressed(VirtualKey.Enter) || IsKeyPressed(VirtualKey.Space);
+
+        private void SuggestionList_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            if (args.ItemContainer is not ListViewItem item)
+            {
+                return;
+            }
+
+            item.RemoveHandler(UIElement.KeyDownEvent, _suggestionItemKeyDownHandler);
+            if (!args.InRecycleQueue)
+            {
+                item.AddHandler(UIElement.KeyDownEvent, _suggestionItemKeyDownHandler, true);
+            }
+        }
+
+        private void SuggestionItem_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != VirtualKey.Tab)
+            {
+                return;
+            }
+
+            if (IsShiftPressed())
+            {
+                e.Handled = _searchButton?.Focus(FocusState.Keyboard) == true;
+            }
+            else if (sender is ListViewItem suggestionItem)
+            {
+                e.Handled = MoveFocusPastSuggestions(suggestionItem);
+            }
+        }
+
+        private bool MoveFocusPastSuggestions(ListViewItem suggestionItem)
+        {
+            if (XamlRoot?.Content is not FrameworkElement searchRoot || !searchRoot.IsLoaded)
+            {
+                return false;
+            }
+
+            var itemTabStops = GetSuggestionItemTabStops();
+            foreach (var item in itemTabStops)
+            {
+                item.IsTabStop = false;
+            }
+
+            try
+            {
+                var moved = _searchButton?.Focus(FocusState.Programmatic) == true &&
+                    FocusManager.TryMoveFocus(
+                        FocusNavigationDirection.Next,
+                        new FindNextElementOptions { SearchRoot = searchRoot });
+
+                ClearFocusTargetAfterSuggestions();
+                if (moved && FocusManager.GetFocusedElement(XamlRoot) is UIElement focusTarget)
+                {
+                    _focusSourceSuggestion = suggestionItem;
+                    _focusTargetAfterSuggestions = focusTarget;
+                    focusTarget.AddHandler(UIElement.KeyDownEvent, _focusTargetAfterSuggestionsKeyDownHandler, true);
+                }
+
+                return moved;
+            }
+            finally
+            {
+                foreach (var item in itemTabStops)
+                {
+                    item.IsTabStop = true;
+                }
+            }
+        }
+
+        private void FocusTargetAfterSuggestions_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Tab && IsShiftPressed() &&
+                ReferenceEquals(sender, _focusTargetAfterSuggestions) &&
+                _focusSourceSuggestion?.IsLoaded == true &&
+                _focusSourceSuggestion.Focus(FocusState.Keyboard))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void ClearFocusTargetAfterSuggestions()
+        {
+            _focusTargetAfterSuggestions?.RemoveHandler(
+                UIElement.KeyDownEvent,
+                _focusTargetAfterSuggestionsKeyDownHandler);
+            _focusTargetAfterSuggestions = null;
+            _focusSourceSuggestion = null;
+        }
+
+        private List<ListViewItem> GetSuggestionItemTabStops()
+        {
+            var items = new List<ListViewItem>();
+            AddRealizedItems(_ungroupedSuggestionList, items);
+            AddRealizedItems(_suggestionList, items);
+            return items;
+        }
+
+        private static void AddRealizedItems(ListView? listView, List<ListViewItem> items)
+        {
+            if (listView == null)
+            {
+                return;
+            }
+
+            for (var index = 0; index < listView.Items.Count; index++)
+            {
+                if (listView.ContainerFromIndex(index) is ListViewItem item && item.IsTabStop)
+                {
+                    items.Add(item);
+                }
+            }
+        }
+
+        private void RemoveSuggestionItemHandlers(ListView listView)
+        {
+            for (var index = 0; index < listView.Items.Count; index++)
+            {
+                if (listView.ContainerFromIndex(index) is ListViewItem item)
+                {
+                    item.RemoveHandler(UIElement.KeyDownEvent, _suggestionItemKeyDownHandler);
+                }
+            }
+        }
+
+        private static bool FocusFirstVisibleItem(params ListView?[] listViews)
+        {
+            foreach (var listView in listViews)
+            {
+                if (listView?.Visibility != Visibility.Visible || !listView.IsEnabled || listView.Items.Count == 0)
+                {
+                    continue;
+                }
+
+                listView.ScrollIntoView(listView.Items[0]);
+                listView.UpdateLayout();
+                if (listView.ContainerFromIndex(0) is ListViewItem item && item.Focus(FocusState.Keyboard))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void ScheduleResultFocus() =>
+            _ = DispatcherQueue.TryEnqueue(() => FocusFirstVisibleItem(_resultList));
 
         private void SuggestionList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
@@ -144,6 +452,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (e.AddedItems.FirstOrDefault() is SearchSuggestion suggestion)
             {
+                _focusResultsWhenAvailable = IsSuggestionAcceptKeyPressed();
                 SearchViewModel?.AcceptSuggestion(suggestion);
             }
 
@@ -155,16 +464,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #elif WPF
         // These template parts are wired for manual keyboard traversal because WPF Popup creates a separate focus scope.
         private ToggleButton? _sourceSelectToggle;
-        private Popup? _sourcePopup;
-        private ToggleButton? _allSourcesButton;
-        private ListView? _sourceList;
-        private TextBox? _queryEntry;
-        private ListView? _suggestionList;
-        private ListView? _resultList;
-        private Button? _searchButton;
         private IInputElement? _focusTargetAfterSuggestions;
-        private bool _focusResultsWhenAvailable;
-        private bool _sourceSelectionByKeyboard;
 
         /// <inheritdoc/>
         public override void OnApplyTemplate()
@@ -207,14 +507,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             base.OnApplyTemplate();
 
+            GetCommonTemplateParts();
             _sourceSelectToggle = GetTemplateChild("PART_SourceSelectToggle") as ToggleButton;
-            _sourcePopup = GetTemplateChild("PART_SourcePopup") as Popup;
-            _allSourcesButton = GetTemplateChild("PART_AllSourcesButton") as ToggleButton;
-            _sourceList = GetTemplateChild("PART_SourceList") as ListView;
-            _queryEntry = GetTemplateChild("QueryEntry") as TextBox;
-            _searchButton = GetTemplateChild("PART_SearchButton") as Button;
-            _suggestionList = GetTemplateChild("PART_SuggestionList") as ListView;
-            _resultList = GetTemplateChild("PART_ResultList") as ListView;
 
             if (_sourceSelectToggle != null)
             {
@@ -280,12 +574,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void AllSourcesButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!_sourceSelectionByKeyboard)
+            if (!TakeKeyboardSourceSelection())
             {
                 return;
             }
 
-            _sourceSelectionByKeyboard = false;
             _ = Dispatcher.BeginInvoke(new Action(() => _queryEntry?.Focus()), System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
@@ -311,12 +604,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void SourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count == 0 || !_sourceSelectionByKeyboard)
+            if (e.AddedItems.Count == 0 || !TakeKeyboardSourceSelection())
             {
                 return;
             }
 
-            _sourceSelectionByKeyboard = false;
             _ = Dispatcher.BeginInvoke(new Action(() => _queryEntry?.Focus()), System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
@@ -384,37 +676,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return (listView.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem)?.Focus() == true;
         }
 
-        private void FocusResultsWhenAvailable()
-        {
-            if (!_focusResultsWhenAvailable || SearchViewModel?.Results == null)
-            {
-                return;
-            }
-
-            _focusResultsWhenAvailable = false;
-
-            if (SearchViewModel.Results.Count == 0)
-            {
-                return;
-            }
-            // Defer until layout completes so the first result container exists and can receive focus.
+        private void ScheduleResultFocus() =>
             _ = Dispatcher.BeginInvoke(new Action(() => FocusListItem(_resultList, 0)), System.Windows.Threading.DispatcherPriority.Loaded);
-        }
-
-        private async Task RepeatSearchAndFocusResults()
-        {
-            if (SearchViewModel == null)
-            {
-                return;
-            }
-
-            await SearchViewModel.RepeatSearchHere();
-            if (SearchViewModel.Results?.Count > 0)
-            {
-                // The search has completed; now wait for bindings and item containers before moving focus.
-                await Dispatcher.InvokeAsync(() => FocusListItem(_resultList, 0), System.Windows.Threading.DispatcherPriority.Loaded);
-            }
-        }
 
         private bool MoveFocusPastSearchView()
         {
@@ -439,6 +702,56 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 #endif
+
+        private void GetCommonTemplateParts()
+        {
+            _sourcePopup = GetTemplateChild("PART_SourcePopup") as Popup;
+            _allSourcesButton = GetTemplateChild("PART_AllSourcesButton") as ToggleButton;
+            _sourceList = GetTemplateChild("PART_SourceList") as ListView;
+            _queryEntry = GetTemplateChild("QueryEntry") as TextBox;
+            _suggestionList = GetTemplateChild("PART_SuggestionList") as ListView;
+            _resultList = GetTemplateChild("PART_ResultList") as ListView;
+            _searchButton = GetTemplateChild("PART_SearchButton") as Button;
+        }
+
+        private bool TakeKeyboardSourceSelection()
+        {
+            if (!_sourceSelectionByKeyboard)
+            {
+                return false;
+            }
+
+            _sourceSelectionByKeyboard = false;
+            return true;
+        }
+
+        private void FocusResultsWhenAvailable()
+        {
+            if (!_focusResultsWhenAvailable || SearchViewModel?.Results == null)
+            {
+                return;
+            }
+
+            _focusResultsWhenAvailable = false;
+            if (SearchViewModel.Results.Count > 0)
+            {
+                ScheduleResultFocus();
+            }
+        }
+
+        private async Task RepeatSearchAndFocusResults()
+        {
+            if (SearchViewModel == null)
+            {
+                return;
+            }
+
+            await SearchViewModel.RepeatSearchHere();
+            if (SearchViewModel.Results?.Count > 0)
+            {
+                ScheduleResultFocus();
+            }
+        }
 
         private async Task ConfigureViewModel()
         {
@@ -485,6 +798,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // ListView calls selecteditem binding with null when collection is cleared.
                 if (value is SearchSuggestion userSelection)
                 {
+#if WINDOWS_XAML
+                    _focusResultsWhenAvailable = IsSuggestionAcceptKeyPressed();
+#endif
                     _acceptingSuggestionFlag = true;
                     _ = SearchViewModel?.AcceptSuggestion(userSelection)
                                        .ContinueWith(tt => _acceptingSuggestionFlag = false, TaskScheduler.FromCurrentSynchronizationContext());
@@ -724,7 +1040,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             TemplateSettings.OnResultViewVisibilityChanged();
             TemplateSettings.OnResultMessageVisibilityChanged();
-#if WPF
+#if WPF || WINDOWS_XAML
             FocusResultsWhenAvailable();
 #endif
 
@@ -783,7 +1099,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleRepeatSearchHereCommand()
         {
-#if WPF
+    #if WPF || WINDOWS_XAML
             _ = RepeatSearchAndFocusResults();
 #else
             SearchViewModel?.RepeatSearchHere();
