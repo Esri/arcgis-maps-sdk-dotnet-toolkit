@@ -339,23 +339,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 if (map.Item != null)
                 {
                     traceTypes = await map.GetNamedTraceConfigurationsFromUtilityNetworkAsync(utilityNetwork, requestCts.Token);
-                    if (requestedNames?.Any(n => !string.IsNullOrWhiteSpace(n)) == true)
-                    {
-                        traceTypes = traceTypes.Where(traceType => requestedNames.Any(name => string.Equals(name, traceType.Name, StringComparison.OrdinalIgnoreCase)));
-                    }
                 }
                 else
                 {
-                    var queryParameters = new UtilityNamedTraceConfigurationQueryParameters();
-                    if (requestedNames != null)
-                    {
-                        foreach (var requestedName in requestedNames)
-                        {
-                            queryParameters.Names.Add(requestedName);
-                        }
-                    }
+                    traceTypes = await utilityNetwork.QueryNamedTraceConfigurationsAsync(null, requestCts.Token);
+                }
 
-                    traceTypes = await utilityNetwork.QueryNamedTraceConfigurationsAsync(queryParameters, requestCts.Token);
+                if (requestedNames?.Any(n => !string.IsNullOrWhiteSpace(n)) == true)
+                {
+                    traceTypes = traceTypes.Where(traceType => requestedNames.Any(name => string.Equals(name, traceType.Name, StringComparison.OrdinalIgnoreCase)));
                 }
 
                 requestCts.Token.ThrowIfCancellationRequested();
