@@ -23,6 +23,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 
 #if WPF
+using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls.Primitives;
 #endif
@@ -484,8 +485,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ScheduleResultFocus() =>
             _ = DispatcherQueue.TryEnqueue(() => FocusFirstVisibleItem(_resultList));
 
-        private void ScheduleNoResultsAnnouncement() =>
-            _ = DispatcherQueue.TryEnqueue(RaiseNoResultsAnnouncement);
+        private void ScheduleLiveRegionAnnouncement(FrameworkElement element) =>
+            _ = DispatcherQueue.TryEnqueue(() => RaiseLiveRegionChanged(element));
+
+        private void ScheduleNotificationAnnouncement(ListView listView, string announcement) =>
+            _ = DispatcherQueue.TryEnqueue(() => RaiseNotificationAnnouncement(listView, announcement));
 
         private void SuggestionList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
@@ -744,8 +748,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ScheduleResultFocus() =>
             _ = Dispatcher.BeginInvoke(new Action(() => FocusListItem(_resultList, 0)), System.Windows.Threading.DispatcherPriority.Loaded);
 
-        private void ScheduleNoResultsAnnouncement() =>
-            _ = Dispatcher.BeginInvoke(new Action(RaiseNoResultsAnnouncement), System.Windows.Threading.DispatcherPriority.Loaded);
+        private void ScheduleLiveRegionAnnouncement(FrameworkElement element) =>
+            _ = Dispatcher.BeginInvoke(new Action(() => RaiseLiveRegionChanged(element)), System.Windows.Threading.DispatcherPriority.Loaded);
+
+        private void ScheduleNotificationAnnouncement(ListView listView, string announcement) =>
+            _ = Dispatcher.BeginInvoke(new Action(() => RaiseNotificationAnnouncement(listView, announcement)), System.Windows.Threading.DispatcherPriority.Loaded);
 
         private bool MoveFocusPastSearchView()
         {
@@ -778,6 +785,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _sourceList = GetTemplateChild("PART_SourceList") as ListView;
             _queryEntry = GetTemplateChild("QueryEntry") as TextBox;
             _suggestionList = GetTemplateChild("PART_SuggestionList") as ListView;
+#if WINDOWS_XAML
+            _ungroupedSuggestionList = GetTemplateChild("PART_SuggestionListUnGrouped") as ListView;
+#endif
             _resultList = GetTemplateChild("PART_ResultList") as ListView;
             _resultMessage = GetTemplateChild("PART_ResultMessage") as TextBlock;
             _searchButton = GetTemplateChild("PART_SearchButton") as Button;
@@ -827,23 +837,73 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (SearchViewModel?.Suggestions?.Count == 0 || SearchViewModel?.Results?.Count == 0)
             {
-                ScheduleNoResultsAnnouncement();
+                if (_resultMessage != null)
+                {
+                    ScheduleLiveRegionAnnouncement(_resultMessage);
+                }
             }
         }
 
-        private void RaiseNoResultsAnnouncement()
+        private void AnnounceAvailableItems(ListView? listView, string resourceKey)
         {
-            if (_resultMessage?.Visibility != Visibility.Visible)
+            var announcement = Properties.Resources.GetString(resourceKey);
+            if (listView != null && !string.IsNullOrEmpty(announcement))
+            {
+                ScheduleNotificationAnnouncement(listView, announcement);
+            }
+        }
+
+        private void RaiseLiveRegionChanged(FrameworkElement element)
+        {
+            element.UpdateLayout();
+
+            if (element is ListView listView && listView.Items.Count == 0)
             {
                 return;
             }
 
 #if WPF
-            var peer = UIElementAutomationPeer.FromElement(_resultMessage) ?? UIElementAutomationPeer.CreatePeerForElement(_resultMessage);
+            if (!element.IsVisible)
+            {
+                return;
+            }
+
+            var peer = UIElementAutomationPeer.FromElement(element) ?? UIElementAutomationPeer.CreatePeerForElement(element);
 #elif WINDOWS_XAML
-            var peer = FrameworkElementAutomationPeer.FromElement(_resultMessage) ?? FrameworkElementAutomationPeer.CreatePeerForElement(_resultMessage);
+            if (element.Visibility != Visibility.Visible)
+            {
+                return;
+            }
+
+            var peer = FrameworkElementAutomationPeer.FromElement(element) ?? FrameworkElementAutomationPeer.CreatePeerForElement(element);
 #endif
             peer?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
+        }
+
+        private void RaiseNotificationAnnouncement(ListView listView, string announcement)
+        {
+            listView.UpdateLayout();
+
+#if WPF
+            if (listView.Items.Count == 0 || !listView.IsVisible)
+            {
+                return;
+            }
+
+            var peer = UIElementAutomationPeer.FromElement(listView) ?? UIElementAutomationPeer.CreatePeerForElement(listView);
+#elif WINDOWS_XAML
+            if (listView.Items.Count == 0 || listView.Visibility != Visibility.Visible)
+            {
+                return;
+            }
+
+            var peer = FrameworkElementAutomationPeer.FromElement(listView) ?? FrameworkElementAutomationPeer.CreatePeerForElement(listView);
+#endif
+            peer?.RaiseNotificationEvent(
+                AutomationNotificationKind.Other,
+                AutomationNotificationProcessing.MostRecent,
+                announcement,
+                "SearchViewAvailableItems");
         }
 
         private async Task ConfigureViewModel()
@@ -1134,6 +1194,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             TemplateSettings.OnResultViewVisibilityChanged();
             TemplateSettings.OnResultMessageVisibilityChanged();
             AnnounceNoResults();
+            AnnounceAvailableItems(_resultList, "SearchViewResultsAvailable");
 #if WPF || WINDOWS_XAML
             FocusResultsWhenAvailable();
 #endif
@@ -1411,7 +1472,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AnnounceNoResults();
 #if WINDOWS_XAML
             UpdateGroupingForUWP();
+            AnnounceAvailableItems(_ungroupedSuggestionList, "SearchViewSuggestionsAvailable");
 #endif
+            AnnounceAvailableItems(_suggestionList, "SearchViewSuggestionsAvailable");
         }
 
 #if WINDOWS_XAML
