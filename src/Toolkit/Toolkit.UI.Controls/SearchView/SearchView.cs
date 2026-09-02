@@ -508,8 +508,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (e.AddedItems.FirstOrDefault() is SearchSuggestion suggestion)
             {
-                _focusResultsWhenAvailable = IsSuggestionAcceptKeyPressed();
-                SearchViewModel?.AcceptSuggestion(suggestion);
+                AcceptSuggestion(suggestion);
             }
 
             if (_suggestionList != null)
@@ -944,6 +943,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         #region Binding support
 
+        private void AcceptSuggestion(SearchSuggestion suggestion)
+        {
+    #if WINDOWS_XAML
+            _focusResultsWhenAvailable = IsSuggestionAcceptKeyPressed();
+    #endif
+            _acceptingSuggestionFlag = true;
+            _ = SearchViewModel?.AcceptSuggestion(suggestion)
+                       .ContinueWith(tt => _acceptingSuggestionFlag = false, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
         /// <summary>
         /// Gets or sets the selected suggestion, triggering a search.
         /// </summary>
@@ -955,12 +964,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // ListView calls selecteditem binding with null when collection is cleared.
                 if (value is SearchSuggestion userSelection)
                 {
-#if WINDOWS_XAML
-                    _focusResultsWhenAvailable = IsSuggestionAcceptKeyPressed();
-#endif
-                    _acceptingSuggestionFlag = true;
-                    _ = SearchViewModel?.AcceptSuggestion(userSelection)
-                                       .ContinueWith(tt => _acceptingSuggestionFlag = false, TaskScheduler.FromCurrentSynchronizationContext());
+                    AcceptSuggestion(userSelection);
                 }
             }
         }
@@ -1198,7 +1202,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             TemplateSettings.OnResultViewVisibilityChanged();
             TemplateSettings.OnResultMessageVisibilityChanged();
             AnnounceNoResults();
-            AnnounceAvailableItems(_resultList, "SearchViewResultsAvailable");
+            if (SearchViewModel.Results?.Count > 0)
+            {
+                AnnounceAvailableItems(_resultList, "SearchViewResultsAvailable");
+            }
 #if WPF || WINDOWS_XAML
             FocusResultsWhenAvailable();
 #endif
@@ -1476,9 +1483,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AnnounceNoResults();
 #if WINDOWS_XAML
             UpdateGroupingForUWP();
-            AnnounceAvailableItems(_ungroupedSuggestionList, "SearchViewSuggestionsAvailable");
 #endif
-            AnnounceAvailableItems(_suggestionList, "SearchViewSuggestionsAvailable");
+            if (SearchViewModel?.Suggestions?.Count > 0)
+            {
+#if WINDOWS_XAML
+                AnnounceAvailableItems(_ungroupedSuggestionList, "SearchViewSuggestionsAvailable");
+#endif
+                AnnounceAvailableItems(_suggestionList, "SearchViewSuggestionsAvailable");
+            }
         }
 
 #if WINDOWS_XAML
