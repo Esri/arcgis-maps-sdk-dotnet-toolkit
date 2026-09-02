@@ -1,5 +1,6 @@
 #if WPF
 
+using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -154,13 +155,18 @@ public partial class OrientedImageryView
     // This should be overridable, probably as an Action dependency property or something. Or maybe it should be its own event with this as the default handler.
     private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e)
     {
-        if (e.Marker != null)
-            return; // do not add a new marker if there is already one in proximity to the click location
+        // Do not add a new marker if there is already one in proximity to the click location
+        if (sender is not OrientedImageDisplay display || e.Marker != null)
+            return;
 
-        if (sender is OrientedImageDisplay display)
+        try
         {
             var location = await display.Footprint!.OrientedImage.ImageToLocationAsync(e.ImagePoint);
             ViewModel.AddMarkerLocation(location);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error converting image point to location: {ex.Message}");
         }
     }
 
