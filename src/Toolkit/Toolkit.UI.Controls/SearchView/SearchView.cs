@@ -23,12 +23,14 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 
 #if WPF
+using System.Windows.Automation.Peers;
 using System.Windows.Controls.Primitives;
 #endif
 
 #if WINDOWS_XAML
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Automation.Peers;
 using Windows.Foundation;
 using Windows.System;
 using Windows.UI.Core;
@@ -48,6 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "QueryEntry", Type = typeof(TextBox))]
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_ResultList", Type = typeof(ListView))]
+    [TemplatePart(Name = "PART_ResultMessage", Type = typeof(TextBlock))]
     [TemplatePart(Name = "PART_SearchButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_SourceSelectToggle", Type = typeof(ToggleButton))]
 #if WINDOWS_XAML
@@ -80,6 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TextBox? _queryEntry;
         private ListView? _suggestionList;
         private ListView? _resultList;
+        private TextBlock? _resultMessage;
         private Button? _searchButton;
         private bool _focusResultsWhenAvailable;
         private bool _sourceSelectionByKeyboard;
@@ -480,6 +484,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ScheduleResultFocus() =>
             _ = DispatcherQueue.TryEnqueue(() => FocusFirstVisibleItem(_resultList));
 
+        private void ScheduleNoResultsAnnouncement() =>
+            _ = DispatcherQueue.TryEnqueue(RaiseNoResultsAnnouncement);
+
         private void SuggestionList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             if (_groupListSelectionFlag)
@@ -737,6 +744,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ScheduleResultFocus() =>
             _ = Dispatcher.BeginInvoke(new Action(() => FocusListItem(_resultList, 0)), System.Windows.Threading.DispatcherPriority.Loaded);
 
+        private void ScheduleNoResultsAnnouncement() =>
+            _ = Dispatcher.BeginInvoke(new Action(RaiseNoResultsAnnouncement), System.Windows.Threading.DispatcherPriority.Loaded);
+
         private bool MoveFocusPastSearchView()
         {
             if (_searchButton == null)
@@ -769,6 +779,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _queryEntry = GetTemplateChild("QueryEntry") as TextBox;
             _suggestionList = GetTemplateChild("PART_SuggestionList") as ListView;
             _resultList = GetTemplateChild("PART_ResultList") as ListView;
+            _resultMessage = GetTemplateChild("PART_ResultMessage") as TextBlock;
             _searchButton = GetTemplateChild("PART_SearchButton") as Button;
             _sourceSelectToggle = GetTemplateChild("PART_SourceSelectToggle") as ToggleButton;
         }
@@ -810,6 +821,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 ScheduleResultFocus();
             }
+        }
+
+        private void AnnounceNoResults()
+        {
+            if (SearchViewModel?.Suggestions?.Count == 0 || SearchViewModel?.Results?.Count == 0)
+            {
+                ScheduleNoResultsAnnouncement();
+            }
+        }
+
+        private void RaiseNoResultsAnnouncement()
+        {
+            if (_resultMessage?.Visibility != Visibility.Visible)
+            {
+                return;
+            }
+
+#if WPF
+            var peer = UIElementAutomationPeer.FromElement(_resultMessage) ?? UIElementAutomationPeer.CreatePeerForElement(_resultMessage);
+#elif WINDOWS_XAML
+            var peer = FrameworkElementAutomationPeer.FromElement(_resultMessage) ?? FrameworkElementAutomationPeer.CreatePeerForElement(_resultMessage);
+#endif
+            peer?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
         }
 
         private async Task ConfigureViewModel()
@@ -1099,6 +1133,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             TemplateSettings.OnResultViewVisibilityChanged();
             TemplateSettings.OnResultMessageVisibilityChanged();
+            AnnounceNoResults();
 #if WPF || WINDOWS_XAML
             FocusResultsWhenAvailable();
 #endif
@@ -1373,6 +1408,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             TemplateSettings.OnResultViewVisibilityChanged();
             TemplateSettings.OnResultMessageVisibilityChanged();
+            AnnounceNoResults();
 #if WINDOWS_XAML
             UpdateGroupingForUWP();
 #endif
