@@ -21,8 +21,6 @@ public partial class OrientedImageryView
     /// </summary>
     public OrientedImageryView() : base()
     {
-        _display = new OrientedImageDisplay();
-
         ViewModel = new OrientedImageryViewModel();
 
         ItemsSource = GetDefaultToolbarItems();
