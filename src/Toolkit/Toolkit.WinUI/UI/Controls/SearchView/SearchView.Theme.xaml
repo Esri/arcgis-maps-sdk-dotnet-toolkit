@@ -496,8 +496,8 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <ToggleButton
-                        x:Name="SourceSelectToggle"
+                    <controls:SourceSelectToggleButton
+                        x:Name="PART_SourceSelectToggle"
                         Grid.Column="0"
                         BorderThickness="0,0,1,0"
                         IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
@@ -511,7 +511,7 @@
                             Stroke="{ThemeResource Search.Foreground.Color}"
                             StrokeThickness="1"
                             Style="{StaticResource ActionButtonPathStyle}" />
-                    </ToggleButton>
+                    </controls:SourceSelectToggleButton>
                     <TextBox
                         x:Name="QueryEntry"
                         Grid.Column="1"
@@ -537,6 +537,7 @@
                         <Path Data="M3.98 11.303L7.281 8 3.98 4.697l.707-.707L7.99 7.293l.01-.01.01.01 3.304-3.303.707.707L8.718 8l3.303 3.303-.707.707L8.01 8.707l-.01.01-.01-.01-3.304 3.303z" Style="{StaticResource ActionButtonPathStyle}" />
                     </Button>
                     <Button
+                        x:Name="PART_SearchButton"
                         Grid.Column="3"
                         BorderThickness="1,0,0,0"
                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SearchCommand, Mode=OneTime}"
@@ -567,12 +568,15 @@
                     Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty'}">
                     <Grid>
                         <ListView
+                            x:Name="PART_SuggestionListUnGrouped"
                             ItemTemplate="{StaticResource SuggestionTemplate}"
                             ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Suggestions, Mode=OneWay}"
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedSuggestion, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
                             AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
                             AutomationProperties.AutomationId="SearchSuggestionsList"
+                            SelectionMode="Single"
+                            SingleSelectionFollowsFocus="False"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}}" />
                         <ListView
                             x:Name="PART_SuggestionList"
@@ -581,6 +585,8 @@
                             Style="{StaticResource ListStyle}"
                             AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
                             AutomationProperties.AutomationId="SearchSuggestionsListGrouped"
+                            SelectionMode="Single"
+                            SingleSelectionFollowsFocus="False"
                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.SourceSelectVisibility, Mode=OneWay}">
                             <ListView.GroupStyle>
                                 <GroupStyle>
@@ -593,6 +599,7 @@
                                         <Style TargetType="ListViewHeaderItem">
                                             <Setter Property="Margin" Value="0" />
                                             <Setter Property="MinHeight" Value="0" />
+                                            <Setter Property="IsTabStop" Value="False" />
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="ListViewHeaderItem">
@@ -616,6 +623,7 @@
                 Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ResultViewVisibility, Mode=OneWay}">
                 <Grid>
                     <ListView
+                        x:Name="PART_ResultList"
                         MaxHeight="300"
                         IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
                         ItemTemplate="{StaticResource ResultTemplate}"
@@ -623,7 +631,9 @@
                         SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.SelectedResult, Mode=TwoWay}"
                         Style="{StaticResource ListStyle}"
                         AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchResults}"
-                        AutomationProperties.AutomationId="SearchResultsList"/>
+                        AutomationProperties.AutomationId="SearchResultsList"
+                        SelectionMode="Single"
+                        SingleSelectionFollowsFocus="False"/>
                     <TextBlock
                         Style="{StaticResource ResultMessageStyle}"
                         Text="{TemplateBinding NoResultMessage}"
@@ -631,23 +641,28 @@
                 </Grid>
             </Border>
             <Popup
+                x:Name="PART_SourcePopup"
                 IsLightDismissEnabled="True"
                 IsOpen="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
                 VerticalOffset="34">
                 <Border Width="{TemplateBinding Width}" Style="{StaticResource ResultAreaBorderStyle}">
                     <StackPanel>
-                        <ToggleButton
+                        <controls:AllSourcesToggleButton
+                            x:Name="PART_AllSourcesButton"
                             Content="{TemplateBinding AllSourceSelectText}"
                             IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
                             Style="{StaticResource AllSourceButtonStyle}"
                             AutomationProperties.AutomationId="AllSourcesButton"/>
                         <ListView
+                            x:Name="PART_SourceList"
                             ItemTemplate="{StaticResource SourceTemplate}"
                             ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay}"
                             Style="{StaticResource ListStyle}"
                             AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"
-                            AutomationProperties.AutomationId="SearchSourcesList"/>
+                            AutomationProperties.AutomationId="SearchSourcesList"
+                            SelectionMode="Single"
+                            SingleSelectionFollowsFocus="False"/>
                     </StackPanel>
                 </Border>
             </Popup>
@@ -671,5 +686,6 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Width" Value="256" />
         <Setter Property="Margin" Value="4" />
+        <Setter Property="IsTabStop" Value="False" />
     </Style>
 </ResourceDictionary>

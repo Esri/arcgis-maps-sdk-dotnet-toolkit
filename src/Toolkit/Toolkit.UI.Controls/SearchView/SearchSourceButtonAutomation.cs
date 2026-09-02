@@ -1,17 +1,23 @@
 using System.Globalization;
+
+#if WPF
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls.Primitives;
+#elif WINUI
+using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Automation.Peers;
+using Microsoft.UI.Xaml.Automation.Provider;
+using Microsoft.UI.Xaml.Controls.Primitives;
+#endif
 
 #pragma warning disable CS1591
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    // Keeps ToggleButton styling/binding from XAML while reporting button-style automation behavior.
-    public sealed class AllSourcesToggleButton : ToggleButton
+    public sealed partial class AllSourcesToggleButton : ToggleButton
     {
-        // We cache the prior state because Checked/Unchecked handlers only expose the new state.
         private bool _lastIsSelected;
 
         public AllSourcesToggleButton()
@@ -20,12 +26,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Unchecked += AllSourcesToggleButton_CheckedChanged;
         }
 
-        internal void Invoke() => OnClick();
+        internal void Invoke() => IsChecked = true;
 
         private void AllSourcesToggleButton_CheckedChanged(object sender, RoutedEventArgs e)
         {
             var isSelected = IsChecked == true;
-            if (isSelected != _lastIsSelected && UIElementAutomationPeer.FromElement(this) is AllSourcesToggleButtonAutomationPeer peer)
+            if (isSelected != _lastIsSelected && GetAutomationPeer() is AllSourcesToggleButtonAutomationPeer peer)
             {
                 peer.RaiseSelectionNameChanged(_lastIsSelected, isSelected);
             }
@@ -34,9 +40,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         protected override AutomationPeer OnCreateAutomationPeer() => new AllSourcesToggleButtonAutomationPeer(this);
+
+        private AutomationPeer? GetAutomationPeer()
+        {
+#if WPF
+            return UIElementAutomationPeer.FromElement(this);
+#elif WINUI
+            return FrameworkElementAutomationPeer.FromElement(this);
+#endif
+        }
     }
 
-    internal sealed class AllSourcesToggleButtonAutomationPeer : ToggleButtonAutomationPeer, IInvokeProvider
+    internal sealed partial class AllSourcesToggleButtonAutomationPeer : ToggleButtonAutomationPeer, IInvokeProvider
     {
         internal AllSourcesToggleButtonAutomationPeer(AllSourcesToggleButton owner)
             : base(owner)
@@ -55,14 +70,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         protected override string GetNameCore() => GetAccessibleName(((ToggleButton)Owner).IsChecked == true);
 
+#if WPF
         public override object? GetPattern(PatternInterface patternInterface)
+#elif WINUI
+        protected override object? GetPatternCore(PatternInterface patternInterface)
+#endif
         {
-            // Expose Invoke and hide Toggle so Narrator does not read the control as a toggle switch.
             return patternInterface switch
             {
                 PatternInterface.Invoke => this,
                 PatternInterface.Toggle => null,
+#if WPF
                 _ => base.GetPattern(patternInterface),
+#elif WINUI
+                _ => base.GetPatternCore(patternInterface),
+#endif
             };
         }
 
@@ -76,16 +98,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return name;
             }
 
-            // Appending "selected" to the Name property produces consistent speech across screen readers.
             var format = Properties.Resources.GetString("SearchViewSelectedAutomationName") ?? "{0}, selected";
             return string.Format(CultureInfo.CurrentCulture, format, name);
         }
     }
 
-    // The source button opens/closes popup content, so automation should expose Expand/Collapse semantics.
-    public sealed class SourceSelectToggleButton : ToggleButton
+    public sealed partial class SourceSelectToggleButton : ToggleButton
     {
-        // We cache the prior state because Checked/Unchecked handlers only expose the new state.
         private ExpandCollapseState _lastExpandCollapseState = ExpandCollapseState.Collapsed;
 
         public SourceSelectToggleButton()
@@ -97,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void SourceSelectToggleButton_CheckedChanged(object sender, RoutedEventArgs e)
         {
             var newState = GetExpandCollapseState(IsChecked);
-            if (newState != _lastExpandCollapseState && UIElementAutomationPeer.FromElement(this) is SourceSelectToggleButtonAutomationPeer peer)
+            if (newState != _lastExpandCollapseState && GetAutomationPeer() is SourceSelectToggleButtonAutomationPeer peer)
             {
                 peer.RaiseExpandCollapseStateChanged(_lastExpandCollapseState, newState);
             }
@@ -110,9 +129,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         internal static ExpandCollapseState GetExpandCollapseState(bool? isChecked) => isChecked == true
             ? ExpandCollapseState.Expanded
             : ExpandCollapseState.Collapsed;
+
+        private AutomationPeer? GetAutomationPeer()
+        {
+#if WPF
+            return UIElementAutomationPeer.FromElement(this);
+#elif WINUI
+            return FrameworkElementAutomationPeer.FromElement(this);
+#endif
+        }
     }
 
-    internal sealed class SourceSelectToggleButtonAutomationPeer : ToggleButtonAutomationPeer, IExpandCollapseProvider
+    internal sealed partial class SourceSelectToggleButtonAutomationPeer : ToggleButtonAutomationPeer, IExpandCollapseProvider
     {
         internal SourceSelectToggleButtonAutomationPeer(SourceSelectToggleButton owner)
             : base(owner)
@@ -130,14 +158,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             RaisePropertyChangedEvent(ExpandCollapsePatternIdentifiers.ExpandCollapseStateProperty, oldState, newState);
         }
 
+#if WPF
         public override object? GetPattern(PatternInterface patternInterface)
+#elif WINUI
+        protected override object? GetPatternCore(PatternInterface patternInterface)
+#endif
         {
-            // Expose ExpandCollapse and hide Toggle so assistive tech treats this as a popup opener.
             return patternInterface switch
             {
                 PatternInterface.ExpandCollapse => this,
                 PatternInterface.Toggle => null,
+#if WPF
                 _ => base.GetPattern(patternInterface),
+#elif WINUI
+                _ => base.GetPatternCore(patternInterface),
+#endif
             };
         }
 
