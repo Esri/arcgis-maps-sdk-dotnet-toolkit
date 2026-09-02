@@ -188,7 +188,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             GetCommonTemplateParts();
             _ungroupedSuggestionList = GetTemplateChild("PART_SuggestionListUnGrouped") as ListView;
-            _sourceSelectToggle = GetTemplateChild("PART_SourceSelectToggle") as ToggleButton;
 
             if (_sourcePopup != null)
             {
@@ -550,7 +549,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnApplyTemplate();
 
             GetCommonTemplateParts();
-            _sourceSelectToggle = GetTemplateChild("PART_SourceSelectToggle") as ToggleButton;
 
             if (_sourceSelectToggle != null)
             {
@@ -772,6 +770,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _suggestionList = GetTemplateChild("PART_SuggestionList") as ListView;
             _resultList = GetTemplateChild("PART_ResultList") as ListView;
             _searchButton = GetTemplateChild("PART_SearchButton") as Button;
+            _sourceSelectToggle = GetTemplateChild("PART_SourceSelectToggle") as ToggleButton;
         }
 
         private bool TakeKeyboardSourceSelection()
