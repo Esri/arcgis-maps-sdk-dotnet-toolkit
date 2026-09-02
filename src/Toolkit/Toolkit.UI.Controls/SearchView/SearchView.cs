@@ -51,7 +51,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "QueryEntry", Type = typeof(TextBox))]
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_ResultList", Type = typeof(ListView))]
+#if WPF
+    [TemplatePart(Name = "PART_ResultMessage", Type = typeof(Label))]
+#else
     [TemplatePart(Name = "PART_ResultMessage", Type = typeof(TextBlock))]
+#endif
     [TemplatePart(Name = "PART_SearchButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_SourceSelectToggle", Type = typeof(ToggleButton))]
 #if WINDOWS_XAML
@@ -84,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TextBox? _queryEntry;
         private ListView? _suggestionList;
         private ListView? _resultList;
-        private TextBlock? _resultMessage;
+        private FrameworkElement? _resultMessage;
         private Button? _searchButton;
         private bool _focusResultsWhenAvailable;
         private bool _sourceSelectionByKeyboard;
@@ -789,7 +793,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _ungroupedSuggestionList = GetTemplateChild("PART_SuggestionListUnGrouped") as ListView;
 #endif
             _resultList = GetTemplateChild("PART_ResultList") as ListView;
-            _resultMessage = GetTemplateChild("PART_ResultMessage") as TextBlock;
+            _resultMessage = GetTemplateChild("PART_ResultMessage") as FrameworkElement;
             _searchButton = GetTemplateChild("PART_SearchButton") as Button;
             _sourceSelectToggle = GetTemplateChild("PART_SourceSelectToggle") as ToggleButton;
         }
