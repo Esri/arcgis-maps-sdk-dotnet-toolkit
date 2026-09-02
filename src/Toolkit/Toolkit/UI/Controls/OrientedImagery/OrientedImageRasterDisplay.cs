@@ -406,6 +406,9 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         }
         else if (position.Location is MapPoint location && Footprint?.OrientedImage is OrientedImage image)
         {
+            if (image.LoadStatus != LoadStatus.Loaded)
+                return null;
+
             try
             {
                 pixel = await image.LocationToImageAsync(location);
