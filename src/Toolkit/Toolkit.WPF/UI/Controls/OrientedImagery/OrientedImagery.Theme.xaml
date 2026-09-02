@@ -123,22 +123,6 @@
     </Style>
 
     <!-- Toolbar data templates -->
-    <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
-        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding MainViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
-            <controls:SymbolDisplay Width="32" Height="32" Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
-        </Button>
-    </DataTemplate>
-
-    <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.AllowAddingMarkers}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
-            <Viewbox Width="32" Height="32" Stretch="Uniform">
-                <TextBlock Text="&#xe8ed;"
-                           FontSize="24"
-                           FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                           Foreground="Black" />
-            </Viewbox>
-        </ToggleButton>
-    </DataTemplate>
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowSelectedFootprint}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}">
@@ -232,6 +216,23 @@
                     </TextBlock>
                 </Viewbox>
             </Grid>
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.AllowAddingMarkers}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
+            <Viewbox Width="32" Height="32" Stretch="Uniform">
+                <TextBlock Text="&#xe8ed;"
+                           FontSize="24"
+                           FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                           Foreground="Black" />
+            </Viewbox>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
+        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding MainViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
+            <controls:SymbolDisplay Width="32" Height="32" Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
         </Button>
     </DataTemplate>
 
