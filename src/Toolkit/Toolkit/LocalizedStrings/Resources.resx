@@ -594,7 +594,7 @@
     <comment>The message to show when a geocode search completes with no results</comment>
   </data>
   <data name="SearchViewResultsAvailable" xml:space="preserve">
-    <value>Search results are available</value>
+    <value>Results available</value>
     <comment>The message announced by screen readers when search results become available</comment>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
@@ -626,7 +626,7 @@
     <comment>UIA AutomationProperties.Name for the list view control displaying search suggestions, used by screen readers to identify the control</comment>
   </data>
   <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
-    <value>Search suggestions are available</value>
+    <value>Suggestions available</value>
     <comment>The message announced by screen readers when search suggestions become available</comment>
   </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
