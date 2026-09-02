@@ -41,6 +41,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         _images = new List<OrientedImage>();
 
+        AutoUpdateFootprint = true;
         SelectedFootprintFillColor = System.Drawing.Color.FromArgb(32, System.Drawing.Color.Red);
         SelectedFootprintOutlineColor = System.Drawing.Color.Red;
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(16, System.Drawing.Color.Blue);
