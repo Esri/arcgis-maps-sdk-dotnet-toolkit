@@ -4,6 +4,33 @@
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:converter="using:Esri.ArcGISRuntime.Toolkit.Internal">
     <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <SolidColorBrush x:Key="Search.Background.Brush" Color="White" />
+            <SolidColorBrush x:Key="Search.Background.Hover.Brush" Color="#f3f3f3" />
+            <SolidColorBrush x:Key="Search.Background.Press.Brush" Color="#e2f1fb" />
+            <SolidColorBrush x:Key="Search.Foreground.Brush" Color="#404040" />
+            <SolidColorBrush x:Key="Search.Foreground.Alt.Brush" Color="#6e6e6e" />
+            <SolidColorBrush x:Key="Search.Foreground.Hover.Brush" Color="#4e4e4e" />
+            <SolidColorBrush x:Key="Search.Foreground.Press.Brush" Color="#2e2e2e" />
+            <SolidColorBrush x:Key="Search.Image.Background.Brush" Color="Transparent" />
+            <SolidColorBrush x:Key="Accent.Background.Brush" Color="#007AC2" />
+            <SolidColorBrush x:Key="Accent.Background.Hover.Brush" Color="#00619B" />
+            <SolidColorBrush x:Key="Accent.Background.Press.Brush" Color="#004874" />
+            <SolidColorBrush x:Key="Accent.Foreground.Brush" Color="White" />
+            <SolidColorBrush x:Key="Highlight.Border.Brush" Color="#007AC2" />
+            <SolidColorBrush x:Key="Border.Internal.Brush" Color="#6e6e6e" />
+            <SolidColorBrush x:Key="Border.External.Brush" Color="#6e6e6e" />
+            <SolidColorBrush x:Key="Border.Separator.Brush" Color="#4e6e6e6e" />
+            <SolidColorBrush x:Key="GroupHeader.Background.Brush" Color="#4e4e4e" />
+            <SolidColorBrush x:Key="GroupHeader.Foreground.Brush" Color="White" />
+            <Style x:Key="Search.PrimaryTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Search.Foreground.Brush}" />
+            </Style>
+            <Style x:Key="Search.SecondaryTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Search.Foreground.Alt.Brush}" />
+            </Style>
+            <Thickness x:Key="Search.QueryPlaceholderPadding">8,4,4,4</Thickness>
+        </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <Color x:Key="Search.Background.Color">White</Color>
             <Color x:Key="Search.Background.Hover.Color">#f3f3f3</Color>
@@ -15,12 +42,38 @@
             <Color x:Key="Accent.Background.Color">#007AC2</Color>
             <Color x:Key="Accent.Background.Hover.Color">#00619B</Color>
             <Color x:Key="Accent.Background.Press.Color">#004874</Color>
+            <Color x:Key="Accent.Foreground.Color">White</Color>
             <Color x:Key="Highlight.Border.Color">#007AC2</Color>
             <Color x:Key="Border.Internal.Color">#6e6e6e</Color>
             <Color x:Key="Border.External.Color">#6e6e6e</Color>
             <Color x:Key="GroupHeader.Foreground.Color">White</Color>
             <Color x:Key="GroupHeader.Background.Color">#4e4e4e</Color>
             <Color x:Key="Border.Separator.Color">#4e6e6e6e</Color>
+            <SolidColorBrush x:Key="Search.Background.Brush" Color="{StaticResource Search.Background.Color}" />
+            <SolidColorBrush x:Key="Search.Background.Hover.Brush" Color="{StaticResource Search.Background.Hover.Color}" />
+            <SolidColorBrush x:Key="Search.Background.Press.Brush" Color="{StaticResource Search.Background.Press.Color}" />
+            <SolidColorBrush x:Key="Search.Foreground.Brush" Color="{StaticResource Search.Foreground.Color}" />
+            <SolidColorBrush x:Key="Search.Foreground.Alt.Brush" Color="{StaticResource Search.Foreground.Alt.Color}" />
+            <SolidColorBrush x:Key="Search.Foreground.Hover.Brush" Color="{StaticResource Search.Foreground.Hover.Color}" />
+            <SolidColorBrush x:Key="Search.Foreground.Press.Brush" Color="{StaticResource Search.Foreground.Press.Color}" />
+            <SolidColorBrush x:Key="Search.Image.Background.Brush" Color="Transparent" />
+            <SolidColorBrush x:Key="Accent.Background.Brush" Color="{StaticResource Accent.Background.Color}" />
+            <SolidColorBrush x:Key="Accent.Background.Hover.Brush" Color="{StaticResource Accent.Background.Hover.Color}" />
+            <SolidColorBrush x:Key="Accent.Background.Press.Brush" Color="{StaticResource Accent.Background.Press.Color}" />
+            <SolidColorBrush x:Key="Accent.Foreground.Brush" Color="{StaticResource Accent.Foreground.Color}" />
+            <SolidColorBrush x:Key="Highlight.Border.Brush" Color="{StaticResource Highlight.Border.Color}" />
+            <SolidColorBrush x:Key="Border.Internal.Brush" Color="{StaticResource Border.Internal.Color}" />
+            <SolidColorBrush x:Key="Border.External.Brush" Color="{StaticResource Border.External.Color}" />
+            <SolidColorBrush x:Key="Border.Separator.Brush" Color="{StaticResource Border.Separator.Color}" />
+            <SolidColorBrush x:Key="GroupHeader.Background.Brush" Color="{StaticResource GroupHeader.Background.Color}" />
+            <SolidColorBrush x:Key="GroupHeader.Foreground.Brush" Color="{StaticResource GroupHeader.Foreground.Color}" />
+            <Style x:Key="Search.PrimaryTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Search.Foreground.Brush}" />
+            </Style>
+            <Style x:Key="Search.SecondaryTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Search.Foreground.Alt.Brush}" />
+            </Style>
+            <Thickness x:Key="Search.QueryPlaceholderPadding">8,4,4,4</Thickness>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <Color x:Key="Search.Background.Color">#242424</Color>
@@ -33,30 +86,62 @@
             <Color x:Key="Accent.Background.Color">#009AF2</Color>
             <Color x:Key="Accent.Background.Hover.Color">#007AC2</Color>
             <Color x:Key="Accent.Background.Press.Color">#00619B</Color>
+            <Color x:Key="Accent.Foreground.Color">White</Color>
             <Color x:Key="Highlight.Border.Color">#009AF2</Color>
             <Color x:Key="Border.Internal.Color">#505050</Color>
             <Color x:Key="Border.External.Color">#101010</Color>
             <Color x:Key="GroupHeader.Foreground.Color">White</Color>
             <Color x:Key="GroupHeader.Background.Color">#181818</Color>
             <Color x:Key="Border.Separator.Color">#4e101010</Color>
+            <SolidColorBrush x:Key="Search.Background.Brush" Color="{StaticResource Search.Background.Color}" />
+            <SolidColorBrush x:Key="Search.Background.Hover.Brush" Color="{StaticResource Search.Background.Hover.Color}" />
+            <SolidColorBrush x:Key="Search.Background.Press.Brush" Color="{StaticResource Search.Background.Press.Color}" />
+            <SolidColorBrush x:Key="Search.Foreground.Brush" Color="{StaticResource Search.Foreground.Color}" />
+            <SolidColorBrush x:Key="Search.Foreground.Alt.Brush" Color="{StaticResource Search.Foreground.Alt.Color}" />
+            <SolidColorBrush x:Key="Search.Foreground.Hover.Brush" Color="{StaticResource Search.Foreground.Hover.Color}" />
+            <SolidColorBrush x:Key="Search.Foreground.Press.Brush" Color="{StaticResource Search.Foreground.Press.Color}" />
+            <SolidColorBrush x:Key="Search.Image.Background.Brush" Color="Transparent" />
+            <SolidColorBrush x:Key="Accent.Background.Brush" Color="{StaticResource Accent.Background.Color}" />
+            <SolidColorBrush x:Key="Accent.Background.Hover.Brush" Color="{StaticResource Accent.Background.Hover.Color}" />
+            <SolidColorBrush x:Key="Accent.Background.Press.Brush" Color="{StaticResource Accent.Background.Press.Color}" />
+            <SolidColorBrush x:Key="Accent.Foreground.Brush" Color="{StaticResource Accent.Foreground.Color}" />
+            <SolidColorBrush x:Key="Highlight.Border.Brush" Color="{StaticResource Highlight.Border.Color}" />
+            <SolidColorBrush x:Key="Border.Internal.Brush" Color="{StaticResource Border.Internal.Color}" />
+            <SolidColorBrush x:Key="Border.External.Brush" Color="{StaticResource Border.External.Color}" />
+            <SolidColorBrush x:Key="Border.Separator.Brush" Color="{StaticResource Border.Separator.Color}" />
+            <SolidColorBrush x:Key="GroupHeader.Background.Brush" Color="{StaticResource GroupHeader.Background.Color}" />
+            <SolidColorBrush x:Key="GroupHeader.Foreground.Brush" Color="{StaticResource GroupHeader.Foreground.Color}" />
+            <Style x:Key="Search.PrimaryTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Search.Foreground.Brush}" />
+            </Style>
+            <Style x:Key="Search.SecondaryTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Search.Foreground.Alt.Brush}" />
+            </Style>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="HighContrast">
+            <SolidColorBrush x:Key="Search.Background.Brush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="Search.Background.Hover.Brush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="Search.Background.Press.Brush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="Search.Foreground.Brush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="Search.Foreground.Alt.Brush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="Search.Foreground.Hover.Brush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+            <SolidColorBrush x:Key="Search.Foreground.Press.Brush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+            <SolidColorBrush x:Key="Search.Image.Background.Brush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="Accent.Background.Brush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="Accent.Background.Hover.Brush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="Accent.Background.Press.Brush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="Accent.Foreground.Brush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+            <SolidColorBrush x:Key="Highlight.Border.Brush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="Border.Internal.Brush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="Border.External.Brush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="Border.Separator.Brush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="GroupHeader.Background.Brush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="GroupHeader.Foreground.Brush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+            <Style x:Key="Search.PrimaryTextBlockStyle" TargetType="TextBlock" />
+            <Style x:Key="Search.SecondaryTextBlockStyle" TargetType="TextBlock" />
+            <Thickness x:Key="Search.QueryPlaceholderPadding">16,4,4,4</Thickness>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
-    <SolidColorBrush x:Key="Search.Background.Brush" Color="{ThemeResource Search.Background.Color}" />
-    <SolidColorBrush x:Key="Search.Background.Hover.Brush" Color="{ThemeResource Search.Background.Hover.Color}" />
-    <SolidColorBrush x:Key="Search.Background.Press.Brush" Color="{ThemeResource Search.Background.Press.Color}" />
-    <SolidColorBrush x:Key="Search.Foreground.Brush" Color="{ThemeResource Search.Foreground.Color}" />
-    <SolidColorBrush x:Key="Search.Foreground.Alt.Brush" Color="{ThemeResource Search.Foreground.Alt.Color}" />
-    <SolidColorBrush x:Key="Search.Foreground.Hover.Brush" Color="{ThemeResource Search.Foreground.Hover.Color}" />
-    <SolidColorBrush x:Key="Search.Foreground.Press.Brush" Color="{ThemeResource Search.Foreground.Press.Color}" />
-    <SolidColorBrush x:Key="Accent.Background.Brush" Color="{ThemeResource Accent.Background.Color}" />
-    <SolidColorBrush x:Key="Accent.Background.Hover.Brush" Color="{ThemeResource Accent.Background.Hover.Color}" />
-    <SolidColorBrush x:Key="Accent.Background.Press.Brush" Color="{ThemeResource Accent.Background.Press.Color}" />
-    <SolidColorBrush x:Key="Highlight.Border.Brush" Color="{ThemeResource Highlight.Border.Color}" />
-    <SolidColorBrush x:Key="Border.Internal.Brush" Color="{ThemeResource Border.Internal.Color}" />
-    <SolidColorBrush x:Key="Border.External.Brush" Color="{ThemeResource Border.External.Color}" />
-    <SolidColorBrush x:Key="Border.Separator.Brush" Color="{ThemeResource Border.Separator.Color}" />
-    <SolidColorBrush x:Key="GroupHeader.Background.Brush" Color="{ThemeResource GroupHeader.Background.Color}" />
-    <SolidColorBrush x:Key="GroupHeader.Foreground.Brush" Color="{ThemeResource GroupHeader.Foreground.Color}" />
     <converter:EmptyStringToVisibilityConverter x:Key="PlaceholderVisibilityConverter" />
     <converter:CollectionIsEmptyToBoolConverter x:Key="CollectionIsEmptyToBoolConverter" />
     <converter:CollectionIsSingletonToBoolConverter x:Key="CollectionIsSingletonToBoolConverter" />
@@ -73,45 +158,33 @@
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="Transparent" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
+                        <VisualState.Setters>
+                            <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Brush}" />
+                            <Setter Target="Border.BorderBrush" Value="Transparent" />
+                            <Setter Target="InnerContentPresenter.Foreground" Value="{ThemeResource Search.Foreground.Brush}" />
+                        </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="PointerOver">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Hover.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
+                        <VisualState.Setters>
+                            <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Hover.Brush}" />
+                            <Setter Target="InnerContentPresenter.Foreground" Value="{ThemeResource Search.Foreground.Hover.Brush}" />
+                        </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Pressed">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
+                        <VisualState.Setters>
+                            <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Press.Brush}" />
+                            <Setter Target="InnerContentPresenter.Foreground" Value="{ThemeResource Search.Foreground.Press.Brush}" />
+                        </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Disabled" />
                     <VisualState x:Name="Selected">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Hover.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Highlight.Border.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="2,0,0,0" />
-                            </ObjectAnimationUsingKeyFrames>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerContentPresenter" Storyboard.TargetProperty="Margin">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,0" />
-                            </ObjectAnimationUsingKeyFrames>
-                        </Storyboard>
+                        <VisualState.Setters>
+                            <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Hover.Brush}" />
+                            <Setter Target="Border.BorderBrush" Value="{ThemeResource Highlight.Border.Brush}" />
+                            <Setter Target="Border.BorderThickness" Value="2,0,0,0" />
+                            <Setter Target="InnerContentPresenter.Margin" Value="0,0,0,0" />
+                            <Setter Target="InnerContentPresenter.Foreground" Value="{ThemeResource Search.Foreground.Hover.Brush}" />
+                        </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
@@ -121,8 +194,8 @@
         <Border>
             <TextBlock
                 Padding="8"
+                Style="{ThemeResource Search.PrimaryTextBlockStyle}"
                 VerticalAlignment="Center"
-                Foreground="{ThemeResource Search.Foreground.Brush}"
                 Text="{Binding DisplayName, Mode=OneWay}"
                 TextWrapping="Wrap" />
         </Border>
@@ -134,23 +207,26 @@
                     <ColumnDefinition Width="24" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Image
+                <Border
                     Width="16"
                     Height="16"
+                    Background="{ThemeResource Search.Image.Background.Brush}"
+                    HighContrastAdjustment="Auto"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Source="{Binding Path=MarkerImageSource, Mode=OneWay}" />
+                    VerticalAlignment="Center">
+                    <Image Source="{Binding Path=MarkerImageSource, Mode=OneWay}" />
+                </Border>
                 <StackPanel
                     Grid.Column="1"
                     Margin="4,0,0,0"
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <TextBlock
-                        Foreground="{ThemeResource Search.Foreground.Brush}"
+                        Style="{ThemeResource Search.PrimaryTextBlockStyle}"
                         Text="{Binding Path=DisplayTitle}"
                         TextWrapping="Wrap" />
                     <TextBlock
-                        Foreground="{ThemeResource Search.Foreground.Alt.Brush}"
+                        Style="{ThemeResource Search.SecondaryTextBlockStyle}"
                         Text="{Binding Path=DisplaySubtitle}"
                         TextTrimming="CharacterEllipsis"
                         Visibility="{Binding Path=DisplaySubtitle, Mode=OneWay, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
@@ -165,25 +241,28 @@
                     <ColumnDefinition Width="10" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Path
+                <Border
                     Width="10"
                     Height="10"
-                    Data="M14.482 13.784L9.708 9.011a4.8 4.8 0 1 0-.69.69l4.773 4.773zM3.315 8.687a3.8 3.8 0 1 1 2.687 1.112 3.806 3.806 0 0 1-2.687-1.112z"
-                    Fill="{ThemeResource Search.Foreground.Brush}"
-                    Stretch="Uniform"
-                    Visibility="{Binding IsCollection, Mode=OneTime}" />
-                <Path
-                    Width="10"
-                    Height="10"
-                    Data="M8 0a4.96 4.96 0 0 0-4.9 5.086C3.1 7.893 5.778 11.692 8 16c2.222-4.308 4.9-8.107 4.9-10.914A4.96 4.96 0 0 0 8 0zm0 13.877c-.298-.543-.598-1.077-.89-1.6C5.561 9.514 4.1 6.906 4.1 5.085A3.954 3.954 0 0 1 8 1a3.954 3.954 0 0 1 3.9 4.086c0 1.82-1.462 4.429-3.01 7.19-.292.524-.592 1.058-.89 1.601zM8 2.834A2.166 2.166 0 1 0 10.13 5 2.147 2.147 0 0 0 8 2.834zm0 3.332A1.167 1.167 0 1 1 9.13 5 1.15 1.15 0 0 1 8 6.166z"
-                    Fill="{ThemeResource Search.Foreground.Brush}"
-                    Stretch="Uniform"
-                    Visibility="{Binding IsCollection, Mode=OneTime, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                    Background="{ThemeResource Search.Image.Background.Brush}">
+                    <Grid>
+                        <Path
+                            Data="M14.482 13.784L9.708 9.011a4.8 4.8 0 1 0-.69.69l4.773 4.773zM3.315 8.687a3.8 3.8 0 1 1 2.687 1.112 3.806 3.806 0 0 1-2.687-1.112z"
+                            Fill="{ThemeResource Search.Foreground.Brush}"
+                            Stretch="Uniform"
+                            Visibility="{Binding IsCollection, Mode=OneTime}" />
+                        <Path
+                            Data="M8 0a4.96 4.96 0 0 0-4.9 5.086C3.1 7.893 5.778 11.692 8 16c2.222-4.308 4.9-8.107 4.9-10.914A4.96 4.96 0 0 0 8 0zm0 13.877c-.298-.543-.598-1.077-.89-1.6C5.561 9.514 4.1 6.906 4.1 5.085A3.954 3.954 0 0 1 8 1a3.954 3.954 0 0 1 3.9 4.086c0 1.82-1.462 4.429-3.01 7.19-.292.524-.592 1.058-.89 1.601zM8 2.834A2.166 2.166 0 1 0 10.13 5 2.147 2.147 0 0 0 8 2.834zm0 3.332A1.167 1.167 0 1 1 9.13 5 1.15 1.15 0 0 1 8 6.166z"
+                            Fill="{ThemeResource Search.Foreground.Brush}"
+                            Stretch="Uniform"
+                            Visibility="{Binding IsCollection, Mode=OneTime, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                    </Grid>
+                </Border>
                 <TextBlock
                     Grid.Column="1"
                     Margin="8,0,0,0"
+                    Style="{ThemeResource Search.PrimaryTextBlockStyle}"
                     VerticalAlignment="Center"
-                    Foreground="{ThemeResource Search.Foreground.Brush}"
                     Text="{Binding DisplayTitle, Mode=OneTime}"
                     TextWrapping="Wrap" />
             </Grid>
@@ -227,38 +306,26 @@
                                     <VisualTransition GeneratedDuration="0" To="Pressed" />
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Brush}" />
+                                    </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Hover.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Foreground.Hover.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Hover.Brush}" />
+                                        <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource Search.Foreground.Hover.Brush}" />
+                                    </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Foreground.Press.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Press.Brush}" />
+                                        <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource Search.Foreground.Press.Brush}" />
+                                    </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Checked">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Press.Brush}" />
+                                    </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
@@ -296,44 +363,28 @@
                                     <VisualTransition GeneratedDuration="0" To="Checked" />
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="Transparent" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Brush}" />
+                                        <Setter Target="Border.BorderBrush" Value="Transparent" />
+                                    </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Hover.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Hover.Brush}" />
+                                    </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Press.Brush}" />
+                                    </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Checked">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Highlight.Border.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="2,0,0,0" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Margin">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,0" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Search.Background.Brush}" />
+                                        <Setter Target="Border.BorderBrush" Value="{ThemeResource Highlight.Border.Brush}" />
+                                        <Setter Target="Border.BorderThickness" Value="2,0,0,0" />
+                                        <Setter Target="ContentPresenter.Margin" Value="0,0,0,0" />
+                                    </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
@@ -355,7 +406,7 @@
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Foreground="White" />
+                            Foreground="{ThemeResource Accent.Foreground.Brush}" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>
@@ -364,18 +415,14 @@
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal" />
                                 <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Accent.Background.Hover.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Accent.Background.Hover.Brush}" />
+                                    </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Accent.Background.Press.Color}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource Accent.Background.Press.Brush}" />
+                                    </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
@@ -432,7 +479,11 @@
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />
                                     <VisualState x:Name="PointerOver" />
-                                    <VisualState x:Name="Focused" />
+                                    <VisualState x:Name="Focused">
+                                        <VisualState.Setters>
+                                            <Setter Target="ContentElement.Foreground" Value="{ThemeResource Search.Foreground.Brush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
                                     <VisualState x:Name="Disabled" />
                                 </VisualStateGroup>
                                 <VisualStateGroup x:Name="ButtonStates">
@@ -447,7 +498,7 @@
         </Setter>
     </Style>
     <Style x:Key="QueryPlaceholderStyle" TargetType="TextBlock">
-        <Setter Property="Padding" Value="8,4,4,4" />
+        <Setter Property="Padding" Value="{ThemeResource Search.QueryPlaceholderPadding}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Foreground" Value="{ThemeResource Search.Foreground.Alt.Brush}" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -478,7 +529,7 @@
         <Setter Property="Height" Value="12" />
         <Setter Property="Stretch" Value="Uniform" />
         <Setter Property="StrokeThickness" Value="0" />
-        <Setter Property="Fill" Value="{ThemeResource Search.Foreground.Color}" />
+        <Setter Property="Fill" Value="{ThemeResource Search.Foreground.Brush}" />
     </Style>
     <ControlTemplate x:Key="DefaultSearchViewTemplate" TargetType="controls:SearchView">
         <Grid>
@@ -508,7 +559,7 @@
                         <Path
                             Data="M13.1 6L8 11.1 2.9 6z"
                             Fill="Transparent"
-                            Stroke="{ThemeResource Search.Foreground.Color}"
+                            Stroke="{ThemeResource Search.Foreground.Brush}"
                             StrokeThickness="1"
                             Style="{StaticResource ActionButtonPathStyle}" />
                     </controls:SourceSelectToggleButton>
