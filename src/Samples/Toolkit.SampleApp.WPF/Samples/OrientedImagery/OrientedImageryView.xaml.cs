@@ -22,6 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
     {
         private const string MapBasemap = "https://runtime.maps.arcgis.com/home/item.html?id=67372ff42cd145319639a99152b15bc3";
         private const string SceneBasemap = "https://runtime.maps.arcgis.com/home/item.html?id=0560e29930dc4d5ebeb58c635c0909c9";
+        private const string ElevationUrl = "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer";
 
         private OrientedImageryLayer? _oiLayer;
 
@@ -29,6 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private SceneView _sceneView;
         private bool _usingMapView;
         private GeoView _currentGeoView => _usingMapView ? _mapView : _sceneView;
+
+        private ElevationSource _elevationSource;
 
         public OrientedImageryView()
         {
@@ -41,6 +44,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _mapView.GeoViewTapped += CurrentGeoView_GeoViewTapped;
             GeoViewContainer.Children.Add(_mapView);
             MainOrientedImageryView.GeoView = _mapView;
+
+            _elevationSource = new ArcGISTiledElevationSource(new Uri(ElevationUrl));
         }
 
         private void ConfigureToolbar()
@@ -58,6 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 await oiLayer.LoadAsync();
                 if (oiLayer.LoadStatus == LoadStatus.FailedToLoad)
                     return;
+                oiLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Relative;
 
                 _oiLayer = oiLayer;
 
@@ -163,6 +169,43 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
             if (_oiLayer?.FullExtent != null)
                 _currentGeoView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
+        }
+
+        private void ToggleElevationSurfaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_sceneView.Scene?.BaseSurface is not Surface surface)
+                return;
+
+            if (surface.ElevationSources.Count > 0)
+                surface.ElevationSources.Clear();
+            else
+                surface.ElevationSources.Add(_elevationSource);
+        }
+
+        private int _scenePropertiesState = 0;
+        private void ScenePropertiesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_oiLayer == null)
+                return;
+
+            if (_scenePropertiesState == 0)
+            {
+                _oiLayer.SceneProperties.SurfacePlacement = SurfacePlacement.DrapedFlat;
+            }
+            else if (_scenePropertiesState == 1)
+            {
+                _oiLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Absolute;
+            }
+            else if (_scenePropertiesState == 2)
+            {
+                _oiLayer.SceneProperties.AltitudeOffset = 50;
+            }
+            else if (_scenePropertiesState == 3)
+            {
+                _oiLayer.SceneProperties = new LayerSceneProperties(SurfacePlacement.Relative);
+            }
+
+            _scenePropertiesState = (_scenePropertiesState + 1) % 4;
         }
     }
 }
