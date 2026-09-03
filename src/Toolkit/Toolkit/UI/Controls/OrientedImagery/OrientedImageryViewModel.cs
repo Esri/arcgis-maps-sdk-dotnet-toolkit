@@ -60,6 +60,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
 #region GeoModel
     private OrientedImageryLayer? _oiLayer;
+    private LayerSceneProperties? _oiLayerSceneProperties;
 
     /// <summary>
     /// Gets or sets the oriented imagery layer whose visible footprints are managed by this view model.
@@ -74,6 +75,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             if (_oiLayer != null)
             {
                 _oiLayer.VisibleFootprints.Clear();
+                _oiLayer.PropertyChanged -= OrientedImageryLayer_PropertyChanged;
+                _oiLayerSceneProperties!.PropertyChanged -= OrientedImageryLayer_SceneProperties_PropertyChanged;
             }
 
             _images.Clear();
@@ -81,9 +84,39 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             Markers.Clear();
 
             _oiLayer = value;
+            if (_oiLayer != null)
+            {
+                _oiLayer.PropertyChanged += OrientedImageryLayer_PropertyChanged;
+                _oiLayerSceneProperties = _oiLayer.SceneProperties;
+                _oiLayerSceneProperties.PropertyChanged += OrientedImageryLayer_SceneProperties_PropertyChanged;
+            }
+            MatchSceneProperties();
             UpdateVisibleFootprints();
         }
     }
+
+    private void MatchSceneProperties()
+    {
+        _markersOverlay.SceneProperties.SurfacePlacement = _oiLayer?.SceneProperties.SurfacePlacement ?? SurfacePlacement.Relative;
+        _markersOverlay.SceneProperties.AltitudeOffset = _oiLayer?.SceneProperties.AltitudeOffset ?? 0d;
+    }
+
+    private void OrientedImageryLayer_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(OrientedImageryLayer.SceneProperties))
+            return;
+
+        if (_oiLayerSceneProperties != null)
+            _oiLayerSceneProperties.PropertyChanged -= OrientedImageryLayer_SceneProperties_PropertyChanged;
+
+        _oiLayerSceneProperties = _oiLayer?.SceneProperties;
+        MatchSceneProperties();
+
+        if (_oiLayer != null)
+            _oiLayerSceneProperties!.PropertyChanged += OrientedImageryLayer_SceneProperties_PropertyChanged;
+    }
+
+    private void OrientedImageryLayer_SceneProperties_PropertyChanged(object? sender, PropertyChangedEventArgs e) => MatchSceneProperties();
 #endregion GeoModel
 
 #region Images
