@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -52,6 +53,18 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     private bool _acceptingSuggestionFlag;
 
     private bool _sourceSelectToggled;
+
+    private bool _focusResultsWhenAvailable;
+
+    partial void ConnectKeyboardNavigation();
+
+    partial void DisconnectKeyboardNavigation();
+
+    partial void OnSourceListOpened();
+
+    partial void OnSourceSelected();
+
+    partial void OnResultFocusRequested();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SearchView"/> class.
@@ -123,6 +136,8 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
     {
+        DisconnectKeyboardNavigation();
+
         if (PART_SourceSelectButton != null)
         {
             PART_SourceSelectButton.Clicked -= PART_SourceSelectButton_Clicked;
@@ -240,6 +255,8 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
+        UpdateSourceButtonAccessibility();
+        ConnectKeyboardNavigation();
     }
 
     private void HandleClearSearchCommand()
@@ -253,21 +270,16 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         SearchViewModel?.CommitSearch();
     }
 
-    private void HandleRepeatSearchHereCommand()
-    {
-        SearchViewModel?.RepeatSearchHere();
-    }
+    private void HandleRepeatSearchHereCommand() => _ = RepeatSearchAndFocusResults();
 
     private void PART_SourcesView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (SearchViewModel == null)
+        if (SearchViewModel == null || e.CurrentSelection.FirstOrDefault() is not string selectedSource)
         {
             return;
         }
 
-        var selectedSource = e.CurrentSelection.FirstOrDefault() as string;
-
-        if (selectedSource == null || selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
+        if (selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
         {
             SearchViewModel.ActiveSource = null;
         }
@@ -278,9 +290,11 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
         _sourceSelectToggled = false;
         UpdateVisibility();
+        UpdateSourceButtonAccessibility();
+        OnSourceSelected();
     }
 
-    private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => SearchViewModel?.RepeatSearchHere();
+    private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => _ = RepeatSearchAndFocusResults();
 
     private void PART_SuggestionsView_ItemSelected(object? sender, SelectionChangedEventArgs e)
     {
@@ -311,6 +325,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
+        if (_sourceSelectToggled)
+        {
+            OnSourceListOpened();
+        }
     }
 
     private void PART_Entry_TextChanged(object? sender, TextChangedEventArgs e)
@@ -368,6 +386,34 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             _acceptingSuggestionFlag = false;
         }
+    }
+
+    private async Task RepeatSearchAndFocusResults()
+    {
+        if (SearchViewModel == null)
+        {
+            return;
+        }
+
+        await SearchViewModel.RepeatSearchHere();
+        if (SearchViewModel.Results?.Count > 0)
+        {
+            OnResultFocusRequested();
+        }
+    }
+
+    private void UpdateSourceButtonAccessibility()
+    {
+        if (PART_SourceSelectButton == null)
+        {
+            return;
+        }
+
+        var prompt = Properties.Resources.GetString("SearchViewSelectSearchSource");
+        var selectedSource = SearchViewModel?.ActiveSource?.DisplayName ?? AllSourcesSelectText;
+        var selectedFormat = Properties.Resources.GetString("SearchViewSelectedAutomationName") ?? "{0}, selected";
+        var selectedDescription = string.Format(CultureInfo.CurrentCulture, selectedFormat, selectedSource);
+        PART_SourceSelectButton.SetValue(SemanticProperties.DescriptionProperty, $"{prompt}. {selectedDescription}");
     }
 
     private void AddResultToGeoView(SearchResult result)
@@ -584,6 +630,9 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
         switch (e.PropertyName)
         {
+            case nameof(SearchViewModel.ActiveSource):
+                UpdateSourceButtonAccessibility();
+                break;
             case nameof(SearchViewModel.ActivePlaceholder):
                 PART_Entry?.SetValue(Entry.PlaceholderProperty, SearchViewModel.ActivePlaceholder);
                 UpdateVisibility();
@@ -720,6 +769,15 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
+
+        if (_focusResultsWhenAvailable && SearchViewModel.Results != null)
+        {
+            _focusResultsWhenAvailable = false;
+            if (SearchViewModel.Results.Count > 0)
+            {
+                OnResultFocusRequested();
+            }
+        }
 
         if (SearchViewModel.Results == null)
         {
