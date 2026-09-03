@@ -117,6 +117,7 @@
             <Style x:Key="Search.SecondaryTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{StaticResource Search.Foreground.Alt.Brush}" />
             </Style>
+            <Thickness x:Key="Search.QueryPlaceholderPadding">8,4,4,4</Thickness>
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="Search.Background.Brush" Color="{ThemeResource SystemColorWindowColor}" />
