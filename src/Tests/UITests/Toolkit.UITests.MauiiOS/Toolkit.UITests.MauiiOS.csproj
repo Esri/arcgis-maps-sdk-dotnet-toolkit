@@ -26,7 +26,7 @@
   <Target Name="BuildTestApp" Condition="'$(BuildApp)'=='true'">
     <PropertyGroup>
       <!-- Force iOS target when building the MAUI test app from the test project -->
-      <_MauiTestAppTfm>$(TestAppNetVersion)-ios</_MauiTestAppTfm>
+      <_MauiTestAppTfm>$(TestAppiOSTargetFramework)</_MauiTestAppTfm>
       <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
     </PropertyGroup>
 

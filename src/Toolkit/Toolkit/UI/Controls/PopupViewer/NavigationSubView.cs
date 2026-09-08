@@ -237,6 +237,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateView();
         }
 
+        /// <summary>
+        /// Navigates to the previous content in the navigation stack.
+        /// </summary>
+        /// <returns>The previous content, or <see langword="null"/> when back navigation is unavailable or canceled.</returns>
         public async Task<object?> GoBack()
         {
             if (!IsBackNavigationEnabled || _navigationStack.Count == 0)

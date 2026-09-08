@@ -9,6 +9,10 @@ permissions:
   contents: read
   pull-requests: write
 
+env:
+  DOTNET_SDK_VERSION: 11.0.100-preview.7.26381.103
+  DOTNET_WORKLOAD_VERSION: 11.0.100-preview.7.26410.2
+
 jobs:
   api-diff:
     runs-on: windows-latest
@@ -17,10 +21,10 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
           
       - name: Install MAUI workload
-        run: dotnet workload install maui
+        run: dotnet workload install maui --version $env:DOTNET_WORKLOAD_VERSION
 
       - name: Install generator
         run: dotnet tool install --global dotMorten.OmdGenerator --version=1.8.3

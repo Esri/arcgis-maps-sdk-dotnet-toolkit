@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>$(TestAppNetVersion)-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>$(TestAppWindowsTargetFramework)</TargetFramework>
     <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <RootNamespace>Toolkit.UITests.WinUI.Puppet</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -41,7 +41,7 @@
   <ItemGroup>
     <PackageReference Include="Esri.Calcite.WinUI" Version="1.0.0-rc.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7463" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260101001" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="$(WinAppSDKVersion)" />
   </ItemGroup>
 
   <!-- Test Pages -->

@@ -36,18 +36,20 @@
 
   <!--Framework versions-->
   <PropertyGroup>
+    <DotNetSdkVersion Condition="'$(DotNetSdkVersion)'==''">11.0.100-preview.7.26381.103</DotNetSdkVersion>
+    <DotNetWorkloadVersion Condition="'$(DotNetWorkloadVersion)'==''">11.0.100-preview.7.26410.2</DotNetWorkloadVersion>
     <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">19041</ArcGISRuntime_MinimumSupportedWindowsBuild>
     <WindowsSDKTargetBuild Condition="'$(WindowsSDKTargetBuild)'==''">19041</WindowsSDKTargetBuild>
     <DotNetTargetFramework>net472</DotNetTargetFramework>
-    <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">net10.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
-    <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net10.0</NETMauiTarget>
+    <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net11.0</NETMauiTarget>
+    <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
     <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
-    <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android36.0</NetAndroidTargetFramework>
-    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst26.0</NetCatalystTargetFramework>
-    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios26.0</NetiOSTargetFramework>  
-    <MauiVersion Condition="'$(MauiVersion)'==''">10.0.40</MauiVersion>
-    <WinUIVersion Condition="'$(WinUIVersion)'==''">1.8.250906003</WinUIVersion>
-    <WinAppSDKVersion Condition="'$(WinAppSDKVersion)'==''">1.8.251003001</WinAppSDKVersion>
+    <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android37.0</NetAndroidTargetFramework>
+    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst26.5</NetCatalystTargetFramework>
+    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios26.5</NetiOSTargetFramework>
+    <MauiVersion Condition="'$(MauiVersion)'==''">11.0.0-preview.7.26406.9</MauiVersion>
+    <WinUIVersion Condition="'$(WinUIVersion)'==''">1.8.251106002</WinUIVersion>
+    <WinAppSDKVersion Condition="'$(WinAppSDKVersion)'==''">1.8.251106002</WinAppSDKVersion>
   </PropertyGroup>
   <PropertyGroup>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>

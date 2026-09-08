@@ -7,7 +7,11 @@
     <TestAppApiKey Condition="'$(TestAppApiKey)'==''"></TestAppApiKey>
 
     <!-- Be sure to delete the obj/ and bin/ folders in both App and Runner projects if updating this parameter -->
-    <TestAppNetVersion>net10.0</TestAppNetVersion>
+    <TestAppNetVersion>$(NETMauiTarget)</TestAppNetVersion>
+    <TestAppWindowsTargetFramework>$(NetMauiWindowsTargetFramework)</TestAppWindowsTargetFramework>
+    <TestAppAndroidTargetFramework>$(NetAndroidTargetFramework)</TestAppAndroidTargetFramework>
+    <TestAppCatalystTargetFramework>$(NetCatalystTargetFramework)</TestAppCatalystTargetFramework>
+    <TestAppiOSTargetFramework>$(NetiOSTargetFramework)</TestAppiOSTargetFramework>
 
     <!-- Other useful general properties (particularly ArcGISRuntimeToolkitPackageVersion, ArcGISRuntimePackageVersion, MauiVersion, and UseNugetPackage)
          may be found in the root Directory.build.props file. -->
@@ -44,7 +48,7 @@
   <!-- Maintenance Settings -->
   <!-- These are unlikely to need to be changed in normal use -->
   <PropertyGroup>
-    <TestRunnerNetVersion>net10.0</TestRunnerNetVersion>
+    <TestRunnerNetVersion>$(NETMauiTarget)</TestRunnerNetVersion>
     <AppiumWebDriverVersion>8.3.2</AppiumWebDriverVersion>
     <MagickNetVersion>14.16.0</MagickNetVersion>
   </PropertyGroup>

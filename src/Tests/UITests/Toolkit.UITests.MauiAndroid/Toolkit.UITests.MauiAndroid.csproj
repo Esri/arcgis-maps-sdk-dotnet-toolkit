@@ -20,8 +20,8 @@
   <!-- Build test app if needed and record build location to AppBuildInfo.txt -->
   <Target Name="BuildTestApp" BeforeTargets="Build" Condition="'$(AndroidUsePreinstalledApp)' != 'true'">
     <PropertyGroup>
-      <!-- Force iOS target when building the MAUI test app from the test project -->
-      <_MauiTestAppTfm>net9.0-android</_MauiTestAppTfm>
+      <!-- Force the Android target when building the MAUI test app from the test project. -->
+      <_MauiTestAppTfm>$(TestAppAndroidTargetFramework)</_MauiTestAppTfm>
       <_MauiTestAppProject>..\..\UITests\Toolkit.UITests.Maui.App\Toolkit.UITests.Maui.App.csproj</_MauiTestAppProject>
       <!-- Force Release mode to avoid crashes from FastDeploy -->
       <_ForcedConfig>Release</_ForcedConfig>

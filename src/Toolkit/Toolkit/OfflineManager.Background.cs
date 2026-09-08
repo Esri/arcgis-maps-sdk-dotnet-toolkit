@@ -76,8 +76,15 @@ namespace Esri.ArcGISRuntime.Toolkit
                 return null;
             }
 
+            var title = Properties.Resources.GetString("OfflineMapAreasBackgroundTaskTitle");
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                Trace.WriteLine("Unable to start a continued processing task because its localized title is missing.", "ArcGIS Toolkit");
+                return null;
+            }
+
             using var requestIdentifier = new NSString(identifier);
-            using var requestTitle = new NSString(Properties.Resources.GetString("OfflineMapAreasBackgroundTaskTitle"));
+            using var requestTitle = new NSString(title);
             using var requestSubtitle = new NSString(subtitle);
 
             var allocatedHandle = IntPtr_objc_msgSend(requestClassHandle, Selector.GetHandle("alloc"));

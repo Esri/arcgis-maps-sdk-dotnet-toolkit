@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+env:
+  DOTNET_SDK_VERSION: 11.0.100-preview.7.26381.103
+  DOTNET_WORKLOAD_VERSION: 11.0.100-preview.7.26410.2
+
 jobs:
   build:
 
@@ -16,15 +20,19 @@ jobs:
     steps:
         
     - name: Clone Repo
-      uses: actions/checkout@v7
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v3
        
     - name: Install MAUI Workload
       run: |
-        dotnet workload install maui@9.0.100
-        dotnet workload restore src/Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj --from-previous-sdk
+        dotnet workload install maui --version $env:DOTNET_WORKLOAD_VERSION
 
     - name: Restore
       run: |

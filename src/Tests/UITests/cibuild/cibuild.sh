@@ -22,6 +22,20 @@ function install_dotnet {
   dotnet_version=$2
   dotnet_cache_dir=$3
 
+  if [ -n "${DOTNET_PATH:-}" ]; then
+    if [ ! -x "${DOTNET_PATH}" ]; then
+      echo "DOTNET_PATH is not executable: ${DOTNET_PATH}" 1>&2
+      exit 1
+    fi
+    installed_version=$("${DOTNET_PATH}" --version)
+    if [ "${installed_version}" != "${dotnet_version}" ]; then
+      echo "Expected .NET SDK ${dotnet_version}, found ${installed_version}." 1>&2
+      exit 1
+    fi
+    export DOTNET_ROOT=$(dirname "${DOTNET_PATH}")
+    return
+  fi
+
   # Install the desired dotnet version if not already cached
   if [ -z "${dotnet_cache_dir}" ]; then
     dotnet_install_dir="${workspace}/.dotnet"

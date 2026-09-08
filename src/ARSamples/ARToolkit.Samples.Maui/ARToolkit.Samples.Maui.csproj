@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
+        <TargetFrameworks>$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
         <OutputType>Exe</OutputType>
         <RootNamespace>ARToolkit.Samples.Maui</RootNamespace>
         <UseMaui>true</UseMaui>

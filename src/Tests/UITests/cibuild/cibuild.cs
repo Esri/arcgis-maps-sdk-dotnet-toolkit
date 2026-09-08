@@ -15,6 +15,7 @@ internal class Program
     private static event EventHandler? BuildEnding;
     private static Lock _cleanupLock = new Lock();
     private static bool _startedCleanup = false;
+    private static string _workloadVersion = string.Empty;
     private static void OnBuildEnding()
     {
         lock(_cleanupLock)
@@ -48,6 +49,7 @@ internal class Program
 
         // Derived variables
         var yamlConfig = Path.Join(toolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
+        _workloadVersion = ReadYamlValue(yamlConfig, "workload-version");
         var dependencies = new CommonDependencies(dotnetExe);
 
         try {
@@ -57,7 +59,7 @@ internal class Program
             // Configure nuget repo if set
             var nugetRepo = Environment.GetEnvironmentVariable("NUGET_REPO");
             if (!string.IsNullOrWhiteSpace(nugetRepo)) {
-                SetNugetSource(toolkitSrc, dependencies.DotnetExe, nugetRepo);
+                SetNugetSource(workspace, dependencies.DotnetExe, nugetRepo);
             }
 
             // Install node
@@ -105,11 +107,13 @@ internal class Program
 
             // Run tests
             Console.WriteLine("\nRunning tests...");
-            var artifactsPath = Path.Join(uiTestsPath, "artifacts", "bin");
+            var artifactsPath = Path.Join(workspace, "artifacts", "bin");
             var runnerExe = Path.Join(artifactsPath, buildSettings.RunnerName, "TestBuild", buildSettings.RunnerName);
             var appExe = Path.Join(artifactsPath, buildSettings.AppName, "TestBuild", buildSettings.BinaryName);
             Environment.SetEnvironmentVariable("TKUITEST_APP", appExe);
-            RunBinary(runnerExe, $"{string.Join(" ", buildSettings.TestParams)}", throwOnError: false);
+            var testRun = RunBinary(runnerExe, $"{string.Join(" ", buildSettings.TestParams)}", throwOnError: false);
+            if (testRun?.ExitCode != 0)
+                return testRun?.ExitCode ?? 1;
         }
         finally {
             OnBuildEnding();
@@ -153,6 +157,7 @@ internal class Program
         var nugetDir = Path.Join(workspace, ".nuget");
         Environment.SetEnvironmentVariable("NUGET_PACKAGES", Path.Join(nugetDir, "packages"));
         Environment.SetEnvironmentVariable("NUGET_HTTP_CACHE_PATH", Path.Join(nugetDir, "cache"));
+        Environment.SetEnvironmentVariable("RestoreConfigFile", configFile);
 
         Console.WriteLine("Done configuring nuget.\n");
     }
@@ -236,7 +241,7 @@ internal class Program
     {
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiMac");
-        var macFramework = "net10.0-maccatalyst";
+        var macFramework = "net11.0-maccatalyst26.5";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {macFramework}",
             "-r maccatalyst-arm64"
@@ -247,7 +252,7 @@ internal class Program
 
         // Install maui maccatalyst workload
         Console.WriteLine("\nInstalling maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        EnsureMauiWorkload(dependencies.DotnetExe);
 
         // Install appium mac driver
         InstallAppiumDriver(dependencies, "mac2");
@@ -285,10 +290,13 @@ internal class Program
     {
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiiOS");
-        var iosFramework = "net10.0-ios";
+        var iosFramework = "net11.0-ios26.5";
+        var runtimeIdentifier = Environment.GetEnvironmentVariable("TOOLKIT_IOS_RUNTIME_IDENTIFIER") ?? "ios-arm64";
+        if (runtimeIdentifier is not ("ios-arm64" or "iossimulator-arm64"))
+            throw new ArgumentException("TOOLKIT_IOS_RUNTIME_IDENTIFIER must be ios-arm64 or iossimulator-arm64.");
         buildSettings.BuildParamsApp.AddRange([
             $"-f {iosFramework}",
-            "-r ios-arm64"
+            $"-r {runtimeIdentifier}"
         ]);
         buildSettings.BinaryName = "Toolkit.UITests.Maui.App.app";
         AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
@@ -298,7 +306,7 @@ internal class Program
 
         // Install maui ios workload
         Console.WriteLine("\nInstalling maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        EnsureMauiWorkload(dependencies.DotnetExe);
 
         // Install appium ios driver
         InstallAppiumDriver(dependencies, "xcuitest");
@@ -349,12 +357,14 @@ internal class Program
 
     private static BuildSettings SetupAndroid(CommonDependencies dependencies, string nodeWorkspace, string toolkitSrc, string workspace, string apiKey, string[] consoleArgs)
     {
-        var jdkDirectory = $"{workspace}/jdk";
-        var androidSdkDirectory = $"{workspace}/android-sdk";
+        var jdkDirectory = Environment.GetEnvironmentVariable("JAVA_HOME") ?? $"{workspace}/jdk";
+        var androidSdkDirectory = Environment.GetEnvironmentVariable("ANDROID_SDK_ROOT")
+            ?? Environment.GetEnvironmentVariable("ANDROID_HOME")
+            ?? $"{workspace}/android-sdk";
 
         // Define build settings
         var buildSettings = new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiAndroid");
-        var androidFramework = "net10.0-android";
+        var androidFramework = "net11.0-android37.0";
         buildSettings.BuildParamsApp.AddRange([
             $"-f {androidFramework}",
             "-r android-arm64",
@@ -366,7 +376,7 @@ internal class Program
 
         // Install maui android
         Console.WriteLine("\nInstalling maui maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        EnsureMauiWorkload(dependencies.DotnetExe);
 
         // Install appium android driver
         InstallAppiumDriver(dependencies, "uiautomator2");
@@ -399,6 +409,19 @@ internal class Program
         else
             RunBinary(dependencies.NodeExe, [dependencies.AppiumEntry, "driver", "install", driverName]);
     }
+
+    private static void EnsureMauiWorkload(string dotnetExe)
+    {
+        if (string.Equals(Environment.GetEnvironmentVariable("SKIP_WORKLOAD_INSTALL"), "true", StringComparison.OrdinalIgnoreCase))
+        {
+            var workloads = RunBinary(dotnetExe, "workload list", captureStdOut: true);
+            if (workloads?.StandardOutput.Contains("maui", StringComparison.OrdinalIgnoreCase) != true)
+                throw new InvalidOperationException("The preinstalled toolchain does not contain the MAUI workload.");
+            return;
+        }
+
+        RunBinary(dotnetExe, $"workload install maui --version {_workloadVersion}");
+    }
 #endregion
 
 #region BuildSettings
@@ -408,7 +431,8 @@ internal class Program
         settings.BuildParamsCommon.AddRange([
             "-c Release",
             "-p:ArtifactsPivots=TestBuild",
-            "-p:UseArtifactsOutput=true"
+            "-p:UseArtifactsOutput=true",
+            $"-p:ArtifactsPath={Path.Join(workspace, "artifacts")}"
         ]);
 
         // Release version config
@@ -441,8 +465,8 @@ internal class Program
             settings.TestParams.AddRange(["--filter", consoleArgs[filterArgIndex+1]]);
         }
 
-        // API key
-        settings.BuildParamsApp.Add($"-p:TestAppApiKey={apiKey}");
+        // Expose the API key to MSBuild without printing it in the command line.
+        Environment.SetEnvironmentVariable("TestAppApiKey", apiKey);
     }
 
     private class BuildSettings
@@ -591,18 +615,23 @@ internal class Program
             throw new Exception($"Call to {startInfo.FileName} failed with exit code {process.ExitCode}.");
         }
 
-        return captureOutput ? new BinaryOutput(stdOut.ToString(), stdErr.ToString()) : null;
+        return new BinaryOutput(
+            captureOutput ? stdOut.ToString() : string.Empty,
+            captureOutput ? stdErr.ToString() : string.Empty,
+            process.ExitCode);
     }
 
     private class BinaryOutput
     {
         public string StandardOutput;
         public string StandardError;
+        public int ExitCode;
 
-        public BinaryOutput(string standardOut, string standardErr)
+        public BinaryOutput(string standardOut, string standardErr, int exitCode)
         {
             StandardOutput = standardOut;
             StandardError = standardErr;
+            ExitCode = exitCode;
         }
     }
 #endregion
