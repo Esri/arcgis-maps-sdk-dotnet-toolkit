@@ -77,6 +77,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+#if WPF
+        private sealed class PopupElementContentPresenter : ContentPresenter
+        {
+            protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer() =>
                 new PopupElementContentPresenterAutomationPeer(this);
         }
 
