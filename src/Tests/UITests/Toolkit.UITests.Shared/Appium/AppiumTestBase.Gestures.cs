@@ -46,6 +46,33 @@ public abstract partial class AppiumTestBase
         PressEnter(element);
     }
 
+#if WINDOWS_TEST
+    // Sends a single key press (down then up) as a global keystroke, landing on whatever element
+    // currently has focus - e.g. after Click()-ing a button. Used for testing keyboard navigation
+    // (arrow keys) that isn't well supported through IWebElement.SendKeys on the Windows driver.
+    protected void PressKey(int virtualKeyCode)
+    {
+        var actions = new List<Dictionary<string, object>>
+        {
+            new Dictionary<string, object>
+            {
+                {"virtualKeyCode", virtualKeyCode },
+                {"down", true }
+            },
+            new Dictionary<string, object>
+            {
+                {"virtualKeyCode", virtualKeyCode },
+                {"down", false }
+            }
+        };
+
+        Driver.ExecuteScript("windows: keys", new Dictionary<string, object>
+        {
+            {"actions",  actions}
+        });
+    }
+#endif
+
     protected void PressEnter(
 #if IOS_TEST || MAC_TEST
     AppiumElement element
@@ -55,24 +82,7 @@ public abstract partial class AppiumTestBase
     )
     {
 #if WINDOWS_TEST
-        var actions = new List<Dictionary<string, object>>
-        {
-            new Dictionary<string, object>
-            {
-                {"virtualKeyCode", 0x0D },
-                {"down", true }
-            },
-            new Dictionary<string, object>
-            {
-                {"virtualKeyCode", 0x0D },
-                {"down", false }
-            }
-        };
-
-        Driver.ExecuteScript("windows: keys", new Dictionary<string, object>
-        {
-            {"actions",  actions}
-        });
+        PressKey(0x0D);
 #elif ANDROID_TEST
         // This only works if the keyboard is open, you might need to click on the input first to open it
         Driver.ExecuteScript("mobile: performEditorAction", new Dictionary<string, object>
