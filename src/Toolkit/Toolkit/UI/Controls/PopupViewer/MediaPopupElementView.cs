@@ -35,7 +35,43 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
             DefaultStyleKey = typeof(MediaPopupElementView);
 #endif
+#if WPF || WINDOWS_XAML
+            PreviousMediaButtonText = Properties.Resources.GetString("PopupViewerPreviousMediaButtonText");
+            NextMediaButtonText = Properties.Resources.GetString("PopupViewerNextMediaButtonText");
+#endif
         }
+
+#if WPF || WINDOWS_XAML
+        /// <summary>
+        /// Gets or sets the accessible name and tooltip text used for the button that shows the previous media item.
+        /// </summary>
+        public string? PreviousMediaButtonText
+        {
+            get { return GetValue(PreviousMediaButtonTextProperty) as string; }
+            set { SetValue(PreviousMediaButtonTextProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="PreviousMediaButtonText"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty PreviousMediaButtonTextProperty =
+            PropertyHelper.CreateProperty<string, MediaPopupElementView>(nameof(PreviousMediaButtonText));
+
+        /// <summary>
+        /// Gets or sets the accessible name and tooltip text used for the button that shows the next media item.
+        /// </summary>
+        public string? NextMediaButtonText
+        {
+            get { return GetValue(NextMediaButtonTextProperty) as string; }
+            set { SetValue(NextMediaButtonTextProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="NextMediaButtonText"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NextMediaButtonTextProperty =
+            PropertyHelper.CreateProperty<string, MediaPopupElementView>(nameof(NextMediaButtonText));
+#endif
 
         /// <summary>
         /// Gets or sets the MediaPopupElement.
