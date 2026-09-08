@@ -19,6 +19,7 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
+using System.Windows.Automation;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -41,6 +42,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is RichTextBox rtb)
             {
                 rtb.Document = HtmlToView.ToFlowDocument(Element.Text, (s,e) =>  PopupViewer.GetPopupViewerParent(s as DependencyObject)?.OnHyperlinkClicked(e.Uri));
+
+                // RichTextBox's default automation peer only surfaces the current line to Narrator on focus
+                // (the same "edit control" behavior as a plain multi-line TextBox), so the full text is set
+                // explicitly as the accessible name to make sure all of it - not just the first line - is exposed.
+                AutomationProperties.SetName(rtb, Element.Text.ToPlainText());
             }
         }
     }
