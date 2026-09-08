@@ -23,11 +23,13 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #if WINUI
 using Microsoft.UI;
 using Microsoft.UI.Text;
+using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Documents;
 using Windows.UI.Text;
-#elif WINDOWS_UWP   
+#elif WINDOWS_UWP
 using Windows.UI;
 using Windows.UI.Text;
+using Windows.UI.Xaml.Automation;
 using Windows.UI.Xaml.Documents;
 #endif
 
@@ -50,6 +52,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 rtb.Content = HtmlToView.ToUIElement(Element.Text, (s, e) => PopupViewer.GetPopupViewerParent(s as DependencyObject)?.OnHyperlinkClicked(e));
                 rtb.Visibility = string.IsNullOrEmpty(Element?.Text) ? Visibility.Collapsed : Visibility.Visible;
+
+                // A ContentControl hosting an arbitrary element tree isn't a text control, so Narrator has
+                // nothing to read from it by default; the full text is set explicitly as its accessible name.
+                AutomationProperties.SetName(rtb, Element.Text.ToPlainText());
             }
         }
     }
