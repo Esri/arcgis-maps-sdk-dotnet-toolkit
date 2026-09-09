@@ -1,7 +1,5 @@
 #if WPF
 
-using Esri.ArcGISRuntime.Location;
-using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
@@ -41,8 +39,6 @@ public partial class OrientedImageryView
 #endif
     {
         base.OnApplyTemplate();
-
-        DataContext = ViewModel;
 
         if (_display != null)
             _display.ImageClicked -= Display_ImageClicked;
@@ -191,19 +187,7 @@ public partial class OrientedImageryView
 
 #endregion Display
 
-#region GeoModel
-    /// <summary>
-    /// Gets or sets the oriented imagery layer associated with this view.
-    /// </summary>
-    /// <remarks>
-    /// This is a thin wrapper over the <see cref="OrientedImageryViewModel.OrientedImageryLayer"/> property.
-    /// </remarks>
-    public OrientedImageryLayer? OrientedImageryLayer
-    {
-        get => ViewModel.OrientedImageryLayer;
-        set { ViewModel.OrientedImageryLayer = value; }
-    }
-
+#region GeoView
     /// <summary>
     /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/> on which marker graphics are displayed.
     /// </summary>
@@ -235,7 +219,7 @@ public partial class OrientedImageryView
             newGeoView.GraphicsOverlays.Add(ViewModel.MarkersOverlay);
         }
     }
-#endregion GeoModel
+#endregion GeoView
 }
 
 #endif
