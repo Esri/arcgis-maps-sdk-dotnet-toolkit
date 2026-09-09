@@ -135,34 +135,10 @@ public partial class OrientedImageryView
 #region Display
     private OrientedImageDisplay? _display;
 
-    private void WireDisplayProperties()
-    {
-        if (_display == null)
-            return;
-
-        _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
-        _display.Markers = ViewModel.Markers;
-        _display.Footprint = ViewModel.SelectedImageFootprint;
-        _display.DisplayBackgroundColor = DisplayBackgroundColor;
-    }
-
-    // This should be overridable, probably as an Action dependency property or something. Or maybe it should be its own event with this as the default handler.
-    private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e)
-    {
-        // Do not add a new marker if there is already one in proximity to the click location
-        if (sender is not OrientedImageDisplay display || e.Marker != null)
-            return;
-
-        try
-        {
-            var location = await display.Footprint!.OrientedImage.ImageToLocationAsync(e.ImagePoint);
-            ViewModel.AddMarkerLocation(location);
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Error converting image point to location: {ex.Message}");
-        }
-    }
+    /// <summary>
+    /// Occurs whenever a user taps on the image display.
+    /// </summary>
+    public event EventHandler<OrientedImageDisplay.ImageClickedEventArgs>? ImageTapped;
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -179,12 +155,24 @@ public partial class OrientedImageryView
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
         PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
 
+    private void WireDisplayProperties()
+    {
+        if (_display == null)
+            return;
+
+        _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
+        _display.Markers = ViewModel.Markers;
+        _display.Footprint = ViewModel.SelectedImageFootprint;
+        _display.DisplayBackgroundColor = DisplayBackgroundColor;
+    }
+
+    private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e) => ImageTapped?.Invoke(this, e);
+
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
         if (_display != null)
             _display.DisplayBackgroundColor = displayBackgroundColor;
     }
-
 #endregion Display
 
 #region GeoView
