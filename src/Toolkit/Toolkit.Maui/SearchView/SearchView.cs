@@ -643,7 +643,8 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 UpdateVisibility();
                 AnnounceSearchItems(
                     SearchViewModel.Suggestions,
-                    Properties.Resources.GetString("SearchViewSuggestionsAvailable"));
+                    Properties.Resources.GetString("SearchViewSuggestionsAvailable"),
+                    PART_SuggestionsView);
                 break;
             case nameof(SearchViewModel.Results):
                 PART_ResultView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Results ?? new List<SearchResult>());
@@ -753,7 +754,8 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         UpdateVisibility();
         AnnounceSearchItems(
             SearchViewModel.Results,
-            Properties.Resources.GetString("SearchViewResultsAvailable"));
+            Properties.Resources.GetString("SearchViewResultsAvailable"),
+            PART_ResultView);
 
         if (_focusResultsWhenAvailable && SearchViewModel.Results != null)
         {
@@ -798,17 +800,21 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
     }
 
-    private void AnnounceSearchItems<T>(IList<T>? items, string availableMessage)
+    private void AnnounceSearchItems<T>(IList<T>? items, string availableMessage, VisualElement? itemsView)
     {
         if (items == null)
         {
             return;
         }
 
-        var announcement = items.Count > 0 ? availableMessage : NoResultMessage;
+        var announcement = items.Count > 0 && itemsView?.IsVisible == true
+            ? availableMessage
+            : items.Count == 0 && PART_ResultLabel?.IsVisible == true
+                ? NoResultMessage
+                : null;
         if (!string.IsNullOrEmpty(announcement))
         {
-            Dispatcher.Dispatch(() => Microsoft.Maui.ApplicationModel.SemanticScreenReader.Default.Announce(announcement));
+            Dispatcher.Dispatch(() => Microsoft.Maui.Accessibility.SemanticScreenReader.Default.Announce(announcement));
         }
     }
 
