@@ -14,9 +14,6 @@
                 <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OrientedImagery/OrientedImagery.Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Define the main OrientedImageryViewModel -->
-            <esri:OrientedImageryViewModel x:Key="MainOrientedImageryVM" />
-
             <!-- Define a data template for a custom toolbar item type -->
             <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIToolbarItem">
                 <Button Click="OpenSelectedImagePopupButton_Click" ToolTip="Open popup for selected image">
@@ -77,7 +74,6 @@
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       ResizeBehavior="PreviousAndNext" />
         <esri:OrientedImageryView x:Name="MainOrientedImageryView"
-                                  ViewModel="{StaticResource MainOrientedImageryVM}"
                                   ItemTemplateSelector="{StaticResource CustomToolbarSelector}"
                                   Grid.Row="1" Grid.Column="2"/>
 
