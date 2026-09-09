@@ -52,6 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
             MainOrientedImageryView.GeoView = _mapView;
             MainOrientedImageryView.ViewModel = _orientedImageryVM;
+            MainOrientedImageryView.ImageTapped += MainOrientedImageryView_ImageTapped;
         }
 
         private void ConfigureToolbar()
@@ -122,6 +123,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 var images = await _oiLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
                 _orientedImageryVM.SetImages(images.ToList(), e.Location);
                 _orientedImageryVM.SelectedImage = images.Count < 1 ? null : images[0];
+            }
+        }
+
+        private async void MainOrientedImageryView_ImageTapped(object? sender, OrientedImageDisplay.ImageClickedEventArgs e)
+        {
+            // Do not add a new marker if there is already one in proximity to the click location
+            if (e.Marker != null)
+                return;
+
+            try
+            {
+                var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
+                _orientedImageryVM.AddMarkerLocation(location);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error converting image point to location: {ex.Message}");
             }
         }
 
