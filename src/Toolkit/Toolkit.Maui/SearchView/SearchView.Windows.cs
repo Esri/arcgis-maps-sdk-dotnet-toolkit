@@ -118,6 +118,7 @@ public partial class SearchView
         if (_nativeSourcesView != null)
         {
             NativeAutomationProperties.SetName(_nativeSourcesView, Properties.Resources.GetString("SearchViewSearchSources"));
+            _nativeSourcesView.SingleSelectionFollowsFocus = false;
             _sourcesViewKeyDownHandler ??= SourcesView_KeyDown;
             _nativeSourcesView.AddHandler(UIElement.KeyDownEvent, _sourcesViewKeyDownHandler, true);
         }
@@ -126,6 +127,7 @@ public partial class SearchView
         {
             NativeAutomationProperties.SetName(_nativeSuggestionsView, Properties.Resources.GetString("SearchViewSearchSuggestions"));
             _nativeSuggestionsView.IsTabStop = false;
+            _nativeSuggestionsView.SingleSelectionFollowsFocus = false;
             _nativeSuggestionsView.ChoosingGroupHeaderContainer += SuggestionsView_ChoosingGroupHeaderContainer;
             _suggestionsViewKeyDownHandler ??= SuggestionsView_KeyDown;
             _nativeSuggestionsView.AddHandler(UIElement.KeyDownEvent, _suggestionsViewKeyDownHandler, true);
@@ -134,6 +136,7 @@ public partial class SearchView
         if (PART_ResultView?.Handler?.PlatformView is ListViewBase resultView)
         {
             NativeAutomationProperties.SetName(resultView, Properties.Resources.GetString("SearchViewSearchResults"));
+            resultView.SingleSelectionFollowsFocus = false;
         }
     }
 
