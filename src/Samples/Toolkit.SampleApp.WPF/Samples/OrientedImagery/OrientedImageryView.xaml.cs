@@ -3,6 +3,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
@@ -24,6 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private const string SceneBasemap = "https://runtime.maps.arcgis.com/home/item.html?id=0560e29930dc4d5ebeb58c635c0909c9";
         private const string ElevationUrl = "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer";
 
+        private OrientedImageryViewModel _orientedImageryVM;
         private OrientedImageryLayer? _oiLayer;
 
         private MapView _mapView;
@@ -36,6 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         public OrientedImageryView()
         {
             InitializeComponent();
+
             ConfigureToolbar();
 
             _mapView = new MapView() { Map = new Map(new Uri(MapBasemap)) };
@@ -43,9 +46,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _usingMapView = true;
             _mapView.GeoViewTapped += CurrentGeoView_GeoViewTapped;
             GeoViewContainer.Children.Add(_mapView);
-            MainOrientedImageryView.GeoView = _mapView;
 
+            _orientedImageryVM = new OrientedImageryViewModel();
             _elevationSource = new ArcGISTiledElevationSource(new Uri(ElevationUrl));
+
+            MainOrientedImageryView.GeoView = _mapView;
+            MainOrientedImageryView.ViewModel = _orientedImageryVM;
         }
 
         private void ConfigureToolbar()
@@ -78,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                     sceneView.Scene.OperationalLayers.Add(_oiLayer);
                 }
 
-                MainOrientedImageryView.OrientedImageryLayer = _oiLayer;
+                _orientedImageryVM.OrientedImageryLayer = _oiLayer;
                 if (_oiLayer?.FullExtent != null)
                     _currentGeoView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
             }
@@ -99,29 +105,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 return;
 
             // In this case we are choosing to interpret OrientedImageryViewModel.AllowAddingMarkers as mutually exclusive with image searching.
-            if (MainOrientedImageryView.ViewModel.AllowAddingMarkers)
+            if (_orientedImageryVM.AllowAddingMarkers)
             {
-                MainOrientedImageryView.ViewModel.AddMarkerLocation(e.Location);
+                _orientedImageryVM.AddMarkerLocation(e.Location);
                 return;
             }
 
             var identifyResult = await _currentGeoView.IdentifyLayerAsync(_oiLayer, e.Position, 0, false);
             if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
             {
-                MainOrientedImageryView.ViewModel.SelectedImage = await _oiLayer.FetchImageForFeatureAsync(feature);
+                _orientedImageryVM.SelectedImage = await _oiLayer.FetchImageForFeatureAsync(feature);
             }
             else
             {
                 var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
                 var images = await _oiLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
-                MainOrientedImageryView.ViewModel.SetImages(images.ToList(), e.Location);
-                MainOrientedImageryView.ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
+                _orientedImageryVM.SetImages(images.ToList(), e.Location);
+                _orientedImageryVM.SelectedImage = images.Count < 1 ? null : images[0];
             }
         }
 
         private void OpenSelectedImagePopupButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedImage = MainOrientedImageryView.ViewModel.SelectedImage;
+            var selectedImage = _orientedImageryVM.SelectedImage;
             if (selectedImage == null)
                 return;
 
