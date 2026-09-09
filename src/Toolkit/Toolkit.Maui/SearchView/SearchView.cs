@@ -16,7 +16,6 @@
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -62,9 +61,9 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     partial void OnSourceListOpened();
 
-    partial void OnSourceSelected();
-
     partial void OnResultFocusRequested();
+
+    partial void UpdateSourceSelectAutomationState();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SearchView"/> class.
@@ -255,7 +254,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
-        UpdateSourceButtonAccessibility();
         ConnectKeyboardNavigation();
     }
 
@@ -290,8 +288,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
         _sourceSelectToggled = false;
         UpdateVisibility();
-        UpdateSourceButtonAccessibility();
-        OnSourceSelected();
     }
 
     private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => _ = RepeatSearchAndFocusResults();
@@ -400,20 +396,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             OnResultFocusRequested();
         }
-    }
-
-    private void UpdateSourceButtonAccessibility()
-    {
-        if (PART_SourceSelectButton == null)
-        {
-            return;
-        }
-
-        var prompt = Properties.Resources.GetString("SearchViewSelectSearchSource");
-        var selectedSource = SearchViewModel?.ActiveSource?.DisplayName ?? AllSourcesSelectText;
-        var selectedFormat = Properties.Resources.GetString("SearchViewSelectedAutomationName") ?? "{0}, selected";
-        var selectedDescription = string.Format(CultureInfo.CurrentCulture, selectedFormat, selectedSource);
-        PART_SourceSelectButton.SetValue(SemanticProperties.DescriptionProperty, $"{prompt}. {selectedDescription}");
     }
 
     private void AddResultToGeoView(SearchResult result)
@@ -630,9 +612,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
         switch (e.PropertyName)
         {
-            case nameof(SearchViewModel.ActiveSource):
-                UpdateSourceButtonAccessibility();
-                break;
             case nameof(SearchViewModel.ActivePlaceholder):
                 PART_Entry?.SetValue(Entry.PlaceholderProperty, SearchViewModel.ActivePlaceholder);
                 UpdateVisibility();
@@ -662,6 +641,9 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 }
 
                 UpdateVisibility();
+                AnnounceSearchItems(
+                    SearchViewModel.Suggestions,
+                    Properties.Resources.GetString("SearchViewSuggestionsAvailable"));
                 break;
             case nameof(SearchViewModel.Results):
                 PART_ResultView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Results ?? new List<SearchResult>());
@@ -769,6 +751,9 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
+        AnnounceSearchItems(
+            SearchViewModel.Results,
+            Properties.Resources.GetString("SearchViewResultsAvailable"));
 
         if (_focusResultsWhenAvailable && SearchViewModel.Results != null)
         {
@@ -813,6 +798,20 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
     }
 
+    private void AnnounceSearchItems<T>(IList<T>? items, string availableMessage)
+    {
+        if (items == null)
+        {
+            return;
+        }
+
+        var announcement = items.Count > 0 ? availableMessage : NoResultMessage;
+        if (!string.IsNullOrEmpty(announcement))
+        {
+            Dispatcher.Dispatch(() => Microsoft.Maui.ApplicationModel.SemanticScreenReader.Default.Announce(announcement));
+        }
+    }
+
     private void UpdateVisibility()
     {
         PART_SuggestionsView?.SetValue(View.IsVisibleProperty, SuggestionsViewVisibility);
@@ -823,6 +822,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         PART_RepeatButton?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
         PART_RepeatButtonContainer?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
         PART_SourcesView?.SetValue(View.IsVisibleProperty, SourcePopupVisibility);
+        UpdateSourceSelectAutomationState();
     }
 
     #endregion events

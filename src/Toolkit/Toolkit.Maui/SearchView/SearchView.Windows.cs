@@ -1,4 +1,5 @@
 #if WINDOWS
+using System.Linq;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -16,29 +17,26 @@ public partial class SearchView
 {
     private NativeButton? _nativeSourceSelectButton;
     private NativeButton? _nativeSearchButton;
-    private TextBox? _nativeEntry;
     private ListViewBase? _nativeSourcesView;
     private ListViewBase? _nativeSuggestionsView;
-    private ListViewBase? _nativeResultView;
     private UIElement? _focusTargetAfterSuggestions;
     private ListViewItem? _focusSourceSuggestion;
+    private KeyEventHandler? _sourcesViewKeyDownHandler;
     private KeyEventHandler? _suggestionsViewKeyDownHandler;
     private PointerEventHandler? _sourceSelectButtonPointerPressedHandler;
     private bool _sourceSelectOpenedByPointer;
-    private bool _sourceSelectionByKeyboard;
 
     partial void ConnectKeyboardNavigation()
     {
-        SubscribeToHandlerChanges();
+        SetHandlerChangedSubscriptions(true);
         WireNativeControls();
     }
 
     partial void DisconnectKeyboardNavigation()
     {
-        UnsubscribeFromHandlerChanges();
+        SetHandlerChangedSubscriptions(false);
         UnwireNativeControls();
         _sourceSelectOpenedByPointer = false;
-        _sourceSelectionByKeyboard = false;
     }
 
     partial void OnSourceListOpened()
@@ -52,82 +50,45 @@ public partial class SearchView
         _ = _nativeSourceSelectButton?.DispatcherQueue.TryEnqueue(() => FocusFirstItem(_nativeSourcesView));
     }
 
-    partial void OnSourceSelected()
+    partial void OnResultFocusRequested() => Dispatcher.Dispatch(() =>
+        FocusFirstItem(PART_ResultView?.Handler?.PlatformView as ListViewBase));
+
+    partial void UpdateSourceSelectAutomationState()
     {
-        if (!_sourceSelectionByKeyboard)
+        if (_nativeSourceSelectButton != null)
         {
-            return;
-        }
-
-        _sourceSelectionByKeyboard = false;
-        Dispatcher.Dispatch(() => _nativeEntry?.Focus(FocusState.Keyboard));
-    }
-
-    partial void OnResultFocusRequested() => Dispatcher.Dispatch(() => FocusFirstItem(_nativeResultView));
-
-    private void SubscribeToHandlerChanges()
-    {
-        if (PART_SourceSelectButton != null)
-        {
-            PART_SourceSelectButton.HandlerChanged += TemplatePart_HandlerChanged;
-        }
-
-        if (PART_SearchButton != null)
-        {
-            PART_SearchButton.HandlerChanged += TemplatePart_HandlerChanged;
-        }
-
-        if (PART_Entry != null)
-        {
-            PART_Entry.HandlerChanged += TemplatePart_HandlerChanged;
-        }
-
-        if (PART_SourcesView != null)
-        {
-            PART_SourcesView.HandlerChanged += TemplatePart_HandlerChanged;
-        }
-
-        if (PART_SuggestionsView != null)
-        {
-            PART_SuggestionsView.HandlerChanged += TemplatePart_HandlerChanged;
-        }
-
-        if (PART_ResultView != null)
-        {
-            PART_ResultView.HandlerChanged += TemplatePart_HandlerChanged;
+            var name = Properties.Resources.GetString("SearchViewSelectSearchSource");
+            var state = Properties.Resources.GetString(SourcePopupVisibility
+                ? "SearchViewExpandedAutomationState"
+                : "SearchViewCollapsedAutomationState");
+            NativeAutomationProperties.SetName(_nativeSourceSelectButton, $"{name}, {state}");
         }
     }
 
-    private void UnsubscribeFromHandlerChanges()
+    private void SetHandlerChangedSubscriptions(bool subscribe)
     {
-        if (PART_SourceSelectButton != null)
+        foreach (var part in new VisualElement?[]
         {
-            PART_SourceSelectButton.HandlerChanged -= TemplatePart_HandlerChanged;
-        }
+            PART_SourceSelectButton,
+            PART_SearchButton,
+            PART_SourcesView,
+            PART_SuggestionsView,
+            PART_ResultView,
+        })
+        {
+            if (part == null)
+            {
+                continue;
+            }
 
-        if (PART_SearchButton != null)
-        {
-            PART_SearchButton.HandlerChanged -= TemplatePart_HandlerChanged;
-        }
-
-        if (PART_Entry != null)
-        {
-            PART_Entry.HandlerChanged -= TemplatePart_HandlerChanged;
-        }
-
-        if (PART_SourcesView != null)
-        {
-            PART_SourcesView.HandlerChanged -= TemplatePart_HandlerChanged;
-        }
-
-        if (PART_SuggestionsView != null)
-        {
-            PART_SuggestionsView.HandlerChanged -= TemplatePart_HandlerChanged;
-        }
-
-        if (PART_ResultView != null)
-        {
-            PART_ResultView.HandlerChanged -= TemplatePart_HandlerChanged;
+            if (subscribe)
+            {
+                part.HandlerChanged += TemplatePart_HandlerChanged;
+            }
+            else
+            {
+                part.HandlerChanged -= TemplatePart_HandlerChanged;
+            }
         }
     }
 
@@ -139,15 +100,14 @@ public partial class SearchView
 
         _nativeSourceSelectButton = PART_SourceSelectButton?.Handler?.PlatformView as NativeButton;
         _nativeSearchButton = PART_SearchButton?.Handler?.PlatformView as NativeButton;
-        _nativeEntry = PART_Entry?.Handler?.PlatformView as TextBox;
         _nativeSourcesView = PART_SourcesView?.Handler?.PlatformView as ListViewBase;
         _nativeSuggestionsView = PART_SuggestionsView?.Handler?.PlatformView as ListViewBase;
-        _nativeResultView = PART_ResultView?.Handler?.PlatformView as ListViewBase;
 
         if (_nativeSourceSelectButton != null)
         {
             _sourceSelectButtonPointerPressedHandler ??= SourceSelectButton_PointerPressed;
             _nativeSourceSelectButton.AddHandler(UIElement.PointerPressedEvent, _sourceSelectButtonPointerPressedHandler, true);
+            UpdateSourceSelectAutomationState();
         }
 
         if (_nativeSearchButton != null)
@@ -158,21 +118,22 @@ public partial class SearchView
         if (_nativeSourcesView != null)
         {
             NativeAutomationProperties.SetName(_nativeSourcesView, Properties.Resources.GetString("SearchViewSearchSources"));
-            _nativeSourcesView.KeyDown += SourcesView_KeyDown;
-            _nativeSourcesView.PointerPressed += SourcesView_PointerPressed;
+            _sourcesViewKeyDownHandler ??= SourcesView_KeyDown;
+            _nativeSourcesView.AddHandler(UIElement.KeyDownEvent, _sourcesViewKeyDownHandler, true);
         }
 
         if (_nativeSuggestionsView != null)
         {
             NativeAutomationProperties.SetName(_nativeSuggestionsView, Properties.Resources.GetString("SearchViewSearchSuggestions"));
             _nativeSuggestionsView.IsTabStop = false;
+            _nativeSuggestionsView.ChoosingGroupHeaderContainer += SuggestionsView_ChoosingGroupHeaderContainer;
             _suggestionsViewKeyDownHandler ??= SuggestionsView_KeyDown;
             _nativeSuggestionsView.AddHandler(UIElement.KeyDownEvent, _suggestionsViewKeyDownHandler, true);
         }
 
-        if (_nativeResultView != null)
+        if (PART_ResultView?.Handler?.PlatformView is ListViewBase resultView)
         {
-            NativeAutomationProperties.SetName(_nativeResultView, Properties.Resources.GetString("SearchViewSearchResults"));
+            NativeAutomationProperties.SetName(resultView, Properties.Resources.GetString("SearchViewSearchResults"));
         }
     }
 
@@ -195,12 +156,15 @@ public partial class SearchView
 
         if (_nativeSourcesView != null)
         {
-            _nativeSourcesView.KeyDown -= SourcesView_KeyDown;
-            _nativeSourcesView.PointerPressed -= SourcesView_PointerPressed;
+            if (_sourcesViewKeyDownHandler != null)
+            {
+                _nativeSourcesView.RemoveHandler(UIElement.KeyDownEvent, _sourcesViewKeyDownHandler);
+            }
         }
 
         if (_nativeSuggestionsView != null)
         {
+            _nativeSuggestionsView.ChoosingGroupHeaderContainer -= SuggestionsView_ChoosingGroupHeaderContainer;
             if (_suggestionsViewKeyDownHandler != null)
             {
                 _nativeSuggestionsView.RemoveHandler(UIElement.KeyDownEvent, _suggestionsViewKeyDownHandler);
@@ -209,10 +173,8 @@ public partial class SearchView
 
         _nativeSourceSelectButton = null;
         _nativeSearchButton = null;
-        _nativeEntry = null;
         _nativeSourcesView = null;
         _nativeSuggestionsView = null;
-        _nativeResultView = null;
     }
 
     private void SourceSelectButton_PointerPressed(object sender, PointerRoutedEventArgs e) =>
@@ -236,31 +198,48 @@ public partial class SearchView
 
         if (e.Key == VirtualKey.Tab)
         {
-            e.Handled = CloseSourcesAndFocus(IsShiftPressed() ? _nativeSourceSelectButton : _nativeEntry);
+            e.Handled = CloseSourcesAndFocus(IsShiftPressed() ? _nativeSourceSelectButton : GetNativeEntry());
             return;
         }
 
-        _sourceSelectionByKeyboard = true;
         if (e.Key is VirtualKey.Enter or VirtualKey.Space)
         {
-            _ = _nativeSourcesView?.DispatcherQueue.TryEnqueue(() =>
-            {
-                if (_sourceSelectionByKeyboard)
-                {
-                    CloseSourcesAndFocus(_nativeEntry);
-                }
-            });
+            e.Handled = true;
+            _ = _nativeSourcesView?.DispatcherQueue.TryEnqueue(() => CloseSourcesAndFocus(GetNativeEntry()));
         }
     }
 
-    private void SourcesView_PointerPressed(object sender, PointerRoutedEventArgs e) => _sourceSelectionByKeyboard = false;
+    private TextBox? GetNativeEntry() => PART_Entry?.Handler?.PlatformView as TextBox;
 
     private bool CloseSourcesAndFocus(NativeControl? target)
     {
         _sourceSelectToggled = false;
         UpdateVisibility();
-        _sourceSelectionByKeyboard = false;
         return target?.Focus(FocusState.Keyboard) == true;
+    }
+
+    private void SuggestionsView_ChoosingGroupHeaderContainer(ListViewBase sender, ChoosingGroupHeaderContainerEventArgs args)
+    {
+        args.GroupHeaderContainer ??= new ListViewHeaderItem();
+        args.GroupHeaderContainer.IsTabStop = false;
+
+        if (PART_SuggestionsView?.ItemsSource?.Cast<object>().ElementAtOrDefault(args.GroupIndex) is IGrouping<ISearchSource, SearchSuggestion> group &&
+            !string.IsNullOrEmpty(group.Key?.DisplayName))
+        {
+            var header = args.GroupHeaderContainer;
+            NativeAutomationProperties.SetName(header, group.Key.DisplayName);
+            _ = sender.DispatcherQueue.TryEnqueue(() => SetSuggestionGroupAccessibilityView(sender, args.Group));
+        }
+    }
+
+    private static void SetSuggestionGroupAccessibilityView(ListViewBase suggestionsView, object group)
+    {
+        if (suggestionsView.ContainerFromItem(group) is GroupItem groupItem)
+        {
+            NativeAutomationProperties.SetAccessibilityView(
+                groupItem,
+                Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+        }
     }
 
     private void SuggestionsView_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -288,7 +267,7 @@ public partial class SearchView
 
     private bool MoveFocusPastSuggestions(ListViewItem suggestionItem)
     {
-        if (_nativeSuggestionsView == null)
+        if (_nativeSuggestionsView?.XamlRoot?.Content is not FrameworkElement searchRoot || !searchRoot.IsLoaded)
         {
             return false;
         }
@@ -301,7 +280,10 @@ public partial class SearchView
 
         try
         {
-            var moved = FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
+            var moved = _nativeSearchButton?.Focus(FocusState.Programmatic) == true &&
+                FocusManager.TryMoveFocus(
+                    FocusNavigationDirection.Next,
+                    new FindNextElementOptions { SearchRoot = searchRoot });
             ClearFocusTargetAfterSuggestions();
             if (moved && FocusManager.GetFocusedElement(_nativeSuggestionsView.XamlRoot) is UIElement focusTarget)
             {
