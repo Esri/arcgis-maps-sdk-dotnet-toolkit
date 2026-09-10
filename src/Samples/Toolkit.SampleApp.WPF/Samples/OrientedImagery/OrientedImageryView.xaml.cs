@@ -35,11 +35,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
         private ElevationSource _elevationSource;
 
+        private bool _usingAlternateToolbarStyling = false;
+
         public OrientedImageryView()
         {
             InitializeComponent();
-
-            ConfigureToolbar();
 
             _mapView = new MapView() { Map = new Map(new Uri(MapBasemap)) };
             _sceneView = new SceneView() { Scene = new Scene(new Uri(SceneBasemap)) };
@@ -48,18 +48,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             GeoViewContainer.Children.Add(_mapView);
 
             _orientedImageryVM = new OrientedImageryViewModel();
+            _orientedImageryVM.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
+
             _elevationSource = new ArcGISTiledElevationSource(new Uri(ElevationUrl));
 
             MainOrientedImageryView.GeoView = _mapView;
             MainOrientedImageryView.ViewModel = _orientedImageryVM;
             MainOrientedImageryView.ImageTapped += MainOrientedImageryView_ImageTapped;
-        }
-
-        private void ConfigureToolbar()
-        {
-            var toolbarItems = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryView.GetDefaultToolbarItems();
-            toolbarItems.Add(new ExampleOIToolbarItem());
-            MainOrientedImageryView.ItemsSource = toolbarItems;
         }
 
         private async Task ApplyLayer(Uri layerUri)
@@ -230,6 +225,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             }
 
             _scenePropertiesState = (_scenePropertiesState + 1) % 4;
+        }
+
+        private void UpdateToolbarButton_Click(object sender, RoutedEventArgs e)
+        {
+            _usingAlternateToolbarStyling = !_usingAlternateToolbarStyling;
+            if (_usingAlternateToolbarStyling)
+            {
+                _orientedImageryVM.ToolbarItems.RemoveAt(_orientedImageryVM.ToolbarItems.Count - 1);
+                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("AlternateToolbarSelector");
+            }
+            else
+            {
+                _orientedImageryVM.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
+                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("CustomToolbarSelector");
+            }
         }
     }
 }
