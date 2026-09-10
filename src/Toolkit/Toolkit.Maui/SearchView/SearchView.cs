@@ -751,6 +751,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             return;
         }
 
+        await Task.Yield();
         UpdateVisibility();
         AnnounceSearchItems(
             SearchViewModel.Results,
