@@ -281,6 +281,16 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             return;
         }
 
+        SelectSource(selectedSource);
+    }
+
+    private void SelectSource(string selectedSource)
+    {
+        if (SearchViewModel == null)
+        {
+            return;
+        }
+
         if (selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
         {
             SearchViewModel.ActiveSource = null;
