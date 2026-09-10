@@ -38,27 +38,17 @@ public partial class OrientedImageryView
         base.OnApplyTemplate();
 
         if (_display != null)
-            _display.ImageClicked -= Display_ImageClicked;
+            UnwireDisplay(_display);
         if (_toolbarContainer != null)
-        {
-            _toolbarContainer.ItemTemplateSelector = null;
-            _toolbarContainer.ItemsSource = null;
-        }
+            UnwireToolbarContainer(_toolbarContainer);
 
         _display = GetTemplateChild(ImageDisplayName) as OrientedImageDisplay;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
 
-        if (_display == null)
-            return;
+        if (_display != null)
+            WireDisplay(_display);
         if (_toolbarContainer != null)
-        {
-            _toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
-            _toolbarContainer.Items.Clear();
-            _toolbarContainer.ItemsSource = ViewModel?.ToolbarItems;
-        }
-
-    _display.ImageClicked += Display_ImageClicked;
-        WireDisplayProperties();
+            WireToolbarContainer(_toolbarContainer);
     }
 
 #region ViewModel
@@ -103,7 +93,8 @@ public partial class OrientedImageryView
             GeoView.GraphicsOverlays.Add(newValue.MarkersOverlay);
         }
 
-        WireDisplayProperties();
+        if (_display != null)
+            WireDisplayToViewModel(_display);
     }
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -149,15 +140,27 @@ public partial class OrientedImageryView
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
         PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
 
-    private void WireDisplayProperties()
+    private void WireDisplay(OrientedImageDisplay display)
     {
-        if (_display == null)
-            return;
+        display.ImageClicked += Display_ImageClicked;
+        display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
+        WireDisplayToViewModel(display);
+    }
 
-        _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
-        _display.Markers = ViewModel.Markers;
-        _display.Footprint = ViewModel.SelectedImageFootprint;
-        _display.DisplayBackgroundColor = DisplayBackgroundColor;
+    private void WireDisplayToViewModel(OrientedImageDisplay display)
+    {
+        display.Markers = ViewModel.Markers;
+        display.Footprint = ViewModel.SelectedImageFootprint;
+        display.DisplayBackgroundColor = DisplayBackgroundColor;
+    }
+
+    private void UnwireDisplay(OrientedImageDisplay display)
+    {
+        display.ImageClicked -= Display_ImageClicked;
+        display.ClearValue(OrientedImageDisplay.AutoUpdateFootprintProperty);
+        display.ClearValue(OrientedImageDisplay.MarkersProperty);
+        display.ClearValue(OrientedImageDisplay.FootprintProperty);
+        display.ClearValue(OrientedImageDisplay.DisplayBackgroundColorProperty);
     }
 
     private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e) => ImageTapped?.Invoke(this, e);
@@ -242,6 +245,19 @@ public partial class OrientedImageryView
 
         if (_toolbarContainer != null)
             _toolbarContainer.ItemTemplateSelector = newSelector;
+    }
+
+    private void WireToolbarContainer(ItemsControl toolbarContainer)
+    {
+        toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
+        toolbarContainer.Items.Clear();
+        toolbarContainer.ItemsSource = ViewModel?.ToolbarItems;
+    }
+
+    private void UnwireToolbarContainer(ItemsControl toolbarContainer)
+    {
+        toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
+        toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
     }
 #endregion Toolbar
 }
