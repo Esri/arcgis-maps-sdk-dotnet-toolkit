@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -119,6 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                                     img.Height = double.NaN;
                                 };
                             }
+                            System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
 #endif
                             img.Source = source;
                         }
@@ -216,7 +217,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
                 var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi, Style = style });
                 var source = await chart.Image.ToImageSourceAsync();
-                return new Image() { Source = source };
+                var img = new Image() { Source = source };
+#if WPF
+                System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
+#endif
+                return img;
             }
             catch { return null; }
         }
