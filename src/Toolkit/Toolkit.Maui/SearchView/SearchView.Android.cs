@@ -57,7 +57,7 @@ public partial class SearchView
                 list.AddOnChildAttachStateChangeListener(_listItemKeyListener!);
                 for (var index = 0; index < list.ChildCount; index++)
                 {
-                    SetKeyHandler(list.GetChildAt(index), true);
+                    SetItemHandlers(list.GetChildAt(index), true);
                 }
             }
         }
@@ -75,7 +75,7 @@ public partial class SearchView
                 }
                 for (var index = 0; index < list.ChildCount; index++)
                 {
-                    SetKeyHandler(list.GetChildAt(index), false);
+                    SetItemHandlers(list.GetChildAt(index), false);
                 }
             }
         }
@@ -140,6 +140,8 @@ public partial class SearchView
             return;
         }
 
+        // Key handlers are attached to every item descendant so list navigation works when a child has focus.
+        // Do not treat Enter, Space, or Tab on an interactive custom-template control as a list-item action.
         if (!ReferenceEquals(focusedView, focusedItem.ItemView) && focusedView.Clickable)
         {
             return;
@@ -150,25 +152,7 @@ public partial class SearchView
             e.Handled = true;
             if (e.Event.Action == KeyEventActions.Up)
             {
-                if (ReferenceEquals(listView, _nativeSourcesView) &&
-                    PART_SourcesView?.ItemsSource is IList<string> sources &&
-                    focusedItem.BindingAdapterPosition is int position &&
-                    position >= 0 && position < sources.Count)
-                {
-                    var selectedSource = sources[position];
-                    if (Equals(PART_SourcesView.SelectedItem, selectedSource))
-                    {
-                        SelectSource(selectedSource);
-                    }
-                    else
-                    {
-                        focusedItem.ItemView.PerformClick();
-                    }
-                }
-                else
-                {
-                    focusedItem.ItemView.PerformClick();
-                }
+                focusedItem.ItemView.PerformClick();
             }
 
             return;
@@ -195,6 +179,44 @@ public partial class SearchView
                     position,
                     e.KeyCode == Keycode.DpadDown ? 1 : -1);
             }
+        }
+    }
+
+    private void SetItemHandlers(NativeView? itemView, bool attach)
+    {
+        if (itemView == null)
+        {
+            return;
+        }
+
+        SetKeyHandler(itemView, attach);
+        itemView.Click -= SourceItem_Click;
+        if (attach && ReferenceEquals(itemView.Parent, _nativeSourcesView))
+        {
+            itemView.Click += SourceItem_Click;
+        }
+    }
+
+    private void SourceItem_Click(object? sender, EventArgs e)
+    {
+        if (sender is not NativeView itemView ||
+            !_sourceSelectToggled ||
+            PART_SourcesView?.ItemsSource is not IList<string> sources ||
+            _nativeSourcesView?.FindContainingViewHolder(itemView)?.BindingAdapterPosition is not int position ||
+            position < 0 || position >= sources.Count)
+        {
+            return;
+        }
+
+        var selectedSource = sources[position];
+        if (Equals(PART_SourcesView.SelectedItem, selectedSource))
+        {
+            // Activating the selected source does not raise SelectionChanged, so complete it explicitly.
+            SelectSource(selectedSource);
+        }
+        else
+        {
+            PART_SourcesView.SelectedItem = selectedSource;
         }
     }
 
@@ -288,33 +310,29 @@ public partial class SearchView
 
         public ListItemKeyListener(SearchView searchView) => _searchView = searchView;
 
-        public void OnChildViewAttachedToWindow(NativeView view) => _searchView.SetKeyHandler(view, true);
+        public void OnChildViewAttachedToWindow(NativeView view) => _searchView.SetItemHandlers(view, true);
 
-        public void OnChildViewDetachedFromWindow(NativeView view) => _searchView.SetKeyHandler(view, false);
+        public void OnChildViewDetachedFromWindow(NativeView view) => _searchView.SetItemHandlers(view, false);
     }
 
     private static void FocusListItem(RecyclerView listView, int currentPosition, int direction)
     {
-        var adapter = listView.GetAdapter();
-        for (var position = currentPosition + direction;
-            position >= 0 && position < (adapter?.ItemCount ?? 0);
-            position += direction)
+        var position = currentPosition + direction;
+        if (position >= 0 && position < (listView.GetAdapter()?.ItemCount ?? 0))
         {
             listView.ScrollToPosition(position);
-            var targetPosition = position;
             listView.Post(() =>
             {
-                var item = listView.FindViewHolderForAdapterPosition(targetPosition)?.ItemView;
+                var item = listView.FindViewHolderForAdapterPosition(position)?.ItemView;
                 if (item?.Focusable == true)
                 {
                     item.RequestFocus();
                 }
                 else
                 {
-                    FocusListItem(listView, targetPosition, direction);
+                    FocusListItem(listView, position, direction);
                 }
             });
-            return;
         }
     }
 
