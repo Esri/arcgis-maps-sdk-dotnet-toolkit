@@ -47,6 +47,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(16, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
+        ToolbarItems = GetDefaultToolbarItems();
+        ToolbarItems.CollectionChanged += ToolbarItems_CollectionChanged;
+
         SelectNextImageCommand = new Command(
             execute: () => SelectNextImage(),
             canExecute: () => _images.Count > 0 && (SelectedImage == null || _images.IndexOf(SelectedImage) < _images.Count - 1));
@@ -576,6 +579,44 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         public int ZIndex = zIndex;
     }
 #endregion Markers
+
+#region ToolbarItems
+    /// <summary>
+    /// The collection of toolbar items to be displayed on the containing <see cref="OrientedImageryView"/>.
+    /// </summary>
+    /// <remarks>
+    /// Each toolbar items is an <see cref="OrientedImageryToolbarItemBase"/> object with a reference to the containing <see cref="OrientedImageryViewModel"/>.
+    /// The list is initially populated with a set of default toolbar items for the base control.
+    /// </remarks>
+    public ObservableCollection<OrientedImageryToolbarItemBase> ToolbarItems { get; private set; }
+
+    /// <summary>
+    /// Gets the default toolbar items for a <see cref="OrientedImageryViewModel"/>.
+    /// </summary>
+    private static ObservableCollection<OrientedImageryToolbarItemBase> GetDefaultToolbarItems()
+    {
+        var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<MarkerSymbol>()
+        {
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Purple, 10),
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Yellow, 10),
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 10)
+        });
+        return [new ShowSelectedFootprintVM(), new ShowUnselectedFootprintsVM(), new ShowCameraMarkersVM(), new AllowAddingMarkersVM(), markerSymbolPickerVM, new ClearMarkersVM()];
+    }
+
+    private void ToolbarItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        foreach (var removedItem in e.OldItems?.OfType<OrientedImageryToolbarItemBase>() ?? [])
+        {
+            removedItem.ViewModel = null;
+        }
+
+        foreach (var newItem in ToolbarItems)
+        {
+            newItem.ViewModel = this;
+        }
+    }
+#endregion ToolbarItems
 
 #region INotifyPropertyChanged
     /// <inheritdoc/>
