@@ -15,12 +15,12 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Define a data template for a custom toolbar item type -->
-            <DataTemplate x:Key="DemoOilToolbarControlTemplate" DataType="local:ExampleOIToolbarItem">
+            <DataTemplate x:Key="PopupToolbarItemTemplate" DataType="{x:Type local:OrientedImageryPopupToolbarItem}">
                 <Button Click="OpenSelectedImagePopupButton_Click" ToolTip="Open popup for selected image">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding MainViewModel.SelectedImage}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding ViewModel.SelectedImage}" Value="{x:Null}">
                                     <Setter Property="IsEnabled" Value="False" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -36,7 +36,17 @@
 
             <!-- Register the toolbar data template with a selector -->
             <esri:OrientedImageryViewTemplateSelector x:Key="CustomToolbarSelector">
-                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:ExampleOIToolbarItem}" Template="{StaticResource DemoOilToolbarControlTemplate}" />
+                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:OrientedImageryPopupToolbarItem}" Template="{StaticResource PopupToolbarItemTemplate}" />
+            </esri:OrientedImageryViewTemplateSelector>
+
+            <!-- Implement a second selector that overrides an existing toolbar item style -->
+            <DataTemplate x:Key="ShowUnselectedFootprintsToolbarItemTemplate" DataType="{x:Type esri:ShowUnselectedFootprintsVM}">
+                <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding ViewModel.ShowUnselectedFootprints}" ToolTip="Modified item style" Content="Override" />
+            </DataTemplate>
+
+            <esri:OrientedImageryViewTemplateSelector x:Key="AlternateToolbarSelector">
+                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:OrientedImageryPopupToolbarItem}" Template="{StaticResource PopupToolbarItemTemplate}" />
+                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type esri:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarItemTemplate}" />
             </esri:OrientedImageryViewTemplateSelector>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -68,13 +78,14 @@
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Button x:Name="ToggleElevationSurfaceButton" Content="Toggle elevation surface (3D only)" Click="ToggleElevationSurfaceButton_Click" />
                 <Button x:Name="ScenePropertiesButton" Content="Update scene properties" Click="ScenePropertiesButton_Click" />
+                <Button x:Name="UpdateToolbarButton" Content="Update toolbar" Click="UpdateToolbarButton_Click" />
             </StackPanel>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.Column="1" Width="5"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       ResizeBehavior="PreviousAndNext" />
         <esri:OrientedImageryView x:Name="MainOrientedImageryView"
-                                  ItemTemplateSelector="{StaticResource CustomToolbarSelector}"
+                                  ToolbarItemTemplateSelector="{StaticResource CustomToolbarSelector}"
                                   Grid.Row="1" Grid.Column="2"/>
 
         <Grid x:Name="SelectedImagePopupBackground"
