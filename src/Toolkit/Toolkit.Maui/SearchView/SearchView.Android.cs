@@ -10,10 +10,12 @@ public partial class SearchView
     private RecyclerView? _nativeSourcesView;
     private RecyclerView? _nativeSuggestionsView;
     private RecyclerView? _nativeResultView;
-    private readonly ListItemKeyListener _listItemKeyListener = new();
+    private ListItemKeyListener? _listItemKeyListener;
 
     partial void ConnectKeyboardNavigation()
     {
+        _listItemKeyListener ??= new(this);
+
         foreach (var list in new[] { PART_SourcesView, PART_SuggestionsView, PART_ResultView })
         {
             if (list != null)
@@ -52,7 +54,7 @@ public partial class SearchView
         {
             if (list != null)
             {
-                list.AddOnChildAttachStateChangeListener(_listItemKeyListener);
+                list.AddOnChildAttachStateChangeListener(_listItemKeyListener!);
                 for (var index = 0; index < list.ChildCount; index++)
                 {
                     SetKeyHandler(list.GetChildAt(index), true);
@@ -67,7 +69,10 @@ public partial class SearchView
         {
             if (list != null)
             {
-                list.RemoveOnChildAttachStateChangeListener(_listItemKeyListener);
+                if (_listItemKeyListener != null)
+                {
+                    list.RemoveOnChildAttachStateChangeListener(_listItemKeyListener);
+                }
                 for (var index = 0; index < list.ChildCount; index++)
                 {
                     SetKeyHandler(list.GetChildAt(index), false);
@@ -126,11 +131,16 @@ public partial class SearchView
         recyclerView.Post(() => recyclerView.FindViewHolderForAdapterPosition(0)?.ItemView.RequestFocus());
     }
 
-    private static void ListItem_KeyPress(object? sender, NativeView.KeyEventArgs e)
+    private void ListItem_KeyPress(object? sender, NativeView.KeyEventArgs e)
     {
         if (sender is not NativeView focusedView ||
             FindParentList(focusedView) is not RecyclerView listView ||
             listView.FindContainingViewHolder(focusedView) is not RecyclerView.ViewHolder focusedItem)
+        {
+            return;
+        }
+
+        if (!ReferenceEquals(focusedView, focusedItem.ItemView) && focusedView.Clickable)
         {
             return;
         }
@@ -140,7 +150,25 @@ public partial class SearchView
             e.Handled = true;
             if (e.Event.Action == KeyEventActions.Up)
             {
-                focusedItem.ItemView.PerformClick();
+                if (ReferenceEquals(listView, _nativeSourcesView) &&
+                    PART_SourcesView?.ItemsSource is IList<string> sources &&
+                    focusedItem.BindingAdapterPosition is int position &&
+                    position >= 0 && position < sources.Count)
+                {
+                    var selectedSource = sources[position];
+                    if (Equals(PART_SourcesView.SelectedItem, selectedSource))
+                    {
+                        SelectSource(selectedSource);
+                    }
+                    else
+                    {
+                        focusedItem.ItemView.PerformClick();
+                    }
+                }
+                else
+                {
+                    focusedItem.ItemView.PerformClick();
+                }
             }
 
             return;
@@ -148,10 +176,9 @@ public partial class SearchView
 
         if (e.KeyCode == Keycode.Tab)
         {
-            e.Handled = true;
             if (e.Event.Action == KeyEventActions.Down)
             {
-                MoveFocusOutOfList(listView, focusedView, e.Event.IsShiftPressed);
+                e.Handled = MoveFocusOutOfList(listView, focusedView, e.Event.IsShiftPressed);
             }
 
             return;
@@ -171,11 +198,11 @@ public partial class SearchView
         }
     }
 
-    private static void MoveFocusOutOfList(RecyclerView listView, NativeView focusedView, bool moveBackward)
+    private bool MoveFocusOutOfList(RecyclerView listView, NativeView focusedView, bool moveBackward)
     {
         if (listView.RootView is not ViewGroup root)
         {
-            return;
+            return false;
         }
 
         var direction = moveBackward ? FocusSearchDirection.Backward : FocusSearchDirection.Forward;
@@ -185,10 +212,22 @@ public partial class SearchView
             candidate = FocusFinder.Instance?.FindNextFocus(root, candidate, direction);
             if (candidate == null || !IsInList(candidate, listView))
             {
-                candidate?.RequestFocus();
-                return;
+                if (candidate?.RequestFocus() == true)
+                {
+                    if (ReferenceEquals(listView, _nativeSourcesView))
+                    {
+                        _sourceSelectToggled = false;
+                        UpdateVisibility();
+                    }
+
+                    return true;
+                }
+
+                return false;
             }
         }
+
+        return false;
     }
 
     private static bool IsInList(NativeView view, RecyclerView listView)
@@ -217,7 +256,7 @@ public partial class SearchView
         return null;
     }
 
-    private static void SetKeyHandler(NativeView? view, bool attach)
+    private void SetKeyHandler(NativeView? view, bool attach)
     {
         if (view == null)
         {
@@ -226,6 +265,7 @@ public partial class SearchView
 
         if (attach)
         {
+            view.KeyPress -= ListItem_KeyPress;
             view.KeyPress += ListItem_KeyPress;
         }
         else
@@ -244,9 +284,13 @@ public partial class SearchView
 
     private sealed class ListItemKeyListener : Java.Lang.Object, RecyclerView.IOnChildAttachStateChangeListener
     {
-        public void OnChildViewAttachedToWindow(NativeView view) => SetKeyHandler(view, true);
+        private readonly SearchView _searchView;
 
-        public void OnChildViewDetachedFromWindow(NativeView view) => SetKeyHandler(view, false);
+        public ListItemKeyListener(SearchView searchView) => _searchView = searchView;
+
+        public void OnChildViewAttachedToWindow(NativeView view) => _searchView.SetKeyHandler(view, true);
+
+        public void OnChildViewDetachedFromWindow(NativeView view) => _searchView.SetKeyHandler(view, false);
     }
 
     private static void FocusListItem(RecyclerView listView, int currentPosition, int direction)
