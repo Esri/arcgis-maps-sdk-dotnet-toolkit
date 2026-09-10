@@ -12,18 +12,28 @@ using System.Windows.Input;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 /// <summary>
-/// Base class for view models that are used in the toolbar of the <see cref="OrientedImageryView"/>.
-/// Derive from this class to automatically get access to the main view model of the oriented imagery view via the <see cref="MainViewModel"/> property.
+/// Base class for view models backing the toolbar controls of an <see cref="OrientedImageryView"/>.
 /// </summary>
+/// <remarks>
+/// <para>
+///   <see cref="OrientedImageryToolbarItemBase"/> objects are meant to be held in <see cref="OrientedImageryViewModel.ToolbarItems"/>.
+///   They supply an <see cref="ViewModel"/> property for convenient access to the containing <see cref="OrientedImageryViewModel"/>, and implement
+///   <see cref="INotifyPropertyChanged"/>.
+/// </para>
+/// <para>
+///   <see cref="ViewModel"/> is populated when an <see cref="OrientedImageryToolbarItemBase"/> instance is added to <see cref="OrientedImageryViewModel.ToolbarItems"/>.
+///   The same <see cref="OrientedImageryToolbarItemBase"/> instance should not be shared between multiple <see cref="OrientedImageryViewModel"/> instances, as only
+///   one view model can be referenced by the <see cref="ViewModel"/> property at a time.
+/// </para>
+/// </remarks>
 public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
 {
     private OrientedImageryViewModel? _mainViewModel;
 
     /// <summary>
-    /// Gets or sets the main view model for the oriented imagery view. This property will be set automatically when the toolbar is added to the
-    /// <see cref="ItemsControl.ItemsSource"/> of the <see cref="OrientedImageryView"/>.
+    /// Gets or sets the linked <see cref="OrientedImageryViewModel"/>. This property will be set automatically when the toolbar item is added to <see cref="OrientedImageryViewModel.ToolbarItems"/>.
     /// </summary>
-    public OrientedImageryViewModel? MainViewModel
+    public OrientedImageryViewModel? ViewModel
     {
         get => _mainViewModel;
         set
@@ -31,13 +41,13 @@ public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
             if (value == _mainViewModel) return;
             var oldValue = _mainViewModel;
             _mainViewModel = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainViewModel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
             OnMainViewModelChanged(oldValue, value);
         }
     }
 
     /// <summary>
-    /// Called when the <see cref="MainViewModel"/> property changes. Override this method to handle changes to the main view model.
+    /// Called when the <see cref="ViewModel"/> property changes. Override this method to handle changes to the main view model.
     /// </summary>
     protected virtual void OnMainViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue) { }
 
@@ -86,29 +96,29 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
     {
         get
         {
-            if (MainViewModel == null || !MainViewModel.ShowCameraLocations)
+            if (ViewModel == null || !ViewModel.ShowCameraLocations)
                 return CameraMarkerDisplayMode.Off;
 
-            return MainViewModel.ShowCameraLocationsOnDisplay ? CameraMarkerDisplayMode.All : CameraMarkerDisplayMode.GeoView;
+            return ViewModel.ShowCameraLocationsOnDisplay ? CameraMarkerDisplayMode.All : CameraMarkerDisplayMode.GeoView;
         }
         set
         {
-            if (MainViewModel == null)
+            if (ViewModel == null)
                 return;
 
             switch (value)
             {
                 case CameraMarkerDisplayMode.Off:
-                    MainViewModel.ShowCameraLocations = false;
-                    MainViewModel.ShowCameraLocationsOnDisplay = false;
+                    ViewModel.ShowCameraLocations = false;
+                    ViewModel.ShowCameraLocationsOnDisplay = false;
                     break;
                 case CameraMarkerDisplayMode.GeoView:
-                    MainViewModel.ShowCameraLocations = true;
-                    MainViewModel.ShowCameraLocationsOnDisplay = false;
+                    ViewModel.ShowCameraLocations = true;
+                    ViewModel.ShowCameraLocationsOnDisplay = false;
                     break;
                 case CameraMarkerDisplayMode.All:
-                    MainViewModel.ShowCameraLocations = true;
-                    MainViewModel.ShowCameraLocationsOnDisplay = true;
+                    ViewModel.ShowCameraLocations = true;
+                    ViewModel.ShowCameraLocationsOnDisplay = true;
                     break;
             }
         }
@@ -127,7 +137,7 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
         ToggleCameraMarkerDisplayMode = new Command(
         execute: () =>
         {
-            if (MainViewModel == null)
+            if (ViewModel == null)
                 return;
 
             DisplayMode = DisplayMode switch
@@ -219,9 +229,9 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
         {
             if (value == _selectedSymbol) { return; }
             SetProperty(ref _selectedSymbol, value);
-            if (MainViewModel != null)
+            if (ViewModel != null)
             {
-                MainViewModel.NewMarkerSymbol = _selectedSymbol;
+                ViewModel.NewMarkerSymbol = _selectedSymbol;
             }
         }
     }
@@ -238,8 +248,8 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
     protected override void OnMainViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
     {
         base.OnMainViewModelChanged(oldValue, newValue);
-        if (MainViewModel != null)
-            MainViewModel.NewMarkerSymbol = _selectedSymbol;
+        if (ViewModel != null)
+            ViewModel.NewMarkerSymbol = _selectedSymbol;
     }
 }
 #endif
