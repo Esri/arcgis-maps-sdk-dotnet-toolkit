@@ -17,7 +17,10 @@
 using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Collections;
 #if WPF
+using System.Windows.Automation.Peers;
 using System.Windows.Controls.Primitives;
+#elif WINUI
+using Microsoft.UI.Xaml.Automation.Peers;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -34,6 +37,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private ButtonBase? _previousButton;
         private ButtonBase? _nextButton;
         private int selectedIndex = 0;
+#endif
+
+        // A plain Control has no automation peer by default. Without this override, the enclosing
+        // PopupElementItemsControl's ItemsControlAutomationPeer can't find a real peer for this item and falls
+        // back to a synthetic ItemAutomationPeer wrapping the raw MediaPopupElement data object - which hides
+        // this view's real content (title, caption, prev/next buttons) from Narrator's navigation entirely.
+#if WPF
+        /// <inheritdoc />
+        protected override AutomationPeer OnCreateAutomationPeer() => new FrameworkElementAutomationPeer(this);
+#elif WINUI
+        /// <inheritdoc />
+        protected override Microsoft.UI.Xaml.Automation.Peers.AutomationPeer OnCreateAutomationPeer() => new FrameworkElementAutomationPeer(this);
 #endif
 
         /// <inheritdoc />
