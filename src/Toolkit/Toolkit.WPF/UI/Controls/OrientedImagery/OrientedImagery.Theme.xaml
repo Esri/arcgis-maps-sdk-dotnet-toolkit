@@ -125,18 +125,18 @@
     <!-- Toolbar data templates -->
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowSelectedFootprint}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}">
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding ViewModel.ShowSelectedFootprint}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}">
             <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
                 <Grid Width="24" Height="24">
                     <!-- A font icon was not available for this calcite symbol (trapezoid). Using two manual Paths also allows binding separate colors for fill and stroke. -->
                     <Path SnapsToDevicePixels="true" Data="M19.384 20H4.616L.349 4h23.302zm-14-1h13.232l3.733-14H1.651z">
                         <Path.Fill>
-                            <SolidColorBrush Color="{Binding MainViewModel.SelectedFootprintOutlineColor, Converter={StaticResource ColorToColorConverter}}" />
+                            <SolidColorBrush Color="{Binding ViewModel.SelectedFootprintOutlineColor, Converter={StaticResource ColorToColorConverter}}" />
                         </Path.Fill>
                     </Path>
                     <Path SnapsToDevicePixels="true" Data="m22.35 5-3.73 14H5.38L1.65 5z">
                         <Path.Fill>
-                            <SolidColorBrush Color="{Binding MainViewModel.SelectedFootprintFillColor, Converter={StaticResource ColorToColorConverter}}" />
+                            <SolidColorBrush Color="{Binding ViewModel.SelectedFootprintFillColor, Converter={StaticResource ColorToColorConverter}}" />
                         </Path.Fill>
                     </Path>
                 </Grid>
@@ -145,18 +145,18 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.ShowUnselectedFootprints}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedImageFootprints}">
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding ViewModel.ShowUnselectedFootprints}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedImageFootprints}">
             <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
                 <Grid Width="24" Height="24">
                     <!-- See comment on ShowSelectedFootprintToolbarTemplate. -->
                     <Path SnapsToDevicePixels="true" Data="M19.384 20H4.616L.349 4h23.302zm-14-1h13.232l3.733-14H1.651z">
                         <Path.Fill>
-                            <SolidColorBrush Color="{Binding MainViewModel.UnselectedFootprintOutlineColor, Converter={StaticResource ColorToColorConverter}}" />
+                            <SolidColorBrush Color="{Binding ViewModel.UnselectedFootprintOutlineColor, Converter={StaticResource ColorToColorConverter}}" />
                         </Path.Fill>
                     </Path>
                     <Path SnapsToDevicePixels="true" Data="m22.35 5-3.73 14H5.38L1.65 5z">
                         <Path.Fill>
-                            <SolidColorBrush Color="{Binding MainViewModel.UnselectedFootprintFillColor, Converter={StaticResource ColorToColorConverter}}" />
+                            <SolidColorBrush Color="{Binding ViewModel.UnselectedFootprintFillColor, Converter={StaticResource ColorToColorConverter}}" />
                         </Path.Fill>
                     </Path>
                 </Grid>
@@ -170,11 +170,11 @@
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
                     <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewShowCameraMarkersOnGeoView}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding MainViewModel.ShowCameraLocations}" Value="True">
+                        <DataTrigger Binding="{Binding ViewModel.ShowCameraLocations}" Value="True">
                             <Setter Property="Background" Value="#FFD3D3D3" />
                             <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewShowCameraMarkersOnGeoViewAndImageDisplay}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding MainViewModel.ShowCameraLocationsOnDisplay}" Value="True">
+                        <DataTrigger Binding="{Binding ViewModel.ShowCameraLocationsOnDisplay}" Value="True">
                             <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewClearCameraMarkers}" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -190,7 +190,7 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MainViewModel.ShowCameraLocationsOnDisplay}" Value="True">
+                                    <DataTrigger Binding="{Binding ViewModel.ShowCameraLocationsOnDisplay}" Value="True">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -207,7 +207,7 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MainViewModel.ShowCameraLocationsOnDisplay}" Value="True">
+                                    <DataTrigger Binding="{Binding ViewModel.ShowCameraLocationsOnDisplay}" Value="True">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -220,7 +220,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
-        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding MainViewModel.AllowAddingMarkers}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
+        <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding ViewModel.AllowAddingMarkers}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
             <Viewbox Width="32" Height="32" Stretch="Uniform">
                 <TextBlock Text="&#xe8ed;"
                            FontSize="24"
@@ -231,13 +231,13 @@
     </DataTemplate>
 
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
-        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding MainViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
+        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding ViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
             <controls:SymbolDisplay Width="32" Height="32" Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
         </Button>
     </DataTemplate>
 
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
-        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding MainViewModel.ClearMarkersCommand}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
+        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding ViewModel.ClearMarkersCommand}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
             <Viewbox Width="28" Height="28" Stretch="Uniform">
                 <TextBlock Text="&#xe83e;"
                            FontSize="24"
@@ -247,7 +247,7 @@
         </Button>
     </DataTemplate>
 
-    <!-- Display style -->
+    <!-- Image display style -->
     <Style TargetType="{x:Type controls:OrientedImageDisplay}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
@@ -264,11 +264,22 @@
         </Setter>
     </Style>
 
+    <!-- Toolbar container style -->
+    <Style TargetType="{x:Type ItemsControl}">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Main view style -->
     <Style TargetType="{x:Type controls:OrientedImageryView}">
         <Setter Property="IsTabStop" Value="False" />
 
-        <Setter Property="ItemTemplateSelector">
+        <Setter Property="ToolbarItemTemplateSelector">
             <Setter.Value>
                 <controls:OrientedImageryViewTemplateSelector>
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
@@ -278,14 +289,6 @@
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
                 </controls:OrientedImageryViewTemplateSelector>
-            </Setter.Value>
-        </Setter>
-
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal" />
-                </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
 
@@ -302,7 +305,7 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <ItemsPresenter />
+                            <ItemsControl x:Name="PART_ToolbarContainer" />
 
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>

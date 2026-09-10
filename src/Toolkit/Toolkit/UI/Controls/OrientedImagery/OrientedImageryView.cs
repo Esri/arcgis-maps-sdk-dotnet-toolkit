@@ -1,9 +1,7 @@
 #if WPF
 
-using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
-using System.Collections.ObjectModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -13,6 +11,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 public partial class OrientedImageryView
 {
     private const string ImageDisplayName = "PART_ImageDisplay";
+    private const string ToolbarContainerName = "PART_ToolbarContainer";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
@@ -20,8 +19,6 @@ public partial class OrientedImageryView
     public OrientedImageryView() : base()
     {
         ViewModel = new OrientedImageryViewModel();
-
-        ItemsSource = GetDefaultToolbarItems();
 
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -42,31 +39,29 @@ public partial class OrientedImageryView
 
         if (_display != null)
             _display.ImageClicked -= Display_ImageClicked;
+        if (_toolbarContainer != null)
+        {
+            _toolbarContainer.ItemTemplateSelector = null;
+            _toolbarContainer.ItemsSource = null;
+        }
 
         _display = GetTemplateChild(ImageDisplayName) as OrientedImageDisplay;
+        _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
 
         if (_display == null)
             return;
+        if (_toolbarContainer != null)
+        {
+            _toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
+            _toolbarContainer.Items.Clear();
+            _toolbarContainer.ItemsSource = ViewModel?.ToolbarItems;
+        }
 
-        _display.ImageClicked += Display_ImageClicked;
+    _display.ImageClicked += Display_ImageClicked;
         WireDisplayProperties();
     }
 
 #region ViewModel
-    /// <summary>
-    /// Gets the default toolbar items for the OrientedImageryView.
-    /// </summary>
-    public static Collection<object> GetDefaultToolbarItems()
-    {
-        var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<MarkerSymbol>()
-        {
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Purple, 10),
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Yellow, 10),
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 10)
-        });
-        return new() {new ShowSelectedFootprintVM(), new ShowUnselectedFootprintsVM(), new ShowCameraMarkersVM(), new AllowAddingMarkersVM(), markerSymbolPickerVM, new ClearMarkersVM() };
-    }
-
     /// <summary>
     /// Gets or sets the view model for the oriented imagery view.
     /// </summary>
@@ -100,7 +95,6 @@ public partial class OrientedImageryView
 
         newValue.PropertyChanged += ViewModel_PropertyChanged;
         DataContext = newValue;
-        SetToolbarViewModels(newValue);
 
         if (GeoView != null)
         {
@@ -208,6 +202,48 @@ public partial class OrientedImageryView
         }
     }
 #endregion GeoView
+
+#region Toolbar
+    private ItemsControl? _toolbarContainer;
+    private OrientedImageryViewTemplateSelector? _defaultItemTemplateSelector;
+
+    /// <summary>
+    /// Gets or sets the <see cref="DataTemplateSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar items in
+    /// <see cref="OrientedImageryViewModel.ToolbarItems"/>.
+    /// </summary>
+    public DataTemplateSelector? ToolbarItemTemplateSelector
+    {
+        get => (DataTemplateSelector)GetValue(ToolbarItemTemplateSelectorProperty);
+        set => SetValue(ToolbarItemTemplateSelectorProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="ToolbarItemTemplateSelector" /> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty ToolbarItemTemplateSelectorProperty =
+        PropertyHelper.CreateProperty<DataTemplateSelector?, OrientedImageryView>(nameof(ToolbarItemTemplateSelector), null, (s, oldValue, newValue) => s.OnItemTemplateSelectorChanged(oldValue, newValue));
+
+    private void OnItemTemplateSelectorChanged(DataTemplateSelector? oldItemTemplateSelector, DataTemplateSelector? newItemTemplateSelector)
+    {
+        if (newItemTemplateSelector is not OrientedImageryViewTemplateSelector newSelector)
+        {
+            return;
+        }
+
+        // Save and in the future merge the default selector so the default styles are always available unless overridden.
+        if (ReadLocalValue(ToolbarItemTemplateSelectorProperty) == DependencyProperty.UnsetValue)
+        {
+            _defaultItemTemplateSelector = newSelector;
+        }
+        else if (_defaultItemTemplateSelector is not null)
+        {
+            newSelector.Merge(_defaultItemTemplateSelector);
+        }
+
+        if (_toolbarContainer != null)
+            _toolbarContainer.ItemTemplateSelector = newSelector;
+    }
+#endregion Toolbar
 }
 
 #endif
