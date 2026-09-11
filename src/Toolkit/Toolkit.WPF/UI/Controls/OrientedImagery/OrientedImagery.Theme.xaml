@@ -16,7 +16,6 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -51,7 +50,6 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -94,7 +92,6 @@
         <Setter Property="Background" Value="#80FFFFFF" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -232,7 +229,7 @@
 
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
         <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding ViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
-            <controls:SymbolDisplay Width="32" Height="32" Symbol="{Binding SelectedSymbol, Mode=OneWay}" />
+            <controls:SymbolDisplay Width="32" Height="32" Symbol="{Binding SelectedSymbol, Mode=OneWay}" IsTabStop="False" Focusable="False" />
         </Button>
     </DataTemplate>
 
