@@ -174,21 +174,22 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" Focusable="True"
-                                   AutomationProperties.Name="{Binding Title}"/>
-                        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" Focusable="True"
-                                   AutomationProperties.Name="{Binding Description}"/>
+                            <StackPanel Grid.ColumnSpan="3">
+                                <TextBlock Grid.Row="0" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" Focusable="True"
+AutomationProperties.Name="{Binding Title}"/>
+                                <TextBlock Grid.Row="1" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" Focusable="True"
+AutomationProperties.Name="{Binding Description}"/>
+                            </StackPanel>
 
-                        <StackPanel Grid.Row="2" Margin="0,0,0,20" DataContext="{TemplateBinding CurrentItem}" Grid.Column="1">
+                            <StackPanel Grid.Row="1" Margin="0,0,0,20" DataContext="{TemplateBinding CurrentItem}" Grid.Column="1">
                             <primitives:PopupMediaView x:Name="CurrentMediaView" PopupMedia="{Binding}" Margin="0,5" IsTabStop="False" AutomationProperties.Name="{Binding Title}"/>
                             <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                             <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="2"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}" ToolTip="{TemplateBinding PreviousMediaButtonText}" />
-                        <Button Grid.Column="2" Grid.Row="2"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}" ToolTip="{TemplateBinding NextMediaButtonText}" />
+                        <Button Grid.Column="0" Grid.Row="1"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}" ToolTip="{TemplateBinding PreviousMediaButtonText}" />
+                        <Button Grid.Column="2" Grid.Row="1"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}" ToolTip="{TemplateBinding NextMediaButtonText}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
