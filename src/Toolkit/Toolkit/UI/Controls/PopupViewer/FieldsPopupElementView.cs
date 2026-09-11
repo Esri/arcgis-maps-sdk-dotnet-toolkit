@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Collections.Generic;
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
 #else
@@ -103,8 +104,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty ElementProperty =
             PropertyHelper.CreateProperty<FieldsPopupElement, FieldsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.RefreshTable());
 
+        // The (label, value) cell pairs of the currently displayed table, in row order. Backs the
+        // Grid/Table UIA control pattern exposed via FieldsPopupElementViewAutomationPeer (see .Windows.cs).
+        internal IReadOnlyList<(ChildElement Label, ChildElement Value)> Cells => _cells;
+        private readonly List<(ChildElement Label, ChildElement Value)> _cells = new();
+
         private void RefreshTable()
         {
+            _cells.Clear();
             var presenter = GetTemplateChild(TableAreaContentName) as ContentPresenter;
             if (presenter is null) return;
             if (Element is null || !Element.Fields.Any())
@@ -159,6 +166,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Grid.SetColumn(valueCell, 2);
                 g.Children.Add(valueCell);
                 AutomationProperties.SetLabeledBy(valueCell, label);
+                _cells.Add((label, valueCell));
+
+#if WPF || WINUI
+                // Gives each cell's own automation peer (FieldsTableCellAutomationPeer) enough info to report
+                // its row/column back to UIA, so Narrator's table navigation works cell-by-cell.
+                if (label is IFieldsTableCell labelCell)
+                {
+                    labelCell.Row = i;
+                    labelCell.Column = 0;
+                    labelCell.ContainingGridElement = this;
+                }
+                if (valueCell is IFieldsTableCell valueTableCell)
+                {
+                    valueTableCell.Row = i;
+                    valueTableCell.Column = 1;
+                    valueTableCell.ContainingGridElement = this;
+                    valueTableCell.RowHeaderElement = label;
+                }
+#endif
             }
 
             Border verticalDivider = new Border()
@@ -177,7 +203,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if !WPF // see FieldsPopupElementView.Windows.cs for WPF implementation
         private ChildElement CreateTextCell(string? text, bool wrap)
         {
+#if WINUI
+            var t = new FieldsTableCellTextBlock
+#else
             var t = new TextBlock
+#endif
             {
                 Text = text ?? "",
                 Style = FieldTextStyle,
@@ -190,6 +220,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 t.TextWrapping = TextWrapping.Wrap;
 #endif
             }
+
+            t.Focusable = true;
+
+            AutomationProperties.SetName(t, t.Text);
+
             return t;
         }
 
@@ -198,6 +233,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
             // Don't use the SelectableLabel here since hyperlinks don't need to be selectable and it can cause issues with the tap gesture recognizer.
             var t = new Microsoft.Maui.Controls.Label
+#elif WINUI
+            var t = new FieldsTableCellTextBlock
 #else
             var t = new TextBlock
 #endif
@@ -229,7 +266,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             };
 #if WINDOWS_XAML
             hl.Inlines.Add(new Run() { Text = Properties.Resources.GetString("PopupViewerViewHyperlinkText") });
-#else
+            AutomationProperties.SetName(t, Properties.Resources.GetString("PopupViewerViewHyperlinkText"));
+#else   
             hl.Inlines.Add(Properties.Resources.GetString("PopupViewerViewHyperlinkText"));
 #endif
             t.Inlines.Add(hl);
