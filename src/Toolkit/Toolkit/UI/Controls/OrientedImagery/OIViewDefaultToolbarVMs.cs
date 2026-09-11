@@ -192,6 +192,7 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
             if (SymbolOptions.Count < 1)
             {
                 SelectedSymbol = DefaultSymbol;
+                return;
             }
             var currentIndex = SymbolOptions.IndexOf(SelectedSymbol);
             if (currentIndex < 0 || currentIndex >= SymbolOptions.Count - 1)
