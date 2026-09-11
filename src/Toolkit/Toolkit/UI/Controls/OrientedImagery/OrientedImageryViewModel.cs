@@ -83,6 +83,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             }
 
             _images.Clear();
+            _footprints.Clear();
             SelectedImage = null;
             Markers.Clear();
 
@@ -189,7 +190,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </remarks>
     /// <param name="images">The oriented images to display.</param>
     /// <param name="searchPoint">The point from which the images were searched.</param>
-    public void SetImages(List<OrientedImage> images, MapPoint? searchPoint = null)
+    public void SetImages(IEnumerable<OrientedImage> images, MapPoint? searchPoint = null)
     {
 
         _images = images.ToList();
