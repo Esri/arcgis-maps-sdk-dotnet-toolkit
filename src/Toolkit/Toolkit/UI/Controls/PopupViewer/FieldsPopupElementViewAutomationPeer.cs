@@ -138,8 +138,49 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         protected override AutomationPeer OnCreateAutomationPeer() => new FieldsTableCellAutomationPeer(this);
     }
 #elif WINUI
-    internal sealed class FieldsTableCellTextBlock : Microsoft.UI.Xaml.Controls.TextBlock, IFieldsTableCell
+    // Microsoft.UI.Xaml.Controls.TextBlock (and most other leaf controls, e.g. Border) is sealed in WinUI, so
+    // unlike the WPF version above this can't subclass TextBlock directly to override OnCreateAutomationPeer().
+    // Instead it wraps a TextBlock as its single child (Grid isn't sealed) and forwards the handful of members
+    // the table-building code in FieldsPopupElementView.cs actually uses.
+    internal sealed partial class FieldsTableCellTextBlock : Microsoft.UI.Xaml.Controls.Grid, IFieldsTableCell
     {
+        internal readonly Microsoft.UI.Xaml.Controls.TextBlock InnerTextBlock = new();
+
+        public FieldsTableCellTextBlock()
+        {
+            Children.Add(InnerTextBlock);
+
+            // InnerTextBlock is a real visual element with its own default TextBlockAutomationPeer, which UIA
+            // discovers on its own as a child of this wrapper - even though FieldsTableCellAutomationPeer below
+            // computes the correct folded Name for the *cell*, InnerTextBlock's own peer was still showing up as
+            // an extra, unsuppressed stop repeating the same text a second time (confirmed live: Narrator read
+            // the cell, then immediately read it again). Raw removes InnerTextBlock's own peer from the
+            // Control/Content views entirely; any of its own automation-relevant descendants (e.g. the
+            // Hyperlink inline in CreateHyperlinkCell) still surface normally since UIA promotes a hidden node's
+            // visible descendants up to the nearest visible ancestor instead of hiding the whole subtree.
+            AutomationProperties.SetAccessibilityView(InnerTextBlock, AccessibilityView.Raw);
+        }
+
+        public string Text
+        {
+            get => InnerTextBlock.Text;
+            set => InnerTextBlock.Text = value;
+        }
+
+        public Microsoft.UI.Xaml.TextWrapping TextWrapping
+        {
+            get => InnerTextBlock.TextWrapping;
+            set => InnerTextBlock.TextWrapping = value;
+        }
+
+        public Microsoft.UI.Xaml.Documents.InlineCollection Inlines => InnerTextBlock.Inlines;
+
+        public new Microsoft.UI.Xaml.Style? Style
+        {
+            get => InnerTextBlock.Style;
+            set => InnerTextBlock.Style = value;
+        }
+
         public int Row { get; set; }
         public int Column { get; set; }
         public FrameworkElement? ContainingGridElement { get; set; }
@@ -169,7 +210,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (element is System.Windows.Controls.TextBox tb) return tb.Text ?? string.Empty;
             if (element is System.Windows.Controls.TextBlock tblk) return tblk.Text ?? string.Empty;
 #elif WINUI
-            if (element is Microsoft.UI.Xaml.Controls.TextBlock tblk) return tblk.Text ?? string.Empty;
+            if (element is FieldsTableCellTextBlock tblk) return tblk.Text ?? string.Empty;
 #endif
             return string.Empty;
         }

@@ -221,7 +221,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
 
+#if !WINUI
+            // Microsoft.UI.Xaml.Controls.TextBlock has no Focusable property (only Control-derived elements
+            // get IsTabStop in WinUI), so there's nothing to set here for the FieldsTableCellTextBlock wrapper.
             t.Focusable = true;
+#endif
 
             AutomationProperties.SetName(t, t.Text);
 
