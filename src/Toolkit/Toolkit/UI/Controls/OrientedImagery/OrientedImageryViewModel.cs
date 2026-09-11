@@ -593,7 +593,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// <summary>
     /// Gets the default toolbar items for a <see cref="OrientedImageryViewModel"/>.
     /// </summary>
-    private static ObservableCollection<OrientedImageryToolbarItemBase> GetDefaultToolbarItems()
+    private ObservableCollection<OrientedImageryToolbarItemBase> GetDefaultToolbarItems()
     {
         var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<MarkerSymbol>()
         {
@@ -601,7 +601,21 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Yellow, 10),
             new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 10)
         });
-        return [new ShowSelectedFootprintVM(), new ShowUnselectedFootprintsVM(), new ShowCameraMarkersVM(), new AllowAddingMarkersVM(), markerSymbolPickerVM, new ClearMarkersVM()];
+
+        ObservableCollection<OrientedImageryToolbarItemBase> items =
+        [
+            new ShowSelectedFootprintVM(),
+            new ShowUnselectedFootprintsVM(),
+            new ShowCameraMarkersVM(),
+            new AllowAddingMarkersVM(),
+            markerSymbolPickerVM,
+            new ClearMarkersVM()
+        ];
+
+        foreach (var item in items)
+            item.ViewModel = this;
+
+        return items;
     }
 
     private void ToolbarItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
