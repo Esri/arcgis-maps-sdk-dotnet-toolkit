@@ -302,6 +302,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
         else if (position.Location is MapPoint location)
         {
+            if (image.LoadStatus != LoadStatus.Loaded)
+                return null;
+
             try
             {
                 pixel = await image.LocationToImageAsync(location).ConfigureAwait(false);

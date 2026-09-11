@@ -1049,4 +1049,44 @@
     <value>Oriented image, {0}</value>
     <comment>UIA AutomationProperties.Name for the image shown by OrientedImageDisplay; {0} is the oriented image type (e.g. Nadir)</comment>
   </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>Select marker symbol</value>
+    <comment>Tooltip for the OrientedImageryView button that selects the marker symbol.</comment>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>Toggle add markers</value>
+    <comment>Tooltip for the OrientedImageryView button that enables or disables adding markers.</comment>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>Show selected image footprint</value>
+    <comment>Tooltip for the OrientedImageryView button that shows the selected image footprint.</comment>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Show unselected image footprints</value>
+    <comment>Tooltip for the OrientedImageryView button that shows unselected image footprints.</comment>
+  </data>
+  <data name="OrientedImageryViewShowCameraMarkersOnGeoView" xml:space="preserve">
+    <value>Show camera markers on geo view</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the geo view.</comment>
+  </data>
+  <data name="OrientedImageryViewShowCameraMarkersOnGeoViewAndImageDisplay" xml:space="preserve">
+    <value>Show camera markers in geo view and image display</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on both the geo view and image display.</comment>
+  </data>
+  <data name="OrientedImageryViewClearCameraMarkers" xml:space="preserve">
+    <value>Clear camera markers</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers can be cleared.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkers" xml:space="preserve">
+    <value>Clear markers</value>
+    <comment>Tooltip for the OrientedImageryView button that clears markers.</comment>
+  </data>
+  <data name="OrientedImageryViewLoading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>Message shown by OrientedImageryView while an image is loading.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImagesSelected" xml:space="preserve">
+    <value>No images selected</value>
+    <comment>Message shown by OrientedImageryView when no images are selected.</comment>
+  </data>
 </root>
