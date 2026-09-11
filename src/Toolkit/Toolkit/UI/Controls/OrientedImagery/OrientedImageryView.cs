@@ -84,7 +84,6 @@ public partial class OrientedImageryView
         }
 
         newValue.PropertyChanged += ViewModel_PropertyChanged;
-        DataContext = newValue;
 
         if (GeoView != null)
         {
