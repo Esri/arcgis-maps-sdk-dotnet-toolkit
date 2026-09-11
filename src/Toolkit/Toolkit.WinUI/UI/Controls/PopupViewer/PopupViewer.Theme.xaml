@@ -402,7 +402,13 @@
                             <ContentControl ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Padding="{TemplateBinding Padding}" Margin="12,0,0,0"
                                             VerticalAlignment="Stretch" VerticalContentAlignment="Center" x:Name="Header" />
                         </StackPanel>
-                        <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1" IsVerticalRailEnabled="True" Padding="{TemplateBinding Padding}" >
+                        <!-- AccessibilityView="Raw": this ScrollViewer is a purely structural wrapper with no
+                             AutomationProperties.Name of its own, so its default peer falls back to the raw
+                             Popup data object's ToString() ("Esri.ArcGISRuntime.Mapping.Popups.Popup Pane").
+                             Raw removes it from Control/Content view navigation entirely; the real content
+                             underneath (Content) is unaffected since UIA promotes a hidden node's visible
+                             descendants up to the nearest visible ancestor instead of hiding the whole subtree. -->
+                        <ScrollViewer x:Name="ScrollViewer" AutomationProperties.AccessibilityView="Raw" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1" IsVerticalRailEnabled="True" Padding="{TemplateBinding Padding}" >
                             <ContentControl x:Name="Content"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
