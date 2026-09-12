@@ -349,9 +349,10 @@
                         PlacementTarget="{Binding ElementName=PopupTarget}"
                         StaysOpen="False">
                         <Border Style="{StaticResource ResultAreaBorderStyle}">
-                            <StackPanel>
+                            <DockPanel LastChildFill="True">
                                 <controls:AllSourcesToggleButton
                                     x:Name="PART_AllSourcesButton"
+                                    DockPanel.Dock="Top"
                                     Width="{Binding ElementName=PART_SourceList, Path=ActualWidth, Mode=OneWay}"
                                     HorizontalContentAlignment="Left"
                                     BorderThickness="0"
@@ -370,7 +371,7 @@
                                     Style="{StaticResource ListStyle}" 
                                     AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"
                                     AutomationProperties.AutomationId="SearchSourcesList"/>
-                            </StackPanel>
+                                    </DockPanel>
                         </Border>
                     </Popup>
                     <TextBox
