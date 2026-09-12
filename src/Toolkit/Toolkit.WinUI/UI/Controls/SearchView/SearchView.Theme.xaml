@@ -229,7 +229,7 @@
                     <TextBlock
                         Style="{ThemeResource Search.SecondaryTextBlockStyle}"
                         Text="{Binding Path=DisplaySubtitle}"
-                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="Wrap"
                         Visibility="{Binding Path=DisplaySubtitle, Mode=OneWay, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
                 </StackPanel>
             </Grid>
@@ -283,7 +283,8 @@
     </Style>
     <Style x:Key="BarActionButtonStyle" TargetType="ButtonBase">
         <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="32" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
@@ -513,17 +514,6 @@
                 </Style>
             </Setter.Value>
         </Setter>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ListView">
-                    <Border Name="Border">
-                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                            <ItemsPresenter />
-                        </ScrollViewer>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
     <Style x:Key="ActionButtonPathStyle" TargetType="Path">
         <Setter Property="Width" Value="12" />
@@ -576,6 +566,7 @@
                         VerticalAlignment="Center"
                         Style="{StaticResource QueryPlaceholderStyle}"
                         Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActivePlaceholder, Mode=OneWay}"
+                        TextWrapping="Wrap"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
                     <Button
                         Grid.Column="2"
@@ -606,7 +597,10 @@
                         Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.IsWaiting, Mode=OneWay}" />
                 </Grid>
             </Border>
-            <Popup IsOpen="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}" VerticalOffset="34">
+            <Popup
+                Grid.Row="1"
+                IsOpen="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}"
+                VerticalOffset="0.5">
                 <Popup.Resources>
                     <CollectionViewSource
                         x:Key="GroupedSuggestionsEx"
@@ -615,6 +609,7 @@
                 </Popup.Resources>
                 <Border
                     Width="{TemplateBinding Width}"
+                    MaxHeight="300"
                     BorderThickness="1,0,1,1"
                     Style="{StaticResource ResultAreaBorderStyle}"
                     Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty'}">
@@ -696,11 +691,19 @@
             </Border>
             <Popup
                 x:Name="PART_SourcePopup"
+                Grid.Row="1"
                 IsLightDismissEnabled="True"
                 IsOpen="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
-                VerticalOffset="34">
-                <Border Width="{TemplateBinding Width}" Style="{StaticResource ResultAreaBorderStyle}">
-                    <StackPanel>
+                VerticalOffset="0.5">
+                <Border
+                    Width="{TemplateBinding Width}"
+                    MaxHeight="300"
+                    Style="{StaticResource ResultAreaBorderStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
                         <controls:AllSourcesToggleButton
                             x:Name="PART_AllSourcesButton"
                             Content="{TemplateBinding AllSourceSelectText}"
@@ -709,6 +712,7 @@
                             AutomationProperties.AutomationId="AllSourcesButton"/>
                         <ListView
                             x:Name="PART_SourceList"
+                            Grid.Row="1"
                             ItemTemplate="{StaticResource SourceTemplate}"
                             ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay}"
@@ -717,7 +721,7 @@
                             AutomationProperties.AutomationId="SearchSourcesList"
                             SelectionMode="Single"
                             SingleSelectionFollowsFocus="False"/>
-                    </StackPanel>
+                    </Grid>
                 </Border>
             </Popup>
             <StackPanel
