@@ -216,7 +216,7 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="Background" Value="{StaticResource DefaultControlBackgroundBrush}" />
         <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="32" />
+        <Setter Property="MinHeight" Value="32" />
         <Setter Property="BorderThickness" Value="0,0,0,0" />
         <Setter Property="BorderBrush" Value="{StaticResource CommonGrayBrush}" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -232,7 +232,7 @@
         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
             <TextBlock
                 Padding="8"
-                FontSize="12"
+                FontSize="{DynamicResource {x:Static SystemFonts.MessageFontSizeKey}}"
                 Text="{Binding DisplayName, Mode=OneWay}"
                 TextWrapping="Wrap" />
         </Border>
@@ -258,14 +258,14 @@
     </Style>
     <Style x:Key="QueryEntryStyle" TargetType="TextBox">
         <Setter Property="Padding" Value="8,0,0,0" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{converter:TextScaledFontSize FontSize=14}" />
         <Setter Property="MaxLines" Value="1" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
     <Style x:Key="QueryPlaceholderStyle" TargetType="TextBlock">
         <Setter Property="Padding" Value="8,4,4,4" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{converter:TextScaledFontSize FontSize=14}" />
         <Setter Property="Foreground" Value="{StaticResource CommonGrayBrush}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="IsHitTestVisible" Value="False" />
@@ -349,9 +349,10 @@
                         PlacementTarget="{Binding ElementName=PopupTarget}"
                         StaysOpen="False">
                         <Border Style="{StaticResource ResultAreaBorderStyle}">
-                            <StackPanel>
+                            <DockPanel LastChildFill="True">
                                 <controls:AllSourcesToggleButton
                                     x:Name="PART_AllSourcesButton"
+                                    DockPanel.Dock="Top"
                                     Width="{Binding ElementName=PART_SourceList, Path=ActualWidth, Mode=OneWay}"
                                     HorizontalContentAlignment="Left"
                                     BorderThickness="0"
@@ -370,7 +371,7 @@
                                     Style="{StaticResource ListStyle}" 
                                     AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"
                                     AutomationProperties.AutomationId="SearchSourcesList"/>
-                            </StackPanel>
+                                    </DockPanel>
                         </Border>
                     </Popup>
                     <TextBox
@@ -384,6 +385,7 @@
                         Grid.Column="1"
                         Style="{StaticResource QueryPlaceholderStyle}"
                         Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActivePlaceholder, Mode=OneWay}"
+                        TextWrapping="Wrap"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
                     <Button
                         Grid.Column="2"
@@ -481,7 +483,7 @@
                                                     Visibility="{Binding ElementName=Self, Path=DataContext.SourceSelectVisibility, Mode=OneWay}">
                                                     <TextBlock
                                                         Margin="8"
-                                                        FontSize="11"
+                                                        FontSize="{converter:TextScaledFontSize FontSize=11}"
                                                         FontWeight="SemiBold"
                                                         Foreground="White"
                                                         Text="{Binding Name.DisplayName}"
