@@ -83,6 +83,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             }
 
             _images.Clear();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
             _footprints.Clear();
             SelectedImage = null;
             Markers.Clear();
@@ -158,12 +159,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Gets the footprint of the currently selected image. This is updated based on the <see cref="SelectedImage"/> property.
+    /// Gets a read-only view of the list of selected and unselected images currently assigned to the control.
     /// </summary>
-    public OrientedImageFootprint? SelectedImageFootprint
+    public IReadOnlyList<OrientedImage> Images
     {
-        get => _selectedImageFootprint;
-        private set => SetProperty(ref _selectedImageFootprint, value);
+        get => _images.AsReadOnly();
     }
 
     /// <summary>
@@ -192,8 +192,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// <param name="searchPoint">The point from which the images were searched.</param>
     public void SetImages(IEnumerable<OrientedImage> images, MapPoint? searchPoint = null)
     {
-
         _images = images.ToList();
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
         _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
 
         UpdateSearchPointMarker(searchPoint);
@@ -227,13 +227,21 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             SelectedImage = _images[currentIndex - 1];
         }
     }
-
 #endregion Images
 
 #region Footprints
     private List<OrientedImageFootprint> _footprints = new();
 
     private bool _showSelectedFootprint = true;
+
+    /// <summary>
+    /// Gets the footprint of the currently selected image. This is updated based on the <see cref="SelectedImage"/> property.
+    /// </summary>
+    public OrientedImageFootprint? SelectedImageFootprint
+    {
+        get => _selectedImageFootprint;
+        private set => SetProperty(ref _selectedImageFootprint, value);
+    }
 
     /// <summary>
     /// Gets or sets a value indicating whether to show the footprint for the selected oriented image.
