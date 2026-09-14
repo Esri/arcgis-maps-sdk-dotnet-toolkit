@@ -10,7 +10,6 @@ public class PopupViewerTests : AppiumTestBase
     // Mirrors the constants in Toolkit.UITests.App.TestPages.PopupViewerFields (the shared test-page
     // code-behind), which builds the same fully-offline Popup on every platform.
     private const string PopupTitle = "Ridgeline Trailhead";
-    private const string FieldsElementTitle = "Fields";
     private const string MediaElementTitle = "Media";
     private const string TextElementFirstParagraph = "This trailhead connects to the Ridgeline Loop and Summit Spur trails.";
     private const string TextElementSecondParagraph = "Parking is available year-round, but the upper trail closes seasonally.";
@@ -30,19 +29,22 @@ public class PopupViewerTests : AppiumTestBase
     }
 
 #if WPF_TEST
-    //[TestMethod]
-    //public async Task PopupViewerFields_ImplementsTableControlPattern()
-    //{
-    //    OpenSample(PopupViewerFieldsPage);
+    [TestMethod]
+    public async Task PopupViewerFields_ImplementsTableControlPattern()
+    {
+        OpenSample(PopupViewerFieldsPage);
 
-    //    var fieldsElement = FindElementByName(FieldsElementTitle, DefaultTimeout);
-    //    var controlType = GetControlType(fieldsElement);
-    //    var localizedControlType = GetLocalizedControlType(fieldsElement);
-    //    TestContext.WriteLine($"Fields element ControlType=\"{controlType}\" LocalizedControlType=\"{localizedControlType}\"");
-    //    Assert.IsTrue(
-    //        controlType.Contains("Table", StringComparison.OrdinalIgnoreCase) || localizedControlType.Contains("table", StringComparison.OrdinalIgnoreCase),
-    //        $"Expected the fields element to be exposed as a table/grid to UIA, but ControlType was \"{controlType}\" and LocalizedControlType was \"{localizedControlType}\".");
-    //}
+        // Name-based lookup would ambiguously match the "Fields" title header text above the table (a
+        // separate element) rather than the table itself, which has no accessible name of its own - the
+        // table's peer sets a distinct ClassName (see FieldsPopupElementViewAutomationPeer.GetClassNameCore()).
+        var fieldsElement = FindElementByClassName("FieldsPopupElementView", DefaultTimeout);
+        var controlType = GetControlType(fieldsElement);
+        var localizedControlType = GetLocalizedControlType(fieldsElement);
+        TestContext.WriteLine($"Fields element ControlType=\"{controlType}\" LocalizedControlType=\"{localizedControlType}\"");
+        Assert.IsTrue(
+            controlType.Contains("Table", StringComparison.OrdinalIgnoreCase) || localizedControlType.Contains("table", StringComparison.OrdinalIgnoreCase),
+            $"Expected the fields element to be exposed as a table/grid to UIA, but ControlType was \"{controlType}\" and LocalizedControlType was \"{localizedControlType}\".");
+    }
 
     [TestMethod]
     public async Task PopupViewer_Media_PrevNextButtonsHaveLocalizedNames()
