@@ -1,6 +1,7 @@
 #if WPF
 
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -12,6 +13,7 @@ public partial class OrientedImageryView
 {
     private const string ImageDisplayName = "PART_ImageDisplay";
     private const string ToolbarContainerName = "PART_ToolbarContainer";
+    private const string PaginatorName = "PART_Paginator";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
@@ -41,14 +43,19 @@ public partial class OrientedImageryView
             UnwireDisplay(_display);
         if (_toolbarContainer != null)
             UnwireToolbarContainer(_toolbarContainer);
+        if (_paginator != null)
+            _paginator.SelectedPageIndexChanged -= Paginator_SelectedPageIndexChanged;
 
         _display = GetTemplateChild(ImageDisplayName) as OrientedImageDisplay;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
+        _paginator = GetTemplateChild(PaginatorName) as Paginator;
 
         if (_display != null)
             WireDisplay(_display);
         if (_toolbarContainer != null)
             WireToolbarContainer(_toolbarContainer);
+        if (_paginator != null)
+            _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
     }
 
 #region ViewModel
@@ -103,6 +110,22 @@ public partial class OrientedImageryView
             case nameof(OrientedImageryViewModel.SelectedImageFootprint):
                 if (_display != null)
                     _display.Footprint = ViewModel.SelectedImageFootprint;
+                break;
+            case nameof(OrientedImageryViewModel.SelectedImage):
+                if (_paginator != null)
+                {
+                    var index = -1;
+                    for (var i = 0; i < ViewModel.Images.Count; i++)
+                    {
+                        if (ReferenceEquals(ViewModel.Images[i], ViewModel.SelectedImage))
+                            index = i;
+                    }
+                    _paginator.SelectedPageIndex = index;
+                }
+                break;
+            case nameof(OrientedImageryViewModel.Images):
+                if (_paginator != null)
+                    _paginator.TotalPages = ViewModel.Images.Count;
                 break;
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
                 if (_display != null)
@@ -259,6 +282,16 @@ public partial class OrientedImageryView
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
     }
 #endregion Toolbar
+
+#region Pagination
+    private Paginator? _paginator;
+
+    private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
+    {
+        if (newPageIndex > 0 && newPageIndex < ViewModel.Images.Count)
+            ViewModel.SelectedImage = ViewModel.Images[newPageIndex];
+    }
+#endregion
 }
 
 #endif
