@@ -37,6 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if WPF
         private ButtonBase? _previousButton;
         private ButtonBase? _nextButton;
+        private FrameworkElement? _currentMediaView;
         private int selectedIndex = 0;
 #endif
 
@@ -81,6 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _nextButton.Click += OnNextButtonClicked;
             }
+            _currentMediaView = GetTemplateChild("CurrentMediaView") as FrameworkElement;
             UpdateContent();
 #elif WINUI
             UpdatePipsVisibility();
@@ -120,6 +122,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
             }
             CurrentItem = content;
+
+            // Narrator announces "item X of Y" on its own from these two properties - without them the
+            // currently-shown media item gives no indication of its position among the others.
+            if (_currentMediaView != null)
+            {
+                System.Windows.Automation.AutomationProperties.SetPositionInSet(_currentMediaView, selectedIndex + 1);
+                System.Windows.Automation.AutomationProperties.SetSizeOfSet(_currentMediaView, itemCount);
+            }
         }
 
         private void OnPreviousButtonClicked(object sender, RoutedEventArgs e)
