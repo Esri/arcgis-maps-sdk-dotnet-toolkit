@@ -19,6 +19,7 @@ using System.Collections;
 #if WPF
 using System.Windows.Automation.Peers;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 #elif WINUI
 using Microsoft.UI.Xaml.Automation.Peers;
 #endif
@@ -59,6 +60,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
 #if WPF
+            PreviewKeyDown -= OnPreviewKeyDown;
+            PreviewKeyDown += OnPreviewKeyDown;
+
             if (_previousButton != null)
             {
                 _previousButton.Click -= OnPreviousButtonClicked;
@@ -136,6 +140,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 selectedIndex = 0;
             }
             UpdateContent();
+        }
+
+        // Lets the Left/Right arrow keys page through media items while focus is anywhere inside this control
+        // (e.g. on the prev/next buttons themselves), in addition to clicking them. PreviewKeyDown is a
+        // tunneling event, so wiring it on this control - rather than the individual buttons - catches the key
+        // regardless of which descendant currently has focus. Only handled when there's more than one item, so
+        // arrow keys don't do anything surprising (or swallow the keystroke) when paging isn't possible.
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if ((Element?.Media?.Count ?? 0) < 2)
+            {
+                return;
+            }
+
+            if (e.Key == Key.Left)
+            {
+                OnPreviousButtonClicked(this, new RoutedEventArgs());
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Right)
+            {
+                OnNextButtonClicked(this, new RoutedEventArgs());
+                e.Handled = true;
+            }
         }
 
 #endif
