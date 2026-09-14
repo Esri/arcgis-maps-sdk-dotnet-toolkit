@@ -1,0 +1,137 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery">
+    <local:PaginatorCurrentPageVisibilityConverter x:Key="PaginatorCurrentPageVisibilityConverter" />
+    <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
+
+    <Style x:Key="PaginatorNavigationButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="33" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="#6B6B6B" />
+        <Setter Property="FontFamily" Value="{StaticResource ToolkitIconsFontFamily}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Root" Background="{TemplateBinding Background}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#0A000000" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#14000000" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PaginatorPageButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="MinWidth" Value="35" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="#6B6B6B" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid x:Name="Root" Background="{TemplateBinding Background}">
+                        <!-- Unselected page styling -->
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+
+                        <!-- Selected page styling -->
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.Foreground="#151515">
+                            <ContentPresenter.Visibility>
+                                <MultiBinding Converter="{StaticResource PaginatorCurrentPageVisibilityConverter}">
+                                    <Binding />
+                                    <Binding Path="SelectedPageIndex" RelativeSource="{RelativeSource AncestorType={x:Type local:Paginator}}" />
+                                </MultiBinding>
+                            </ContentPresenter.Visibility>
+                        </ContentPresenter>
+                        <Border Height="2"
+                                Margin="1,0"
+                                VerticalAlignment="Bottom"
+                                Background="#007AC2">
+                            <Border.Visibility>
+                                <MultiBinding Converter="{StaticResource PaginatorCurrentPageVisibilityConverter}">
+                                    <Binding />
+                                    <Binding Path="SelectedPageIndex" RelativeSource="{RelativeSource AncestorType={x:Type local:Paginator}}" />
+                                </MultiBinding>
+                            </Border.Visibility>
+                        </Border>
+                    </Grid>
+
+                    <!-- Triggers for both -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#0A000000" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="#14000000" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:Paginator}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid Height="32" HorizontalAlignment="{Binding HorizontalAlignment, RelativeSource={RelativeSource TemplatedParent}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="PART_LeftNavigate"
+                                Content="&#xe79f;"
+                                Style="{StaticResource PaginatorNavigationButtonStyle}"
+                                VerticalAlignment="Center" />
+
+                        <ItemsControl x:Name="PART_PagesPresenter" Grid.Column="1" IsTabStop="False" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <local:PaginatorPresenterPanel
+                                        x:Name="PART_PaginationPanel"
+                                        SelectedPageIndex="{Binding SelectedPageIndex, RelativeSource={RelativeSource AncestorType={x:Type local:Paginator}}}"
+                                        TotalPages="{Binding TotalPages, RelativeSource={RelativeSource AncestorType={x:Type local:Paginator}}}" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding}" Style="{StaticResource PaginatorPageButtonStyle}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button x:Name="PART_RightNavigate"
+                                FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                FontSize="16"
+                                Content="&#xe7a0;"
+                                Grid.Column="2"
+                                Style="{StaticResource PaginatorNavigationButtonStyle}"
+                                VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
