@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Windows.System;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using NativeAutomationProperties = Microsoft.UI.Xaml.Automation.AutomationProperties;
 using NativeButton = Microsoft.UI.Xaml.Controls.Button;
 using NativeControl = Microsoft.UI.Xaml.Controls.Control;
@@ -25,6 +26,8 @@ public partial class SearchView
     private KeyEventHandler? _suggestionsViewKeyDownHandler;
     private PointerEventHandler? _sourceSelectButtonPointerPressedHandler;
     private bool _sourceSelectOpenedByPointer;
+    private AccessibilitySettings? _accessibilitySettings;
+    private UISettings? _uiSettings;
 
     partial void ConnectKeyboardNavigation()
     {
@@ -38,6 +41,51 @@ public partial class SearchView
         UnwireNativeControls();
         _sourceSelectOpenedByPointer = false;
     }
+
+    partial void OnSearchViewLoaded() => ConnectHighContrastSettings();
+
+    partial void OnSearchViewUnloaded() => DisconnectHighContrastSettings();
+
+    private void ConnectHighContrastSettings()
+    {
+        if (_accessibilitySettings != null)
+        {
+            return;
+        }
+
+        _accessibilitySettings = new AccessibilitySettings();
+        _uiSettings = new UISettings();
+        _uiSettings.ColorValuesChanged += UISettings_ColorValuesChanged;
+        UpdateHighContrastColors();
+    }
+
+    private void DisconnectHighContrastSettings()
+    {
+        if (_uiSettings != null)
+        {
+            _uiSettings.ColorValuesChanged -= UISettings_ColorValuesChanged;
+        }
+
+        _uiSettings = null;
+        _accessibilitySettings = null;
+        UpdateHighContrastColors();
+    }
+
+    private void UISettings_ColorValuesChanged(UISettings sender, object args) =>
+        Dispatcher.Dispatch(UpdateHighContrastColors);
+
+    private void UpdateHighContrastColors()
+    {
+        var highContrast = _accessibilitySettings?.HighContrast == true && _uiSettings != null;
+        var foreground = highContrast ? _uiSettings!.GetColorValue(UIColorType.Foreground) : default;
+        var background = highContrast ? _uiSettings!.GetColorValue(UIColorType.Background) : default;
+        SetHighContrastColors(
+            highContrast ? ToMauiColor(foreground) : null,
+            highContrast ? ToMauiColor(background) : null);
+    }
+
+    private static Color ToMauiColor(Windows.UI.Color color) =>
+        Color.FromRgba(color.R, color.G, color.B, color.A);
 
     partial void OnSourceListOpened()
     {
