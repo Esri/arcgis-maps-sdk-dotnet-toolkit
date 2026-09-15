@@ -53,6 +53,18 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     private bool _sourceSelectToggled;
 
+    private bool _focusResultsWhenAvailable;
+
+    partial void ConnectKeyboardNavigation();
+
+    partial void DisconnectKeyboardNavigation();
+
+    partial void OnSourceListOpened();
+
+    partial void OnResultFocusRequested();
+
+    partial void UpdateSourceSelectAutomationState();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SearchView"/> class.
     /// </summary>
@@ -123,6 +135,8 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
     {
+        DisconnectKeyboardNavigation();
+
         if (PART_SourceSelectButton != null)
         {
             PART_SourceSelectButton.Clicked -= PART_SourceSelectButton_Clicked;
@@ -240,6 +254,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
+        ConnectKeyboardNavigation();
     }
 
     private void HandleClearSearchCommand()
@@ -253,21 +268,16 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         SearchViewModel?.CommitSearch();
     }
 
-    private void HandleRepeatSearchHereCommand()
-    {
-        SearchViewModel?.RepeatSearchHere();
-    }
+    private void HandleRepeatSearchHereCommand() => _ = RepeatSearchAndFocusResults();
 
     private void PART_SourcesView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (SearchViewModel == null)
+        if (SearchViewModel == null || e.CurrentSelection.FirstOrDefault() is not string selectedSource)
         {
             return;
         }
 
-        var selectedSource = e.CurrentSelection.FirstOrDefault() as string;
-
-        if (selectedSource == null || selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
+        if (selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
         {
             SearchViewModel.ActiveSource = null;
         }
@@ -280,7 +290,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         UpdateVisibility();
     }
 
-    private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => SearchViewModel?.RepeatSearchHere();
+    private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => _ = RepeatSearchAndFocusResults();
 
     private void PART_SuggestionsView_ItemSelected(object? sender, SelectionChangedEventArgs e)
     {
@@ -311,6 +321,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
+        if (_sourceSelectToggled)
+        {
+            OnSourceListOpened();
+        }
     }
 
     private void PART_Entry_TextChanged(object? sender, TextChangedEventArgs e)
@@ -367,6 +381,20 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         finally
         {
             _acceptingSuggestionFlag = false;
+        }
+    }
+
+    private async Task RepeatSearchAndFocusResults()
+    {
+        if (SearchViewModel == null)
+        {
+            return;
+        }
+
+        await SearchViewModel.RepeatSearchHere();
+        if (SearchViewModel.Results?.Count > 0)
+        {
+            OnResultFocusRequested();
         }
     }
 
@@ -613,6 +641,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 }
 
                 UpdateVisibility();
+                AnnounceSearchItems(
+                    SearchViewModel.Suggestions,
+                    Properties.Resources.GetString("SearchViewSuggestionsAvailable"),
+                    PART_SuggestionsView);
                 break;
             case nameof(SearchViewModel.Results):
                 PART_ResultView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Results ?? new List<SearchResult>());
@@ -719,7 +751,21 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             return;
         }
 
+        await Task.Yield();
         UpdateVisibility();
+        AnnounceSearchItems(
+            SearchViewModel.Results,
+            Properties.Resources.GetString("SearchViewResultsAvailable"),
+            PART_ResultView);
+
+        if (_focusResultsWhenAvailable && SearchViewModel.Results != null)
+        {
+            _focusResultsWhenAvailable = false;
+            if (SearchViewModel.Results.Count > 0)
+            {
+                OnResultFocusRequested();
+            }
+        }
 
         if (SearchViewModel.Results == null)
         {
@@ -755,6 +801,24 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
     }
 
+    private void AnnounceSearchItems<T>(IList<T>? items, string availableMessage, VisualElement? itemsView)
+    {
+        if (items == null)
+        {
+            return;
+        }
+
+        var announcement = items.Count > 0 && itemsView?.IsVisible == true
+            ? availableMessage
+            : items.Count == 0 && PART_ResultLabel?.IsVisible == true
+                ? NoResultMessage
+                : null;
+        if (!string.IsNullOrEmpty(announcement))
+        {
+            Dispatcher.Dispatch(() => Microsoft.Maui.Accessibility.SemanticScreenReader.Default.Announce(announcement));
+        }
+    }
+
     private void UpdateVisibility()
     {
         PART_SuggestionsView?.SetValue(View.IsVisibleProperty, SuggestionsViewVisibility);
@@ -765,6 +829,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         PART_RepeatButton?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
         PART_RepeatButtonContainer?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
         PART_SourcesView?.SetValue(View.IsVisibleProperty, SourcePopupVisibility);
+        UpdateSourceSelectAutomationState();
     }
 
     #endregion events
