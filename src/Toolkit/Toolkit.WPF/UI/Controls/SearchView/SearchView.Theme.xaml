@@ -545,9 +545,8 @@
                                                     Grid.Column="1"
                                                     Margin="4,0,0,0"
                                                     Orientation="Vertical">
-                                                    <TextBlock Text="{Binding Path=DisplayTitle}" TextWrapping="Wrap" />
+                                                    <TextBlock Foreground="{StaticResource CommonGrayBrush}" Text="{Binding Path=DisplayTitle}" TextWrapping="Wrap" />
                                                     <TextBlock
-                                                        Foreground="{StaticResource CommonGrayBrush}"
                                                         Text="{Binding Path=DisplaySubtitle}"
                                                         TextTrimming="CharacterEllipsis"
                                                         Visibility="{Binding Path=DisplaySubtitle, Mode=OneWay, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
