@@ -55,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                 // A ContentControl hosting an arbitrary element tree isn't a text control, so Narrator has
                 // nothing to read from it by default; the full text is set explicitly as its accessible name.
-                AutomationProperties.SetName(rtb, Element.Text.ToPlainText());
+                AutomationProperties.SetName(rtb, Element?.Text?.ToPlainText());
             }
         }
     }
