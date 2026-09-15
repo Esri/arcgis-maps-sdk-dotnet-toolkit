@@ -629,6 +629,10 @@
     <value>Search sources</value>
     <comment>UIA AutomationProperties.Name for the list view control displaying search sources, used by screen readers to identify the control</comment>
   </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>Sources available</value>
+    <comment>The message announced by screen readers when search sources become available</comment>
+  </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
     <value>Search suggestions</value>
     <comment>UIA AutomationProperties.Name for the list view control displaying search suggestions, used by screen readers to identify the control</comment>
