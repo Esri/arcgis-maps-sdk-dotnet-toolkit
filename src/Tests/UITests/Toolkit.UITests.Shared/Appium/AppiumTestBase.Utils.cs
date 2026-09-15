@@ -105,11 +105,10 @@ public abstract partial class AppiumTestBase
 
     protected AppiumElement FindElementByClassName(string className, TimeSpan? timeout = null)
     {
-#if WINDOWS_TEST
-        var action = () => Driver.FindElement(MobileBy.ClassName(className));
-#else
+#if !WINDOWS_TEST
         throw new NotImplementedException("FindElementByClassName(string,TimeSpan?) is not implemented for this platform.");
 #endif
+        var action = () => Driver.FindElement(MobileBy.ClassName(className));
         try
         {
             return OptionalWaitCall(action, timeout);
@@ -223,11 +222,10 @@ public abstract partial class AppiumTestBase
 
     protected string GetControlType(AppiumElement element, TimeSpan? timeout = null)
     {
-#if WINDOWS_TEST
-        var action = () => element.GetAttribute("ControlType");
-#else
+#if !WINDOWS_TEST
         throw new NotImplementedException("GetControlType(AppiumElement,TimeSpan?) is not implemented for this platform.");
 #endif
+        var action = () => element.GetAttribute("ControlType");
         try
         {
             return OptionalWaitCall(action, timeout);
@@ -241,11 +239,10 @@ public abstract partial class AppiumTestBase
 
     protected string GetLocalizedControlType(AppiumElement element, TimeSpan? timeout = null)
     {
-#if WINDOWS_TEST
-        var action = () => element.GetAttribute("LocalizedControlType");
-#else
+#if !WINDOWS_TEST
         throw new NotImplementedException("GetLocalizedControlType(AppiumElement,TimeSpan?) is not implemented for this platform.");
 #endif
+        var action = () => element.GetAttribute("LocalizedControlType");
         try
         {
             return OptionalWaitCall(action, timeout);
