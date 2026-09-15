@@ -8,20 +8,17 @@
     <converter:CollectionIsSingletonToBoolConverter x:Key="CollectionIsSingletonToBoolConverter" />
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
-    <Color x:Key="ButtonHoverColor">#f3f3f3</Color>
-    <Color x:Key="ButtonPressColor">#e2f1fb</Color>
     <Color x:Key="BlueButtonColor">#007AC2</Color>
     <Color x:Key="BlueButtonHoverColor">#00619B</Color>
     <Color x:Key="BlueButtonPressColor">#004874</Color>
-    <Color x:Key="CommonGrayColor">#6e6e6e</Color>
-    <SolidColorBrush x:Key="CommonGrayBrush" Color="{StaticResource CommonGrayColor}" />
-    <SolidColorBrush x:Key="DefaultControlBackgroundBrush" Color="White" />
+    <SolidColorBrush x:Key="CommonGrayBrush" Color="{DynamicResource {x:Static SystemColors.ControlTextColorKey}}" />
+    <SolidColorBrush x:Key="DefaultControlBackgroundBrush" Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
     <SolidColorBrush x:Key="BlueButtonBrush" Color="{StaticResource BlueButtonColor}" />
     <SolidColorBrush x:Key="BlueButtonHoverBrush" Color="{StaticResource BlueButtonHoverColor}" />
     <SolidColorBrush x:Key="BlueButtonPressBrush" Color="{StaticResource BlueButtonPressColor}" />
-    <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource ButtonHoverColor}" />
-    <SolidColorBrush x:Key="ButtonPressBrush" Color="{StaticResource ButtonPressColor}" />
-    <SolidColorBrush x:Key="ItemSeparatorBrush" Color="#6e6e6e4e" />
+    <SolidColorBrush x:Key="HoverBrush" Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
+    <SolidColorBrush x:Key="ButtonPressBrush" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+    <SolidColorBrush x:Key="ItemSeparatorBrush" Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}" Opacity="0.3" />
     <ControlTemplate x:Key="BarActionButtonTemplate" TargetType="ButtonBase">
         <Border
             x:Name="Border"
@@ -50,14 +47,14 @@
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -144,14 +141,14 @@
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -178,7 +175,7 @@
             SnapsToDevicePixels="true">
             <Border.Background>
                 <!-- Storyboards cannot animate the shared frozen brush resource; each item needs its own brush. -->
-                <SolidColorBrush Color="White" />
+                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
             </Border.Background>
             <ContentPresenter />
             <VisualStateManager.VisualStateGroups>
@@ -187,7 +184,7 @@
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -198,7 +195,7 @@
                     <VisualState x:Name="Selected">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -266,7 +263,7 @@
     <Style x:Key="QueryPlaceholderStyle" TargetType="TextBlock">
         <Setter Property="Padding" Value="8,4,4,4" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="Foreground" Value="{StaticResource CommonGrayBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="IsHitTestVisible" Value="False" />
     </Style>
@@ -483,7 +480,7 @@
                                                         Margin="8"
                                                         FontSize="11"
                                                         FontWeight="SemiBold"
-                                                        Foreground="White"
+                                                        Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
                                                         Text="{Binding Name.DisplayName}"
                                                         TextWrapping="Wrap" />
                                                 </Border>
