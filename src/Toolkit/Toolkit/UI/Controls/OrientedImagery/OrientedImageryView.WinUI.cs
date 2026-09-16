@@ -13,9 +13,44 @@ public partial class OrientedImageryView : ItemsControl
     private long _isInteractiveCallbackToken;
     private long _errorCallbackToken;
 
-    internal SelectNewMarkerSymbolVM MarkerSymbolPicker { get; private set; } = null!;
+    internal DefaultWinUIToolbarTemplates? DefaultToolbarTemplates
+    {
+        get => (DefaultWinUIToolbarTemplates?)GetValue(DefaultToolbarTemplatesProperty);
+        set => SetValue(DefaultToolbarTemplatesProperty, value);
+    }
 
-    internal ShowCameraMarkersVM CameraMarkers { get; private set; } = null!;
+    internal static readonly DependencyProperty DefaultToolbarTemplatesProperty =
+        DependencyProperty.Register(nameof(DefaultToolbarTemplates), typeof(DefaultWinUIToolbarTemplates), typeof(OrientedImageryView), new PropertyMetadata(null));
+
+    private void WireToolbarWinUI(ItemsControl toolbarContainer)
+    {
+        if (ToolbarItemTemplateSelector == null)
+            ToolbarItemTemplateSelector = CreateDefaultSelector();
+        toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
+    }
+
+    private void UnwireToolbarWinUI(ItemsControl toolbarContainer)
+    {
+        toolbarContainer.ItemTemplateSelector = null;
+    }
+
+    private OrientedImageryViewTemplateSelector CreateDefaultSelector()
+    {
+        var selector = new OrientedImageryViewTemplateSelector();
+
+        var templates = DefaultToolbarTemplates;
+        if (templates != null)
+        {
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(ShowSelectedFootprintVM), Template = templates.ShowSelectedFootprintVMTemplate });
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(ShowUnselectedFootprintsVM), Template = templates.ShowUnselectedFootprintsVMTemplate });
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(ShowCameraMarkersVM), Template = templates.ShowCameraMarkersVMTemplate });
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(AllowAddingMarkersVM), Template = templates.AllowAddingMarkersVMTemplate });
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(SelectNewMarkerSymbolVM), Template = templates.MarkerPickerVMTemplate });
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(ClearMarkersVM), Template = templates.ClearMarkersVMTemplate });
+        }
+
+        return selector;
+    }
 
     private void UpdateDisplayStateSubscriptions(OrientedImageDisplay? oldDisplay, OrientedImageDisplay? newDisplay)
     {
@@ -72,6 +107,16 @@ public partial class OrientedImageryView : ItemsControl
 
     internal static readonly DependencyProperty ImageDisplayErrorProperty =
         DependencyProperty.Register(nameof(ImageDisplayError), typeof(Exception), typeof(OrientedImageryView), new PropertyMetadata(null));
+
 }
 
+internal sealed class DefaultWinUIToolbarTemplates
+{
+    public DataTemplate? ShowSelectedFootprintVMTemplate { get; set; }
+    public DataTemplate? ShowUnselectedFootprintsVMTemplate { get; set; }
+    public DataTemplate? ShowCameraMarkersVMTemplate { get; set; }
+    public DataTemplate? AllowAddingMarkersVMTemplate { get; set; }
+    public DataTemplate? MarkerPickerVMTemplate { get; set; }
+    public DataTemplate? ClearMarkersVMTemplate { get; set; }
+}
 #endif
