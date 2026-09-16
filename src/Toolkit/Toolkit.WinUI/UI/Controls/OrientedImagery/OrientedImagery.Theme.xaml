@@ -1,4 +1,4 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     x:Class="Esri.ArcGISRuntime.Toolkit.OrientedImageryResources"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,6 +9,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <!-- Helper Styles -->
 
     <Style x:Key="OrientedImageryToolbarButtonStyle" TargetType="Button">
         <Setter Property="MinWidth" Value="40" />
@@ -77,6 +79,172 @@
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
+    <!-- Toolbar Data Templates -->
+
+    <Style x:Key="ToolbarContainerStyle" TargetType="ItemsControl">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="ToolbarCategoryTemplate" x:DataType="controls:OrientedImageryToolbarCategory">
+        <ItemsControl
+            ItemsSource="{x:Bind ToolbarItems, Mode=OneWay}"
+            Loaded="ToolbarCategory_Loaded"
+            Style="{StaticResource ToolbarContainerStyle}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="MoreCategoryTemplate" x:DataType="controls:OrientedImageryToolbarCategory">
+        <ItemsControl
+            ItemsSource="{x:Bind ToolbarItems, Mode=OneWay}"
+            Loaded="ToolbarCategory_Loaded"
+            Style="{StaticResource ToolbarContainerStyle}"
+            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.SupportsSequentialNavigation), Mode=OneWay}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="ToolbarDividerTemplate" x:DataType="controls:ToolbarDividerVM">
+        <Border
+            Width="1"
+            Height="28"
+            Margin="8,6"
+            Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="ImageSearchModeToolbarTemplate" x:DataType="controls:ImageSearchModeVM">
+        <Button
+            IsEnabled="False"
+            Content="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
+            Style="{StaticResource OrientedImageryToolbarButtonStyle}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="SequentialNavigationToolbarTemplate" x:DataType="controls:SequentialNavigationVM">
+        <Button
+            IsEnabled="False"
+            Content="{internal:LocalizedString Key=EnterSequentialNavigationModeLabel}"
+            AutomationProperties.Name="{internal:LocalizedString Key=EnterSequentialNavigationModeLabel}"
+            Style="{StaticResource OrientedImageryToolbarButtonStyle}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" x:DataType="controls:ShowSelectedFootprintVM">
+        <ToggleButton
+            IsChecked="{x:Bind ViewModel.ShowSelectedFootprint, Mode=TwoWay}"
+            Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedFootprint}">
+            <Viewbox Width="30" Height="30" Stretch="Uniform">
+                <Grid Width="24" Height="24">
+                    <Path Data="F0 M19.384 20H4.616L.349 4h23.302z">
+                        <Path.Fill>
+                            <SolidColorBrush Color="{x:Bind local:OrientedImageryResources.ToWindowsColor(ViewModel.SelectedFootprintFillColor), Mode=OneWay}" />
+                        </Path.Fill>
+                        <Path.Stroke>
+                            <SolidColorBrush Color="{x:Bind local:OrientedImageryResources.ToWindowsColor(ViewModel.SelectedFootprintOutlineColor), Mode=OneWay}" />
+                        </Path.Stroke>
+                    </Path>
+                </Grid>
+            </Viewbox>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" x:DataType="controls:ShowUnselectedFootprintsVM">
+        <ToggleButton
+            IsChecked="{x:Bind ViewModel.ShowUnselectedFootprints, Mode=TwoWay}"
+            Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedFootprints}">
+            <Viewbox Width="30" Height="30" Stretch="Uniform">
+                <Grid Width="24" Height="24">
+                    <Path Data="F0 M19.384 20H4.616L.349 4h23.302z">
+                        <Path.Fill>
+                            <SolidColorBrush Color="{x:Bind local:OrientedImageryResources.ToWindowsColor(ViewModel.UnselectedFootprintFillColor), Mode=OneWay}" />
+                        </Path.Fill>
+                        <Path.Stroke>
+                            <SolidColorBrush Color="{x:Bind local:OrientedImageryResources.ToWindowsColor(ViewModel.UnselectedFootprintOutlineColor), Mode=OneWay}" />
+                        </Path.Stroke>
+                    </Path>
+                </Grid>
+            </Viewbox>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" x:DataType="controls:ShowCameraMarkersVM">
+        <ToggleButton
+            Command="{x:Bind ToggleCameraMarkerDisplayMode, Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleCameraMarkers}">
+            <Grid Width="32" Height="32" UseLayoutRounding="True">
+                <Viewbox Width="32" Height="32">
+                    <FontIcon
+                        Glyph="&#xe77a;"
+                        FontSize="32"
+                        FontFamily="{StaticResource toolkit-icons}"
+                        Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+                </Viewbox>
+            </Grid>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" x:DataType="controls:AllowAddingMarkersVM">
+        <ToggleButton
+            IsChecked="{x:Bind IsAddingMarkersEnabled, Mode=TwoWay}"
+            Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
+            <Viewbox Width="32" Height="32" Stretch="Uniform">
+                <FontIcon
+                    Glyph="&#xe8ed;"
+                    FontSize="24"
+                    FontFamily="{StaticResource toolkit-icons}"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+            </Viewbox>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="MarkerPickerToolbarTemplate" x:DataType="controls:SelectNewMarkerSymbolVM">
+        <ComboBox
+            ItemsSource="{x:Bind SymbolOptions, Mode=OneWay}"
+            SelectedItem="{x:Bind SelectedSymbol, Mode=TwoWay}"
+            Style="{StaticResource OrientedImageryToolbarComboBoxStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
+            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenAddingMarkers(ViewModel.InteractionState), Mode=OneWay}">
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="MinWidth" Value="40" />
+                    <Setter Property="MinHeight" Value="40" />
+                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </ComboBox.ItemContainerStyle>
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="symbology:MarkerSymbol">
+                    <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ClearMarkersToolbarTemplate" x:DataType="controls:ClearMarkersVM">
+        <Button
+            Command="{x:Bind ViewModel.ClearMarkersCommand, Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
+            <Viewbox Width="32" Height="32" Stretch="Uniform">
+                <FontIcon
+                    Glyph="&#xe83e;"
+                    FontSize="24"
+                    FontFamily="{StaticResource toolkit-icons}"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+            </Viewbox>
+        </Button>
+    </DataTemplate>
+
+    <!-- OrientedImageDisplay Style -->
+
     <Style TargetType="controls:OrientedImageViewport">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
@@ -93,8 +261,28 @@
         </Setter>
     </Style>
 
+    <!-- OrientedImageryView Style -->
+
     <Style TargetType="controls:OrientedImageryView">
         <Setter Property="IsTabStop" Value="False" />
+
+        <Setter Property="DefaultToolbarTemplates">
+            <Setter.Value>
+                <controls:DefaultWinUIToolbarTemplates
+                    CategoryTemplate="{StaticResource ToolbarCategoryTemplate}"
+                    MoreCategoryTemplate="{StaticResource MoreCategoryTemplate}"
+                    ToolbarDividerVMTemplate="{StaticResource ToolbarDividerTemplate}"
+                    ImageSearchModeVMTemplate="{StaticResource ImageSearchModeToolbarTemplate}"
+                    SequentialNavigationVMTemplate="{StaticResource SequentialNavigationToolbarTemplate}"
+                    AllowAddingMarkersVMTemplate="{StaticResource AllowAddingMarkersToolbarTemplate}"
+                    ClearMarkersVMTemplate="{StaticResource ClearMarkersToolbarTemplate}"
+                    MarkerPickerVMTemplate="{StaticResource MarkerPickerToolbarTemplate}"
+                    ShowCameraMarkersVMTemplate="{StaticResource ShowCameraMarkersToolbarTemplate}"
+                    ShowSelectedFootprintVMTemplate="{StaticResource ShowSelectedFootprintToolbarTemplate}"
+                    ShowUnselectedFootprintsVMTemplate="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
+            </Setter.Value>
+        </Setter>
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:OrientedImageryView">
@@ -108,108 +296,7 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <StackPanel x:Name="PART_ToolbarContainer" HorizontalAlignment="Center" Orientation="Horizontal">
-
-                                <ToggleButton
-                                    IsChecked="{x:Bind ViewModel.ShowSelectedFootprint, Mode=TwoWay}"
-                                    Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}">
-                                    <Viewbox Width="30" Height="30" Stretch="Uniform">
-                                        <Grid Width="24" Height="24">
-                                            <Path Data="F0 M19.384 20H4.616L.349 4h23.302z">
-                                                <Path.Fill>
-                                                    <SolidColorBrush Color="{x:Bind local:OrientedImageryResources.ToWindowsColor(ViewModel.SelectedFootprintFillColor), Mode=OneWay}" />
-                                                </Path.Fill>
-                                                <Path.Stroke>
-                                                    <SolidColorBrush Color="{x:Bind local:OrientedImageryResources.ToWindowsColor(ViewModel.SelectedFootprintOutlineColor), Mode=OneWay}" />
-                                                </Path.Stroke>
-                                            </Path>
-                                        </Grid>
-                                    </Viewbox>
-                                </ToggleButton>
-
-                                <ToggleButton
-                                    IsChecked="{x:Bind ViewModel.ShowUnselectedFootprints, Mode=TwoWay}"
-                                    Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
-                                    <Viewbox Width="30" Height="30" Stretch="Uniform">
-                                        <Grid Width="24" Height="24">
-                                            <Path Data="F0 M19.384 20H4.616L.349 4h23.302z">
-                                                <Path.Fill>
-                                                    <SolidColorBrush Color="{x:Bind local:OrientedImageryResources.ToWindowsColor(ViewModel.UnselectedFootprintFillColor), Mode=OneWay}" />
-                                                </Path.Fill>
-                                                <Path.Stroke>
-                                                    <SolidColorBrush Color="{x:Bind local:OrientedImageryResources.ToWindowsColor(ViewModel.UnselectedFootprintOutlineColor), Mode=OneWay}" />
-                                                </Path.Stroke>
-                                            </Path>
-                                        </Grid>
-                                    </Viewbox>
-                                </ToggleButton>
-
-                                <ToggleButton
-                                    Command="{x:Bind CameraMarkers.ToggleCameraMarkerDisplayMode, Mode=OneWay}"
-                                    Style="{StaticResource OrientedImageryToolbarButtonStyle}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}">
-                                    <Grid Width="32" Height="32" UseLayoutRounding="True">
-                                        <Viewbox Width="32" Height="32">
-                                            <FontIcon
-                                                Glyph="&#xe77a;"
-                                                FontSize="32"
-                                                FontFamily="{StaticResource toolkit-icons}"
-                                                Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
-                                        </Viewbox>
-                                    </Grid>
-                                </ToggleButton>
-
-                                <ToggleButton
-                                    IsChecked="{x:Bind AllowAddingMarkers.IsAddingMarkersEnabled, Mode=TwoWay}"
-                                    Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
-                                    <Viewbox Width="32" Height="32" Stretch="Uniform">
-                                        <FontIcon
-                                            Glyph="&#xe8ed;"
-                                            FontSize="24"
-                                            FontFamily="{StaticResource toolkit-icons}"
-                                            Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
-                                    </Viewbox>
-                                </ToggleButton>
-
-                                <ComboBox
-                                    ItemsSource="{x:Bind MarkerSymbolPicker.SymbolOptions, Mode=OneWay}"
-                                    SelectedItem="{x:Bind MarkerSymbolPicker.SelectedSymbol, Mode=TwoWay}"
-                                    Style="{StaticResource OrientedImageryToolbarComboBoxStyle}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
-                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
-                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(AllowAddingMarkers.IsAddingMarkersEnabled), Mode=OneWay}">
-                                    <ComboBox.ItemContainerStyle>
-                                        <Style TargetType="ComboBoxItem">
-                                            <Setter Property="MinWidth" Value="40" />
-                                            <Setter Property="MinHeight" Value="40" />
-                                            <Setter Property="Padding" Value="4" />
-                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                            <Setter Property="VerticalContentAlignment" Value="Center" />
-                                        </Style>
-                                    </ComboBox.ItemContainerStyle>
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate x:DataType="symbology:MarkerSymbol">
-                                            <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-
-                                <Button
-                                    Command="{x:Bind ViewModel.ClearMarkersCommand, Mode=OneWay}"
-                                    Style="{StaticResource OrientedImageryToolbarButtonStyle}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
-                                    <Viewbox Width="32" Height="32" Stretch="Uniform">
-                                        <FontIcon
-                                                Glyph="&#xe83e;"
-                                                FontSize="24"
-                                                FontFamily="{StaticResource toolkit-icons}"
-                                                Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
-                                    </Viewbox>
-                                </Button>
-                            </StackPanel>
+                            <ItemsControl x:Name="PART_ToolbarContainer" Style="{StaticResource ToolbarContainerStyle}" />
 
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
