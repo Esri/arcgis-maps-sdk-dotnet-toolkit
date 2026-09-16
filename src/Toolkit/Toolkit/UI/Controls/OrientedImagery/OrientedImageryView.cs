@@ -58,14 +58,11 @@ public partial class OrientedImageryView
 
         if (_display != null)
             UnwireDisplay(_display);
-#if WPF
         if (_toolbarContainer != null)
             UnwireToolbarContainer(_toolbarContainer);
+#if WPF
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged -= Paginator_SelectedPageIndexChanged;
-#elif WINDOWS_XAML
-        if (_display != null)
-            UnwireDisplay_WinUI(_display);
 #endif
 
         _display = GetTemplateChild(ImageDisplayName) as OrientedImageDisplay;
@@ -76,14 +73,11 @@ public partial class OrientedImageryView
 
         if (_display != null)
             WireDisplay(_display);
-#if WPF
         if (_toolbarContainer != null)
             WireToolbarContainer(_toolbarContainer);
+#if WPF
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
-#elif WINDOWS_XAML
-        if (_display != null)
-            WireDisplay_WinUI(_display);
 #endif
         RewireViewModel();
     }
@@ -130,12 +124,6 @@ public partial class OrientedImageryView
         }
 
         RewireViewModel();
-
-#if WINDOWS_XAML
-        // Temporary workaround to avoid doing full toolbar implementation
-        MarkerSymbolPicker = ViewModel.ToolbarItems.OfType<SelectNewMarkerSymbolVM>().Single();
-        CameraMarkers = ViewModel.ToolbarItems.OfType<ShowCameraMarkersVM>().Single();
-#endif
     }
 
     private void RewireViewModel()
@@ -220,6 +208,11 @@ public partial class OrientedImageryView
     private void WireDisplay(OrientedImageDisplay display)
     {
         display.ImageTapped += Display_ImageTapped;
+
+#if WINDOWS_XAML
+        if (_display != null)
+            WireDisplay_WinUI(_display);
+#endif
     }
 
     private void UnwireDisplay(OrientedImageDisplay display)
@@ -229,6 +222,11 @@ public partial class OrientedImageryView
         display.ClearValue(OrientedImageDisplay.MarkersProperty);
         display.ClearValue(OrientedImageDisplay.FootprintProperty);
         display.ClearValue(OrientedImageDisplay.DisplayBackgroundColorProperty);
+
+#if WINDOWS_XAML
+        if (_display != null)
+            UnwireDisplay_WinUI(_display);
+#endif
     }
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
@@ -492,7 +490,6 @@ public partial class OrientedImageryView
 
 #region Toolbar
     private ItemsControl? _toolbarContainer;
-#if WPF
     private OrientedImageryViewTemplateSelector? _defaultItemTemplateSelector;
 
     /// <summary>
@@ -536,14 +533,20 @@ public partial class OrientedImageryView
     {
         toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
         toolbarContainer.Items.Clear();
+        toolbarContainer.ItemsSource = ViewModel?.ToolbarItems;
+#if WINDOWS_XAML
+        WireToolbarWinUI(toolbarContainer);
+#endif
     }
 
     private void UnwireToolbarContainer(ItemsControl toolbarContainer)
     {
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
-    }
+#if WINDOWS_XAML
+        UnwireToolbarWinUI(toolbarContainer);
 #endif
+    }
 #endregion Toolbar
 
 #if WPF
