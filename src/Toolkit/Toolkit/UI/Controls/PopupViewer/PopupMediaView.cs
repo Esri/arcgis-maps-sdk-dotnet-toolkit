@@ -277,7 +277,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             string? altText = GetAltText();
 #if WPF
             this.ToolTip = altText;
-            System.Windows.Automation.AutomationProperties.SetName(this, altText);
 #elif WINUI
             ToolTipService.SetToolTip(this, altText);
             Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(this, altText);
