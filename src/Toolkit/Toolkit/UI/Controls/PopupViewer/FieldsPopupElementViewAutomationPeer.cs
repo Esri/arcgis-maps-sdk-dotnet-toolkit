@@ -14,9 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 #if WPF
+using System.Linq;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
+using System.Windows.Documents;
 #elif WINUI
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Automation.Peers;
@@ -208,12 +210,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
 #if WPF
             if (element is System.Windows.Controls.TextBox tb) return tb.Text ?? string.Empty;
-            if (element is System.Windows.Controls.TextBlock tblk) return tblk.Text ?? string.Empty;
+            // TextBlock.Text only reflects content set through the Text property itself - for a cell built via
+            // Inlines.Add() (the hyperlink cells from FieldsPopupElementView.Windows.cs's CreateHyperlinkCell),
+            // it always returns "" even though the hyperlink's own text is clearly there when rendered. Reading
+            // the TextRange over the whole element instead gives the actual rendered text either way, including
+            // any nested Hyperlink's text.
+            if (element is System.Windows.Controls.TextBlock tblk) return new TextRange(tblk.ContentStart, tblk.ContentEnd).Text ?? string.Empty;
 #elif WINUI
             if (element is FieldsTableCellTextBlock tblk) return tblk.Text ?? string.Empty;
 #endif
             return string.Empty;
         }
+
+#if WPF
+        private static bool ContainsHyperlink(FrameworkElement element) =>
+            element is System.Windows.Controls.TextBlock tblk && tblk.Inlines.Any(static i => i is Hyperlink);
+#endif
 
         // Explicit, deterministic Name/ControlType for this cell. Without this, GetNameCore() falls back to
         // whatever WPF computes automatically for a table-item peer with a row header (GetRowHeaderItems()
@@ -225,6 +237,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         // into a single stop instead of two, while still speaking the label. The row number itself is *not*
         // baked in here - Narrator already announces "Row X of Y" on its own from the IGridItemProvider/
         // ContainingGrid pattern data, so adding it here would just say it twice.
+        //
+        // Hyperlink cells (e.g. "Photo URL") fold without the colon ("Photo URL View" rather than
+        // "Photo URL: View") since GetAutomationControlTypeCore() below already appends "Hyperlink" as the
+        // announced role right after the Name - "Photo URL: View Hyperlink" read worse than "Photo URL View
+        // Hyperlink".
         /// <inheritdoc />
         protected override string GetNameCore()
         {
@@ -233,15 +250,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 var labelText = GetOwnText(header);
                 if (!string.IsNullOrEmpty(labelText))
-                {
                     return $"{labelText}: {ownText}";
-                }
             }
             return ownText;
         }
 
         /// <inheritdoc />
-        protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Text;
+        protected override AutomationControlType GetAutomationControlTypeCore() =>
+#if WPF
+            ContainsHyperlink((FrameworkElement)Owner) ? AutomationControlType.Hyperlink : AutomationControlType.Text;
+#else
+            AutomationControlType.Text;
+#endif
 
         // Label cells (column 0) are no longer independent stops for normal Tab/arrow-key navigation - their
         // text is folded into the value cell's Name instead (see GetNameCore()). They remain reachable via
