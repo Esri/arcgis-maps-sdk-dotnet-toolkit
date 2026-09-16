@@ -33,10 +33,22 @@ public sealed partial class OrientedImageryViewSample : Page
         _orientedImageryViewModel = new OrientedImageryViewModel();
         MainOrientedImageryView.ViewModel = _orientedImageryViewModel;
 
+        MainOrientedImageryView.Loaded += (_, _) => ConfigureToolbarTemplates();
+
         _ = InitializeAsync();
     }
 
-    public static bool HasSelectedImage(OrientedImage? selectedImage) => selectedImage != null;
+    private void ConfigureToolbarTemplates()
+    {
+        if (MainOrientedImageryView.ToolbarItemTemplateSelector is not OrientedImageryViewToolbarSelector selector)
+            return;
+
+        //// This is currently a bit broken and it crowds out the default controls. Comment out to fix
+        //var overlays = _orientedImageryViewModel.ToolbarCategories.Single(static c => c.Name == OrientedImageryToolbarCategory.OverlaysCategoryName);
+        //overlays.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
+        //if (this.Resources.TryGetValue("PopupToolbarItemTemplate", out object popupItemTempalteObject) && popupItemTempalteObject is DataTemplate popupItemTemplate)
+        //    selector.SelectionPairs.Add(new OrientedImageryToolbarItemSelectorPair() { ItemType = typeof(OrientedImageryPopupToolbarItem), Template = popupItemTemplate });
+    }
 
     private async Task InitializeAsync()
     {
@@ -115,4 +127,6 @@ public sealed partial class OrientedImageryViewSample : Page
         SelectedImagePopupBackground.Visibility = Visibility.Collapsed;
         SelectedImagePopupViewer.Popup = null;
     }
+
+    public static bool HasSelectedImage(OrientedImage? selectedImage) => selectedImage != null;
 }

@@ -1,8 +1,8 @@
-#if WPF || MAUI
-
 using System.Collections.ObjectModel;
 #if WPF
 using System.Windows.Markup;
+#elif WINDOWS_XAML
+using Microsoft.UI.Xaml.Markup;
 #endif
 
 #if MAUI
@@ -14,8 +14,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 /// <summary>
 /// An implementation of <see cref="DataTemplateSelector"/> for selecting templates based on a set of predefined key-template pairs.
 /// </summary>
+#if WPF
 [ContentProperty(nameof(SelectionPairs))]
-public class ToolbarSelector : DataTemplateSelector
+#endif
+public partial class ToolbarSelector : DataTemplateSelector
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ToolbarSelector"/> class.
@@ -40,10 +42,31 @@ public class ToolbarSelector : DataTemplateSelector
 
     /// <inheritdoc/>
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
-#else
+#elif WPF
     /// <inheritdoc/>
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
+#elif WINDOWS_XAML
+    /// <inheritdoc/>
+    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
 #endif
+    {
+        return SelectTemplateInner(item) ??
+#if WINDOWS_XAML
+            base.SelectTemplateCore(item, container);
+#else
+            base.SelectTemplate(item, container);
+#endif
+    }
+
+#if WINDOWS_XAML
+    /// <inheritdoc/>
+    protected override DataTemplate SelectTemplateCore(object item)
+    {
+        return SelectTemplateInner(item) ?? base.SelectTemplateCore(item);
+    }
+#endif
+
+    private DataTemplate? SelectTemplateInner(object item)
     {
         if (item is ToolbarCategory category)
         {
@@ -70,7 +93,7 @@ public class ToolbarSelector : DataTemplateSelector
         return container is OrientedImageryViewer ? DefaultTemplate :
             throw new InvalidOperationException($"No oriented imagery toolbar template is registered for '{item.GetType().Name}'.");
 #else
-        return base.SelectTemplate(item, container);
+        return null;
 #endif
     }
 
@@ -230,4 +253,3 @@ public class ToolbarSelectorPair
         Item
     }
 }
-#endif

@@ -9,6 +9,32 @@
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <DataTemplate x:Key="PopupToolbarItemTemplate" x:DataType="local:OrientedImageryPopupToolbarItem">
+            <Button
+                Click="OpenSelectedImagePopupButton_Click"
+                IsEnabled="{x:Bind local:OrientedImageryViewSample.HasSelectedImage(ViewModel.SelectedImage), Mode=OneWay}"
+                ToolTipService.ToolTip="Open popup for selected image">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="MinWidth" Value="40" />
+                        <Setter Property="MinHeight" Value="40" />
+                        <Setter Property="Padding" Value="4" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                    </Style>
+                </Button.Style>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <Grid Width="32" Height="32">
+                        <Path
+                            Data="M7 10h18v10H7zm17 9v-8H8v8zM15 7H7v1h8zm9 1h1V7h-1zm5 14a2 2 0 0 1-2 2h-6.69l-4.277 6.33L11.757 24H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2zM28 5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v17a1 1 0 0 0 1 1h7.289l3.744 5.543L19.778 23H27a1 1 0 0 0 1-1z"
+                            Fill="{ThemeResource TextFillColorPrimaryBrush}" />
+                    </Grid>
+                </Viewbox>
+            </Button>
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -23,7 +49,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -36,11 +61,6 @@
                 Grid.Column="1"
                 Click="ApplyLayerButton_Click"
                 Content="Apply Layer" />
-            <Button
-                Grid.Column="2"
-                Click="OpenSelectedImagePopupButton_Click"
-                Content="Open selected image popup"
-                IsEnabled="{x:Bind local:OrientedImageryViewSample.HasSelectedImage(MainOrientedImageryView.ViewModel.SelectedImage), Mode=OneWay}" />
             <TextBlock
                 x:Name="StatusTextBlock"
                 Grid.Row="1"
