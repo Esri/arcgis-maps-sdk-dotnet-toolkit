@@ -44,9 +44,9 @@ public partial class OrientedImageryView
         var oldDisplay = _display;
         if (oldDisplay != null)
             UnwireDisplay(oldDisplay);
-#if WPF
         if (_toolbarContainer != null)
             UnwireToolbarContainer(_toolbarContainer);
+#if WPF
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged -= Paginator_SelectedPageIndexChanged;
 #endif
@@ -63,9 +63,9 @@ public partial class OrientedImageryView
 
         if (_display != null)
             WireDisplay(_display);
-#if WPF
         if (_toolbarContainer != null)
             WireToolbarContainer(_toolbarContainer);
+#if WPF
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
 #endif
@@ -114,12 +114,6 @@ public partial class OrientedImageryView
 
         if (_display != null)
             WireDisplayToViewModel(_display);
-
-#if WINDOWS_XAML
-        // Temporary workaround to avoid doing full toolbar implementation
-        MarkerSymbolPicker = ViewModel.ToolbarItems.OfType<SelectNewMarkerSymbolVM>().Single();
-        CameraMarkers = ViewModel.ToolbarItems.OfType<ShowCameraMarkersVM>().Single();
-#endif
     }
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -251,7 +245,6 @@ public partial class OrientedImageryView
 
 #region Toolbar
     private ItemsControl? _toolbarContainer;
-#if WPF
     private OrientedImageryViewTemplateSelector? _defaultItemTemplateSelector;
 
     /// <summary>
@@ -296,14 +289,19 @@ public partial class OrientedImageryView
         toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
         toolbarContainer.Items.Clear();
         toolbarContainer.ItemsSource = ViewModel?.ToolbarItems;
+#if WINDOWS_XAML
+        WireToolbarWinUI(toolbarContainer);
+#endif
     }
 
     private void UnwireToolbarContainer(ItemsControl toolbarContainer)
     {
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
-    }
+#if WINDOWS_XAML
+        UnwireToolbarWinUI(toolbarContainer);
 #endif
+    }
 #endregion Toolbar
 
 #if WPF
