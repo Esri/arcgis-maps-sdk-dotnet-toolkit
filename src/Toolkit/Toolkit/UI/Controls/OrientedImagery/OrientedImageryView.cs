@@ -54,9 +54,9 @@ public partial class OrientedImageryView
 
         if (_viewport != null)
             UnwireViewport(_viewport);
-#if WPF
         if (_toolbarContainer != null)
             UnwireToolbarContainer(_toolbarContainer);
+#if WPF
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged -= Paginator_SelectedPageIndexChanged;
 #endif
@@ -69,9 +69,9 @@ public partial class OrientedImageryView
 
         if (_viewport != null)
             WireViewport(_viewport);
-#if WPF
         if (_toolbarContainer != null)
             WireToolbarContainer(_toolbarContainer);
+#if WPF
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
 #endif
@@ -128,13 +128,6 @@ public partial class OrientedImageryView
 #if WPF
         UpdatePaginatorSelection();
 #endif
-
-#if WINDOWS_XAML
-        // Temporary workaround to avoid doing full toolbar implementation
-        MarkerSymbolPicker = ViewModel.ToolbarCategories.Single(c => c.Name == OrientedImageryToolbarCategory.MarkersCategoryName).ToolbarItems.OfType<SelectNewMarkerSymbolVM>().Single();
-        CameraMarkers = ViewModel.ToolbarCategories.Single(c => c.Name == OrientedImageryToolbarCategory.OverlaysCategoryName).ToolbarItems.OfType<ShowCameraMarkersVM>().Single();
-        AllowAddingMarkers = ViewModel.ToolbarCategories.Single(c => c.Name == OrientedImageryToolbarCategory.MarkersCategoryName).ToolbarItems.OfType<AllowAddingMarkersVM>().Single();
-#endif
     }
 
     private void RewireViewModel()
@@ -163,8 +156,8 @@ public partial class OrientedImageryView
             case nameof(OrientedImageryViewModel.Images):
 #if WPF
                 UpdatePaginatorSelection();
-                break;
 #endif
+                break;
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
                 if (_viewport != null)
                     _viewport.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
@@ -366,7 +359,6 @@ public partial class OrientedImageryView
 #endif
     }
 
-
     /// <summary>
     /// Set this function to override the default event handler when the connected <see cref="GeoView"/> is tapped. A <c>null</c> value means the default behavior is active.
     /// </summary>
@@ -431,8 +423,6 @@ public partial class OrientedImageryView
 
 #region Toolbar
     private ItemsControl? _toolbarContainer;
-
-#if WPF
     private OrientedImageryViewToolbarSelector? _defaultItemTemplateSelector;
 
     /// <summary>
@@ -476,14 +466,20 @@ public partial class OrientedImageryView
     {
         toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
         toolbarContainer.Items.Clear();
+        toolbarContainer.ItemsSource = ViewModel?.ToolbarCategories;
+#if WINDOWS_XAML
+        WireToolbarWinUI(toolbarContainer);
+#endif
     }
 
     private void UnwireToolbarContainer(ItemsControl toolbarContainer)
     {
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
-    }
+#if WINDOWS_XAML
+        UnwireToolbarWinUI(toolbarContainer);
 #endif
+    }
 #endregion Toolbar
 
 #if WPF
