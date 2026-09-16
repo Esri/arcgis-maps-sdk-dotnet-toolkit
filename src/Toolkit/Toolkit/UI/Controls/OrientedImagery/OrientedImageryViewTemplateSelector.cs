@@ -1,15 +1,21 @@
-#if WPF
+#if WPF || WINDOWS_XAML
 
 using System.Collections.ObjectModel;
+#if WPF
 using System.Windows.Markup;
+#elif WINDOWS_XAML
+using Microsoft.UI.Xaml.Markup;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 /// <summary>
 /// An implementation of <see cref="DataTemplateSelector"/> for selecting templates based on a set of predefined key-template pairs.
 /// </summary>
+#if WPF
 [ContentProperty(nameof(SelectionPairs))]
-public class OrientedImageryViewToolbarSelector : DataTemplateSelector
+#endif
+public partial class OrientedImageryViewToolbarSelector : DataTemplateSelector
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryViewToolbarSelector"/> class.
@@ -29,7 +35,29 @@ public class OrientedImageryViewToolbarSelector : DataTemplateSelector
     public Collection<OrientedImageryToolbarSelectorPair> SelectionPairs { get; private set; }
 
     /// <inheritdoc/>
+#if WPF
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
+#elif WINDOWS_XAML
+    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+#endif
+    {
+        return SelectTemplateInner(item) ??
+#if WPF
+            base.SelectTemplate(item, container);
+#elif WINDOWS_XAML
+            base.SelectTemplateCore(item, container);
+#endif
+    }
+
+#if WINDOWS_XAML
+    /// <inheritdoc/>
+    protected override DataTemplate SelectTemplateCore(object item)
+    {
+        return SelectTemplateInner(item) ?? base.SelectTemplateCore(item);
+    }
+#endif
+
+    private DataTemplate? SelectTemplateInner(object item)
     {
         if (item is OrientedImageryToolbarCategory category)
         {
@@ -52,7 +80,7 @@ public class OrientedImageryViewToolbarSelector : DataTemplateSelector
             }
         }
 
-        return base.SelectTemplate(item, container);
+        return null;
     }
 
     /// <summary>
