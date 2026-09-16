@@ -141,8 +141,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         img.Cursor = Cursors.Hand;
                         img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
                     }
+                    img.Focusable = true;
+                    img.PreviewKeyUp += (s, e) =>
+                        {
+                            if (e.Key == Key.Enter || e.Key == Key.Space)
+                                Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                        };
+                    KeyboardNavigation.SetIsTabStop(img, true);
 #elif WINDOWS_XAML
                     img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    img.PreviewKeyUp += (s, e) =>
+                    {
+                        if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
+                            Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    };
+                    img.IsTabStop = true;
 #endif
 #endif
                 }
