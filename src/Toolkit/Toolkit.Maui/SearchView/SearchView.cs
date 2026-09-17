@@ -345,6 +345,12 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     private void PART_Entry_TextChanged(object? sender, TextChangedEventArgs e)
     {
+        if (_sourceSelectToggled && sender is Entry { IsFocused: true })
+        {
+            _sourceSelectToggled = false;
+            UpdateVisibility();
+        }
+
         if (SearchViewModel != null)
         {
             SearchViewModel.CurrentQuery = e.NewTextValue;
@@ -837,14 +843,19 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     private void UpdateVisibility()
     {
-        PART_SuggestionsView?.SetValue(View.IsVisibleProperty, SuggestionsViewVisibility);
-        PART_ResultView?.SetValue(View.IsVisibleProperty, ResultViewVisibility);
-        PART_ResultContainer?.SetValue(View.IsVisibleProperty, ResultLabelVisibility);
-        PART_ResultLabel?.SetValue(View.IsVisibleProperty, ResultLabelVisibility);
+        var sourcesVisible = SourcePopupVisibility;
+        var suggestionsVisible = !sourcesVisible && SuggestionsViewVisibility;
+        var resultsVisible = !sourcesVisible && !suggestionsVisible && ResultViewVisibility;
+        var resultLabelVisible = !sourcesVisible && !suggestionsVisible && !resultsVisible && ResultLabelVisibility;
+
+        PART_SuggestionsView?.SetValue(View.IsVisibleProperty, suggestionsVisible);
+        PART_ResultView?.SetValue(View.IsVisibleProperty, resultsVisible);
+        PART_ResultContainer?.SetValue(View.IsVisibleProperty, resultLabelVisible);
+        PART_ResultLabel?.SetValue(View.IsVisibleProperty, resultLabelVisible);
         PART_SourceSelectButton?.SetValue(View.IsVisibleProperty, SourceSelectVisibility);
         PART_RepeatButton?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
         PART_RepeatButtonContainer?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
-        PART_SourcesView?.SetValue(View.IsVisibleProperty, SourcePopupVisibility);
+        PART_SourcesView?.SetValue(View.IsVisibleProperty, sourcesVisible);
         UpdateSourceSelectAutomationState();
     }
 
