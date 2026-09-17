@@ -61,7 +61,11 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     partial void OnSourceListOpened();
 
+    partial void OnSourceSelected();
+
     partial void OnResultFocusRequested();
+
+    partial void OnSuggestionSelected();
 
     partial void UpdateSourceSelectAutomationState();
 
@@ -277,6 +281,16 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             return;
         }
 
+        SelectSource(selectedSource);
+    }
+
+    private void SelectSource(string selectedSource)
+    {
+        if (SearchViewModel == null)
+        {
+            return;
+        }
+
         if (selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
         {
             SearchViewModel.ActiveSource = null;
@@ -286,6 +300,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             SearchViewModel.ActiveSource = SearchViewModel.Sources.First(source => source.DisplayName == selectedSource);
         }
 
+        OnSourceSelected();
         _sourceSelectToggled = false;
         UpdateVisibility();
     }
@@ -298,6 +313,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             PART_SuggestionsView?.SetValue(CollectionView.SelectedItemProperty, null);
 
+            OnSuggestionSelected();
             _ = AcceptSuggestion(suggestion);
         }
     }
