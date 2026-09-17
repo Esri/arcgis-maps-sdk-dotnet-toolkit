@@ -68,6 +68,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }, () => CurrentFeatureForm?.HasEdits == true);
             Unloaded += (s, e) => ClearUtilityAssociationCandidateSelection();
+#if WINDOWS_XAML
+            IsTabStop = false;
+#endif
         }
 
         private class Command : System.Windows.Input.ICommand

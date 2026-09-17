@@ -33,6 +33,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         protected override DependencyObject GetContainerForItemOverride() => new PopupElementContentPresenter();
 
 #endif
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PopupElementItemsControl"/> class.
+        /// </summary>
+        public PopupElementItemsControl()
+        {
+            this.IsTabStop = false;
+        }
+
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
