@@ -121,6 +121,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                             }
                             System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
 #endif
+#if WINUI
+                            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(img, GetAltText());
+#endif
                             img.Source = source;
                         }
                     }
@@ -150,11 +153,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     KeyboardNavigation.SetIsTabStop(img, true);
 #elif WINDOWS_XAML
                     img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
-                    img.PreviewKeyUp += (s, e) =>
-                    {
-                        if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
-                            Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
-                    };
+                    //img.PreviewKeyUp += (s, e) =>
+                    //{
+                    //    if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
+                    //        Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    //};
                     img.IsTabStop = true;
 #endif
 #endif
@@ -279,7 +282,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             this.ToolTip = altText;
 #elif WINUI
             ToolTipService.SetToolTip(this, altText);
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(this, altText);
             UpdateFlipViewItemAutomationName(altText);
 #elif MAUI
             ToolTipProperties.SetText(this, altText);
@@ -392,16 +394,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             if (ancestor is Microsoft.UI.Xaml.Controls.FlipViewItem flipViewItem)
             {
-                var oldName = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(flipViewItem);
-                var newName = altText ?? string.Empty;
-                Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(flipViewItem, newName);
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAccessibilityView(flipViewItem, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+                //var oldName = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(flipViewItem);
+                //var newName = altText ?? string.Empty;
+                //Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(flipViewItem, newName);
 
-                // FlipViewItem's own automation peer can cache its Name (from the raw data item's ToString())
-                // before this ever runs, and won't re-query AutomationProperties.Name on its own - explicitly
-                // notify UIA that it changed so Narrator picks up the new value instead of the stale cached one.
-                var peer = Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.FromElement(flipViewItem)
-                    ?? Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(flipViewItem);
-                peer?.RaisePropertyChangedEvent(Microsoft.UI.Xaml.Automation.AutomationElementIdentifiers.NameProperty, oldName, newName);
+                //// FlipViewItem's own automation peer can cache its Name (from the raw data item's ToString())
+                //// before this ever runs, and won't re-query AutomationProperties.Name on its own - explicitly
+                //// notify UIA that it changed so Narrator picks up the new value instead of the stale cached one.
+                //var peer = Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.FromElement(flipViewItem)
+                //    ?? Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(flipViewItem);
+                //peer?.RaisePropertyChangedEvent(Microsoft.UI.Xaml.Automation.AutomationElementIdentifiers.NameProperty, oldName, newName);
             }
         }
 #endif
