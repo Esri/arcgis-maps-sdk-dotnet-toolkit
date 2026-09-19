@@ -59,6 +59,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     partial void DisconnectKeyboardNavigation();
 
+    partial void OnSearchViewLoaded();
+
+    partial void OnSearchViewUnloaded();
+
     partial void OnSourceListOpened();
 
     partial void OnSourceSelected();
@@ -74,6 +78,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     /// </summary>
     public SearchView()
     {
+        UpdateThemeColors();
         ResultTemplate = DefaultResultTemplate;
         SuggestionTemplate = DefaultSuggestionTemplate;
         ControlTemplate = DefaultControlTemplate;
@@ -103,16 +108,38 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         SearchCommand = new DelegateCommand(HandleSearchCommand);
         RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
         Loaded += SearchView_Loaded;
+        Unloaded += SearchView_Unloaded;
     }
 
     private void SearchView_Loaded(object? sender, EventArgs e)
     {
+        OnSearchViewLoaded();
+
+        if (Application.Current != null)
+        {
+            Application.Current.RequestedThemeChanged -= Application_RequestedThemeChanged;
+            Application.Current.RequestedThemeChanged += Application_RequestedThemeChanged;
+        }
+
         if (GeoView != null)
         {
             HandleViewpointChanged();
         }
         _ = ConfigureForCurrentConfiguration();
     }
+
+    private void SearchView_Unloaded(object? sender, EventArgs e)
+    {
+        OnSearchViewUnloaded();
+
+        if (Application.Current != null)
+        {
+            Application.Current.RequestedThemeChanged -= Application_RequestedThemeChanged;
+        }
+    }
+
+    private void Application_RequestedThemeChanged(object? sender, AppThemeChangedEventArgs e)
+        => UpdateThemeColors();
 
     private void InitializeLocalizedStrings()
     {
@@ -888,6 +915,39 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     {
         get => GetValue(SuggestionGroupHeaderTemplateProperty) as DataTemplate;
         set => SetValue(SuggestionGroupHeaderTemplateProperty, value);
+    }
+
+    private void SetHighContrastColors(Color? foreground, Color? background)
+    {
+        if (foreground == null || background == null)
+        {
+            UpdateThemeColors();
+            return;
+        }
+
+        SetColorResources(foreground, background, foreground, background, background, foreground);
+    }
+
+    private void UpdateThemeColors()
+    {
+        var isDark = Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark;
+        SetColorResources(
+            isDark ? Colors.White : Color.FromArgb("#151515"),
+            isDark ? Color.FromArgb("#2B2B2B") : Colors.White,
+            Colors.White,
+            isDark ? Color.FromArgb("#151515") : Color.FromArgb("#4E4E4E"),
+            Color.FromArgb(isDark ? "#00619B" : "#007AC2"),
+            Colors.White);
+    }
+
+    private void SetColorResources(Color foreground, Color background, Color headerForeground, Color headerBackground, Color accent, Color accentForeground)
+    {
+        Resources[ForegroundColorResourceKey] = foreground;
+        Resources[BackgroundColorResourceKey] = background;
+        Resources[GroupHeaderForegroundColorResourceKey] = headerForeground;
+        Resources[GroupHeaderBackgroundColorResourceKey] = headerBackground;
+        Resources[AccentColorResourceKey] = accent;
+        Resources[AccentForegroundColorResourceKey] = accentForeground;
     }
 
     /// <summary>
