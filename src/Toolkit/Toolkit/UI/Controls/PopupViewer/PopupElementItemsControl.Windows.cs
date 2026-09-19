@@ -28,6 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private static DataTemplate UnsupportedPopupElementTemplate = new DataTemplate();
 
+#if WPF
+        /// <inheritdoc />
+        protected override DependencyObject GetContainerForItemOverride() => new PopupElementContentPresenter();
+
+#endif
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
@@ -71,6 +76,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
             }
         }
+
+#if WPF
+        private sealed class PopupElementContentPresenter : ContentPresenter
+        {
+            protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer() =>
+                new PopupElementContentPresenterAutomationPeer(this);
+        }
+
+        private sealed class PopupElementContentPresenterAutomationPeer : System.Windows.Automation.Peers.FrameworkElementAutomationPeer
+        {
+            public PopupElementContentPresenterAutomationPeer(PopupElementContentPresenter owner)
+                : base(owner)
+            {
+            }
+
+            protected override bool IsControlElementCore() => false;
+
+            protected override bool IsContentElementCore() => false;
+        }
+#endif
 
         /// <summary>
         /// Template used for rendering a <see cref="TextPopupElement"/>.

@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -119,6 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                                     img.Height = double.NaN;
                                 };
                             }
+                            System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
 #endif
                             img.Source = source;
                         }
@@ -140,8 +141,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         img.Cursor = Cursors.Hand;
                         img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
                     }
+                    img.Focusable = true;
+                    img.PreviewKeyUp += (s, e) =>
+                        {
+                            if (e.Key == Key.Enter || e.Key == Key.Space)
+                                Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                        };
+                    KeyboardNavigation.SetIsTabStop(img, true);
 #elif WINDOWS_XAML
                     img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    img.PreviewKeyUp += (s, e) =>
+                    {
+                        if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
+                            Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    };
+                    img.IsTabStop = true;
 #endif
 #endif
                 }
@@ -216,7 +230,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
                 var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi, Style = style });
                 var source = await chart.Image.ToImageSourceAsync();
-                return new Image() { Source = source };
+                var img = new Image() { Source = source };
+#if WPF
+                System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
+#endif
+                return img;
             }
             catch { return null; }
         }
@@ -259,10 +277,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             string? altText = GetAltText();
 #if WPF
             this.ToolTip = altText;
-            System.Windows.Automation.AutomationProperties.SetName(this, altText);
 #elif WINUI
             ToolTipService.SetToolTip(this, altText);
             Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(this, altText);
+            UpdateFlipViewItemAutomationName(altText);
 #elif MAUI
             ToolTipProperties.SetText(this, altText);
             SemanticProperties.SetDescription(this, altText);
@@ -352,7 +370,41 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 StartRefreshTimer(PopupMedia.ImageRefreshInterval);
             }
+#if WINUI
+            UpdateFlipViewItemAutomationName(GetAltText());
+#endif
         }
+
+#if WINUI
+        // When hosted inside the media FlipView, the FlipViewItem container is a separate automation element
+        // from this view, with its own default peer that falls back to the raw PopupMedia data item's
+        // ToString() when no explicit Name is set. Called both from UpdateAltText() (covers a recycled,
+        // already-loaded container getting a new PopupMedia) and from OnViewLoaded (covers first load, since
+        // the property-changed callback that drives UpdateAltText() fires before this view is actually attached
+        // to the visual tree - confirmed live: VisualTreeHelper.GetParent(this) is still null at that point,
+        // so the ancestor walk below only succeeds once this method also runs from Loaded).
+        private void UpdateFlipViewItemAutomationName(string? altText)
+        {
+            var ancestor = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(this);
+            while (ancestor != null && ancestor is not Microsoft.UI.Xaml.Controls.FlipViewItem)
+            {
+                ancestor = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(ancestor);
+            }
+            if (ancestor is Microsoft.UI.Xaml.Controls.FlipViewItem flipViewItem)
+            {
+                var oldName = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(flipViewItem);
+                var newName = altText ?? string.Empty;
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(flipViewItem, newName);
+
+                // FlipViewItem's own automation peer can cache its Name (from the raw data item's ToString())
+                // before this ever runs, and won't re-query AutomationProperties.Name on its own - explicitly
+                // notify UIA that it changed so Narrator picks up the new value instead of the stale cached one.
+                var peer = Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.FromElement(flipViewItem)
+                    ?? Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(flipViewItem);
+                peer?.RaisePropertyChangedEvent(Microsoft.UI.Xaml.Automation.AutomationElementIdentifiers.NameProperty, oldName, newName);
+            }
+        }
+#endif
 
         private void OnViewUnloaded(object? sender,
 #if WINDOWS_XAML

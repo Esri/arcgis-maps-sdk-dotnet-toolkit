@@ -521,6 +521,14 @@
     <value>View</value>
     <comment>The text displayed for a hyperlink, that when clicked will view that webpage/link</comment>
   </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>Previous media</value>
+    <comment>Accessible name and tooltip for the button that shows the previous item in a MediaPopupElement with multiple media</comment>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>Next media</value>
+    <comment>Accessible name and tooltip for the button that shows the next item in a MediaPopupElement with multiple media</comment>
+  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Associations</value>
     <comment>The default title used when UtilityAssociationsPopupElement's title is empty</comment>

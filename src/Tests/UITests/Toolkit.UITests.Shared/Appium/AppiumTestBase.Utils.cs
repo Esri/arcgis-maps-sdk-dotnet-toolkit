@@ -103,6 +103,23 @@ public abstract partial class AppiumTestBase
         }
     }
 
+    protected AppiumElement FindElementByClassName(string className, TimeSpan? timeout = null)
+    {
+#if !WINDOWS_TEST
+        throw new NotImplementedException("FindElementByClassName(string,TimeSpan?) is not implemented for this platform.");
+#endif
+        var action = () => Driver.FindElement(MobileBy.ClassName(className));
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"No elements found with class name \"{className}\". See exception for details.");
+            throw;
+        }
+    }
+
     protected AppiumElement FindElementByText(string text, TimeSpan? timeout = null)
     {
 #if ANDROID_TEST
@@ -199,6 +216,40 @@ public abstract partial class AppiumTestBase
         catch (Exception)
         {
             TestContext.WriteLine($"Could not get automation name for element \"{element.Id}\". See exception for details.");
+            throw;
+        }
+    }
+
+    protected string GetControlType(AppiumElement element, TimeSpan? timeout = null)
+    {
+#if !WINDOWS_TEST
+        throw new NotImplementedException("GetControlType(AppiumElement,TimeSpan?) is not implemented for this platform.");
+#endif
+        var action = () => element.GetAttribute("ControlType");
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"Could not get control type for element \"{element.Id}\". See exception for details.");
+            throw;
+        }
+    }
+
+    protected string GetLocalizedControlType(AppiumElement element, TimeSpan? timeout = null)
+    {
+#if !WINDOWS_TEST
+        throw new NotImplementedException("GetLocalizedControlType(AppiumElement,TimeSpan?) is not implemented for this platform.");
+#endif
+        var action = () => element.GetAttribute("LocalizedControlType");
+        try
+        {
+            return OptionalWaitCall(action, timeout);
+        }
+        catch (Exception)
+        {
+            TestContext.WriteLine($"Could not get localized control type for element \"{element.Id}\". See exception for details.");
             throw;
         }
     }

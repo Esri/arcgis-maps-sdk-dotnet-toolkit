@@ -1,4 +1,4 @@
-﻿<ResourceDictionary
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
@@ -45,12 +45,13 @@
         <Setter Property="RowEvenBackground" Value="#FFFBFBFB" />
         <Setter Property="DividerBrush" Value="#11333333" />
         <Setter Property="FieldTextStyle" Value="{StaticResource FieldsPopupElementViewTextStyle}" />
+        <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:FieldsPopupElementView}">
                     <StackPanel>
-                        <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <ContentPresenter x:Name="TableAreaContent" />
                     </StackPanel>
                 </ControlTemplate>
@@ -126,8 +127,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:AttachmentsPopupElementView}">
                     <StackPanel>
-                        <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -173,23 +174,34 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        
+                        <StackPanel Grid.ColumnSpan="3">
+                                <primitives:AccessibleTextBlock Grid.Row="0" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}"/>
+                                <primitives:AccessibleTextBlock Grid.Row="1" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}"/>
+                            </StackPanel>
 
-                        <StackPanel Grid.Row="2" Margin="0,0,0,20" DataContext="{TemplateBinding CurrentItem}" Grid.Column="1">
-                            <primitives:PopupMediaView PopupMedia="{Binding}" Margin="0,5" />
-                            <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                            <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <StackPanel Grid.Row="1" Margin="0,0,0,20" DataContext="{TemplateBinding CurrentItem}" Grid.Column="1">
+                            <primitives:PopupMediaView x:Name="CurrentMediaView" PopupMedia="{Binding}" Margin="0,5" IsTabStop="False"/>
+                            <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                            <primitives:AccessibleTextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="2"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="PreviousButton" />
-                        <Button Grid.Column="2" Grid.Row="2"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="NextButton" />
+                        <Button Grid.Column="0" Grid.Row="1"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}">
+                            <Button.ToolTip>
+                                <ToolTip Content="{TemplateBinding PreviousMediaButtonText}" FontFamily="{x:Static SystemFonts.MessageFontFamily}" />
+                            </Button.ToolTip>
+                        </Button>
+                        <Button Grid.Column="2" Grid.Row="1"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}">
+                            <Button.ToolTip>
+                                <ToolTip Content="{TemplateBinding NextMediaButtonText}" FontFamily="{x:Static SystemFonts.MessageFontFamily}" />
+                            </Button.ToolTip>
+                        </Button>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 
     <Style TargetType="{x:Type primitives:UtilityAssociationsPopupElementView}" >
@@ -418,10 +430,10 @@
                                 <TextBlock Text="&#xE74A;" FontFamily="Segoe MDL2 Assets" />
                             </Button>
                             <ContentControl ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Margin="{TemplateBinding Padding}"
-                                            VerticalAlignment="Stretch" VerticalContentAlignment="Center" x:Name="Header" />
+                                            VerticalAlignment="Stretch" VerticalContentAlignment="Center" x:Name="Header" IsTabStop="False" />
                         </StackPanel>
                         <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1">
-                            <ContentControl x:Name="Content"
+                            <ContentControl x:Name="Content" IsTabStop="False"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
@@ -436,6 +448,7 @@
     </Style>
 
     <Style TargetType="{x:Type controls:PopupViewer}">
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:PopupViewer}">
@@ -483,15 +496,15 @@
                                                     <RowDefinition Height="*"/>
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
-                                                <primitives:PopupElementItemsControl Grid.Row="0" ItemsSource="{Binding EvaluatedElements, Mode=OneWay}" Margin="0,10" x:Name="ItemsView">
+                                                <primitives:PopupElementItemsControl Grid.Row="0" IsTabStop="False" ItemsSource="{Binding EvaluatedElements, Mode=OneWay}" Margin="0,10" x:Name="ItemsView">
                                                     <primitives:PopupElementItemsControl.TextPopupElementTemplate>
                                                         <DataTemplate>
-                                                            <primitives:TextPopupElementView Element="{Binding}" Margin="0,10" />
+                                                            <primitives:TextPopupElementView Element="{Binding}" Margin="0,10" IsTabStop="False" Focusable="False"/>
                                                         </DataTemplate>
                                                     </primitives:PopupElementItemsControl.TextPopupElementTemplate>
                                                     <primitives:PopupElementItemsControl.MediaPopupElementTemplate>
                                                         <DataTemplate>
-                                                            <primitives:MediaPopupElementView Element="{Binding}" Margin="0,10" />
+                                                            <primitives:MediaPopupElementView Element="{Binding}" Margin="0,10" IsTabStop="False" />
                                                         </DataTemplate>
                                                     </primitives:PopupElementItemsControl.MediaPopupElementTemplate>
                                                     <primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
