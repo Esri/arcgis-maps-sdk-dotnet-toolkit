@@ -400,6 +400,11 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         }
         else if (position.Location is MapPoint location && Footprint?.OrientedImage is OrientedImage image)
         {
+            // Core fails every later transform on an image whose first transform ran before it was loaded,
+            // so wait for the load; PresentAsync re-resolves all markers once the raster is up.
+            if (image.LoadStatus != LoadStatus.Loaded)
+                return null;
+
             try
             {
                 pixel = await image.LocationToImageAsync(location);
