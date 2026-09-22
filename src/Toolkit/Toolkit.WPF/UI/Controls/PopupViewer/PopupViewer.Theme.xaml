@@ -30,7 +30,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:TextPopupElementView}">
-                    <RichTextBox x:Name="TextArea" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="{Binding Text, Converter={StaticResource PopupViewerVisibilityConverter}}" IsReadOnly="True" BorderThickness="0" Background="Transparent" IsTabStop="False" Focusable="False" />
+                    <primitives:AccessibleRichTextBox x:Name="TextArea" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="{Binding Text, Converter={StaticResource PopupViewerVisibilityConverter}}" IsReadOnly="True" IsDocumentEnabled="True" BorderThickness="0" Background="Transparent" IsTabStop="True" Focusable="True" IsAccessible="False" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
