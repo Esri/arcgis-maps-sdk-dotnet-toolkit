@@ -18,6 +18,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.Primitives;
 using Esri.ArcGISRuntime.UI;
 using System.IO;
 #if WPF
@@ -46,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         // object's ToString() ("Esri.ArcGISRuntime.Mapping.Popups.PopupMedia") instead of this view's content.
 #if WPF
         /// <inheritdoc />
-        protected override AutomationPeer OnCreateAutomationPeer() => new FrameworkElementAutomationPeer(this);
+        protected override AutomationPeer OnCreateAutomationPeer() => new PopupMediaViewPeer(this);
 #elif WINUI
         /// <inheritdoc />
         protected override Microsoft.UI.Xaml.Automation.Peers.AutomationPeer OnCreateAutomationPeer() => new FrameworkElementAutomationPeer(this);
@@ -70,6 +71,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return base.MeasureOverride(constraint);
         }
 
+    }
+}
+#endif
+
+#if WPF
+/// <summary>
+/// Automation peer for the <see cref="PopupMediaView"/> control.
+/// </summary>
+public class PopupMediaViewPeer : FrameworkElementAutomationPeer
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref="PopupMediaViewPeer"/> class.
+    /// </summary>
+    /// <param name="owner"></param>
+    public PopupMediaViewPeer(PopupMediaView owner) : base(owner)
+    {
+    }
+
+    /// <summary>
+    /// Indicates that this control is not a content element for accessibility purposes.
+    /// </summary>
+    /// <returns></returns>
+    protected override bool IsContentElementCore()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Indicates that this control is not a control element for accessibility purposes.
+    /// </summary>
+    /// <returns></returns>
+    protected override bool IsControlElementCore()
+    {
+        return false;
     }
 }
 #endif

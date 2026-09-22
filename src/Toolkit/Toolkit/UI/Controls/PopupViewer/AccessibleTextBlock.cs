@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 #if WPF
+using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 
@@ -46,6 +47,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty IsAccessibleProperty =
             DependencyProperty.Register(nameof(IsAccessible), typeof(bool), typeof(AccessibleTextBlock), new PropertyMetadata(true));
 
+        public AutomationHeadingLevel AutomationHeadingLevel
+        {
+            get => (AutomationHeadingLevel)GetValue(AutomationHeadingLevelProperty);
+            set => SetValue(AutomationHeadingLevelProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="AutomationHeadingLevel"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AutomationHeadingLevelProperty =
+            DependencyProperty.Register(nameof(AutomationHeadingLevel), typeof(AutomationHeadingLevel), typeof(AccessibleTextBlock), new PropertyMetadata(AutomationHeadingLevel.None));
+
         protected override AutomationPeer OnCreateAutomationPeer() => new AccessibleTextBlockAutomationPeer(this);
     }
 
@@ -56,13 +69,78 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
         }
 
-        private bool IsAccessible => (Owner as AccessibleTextBlock)?.IsAccessible ?? true;
+        private bool IsAccessible
+        {
+            get
+            {
+                var tb = Owner as AccessibleTextBlock;
+                if (tb == null || String.IsNullOrWhiteSpace(tb.Text))
+                    return false;
+
+                return tb.IsAccessible;
+            }
+        }
 
         /// <inheritdoc />
         protected override bool IsControlElementCore() => IsAccessible;
 
         /// <inheritdoc />
         protected override bool IsContentElementCore() => IsAccessible;
+
+        protected override AutomationHeadingLevel GetHeadingLevelCore() => (Owner as AccessibleTextBlock)?.AutomationHeadingLevel ?? base.GetHeadingLevelCore();
+    }
+
+    internal sealed class AccessibleRichTextBox : RichTextBox
+    {
+        /// <summary>
+        /// Gets or sets whether this element is exposed to UI Automation as a real control/content element,
+        /// overriding WPF's default suppression of elements whose TemplatedParent is set. Defaults to
+        /// <c>true</c>; set to <c>false</c> (or bind it) to fall back to the normal suppressed behavior for a
+        /// specific instance without needing a different element type.
+        /// </summary>
+        public bool IsAccessible
+        {
+            get => (bool)GetValue(IsAccessibleProperty);
+            set => SetValue(IsAccessibleProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="IsAccessible"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsAccessibleProperty =
+            DependencyProperty.Register(nameof(IsAccessible), typeof(bool), typeof(AccessibleRichTextBox), new PropertyMetadata(true));
+
+        public AutomationHeadingLevel AutomationHeadingLevel
+        {
+            get => (AutomationHeadingLevel)GetValue(AutomationHeadingLevelProperty);
+            set => SetValue(AutomationHeadingLevelProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="AutomationHeadingLevel"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AutomationHeadingLevelProperty =
+            DependencyProperty.Register(nameof(AutomationHeadingLevel), typeof(AutomationHeadingLevel), typeof(AccessibleRichTextBox), new PropertyMetadata(AutomationHeadingLevel.None));
+
+        protected override AutomationPeer OnCreateAutomationPeer() => new AccessibleRickTextBoxAutomationPeer(this);
+    }
+
+    internal sealed class AccessibleRickTextBoxAutomationPeer : RichTextBoxAutomationPeer
+    {
+        public AccessibleRickTextBoxAutomationPeer(AccessibleRichTextBox owner)
+            : base(owner)
+        {
+        }
+
+        private bool IsAccessible => (Owner as AccessibleRichTextBox)?.IsAccessible ?? true;
+
+        /// <inheritdoc />
+        protected override bool IsControlElementCore() => IsAccessible;
+
+        /// <inheritdoc />
+        protected override bool IsContentElementCore() => IsAccessible;
+
+        protected override AutomationHeadingLevel GetHeadingLevelCore() => (Owner as AccessibleRichTextBox)?.AutomationHeadingLevel ?? base.GetHeadingLevelCore();
     }
 }
 #endif
