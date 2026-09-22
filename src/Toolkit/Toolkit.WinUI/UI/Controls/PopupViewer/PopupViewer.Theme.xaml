@@ -66,8 +66,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:FieldsPopupElementView">
                     <StackPanel>
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" AutomationProperties.HeadingLevel="Level1" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" AutomationProperties.HeadingLevel="Level2"/>
                         <ContentPresenter x:Name="TableAreaContent" />
                     </StackPanel>
                 </ControlTemplate>
@@ -128,8 +128,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:AttachmentsPopupElementView">
                     <StackPanel>
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                   AutomationProperties.HeadingLevel="Level1"/>
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                   AutomationProperties.HeadingLevel="Level2"/>
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -172,14 +174,16 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Grid.Row="0" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                   AutomationProperties.HeadingLevel="Level1"/>
+                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                   AutomationProperties.HeadingLevel="Level2"/>
                         <FlipView Background="Transparent" AutomationProperties.AccessibilityView="Raw" MaxHeight="200" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Media}" Grid.Row="2" IsTabStop="False" />
                         <PipsPager x:Name="PipsPager"
                             HorizontalAlignment="Center"
                             Grid.Row="3"
                             NumberOfPages="{Binding Media.Count}"
-                            SelectedPageIndex="{Binding SelectedIndex, ElementName=FlipView, Mode=TwoWay}" />
+                            SelectedPageIndex="{Binding SelectedIndex, ElementName=FlipView, Mode=TwoWay}" AutomationProperties.AccessibilityView="Raw" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -442,7 +446,7 @@
                                     <primitives:PopupContentTemplateSelector.PopupTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
-                                                Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                                                Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" AutomationProperties.HeadingLevel="Level1" />
                                         </DataTemplate>
                                     </primitives:PopupContentTemplateSelector.PopupTemplate>
                                     <primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>

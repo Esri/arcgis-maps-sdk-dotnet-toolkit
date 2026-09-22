@@ -8,6 +8,7 @@
 
     <internal:VisibilityConverter x:Key="PopupViewerVisibilityConverter"/>
     <internal:EmptyStringToVisibilityConverter x:Key="PlaceholderVisibilityConverter" />
+    <internal:EmptyStringToBooleanConverter x:Key="EmptyStringToBooleanConverter" />
     <internal:HtmlToPlainTextConverter x:Key="PopupViewerHtmlToPlainTextConverter"/>
     <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
     <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
@@ -25,10 +26,11 @@
         <Setter Property="Foreground" Value="Gray" />
     </Style>
     <Style TargetType="{x:Type primitives:TextPopupElementView}">
+        <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:TextPopupElementView}">
-                    <RichTextBox x:Name="TextArea" Visibility="{Binding Text, Converter={StaticResource PopupViewerVisibilityConverter}}" IsReadOnly="True" IsDocumentEnabled="True" BorderThickness="0" />
+                    <RichTextBox x:Name="TextArea" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="{Binding Text, Converter={StaticResource PopupViewerVisibilityConverter}}" IsReadOnly="True" BorderThickness="0" Background="Transparent" IsTabStop="False" Focusable="False" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -50,8 +52,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:FieldsPopupElementView}">
                     <StackPanel>
-                        <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                                        AutomationHeadingLevel="Level2" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
+                        <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                                        AutomationHeadingLevel="Level3" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}"/>
                         <ContentPresenter x:Name="TableAreaContent" />
                     </StackPanel>
                 </ControlTemplate>
@@ -127,8 +131,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:AttachmentsPopupElementView}">
                     <StackPanel>
-                        <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                                        AutomationHeadingLevel="Level2" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
+                        <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                                        AutomationHeadingLevel="Level3" IsAccessible="{Binding Description,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -178,21 +184,29 @@
                         </Grid.RowDefinitions>
                         
                         <StackPanel Grid.ColumnSpan="3">
-                                <primitives:AccessibleTextBlock Grid.Row="0" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}"/>
-                                <primitives:AccessibleTextBlock Grid.Row="1" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}"/>
+                                <primitives:AccessibleTextBlock Grid.Row="0" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}"
+                                                                AutomationHeadingLevel="Level2" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
+                                <primitives:AccessibleTextBlock Grid.Row="1" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                                                                AutomationHeadingLevel="Level3" IsAccessible="{Binding Description,Converter={StaticResource EmptyStringToBooleanConverter}}"/>
                             </StackPanel>
 
                         <StackPanel Grid.Row="1" Margin="0,0,0,20" DataContext="{TemplateBinding CurrentItem}" Grid.Column="1">
                             <primitives:PopupMediaView x:Name="CurrentMediaView" PopupMedia="{Binding}" Margin="0,5" IsTabStop="False"/>
-                            <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                            <primitives:AccessibleTextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                            <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
+                            <primitives:AccessibleTextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" IsAccessible="{Binding Caption,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="1"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}">
+                        <Button Grid.Column="0" Grid.Row="1" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}">
+                            <Button.Content>
+                                <primitives:AccessibleTextBlock Text="" FontFamily="Segoe MDL2 Assets" IsAccessible="False" />
+                            </Button.Content>
                             <Button.ToolTip>
                                 <ToolTip Content="{TemplateBinding PreviousMediaButtonText}" FontFamily="{x:Static SystemFonts.MessageFontFamily}" />
                             </Button.ToolTip>
                         </Button>
-                        <Button Grid.Column="2" Grid.Row="1"  Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}">
+                        <Button Grid.Column="2" Grid.Row="1" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}">
+                            <Button.Content>
+                                <primitives:AccessibleTextBlock Text="" FontFamily="Segoe MDL2 Assets" IsAccessible="False" />
+                            </Button.Content>
                             <Button.ToolTip>
                                 <ToolTip Content="{TemplateBinding NextMediaButtonText}" FontFamily="{x:Static SystemFonts.MessageFontFamily}" />
                             </Button.ToolTip>
@@ -464,8 +478,8 @@
                                 <primitives:PopupContentTemplateSelector>
                                     <primitives:PopupContentTemplateSelector.PopupTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
-                                  Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                                            <primitives:AccessibleTextBlock Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
+                                  Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" AutomationHeadingLevel="Level1" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                                         </DataTemplate>
                                     </primitives:PopupContentTemplateSelector.PopupTemplate>
                                     <primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
