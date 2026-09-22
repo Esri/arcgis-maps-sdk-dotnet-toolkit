@@ -2,7 +2,9 @@
 
   <PropertyGroup>
     <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">300.2.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">300.2.0</ArcGISRuntimePackageVersion>
+    <!-- LOCAL DEV: floats to the newest 300.2.0 daily so the Oriented Imagery work builds against the current
+         core API. Revert to 300.2.0 before merging. -->
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">300.2.0-daily*</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
