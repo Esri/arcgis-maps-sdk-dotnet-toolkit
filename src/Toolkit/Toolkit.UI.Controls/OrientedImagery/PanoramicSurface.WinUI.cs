@@ -41,9 +41,6 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
     private IDXGISwapChain1* _swapchain;
     private ID3D11RenderTargetView* _backBufferView;
     private bool _renderHooked;
-    private bool _needsRender = true;
-    private bool _deviceLost;
-    private bool _deviceEverCreated; // distinguishes a reload (device existed before) from the first load
 
     public PanoramicSurface()
     {
@@ -60,17 +57,17 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         Tapped += OnTapped;
     }
 
-    private void OnCompositionScaleChanged(SwapChainPanel sender, object args)
-    {
-        Safe(() =>
-        {
-            if (_swapchain is null)
-                EnsureResources();
-            else
-                CreateSizeDependentResources();
+    private void OnCompositionScaleChanged(SwapChainPanel sender, object args) => Safe(EnsureOrResize);
 
-            RequestRender();
-        });
+    private void OnSizeChanged(object sender, SizeChangedEventArgs e) => Safe(EnsureOrResize);
+
+    private void OnLoaded(object sender, RoutedEventArgs e) => Safe(HandleLoaded);
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        UnhookRendering();
+        ReleasePresentResources();
+        ReleaseDeviceResources();
     }
 
     private void OnTapped(object sender, TappedRoutedEventArgs e)
@@ -79,71 +76,14 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         SurfaceTapped?.Invoke(position.X, position.Y);
     }
 
-    // Re-renders on the next composition tick (on-demand: only when the camera, texture, or size changed).
-    public void RequestRender() => _needsRender = true;
-
-    // Runs a lifecycle step (device/swap-chain/resource creation) in a XAML event handler, outside the render loop's
-    // own try/catch, routing any failure to RenderFailed so the hosting display surfaces it as Error.
-    private void Safe(Action action)
+    private void EnsureOrResize()
     {
-        try
-        {
-            action();
-        }
-        catch (Exception ex)
-        {
-            // A removed device is recoverable: flag it so the render loop rebuilds via TryRecoverDevice instead of
-            // stranding with released resources behind a one-shot RenderFailed (same rule as the render catch).
-            if (IsDeviceRemoved)
-            {
-                _deviceLost = true;
-                _needsRender = true;
-                return;
-            }
-
-            RenderFailed?.Invoke(ex);
-        }
-    }
-
-    private void OnLoaded(object sender, RoutedEventArgs e)
-    {
-        Safe(() =>
-        {
-            bool isReload = _deviceEverCreated;
-
-            // Hook the render pump BEFORE resource creation: if creation fails with a removed device, recovery
-            // runs on composition ticks - which only happen once hooked.
-            HookRendering();
+        if (_swapchain is null)
             EnsureResources();
-            RequestRender();
-            if (IsDeviceInitialized)
-                _deviceEverCreated = true;
+        else
+            CreateSizeDependentResources();
 
-            // On a RELOAD the fresh device has no content and the stash was consumed, so ask the display to re-supply.
-            // On the FIRST load the normal load path supplies it. Raising here would force a redundant second decode.
-            if (isReload && IsDeviceInitialized && !HasTexture)
-                DeviceRecreated?.Invoke();
-        });
-    }
-
-    private void OnUnloaded(object sender, RoutedEventArgs e)
-    {
-        UnhookRendering();
-        ReleaseSwapChain();
-        ReleaseDeviceResources();
-    }
-
-    private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-    {
-        Safe(() =>
-        {
-            if (_swapchain is null)
-                EnsureResources();
-            else
-                CreateSizeDependentResources();
-
-            RequestRender();
-        });
+        RequestRender();
     }
 
     private (uint Width, uint Height) GetPixelSize()
@@ -160,7 +100,7 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         return (width, height);
     }
 
-    private void EnsureResources()
+    private partial void EnsureResources()
     {
         if (XamlRoot is null || ActualWidth <= 0 || ActualHeight <= 0)
             return;
@@ -193,41 +133,30 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
             Flags = 0,
         };
 
-        IDXGIDevice* dxgiDevice;
-        Guid dxgiDeviceIid = IDXGIDevice.IID_Guid;
-        ((IUnknown*)Device)->QueryInterface(&dxgiDeviceIid, (void**)&dxgiDevice).ThrowOnFailure();
+        IDXGIDevice* dxgiDevice = null;
+        IDXGIAdapter* adapter = null;
+        IDXGIFactory2* factory = null;
         try
         {
-            IDXGIAdapter* adapter;
+            Guid dxgiDeviceIid = IDXGIDevice.IID_Guid;
+            ((IUnknown*)Device)->QueryInterface(&dxgiDeviceIid, (void**)&dxgiDevice).ThrowOnFailure();
             dxgiDevice->GetAdapter(&adapter);
-            try
-            {
-                IDXGIFactory2* factory;
-                Guid factoryIid = IDXGIFactory2.IID_Guid;
-                adapter->GetParent(&factoryIid, (void**)&factory);
-                try
-                {
-                    IDXGISwapChain1* swapchain;
-                    factory->CreateSwapChainForComposition((IUnknown*)Device, &desc, null, &swapchain);
-                    _swapchain = swapchain;
+            Guid factoryIid = IDXGIFactory2.IID_Guid;
+            adapter->GetParent(&factoryIid, (void**)&factory);
 
-                    // Bind the swap chain to this SwapChainPanel via the COM interop interface (AOT-safe ComWrappers).
-                    ISwapChainPanelNative panelNative = this.As<ISwapChainPanelNative>();
-                    panelNative.SetSwapChain((nint)swapchain);
-                }
-                finally
-                {
-                    factory->Release();
-                }
-            }
-            finally
-            {
-                adapter->Release();
-            }
+            IDXGISwapChain1* swapchain;
+            factory->CreateSwapChainForComposition((IUnknown*)Device, &desc, null, &swapchain);
+            _swapchain = swapchain;
+
+            // Bind the swap chain to this SwapChainPanel via the COM interop interface (AOT-safe ComWrappers).
+            ISwapChainPanelNative panelNative = this.As<ISwapChainPanelNative>();
+            panelNative.SetSwapChain((nint)swapchain);
         }
         finally
         {
-            dxgiDevice->Release();
+            Release(ref factory);
+            Release(ref adapter);
+            Release(ref dxgiDevice);
         }
     }
 
@@ -244,11 +173,7 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         if (Context is not null)
             Context->OMSetRenderTargets(0, (ID3D11RenderTargetView**)null, null);
 
-        if (_backBufferView is not null)
-        {
-            _ = ((IUnknown*)_backBufferView)->Release();
-            _backBufferView = null;
-        }
+        Release(ref _backBufferView);
 
         // These generated wrappers throw on failure - e.g. a device-loss HRESULT from ResizeBuffers, leaving
         // _backBufferView released and null. The throw lands in the caller's Safe, which routes device-loss
@@ -266,7 +191,7 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         }
         finally
         {
-            _ = ((IUnknown*)backBuffer)->Release();
+            Release(ref backBuffer);
         }
 
         ApplySwapChainScale();
@@ -298,7 +223,7 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         }
     }
 
-    private void HookRendering()
+    private partial void HookRendering()
     {
         if (!_renderHooked)
         {
@@ -316,85 +241,23 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         }
     }
 
-    private void OnRendering(object? sender, object e)
+    private void OnRendering(object? sender, object e) => RenderTick();
+
+    private partial bool IsReadyToRender() => _swapchain is not null && _backBufferView is not null;
+
+    private partial bool PresentResourcesReady() => _swapchain is not null;
+
+    private partial void RenderFrame()
     {
-        if (_deviceLost && !TryRecoverDevice())
-            return; // GPU still unavailable (e.g. mid RDP-reconnect); retry next tick.
-
-        if (!_needsRender || _swapchain is null || _backBufferView is null)
-            return;
-
         (uint width, uint height) = GetPixelSize();
-        try
-        {
-            if (HasTexture)
-                RenderScene(_backBufferView, width, height);
-            else
-                ClearTarget(_backBufferView); // present a blank backdrop (no texture) instead of leaving a stale frame
-
-            _swapchain->Present(1, 0);
-        }
-        catch (Exception ex)
-        {
-            if (IsDeviceRemoved)
-            {
-                _deviceLost = true;
-                _needsRender = true;
-                return;
-            }
-
-            RenderFailed?.Invoke(ex);
-            return;
-        }
-
-        if (IsDeviceRemoved)
-        {
-            _deviceLost = true;
-            _needsRender = true;
-            return;
-        }
-
-        _needsRender = false;
+        RenderScene(_backBufferView, width, height);
+        _swapchain->Present(1, 0);
     }
 
-    // Rebuilds the device + all resources after a device-lost. Returns false to retry on the next tick
-    // while the GPU is still unavailable. DeviceRecreated then asks the display to re-supply the texture + markers;
-    // the camera (plain properties on the surface) is preserved.
-    private bool TryRecoverDevice()
+    private partial void ReleasePresentResources()
     {
-        try
-        {
-            ReleaseSwapChain();
-            ReleaseDeviceResources();
-            EnsureResources();
-        }
-        catch
-        {
-            return false;
-        }
-
-        if (!IsDeviceInitialized || _swapchain is null)
-            return false;
-
-        _deviceLost = false;
-        _needsRender = true;
-        DeviceRecreated?.Invoke(); // the display re-supplies the texture + markers (they were on the old device)
-        return true;
-    }
-
-    private void ReleaseSwapChain()
-    {
-        if (_backBufferView is not null)
-        {
-            _ = ((IUnknown*)_backBufferView)->Release();
-            _backBufferView = null;
-        }
-
-        if (_swapchain is not null)
-        {
-            _ = ((IUnknown*)_swapchain)->Release();
-            _swapchain = null;
-        }
+        Release(ref _backBufferView);
+        Release(ref _swapchain);
     }
 
     private void OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)

@@ -17,7 +17,11 @@
 
 #if MAUI
 global using DependencyProperty = Microsoft.Maui.Controls.BindableProperty;
+global using DependencyPropertyKey = Microsoft.Maui.Controls.BindablePropertyKey;
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+#elif WINDOWS_XAML
+// WinUI has no read-only registration, so a read-only property's key is the property itself.
+global using DependencyPropertyKey = Microsoft.UI.Xaml.DependencyProperty;
 #endif
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -45,27 +49,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                     (s, e) => propertyChanged?.Invoke((OwnerType)s, e.OldValue is null ? default : (ValueType)e.OldValue, e.NewValue is null ? default : (ValueType)e.NewValue)));
 #endif
 
-#if WPF || MAUI
         /// <summary>
         /// Read-only variant of <see cref="CreateProperty{ValueType, OwnerType}"/> for control-owned computed state:
-        /// external SetValue/ClearValue are rejected by the property system; the owner writes through the returned
-        /// key. WinUI has no read-only registration, so callers keep an ordinary property there.
+        /// the owner writes through the returned key and external SetValue/ClearValue are rejected. WinUI has no
+        /// read-only registration, so the key is an ordinary property there.
         /// </summary>
-#if WPF
-        public static System.Windows.DependencyPropertyKey CreateReadOnlyProperty<ValueType, OwnerType>(string propertyName,
+        public static DependencyPropertyKey CreateReadOnlyProperty<ValueType, OwnerType>(string propertyName,
             ValueType? defaultValue = default,
             Action<OwnerType, ValueType?, ValueType?>? propertyChanged = null) where OwnerType : DependencyObject
+#if WPF
             => DependencyProperty.RegisterReadOnly(propertyName, typeof(ValueType), typeof(OwnerType),
                 new PropertyMetadata(defaultValue,
                     propertyChanged is null ? null :
                     (s, e) => propertyChanged?.Invoke((OwnerType)s, e.OldValue is null ? default : (ValueType)e.OldValue, e.NewValue is null ? default : (ValueType)e.NewValue)));
-#else
-        public static Microsoft.Maui.Controls.BindablePropertyKey CreateReadOnlyProperty<ValueType, OwnerType>(string propertyName,
-            ValueType? defaultValue = default,
-            Action<OwnerType, ValueType?, ValueType?>? propertyChanged = null) where OwnerType : DependencyObject
+#elif MAUI
             => DependencyProperty.CreateReadOnly(propertyName, typeof(ValueType), typeof(OwnerType), defaultValue, propertyChanged: propertyChanged is null ? null :
                 (s, oldValue, newValue) => propertyChanged?.Invoke((OwnerType)s, oldValue is null ? default : (ValueType)oldValue, newValue is null ? default : (ValueType)newValue));
+#else
+            => CreateProperty(propertyName, defaultValue, propertyChanged);
 #endif
+
+        /// <summary>Gets the public property behind a read-only registration.</summary>
+        public static DependencyProperty GetProperty(DependencyPropertyKey key)
+#if WPF
+            => key.DependencyProperty;
+#elif MAUI
+            => key.BindableProperty;
+#else
+            => key;
 #endif
     }
 }

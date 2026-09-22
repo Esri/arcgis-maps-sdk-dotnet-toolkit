@@ -17,10 +17,6 @@
 #if WPF || WINDOWS_XAML || __ANDROID__ || (MAUI && WINDOWS)
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,22 +25,14 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
-using Color = System.Drawing.Color;
 using PointF = System.Drawing.PointF;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
-#if WPF
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
-using VerticalAlignment = System.Windows.VerticalAlignment;
-#elif WINDOWS_XAML
-using System.Runtime.InteropServices.WindowsRuntime;
-using HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment;
-using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
-#elif MAUI
-using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
-#if WINDOWS
+#if WINDOWS_XAML || (MAUI && WINDOWS)
 using System.Runtime.InteropServices.WindowsRuntime;
 #endif
+#if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 #if MAUI
@@ -68,7 +56,6 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private readonly PanoramicSurface _surface;
 #endif
     private readonly List<ResolvedMarker> _resolvedMarkers = [];
-    private readonly List<WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
     private int _markerGeneration;
     private int _imageWidth;
     private int _imageHeight;
@@ -172,71 +159,19 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
     }
 
-    // Re-subscribes to each current marker's PropertyChanged and re-resolves the whole set. Called when the collection
-    // is replaced or changes; a marker's own property change re-resolves without re-subscribing.
-    protected override void RebuildMarkers()
-    {
-        foreach (var listener in _markerListeners)
-        {
-            listener.Detach();
-        }
+    // Every marker change re-resolves the whole set; the surface redraws all markers from the result anyway.
+    protected override void RebuildMarkers() => _ = ResolveMarkersAsync();
 
-        _markerListeners.Clear();
-        AddMarkers(Markers ?? []);
-    }
+    protected override void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers) => _ = ResolveMarkersAsync();
 
-    protected override void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers)
-    {
-        foreach (OrientedImageMarker marker in newMarkers)
-        {
-            SetMarkerListener(marker, out var listener);
-            _markerListeners.Add(listener);
-        }
+    protected override void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index) => _ = ResolveMarkersAsync();
 
-        _ = ResolveMarkersAsync();
-    }
+    protected override void RemoveMarkers(int startingIndex, IEnumerable<OrientedImageMarker> removedMarkers) => _ = ResolveMarkersAsync();
 
-    protected override void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index)
-    {
-        _markerListeners[index].Detach();
-        SetMarkerListener(newMarker, out var listener);
-        _markerListeners[index] = listener;
+    protected override void MoveMarkers(int oldIndex, int newIndex) => _ = ResolveMarkersAsync();
 
-        _ = ResolveMarkersAsync();
-    }
-
-    protected override void RemoveMarkers(int startingIndex, IEnumerable<OrientedImageMarker> removedMarkers)
-    {
-        foreach (var marker in removedMarkers)
-        {
-            _markerListeners[startingIndex].Detach();
-            _markerListeners.RemoveAt(startingIndex);
-        }
-
-        _ = ResolveMarkersAsync();
-    }
-
-    protected override void MoveMarkers(int oldIndex, int newIndex)
-    {
-        var temp = _markerListeners[oldIndex];
-        _markerListeners[oldIndex] = _markerListeners[newIndex];
-        _markerListeners[newIndex] = temp;
-
-        _ = ResolveMarkersAsync();
-    }
-
-    private void SetMarkerListener(OrientedImageMarker marker, out WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs> listener)
-    {
-        listener = new WeakEventListener<OrientedImagePanoramicDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
-        {
-            OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
-            OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
-        };
-        marker.PropertyChanged += listener.OnEvent;
-    }
-
-    // Dispatch so the snapshot of the app-owned marker is taken on the UI thread (the app may raise PropertyChanged off it).
-    private void OnMarkerPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.Dispatch(() => _ = ResolveMarkersAsync());
+    // Dispatch so the snapshot of the app-owned marker is taken on the UI thread.
+    protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName) => this.Dispatch(() => _ = ResolveMarkersAsync());
 
     // Resolves every visible marker to a normalized (u,v) and a rasterized swatch, then pushes the set to the surface.
     // Re-entrant: a generation counter discards a resolve superseded by a newer one. Resolution runs off the UI thread;

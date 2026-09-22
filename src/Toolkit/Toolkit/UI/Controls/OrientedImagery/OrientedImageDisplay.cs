@@ -68,7 +68,6 @@ public partial class OrientedImageDisplay
     /// Initializes a new instance of the <see cref="OrientedImageDisplay"/> class.
     /// </summary>
     public OrientedImageDisplay()
-        : base()
     {
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -203,76 +202,31 @@ public partial class OrientedImageDisplay
     public static readonly DependencyProperty AutoUpdateFootprintProperty =
         PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(AutoUpdateFootprint), false, (s, oldValue, newValue) => s._activeDisplay?.SetAutoUpdateFootprint(newValue));
 
-    // IsBusy/IsInteractive/Error are control-owned computed state: registered read-only where the platform
-    // supports it, so external SetValue/ClearValue can't overwrite them (bindings/triggers still read them).
-    // WinUI has no read-only dependency-property registration; an ordinary property is the platform compromise.
-#if WPF
-    private static readonly System.Windows.DependencyPropertyKey IsBusyPropertyKey =
+    // IsBusy/IsInteractive/Error are control-owned computed state, registered read-only where the platform
+    // supports it so external SetValue/ClearValue cannot overwrite them (bindings still read them).
+    private static readonly DependencyPropertyKey IsBusyPropertyKey =
         PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsBusy));
 
-    private static readonly System.Windows.DependencyPropertyKey IsInteractivePropertyKey =
+    private static readonly DependencyPropertyKey IsInteractivePropertyKey =
         PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsInteractive));
 
-    private static readonly System.Windows.DependencyPropertyKey ErrorPropertyKey =
+    private static readonly DependencyPropertyKey ErrorPropertyKey =
         PropertyHelper.CreateReadOnlyProperty<Exception, OrientedImageDisplay>(nameof(Error));
 
     /// <summary>
     /// Identifies the <see cref="IsBusy"/> dependency property.
     /// </summary>
-    public static readonly DependencyProperty IsBusyProperty = IsBusyPropertyKey.DependencyProperty;
+    public static readonly DependencyProperty IsBusyProperty = PropertyHelper.GetProperty(IsBusyPropertyKey);
 
     /// <summary>
     /// Identifies the <see cref="IsInteractive"/> dependency property.
     /// </summary>
-    public static readonly DependencyProperty IsInteractiveProperty = IsInteractivePropertyKey.DependencyProperty;
+    public static readonly DependencyProperty IsInteractiveProperty = PropertyHelper.GetProperty(IsInteractivePropertyKey);
 
     /// <summary>
     /// Identifies the <see cref="Error"/> dependency property.
     /// </summary>
-    public static readonly DependencyProperty ErrorProperty = ErrorPropertyKey.DependencyProperty;
-#elif MAUI
-    private static readonly Microsoft.Maui.Controls.BindablePropertyKey IsBusyPropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsBusy));
-
-    private static readonly Microsoft.Maui.Controls.BindablePropertyKey IsInteractivePropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsInteractive));
-
-    private static readonly Microsoft.Maui.Controls.BindablePropertyKey ErrorPropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<Exception, OrientedImageDisplay>(nameof(Error));
-
-    /// <summary>
-    /// Identifies the <see cref="IsBusy"/> bindable property.
-    /// </summary>
-    public static readonly DependencyProperty IsBusyProperty = IsBusyPropertyKey.BindableProperty;
-
-    /// <summary>
-    /// Identifies the <see cref="IsInteractive"/> bindable property.
-    /// </summary>
-    public static readonly DependencyProperty IsInteractiveProperty = IsInteractivePropertyKey.BindableProperty;
-
-    /// <summary>
-    /// Identifies the <see cref="Error"/> bindable property.
-    /// </summary>
-    public static readonly DependencyProperty ErrorProperty = ErrorPropertyKey.BindableProperty;
-#else
-    /// <summary>
-    /// Identifies the <see cref="IsBusy"/> dependency property.
-    /// </summary>
-    public static readonly DependencyProperty IsBusyProperty =
-        PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(IsBusy));
-
-    /// <summary>
-    /// Identifies the <see cref="IsInteractive"/> dependency property.
-    /// </summary>
-    public static readonly DependencyProperty IsInteractiveProperty =
-        PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(IsInteractive));
-
-    /// <summary>
-    /// Identifies the <see cref="Error"/> dependency property.
-    /// </summary>
-    public static readonly DependencyProperty ErrorProperty =
-        PropertyHelper.CreateProperty<Exception, OrientedImageDisplay>(nameof(Error));
-#endif
+    public static readonly DependencyProperty ErrorProperty = PropertyHelper.GetProperty(ErrorPropertyKey);
 
     /// <summary>
     /// Identifies the <see cref="DisplayBackgroundColor"/> dependency property.
@@ -390,15 +344,9 @@ public partial class OrientedImageDisplay
     // An unsupported image type has no display, so its error is reported here directly.
     private void UpdateState()
     {
-#if WPF || MAUI
         SetValue(IsBusyPropertyKey, _unsupportedError is null && (_activeDisplay?.IsBusy ?? false));
         SetValue(IsInteractivePropertyKey, _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false));
         SetValue(ErrorPropertyKey, _unsupportedError ?? _activeDisplay?.Error);
-#else
-        SetValue(IsBusyProperty, _unsupportedError is null && (_activeDisplay?.IsBusy ?? false));
-        SetValue(IsInteractiveProperty, _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false));
-        SetValue(ErrorProperty, _unsupportedError ?? _activeDisplay?.Error);
-#endif
     }
 
     // Selects the inner display for an image type: planar -> raster, panoramic -> panoramic (Windows + Android for
