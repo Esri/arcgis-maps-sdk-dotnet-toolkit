@@ -30,10 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// Describes where an <see cref="OrientedImageMarker"/> is anchored: to a pixel on the currently displayed image,
 /// or to a world location that is projected onto each image.
 /// </summary>
-/// <remarks>
-/// A position is created through <see cref="FromImagePoint(PointF)"/> or <see cref="FromLocation(MapPoint)"/>; exactly
-/// one of <see cref="ImagePoint"/> and <see cref="Location"/> is non-<c>null</c>.
-/// </remarks>
+/// <remarks>Create through <see cref="FromImagePoint(PointF)"/> or <see cref="FromLocation(MapPoint)"/>; exactly one of
+/// <see cref="ImagePoint"/> and <see cref="Location"/> is non-<c>null</c>.</remarks>
 public readonly struct OrientedImageMarkerPosition : IEquatable<OrientedImageMarkerPosition>
 {
     private OrientedImageMarkerPosition(PointF? imagePoint, MapPoint? location)

@@ -26,13 +26,9 @@ using PlatformPanoramicSurface = Esri.ArcGISRuntime.Toolkit.UI.Controls.Panorami
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 
-// MAUI virtual view for the platform panorama surface (GLES TextureView on Android; the Windows heads' D3D11
-// SwapChainPanel surface on MAUI-Windows), hosted by OrientedImagePanoramicDisplay. It mirrors the surface API
-// the display consumes (camera, texture, markers, events) and forwards to the platform view once the handler
-// connects, stashing content set before that (the platform view only exists while attached to a window).
-// On re-attach after a disconnect (the platform surface and its GPU resources were disposed), it raises
-// DeviceRecreated so the display re-supplies the panorama - the same recovery contract the platform surfaces
-// use for in-place device/context loss.
+// MAUI virtual view over the platform panorama surface (GLES TextureView on Android, the D3D11 SwapChainPanel surface
+// on Windows). Forwards to the platform view once the handler connects and stashes what was set before that, since
+// the platform view exists only while attached to a window.
 internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 {
     private PlatformPanoramicSurface? _platform;
@@ -91,8 +87,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         }
     }
 
-    // The platform view's size in its own screen units: physical pixels on Android, DIPs on Windows.
-    // Tap coordinates and hit-testing use the same unit, so the display's math stays consistent.
+    // In the platform view's own units (physical pixels on Android, DIPs on Windows), the same units as tap coordinates.
     public double ActualWidth => _platform?.ActualWidth ?? 0;
 
     public double ActualHeight => _platform?.ActualHeight ?? 0;
@@ -241,9 +236,8 @@ internal sealed class PanoramicSurfaceViewHandler : ViewHandler<PanoramicSurface
         new PropertyMapper<PanoramicSurfaceView, PanoramicSurfaceViewHandler>(ViewMapper)
         {
 #if !__ANDROID__
-            // WinUI SwapChainPanel rejects the Background property (even ClearValue throws), and the base
-            // ViewMapper maps it on connect - which would unwind out of the host's set_Content and leave the
-            // display unhosted. The surface paints its own backdrop (SetClearColor).
+            // SwapChainPanel rejects Background (even ClearValue throws) and the base ViewMapper sets it on connect, which
+            // would unwind out of the host's set_Content and leave the display unhosted. The surface paints its own backdrop.
             [nameof(Microsoft.Maui.IView.Background)] = MapBackgroundNoOp,
 #endif
         };
@@ -251,7 +245,6 @@ internal sealed class PanoramicSurfaceViewHandler : ViewHandler<PanoramicSurface
 #if !__ANDROID__
     private static void MapBackgroundNoOp(PanoramicSurfaceViewHandler handler, PanoramicSurfaceView view)
     {
-        // Intentionally empty: not supported on SwapChainPanel.
     }
 #endif
 

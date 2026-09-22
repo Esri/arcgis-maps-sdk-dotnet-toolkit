@@ -49,9 +49,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Raster inner display for OrientedImageDisplay: hosts a MapView showing the oriented image as a raster layer,
-// renders markers, and (when enabled) recomputes the visible footprint corners as the viewport changes.
-// The shared OrientedImageInnerDisplay skeleton owns the load/session/state plumbing.
+// Inner display for planar images: a MapView showing the image as a RasterLayer, markers as overlay graphics, and
+// the visible pixel ring pushed to the footprint while auto-update is enabled.
 internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDisplay
 {
     private readonly MapView _mapView;
@@ -86,10 +85,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         {
             UpdateState();
 
-            // The initial framing's ViewpointChanged can fire while drawing is still in progress - where
-            // BeginFootprintUpdate rejects it - and no further viewpoint event is guaranteed afterwards, so
-            // push the footprint once drawing settles. No-op unless auto-update is enabled, and the base's
-            // latest-wins cancellation makes redundant pushes safe.
+            // The initial ViewpointChanged can fire while still drawing, where BeginFootprintUpdate rejects it, and no
+            // later viewpoint event is guaranteed; push once drawing settles. Redundant pushes are safe (latest wins).
             if (e.Status == DrawStatus.Completed)
                 UpdateFootprint();
         };
@@ -105,7 +102,6 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     protected override Microsoft.UI.Xaml.DependencyObject AutomationNameTarget => _mapView;
 #endif
 
-    // A loaded raster stays interactive while it redraws during a pan (busy and interactive can both be true).
     // A MapView with no Map sits at DrawStatus.InProgress forever, so only count drawing when there's a map.
     protected override bool IsPresentationBusy => _mapView.Map is not null && _mapView.DrawStatus == DrawStatus.InProgress;
 
@@ -134,8 +130,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
     protected override async Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token)
     {
-        // A same-image re-present: abort the previous layer's in-flight load. Lock the view while loading so the
-        // user can't accidentally pan/zoom away from the incoming image.
+        // Abort a previous layer's load and keep the view locked until the new raster is framed.
         _rasterLayer?.CancelLoad();
         SetInteractive(false);
 
@@ -150,14 +145,12 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
         if (layer.Raster?.RasterInfo?.Extent is Envelope extent)
         {
-            // The effective rotation formula (from ArcGIS JS API) is clockwise,
-            // but MapView rotation is counter-clockwise; negate it.
-            // Only the view (not the raster) rotates, so marker placement and hit-testing stays in native pixel space.
+            // The effective rotation is clockwise, MapView rotation counter-clockwise: negate. Only the view rotates, so
+            // markers and hit-testing stay in native pixel space (OrientedImageRotation.DesignNotes.md).
             double viewRotation = -GetEffectiveRotationDegrees(image);
             try
             {
-                // Zoom and rotate in one quick animation-free viewpoint set. The extent may have a null spatial
-                // reference (a plain image map has none); the Viewpoint constructor accepts that.
+                // Frame and rotate in one animation-free viewpoint set.
                 _mapView.SetViewpoint(new Viewpoint(extent, viewRotation));
             }
             catch
@@ -172,7 +165,6 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             _ = RefreshMarkerGeometriesAsync();
         }
 
-        // Unlock once the raster has loaded.
         SetInteractive(true);
     }
 
@@ -186,8 +178,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
     public override void SetBackgroundColor(System.Drawing.Color color)
     {
-        // Empty restores the MapView's default grid (gray with black grid lines).
-        // Otherwise sets it to a solid color (no grid lines).
+        // Empty restores the default grid; otherwise a solid color with zero-width grid lines.
         _mapView.BackgroundGrid = color.IsEmpty
             ? new BackgroundGrid()
             : new BackgroundGrid(color, System.Drawing.Color.Transparent, 0f, 16f);
@@ -201,9 +192,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             _mapView.ViewpointChanged -= OnViewpointChanged;
     }
 
-    // Locks/unlocks MapView user interaction (programmatic SetViewpoint still works while locked).
-    // Replace the whole MapViewInteractionOptions object (an in-place IsEnabled flip would be ignored).
-    // Tracks the enabled state in _interactive; each caller follows this with UpdateState, which surfaces it as IsInteractive.
+    // Locks/unlocks user interaction; programmatic SetViewpoint still works while locked. Replace the whole
+    // MapViewInteractionOptions object: an in-place IsEnabled flip is ignored.
     private void SetInteractive(bool enabled)
     {
         _interactive = enabled;
@@ -222,9 +212,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return new Raster(uri.IsAbsoluteUri && uri.IsFile ? uri.LocalPath : uri.OriginalString);
     }
 
-    // Rebuilds the marker-to-graphic mapping from scratch and observes each marker for live updates.
-    // Snapshots the app-owned collection on the calling thread (so it's never enumerated off its mutating thread),
-    // then does the overlay/dictionary work on the UI thread.
+    // Snapshot the app-owned collection on the calling thread; the overlay and dictionary work runs on the UI thread.
     protected override void RebuildMarkers()
     {
         List<OrientedImageMarker>? snapshot = Markers is null ? null : new(Markers);
@@ -310,9 +298,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         });
     }
 
-    // Recomputes the map-space geometry for every current marker.
-    // Called after the raster loads (so markers set before load get placed) and whenever the marker set changes.
-    // Pass a subset of markers to refresh only those; otherwise refresh all.
+    // Re-places the given markers, or all of them when null.
     private async Task RefreshMarkerGeometriesAsync(IEnumerable<OrientedImageMarker>? markers = null)
     {
         if (markers == null)
@@ -337,17 +323,13 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     {
         CancellationToken token = SessionToken;
         MapPoint? mapPoint = await ResolveMarkerMapPointAsync(marker);
-        // The marker set or the image may have changed while awaiting; only apply if this graphic is still the
-        // marker's graphic AND the session is unchanged (a pixel projected through the old image's camera model
-        // must not be placed on the new raster). A null point (unprojectable location, see PixelToMap) clears the
-        // geometry.
+        // Apply only if the graphic is still the marker's and the session is unchanged: a pixel projected through the old
+        // image's camera model must not land on the new raster. A null point clears the geometry.
         if (!token.IsCancellationRequested && _markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
             graphic.Geometry = mapPoint;
     }
 
-    // Resolves a marker to display map space: image-anchored uses its pixel directly,
-    // world-anchored projects to a pixel via the camera model first; both then map pixel->map via the raster extent.
-    // Null if the raster isn't ready.
+    // Marker -> image pixel (world-anchored via the camera model) -> map point; null while the raster isn't ready.
     private async Task<MapPoint?> ResolveMarkerMapPointAsync(OrientedImageMarker marker)
     {
         OrientedImageMarkerPosition position = marker.Position;
@@ -358,8 +340,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         }
         else if (position.Location is MapPoint location && Footprint?.OrientedImage is OrientedImage image)
         {
-            // Core fails every later transform on an image whose first transform ran before it was loaded,
-            // so wait for the load; PresentAsync re-resolves all markers once the raster is up.
+            // Core fails every later transform on an image whose first transform ran before load; PresentAsync retries after load.
             if (image.LoadStatus != LoadStatus.Loaded)
                 return null;
 
@@ -380,9 +361,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return PixelToMap(pixel);
     }
 
-    // Effective in-plane display rotation (degrees, clockwise+):
-    // CameraRoll + ImageRotation (from image attributes) + the JPEG's EXIF orientation.
-    // Summed without clamping because real data exceeds spec's "+-90 degrees".
+    // Clockwise degrees, summed without clamping: real data exceeds the spec's +-90 roll.
     private static double GetEffectiveRotationDegrees(OrientedImage image)
     {
         double roll = ReadRotationAttribute(image, "CameraRoll");
@@ -390,8 +369,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return roll + imageRotation + ReadExifRotationDegrees(image.DataUri);
     }
 
-    // Reads a rotation field (degrees) from the image attributes; absent/null/non-double/NaN reads as 0.
-    // CameraRoll and ImageRotation are esriFieldTypeDouble, which surface as a boxed double, so no conversion is needed.
+    // CameraRoll and ImageRotation are esriFieldTypeDouble, so a boxed double is the only shape to accept.
     private static double ReadRotationAttribute(OrientedImage image, string name)
     {
         if (image.Attributes.TryGetValue(name, out object? raw) && raw is double value && !double.IsNaN(value))
@@ -399,9 +377,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return 0d;
     }
 
-    // Reads the downloaded image file's EXIF Orientation
-    // and returns the associated clockwise display rotation (0/90/180/270).
-    // Also returns 0 for a remote/non-file URI, a non-JPEG, missing EXIF, normal, or a mirror-only orientation.
+    // Clockwise display rotation (0/90/180/270) from a local JPEG's EXIF Orientation; 0 when absent or not applicable.
     private static double ReadExifRotationDegrees(Uri? dataUri)
     {
         if (dataUri is null || !dataUri.IsFile)
@@ -410,7 +386,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         // Minimal metadata parser inspired by https://stackoverflow.com/q/7584794/383361
         try
         {
-            // Core keeps the image file open, so open shared to avoid a sharing violation on this best-effort read.
+            // Open shared: the SDK owns the downloaded file.
             using FileStream stream = new FileStream(dataUri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             if (stream.ReadByte() != 0xFF || stream.ReadByte() != 0xD8)
                 return 0; // not a JPEG
@@ -508,7 +484,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     // Raster cell sizes can be negative (flipped axis) or zero (unknown); a pixel is one unit in either case.
     private static double CellSize(double size) => size == 0 ? 1 : Math.Abs(size);
 
-    // Maps an image pixel to a point in the display's map space (the inverse of ComputeCorners).
+    // Maps an image pixel to display map space; the inverse of MapToPixel.
     private MapPoint? PixelToMap(PointF pixel)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
@@ -517,7 +493,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         double cellX = CellSize(info.CellSizeX);
         double cellY = CellSize(info.CellSizeY);
 
-        // Drop a non-finite or wildly off-image pixels (e.g. projecting camera's own location to itself)
+        // Drop non-finite or wildly off-image pixels (e.g. the camera's own location projected onto its image).
         if (!IsPlaceablePixel(pixel.X, extent.Width / cellX) || !IsPlaceablePixel(pixel.Y, extent.Height / cellY))
             return null;
 
@@ -526,7 +502,6 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return new MapPoint(x, y, extent.SpatialReference);
     }
 
-    // Placeable if finite and within a generous margin of the image bounds
     private static bool IsPlaceablePixel(double value, double max)
     {
         if (!double.IsFinite(value))
@@ -553,8 +528,6 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
     private async void OnMapViewTapped(object? sender, GeoViewInputEventArgs e)
     {
-        // Every tap on the image raises ImageClicked with the pixel populated.
-        // Clicking a marker still counts as an image click, but also puts the hit marker into the event args.
         if (e.Location is not MapPoint location || Footprint?.OrientedImage is not OrientedImage image || MapToPixel(location) is not PointF imagePoint)
             return;
 
@@ -571,8 +544,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             // Identify can fail during map teardown. Report the image click without a marker.
         }
 
-        // The image may have been replaced while identifying; don't report the previous image's click (its captured
-        // pixel is in the old image's space, and the marker would come from the new overlay).
+        // The image may have changed while identifying; the captured pixel is in the old image's space.
         if (token.IsCancellationRequested)
             return;
 
@@ -600,10 +572,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return footprint.UpdateFootprintAsync(pixels, NextFootprintUpdateToken());
     }
 
-    // Converts the map-space visible-area ring into an ordered list of image pixel vertices, clipped to the image
-    // rectangle. The clip must be a true polygon intersection: clamping each vertex independently distorts any
-    // ring with vertices outside the image (a rotated view enclosing the whole image would collapse to the
-    // diamond of the edge midpoints). Internal (not private) for unit tests.
+    // Visible-area ring -> image-pixel ring clipped to the image rectangle. A true polygon clip, not per-vertex
+    // clamping, which collapses a rotated view enclosing the whole image to a diamond. Internal for unit tests.
     internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
     {
         double cellX = CellSize(cellSizeX);

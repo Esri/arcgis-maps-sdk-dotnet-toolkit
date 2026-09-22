@@ -38,20 +38,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// The shared skeleton of OrientedImageDisplay's inner displays (raster, panoramic, future video). It owns:
-//
-//  - The presentation session: one footprint + one cancellation token per SetFootprint call, which cancels the
-//    previous session's token. The token IS the staleness check ("superseded == canceled"): it is threaded
-//    through every await, and any code that touches display state after an await must capture it beforehand
-//    and re-check it.
-//  - The transition checklist: cancel the outgoing image's load and in-flight footprint updates, blank the
-//    presentation immediately on an image change (the old image must never stay visible or clickable while
-//    state describes the new one), reset loading/error, update the automation name.
-//  - Reported state (IsBusy/IsInteractive/Error/StateChanged), the marker-collection subscription, and the
-//    auto-update-footprint plumbing (latest-wins cancellation; canceled on disable and session end).
-//
-// Derived displays implement only their unique parts: PresentAsync (make the loaded image visible),
-// ClearPresentation (blank it), the footprint update for their image type, marker rendering, and background color.
+// Base of OrientedImageDisplay's inner displays. Owns the presentation session (one footprint and one cancellation
+// token per SetFootprint), the reported state, the marker subscriptions and the auto-update-footprint plumbing.
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Platform view types are not IDisposable by convention. The session CTS is cancel-only (no timer), so it needs no disposal; canceling it on supersede is the release.")]
 #if MAUI
 internal abstract class OrientedImageInnerDisplay : ContentView
@@ -82,11 +70,8 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     /// <summary>Gets a value indicating whether the display is busy loading, initializing, or drawing (not in a steady state).</summary>
     public bool IsBusy { get; private set; }
 
-    /// <summary>
-    /// Gets a value indicating whether the display is ready to interact with: it has a presented image, the view can
-    /// be panned/zoomed, and there is no critical <see cref="Error"/>. Independent of <see cref="IsBusy"/>; a
-    /// presented display stays interactive while it redraws.
-    /// </summary>
+    /// <summary>Gets a value indicating whether the display has a presented, unlocked image and no <see cref="Error"/>.
+    /// Independent of <see cref="IsBusy"/>: a presented display stays interactive while it redraws.</summary>
     public bool IsInteractive { get; private set; }
 
     /// <summary>Gets the error that prevents the display from showing its image, or <c>null</c> when there is none.</summary>
@@ -104,18 +89,12 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     /// <summary>Gets the app-owned markers rendered over the image, or <c>null</c>.</summary>
     protected ObservableCollection<OrientedImageMarker>? Markers => _markers;
 
-    /// <summary>
-    /// Gets the current presentation session's cancellation token: canceled when a later
-    /// <see cref="SetFootprint"/> superseded the footprint it accompanied. Capture it before an await and
-    /// re-check it after, before touching display state; canceled until the first <see cref="SetFootprint"/>.
-    /// </summary>
+    /// <summary>Gets the session token: canceled when a later <see cref="SetFootprint"/> supersedes this one, and
+    /// before the first one. Capture it before an await and re-check it before touching display state.</summary>
     protected CancellationToken SessionToken => _sessionCts?.Token ?? new CancellationToken(canceled: true);
 
-    /// <summary>
-    /// Gets or sets the presentation failure surfaced through <see cref="Error"/> after the image's own load error.
-    /// The load skeleton records load/present exceptions here; derived displays may record asynchronous
-    /// render/device failures. Cleared when a new session starts. Call <see cref="UpdateState"/> after setting.
-    /// </summary>
+    /// <summary>Gets or sets a presentation failure to surface through <see cref="Error"/>; derived displays record
+    /// asynchronous render/device failures here and then call <see cref="UpdateState"/>. Cleared per session.</summary>
     protected Exception? PresentationError { get; set; }
 
     // The platform automation-name policy needs the concrete focusable inner view.
@@ -264,35 +243,28 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     // record a presentation failure; check the token after every await before touching display state.
     protected abstract Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token);
 
-    // Blanks the presentation NOW (visuals, dimensions, on-image markers). Called synchronously when the displayed
-    // image changes or goes away, and by derived code when a present attempt yields nothing displayable.
+    // Blanks the presentation synchronously: visuals, dimensions and on-image markers.
     protected abstract void ClearPresentation();
 
-    // A new marker collection was set; rebuild subscriptions and re-render.
+    // Marker hooks, called from the collection subscription above; each re-renders after updating. OnMarkerChanged
+    // may arrive off the UI thread, since the app raises it.
     protected abstract void RebuildMarkers();
 
-    // Markers were added to the collection; add and subscribe them then re-render.
     protected abstract void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers);
 
-    // A marker was replaced in the collection; remove and unsubscribe the old marker, add and subscribe the new one, then re-render.
     protected abstract void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index);
 
-    // Markers were removed from the collection; remove and unsubscribe markers then re-render.
     protected abstract void RemoveMarkers(int startingIndex, IEnumerable<OrientedImageMarker> removedMarkers);
 
-    // A marker was moved the collection; move internal markers collection to match.
     protected abstract void MoveMarkers(int oldIndex, int newIndex);
 
-    // A marker's Position, Symbol or IsVisible changed. The app raises it, possibly off the UI thread.
     protected abstract void OnMarkerChanged(OrientedImageMarker marker, string? propertyName);
 
     // Subscribe/unsubscribe the platform view-change event that should drive UpdateFootprint.
     protected abstract void OnAutoUpdateFootprintChanged(bool enabled);
 
-    // Starts the core update of the footprint for the current view, using the UpdateFootprintAsync overload that
-    // fits the image type, or returns null when the view can't be computed yet (nothing is pushed and an in-flight
-    // update is left alone). Snapshot the view before taking the token from NextFootprintUpdateToken, so a view
-    // that can't be computed never cancels a good update.
+    // Pushes the current view through the UpdateFootprintAsync overload for the image type, or returns null when the
+    // view can't be computed yet. Take the token from NextFootprintUpdateToken last, so a bad view never cancels a good update.
     protected abstract Task? BeginFootprintUpdate(OrientedImageFootprint footprint);
 
     // The load skeleton finished for the current session (present, clear, or failure) - state and image dimensions
@@ -307,8 +279,6 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     /// <summary>Raises <see cref="ImageClicked"/>.</summary>
     protected void RaiseImageClicked(OrientedImageDisplay.ImageClickedEventArgs args) => ImageClicked?.Invoke(this, args);
 
-    // Resolves the display's state from its sources and raises StateChanged when it changes.
-    // IsBusy means "loading, or the presentation is busy"; IsInteractive means "presented, unlocked, no error".
     protected void UpdateState()
     {
         Exception? error = ResolveError();
@@ -323,9 +293,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    // Pushes the current view to the footprint (BeginFootprintUpdate). Runs on view changes while auto-update is
-    // enabled, and once when a new image finishes presenting. Latest wins: a stale view never beats a newer one,
-    // and superseding the footprint or disabling auto-update cancels the in-flight update too.
+    // Pushes the current view to the footprint. Latest wins: NextFootprintUpdateToken cancels the in-flight update.
     protected async void UpdateFootprint()
     {
         if (!_autoUpdate || Footprint is not OrientedImageFootprint footprint)
@@ -374,7 +342,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         if (imageChanged)
             Footprint?.OrientedImage?.CancelLoad();
 
-        // An in-flight footprint-corner update must not mutate a footprint this display no longer manages.
+        // An in-flight footprint update must not mutate a footprint this display no longer manages.
         if (!ReferenceEquals(Footprint, footprint))
             _updateCts?.Cancel();
 
@@ -416,8 +384,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         }
         catch (Exception ex)
         {
-            // Only the session that still owns the display may record a failure; a superseded load's late
-            // exception must not mark the newer image's state as failed.
+            // A superseded load's late exception must not mark the newer image as failed.
             if (!token.IsCancellationRequested)
                 PresentationError = ex;
         }
