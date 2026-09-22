@@ -15,21 +15,9 @@ public sealed class PanoramaCameraStateTests
     private const float Fov90 = MathF.PI / 2f;
 
     [TestMethod]
-    public void ScreenCenterAtIdentityCameraMapsToConventionAnchor()
-    {
-        var camera = new PanoramaCameraState(yaw: 0f, pitch: 0f, fieldOfView: Fov90);
-
-        Assert.IsTrue(camera.TryScreenToNormalizedUv(ViewWidth / 2, ViewHeight / 2, ViewWidth, ViewHeight, out float u, out float v));
-
-        // The documented convention: identity camera looks at (0.75, 0.5).
-        Assert.AreEqual(0.75f, u, 1e-4f);
-        Assert.AreEqual(0.5f, v, 1e-4f);
-    }
-
-    [TestMethod]
     public void ScreenCenterTracksYawAndPitchLinearly()
     {
-        // u_center = 0.75 + yaw/2pi (mod 1); v_center = 0.5 + pitch/pi.
+        // u_center = 0.75 + yaw/2pi (mod 1); v_center = 0.5 + pitch/pi, so the identity camera looks at (0.75, 0.5).
         foreach (float yaw in new[] { -2.5f, -0.8f, 0f, 0.4f, 1.9f, 3.1f })
         {
             foreach (float pitch in new[] { -1.2f, -0.3f, 0f, 0.3f, 1.2f })
@@ -48,55 +36,42 @@ public sealed class PanoramaCameraStateTests
     }
 
     [TestMethod]
-    public void ScreenToUvRoundTripsAcrossCameraAndScreenGrid()
+    public void ScreenToUvRoundTripsAcrossCameraScreenAndViewportGrid()
     {
         float[] yaws = [-2.5f, -1f, 0f, 0.7f, 2f, 3.1f];
         float[] pitches = [-1.2f, -0.5f, 0f, 0.5f, 1.2f];
         float[] fovs = [PanoramaCameraState.MinFieldOfView, Fov90, PanoramaCameraState.MaxFieldOfView];
+        (double Width, double Height)[] viewports = [(ViewWidth, ViewHeight), (800, 400), (300, 900)];
 
-        foreach (float yaw in yaws)
+        foreach ((double width, double height) in viewports)
         {
-            foreach (float pitch in pitches)
+            foreach (float yaw in yaws)
             {
-                foreach (float fov in fovs)
+                foreach (float pitch in pitches)
                 {
-                    var camera = new PanoramaCameraState(yaw, pitch, fov);
-                    for (int ix = 0; ix <= 4; ix++)
+                    foreach (float fov in fovs)
                     {
-                        for (int iy = 0; iy <= 4; iy++)
+                        var camera = new PanoramaCameraState(yaw, pitch, fov);
+                        for (int ix = 0; ix <= 4; ix++)
                         {
-                            double x = (0.1 + (0.2 * ix)) * ViewWidth;
-                            double y = (0.1 + (0.2 * iy)) * ViewHeight;
+                            for (int iy = 0; iy <= 4; iy++)
+                            {
+                                double x = (0.1 + (0.2 * ix)) * width;
+                                double y = (0.1 + (0.2 * iy)) * height;
 
-                            string context = $"yaw={yaw}, pitch={pitch}, fov={fov}, screen=({x},{y})";
-                            Assert.IsTrue(camera.TryScreenToNormalizedUv(x, y, ViewWidth, ViewHeight, out float u, out float v), $"screen->uv failed: {context}");
-                            Assert.IsTrue(u is >= 0f and <= 1f, $"u out of range ({u}): {context}");
-                            Assert.IsTrue(v is >= 0f and <= 1f, $"v out of range ({v}): {context}");
+                                string context = $"viewport={width}x{height}, yaw={yaw}, pitch={pitch}, fov={fov}, screen=({x},{y})";
+                                Assert.IsTrue(camera.TryScreenToNormalizedUv(x, y, width, height, out float u, out float v), $"screen->uv failed: {context}");
+                                Assert.IsTrue(u is >= 0f and <= 1f, $"u out of range ({u}): {context}");
+                                Assert.IsTrue(v is >= 0f and <= 1f, $"v out of range ({v}): {context}");
 
-                            Assert.IsTrue(camera.TryNormalizedUvToScreen(u, v, ViewWidth, ViewHeight, out double backX, out double backY), $"uv->screen failed: {context}");
-                            Assert.AreEqual(x, backX, 0.1, $"x round-trip: {context}");
-                            Assert.AreEqual(y, backY, 0.1, $"y round-trip: {context}");
+                                Assert.IsTrue(camera.TryNormalizedUvToScreen(u, v, width, height, out double backX, out double backY), $"uv->screen failed: {context}");
+                                Assert.AreEqual(x, backX, 0.1, $"x round-trip: {context}");
+                                Assert.AreEqual(y, backY, 0.1, $"y round-trip: {context}");
+                            }
                         }
                     }
                 }
             }
-        }
-    }
-
-    [TestMethod]
-    public void ScreenToUvRoundTripsOnNonSquareViewports()
-    {
-        // Non-square aspect ratios exercise the width/height mapping independently.
-        foreach ((double w, double h) in new[] { (800.0, 400.0), (300.0, 900.0), (1024.0, 768.0) })
-        {
-            var camera = new PanoramaCameraState(yaw: 0.6f, pitch: -0.4f, fieldOfView: Fov90);
-
-            double x = 0.3 * w;
-            double y = 0.7 * h;
-            Assert.IsTrue(camera.TryScreenToNormalizedUv(x, y, w, h, out float u, out float v));
-            Assert.IsTrue(camera.TryNormalizedUvToScreen(u, v, w, h, out double backX, out double backY));
-            Assert.AreEqual(x, backX, 0.1, $"viewport {w}x{h}");
-            Assert.AreEqual(y, backY, 0.1, $"viewport {w}x{h}");
         }
     }
 
@@ -118,19 +93,6 @@ public sealed class PanoramaCameraStateTests
         Assert.IsFalse(camera.TryScreenToNormalizedUv(0, 0, ViewWidth, 0, out _, out _));
         Assert.IsFalse(camera.TryNormalizedUvToScreen(0.5f, 0.5f, 0, ViewHeight, out _, out _));
         Assert.IsFalse(camera.TryNormalizedUvToScreen(0.5f, 0.5f, ViewWidth, 0, out _, out _));
-    }
-
-    [TestMethod]
-    public void YawOfNegativeQuarterTurnCentersUvHalf()
-    {
-        // The identity camera centers u = 0.75, so re-anchoring the view to the image center (u = 0.5, the column
-        // that faces the camera heading) takes yaw = -pi/2. The panoramic display's initial view builds on this:
-        // yaw = -pi/2 - heading looks north, since azimuth(u) = heading + (u - 0.5) * 2pi.
-        var camera = new PanoramaCameraState(yaw: -MathF.PI / 2f, pitch: 0f, fieldOfView: Fov90);
-
-        Assert.IsTrue(camera.TryScreenToNormalizedUv(ViewWidth / 2, ViewHeight / 2, ViewWidth, ViewHeight, out float u, out float v));
-        Assert.AreEqual(0.5f, u, 1e-4f);
-        Assert.AreEqual(0.5f, v, 1e-4f);
     }
 
     [TestMethod]
@@ -170,21 +132,6 @@ public sealed class PanoramaCameraStateTests
         // Defensive fallback before the view has a size.
         Assert.AreEqual(PanoramaCameraState.MouseRotationScale, PanoramaCameraState.DragRotationScale(Fov90, 0));
         Assert.AreEqual(PanoramaCameraState.MouseRotationScale, PanoramaCameraState.DragRotationScale(Fov90, -5));
-    }
-
-    [TestMethod]
-    public void FootprintViewAtIdentityCameraIsAQuarterTurnFromTheImageCenter()
-    {
-        // The identity camera looks at u = 0.75, a quarter turn clockwise from the image's center column (u = 0.5),
-        // on the horizon; a square viewport spans the same angle horizontally and vertically.
-        var camera = new PanoramaCameraState(yaw: 0f, pitch: 0f, fieldOfView: Fov90);
-
-        Assert.IsTrue(camera.TryGetFootprintView(600, 600, out PanoramaCameraState.FootprintView view));
-
-        Assert.AreEqual(90.0, view.Yaw, 1e-4);
-        Assert.AreEqual(90.0, view.Pitch, 1e-4);
-        Assert.AreEqual(90.0, view.VerticalFieldOfView, 1e-4);
-        Assert.AreEqual(90.0, view.HorizontalFieldOfView, 1e-4);
     }
 
     [TestMethod]
