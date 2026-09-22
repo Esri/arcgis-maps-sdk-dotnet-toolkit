@@ -31,15 +31,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// A point of interest rendered over the image in an <see cref="OrientedImageDisplay"/>.
 /// </summary>
 /// <remarks>
-/// <para>
-/// Markers are authored and owned by the application; <see cref="OrientedImageDisplay"/> renders whatever is in its
-/// <see cref="OrientedImageDisplay.Markers"/> collection and never modifies it.
-/// </para>
-/// <para>
-/// A marker is anchored either to an image pixel or to a world location (see <see cref="OrientedImageMarkerPosition"/>).
-/// <see cref="Position"/>, <see cref="Symbol"/>, and <see cref="IsVisible"/> raise <see cref="PropertyChanged"/> so the
-/// control updates the rendered marker in place.
-/// </para>
+/// Anchored to an image pixel or a world location (see <see cref="OrientedImageMarkerPosition"/>). Changes to
+/// <see cref="Position"/>, <see cref="Symbol"/>, and <see cref="IsVisible"/> update the rendered marker in place.
 /// </remarks>
 public sealed class OrientedImageMarker : INotifyPropertyChanged
 {

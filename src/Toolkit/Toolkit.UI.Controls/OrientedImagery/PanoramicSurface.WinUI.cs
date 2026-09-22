@@ -88,11 +88,8 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
 
     private (uint Width, uint Height) GetPixelSize()
     {
-        // For a SwapChainPanel the authoritative DIP->physical-pixel factor is CompositionScaleX/Y
-        // (it folds in any parent ScaleTransform), NOT XamlRoot.RasterizationScale.
-        // The back buffer is sized in physical pixels and the swap chain is then scaled back to DIPs
-        // via SetMatrixTransform (see ApplySwapChainScale) so it isn't displayed 1:1-in-DIP
-        // (which would zoom and top-left-anchor the image at >100% DPI and appear off-center).
+        // CompositionScaleX/Y is the DIP-to-pixel factor for a SwapChainPanel (it folds in parent transforms;
+        // XamlRoot.RasterizationScale does not). The buffer is sized in pixels and mapped back to DIPs by ApplySwapChainScale.
         float scaleX = CompositionScaleX <= 0 ? 1f : CompositionScaleX;
         float scaleY = CompositionScaleY <= 0 ? 1f : CompositionScaleY;
         uint width = (uint)Math.Max(1, Math.Ceiling(ActualWidth * scaleX));
@@ -167,17 +164,14 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
 
         (uint width, uint height) = GetPixelSize();
 
-        // ResizeBuffers requires that ALL references to the back buffers be released first, including the indirect
-        // reference held by the device context while the back-buffer RTV is bound as a render target (it stays bound
-        // across frames from RenderScene's OMSetRenderTargets). Unbind it, then release our view, before resizing.
+        // ResizeBuffers fails while any back-buffer reference is alive, including the RTV still bound on the context
+        // from the last frame. Unbind it, then release the view.
         if (Context is not null)
             Context->OMSetRenderTargets(0, (ID3D11RenderTargetView**)null, null);
 
         Release(ref _backBufferView);
 
-        // These generated wrappers throw on failure - e.g. a device-loss HRESULT from ResizeBuffers, leaving
-        // _backBufferView released and null. The throw lands in the caller's Safe, which routes device-loss
-        // to the render loop's recovery.
+        // ResizeBuffers throws on a device-loss HRESULT; the caller's Safe routes that to recovery.
         _swapchain->ResizeBuffers(2, width, height, DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_UNORM, 0);
 
         ID3D11Texture2D* backBuffer;
@@ -197,9 +191,8 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         ApplySwapChainScale();
     }
 
-    // A composition swap chain maps its (physical-pixel) back buffer 1:1 into the panel's DIP space unless a transform
-    // is set. Without this, content is zoomed by the DPI factor and anchored at the top-left at >100% DPI, so the view
-    // center sits up-and-left. The inverse-scale transform displays the physical-pixel buffer at the correct DIP size.
+    // A composition swap chain maps its pixel buffer 1:1 into DIP space, so at >100% DPI the image is zoomed and
+    // anchored top-left. The inverse-scale transform shows it at the correct DIP size.
     private void ApplySwapChainScale()
     {
         if (_swapchain is null)
