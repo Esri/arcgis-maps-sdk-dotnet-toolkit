@@ -231,13 +231,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 
     private void OnPlatformDeviceRecreated() => DeviceRecreated?.Invoke();
 
-    private void OnPlatformCameraChanged()
-    {
-        _yaw = _platform?.Yaw ?? _yaw;
-        _pitch = _platform?.Pitch ?? _pitch;
-        _fieldOfView = _platform?.FieldOfView ?? _fieldOfView;
-        CameraChanged?.Invoke();
-    }
+    private void OnPlatformCameraChanged() => CameraChanged?.Invoke();
 }
 
 // Maps the virtual view to the platform panorama surface. Registered by UseArcGISToolkit.

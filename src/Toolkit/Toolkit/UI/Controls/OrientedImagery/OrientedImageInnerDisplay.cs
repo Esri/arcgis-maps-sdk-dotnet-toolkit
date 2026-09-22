@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -60,6 +61,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 {
     private ObservableCollection<OrientedImageMarker>? _markers;
     private WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
+    private readonly Dictionary<OrientedImageMarker, WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
     private CancellationTokenSource? _sessionCts;
     private CancellationTokenSource? _updateCts;
     private bool _autoUpdate;
@@ -163,6 +165,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
             incc.CollectionChanged += _markersListener.OnEvent;
         }
 
+        ListenToMarkers();
         RebuildMarkers();
     }
 
@@ -171,22 +174,71 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                AddMarkers(e.NewItems!.OfType<OrientedImageMarker>());
+                List<OrientedImageMarker> added = e.NewItems!.OfType<OrientedImageMarker>().ToList();
+                added.ForEach(ListenTo);
+                AddMarkers(added);
                 break;
             case NotifyCollectionChangedAction.Replace:
                 if (e.OldItems![0] is OrientedImageMarker oldMarker && e.NewItems![0] is OrientedImageMarker newMarker)
+                {
+                    StopListening(oldMarker);
+                    ListenTo(newMarker);
                     ReplaceMarker(oldMarker, newMarker, e.OldStartingIndex);
+                }
+
                 break;
             case NotifyCollectionChangedAction.Remove:
-                RemoveMarkers(e.OldStartingIndex, e.OldItems!.OfType<OrientedImageMarker>());
+                List<OrientedImageMarker> removed = e.OldItems!.OfType<OrientedImageMarker>().ToList();
+                removed.ForEach(StopListening);
+                RemoveMarkers(e.OldStartingIndex, removed);
                 break;
             case NotifyCollectionChangedAction.Move:
                 MoveMarkers(e.OldStartingIndex, e.NewStartingIndex);
                 break;
             case NotifyCollectionChangedAction.Reset:
+                ListenToMarkers();
                 RebuildMarkers();
                 break;
         }
+    }
+
+    // Subscribes to every marker in the current collection, dropping earlier subscriptions.
+    private void ListenToMarkers()
+    {
+        foreach (var listener in _markerListeners.Values)
+            listener.Detach();
+
+        _markerListeners.Clear();
+        if (_markers is null)
+            return;
+
+        foreach (OrientedImageMarker marker in _markers)
+            ListenTo(marker);
+    }
+
+    // Weak, like the collection subscription: an app-owned long-lived marker must not keep the display alive.
+    private void ListenTo(OrientedImageMarker marker)
+    {
+        StopListening(marker);
+        var listener = new WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
+        {
+            OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
+            OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+        };
+        marker.PropertyChanged += listener.OnEvent;
+        _markerListeners[marker] = listener;
+    }
+
+    private void StopListening(OrientedImageMarker marker)
+    {
+        if (_markerListeners.Remove(marker, out var listener))
+            listener.Detach();
+    }
+
+    private void OnMarkerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is OrientedImageMarker marker)
+            OnMarkerChanged(marker, e.PropertyName);
     }
 
     /// <summary>Enables or disables automatic recomputation of the footprint as the view changes.</summary>
@@ -230,6 +282,9 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 
     // A marker was moved the collection; move internal markers collection to match.
     protected abstract void MoveMarkers(int oldIndex, int newIndex);
+
+    // A marker's Position, Symbol or IsVisible changed. The app raises it, possibly off the UI thread.
+    protected abstract void OnMarkerChanged(OrientedImageMarker marker, string? propertyName);
 
     // Subscribe/unsubscribe the platform view-change event that should drive UpdateFootprint.
     protected abstract void OnAutoUpdateFootprintChanged(bool enabled);

@@ -165,11 +165,58 @@ internal readonly struct PanoramaCameraState
         return true;
     }
 
-    private Matrix4x4 GetWorldViewProjection(float aspectRatio)
+    // The renderers upload this matrix, so the drawn sphere and the click/marker math above cannot drift apart.
+    internal Matrix4x4 GetWorldViewProjection(float aspectRatio)
     {
         Matrix4x4 world = Matrix4x4.CreateRotationY(Yaw) * Matrix4x4.CreateRotationX(Pitch);
         Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(FieldOfView, aspectRatio, NearPlane, FarPlane);
         return world * projection;
+    }
+
+    // The unit sphere every renderer draws, in the convention above: xyz positions, uv texture coordinates and a
+    // 16-bit triangle list (signed for the GL buffers; the values fit either way).
+    internal static (float[] Positions, float[] TexCoords, short[] Indices) CreateSphereMesh()
+    {
+        const int longitudeSegments = 64;
+        const int latitudeSegments = 32;
+        int vertexCount = (longitudeSegments + 1) * (latitudeSegments + 1);
+        float[] positions = new float[vertexCount * 3];
+        float[] texCoords = new float[vertexCount * 2];
+        int p = 0, t = 0;
+        for (int lat = 0; lat <= latitudeSegments; lat++)
+        {
+            float v = lat / (float)latitudeSegments;
+            float phi = v * MathF.PI;
+            for (int lon = 0; lon <= longitudeSegments; lon++)
+            {
+                float u = lon / (float)longitudeSegments;
+                float theta = u * 2f * MathF.PI;
+                positions[p++] = MathF.Sin(phi) * MathF.Cos(theta);
+                positions[p++] = MathF.Cos(phi);
+                positions[p++] = MathF.Sin(phi) * MathF.Sin(theta);
+                texCoords[t++] = u;
+                texCoords[t++] = v;
+            }
+        }
+
+        short[] indices = new short[longitudeSegments * latitudeSegments * 6];
+        int i = 0;
+        for (int lat = 0; lat < latitudeSegments; lat++)
+        {
+            for (int lon = 0; lon < longitudeSegments; lon++)
+            {
+                short first = (short)((lat * (longitudeSegments + 1)) + lon);
+                short second = (short)(first + longitudeSegments + 1);
+                indices[i++] = first;
+                indices[i++] = second;
+                indices[i++] = (short)(first + 1);
+                indices[i++] = (short)(first + 1);
+                indices[i++] = second;
+                indices[i++] = (short)(second + 1);
+            }
+        }
+
+        return (positions, texCoords, indices);
     }
 }
 #endif

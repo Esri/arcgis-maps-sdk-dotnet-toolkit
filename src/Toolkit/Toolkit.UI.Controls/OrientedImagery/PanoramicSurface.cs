@@ -17,6 +17,7 @@
 #if WPF || WINDOWS_XAML || (MAUI && WINDOWS)
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using Windows.Win32;
@@ -105,6 +106,11 @@ internal sealed unsafe partial class PanoramicSurface
     private byte[]? _pendingBgra;
     private uint _pendingWidth, _pendingHeight;
     private bool _usingWarp;
+
+    // Render-loop and device-lost state shared by the present layers (see the partial methods below).
+    private bool _needsRender = true;
+    private bool _deviceLost;
+    private bool _deviceEverCreated;
 
     // Marker billboard pass: each marker's swatch is a BGRA texture drawn as a screen-aligned,
     // alpha-blended quad at the (u,v) it projects to (CPU-projected with the same camera as the sphere).
@@ -217,6 +223,119 @@ internal sealed unsafe partial class PanoramicSurface
 
     internal ID3D11DeviceContext* Context => _context;
 
+    // Render-loop plumbing shared by the WPF and WinUI present layers. Each layer implements the partial methods:
+    // EnsureResources creates the device and its present resources, ReleasePresentResources drops the latter,
+    // HookRendering subscribes the per-frame tick, IsReadyToRender says whether RenderFrame can run, and
+    // PresentResourcesReady reports whether a recovery rebuilt them.
+    private partial void EnsureResources();
+
+    private partial void ReleasePresentResources();
+
+    private partial void HookRendering();
+
+    private partial bool IsReadyToRender();
+
+    private partial bool PresentResourcesReady();
+
+    private partial void RenderFrame();
+
+    // Re-renders on the next tick; rendering is on demand (camera, texture or size changes).
+    public void RequestRender() => _needsRender = true;
+
+    // A removed device (TDR, driver update, RDP, sleep) is rebuilt on the next tick instead of being reported.
+    private void NotifyDeviceLost()
+    {
+        _deviceLost = true;
+        _needsRender = true;
+    }
+
+    // Runs a lifecycle step from a XAML handler, outside the render tick's own try/catch: a removed device goes to
+    // recovery, anything else to RenderFailed so the display surfaces it as Error.
+    private void Safe(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch (Exception ex)
+        {
+            if (IsDeviceRemoved)
+                NotifyDeviceLost();
+            else
+                RenderFailed?.Invoke(ex);
+        }
+    }
+
+    // Loaded: hook the tick before creating resources, so a device removed during creation is still recovered on a
+    // tick. On a reload the fresh device has no content and the stash was consumed, so ask the display to re-supply
+    // it; on the first load the load path supplies it and raising here would decode twice.
+    private void HandleLoaded()
+    {
+        bool isReload = _deviceEverCreated;
+        HookRendering();
+        EnsureResources();
+        RequestRender();
+        if (IsDeviceInitialized)
+            _deviceEverCreated = true;
+
+        if (isReload && IsDeviceInitialized && !HasTexture)
+            DeviceRecreated?.Invoke();
+    }
+
+    // One render tick: recover a lost device first, then draw when something changed. A device removed during or
+    // after the draw is recovered on a later tick rather than reported.
+    private void RenderTick()
+    {
+        if (_deviceLost && !TryRecoverDevice())
+            return;
+
+        if (!_needsRender || !IsReadyToRender())
+            return;
+
+        try
+        {
+            RenderFrame();
+        }
+        catch (Exception ex)
+        {
+            if (IsDeviceRemoved)
+                NotifyDeviceLost();
+            else
+                RenderFailed?.Invoke(ex);
+            return;
+        }
+
+        if (IsDeviceRemoved)
+            NotifyDeviceLost();
+        else
+            _needsRender = false;
+    }
+
+    // Rebuilds the device and its resources after a device-lost; false while the GPU is still unavailable, retried
+    // next tick. The display then re-supplies the texture and markers through DeviceRecreated; the camera lives
+    // here and survives.
+    private bool TryRecoverDevice()
+    {
+        try
+        {
+            ReleasePresentResources();
+            ReleaseDeviceResources();
+            EnsureResources();
+        }
+        catch
+        {
+            return false;
+        }
+
+        if (!IsDeviceInitialized || !PresentResourcesReady())
+            return false;
+
+        _deviceLost = false;
+        _needsRender = true;
+        DeviceRecreated?.Invoke();
+        return true;
+    }
+
     // Creates the device and all device-independent resources. Safe to call repeatedly (no-op once created).
     public void Initialize()
     {
@@ -224,11 +343,11 @@ internal sealed unsafe partial class PanoramicSurface
             return;
 
         CreateDeviceResources();
-        CreateShaderResources();
+        CreatePipeline(VertexShaderSource, PixelShaderSource, DXGI_FORMAT.DXGI_FORMAT_R32G32B32_FLOAT, 12, out _vertexShader, out _pixelShader, out _inputLayout);
         CreateGeometryResources();
-        CreateConstantBuffer();
+        _constantBuffer = CreateBuffer((uint)sizeof(Matrix4x4), D3D11_BIND_FLAG.D3D11_BIND_CONSTANT_BUFFER, null);
         CreateRasterizerState();
-        CreateSamplerState();
+        _samplerState = CreateSampler(D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_WRAP); // wrap u across the seam
         CreateMarkerResources();
 
         if (_pendingBgra is byte[] pending)
@@ -318,18 +437,24 @@ internal sealed unsafe partial class PanoramicSurface
         _clearA = a;
     }
 
-    // Renders the panorama sphere into the supplied target view sized to (width, height) device pixels.
+    // Renders the panorama sphere and markers into the target sized to (width, height) device pixels. Without a
+    // texture it only clears to the backdrop color, so clearing the panorama blanks the display instead of leaving
+    // the previous frame on screen.
     public void RenderScene(ID3D11RenderTargetView* target, uint width, uint height)
     {
-        if (_context is null || target is null || _vertexShader is null || _pixelShader is null ||
-            _inputLayout is null || _vertexBuffer is null || _indexBuffer is null || _constantBuffer is null ||
-            _panoramaTextureView is null || _samplerState is null)
+        if (_context is null || target is null)
             return;
-
-        UpdateSceneConstants(MathF.Max(1f, width) / MathF.Max(1f, height));
 
         float* clear = stackalloc float[4] { _clearR, _clearG, _clearB, _clearA };
         _context->ClearRenderTargetView(target, clear);
+        if (_vertexShader is null || _pixelShader is null || _inputLayout is null || _vertexBuffer is null ||
+            _indexBuffer is null || _constantBuffer is null || _panoramaTextureView is null || _samplerState is null)
+            return;
+
+        float aspectRatio = MathF.Max(1f, width) / MathF.Max(1f, height);
+        Matrix4x4 worldViewProjection = new PanoramaCameraState(Yaw, Pitch, FieldOfView).GetWorldViewProjection(aspectRatio);
+        Matrix4x4 transposed = Matrix4x4.Transpose(worldViewProjection);
+        _context->UpdateSubresource((ID3D11Resource*)_constantBuffer, 0, (D3D11_BOX*)null, &transposed, 0, 0);
 
         D3D11_VIEWPORT viewport = new() { TopLeftX = 0, TopLeftY = 0, Width = width, Height = height, MinDepth = 0f, MaxDepth = 1f };
         _context->RSSetViewports(1, &viewport);
@@ -355,19 +480,7 @@ internal sealed unsafe partial class PanoramicSurface
         _context->PSSetSamplers(0, 1, &sampler);
         _context->DrawIndexed(_indexCount, 0, 0);
 
-        DrawMarkers(width, height);
-    }
-
-    // Clears the target to the background color (no sphere/markers). Used to present a blank frame when there is no
-    // texture, so clearing the panorama (footprint change / failed load) actually blanks the displayed buffer instead
-    // of leaving the previous frame on screen (the render loops otherwise skip drawing when HasTexture is false).
-    public void ClearTarget(ID3D11RenderTargetView* target)
-    {
-        if (_context is null || target is null)
-            return;
-
-        float* clear = stackalloc float[4] { _clearR, _clearG, _clearB, _clearA };
-        _context->ClearRenderTargetView(target, clear);
+        DrawMarkers(width, height, in worldViewProjection);
     }
 
     private void CreateDeviceResources()
@@ -399,19 +512,21 @@ internal sealed unsafe partial class PanoramicSurface
         _context = context;
     }
 
-    private void CreateShaderResources()
+    // Compiles a vertex/pixel shader pair and the two-element (POSITION, TEXCOORD) input layout that feeds it.
+    private void CreatePipeline(string vertexSource, string pixelSource, DXGI_FORMAT positionFormat, uint texCoordOffset,
+        out ID3D11VertexShader* vertexShader, out ID3D11PixelShader* pixelShader, out ID3D11InputLayout* inputLayout)
     {
-        ID3DBlob* vertexBlob = CompileShader(VertexShaderSource, "vs_4_0");
-        ID3DBlob* pixelBlob = CompileShader(PixelShaderSource, "ps_4_0");
+        ID3DBlob* vertexBlob = CompileShader(vertexSource, "vs_4_0");
+        ID3DBlob* pixelBlob = CompileShader(pixelSource, "ps_4_0");
         try
         {
-            ID3D11VertexShader* vertexShader;
-            _device->CreateVertexShader(vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), null, &vertexShader);
-            _vertexShader = vertexShader;
+            ID3D11VertexShader* vs;
+            _device->CreateVertexShader(vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), null, &vs);
+            vertexShader = vs;
 
-            ID3D11PixelShader* pixelShader;
-            _device->CreatePixelShader(pixelBlob->GetBufferPointer(), pixelBlob->GetBufferSize(), null, &pixelShader);
-            _pixelShader = pixelShader;
+            ID3D11PixelShader* ps;
+            _device->CreatePixelShader(pixelBlob->GetBufferPointer(), pixelBlob->GetBufferSize(), null, &ps);
+            pixelShader = ps;
 
             byte[] position = Encoding.ASCII.GetBytes("POSITION\0");
             byte[] texCoord = Encoding.ASCII.GetBytes("TEXCOORD\0");
@@ -422,7 +537,7 @@ internal sealed unsafe partial class PanoramicSurface
                 elements[0] = new D3D11_INPUT_ELEMENT_DESC
                 {
                     SemanticName = new PCSTR(positionPtr),
-                    Format = DXGI_FORMAT.DXGI_FORMAT_R32G32B32_FLOAT,
+                    Format = positionFormat,
                     AlignedByteOffset = 0,
                     InputSlotClass = D3D11_INPUT_CLASSIFICATION.D3D11_INPUT_PER_VERTEX_DATA,
                 };
@@ -430,13 +545,13 @@ internal sealed unsafe partial class PanoramicSurface
                 {
                     SemanticName = new PCSTR(texCoordPtr),
                     Format = DXGI_FORMAT.DXGI_FORMAT_R32G32_FLOAT,
-                    AlignedByteOffset = 12,
+                    AlignedByteOffset = texCoordOffset,
                     InputSlotClass = D3D11_INPUT_CLASSIFICATION.D3D11_INPUT_PER_VERTEX_DATA,
                 };
 
-                ID3D11InputLayout* inputLayout;
-                _device->CreateInputLayout(elements, 2, vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &inputLayout);
-                _inputLayout = inputLayout;
+                ID3D11InputLayout* layout;
+                _device->CreateInputLayout(elements, 2, vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &layout);
+                inputLayout = layout;
             }
         }
         finally
@@ -446,52 +561,50 @@ internal sealed unsafe partial class PanoramicSurface
         }
     }
 
-    private void CreateGeometryResources()
+    private ID3D11Buffer* CreateBuffer(uint byteWidth, D3D11_BIND_FLAG bindFlags, void* initialData,
+        D3D11_USAGE usage = D3D11_USAGE.D3D11_USAGE_DEFAULT, D3D11_CPU_ACCESS_FLAG cpuAccess = default)
     {
-        (VertexPositionTexture[] vertices, ushort[] indices) = CreateSphereMesh();
-        _indexCount = (uint)indices.Length;
-
-        D3D11_BUFFER_DESC vertexBufferDesc = new()
-        {
-            ByteWidth = (uint)(vertices.Length * sizeof(VertexPositionTexture)),
-            Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
-            BindFlags = D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER,
-        };
-        D3D11_BUFFER_DESC indexBufferDesc = new()
-        {
-            ByteWidth = (uint)(indices.Length * sizeof(ushort)),
-            Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
-            BindFlags = D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER,
-        };
-
-        fixed (VertexPositionTexture* vertexData = vertices)
-        {
-            D3D11_SUBRESOURCE_DATA data = new() { pSysMem = vertexData };
-            ID3D11Buffer* buffer;
-            _device->CreateBuffer(&vertexBufferDesc, &data, &buffer);
-            _vertexBuffer = buffer;
-        }
-
-        fixed (ushort* indexData = indices)
-        {
-            D3D11_SUBRESOURCE_DATA data = new() { pSysMem = indexData };
-            ID3D11Buffer* buffer;
-            _device->CreateBuffer(&indexBufferDesc, &data, &buffer);
-            _indexBuffer = buffer;
-        }
+        D3D11_BUFFER_DESC desc = new() { ByteWidth = byteWidth, Usage = usage, BindFlags = bindFlags, CPUAccessFlags = cpuAccess };
+        D3D11_SUBRESOURCE_DATA data = new() { pSysMem = initialData };
+        ID3D11Buffer* buffer;
+        _device->CreateBuffer(&desc, initialData is null ? null : &data, &buffer);
+        return buffer;
     }
 
-    private void CreateConstantBuffer()
+    private ID3D11SamplerState* CreateSampler(D3D11_TEXTURE_ADDRESS_MODE addressU)
     {
-        D3D11_BUFFER_DESC desc = new()
+        D3D11_SAMPLER_DESC desc = new()
         {
-            ByteWidth = (uint)sizeof(Matrix4x4),
-            Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
-            BindFlags = D3D11_BIND_FLAG.D3D11_BIND_CONSTANT_BUFFER,
+            Filter = D3D11_FILTER.D3D11_FILTER_MIN_MAG_MIP_LINEAR,
+            AddressU = addressU,
+            AddressV = D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP,
+            AddressW = D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP,
+            ComparisonFunc = D3D11_COMPARISON_FUNC.D3D11_COMPARISON_NEVER,
+            MinLOD = 0f,
+            MaxLOD = float.MaxValue,
+            MaxAnisotropy = 1,
         };
-        ID3D11Buffer* buffer;
-        _device->CreateBuffer(&desc, null, &buffer);
-        _constantBuffer = buffer;
+        ID3D11SamplerState* state;
+        _device->CreateSamplerState(&desc, &state);
+        return state;
+    }
+
+    private void CreateGeometryResources()
+    {
+        (float[] positions, float[] texCoords, short[] indices) = PanoramaCameraState.CreateSphereMesh();
+        var vertices = new VertexPositionTexture[positions.Length / 3];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            vertices[i] = new VertexPositionTexture(
+                new Vector3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]),
+                new Vector2(texCoords[i * 2], texCoords[(i * 2) + 1]));
+        }
+
+        _indexCount = (uint)indices.Length;
+        fixed (VertexPositionTexture* vertexData = vertices)
+            _vertexBuffer = CreateBuffer((uint)(vertices.Length * sizeof(VertexPositionTexture)), D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER, vertexData);
+        fixed (short* indexData = indices)
+            _indexBuffer = CreateBuffer((uint)(indices.Length * sizeof(short)), D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER, indexData);
     }
 
     private void CreateRasterizerState()
@@ -508,36 +621,13 @@ internal sealed unsafe partial class PanoramicSurface
         _rasterizerState = state;
     }
 
-    private void CreateSamplerState()
-    {
-        D3D11_SAMPLER_DESC desc = new()
-        {
-            Filter = D3D11_FILTER.D3D11_FILTER_MIN_MAG_MIP_LINEAR,
-            AddressU = D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_WRAP,
-            AddressV = D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP,
-            AddressW = D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP,
-            ComparisonFunc = D3D11_COMPARISON_FUNC.D3D11_COMPARISON_NEVER,
-            MinLOD = 0f,
-            MaxLOD = float.MaxValue,
-            MaxAnisotropy = 1,
-        };
-        ID3D11SamplerState* state;
-        _device->CreateSamplerState(&desc, &state);
-        _samplerState = state;
-    }
-
     // Sets the marker swatches to draw over the panorama (replaces any previous set). Each swatch is a tightly-packed
     // BGRA8 buffer placed at a normalized (u,v). Safe to call before the device exists (stashed, built in Initialize).
     internal void SetMarkers(IReadOnlyList<MarkerSwatch> markers)
     {
         if (_device is null)
         {
-            _pendingMarkers = new MarkerSwatch[markers.Count];
-            for (int i = 0; i < markers.Count; i++)
-            {
-                _pendingMarkers[i] = markers[i];
-            }
-
+            _pendingMarkers = markers.ToArray();
             return;
         }
 
@@ -546,64 +636,11 @@ internal sealed unsafe partial class PanoramicSurface
 
     private void CreateMarkerResources()
     {
-        ID3DBlob* vertexBlob = CompileShader(MarkerVertexShaderSource, "vs_4_0");
-        ID3DBlob* pixelBlob = CompileShader(MarkerPixelShaderSource, "ps_4_0");
-        try
-        {
-            ID3D11VertexShader* vertexShader;
-            _device->CreateVertexShader(vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), null, &vertexShader);
-            _markerVertexShader = vertexShader;
-
-            ID3D11PixelShader* pixelShader;
-            _device->CreatePixelShader(pixelBlob->GetBufferPointer(), pixelBlob->GetBufferSize(), null, &pixelShader);
-            _markerPixelShader = pixelShader;
-
-            byte[] position = Encoding.ASCII.GetBytes("POSITION\0");
-            byte[] texCoord = Encoding.ASCII.GetBytes("TEXCOORD\0");
-            fixed (byte* positionPtr = position)
-            fixed (byte* texCoordPtr = texCoord)
-            {
-                D3D11_INPUT_ELEMENT_DESC* elements = stackalloc D3D11_INPUT_ELEMENT_DESC[2];
-                elements[0] = new D3D11_INPUT_ELEMENT_DESC
-                {
-                    SemanticName = new PCSTR(positionPtr),
-                    Format = DXGI_FORMAT.DXGI_FORMAT_R32G32_FLOAT,
-                    AlignedByteOffset = 0,
-                    InputSlotClass = D3D11_INPUT_CLASSIFICATION.D3D11_INPUT_PER_VERTEX_DATA,
-                };
-                elements[1] = new D3D11_INPUT_ELEMENT_DESC
-                {
-                    SemanticName = new PCSTR(texCoordPtr),
-                    Format = DXGI_FORMAT.DXGI_FORMAT_R32G32_FLOAT,
-                    AlignedByteOffset = 8,
-                    InputSlotClass = D3D11_INPUT_CLASSIFICATION.D3D11_INPUT_PER_VERTEX_DATA,
-                };
-
-                ID3D11InputLayout* inputLayout;
-                _device->CreateInputLayout(elements, 2, vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &inputLayout);
-                _markerInputLayout = inputLayout;
-            }
-        }
-        finally
-        {
-            Release(ref pixelBlob);
-            Release(ref vertexBlob);
-        }
+        CreatePipeline(MarkerVertexShaderSource, MarkerPixelShaderSource, DXGI_FORMAT.DXGI_FORMAT_R32G32_FLOAT, 8, out _markerVertexShader, out _markerPixelShader, out _markerInputLayout);
 
         ushort[] indices = [0, 1, 2, 2, 1, 3];
-        D3D11_BUFFER_DESC indexBufferDesc = new()
-        {
-            ByteWidth = (uint)(indices.Length * sizeof(ushort)),
-            Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
-            BindFlags = D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER,
-        };
         fixed (ushort* indexData = indices)
-        {
-            D3D11_SUBRESOURCE_DATA data = new() { pSysMem = indexData };
-            ID3D11Buffer* buffer;
-            _device->CreateBuffer(&indexBufferDesc, &data, &buffer);
-            _markerIndexBuffer = buffer;
-        }
+            _markerIndexBuffer = CreateBuffer((uint)(indices.Length * sizeof(ushort)), D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER, indexData);
 
         // Straight (non-premultiplied) alpha source-over: the swatch buffers from RuntimeImage are not premultiplied.
         D3D11_BLEND_DESC blendDesc = default;
@@ -622,21 +659,7 @@ internal sealed unsafe partial class PanoramicSurface
         ID3D11BlendState* blendState;
         _device->CreateBlendState(&blendDesc, &blendState);
         _markerBlendState = blendState;
-
-        D3D11_SAMPLER_DESC samplerDesc = new()
-        {
-            Filter = D3D11_FILTER.D3D11_FILTER_MIN_MAG_MIP_LINEAR,
-            AddressU = D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP,
-            AddressV = D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP,
-            AddressW = D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP,
-            ComparisonFunc = D3D11_COMPARISON_FUNC.D3D11_COMPARISON_NEVER,
-            MinLOD = 0f,
-            MaxLOD = float.MaxValue,
-            MaxAnisotropy = 1,
-        };
-        ID3D11SamplerState* sampler;
-        _device->CreateSamplerState(&samplerDesc, &sampler);
-        _markerSampler = sampler;
+        _markerSampler = CreateSampler(D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP);
 
         if (_pendingMarkers is MarkerSwatch[] pending)
         {
@@ -682,31 +705,19 @@ internal sealed unsafe partial class PanoramicSurface
         if (_markerVertexBuffer is null || _markerVertexCapacity < requiredVertices)
         {
             Release(ref _markerVertexBuffer);
-            D3D11_BUFFER_DESC desc = new()
-            {
-                ByteWidth = requiredVertices * (uint)sizeof(MarkerVertex),
-                Usage = D3D11_USAGE.D3D11_USAGE_DYNAMIC,
-                BindFlags = D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER,
-                CPUAccessFlags = D3D11_CPU_ACCESS_FLAG.D3D11_CPU_ACCESS_WRITE,
-            };
-            ID3D11Buffer* buffer;
-            _device->CreateBuffer(&desc, null, &buffer);
-            _markerVertexBuffer = buffer;
+            _markerVertexBuffer = CreateBuffer(requiredVertices * (uint)sizeof(MarkerVertex), D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER, null,
+                D3D11_USAGE.D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_FLAG.D3D11_CPU_ACCESS_WRITE);
             _markerVertexCapacity = requiredVertices;
         }
     }
 
-    // Projects each marker to NDC with the current camera, fills the dynamic vertex buffer, and draws the visible ones
+    // Projects each marker to NDC with the frame's camera, fills the dynamic vertex buffer, and draws the visible ones
     // as alpha-blended textured quads sized to the swatch's pixel dimensions. Markers behind the camera are skipped.
-    private void DrawMarkers(uint width, uint height)
+    private void DrawMarkers(uint width, uint height, in Matrix4x4 worldViewProjection)
     {
         if (_markerCount == 0 || _markerVertexBuffer is null || _markerVertexShader is null || _markerPixelShader is null ||
             _markerInputLayout is null || _markerIndexBuffer is null || _markerBlendState is null || _markerSampler is null)
             return;
-
-        Matrix4x4 world = Matrix4x4.CreateRotationY(Yaw) * Matrix4x4.CreateRotationX(Pitch);
-        Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(FieldOfView, MathF.Max(1f, width) / MathF.Max(1f, height), 0.1f, 10f);
-        Matrix4x4 worldViewProjection = world * projection;
 
         D3D11_MAPPED_SUBRESOURCE mapped;
         _context->Map((ID3D11Resource*)_markerVertexBuffer, 0, D3D11_MAP.D3D11_MAP_WRITE_DISCARD, 0, &mapped);
@@ -799,14 +810,6 @@ internal sealed unsafe partial class PanoramicSurface
         _markerVertexCapacity = 0;
     }
 
-    private void UpdateSceneConstants(float aspectRatio)
-    {
-        Matrix4x4 world = Matrix4x4.CreateRotationY(Yaw) * Matrix4x4.CreateRotationX(Pitch);
-        Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(FieldOfView, aspectRatio, 0.1f, 10f);
-        Matrix4x4 worldViewProjection = Matrix4x4.Transpose(world * projection);
-        _context->UpdateSubresource((ID3D11Resource*)_constantBuffer, 0, (D3D11_BOX*)null, &worldViewProjection, 0, 0);
-    }
-
     private ID3DBlob* CompileShader(string source, string target)
     {
         byte[] sourceBytes = Encoding.UTF8.GetBytes(source);
@@ -849,46 +852,6 @@ internal sealed unsafe partial class PanoramicSurface
 
             return code;
         }
-    }
-
-    private static (VertexPositionTexture[] Vertices, ushort[] Indices) CreateSphereMesh()
-    {
-        const int size = 30;
-        var vertices = new VertexPositionTexture[((size * 2) + 1) * (size + 1)];
-        var indices = new ushort[(size * 2) * size * 6];
-        int v = 0;
-        for (int i = 0; i <= size; i++)
-        {
-            float phi = MathF.PI * i / size;
-            for (int j = 0; j <= size * 2; j++)
-            {
-                float theta = 2f * MathF.PI * j / (size * 2);
-                float x = MathF.Sin(phi) * MathF.Cos(theta);
-                float y = MathF.Cos(phi);
-                float z = MathF.Sin(phi) * MathF.Sin(theta);
-                vertices[v++] = new VertexPositionTexture(new Vector3(x, y, z), new Vector2(j / (float)(size * 2), phi / MathF.PI));
-            }
-        }
-
-        int index = 0;
-        for (int x = 0; x < size; x++)
-        {
-            for (int y = 0; y < size * 2; y++)
-            {
-                ushort v0 = (ushort)((x * ((size * 2) + 1)) + y);
-                ushort v1 = (ushort)(((x + 1) * ((size * 2) + 1)) + y);
-                ushort v2 = (ushort)((x * ((size * 2) + 1)) + y + 1);
-                ushort v3 = (ushort)(((x + 1) * ((size * 2) + 1)) + y + 1);
-                indices[index++] = v0;
-                indices[index++] = v1;
-                indices[index++] = v2;
-                indices[index++] = v2;
-                indices[index++] = v1;
-                indices[index++] = v3;
-            }
-        }
-
-        return (vertices, indices);
     }
 
     private static void Release<T>(ref T* p)

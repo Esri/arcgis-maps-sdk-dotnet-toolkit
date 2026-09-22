@@ -18,7 +18,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Android.Content;
 using Android.Graphics;
@@ -41,9 +44,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 // stay in lockstep with it or clicks/markers are mirrored.
 internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextureListener
 {
-    private const int SphereLongitudeSegments = 64;
-    private const int SphereLatitudeSegments = 32;
-
     // GL_CULL_FACE, the glEnable/glDisable capability. Mono.Android's GLES20 exposes no constant for it (the
     // GlCullFace name is taken by the method); GlCullFaceMode (0x0B45) is the glGet query enum, NOT a capability -
     // passing it to glDisable is GL_INVALID_ENUM (caught by the emulator's strict validation).
@@ -56,11 +56,17 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     private int _renderQueued;
     private int _disposed;
 
-    // EGL state - owned by the render thread after creation.
-#pragma warning disable CA2213 // Disposed via TearDownEgl on the render thread (their owner); Dispose enqueues it and joins rather than racing a possibly-wedged thread.
+    // EGL and GL objects - owned by the render thread after creation, which disposes them in TearDownEgl and
+    // DeleteSceneResources; Dispose enqueues that and joins rather than racing a possibly-wedged thread.
+#pragma warning disable CA2213
     private EGLDisplay? _eglDisplay;
     private EGLContext? _eglContext;
     private EGLSurface? _eglSurface;
+    private FloatBuffer? _sphereVertices;
+    private FloatBuffer? _sphereTexCoords;
+    private ShortBuffer? _sphereIndices;
+    private FloatBuffer? _markerQuadBuffer;
+    private FloatBuffer? _markerQuadUvBuffer;
 #pragma warning restore CA2213
     private EGLConfig? _eglConfig;
     private SurfaceTexture? _surfaceTexture;
@@ -75,19 +81,10 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     private int _uMvp;
     private int _uTexture;
     private int _textureId;
-#pragma warning disable CA2213 // Disposed via TearDownEgl/DeleteSceneResources on the render thread (their owner); see the EGL fields above.
-    private FloatBuffer? _sphereVertices;
-    private FloatBuffer? _sphereTexCoords;
-    private ShortBuffer? _sphereIndices;
-#pragma warning restore CA2213
     private int _sphereIndexCount;
     private readonly float[] _mvp = new float[16];
     private readonly float[] _markerQuad = new float[4 * 3];
     private readonly float[] _markerQuadUv = new float[4 * 2];
-#pragma warning disable CA2213 // Disposed via TearDownEgl/DeleteSceneResources on the render thread (their owner); see the EGL fields above.
-    private FloatBuffer? _markerQuadBuffer;
-    private FloatBuffer? _markerQuadUvBuffer;
-#pragma warning restore CA2213
     private readonly List<GlMarker> _glMarkers = new();
 
     // Cross-thread state. Camera fields are written on the UI thread and read on the render thread; float
@@ -194,10 +191,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     public void SetMarkers(IReadOnlyList<MarkerSwatch> swatches)
     {
-        MarkerSwatch[] copy = new MarkerSwatch[swatches.Count];
-        for (int i = 0; i < swatches.Count; i++)
-            copy[i] = swatches[i];
-
+        MarkerSwatch[] copy = swatches.ToArray();
         lock (_pendingLock)
         {
             _pendingMarkers = copy;
@@ -602,51 +596,26 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         _markerQuadUvBuffer = null;
     }
 
-    // Unit sphere around the camera. MUST match the PanoramaCameraState convention:
-    // x = sin(phi)cos(theta), y = cos(phi), z = sin(phi)sin(theta); u = theta/2pi, v = phi/pi (no u flip).
     private void CreateSphereMesh()
     {
-        int vertexCount = (SphereLongitudeSegments + 1) * (SphereLatitudeSegments + 1);
-        float[] positions = new float[vertexCount * 3];
-        float[] uvs = new float[vertexCount * 2];
-        int p = 0, t = 0;
-        for (int lat = 0; lat <= SphereLatitudeSegments; lat++)
-        {
-            float v = lat / (float)SphereLatitudeSegments;
-            float phi = v * MathF.PI;
-            for (int lon = 0; lon <= SphereLongitudeSegments; lon++)
-            {
-                float u = lon / (float)SphereLongitudeSegments;
-                float theta = u * 2f * MathF.PI;
-                positions[p++] = MathF.Sin(phi) * MathF.Cos(theta);
-                positions[p++] = MathF.Cos(phi);
-                positions[p++] = MathF.Sin(phi) * MathF.Sin(theta);
-                uvs[t++] = u;
-                uvs[t++] = v;
-            }
-        }
-
-        short[] indices = new short[SphereLongitudeSegments * SphereLatitudeSegments * 6];
-        int i = 0;
-        for (int lat = 0; lat < SphereLatitudeSegments; lat++)
-        {
-            for (int lon = 0; lon < SphereLongitudeSegments; lon++)
-            {
-                short first = (short)((lat * (SphereLongitudeSegments + 1)) + lon);
-                short second = (short)(first + SphereLongitudeSegments + 1);
-                indices[i++] = first;
-                indices[i++] = second;
-                indices[i++] = (short)(first + 1);
-                indices[i++] = (short)(first + 1);
-                indices[i++] = second;
-                indices[i++] = (short)(second + 1);
-            }
-        }
-
+        (float[] positions, float[] texCoords, short[] indices) = PanoramaCameraState.CreateSphereMesh();
         _sphereVertices = ToFloatBuffer(positions);
-        _sphereTexCoords = ToFloatBuffer(uvs);
+        _sphereTexCoords = ToFloatBuffer(texCoords);
         _sphereIndices = ToShortBuffer(indices);
         _sphereIndexCount = indices.Length;
+    }
+
+    // Creates a linearly filtered 2D texture with the given horizontal wrap mode and leaves it bound.
+    private static int CreateTexture(int wrapS)
+    {
+        int[] ids = new int[1];
+        GLES20.GlGenTextures(1, ids, 0);
+        GLES20.GlBindTexture(GLES20.GlTexture2d, ids[0]);
+        GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMinFilter, GLES20.GlLinear);
+        GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMagFilter, GLES20.GlLinear);
+        GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureWrapS, wrapS);
+        GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureWrapT, GLES20.GlClampToEdge);
+        return ids[0];
     }
 
     private void ConsumePendingBitmap()
@@ -679,19 +648,12 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
             DeleteTexture();
             DrainGlErrors(); // the post-upload check must only see the upload's own errors
-            int[] ids = new int[1];
-            GLES20.GlGenTextures(1, ids, 0);
-            _textureId = ids[0];
-            GLES20.GlBindTexture(GLES20.GlTexture2d, _textureId);
-            GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMinFilter, GLES20.GlLinear);
-            GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMagFilter, GLES20.GlLinear);
 
             // The u (yaw) seam wraps with REPEAT, but ES2 treats a non-power-of-two texture with REPEAT as
             // incomplete (every sample returns black), so an ES2-only device takes CLAMP_TO_EDGE for NPOT
             // panoramas instead - a hairline seam at the wrap beats a black sphere.
             bool repeatSafe = _contextIsEs3 || (BitOperations.IsPow2(bitmap.Width) && BitOperations.IsPow2(bitmap.Height));
-            GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureWrapS, repeatSafe ? GLES20.GlRepeat : GLES20.GlClampToEdge);
-            GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureWrapT, GLES20.GlClampToEdge);
+            _textureId = CreateTexture(repeatSafe ? GLES20.GlRepeat : GLES20.GlClampToEdge);
             GLUtils.TexImage2D(GLES20.GlTexture2d, 0, bitmap, 0);
             ThrowOnGlError("panorama texture upload");
             GLES20.GlBindTexture(GLES20.GlTexture2d, 0);
@@ -735,13 +697,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
                 rgba[i + 3] = swatch.Bgra[i + 3];
             }
 
-            int[] ids = new int[1];
-            GLES20.GlGenTextures(1, ids, 0);
-            GLES20.GlBindTexture(GLES20.GlTexture2d, ids[0]);
-            GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMinFilter, GLES20.GlLinear);
-            GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMagFilter, GLES20.GlLinear);
-            GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureWrapS, GLES20.GlClampToEdge);
-            GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureWrapT, GLES20.GlClampToEdge);
+            int textureId = CreateTexture(GLES20.GlClampToEdge);
             using (ByteBuffer buffer = ByteBuffer.AllocateDirect(rgba.Length))
             {
                 buffer.Put(rgba);
@@ -751,7 +707,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
             ThrowOnGlError("marker texture upload");
             GLES20.GlBindTexture(GLES20.GlTexture2d, 0);
-            _glMarkers.Add(new GlMarker(ids[0], swatch.U, swatch.V, swatch.Width, swatch.Height));
+            _glMarkers.Add(new GlMarker(textureId, swatch.U, swatch.V, swatch.Width, swatch.Height));
         }
 
         DrawCore();
@@ -804,11 +760,9 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
             GLES20.GlUseProgram(_program);
 
-            // System.Numerics row-major memory read column-major by GLSL == the transpose, and
-            // M^T * column-vector == row-vector * M - so upload raw with transpose false (see PanoramaCameraState).
-            Matrix4x4 world = Matrix4x4.CreateRotationY(yaw) * Matrix4x4.CreateRotationX(pitch);
-            Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(fov, width / (float)Math.Max(1, height), 0.1f, 10f);
-            WriteMatrix(world * projection, _mvp);
+            // Row-major System.Numerics bytes read column-major by GLSL are the transpose the row-vector math needs, so
+            // upload with transpose = false.
+            WriteMatrix(new PanoramaCameraState(yaw, pitch, fov).GetWorldViewProjection(width / (float)Math.Max(1, height)), _mvp);
             GLES20.GlUniformMatrix4fv(_uMvp, 1, false, _mvp, 0);
 
             GLES20.GlActiveTexture(GLES20.GlTexture0);
@@ -920,25 +874,9 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         throw new InvalidOperationException($"OpenGL error 0x{error:X} during {operation}.");
     }
 
-    private static void WriteMatrix(in Matrix4x4 m, float[] destination)
-    {
-        destination[0] = m.M11;
-        destination[1] = m.M12;
-        destination[2] = m.M13;
-        destination[3] = m.M14;
-        destination[4] = m.M21;
-        destination[5] = m.M22;
-        destination[6] = m.M23;
-        destination[7] = m.M24;
-        destination[8] = m.M31;
-        destination[9] = m.M32;
-        destination[10] = m.M33;
-        destination[11] = m.M34;
-        destination[12] = m.M41;
-        destination[13] = m.M42;
-        destination[14] = m.M43;
-        destination[15] = m.M44;
-    }
+    // Matrix4x4 is sixteen sequential floats, M11 first.
+    private static void WriteMatrix(in Matrix4x4 m, float[] destination) =>
+        MemoryMarshal.Cast<Matrix4x4, float>(MemoryMarshal.CreateReadOnlySpan(ref Unsafe.AsRef(in m), 1)).CopyTo(destination);
 
     private static int CreateProgram(string vertexSource, string fragmentSource)
     {

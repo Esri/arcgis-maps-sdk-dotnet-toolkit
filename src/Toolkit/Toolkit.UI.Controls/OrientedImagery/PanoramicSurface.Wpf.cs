@@ -19,6 +19,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Direct3D11;
 using Windows.Win32.Graphics.Dxgi;
@@ -68,9 +69,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     private WriteableBitmap? _writeableBitmap;
 
     private bool _renderHooked;
-    private bool _needsRender = true;
-    private bool _deviceLost;
-    private bool _deviceEverCreated; // distinguishes a reload (device existed before) from the first load
     private Point _lastMousePosition;
     private Point _mouseDownPosition;
     private bool _wasDragging; // the previous move sample had the left button pressed (so a delta is meaningful)
@@ -87,8 +85,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         Unloaded += OnUnloaded;
         SizeChanged += OnSizeChanged;
     }
-
-    public void RequestRender() => _needsRender = true;
 
     protected override System.Windows.Size MeasureOverride(System.Windows.Size constraint)
     {
@@ -114,49 +110,12 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         return (width, height);
     }
 
-    private void OnLoaded(object sender, RoutedEventArgs e)
-    {
-        Safe(() =>
-        {
-            bool isReload = _deviceEverCreated;
-            EnsureResources();
-            HookRendering();
-            RequestRender();
-            if (IsDeviceInitialized)
-            {
-                _deviceEverCreated = true;
-            }
-
-            // On a RELOAD (RDP reconnect / display change tears down and rebuilds the visual tree, releasing the device
-            // on Unloaded) the fresh device has no content and the stash was consumed, so ask the display to re-supply.
-            // On the FIRST load the normal load path supplies it. Raising here would force a redundant second decode,
-            // so gate on a prior device existing.
-            if (isReload && IsDeviceInitialized && !HasTexture)
-            {
-                DeviceRecreated?.Invoke();
-            }
-        });
-    }
-
-    // Runs a present-layer step in a XAML event handler (outside the load path's try/catch)
-    // routing any failure to so the hosting display surfaces it as Error instead of failing silently.
-    private void Safe(Action action)
-    {
-        try
-        {
-            action();
-        }
-        catch (Exception ex)
-        {
-            RenderFailed?.Invoke(ex);
-        }
-    }
+    private void OnLoaded(object sender, RoutedEventArgs e) => Safe(HandleLoaded);
 
     private void OnUnloaded(object sender, RoutedEventArgs e)
     {
         UnhookRendering();
-        ReleaseSurfaces();
-        ReleaseDevice9();
+        ReleasePresentResources();
         ReleaseDeviceResources();
     }
 
@@ -169,7 +128,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         });
     }
 
-    private void EnsureResources()
+    private partial void EnsureResources()
     {
         if (ActualWidth <= 0 || ActualHeight <= 0)
             return;
@@ -216,12 +175,8 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         if (PresentationSource.FromVisual(this) is HwndSource hwnd && hwnd.CompositionTarget?.RenderMode == RenderMode.SoftwareOnly)
             return true;
 
-        const int SM_REMOTESESSION = 0x1000;
-        return GetSystemMetrics(SM_REMOTESESSION) != 0;
+        return PInvoke.GetSystemMetrics(Windows.Win32.UI.WindowsAndMessaging.SYSTEM_METRICS_INDEX.SM_REMOTESESSION) != 0;
     }
-
-    [LibraryImport("user32.dll")]
-    private static partial int GetSystemMetrics(int index);
 
     private void CreateSoftwareSurfaces(uint width, uint height)
     {
@@ -272,7 +227,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
         ThrowIfFailed(D3D9.Direct3DCreate9Ex(D3D9SdkVersion, out _d3d9), "Direct3DCreate9Ex");
 
-        nint focusWindow = D3D9.GetDesktopWindow();
+        nint focusWindow = (nint)PInvoke.GetDesktopWindow().Value;
         D3DPRESENT_PARAMETERS pp = new()
         {
             BackBufferWidth = 1,
@@ -349,7 +304,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         }
     }
 
-    private void HookRendering()
+    private partial void HookRendering()
     {
         if (!_renderHooked)
         {
@@ -367,97 +322,43 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         }
     }
 
-    private void OnRendering(object? sender, EventArgs e)
-    {
-        if (_deviceLost && !TryRecoverDevice())
-            return; // GPU still unavailable, retry next tick.
+    private void OnRendering(object? sender, EventArgs e) => RenderTick();
 
-        // A missing texture is not a blocker. RenderHardware/RenderSoftware clear to a blank backdrop
-        // (so a footprint change / failed load blanks the buffer instead of leaving the previous frame on screen).
-        bool ready = Context is not null && (_useSoftware
+    private partial bool IsReadyToRender() =>
+        Context is not null && (_useSoftware
             ? _writeableBitmap is not null && _renderTargetView is not null
             : _d3dImage is not null && _sharedView is not null && _d3dImage.IsFrontBufferAvailable);
-        if (!_needsRender || !ready)
-            return;
 
-        try
-        {
-            if (_useSoftware)
-                RenderSoftware();
-            else
-                RenderHardware();
-        }
-        catch (Exception ex)
-        {
-            // A device-removed during render is recoverable (rebuilt next tick, re-supplied via DeviceRecreated).
-            // Do not surface it as Error. Only genuine render failures go to RenderFailed.
-            if (IsDeviceRemoved)
-            {
-                _deviceLost = true;
-                _needsRender = true;
-                return;
-            }
+    // The surfaces are created by the first sized EnsureResources; the tick waits for them.
+    private partial bool PresentResourcesReady() => true;
 
-            RenderFailed?.Invoke(ex);
-            return;
-        }
-
-        if (IsDeviceRemoved)
-        {
-            _deviceLost = true;
-            _needsRender = true;
-        }
+    private partial void RenderFrame()
+    {
+        if (_useSoftware)
+            RenderSoftware();
+        else
+            RenderHardware();
     }
 
-    // Rebuilds the device + all resources after a device-lost.
-    // Returns false to retry on the next tick while the GPU is still unavailable.
-    // DeviceRecreated then asks the display to re-supply the texture and markers.
-    // The camera (plain properties on the surface) is preserved.
-    private bool TryRecoverDevice()
+    private partial void ReleasePresentResources()
     {
-        try
-        {
-            ReleaseSurfaces();
-            ReleaseDevice9();
-            ReleaseDeviceResources();
-            EnsureResources();
-        }
-        catch
-        {
-            return false;
-        }
-
-        if (!IsDeviceInitialized)
-            return false;
-
-        _deviceLost = false;
-        _needsRender = true;
-        DeviceRecreated?.Invoke(); // the display re-supplies the texture and markers (they were on the old device)
-        return true;
+        ReleaseSurfaces();
+        ReleaseDevice9();
     }
 
     private void RenderHardware()
     {
-        if (HasTexture)
-            RenderScene(_sharedView, _surfaceWidth, _surfaceHeight);
-        else
-            ClearTarget(_sharedView); // blank backdrop (no texture)
-
+        RenderScene(_sharedView, _surfaceWidth, _surfaceHeight);
         Context->Flush(); // ensure D3D11 writes complete before WPF copies the D3D9 surface
 
         _d3dImage!.Lock();
         _d3dImage.AddDirtyRect(new Int32Rect(0, 0, _d3dImage.PixelWidth, _d3dImage.PixelHeight));
         _d3dImage.Unlock();
-        _needsRender = false;
     }
 
     private void RenderSoftware()
     {
-        if (HasTexture)
-            RenderScene(_renderTargetView, _surfaceWidth, _surfaceHeight);
-        else
-            ClearTarget(_renderTargetView); // blank backdrop (no texture)
-
+        RenderScene(_renderTargetView, _surfaceWidth, _surfaceHeight);
         Context->CopyResource((ID3D11Resource*)_stagingTexture, (ID3D11Resource*)_renderTarget);
 
         D3D11_MAPPED_SUBRESOURCE mapped;
@@ -481,20 +382,14 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         {
             Context->Unmap((ID3D11Resource*)_stagingTexture, 0);
         }
-
-        _needsRender = false;
     }
 
     private void OnFrontBufferAvailableChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
+        // The front buffer came back (RDP reconnect, display change): rebuild on the next tick, which also recreates
+        // the D3D11 device if it was removed, not just the D3D9 surfaces.
         if (_d3dImage?.IsFrontBufferAvailable == true)
-        {
-            // Front buffer came back (e.g. RDP reconnect / display change).
-            // Trigger the unified rebuild on the next render tick,
-            // which also re-creates the D3D11 device if it was removed (not just the D3D9 surfaces).
-            _deviceLost = true;
-            RequestRender();
-        }
+            NotifyDeviceLost();
     }
 
     private void ReleaseSurfaces()
@@ -649,9 +544,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     {
         [LibraryImport("d3d9.dll")]
         internal static partial int Direct3DCreate9Ex(uint sdkVersion, out nint d3d9ex);
-
-        [LibraryImport("user32.dll")]
-        internal static partial nint GetDesktopWindow();
 
         internal static int CreateDeviceEx(nint self, uint adapter, uint deviceType, nint focusWindow, uint behaviorFlags, void* presentParams, out nint device)
         {

@@ -24,3 +24,5 @@ IDXGIFactory2
 IDXGIResource
 IDXGISwapChain1
 IDXGISwapChain2
+GetSystemMetrics
+GetDesktopWindow
