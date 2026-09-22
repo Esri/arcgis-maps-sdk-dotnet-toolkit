@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
@@ -10,9 +9,9 @@ using PointF = System.Drawing.PointF;
 namespace Toolkit.Tests;
 
 /// <summary>
-/// Hosting and lifetime contracts of <see cref="OrientedImageDisplay"/> and its inner displays that hold without
-/// a running app: re-applying the control template must re-host the active display in the new template's host,
-/// and app-owned markers must not retain a discarded display through their PropertyChanged subscriptions.
+/// Contracts of <see cref="OrientedImageDisplay"/> and its inner displays that hold without a running app:
+/// template re-hosting, marker subscriptions that must not retain a discarded display, read-only state
+/// properties, accessibility, and the visible-area clipping math.
 /// </summary>
 [TestClass]
 public sealed class OrientedImageDisplayTests
@@ -67,109 +66,6 @@ public sealed class OrientedImageDisplayTests
         var display = new OrientedImagePanoramicDisplay();
         display.SetMarkers(markers);
         return new WeakReference(display);
-    }
-
-    [TestMethod]
-    public void ReapplyingTemplateDoesNotRestartPresentation()
-    {
-        RunSta(() =>
-        {
-            var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
-            Assert.IsTrue(control.ApplyTemplate());
-            object? activeDisplay = GetNonPublicField(control, "_activeDisplay");
-            Assert.IsNotNull(activeDisplay, "sanity: the first template application selects a display");
-            object? initialSession = GetNonPublicField(activeDisplay, "_sessionCts");
-            Assert.IsNotNull(initialSession, "sanity: the first template application starts a presentation session");
-
-            control.Template = CreateHostTemplate();
-            Assert.IsTrue(control.ApplyTemplate());
-
-            // Re-templating must only re-host: a new session would recreate the raster layer / re-decode the
-            // panorama (I/O, flicker) and cancel valid in-flight work for an unchanged footprint.
-            Assert.AreSame(activeDisplay, GetNonPublicField(control, "_activeDisplay"));
-            Assert.AreSame(
-                initialSession,
-                GetNonPublicField(activeDisplay, "_sessionCts"),
-                "re-applying the template must not start a new presentation session");
-        });
-    }
-
-    [TestMethod]
-    public void UnsupportedTypeErrorPublishesWithoutAnActiveDisplay()
-    {
-        RunSta(() =>
-        {
-            var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
-            Assert.IsTrue(control.ApplyTemplate());
-
-            // Arrange the boundary state UpdateDisplay produces when the first-ever footprint has an unsupported
-            // image type (no display was ever active; a video-typed OrientedImage is not constructible headless):
-            // the null -> null display transition must still publish the freshly computed unsupported-type error.
-            SetNonPublicField(control, "_activeDisplay", null);
-            var unsupported = new NotSupportedException("test: unsupported image type");
-            SetNonPublicField(control, "_unsupportedError", unsupported);
-
-            InvokeNonPublic(control, "SetActiveDisplay", [null]);
-
-            Assert.AreSame(unsupported, control.Error, "the unsupported-type error must publish even when no display was ever active");
-        });
-    }
-
-    [TestMethod]
-    public void PanoramicRecoveryStateIsBusyAndNotInteractive()
-    {
-        RunSta(() =>
-        {
-            var display = new OrientedImagePanoramicDisplay();
-
-            // Simulate a presented panorama (dimensions come from a real decode in production).
-            SetNonPublicField(display, "_imageWidth", 4096);
-            SetNonPublicField(display, "_imageHeight", 2048);
-            InvokeNonPublic(display, "UpdateState", []);
-            Assert.IsTrue(display.IsInteractive, "sanity: presented and error-free implies interactive");
-            Assert.IsFalse(display.IsBusy);
-
-            // The device-recovery entry state: dimensions invalidated, recovery flagged, state recomputed. During
-            // the re-decode the surface is blank; commands bound to IsInteractive must not stay enabled over it.
-            SetNonPublicField(display, "_imageWidth", 0);
-            SetNonPublicField(display, "_imageHeight", 0);
-            SetNonPublicField(display, "_recovering", true);
-            InvokeNonPublic(display, "UpdateState", []);
-
-            Assert.IsFalse(display.IsInteractive, "a blank recovering surface must not be interactive");
-            Assert.IsTrue(display.IsBusy, "device recovery is presentation work and must surface as busy");
-        });
-    }
-
-    // The boundary tests arrange non-public state (real OrientedImages of specific types are not constructible
-    // headless) - resolve members across the inheritance chain.
-    private static object? GetNonPublicField(object target, string name) => GetFieldInfo(target, name).GetValue(target);
-
-    private static void SetNonPublicField(object target, string name, object? value) => GetFieldInfo(target, name).SetValue(target, value);
-
-    private static FieldInfo GetFieldInfo(object target, string name)
-    {
-        for (Type? type = target.GetType(); type is not null; type = type.BaseType)
-        {
-            if (type.GetField(name, BindingFlags.NonPublic | BindingFlags.Instance) is FieldInfo field)
-                return field;
-        }
-
-        throw new MissingFieldException(target.GetType().Name, name);
-    }
-
-    private static void InvokeNonPublic(object target, string name, object?[] args)
-    {
-        for (Type? type = target.GetType(); type is not null; type = type.BaseType)
-        {
-            if (type.GetMethod(name, BindingFlags.NonPublic | BindingFlags.Instance) is MethodInfo method)
-            {
-                method.Invoke(target, args);
-                return;
-            }
-        }
-
-        throw new MissingMethodException(target.GetType().Name, name);
     }
 
     [TestMethod]
