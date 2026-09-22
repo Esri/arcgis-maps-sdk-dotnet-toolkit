@@ -36,6 +36,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 //     and v_center = 0.5 + Pitch/pi (positive pitch looks below the horizon). The initial view heading is
 //     set by the display as Yaw = -CameraHeading (see OrientedImagePanoramicDisplay).
 //   - Screen: element/DIP coordinates, origin top-left, +Y down.
+//   - Footprint: the SDK's 360 footprint update takes degrees with yaw 0 at the image's center column and pitch 0
+//     at the nadir; TryGetFootprintView converts to it.
 // GL note: System.Numerics matrices are row-major with row-vector math (clip = v * M). A GLSL mat4 uniform
 // reads the same bytes column-major, i.e. as M-transposed, and computes M^T * v == v * M - so upload the raw
 // floats with transpose = false; do not transpose them yourself.
@@ -130,6 +132,36 @@ internal readonly struct PanoramaCameraState
 
         screenX = (((clip.X / clip.W) * 0.5) + 0.5) * viewWidth;
         screenY = (1.0 - (((clip.Y / clip.W) * 0.5) + 0.5)) * viewHeight;
+        return true;
+    }
+
+    // The view in the oriented imagery 360 footprint convention, for
+    // OrientedImageFootprint.UpdateFootprintAsync(yaw, pitch, horizontalFov, verticalFov). All values are degrees:
+    // Yaw is clockwise from the image's center column in [0, 360); Pitch runs from the nadir (0) through the
+    // horizon (90) to the zenith (180); the fields of view are the angles the viewport's width and height span.
+    public readonly record struct FootprintView(double Yaw, double Pitch, double HorizontalFieldOfView, double VerticalFieldOfView);
+
+    // Converts this camera to the footprint convention. The image maps its column u = 0.5 + yaw/360 and its row
+    // v = 1 - pitch/180, so with the center anchors above (u_center = 0.75 + Yaw/2pi, v_center = 0.5 + Pitch/pi)
+    // yaw = 90 deg + Yaw and pitch = 90 deg - Pitch. The horizontal field of view is the perspective frustum's,
+    // widened from the vertical one by the aspect ratio. False when the viewport has no size or the camera is invalid.
+    public bool TryGetFootprintView(double viewWidth, double viewHeight, out FootprintView view)
+    {
+        view = default;
+        if (viewWidth <= 0 || viewHeight <= 0)
+            return false;
+
+        if (!float.IsFinite(Yaw) || !float.IsFinite(Pitch) || !float.IsFinite(FieldOfView) || FieldOfView <= 0f || FieldOfView >= MathF.PI)
+            return false;
+
+        double yaw = (90.0 + (Yaw * 180.0 / Math.PI)) % 360.0;
+        if (yaw < 0)
+            yaw += 360.0;
+
+        double pitch = Math.Clamp(90.0 - (Pitch * 180.0 / Math.PI), 0.0, 180.0);
+        double verticalFov = FieldOfView * 180.0 / Math.PI;
+        double horizontalFov = 2.0 * Math.Atan((viewWidth / viewHeight) * Math.Tan(FieldOfView / 2.0)) * 180.0 / Math.PI;
+        view = new FootprintView(yaw, pitch, horizontalFov, verticalFov);
         return true;
     }
 

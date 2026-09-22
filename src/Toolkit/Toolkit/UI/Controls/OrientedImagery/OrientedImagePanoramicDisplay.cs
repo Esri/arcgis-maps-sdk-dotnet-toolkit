@@ -402,64 +402,22 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             _surface.CameraChanged -= OnCameraChanged;
     }
 
-    private void OnCameraChanged() => UpdateFootprintCorners();
+    private void OnCameraChanged() => UpdateFootprint();
 
-    protected override bool TryGetFootprintCorners(out IReadOnlyList<PointF> corners)
+    // 360 image: push the camera orientation and the angular extent of the view. Core derives the ground footprint
+    // from them (horizon arc, seam wrap and pole handling included), so no pixel ring is projected here.
+    protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
     {
-        corners = Array.Empty<PointF>();
         double width = _surface.ActualWidth;
         double height = _surface.ActualHeight;
-        if (_imageWidth <= 0 || _imageHeight <= 0 || width <= 0 || height <= 0)
-            return false;
+        if (_imageWidth <= 0 || _imageHeight <= 0)
+            return null;
 
         var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
-        return TryProjectViewRing(camera, width, height, out corners);
-    }
+        if (!camera.TryGetFootprintView(width, height, out PanoramaCameraState.FootprintView view))
+            return null;
 
-    // Projects the screen-view boundary onto the equirectangular image as an ordered ring of pixel vertices,
-    // densified (several samples per screen edge) because a panorama's straight screen edges map to curved arcs
-    // on the image, which four corners approximate poorly. Horizontal coordinates are unwrapped across the
-    // u = 0/1 seam so the ring stays continuous — pixels may fall outside [0, width], which core maps back onto
-    // the sphere. Returns false when any sample can't be projected (e.g. looking past a pole).
-    private bool TryProjectViewRing(PanoramaCameraState camera, double width, double height, out IReadOnlyList<PointF> ring)
-    {
-        ring = System.Array.Empty<PointF>();
-        const int samplesPerEdge = 8;
-
-        // Screen boundary sampled clockwise from the top-left corner, without repeating the shared corners.
-        var boundary = new List<(double X, double Y)>(samplesPerEdge * 4);
-        for (int i = 0; i < samplesPerEdge; i++)
-            boundary.Add(((double)i / samplesPerEdge * width, 0));                    // top edge, left → right
-        for (int i = 0; i < samplesPerEdge; i++)
-            boundary.Add((width, (double)i / samplesPerEdge * height));               // right edge, top → bottom
-        for (int i = 0; i < samplesPerEdge; i++)
-            boundary.Add((width - ((double)i / samplesPerEdge * width), height));     // bottom edge, right → left
-        for (int i = 0; i < samplesPerEdge; i++)
-            boundary.Add((0, height - ((double)i / samplesPerEdge * height)));        // left edge, bottom → top
-
-        var pixels = new List<PointF>(boundary.Count);
-        double seamOffset = 0;
-        float previousU = 0;
-        for (int i = 0; i < boundary.Count; i++)
-        {
-            if (!camera.TryScreenToNormalizedUv(boundary[i].X, boundary[i].Y, width, height, out float u, out float v))
-                return false;
-
-            if (i != 0)
-            {
-                float delta = u - previousU;
-                if (delta > 0.5f)
-                    seamOffset -= 1.0;
-                else if (delta < -0.5f)
-                    seamOffset += 1.0;
-            }
-
-            previousU = u;
-            pixels.Add(new PointF((float)((u + seamOffset) * _imageWidth), v * _imageHeight));
-        }
-
-        ring = pixels;
-        return true;
+        return footprint.UpdateFootprintAsync(view.Yaw, view.Pitch, view.HorizontalFieldOfView, view.VerticalFieldOfView, NextFootprintUpdateToken());
     }
 
     public override void SetBackgroundColor(System.Drawing.Color color)
@@ -501,7 +459,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         // Push the initial footprint explicitly: auto-update is usually enabled before this load completes
         // (image dimensions were still zero on its immediate push), and if the camera assignments above happen
         // not to change the values they raise no CameraChanged either.
-        UpdateFootprintCorners();
+        UpdateFootprint();
     }
 
     // Blank the texture and invalidate dimensions NOW, so the user never sees the old panorama and clicks are
