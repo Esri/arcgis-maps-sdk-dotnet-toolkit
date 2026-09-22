@@ -126,9 +126,12 @@ public partial class OrientedImageDisplay
     /// viewport changes.
     /// </summary>
     /// <remarks>
-    /// When <c>true</c>, the control recomputes the visible image corners as the display is panned or zoomed and
-    /// calls <see cref="OrientedImageFootprint.UpdateFootprintAsync(System.Collections.Generic.IEnumerable{System.Drawing.PointF}, System.Threading.CancellationToken)"/>
-    /// so the footprint rendered on the map stays in sync. The footprint itself is not drawn by this control.
+    /// When <c>true</c>, the control recomputes the visible part of the image as the display is panned or zoomed and
+    /// pushes it to the footprint so the footprint rendered on the map stays in sync: a planar image calls
+    /// <see cref="OrientedImageFootprint.UpdateFootprintAsync(System.Collections.Generic.IEnumerable{System.Drawing.PointF}, System.Threading.CancellationToken)"/>
+    /// with the visible pixel outline, a 360 image calls
+    /// <see cref="OrientedImageFootprint.UpdateFootprintAsync(double, double, double, double, System.Threading.CancellationToken)"/>
+    /// with the camera orientation and field of view. The footprint itself is not drawn by this control.
     /// </remarks>
     /// <value>A value indicating whether the footprint is automatically updated. The default is <c>false</c>.</value>
     public bool AutoUpdateFootprint
