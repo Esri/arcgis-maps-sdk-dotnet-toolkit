@@ -91,11 +91,11 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             UpdateState();
 
             // The initial framing's ViewpointChanged can fire while drawing is still in progress - where
-            // TryGetFootprintCorners rejects it - and no further viewpoint event is guaranteed afterwards, so
+            // BeginFootprintUpdate rejects it - and no further viewpoint event is guaranteed afterwards, so
             // push the footprint once drawing settles. No-op unless auto-update is enabled, and the base's
             // latest-wins cancellation makes redundant pushes safe.
             if (e.Status == DrawStatus.Completed)
-                UpdateFootprintCorners();
+                UpdateFootprint();
         };
         Content = _mapView;
         UpdateAutomationName();
@@ -618,26 +618,25 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         RaiseImageClicked(new OrientedImageDisplay.ImageClickedEventArgs(imagePoint, image, marker));
     }
 
-    private void OnViewpointChanged(object? sender, EventArgs e) => UpdateFootprintCorners();
+    private void OnViewpointChanged(object? sender, EventArgs e) => UpdateFootprint();
 
-    protected override bool TryGetFootprintCorners(out IReadOnlyList<PointF> corners)
+    // Planar image: push the visible part of the raster as a pixel ring.
+    protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
     {
-        corners = Array.Empty<PointF>();
         if (_mapView.DrawStatus != DrawStatus.Completed)
-            return false;
+            return null;
 
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
-            return false;
+            return null;
 
         if (_mapView.VisibleArea is not Polygon visibleArea || visibleArea.Parts.Count == 0)
-            return false;
+            return null;
 
         List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY);
         if (pixels.Count < 3)
-            return false;
+            return null;
 
-        corners = pixels;
-        return true;
+        return footprint.UpdateFootprintAsync(pixels, NextFootprintUpdateToken());
     }
 
     // Converts the map-space visible-area ring into an ordered list of image pixel vertices, clipped to the image

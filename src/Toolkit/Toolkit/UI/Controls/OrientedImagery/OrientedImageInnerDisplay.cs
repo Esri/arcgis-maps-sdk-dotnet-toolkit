@@ -23,7 +23,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using PointF = System.Drawing.PointF;
 #if WPF
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using VerticalAlignment = System.Windows.VerticalAlignment;
@@ -51,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 //    auto-update-footprint plumbing (latest-wins cancellation; canceled on disable and session end).
 //
 // Derived displays implement only their unique parts: PresentAsync (make the loaded image visible),
-// ClearPresentation (blank it), footprint-corner projection, marker rendering, and background color.
+// ClearPresentation (blank it), the footprint update for their image type, marker rendering, and background color.
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Platform view types are not IDisposable by convention. The session CTS is cancel-only (no timer), so it needs no disposal; canceling it on supersede is the release.")]
 #if MAUI
 internal abstract class OrientedImageInnerDisplay : ContentView
@@ -200,7 +199,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         _autoUpdate = enabled;
         OnAutoUpdateFootprintChanged(enabled);
         if (enabled)
-            UpdateFootprintCorners(); // push the current view immediately; the view may be static until interaction
+            UpdateFootprint(); // push the current view immediately; the view may be static until interaction
         else
             _updateCts?.Cancel(); // don't let an in-flight update land after auto-update was turned off
     }
@@ -232,11 +231,14 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     // A marker was moved the collection; move internal markers collection to match.
     protected abstract void MoveMarkers(int oldIndex, int newIndex);
 
-    // Subscribe/unsubscribe the platform view-change event that should drive UpdateFootprintCorners.
+    // Subscribe/unsubscribe the platform view-change event that should drive UpdateFootprint.
     protected abstract void OnAutoUpdateFootprintChanged(bool enabled);
 
-    // Projects the current view onto the image as an ordered pixel ring; false when it can't be computed yet.
-    protected abstract bool TryGetFootprintCorners(out IReadOnlyList<PointF> corners);
+    // Starts the core update of the footprint for the current view, using the UpdateFootprintAsync overload that
+    // fits the image type, or returns null when the view can't be computed yet (nothing is pushed and an in-flight
+    // update is left alone). Snapshot the view before taking the token from NextFootprintUpdateToken, so a view
+    // that can't be computed never cancels a good update.
+    protected abstract Task? BeginFootprintUpdate(OrientedImageFootprint footprint);
 
     // The load skeleton finished for the current session (present, clear, or failure) - state and image dimensions
     // are settled. Derived displays re-resolve dimension-dependent visuals (e.g. panoramic markers) here.
@@ -266,28 +268,31 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    // Projects the current view onto the image (TryGetFootprintCorners) and pushes the ring to the footprint.
-    // Runs on view changes while auto-update is enabled, and once when a new image finishes presenting.
-    // Cancel-prior, so a stale view never wins a race; superseding the footprint or disabling auto-update cancels too.
-    protected async void UpdateFootprintCorners()
+    // Pushes the current view to the footprint (BeginFootprintUpdate). Runs on view changes while auto-update is
+    // enabled, and once when a new image finishes presenting. Latest wins: a stale view never beats a newer one,
+    // and superseding the footprint or disabling auto-update cancels the in-flight update too.
+    protected async void UpdateFootprint()
     {
         if (!_autoUpdate || Footprint is not OrientedImageFootprint footprint)
             return;
 
-        if (!TryGetFootprintCorners(out IReadOnlyList<PointF> corners))
-            return;
-
-        _updateCts?.Cancel();
-        CancellationTokenSource cts = new();
-        _updateCts = cts;
         try
         {
-            await footprint.UpdateFootprintAsync(corners, cts.Token);
+            if (BeginFootprintUpdate(footprint) is Task update)
+                await update;
         }
         catch
         {
             // Ignore cancellation/failures from a superseded update.
         }
+    }
+
+    // Cancels the in-flight footprint update and returns the token for the next one.
+    protected CancellationToken NextFootprintUpdateToken()
+    {
+        _updateCts?.Cancel();
+        _updateCts = new CancellationTokenSource();
+        return _updateCts.Token;
     }
 
     // Gives the focusable inner view a meaningful screen-reader label instead of a generic one.
