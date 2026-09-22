@@ -97,12 +97,9 @@ internal sealed unsafe partial class PanoramicSurface
     private ID3D11SamplerState* _samplerState;
     private ID3D11RasterizerState* _rasterizerState;
     private uint _indexCount;
-    private float _clearR, _clearG, _clearB, _clearA = 1f;
+    private float _clearR = 0.02f, _clearG = 0.02f, _clearB = 0.02f, _clearA = 1f;
 
-    // A texture handed in before the device exists (decoded before the surface Loaded) is stashed here
-    // and uploaded once Initialize() creates the device, then released.
-    // After a device-lost rebuild the panorama is re-supplied by  display via the DeviceRecreated event (see below)
-    // rather than retained here, to avoid a large idle CPU copy.
+    // A texture handed in before the device exists is stashed here and uploaded by Initialize, then released.
     private byte[]? _pendingBgra;
     private uint _pendingWidth, _pendingHeight;
     private bool _usingWarp;
@@ -112,9 +109,7 @@ internal sealed unsafe partial class PanoramicSurface
     private bool _deviceLost;
     private bool _deviceEverCreated;
 
-    // Marker billboard pass: each marker's swatch is a BGRA texture drawn as a screen-aligned,
-    // alpha-blended quad at the (u,v) it projects to (CPU-projected with the same camera as the sphere).
-    // Drawn after the sphere, on top.
+    // Marker billboard pass: each swatch is drawn after the sphere as a screen-aligned, alpha-blended quad.
     private ID3D11VertexShader* _markerVertexShader;
     private ID3D11PixelShader* _markerPixelShader;
     private ID3D11InputLayout* _markerInputLayout;
@@ -143,8 +138,7 @@ internal sealed unsafe partial class PanoramicSurface
     // The WPF present layer reads this because a WARP D3D11 texture cannot be shared with a hardware D3D9Ex device.
     internal bool IsUsingWarp => _usingWarp;
 
-    // Camera state (radians). Owned by the platform camera/gesture layer; consumed by the scene constants.
-    // The setters raise CameraChanged so the hosting display can recompute the visible footprint (auto-update).
+    // Camera state (radians), owned by the platform input layer.
     public float Yaw
     {
         get => _yaw;
@@ -172,22 +166,18 @@ internal sealed unsafe partial class PanoramicSurface
         CameraChanged?.Invoke();
     }
 
-    // Raised when the camera (yaw/pitch/field of view) changes, so the hosting display can recompute the visible
-    // footprint while auto-update is enabled.
+    // Raised by the camera setters so the display can update the footprint while auto-update is on.
     internal event Action? CameraChanged;
 
     // Raised when the surface is tapped/clicked, carrying the position in element (DIP) coordinates.
     internal event Action<double, double>? SurfaceTapped;
 
-    // Raised when device creation, the present bridge, or a render fails inside a present layer
-    // (outside the load path), so the hosting display can surface it as its Error
-    // instead of failing silently.
+    // Raised when device creation, the present bridge, or a render fails in a present layer, outside the load path,
+    // so the display can report it as Error.
     internal event Action<Exception>? RenderFailed;
 
-    // Raised after the device is rebuilt following a device-lost (RDP/sleep/TDR).
-    // The GPU texture and markers are gone, so the hosting display re-supplies them (re-decode + SetTexture + re-resolve markers);
-    // the camera is preserved because it lives on this surface and is untouched by the rebuild.
-    // Not raised on the initial device creation.
+    // Raised after a device-lost rebuild, not on first creation. The GPU texture and markers are gone and the display
+    // re-supplies them; the camera lives on this surface and is untouched.
     internal event Action? DeviceRecreated;
 
     public bool IsDeviceInitialized => _device is not null;
@@ -217,8 +207,7 @@ internal sealed unsafe partial class PanoramicSurface
 
     public bool HasTexture => _panoramaTextureView is not null;
 
-    // The device and context are created by Initialize(); the present layer uses them to create
-    // its swap chain (WinUI) or shared texture (WPF) on the same device.
+    // The present layers create their swap chain (WinUI) or shared texture (WPF) on this device.
     internal ID3D11Device* Device => _device;
 
     internal ID3D11DeviceContext* Context => _context;
@@ -367,7 +356,6 @@ internal sealed unsafe partial class PanoramicSurface
 
         if (_device is null)
         {
-            // Decoded before the surface created its device; stash and upload from Initialize().
             _pendingBgra = bgra.ToArray();
             _pendingWidth = width;
             _pendingHeight = height;
@@ -499,8 +487,7 @@ internal sealed unsafe partial class PanoramicSurface
         // Re-evaluate per creation: a rebuild after hardware returns must not stay latched on WARP from a prior session.
         _usingWarp = false;
 
-        // Try a hardware device; fall back to the WARP software rasterizer when no compatible GPU is available
-        // (common under Remote Desktop / headless sessions), so the panorama still renders.
+        // Hardware first; WARP keeps the panorama rendering under Remote Desktop or without a compatible GPU.
         HRESULT hr = PInvoke.D3D11CreateDevice(null, D3D_DRIVER_TYPE.D3D_DRIVER_TYPE_HARDWARE, default, flags, featureLevels, PInvoke.D3D11_SDK_VERSION, &device, out _, &context);
         if (hr.Failed)
         {

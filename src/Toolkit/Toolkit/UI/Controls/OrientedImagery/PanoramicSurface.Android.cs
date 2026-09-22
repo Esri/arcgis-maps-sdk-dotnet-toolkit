@@ -33,24 +33,16 @@ using static Esri.ArcGISRuntime.Toolkit.UI.Controls.PanoramaCameraState;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 
-// Android render surface for the panoramic (360) display: the GLES counterpart of the Windows D3D11
-// PanoramicSurface. A TextureView (not GLSurfaceView) with a hand-rolled EGL context on a dedicated render
-// thread, mirroring the SDK GeoView's Android host: TextureView composites like a normal view (no SurfaceView
-// hole-punch when OrientedImageDisplay swaps raster<->panoramic), and the EGL context is created once and
-// survives backgrounding - only the window surface is recreated per SurfaceTexture. Rendering is on-demand
-// (a panorama is static between interactions), so there is no continuous pulse.
-//
-// Coordinate conventions (sphere mesh, camera, uv) are defined by PanoramaCameraState - the mesh below must
-// stay in lockstep with it or clicks/markers are mirrored.
+// Android surface for the panoramic display: a TextureView with its own EGL context on a dedicated render thread,
+// the host the SDK GeoView uses. The context is created once and survives backgrounding; only the window surface
+// follows the SurfaceTexture. Rendering is on demand. Mesh and camera come from PanoramaCameraState.
 internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextureListener
 {
-    // GL_CULL_FACE, the glEnable/glDisable capability. Mono.Android's GLES20 exposes no constant for it (the
-    // GlCullFace name is taken by the method); GlCullFaceMode (0x0B45) is the glGet query enum, NOT a capability -
-    // passing it to glDisable is GL_INVALID_ENUM (caught by the emulator's strict validation).
+    // GL_CULL_FACE as a glEnable/glDisable capability. Mono.Android has no constant for it (GlCullFace is the method),
+    // and GlCullFaceMode (0x0B45) is the glGet enum: passing that to glDisable is GL_INVALID_ENUM.
     private const int GlCullFaceCapability = 0x0B44;
 
-    // All EGL/GL work runs on this single serial queue; state transitions are idempotent atomic gates
-    // (the Kotlin SDK pattern - a serial GL owner needs no dispose lock).
+    // All EGL/GL work runs on this serial queue; state transitions are atomic gates, so there is no dispose lock.
     private readonly BlockingCollection<Action> _renderQueue = new();
     private Thread? _renderThread;
     private int _renderQueued;
@@ -159,8 +151,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         CameraChanged?.Invoke();
     }
 
-    // Uploads a decoded panorama. The bitmap is owned by the surface from here on (recycled after upload or
-    // when superseded). It should already be within the decode memory budget; if it still exceeds the GL max
+    // Takes ownership of the bitmap (recycled after upload or when superseded). If it still exceeds the GL max
     // texture size it is downscaled once at upload.
     public void SetTexture(Bitmap bitmap)
     {
@@ -233,9 +224,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     public override bool OnGenericMotionEvent(MotionEvent? e)
     {
-        // A mouse wheel (emulator, ChromeOS, DeX) arrives as an ACTION_SCROLL generic motion event, not a touch.
-        // Map it to field-of-view zoom like the Windows heads' mouse wheel (0.1 rad per notch); consuming the
-        // event also stops the framework/emulator fallback that would otherwise convert it into synthetic panning.
+        // A mouse wheel (emulator, ChromeOS, DeX) arrives as an ACTION_SCROLL generic motion event, not a touch. Map it
+        // to zoom like the Windows wheel; consuming it also stops the synthetic-pan fallback.
         if (e?.Action == MotionEventActions.Scroll)
         {
             float notches = e.GetAxisValue(Axis.Vscroll); // wheel up = positive = zoom in (narrower FOV)
@@ -269,9 +259,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
                 stopped = _renderThread.Join(2000);
             }
 
-            // A failed join means the render thread is wedged in a driver call: leak the queue rather than
-            // dispose it under a live consumer (the thread would throw unhandled when it resumes; if it does,
-            // the still-queued TearDownEgl cleans up late instead).
+            // A failed join means the render thread is wedged in a driver call: leave the queue alive rather than dispose
+            // it under a live consumer. The queued TearDownEgl then cleans up late.
             if (stopped)
                 _renderQueue.Dispose();
 
@@ -351,9 +340,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             ConsumePendingMarkers();
             DrawCore();
 
-            // A fresh context with nothing to show and nothing pending: ask the display to re-supply
-            // (the re-decode path; mirrors the Windows DeviceRecreated contract). First creation is covered
-            // by the initial load already in flight.
+            // A recreated context with nothing to show: ask the display to re-supply (the DeviceRecreated contract).
             if (recreated)
                 Post(() => DeviceRecreated?.Invoke());
         });
@@ -420,9 +407,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
         _eglConfig = configs[0];
 
-        // Create an ES2 context FIRST and read GL_VERSION before upgrading to ES3. Creating an ES3 context
-        // outright can produce a context that passes creation but fails at eglMakeCurrent with EGL_BAD_MATCH
-        // on some devices - the same field lesson the SDK GeoViews carry (e.g. Samsung Tab A SM-T280).
+        // Create an ES2 context first and read GL_VERSION before upgrading to ES3. An ES3 context created outright can
+        // pass creation and then fail eglMakeCurrent with EGL_BAD_MATCH on some devices.
         int[] es2Attribs = { EGL14.EglContextClientVersion, 2, EGL14.EglNone };
         EGLContext? context = EGL14.EglCreateContext(display, _eglConfig, EGL14.EglNoContext, es2Attribs, 0);
         if (context is null || context == EGL14.EglNoContext)
@@ -489,8 +475,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         _eglSurface = null;
     }
 
-    // Full context teardown: dispose path, or a genuine context loss before recreation. Runs on the render
-    // thread, which owns the GL/EGL objects and their JNI wrappers.
+    // Full teardown. Runs on the render thread, which owns the GL/EGL objects and their JNI wrappers.
     private void TearDownEgl()
     {
         DeleteSceneResources();
@@ -517,8 +502,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         _textureId = 0;
     }
 
-    // A lost context (rare: EGL_CONTEXT_LOST power event) is torn down and rebuilt on the spot; the display
-    // re-supplies content through DeviceRecreated (there is no retained CPU copy of the panorama).
+    // EGL_CONTEXT_LOST: rebuild on the spot; the display re-supplies content through DeviceRecreated.
     private void RecoverFromContextLoss()
     {
         SurfaceTexture? surface = _surfaceTexture;
@@ -620,8 +604,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     private void ConsumePendingBitmap()
     {
-        // Context readiness is render-thread-owned and this runs on the render thread: check first, then take.
-        // When not ready, the pending bitmap stays stashed for the surface-available path to consume.
+        // Render thread only: check readiness before taking the stash; if not ready, the surface-available path consumes it.
         if (_eglContext is null || _eglSurface is null)
             return;
 
@@ -649,9 +632,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             DeleteTexture();
             DrainGlErrors(); // the post-upload check must only see the upload's own errors
 
-            // The u (yaw) seam wraps with REPEAT, but ES2 treats a non-power-of-two texture with REPEAT as
-            // incomplete (every sample returns black), so an ES2-only device takes CLAMP_TO_EDGE for NPOT
-            // panoramas instead - a hairline seam at the wrap beats a black sphere.
+            // ES2 treats a non-power-of-two texture with REPEAT as incomplete (samples black), so ES2-only devices take
+            // CLAMP_TO_EDGE for NPOT panoramas: a hairline seam beats a black sphere.
             bool repeatSafe = _contextIsEs3 || (BitOperations.IsPow2(bitmap.Width) && BitOperations.IsPow2(bitmap.Height));
             _textureId = CreateTexture(repeatSafe ? GLES20.GlRepeat : GLES20.GlClampToEdge);
             GLUtils.TexImage2D(GLES20.GlTexture2d, 0, bitmap, 0);
@@ -788,8 +770,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             HandleEglFailure("eglSwapBuffers");
     }
 
-    // Markers are screen-aligned alpha-blended quads sized to the swatch pixels, CPU-projected with the same
-    // camera math as the sphere (shared PanoramaCameraState), drawn with an identity MVP.
+    // Screen-aligned alpha-blended quads sized to the swatch, projected with the shared camera math, drawn with an identity MVP.
     private void DrawMarkers(int width, int height, float yaw, float pitch, float fov)
     {
         if (_glMarkers.Count == 0 || _markerQuadBuffer is null || _markerQuadUvBuffer is null)
@@ -940,8 +921,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     #region Input (UI thread)
 
-    // Detector composition instead of raw MotionEvent math: pointer transitions (a second finger landing) and
-    // tap-vs-drag disambiguation are handled by the platform recognizers.
+    // Platform recognizers handle second-pointer transitions and tap-vs-drag disambiguation.
     private sealed class PanGestureListener : GestureDetector.SimpleOnGestureListener
     {
         private readonly PanoramicSurface _owner;

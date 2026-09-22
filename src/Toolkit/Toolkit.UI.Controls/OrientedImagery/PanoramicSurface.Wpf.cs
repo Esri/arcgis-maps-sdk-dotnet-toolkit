@@ -29,16 +29,10 @@ using static Esri.ArcGISRuntime.Toolkit.UI.Controls.PanoramaCameraState;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-// WPF present layer for the shared D3D11 core (PanoramicSurface.cs). Renders on demand on the UI thread.
-//
-// Hardware path:
-// Render into a shared D3D11 render target, mirror it to a D3D9Ex surface, and present via a WPF D3DImage.
-//
-// Software path (Remote Desktop / no GPU):
-// Render into a render target, read back through a staging texture, and blit into a WriteableBitmap.
-//
-// The D3D11 side uses CsWin32. The legacy Direct3D9 COM API is NOT in the Win32 metadata,
-// so the few D3D9Ex calls for the bridge dispatch through their documented vtable slots in the nested D3D9 helper.
+// WPF present layer for the shared D3D11 core. Hardware path: render into a shared D3D11 texture, open it on a
+// D3D9Ex device and present through a D3DImage. Software path (Remote Desktop, no GPU, WARP): read the render
+// target back through a staging texture into a WriteableBitmap. Direct3D 9 has no CsWin32 metadata, so the
+// nested D3D9 helper calls its few methods through vtable slots.
 internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.Image
 {
     // D3D9Ex create flags: HARDWARE_VERTEXPROCESSING | MULTITHREADED | FPU_PRESERVE.
@@ -59,9 +53,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     private ID3D11Texture2D* _sharedTexture;
     private ID3D11RenderTargetView* _sharedView;
 
-    // Software present path (Remote Desktop / no-GPU / WARP):
-    // render into a D3D11 render target, copy to a CPU-readable staging texture, and blit into a WriteableBitmap,
-    // bypassing the D3D9Ex<->D3DImage shared-surface bridge (which cannot share a WARP texture and is unavailable under RDP).
     private bool _useSoftware;
     private ID3D11Texture2D* _renderTarget;
     private ID3D11RenderTargetView* _renderTargetView;
@@ -96,9 +87,8 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
     protected override System.Windows.Size ArrangeOverride(System.Windows.Size arrangeSize)
     {
-        // The base Image.ArrangeOverride sizes RenderSize to the Source's natural no-Source size (0,0),
-        // which collapses the surface, so EnsureResources never sees a non-zero ActualWidth and the device is never created.
-        // Fill the arranged slot instead; once Source is the D3DImage, Stretch.Fill draws it over this same area.
+        // Image.ArrangeOverride sizes RenderSize from the Source, so with none the element collapses to 0x0 and the
+        // device is never created. Fill the slot; once Source is set, Stretch.Fill draws it over the same area.
         return arrangeSize;
     }
 
@@ -429,28 +419,23 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
             throw new InvalidOperationException($"{what} failed (HRESULT 0x{hr:X8}).");
     }
 
-    /// <inheritdoc/>
     protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonDown(e);
         _mouseDownPosition = e.GetPosition(this);
 
-        // Clear the drag anchor at the start of each gesture so the first pressed move re-seeds _lastMousePosition
-        // instead of chaining a delta off the previous gesture (touch/RDP may deliver no hover move between gestures).
+        // Re-seed the drag anchor per gesture; touch and RDP may deliver no hover move between gestures.
         _wasDragging = false;
         Focus();
         CaptureMouse();
     }
 
-    /// <inheritdoc/>
     protected override void OnMouseMove(MouseEventArgs e)
     {
         base.OnMouseMove(e);
 
-        // Drive the drag purely from move events + button state, never from the down event:
-        // under Remote Desktop the down can be missed or input promoted, which would leave a stale anchor and a huge first delta.
-        // _lastMousePosition tracks EVERY move (including button-up hover), so a delta is only ever applied
-        // between two consecutive pressed moves. The anchor is always the immediately-preceding sample, so there is no first-frame jump.
+        // The drag is driven by move events and button state only: under RDP the press can be missed or promoted.
+        // A delta applies only between two consecutive pressed moves, so there is no first-frame jump.
         Point position = e.GetPosition(this);
         bool pressed = e.LeftButton == MouseButtonState.Pressed;
         if (pressed && _wasDragging)
@@ -465,7 +450,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         _wasDragging = pressed;
     }
 
-    /// <inheritdoc/>
     protected override void OnMouseUp(MouseButtonEventArgs e)
     {
         base.OnMouseUp(e);
@@ -478,7 +462,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
             SurfaceTapped?.Invoke(position.X, position.Y);
     }
 
-    /// <inheritdoc/>
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
         base.OnMouseWheel(e);
@@ -486,7 +469,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         RequestRender();
     }
 
-    /// <inheritdoc/>
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
@@ -494,7 +476,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         {
             case Key.Left:
                 Yaw += KeyboardRotationDelta;
-               break;
+                break;
             case Key.Right:
                 Yaw -= KeyboardRotationDelta;
                 break;

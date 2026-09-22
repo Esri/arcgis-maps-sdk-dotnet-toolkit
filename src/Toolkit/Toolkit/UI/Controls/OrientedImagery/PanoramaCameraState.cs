@@ -20,27 +20,15 @@ using System.Numerics;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-// Platform-neutral inverse of the panorama render projection: converts between a screen point and a normalized
-// equirectangular texture coordinate (u,v) in [0,1]. Pair (u,v) with the source image pixel dimensions
-// to reach the image-pixel space the SDK's OrientedImage.ImageToLocationAsync / contract clicks use.
-//
-// This type is the AUTHORITATIVE definition of the panorama coordinate conventions. Every platform renderer
-// (D3D11 on Windows, GLES on Android, SceneKit on Apple) must generate its sphere mesh and camera matrices to
-// match, or screen<->pixel math (clicks, markers, footprints) is mirrored or offset on that platform:
-//   - Sphere: unit sphere around the camera, parameterized x = sin(phi)*cos(theta), y = cos(phi),
-//     z = sin(phi)*sin(theta), with equirectangular UV u = theta/2pi (wrap), v = phi/pi (clamp).
-//     v = 0 is up (phi = 0), v = 1 is down; the horizon is v = 0.5.
-//   - Camera: right-handed, at the origin looking down -Z; world = RotationY(Yaw) * RotationX(Pitch)
-//     (System.Numerics row-vector convention). Yaw/Pitch/FieldOfView are radians; FieldOfView is vertical.
-//     At Yaw = 0, Pitch = 0 the view center is (u, v) = (0.75, 0.5); u_center = 0.75 + Yaw/2pi (mod 1)
-//     and v_center = 0.5 + Pitch/pi (positive pitch looks below the horizon). The initial view heading is
-//     set by the display as Yaw = -CameraHeading (see OrientedImagePanoramicDisplay).
+// Platform-neutral inverse of the panorama render projection: screen point <-> normalized equirectangular (u,v) in
+// [0,1]. Multiply (u,v) by the image pixel dimensions to reach the pixel space the OrientedImage transforms use.
+// Every renderer's sphere mesh and camera matrices must match this convention, or taps and markers are mirrored:
+//   - Sphere: unit sphere around the camera, x = sin(phi)*cos(theta), y = cos(phi), z = sin(phi)*sin(theta);
+//     u = theta/2pi (wrap), v = phi/pi (clamp), so v = 0 is up and the horizon is v = 0.5.
+//   - Camera: right-handed at the origin looking down -Z; world = RotationY(Yaw) * RotationX(Pitch) in the
+//     System.Numerics row-vector convention. Angles are radians; FieldOfView is vertical. At Yaw = Pitch = 0 the view
+//     center is (u,v) = (0.75, 0.5); u_center = 0.75 + Yaw/2pi (mod 1) and v_center = 0.5 + Pitch/pi (positive looks down).
 //   - Screen: element/DIP coordinates, origin top-left, +Y down.
-//   - Footprint: the SDK's 360 footprint update takes degrees with yaw 0 at the image's center column and pitch 0
-//     at the nadir; TryGetFootprintView converts to it.
-// GL note: System.Numerics matrices are row-major with row-vector math (clip = v * M). A GLSL mat4 uniform
-// reads the same bytes column-major, i.e. as M-transposed, and computes M^T * v == v * M - so upload the raw
-// floats with transpose = false; do not transpose them yourself.
 internal readonly struct PanoramaCameraState
 {
     private const float NearPlane = 0.1f;
@@ -54,9 +42,8 @@ internal readonly struct PanoramaCameraState
     public const float MouseRotationScale = 0.0035f; // fallback drag scale while the view size is unknown
     public const float KeyboardRotationDelta = MathF.PI / 90f;
 
-    // The viewport spans fieldOfView (vertical, radians) across viewHeight DIPs.
-    // Drag rotation in rad-per-DIP so the grabbed point tracks the pointer at screen center,
-    // independent of control size, zoom and DPI. Same factor for yaw (the aspect's width cancels).
+    // Rad-per-DIP drag scale so the grabbed point tracks the pointer at screen center regardless of control size,
+    // zoom and DPI. The same factor serves yaw (the aspect's width cancels).
     public static float DragRotationScale(float fieldOfView, double viewHeight)
     {
         if (viewHeight <= 0)
@@ -78,8 +65,7 @@ internal readonly struct PanoramaCameraState
 
     public float FieldOfView { get; }
 
-    // Screen point (element/DIP coordinates, origin top-left) -> normalized equirectangular (u,v) in [0,1].
-    // Inverse of the render's world*projection; matches the sphere mesh parameterization (u = theta/2pi, v = phi/pi).
+    // Screen point -> normalized (u,v): the inverse of the render's world*projection.
     public bool TryScreenToNormalizedUv(double screenX, double screenY, double viewWidth, double viewHeight, out float u, out float v)
     {
         u = 0f;
@@ -110,8 +96,7 @@ internal readonly struct PanoramaCameraState
         return true;
     }
 
-    // Normalized (u,v) -> screen point (element/DIP coordinates). Forward projection, for placing markers.
-    // Returns false when the point is behind the camera (outside the current view).
+    // Normalized (u,v) -> screen point; false when the point is behind the camera.
     public bool TryNormalizedUvToScreen(float u, float v, double viewWidth, double viewHeight, out double screenX, out double screenY)
     {
         screenX = 0;
@@ -135,16 +120,12 @@ internal readonly struct PanoramaCameraState
         return true;
     }
 
-    // The view in the oriented imagery 360 footprint convention, for
-    // OrientedImageFootprint.UpdateFootprintAsync(yaw, pitch, horizontalFov, verticalFov). All values are degrees:
-    // Yaw is clockwise from the image's center column in [0, 360); Pitch runs from the nadir (0) through the
-    // horizon (90) to the zenith (180); the fields of view are the angles the viewport's width and height span.
+    // Arguments for OrientedImageFootprint.UpdateFootprintAsync(yaw, pitch, hFov, vFov), all degrees: yaw clockwise
+    // from the image's center column in [0, 360), pitch from the nadir (0) through the horizon (90) to the zenith (180).
     public readonly record struct FootprintView(double Yaw, double Pitch, double HorizontalFieldOfView, double VerticalFieldOfView);
 
-    // Converts this camera to the footprint convention. The image maps its column u = 0.5 + yaw/360 and its row
-    // v = 1 - pitch/180, so with the center anchors above (u_center = 0.75 + Yaw/2pi, v_center = 0.5 + Pitch/pi)
-    // yaw = 90 deg + Yaw and pitch = 90 deg - Pitch. The horizontal field of view is the perspective frustum's,
-    // widened from the vertical one by the aspect ratio. False when the viewport has no size or the camera is invalid.
+    // Image column u = 0.5 + yaw/360 and row v = 1 - pitch/180, so yaw = 90 + Yaw and pitch = 90 - Pitch (degrees); the
+    // horizontal field of view is the frustum's, widened from the vertical by the aspect ratio.
     public bool TryGetFootprintView(double viewWidth, double viewHeight, out FootprintView view)
     {
         view = default;

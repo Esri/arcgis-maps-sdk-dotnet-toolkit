@@ -41,11 +41,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Panoramic (360/equirectangular) inner display for OrientedImageDisplay.
-// Supports the Windows heads (WPF + WinUI, hosting the shared Direct3D PanoramicSurface) and Android
-// (hosting the GLES PanoramicSurface through the PanoramicSurfaceView handler); iOS/MacCatalyst pending.
-// The shared OrientedImageInnerDisplay skeleton owns the load/session/state plumbing; this class decodes the
-// image to a texture and surfaces clicks. All screen<->pixel math goes through the shared PanoramaCameraState.
+// Panoramic (equirectangular 360) inner display: decodes the image to a texture on the platform PanoramicSurface
+// and surfaces taps. All screen<->pixel math goes through PanoramaCameraState.
 internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInnerDisplay
 {
     private const double MarkerHitTolerance = 12d;
@@ -96,9 +93,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         UpdateState();
     }
 
-    // After a device-lost rebuild the GPU texture + markers are gone (the surface does not keep a CPU copy, to avoid a
-    // large idle duplicate). Re-decode the current image and re-supply texture + markers; the camera is preserved
-    // because it lives on the surface and is untouched by the rebuild.
+    // After a device-lost rebuild the GPU texture and markers are gone (the surface keeps no CPU copy): re-decode and
+    // re-supply them. The camera lives on the surface and survives the rebuild.
     private async void OnDeviceRecreated()
     {
         OrientedImage? image = Footprint?.OrientedImage;
@@ -106,9 +102,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         if (image is null || token.IsCancellationRequested)
             return; // nothing loaded, or an in-flight load will upload once it completes
 
-        // The rebuilt surface has no texture yet (it blanks until re-supply). Invalidate dimensions so a click on the
-        // blank surface isn't reported against the old pixel space, and surface the recovery immediately as
-        // busy/non-interactive - commands bound to IsInteractive must not stay enabled over a blank panorama.
+        // The rebuilt surface is blank until re-supplied: invalidate the dimensions so a tap isn't reported against the
+        // old pixel space, and report busy/non-interactive so bound commands don't stay enabled over a blank panorama.
         _imageWidth = 0;
         _imageHeight = 0;
         _recovering = true;
@@ -152,8 +147,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
         finally
         {
-            // Recompute on every completion/cancellation/failure path (safe when superseded: UpdateState only
-            // reads the current session's state).
+            // Safe when superseded: UpdateState reads only the current session's state.
             _recovering = false;
             UpdateState();
         }
@@ -173,9 +167,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     // Dispatch so the snapshot of the app-owned marker is taken on the UI thread.
     protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName) => this.Dispatch(() => _ = ResolveMarkersAsync());
 
-    // Resolves every visible marker to a normalized (u,v) and a rasterized swatch, then pushes the set to the surface.
-    // Re-entrant: a generation counter discards a resolve superseded by a newer one. Resolution runs off the UI thread;
-    // only the final apply (texture upload) marshals back.
+    // Resolves every visible marker to a normalized (u,v) plus a rasterized swatch and pushes the set to the surface.
+    // Runs off the UI thread; only the final apply marshals back.
     private async Task ResolveMarkersAsync()
     {
         int generation = Interlocked.Increment(ref _markerGeneration);
@@ -251,16 +244,14 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             return null;
         }
 
-        // A location that doesn't project (e.g. at or behind the camera position) can come back non-finite; never
-        // let NaN/Infinity into the marker pipeline (screen projection, GPU quad vertices, hit-test distances).
+        // A location at or behind the camera can project non-finite; keep NaN/Infinity out of the marker pipeline.
         if (!float.IsFinite(pixel.X) || !float.IsFinite(pixel.Y))
             return null;
 
         return (pixel.X / imageWidth, pixel.Y / imageHeight);
     }
 
-    // Rasterizes a symbol to a tightly-packed BGRA8 swatch via RuntimeImage. The raw buffer is a publicly-visible,
-    // exact-size MemoryStream, so it can be used without a copy; a Read fallback covers any future change to that.
+    // Rasterizes a symbol to a tightly-packed BGRA8 swatch via RuntimeImage.
     private static async Task<(byte[] Bgra, int Width, int Height)?> CreateSwatchAsync(Symbol symbol, double scale)
     {
         try
@@ -305,10 +296,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 #if MAUI
     private static double GetScaleFactor()
     {
-        // Swatches are rasterized in physical pixels to match the physical-pixel GL viewport (Android) or the
-        // composition-scaled back buffer (MAUI-Windows). On Windows the main display's density approximates the
-        // panel's per-monitor CompositionScale that the WinUI head uses; exact parity would need a reach into
-        // the platform view.
+        // Swatches rasterize in physical pixels to match the GL viewport (Android) or the composition-scaled back buffer
+        // (Windows). MainDisplayInfo.Density approximates the panel's per-monitor CompositionScale.
         double density = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Density;
         return density > 0 ? density : 1.0;
     }
@@ -316,8 +305,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private double GetScaleFactor()
     {
 #if WINDOWS_XAML
-        // Rasterize swatches at the SwapChainPanel's CompositionScale (the same factor that sizes the back buffer) so
-        // marker pixels match the physical-pixel viewport. Fall back when the panel is not yet composed.
+        // CompositionScale sizes the back buffer, so swatches rasterized at it match the viewport; fall back before composition.
         float compositionScale = _surface.CompositionScaleX;
         if (compositionScale > 0)
             return compositionScale;
@@ -339,8 +327,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     private void OnCameraChanged() => UpdateFootprint();
 
-    // 360 image: push the camera orientation and the angular extent of the view. Core derives the ground footprint
-    // from them (horizon arc, seam wrap and pole handling included), so no pixel ring is projected here.
+    // Core derives the 360 ground footprint from the camera orientation and the view's angular extent.
     protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
     {
         double width = _surface.ActualWidth;
@@ -384,29 +371,24 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _imageHeight = frame.Height;
         ApplyTexture(frame);
 
-        // Orient the initial view to look NORTH (JS viewer parity). The image maps
-        // azimuth = CameraHeading + (u - 0.5) * 2pi, i.e. the center column faces the camera heading, while the
-        // identity camera centers u = 0.75 - so re-anchor by -pi/2 before subtracting the heading.
+        // Look north initially (JS viewer parity): the center column faces CameraHeading but the identity camera centers
+        // u = 0.75, so re-anchor by -pi/2 before subtracting the heading.
         _surface.Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image);
         _surface.Pitch = 0f;
         _surface.RequestRender();
 
-        // Push the initial footprint explicitly: auto-update is usually enabled before this load completes
-        // (image dimensions were still zero on its immediate push), and if the camera assignments above happen
-        // not to change the values they raise no CameraChanged either.
+        // Push the footprint explicitly: the push made when auto-update was enabled ran with zero dimensions, and camera
+        // assignments that don't change the values raise no CameraChanged.
         UpdateFootprint();
     }
 
-    // Blank the texture and invalidate dimensions NOW, so the user never sees the old panorama and clicks are
-    // suppressed (zero dimensions) until a new texture is ready.
     protected override void ClearPresentation()
     {
         _surface.ClearTexture();
         _imageWidth = 0;
         _imageHeight = 0;
 
-        // Drop the on-image markers immediately, and invalidate any in-flight resolve (generation bump), so stale
-        // markers neither render on the next texture nor hit-test against it before a fresh resolve lands.
+        // Bump the generation so an in-flight resolve can't apply stale markers to the next texture.
         Interlocked.Increment(ref _markerGeneration);
         _resolvedMarkers.Clear();
         _surface.SetMarkers(Array.Empty<PanoramicSurface.MarkerSwatch>());
@@ -414,8 +396,6 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _surface.RequestRender();
     }
 
-    // Re-resolve markers now that the image and its pixel dimensions are settled (world-anchored markers
-    // reproject onto the new image; image-anchored markers re-scale to the new dimensions).
     protected override void OnPresentCompleted() => _ = ResolveMarkersAsync();
 
     private void OnSurfaceTapped(double x, double y)
@@ -472,8 +452,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         {
             if (uri.IsFile)
             {
-                // Core keeps the image file open and StorageFile has no share-mode option, so open a FileShare.ReadWrite
-                // FileStream and adapt it to the IRandomAccessStream BitmapDecoder needs.
+                // Open shared (StorageFile has no share mode): the SDK owns the downloaded file.
                 stream = new FileStream(uri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).AsRandomAccessStream();
             }
             else if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
@@ -512,8 +491,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 System.Windows.Media.Imaging.BitmapDecoder decoder;
                 if (uri.IsFile)
                 {
-                    // Core keeps the image file open, so open it FileShare.ReadWrite (a Uri-based decoder can't) to avoid
-                    // a sharing violation. OnLoad reads the image fully, so the stream can be disposed right after.
+                    // Open shared (a Uri-based decoder can't): the SDK owns the downloaded file. OnLoad reads it fully.
                     using var fileStream = new FileStream(uri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     decoder = System.Windows.Media.Imaging.BitmapDecoder.Create(fileStream, System.Windows.Media.Imaging.BitmapCreateOptions.None, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
                 }
@@ -534,10 +512,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             token);
     }
 #elif __ANDROID__
-    // Decodes with a power-of-two downsample so the longest side fits the device memory budget (isLowRamDevice:
-    // 4096, else 8192). Width/Height report the ORIGINAL pixel dimensions - the SDK transforms, markers and clicks
-    // all work in the original image pixel space; only the GPU texture is downsampled (uv is normalized, so the
-    // sphere samples identically). A residual GL_MAX_TEXTURE_SIZE clamp happens at upload inside the surface.
+    // Power-of-two downsample to the device budget (4096 low-RAM, else 8192) for the GPU texture only; Width/Height
+    // stay the ORIGINAL dimensions because markers and taps work in source pixel space.
     private static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
@@ -595,18 +571,15 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 #endif
 
 #if __ANDROID__
-    // The decoded (possibly downsampled) panorama bitmap plus the ORIGINAL pixel dimensions of the source image.
-    // This is also the seam where a future 360-video source would provide frames over time instead of a single decode.
+    // The decoded (possibly downsampled) bitmap plus the ORIGINAL pixel dimensions of the source image.
     private readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height);
 
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bitmap);
 
-    // A frame that lost a generation race is never applied; release its bitmap promptly instead of waiting
-    // for finalizers (full-size panorama bitmaps add up fast during rapid paging).
+    // Lost a generation race: recycle now rather than via finalizers; full-size bitmaps add up during rapid paging.
     private static void DiscardFrame(PanoramaFrame? frame) => frame?.Bitmap.Recycle();
 #else
-    // The decoded equirectangular image as tightly-packed BGRA8 plus its pixel dimensions. This is also the seam
-    // where a future 360-video source would provide frames over time instead of a single decode.
+    // The decoded image as tightly-packed BGRA8 plus its pixel dimensions.
     private readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
 
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);

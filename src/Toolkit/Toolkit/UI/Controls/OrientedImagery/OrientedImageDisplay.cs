@@ -24,7 +24,6 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using PointF = System.Drawing.PointF;
 using Color = System.Drawing.Color;
 
-// The host element that presents the active inner display differs per platform.
 #if WPF
 using DisplayHostElement = System.Windows.Controls.ContentPresenter;
 #elif WINDOWS_XAML
@@ -60,7 +59,6 @@ public partial class OrientedImageDisplay
     private OrientedImageInnerDisplay? _activeDisplay;
     private Exception? _unsupportedError;
 
-    // Default marker symbol: a filled blue circle used when a marker has no Symbol.
     internal static readonly SimpleMarkerSymbol DefaultMarkerSymbol =
         new(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(255, 0, 122, 194), 10);
 
@@ -70,7 +68,6 @@ public partial class OrientedImageDisplay
     public OrientedImageDisplay()
     {
 #if MAUI
-        // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
         ControlTemplate = DefaultControlTemplate;
 #else
         DefaultStyleKey = typeof(OrientedImageDisplay);
@@ -125,12 +122,9 @@ public partial class OrientedImageDisplay
     /// viewport changes.
     /// </summary>
     /// <remarks>
-    /// When <c>true</c>, the control recomputes the visible part of the image as the display is panned or zoomed and
-    /// pushes it to the footprint so the footprint rendered on the map stays in sync: a planar image calls
-    /// <see cref="OrientedImageFootprint.UpdateFootprintAsync(System.Collections.Generic.IEnumerable{System.Drawing.PointF}, System.Threading.CancellationToken)"/>
-    /// with the visible pixel outline, a 360 image calls
-    /// <see cref="OrientedImageFootprint.UpdateFootprintAsync(double, double, double, double, System.Threading.CancellationToken)"/>
-    /// with the camera orientation and field of view. The footprint itself is not drawn by this control.
+    /// When <c>true</c>, panning or zooming pushes the visible part of the image to the footprint so the footprint drawn on the map stays in sync:
+    /// a planar image calls <see cref="OrientedImageFootprint.UpdateFootprintAsync(System.Collections.Generic.IEnumerable{System.Drawing.PointF}, System.Threading.CancellationToken)"/>,
+    /// a 360 image calls <see cref="OrientedImageFootprint.UpdateFootprintAsync(double, double, double, double, System.Threading.CancellationToken)"/>. This control does not draw the footprint.
     /// </remarks>
     /// <value>A value indicating whether the footprint is automatically updated. The default is <c>false</c>.</value>
     public bool AutoUpdateFootprint
@@ -140,35 +134,23 @@ public partial class OrientedImageDisplay
     }
 
     /// <summary>
-    /// Gets a value indicating whether the control is busy loading, initializing, or drawing its image
-    /// (that is, not in a steady state).
+    /// Gets a value indicating whether the control is loading, initializing, or drawing its image.
     /// </summary>
-    /// <remarks>
-    /// Use this to show progress (for example, a busy indicator). It is independent of <see cref="IsInteractive"/>:
-    /// a loaded image can be interacted with while it redraws, so both can be <c>true</c> at once.
-    /// </remarks>
+    /// <remarks>Independent of <see cref="IsInteractive"/>: a loaded image stays interactive while it redraws.</remarks>
     /// <value><c>true</c> while the active display is loading, initializing, or drawing; otherwise <c>false</c>.</value>
     public bool IsBusy => (bool)GetValue(IsBusyProperty);
 
     /// <summary>
-    /// Gets a value indicating whether the control is ready to interact with: it has a loaded image,
-    /// its view can be panned/zoomed, and there is no critical <see cref="Error"/>.
+    /// Gets a value indicating whether the image is loaded, can be panned and zoomed, and has no <see cref="Error"/>.
     /// </summary>
-    /// <remarks>
-    /// Use this to enable or disable UI that acts on the displayed image (for example, controls that add markers).
-    /// It is <c>false</c> before an image is loaded, while an unsupported image type or a load/render error is present,
-    /// and becomes <c>true</c> once the image is shown and the view is unlocked.
-    /// </remarks>
+    /// <remarks>Use this to enable UI that acts on the displayed image, such as controls that add markers.</remarks>
     /// <value><c>true</c> when the image is loaded and the view can be interacted with; otherwise <c>false</c>.</value>
     public bool IsInteractive => (bool)GetValue(IsInteractiveProperty);
 
     /// <summary>
     /// Gets the error preventing the image from being shown, or <c>null</c> when there is none.
     /// </summary>
-    /// <remarks>
-    /// Surfaces the active display's failure (for example, an <see cref="OrientedImage"/> load error or a layer
-    /// rendering error). While <see cref="Error"/> is non-<c>null</c>, <see cref="IsInteractive"/> is <c>false</c>.
-    /// </remarks>
+    /// <remarks>An image load or layer rendering error from the active display. While non-<c>null</c>, <see cref="IsInteractive"/> is <c>false</c>.</remarks>
     /// <value>The current error, or <c>null</c>.</value>
     public Exception? Error => GetValue(ErrorProperty) as Exception;
 
@@ -202,8 +184,7 @@ public partial class OrientedImageDisplay
     public static readonly DependencyProperty AutoUpdateFootprintProperty =
         PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(AutoUpdateFootprint), false, (s, oldValue, newValue) => s._activeDisplay?.SetAutoUpdateFootprint(newValue));
 
-    // IsBusy/IsInteractive/Error are control-owned computed state, registered read-only where the platform
-    // supports it so external SetValue/ClearValue cannot overwrite them (bindings still read them).
+    // Computed state, read-only where the platform supports it (see PropertyHelper.CreateReadOnlyProperty).
     private static readonly DependencyPropertyKey IsBusyPropertyKey =
         PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsBusy));
 
@@ -253,19 +234,14 @@ public partial class OrientedImageDisplay
         if (_displayHost is null)
             return; // a template without the host part shows nothing; a later template can re-host
 
-        // Hosting and presentation are separate concerns: the FIRST host runs the full selection/presentation
-        // pipeline (a footprint assigned before the template existed was deferred by UpdateDisplay's host guard);
-        // a RE-applied template only needs the active display moved into the new host - re-presenting would
-        // reload the image and cancel valid in-flight work.
+        // First host: run the full pipeline (a footprint set before the template existed was deferred by UpdateDisplay).
+        // Re-applied template: only re-host; re-presenting would reload the image and cancel in-flight work.
         if (previousHost is null)
             UpdateDisplay();
         else
             HostActiveDisplay();
     }
 
-    /// <summary>
-    /// Selects the inner display for the current image type, makes it active, and pushes the current state into it.
-    /// </summary>
     private void UpdateDisplay()
     {
         if (_displayHost is null)
@@ -274,8 +250,8 @@ public partial class OrientedImageDisplay
         OrientedImageType? type = Footprint?.OrientedImage?.Type;
         OrientedImageInnerDisplay? display = SelectDisplay(type);
 
-        // A non-null image type with no display is an unsupported type (video, or panoramic on platforms without a
-        // panoramic display yet); surface it as an explicit error so a host can tell that apart from "nothing loaded".
+        // A known type with no display is unsupported (video, or panoramic without a panoramic display); report it
+        // rather than look "not loaded".
         _unsupportedError = display is null && type is not null
             ? new NotSupportedException($"Oriented image type '{type}' is not supported by this control yet.")
             : null;
@@ -291,15 +267,12 @@ public partial class OrientedImageDisplay
         }
     }
 
-    // Swaps the active display: moves host content and event subscriptions. Subscribes before the caller pushes state
-    // in, so the display's first state/interaction notifications aren't missed.
+    // Subscribes before the caller pushes state in, so the display's first notifications aren't missed.
     private void SetActiveDisplay(OrientedImageInnerDisplay? display)
     {
         if (ReferenceEquals(_activeDisplay, display))
         {
-            // Same display (including null -> null, e.g. an unsupported image type while no display was ever
-            // active): still re-host and publish state - this is the only path that surfaces a just-recomputed
-            // _unsupportedError.
+            // Same display (including null -> null): re-host and publish state anyway; only this path surfaces a recomputed _unsupportedError.
             HostActiveDisplay();
             UpdateState();
             return;
@@ -310,9 +283,7 @@ public partial class OrientedImageDisplay
             _activeDisplay.StateChanged -= OnDisplayStateChanged;
             _activeDisplay.ImageClicked -= OnDisplayImageClicked;
 
-            // Release the outgoing display's content so an inactive display doesn't retain its load, map/device
-            // content, or marker subscriptions. SetFootprint(null) supersedes its in-flight session and clears
-            // the presentation.
+            // Release the outgoing display's image, map/device content and marker subscriptions.
             _activeDisplay.SetMarkers(null);
             _activeDisplay.SetFootprint(null);
         }
@@ -329,8 +300,6 @@ public partial class OrientedImageDisplay
         UpdateState();
     }
 
-    // Presents the active display in the current template's host. Idempotent: called on display swap and on
-    // template re-apply (same display, new host).
     private void HostActiveDisplay()
     {
         _displayHost!.Content = _activeDisplay;
@@ -340,8 +309,7 @@ public partial class OrientedImageDisplay
 
     private void OnDisplayImageClicked(object? sender, ImageClickedEventArgs e) => ImageClicked?.Invoke(this, e);
 
-    // Surfaces the active display's state as the control's own read-only IsBusy/IsInteractive/Error.
-    // An unsupported image type has no display, so its error is reported here directly.
+    // An unsupported image type has no display, so its error is merged in here.
     private void UpdateState()
     {
         SetValue(IsBusyPropertyKey, _unsupportedError is null && (_activeDisplay?.IsBusy ?? false));
@@ -349,8 +317,6 @@ public partial class OrientedImageDisplay
         SetValue(ErrorPropertyKey, _unsupportedError ?? _activeDisplay?.Error);
     }
 
-    // Selects the inner display for an image type: planar -> raster, panoramic -> panoramic (Windows + Android for
-    // now), video (and panoramic where no panoramic display exists yet) -> none (surfaced as an unsupported-type error).
     private OrientedImageInnerDisplay? SelectDisplay(OrientedImageType? type)
     {
         if (type is null || IsPlanar(type.Value))
@@ -362,9 +328,7 @@ public partial class OrientedImageDisplay
         return null;
     }
 
-    /// <summary>
-    /// Determines whether an image type is presented by the raster display (everything that is not a panoramic or video type).
-    /// </summary>
+    // Everything that is not panoramic or video goes to the raster display.
     private static bool IsPlanar(OrientedImageType type) => type switch
     {
         OrientedImageType.Image360 => false,
@@ -396,10 +360,7 @@ public partial class OrientedImageDisplay
         /// <summary>
         /// Gets the clicked position in image (pixel) coordinates.
         /// </summary>
-        /// <remarks>
-        /// Use <see cref="OrientedImage.ImageToLocationAsync"/> on <see cref="Image"/> to obtain the corresponding
-        /// real-world location.
-        /// </remarks>
+        /// <remarks>Use <see cref="OrientedImage.ImageToLocationAsync"/> on <see cref="Image"/> to get the world location.</remarks>
         /// <value>The clicked image coordinate.</value>
         public PointF ImagePoint { get; }
 
@@ -412,10 +373,6 @@ public partial class OrientedImageDisplay
         /// <summary>
         /// Gets the marker the tap hit, or <c>null</c> if the tap did not hit a marker.
         /// </summary>
-        /// <remarks>
-        /// Inspect this to act on a marker tap (use case 4); ignore it to handle only raw image clicks. The image
-        /// coordinates are populated either way.
-        /// </remarks>
         /// <value>The tapped marker, or <c>null</c>.</value>
         public OrientedImageMarker? Marker { get; }
     }
