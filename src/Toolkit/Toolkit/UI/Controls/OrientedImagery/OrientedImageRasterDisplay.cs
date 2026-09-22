@@ -17,10 +17,7 @@
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,7 +62,6 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     private RasterLayer? _rasterLayer;
     private readonly Dictionary<OrientedImageMarker, Graphic> _markerGraphics = [];
     private readonly Dictionary<Graphic, OrientedImageMarker> _graphicMarkers = [];
-    private readonly List<WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
     private bool _interactive;
 
     internal OrientedImageRasterDisplay()
@@ -234,16 +230,9 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         List<OrientedImageMarker>? snapshot = Markers is null ? null : new(Markers);
         this.Dispatch(() =>
         {
-            foreach (var listener in _markerListeners)
-            {
-                listener.Detach();
-            }
-
-            _markerListeners.Clear();
             _markerGraphics.Clear();
             _graphicMarkers.Clear();
             _markersOverlay.Graphics.Clear();
-
             AddMarkers(snapshot ?? []);
         });
     }
@@ -258,9 +247,6 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
                 _markerGraphics[marker] = graphic;
                 _graphicMarkers[graphic] = marker;
                 _markersOverlay.Graphics.Add(graphic);
-
-                SetMarkerListener(marker, out var listener);
-                _markerListeners.Add(listener);
             }
 
             _ = RefreshMarkerGeometriesAsync(newMarkers);
@@ -274,17 +260,13 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             var oldGraphic = _markersOverlay.Graphics[index];
             _markerGraphics.Remove(oldMarker);
             _graphicMarkers.Remove(oldGraphic);
-            _markerListeners[index].Detach();
 
             Graphic newGraphic = new() { Symbol = newMarker.Symbol, IsVisible = newMarker.IsVisible };
             _markerGraphics[newMarker] = newGraphic;
             _graphicMarkers[newGraphic] = newMarker;
             _markersOverlay.Graphics[index] = newGraphic;
 
-            SetMarkerListener(newMarker, out var listener);
-            _markerListeners[index] = listener;
-
-            _ = RefreshMarkerGeometriesAsync(new List<OrientedImageMarker> { newMarker });
+            _ = RefreshMarkerGeometriesAsync([newMarker]);
         });
     }
 
@@ -294,50 +276,26 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         {
             foreach (OrientedImageMarker marker in removedMarkers)
             {
-                var graphic = _markerGraphics[marker];
-                _markerGraphics.Remove(marker);
-                _graphicMarkers.Remove(graphic);
-
-                var index = _markersOverlay.Graphics.IndexOf(graphic);
-                _markerListeners[index].Detach();
-                _markerListeners.RemoveAt(index);
-                _markersOverlay.Graphics.RemoveAt(index);
+                if (_markerGraphics.Remove(marker, out Graphic? graphic))
+                {
+                    _graphicMarkers.Remove(graphic);
+                    _markersOverlay.Graphics.Remove(graphic);
+                }
             }
         });
     }
 
-    protected override void MoveMarkers(int oldIndex, int newIndex)
-    {
-        this.Dispatch(() =>
-        {
-            var temp = _markerListeners[oldIndex];
-            _markerListeners[oldIndex] = _markerListeners[newIndex];
-            _markerListeners[newIndex] = temp;
-            _markersOverlay.Graphics.Move(oldIndex, newIndex);
-        });
-    }
-
-    private void SetMarkerListener(OrientedImageMarker marker, out WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs> listener)
-    {
-        // Weak, like the collection subscription in SetMarkers: an app-owned long-lived marker must not
-        // keep the display (and through it the control and its MapView) alive after the control is gone.
-        listener = new WeakEventListener<OrientedImageRasterDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
-        {
-            OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
-            OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
-        };
-        marker.PropertyChanged += listener.OnEvent;
-    }
+    protected override void MoveMarkers(int oldIndex, int newIndex) => this.Dispatch(() => _markersOverlay.Graphics.Move(oldIndex, newIndex));
 
     // Dispatch so marker updates can't touch the graphic/dictionaries off the UI thread.
-    private void OnMarkerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName)
     {
         this.Dispatch(() =>
         {
-            if (sender is not OrientedImageMarker marker || !_markerGraphics.TryGetValue(marker, out Graphic? graphic))
+            if (!_markerGraphics.TryGetValue(marker, out Graphic? graphic))
                 return;
 
-            switch (e.PropertyName)
+            switch (propertyName)
             {
                 case nameof(OrientedImageMarker.Symbol):
                     graphic.Symbol = marker.Symbol;
@@ -547,14 +505,17 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             ? BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(offset))
             : BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset));
 
+    // Raster cell sizes can be negative (flipped axis) or zero (unknown); a pixel is one unit in either case.
+    private static double CellSize(double size) => size == 0 ? 1 : Math.Abs(size);
+
     // Maps an image pixel to a point in the display's map space (the inverse of ComputeCorners).
     private MapPoint? PixelToMap(PointF pixel)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
             return null;
 
-        double cellX = info.CellSizeX == 0 ? 1 : Math.Abs(info.CellSizeX);
-        double cellY = info.CellSizeY == 0 ? 1 : Math.Abs(info.CellSizeY);
+        double cellX = CellSize(info.CellSizeX);
+        double cellY = CellSize(info.CellSizeY);
 
         // Drop a non-finite or wildly off-image pixels (e.g. projecting camera's own location to itself)
         if (!IsPlaceablePixel(pixel.X, extent.Width / cellX) || !IsPlaceablePixel(pixel.Y, extent.Height / cellY))
@@ -583,8 +544,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
             return null;
 
-        double cellX = info.CellSizeX == 0 ? 1 : Math.Abs(info.CellSizeX);
-        double cellY = info.CellSizeY == 0 ? 1 : Math.Abs(info.CellSizeY);
+        double cellX = CellSize(info.CellSizeX);
+        double cellY = CellSize(info.CellSizeY);
         double col = (mapPoint.X - extent.XMin) / cellX;
         double row = (extent.YMax - mapPoint.Y) / cellY;
         return new PointF((float)col, (float)row);
@@ -645,8 +606,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     // diamond of the edge midpoints). Internal (not private) for unit tests.
     internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
     {
-        double cellX = cellSizeX == 0 ? 1 : Math.Abs(cellSizeX);
-        double cellY = cellSizeY == 0 ? 1 : Math.Abs(cellSizeY);
+        double cellX = CellSize(cellSizeX);
+        double cellY = CellSize(cellSizeY);
         double maxCol = extent.Width / cellX;
         double maxRow = extent.Height / cellY;
 
