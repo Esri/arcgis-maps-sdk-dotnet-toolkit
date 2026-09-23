@@ -288,7 +288,7 @@ public partial class OrientedImageryView
 
     private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
     {
-        if (newPageIndex > 0 && newPageIndex < ViewModel.Images.Count)
+        if (newPageIndex >= 0 && newPageIndex < ViewModel.Images.Count)
             ViewModel.SelectedImage = ViewModel.Images[newPageIndex];
     }
 #endregion
