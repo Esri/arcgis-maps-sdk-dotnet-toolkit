@@ -1,3 +1,5 @@
+using OpenQA.Selenium.Appium;
+
 namespace Toolkit.UITest.Shared.PopupViewer;
 
 [TestClass]
@@ -16,6 +18,10 @@ public class PopupViewerTests : AppiumTestBase
     private const string ImageMediaAlternativeText = "Illustrated map showing three looping trails around the trailhead";
     private const string ChartMediaTitle = "Monthly Visitors";
     private const string ChartMediaCaption = "Visitor counts by month";
+
+    // Mirrors the attachments created by Toolkit.UITests.App.TestPages.PopupViewerAttachments (the shared test-page code-behind).
+    private const string PopupViewerAttachmentsPage = "PopupViewerAttachments";
+    private static readonly string[] AttachmentNames = ["trail-map.png", "parking-permit.pdf", "ranger-notes.txt"];
 
     [TestMethod]
     public async Task PopupViewer_Text_FullTextIsExposed()
@@ -91,6 +97,27 @@ public class PopupViewerTests : AppiumTestBase
 
         PressKey(VK_RIGHT);
         Assert.AreEqual("2", currentItemHost.GetAttribute("PositionInSet"), "Expected the Right arrow key to navigate to the next media item.");
+    }
+
+    [TestMethod]
+    public async Task PopupViewer_Attachments_ListItemsExposeAttachmentName()
+    {
+        OpenSample(PopupViewerAttachmentsPage);
+
+        // The attachment list is only made visible once the attachments have been fetched from the feature.
+        var attachmentList = FindElement("AttachmentList", TimeSpan.FromSeconds(15));
+        var listItems = attachmentList.FindElements(MobileBy.ClassName("ListViewItem"));
+        Assert.AreEqual(AttachmentNames.Length, listItems.Count, "Expected one ListViewItem per attachment.");
+
+        foreach (var attachmentName in AttachmentNames)
+        {
+            // Scope to ListViewItems so the attachment name TextBlock inside the item template can't satisfy the lookup.
+            var matches = listItems.Where(item => GetAutomationName(item) == attachmentName).ToList();
+            Assert.AreEqual(1, matches.Count, $"Expected exactly one ListViewItem with accessible name \"{attachmentName}\".");
+            var controlType = GetControlType(matches[0]);
+            Assert.IsTrue(controlType.Contains("ListItem", StringComparison.OrdinalIgnoreCase),
+                $"Expected attachment \"{attachmentName}\" to be exposed as a list item, but ControlType was \"{controlType}\".");
+        }
     }
 #endif
 
