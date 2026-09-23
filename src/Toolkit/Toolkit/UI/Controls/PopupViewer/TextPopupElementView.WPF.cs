@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void OnElementPropertyChanged()
         {
             // Full list of supported tags and attributes here: https://doc.arcgis.com/en/arcgis-online/reference/supported-html.htm
-            if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is AccessibleRichTextBox rtb)
+            if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is RichTextBox rtb)
             {
                 rtb.Document = HtmlToView.ToFlowDocument(Element.Text, (s,e) =>  PopupViewer.GetPopupViewerParent(s as DependencyObject)?.OnHyperlinkClicked(e.Uri));
                 
