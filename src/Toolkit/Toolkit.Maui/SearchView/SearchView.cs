@@ -53,11 +53,32 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
     private bool _sourceSelectToggled;
 
+    private bool _focusResultsWhenAvailable;
+
+    partial void ConnectKeyboardNavigation();
+
+    partial void DisconnectKeyboardNavigation();
+
+    partial void OnSearchViewLoaded();
+
+    partial void OnSearchViewUnloaded();
+
+    partial void OnSourceListOpened();
+
+    partial void OnSourceSelected();
+
+    partial void OnResultFocusRequested();
+
+    partial void OnSuggestionSelected();
+
+    partial void UpdateSourceSelectAutomationState();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SearchView"/> class.
     /// </summary>
     public SearchView()
     {
+        UpdateThemeColors();
         ResultTemplate = DefaultResultTemplate;
         SuggestionTemplate = DefaultSuggestionTemplate;
         ControlTemplate = DefaultControlTemplate;
@@ -87,16 +108,38 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         SearchCommand = new DelegateCommand(HandleSearchCommand);
         RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
         Loaded += SearchView_Loaded;
+        Unloaded += SearchView_Unloaded;
     }
 
     private void SearchView_Loaded(object? sender, EventArgs e)
     {
+        OnSearchViewLoaded();
+
+        if (Application.Current != null)
+        {
+            Application.Current.RequestedThemeChanged -= Application_RequestedThemeChanged;
+            Application.Current.RequestedThemeChanged += Application_RequestedThemeChanged;
+        }
+
         if (GeoView != null)
         {
             HandleViewpointChanged();
         }
         _ = ConfigureForCurrentConfiguration();
     }
+
+    private void SearchView_Unloaded(object? sender, EventArgs e)
+    {
+        OnSearchViewUnloaded();
+
+        if (Application.Current != null)
+        {
+            Application.Current.RequestedThemeChanged -= Application_RequestedThemeChanged;
+        }
+    }
+
+    private void Application_RequestedThemeChanged(object? sender, AppThemeChangedEventArgs e)
+        => UpdateThemeColors();
 
     private void InitializeLocalizedStrings()
     {
@@ -123,6 +166,8 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
     {
+        DisconnectKeyboardNavigation();
+
         if (PART_SourceSelectButton != null)
         {
             PART_SourceSelectButton.Clicked -= PART_SourceSelectButton_Clicked;
@@ -240,6 +285,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
+        ConnectKeyboardNavigation();
     }
 
     private void HandleClearSearchCommand()
@@ -253,21 +299,26 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         SearchViewModel?.CommitSearch();
     }
 
-    private void HandleRepeatSearchHereCommand()
-    {
-        SearchViewModel?.RepeatSearchHere();
-    }
+    private void HandleRepeatSearchHereCommand() => _ = RepeatSearchAndFocusResults();
 
     private void PART_SourcesView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (SearchViewModel == null || e.CurrentSelection.FirstOrDefault() is not string selectedSource)
+        {
+            return;
+        }
+
+        SelectSource(selectedSource);
+    }
+
+    private void SelectSource(string selectedSource)
     {
         if (SearchViewModel == null)
         {
             return;
         }
 
-        var selectedSource = e.CurrentSelection.FirstOrDefault() as string;
-
-        if (selectedSource == null || selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
+        if (selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
         {
             SearchViewModel.ActiveSource = null;
         }
@@ -276,11 +327,12 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             SearchViewModel.ActiveSource = SearchViewModel.Sources.First(source => source.DisplayName == selectedSource);
         }
 
+        OnSourceSelected();
         _sourceSelectToggled = false;
         UpdateVisibility();
     }
 
-    private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => SearchViewModel?.RepeatSearchHere();
+    private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => _ = RepeatSearchAndFocusResults();
 
     private void PART_SuggestionsView_ItemSelected(object? sender, SelectionChangedEventArgs e)
     {
@@ -288,6 +340,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             PART_SuggestionsView?.SetValue(CollectionView.SelectedItemProperty, null);
 
+            OnSuggestionSelected();
             _ = AcceptSuggestion(suggestion);
         }
     }
@@ -311,10 +364,20 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
 
         UpdateVisibility();
+        if (_sourceSelectToggled)
+        {
+            OnSourceListOpened();
+        }
     }
 
     private void PART_Entry_TextChanged(object? sender, TextChangedEventArgs e)
     {
+        if (_sourceSelectToggled && sender is Entry { IsFocused: true })
+        {
+            _sourceSelectToggled = false;
+            UpdateVisibility();
+        }
+
         if (SearchViewModel != null)
         {
             SearchViewModel.CurrentQuery = e.NewTextValue;
@@ -367,6 +430,20 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         finally
         {
             _acceptingSuggestionFlag = false;
+        }
+    }
+
+    private async Task RepeatSearchAndFocusResults()
+    {
+        if (SearchViewModel == null)
+        {
+            return;
+        }
+
+        await SearchViewModel.RepeatSearchHere();
+        if (SearchViewModel.Results?.Count > 0)
+        {
+            OnResultFocusRequested();
         }
     }
 
@@ -613,6 +690,10 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 }
 
                 UpdateVisibility();
+                AnnounceSearchItems(
+                    SearchViewModel.Suggestions,
+                    Properties.Resources.GetString("SearchViewSuggestionsAvailable"),
+                    PART_SuggestionsView);
                 break;
             case nameof(SearchViewModel.Results):
                 PART_ResultView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Results ?? new List<SearchResult>());
@@ -719,7 +800,21 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             return;
         }
 
+        await Task.Yield();
         UpdateVisibility();
+        AnnounceSearchItems(
+            SearchViewModel.Results,
+            Properties.Resources.GetString("SearchViewResultsAvailable"),
+            PART_ResultView);
+
+        if (_focusResultsWhenAvailable && SearchViewModel.Results != null)
+        {
+            _focusResultsWhenAvailable = false;
+            if (SearchViewModel.Results.Count > 0)
+            {
+                OnResultFocusRequested();
+            }
+        }
 
         if (SearchViewModel.Results == null)
         {
@@ -755,16 +850,40 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
     }
 
+    private void AnnounceSearchItems<T>(IList<T>? items, string availableMessage, VisualElement? itemsView)
+    {
+        if (items == null)
+        {
+            return;
+        }
+
+        var announcement = items.Count > 0 && itemsView?.IsVisible == true
+            ? availableMessage
+            : items.Count == 0 && PART_ResultLabel?.IsVisible == true
+                ? NoResultMessage
+                : null;
+        if (!string.IsNullOrEmpty(announcement))
+        {
+            Dispatcher.Dispatch(() => Microsoft.Maui.Accessibility.SemanticScreenReader.Default.Announce(announcement));
+        }
+    }
+
     private void UpdateVisibility()
     {
-        PART_SuggestionsView?.SetValue(View.IsVisibleProperty, SuggestionsViewVisibility);
-        PART_ResultView?.SetValue(View.IsVisibleProperty, ResultViewVisibility);
-        PART_ResultContainer?.SetValue(View.IsVisibleProperty, ResultLabelVisibility);
-        PART_ResultLabel?.SetValue(View.IsVisibleProperty, ResultLabelVisibility);
+        var sourcesVisible = SourcePopupVisibility;
+        var suggestionsVisible = !sourcesVisible && SuggestionsViewVisibility;
+        var resultsVisible = !sourcesVisible && !suggestionsVisible && ResultViewVisibility;
+        var resultLabelVisible = !sourcesVisible && !suggestionsVisible && !resultsVisible && ResultLabelVisibility;
+
+        PART_SuggestionsView?.SetValue(View.IsVisibleProperty, suggestionsVisible);
+        PART_ResultView?.SetValue(View.IsVisibleProperty, resultsVisible);
+        PART_ResultContainer?.SetValue(View.IsVisibleProperty, resultLabelVisible);
+        PART_ResultLabel?.SetValue(View.IsVisibleProperty, resultLabelVisible);
         PART_SourceSelectButton?.SetValue(View.IsVisibleProperty, SourceSelectVisibility);
         PART_RepeatButton?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
         PART_RepeatButtonContainer?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
-        PART_SourcesView?.SetValue(View.IsVisibleProperty, SourcePopupVisibility);
+        PART_SourcesView?.SetValue(View.IsVisibleProperty, sourcesVisible);
+        UpdateSourceSelectAutomationState();
     }
 
     #endregion events
@@ -796,6 +915,39 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     {
         get => GetValue(SuggestionGroupHeaderTemplateProperty) as DataTemplate;
         set => SetValue(SuggestionGroupHeaderTemplateProperty, value);
+    }
+
+    private void SetHighContrastColors(Color? foreground, Color? background)
+    {
+        if (foreground == null || background == null)
+        {
+            UpdateThemeColors();
+            return;
+        }
+
+        SetColorResources(foreground, background, foreground, background, background, foreground);
+    }
+
+    private void UpdateThemeColors()
+    {
+        var isDark = Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark;
+        SetColorResources(
+            isDark ? Colors.White : Color.FromArgb("#151515"),
+            isDark ? Color.FromArgb("#2B2B2B") : Colors.White,
+            Colors.White,
+            isDark ? Color.FromArgb("#151515") : Color.FromArgb("#4E4E4E"),
+            Color.FromArgb(isDark ? "#00619B" : "#007AC2"),
+            Colors.White);
+    }
+
+    private void SetColorResources(Color foreground, Color background, Color headerForeground, Color headerBackground, Color accent, Color accentForeground)
+    {
+        Resources[ForegroundColorResourceKey] = foreground;
+        Resources[BackgroundColorResourceKey] = background;
+        Resources[GroupHeaderForegroundColorResourceKey] = headerForeground;
+        Resources[GroupHeaderBackgroundColorResourceKey] = headerBackground;
+        Resources[AccentColorResourceKey] = accent;
+        Resources[AccentForegroundColorResourceKey] = accentForeground;
     }
 
     /// <summary>
