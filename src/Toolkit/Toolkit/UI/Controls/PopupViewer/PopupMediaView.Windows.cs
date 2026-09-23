@@ -55,6 +55,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
 #if WPF
         /// <inheritdoc />
+        protected override void OnContentChanged(object oldContent, object newContent)
+        {
+            base.OnContentChanged(oldContent, newContent);
+
+            // The accessible name comes from the (asynchronously generated) content, so let UIA clients know it changed.
+            if (UIElementAutomationPeer.FromElement(this) is AutomationPeer peer)
+            {
+                var oldName = oldContent is DependencyObject o ? System.Windows.Automation.AutomationProperties.GetName(o) : string.Empty;
+                peer.RaisePropertyChangedEvent(System.Windows.Automation.AutomationElementIdentifiers.NameProperty, oldName, peer.GetName());
+            }
+        }
+
+        /// <inheritdoc />
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
         {
             _lastChartSize = 0;
@@ -79,6 +92,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 /// <summary>
 /// Automation peer for the <see cref="PopupMediaView"/> control.
 /// </summary>
+/// <remarks>
+/// Exposes the media view as a single image element named after the media's alternative text, and hides the
+/// generated image inside it so the alternative text is only announced once. Exposing this element (rather than
+/// the inner image) matters because <see cref="MediaPopupElementView"/> sets PositionInSet/SizeOfSet on it,
+/// so Narrator can announce "item X of Y" for the current media item.
+/// </remarks>
 public class PopupMediaViewPeer : FrameworkElementAutomationPeer
 {
     /// <summary>
@@ -89,22 +108,28 @@ public class PopupMediaViewPeer : FrameworkElementAutomationPeer
     {
     }
 
+    /// <inheritdoc />
+    protected override string GetClassNameCore() => nameof(PopupMediaView);
+
+    /// <inheritdoc />
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Image;
+
     /// <summary>
-    /// Indicates that this control is not a content element for accessibility purposes.
+    /// Returns the alternative text of the displayed media, which is set as the accessible name of the generated image content.
     /// </summary>
-    /// <returns></returns>
-    protected override bool IsContentElementCore()
+    protected override string GetNameCore()
     {
-        return false;
+        var name = base.GetNameCore();
+        if (string.IsNullOrEmpty(name) && Owner is PopupMediaView view && view.Content is DependencyObject content)
+        {
+            name = System.Windows.Automation.AutomationProperties.GetName(content);
+        }
+        return name ?? string.Empty;
     }
 
     /// <summary>
-    /// Indicates that this control is not a control element for accessibility purposes.
+    /// Hides the generated image content, whose alternative text is already exposed as this element's name.
     /// </summary>
-    /// <returns></returns>
-    protected override bool IsControlElementCore()
-    {
-        return false;
-    }
+    protected override List<AutomationPeer>? GetChildrenCore() => null;
 }
 #endif

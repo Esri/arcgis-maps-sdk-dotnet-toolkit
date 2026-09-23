@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="TextPopupElement"/>.
     /// </summary>
-    [TemplatePart(Name = TextAreaName, Type = typeof(RichTextBox))]
+    [TemplatePart(Name = TextAreaName, Type = typeof(AccessibleRichTextBox))]
     public partial class TextPopupElementView : Control
     {
         private const string TextAreaName = "TextArea";
@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void OnElementPropertyChanged()
         {
             // Full list of supported tags and attributes here: https://doc.arcgis.com/en/arcgis-online/reference/supported-html.htm
-            if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is RichTextBox rtb)
+            if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is AccessibleRichTextBox rtb)
             {
                 rtb.Document = HtmlToView.ToFlowDocument(Element.Text, (s,e) =>  PopupViewer.GetPopupViewerParent(s as DependencyObject)?.OnHyperlinkClicked(e.Uri));
                 
@@ -69,6 +69,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public TextPopupElementViewPeer(TextPopupElementView owner) : base(owner)
         {
         }
+
+        /// <inheritdoc />
+        protected override string GetClassNameCore() => nameof(TextPopupElementView);
 
         /// <summary>
         /// Indicates that this control is a content element for accessibility purposes.
