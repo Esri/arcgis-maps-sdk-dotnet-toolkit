@@ -17,7 +17,11 @@
 using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Collections;
 #if WPF
+using System.Windows.Automation.Peers;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+#elif WINUI
+using Microsoft.UI.Xaml.Automation.Peers;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -33,7 +37,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if WPF
         private ButtonBase? _previousButton;
         private ButtonBase? _nextButton;
+        private FrameworkElement? _currentMediaView;
         private int selectedIndex = 0;
+#endif
+
+        // A plain Control has no automation peer by default. Without this override, the enclosing
+        // PopupElementItemsControl's ItemsControlAutomationPeer can't find a real peer for this item and falls
+        // back to a synthetic ItemAutomationPeer wrapping the raw MediaPopupElement data object - which hides
+        // this view's real content (title, caption, prev/next buttons) from Narrator's navigation entirely.
+#if WPF
+        /// <inheritdoc />
+        protected override AutomationPeer OnCreateAutomationPeer() => new FrameworkElementAutomationPeer(this);
+#elif WINUI
+        /// <inheritdoc />
+        protected override Microsoft.UI.Xaml.Automation.Peers.AutomationPeer OnCreateAutomationPeer() => new FrameworkElementAutomationPeer(this);
 #endif
 
         /// <inheritdoc />
@@ -44,6 +61,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
 #if WPF
+            PreviewKeyDown -= OnPreviewKeyDown;
+            PreviewKeyDown += OnPreviewKeyDown;
+
             if (_previousButton != null)
             {
                 _previousButton.Click -= OnPreviousButtonClicked;
@@ -62,6 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _nextButton.Click += OnNextButtonClicked;
             }
+            _currentMediaView = GetTemplateChild("CurrentMediaView") as FrameworkElement;
             UpdateContent();
 #elif WINUI
             UpdatePipsVisibility();
@@ -101,6 +122,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
             }
             CurrentItem = content;
+
+            // Narrator announces "item X of Y" on its own from these two properties - without them the
+            // currently-shown media item gives no indication of its position among the others.
+            if (_currentMediaView != null)
+            {
+                System.Windows.Automation.AutomationProperties.SetPositionInSet(_currentMediaView, selectedIndex + 1);
+                System.Windows.Automation.AutomationProperties.SetSizeOfSet(_currentMediaView, itemCount);
+            }
         }
 
         private void OnPreviousButtonClicked(object sender, RoutedEventArgs e)
@@ -121,6 +150,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 selectedIndex = 0;
             }
             UpdateContent();
+        }
+
+        // Lets the Left/Right arrow keys page through media items while focus is anywhere inside this control
+        // (e.g. on the prev/next buttons themselves), in addition to clicking them. PreviewKeyDown is a
+        // tunneling event, so wiring it on this control - rather than the individual buttons - catches the key
+        // regardless of which descendant currently has focus. Only handled when there's more than one item, so
+        // arrow keys don't do anything surprising (or swallow the keystroke) when paging isn't possible.
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if ((Element?.Media?.Count ?? 0) < 2)
+            {
+                return;
+            }
+
+            if (e.Key == Key.Left)
+            {
+                OnPreviousButtonClicked(this, new RoutedEventArgs());
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Right)
+            {
+                OnNextButtonClicked(this, new RoutedEventArgs());
+                e.Handled = true;
+            }
         }
 
 #endif

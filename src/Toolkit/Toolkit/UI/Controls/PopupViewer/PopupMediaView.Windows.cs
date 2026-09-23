@@ -18,12 +18,17 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.Primitives;
 using Esri.ArcGISRuntime.UI;
 using System.IO;
 #if WPF
+using System.Windows.Automation.Peers;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xaml;
+#elif WINUI
+using Microsoft.UI.Xaml.Automation.Peers;
+using Windows.Foundation;
 #elif WINDOWS_XAML
 using Windows.Foundation;
 #endif
@@ -36,6 +41,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public partial class PopupMediaView : ContentControl
     {
+        // A plain ContentControl has no automation peer by default. Without this override, the enclosing
+        // media list's ItemsControlAutomationPeer can't find a real peer for this item and falls back to a
+        // synthetic ItemAutomationPeer wrapping the raw PopupMedia data object - so Narrator reads the data
+        // object's ToString() ("Esri.ArcGISRuntime.Mapping.Popups.PopupMedia") instead of this view's content.
+#if WPF
+        /// <inheritdoc />
+        protected override AutomationPeer OnCreateAutomationPeer() => new PopupMediaViewPeer(this);
+#elif WINUI
+        /// <inheritdoc />
+        protected override Microsoft.UI.Xaml.Automation.Peers.AutomationPeer OnCreateAutomationPeer() => new FrameworkElementAutomationPeer(this);
+#endif
+
 #if WPF
         /// <inheritdoc />
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
@@ -54,6 +71,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return base.MeasureOverride(constraint);
         }
 
+    }
+}
+#endif
+
+#if WPF
+/// <summary>
+/// Automation peer for the <see cref="PopupMediaView"/> control.
+/// </summary>
+public class PopupMediaViewPeer : FrameworkElementAutomationPeer
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref="PopupMediaViewPeer"/> class.
+    /// </summary>
+    /// <param name="owner"></param>
+    public PopupMediaViewPeer(PopupMediaView owner) : base(owner)
+    {
+    }
+
+    /// <summary>
+    /// Indicates that this control is not a content element for accessibility purposes.
+    /// </summary>
+    /// <returns></returns>
+    protected override bool IsContentElementCore()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Indicates that this control is not a control element for accessibility purposes.
+    /// </summary>
+    /// <returns></returns>
+    protected override bool IsControlElementCore()
+    {
+        return false;
     }
 }
 #endif

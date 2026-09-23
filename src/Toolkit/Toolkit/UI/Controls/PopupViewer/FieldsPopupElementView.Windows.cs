@@ -19,6 +19,7 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if WPF
+using System.Windows.Automation.Peers;
 using System.Windows.Documents;
 #endif
 
@@ -32,6 +33,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class FieldsPopupElementView : Control
     {
         private const string TableAreaContentName = "TableAreaContent";
+
+#if WPF
+        /// <inheritdoc />
+        protected override AutomationPeer OnCreateAutomationPeer() => new FieldsPopupElementViewAutomationPeer(this);
+#elif WINUI
+        /// <inheritdoc />
+        protected override Microsoft.UI.Xaml.Automation.Peers.AutomationPeer OnCreateAutomationPeer() => new FieldsPopupElementViewAutomationPeer(this);
+#endif
 
 #if WPF
         private static bool IsStyleCompatible(Type elementType, Style? style)
@@ -49,22 +58,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 // Fallback to TextBlock if user specifically provided a custom style for it.
                 // Previous versions of this control used TextBlock, so this allows users to keep their existing styling.
-                return new TextBlock
+                return new FieldsTableCellTextBlock
                 {
                     Style = FieldTextStyle,
                     Text = text ?? "",
                     TextWrapping = wrap ? TextWrapping.Wrap : TextWrapping.NoWrap,
+                    Focusable = true,
                 };
             }
 
             // Default: Use a TextBox styled to look like a TextBlock, which allows text selection and copying.
             // Requested for WPF by https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/issues/710
-            var tb = new TextBox
+            var tb = new FieldsTableCellTextBox
             {
                 Text = text ?? "",
 
                 IsReadOnly = true,
                 IsReadOnlyCaretVisible = false,
+                
+                // Set to false to have tab work between interactive controls.
                 IsTabStop = false,
 
                 Background = Brushes.Transparent,
@@ -85,13 +97,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 tb.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
                 tb.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
             }
+            tb.Focusable = true;
 
             return tb;
         }
 
         private TextBlock CreateHyperlinkCell(Uri uri)
         {
-            var t = new TextBlock { TextWrapping = TextWrapping.Wrap };
+            var t = new FieldsTableCellTextBlock { TextWrapping = TextWrapping.Wrap };
 
             // Apply FieldTextStyle if it also works for TextBlock
             if (IsStyleCompatible(typeof(TextBlock), FieldTextStyle))
