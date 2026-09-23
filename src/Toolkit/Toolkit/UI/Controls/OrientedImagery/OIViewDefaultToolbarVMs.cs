@@ -164,6 +164,11 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
 public class ClearMarkersVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
+/// View model for the sequential navigation toolbar control in the Oriented Imagery View.
+/// </summary>
+public class SequentialNavigationVM : OrientedImageryToolbarItemBase { }
+
+/// <summary>
 /// View model for the "Select New Marker Symbol" toolbar control in the Oriented Imagery View.
 /// This control allows the user to loop through a collection of marker symbols and select one to be used for new markers in the oriented imagery view.
 /// </summary>

@@ -1129,6 +1129,14 @@
     <value>Clear markers</value>
     <comment>Tooltip for the OrientedImageryView button that clears markers.</comment>
   </data>
+  <data name="OrientedImageryViewEnterSequentialNavigation" xml:space="preserve">
+    <value>Enter sequential navigation</value>
+    <comment>Tooltip for the OrientedImageryView button that enters sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewReturnToResults" xml:space="preserve">
+    <value>Return to results</value>
+    <comment>Tooltip for the OrientedImageryView button that returns from sequential navigation.</comment>
+  </data>
   <data name="OrientedImageryViewLoading" xml:space="preserve">
     <value>Loading...</value>
     <comment>Message shown by OrientedImageryView while an image is loading.</comment>

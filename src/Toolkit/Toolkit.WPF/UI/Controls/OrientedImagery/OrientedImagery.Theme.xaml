@@ -248,6 +248,54 @@
         </Button>
     </DataTemplate>
 
+    <DataTemplate x:Key="SequentialNavigationToolbarTemplate" DataType="controls:SequentialNavigationVM">
+        <Button Command="{Binding ViewModel.ToggleSequentialNavigationCommand}"
+                IsEnabled="{Binding ViewModel.SupportsSequentialNavigation}">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+                    <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigation}" Value="True">
+                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Grid Width="28" Height="28">
+                <Image Width="28"
+                       Height="28"
+                       Stretch="Uniform"
+                       Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/sequential-navigation.png">
+                    <Image.Style>
+                        <Style TargetType="{x:Type Image}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigation}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Image Width="28"
+                       Height="28"
+                       Stretch="Uniform"
+                       Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/Back%20to%20results.png">
+                    <Image.Style>
+                        <Style TargetType="{x:Type Image}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigation}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+            </Grid>
+        </Button>
+    </DataTemplate>
+
     <!-- Image display style -->
     <Style TargetType="{x:Type controls:OrientedImageDisplay}">
         <Setter Property="IsTabStop" Value="False" />
@@ -289,6 +337,7 @@
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SequentialNavigationVM}" Template="{StaticResource SequentialNavigationToolbarTemplate}" />
                 </controls:OrientedImageryViewTemplateSelector>
             </Setter.Value>
         </Setter>
@@ -427,7 +476,18 @@
                                 </Button>
                             </Grid>
 
-                            <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="2" />
+                            <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="2">
+                                <local:Paginator.Style>
+                                    <Style TargetType="{x:Type local:Paginator}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.IsSequentialNavigation}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </local:Paginator.Style>
+                            </local:Paginator>
                         </Grid>
                     </Border>
                 </ControlTemplate>
