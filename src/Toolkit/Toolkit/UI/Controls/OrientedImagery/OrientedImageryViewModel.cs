@@ -53,10 +53,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         SelectNextImageCommand = new Command(
             execute: async () => await SelectNextImageAsync(),
-            canExecute: () => IsSequentialNavigation ? SupportsSequentialNavigation && !_isFetchingAdjacentImage && SelectedImage != null : _images.Count > 0 && (SelectedImage == null || _images.IndexOf(SelectedImage) < _images.Count - 1));
+            canExecute: () => IsSequentialNavigation ? SupportsSequentialNavigation && !_isFetchingAdjacentImage && !_noNextImage && SelectedImage != null : _images.Count > 0 && (SelectedImage == null || _images.IndexOf(SelectedImage) < _images.Count - 1));
         SelectPreviousImageCommand = new Command(
             execute: async () => await SelectPreviousImageAsync(),
-            canExecute: () => IsSequentialNavigation ? SupportsSequentialNavigation && !_isFetchingAdjacentImage && SelectedImage != null : _images.Count > 0 && (SelectedImage != null && _images.IndexOf(SelectedImage) > 0));
+            canExecute: () => IsSequentialNavigation ? SupportsSequentialNavigation && !_isFetchingAdjacentImage && !_noPreviousImage && SelectedImage != null : _images.Count > 0 && (SelectedImage != null && _images.IndexOf(SelectedImage) > 0));
         ToggleSequentialNavigationCommand = new Command(
             execute: async () => await ToggleSequentialNavigationAsync(),
             canExecute: () => SupportsSequentialNavigation);
@@ -143,6 +143,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private OrientedImageFootprint? _selectedImageFootprint;
     private bool _isSequentialNavigation;
     private bool _isFetchingAdjacentImage;
+    private const int ArcGISNoDataErrorCode = 18;
+    private bool _noNextImage;
+    private bool _noPreviousImage;
+    private int _sequentialNavigationVersion;
+    private string? _sequentialNavigationMessage;
     private OrientedImage? _imageBeforeSequentialNavigation;
     private List<OrientedImage>? _imagesBeforeSequentialNavigation;
 
@@ -157,7 +162,21 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public bool IsSequentialNavigation
     {
         get => _isSequentialNavigation;
-        private set => SetProperty(ref _isSequentialNavigation, value);
+        private set
+        {
+            if (_isSequentialNavigation == value) return;
+            ResetSequentialNavigationState();
+            SetProperty(ref _isSequentialNavigation, value);
+        }
+    }
+
+    /// <summary>
+    /// Gets the boundary or error message for sequential navigation.
+    /// </summary>
+    public string? SequentialNavigationMessage
+    {
+        get => _sequentialNavigationMessage;
+        private set => SetProperty(ref _sequentialNavigationMessage, value);
     }
 
     /// <summary>
@@ -170,6 +189,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             if (value == _selectedImage) return;
 
+            ResetSequentialNavigationState();
             SetProperty(ref _selectedImage, value);
 
             if (_selectedImage != null)
@@ -299,22 +319,62 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private async Task FetchAdjacentImageAsync(SequenceStep step)
     {
-        if (_isFetchingAdjacentImage || !SupportsSequentialNavigation || SelectedImage == null || OrientedImageryLayer == null)
+        if (!IsSequentialNavigation || _isFetchingAdjacentImage || !SupportsSequentialNavigation || SelectedImage == null || OrientedImageryLayer == null ||
+            (step == SequenceStep.Next ? _noNextImage : _noPreviousImage))
             return;
 
+        var image = SelectedImage;
+        var layer = OrientedImageryLayer;
+        var navigationVersion = _sequentialNavigationVersion;
         _isFetchingAdjacentImage = true;
+        SequentialNavigationMessage = null;
         ChangeNavigationCommandCanExecute();
         try
         {
-            var adjacentImage = await OrientedImageryLayer.FetchAdjacentImageAsync(SelectedImage, step);
+            var adjacentImage = await layer.FetchAdjacentImageAsync(image, step);
+            if (navigationVersion != _sequentialNavigationVersion || layer != OrientedImageryLayer)
+                return;
+
             if (adjacentImage != null)
                 SelectedImage = adjacentImage;
+            else
+                SetSequentialNavigationBoundary(step);
+        }
+        catch (ArcGISRuntimeException exception) when (exception.ErrorCode == ArcGISNoDataErrorCode)
+        {
+            if (navigationVersion == _sequentialNavigationVersion && layer == OrientedImageryLayer)
+                SetSequentialNavigationBoundary(step);
+        }
+        catch (Exception exception)
+        {
+            if (navigationVersion == _sequentialNavigationVersion && layer == OrientedImageryLayer)
+                SequentialNavigationMessage = string.Format(Properties.Resources.GetString("OrientedImageryViewNavigationFailed") ?? "{0}", exception.Message);
         }
         finally
         {
             _isFetchingAdjacentImage = false;
             ChangeNavigationCommandCanExecute();
         }
+    }
+
+    private void SetSequentialNavigationBoundary(SequenceStep step)
+    {
+        if (step == SequenceStep.Next)
+            _noNextImage = true;
+        else
+            _noPreviousImage = true;
+
+        SequentialNavigationMessage = Properties.Resources.GetString(step == SequenceStep.Next
+            ? "OrientedImageryViewNoNextImage"
+            : "OrientedImageryViewNoPreviousImage");
+    }
+
+    private void ResetSequentialNavigationState()
+    {
+        _sequentialNavigationVersion++;
+        _noNextImage = false;
+        _noPreviousImage = false;
+        SequentialNavigationMessage = null;
     }
 
     private void ChangeNavigationCommandCanExecute()

@@ -354,6 +354,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <ItemsControl x:Name="PART_ToolbarContainer" />
@@ -488,6 +489,43 @@
                                     </Style>
                                 </local:Paginator.Style>
                             </local:Paginator>
+                            <StackPanel Grid.Row="2"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.IsSequentialNavigation, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button Style="{StaticResource ToolbarButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                                    <TextBlock Text="&lt;" FontSize="20" />
+                                </Button>
+                                <TextBlock Text="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationLabel}"
+                                           TextDecorations="Underline"
+                                           VerticalAlignment="Center"
+                                           Margin="4,0" />
+                                <Button Style="{StaticResource ToolbarButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                                    <TextBlock Text="&gt;" FontSize="20" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock Grid.Row="3"
+                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationMessage}"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       Margin="8,0,8,4">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationMessage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Grid>
                     </Border>
                 </ControlTemplate>

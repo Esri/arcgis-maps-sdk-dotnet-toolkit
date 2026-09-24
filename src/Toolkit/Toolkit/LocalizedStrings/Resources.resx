@@ -1137,9 +1137,33 @@
     <value>Return to results</value>
     <comment>Tooltip for the OrientedImageryView button that returns from sequential navigation.</comment>
   </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>Seq.Navigation</value>
+    <comment>Underlined label between the previous and next image buttons in sequential navigation mode.</comment>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>Previous image</value>
+    <comment>Tooltip and accessibility name for the previous image button.</comment>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>Next image</value>
+    <comment>Tooltip and accessibility name for the next image button.</comment>
+  </data>
   <data name="OrientedImageryViewLoading" xml:space="preserve">
     <value>Loading...</value>
     <comment>Message shown by OrientedImageryView while an image is loading.</comment>
+  </data>
+  <data name="OrientedImageryViewNoPreviousImage" xml:space="preserve">
+    <value>No previous image in this sequence.</value>
+    <comment>Message shown when sequential navigation reaches the start of a sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewNoNextImage" xml:space="preserve">
+    <value>No next image in this sequence.</value>
+    <comment>Message shown when sequential navigation reaches the end of a sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewNavigationFailed" xml:space="preserve">
+    <value>Unable to load the adjacent image. {0}</value>
+    <comment>Message shown when sequential navigation fails; {0} is the error detail.</comment>
   </data>
   <data name="OrientedImageryViewNoImagesSelected" xml:space="preserve">
     <value>No images selected</value>
