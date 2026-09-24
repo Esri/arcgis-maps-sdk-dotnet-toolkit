@@ -1153,14 +1153,6 @@
     <value>Loading...</value>
     <comment>Message shown by OrientedImageryView while an image is loading.</comment>
   </data>
-  <data name="OrientedImageryViewNoPreviousImage" xml:space="preserve">
-    <value>No previous image in this sequence.</value>
-    <comment>Message shown when sequential navigation reaches the start of a sequence.</comment>
-  </data>
-  <data name="OrientedImageryViewNoNextImage" xml:space="preserve">
-    <value>No next image in this sequence.</value>
-    <comment>Message shown when sequential navigation reaches the end of a sequence.</comment>
-  </data>
   <data name="OrientedImageryViewNavigationFailed" xml:space="preserve">
     <value>Unable to load the adjacent image. {0}</value>
     <comment>Message shown when sequential navigation fails; {0} is the error detail.</comment>
