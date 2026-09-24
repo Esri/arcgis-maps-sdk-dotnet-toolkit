@@ -78,6 +78,7 @@ public partial class OrientedImageryView
     {
         if (oldValue != null)
         {
+            oldValue.SetSelectedImageReady(false);
             oldValue.PropertyChanged -= ViewModel_PropertyChanged;
 
             if (GeoView?.GraphicsOverlays != null)
@@ -109,7 +110,10 @@ public partial class OrientedImageryView
         {
             case nameof(OrientedImageryViewModel.SelectedImageFootprint):
                 if (_display != null)
+                {
                     _display.Footprint = ViewModel.SelectedImageFootprint;
+                    UpdateSelectedImageReady();
+                }
                 break;
             case nameof(OrientedImageryViewModel.SelectedImage):
                 if (_paginator != null)
@@ -165,6 +169,7 @@ public partial class OrientedImageryView
     private void WireDisplay(OrientedImageDisplay display)
     {
         display.ImageClicked += Display_ImageClicked;
+        display.StateChanged += Display_StateChanged;
         display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
         WireDisplayToViewModel(display);
     }
@@ -174,16 +179,24 @@ public partial class OrientedImageryView
         display.Markers = ViewModel.Markers;
         display.Footprint = ViewModel.SelectedImageFootprint;
         display.DisplayBackgroundColor = DisplayBackgroundColor;
+        UpdateSelectedImageReady();
     }
 
     private void UnwireDisplay(OrientedImageDisplay display)
     {
         display.ImageClicked -= Display_ImageClicked;
+        display.StateChanged -= Display_StateChanged;
+        ViewModel.SetSelectedImageReady(false);
         display.ClearValue(OrientedImageDisplay.AutoUpdateFootprintProperty);
         display.ClearValue(OrientedImageDisplay.MarkersProperty);
         display.ClearValue(OrientedImageDisplay.FootprintProperty);
         display.ClearValue(OrientedImageDisplay.DisplayBackgroundColorProperty);
     }
+
+    private void Display_StateChanged(object? sender, EventArgs e) => UpdateSelectedImageReady();
+
+    private void UpdateSelectedImageReady() => ViewModel.SetSelectedImageReady(
+        _display?.IsInteractive == true && ViewModel.SelectedImage != null && _display.Footprint?.OrientedImage == ViewModel.SelectedImage);
 
     private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e) => ImageTapped?.Invoke(this, e);
 
