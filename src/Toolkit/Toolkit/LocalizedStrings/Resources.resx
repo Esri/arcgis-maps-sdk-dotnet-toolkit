@@ -1117,10 +1117,6 @@
     <value>Show camera markers on geo view</value>
     <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the geo view.</comment>
   </data>
-  <data name="OrientedImageryViewShowCameraMarkersOnGeoViewAndImageDisplay" xml:space="preserve">
-    <value>Show camera markers in geo view and image display</value>
-    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on both the geo view and image display.</comment>
-  </data>
   <data name="OrientedImageryViewClearCameraMarkers" xml:space="preserve">
     <value>Clear camera markers</value>
     <comment>Tooltip for the OrientedImageryView button when camera markers can be cleared.</comment>

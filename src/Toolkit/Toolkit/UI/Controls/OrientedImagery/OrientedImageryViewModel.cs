@@ -63,7 +63,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             canExecute: () => IsSequentialNavigation || (SupportsSequentialNavigation && SelectedImage != null && _isSelectedImageReady));
         ClearMarkersCommand = new Command(
             execute: () => ClearMarkers(),
-            canExecute: () => true);
+            canExecute: () => HasUserMarkers);
     }
 
 #region GeoModel
@@ -418,6 +418,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             _noNextImage = true;
         else
             _noPreviousImage = true;
+
+        ChangeNavigationCommandCanExecute();
     }
 
     private void ResetSequentialNavigationState()
@@ -627,6 +629,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         get { return _markers; }
     }
 
+    private bool HasUserMarkers => Markers.Any(marker => marker.Tag is not MarkerTag);
+
     /// <summary>
     /// Gets the graphics overlay that contains the marker graphics.
     /// </summary>
@@ -707,6 +711,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void Markers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
+        ((Command)ClearMarkersCommand).ChangeCanExecute();
+
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
@@ -738,12 +744,17 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void ClearMarkers()
     {
+        if (!HasUserMarkers)
+            return;
+
         var searchPointMarker = Markers.FirstOrDefault((marker) => marker.Tag is MarkerTag tag && tag.Identifier == SearchPointMarkerTag.Identifier);
         Markers.Clear();
         UpdateCameraMarkers();
         UpdateSelectedCameraMarker();
         if (searchPointMarker != null)
             Markers.Add(searchPointMarker);
+
+        ((Command)ClearMarkersCommand).ChangeCanExecute();
     }
 
     private void UpdateSearchPointMarker(MapPoint? location)
