@@ -1117,10 +1117,6 @@
     <value>Show camera markers on geo view</value>
     <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the geo view.</comment>
   </data>
-  <data name="OrientedImageryViewShowCameraMarkersOnGeoViewAndImageDisplay" xml:space="preserve">
-    <value>Show camera markers in geo view and image display</value>
-    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on both the geo view and image display.</comment>
-  </data>
   <data name="OrientedImageryViewClearCameraMarkers" xml:space="preserve">
     <value>Clear camera markers</value>
     <comment>Tooltip for the OrientedImageryView button when camera markers can be cleared.</comment>
@@ -1129,9 +1125,33 @@
     <value>Clear markers</value>
     <comment>Tooltip for the OrientedImageryView button that clears markers.</comment>
   </data>
+  <data name="OrientedImageryViewEnterSequentialNavigation" xml:space="preserve">
+    <value>Enter sequential navigation</value>
+    <comment>Tooltip for the OrientedImageryView button that enters sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewReturnToResults" xml:space="preserve">
+    <value>Return to results</value>
+    <comment>Tooltip for the OrientedImageryView button that returns from sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>Seq.Navigation</value>
+    <comment>Underlined label between the previous and next image buttons in sequential navigation mode.</comment>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>Previous image</value>
+    <comment>Tooltip and accessibility name for the previous image button.</comment>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>Next image</value>
+    <comment>Tooltip and accessibility name for the next image button.</comment>
+  </data>
   <data name="OrientedImageryViewLoading" xml:space="preserve">
     <value>Loading...</value>
     <comment>Message shown by OrientedImageryView while an image is loading.</comment>
+  </data>
+  <data name="OrientedImageryViewNavigationFailed" xml:space="preserve">
+    <value>Unable to load the adjacent image. {0}</value>
+    <comment>Message shown when sequential navigation fails; {0} is the error detail.</comment>
   </data>
   <data name="OrientedImageryViewNoImagesSelected" xml:space="preserve">
     <value>No images selected</value>
