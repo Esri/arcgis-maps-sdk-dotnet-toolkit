@@ -10,6 +10,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 #if MAUI
@@ -51,14 +53,17 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         ToolbarItems.CollectionChanged += ToolbarItems_CollectionChanged;
 
         SelectNextImageCommand = new Command(
-            execute: () => SelectNextImage(),
-            canExecute: () => _images.Count > 0 && (SelectedImage == null || _images.IndexOf(SelectedImage) < _images.Count - 1));
+            execute: async () => await SelectNextImageAsync(),
+            canExecute: () => IsSequentialNavigation ? SupportsSequentialNavigation && !_isFetchingAdjacentImage && !_noNextImage && SelectedImage != null : _images.Count > 0 && (SelectedImage == null || _images.IndexOf(SelectedImage) < _images.Count - 1));
         SelectPreviousImageCommand = new Command(
-            execute: () => SelectPreviousImage(),
-            canExecute: () => _images.Count > 0 && (SelectedImage != null && _images.IndexOf(SelectedImage) > 0));
+            execute: async () => await SelectPreviousImageAsync(),
+            canExecute: () => IsSequentialNavigation ? SupportsSequentialNavigation && !_isFetchingAdjacentImage && !_noPreviousImage && SelectedImage != null : _images.Count > 0 && (SelectedImage != null && _images.IndexOf(SelectedImage) > 0));
+        ToggleSequentialNavigationCommand = new Command(
+            execute: async () => await ToggleSequentialNavigationAsync(),
+            canExecute: () => IsSequentialNavigation || (SupportsSequentialNavigation && SelectedImage != null && _isSelectedImageReady));
         ClearMarkersCommand = new Command(
             execute: () => ClearMarkers(),
-            canExecute: () => true);
+            canExecute: () => HasUserMarkers);
     }
 
 #region GeoModel
@@ -82,6 +87,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 _oiLayerSceneProperties!.PropertyChanged -= OrientedImageryLayer_SceneProperties_PropertyChanged;
             }
 
+            IsSequentialNavigation = false;
+            ResetSequentialNavigationState();
+            _imageBeforeSequentialNavigation = null;
             _images.Clear();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
             _footprints.Clear();
@@ -95,6 +103,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 _oiLayerSceneProperties = _oiLayer.SceneProperties;
                 _oiLayerSceneProperties.PropertyChanged += OrientedImageryLayer_SceneProperties_PropertyChanged;
             }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SupportsSequentialNavigation)));
+            ChangeNavigationCommandCanExecute();
             MatchSceneProperties();
             UpdateVisibleFootprints();
         }
@@ -108,6 +118,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void OrientedImageryLayer_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (e.PropertyName == nameof(OrientedImageryLayer.SupportsSequentialNavigation))
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SupportsSequentialNavigation)));
+            ChangeNavigationCommandCanExecute();
+            return;
+        }
+
         if (e.PropertyName != nameof(OrientedImageryLayer.SceneProperties))
             return;
 
@@ -128,6 +145,45 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private List<OrientedImage> _images;
     private OrientedImage? _selectedImage;
     private OrientedImageFootprint? _selectedImageFootprint;
+    private bool _isSequentialNavigation;
+    private bool _isFetchingAdjacentImage;
+    private OrientedImage? _nextSequentialImage;
+    private OrientedImage? _previousSequentialImage;
+    private CancellationTokenSource? _adjacentImagesCancellation;
+    private bool _noNextImage;
+    private bool _noPreviousImage;
+    private int _sequentialNavigationVersion;
+    private string? _sequentialNavigationMessage;
+    private OrientedImage? _imageBeforeSequentialNavigation;
+    private bool _isSelectedImageReady;
+
+    /// <summary>
+    /// Gets a value indicating whether the current layer supports sequential navigation.
+    /// </summary>
+    public bool SupportsSequentialNavigation => OrientedImageryLayer?.SupportsSequentialNavigation == true;
+
+    /// <summary>
+    /// Gets a value indicating whether sequential navigation is active.
+    /// </summary>
+    public bool IsSequentialNavigation
+    {
+        get => _isSequentialNavigation;
+        private set
+        {
+            if (_isSequentialNavigation == value) return;
+            ResetSequentialNavigationState();
+            SetProperty(ref _isSequentialNavigation, value);
+        }
+    }
+
+    /// <summary>
+    /// Gets the error message for sequential navigation.
+    /// </summary>
+    public string? SequentialNavigationMessage
+    {
+        get => _sequentialNavigationMessage;
+        private set => SetProperty(ref _sequentialNavigationMessage, value);
+    }
 
     /// <summary>
     /// Gets or sets the currently selected oriented image.
@@ -139,6 +195,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             if (value == _selectedImage) return;
 
+            SetSelectedImageReady(false);
+            ResetSequentialNavigationState();
             SetProperty(ref _selectedImage, value);
 
             if (_selectedImage != null)
@@ -153,8 +211,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             UpdateVisibleFootprints();
             UpdateSelectedCameraMarker();
 
-            ((Command)SelectNextImageCommand).ChangeCanExecute();
-            ((Command)SelectPreviousImageCommand).ChangeCanExecute();
+            ChangeNavigationCommandCanExecute();
+            if (IsSequentialNavigation)
+                _ = PrefetchAdjacentImagesAsync();
         }
     }
 
@@ -183,29 +242,45 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public ICommand SelectPreviousImageCommand { get; private set; }
 
     /// <summary>
+    /// Enters sequential navigation or returns to the current search results.
+    /// </summary>
+    public ICommand ToggleSequentialNavigationCommand { get; private set; }
+
+    /// <summary>
     /// Sets the images to display in the control.
     /// </summary>
     /// <remarks>
     /// Pass the <paramref name="searchPoint"/> parameter to display a marker at the location from which the images were searched.
+    /// Assigning results exits sequential navigation and clears the selected image and any previous navigation state.
     /// </remarks>
     /// <param name="images">The oriented images to display.</param>
     /// <param name="searchPoint">The point from which the images were searched.</param>
     public void SetImages(IEnumerable<OrientedImage> images, MapPoint? searchPoint = null)
     {
-        _images = images.ToList();
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
+        var newImages = images.ToList();
+        IsSequentialNavigation = false;
+        ResetSequentialNavigationState();
+        _imageBeforeSequentialNavigation = null;
+        SelectedImage = null;
+        _images = newImages;
         _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
 
         UpdateSearchPointMarker(searchPoint);
         UpdateCameraMarkers();
         UpdateVisibleFootprints();
 
-        ((Command)SelectNextImageCommand).ChangeCanExecute();
-        ((Command)SelectPreviousImageCommand).ChangeCanExecute();
+        ChangeNavigationCommandCanExecute();
     }
 
-    private void SelectNextImage()
+    private async Task SelectNextImageAsync()
     {
+        if (IsSequentialNavigation)
+        {
+            await FetchAdjacentImageAsync(SequenceStep.Next);
+            return;
+        }
+
         if (_images.Count == 0)
             return;
 
@@ -216,8 +291,14 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         }
     }
 
-    private void SelectPreviousImage()
+    private async Task SelectPreviousImageAsync()
     {
+        if (IsSequentialNavigation)
+        {
+            await FetchAdjacentImageAsync(SequenceStep.Previous);
+            return;
+        }
+
         if (_images.Count == 0)
             return;
 
@@ -226,6 +307,146 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             SelectedImage = _images[currentIndex - 1];
         }
+    }
+
+    private Task ToggleSequentialNavigationAsync()
+    {
+        if (IsSequentialNavigation)
+        {
+            IsSequentialNavigation = false;
+            SelectedImage = _imageBeforeSequentialNavigation;
+            _imageBeforeSequentialNavigation = null;
+            ChangeNavigationCommandCanExecute();
+            return Task.CompletedTask;
+        }
+
+        if (!SupportsSequentialNavigation || SelectedImage == null || !_isSelectedImageReady)
+            return Task.CompletedTask;
+
+        _imageBeforeSequentialNavigation = SelectedImage;
+        IsSequentialNavigation = true;
+        return PrefetchAdjacentImagesAsync();
+    }
+
+    private async Task FetchAdjacentImageAsync(SequenceStep step)
+    {
+        if (!IsSequentialNavigation || _isFetchingAdjacentImage || !SupportsSequentialNavigation || SelectedImage == null || OrientedImageryLayer == null ||
+            (step == SequenceStep.Next ? _noNextImage : _noPreviousImage))
+            return;
+
+        var adjacentImage = step == SequenceStep.Next ? _nextSequentialImage : _previousSequentialImage;
+        if (adjacentImage == null)
+        {
+            var navigationVersion = _sequentialNavigationVersion;
+            await PrefetchAdjacentImagesAsync();
+            if (navigationVersion != _sequentialNavigationVersion)
+                return;
+
+            adjacentImage = step == SequenceStep.Next ? _nextSequentialImage : _previousSequentialImage;
+        }
+
+        if (adjacentImage != null)
+            SelectedImage = adjacentImage;
+    }
+
+    private async Task PrefetchAdjacentImagesAsync()
+    {
+        if (!IsSequentialNavigation || !SupportsSequentialNavigation || SelectedImage == null || OrientedImageryLayer == null || _isFetchingAdjacentImage)
+            return;
+
+        var cancellation = new CancellationTokenSource();
+        _adjacentImagesCancellation = cancellation;
+        var navigationVersion = _sequentialNavigationVersion;
+        _isFetchingAdjacentImage = true;
+        SequentialNavigationMessage = null;
+        ChangeNavigationCommandCanExecute();
+        try
+        {
+            await Task.WhenAll(
+                PrefetchAdjacentImageAsync(OrientedImageryLayer, SelectedImage, SequenceStep.Next, navigationVersion, cancellation.Token),
+                PrefetchAdjacentImageAsync(OrientedImageryLayer, SelectedImage, SequenceStep.Previous, navigationVersion, cancellation.Token));
+        }
+        finally
+        {
+            if (navigationVersion == _sequentialNavigationVersion)
+            {
+                _adjacentImagesCancellation = null;
+                _isFetchingAdjacentImage = false;
+                ChangeNavigationCommandCanExecute();
+            }
+            cancellation.Dispose();
+        }
+    }
+
+    private async Task PrefetchAdjacentImageAsync(OrientedImageryLayer layer, OrientedImage image, SequenceStep step, int navigationVersion, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var adjacentImage = await layer.FetchAdjacentImageAsync(image, step, cancellationToken);
+            if (navigationVersion != _sequentialNavigationVersion || cancellationToken.IsCancellationRequested)
+                return;
+
+            if (step == SequenceStep.Next)
+                _nextSequentialImage = adjacentImage;
+            else
+                _previousSequentialImage = adjacentImage;
+
+            if (adjacentImage == null)
+                SetSequentialNavigationBoundary(step);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+        }
+        catch (ArcGISException exception) when (IsEndOfSequenceError(exception.Message))
+        {
+            if (navigationVersion == _sequentialNavigationVersion && !cancellationToken.IsCancellationRequested)
+                SetSequentialNavigationBoundary(step);
+        }
+        catch (Exception exception)
+        {
+            if (navigationVersion == _sequentialNavigationVersion && !cancellationToken.IsCancellationRequested)
+                SequentialNavigationMessage = string.Format(Properties.Resources.GetString("OrientedImageryViewNavigationFailed") ?? "{0}", exception.Message);
+        }
+    }
+
+    internal static bool IsEndOfSequenceError(string message) =>
+        message.IndexOf("No adjacent image query result is available", StringComparison.OrdinalIgnoreCase) >= 0;
+
+    private void SetSequentialNavigationBoundary(SequenceStep step)
+    {
+        if (step == SequenceStep.Next)
+            _noNextImage = true;
+        else
+            _noPreviousImage = true;
+
+        ChangeNavigationCommandCanExecute();
+    }
+
+    private void ResetSequentialNavigationState()
+    {
+        _sequentialNavigationVersion++;
+        _adjacentImagesCancellation?.Cancel();
+        _adjacentImagesCancellation = null;
+        _isFetchingAdjacentImage = false;
+        _nextSequentialImage = null;
+        _previousSequentialImage = null;
+        _noNextImage = false;
+        _noPreviousImage = false;
+        SequentialNavigationMessage = null;
+    }
+
+    internal void SetSelectedImageReady(bool isReady)
+    {
+        if (_isSelectedImageReady == isReady) return;
+        _isSelectedImageReady = isReady;
+        ((Command)ToggleSequentialNavigationCommand).ChangeCanExecute();
+    }
+
+    private void ChangeNavigationCommandCanExecute()
+    {
+        ((Command)SelectNextImageCommand).ChangeCanExecute();
+        ((Command)SelectPreviousImageCommand).ChangeCanExecute();
+        ((Command)ToggleSequentialNavigationCommand).ChangeCanExecute();
     }
 #endregion Images
 
@@ -408,6 +629,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         get { return _markers; }
     }
 
+    private bool HasUserMarkers => Markers.Any(marker => marker.Tag is not MarkerTag);
+
     /// <summary>
     /// Gets the graphics overlay that contains the marker graphics.
     /// </summary>
@@ -488,6 +711,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void Markers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
+        ((Command)ClearMarkersCommand).ChangeCanExecute();
+
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
@@ -519,12 +744,17 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void ClearMarkers()
     {
+        if (!HasUserMarkers)
+            return;
+
         var searchPointMarker = Markers.FirstOrDefault((marker) => marker.Tag is MarkerTag tag && tag.Identifier == SearchPointMarkerTag.Identifier);
         Markers.Clear();
         UpdateCameraMarkers();
         UpdateSelectedCameraMarker();
         if (searchPointMarker != null)
             Markers.Add(searchPointMarker);
+
+        ((Command)ClearMarkersCommand).ChangeCanExecute();
     }
 
     private void UpdateSearchPointMarker(MapPoint? location)
@@ -618,7 +848,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             new ShowCameraMarkersVM(),
             new AllowAddingMarkersVM(),
             markerSymbolPickerVM,
-            new ClearMarkersVM()
+            new ClearMarkersVM(),
+            new SequentialNavigationVM()
         ];
 
         foreach (var item in items)
