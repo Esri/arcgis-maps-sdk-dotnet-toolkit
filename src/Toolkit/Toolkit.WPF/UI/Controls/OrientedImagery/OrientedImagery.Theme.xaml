@@ -128,18 +128,8 @@
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding ViewModel.ShowSelectedFootprint}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}">
             <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
-                <Grid Width="24" Height="24">
-                    <!-- A font icon was not available for this calcite symbol (trapezoid). Using two manual Paths also allows binding separate colors for fill and stroke. -->
-                    <Path SnapsToDevicePixels="true" Data="M19.384 20H4.616L.349 4h23.302zm-14-1h13.232l3.733-14H1.651z">
-                        <Path.Fill>
-                            <SolidColorBrush Color="{Binding ViewModel.SelectedFootprintOutlineColor, Converter={StaticResource ColorToColorConverter}}" />
-                        </Path.Fill>
-                    </Path>
-                    <Path SnapsToDevicePixels="true" Data="m22.35 5-3.73 14H5.38L1.65 5z">
-                        <Path.Fill>
-                            <SolidColorBrush Color="{Binding ViewModel.SelectedFootprintFillColor, Converter={StaticResource ColorToColorConverter}}" />
-                        </Path.Fill>
-                    </Path>
+                <Grid Width="32" Height="32">
+                    <Path SnapsToDevicePixels="true" Fill="Black" Data="M28.9869 20.3149L30.0339 26.5899C28.6639 26.3499 26.4439 26.0599 23.7139 26.0599C23.5449 26.0599 23.3899 26.0669 23.2279 26.0699L22.1879 27.1099C22.6649 27.0789 23.1699 27.0599 23.7139 27.0599C28.1639 27.0599 31.2539 27.8599 31.2539 27.8599L29.8559 19.4469L28.9869 20.3149ZM14.0529 27.9879C12.6329 28.3739 11.0459 28.6599 8.79392 28.6599C5.78392 28.6599 3.42392 27.7699 2.36392 27.2899L6.04392 5.07993C7.06392 5.37993 8.58392 5.72993 10.5939 5.72993C13.0939 5.72993 14.5939 5.29993 16.0339 4.87993C17.4839 4.45993 18.8539 4.06993 21.3239 4.06993C23.5139 4.06993 25.4339 4.39993 26.3739 4.58993L28.0719 14.7939L29.1319 15.1019L27.2539 3.75993C27.2539 3.75993 24.5839 3.06993 21.3239 3.06993C16.1839 3.06993 15.4039 4.72993 10.5939 4.72993C7.77392 4.72993 5.95392 3.98993 5.25392 3.75993L1.25392 27.8599C1.25392 27.8599 4.34392 29.6599 8.79392 29.6599C11.1669 29.6599 12.8529 29.3499 14.3309 28.9429L14.0529 27.9879ZM10.7539 9.85993C9.92392 9.85993 9.25392 10.5299 9.25392 11.3599C9.25392 12.1899 9.92392 12.8599 10.7539 12.8599C11.5839 12.8599 12.2539 12.1899 12.2539 11.3599C12.2539 10.5299 11.5839 9.85993 10.7539 9.85993ZM10.7539 11.8599C10.4739 11.8599 10.2539 11.6399 10.2539 11.3599C10.2539 11.0799 10.4739 10.8599 10.7539 10.8599C11.0339 10.8599 11.2539 11.0799 11.2539 11.3599C11.2539 11.6399 11.0339 11.8599 10.7539 11.8599ZM12.9699 12.4929C12.7409 12.939 12.3831 13.3059 11.9429 13.5459L13.0966 17.2199L15.3639 25.3399L16.6639 29.7999L29.2539 17.2199L12.9699 12.4929ZM14.0139 17.0699L12.9839 13.5299L27.3539 17.6999L17.1539 27.8999L14.0139 17.0699Z"/>
                 </Grid>
             </Viewbox>
         </ToggleButton>
@@ -148,18 +138,8 @@
     <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
         <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding ViewModel.ShowUnselectedFootprints}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedImageFootprints}">
             <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
-                <Grid Width="24" Height="24">
-                    <!-- See comment on ShowSelectedFootprintToolbarTemplate. -->
-                    <Path SnapsToDevicePixels="true" Data="M19.384 20H4.616L.349 4h23.302zm-14-1h13.232l3.733-14H1.651z">
-                        <Path.Fill>
-                            <SolidColorBrush Color="{Binding ViewModel.UnselectedFootprintOutlineColor, Converter={StaticResource ColorToColorConverter}}" />
-                        </Path.Fill>
-                    </Path>
-                    <Path SnapsToDevicePixels="true" Data="m22.35 5-3.73 14H5.38L1.65 5z">
-                        <Path.Fill>
-                            <SolidColorBrush Color="{Binding ViewModel.UnselectedFootprintFillColor, Converter={StaticResource ColorToColorConverter}}" />
-                        </Path.Fill>
-                    </Path>
+                <Grid Width="32" Height="32">
+                    <Path SnapsToDevicePixels="true" Fill="Black" Data="M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z"/>
                 </Grid>
             </Viewbox>
         </ToggleButton>
@@ -173,78 +153,105 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ViewModel.ShowCameraLocations}" Value="True">
                             <Setter Property="Background" Value="#FFD3D3D3" />
-                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewShowCameraMarkersOnGeoViewAndImageDisplay}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ViewModel.ShowCameraLocationsOnDisplay}" Value="True">
                             <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewClearCameraMarkers}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Button.Style>
-            <Grid Width="32" Height="32">
-                <Viewbox Width="32" Height="32" Stretch="Uniform">
-                    <TextBlock Text="&#xe77a;"
-                           FontSize="24"
-                           FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                           Foreground="Black">
-                        <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ViewModel.ShowCameraLocationsOnDisplay}" Value="True">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                </Viewbox>
-                <Viewbox>
-                    <TextBlock Text="&#xe77d;"
-                           FontSize="24"
-                           FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                           Foreground="Black">
-                        <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ViewModel.ShowCameraLocationsOnDisplay}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                </Viewbox>
-            </Grid>
+            <Viewbox Width="32" Height="32" Stretch="Uniform">
+                <Path Stretch="Uniform"
+                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Data="M11 13H6V12H11V13ZM30 23.5V11.5C29.9983 10.12 28.88 9.00165 27.5 9H27C26.4479 8.99945 26.0006 8.55206 26 8C25.9989 6.89589 25.1041 6.0011 24 6H16C14.8959 6.0011 14.0011 6.89589 14 8C13.9994 8.55206 13.5521 8.99945 13 9H11V8H6V9H4.5C3.11997 9.00165 2.00165 10.12 2 11.5V23.5C2.00165 24.88 3.11997 25.9983 4.5 26H27.5C28.88 25.9983 29.9983 24.88 30 23.5ZM7 10V9H10V10H13C14.1041 9.9989 14.9989 9.10411 15 8C15.0006 7.44794 15.4479 7.00055 16 7H24C24.5521 7.00055 24.9994 7.44794 25 8C25.0011 9.10411 25.8959 9.9989 27 10H27.5C28.328 10.0011 28.9989 10.672 29 11.5V23.5C28.9989 24.328 28.328 24.9989 27.5 25H4.5C3.67203 24.9989 3.0011 24.328 3 23.5V11.5C3.0011 10.672 3.67203 10.0011 4.5 10H7ZM25.8 17C25.8 13.7967 23.2033 11.2 20 11.2C16.7967 11.2 14.2 13.7967 14.2 17C14.2 20.2033 16.7967 22.8 20 22.8C23.2019 22.7967 25.7967 20.2019 25.8 17ZM24.8 17C24.8 19.651 22.651 21.8 20 21.8C17.349 21.8 15.2 19.651 15.2 17C15.2 14.349 17.349 12.2 20 12.2C22.6498 12.2028 24.7972 14.3502 24.8 17Z" />
+            </Viewbox>
         </Button>
     </DataTemplate>
 
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
         <ToggleButton Style="{StaticResource ToolbarToggleButtonStyle}" IsChecked="{Binding ViewModel.AllowAddingMarkers}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
             <Viewbox Width="32" Height="32" Stretch="Uniform">
-                <TextBlock Text="&#xe8ed;"
-                           FontSize="24"
-                           FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                           Foreground="Black" />
+                <Grid Width="32" Height="32">
+                  <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                      Data="M2 2V15L18 14.5V2H2ZM17 13.5L3 14V12.614L4.771 10.843C4.90986 10.8882 5.05498 10.9111 5.201 10.911C5.56558 10.9117 5.9154 10.767 6.173 10.509L8.461 8.219L10.731 10.111C11.2213 10.5202 11.9288 10.538 12.439 10.154L13.639 9.254L17 12.614V13.5ZM13.965 8.165C13.8323 8.03222 13.6221 8.0173 13.472 8.13L11.839 9.355C11.6991 9.46008 11.5053 9.45511 11.371 9.343L8.665 7.087C8.51504 6.9615 8.29403 6.97149 8.156 7.11L5.466 9.8C5.31879 9.94712 5.08021 9.94712 4.933 9.8C4.78579 9.65288 4.54721 9.65288 4.4 9.8L3 11.2V3H17V11.2L13.965 8.165ZM13.5 5.5C13.5 6.05228 13.0523 6.5 12.5 6.5C11.9477 6.5 11.5 6.05228 11.5 5.5C11.5 4.94772 11.9477 4.5 12.5 4.5C13.0523 4.5 13.5 4.94772 13.5 5.5Z" />
+                  <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                      Data="M9 30.583C10.7152 31.3035 12.5643 31.6502 14.424 31.6C19.666 31.6 21.216 29.966 26.458 29.966C28.3174 29.9159 30.1661 30.2626 31.881 30.983L28.831 12.878C27.3906 12.3118 25.8586 12.0142 24.311 12C20.463 12 20.419 13.6 16.571 13.6C15.0363 13.5915 13.461 14.1951 12 13.725L9 30.583ZM16.57 14.6C18.0342 14.6294 19.4865 14.3304 20.82 13.725C21.9117 13.2169 23.1063 12.9687 24.31 13C25.5446 13.0148 26.7694 13.2223 27.94 13.615L30.615 29.487C29.2576 29.135 27.8603 28.9602 26.458 28.967C24.3463 28.9724 22.2445 29.2562 20.207 29.811C18.3228 30.329 16.3781 30.5944 14.424 30.6C12.9652 30.6132 11.5137 30.3938 10.124 29.95L12.853 14.6C14.0718 14.896 15.3158 14.5923 16.57 14.6ZM11.263 29.236C12.2989 29.4822 13.3603 29.6044 14.425 29.6C16.3002 29.5927 18.1661 29.3368 19.974 28.839C22.0878 28.2636 24.2683 27.9701 26.459 27.966C27.4391 27.9644 28.4176 28.0426 29.385 28.2L27.057 14.39C26.1628 14.1398 25.2395 14.0086 24.311 14C23.2378 13.9707 22.1726 14.1933 21.201 14.65C19.7466 15.3043 18.1655 15.6287 16.571 15.6C15.5937 15.596 14.6186 15.5063 13.657 15.332L12.853 20L12.813 20.033L12.803 20.091L12.832 20.124L11.263 29.236ZM26.459 26.966C24.1891 26.9681 21.9295 27.2707 19.739 27.866C18.0078 28.3438 16.2209 28.5906 14.425 28.6C13.7514 28.6015 13.0787 28.5503 12.413 28.447L13.783 20.496C13.876 20.42 13.963 20.337 14.059 20.265C15.446 19.229 17.482 18.55 18.156 18.905C18.317 19.0748 18.4407 19.2765 18.519 19.497C18.7372 20.0519 19.0976 20.5396 19.564 20.911C20.0977 21.2432 20.7231 21.3972 21.35 21.351C21.6029 21.3303 21.8573 21.3609 22.098 21.441C22.5995 21.7905 23.0299 22.2324 23.366 22.743C23.9543 23.6693 24.8012 24.4029 25.802 24.853C26.1575 24.9837 26.5332 25.0507 26.912 25.051C27.2176 25.0351 27.5206 24.9868 27.816 24.907L28.176 27.041C27.611 26.991 27.036 26.966 26.459 26.966ZM16.57 16.6C18.2947 16.6275 20.0046 16.2777 21.58 15.575C22.431 15.1681 23.3671 14.9709 24.31 15C24.9388 15.0043 25.5654 15.0734 26.18 15.206L27.648 23.921C27.4068 23.9884 27.1597 24.0319 26.91 24.051C26.6359 24.0501 26.3641 24.001 26.107 23.906C25.2785 23.5143 24.5814 22.8908 24.1 22.111C23.6888 21.4926 23.1573 20.9634 22.537 20.555C22.1669 20.3872 21.76 20.3166 21.355 20.35C20.9169 20.3907 20.4768 20.2972 20.093 20.082C19.7656 19.8039 19.5144 19.447 19.363 19.045C19.2194 18.6293 18.9486 18.2692 18.589 18.016C18.2912 17.8655 17.9606 17.7913 17.627 17.8C16.3346 17.913 15.0934 18.3584 14.024 19.093L14.476 16.467C15.1709 16.5543 15.8696 16.5987 16.57 16.6ZM20.499 17.3C20.499 16.7477 20.9467 16.3 21.499 16.3C22.0513 16.3 22.499 16.7477 22.499 17.3C22.499 17.8523 22.0513 18.3 21.499 18.3C20.9467 18.3 20.499 17.8523 20.499 17.3ZM23.499 19.3C23.499 18.7477 23.9467 18.3 24.499 18.3C25.0513 18.3 25.499 18.7477 25.499 19.3C25.499 19.8523 25.0513 20.3 24.499 20.3C23.9467 20.3 23.499 19.8523 23.499 19.3Z" />
+                  <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                      Data="M28.3326 9.27547L26.4369 11.2038L24.5086 9.308L24.9826 8.82593L26.1385 9.96241C26.2647 9.21671 26.5686 6.5932 24.95 5.0019C23.0589 3.14271 19.795 3.93234 19.7619 3.94056L19.5972 3.28512C19.7453 3.24745 23.2594 2.39173 25.424 4.51983C27.135 6.20199 26.9962 8.75263 26.8456 9.82378L27.8506 8.80154L28.3326 9.27547Z" />
+                  <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                      Data="M2.17034 17.3521L4.51216 16.0001L5.86421 18.3419L5.27875 18.6799L4.46822 17.276C4.14753 17.961 3.15407 20.408 4.28899 22.3738C5.61496 24.6704 8.97122 24.781 9.00529 24.7819L8.98905 25.4576C8.83624 25.4543 5.22129 25.3406 3.70353 22.7118C2.50382 20.6338 3.31868 18.2129 3.74983 17.2208L2.50836 17.9376L2.17034 17.3521Z" />
+                </Grid>
             </Viewbox>
         </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
         <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding ViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
-            <controls:SymbolDisplay Width="32" Height="32" Symbol="{Binding SelectedSymbol, Mode=OneWay}" IsTabStop="False" Focusable="False" />
+            <Viewbox Width="32" Height="32" Stretch="Uniform">
+                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Data="M23 14.8499C21.843 14.8499 20.7119 14.5068 19.7499 13.864C18.7879 13.2212 18.0381 12.3076 17.5953 11.2386C17.1525 10.1697 17.0367 8.99342 17.2624 7.85863C17.4881 6.72384 18.0453 5.68147 18.8634 4.86333C19.6816 4.04519 20.7239 3.48803 21.8587 3.26231C22.9935 3.03659 24.1698 3.15244 25.2387 3.59521C26.3076 4.03798 27.2213 4.78779 27.8641 5.74982C28.5069 6.71185 28.85 7.84288 28.85 8.99991C28.8481 10.5509 28.2312 12.0377 27.1345 13.1344C26.0378 14.2311 24.5509 14.8481 23 14.8499ZM23 4.04991C22.021 4.04991 21.064 4.34022 20.2499 4.88413C19.4359 5.42804 18.8014 6.20113 18.4268 7.10562C18.0521 8.01012 17.9541 9.0054 18.1451 9.9656C18.3361 10.9258 18.8076 11.8078 19.4998 12.5001C20.1921 13.1924 21.0741 13.6638 22.0343 13.8548C22.9945 14.0458 23.9898 13.9478 24.8943 13.5731C25.7988 13.1985 26.5719 12.564 27.1158 11.75C27.6597 10.936 27.95 9.97892 27.95 8.99991C27.9484 7.68757 27.4264 6.42944 26.4984 5.50148C25.5705 4.57352 24.3123 4.05149 23 4.04991ZM14.262 23.9899L4.623 23.9999L2 15.1059L9.5 9.99991L17 15.1099L14.262 23.9899ZM5.377 22.9999H13.517L15.799 15.5199L9.5 11.2359L3.191 15.5219L5.377 22.9999ZM23.5 18.2349L18 22.3089L20.399 28.9999H26.791L29 22.3099L23.5 18.2349Z" />
+            </Viewbox>
         </Button>
     </DataTemplate>
 
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
-        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding ViewModel.ClearMarkersCommand}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
+        <Button Style="{StaticResource ToolbarButtonStyle}"
+                Command="{Binding ViewModel.ClearMarkersCommand}"
+                ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
             <Viewbox Width="28" Height="28" Stretch="Uniform">
                 <TextBlock Text="&#xe83e;"
                            FontSize="24"
                            FontFamily="{StaticResource ToolkitIconsFontFamily}"
                            Foreground="Black" />
             </Viewbox>
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SequentialNavigationToolbarTemplate" DataType="controls:SequentialNavigationVM">
+        <Button Command="{Binding ViewModel.ToggleSequentialNavigationCommand}"
+                IsEnabled="{Binding ViewModel.SupportsSequentialNavigation}">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+                    <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigation}" Value="True">
+                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Grid Width="28" Height="28">
+                <Path Width="28"
+                      Height="28"
+                      Stretch="Uniform"
+                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z">
+                    <Path.Style>
+                        <Style TargetType="{x:Type Path}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigation}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                </Path>
+                <Path Width="28"
+                      Height="28"
+                      Stretch="Uniform"
+                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Data="M4 18H3V29H29V3H12V4H28V28H4V18ZM5.66 13.354L1.807 9.5L5.66 5.646L6.367 6.353L3.767 9H11.5C13.7489 8.9923 15.9086 9.87918 17.503 11.4652C19.0974 13.0512 19.9958 15.2061 20 17.455V22.855H19V17.455C18.9956 13.3147 15.6403 9.95941 11.5 9.955H3.675L6.367 12.646L5.66 13.354Z">
+                    <Path.Style>
+                        <Style TargetType="{x:Type Path}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigation}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                </Path>
+            </Grid>
         </Button>
     </DataTemplate>
 
@@ -289,6 +296,7 @@
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
                     <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
+                    <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SequentialNavigationVM}" Template="{StaticResource SequentialNavigationToolbarTemplate}" />
                 </controls:OrientedImageryViewTemplateSelector>
             </Setter.Value>
         </Setter>
@@ -304,6 +312,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
@@ -427,7 +436,72 @@
                                 </Button>
                             </Grid>
 
-                            <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="2" />
+                            <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="2">
+                                <local:Paginator.Style>
+                                    <Style TargetType="{x:Type local:Paginator}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.IsSequentialNavigation}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </local:Paginator.Style>
+                            </local:Paginator>
+                            <StackPanel Grid.Row="2"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.IsSequentialNavigation, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button Style="{StaticResource PaginatorNavigationButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                                    <TextBlock Text="&lt;" />
+                                </Button>
+                                <Button Content="Prev"
+                                        Style="{StaticResource PaginatorPageButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}" />
+                                <Grid Width="35" Height="32">
+                                    <TextBlock Text="."
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Foreground="#151515"
+                                               FontSize="14" />
+                                    <Border Height="2"
+                                            Margin="1,0"
+                                            VerticalAlignment="Bottom"
+                                            Background="#007AC2" />
+                                </Grid>
+                                <Button Content="Next"
+                                        Style="{StaticResource PaginatorPageButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}" />
+                                <Button Style="{StaticResource PaginatorNavigationButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                                    <TextBlock Text="&gt;" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock Grid.Row="3"
+                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationMessage}"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       Margin="8,0,8,4">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationMessage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Grid>
                     </Border>
                 </ControlTemplate>
