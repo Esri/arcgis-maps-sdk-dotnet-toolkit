@@ -92,40 +92,8 @@ public class ShowUnselectedFootprintsVM : OrientedImageryToolbarItemBase { }
 /// </summary>
 public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
 {
-    private CameraMarkerDisplayMode DisplayMode
-    {
-        get
-        {
-            if (ViewModel == null || !ViewModel.ShowCameraLocations)
-                return CameraMarkerDisplayMode.Off;
-
-            return ViewModel.ShowCameraLocationsOnDisplay ? CameraMarkerDisplayMode.All : CameraMarkerDisplayMode.GeoView;
-        }
-        set
-        {
-            if (ViewModel == null)
-                return;
-
-            switch (value)
-            {
-                case CameraMarkerDisplayMode.Off:
-                    ViewModel.ShowCameraLocations = false;
-                    ViewModel.ShowCameraLocationsOnDisplay = false;
-                    break;
-                case CameraMarkerDisplayMode.GeoView:
-                    ViewModel.ShowCameraLocations = true;
-                    ViewModel.ShowCameraLocationsOnDisplay = false;
-                    break;
-                case CameraMarkerDisplayMode.All:
-                    ViewModel.ShowCameraLocations = true;
-                    ViewModel.ShowCameraLocationsOnDisplay = true;
-                    break;
-            }
-        }
-    }
-
     /// <summary>
-    /// Advances to the next camera marker display mode.
+    /// Toggles camera markers between map-only visibility and hidden on both map and image.
     /// </summary>
     public ICommand ToggleCameraMarkerDisplayMode { get; }
 
@@ -140,21 +108,10 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
             if (ViewModel == null)
                 return;
 
-            DisplayMode = DisplayMode switch
-            {
-                CameraMarkerDisplayMode.Off => CameraMarkerDisplayMode.GeoView,
-                CameraMarkerDisplayMode.GeoView => CameraMarkerDisplayMode.All,
-                _ => CameraMarkerDisplayMode.Off,
-            };
+            ViewModel.ShowCameraLocationsOnDisplay = false;
+            ViewModel.ShowCameraLocations = !ViewModel.ShowCameraLocations;
         },
         canExecute: () => true);
-    }
-
-    private enum CameraMarkerDisplayMode
-    {
-        Off,
-        GeoView,
-        All,
     }
 }
 
@@ -162,6 +119,11 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
 /// View model for the "Clear Markers" toolbar control in the Oriented Imagery View.
 /// </summary>
 public class ClearMarkersVM : OrientedImageryToolbarItemBase { }
+
+/// <summary>
+/// View model for the sequential navigation toolbar control in the Oriented Imagery View.
+/// </summary>
+public class SequentialNavigationVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
 /// View model for the "Select New Marker Symbol" toolbar control in the Oriented Imagery View.
