@@ -138,7 +138,7 @@
                                                         AutomationHeadingLevel="Level2" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                                         AutomationHeadingLevel="Level3" IsAccessible="{Binding Description,Converter={StaticResource EmptyStringToBooleanConverter}}" />
-                        <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
+                        <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single" AutomationProperties.Name="{Binding Path=Title}" KeyboardNavigation.AcceptsReturn="True">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
