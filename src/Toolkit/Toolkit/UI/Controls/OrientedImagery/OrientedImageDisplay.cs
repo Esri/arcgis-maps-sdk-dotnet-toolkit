@@ -311,12 +311,18 @@ public partial class OrientedImageDisplay
 
     private void OnDisplayImageClicked(object? sender, ImageClickedEventArgs e) => ImageClicked?.Invoke(this, e);
 
-    // An unsupported image type has no display, so its error is merged in here.
+    // An unsupported image type has no display, so its error is merged in here. StateChanged fires only on a change.
     private void UpdateState()
     {
-        SetValue(IsBusyPropertyKey, _unsupportedError is null && (_activeDisplay?.IsBusy ?? false));
-        SetValue(IsInteractivePropertyKey, _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false));
-        SetValue(ErrorPropertyKey, _unsupportedError ?? _activeDisplay?.Error);
+        bool busy = _unsupportedError is null && (_activeDisplay?.IsBusy ?? false);
+        bool interactive = _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false);
+        Exception? error = _unsupportedError ?? _activeDisplay?.Error;
+        if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
+            return;
+
+        SetValue(IsBusyPropertyKey, busy);
+        SetValue(IsInteractivePropertyKey, interactive);
+        SetValue(ErrorPropertyKey, error);
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
