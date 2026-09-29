@@ -4,13 +4,11 @@ using System.Windows.Input;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 
 /// <summary>
-/// Should hold a list of buttons. 
+/// Displays an adaptive, centered range of equally sized page buttons.
 /// </summary>
 internal class PaginatorPresenterPanel : Panel
 {
-    private int _visibleChildrenStart = 0;
-    private int _visibleChildrenEnd = 0;
-    private Size _requestedSize;
+    private Size _pageSize;
 
     /// <summary>
     /// Gets or sets the index of the currently-selected page.
@@ -44,72 +42,47 @@ internal class PaginatorPresenterPanel : Panel
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        var currentPage = SelectedPageIndex > -1 ? SelectedPageIndex : 0;
-        var totalPagesCount = TotalPages;
-
-        if (totalPagesCount < 1)
-            return new Size(0, 0);
-
-        InternalChildren[currentPage].Measure(availableSize);
-        var desiredSize = InternalChildren[currentPage].DesiredSize;
-
-        if (desiredSize.Width >= availableSize.Width)
+        _pageSize = new Size();
+        var pageCount = Math.Min(TotalPages, InternalChildren.Count);
+        // Include offscreen labels so navigating across a digit boundary does not resize the buttons.
+        for (var i = 0; i < pageCount; i++)
         {
-            _visibleChildrenStart = currentPage;
-            _visibleChildrenEnd = currentPage;
-            _requestedSize = desiredSize;
-            return desiredSize;
+            var child = InternalChildren[i];
+            child.Measure(new Size(double.PositiveInfinity, availableSize.Height));
+            _pageSize.Width = Math.Max(_pageSize.Width, child.DesiredSize.Width);
+            _pageSize.Height = Math.Max(_pageSize.Height, child.DesiredSize.Height);
         }
 
-        var i = 1;
-        while (true)
-        {
-            var lId = currentPage - i;
-            var rId = currentPage + i;
-            double additionalWidth = 0;
-            double height = desiredSize.Height;
+        return new Size(GetVisiblePageCount(availableSize.Width, pageCount) * _pageSize.Width, _pageSize.Height);
+    }
 
-            if (lId >= 0)
-            {
-                InternalChildren[lId].Measure(availableSize);
-                additionalWidth += InternalChildren[lId].DesiredSize.Width;
-                height = Math.Max(height, InternalChildren[lId].DesiredSize.Height);
-            }
+    private int GetVisiblePageCount(double availableWidth, int pageCount)
+    {
+        if (pageCount < 1)
+            return 0;
 
-            if (rId < totalPagesCount)
-            {
-                InternalChildren[rId].Measure(availableSize);
-                additionalWidth += InternalChildren[rId].DesiredSize.Width;
-                height = Math.Max(height, InternalChildren[rId].DesiredSize.Height);
-            }
+        if (_pageSize.Width == 0 || availableWidth >= pageCount * _pageSize.Width)
+            return pageCount;
 
-            if ((desiredSize.Width + additionalWidth >= availableSize.Width) || (lId < 0 && rId >= totalPagesCount))
-            {
-                _visibleChildrenStart = Math.Max(0, lId + 1);
-                _visibleChildrenEnd = Math.Min(totalPagesCount, rId - 1);
-                break;
-            }
-
-            desiredSize.Width += additionalWidth;
-            desiredSize.Height = height;
-            i++;
-        }
-
-        _requestedSize = desiredSize;
-        return desiredSize;
+        var count = Math.Max(1, (int)(availableWidth / _pageSize.Width));
+        return count % 2 == 0 ? count - 1 : count;
     }
 
     protected override Size ArrangeOverride(Size finalSize)
     {
-        var left = Math.Max(0, (finalSize.Width - _requestedSize.Width) / 2);
-        for (var i = 0; i < TotalPages; i++)
+        var pageCount = Math.Min(TotalPages, InternalChildren.Count);
+        var visibleCount = GetVisiblePageCount(finalSize.Width, pageCount);
+        var currentPage = Math.Max(0, Math.Min(SelectedPageIndex, pageCount - 1));
+        var start = Math.Max(0, Math.Min(currentPage - visibleCount / 2, pageCount - visibleCount));
+        var left = Math.Max(0, (finalSize.Width - visibleCount * _pageSize.Width) / 2);
+        for (var i = 0; i < InternalChildren.Count; i++)
         {
             var child = InternalChildren[i];
-            if (i >= _visibleChildrenStart && i <= _visibleChildrenEnd)
+            if (i >= start && i < start + visibleCount)
             {
                 var top = Math.Max(0, (finalSize.Height - child.DesiredSize.Height) / 2);
-                child.Arrange(new Rect(new Point(left, top), child.DesiredSize));
-                left += child.DesiredSize.Width;
+                child.Arrange(new Rect(left, top, _pageSize.Width, child.DesiredSize.Height));
+                left += _pageSize.Width;
                 if (child is Control childControl)
                     childControl.IsTabStop = true;
                 else if (child is ContentPresenter childPresenter)
@@ -125,6 +98,6 @@ internal class PaginatorPresenterPanel : Panel
             }
         }
 
-        return _requestedSize;
+        return finalSize;
     }
 }
