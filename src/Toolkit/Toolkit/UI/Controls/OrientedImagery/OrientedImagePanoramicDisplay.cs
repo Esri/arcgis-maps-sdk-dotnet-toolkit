@@ -220,12 +220,16 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         });
     }
 
-    // Image-anchored markers use their pixel directly; world-anchored markers project through the camera model.
+    // Image-anchored markers use their pixel directly, on their own image only; world-anchored markers project through
+    // the camera model.
     private static async Task<(float U, float V)?> ResolveUvAsync(OrientedImageMarkerPosition position, OrientedImage image, int imageWidth, int imageHeight)
     {
         PointF pixel;
         if (position.ImagePoint is PointF imagePoint)
         {
+            if (!ReferenceEquals(position.Image, image))
+                return null;
+
             pixel = imagePoint;
         }
         else if (position.Location is MapPoint location)
