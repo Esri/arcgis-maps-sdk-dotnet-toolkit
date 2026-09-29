@@ -4,15 +4,17 @@ using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Color = System.Drawing.Color;
 using PointF = System.Drawing.PointF;
 
 namespace Toolkit.Tests;
 
 /// <summary>
 /// Contracts of <see cref="OrientedImageDisplay"/> and its inner displays that hold without a running app:
-/// template re-hosting, marker subscriptions that must not retain a discarded display, marker positions, read-only
-/// state properties, accessibility, and the visible-area clipping math.
+/// template re-hosting, marker subscriptions that must not retain a discarded display, marker positions and offsets,
+/// read-only state properties, accessibility, and the visible-area clipping math.
 /// </summary>
 [TestClass]
 public sealed class OrientedImageDisplayTests
@@ -74,6 +76,24 @@ public sealed class OrientedImageDisplayTests
     {
         // An image point is drawn only on the image it belongs to, so it cannot exist without one.
         Assert.ThrowsExactly<ArgumentNullException>(() => OrientedImageMarkerPosition.FromImagePoint(null!, new PointF(10f, 10f)));
+    }
+
+    [TestMethod]
+    public void PanoramicMarkerOffsetTurnsWithSymbolAngle()
+    {
+        // The map rotates a marker clockwise around its anchor, offset included; screen y points down.
+        AssertOffset(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10), 0, 0);
+        AssertOffset(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10) { OffsetX = 15, OffsetY = 20 }, 15, -20);
+        AssertOffset(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10) { OffsetX = 10, Angle = 90 }, 0, 10);
+        AssertOffset(new PictureMarkerSymbol(new Uri("https://example.com/pin.png")) { OffsetY = 16, Angle = 90 }, 16, 0);
+        AssertOffset(new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2), 0, 0);
+
+        static void AssertOffset(Symbol symbol, double x, double y)
+        {
+            (double X, double Y) offset = OrientedImagePanoramicDisplay.GetMarkerOffset(symbol);
+            Assert.AreEqual(x, offset.X, 1e-9, $"{symbol.GetType().Name} X");
+            Assert.AreEqual(y, offset.Y, 1e-9, $"{symbol.GetType().Name} Y");
+        }
     }
 
     [TestMethod]

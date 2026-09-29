@@ -344,7 +344,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         }
         else if (position.Location is MapPoint location && Footprint?.OrientedImage is OrientedImage image)
         {
-            // Core fails every later transform on an image whose first transform ran before load; PresentAsync retries after load.
+            // A transform attempted before the image loads makes every later transform on it fail; PresentAsync retries after load.
             if (image.LoadStatus != LoadStatus.Loaded)
                 return null;
 
