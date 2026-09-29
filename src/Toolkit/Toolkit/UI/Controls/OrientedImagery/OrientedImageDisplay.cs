@@ -126,7 +126,7 @@ public partial class OrientedImageDisplay
     /// a planar image calls <see cref="OrientedImageFootprint.UpdateFootprintAsync(System.Collections.Generic.IEnumerable{System.Drawing.PointF}, System.Threading.CancellationToken)"/>,
     /// a 360 image calls <see cref="OrientedImageFootprint.UpdateFootprintAsync(double, double, double, double, System.Threading.CancellationToken)"/>. This control does not draw the footprint.
     /// </remarks>
-    /// <value>A value indicating whether the footprint is automatically updated. The default is <c>false</c>.</value>
+    /// <value>A value indicating whether the footprint is automatically updated. The default is <c>true</c>.</value>
     public bool AutoUpdateFootprint
     {
         get => (bool)GetValue(AutoUpdateFootprintProperty);
@@ -182,7 +182,7 @@ public partial class OrientedImageDisplay
     /// Identifies the <see cref="AutoUpdateFootprint"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty AutoUpdateFootprintProperty =
-        PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(AutoUpdateFootprint), false, (s, oldValue, newValue) => s._activeDisplay?.SetAutoUpdateFootprint(newValue));
+        PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(AutoUpdateFootprint), true, (s, oldValue, newValue) => s._activeDisplay?.SetAutoUpdateFootprint(newValue));
 
     // Computed state, read-only where the platform supports it (see PropertyHelper.CreateReadOnlyProperty).
     private static readonly DependencyPropertyKey IsBusyPropertyKey =
