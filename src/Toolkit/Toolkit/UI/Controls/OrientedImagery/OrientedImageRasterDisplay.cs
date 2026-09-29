@@ -336,6 +336,10 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         PointF pixel;
         if (position.ImagePoint is PointF imagePoint)
         {
+            // An image point belongs to one image and is never drawn on another.
+            if (!ReferenceEquals(position.Image, Footprint?.OrientedImage))
+                return null;
+
             pixel = imagePoint;
         }
         else if (position.Location is MapPoint location && Footprint?.OrientedImage is OrientedImage image)
