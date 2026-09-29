@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using PointF = System.Drawing.PointF;
 
@@ -10,8 +11,8 @@ namespace Toolkit.Tests;
 
 /// <summary>
 /// Contracts of <see cref="OrientedImageDisplay"/> and its inner displays that hold without a running app:
-/// template re-hosting, marker subscriptions that must not retain a discarded display, read-only state
-/// properties, accessibility, and the visible-area clipping math.
+/// template re-hosting, marker subscriptions that must not retain a discarded display, marker positions, read-only
+/// state properties, accessibility, and the visible-area clipping math.
 /// </summary>
 [TestClass]
 public sealed class OrientedImageDisplayTests
@@ -44,7 +45,7 @@ public sealed class OrientedImageDisplayTests
         {
             var markers = new ObservableCollection<OrientedImageMarker>
             {
-                new(OrientedImageMarkerPosition.FromImagePoint(new PointF(10f, 10f))),
+                new(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0))),
             };
 
             WeakReference weakDisplay = CreateDiscardedDisplay(markers);
@@ -66,6 +67,13 @@ public sealed class OrientedImageDisplayTests
         var display = new OrientedImagePanoramicDisplay();
         display.SetMarkers(markers);
         return new WeakReference(display);
+    }
+
+    [TestMethod]
+    public void ImagePointPositionRequiresItsImage()
+    {
+        // An image point is drawn only on the image it belongs to, so it cannot exist without one.
+        Assert.ThrowsExactly<ArgumentNullException>(() => OrientedImageMarkerPosition.FromImagePoint(null!, new PointF(10f, 10f)));
     }
 
     [TestMethod]
