@@ -431,19 +431,25 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         RaiseImageClicked(new OrientedImageDisplay.ImageClickedEventArgs(pixel, image, marker));
     }
 
-    // Returns the nearest visible marker drawn within the hit tolerance of the tap, or null. A marker is drawn at its
-    // projected anchor plus its symbol offset.
     private OrientedImageMarker? HitTestMarker(PanoramaCameraState camera, double x, double y)
     {
-        OrientedImageMarker? hit = null;
         double dip = 1d;
 #if __ANDROID__
         dip = GetScaleFactor(); // Android taps and view sizes are physical pixels; the tolerance and offsets are in DIPs
 #endif
+        return HitTestMarker(_resolvedMarkers, camera, _surface.ActualWidth, _surface.ActualHeight, x, y, dip);
+    }
+
+    // Returns the nearest marker drawn within the hit tolerance of the tap, or null. A marker is drawn at its projected
+    // anchor plus its symbol offset. dip converts DIPs to view units; it is 1 where the view measures in DIPs.
+    internal static OrientedImageMarker? HitTestMarker(IReadOnlyList<ResolvedMarker> markers, PanoramaCameraState camera,
+        double viewWidth, double viewHeight, double x, double y, double dip)
+    {
+        OrientedImageMarker? hit = null;
         double best = MarkerHitTolerance * dip;
-        foreach (ResolvedMarker resolved in _resolvedMarkers)
+        foreach (ResolvedMarker resolved in markers)
         {
-            if (!camera.TryNormalizedUvToScreen(resolved.U, resolved.V, _surface.ActualWidth, _surface.ActualHeight, out double sx, out double sy))
+            if (!camera.TryNormalizedUvToScreen(resolved.U, resolved.V, viewWidth, viewHeight, out double sx, out double sy))
                 continue;
 
             sx += resolved.OffsetX * dip;
@@ -615,6 +621,6 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     // A marker resolved to a normalized (u,v) and its symbol offset in DIPs, kept on the UI side for tap hit-testing
     // (the surface owns the GPU side).
-    private readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY);
+    internal readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY);
 }
 #endif
