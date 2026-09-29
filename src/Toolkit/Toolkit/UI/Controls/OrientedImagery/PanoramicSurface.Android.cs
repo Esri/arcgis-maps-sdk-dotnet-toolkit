@@ -689,7 +689,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
             ThrowOnGlError("marker texture upload");
             GLES20.GlBindTexture(GLES20.GlTexture2d, 0);
-            _glMarkers.Add(new GlMarker(textureId, swatch.U, swatch.V, swatch.Width, swatch.Height));
+            _glMarkers.Add(new GlMarker(textureId, swatch.U, swatch.V, swatch.Width, swatch.Height, swatch.OffsetX, swatch.OffsetY));
         }
 
         DrawCore();
@@ -770,7 +770,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             HandleEglFailure("eglSwapBuffers");
     }
 
-    // Screen-aligned alpha-blended quads sized to the swatch, projected with the shared camera math, drawn with an identity MVP.
+    // Screen-aligned alpha-blended quads sized to the swatch and shifted by the symbol offset, projected with the shared
+    // camera math, drawn with an identity MVP.
     private void DrawMarkers(int width, int height, float yaw, float pitch, float fov)
     {
         if (_glMarkers.Count == 0 || _markerQuadBuffer is null || _markerQuadUvBuffer is null)
@@ -789,6 +790,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             if (!camera.TryNormalizedUvToScreen(marker.U, marker.V, width, height, out double sx, out double sy))
                 continue; // behind the camera
 
+            sx += marker.OffsetX;
+            sy += marker.OffsetY;
             float cx = (float)((sx / width * 2.0) - 1.0);
             float cy = (float)(1.0 - (sy / height * 2.0));
             float halfW = marker.Width / (float)width;
@@ -968,9 +971,10 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     #endregion
 
-    // Same nested name and shape as the Windows PanoramicSurface.MarkerSwatch so the display code is shared.
-    internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height);
+    // Same nested name and shape as the Windows PanoramicSurface.MarkerSwatch so the display code is shared. The offset
+    // runs from the anchor to the swatch center, in device pixels with y down.
+    internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY);
 
-    private readonly record struct GlMarker(int TextureId, float U, float V, int Width, int Height);
+    private readonly record struct GlMarker(int TextureId, float U, float V, int Width, int Height, float OffsetX, float OffsetY);
 }
 #endif

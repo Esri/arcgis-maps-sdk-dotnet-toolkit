@@ -124,6 +124,8 @@ internal sealed unsafe partial class PanoramicSurface
     private float[] _markerV = [];
     private float[] _markerW = [];
     private float[] _markerH = [];
+    private float[] _markerOffsetX = [];
+    private float[] _markerOffsetY = [];
     private nint[] _markerTextures = [];
     private nint[] _markerViews = [];
     private int[] _visibleBase = [];
@@ -670,6 +672,8 @@ internal sealed unsafe partial class PanoramicSurface
             _markerV = new float[count];
             _markerW = new float[count];
             _markerH = new float[count];
+            _markerOffsetX = new float[count];
+            _markerOffsetY = new float[count];
             _markerTextures = new nint[count];
             _markerViews = new nint[count];
             _visibleBase = new int[count];
@@ -684,6 +688,8 @@ internal sealed unsafe partial class PanoramicSurface
             _markerV[i] = marker.V;
             _markerW[i] = marker.Width;
             _markerH[i] = marker.Height;
+            _markerOffsetX[i] = marker.OffsetX;
+            _markerOffsetY[i] = marker.OffsetY;
             _markerTextures[i] = (nint)texture;
             _markerViews[i] = (nint)view;
         }
@@ -699,7 +705,8 @@ internal sealed unsafe partial class PanoramicSurface
     }
 
     // Projects each marker to NDC with the frame's camera, fills the dynamic vertex buffer, and draws the visible ones
-    // as alpha-blended textured quads sized to the swatch's pixel dimensions. Markers behind the camera are skipped.
+    // as alpha-blended textured quads sized to the swatch's pixel dimensions and shifted by the symbol offset. Markers
+    // behind the camera are skipped.
     private void DrawMarkers(uint width, uint height, in Matrix4x4 worldViewProjection)
     {
         if (_markerCount == 0 || _markerVertexBuffer is null || _markerVertexShader is null || _markerPixelShader is null ||
@@ -719,8 +726,9 @@ internal sealed unsafe partial class PanoramicSurface
             if (clip.W <= 0f)
                 continue;
 
-            float ndcX = clip.X / clip.W;
-            float ndcY = clip.Y / clip.W;
+            // The offset is in device pixels with y down; NDC spans 2 units per viewport and points y up.
+            float ndcX = (clip.X / clip.W) + (2f * _markerOffsetX[i] / width);
+            float ndcY = (clip.Y / clip.W) - (2f * _markerOffsetY[i] / height);
             float halfX = _markerW[i] / width;
             float halfY = _markerH[i] / height;
             int b = visible * 4;
@@ -873,7 +881,8 @@ internal sealed unsafe partial class PanoramicSurface
 
     private readonly record struct MarkerVertex(Vector2 Position, Vector2 TexCoord);
 
-    // A resolved marker ready for the GPU: a tightly-packed BGRA8 swatch and the normalized (u,v) it sits at.
-    internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height);
+    // A resolved marker ready for the GPU: a tightly-packed BGRA8 swatch, the normalized (u,v) of its anchor, and the
+    // symbol offset from the anchor to the swatch center in device pixels, y down.
+    internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY);
 }
 #endif
