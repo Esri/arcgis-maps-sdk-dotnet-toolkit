@@ -517,7 +517,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return value >= -margin && value <= max + margin;
     }
 
-    // Maps a point in the display's map space back to an image pixel (to report ImageClicked in image coordinates).
+    // Maps a point in the display's map space back to an image pixel (to report ImageTapped in image coordinates).
     private PointF? MapToPixel(MapPoint mapPoint)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
@@ -545,14 +545,14 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         }
         catch
         {
-            // Identify can fail during map teardown. Report the image click without a marker.
+            // Identify can fail during map teardown. Report the tap without a marker.
         }
 
         // The image may have changed while identifying; the captured pixel is in the old image's space.
         if (token.IsCancellationRequested)
             return;
 
-        RaiseImageClicked(new OrientedImageDisplay.ImageClickedEventArgs(imagePoint, image, marker));
+        RaiseImageTapped(new OrientedImageDisplay.ImageTappedEventArgs(imagePoint, image, marker));
     }
 
     private void OnViewpointChanged(object? sender, EventArgs e) => UpdateFootprint();

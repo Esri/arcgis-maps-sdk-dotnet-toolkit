@@ -63,7 +63,7 @@ public readonly struct OrientedImageMarkerPosition : IEquatable<OrientedImageMar
 
     /// <summary>
     /// Creates a position anchored to a pixel of <paramref name="image"/>, for example from an
-    /// <see cref="OrientedImageDisplay.ImageClicked"/> event.
+    /// <see cref="OrientedImageDisplay.ImageTapped"/> event.
     /// </summary>
     /// <param name="image">The image the pixel belongs to. The marker is drawn only while this image is displayed.</param>
     /// <param name="imagePoint">The image-space pixel coordinate.</param>
