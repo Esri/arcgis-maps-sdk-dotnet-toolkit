@@ -203,8 +203,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             if (swatch is not (byte[] bgra, int width, int height))
                 continue;
 
-            resolved.Add(new ResolvedMarker(marker, u, v));
-            swatches.Add(new PanoramicSurface.MarkerSwatch(u, v, bgra, width, height));
+            (double offsetX, double offsetY) = GetMarkerOffset(symbol);
+            resolved.Add(new ResolvedMarker(marker, u, v, offsetX, offsetY));
+            swatches.Add(new PanoramicSurface.MarkerSwatch(u, v, bgra, width, height, (float)(offsetX * scale), (float)(offsetY * scale)));
         }
 
         this.Dispatch(() =>
@@ -287,6 +288,20 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
     }
 
+    // Where a symbol draws relative to its anchor, in DIPs with y down. The map rotates a marker clockwise around its
+    // anchor, so the offset turns with the angle; swatches include the angle but not the offset. Composite and
+    // multilayer symbols carry per-layer offsets that one swatch cannot represent.
+    internal static (double X, double Y) GetMarkerOffset(Symbol symbol)
+    {
+        if (symbol is not MarkerSymbol marker)
+            return (0d, 0d);
+
+        double angle = marker.Angle * Math.PI / 180d;
+        double cos = Math.Cos(angle);
+        double sin = Math.Sin(angle);
+        return ((marker.OffsetX * cos) + (marker.OffsetY * sin), (marker.OffsetX * sin) - (marker.OffsetY * cos));
+    }
+
     private static byte[] ReadAllBytes(Stream stream)
     {
         if (stream is MemoryStream memory)
@@ -331,7 +346,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     private void OnCameraChanged() => UpdateFootprint();
 
-    // Core derives the 360 ground footprint from the camera orientation and the view's angular extent.
+    // UpdateFootprintAsync derives the 360 ground footprint from the camera orientation and the view's angular extent.
     protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
     {
         double width = _surface.ActualWidth;
@@ -416,19 +431,23 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         RaiseImageClicked(new OrientedImageDisplay.ImageClickedEventArgs(pixel, image, marker));
     }
 
-    // Returns the nearest visible marker whose projected screen position is within the hit tolerance of the tap, or null.
+    // Returns the nearest visible marker drawn within the hit tolerance of the tap, or null. A marker is drawn at its
+    // projected anchor plus its symbol offset.
     private OrientedImageMarker? HitTestMarker(PanoramaCameraState camera, double x, double y)
     {
         OrientedImageMarker? hit = null;
-        double best = MarkerHitTolerance;
+        double dip = 1d;
 #if __ANDROID__
-        best *= GetScaleFactor(); // Android taps and view sizes are physical pixels; the tolerance is DIP-defined
+        dip = GetScaleFactor(); // Android taps and view sizes are physical pixels; the tolerance and offsets are in DIPs
 #endif
+        double best = MarkerHitTolerance * dip;
         foreach (ResolvedMarker resolved in _resolvedMarkers)
         {
             if (!camera.TryNormalizedUvToScreen(resolved.U, resolved.V, _surface.ActualWidth, _surface.ActualHeight, out double sx, out double sy))
                 continue;
 
+            sx += resolved.OffsetX * dip;
+            sy += resolved.OffsetY * dip;
             double distance = Math.Sqrt(((sx - x) * (sx - x)) + ((sy - y) * (sy - y)));
             if (distance <= best)
             {
@@ -594,7 +613,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     }
 #endif
 
-    // A marker resolved to a normalized (u,v), kept on the UI side for tap hit-testing (the surface owns the GPU side).
-    private readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V);
+    // A marker resolved to a normalized (u,v) and its symbol offset in DIPs, kept on the UI side for tap hit-testing
+    // (the surface owns the GPU side).
+    private readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY);
 }
 #endif
