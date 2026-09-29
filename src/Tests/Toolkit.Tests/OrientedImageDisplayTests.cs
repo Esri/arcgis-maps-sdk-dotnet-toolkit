@@ -97,6 +97,34 @@ public sealed class OrientedImageDisplayTests
     }
 
     [TestMethod]
+    public void PanoramicHitTestFollowsTheDrawnMarker()
+    {
+        // Looking at the image center: (0.75, 0.5) projects to the middle of a 400 x 300 view.
+        var camera = new PanoramaCameraState(yaw: 0f, pitch: 0f, fieldOfView: MathF.PI / 2f);
+        Assert.IsTrue(camera.TryNormalizedUvToScreen(0.75f, 0.5f, 400, 300, out double cx, out double cy));
+        var onAnchor = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)));
+        var nearAnchor = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)));
+        var drawnAway = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)));
+
+        // Drawn 15 DIPs right of and 20 DIPs above its anchor.
+        var offset = new[] { new OrientedImagePanoramicDisplay.ResolvedMarker(drawnAway, 0.75f, 0.5f, 15, -20) };
+        Assert.AreSame(drawnAway, Hit(offset, cx + 15, cy - 20, dip: 1), "a tap on the drawn marker hits it");
+        Assert.IsNull(Hit(offset, cx, cy, dip: 1), "a tap on the bare anchor, 25 DIPs from the drawing, misses");
+        Assert.AreSame(drawnAway, Hit(offset, cx + 30, cy - 40, dip: 2), "the offset scales with the view's pixels per DIP");
+
+        var close = new[]
+        {
+            new OrientedImagePanoramicDisplay.ResolvedMarker(onAnchor, 0.75f, 0.5f, 0, 0),
+            new OrientedImagePanoramicDisplay.ResolvedMarker(nearAnchor, 0.75f, 0.5f, 6, 0),
+        };
+        Assert.AreSame(onAnchor, Hit(close, cx + 2, cy, dip: 1), "the nearest drawn marker wins");
+        Assert.AreSame(nearAnchor, Hit(close, cx + 4, cy, dip: 1), "the nearest drawn marker wins");
+
+        OrientedImageMarker? Hit(OrientedImagePanoramicDisplay.ResolvedMarker[] markers, double x, double y, double dip) =>
+            OrientedImagePanoramicDisplay.HitTestMarker(markers, camera, 400, 300, x, y, dip);
+    }
+
+    [TestMethod]
     public void ComputedStatePropertiesRejectExternalWrites()
     {
         RunSta(() =>
