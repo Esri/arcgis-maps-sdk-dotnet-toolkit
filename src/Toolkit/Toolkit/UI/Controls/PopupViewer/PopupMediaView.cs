@@ -395,16 +395,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (ancestor is Microsoft.UI.Xaml.Controls.FlipViewItem flipViewItem)
             {
                 Microsoft.UI.Xaml.Automation.AutomationProperties.SetAccessibilityView(flipViewItem, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
-                //var oldName = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(flipViewItem);
-                //var newName = altText ?? string.Empty;
-                //Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(flipViewItem, newName);
+                var oldName = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(flipViewItem);
+                var newName = altText ?? string.Empty;
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(flipViewItem, newName);
 
                 //// FlipViewItem's own automation peer can cache its Name (from the raw data item's ToString())
                 //// before this ever runs, and won't re-query AutomationProperties.Name on its own - explicitly
                 //// notify UIA that it changed so Narrator picks up the new value instead of the stale cached one.
-                //var peer = Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.FromElement(flipViewItem)
-                //    ?? Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(flipViewItem);
-                //peer?.RaisePropertyChangedEvent(Microsoft.UI.Xaml.Automation.AutomationElementIdentifiers.NameProperty, oldName, newName);
+                var peer = Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.FromElement(flipViewItem)
+                    ?? Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(flipViewItem);
+                peer?.RaisePropertyChangedEvent(Microsoft.UI.Xaml.Automation.AutomationElementIdentifiers.NameProperty, oldName, newName);
             }
         }
 #endif
