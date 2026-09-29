@@ -89,9 +89,9 @@ public partial class OrientedImageDisplay
     /// </summary>
     /// <remarks>
     /// Raised for every tap on the image; the image coordinates are always populated.
-    /// If the tap also hit a marker, that marker is carried on <see cref="ImageClickedEventArgs.Marker"/>.
+    /// If the tap also hit a marker, that marker is carried on <see cref="ImageTappedEventArgs.Marker"/>.
     /// </remarks>
-    public event EventHandler<ImageClickedEventArgs>? ImageClicked;
+    public event EventHandler<ImageTappedEventArgs>? ImageTapped;
 
     /// <summary>
     /// Gets or sets the footprint of the oriented image to display.
@@ -281,7 +281,7 @@ public partial class OrientedImageDisplay
         if (_activeDisplay is not null)
         {
             _activeDisplay.StateChanged -= OnDisplayStateChanged;
-            _activeDisplay.ImageClicked -= OnDisplayImageClicked;
+            _activeDisplay.ImageTapped -= OnDisplayImageTapped;
 
             // Release the outgoing display's image, map/device content and marker subscriptions.
             _activeDisplay.SetMarkers(null);
@@ -294,7 +294,7 @@ public partial class OrientedImageDisplay
         if (display is not null)
         {
             display.StateChanged += OnDisplayStateChanged;
-            display.ImageClicked += OnDisplayImageClicked;
+            display.ImageTapped += OnDisplayImageTapped;
         }
 
         UpdateState();
@@ -309,7 +309,7 @@ public partial class OrientedImageDisplay
 
     internal event EventHandler? StateChanged;
 
-    private void OnDisplayImageClicked(object? sender, ImageClickedEventArgs e) => ImageClicked?.Invoke(this, e);
+    private void OnDisplayImageTapped(object? sender, ImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
 
     // An unsupported image type has no display, so its error is merged in here. StateChanged fires only on a change.
     private void UpdateState()
@@ -349,17 +349,17 @@ public partial class OrientedImageDisplay
     };
 
     /// <summary>
-    /// Event arguments for the <see cref="OrientedImageDisplay.ImageClicked"/> event.
+    /// Event arguments for the <see cref="OrientedImageDisplay.ImageTapped"/> event.
     /// </summary>
-    public class ImageClickedEventArgs : EventArgs
+    public class ImageTappedEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageClickedEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="ImageTappedEventArgs"/> class.
         /// </summary>
-        /// <param name="imagePoint">The clicked position in image (pixel) coordinates.</param>
-        /// <param name="image">The oriented image that was clicked.</param>
+        /// <param name="imagePoint">The tapped position in image (pixel) coordinates.</param>
+        /// <param name="image">The oriented image that was tapped.</param>
         /// <param name="marker">The marker the tap hit, or <c>null</c> if it hit no marker.</param>
-        public ImageClickedEventArgs(PointF imagePoint, OrientedImage image, OrientedImageMarker? marker = null)
+        public ImageTappedEventArgs(PointF imagePoint, OrientedImage image, OrientedImageMarker? marker = null)
         {
             ImagePoint = imagePoint;
             Image = image;
@@ -367,16 +367,16 @@ public partial class OrientedImageDisplay
         }
 
         /// <summary>
-        /// Gets the clicked position in image (pixel) coordinates.
+        /// Gets the tapped position in image (pixel) coordinates.
         /// </summary>
         /// <remarks>Use <see cref="OrientedImage.ImageToLocationAsync"/> on <see cref="Image"/> to get the world location.</remarks>
-        /// <value>The clicked image coordinate.</value>
+        /// <value>The tapped image coordinate.</value>
         public PointF ImagePoint { get; }
 
         /// <summary>
-        /// Gets the oriented image that was clicked.
+        /// Gets the oriented image that was tapped.
         /// </summary>
-        /// <value>The clicked oriented image.</value>
+        /// <value>The tapped oriented image.</value>
         public OrientedImage Image { get; }
 
         /// <summary>

@@ -81,7 +81,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     public event EventHandler? StateChanged;
 
     /// <summary>Occurs when the user taps the image; a tapped marker (if any) is carried on the event args.</summary>
-    public event EventHandler<OrientedImageDisplay.ImageClickedEventArgs>? ImageClicked;
+    public event EventHandler<OrientedImageDisplay.ImageTappedEventArgs>? ImageTapped;
 
     /// <summary>Gets the footprint of the current presentation session.</summary>
     protected OrientedImageFootprint? Footprint { get; private set; }
@@ -276,8 +276,8 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     // Error precedence: the image's own load error, then anything the presentation recorded (decode/present/render).
     protected virtual Exception? ResolveError() => Footprint?.OrientedImage?.LoadError ?? PresentationError;
 
-    /// <summary>Raises <see cref="ImageClicked"/>.</summary>
-    protected void RaiseImageClicked(OrientedImageDisplay.ImageClickedEventArgs args) => ImageClicked?.Invoke(this, args);
+    /// <summary>Raises <see cref="ImageTapped"/>.</summary>
+    protected void RaiseImageTapped(OrientedImageDisplay.ImageTappedEventArgs args) => ImageTapped?.Invoke(this, args);
 
     protected void UpdateState()
     {
