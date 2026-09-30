@@ -1113,6 +1113,30 @@
     <value>Show unselected image footprints</value>
     <comment>Tooltip for the OrientedImageryView button that shows unselected image footprints.</comment>
   </data>
+  <data name="OrientedImageryViewSelectedFootprintAutomationName" xml:space="preserve">
+    <value>Selected image footprint</value>
+    <comment>Name for the footprint toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsAutomationName" xml:space="preserve">
+    <value>Camera locations on GeoView</value>
+    <comment>Name for the camera locations toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewUnselectedFootprintsAutomationName" xml:space="preserve">
+    <value>Unselected image footprints</value>
+    <comment>Name for the footprints toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewAddMarkersAutomationName" xml:space="preserve">
+    <value>Add markers</value>
+    <comment>Name for the marker-creation toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>Go to image {0} of {1}</value>
+    <comment>Pagination automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>Image {0} of {1}, selected</value>
+    <comment>Selected pagination button automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
+  </data>
   <data name="OrientedImageryViewShowCameraMarkersOnGeoView" xml:space="preserve">
     <value>Show camera markers on GeoView</value>
     <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the GeoView.</comment>

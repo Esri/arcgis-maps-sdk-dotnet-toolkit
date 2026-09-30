@@ -1,6 +1,7 @@
 ﻿using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using System.Globalization;
+using System.Windows.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 
@@ -85,10 +86,49 @@ public class Paginator : Control
 
     private void OnCurrentPageNumberChanged(int oldValue, int newValue)
     {
+        bool restorePageFocus = _pagesPresenter?.IsKeyboardFocusWithin == true;
         if (oldValue != newValue)
             SelectedPageIndexChanged?.Invoke(this, newValue);
 
         UpdateNavButtonsEnabled();
+        if (restorePageFocus)
+            Dispatcher.InvokeAsync(FocusSelectedPage, System.Windows.Threading.DispatcherPriority.Input);
+    }
+
+    /// <inheritdoc />
+    protected override void OnPreviewKeyDown(KeyEventArgs e)
+    {
+        base.OnPreviewKeyDown(e);
+        if (e.Handled || _pagesPresenter?.IsKeyboardFocusWithin != true || TotalPages <= 0 || Keyboard.Modifiers != ModifierKeys.None)
+            return;
+
+        int direction = FlowDirection == FlowDirection.RightToLeft ? -1 : 1;
+        int index = e.Key switch
+        {
+            Key.Left => SelectedPageIndex - direction,
+            Key.Right => SelectedPageIndex + direction,
+            Key.Up => SelectedPageIndex - 1,
+            Key.Down => SelectedPageIndex + 1,
+            Key.Home => 0,
+            Key.End => TotalPages - 1,
+            _ => -1,
+        };
+        if (e.Key is not (Key.Left or Key.Right or Key.Up or Key.Down or Key.Home or Key.End))
+            return;
+
+        e.Handled = true;
+        SetCurrentValue(CurrentPageNumberProperty, Math.Clamp(index, 0, TotalPages - 1));
+    }
+
+    private void FocusSelectedPage()
+    {
+        if (_pagesPresenter?.IsKeyboardFocusWithin != true)
+            return;
+
+        // Run after selection bindings update, without stealing focus if the user has already left.
+        _pagesPresenter.UpdateLayout();
+        if (_pagesPresenter?.ItemContainerGenerator.ContainerFromIndex(SelectedPageIndex) is FrameworkElement container && container.IsVisible)
+            container.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
     }
 
     /// <summary>
@@ -178,4 +218,24 @@ public sealed class PaginatorCurrentPageVisibilityConverter : IMultiValueConvert
     {
         throw new NotSupportedException();
     }
+}
+
+/// <summary>
+/// Creates a localized accessible name identifying a page and its selection state.
+/// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
+public sealed class PaginatorPageNameConverter : IMultiValueConverter
+{
+    /// <inheritdoc />
+    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (values.Length != 3 || values[0] is not int page || values[1] is not int selectedIndex || values[2] is not int total)
+            return DependencyProperty.UnsetValue;
+
+        string key = page == selectedIndex + 1 ? "OrientedImageryViewSelectedPageFormat" : "OrientedImageryViewGoToPageFormat";
+        return string.Format(culture, Properties.Resources.GetString(key)!, page, total);
+    }
+
+    /// <inheritdoc />
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotSupportedException();
 }

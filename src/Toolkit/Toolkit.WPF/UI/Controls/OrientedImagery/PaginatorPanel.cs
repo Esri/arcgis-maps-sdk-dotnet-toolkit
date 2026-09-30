@@ -61,6 +61,7 @@ internal class PaginatorPresenterPanel : Panel
     {
         var pageCount = Math.Min(TotalPages, InternalChildren.Count);
         var (start, visibleCount) = OrientedImageryPagination.GetRange(pageCount, SelectedPageIndex, finalSize.Width, _pageSize.Width);
+        var tabIndex = Math.Max(0, Math.Min(SelectedPageIndex, pageCount - 1));
         var left = Math.Max(0, (finalSize.Width - visibleCount * _pageSize.Width) / 2);
         for (var i = 0; i < InternalChildren.Count; i++)
         {
@@ -71,9 +72,9 @@ internal class PaginatorPresenterPanel : Panel
                 child.Arrange(new Rect(left, top, _pageSize.Width, child.DesiredSize.Height));
                 left += _pageSize.Width;
                 if (child is Control childControl)
-                    childControl.IsTabStop = true;
+                    childControl.IsTabStop = i == tabIndex;
                 else if (child is ContentPresenter childPresenter)
-                    KeyboardNavigation.SetTabNavigation(childPresenter, KeyboardNavigationMode.Once);
+                    KeyboardNavigation.SetTabNavigation(childPresenter, i == tabIndex ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
             }
             else
             {
