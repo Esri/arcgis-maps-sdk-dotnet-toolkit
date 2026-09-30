@@ -140,7 +140,7 @@ public partial class OrientedImageryView
     /// <summary>
     /// Occurs whenever a user taps on the image display.
     /// </summary>
-    public event EventHandler<OrientedImageDisplay.ImageClickedEventArgs>? ImageTapped;
+    public event EventHandler<OrientedImageDisplay.ImageTappedEventArgs>? ImageTapped;
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -159,7 +159,7 @@ public partial class OrientedImageryView
 
     private void WireDisplay(OrientedImageDisplay display)
     {
-        display.ImageClicked += Display_ImageClicked;
+        display.ImageTapped += Display_ImageTapped;
         display.StateChanged += Display_StateChanged;
         display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
         WireDisplayToViewModel(display);
@@ -175,7 +175,7 @@ public partial class OrientedImageryView
 
     private void UnwireDisplay(OrientedImageDisplay display)
     {
-        display.ImageClicked -= Display_ImageClicked;
+        display.ImageTapped -= Display_ImageTapped;
         display.StateChanged -= Display_StateChanged;
         ViewModel.SetSelectedImageReady(false);
         display.ClearValue(OrientedImageDisplay.AutoUpdateFootprintProperty);
@@ -189,7 +189,7 @@ public partial class OrientedImageryView
     private void UpdateSelectedImageReady() => ViewModel.SetSelectedImageReady(
         _display?.IsInteractive == true && ViewModel.SelectedImage != null && _display.Footprint?.OrientedImage == ViewModel.SelectedImage);
 
-    private async void Display_ImageClicked(object? sender, OrientedImageDisplay.ImageClickedEventArgs e) => ImageTapped?.Invoke(this, e);
+    private async void Display_ImageTapped(object? sender, OrientedImageDisplay.ImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
