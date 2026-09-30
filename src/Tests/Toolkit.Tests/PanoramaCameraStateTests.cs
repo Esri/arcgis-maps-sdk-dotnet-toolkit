@@ -135,6 +135,70 @@ public sealed class PanoramaCameraStateTests
     }
 
     [TestMethod]
+    public void ArrowKeysMoveTheViewTowardTheirSide()
+    {
+        // As in MapView, Left looks left and Up looks up: a step moves the view center toward the screen point on the
+        // arrow's side, along that axis only.
+        AssertNavigatesToward(PanoramaCameraState.NavigationKeys.Left, -100, 0);
+        AssertNavigatesToward(PanoramaCameraState.NavigationKeys.Right, 100, 0);
+        AssertNavigatesToward(PanoramaCameraState.NavigationKeys.Up, 0, -100);
+        AssertNavigatesToward(PanoramaCameraState.NavigationKeys.Down, 0, 100);
+    }
+
+    [TestMethod]
+    public void HeldArrowKeysCombineAtTheMapViewPanSpeed()
+    {
+        // Up+Left turns both ways in one step, each at MapView's 300 DIPs per second on screen.
+        var start = new PanoramaCameraState(0.3f, 0.2f, Fov90);
+        float perSecond = (float)PanoramaCameraState.KeyboardPanSpeed * PanoramaCameraState.DragRotationScale(Fov90, ViewHeight);
+
+        PanoramaCameraState moved = start.Navigate(PanoramaCameraState.NavigationKeys.Up | PanoramaCameraState.NavigationKeys.Left, 0.5, ViewHeight);
+
+        Assert.AreEqual(start.Yaw - (perSecond / 2), moved.Yaw, 1e-5f);
+        Assert.AreEqual(start.Pitch - (perSecond / 2), moved.Pitch, 1e-5f);
+        Assert.AreEqual(start.FieldOfView, moved.FieldOfView);
+
+        // No keys and opposite keys leave the camera alone, and pitch stops short of the zenith.
+        Assert.AreEqual(start, start.Navigate(PanoramaCameraState.NavigationKeys.None, 0.5, ViewHeight));
+        Assert.AreEqual(start, start.Navigate(PanoramaCameraState.NavigationKeys.Left | PanoramaCameraState.NavigationKeys.Right, 0.5, ViewHeight));
+        Assert.AreEqual(PanoramaCameraState.MinPitch, start.Navigate(PanoramaCameraState.NavigationKeys.Up, 60, ViewHeight).Pitch);
+    }
+
+    [TestMethod]
+    public void ZoomKeysScaleTheViewByTwoPerSecondWithinTheLimits()
+    {
+        // The view's scale is 1 / tan(FieldOfView / 2), and MapView's zoom keys double or halve its scale per second.
+        var start = new PanoramaCameraState(0f, 0f, Fov90);
+        Assert.AreEqual(0.5, Math.Tan(start.Navigate(PanoramaCameraState.NavigationKeys.ZoomIn, 1, ViewHeight).FieldOfView / 2), 1e-5);
+        Assert.AreEqual(Math.Sqrt(2), Math.Tan(start.Navigate(PanoramaCameraState.NavigationKeys.ZoomOut, 0.5, ViewHeight).FieldOfView / 2), 1e-5);
+        Assert.AreEqual(start, start.Navigate(PanoramaCameraState.NavigationKeys.ZoomIn | PanoramaCameraState.NavigationKeys.ZoomOut, 1, ViewHeight));
+
+        Assert.AreEqual(PanoramaCameraState.MinFieldOfView, start.Navigate(PanoramaCameraState.NavigationKeys.ZoomIn, 10, ViewHeight).FieldOfView);
+        Assert.AreEqual(PanoramaCameraState.MaxFieldOfView, start.Navigate(PanoramaCameraState.NavigationKeys.ZoomOut, 10, ViewHeight).FieldOfView);
+    }
+
+    private static void AssertNavigatesToward(PanoramaCameraState.NavigationKeys key, double dx, double dy)
+    {
+        var start = new PanoramaCameraState(0.3f, 0.2f, Fov90);
+        Assert.IsTrue(start.TryScreenToNormalizedUv(ViewWidth / 2, ViewHeight / 2, ViewWidth, ViewHeight, out float startU, out float startV));
+        Assert.IsTrue(start.TryScreenToNormalizedUv((ViewWidth / 2) + dx, (ViewHeight / 2) + dy, ViewWidth, ViewHeight, out float targetU, out float targetV));
+
+        PanoramaCameraState moved = start.Navigate(key, 0.1, ViewHeight);
+        Assert.IsTrue(moved.TryScreenToNormalizedUv(ViewWidth / 2, ViewHeight / 2, ViewWidth, ViewHeight, out float u, out float v));
+
+        if (dx != 0)
+        {
+            Assert.IsLessThan(Math.Abs(targetU - startU), Math.Abs(targetU - u), $"{key} should turn the view toward the target.");
+            Assert.AreEqual(startV, v, 1e-5f, $"{key} should not tilt the view.");
+        }
+        else
+        {
+            Assert.IsLessThan(Math.Abs(targetV - startV), Math.Abs(targetV - v), $"{key} should tilt the view toward the target.");
+            Assert.AreEqual(startU, u, 1e-5f, $"{key} should not turn the view.");
+        }
+    }
+
+    [TestMethod]
     public void FootprintViewMatchesTheProjectedViewCenter()
     {
         // The footprint convention maps image column u = 0.5 + yaw/360 and row v = 1 - pitch/180, so the
