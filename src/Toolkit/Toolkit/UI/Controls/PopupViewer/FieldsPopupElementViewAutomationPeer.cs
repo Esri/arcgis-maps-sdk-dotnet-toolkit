@@ -44,11 +44,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
 #if WPF
+        /// <inheritdoc />
         protected override bool IsContentElementCore()
         {
             return false;
         }
 
+        /// <inheritdoc />
         protected override bool IsControlElementCore()
         {
             return false;
