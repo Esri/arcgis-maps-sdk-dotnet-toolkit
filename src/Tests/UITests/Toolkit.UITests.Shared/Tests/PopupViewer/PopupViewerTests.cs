@@ -1,3 +1,5 @@
+using OpenQA.Selenium.Appium;
+
 namespace Toolkit.UITest.Shared.PopupViewer;
 
 [TestClass]
@@ -17,12 +19,22 @@ public class PopupViewerTests : AppiumTestBase
     private const string ChartMediaTitle = "Monthly Visitors";
     private const string ChartMediaCaption = "Visitor counts by month";
 
+    // Mirrors the attachments created by Toolkit.UITests.App.TestPages.PopupViewerAttachments (the shared test-page code-behind).
+    private const string PopupViewerAttachmentsPage = "PopupViewerAttachments";
+    private static readonly string[] AttachmentNames = ["trail-map.png", "parking-permit.pdf", "ranger-notes.txt"];
+
     [TestMethod]
     public async Task PopupViewer_Text_FullTextIsExposed()
     {
         OpenSample(PopupViewerFieldsPage);
 
+#if WPF_TEST
+        // On WPF the full text is exposed on TextPopupElementView itself; the inner RichTextBox ("TextArea")
+        // is intentionally hidden from UIA so the text isn't announced twice.
+        var textArea = FindElementByClassName("TextPopupElementView", DefaultTimeout);
+#else
         var textArea = FindElement("TextArea", DefaultTimeout);
+#endif
         var name = GetAutomationName(textArea);
         Assert.IsTrue(name.Contains(TextElementFirstParagraph), "Expected the text element's accessible name to include the first paragraph.");
         Assert.IsTrue(name.Contains(TextElementSecondParagraph), "Expected the text element's accessible name to include the second paragraph, not just the first line.");
@@ -66,7 +78,7 @@ public class PopupViewerTests : AppiumTestBase
         Click(nextButton);
 
         var currentItemHost = FindElement("CurrentMediaView", DefaultTimeout);
-        var positionInSet = currentItemHost.GetAttribute("PositionInSet");
+        var positionInSet = await WaitForAttributeAsync(currentItemHost, "PositionInSet", "2");
         var sizeOfSet = currentItemHost.GetAttribute("SizeOfSet");
         TestContext.WriteLine($"Media host PositionInSet=\"{positionInSet}\" SizeOfSet=\"{sizeOfSet}\"");
         Assert.AreEqual("2", positionInSet, "Expected the second media item to report position 2 in the set after clicking Next.");
@@ -82,15 +94,52 @@ public class PopupViewerTests : AppiumTestBase
         Click(previousButton); // Focuses the button and wraps around to the last (second) media item.
 
         var currentItemHost = FindElement("CurrentMediaView", DefaultTimeout);
-        Assert.AreEqual("2", currentItemHost.GetAttribute("PositionInSet"), "Expected clicking Previous from the first item to wrap around to the last item.");
+        Assert.AreEqual("2", await WaitForAttributeAsync(currentItemHost, "PositionInSet", "2"), "Expected clicking Previous from the first item to wrap around to the last item.");
 
         const int VK_LEFT = 0x25;
         const int VK_RIGHT = 0x27;
         PressKey(VK_LEFT);
-        Assert.AreEqual("1", currentItemHost.GetAttribute("PositionInSet"), "Expected the Left arrow key to navigate to the previous media item.");
+        Assert.AreEqual("1", await WaitForAttributeAsync(currentItemHost, "PositionInSet", "1"), "Expected the Left arrow key to navigate to the previous media item.");
 
         PressKey(VK_RIGHT);
-        Assert.AreEqual("2", currentItemHost.GetAttribute("PositionInSet"), "Expected the Right arrow key to navigate to the next media item.");
+        Assert.AreEqual("2", await WaitForAttributeAsync(currentItemHost, "PositionInSet", "2"), "Expected the Right arrow key to navigate to the next media item.");
+    }
+
+    // Click()/PressKey() only queue input for the app, and UIA property reads are serviced ahead of queued input,
+    // so reading an attribute immediately afterwards can observe the state from before the input was handled.
+    // Polls until the attribute reaches the expected value (or the timeout elapses) and returns the last value read.
+    private static async Task<string> WaitForAttributeAsync(OpenQA.Selenium.Appium.AppiumElement element, string attribute, string expected)
+    {
+        var deadline = DateTime.UtcNow + TimeSpan.FromSeconds(2);
+        var value = element.GetAttribute(attribute);
+        while (value != expected && DateTime.UtcNow < deadline)
+        {
+            await Task.Delay(100);
+            value = element.GetAttribute(attribute);
+        }
+        return value;
+    }
+
+    [TestMethod]
+    public async Task PopupViewer_Attachments_ListItemsExposeAttachmentName()
+    {
+        OpenSample(PopupViewerAttachmentsPage);
+
+        // The attachment list is only made visible once the attachments have been fetched from the feature.
+        var attachmentList = FindElement("AttachmentList", TimeSpan.FromSeconds(15));
+        // WPF's ListViewItemAutomationPeer inherits its UIA ClassName from ListBoxItemAutomationPeer.
+        var listItems = attachmentList.FindElements(MobileBy.ClassName("ListBoxItem"));
+        Assert.AreEqual(AttachmentNames.Length, listItems.Count, "Expected one ListViewItem per attachment.");
+
+        foreach (var attachmentName in AttachmentNames)
+        {
+            // Scope to ListViewItems so the attachment name TextBlock inside the item template can't satisfy the lookup.
+            var matches = listItems.Where(item => GetAutomationName(item) == attachmentName).ToList();
+            Assert.AreEqual(1, matches.Count, $"Expected exactly one ListViewItem with accessible name \"{attachmentName}\".");
+            var controlType = GetControlType(matches[0]);
+            Assert.IsTrue(controlType.Contains("ListItem", StringComparison.OrdinalIgnoreCase),
+                $"Expected attachment \"{attachmentName}\" to be exposed as a list item, but ControlType was \"{controlType}\".");
+        }
     }
 #endif
 
