@@ -1157,4 +1157,10 @@
     <value>No images selected</value>
     <comment>Message shown by OrientedImageryView when no images are selected.</comment>
   </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>Next</value>
+  </data>
 </root>
