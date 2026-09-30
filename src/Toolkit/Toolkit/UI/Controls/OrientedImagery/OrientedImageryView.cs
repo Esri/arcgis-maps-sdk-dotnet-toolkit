@@ -116,16 +116,7 @@ public partial class OrientedImageryView
                 }
                 break;
             case nameof(OrientedImageryViewModel.SelectedImage):
-                if (_paginator != null)
-                {
-                    var index = -1;
-                    for (var i = 0; i < ViewModel.Images.Count; i++)
-                    {
-                        if (ReferenceEquals(ViewModel.Images[i], ViewModel.SelectedImage))
-                            index = i;
-                    }
-                    _paginator.SelectedPageIndex = index;
-                }
+                UpdatePaginatorSelection();
                 break;
             case nameof(OrientedImageryViewModel.Images):
                 if (_paginator != null)
@@ -178,7 +169,7 @@ public partial class OrientedImageryView
     {
         display.Markers = ViewModel.Markers;
         display.Footprint = ViewModel.SelectedImageFootprint;
-        display.DisplayBackgroundColor = DisplayBackgroundColor;
+        UpdateDisplayBackgroundColor(DisplayBackgroundColor);
         UpdateSelectedImageReady();
     }
 
@@ -298,6 +289,19 @@ public partial class OrientedImageryView
 
 #region Pagination
     private Paginator? _paginator;
+
+    private void UpdatePaginatorSelection()
+    {
+        if (_paginator == null)
+            return;
+        var index = -1;
+        for (var i = 0; i < ViewModel.Images.Count; i++)
+        {
+            if (ReferenceEquals(ViewModel.Images[i], ViewModel.SelectedImage))
+                index = i;
+        }
+        _paginator.SelectedPageIndex = index;
+    }
 
     private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
     {
