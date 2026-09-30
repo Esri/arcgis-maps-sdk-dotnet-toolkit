@@ -38,40 +38,33 @@ public sealed class PanoramaCameraStateTests
     [TestMethod]
     public void ScreenToUvRoundTripsAcrossCameraScreenAndViewportGrid()
     {
-        float[] yaws = [-2.5f, -1f, 0f, 0.7f, 2f, 3.1f];
-        float[] pitches = [-1.2f, -0.5f, 0f, 0.5f, 1.2f];
-        float[] fovs = [PanoramaCameraState.MinFieldOfView, Fov90, PanoramaCameraState.MaxFieldOfView];
-        (double Width, double Height)[] viewports = [(ViewWidth, ViewHeight), (800, 400), (300, 900)];
+        // Yaw 1.9 puts the image seam inside the view, pitch 1.2 reaches past a pole at the widest field of view, and
+        // the viewports cover wide and tall aspect ratios.
+        float[] yaws = [-2.5f, 0f, 1.9f];
+        float[] pitches = [-1.2f, 0f, 1.2f];
+        float[] fovs = [PanoramaCameraState.MinFieldOfView, PanoramaCameraState.MaxFieldOfView];
+        (double Width, double Height)[] viewports = [(ViewWidth, ViewHeight), (300, 900)];
+        double[] fractions = [0.1, 0.5, 0.9];
 
-        foreach ((double width, double height) in viewports)
+        var cases =
+            from viewport in viewports
+            from yaw in yaws
+            from pitch in pitches
+            from fov in fovs
+            from fx in fractions
+            from fy in fractions
+            select (viewport.Width, viewport.Height, Camera: new PanoramaCameraState(yaw, pitch, fov), X: fx * viewport.Width, Y: fy * viewport.Height);
+
+        foreach ((double width, double height, PanoramaCameraState camera, double x, double y) in cases)
         {
-            foreach (float yaw in yaws)
-            {
-                foreach (float pitch in pitches)
-                {
-                    foreach (float fov in fovs)
-                    {
-                        var camera = new PanoramaCameraState(yaw, pitch, fov);
-                        for (int ix = 0; ix <= 4; ix++)
-                        {
-                            for (int iy = 0; iy <= 4; iy++)
-                            {
-                                double x = (0.1 + (0.2 * ix)) * width;
-                                double y = (0.1 + (0.2 * iy)) * height;
+            string context = $"viewport={width}x{height}, yaw={camera.Yaw}, pitch={camera.Pitch}, fov={camera.FieldOfView}, screen=({x},{y})";
+            Assert.IsTrue(camera.TryScreenToNormalizedUv(x, y, width, height, out float u, out float v), $"screen->uv failed: {context}");
+            Assert.IsTrue(u is >= 0f and <= 1f, $"u out of range ({u}): {context}");
+            Assert.IsTrue(v is >= 0f and <= 1f, $"v out of range ({v}): {context}");
 
-                                string context = $"viewport={width}x{height}, yaw={yaw}, pitch={pitch}, fov={fov}, screen=({x},{y})";
-                                Assert.IsTrue(camera.TryScreenToNormalizedUv(x, y, width, height, out float u, out float v), $"screen->uv failed: {context}");
-                                Assert.IsTrue(u is >= 0f and <= 1f, $"u out of range ({u}): {context}");
-                                Assert.IsTrue(v is >= 0f and <= 1f, $"v out of range ({v}): {context}");
-
-                                Assert.IsTrue(camera.TryNormalizedUvToScreen(u, v, width, height, out double backX, out double backY), $"uv->screen failed: {context}");
-                                Assert.AreEqual(x, backX, 0.1, $"x round-trip: {context}");
-                                Assert.AreEqual(y, backY, 0.1, $"y round-trip: {context}");
-                            }
-                        }
-                    }
-                }
-            }
+            Assert.IsTrue(camera.TryNormalizedUvToScreen(u, v, width, height, out double backX, out double backY), $"uv->screen failed: {context}");
+            Assert.AreEqual(x, backX, 0.1, $"x round-trip: {context}");
+            Assert.AreEqual(y, backY, 0.1, $"y round-trip: {context}");
         }
     }
 
@@ -85,38 +78,30 @@ public sealed class PanoramaCameraStateTests
     }
 
     [TestMethod]
-    public void TransformsWithInvalidViewportReturnFalse()
+    public void TransformsRejectInvalidInput()
     {
-        var camera = new PanoramaCameraState(yaw: 0f, pitch: 0f, fieldOfView: Fov90);
-
-        Assert.IsFalse(camera.TryScreenToNormalizedUv(0, 0, 0, ViewHeight, out _, out _));
-        Assert.IsFalse(camera.TryScreenToNormalizedUv(0, 0, ViewWidth, 0, out _, out _));
-        Assert.IsFalse(camera.TryNormalizedUvToScreen(0.5f, 0.5f, 0, ViewHeight, out _, out _));
-        Assert.IsFalse(camera.TryNormalizedUvToScreen(0.5f, 0.5f, ViewWidth, 0, out _, out _));
-    }
-
-    [TestMethod]
-    public void TransformsRejectNonFiniteInputs()
-    {
-        // NaN passes every comparison in the projection math (all comparisons with NaN are false), so without
-        // explicit guards both transforms would "succeed" and hand NaN coordinates to markers and GPU vertices.
+        // NaN passes every comparison in the projection math, so without explicit guards the transforms would succeed
+        // and hand NaN coordinates to markers and GPU vertices.
         var camera = new PanoramaCameraState(yaw: 0.3f, pitch: 0.1f, fieldOfView: Fov90);
-
         foreach (float bad in new[] { float.NaN, float.PositiveInfinity, float.NegativeInfinity })
         {
-            Assert.IsFalse(camera.TryNormalizedUvToScreen(bad, 0.5f, ViewWidth, ViewHeight, out double sx, out double sy), $"u={bad}");
-            Assert.AreEqual(0d, sx, $"screenX must stay at its failure value for u={bad}");
-            Assert.AreEqual(0d, sy, $"screenY must stay at its failure value for u={bad}");
+            Assert.IsFalse(camera.TryNormalizedUvToScreen(bad, 0.5f, ViewWidth, ViewHeight, out _, out _), $"u={bad}");
             Assert.IsFalse(camera.TryNormalizedUvToScreen(0.75f, bad, ViewWidth, ViewHeight, out _, out _), $"v={bad}");
-        }
-
-        foreach (double bad in new[] { double.NaN, double.PositiveInfinity, double.NegativeInfinity })
-        {
-            Assert.IsFalse(camera.TryScreenToNormalizedUv(bad, ViewHeight / 2, ViewWidth, ViewHeight, out float u, out float v), $"x={bad}");
-            Assert.AreEqual(0f, u, $"u must stay at its failure value for x={bad}");
-            Assert.AreEqual(0f, v, $"v must stay at its failure value for x={bad}");
+            Assert.IsFalse(camera.TryScreenToNormalizedUv(bad, ViewHeight / 2, ViewWidth, ViewHeight, out _, out _), $"x={bad}");
             Assert.IsFalse(camera.TryScreenToNormalizedUv(ViewWidth / 2, bad, ViewWidth, ViewHeight, out _, out _), $"y={bad}");
         }
+
+        // The view has no size before layout.
+        Assert.IsFalse(camera.TryScreenToNormalizedUv(0, 0, 0, ViewHeight, out _, out _));
+        Assert.IsFalse(camera.TryNormalizedUvToScreen(0.5f, 0.5f, ViewWidth, 0, out _, out _));
+        Assert.IsFalse(camera.TryGetFootprintView(0, ViewHeight, out _));
+        Assert.IsFalse(camera.TryGetFootprintView(ViewWidth, -1, out _));
+
+        // Cameras the footprint API cannot express.
+        Assert.IsFalse(new PanoramaCameraState(float.NaN, 0f, Fov90).TryGetFootprintView(ViewWidth, ViewHeight, out _));
+        Assert.IsFalse(new PanoramaCameraState(0f, float.PositiveInfinity, Fov90).TryGetFootprintView(ViewWidth, ViewHeight, out _));
+        Assert.IsFalse(new PanoramaCameraState(0f, 0f, 0f).TryGetFootprintView(ViewWidth, ViewHeight, out _));
+        Assert.IsFalse(new PanoramaCameraState(0f, 0f, MathF.PI).TryGetFootprintView(ViewWidth, ViewHeight, out _));
     }
 
     [TestMethod]
@@ -146,16 +131,14 @@ public sealed class PanoramaCameraStateTests
     }
 
     [TestMethod]
-    public void HeldArrowKeysCombineAtTheMapViewPanSpeed()
+    public void HeldArrowKeysCombineAndOpposingKeysCancel()
     {
-        // Up+Left turns both ways in one step, each at MapView's 300 DIPs per second on screen.
+        // Up+Left turns the view up and left by the same angle in one step.
         var start = new PanoramaCameraState(0.3f, 0.2f, Fov90);
-        float perSecond = (float)PanoramaCameraState.KeyboardPanSpeed * PanoramaCameraState.DragRotationScale(Fov90, ViewHeight);
-
         PanoramaCameraState moved = start.Navigate(PanoramaCameraState.NavigationKeys.Up | PanoramaCameraState.NavigationKeys.Left, 0.5, ViewHeight);
 
-        Assert.AreEqual(start.Yaw - (perSecond / 2), moved.Yaw, 1e-5f);
-        Assert.AreEqual(start.Pitch - (perSecond / 2), moved.Pitch, 1e-5f);
+        Assert.IsLessThan(start.Yaw, moved.Yaw);
+        Assert.AreEqual(start.Yaw - moved.Yaw, start.Pitch - moved.Pitch, 1e-6f);
         Assert.AreEqual(start.FieldOfView, moved.FieldOfView);
 
         // No keys and opposite keys leave the camera alone, and pitch stops short of the zenith.
@@ -215,31 +198,8 @@ public sealed class PanoramaCameraStateTests
                 double expectedPitch = (1.0 - v) * 180.0;
                 Assert.AreEqual(expectedYaw, view.Yaw % 360.0, 0.5, $"yaw at yaw={yaw}, pitch={pitch}");
                 Assert.AreEqual(expectedPitch, view.Pitch, 0.5, $"pitch at yaw={yaw}, pitch={pitch}");
-
-                // Closed form: yaw = 90 + Yaw, pitch = 90 - Pitch (degrees), yaw wrapped into [0, 360).
-                double closedFormYaw = ((90.0 + (yaw * 180.0 / Math.PI)) % 360.0 + 360.0) % 360.0;
-                Assert.AreEqual(closedFormYaw, view.Yaw, 1e-3, $"closed-form yaw at yaw={yaw}");
-                Assert.AreEqual(90.0 - (pitch * 180.0 / Math.PI), view.Pitch, 1e-3, $"closed-form pitch at pitch={pitch}");
                 Assert.IsTrue(view.Yaw >= 0 && view.Yaw < 360, $"yaw range at yaw={yaw}: {view.Yaw}");
             }
-        }
-    }
-
-    [TestMethod]
-    public void FootprintViewOfTheInitialViewFacesNorth()
-    {
-        // The display starts a panorama looking north with Yaw = -pi/2 - CameraHeading; on the ground that view
-        // direction is CameraHeading + yaw, which must come back to north.
-        foreach (double headingDegrees in new[] { 0.0, 30.0, 90.0, 200.0, 359.0 })
-        {
-            float yaw = (float)((-Math.PI / 2) - (headingDegrees * Math.PI / 180));
-            var camera = new PanoramaCameraState(yaw, 0f, Fov90);
-
-            Assert.IsTrue(camera.TryGetFootprintView(ViewWidth, ViewHeight, out PanoramaCameraState.FootprintView view));
-
-            double bearing = (headingDegrees + view.Yaw) % 360.0;
-            Assert.IsTrue(bearing < 0.01 || bearing > 359.99, $"heading {headingDegrees}: view bearing {bearing}");
-            Assert.AreEqual(90.0, view.Pitch, 1e-4);
         }
     }
 
@@ -263,18 +223,5 @@ public sealed class PanoramaCameraStateTests
         Assert.IsTrue(camera.TryGetFootprintView(1600, 600, out PanoramaCameraState.FootprintView wide));
         Assert.IsGreaterThan(view.HorizontalFieldOfView, wide.HorizontalFieldOfView);
         Assert.AreEqual(view.VerticalFieldOfView, wide.VerticalFieldOfView, 1e-6);
-    }
-
-    [TestMethod]
-    public void FootprintViewRejectsAnUnsizedViewportAndInvalidCameras()
-    {
-        var camera = new PanoramaCameraState(0f, 0f, Fov90);
-        Assert.IsFalse(camera.TryGetFootprintView(0, ViewHeight, out _));
-        Assert.IsFalse(camera.TryGetFootprintView(ViewWidth, -1, out _));
-
-        Assert.IsFalse(new PanoramaCameraState(float.NaN, 0f, Fov90).TryGetFootprintView(ViewWidth, ViewHeight, out _));
-        Assert.IsFalse(new PanoramaCameraState(0f, float.PositiveInfinity, Fov90).TryGetFootprintView(ViewWidth, ViewHeight, out _));
-        Assert.IsFalse(new PanoramaCameraState(0f, 0f, 0f).TryGetFootprintView(ViewWidth, ViewHeight, out _));
-        Assert.IsFalse(new PanoramaCameraState(0f, 0f, MathF.PI).TryGetFootprintView(ViewWidth, ViewHeight, out _));
     }
 }

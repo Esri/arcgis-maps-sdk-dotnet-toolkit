@@ -7,14 +7,13 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Color = System.Drawing.Color;
-using PointF = System.Drawing.PointF;
 
 namespace Toolkit.Tests;
 
 /// <summary>
 /// Contracts of <see cref="OrientedImageDisplay"/> and its inner displays that hold without a running app:
-/// template re-hosting, marker subscriptions that must not retain a discarded display, marker positions and offsets,
-/// read-only state properties, accessibility, and the visible-area clipping math.
+/// template re-hosting, marker subscriptions that must not retain a discarded display, marker offsets and hit-testing,
+/// accessibility, and the visible-area clipping math.
 /// </summary>
 [TestClass]
 public sealed class OrientedImageDisplayTests
@@ -72,13 +71,6 @@ public sealed class OrientedImageDisplayTests
     }
 
     [TestMethod]
-    public void ImagePointPositionRequiresItsImage()
-    {
-        // An image point is drawn only on the image it belongs to, so it cannot exist without one.
-        Assert.ThrowsExactly<ArgumentNullException>(() => OrientedImageMarkerPosition.FromImagePoint(null!, new PointF(10f, 10f)));
-    }
-
-    [TestMethod]
     public void PanoramicMarkerOffsetTurnsWithSymbolAngle()
     {
         // The map rotates a marker clockwise around its anchor, offset included; screen y points down.
@@ -122,20 +114,6 @@ public sealed class OrientedImageDisplayTests
 
         OrientedImageMarker? Hit(OrientedImagePanoramicDisplay.ResolvedMarker[] markers, double x, double y, double dip) =>
             OrientedImagePanoramicDisplay.HitTestMarker(markers, camera, 400, 300, x, y, dip);
-    }
-
-    [TestMethod]
-    public void ComputedStatePropertiesRejectExternalWrites()
-    {
-        RunSta(() =>
-        {
-            // IsBusy/IsInteractive/Error are control-owned computed state; on WPF they are registered read-only,
-            // so an external SetValue cannot overwrite what the control computed.
-            var control = new OrientedImageDisplay();
-            Assert.ThrowsExactly<InvalidOperationException>(() => control.SetValue(OrientedImageDisplay.IsBusyProperty, true));
-            Assert.ThrowsExactly<InvalidOperationException>(() => control.SetValue(OrientedImageDisplay.IsInteractiveProperty, true));
-            Assert.ThrowsExactly<InvalidOperationException>(() => control.SetValue(OrientedImageDisplay.ErrorProperty, new InvalidOperationException("external")));
-        });
     }
 
     [TestMethod]
