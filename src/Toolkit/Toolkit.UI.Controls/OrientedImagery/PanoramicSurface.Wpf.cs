@@ -472,30 +472,55 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
-        switch (e.Key)
+        NavigationKeys key = e.Key switch
         {
-            case Key.Left:
-                Yaw += KeyboardRotationDelta;
-                break;
-            case Key.Right:
-                Yaw -= KeyboardRotationDelta;
-                break;
-            case Key.Up:
-                Pitch = Math.Clamp(Pitch + KeyboardRotationDelta, MinPitch, MaxPitch);
-                break;
-            case Key.Down:
-                Pitch = Math.Clamp(Pitch - KeyboardRotationDelta, MinPitch, MaxPitch);
-                break;
-            case Key.OemPlus or Key.Add:
-                FieldOfView = Math.Clamp(FieldOfView * 0.9f, MinFieldOfView, MaxFieldOfView);
-                break;
-            case Key.OemMinus or Key.Subtract:
-                FieldOfView = Math.Clamp(FieldOfView * 1.1f, MinFieldOfView, MaxFieldOfView);
-                break;
-            default: return;
+            Key.Left => NavigationKeys.Left,
+            Key.Right => NavigationKeys.Right,
+            Key.Up => NavigationKeys.Up,
+            Key.Down => NavigationKeys.Down,
+            Key.OemPlus or Key.Add => NavigationKeys.ZoomIn,
+            Key.OemMinus or Key.Subtract => NavigationKeys.ZoomOut,
+            _ => NavigationKeys.None,
+        };
+
+        // Arrows pressed with a modifier don't count as held (see GetHeldNavigationKeys) and are left to the app.
+        if (key == NavigationKeys.None || !GetHeldNavigationKeys().HasFlag(key))
+            return;
+
+        // Handled, so arrow keys do not also move focus to a neighboring control.
+        e.Handled = true;
+        StartKeyboardNavigation();
+    }
+
+    protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+    {
+        base.OnLostKeyboardFocus(e);
+        StopKeyboardNavigation();
+    }
+
+    // As in the SDK MapView, arrows count only without Ctrl, Alt, or Shift, and plus and minus count with any
+    // modifier, since Shift types "+" on the main keyboard.
+    private partial NavigationKeys GetHeldNavigationKeys()
+    {
+        NavigationKeys keys = NavigationKeys.None;
+        if ((Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Alt | ModifierKeys.Shift)) == 0)
+        {
+            if (Keyboard.IsKeyDown(Key.Left))
+                keys |= NavigationKeys.Left;
+            if (Keyboard.IsKeyDown(Key.Right))
+                keys |= NavigationKeys.Right;
+            if (Keyboard.IsKeyDown(Key.Up))
+                keys |= NavigationKeys.Up;
+            if (Keyboard.IsKeyDown(Key.Down))
+                keys |= NavigationKeys.Down;
         }
 
-        RequestRender();
+        if (Keyboard.IsKeyDown(Key.OemPlus) || Keyboard.IsKeyDown(Key.Add))
+            keys |= NavigationKeys.ZoomIn;
+        if (Keyboard.IsKeyDown(Key.OemMinus) || Keyboard.IsKeyDown(Key.Subtract))
+            keys |= NavigationKeys.ZoomOut;
+
+        return keys;
     }
 
     [StructLayout(LayoutKind.Sequential)]

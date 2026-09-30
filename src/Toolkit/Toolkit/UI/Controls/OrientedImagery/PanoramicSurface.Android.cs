@@ -36,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 // Android surface for the panoramic display: a TextureView with its own EGL context on a dedicated render thread,
 // the host the SDK GeoView uses. The context is created once and survives backgrounding; only the window surface
 // follows the SurfaceTexture. Rendering is on demand. Mesh and camera come from PanoramaCameraState.
-internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextureListener
+internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextureListener, Choreographer.IFrameCallback
 {
     // GL_CULL_FACE as a glEnable/glDisable capability. Mono.Android has no constant for it (GlCullFace is the method),
     // and GlCullFaceMode (0x0B45) is the glGet enum: passing that to glDisable is GL_INVALID_ENUM.
@@ -102,12 +102,19 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     private readonly GestureDetector _gestureDetector;
     private readonly ScaleGestureDetector _scaleDetector;
 
+    // Held navigation keys by key code, so a key-up clears exactly what its key-down set. The frame callback steps
+    // the camera while any is held; the frame time is 0 until its first frame.
+    private readonly Dictionary<Keycode, NavigationKeys> _heldKeys = new();
+    private bool _keyboardFramePosted;
+    private long _keyboardFrameTime;
+
     public PanoramicSurface(Context context)
         : base(context)
     {
         SurfaceTextureListener = this;
         _gestureDetector = new GestureDetector(context, new PanGestureListener(this));
         _scaleDetector = new ScaleGestureDetector(context, new PinchListener(this));
+        Focusable = true; // like the SDK MapView, so a hardware keyboard reaches it once focus does
     }
 
     // Same event surface as the Windows PanoramicSurface, so the display's contract layer stays shared.
@@ -238,6 +245,91 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         }
 
         return base.OnGenericMotionEvent(e);
+    }
+
+    // Hardware-keyboard navigation, matching the SDK MapView on Android: held arrows move the view toward their side,
+    // and whichever keys type "+" and "-" zoom. The camera steps once per frame while keys are held, so they combine.
+    public override bool OnKeyDown(Keycode keyCode, KeyEvent? e)
+    {
+        NavigationKeys key = GetNavigationKey(keyCode, e);
+        if (key == NavigationKeys.None)
+            return base.OnKeyDown(keyCode, e);
+
+        _heldKeys[keyCode] = key;
+        if (!_keyboardFramePosted)
+        {
+            _keyboardFrameTime = 0;
+            PostKeyboardFrame();
+        }
+
+        return true;
+    }
+
+    public override bool OnKeyUp(Keycode keyCode, KeyEvent? e) => _heldKeys.Remove(keyCode) || base.OnKeyUp(keyCode, e);
+
+    protected override void OnFocusChanged(bool gainFocus, FocusSearchDirection direction, Android.Graphics.Rect? previouslyFocusedRect)
+    {
+        base.OnFocusChanged(gainFocus, direction, previouslyFocusedRect);
+
+        // Key-ups after focus leaves never arrive here.
+        if (!gainFocus)
+            _heldKeys.Clear();
+    }
+
+    // As in the SDK MapView, arrows count only without modifiers, and the keys that type "+" and "-" zoom with any.
+    private static NavigationKeys GetNavigationKey(Keycode keyCode, KeyEvent? e)
+    {
+        bool plain = e?.HasNoModifiers ?? true;
+        return keyCode switch
+        {
+            Keycode.DpadLeft or Keycode.SystemNavigationLeft when plain => NavigationKeys.Left,
+            Keycode.DpadRight or Keycode.SystemNavigationRight when plain => NavigationKeys.Right,
+            Keycode.DpadUp or Keycode.SystemNavigationUp when plain => NavigationKeys.Up,
+            Keycode.DpadDown or Keycode.SystemNavigationDown when plain => NavigationKeys.Down,
+            _ => (char)(e?.UnicodeChar ?? 0) switch
+            {
+                '+' => NavigationKeys.ZoomIn,
+                '-' => NavigationKeys.ZoomOut,
+                _ => NavigationKeys.None,
+            },
+        };
+    }
+
+    private void PostKeyboardFrame()
+    {
+        Choreographer? choreographer = Choreographer.Instance;
+        _keyboardFramePosted = choreographer is not null;
+        choreographer?.PostFrameCallback(this);
+    }
+
+    // One frame of held-key navigation, reposted until every navigation key is released. The first frame only
+    // records its time, since a step spans the time between frames.
+    public void DoFrame(long frameTimeNanos)
+    {
+        NavigationKeys keys = NavigationKeys.None;
+        foreach (NavigationKeys key in _heldKeys.Values)
+            keys |= key;
+
+        if (keys == NavigationKeys.None)
+        {
+            _keyboardFramePosted = false;
+            return;
+        }
+
+        if (_keyboardFrameTime != 0)
+        {
+            // Navigate takes DIPs, like the Windows surfaces; Height is in physical pixels.
+            double seconds = Math.Min((frameTimeNanos - _keyboardFrameTime) / 1e9, MaxKeyboardStepSeconds);
+            double heightDips = ActualHeight / (Resources?.DisplayMetrics?.Density ?? 1f);
+            PanoramaCameraState camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView).Navigate(keys, seconds, heightDips);
+            Yaw = camera.Yaw;
+            Pitch = camera.Pitch;
+            FieldOfView = camera.FieldOfView;
+            RequestRender();
+        }
+
+        _keyboardFrameTime = frameTimeNanos;
+        PostKeyboardFrame();
     }
 
     protected override void Dispose(bool disposing)

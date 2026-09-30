@@ -54,6 +54,13 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         PointerWheelChanged += OnPointerWheelChanged;
         ManipulationDelta += OnManipulationDelta;
         KeyDown += OnKeyDown;
+        LostFocus += (_, _) => StopKeyboardNavigation();
+
+        // Take focus when pressed, and mark the release handled: an unhandled left-button release bubbles to the focusable
+        // ScrollViewer at the root of the window, which takes the focus back.
+        // See https://github.com/microsoft/microsoft-ui-xaml/issues/6330.
+        PointerPressed += (_, _) => Focus(FocusState.Pointer);
+        PointerReleased += (_, e) => e.Handled = true;
         Tapped += OnTapped;
     }
 
@@ -271,33 +278,59 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         RequestRender();
     }
 
+    // The main-keyboard plus and minus keys, VK_OEM_PLUS and VK_OEM_MINUS, have no named VirtualKey values.
+    private const VirtualKey OemPlus = (VirtualKey)0xBB;
+    private const VirtualKey OemMinus = (VirtualKey)0xBD;
+
     private void OnKeyDown(object sender, KeyRoutedEventArgs e)
     {
-        switch (e.Key)
+        NavigationKeys key = e.Key switch
         {
-            case VirtualKey.Left:
-                Yaw += KeyboardRotationDelta;
-                break;
-            case VirtualKey.Right:
-                Yaw -= KeyboardRotationDelta;
-                break;
-            case VirtualKey.Up:
-                Pitch = Math.Clamp(Pitch + KeyboardRotationDelta, MinPitch, MaxPitch);
-                break;
-            case VirtualKey.Down:
-                Pitch = Math.Clamp(Pitch - KeyboardRotationDelta, MinPitch, MaxPitch);
-                break;
-            case VirtualKey.Add:
-                FieldOfView = Math.Clamp(FieldOfView * 0.9f, MinFieldOfView, MaxFieldOfView);
-                break;
-            case VirtualKey.Subtract:
-                FieldOfView = Math.Clamp(FieldOfView * 1.1f, MinFieldOfView, MaxFieldOfView);
-                break;
-            default: return;
+            VirtualKey.Left => NavigationKeys.Left,
+            VirtualKey.Right => NavigationKeys.Right,
+            VirtualKey.Up => NavigationKeys.Up,
+            VirtualKey.Down => NavigationKeys.Down,
+            VirtualKey.Add or OemPlus => NavigationKeys.ZoomIn,
+            VirtualKey.Subtract or OemMinus => NavigationKeys.ZoomOut,
+            _ => NavigationKeys.None,
+        };
+
+        // Arrows pressed with a modifier don't count as held (see GetHeldNavigationKeys) and are left to the app.
+        if (key == NavigationKeys.None || !GetHeldNavigationKeys().HasFlag(key))
+            return;
+
+        // Handled, so arrow keys do not also move focus to a neighboring control.
+        e.Handled = true;
+        StartKeyboardNavigation();
+    }
+
+    // As in the SDK MapView, arrows count only without Ctrl, Alt, or Shift, and plus and minus count with any
+    // modifier, since Shift types "+" on the main keyboard.
+    private partial NavigationKeys GetHeldNavigationKeys()
+    {
+        NavigationKeys keys = NavigationKeys.None;
+        if (!IsKeyDown(VirtualKey.Control) && !IsKeyDown(VirtualKey.Menu) && !IsKeyDown(VirtualKey.Shift))
+        {
+            if (IsKeyDown(VirtualKey.Left))
+                keys |= NavigationKeys.Left;
+            if (IsKeyDown(VirtualKey.Right))
+                keys |= NavigationKeys.Right;
+            if (IsKeyDown(VirtualKey.Up))
+                keys |= NavigationKeys.Up;
+            if (IsKeyDown(VirtualKey.Down))
+                keys |= NavigationKeys.Down;
         }
 
-        RequestRender();
+        if (IsKeyDown(OemPlus) || IsKeyDown(VirtualKey.Add))
+            keys |= NavigationKeys.ZoomIn;
+        if (IsKeyDown(OemMinus) || IsKeyDown(VirtualKey.Subtract))
+            keys |= NavigationKeys.ZoomOut;
+
+        return keys;
     }
+
+    private static bool IsKeyDown(VirtualKey key) =>
+        Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(key).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
 }
 
 // SwapChainPanel <-> DXGI swap chain binding (windows.ui.xaml.media.dxinterop.h)
