@@ -40,7 +40,27 @@ internal readonly struct PanoramaCameraState
     public const float MinFieldOfView = 50f * MathF.PI / 180f;
     public const float MaxFieldOfView = 120f * MathF.PI / 180f;
     public const float MouseRotationScale = 0.0035f; // fallback drag scale while the view size is unknown
-    public const float KeyboardRotationDelta = MathF.PI / 90f;
+
+    // Held-key navigation speeds, matching the SDK MapView: arrows move the view 300 DIPs per second on screen, and
+    // zooming changes the scale by a factor of 2 per second.
+    public const double KeyboardPanSpeed = 300;
+    public const double KeyboardZoomRate = 2;
+
+    // Caps the time step of a single keyboard frame, so a stalled frame doesn't make the view jump.
+    public const double MaxKeyboardStepSeconds = 0.1;
+
+    // The navigation keys currently held down, as polled by each platform's input layer every frame.
+    [Flags]
+    public enum NavigationKeys
+    {
+        None = 0,
+        Left = 1,
+        Right = 2,
+        Up = 4,
+        Down = 8,
+        ZoomIn = 16,
+        ZoomOut = 32,
+    }
 
     // Rad-per-DIP drag scale so the grabbed point tracks the pointer at screen center regardless of control size,
     // zoom and DPI. The same factor serves yaw (the aspect's width cancels).
@@ -64,6 +84,35 @@ internal readonly struct PanoramaCameraState
     public float Pitch { get; }
 
     public float FieldOfView { get; }
+
+    // One frame of held-key navigation. Unlike a drag, which moves the image, an arrow moves the view toward its side,
+    // as in MapView: Left looks left and Up looks up. Held keys combine, so Up+Left moves diagonally. viewHeight uses
+    // the same units as DragRotationScale.
+    public PanoramaCameraState Navigate(NavigationKeys keys, double seconds, double viewHeight)
+    {
+        float angle = (float)(KeyboardPanSpeed * seconds) * DragRotationScale(FieldOfView, viewHeight);
+        int right = Axis(NavigationKeys.Right, NavigationKeys.Left);
+        int down = Axis(NavigationKeys.Down, NavigationKeys.Up);
+        int zoomIn = Axis(NavigationKeys.ZoomIn, NavigationKeys.ZoomOut);
+
+        // Yaw turns the view right and Pitch turns it down (see the convention above).
+        float yaw = Yaw + (right * angle);
+        float pitch = Math.Clamp(Pitch + (down * angle), MinPitch, MaxPitch);
+
+        // The view's scale is 1 / tan(FieldOfView / 2), so zooming in for a second doubles it, as it does in MapView.
+        float fieldOfView = FieldOfView;
+        if (zoomIn != 0)
+        {
+            double halfTangent = Math.Tan(FieldOfView / 2.0) * Math.Pow(KeyboardZoomRate, -zoomIn * seconds);
+            fieldOfView = Math.Clamp((float)(2.0 * Math.Atan(halfTangent)), MinFieldOfView, MaxFieldOfView);
+        }
+
+        return new PanoramaCameraState(yaw, pitch, fieldOfView);
+
+        // +1, -1, or 0 when both or neither of an opposing key pair are held.
+        int Axis(NavigationKeys positive, NavigationKeys negative) =>
+            (keys.HasFlag(positive) ? 1 : 0) - (keys.HasFlag(negative) ? 1 : 0);
+    }
 
     // Screen point -> normalized (u,v): the inverse of the render's world*projection.
     public bool TryScreenToNormalizedUv(double screenX, double screenY, double viewWidth, double viewHeight, out float u, out float v)

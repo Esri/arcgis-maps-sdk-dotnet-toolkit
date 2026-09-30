@@ -17,6 +17,7 @@
 #if WPF || WINDOWS_XAML || (MAUI && WINDOWS)
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -108,6 +109,10 @@ internal sealed unsafe partial class PanoramicSurface
     private bool _needsRender = true;
     private bool _deviceLost;
     private bool _deviceEverCreated;
+
+    // Held-key navigation runs from a navigation key press until every navigation key is released.
+    private bool _keyboardNavigating;
+    private long _keyboardTimestamp;
 
     // Marker billboard pass: each swatch is drawn after the sphere as a screen-aligned, alpha-blended quad.
     private ID3D11VertexShader* _markerVertexShader;
@@ -230,8 +235,48 @@ internal sealed unsafe partial class PanoramicSurface
 
     private partial void RenderFrame();
 
+    // The navigation keys held down now; each present layer reads its platform's key state.
+    private partial PanoramaCameraState.NavigationKeys GetHeldNavigationKeys();
+
     // Re-renders on the next tick; rendering is on demand (camera, texture or size changes).
     public void RequestRender() => _needsRender = true;
+
+    // Starts held-key navigation, which then runs on the render tick like the SDK MapView's key loop. All navigation
+    // keys are polled every frame, so held keys combine and the view moves smoothly rather than at the key repeat rate.
+    private void StartKeyboardNavigation()
+    {
+        if (_keyboardNavigating)
+            return;
+
+        _keyboardNavigating = true;
+        _keyboardTimestamp = Stopwatch.GetTimestamp();
+    }
+
+    // Called when focus leaves: key releases after that may never arrive, so the polled key state can go stale.
+    private void StopKeyboardNavigation() => _keyboardNavigating = false;
+
+    private void StepKeyboardNavigation()
+    {
+        if (!_keyboardNavigating)
+            return;
+
+        PanoramaCameraState.NavigationKeys keys = GetHeldNavigationKeys();
+        if (keys == PanoramaCameraState.NavigationKeys.None)
+        {
+            _keyboardNavigating = false;
+            return;
+        }
+
+        long now = Stopwatch.GetTimestamp();
+        double seconds = Math.Min(Stopwatch.GetElapsedTime(_keyboardTimestamp, now).TotalSeconds, PanoramaCameraState.MaxKeyboardStepSeconds);
+        _keyboardTimestamp = now;
+
+        PanoramaCameraState camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView).Navigate(keys, seconds, ActualHeight);
+        Yaw = camera.Yaw;
+        Pitch = camera.Pitch;
+        FieldOfView = camera.FieldOfView;
+        RequestRender();
+    }
 
     // A removed device (TDR, driver update, RDP, sleep) is rebuilt on the next tick instead of being reported.
     private void NotifyDeviceLost()
@@ -273,10 +318,11 @@ internal sealed unsafe partial class PanoramicSurface
             DeviceRecreated?.Invoke();
     }
 
-    // One render tick: recover a lost device first, then draw when something changed. A device removed during or
-    // after the draw is recovered on a later tick rather than reported.
+    // One render tick: advance held-key navigation, recover a lost device, then draw when something changed. A device
+    // removed during or after the draw is recovered on a later tick rather than reported.
     private void RenderTick()
     {
+        StepKeyboardNavigation();
         if (_deviceLost && !TryRecoverDevice())
             return;
 
