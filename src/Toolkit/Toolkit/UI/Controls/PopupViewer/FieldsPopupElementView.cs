@@ -119,7 +119,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 presenter.Content = null;
                 return;
             }
-            Grid g = new Grid();
+            Grid g = null;
+#if WPF
+            g = new AccessibleGrid();
+#else
+            g = new Grid();
+#endif
+
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
 #if MAUI
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Absolute) });
@@ -175,13 +181,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     labelCell.Row = i;
                     labelCell.Column = 0;
-                    labelCell.ContainingGridElement = this;
+                    labelCell.ContainingGridElement = g;
                 }
                 if (valueCell is IFieldsTableCell valueTableCell)
                 {
                     valueTableCell.Row = i;
                     valueTableCell.Column = 1;
-                    valueTableCell.ContainingGridElement = this;
+                    valueTableCell.ContainingGridElement = g;
                     valueTableCell.RowHeaderElement = label;
                 }
 #endif
