@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             }
         }
 
-        private async void MainOrientedImageryView_ImageTapped(object? sender, OrientedImageDisplay.ImageClickedEventArgs e)
+        private async void MainOrientedImageryView_ImageTapped(object? sender, OrientedImageDisplay.ImageTappedEventArgs e)
         {
             // Do not add a new marker if there is already one in proximity to the click location
             if (e.Marker != null)
