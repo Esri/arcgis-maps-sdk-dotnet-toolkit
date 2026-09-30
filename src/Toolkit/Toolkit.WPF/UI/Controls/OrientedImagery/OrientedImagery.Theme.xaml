@@ -153,7 +153,7 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ViewModel.ShowCameraLocations}" Value="True">
                             <Setter Property="Background" Value="#FFD3D3D3" />
-                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewClearCameraMarkers}" />
+                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewHideCameraMarkers}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

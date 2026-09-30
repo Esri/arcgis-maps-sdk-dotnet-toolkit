@@ -616,7 +616,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private ObservableCollection<OrientedImageMarker> _markers;
     private GraphicsOverlay _markersOverlay;
     private bool _showCameraLocations = true;
-    private bool _showCameraLocationsOnDisplay = false;
     private static readonly MarkerTag SearchPointMarkerTag = new MarkerTag("SearchPointMarker");
     private static readonly MarkerTag SelectedImageMarkerTag = new MarkerTag("SelectedImageMarker", int.MaxValue);
     private static readonly MarkerTag AllCamerasMarkerTag = new MarkerTag("AllSelectedCamerasMarker", -1);
@@ -657,7 +656,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public MarkerSymbol AllCamerasMarkerSymbol { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to show markers for the locations of the cameras associated with the images in the control.
+    /// Gets or sets a value indicating whether camera location markers are shown on the GeoView.
     /// </summary>
     public bool ShowCameraLocations
     {
@@ -667,24 +666,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             if (_showCameraLocations == value) { return; }
 
             SetProperty(ref _showCameraLocations, value);
-            UpdateCameraMarkers();
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to show camera locations on the display.
-    /// </summary>
-    /// <remarks>
-    /// This property only has an effect if <see cref="ShowCameraLocations"/> is set to <c>true</c>.
-    /// </remarks>
-    public bool ShowCameraLocationsOnDisplay
-    {
-        get => _showCameraLocationsOnDisplay;
-        set
-        {
-            if (_showCameraLocationsOnDisplay == value) { return; }
-
-            SetProperty(ref _showCameraLocationsOnDisplay, value);
             UpdateCameraMarkers();
         }
     }
@@ -784,7 +765,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 Markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation((MapPoint)image.Geometry!), AllCamerasMarkerSymbol)
                 {
                     Tag = AllCamerasMarkerTag,
-                    IsVisible = ShowCameraLocationsOnDisplay
+                    IsVisible = false
                 });
             }
         }

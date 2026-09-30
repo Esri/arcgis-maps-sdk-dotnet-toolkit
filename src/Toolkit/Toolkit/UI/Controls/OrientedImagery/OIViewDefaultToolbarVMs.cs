@@ -93,7 +93,7 @@ public class ShowUnselectedFootprintsVM : OrientedImageryToolbarItemBase { }
 public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
 {
     /// <summary>
-    /// Toggles camera markers between map-only visibility and hidden on both map and image.
+    /// Toggles camera markers between visible on the GeoView and hidden.
     /// </summary>
     public ICommand ToggleCameraMarkerDisplayMode { get; }
 
@@ -108,7 +108,6 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
             if (ViewModel == null)
                 return;
 
-            ViewModel.ShowCameraLocationsOnDisplay = false;
             ViewModel.ShowCameraLocations = !ViewModel.ShowCameraLocations;
         },
         canExecute: () => true);
