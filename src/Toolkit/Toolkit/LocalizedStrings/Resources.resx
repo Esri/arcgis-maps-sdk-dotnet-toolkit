@@ -1114,12 +1114,12 @@
     <comment>Tooltip for the OrientedImageryView button that shows unselected image footprints.</comment>
   </data>
   <data name="OrientedImageryViewShowCameraMarkersOnGeoView" xml:space="preserve">
-    <value>Show camera markers on geo view</value>
-    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the geo view.</comment>
+    <value>Show camera markers on GeoView</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the GeoView.</comment>
   </data>
-  <data name="OrientedImageryViewClearCameraMarkers" xml:space="preserve">
-    <value>Clear camera markers</value>
-    <comment>Tooltip for the OrientedImageryView button when camera markers can be cleared.</comment>
+  <data name="OrientedImageryViewHideCameraMarkers" xml:space="preserve">
+    <value>Hide camera markers on GeoView</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers are visible on the GeoView.</comment>
   </data>
   <data name="OrientedImageryViewClearMarkers" xml:space="preserve">
     <value>Clear markers</value>
