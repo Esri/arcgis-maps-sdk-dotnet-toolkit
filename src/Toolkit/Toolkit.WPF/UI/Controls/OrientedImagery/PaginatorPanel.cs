@@ -53,27 +53,14 @@ internal class PaginatorPresenterPanel : Panel
             _pageSize.Height = Math.Max(_pageSize.Height, child.DesiredSize.Height);
         }
 
-        return new Size(GetVisiblePageCount(availableSize.Width, pageCount) * _pageSize.Width, _pageSize.Height);
-    }
-
-    private int GetVisiblePageCount(double availableWidth, int pageCount)
-    {
-        if (pageCount < 1)
-            return 0;
-
-        if (_pageSize.Width == 0 || availableWidth >= pageCount * _pageSize.Width)
-            return pageCount;
-
-        var count = Math.Max(1, (int)(availableWidth / _pageSize.Width));
-        return count % 2 == 0 ? count - 1 : count;
+        var (_, visibleCount) = OrientedImageryPagination.GetRange(pageCount, SelectedPageIndex, availableSize.Width, _pageSize.Width);
+        return new Size(visibleCount * _pageSize.Width, _pageSize.Height);
     }
 
     protected override Size ArrangeOverride(Size finalSize)
     {
         var pageCount = Math.Min(TotalPages, InternalChildren.Count);
-        var visibleCount = GetVisiblePageCount(finalSize.Width, pageCount);
-        var currentPage = Math.Max(0, Math.Min(SelectedPageIndex, pageCount - 1));
-        var start = Math.Max(0, Math.Min(currentPage - visibleCount / 2, pageCount - visibleCount));
+        var (start, visibleCount) = OrientedImageryPagination.GetRange(pageCount, SelectedPageIndex, finalSize.Width, _pageSize.Width);
         var left = Math.Max(0, (finalSize.Width - visibleCount * _pageSize.Width) / 2);
         for (var i = 0; i < InternalChildren.Count; i++)
         {
