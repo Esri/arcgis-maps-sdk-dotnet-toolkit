@@ -473,7 +473,7 @@
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
                                     <TextBlock Text="&lt;" />
                                 </Button>
-                                <Button Content="Prev"
+                                <Button Content="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
                                         Style="{StaticResource PaginatorPageButtonStyle}"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
@@ -489,7 +489,7 @@
                                             VerticalAlignment="Bottom"
                                             Background="#007AC2" />
                                 </Grid>
-                                <Button Content="Next"
+                                <Button Content="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
                                         Style="{StaticResource PaginatorPageButtonStyle}"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
