@@ -1105,4 +1105,90 @@
     <value>Oriented image, {0}</value>
     <comment>UIA AutomationProperties.Name for the image shown by OrientedImageDisplay; {0} is the oriented image type (e.g. Nadir)</comment>
   </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>Select marker symbol</value>
+    <comment>Tooltip for the OrientedImageryView button that selects the marker symbol.</comment>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>Toggle add markers</value>
+    <comment>Tooltip for the OrientedImageryView button that enables or disables adding markers.</comment>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>Show selected image footprint</value>
+    <comment>Tooltip for the OrientedImageryView button that shows the selected image footprint.</comment>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Show unselected image footprints</value>
+    <comment>Tooltip for the OrientedImageryView button that shows unselected image footprints.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectedFootprintAutomationName" xml:space="preserve">
+    <value>Selected image footprint</value>
+    <comment>Name for the footprint toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsAutomationName" xml:space="preserve">
+    <value>Camera locations on GeoView</value>
+    <comment>Name for the camera locations toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewUnselectedFootprintsAutomationName" xml:space="preserve">
+    <value>Unselected image footprints</value>
+    <comment>Name for the footprints toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewAddMarkersAutomationName" xml:space="preserve">
+    <value>Add markers</value>
+    <comment>Name for the marker-creation toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>Go to image {0} of {1}</value>
+    <comment>Pagination automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>Image {0} of {1}, selected</value>
+    <comment>Selected pagination button automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
+  </data>
+  <data name="OrientedImageryViewShowCameraMarkersOnGeoView" xml:space="preserve">
+    <value>Show camera markers on GeoView</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the GeoView.</comment>
+  </data>
+  <data name="OrientedImageryViewHideCameraMarkers" xml:space="preserve">
+    <value>Hide camera markers on GeoView</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers are visible on the GeoView.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkers" xml:space="preserve">
+    <value>Clear markers</value>
+    <comment>Tooltip for the OrientedImageryView button that clears markers.</comment>
+  </data>
+  <data name="OrientedImageryViewEnterSequentialNavigation" xml:space="preserve">
+    <value>Enter sequential navigation</value>
+    <comment>Tooltip for the OrientedImageryView button that enters sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewReturnToResults" xml:space="preserve">
+    <value>Return to results</value>
+    <comment>Tooltip for the OrientedImageryView button that returns from sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>Seq.Navigation</value>
+    <comment>Underlined label between the previous and next image buttons in sequential navigation mode.</comment>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>Previous image</value>
+    <comment>Tooltip and accessibility name for the previous image button.</comment>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>Next image</value>
+    <comment>Tooltip and accessibility name for the next image button.</comment>
+  </data>
+  <data name="OrientedImageryViewLoading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>Message shown by OrientedImageryView while an image is loading.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImagesSelected" xml:space="preserve">
+    <value>No images selected</value>
+    <comment>Message shown by OrientedImageryView when no images are selected.</comment>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>Next</value>
+  </data>
 </root>
