@@ -154,7 +154,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _noNextImage;
     private bool _noPreviousImage;
     private int _sequentialNavigationVersion;
-    private string? _sequentialNavigationMessage;
+    private Exception? _sequentialNavigationError;
     private OrientedImage? _imageBeforeSequentialNavigation;
     private bool _isSelectedImageReady;
 
@@ -178,12 +178,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Gets the error message for sequential navigation.
+    /// Gets the error produced while loading an adjacent image.
     /// </summary>
-    public string? SequentialNavigationMessage
+    public Exception? SequentialNavigationError
     {
-        get => _sequentialNavigationMessage;
-        private set => SetProperty(ref _sequentialNavigationMessage, value);
+        get => _sequentialNavigationError;
+        private set => SetProperty(ref _sequentialNavigationError, value);
     }
 
     /// <summary>
@@ -362,7 +362,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _adjacentImagesCancellation = cancellation;
         var navigationVersion = _sequentialNavigationVersion;
         _isFetchingAdjacentImage = true;
-        SequentialNavigationMessage = null;
+        SequentialNavigationError = null;
         try
         {
             _adjacentImagesFetchTask = Task.WhenAll(
@@ -409,7 +409,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         catch (Exception exception)
         {
             if (navigationVersion == _sequentialNavigationVersion && !cancellationToken.IsCancellationRequested)
-                SequentialNavigationMessage = string.Format(Properties.Resources.GetString("OrientedImageryViewNavigationFailed") ?? "{0}", exception.Message);
+                SequentialNavigationError = exception;
         }
     }
 
@@ -437,7 +437,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _previousSequentialImage = null;
         _noNextImage = false;
         _noPreviousImage = false;
-        SequentialNavigationMessage = null;
+        SequentialNavigationError = null;
     }
 
     internal void SetSelectedImageReady(bool isReady)
