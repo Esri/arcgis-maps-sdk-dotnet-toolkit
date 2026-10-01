@@ -196,7 +196,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 continue;
 
             (double offsetX, double offsetY) = GetMarkerOffset(symbol);
-            resolved.Add(new ResolvedMarker(marker, u, v, offsetX, offsetY));
+            resolved.Add(new ResolvedMarker(marker, u, v, offsetX, offsetY, width / scale / 2, height / scale / 2));
             swatches.Add(new PanoramicSurface.MarkerSwatch(u, v, bgra, width, height, (float)(offsetX * scale), (float)(offsetY * scale)));
         }
 
@@ -432,29 +432,26 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         return HitTestMarker(_resolvedMarkers, camera, _surface.ActualWidth, _surface.ActualHeight, x, y, dip);
     }
 
-    // Returns the nearest marker drawn within the hit tolerance of the tap, or null. A marker is drawn at its projected
-    // anchor plus its symbol offset. dip converts DIPs to view units; it is 1 where the view measures in DIPs.
+    // Returns the topmost marker whose swatch lies within the hit tolerance of the tap, or null, as the planar display's
+    // identify does. Markers draw in list order, so the last one is on top. A swatch is centered on its projected anchor
+    // plus its symbol offset. dip converts DIPs to view units; it is 1 where the view measures in DIPs.
     internal static OrientedImageMarker? HitTestMarker(IReadOnlyList<ResolvedMarker> markers, PanoramaCameraState camera,
         double viewWidth, double viewHeight, double x, double y, double dip)
     {
-        OrientedImageMarker? hit = null;
-        double best = MarkerHitTolerance * dip;
-        foreach (ResolvedMarker resolved in markers)
+        for (int i = markers.Count - 1; i >= 0; i--)
         {
+            ResolvedMarker resolved = markers[i];
             if (!camera.TryNormalizedUvToScreen(resolved.U, resolved.V, viewWidth, viewHeight, out double sx, out double sy))
                 continue;
 
-            sx += resolved.OffsetX * dip;
-            sy += resolved.OffsetY * dip;
-            double distance = Math.Sqrt(((sx - x) * (sx - x)) + ((sy - y) * (sy - y)));
-            if (distance <= best)
-            {
-                best = distance;
-                hit = resolved.Marker;
-            }
+            // The tap's distance from the swatch's rectangle, in DIPs; zero inside it.
+            double dx = Math.Max(Math.Abs(((x - sx) / dip) - resolved.OffsetX) - resolved.HalfWidth, 0);
+            double dy = Math.Max(Math.Abs(((y - sy) / dip) - resolved.OffsetY) - resolved.HalfHeight, 0);
+            if ((dx * dx) + (dy * dy) <= MarkerHitTolerance * MarkerHitTolerance)
+                return resolved.Marker;
         }
 
-        return hit;
+        return null;
     }
 
     private static float ReadHeadingRadians(OrientedImage image)
@@ -663,8 +660,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     }
 #endif
 
-    // A marker resolved to a normalized (u,v) and its symbol offset in DIPs, kept on the UI side for tap hit-testing
-    // (the surface owns the GPU side).
-    internal readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY);
+    // A marker resolved to a normalized (u,v), its symbol offset, and its swatch's half-size, all sizes in DIPs, kept on
+    // the UI side for tap hit-testing (the surface owns the GPU side).
+    internal readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY, double HalfWidth, double HalfHeight);
 }
 #endif

@@ -103,27 +103,31 @@ public sealed class OrientedImageDisplayTests
         // Looking at the image center: (0.75, 0.5) projects to the middle of a 400 x 300 view.
         var camera = new PanoramaCameraState(yaw: 0f, pitch: 0f, fieldOfView: MathF.PI / 2f);
         Assert.IsTrue(camera.TryNormalizedUvToScreen(0.75f, 0.5f, 400, 300, out double cx, out double cy));
-        var onAnchor = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)));
-        var nearAnchor = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)));
-        var drawnAway = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)));
 
-        // Drawn 15 DIPs right of and 20 DIPs above its anchor.
-        var offset = new[] { new OrientedImagePanoramicDisplay.ResolvedMarker(drawnAway, 0.75f, 0.5f, 15, -20) };
-        Assert.AreSame(drawnAway, Hit(offset, cx + 15, cy - 20, dip: 1), "a tap on the drawn marker hits it");
-        Assert.IsNull(Hit(offset, cx, cy, dip: 1), "a tap on the bare anchor, 25 DIPs from the drawing, misses");
-        Assert.AreSame(drawnAway, Hit(offset, cx + 30, cy - 40, dip: 2), "the offset scales with the view's pixels per DIP");
+        // A 10-DIP marker drawn 15 DIPs right of and 20 DIPs above its anchor.
+        var offset = Marker(size: 10, offsetX: 15, offsetY: -20);
+        Assert.AreSame(offset.Marker, Hit([offset], cx + 15, cy - 20, dip: 1), "a tap on the drawn marker hits it");
+        Assert.IsNull(Hit([offset], cx, cy, dip: 1), "a tap on the bare anchor, 18 DIPs from the drawn marker, misses");
+        Assert.AreSame(offset.Marker, Hit([offset], cx + 30, cy - 40, dip: 2), "the offset scales with the view's pixels per DIP");
 
-        var close = new[]
-        {
-            new OrientedImagePanoramicDisplay.ResolvedMarker(onAnchor, 0.75f, 0.5f, 0, 0),
-            new OrientedImagePanoramicDisplay.ResolvedMarker(nearAnchor, 0.75f, 0.5f, 6, 0),
-        };
-        Assert.AreSame(onAnchor, Hit(close, cx + 2, cy, dip: 1), "the nearest drawn marker wins");
-        Assert.AreSame(nearAnchor, Hit(close, cx + 4, cy, dip: 1), "the nearest drawn marker wins");
+        // The whole symbol counts, plus 12 DIPs around it.
+        var large = Marker(size: 80, offsetX: 0, offsetY: 0);
+        Assert.IsNotNull(Hit([large], cx + 30, cy, dip: 1), "inside the symbol");
+        Assert.IsNotNull(Hit([large], cx + 51, cy, dip: 1), "11 DIPs outside its edge");
+        Assert.IsNull(Hit([large], cx + 55, cy, dip: 1), "15 DIPs outside its edge");
+
+        // As in the planar display, the topmost marker within tolerance wins, even over a direct hit beneath it.
+        var upper = Marker(size: 20, offsetX: 55, offsetY: 0);
+        Assert.AreSame(upper.Marker, Hit([large, upper], cx + 38, cy, dip: 1), "inside the lower marker, 7 DIPs from the upper one");
+        Assert.AreSame(large.Marker, Hit([large, upper], cx - 20, cy, dip: 1), "out of the upper marker's reach");
 
         OrientedImageMarker? Hit(OrientedImagePanoramicDisplay.ResolvedMarker[] markers, double x, double y, double dip) =>
             OrientedImagePanoramicDisplay.HitTestMarker(markers, camera, 400, 300, x, y, dip);
     }
+
+    // A marker at the image center with a square swatch of the given size in DIPs.
+    private static OrientedImagePanoramicDisplay.ResolvedMarker Marker(double size, double offsetX, double offsetY) =>
+        new(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0))), 0.75f, 0.5f, offsetX, offsetY, size / 2, size / 2);
 
     [TestMethod]
     public void PanoramicSurfaceHasAccessibleName()
