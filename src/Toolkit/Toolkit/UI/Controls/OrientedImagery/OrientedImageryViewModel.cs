@@ -31,6 +31,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </summary>
     public OrientedImageryViewModel() : base()
     {
+#if WINDOWS_XAML
+        _dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+#endif
         _allowAddingMarkers = false;
         _markers = new ObservableCollection<OrientedImageMarker>();
         _managedMarkers = new ObservableCollection<OrientedImageMarker>();
@@ -628,6 +631,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private readonly ObservableCollection<OrientedImageMarker> _displayMarkers;
     private readonly GraphicsOverlay _markersOverlay;
     private readonly HashSet<OrientedImageMarker> _overlayMarkerSubscriptions = [];
+#if WINDOWS_XAML
+    private readonly Microsoft.UI.Dispatching.DispatcherQueue? _dispatcherQueue;
+#endif
     private bool _showCameraLocations = true;
     private bool _canClearMarkers;
     private static readonly MarkerTag SearchPointMarkerTag = new MarkerTag("SearchPointMarker");
@@ -754,12 +760,21 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void Marker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+#if WPF
         System.Windows.Threading.Dispatcher? dispatcher = System.Windows.Application.Current?.Dispatcher;
         if (dispatcher is not null && !dispatcher.CheckAccess())
         {
             _ = dispatcher.BeginInvoke(SynchronizeMarkers);
             return;
         }
+#elif WINDOWS_XAML
+        if (_dispatcherQueue is { HasThreadAccess: false })
+        {
+            if (!_dispatcherQueue.TryEnqueue(SynchronizeMarkers))
+                throw new InvalidOperationException("Unable to update oriented imagery markers on the UI thread.");
+            return;
+        }
+#endif
 
         SynchronizeMarkers();
     }

@@ -4,6 +4,8 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 #if WPF
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#elif WINDOWS_XAML
+using Paginator = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryPaginator;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -46,14 +48,14 @@ public partial class OrientedImageryView
             UnwireDisplay(oldDisplay);
         if (_toolbarContainer != null)
             UnwireToolbarContainer(_toolbarContainer);
-#if WPF
+#if WPF || WINDOWS_XAML
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged -= Paginator_SelectedPageIndexChanged;
 #endif
 
         _display = GetTemplateChild(ImageDisplayName) as OrientedImageDisplay;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
-#if WPF
+#if WPF || WINDOWS_XAML
         _paginator = GetTemplateChild(PaginatorName) as Paginator;
 #endif
 
@@ -65,9 +67,12 @@ public partial class OrientedImageryView
             WireDisplay(_display);
         if (_toolbarContainer != null)
             WireToolbarContainer(_toolbarContainer);
-#if WPF
+#if WPF || WINDOWS_XAML
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
+#endif
+#if WINDOWS_XAML
+        UpdatePaginator();
 #endif
     }
 
@@ -115,6 +120,12 @@ public partial class OrientedImageryView
 
         if (_display != null)
             WireDisplayToViewModel(_display);
+#if WINDOWS_XAML
+        if (_toolbarContainer != null)
+            _toolbarContainer.ItemsSource = newValue.ToolbarItems;
+        UpdatePaginator();
+        UpdateNavigationVisibility();
+#endif
     }
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -128,13 +139,21 @@ public partial class OrientedImageryView
                     UpdateSelectedImageReady();
                 }
                 break;
-#if WPF
+#if WPF || WINDOWS_XAML
             case nameof(OrientedImageryViewModel.SelectedImage):
                 UpdatePaginatorSelection();
+#if WINDOWS_XAML
+                UpdateNavigationVisibility();
+#endif
                 break;
             case nameof(OrientedImageryViewModel.Images):
                 if (_paginator != null)
                     _paginator.TotalPages = ViewModel.Images.Count;
+                break;
+#endif
+#if WINDOWS_XAML
+            case nameof(OrientedImageryViewModel.IsSequentialNavigation):
+                UpdateNavigationVisibility();
                 break;
 #endif
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
@@ -157,6 +176,8 @@ public partial class OrientedImageryView
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
     /// </summary>
+    /// <remarks>On WinUI, the default <see cref="System.Drawing.Color.Empty"/> follows the active theme.
+    /// Set an explicit color to override it, or restore <see cref="System.Drawing.Color.Empty"/> to follow the theme again.</remarks>
     public System.Drawing.Color DisplayBackgroundColor
     {
         get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
@@ -167,7 +188,11 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="DisplayBackgroundColor" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
+#if WINDOWS_XAML
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#else
         PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#endif
 
     private void WireDisplay(OrientedImageDisplay display)
     {
@@ -206,6 +231,13 @@ public partial class OrientedImageryView
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
+#if WINDOWS_XAML
+        if (displayBackgroundColor.IsEmpty)
+        {
+            var color = ThemeDisplayBackgroundColor;
+            displayBackgroundColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+#endif
         if (_display != null)
             _display.DisplayBackgroundColor = displayBackgroundColor;
     }
@@ -306,9 +338,19 @@ public partial class OrientedImageryView
     }
 #endregion Toolbar
 
-#if WPF
+#if WPF || WINDOWS_XAML
 #region Pagination
     private Paginator? _paginator;
+
+#if WINDOWS_XAML
+    private void UpdatePaginator()
+    {
+        if (_paginator == null)
+            return;
+        _paginator.TotalPages = ViewModel.Images.Count;
+        UpdatePaginatorSelection();
+    }
+#endif
 
     private void UpdatePaginatorSelection()
     {
