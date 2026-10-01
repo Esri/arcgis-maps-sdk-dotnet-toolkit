@@ -15,10 +15,8 @@
 //  ******************************************************************************/
 
 using System;
-using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
@@ -59,6 +57,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     private const double MarkerHitTolerance = 12d;
 
     private RasterLayer? _rasterLayer;
+    private ExifOrientationTransform _imageOrientation;
     private readonly Dictionary<OrientedImageMarker, Graphic> _markerGraphics = [];
     private readonly Dictionary<Graphic, OrientedImageMarker> _graphicMarkers = [];
     private bool _interactive;
@@ -121,14 +120,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
             // GetLayerViewState throws if the layer isn't in the current map (can happen during a map swap).
             if (_mapView.Map?.OperationalLayers.Contains(layer) == true &&
-                _mapView.GetLayerViewState(layer) is LayerViewState layerViewState &&
-                layerViewState.Error is Exception viewError)
-            {
-                // It's now standard for core to raise a warning on RasterLayers whenever pedata hasn't been set, which doesn't apply to most oriented image rasters
-                // since most don't have a spatial reference in the first place
-                if (!(layerViewState.Status.HasFlag(LayerViewStatus.Warning) && viewError.Message.Contains("The pedata directory has not been set.")))
-                    return viewError;
-            }
+                _mapView.GetLayerViewState(layer)?.Error is Exception viewError)
+                return viewError;
         }
 
         return PresentationError;
@@ -148,12 +141,14 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         _rasterLayer = layer;
         await layer.LoadAsync();
         token.ThrowIfCancellationRequested();
+        _imageOrientation = ExifOrientationTransform.Read(dataUri);
 
         if (layer.Raster?.RasterInfo?.Extent is Envelope extent)
         {
-            // The effective rotation is clockwise, MapView rotation counter-clockwise: negate. Only the view rotates, so
-            // markers and hit-testing stay in native pixel space (OrientedImageRotation.DesignNotes.md).
-            double viewRotation = -GetEffectiveRotationDegrees(image);
+            // The raster layer draws the file's stored pixel grid and ignores EXIF orientation, so the view applies the
+            // orientation's rotation too. A view can't reflect, so mirrored images appear upright but reversed. Both
+            // rotations are clockwise; MapView rotation is counter-clockwise.
+            double viewRotation = -(GetEffectiveRotationDegrees(image) + _imageOrientation.RotationDegrees);
             try
             {
                 // Frame and rotate in one animation-free viewpoint set.
@@ -179,6 +174,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         _rasterLayer?.CancelLoad();
         _mapView.Map = null;
         _rasterLayer = null;
+        _imageOrientation = default;
         SetInteractive(false);
     }
 
@@ -344,7 +340,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     {
         double roll = ReadRotationAttribute(image, "CameraRoll");
         double imageRotation = ReadRotationAttribute(image, "ImageRotation");
-        return roll + imageRotation + ReadExifRotationDegrees(image.DataUri);
+        return roll + imageRotation;
     }
 
     // CameraRoll and ImageRotation are esriFieldTypeDouble, so a boxed double is the only shape to accept.
@@ -355,114 +351,11 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return 0d;
     }
 
-    // Clockwise display rotation (0/90/180/270) from a local JPEG's EXIF Orientation; 0 when absent or not applicable.
-    private static double ReadExifRotationDegrees(Uri? dataUri)
-    {
-        if (dataUri is null || !dataUri.IsFile)
-            return 0;
-
-        // Minimal metadata parser inspired by https://stackoverflow.com/q/7584794/383361
-        try
-        {
-            // Open shared: the SDK owns the downloaded file.
-            using FileStream stream = new FileStream(dataUri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            if (stream.ReadByte() != 0xFF || stream.ReadByte() != 0xD8)
-                return 0; // not a JPEG
-
-            while (true)
-            {
-                int b = stream.ReadByte();
-                if (b < 0)
-                    return 0; // EOF before metadata
-                if (b != 0xFF)
-                    continue;
-
-                int marker;
-                do
-                {
-                    marker = stream.ReadByte();
-                }
-                while (marker == 0xFF);
-                if (marker < 0 || marker == 0xDA || marker == 0xD9)
-                    return 0; // start-of-scan / end-of-image: no (more) metadata to read
-
-                if (marker == 0x01 || (marker >= 0xD0 && marker <= 0xD7))
-                    continue; // standalone markers, no length field
-
-                int hi = stream.ReadByte();
-                int lo = stream.ReadByte();
-                if (hi < 0 || lo < 0)
-                    return 0; // EOF before length field
-                int payloadLength = ((hi << 8) | lo) - 2;
-                if (payloadLength < 0 || payloadLength > stream.Length - stream.Position)
-                    return 0; // malformed length field
-
-                if (marker == 0xE1 && payloadLength >= 14)
-                {
-                    byte[] payload = new byte[payloadLength];
-                    stream.ReadExactly(payload);
-                    int orientation = ParseExifOrientation(payload);
-                    if (orientation > 0)
-                        return orientation switch { 3 => 180d, 6 => 90d, 8 => 270d, _ => 0d };
-                    continue; // not the EXIF APP1 (e.g. XMP) or no Orientation tag
-                }
-
-                stream.Seek(payloadLength, SeekOrigin.Current);
-            }
-        }
-        catch
-        {
-            // Fall back to "no rotation" in case of I/O or parsing errors.
-            return 0;
-        }
-    }
-
-    // Extracts the EXIF Orientation value (1..8, or 0 if absent) from a JPEG APP1 payload ("Exif\0\0" + TIFF + IFD0).
-    private static int ParseExifOrientation(byte[] app1)
-    {
-        if (app1.Length < 14 ||
-            app1[0] != (byte)'E' || app1[1] != (byte)'x' || app1[2] != (byte)'i' || app1[3] != (byte)'f' || app1[4] != 0 || app1[5] != 0)
-            return 0;
-
-        const int tiff = 6;
-        bool little = app1[tiff] == 0x49 && app1[tiff + 1] == 0x49;
-        if (!little && !(app1[tiff] == 0x4D && app1[tiff + 1] == 0x4D))
-            return 0; // byte-order mark is neither "II" (little) nor "MM" (big)
-
-        if (ReadExifUInt16(app1, tiff + 2, little) != 42)
-            return 0; // expected TIFF magic number
-
-        long ifd0 = tiff + ReadExifUInt32(app1, tiff + 4, little);
-        if (ifd0 < 0 || ifd0 + 2 > app1.Length)
-            return 0;
-
-        int count = ReadExifUInt16(app1, (int)ifd0, little);
-        for (int i = 0; i < count; i++)
-        {
-            int entry = (int)ifd0 + 2 + (i * 12);
-            if (entry + 12 > app1.Length)
-                return 0;
-            if (ReadExifUInt16(app1, entry, little) == 0x0112)
-                return ReadExifUInt16(app1, entry + 8, little); // Orientation is a SHORT in the value field
-        }
-
-        return 0;
-    }
-
-    private static ushort ReadExifUInt16(byte[] data, int offset, bool little) =>
-        little
-            ? BinaryPrimitives.ReadUInt16LittleEndian(data.AsSpan(offset))
-            : BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(offset));
-
-    private static uint ReadExifUInt32(byte[] data, int offset, bool little) =>
-        little
-            ? BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(offset))
-            : BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset));
-
     // Raster cell sizes can be negative (flipped axis) or zero (unknown); a pixel is one unit in either case.
     private static double CellSize(double size) => size == 0 ? 1 : Math.Abs(size);
 
-    // Maps an image pixel to display map space; the inverse of MapToPixel.
+    // Maps an image pixel, in the oriented space OrientedImage uses, to the stored raster's map space; the inverse of
+    // MapToPixel.
     private MapPoint? PixelToMap(PointF pixel)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
@@ -470,6 +363,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
         double cellX = CellSize(info.CellSizeX);
         double cellY = CellSize(info.CellSizeY);
+        pixel = _imageOrientation.ImageToStored(pixel, extent.Width / cellX, extent.Height / cellY);
 
         // Drop non-finite or wildly off-image pixels (e.g. the camera's own location projected onto its image).
         if (!IsPlaceablePixel(pixel.X, extent.Width / cellX) || !IsPlaceablePixel(pixel.Y, extent.Height / cellY))
@@ -501,7 +395,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         double cellY = CellSize(info.CellSizeY);
         double col = (mapPoint.X - extent.XMin) / cellX;
         double row = (extent.YMax - mapPoint.Y) / cellY;
-        return new PointF((float)col, (float)row);
+        return _imageOrientation.StoredToImage(new PointF((float)col, (float)row), extent.Width / cellX, extent.Height / cellY);
     }
 
     private async void OnMapViewTapped(object? sender, GeoViewInputEventArgs e)
@@ -543,7 +437,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         if (_mapView.VisibleArea is not Polygon visibleArea || visibleArea.Parts.Count == 0)
             return null;
 
-        List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY);
+        List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY, _imageOrientation);
         if (pixels.Count < 3)
             return null;
 
@@ -552,7 +446,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
     // Visible-area ring -> image-pixel ring clipped to the image rectangle. A true polygon clip, not per-vertex
     // clamping, which collapses a rotated view enclosing the whole image to a diamond. Internal for unit tests.
-    internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
+    internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY, ExifOrientationTransform orientation = default)
     {
         double cellX = CellSize(cellSizeX);
         double cellY = CellSize(cellSizeY);
@@ -567,7 +461,11 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         List<(double X, double Y)> clipped = ClipToRectangle(ring, maxCol, maxRow);
         var pixels = new List<PointF>(clipped.Count);
         foreach ((double x, double y) in clipped)
-            pixels.Add(new PointF((float)x, (float)y));
+            pixels.Add(orientation.StoredToImage(new PointF((float)x, (float)y), maxCol, maxRow));
+
+        // A reflection reverses the ring's winding; reverse it again to keep it clockwise.
+        if (orientation.IsMirrored)
+            pixels.Reverse();
 
         return pixels;
     }

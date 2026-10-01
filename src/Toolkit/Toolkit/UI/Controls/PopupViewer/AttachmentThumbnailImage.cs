@@ -45,6 +45,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DefaultStyleKey = typeof(AttachmentThumbnailImage);
         }
 
+#if WPF
+        /// <summary>
+        /// Creates a new instance of the <see cref="AttachmentThumbnailImagePeer"/> class.
+        /// </summary>
+        /// <returns></returns>
+        protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer()=> new AttachmentThumbnailImagePeer(this);
+#endif
+
         /// <inheritdoc/>
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
@@ -195,5 +203,49 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty ThumbnailSizeProperty =
             DependencyProperty.Register(nameof(ThumbnailSize), typeof(double), typeof(AttachmentThumbnailImage), new PropertyMetadata(30d));
     }
+
+#if WPF
+    /// <summary>
+    /// Automation peer for the <see cref="AttachmentThumbnailImage"/> control.
+    /// </summary>
+    public class AttachmentThumbnailImagePeer : System.Windows.Automation.Peers.UIElementAutomationPeer
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AttachmentThumbnailImagePeer"/> class.
+        /// </summary>
+        /// <param name="owner"></param>
+        public AttachmentThumbnailImagePeer(AttachmentThumbnailImage owner) : base(owner)
+        {
+        }
+
+        /// <summary>
+        /// Gets the name of the automation peer.
+        /// </summary>
+        /// <returns></returns>
+        protected override string GetNameCore()
+        {
+            var name = System.Windows.Automation.AutomationProperties.GetName(Owner);
+            return !string.IsNullOrEmpty(name) ? name : base.GetNameCore();
+        }
+
+        /// <summary>
+        /// Gets a value that indicates whether the element is understood by the UI Automation framework as a control element.
+        /// </summary>
+        /// <returns></returns>
+        protected override bool IsContentElementCore()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Gets a value that indicates whether the element is understood by the UI Automation framework as a control element.
+        /// </summary>
+        /// <returns></returns>
+        protected override bool IsControlElementCore()
+        {
+            return false;
+        }
+    }
+#endif
 }
 #endif

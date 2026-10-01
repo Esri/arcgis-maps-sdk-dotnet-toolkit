@@ -196,7 +196,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 continue;
 
             (double offsetX, double offsetY) = GetMarkerOffset(symbol);
-            resolved.Add(new ResolvedMarker(marker, u, v, offsetX, offsetY));
+            resolved.Add(new ResolvedMarker(marker, u, v, offsetX, offsetY, width / scale / 2, height / scale / 2));
             swatches.Add(new PanoramicSurface.MarkerSwatch(u, v, bgra, width, height, (float)(offsetX * scale), (float)(offsetY * scale)));
         }
 
@@ -227,9 +227,6 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
         else if (position.Location is MapPoint location)
         {
-            if (image.LoadStatus != LoadStatus.Loaded)
-                return null;
-
             try
             {
                 pixel = await image.LocationToImageAsync(location).ConfigureAwait(false);
@@ -435,29 +432,26 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         return HitTestMarker(_resolvedMarkers, camera, _surface.ActualWidth, _surface.ActualHeight, x, y, dip);
     }
 
-    // Returns the nearest marker drawn within the hit tolerance of the tap, or null. A marker is drawn at its projected
-    // anchor plus its symbol offset. dip converts DIPs to view units; it is 1 where the view measures in DIPs.
+    // Returns the topmost marker whose swatch lies within the hit tolerance of the tap, or null, as the planar display's
+    // identify does. Markers draw in list order, so the last one is on top. A swatch is centered on its projected anchor
+    // plus its symbol offset. dip converts DIPs to view units; it is 1 where the view measures in DIPs.
     internal static OrientedImageMarker? HitTestMarker(IReadOnlyList<ResolvedMarker> markers, PanoramaCameraState camera,
         double viewWidth, double viewHeight, double x, double y, double dip)
     {
-        OrientedImageMarker? hit = null;
-        double best = MarkerHitTolerance * dip;
-        foreach (ResolvedMarker resolved in markers)
+        for (int i = markers.Count - 1; i >= 0; i--)
         {
+            ResolvedMarker resolved = markers[i];
             if (!camera.TryNormalizedUvToScreen(resolved.U, resolved.V, viewWidth, viewHeight, out double sx, out double sy))
                 continue;
 
-            sx += resolved.OffsetX * dip;
-            sy += resolved.OffsetY * dip;
-            double distance = Math.Sqrt(((sx - x) * (sx - x)) + ((sy - y) * (sy - y)));
-            if (distance <= best)
-            {
-                best = distance;
-                hit = resolved.Marker;
-            }
+            // The tap's distance from the swatch's rectangle, in DIPs; zero inside it.
+            double dx = Math.Max(Math.Abs(((x - sx) / dip) - resolved.OffsetX) - resolved.HalfWidth, 0);
+            double dy = Math.Max(Math.Abs(((y - sy) / dip) - resolved.OffsetY) - resolved.HalfHeight, 0);
+            if ((dx * dx) + (dy * dy) <= MarkerHitTolerance * MarkerHitTolerance)
+                return resolved.Marker;
         }
 
-        return hit;
+        return null;
     }
 
     private static float ReadHeadingRadians(OrientedImage image)
@@ -469,7 +463,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     }
 
 #if WINDOWS_XAML || (MAUI && WINDOWS)
-    private static async Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    internal static async Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         Windows.Storage.Streams.IRandomAccessStream? stream = null;
         try
@@ -493,13 +487,16 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 return null;
 
             Windows.Graphics.Imaging.BitmapDecoder decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+            bool orientJpeg = decoder.DecoderInformation.CodecId == Windows.Graphics.Imaging.BitmapDecoder.JpegDecoderId;
             Windows.Graphics.Imaging.PixelDataProvider pixels = await decoder.GetPixelDataAsync(
                 Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
                 Windows.Graphics.Imaging.BitmapAlphaMode.Ignore,
                 new Windows.Graphics.Imaging.BitmapTransform(),
-                Windows.Graphics.Imaging.ExifOrientationMode.IgnoreExifOrientation,
+                orientJpeg ? Windows.Graphics.Imaging.ExifOrientationMode.RespectExifOrientation : Windows.Graphics.Imaging.ExifOrientationMode.IgnoreExifOrientation,
                 Windows.Graphics.Imaging.ColorManagementMode.DoNotColorManage);
-            return new PanoramaFrame(pixels.DetachPixelData(), (int)decoder.PixelWidth, (int)decoder.PixelHeight);
+            return new PanoramaFrame(pixels.DetachPixelData(),
+                (int)(orientJpeg ? decoder.OrientedPixelWidth : decoder.PixelWidth),
+                (int)(orientJpeg ? decoder.OrientedPixelHeight : decoder.PixelHeight));
         }
         finally
         {
@@ -507,7 +504,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
     }
 #elif WPF
-    private static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    internal static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
             () =>
@@ -525,7 +522,24 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 }
 
                 System.Windows.Media.Imaging.BitmapFrame frame = decoder.Frames[0];
-                var converted = new System.Windows.Media.Imaging.FormatConvertedBitmap(frame, System.Windows.Media.PixelFormats.Bgra32, null, 0);
+                var orientation = decoder is System.Windows.Media.Imaging.JpegBitmapDecoder &&
+                    frame.Metadata is System.Windows.Media.Imaging.BitmapMetadata metadata &&
+                    metadata.GetQuery("/app1/ifd/{ushort=274}") is ushort value
+                    ? new ExifOrientationTransform(value) : default;
+                System.Windows.Media.Imaging.BitmapSource source = frame;
+                if (orientation.IsMirrored || orientation.RotationDegrees != 0)
+                {
+                    // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees). Matrix.Rotate and Scale
+                    // append, so the rotation applies first.
+                    var transform = System.Windows.Media.Matrix.Identity;
+                    transform.Rotate(orientation.RotationDegrees);
+                    if (orientation.IsMirrored)
+                        transform.Scale(-1, 1);
+                    source = new System.Windows.Media.Imaging.TransformedBitmap(frame, new System.Windows.Media.MatrixTransform(transform));
+                }
+
+                token.ThrowIfCancellationRequested();
+                var converted = new System.Windows.Media.Imaging.FormatConvertedBitmap(source, System.Windows.Media.PixelFormats.Bgra32, null, 0);
                 int width = converted.PixelWidth;
                 int height = converted.PixelHeight;
                 int stride = width * 4;
@@ -536,9 +550,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             token);
     }
 #elif __ANDROID__
-    // Power-of-two downsample to the device budget (4096 low-RAM, else 8192) for the GPU texture only; Width/Height
-    // stay the ORIGINAL dimensions because markers and taps work in source pixel space.
-    private static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    // Power-of-two downsample to the device budget (4096 low-RAM, else 8192) for the GPU texture only. Width and Height
+    // stay the full-resolution oriented dimensions, the pixel space that markers and taps use.
+    internal static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
             async () =>
@@ -557,6 +571,15 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 else
                 {
                     return (PanoramaFrame?)null;
+                }
+
+                ExifOrientationTransform orientation;
+                if (path is not null)
+                    orientation = ExifOrientationTransform.Read(uri);
+                else
+                {
+                    using var metadataStream = new MemoryStream(downloaded!, writable: false);
+                    orientation = ExifOrientationTransform.Read(metadataStream);
                 }
 
                 var bounds = new Android.Graphics.BitmapFactory.Options { InJustDecodeBounds = true };
@@ -588,15 +611,38 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 if (bitmap is null)
                     return (PanoramaFrame?)null;
 
-                return (PanoramaFrame?)new PanoramaFrame(bitmap, width, height);
+                try
+                {
+                    token.ThrowIfCancellationRequested();
+                    if (orientation.IsMirrored || orientation.RotationDegrees != 0)
+                    {
+                        // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees).
+                        using var transform = new Android.Graphics.Matrix();
+                        transform.SetRotate((float)orientation.RotationDegrees);
+                        if (orientation.IsMirrored)
+                            transform.PostScale(-1, 1);
+                        Android.Graphics.Bitmap oriented = Android.Graphics.Bitmap.CreateBitmap(bitmap, 0, 0, bitmap.Width, bitmap.Height, transform, false)
+                            ?? throw new InvalidOperationException("Unable to apply the image orientation.");
+                        if (!ReferenceEquals(oriented, bitmap))
+                            bitmap.Recycle();
+                        bitmap = oriented;
+                    }
+
+                    return (PanoramaFrame?)new PanoramaFrame(bitmap, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
+                }
+                catch
+                {
+                    bitmap.Recycle();
+                    throw;
+                }
             },
             token);
     }
 #endif
 
 #if __ANDROID__
-    // The decoded (possibly downsampled) bitmap plus the ORIGINAL pixel dimensions of the source image.
-    private readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height);
+    // The decoded (possibly downsampled) bitmap plus the image's full-resolution oriented dimensions.
+    internal readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height);
 
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bitmap);
 
@@ -604,7 +650,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private static void DiscardFrame(PanoramaFrame? frame) => frame?.Bitmap.Recycle();
 #else
     // The decoded image as tightly-packed BGRA8 plus its pixel dimensions.
-    private readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
+    internal readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
 
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
 
@@ -614,8 +660,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     }
 #endif
 
-    // A marker resolved to a normalized (u,v) and its symbol offset in DIPs, kept on the UI side for tap hit-testing
-    // (the surface owns the GPU side).
-    internal readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY);
+    // A marker resolved to a normalized (u,v), its symbol offset, and its swatch's half-size, all sizes in DIPs, kept on
+    // the UI side for tap hit-testing (the surface owns the GPU side).
+    internal readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY, double HalfWidth, double HalfHeight);
 }
 #endif
