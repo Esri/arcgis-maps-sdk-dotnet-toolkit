@@ -331,12 +331,12 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     protected override void OnAutoUpdateFootprintChanged(bool enabled)
     {
         if (enabled)
-            _surface.CameraChanged += OnCameraChanged;
+            _surface.ViewChanged += OnViewChanged;
         else
-            _surface.CameraChanged -= OnCameraChanged;
+            _surface.ViewChanged -= OnViewChanged;
     }
 
-    private void OnCameraChanged() => UpdateFootprint();
+    private void OnViewChanged() => UpdateFootprint();
 
     // UpdateFootprintAsync derives the 360 ground footprint from the camera orientation and the view's angular extent.
     protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
@@ -389,7 +389,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _surface.RequestRender();
 
         // Push the footprint explicitly: the push made when auto-update was enabled ran with zero dimensions, and camera
-        // assignments that don't change the values raise no CameraChanged.
+        // assignments that don't change the values raise no ViewChanged.
         UpdateFootprint();
     }
 

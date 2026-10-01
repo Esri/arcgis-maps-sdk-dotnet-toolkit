@@ -170,11 +170,12 @@ internal sealed unsafe partial class PanoramicSurface
             return;
 
         field = value;
-        CameraChanged?.Invoke();
+        ViewChanged?.Invoke();
     }
 
-    // Raised by the camera setters so the display can update the footprint while auto-update is on.
-    internal event Action? CameraChanged;
+    // Raised when the camera or the view size changes, so the display can update the footprint while auto-update is
+    // on. The footprint's horizontal field of view follows the aspect ratio.
+    internal event Action? ViewChanged;
 
     // Raised when the surface is tapped/clicked, carrying the position in element (DIP) coordinates.
     internal event Action<double, double>? SurfaceTapped;

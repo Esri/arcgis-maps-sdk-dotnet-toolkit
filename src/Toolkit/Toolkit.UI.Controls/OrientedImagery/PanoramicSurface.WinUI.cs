@@ -66,7 +66,11 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
 
     private void OnCompositionScaleChanged(SwapChainPanel sender, object args) => Safe(EnsureOrResize);
 
-    private void OnSizeChanged(object sender, SizeChangedEventArgs e) => Safe(EnsureOrResize);
+    private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        Safe(EnsureOrResize);
+        ViewChanged?.Invoke();
+    }
 
     private void OnLoaded(object sender, RoutedEventArgs e) => Safe(HandleLoaded);
 

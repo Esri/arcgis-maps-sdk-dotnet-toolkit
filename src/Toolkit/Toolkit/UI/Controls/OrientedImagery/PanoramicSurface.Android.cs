@@ -124,7 +124,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     public event Action? DeviceRecreated;
 
-    public event Action? CameraChanged;
+    public event Action? ViewChanged;
 
     public float Yaw
     {
@@ -155,7 +155,13 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             return;
 
         field = value;
-        CameraChanged?.Invoke();
+        ViewChanged?.Invoke();
+    }
+
+    protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
+    {
+        base.OnSizeChanged(w, h, oldw, oldh);
+        ViewChanged?.Invoke();
     }
 
     // Takes ownership of the bitmap (recycled after upload or when superseded). If it still exceeds the GL max
