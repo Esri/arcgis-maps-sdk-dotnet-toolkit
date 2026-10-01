@@ -298,7 +298,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         OrientedImage? image = footprint?.OrientedImage;
         bool imageChanged = !ReferenceEquals(Footprint?.OrientedImage, image);
 
-        // Replacing a still-loading image: cancel it (no-op if already loaded).
+        // Cancel abandoned downloads during paging. This also cancels other callers loading the same image.
         if (imageChanged)
             Footprint?.OrientedImage?.CancelLoad();
 

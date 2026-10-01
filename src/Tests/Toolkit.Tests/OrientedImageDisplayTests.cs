@@ -1,19 +1,24 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Esri.ArcGISRuntime.UI;
 using Color = System.Drawing.Color;
+using PointF = System.Drawing.PointF;
 
 namespace Toolkit.Tests;
 
 /// <summary>
 /// Contracts of <see cref="OrientedImageDisplay"/> and its inner displays that hold without a running app:
 /// template re-hosting, marker subscriptions that must not retain a discarded display, marker offsets and hit-testing,
-/// accessibility, and the visible-area clipping math.
+/// accessibility, visible-area clipping, and EXIF coordinate and decoder agreement.
 /// </summary>
 [TestClass]
 public sealed class OrientedImageDisplayTests
@@ -21,6 +26,8 @@ public sealed class OrientedImageDisplayTests
     [TestMethod]
     public void ReapplyingTemplateRehostsActiveDisplay()
     {
+        // A template replacement must move the existing display out of the discarded presenter.
+        // Recreating the display would lose its current image and navigation state.
         RunSta(() =>
         {
             var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
@@ -42,6 +49,8 @@ public sealed class OrientedImageDisplayTests
     [TestMethod]
     public void MarkerSubscriptionDoesNotRetainDiscardedDisplay()
     {
+        // The application keeps the collection and marker alive after discarding the display.
+        // Their event subscriptions must not prevent the display from being collected.
         RunSta(() =>
         {
             var markers = new ObservableCollection<OrientedImageMarker>
@@ -146,21 +155,201 @@ public sealed class OrientedImageDisplayTests
 
         List<System.Drawing.PointF> ring = OrientedImageRasterDisplay.ComputeVisibleAreaPixels(visibleArea, extent, 1, 1);
 
-        Assert.IsTrue(ring.Count >= 4, $"expected a full ring, got {ring.Count} vertices");
-        Assert.AreEqual(10000d, RingArea(ring), 1e-3, "the clipped footprint must cover the whole image");
+        Assert.IsGreaterThanOrEqualTo(4, ring.Count, $"expected a full ring, got {ring.Count} vertices");
+        Assert.AreEqual(10000d, Math.Abs(SignedRingArea(ring)), 1e-3, "the clipped footprint must cover the whole image");
     }
 
-    private static double RingArea(IReadOnlyList<System.Drawing.PointF> ring)
+    // Shoelace area is positive for clockwise rings in image coordinates, where y increases downward.
+    private static double SignedRingArea(IReadOnlyList<PointF> ring)
     {
-        double area = 0;
-        for (int i = 0; i < ring.Count; i++)
+        double twiceArea = 0;
+        for (int index = 0; index < ring.Count; index++)
         {
-            System.Drawing.PointF a = ring[i];
-            System.Drawing.PointF b = ring[(i + 1) % ring.Count];
-            area += ((double)a.X * b.Y) - ((double)b.X * a.Y);
+            PointF current = ring[index];
+            PointF next = ring[(index + 1) % ring.Count];
+            twiceArea += ((double)current.X * next.Y) - ((double)next.X * current.Y);
         }
 
-        return Math.Abs(area) / 2;
+        return twiceArea / 2;
+    }
+
+    [TestMethod]
+    [DataRow(1, 40f, 30f)]
+    [DataRow(2, 360f, 30f)]
+    [DataRow(3, 360f, 170f)]
+    [DataRow(4, 40f, 170f)]
+    [DataRow(5, 30f, 40f)]
+    [DataRow(6, 170f, 40f)]
+    [DataRow(7, 170f, 360f)]
+    [DataRow(8, 30f, 360f)]
+    public void ExifOrientationMapsStoredPixelsToDecodedPixels(int exifOrientation, float expectedX, float expectedY)
+    {
+        // A non-square image and an off-center point distinguish rotations from reflections.
+        // Check the expected coordinate as well as the round-trip: two incorrect inverses could still round-trip.
+        var orientation = new ExifOrientationTransform(exifOrientation);
+        var stored = new PointF(40, 30);
+        PointF image = orientation.StoredToImage(stored, 400, 200);
+
+        Assert.AreEqual(new PointF(expectedX, expectedY), image);
+        Assert.AreEqual(stored, orientation.ImageToStored(image, 400, 200));
+
+        // The planar display can rotate but not reflect, so the reflection must come last. Rotating clockwise by
+        // RotationDegrees, then reflecting horizontally if mirrored, must reproduce the mapping.
+        (PointF rotated, float rotatedWidth) = orientation.RotationDegrees switch
+        {
+            90 => (new PointF(200 - stored.Y, stored.X), 200f),
+            180 => (new PointF(400 - stored.X, 200 - stored.Y), 400f),
+            270 => (new PointF(stored.Y, 400 - stored.X), 200f),
+            _ => (stored, 400f),
+        };
+        Assert.AreEqual(image, orientation.IsMirrored ? new PointF(rotatedWidth - rotated.X, rotated.Y) : rotated);
+    }
+
+    [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public void ExifOrientationReadsBothTiffByteOrders(bool littleEndian)
+    {
+        // Cameras write both byte orders, but WIC-written fixtures are always little-endian. The TIFF header puts IFD0
+        // at offset 8; its one entry is Orientation (0x0112), type SHORT, count 1, value 6, followed by no next IFD.
+        byte[] tiff = littleEndian
+            ? [(byte)'I', (byte)'I', 42, 0, 8, 0, 0, 0, 1, 0, 0x12, 0x01, 3, 0, 1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0]
+            : [(byte)'M', (byte)'M', 0, 42, 0, 0, 0, 8, 0, 1, 0x01, 0x12, 0, 3, 0, 0, 0, 1, 0, 6, 0, 0, 0, 0, 0, 0];
+        byte[] jpeg = [0xFF, 0xD8, 0xFF, 0xE1, 0, (byte)(2 + 6 + tiff.Length), .. "Exif\0\0"u8, .. tiff, 0xFF, 0xDA];
+
+        using var stream = new MemoryStream(jpeg);
+        Assert.AreEqual(new ExifOrientationTransform(6), ExifOrientationTransform.Read(stream));
+    }
+
+    [TestMethod]
+    [DataRow(1, 400f, 200f)]
+    [DataRow(2, 400f, 200f)]
+    [DataRow(3, 400f, 200f)]
+    [DataRow(4, 400f, 200f)]
+    [DataRow(5, 200f, 400f)]
+    [DataRow(6, 200f, 400f)]
+    [DataRow(7, 200f, 400f)]
+    [DataRow(8, 200f, 400f)]
+    public void ExifFootprintUsesDecodedDimensionsAndClockwiseWinding(int exifOrientation, float expectedWidth, float expectedHeight)
+    {
+        // A full-image footprint must reach the decoded grid's corners, including swapped dimensions.
+        // Reflection reverses winding, so the output must restore the clockwise order required by the SDK.
+        var orientation = new ExifOrientationTransform(exifOrientation);
+        var builder = new PolygonBuilder((SpatialReference?)null);
+        builder.AddPoint(0, 200);
+        builder.AddPoint(400, 200);
+        builder.AddPoint(400, 0);
+        builder.AddPoint(0, 0);
+        List<PointF> pixels = OrientedImageRasterDisplay.ComputeVisibleAreaPixels(
+            builder.ToGeometry(), new Envelope(0, 0, 400, 200), 1, 1, orientation);
+
+        PointF[] expectedCorners =
+        [
+            new(0, 0),
+            new(expectedWidth, 0),
+            new(expectedWidth, expectedHeight),
+            new(0, expectedHeight),
+        ];
+
+        CollectionAssert.AreEquivalent(expectedCorners, pixels.Distinct().ToArray());
+        Assert.AreEqual(80000d, SignedRingArea(pixels), "the full image must be covered with clockwise winding");
+    }
+
+    [TestMethod]
+    [DataRow(1)]
+    [DataRow(2)]
+    [DataRow(3)]
+    [DataRow(4)]
+    [DataRow(5)]
+    [DataRow(6)]
+    [DataRow(7)]
+    [DataRow(8)]
+    public async Task PanoramicJpegDecodeMatchesSdkOrientation(int exifOrientation)
+    {
+        // Keep the stored pixels unchanged and vary only the EXIF tag, exercising the real metadata reader.
+        // RuntimeImage supplies the SDK's decoded pixel space; the panorama decoder must agree with it.
+        const int StoredWidth = 60;
+        const int StoredHeight = 40;
+        string path = Path.Combine(Path.GetTempPath(), $"toolkit-exif-{Guid.NewGuid():N}.jpg");
+        try
+        {
+            WriteExifJpeg(path, exifOrientation, StoredWidth, StoredHeight);
+            var uri = new Uri(path);
+            var storedPoint = new PointF(10, 15);
+            var expectedOrientation = new ExifOrientationTransform(exifOrientation);
+            ExifOrientationTransform parsedOrientation = ExifOrientationTransform.Read(uri);
+            Assert.AreEqual(
+                expectedOrientation.StoredToImage(storedPoint, StoredWidth, StoredHeight),
+                parsedOrientation.StoredToImage(storedPoint, StoredWidth, StoredHeight),
+                "the JPEG reader must recover the orientation written to the fixture");
+
+            var expected = new RuntimeImage(uri);
+            OrientedImagePanoramicDisplay.PanoramaFrame? result = await OrientedImagePanoramicDisplay.DecodeAsync(uri, CancellationToken.None);
+            Assert.IsNotNull(result);
+            OrientedImagePanoramicDisplay.PanoramaFrame actual = result.Value;
+            Assert.AreEqual(expected.Width, actual.Width);
+            Assert.AreEqual(expected.Height, actual.Height);
+            await AssertDecodedPixelsMatchAsync(expected, actual, exifOrientation);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    private static void WriteExifJpeg(string path, int exifOrientation, int width, int height)
+    {
+        // Four distinct quadrants reveal flips and rotations that a uniform or symmetric image would hide.
+        const int BytesPerPixel = 4;
+        Color[] quadrantColors = [Color.Red, Color.Yellow, Color.Blue, Color.Cyan];
+        byte[] pixels = new byte[width * height * BytesPerPixel];
+        for (int row = 0; row < height; row++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                int quadrant = (row < height / 2 ? 0 : 2) + (column < width / 2 ? 0 : 1);
+                Color color = quadrantColors[quadrant];
+                int offset = ((row * width) + column) * BytesPerPixel;
+                pixels[offset] = color.B;
+                pixels[offset + 1] = color.G;
+                pixels[offset + 2] = color.R;
+                pixels[offset + 3] = color.A;
+            }
+        }
+
+        var metadata = new BitmapMetadata("jpg");
+        metadata.SetQuery("/app1/ifd/{ushort=274}", (ushort)exifOrientation);
+        var source = BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgra32, null, pixels, width * BytesPerPixel);
+        var encoder = new JpegBitmapEncoder { QualityLevel = 100 };
+        encoder.Frames.Add(BitmapFrame.Create(source, null, metadata, null));
+        using Stream output = File.Create(path);
+        encoder.Save(output);
+    }
+
+    private static async Task AssertDecodedPixelsMatchAsync(RuntimeImage expected, OrientedImagePanoramicDisplay.PanoramaFrame actual, int exifOrientation)
+    {
+        using Stream raw = await expected.GetRawBufferAsync();
+        using var buffer = new MemoryStream();
+        await raw.CopyToAsync(buffer);
+        byte[] expectedPixels = buffer.ToArray();
+
+        // Sample inside each quadrant, away from JPEG edges. WIC and the SDK can differ slightly in JPEG rounding.
+        const int BytesPerPixel = 4;
+        const int ChannelTolerance = 3;
+        int[] sampleRows = [actual.Height / 4, actual.Height * 3 / 4];
+        int[] sampleColumns = [actual.Width / 4, actual.Width * 3 / 4];
+        foreach (int row in sampleRows)
+        {
+            foreach (int column in sampleColumns)
+            {
+                int offset = ((row * actual.Width) + column) * BytesPerPixel;
+                for (int channel = 0; channel < BytesPerPixel; channel++)
+                {
+                    int difference = Math.Abs(expectedPixels[offset + channel] - actual.Bgra[offset + channel]);
+                    Assert.IsLessThanOrEqualTo(ChannelTolerance, difference, $"EXIF {exifOrientation}, ({column}, {row}), channel {channel}");
+                }
+            }
+        }
     }
 
     // Mirrors the shape of the control's default template: a single named host presenter.

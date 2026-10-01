@@ -466,7 +466,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     }
 
 #if WINDOWS_XAML || (MAUI && WINDOWS)
-    private static async Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    internal static async Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         Windows.Storage.Streams.IRandomAccessStream? stream = null;
         try
@@ -490,13 +490,16 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 return null;
 
             Windows.Graphics.Imaging.BitmapDecoder decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+            bool orientJpeg = decoder.DecoderInformation.CodecId == Windows.Graphics.Imaging.BitmapDecoder.JpegDecoderId;
             Windows.Graphics.Imaging.PixelDataProvider pixels = await decoder.GetPixelDataAsync(
                 Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
                 Windows.Graphics.Imaging.BitmapAlphaMode.Ignore,
                 new Windows.Graphics.Imaging.BitmapTransform(),
-                Windows.Graphics.Imaging.ExifOrientationMode.IgnoreExifOrientation,
+                orientJpeg ? Windows.Graphics.Imaging.ExifOrientationMode.RespectExifOrientation : Windows.Graphics.Imaging.ExifOrientationMode.IgnoreExifOrientation,
                 Windows.Graphics.Imaging.ColorManagementMode.DoNotColorManage);
-            return new PanoramaFrame(pixels.DetachPixelData(), (int)decoder.PixelWidth, (int)decoder.PixelHeight);
+            return new PanoramaFrame(pixels.DetachPixelData(),
+                (int)(orientJpeg ? decoder.OrientedPixelWidth : decoder.PixelWidth),
+                (int)(orientJpeg ? decoder.OrientedPixelHeight : decoder.PixelHeight));
         }
         finally
         {
@@ -504,7 +507,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
     }
 #elif WPF
-    private static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    internal static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
             () =>
@@ -522,7 +525,24 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 }
 
                 System.Windows.Media.Imaging.BitmapFrame frame = decoder.Frames[0];
-                var converted = new System.Windows.Media.Imaging.FormatConvertedBitmap(frame, System.Windows.Media.PixelFormats.Bgra32, null, 0);
+                var orientation = decoder is System.Windows.Media.Imaging.JpegBitmapDecoder &&
+                    frame.Metadata is System.Windows.Media.Imaging.BitmapMetadata metadata &&
+                    metadata.GetQuery("/app1/ifd/{ushort=274}") is ushort value
+                    ? new ExifOrientationTransform(value) : default;
+                System.Windows.Media.Imaging.BitmapSource source = frame;
+                if (orientation.IsMirrored || orientation.RotationDegrees != 0)
+                {
+                    // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees). Matrix.Rotate and Scale
+                    // append, so the rotation applies first.
+                    var transform = System.Windows.Media.Matrix.Identity;
+                    transform.Rotate(orientation.RotationDegrees);
+                    if (orientation.IsMirrored)
+                        transform.Scale(-1, 1);
+                    source = new System.Windows.Media.Imaging.TransformedBitmap(frame, new System.Windows.Media.MatrixTransform(transform));
+                }
+
+                token.ThrowIfCancellationRequested();
+                var converted = new System.Windows.Media.Imaging.FormatConvertedBitmap(source, System.Windows.Media.PixelFormats.Bgra32, null, 0);
                 int width = converted.PixelWidth;
                 int height = converted.PixelHeight;
                 int stride = width * 4;
@@ -533,9 +553,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             token);
     }
 #elif __ANDROID__
-    // Power-of-two downsample to the device budget (4096 low-RAM, else 8192) for the GPU texture only; Width/Height
-    // stay the ORIGINAL dimensions because markers and taps work in source pixel space.
-    private static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    // Power-of-two downsample to the device budget (4096 low-RAM, else 8192) for the GPU texture only. Width and Height
+    // stay the full-resolution oriented dimensions, the pixel space that markers and taps use.
+    internal static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
             async () =>
@@ -554,6 +574,15 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 else
                 {
                     return (PanoramaFrame?)null;
+                }
+
+                ExifOrientationTransform orientation;
+                if (path is not null)
+                    orientation = ExifOrientationTransform.Read(uri);
+                else
+                {
+                    using var metadataStream = new MemoryStream(downloaded!, writable: false);
+                    orientation = ExifOrientationTransform.Read(metadataStream);
                 }
 
                 var bounds = new Android.Graphics.BitmapFactory.Options { InJustDecodeBounds = true };
@@ -585,15 +614,38 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 if (bitmap is null)
                     return (PanoramaFrame?)null;
 
-                return (PanoramaFrame?)new PanoramaFrame(bitmap, width, height);
+                try
+                {
+                    token.ThrowIfCancellationRequested();
+                    if (orientation.IsMirrored || orientation.RotationDegrees != 0)
+                    {
+                        // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees).
+                        using var transform = new Android.Graphics.Matrix();
+                        transform.SetRotate((float)orientation.RotationDegrees);
+                        if (orientation.IsMirrored)
+                            transform.PostScale(-1, 1);
+                        Android.Graphics.Bitmap oriented = Android.Graphics.Bitmap.CreateBitmap(bitmap, 0, 0, bitmap.Width, bitmap.Height, transform, false)
+                            ?? throw new InvalidOperationException("Unable to apply the image orientation.");
+                        if (!ReferenceEquals(oriented, bitmap))
+                            bitmap.Recycle();
+                        bitmap = oriented;
+                    }
+
+                    return (PanoramaFrame?)new PanoramaFrame(bitmap, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
+                }
+                catch
+                {
+                    bitmap.Recycle();
+                    throw;
+                }
             },
             token);
     }
 #endif
 
 #if __ANDROID__
-    // The decoded (possibly downsampled) bitmap plus the ORIGINAL pixel dimensions of the source image.
-    private readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height);
+    // The decoded (possibly downsampled) bitmap plus the image's full-resolution oriented dimensions.
+    internal readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height);
 
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bitmap);
 
@@ -601,7 +653,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private static void DiscardFrame(PanoramaFrame? frame) => frame?.Bitmap.Recycle();
 #else
     // The decoded image as tightly-packed BGRA8 plus its pixel dimensions.
-    private readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
+    internal readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
 
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
 
