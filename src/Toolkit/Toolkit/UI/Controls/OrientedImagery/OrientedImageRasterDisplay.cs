@@ -520,7 +520,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         if (token.IsCancellationRequested)
             return;
 
-        RaiseImageTapped(new OrientedImageDisplay.ImageTappedEventArgs(imagePoint, image, marker));
+        RaiseImageTapped(new OrientedImageTappedEventArgs(imagePoint, image, marker));
     }
 
     private void OnViewpointChanged(object? sender, EventArgs e) => UpdateFootprint();

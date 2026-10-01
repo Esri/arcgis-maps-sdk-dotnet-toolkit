@@ -46,10 +46,8 @@ internal abstract class OrientedImageInnerDisplay : ContentView
 internal abstract class OrientedImageInnerDisplay : ContentControl
 #endif
 {
-    // The app's collection, and the markers it held when last read. A source that raises no change notifications is
-    // read only when assigned.
     private IEnumerable<OrientedImageMarker>? _markerSource;
-    private List<OrientedImageMarker> _markers = [];
+    private List<OrientedImageMarker> _markers = []; // Snapshot read from the source
     private WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private readonly Dictionary<OrientedImageMarker, WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
     private CancellationTokenSource? _sessionCts;
@@ -83,13 +81,13 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     public event EventHandler? StateChanged;
 
     /// <summary>Occurs when the user taps the image; a tapped marker (if any) is carried on the event args.</summary>
-    public event EventHandler<OrientedImageDisplay.ImageTappedEventArgs>? ImageTapped;
+    public event EventHandler<OrientedImageTappedEventArgs>? ImageTapped;
 
     /// <summary>Gets the footprint of the current presentation session.</summary>
     protected OrientedImageFootprint? Footprint { get; private set; }
 
-    /// <summary>Gets the markers rendered over the image, in the app's collection order. The list is replaced on each
-    /// change, never modified, so a reference to it is a stable snapshot.</summary>
+    /// <summary>Gets the markers rendered over the image, in the app's collection order.
+    /// The list is replaced on each change, never modified, so a reference to it is a stable snapshot.</summary>
     protected IReadOnlyList<OrientedImageMarker> Markers => _markers;
 
     /// <summary>Gets the session token: canceled when a later <see cref="SetFootprint"/> supersedes this one, and
@@ -109,7 +107,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     protected abstract Microsoft.UI.Xaml.DependencyObject AutomationNameTarget { get; }
 #endif
 
-    /// <summary>Gets a value indicating whether a presented image is ready for interaction (state gates aside).</summary>
+    /// <summary>Gets a value indicating whether a presented image is ready for interaction (state permitting).</summary>
     protected abstract bool IsPresentationInteractive { get; }
 
     /// <summary>Gets a value indicating whether the presentation itself is busy (e.g. still drawing) beyond loading.</summary>
@@ -239,7 +237,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     protected virtual Exception? ResolveError() => Footprint?.OrientedImage?.LoadError ?? PresentationError;
 
     /// <summary>Raises <see cref="ImageTapped"/>.</summary>
-    protected void RaiseImageTapped(OrientedImageDisplay.ImageTappedEventArgs args) => ImageTapped?.Invoke(this, args);
+    protected void RaiseImageTapped(OrientedImageTappedEventArgs args) => ImageTapped?.Invoke(this, args);
 
     protected void UpdateState()
     {

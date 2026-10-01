@@ -22,7 +22,6 @@ using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 
 // Disambiguate from MAUI types from global usings
-using PointF = System.Drawing.PointF;
 using Color = System.Drawing.Color;
 
 #if WPF
@@ -90,9 +89,9 @@ public partial class OrientedImageDisplay
     /// </summary>
     /// <remarks>
     /// Raised for every tap on the image; the image coordinates are always populated.
-    /// If the tap also hit a marker, that marker is carried on <see cref="ImageTappedEventArgs.Marker"/>.
+    /// If the tap also hit a marker, that marker is carried on <see cref="OrientedImageTappedEventArgs.Marker"/>.
     /// </remarks>
-    public event EventHandler<ImageTappedEventArgs>? ImageTapped;
+    public event EventHandler<OrientedImageTappedEventArgs>? ImageTapped;
 
     /// <summary>
     /// Gets or sets the footprint of the oriented image to display.
@@ -109,8 +108,8 @@ public partial class OrientedImageDisplay
     /// </summary>
     /// <remarks>
     /// Like an items source, this accepts any collection. If the collection is observable (implements
-    /// <see cref="INotifyCollectionChanged"/>), the control follows its changes; otherwise it reads the collection once
-    /// when assigned. Either way, the control follows changes to the markers themselves and never modifies the
+    /// <see cref="INotifyCollectionChanged"/>), the control follows its changes; otherwise it reads the collection
+    /// once when assigned. Either way, the control follows changes to the markers themselves and never modifies the
     /// collection.
     /// </remarks>
     /// <value>The markers drawn over the image, or <c>null</c>.</value>
@@ -275,7 +274,8 @@ public partial class OrientedImageDisplay
     {
         if (ReferenceEquals(_activeDisplay, display))
         {
-            // Same display (including null -> null): re-host and publish state anyway; only this path surfaces a recomputed _unsupportedError.
+            // Same display (including null -> null):
+            // re-host and publish state anyway; only this path surfaces a recomputed _unsupportedError.
             HostActiveDisplay();
             UpdateState();
             return;
@@ -312,11 +312,12 @@ public partial class OrientedImageDisplay
 
     internal event EventHandler? StateChanged;
 
-    private void OnDisplayImageTapped(object? sender, ImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
+    private void OnDisplayImageTapped(object? sender, OrientedImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
 
-    // An unsupported image type has no display, so its error is merged in here. StateChanged fires only on a change.
+    // Only fires StateChanged when there is an actual change.
     private void UpdateState()
     {
+        // An unsupported image type has no display, so its error is merged in here.
         bool busy = _unsupportedError is null && (_activeDisplay?.IsBusy ?? false);
         bool interactive = _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false);
         Exception? error = _unsupportedError ?? _activeDisplay?.Error;
@@ -337,6 +338,7 @@ public partial class OrientedImageDisplay
         if (type.Value == OrientedImageType.Image360)
             return _panoramicDisplay ??= new OrientedImagePanoramicDisplay();
 #endif
+        // TODO: Implement panoramic on iOS/macCatalyst.
         return null;
     }
 
@@ -350,42 +352,4 @@ public partial class OrientedImageDisplay
         OrientedImageType.TerrestrialFrameVideo => false,
         _ => true,
     };
-
-    /// <summary>
-    /// Event arguments for the <see cref="OrientedImageDisplay.ImageTapped"/> event.
-    /// </summary>
-    public class ImageTappedEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImageTappedEventArgs"/> class.
-        /// </summary>
-        /// <param name="imagePoint">The tapped position in image (pixel) coordinates.</param>
-        /// <param name="image">The oriented image that was tapped.</param>
-        /// <param name="marker">The marker the tap hit, or <c>null</c> if it hit no marker.</param>
-        public ImageTappedEventArgs(PointF imagePoint, OrientedImage image, OrientedImageMarker? marker = null)
-        {
-            ImagePoint = imagePoint;
-            Image = image;
-            Marker = marker;
-        }
-
-        /// <summary>
-        /// Gets the tapped position in image (pixel) coordinates.
-        /// </summary>
-        /// <remarks>Use <see cref="OrientedImage.ImageToLocationAsync"/> on <see cref="Image"/> to get the world location.</remarks>
-        /// <value>The tapped image coordinate.</value>
-        public PointF ImagePoint { get; }
-
-        /// <summary>
-        /// Gets the oriented image that was tapped.
-        /// </summary>
-        /// <value>The tapped oriented image.</value>
-        public OrientedImage Image { get; }
-
-        /// <summary>
-        /// Gets the marker the tap hit, or <c>null</c> if the tap did not hit a marker.
-        /// </summary>
-        /// <value>The tapped marker, or <c>null</c>.</value>
-        public OrientedImageMarker? Marker { get; }
-    }
 }
