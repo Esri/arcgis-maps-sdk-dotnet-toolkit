@@ -38,5 +38,16 @@ public partial class OrientedImageDisplay : TemplatedView
             return host;
         });
     }
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+
+        // Description is pushed as it changes. AutomationId can be set once and raises no change, so it is read when a
+        // display is activated.
+        if (propertyName == SemanticProperties.DescriptionProperty.PropertyName)
+            PushAutomationProperties();
+    }
 }
 #endif

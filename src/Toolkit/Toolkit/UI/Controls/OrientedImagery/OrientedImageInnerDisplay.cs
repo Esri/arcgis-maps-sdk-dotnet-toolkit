@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
@@ -98,13 +97,13 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     /// asynchronous render/device failures here and then call <see cref="UpdateState"/>. Cleared per session.</summary>
     protected Exception? PresentationError { get; set; }
 
-    // The platform automation-name policy needs the concrete focusable inner view.
+    // The focusable inner view, which carries the automation name and id.
 #if MAUI
-    protected abstract View AutomationNameTarget { get; }
+    protected abstract View AutomationTarget { get; }
 #elif WPF
-    protected abstract System.Windows.DependencyObject AutomationNameTarget { get; }
+    protected abstract System.Windows.DependencyObject AutomationTarget { get; }
 #else
-    protected abstract Microsoft.UI.Xaml.DependencyObject AutomationNameTarget { get; }
+    protected abstract Microsoft.UI.Xaml.DependencyObject AutomationTarget { get; }
 #endif
 
     /// <summary>Gets a value indicating whether a presented image is ready for interaction (state permitting).</summary>
@@ -207,6 +206,36 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     /// <param name="color">The background color, or <see cref="System.Drawing.Color.Empty"/> to keep the display's default.</param>
     public abstract void SetBackgroundColor(System.Drawing.Color color);
 
+    /// <summary>Labels the focusable inner view for screen readers with the name the app gave the control.</summary>
+    /// <param name="name">The app's name, or <c>null</c> or empty for the localized default.</param>
+    public void SetAutomationName(string? name)
+    {
+        if (string.IsNullOrEmpty(name))
+            name = Properties.Resources.GetString("OrientedImageDisplayAutomationName") ?? "Oriented image display";
+#if WPF
+        System.Windows.Automation.AutomationProperties.SetName(AutomationTarget, name);
+#elif WINDOWS_XAML
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(AutomationTarget, name);
+#elif MAUI
+        SemanticProperties.SetDescription(AutomationTarget, name);
+#endif
+    }
+
+    /// <summary>Gives the focusable inner view the automation id the app gave the control, so UI tests can find it.</summary>
+    /// <param name="id">The app's automation id, or <c>null</c> or empty for none.</param>
+    public void SetAutomationId(string? id)
+    {
+#if WPF
+        System.Windows.Automation.AutomationProperties.SetAutomationId(AutomationTarget, id ?? string.Empty);
+#elif WINDOWS_XAML
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(AutomationTarget, id ?? string.Empty);
+#elif MAUI
+        // An element's AutomationId can be set once, so only a first, non-empty id is applied.
+        if (!string.IsNullOrEmpty(id) && AutomationTarget.AutomationId is null)
+            AutomationTarget.AutomationId = id;
+#endif
+    }
+
     // Makes the loaded image visible. Runs inside the load skeleton's try: throw (or let cancellation throw) to
     // record a presentation failure; check the token after every await before touching display state.
     protected abstract Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token);
@@ -278,21 +307,6 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         return _updateCts.Token;
     }
 
-    // Gives the focusable inner view a meaningful screen-reader label instead of a generic one.
-    protected void UpdateAutomationName()
-    {
-        string name = Footprint?.OrientedImage?.Type is OrientedImageType type
-            ? string.Format(CultureInfo.CurrentCulture, Properties.Resources.GetString("OrientedImageDisplayImageAutomationNameFormat") ?? "Oriented image, {0}", type)
-            : Properties.Resources.GetString("OrientedImageDisplayAutomationName") ?? "Oriented image display";
-#if WPF
-        System.Windows.Automation.AutomationProperties.SetName(AutomationNameTarget, name);
-#elif WINDOWS_XAML
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(AutomationNameTarget, name);
-#elif MAUI
-        SemanticProperties.SetDescription(AutomationNameTarget, name);
-#endif
-    }
-
     private async Task SetFootprintAsync(OrientedImageFootprint? footprint, CancellationToken token)
     {
         OrientedImage? image = footprint?.OrientedImage;
@@ -308,7 +322,6 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 
         Footprint = footprint;
         PresentationError = null;
-        UpdateAutomationName();
 
         if (imageChanged)
             ClearPresentation();

@@ -144,6 +144,43 @@ public sealed class OrientedImageDisplayTests
     }
 
     [TestMethod]
+    public void AutomationPropertiesOnControlReachFocusableView()
+    {
+        RunSta(() =>
+        {
+            // Focus lands on the inner view, so the name and automation id the app gives the control must reach that
+            // view, whether set before or after the view exists, and clearing the name must restore the default label.
+            var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
+            System.Windows.Automation.AutomationProperties.SetName(control, "Rear camera");
+            System.Windows.Automation.AutomationProperties.SetAutomationId(control, "RearCamera");
+            Assert.IsTrue(control.ApplyTemplate());
+            DependencyObject view = GetFocusableView(control);
+            Assert.AreEqual("Rear camera", System.Windows.Automation.AutomationProperties.GetName(view));
+            Assert.AreEqual("RearCamera", System.Windows.Automation.AutomationProperties.GetAutomationId(view));
+
+            System.Windows.Automation.AutomationProperties.SetName(control, "Front camera");
+            System.Windows.Automation.AutomationProperties.SetAutomationId(control, "FrontCamera");
+            Assert.AreEqual("Front camera", System.Windows.Automation.AutomationProperties.GetName(view));
+            Assert.AreEqual("FrontCamera", System.Windows.Automation.AutomationProperties.GetAutomationId(view));
+
+            control.ClearValue(System.Windows.Automation.AutomationProperties.NameProperty);
+            string defaultName = System.Windows.Automation.AutomationProperties.GetName(view);
+            Assert.IsFalse(string.IsNullOrEmpty(defaultName), "the view must fall back to its default label");
+            Assert.AreNotEqual("Front camera", defaultName);
+        });
+    }
+
+    // The keyboard-focusable element of the active display: the MapView of the raster display here.
+    private static DependencyObject GetFocusableView(OrientedImageDisplay control)
+    {
+        var display = GetHost(control).Content as ContentControl;
+        Assert.IsNotNull(display, "the host presents the active display");
+        var view = display.Content as DependencyObject;
+        Assert.IsNotNull(view, "the display presents its focusable view");
+        return view;
+    }
+
+    [TestMethod]
     public void VisibleAreaIsClippedToImageNotClamped()
     {
         // A 45deg-rotated view (diamond) that fully CONTAINS the 100x100 image: the correct visible-area footprint

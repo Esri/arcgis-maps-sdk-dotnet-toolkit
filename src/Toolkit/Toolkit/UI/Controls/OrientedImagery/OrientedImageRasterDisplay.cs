@@ -90,15 +90,15 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
                 UpdateFootprint();
         };
         Content = _mapView;
-        UpdateAutomationName();
+        SetAutomationName(null);
     }
 
 #if MAUI
-    protected override View AutomationNameTarget => _mapView;
+    protected override View AutomationTarget => _mapView;
 #elif WPF
-    protected override System.Windows.DependencyObject AutomationNameTarget => _mapView;
+    protected override System.Windows.DependencyObject AutomationTarget => _mapView;
 #else
-    protected override Microsoft.UI.Xaml.DependencyObject AutomationNameTarget => _mapView;
+    protected override Microsoft.UI.Xaml.DependencyObject AutomationTarget => _mapView;
 #endif
 
     // A MapView with no Map sits at DrawStatus.InProgress forever, so only count drawing when there's a map.
