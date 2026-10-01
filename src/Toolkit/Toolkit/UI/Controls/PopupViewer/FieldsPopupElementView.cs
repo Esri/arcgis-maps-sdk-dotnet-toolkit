@@ -120,7 +120,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return;
             }
             Grid g = null;
-#if WPF
+#if WPF || WINUI
             g = new AccessibleGrid();
 #else
             g = new Grid();

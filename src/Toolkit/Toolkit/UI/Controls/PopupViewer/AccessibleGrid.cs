@@ -13,14 +13,21 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
+#if WPF || WINUI
+
 #if WPF
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
+#elif WINUI
+using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Automation.Peers;
+using Microsoft.UI.Xaml.Automation.Provider;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    internal sealed class AccessibleGrid : Grid
+    internal sealed partial class AccessibleGrid : Grid
     {
         /// <summary>
         /// Gets or sets whether this element is exposed to UI Automation as a real control/content element,
@@ -55,7 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         protected override AutomationPeer OnCreateAutomationPeer() => new AccessibleGridAutomationPeer(this);
     }
 
-    internal sealed class AccessibleGridAutomationPeer : FrameworkElementAutomationPeer, IGridProvider
+    internal sealed partial class AccessibleGridAutomationPeer : FrameworkElementAutomationPeer, IGridProvider
     {
         private readonly AccessibleGrid _owner;
 
@@ -92,19 +99,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 if (child is IFieldsTableCell cell && cell.Row == row && cell.Column == column)
                 {
+#if WPF
                     var peer = UIElementAutomationPeer.CreatePeerForElement(child);
+#elif WINUI
+                    var peer = FrameworkElementAutomationPeer.FromElement(child);
+#endif
                     return peer is null ? null! : ProviderFromPeer(peer);
                 }
             }
             return null!;
         }
 
+#if WPF
         public override object GetPattern(PatternInterface patternInterface)
         {
             if (patternInterface == PatternInterface.Grid)
                 return this;
             return base.GetPattern(patternInterface);
         }
+#elif WINUI
+        protected override object GetPatternCore(PatternInterface patternInterface)
+        {
+            if (patternInterface == PatternInterface.Grid)
+                return this;
+            return base.GetPatternCore(patternInterface);
+        }
+#endif
     }
 }
 #endif
