@@ -77,7 +77,7 @@ public sealed class OrientedImageMarker : INotifyPropertyChanged
     }
 
     /// <summary>Gets or sets an arbitrary value associated with the marker (for example, a domain identifier).</summary>
-    /// <remarks>Not used by the control; provided so applications can correlate <see cref="OrientedImageDisplay.ImageTappedEventArgs.Marker"/>.</remarks>
+    /// <remarks>Not used by the control; provided so applications can correlate <see cref="OrientedImageTappedEventArgs.Marker"/>.</remarks>
     /// <value>The associated value, or <c>null</c>.</value>
     public object? Tag
     {
