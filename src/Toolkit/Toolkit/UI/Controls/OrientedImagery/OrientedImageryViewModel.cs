@@ -654,10 +654,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     internal GraphicsOverlay MarkersOverlay => _markersOverlay;
 
-    internal OrientedImageDisplay.ImageTappedEventArgs GetPublicImageTappedEventArgs(OrientedImageDisplay.ImageTappedEventArgs eventArgs) =>
+    internal OrientedImageTappedEventArgs GetPublicImageTappedEventArgs(OrientedImageTappedEventArgs eventArgs) =>
         eventArgs.Marker is null || Markers.Contains(eventArgs.Marker)
             ? eventArgs
-            : new OrientedImageDisplay.ImageTappedEventArgs(eventArgs.ImagePoint, eventArgs.Image);
+            : new OrientedImageTappedEventArgs(eventArgs.ImagePoint, eventArgs.Image);
 
     /// <summary>
     /// Gets or sets the default symbology to use when adding new markers.
