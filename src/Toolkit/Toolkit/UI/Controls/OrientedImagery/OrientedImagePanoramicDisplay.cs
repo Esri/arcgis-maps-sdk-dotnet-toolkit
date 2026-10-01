@@ -420,7 +420,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
         var pixel = new PointF(u * _imageWidth, v * _imageHeight);
         OrientedImageMarker? marker = HitTestMarker(camera, x, y);
-        RaiseImageTapped(new OrientedImageDisplay.ImageTappedEventArgs(pixel, image, marker));
+        RaiseImageTapped(new OrientedImageTappedEventArgs(pixel, image, marker));
     }
 
     private OrientedImageMarker? HitTestMarker(PanoramaCameraState camera, double x, double y)
