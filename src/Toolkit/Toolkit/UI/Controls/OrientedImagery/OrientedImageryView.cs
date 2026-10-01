@@ -137,7 +137,7 @@ public partial class OrientedImageryView
     /// Occurs whenever a user taps on the image display.
     /// </summary>
     /// <remarks>Toolkit-managed marker hits raise this event with <c>Marker</c> set to <c>null</c>.</remarks>
-    public event EventHandler<OrientedImageDisplay.ImageTappedEventArgs>? ImageTapped;
+    public event EventHandler<OrientedImageTappedEventArgs>? ImageTapped;
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -186,7 +186,7 @@ public partial class OrientedImageryView
     private void UpdateSelectedImageReady() => ViewModel.SetSelectedImageReady(
         _display?.IsInteractive == true && ViewModel.SelectedImage != null && _display.Footprint?.OrientedImage == ViewModel.SelectedImage);
 
-    private void Display_ImageTapped(object? sender, OrientedImageDisplay.ImageTappedEventArgs e) =>
+    private void Display_ImageTapped(object? sender, OrientedImageTappedEventArgs e) =>
         ImageTapped?.Invoke(this, ViewModel.GetPublicImageTappedEventArgs(e));
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
