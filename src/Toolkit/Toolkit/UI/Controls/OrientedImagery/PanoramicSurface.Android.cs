@@ -881,7 +881,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         GLES20.GlUniformMatrix4fv(_uMvp, 1, false, _mvp, 0);
 
         GLES20.GlEnable(GLES20.GlBlend);
-        GLES20.GlBlendFunc(GLES20.GlSrcAlpha, GLES20.GlOneMinusSrcAlpha); // straight-alpha source-over
+        GLES20.GlBlendFunc(GLES20.GlOne, GLES20.GlOneMinusSrcAlpha); // source-over for premultiplied swatches
 
         foreach (GlMarker marker in _glMarkers)
         {
@@ -1069,8 +1069,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     #endregion
 
-    // Same nested name and shape as the Windows PanoramicSurface.MarkerSwatch so the display code is shared. The offset
-    // runs from the anchor to the swatch center, in device pixels with y down.
+    // Same nested name and shape as the Windows PanoramicSurface.MarkerSwatch so the display code is shared. The swatch
+    // is premultiplied BGRA8; the offset runs from the anchor to the swatch center, in device pixels with y down.
     internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY);
 
     private readonly record struct GlMarker(int TextureId, float U, float V, int Width, int Height, float OffsetX, float OffsetY);
