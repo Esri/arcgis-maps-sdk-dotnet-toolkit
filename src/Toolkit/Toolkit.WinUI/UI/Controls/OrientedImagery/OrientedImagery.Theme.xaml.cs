@@ -11,8 +11,6 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
 
     public static Visibility VisibleWhenFalse(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
 
-    public static Visibility VisibleWhenNull(object? value) => value is null ? Visibility.Visible : Visibility.Collapsed;
-
     public static Visibility VisibleWhenNotNull(object? value) => value is null ? Visibility.Collapsed : Visibility.Visible;
 
     public static Visibility VisibleWhenLoading(object? selectedImage, bool isInteractive)
@@ -21,6 +19,9 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
     public static Visibility VisibleWhenBusy(object? selectedImage, bool isBusy)
         => selectedImage is not null && isBusy ? Visibility.Visible : Visibility.Collapsed;
 
-    public static Windows.UI.Color ToWindowsColor(System.Drawing.Color color)
-        => Windows.UI.Color.FromArgb(color.A, color.R, color.G, color.B);
+    public static string? CameraMarkersToolTip(bool showingMarkers)
+        => Properties.Resources.GetString(showingMarkers ? "OrientedImageryViewClearCameraMarkers" : "OrientedImageryViewShowCameraMarkersOnGeoView");
+
+    public static string? SequentialNavigationToolTip(bool isSequential)
+        => Properties.Resources.GetString(isSequential ? "OrientedImageryViewReturnToResults" : "OrientedImageryViewEnterSequentialNavigation");
 }

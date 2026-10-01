@@ -7,11 +7,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 [TemplatePart(Name = ImageDisplayName, Type = typeof(OrientedImageDisplay))]
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
-public partial class OrientedImageryView : ItemsControl
+[TemplatePart(Name = PaginatorName, Type = typeof(OrientedImageryPaginator))]
+public partial class OrientedImageryView : Control
 {
     private long _isBusyCallbackToken;
     private long _isInteractiveCallbackToken;
     private long _errorCallbackToken;
+
+    internal Windows.UI.Color ThemeDisplayBackgroundColor
+    {
+        get => (Windows.UI.Color)GetValue(ThemeDisplayBackgroundColorProperty);
+        set => SetValue(ThemeDisplayBackgroundColorProperty, value);
+    }
+
+    internal static readonly DependencyProperty ThemeDisplayBackgroundColorProperty =
+        DependencyProperty.Register(nameof(ThemeDisplayBackgroundColor), typeof(Windows.UI.Color), typeof(OrientedImageryView),
+            new PropertyMetadata(default(Windows.UI.Color), (sender, _) =>
+            {
+                var view = (OrientedImageryView)sender;
+                view.UpdateDisplayBackgroundColor(view.DisplayBackgroundColor);
+            }));
 
     internal DefaultWinUIToolbarTemplates? DefaultToolbarTemplates
     {
@@ -41,12 +56,14 @@ public partial class OrientedImageryView : ItemsControl
         var templates = DefaultToolbarTemplates;
         if (templates != null)
         {
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(ImageSearchModeVM), Template = templates.ImageSearchModeVMTemplate });
             selector.TypeTemplatePairs.Add(new() { Type = typeof(ShowSelectedFootprintVM), Template = templates.ShowSelectedFootprintVMTemplate });
             selector.TypeTemplatePairs.Add(new() { Type = typeof(ShowUnselectedFootprintsVM), Template = templates.ShowUnselectedFootprintsVMTemplate });
             selector.TypeTemplatePairs.Add(new() { Type = typeof(ShowCameraMarkersVM), Template = templates.ShowCameraMarkersVMTemplate });
             selector.TypeTemplatePairs.Add(new() { Type = typeof(AllowAddingMarkersVM), Template = templates.AllowAddingMarkersVMTemplate });
             selector.TypeTemplatePairs.Add(new() { Type = typeof(SelectNewMarkerSymbolVM), Template = templates.MarkerPickerVMTemplate });
             selector.TypeTemplatePairs.Add(new() { Type = typeof(ClearMarkersVM), Template = templates.ClearMarkersVMTemplate });
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(SequentialNavigationVM), Template = templates.SequentialNavigationVMTemplate });
         }
 
         return selector;
@@ -84,7 +101,53 @@ public partial class OrientedImageryView : ItemsControl
         IsImageDisplayBusy = _display?.IsBusy ?? false;
         IsImageDisplayInteractive = _display?.IsInteractive ?? false;
         ImageDisplayError = _display?.Error;
+        UpdateNavigationVisibility_WinUI();
     }
+
+    private void UpdateNavigationVisibility_WinUI()
+    {
+        bool hasImage = ViewModel.SelectedImage != null;
+        NoImageSelectedVisibility = hasImage ? Visibility.Collapsed : Visibility.Visible;
+        ImageNavigationVisibility = hasImage ? Visibility.Visible : Visibility.Collapsed;
+        ResultNavigationVisibility = hasImage && !ViewModel.IsSequentialNavigationEnabled ? Visibility.Visible : Visibility.Collapsed;
+        SequentialNavigationVisibility = hasImage && ViewModel.IsSequentialNavigationEnabled ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    internal Visibility NoImageSelectedVisibility
+    {
+        get => (Visibility)GetValue(NoImageSelectedVisibilityProperty);
+        private set => SetValue(NoImageSelectedVisibilityProperty, value);
+    }
+
+    internal static readonly DependencyProperty NoImageSelectedVisibilityProperty =
+        DependencyProperty.Register(nameof(NoImageSelectedVisibility), typeof(Visibility), typeof(OrientedImageryView), new PropertyMetadata(Visibility.Visible));
+
+    internal Visibility ImageNavigationVisibility
+    {
+        get => (Visibility)GetValue(ImageNavigationVisibilityProperty);
+        private set => SetValue(ImageNavigationVisibilityProperty, value);
+    }
+
+    internal static readonly DependencyProperty ImageNavigationVisibilityProperty =
+        DependencyProperty.Register(nameof(ImageNavigationVisibility), typeof(Visibility), typeof(OrientedImageryView), new PropertyMetadata(Visibility.Collapsed));
+
+    internal Visibility ResultNavigationVisibility
+    {
+        get => (Visibility)GetValue(ResultNavigationVisibilityProperty);
+        private set => SetValue(ResultNavigationVisibilityProperty, value);
+    }
+
+    internal static readonly DependencyProperty ResultNavigationVisibilityProperty =
+        DependencyProperty.Register(nameof(ResultNavigationVisibility), typeof(Visibility), typeof(OrientedImageryView), new PropertyMetadata(Visibility.Collapsed));
+
+    internal Visibility SequentialNavigationVisibility
+    {
+        get => (Visibility)GetValue(SequentialNavigationVisibilityProperty);
+        private set => SetValue(SequentialNavigationVisibilityProperty, value);
+    }
+
+    internal static readonly DependencyProperty SequentialNavigationVisibilityProperty =
+        DependencyProperty.Register(nameof(SequentialNavigationVisibility), typeof(Visibility), typeof(OrientedImageryView), new PropertyMetadata(Visibility.Collapsed));
 
     internal bool IsImageDisplayBusy
     {
@@ -117,11 +180,13 @@ public partial class OrientedImageryView : ItemsControl
 
 internal sealed class DefaultWinUIToolbarTemplates
 {
+    public DataTemplate? ImageSearchModeVMTemplate { get; set; }
     public DataTemplate? ShowSelectedFootprintVMTemplate { get; set; }
     public DataTemplate? ShowUnselectedFootprintsVMTemplate { get; set; }
     public DataTemplate? ShowCameraMarkersVMTemplate { get; set; }
     public DataTemplate? AllowAddingMarkersVMTemplate { get; set; }
     public DataTemplate? MarkerPickerVMTemplate { get; set; }
     public DataTemplate? ClearMarkersVMTemplate { get; set; }
+    public DataTemplate? SequentialNavigationVMTemplate { get; set; }
 }
 #endif

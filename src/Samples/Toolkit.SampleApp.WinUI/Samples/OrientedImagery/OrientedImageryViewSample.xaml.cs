@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.UI.Input;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OrientedImagery;
@@ -43,10 +45,13 @@ public sealed partial class OrientedImageryViewSample : Page
         if (MainOrientedImageryView.ToolbarItemTemplateSelector is not OrientedImageryViewTemplateSelector selector)
             return;
 
-        // This is currently a bit broken and it crowds out the default controls. Comment out to fix
-        _orientedImageryViewModel.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
-        if (this.Resources.TryGetValue("PopupToolbarItemTemplate", out object popupItemVMObject) && popupItemVMObject is DataTemplate popupItemVM)
-            selector.TypeTemplatePairs.Add(new() { Type = typeof(OrientedImageryPopupToolbarItem), Template = popupItemVM });
+        var popupTemplate = (DataTemplate)Resources["PopupToolbarItemTemplate"];
+        if (!selector.TypeTemplatePairs.Any(pair => pair.Type == typeof(OrientedImageryPopupToolbarItem)))
+            selector.TypeTemplatePairs.Add(new() { Type = typeof(OrientedImageryPopupToolbarItem), Template = popupTemplate });
+
+        // Register the template before adding the item: ItemsControl selects its template immediately.
+        if (!_orientedImageryViewModel.ToolbarItems.OfType<OrientedImageryPopupToolbarItem>().Any())
+            _orientedImageryViewModel.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
     }
 
     private async Task InitializeAsync()
@@ -127,5 +132,28 @@ public sealed partial class OrientedImageryViewSample : Page
         SelectedImagePopupViewer.Popup = null;
     }
 
+    private void PanelSplitter_DragDelta(object sender, DragDeltaEventArgs e)
+    {
+        const double minimumPanelWidth = 120;
+        var mapWidth = MapColumn.ActualWidth;
+        var imageryWidth = ImageryColumn.ActualWidth;
+        if (mapWidth + imageryWidth < 2 * minimumPanelWidth)
+            return;
+
+        var change = Math.Clamp(e.HorizontalChange, minimumPanelWidth - mapWidth, imageryWidth - minimumPanelWidth);
+        MapColumn.Width = new GridLength(mapWidth + change, GridUnitType.Star);
+        ImageryColumn.Width = new GridLength(imageryWidth - change, GridUnitType.Star);
+    }
+
     public static bool HasSelectedImage(OrientedImage? selectedImage) => selectedImage != null;
+
+    public static double PopupIconOpacity(OrientedImage? selectedImage) => selectedImage == null ? 0.35 : 1;
+}
+
+public sealed partial class PanelResizeHandle : Microsoft.UI.Xaml.Controls.Grid
+{
+    public PanelResizeHandle()
+    {
+        ProtectedCursor = InputSystemCursor.Create(InputSystemCursorShape.SizeWestEast);
+    }
 }
