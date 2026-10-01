@@ -126,10 +126,6 @@ public partial class OrientedImageryView
                 if (_display != null)
                     _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
                 break;
-            case nameof(OrientedImageryViewModel.Markers):
-                if (_display != null)
-                    _display.Markers = ViewModel.Markers;
-                break;
         }
     }
 #endregion ViewModel
@@ -140,6 +136,7 @@ public partial class OrientedImageryView
     /// <summary>
     /// Occurs whenever a user taps on the image display.
     /// </summary>
+    /// <remarks>Toolkit-managed marker hits raise this event with <c>Marker</c> set to <c>null</c>.</remarks>
     public event EventHandler<OrientedImageDisplay.ImageTappedEventArgs>? ImageTapped;
 
     /// <summary>
@@ -167,7 +164,7 @@ public partial class OrientedImageryView
 
     private void WireDisplayToViewModel(OrientedImageDisplay display)
     {
-        display.Markers = ViewModel.Markers;
+        display.Markers = ViewModel.DisplayMarkers;
         display.Footprint = ViewModel.SelectedImageFootprint;
         UpdateDisplayBackgroundColor(DisplayBackgroundColor);
         UpdateSelectedImageReady();
@@ -189,7 +186,8 @@ public partial class OrientedImageryView
     private void UpdateSelectedImageReady() => ViewModel.SetSelectedImageReady(
         _display?.IsInteractive == true && ViewModel.SelectedImage != null && _display.Footprint?.OrientedImage == ViewModel.SelectedImage);
 
-    private async void Display_ImageTapped(object? sender, OrientedImageDisplay.ImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
+    private void Display_ImageTapped(object? sender, OrientedImageDisplay.ImageTappedEventArgs e) =>
+        ImageTapped?.Invoke(this, ViewModel.GetPublicImageTappedEventArgs(e));
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
