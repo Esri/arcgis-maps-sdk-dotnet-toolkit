@@ -6,6 +6,7 @@
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OrientedImagery"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     mc:Ignorable="d">
 
@@ -14,21 +15,28 @@
             <Button
                 Click="OpenSelectedImagePopupButton_Click"
                 IsEnabled="{x:Bind local:OrientedImageryViewSample.HasSelectedImage(ViewModel.SelectedImage), Mode=OneWay}"
-                ToolTipService.ToolTip="Open popup for selected image">
+                ToolTipService.ToolTip="Open popup for selected image"
+                AutomationProperties.Name="Open popup for selected image">
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="MinWidth" Value="40" />
-                        <Setter Property="MinHeight" Value="40" />
+                        <Setter Property="MinWidth" Value="44" />
+                        <Setter Property="MinHeight" Value="44" />
                         <Setter Property="Padding" Value="4" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="BorderBrush" Value="Transparent" />
                     </Style>
                 </Button.Style>
-                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                <Viewbox Width="28" Height="28" Stretch="Uniform">
                     <Grid Width="32" Height="32">
                         <Path
-                            Data="M7 10h18v10H7zm17 9v-8H8v8zM15 7H7v1h8zm9 1h1V7h-1zm5 14a2 2 0 0 1-2 2h-6.69l-4.277 6.33L11.757 24H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2zM28 5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v17a1 1 0 0 0 1 1h7.289l3.744 5.543L19.778 23H27a1 1 0 0 0 1-1z"
-                            Fill="{ThemeResource TextFillColorPrimaryBrush}" />
+                            Width="32"
+                            Height="32"
+                            Stretch="Uniform"
+                            Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                            StrokeThickness="1"
+                            StrokeLineJoin="Round"
+                            Opacity="{x:Bind local:OrientedImageryViewSample.PopupIconOpacity(ViewModel.SelectedImage), Mode=OneWay}"
+                            Data="M4 4H28V24H20L16 29L12 24H4Z M7 10H25V20H7Z M7 7H16 M24 7H25" />
                     </Grid>
                 </Viewbox>
             </Button>
@@ -41,11 +49,12 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition x:Name="MapColumn" Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition x:Name="ImageryColumn" Width="2*" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.ColumnSpan="2" ColumnSpacing="8">
+        <Grid Grid.ColumnSpan="3" ColumnSpacing="8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -74,15 +83,52 @@
             Grid.Row="1"
             x:Name="MainMapView" />
 
-        <toolkit:OrientedImageryView
+        <local:PanelResizeHandle
             Grid.Row="1" Grid.Column="1"
+            Width="24"
+            VerticalAlignment="Stretch">
+            <primitives:Thumb
+                DragDelta="PanelSplitter_DragDelta"
+                AutomationProperties.Name="Resize map and imagery panels">
+                <primitives:Thumb.Template>
+                    <ControlTemplate TargetType="primitives:Thumb">
+                        <Grid Background="Transparent">
+                            <Border
+                                Width="1"
+                                HorizontalAlignment="Center"
+                                Background="{ThemeResource ControlStrokeColorDefaultBrush}" />
+                            <Border
+                                Width="20"
+                                Height="36"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource TextFillColorSecondaryBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6">
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Spacing="3">
+                                    <Border Width="10" Height="2" Background="{ThemeResource TextFillColorPrimaryBrush}" />
+                                    <Border Width="10" Height="2" Background="{ThemeResource TextFillColorPrimaryBrush}" />
+                                    <Border Width="10" Height="2" Background="{ThemeResource TextFillColorPrimaryBrush}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </primitives:Thumb.Template>
+            </primitives:Thumb>
+        </local:PanelResizeHandle>
+
+        <toolkit:OrientedImageryView
+            Grid.Row="1" Grid.Column="2"
             x:Name="MainOrientedImageryView"
-            GeoView="{x:Bind MainMapView, Mode=OneTime}" />
+            GeoView="{x:Bind MainMapView}" />
 
         <Grid
             x:Name="SelectedImagePopupBackground"
-            Grid.RowSpan="2"
-            Grid.ColumnSpan="2"
+            Grid.RowSpan="2" Grid.ColumnSpan="3"
             Background="#AA333333"
             Tapped="SelectedImagePopupBackground_Tapped"
             Visibility="Collapsed">
