@@ -512,7 +512,8 @@
                                 </Button>
                             </StackPanel>
                             <TextBlock Grid.Row="3"
-                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationMessage}"
+                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError.Message}"
+                                       Foreground="Red"
                                        TextWrapping="Wrap"
                                        TextAlignment="Center"
                                        Margin="8,0,8,4">
@@ -520,7 +521,7 @@
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="Visibility" Value="Visible" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationMessage}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                         </Style.Triggers>
