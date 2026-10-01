@@ -678,12 +678,12 @@ internal sealed unsafe partial class PanoramicSurface
         fixed (ushort* indexData = indices)
             _markerIndexBuffer = CreateBuffer((uint)(indices.Length * sizeof(ushort)), D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER, indexData);
 
-        // Straight (non-premultiplied) alpha source-over: the swatch buffers from RuntimeImage are not premultiplied.
+        // Source-over for the premultiplied swatches from RuntimeImage.
         D3D11_BLEND_DESC blendDesc = default;
         D3D11_RENDER_TARGET_BLEND_DESC rtBlend = new()
         {
             BlendEnable = true,
-            SrcBlend = D3D11_BLEND.D3D11_BLEND_SRC_ALPHA,
+            SrcBlend = D3D11_BLEND.D3D11_BLEND_ONE,
             DestBlend = D3D11_BLEND.D3D11_BLEND_INV_SRC_ALPHA,
             BlendOp = D3D11_BLEND_OP.D3D11_BLEND_OP_ADD,
             SrcBlendAlpha = D3D11_BLEND.D3D11_BLEND_ONE,
@@ -928,8 +928,8 @@ internal sealed unsafe partial class PanoramicSurface
 
     private readonly record struct MarkerVertex(Vector2 Position, Vector2 TexCoord);
 
-    // A resolved marker ready for the GPU: a tightly-packed BGRA8 swatch, the normalized (u,v) of its anchor, and the
-    // symbol offset from the anchor to the swatch center in device pixels, y down.
+    // A resolved marker ready for the GPU: a tightly-packed premultiplied BGRA8 swatch, the normalized (u,v) of its
+    // anchor, and the symbol offset from the anchor to the swatch center in device pixels, y down.
     internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY);
 }
 #endif
