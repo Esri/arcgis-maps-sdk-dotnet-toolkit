@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
@@ -47,7 +46,10 @@ internal abstract class OrientedImageInnerDisplay : ContentView
 internal abstract class OrientedImageInnerDisplay : ContentControl
 #endif
 {
-    private ObservableCollection<OrientedImageMarker>? _markers;
+    // The app's collection, and the markers it held when last read. A source that raises no change notifications is
+    // read only when assigned.
+    private IEnumerable<OrientedImageMarker>? _markerSource;
+    private List<OrientedImageMarker> _markers = [];
     private WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private readonly Dictionary<OrientedImageMarker, WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
     private CancellationTokenSource? _sessionCts;
@@ -86,8 +88,9 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     /// <summary>Gets the footprint of the current presentation session.</summary>
     protected OrientedImageFootprint? Footprint { get; private set; }
 
-    /// <summary>Gets the app-owned markers rendered over the image, or <c>null</c>.</summary>
-    protected ObservableCollection<OrientedImageMarker>? Markers => _markers;
+    /// <summary>Gets the markers rendered over the image, in the app's collection order. The list is replaced on each
+    /// change, never modified, so a reference to it is a stable snapshot.</summary>
+    protected IReadOnlyList<OrientedImageMarker> Markers => _markers;
 
     /// <summary>Gets the session token: canceled when a later <see cref="SetFootprint"/> supersedes this one, and
     /// before the first one. Capture it before an await and re-check it before touching display state.</summary>
@@ -124,81 +127,48 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 
     /// <summary>Sets the markers rendered over the image.</summary>
     /// <param name="markers">The markers to render, or <c>null</c>.</param>
-    public void SetMarkers(ObservableCollection<OrientedImageMarker>? markers)
+    public void SetMarkers(IEnumerable<OrientedImageMarker>? markers)
     {
-        if (ReferenceEquals(_markers, markers))
+        if (ReferenceEquals(_markerSource, markers))
             return;
 
         _markersListener?.Detach();
         _markersListener = null;
-        _markers = markers;
+        _markerSource = markers;
 
         if (markers is INotifyCollectionChanged incc)
         {
             // Weak: the app-owned collection must not keep a discarded display alive through this subscription.
             _markersListener = new WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
             {
-                OnEventAction = static (instance, source, eventArgs) => instance.OnMarkersCollectionChanged(source, eventArgs),
+                OnEventAction = static (instance, source, eventArgs) => instance.SyncMarkers(),
                 OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
             };
             incc.CollectionChanged += _markersListener.OnEvent;
         }
 
-        ListenToMarkers();
-        RebuildMarkers();
+        SyncMarkers();
     }
 
-    internal void OnMarkersCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    // Reads the source and reports which markers were added and removed since the last read. Comparing by marker
+    // identity keeps the display in step with the source, whatever notifications it raises. A marker that appears more
+    // than once is shown once, and null items are skipped.
+    private void SyncMarkers()
     {
-        switch (e.Action)
-        {
-            case NotifyCollectionChangedAction.Add:
-                List<OrientedImageMarker> added = e.NewItems!.OfType<OrientedImageMarker>().ToList();
-                added.ForEach(ListenTo);
-                AddMarkers(added);
-                break;
-            case NotifyCollectionChangedAction.Replace:
-                if (e.OldItems![0] is OrientedImageMarker oldMarker && e.NewItems![0] is OrientedImageMarker newMarker)
-                {
-                    StopListening(oldMarker);
-                    ListenTo(newMarker);
-                    ReplaceMarker(oldMarker, newMarker, e.OldStartingIndex);
-                }
+        _markers = _markerSource?.OfType<OrientedImageMarker>().Distinct().ToList() ?? [];
 
-                break;
-            case NotifyCollectionChangedAction.Remove:
-                List<OrientedImageMarker> removed = e.OldItems!.OfType<OrientedImageMarker>().ToList();
-                removed.ForEach(StopListening);
-                RemoveMarkers(e.OldStartingIndex, removed);
-                break;
-            case NotifyCollectionChangedAction.Move:
-                MoveMarkers(e.OldStartingIndex, e.NewStartingIndex);
-                break;
-            case NotifyCollectionChangedAction.Reset:
-                ListenToMarkers();
-                RebuildMarkers();
-                break;
-        }
-    }
-
-    // Subscribes to every marker in the current collection, dropping earlier subscriptions.
-    private void ListenToMarkers()
-    {
-        foreach (var listener in _markerListeners.Values)
-            listener.Detach();
-
-        _markerListeners.Clear();
-        if (_markers is null)
-            return;
-
-        foreach (OrientedImageMarker marker in _markers)
-            ListenTo(marker);
+        // The markers being listened to are those from the last read.
+        var current = new HashSet<OrientedImageMarker>(_markers);
+        List<OrientedImageMarker> removed = _markerListeners.Keys.Where(marker => !current.Contains(marker)).ToList();
+        List<OrientedImageMarker> added = _markers.Where(marker => !_markerListeners.ContainsKey(marker)).ToList();
+        removed.ForEach(StopListening);
+        added.ForEach(ListenTo);
+        OnMarkersChanged(added, removed);
     }
 
     // Weak, like the collection subscription: an app-owned long-lived marker must not keep the display alive.
     private void ListenTo(OrientedImageMarker marker)
     {
-        StopListening(marker);
         var listener = new WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
         {
             OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
@@ -246,17 +216,9 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     // Blanks the presentation synchronously: visuals, dimensions and on-image markers.
     protected abstract void ClearPresentation();
 
-    // Marker hooks, called from the collection subscription above; each re-renders after updating. OnMarkerChanged
-    // may arrive off the UI thread, since the app raises it.
-    protected abstract void RebuildMarkers();
-
-    protected abstract void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers);
-
-    protected abstract void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index);
-
-    protected abstract void RemoveMarkers(int startingIndex, IEnumerable<OrientedImageMarker> removedMarkers);
-
-    protected abstract void MoveMarkers(int oldIndex, int newIndex);
+    // Marker hooks; implementations re-render. Both can run off the UI thread, because the app raises the events
+    // behind them.
+    protected abstract void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed);
 
     protected abstract void OnMarkerChanged(OrientedImageMarker marker, string? propertyName);
 

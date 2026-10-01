@@ -154,15 +154,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     }
 
     // Every marker change re-resolves the whole set; the surface redraws all markers from the result anyway.
-    protected override void RebuildMarkers() => _ = ResolveMarkersAsync();
-
-    protected override void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers) => _ = ResolveMarkersAsync();
-
-    protected override void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index) => _ = ResolveMarkersAsync();
-
-    protected override void RemoveMarkers(int startingIndex, IEnumerable<OrientedImageMarker> removedMarkers) => _ = ResolveMarkersAsync();
-
-    protected override void MoveMarkers(int oldIndex, int newIndex) => _ = ResolveMarkersAsync();
+    protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed) => _ = ResolveMarkersAsync();
 
     // Dispatch so the snapshot of the app-owned marker is taken on the UI thread.
     protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName) => this.Dispatch(() => _ = ResolveMarkersAsync());
@@ -179,7 +171,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
         // Snapshot the app-owned markers on the UI thread (Position/Symbol/IsVisible) before going async.
         var pending = new List<(OrientedImageMarker Marker, OrientedImageMarkerPosition Position, Symbol Symbol)>();
-        if (Markers is not null && image is not null && imageWidth > 0 && imageHeight > 0)
+        if (image is not null && imageWidth > 0 && imageHeight > 0)
         {
             foreach (OrientedImageMarker marker in Markers)
             {

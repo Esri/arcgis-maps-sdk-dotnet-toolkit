@@ -212,68 +212,36 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return new Raster(uri.IsAbsoluteUri && uri.IsFile ? uri.LocalPath : uri.OriginalString);
     }
 
-    // Snapshot the app-owned collection on the calling thread; the overlay and dictionary work runs on the UI thread.
-    protected override void RebuildMarkers()
+    // Graphics are kept per marker, so only added markers need placing. The overlay follows collection order, which
+    // is the drawing order.
+    protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed)
     {
-        List<OrientedImageMarker>? snapshot = Markers is null ? null : new(Markers);
+        IReadOnlyList<OrientedImageMarker> markers = Markers;
         this.Dispatch(() =>
         {
-            _markerGraphics.Clear();
-            _graphicMarkers.Clear();
-            _markersOverlay.Graphics.Clear();
-            AddMarkers(snapshot ?? []);
-        });
-    }
+            foreach (OrientedImageMarker marker in removed)
+            {
+                if (_markerGraphics.Remove(marker, out Graphic? graphic))
+                    _graphicMarkers.Remove(graphic);
+            }
 
-    protected override void AddMarkers(IEnumerable<OrientedImageMarker> newMarkers)
-    {
-        this.Dispatch(() =>
-        {
-            foreach (OrientedImageMarker marker in newMarkers)
+            foreach (OrientedImageMarker marker in added)
             {
                 Graphic graphic = new() { Symbol = marker.Symbol, IsVisible = marker.IsVisible };
                 _markerGraphics[marker] = graphic;
                 _graphicMarkers[graphic] = marker;
-                _markersOverlay.Graphics.Add(graphic);
             }
 
-            _ = RefreshMarkerGeometriesAsync(newMarkers);
-        });
-    }
-
-    protected override void ReplaceMarker(OrientedImageMarker oldMarker, OrientedImageMarker newMarker, int index)
-    {
-        this.Dispatch(() =>
-        {
-            var oldGraphic = _markersOverlay.Graphics[index];
-            _markerGraphics.Remove(oldMarker);
-            _graphicMarkers.Remove(oldGraphic);
-
-            Graphic newGraphic = new() { Symbol = newMarker.Symbol, IsVisible = newMarker.IsVisible };
-            _markerGraphics[newMarker] = newGraphic;
-            _graphicMarkers[newGraphic] = newMarker;
-            _markersOverlay.Graphics[index] = newGraphic;
-
-            _ = RefreshMarkerGeometriesAsync([newMarker]);
-        });
-    }
-
-    protected override void RemoveMarkers(int _, IEnumerable<OrientedImageMarker> removedMarkers)
-    {
-        this.Dispatch(() =>
-        {
-            foreach (OrientedImageMarker marker in removedMarkers)
+            List<Graphic> ordered = markers.Select(marker => _markerGraphics[marker]).ToList();
+            if (!_markersOverlay.Graphics.SequenceEqual(ordered))
             {
-                if (_markerGraphics.Remove(marker, out Graphic? graphic))
-                {
-                    _graphicMarkers.Remove(graphic);
-                    _markersOverlay.Graphics.Remove(graphic);
-                }
+                _markersOverlay.Graphics.Clear();
+                _markersOverlay.Graphics.AddRange(ordered);
             }
+
+            _ = RefreshMarkerGeometriesAsync(added);
         });
     }
-
-    protected override void MoveMarkers(int oldIndex, int newIndex) => this.Dispatch(() => _markersOverlay.Graphics.Move(oldIndex, newIndex));
 
     // Dispatch so marker updates can't touch the graphic/dictionaries off the UI thread.
     protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName)
