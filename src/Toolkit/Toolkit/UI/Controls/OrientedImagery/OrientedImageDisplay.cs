@@ -15,7 +15,8 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -107,13 +108,15 @@ public partial class OrientedImageDisplay
     /// Gets or sets the markers to render on top of the oriented image.
     /// </summary>
     /// <remarks>
-    /// The collection is owned by the application; the control renders its contents and never modifies it. See
-    /// <see cref="OrientedImageMarker"/> for image- versus world-anchored positioning.
+    /// Like an items source, this accepts any collection. If the collection is observable (implements
+    /// <see cref="INotifyCollectionChanged"/>), the control follows its changes; otherwise it reads the collection once
+    /// when assigned. Either way, the control follows changes to the markers themselves and never modifies the
+    /// collection.
     /// </remarks>
-    /// <value>A collection of markers drawn over the image, or <c>null</c>.</value>
-    public ObservableCollection<OrientedImageMarker>? Markers
+    /// <value>The markers drawn over the image, or <c>null</c>.</value>
+    public IEnumerable<OrientedImageMarker>? Markers
     {
-        get => GetValue(MarkersProperty) as ObservableCollection<OrientedImageMarker>;
+        get => GetValue(MarkersProperty) as IEnumerable<OrientedImageMarker>;
         set => SetValue(MarkersProperty, value);
     }
 
@@ -176,7 +179,7 @@ public partial class OrientedImageDisplay
     /// Identifies the <see cref="Markers"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty MarkersProperty =
-        PropertyHelper.CreateProperty<ObservableCollection<OrientedImageMarker>, OrientedImageDisplay>(nameof(Markers), null, (s, oldValue, newValue) => s._activeDisplay?.SetMarkers(newValue));
+        PropertyHelper.CreateProperty<IEnumerable<OrientedImageMarker>, OrientedImageDisplay>(nameof(Markers), null, (s, oldValue, newValue) => s._activeDisplay?.SetMarkers(newValue));
 
     /// <summary>
     /// Identifies the <see cref="AutoUpdateFootprint"/> dependency property.
