@@ -178,6 +178,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             if (_isSequentialNavigation == value) return;
             ResetSequentialNavigationState();
             SetProperty(ref _isSequentialNavigation, value);
+            ChangeNavigationCommandCanExecute();
         }
     }
 
