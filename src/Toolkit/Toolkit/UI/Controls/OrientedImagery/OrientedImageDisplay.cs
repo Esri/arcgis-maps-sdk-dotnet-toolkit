@@ -72,15 +72,26 @@ public partial class OrientedImageDisplay
 #else
         DefaultStyleKey = typeof(OrientedImageDisplay);
 #endif
+#if WINDOWS_XAML
+        RegisterPropertyChangedCallback(Microsoft.UI.Xaml.Automation.AutomationProperties.NameProperty, (_, _) => PushAutomationProperties());
+        RegisterPropertyChangedCallback(Microsoft.UI.Xaml.Automation.AutomationProperties.AutomationIdProperty, (_, _) => PushAutomationProperties());
+#endif
+    }
 
-        // Default localized screen-reader label for the control (consumers may override AutomationProperties.Name).
-        string automationName = Properties.Resources.GetString("OrientedImageDisplayAutomationName") ?? "Oriented image display";
+    // Focus lands on the active display's inner view, so the name and automation id go there too.
+    private void PushAutomationProperties()
+    {
+        if (_activeDisplay is null)
+            return;
 #if WPF
-        System.Windows.Automation.AutomationProperties.SetName(this, automationName);
+        _activeDisplay.SetAutomationName(System.Windows.Automation.AutomationProperties.GetName(this));
+        _activeDisplay.SetAutomationId(System.Windows.Automation.AutomationProperties.GetAutomationId(this));
 #elif WINDOWS_XAML
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(this, automationName);
-#elif MAUI
-        Microsoft.Maui.Controls.SemanticProperties.SetDescription(this, automationName);
+        _activeDisplay.SetAutomationName(Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(this));
+        _activeDisplay.SetAutomationId(Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(this));
+#else
+        _activeDisplay.SetAutomationName(Microsoft.Maui.Controls.SemanticProperties.GetDescription(this));
+        _activeDisplay.SetAutomationId(AutomationId);
 #endif
     }
 
@@ -262,6 +273,7 @@ public partial class OrientedImageDisplay
 
         if (display is not null)
         {
+            PushAutomationProperties();
             display.SetFootprint(Footprint);
             display.SetMarkers(Markers);
             display.SetAutoUpdateFootprint(AutoUpdateFootprint);

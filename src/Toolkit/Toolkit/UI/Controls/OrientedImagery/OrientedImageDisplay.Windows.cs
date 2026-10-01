@@ -20,5 +20,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = "PART_DisplayHost", Type = typeof(ContentPresenter))]
 public partial class OrientedImageDisplay : Control
 {
+#if WPF
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.Property == System.Windows.Automation.AutomationProperties.NameProperty ||
+            e.Property == System.Windows.Automation.AutomationProperties.AutomationIdProperty)
+            PushAutomationProperties();
+    }
+#endif
 }
 #endif

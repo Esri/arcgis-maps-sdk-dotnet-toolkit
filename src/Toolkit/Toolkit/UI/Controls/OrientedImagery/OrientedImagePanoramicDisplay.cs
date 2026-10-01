@@ -69,15 +69,15 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _surface.SurfaceTapped += OnSurfaceTapped;
         _surface.RenderFailed += OnRenderFailed;
         _surface.DeviceRecreated += OnDeviceRecreated;
-        UpdateAutomationName();
+        SetAutomationName(null);
     }
 
 #if MAUI
-    protected override View AutomationNameTarget => _surface;
+    protected override View AutomationTarget => _surface;
 #elif WPF
-    protected override System.Windows.DependencyObject AutomationNameTarget => _surface;
+    protected override System.Windows.DependencyObject AutomationTarget => _surface;
 #else
-    protected override Microsoft.UI.Xaml.DependencyObject AutomationNameTarget => _surface;
+    protected override Microsoft.UI.Xaml.DependencyObject AutomationTarget => _surface;
 #endif
 
     // Interactive once a panorama is decoded and shown (the sphere is then navigable).
