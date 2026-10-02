@@ -175,6 +175,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         _mapView.Map = null;
         _rasterLayer = null;
         _imageOrientation = default;
+        foreach (Graphic graphic in _markerGraphics.Values)
+            graphic.Geometry = null; // placed on the old image; re-placed once the next one is framed
         SetInteractive(false);
     }
 
