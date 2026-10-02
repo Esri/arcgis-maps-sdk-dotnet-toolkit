@@ -112,11 +112,11 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Grid Width="{TemplateBinding ThumbnailSize}" Height="{TemplateBinding ThumbnailSize}">
-                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Text="&#xE896;" />
-                            <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Text="&#xE896;" AutomationProperties.AccessibilityView="Raw" />
+                            <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw" />
                             <ProgressRing Visibility="Collapsed" x:Name="DownloadSpinner" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Attachment.Name, Mode=OneTime}" Margin="5" />
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Attachment.Name, Mode=OneWay}" Margin="5" AutomationProperties.AccessibilityView="Raw" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -132,10 +132,10 @@
                                    AutomationProperties.HeadingLevel="Level1"/>
                         <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                    AutomationProperties.HeadingLevel="Level2"/>
-                        <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
+                        <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single" AutomationProperties.Name="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" />
+                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" AutomationProperties.Name="{Binding Path=Attachment.Name}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
@@ -147,7 +147,6 @@
 
     <Style TargetType="primitives:MediaPopupElementView" >
         <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="AutomationProperties.AccessibilityView" Value="Raw"/>
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -178,12 +177,12 @@
                                    AutomationProperties.HeadingLevel="Level1"/>
                         <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                    AutomationProperties.HeadingLevel="Level2"/>
-                        <FlipView Background="Transparent" AutomationProperties.AccessibilityView="Raw" MaxHeight="200" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Media}" Grid.Row="2" IsTabStop="False" />
+                        <FlipView Background="Transparent" MaxHeight="200" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Media}" Grid.Row="2" IsTabStop="False" />
                         <PipsPager x:Name="PipsPager"
                             HorizontalAlignment="Center"
                             Grid.Row="3"
                             NumberOfPages="{Binding Media.Count}"
-                            SelectedPageIndex="{Binding SelectedIndex, ElementName=FlipView, Mode=TwoWay}" AutomationProperties.AccessibilityView="Raw" />
+                            SelectedPageIndex="{Binding SelectedIndex, ElementName=FlipView, Mode=TwoWay}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -400,16 +399,21 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <Button x:Name="NavigateBack" Background="Transparent" BorderThickness="0,0,2,0" VerticalAlignment="Stretch" CornerRadius="0" MinHeight="50">
                                 <FontIcon Glyph="&#xE76B;" />
                             </Button>
-                            <Button x:Name="NavigateUp" Background="Transparent" BorderThickness="0" VerticalAlignment="Stretch" MinHeight="50">
+                            <Button x:Name="NavigateUp" Grid.Column="1" Background="Transparent" BorderThickness="0" VerticalAlignment="Stretch" MinHeight="50">
                                 <FontIcon Glyph="&#xE74A;" />
                             </Button>
-                            <ContentControl ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Padding="{TemplateBinding Padding}" Margin="12,0,0,0" IsTabStop="False"
+                            <ContentControl Grid.Column="2" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Padding="{TemplateBinding Padding}" Margin="12,0,0,0" IsTabStop="False"
                                             VerticalAlignment="Stretch" VerticalContentAlignment="Center" x:Name="Header" />
-                        </StackPanel>
+                        </Grid>
                         <ScrollViewer x:Name="ScrollViewer" AutomationProperties.AccessibilityView="Raw" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1" IsVerticalRailEnabled="True" Padding="{TemplateBinding Padding}"
                                       IsTabStop="False">
                             <ContentControl x:Name="Content"
@@ -446,7 +450,7 @@
                                     <primitives:PopupContentTemplateSelector.PopupTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Title, Converter={StaticResource PopupViewerHtmlToPlainTextConverter}, Mode=OneWay}" Style="{StaticResource PopupViewerHeaderStyle}"
-                                                Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" AutomationProperties.HeadingLevel="Level1" />
+                                                Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" TextWrapping="WrapWholeWords" AutomationProperties.HeadingLevel="Level1" />
                                         </DataTemplate>
                                     </primitives:PopupContentTemplateSelector.PopupTemplate>
                                     <primitives:PopupContentTemplateSelector.UtilityAssociationsFilterResultTemplate>
