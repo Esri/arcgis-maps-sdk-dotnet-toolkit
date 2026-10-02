@@ -12,10 +12,12 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
             <StaticResource x:Key="OrientedImageryDisabledForegroundBrush" ResourceKey="TextFillColorPrimaryBrush" />
-            <StaticResource x:Key="OrientedImageryNavigationHoverBackgroundBrush" ResourceKey="ControlFillColorSecondaryBrush" />
-            <StaticResource x:Key="OrientedImageryNavigationPressedBackgroundBrush" ResourceKey="ControlFillColorTertiaryBrush" />
-            <StaticResource x:Key="OrientedImageryNavigationActiveForegroundBrush" ResourceKey="TextFillColorPrimaryBrush" />
-            <StaticResource x:Key="OrientedImageryDisplayBackgroundColor" ResourceKey="SolidBackgroundFillColorBase" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationBackgroundBrush" Color="#202020" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationForegroundBrush" Color="White" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationHoverBackgroundBrush" Color="#303030" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationPressedBackgroundBrush" Color="#404040" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationActiveForegroundBrush" Color="White" />
+            <SolidColorBrush x:Key="OrientedImageryDisplayBackgroundBrush" Color="{ThemeResource SolidBackgroundFillColorBase}" />
             <StaticResource x:Key="OrientedImageryButtonHoverBackgroundBrush" ResourceKey="ControlFillColorSecondaryBrush" />
             <StaticResource x:Key="OrientedImageryButtonHoverBorderBrush" ResourceKey="TextFillColorSecondaryBrush" />
             <StaticResource x:Key="OrientedImageryButtonPressedBackgroundBrush" ResourceKey="ControlFillColorTertiaryBrush" />
@@ -32,10 +34,12 @@
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <StaticResource x:Key="OrientedImageryDisabledForegroundBrush" ResourceKey="TextFillColorPrimaryBrush" />
-            <StaticResource x:Key="OrientedImageryNavigationHoverBackgroundBrush" ResourceKey="ControlFillColorSecondaryBrush" />
-            <StaticResource x:Key="OrientedImageryNavigationPressedBackgroundBrush" ResourceKey="ControlFillColorTertiaryBrush" />
-            <StaticResource x:Key="OrientedImageryNavigationActiveForegroundBrush" ResourceKey="TextFillColorPrimaryBrush" />
-            <StaticResource x:Key="OrientedImageryDisplayBackgroundColor" ResourceKey="SolidBackgroundFillColorBase" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationBackgroundBrush" Color="White" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationForegroundBrush" Color="#202020" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationHoverBackgroundBrush" Color="#EFEFEF" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationPressedBackgroundBrush" Color="#D3D3D3" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationActiveForegroundBrush" Color="#202020" />
+            <SolidColorBrush x:Key="OrientedImageryDisplayBackgroundBrush" Color="{ThemeResource SolidBackgroundFillColorBase}" />
             <StaticResource x:Key="OrientedImageryButtonHoverBackgroundBrush" ResourceKey="ControlFillColorSecondaryBrush" />
             <StaticResource x:Key="OrientedImageryButtonHoverBorderBrush" ResourceKey="TextFillColorSecondaryBrush" />
             <StaticResource x:Key="OrientedImageryButtonPressedBackgroundBrush" ResourceKey="ControlFillColorTertiaryBrush" />
@@ -52,10 +56,12 @@
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="OrientedImageryDisabledForegroundBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationForegroundBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
             <SolidColorBrush x:Key="OrientedImageryNavigationHoverBackgroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
             <SolidColorBrush x:Key="OrientedImageryNavigationPressedBackgroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
             <SolidColorBrush x:Key="OrientedImageryNavigationActiveForegroundBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
-            <StaticResource x:Key="OrientedImageryDisplayBackgroundColor" ResourceKey="SystemColorWindowColor" />
+            <SolidColorBrush x:Key="OrientedImageryDisplayBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="OrientedImageryButtonHoverBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="OrientedImageryButtonHoverBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
             <SolidColorBrush x:Key="OrientedImageryButtonPressedBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -247,10 +253,12 @@
     </ControlTemplate>
 
     <Style x:Key="OrientedImageryNavigationButtonStyle" TargetType="Button">
-        <Setter Property="Width" Value="32" />
+        <Setter Property="Width" Value="28" />
+        <Setter Property="MinWidth" Value="0" />
         <Setter Property="MinHeight" Value="60" />
         <Setter Property="Padding" Value="4" />
-        <Setter Property="Background" Value="{ThemeResource OrientedImageryOverlayBackgroundBrush}" />
+        <Setter Property="Background" Value="{ThemeResource OrientedImageryNavigationBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource OrientedImageryNavigationForegroundBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template" Value="{StaticResource OrientedImageryNavigationButtonTemplate}" />
     </Style>
@@ -503,7 +511,7 @@
 
     <Style TargetType="controls:OrientedImageryView">
         <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="ThemeDisplayBackgroundColor" Value="{ThemeResource OrientedImageryDisplayBackgroundColor}" />
+        <Setter Property="ThemeDisplayBackgroundBrush" Value="{ThemeResource OrientedImageryDisplayBackgroundBrush}" />
 
         <Setter Property="DefaultToolbarTemplates">
             <Setter.Value>
@@ -588,6 +596,7 @@
                                 </Border>
 
                                 <Button
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
                                     Style="{StaticResource OrientedImageryNavigationButtonStyle}"
@@ -601,6 +610,7 @@
 
                                 <Button
                                     Grid.Column="2"
+                                    HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}"
                                     Style="{StaticResource OrientedImageryNavigationButtonStyle}"

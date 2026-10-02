@@ -237,7 +237,7 @@ public partial class OrientedImageryView
 #if WINDOWS_XAML
         if (displayBackgroundColor.IsEmpty)
         {
-            var color = ThemeDisplayBackgroundColor;
+            var color = ThemeDisplayBackgroundBrush?.Color ?? default;
             displayBackgroundColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 #endif
