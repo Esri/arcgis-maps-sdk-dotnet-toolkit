@@ -14,11 +14,12 @@
 
     <!-- Helper styles -->
     <Style x:Key="ToolbarButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="MinWidth" Value="40" />
         <Setter Property="MinHeight" Value="40" />
         <Setter Property="Padding" Value="4" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
@@ -34,26 +35,51 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#FFEFEFEF" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
                         </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFC0C0C0" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#FFD3D3D3" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
                         </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter TargetName="Root" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False">
+                <Setter Property="Background" Value="Transparent" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="ToolbarToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="MinWidth" Value="40" />
         <Setter Property="MinHeight" Value="40" />
         <Setter Property="Padding" Value="4" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
@@ -69,34 +95,79 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#FFEFEFEF" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
                         </Trigger>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#FFD3D3D3" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
                             <Setter TargetName="Root" Property="Background" Value="#FFC0C0C0" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
                         </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="False" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFD3D3D3" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="BorderBrush" Value="Black" />
+                        </MultiDataTrigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter TargetName="Root" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="#FFD3D3D3" />
-            </Trigger>
+            <DataTrigger Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False">
+                <Setter Property="Background" Value="Transparent" />
+            </DataTrigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="ImageNavigationButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Width" Value="25" />
         <Setter Property="MinHeight" Value="60" />
         <Setter Property="Padding" Value="4" />
-        <Setter Property="Background" Value="#80FFFFFF" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
@@ -112,11 +183,29 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#DFFFFFFF" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
                         </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFC0C0C0" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#FFFFFFFF" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
                         </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </Trigger>
@@ -135,7 +224,7 @@
                       AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}">
             <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
                 <Grid Width="32" Height="32">
-                    <Path SnapsToDevicePixels="true" Fill="Black" Data="M28.9869 20.3149L30.0339 26.5899C28.6639 26.3499 26.4439 26.0599 23.7139 26.0599C23.5449 26.0599 23.3899 26.0669 23.2279 26.0699L22.1879 27.1099C22.6649 27.0789 23.1699 27.0599 23.7139 27.0599C28.1639 27.0599 31.2539 27.8599 31.2539 27.8599L29.8559 19.4469L28.9869 20.3149ZM14.0529 27.9879C12.6329 28.3739 11.0459 28.6599 8.79392 28.6599C5.78392 28.6599 3.42392 27.7699 2.36392 27.2899L6.04392 5.07993C7.06392 5.37993 8.58392 5.72993 10.5939 5.72993C13.0939 5.72993 14.5939 5.29993 16.0339 4.87993C17.4839 4.45993 18.8539 4.06993 21.3239 4.06993C23.5139 4.06993 25.4339 4.39993 26.3739 4.58993L28.0719 14.7939L29.1319 15.1019L27.2539 3.75993C27.2539 3.75993 24.5839 3.06993 21.3239 3.06993C16.1839 3.06993 15.4039 4.72993 10.5939 4.72993C7.77392 4.72993 5.95392 3.98993 5.25392 3.75993L1.25392 27.8599C1.25392 27.8599 4.34392 29.6599 8.79392 29.6599C11.1669 29.6599 12.8529 29.3499 14.3309 28.9429L14.0529 27.9879ZM10.7539 9.85993C9.92392 9.85993 9.25392 10.5299 9.25392 11.3599C9.25392 12.1899 9.92392 12.8599 10.7539 12.8599C11.5839 12.8599 12.2539 12.1899 12.2539 11.3599C12.2539 10.5299 11.5839 9.85993 10.7539 9.85993ZM10.7539 11.8599C10.4739 11.8599 10.2539 11.6399 10.2539 11.3599C10.2539 11.0799 10.4739 10.8599 10.7539 10.8599C11.0339 10.8599 11.2539 11.0799 11.2539 11.3599C11.2539 11.6399 11.0339 11.8599 10.7539 11.8599ZM12.9699 12.4929C12.7409 12.939 12.3831 13.3059 11.9429 13.5459L13.0966 17.2199L15.3639 25.3399L16.6639 29.7999L29.2539 17.2199L12.9699 12.4929ZM14.0139 17.0699L12.9839 13.5299L27.3539 17.6999L17.1539 27.8999L14.0139 17.0699Z"/>
+                    <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Data="M28.9869 20.3149L30.0339 26.5899C28.6639 26.3499 26.4439 26.0599 23.7139 26.0599C23.5449 26.0599 23.3899 26.0669 23.2279 26.0699L22.1879 27.1099C22.6649 27.0789 23.1699 27.0599 23.7139 27.0599C28.1639 27.0599 31.2539 27.8599 31.2539 27.8599L29.8559 19.4469L28.9869 20.3149ZM14.0529 27.9879C12.6329 28.3739 11.0459 28.6599 8.79392 28.6599C5.78392 28.6599 3.42392 27.7699 2.36392 27.2899L6.04392 5.07993C7.06392 5.37993 8.58392 5.72993 10.5939 5.72993C13.0939 5.72993 14.5939 5.29993 16.0339 4.87993C17.4839 4.45993 18.8539 4.06993 21.3239 4.06993C23.5139 4.06993 25.4339 4.39993 26.3739 4.58993L28.0719 14.7939L29.1319 15.1019L27.2539 3.75993C27.2539 3.75993 24.5839 3.06993 21.3239 3.06993C16.1839 3.06993 15.4039 4.72993 10.5939 4.72993C7.77392 4.72993 5.95392 3.98993 5.25392 3.75993L1.25392 27.8599C1.25392 27.8599 4.34392 29.6599 8.79392 29.6599C11.1669 29.6599 12.8529 29.3499 14.3309 28.9429L14.0529 27.9879ZM10.7539 9.85993C9.92392 9.85993 9.25392 10.5299 9.25392 11.3599C9.25392 12.1899 9.92392 12.8599 10.7539 12.8599C11.5839 12.8599 12.2539 12.1899 12.2539 11.3599C12.2539 10.5299 11.5839 9.85993 10.7539 9.85993ZM10.7539 11.8599C10.4739 11.8599 10.2539 11.6399 10.2539 11.3599C10.2539 11.0799 10.4739 10.8599 10.7539 10.8599C11.0339 10.8599 11.2539 11.0799 11.2539 11.3599C11.2539 11.6399 11.0339 11.8599 10.7539 11.8599ZM12.9699 12.4929C12.7409 12.939 12.3831 13.3059 11.9429 13.5459L13.0966 17.2199L15.3639 25.3399L16.6639 29.7999L29.2539 17.2199L12.9699 12.4929ZM14.0139 17.0699L12.9839 13.5299L27.3539 17.6999L17.1539 27.8999L14.0139 17.0699Z"/>
                 </Grid>
             </Viewbox>
         </ToggleButton>
@@ -148,7 +237,7 @@
                       AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
             <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
                 <Grid Width="32" Height="32">
-                    <Path SnapsToDevicePixels="true" Fill="Black" Data="M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z"/>
+                    <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Data="M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z"/>
                 </Grid>
             </Viewbox>
         </ToggleButton>
@@ -204,7 +293,7 @@
                 <TextBlock Text="&#xe83e;"
                            FontSize="24"
                            FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                           Foreground="Black" />
+                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
             </Viewbox>
         </Button>
     </DataTemplate>
@@ -292,6 +381,13 @@
     <!-- Main view style -->
     <Style TargetType="{x:Type controls:OrientedImageryView}">
         <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="DisplayBackgroundColor">
+            <Setter.Value>
+                <Binding Path="Background.Color" RelativeSource="{RelativeSource Self}" Converter="{StaticResource ColorToColorConverter}" />
+            </Setter.Value>
+        </Setter>
 
         <Setter Property="ToolbarItemTemplateSelector">
             <Setter.Value>
@@ -336,7 +432,7 @@
                                                                DisplayBackgroundColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayBackgroundColor}" />
 
                                 <Border Grid.ColumnSpan="3"
-                                        Background="#80FFFFFF">
+                                        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
                                     <Border.Style>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="Visibility" Value="Collapsed" />
@@ -375,7 +471,7 @@
                                 </ProgressBar>
 
                                 <Border Grid.ColumnSpan="3"
-                                        Background="#80FFFFFF">
+                                        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
                                     <Border.Style>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="Visibility" Value="Collapsed" />
@@ -404,8 +500,9 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Popup.Style>
-                                    <Border Background="White"
-                                            BorderBrush="Gray"
+                                    <Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                            TextElement.Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                            BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
                                             BorderThickness="1"
                                             Padding="8">
                                         <TextBlock MaxWidth="300"
@@ -420,7 +517,7 @@
                                         VerticalAlignment="Center">
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <Grid Width="32" Height="32">
-                                            <Path SnapsToDevicePixels="true" Fill="Black" Data="M20 26.1 9.9 16 20 5.9z">
+                                            <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Data="M20 26.1 9.9 16 20 5.9z">
                                                 <Path.RenderTransform>
                                                     <TranslateTransform X="-3" Y="3" />
                                                 </Path.RenderTransform>
@@ -434,7 +531,7 @@
                                         Grid.Column="2" VerticalAlignment="Center">
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <Grid Width="32" Height="32">
-                                            <Path SnapsToDevicePixels="true" Fill="Black" Data="M12 5.9 22.1 16 12 26.1z">
+                                            <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Data="M12 5.9 22.1 16 12 26.1z">
                                                 <Path.RenderTransform>
                                                     <TranslateTransform Y="2" />
                                                 </Path.RenderTransform>
@@ -491,12 +588,12 @@
                                     <TextBlock Text="."
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
-                                               Foreground="#151515"
+                                               Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
                                                FontSize="14" />
                                     <Border Height="2"
                                             Margin="1,0"
                                             VerticalAlignment="Bottom"
-                                            Background="#007AC2" />
+                                            Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                                 </Grid>
                                 <Button Content="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
                                         Style="{StaticResource PaginatorPageButtonStyle}"
@@ -513,7 +610,7 @@
                             </StackPanel>
                             <TextBlock Grid.Row="3"
                                        Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError.Message}"
-                                       Foreground="Red"
+                                       Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
                                        TextWrapping="Wrap"
                                        TextAlignment="Center"
                                        Margin="8,0,8,4">
