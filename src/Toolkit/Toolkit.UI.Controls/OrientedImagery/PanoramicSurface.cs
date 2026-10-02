@@ -110,6 +110,13 @@ internal sealed unsafe partial class PanoramicSurface
     private bool _deviceLost;
     private bool _deviceEverCreated;
 
+    // Recovery is attempted twice a second, and reported once if it has not succeeded after ten seconds.
+    private static readonly TimeSpan RecoveryRetryInterval = TimeSpan.FromMilliseconds(500);
+    private static readonly TimeSpan RecoveryReportDelay = TimeSpan.FromSeconds(10);
+    private long _recoveryStarted;
+    private long _lastRecoveryAttempt;
+    private bool _recoveryReported;
+
     // Held-key navigation runs from a navigation key press until every navigation key is released.
     private bool _keyboardNavigating;
     private long _keyboardTimestamp;
@@ -183,6 +190,9 @@ internal sealed unsafe partial class PanoramicSurface
     // Raised when device creation, the present bridge, or a render fails in a present layer, outside the load path,
     // so the display can report it as Error.
     internal event Action<Exception>? RenderFailed;
+
+    // Raised when the device is found removed, before the rebuild starts.
+    internal event Action? DeviceLost;
 
     // Raised after a device-lost rebuild, not on first creation. The GPU texture and markers are gone and the display
     // re-supplies them; the camera lives on this surface and is untouched.
@@ -279,11 +289,18 @@ internal sealed unsafe partial class PanoramicSurface
         RequestRender();
     }
 
-    // A removed device (TDR, driver update, RDP, sleep) is rebuilt on the next tick instead of being reported.
+    // A removed device (TDR, driver update, RDP, sleep) is rebuilt on later ticks instead of being reported.
     private void NotifyDeviceLost()
     {
+        if (_deviceLost)
+            return;
+
         _deviceLost = true;
         _needsRender = true;
+        _recoveryStarted = Stopwatch.GetTimestamp();
+        _lastRecoveryAttempt = 0; // the first attempt is immediate
+        _recoveryReported = false;
+        DeviceLost?.Invoke();
     }
 
     // Runs a lifecycle step from a XAML handler, outside the render tick's own try/catch: a removed device goes to
@@ -330,48 +347,65 @@ internal sealed unsafe partial class PanoramicSurface
         if (!_needsRender || !IsReadyToRender())
             return;
 
+        Exception? failure = null;
         try
         {
             RenderFrame();
         }
         catch (Exception ex)
         {
-            if (IsDeviceRemoved)
-                NotifyDeviceLost();
-            else
-                RenderFailed?.Invoke(ex);
-            return;
+            failure = ex;
         }
 
         if (IsDeviceRemoved)
+        {
             NotifyDeviceLost();
-        else
-            _needsRender = false;
+            return;
+        }
+
+        _needsRender = false; // one report per request, so a persistent failure is not reported every frame
+        if (failure is not null)
+            RenderFailed?.Invoke(failure);
     }
 
-    // Rebuilds the device and its resources after a device-lost; false while the GPU is still unavailable, retried
-    // next tick. The display then re-supplies the texture and markers through DeviceRecreated; the camera lives
-    // here and survives.
+    // Rebuilds the device and its resources after a loss. The attempts go on while the GPU is unavailable, and a
+    // success after the failure was reported clears the display's error. The display re-supplies the texture and
+    // markers through DeviceRecreated; the camera lives here and survives.
     private bool TryRecoverDevice()
     {
+        long now = Stopwatch.GetTimestamp();
+        if (Stopwatch.GetElapsedTime(_lastRecoveryAttempt, now) < RecoveryRetryInterval)
+            return false;
+
+        _lastRecoveryAttempt = now;
+        Exception? failure = null;
         try
         {
             ReleasePresentResources();
             ReleaseDeviceResources();
             EnsureResources();
         }
-        catch
+        catch (Exception ex)
         {
-            return false;
+            failure = ex;
         }
 
-        if (!IsDeviceInitialized || !PresentResourcesReady())
-            return false;
+        if (failure is null && IsDeviceInitialized && PresentResourcesReady())
+        {
+            _deviceLost = false;
+            _needsRender = true;
+            DeviceRecreated?.Invoke();
+            return true;
+        }
 
-        _deviceLost = false;
-        _needsRender = true;
-        DeviceRecreated?.Invoke();
-        return true;
+        // Only a failing attempt is reported; EnsureResources also declines while the surface has no size.
+        if (failure is not null && !_recoveryReported && Stopwatch.GetElapsedTime(_recoveryStarted, now) >= RecoveryReportDelay)
+        {
+            _recoveryReported = true;
+            RenderFailed?.Invoke(failure);
+        }
+
+        return false;
     }
 
     // Creates the device and all device-independent resources. Safe to call repeatedly (no-op once created).

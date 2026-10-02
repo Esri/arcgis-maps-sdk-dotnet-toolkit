@@ -50,6 +50,8 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 
     public event Action<Exception>? RenderFailed;
 
+    public event Action? DeviceLost;
+
     public event Action? DeviceRecreated;
 
     public event Action? ViewChanged;
@@ -161,6 +163,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         _platform = platform;
         platform.SurfaceTapped += OnPlatformTapped;
         platform.RenderFailed += OnPlatformRenderFailed;
+        platform.DeviceLost += OnPlatformDeviceLost;
         platform.DeviceRecreated += OnPlatformDeviceRecreated;
         platform.ViewChanged += OnPlatformViewChanged;
 
@@ -213,6 +216,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
             _fieldOfView = _platform.FieldOfView;
             _platform.SurfaceTapped -= OnPlatformTapped;
             _platform.RenderFailed -= OnPlatformRenderFailed;
+            _platform.DeviceLost -= OnPlatformDeviceLost;
             _platform.DeviceRecreated -= OnPlatformDeviceRecreated;
             _platform.ViewChanged -= OnPlatformViewChanged;
         }
@@ -223,6 +227,8 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
     private void OnPlatformTapped(double x, double y) => SurfaceTapped?.Invoke(x, y);
 
     private void OnPlatformRenderFailed(Exception ex) => RenderFailed?.Invoke(ex);
+
+    private void OnPlatformDeviceLost() => DeviceLost?.Invoke();
 
     private void OnPlatformDeviceRecreated() => DeviceRecreated?.Invoke();
 

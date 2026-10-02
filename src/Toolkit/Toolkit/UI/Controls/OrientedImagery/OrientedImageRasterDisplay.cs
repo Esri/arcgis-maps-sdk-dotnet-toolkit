@@ -402,7 +402,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
     private async void OnMapViewTapped(object? sender, GeoViewInputEventArgs e)
     {
-        if (e.Location is not MapPoint location || Footprint?.OrientedImage is not OrientedImage image || MapToPixel(location) is not PointF imagePoint)
+        if (!IsInteractive || e.Location is not MapPoint location || Footprint?.OrientedImage is not OrientedImage image || MapToPixel(location) is not PointF imagePoint)
             return;
 
         CancellationToken token = SessionToken;

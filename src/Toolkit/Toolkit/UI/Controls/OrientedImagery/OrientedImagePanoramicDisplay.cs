@@ -73,6 +73,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         Content = _surface;
         _surface.SurfaceTapped += OnSurfaceTapped;
         _surface.RenderFailed += OnRenderFailed;
+        _surface.DeviceLost += OnDeviceLost;
         _surface.DeviceRecreated += OnDeviceRecreated;
         SetAutomationName(null);
     }
@@ -85,16 +86,28 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     protected override Microsoft.UI.Xaml.DependencyObject AutomationTarget => _surface;
 #endif
 
-    // Interactive once a panorama is decoded and shown (the sphere is then navigable).
-    protected override bool IsPresentationInteractive => _imageWidth > 0 && _imageHeight > 0;
+    // Interactive once a panorama is decoded and shown, and not while recovering.
+    protected override bool IsPresentationInteractive => _imageWidth > 0 && _imageHeight > 0 && !_recovering;
 
-    // A device-lost re-decode is presentation work: the surface is blank until it re-supplies.
+    // Device recovery is presentation work: the surface is blank from the loss until it is rebuilt and re-supplied.
     protected override bool IsPresentationBusy => _recovering;
 
-    // Present-layer (device/bridge/render) failures happen outside the load path; surface them as Error.
+    private void OnDeviceLost()
+    {
+        _recovering = true;
+        UpdateState();
+    }
+
+    // Present-layer (device/bridge/render) failures happen outside the load path: blank the display and surface them
+    // as Error. The blanking render can fail too; that is not reported again.
     private void OnRenderFailed(Exception ex)
     {
+        if (PresentationError is not null)
+            return;
+
         PresentationError = ex;
+        _recovering = false;
+        ClearPresentation();
         UpdateState();
     }
 
@@ -102,11 +115,6 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     // re-supply them. The camera lives on the surface and survives the rebuild.
     private async void OnDeviceRecreated()
     {
-        OrientedImage? image = Footprint?.OrientedImage;
-        CancellationToken token = SessionToken;
-        if (image is null || token.IsCancellationRequested)
-            return; // nothing loaded, or an in-flight load will upload once it completes
-
         // The rebuilt surface is blank until re-supplied: invalidate the dimensions so a tap isn't reported against the
         // old pixel space, and report busy/non-interactive so bound commands don't stay enabled over a blank panorama.
         _imageWidth = 0;
@@ -114,8 +122,13 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _recovering = true;
         UpdateState();
 
+        CancellationToken token = SessionToken;
         try
         {
+            OrientedImage? image = Footprint?.OrientedImage;
+            if (image is null || token.IsCancellationRequested)
+                return; // nothing loaded, or an in-flight load will upload once it completes
+
             await image.RetryLoadAsync(); // idempotent; covers the image being unloaded/cancelled during teardown
             if (token.IsCancellationRequested || image.DataUri is not Uri uri)
                 return;
@@ -436,6 +449,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _imageWidth = frame.Width;
         _imageHeight = frame.Height;
         ApplyTexture(frame);
+        _recovering = false; // re-supplied, whether or not a rebuilt device asked; a later DeviceLost starts over
 
         // Look north initially (JS viewer parity): the center column faces CameraHeading but the identity camera centers
         // u = 0.75, so re-anchor by -pi/2 before subtracting the heading.
@@ -468,7 +482,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     private void OnSurfaceTapped(double x, double y)
     {
-        if (Footprint?.OrientedImage is not OrientedImage image || _imageWidth <= 0 || _imageHeight <= 0)
+        if (!IsInteractive || Footprint?.OrientedImage is not OrientedImage image)
             return;
 
         var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
