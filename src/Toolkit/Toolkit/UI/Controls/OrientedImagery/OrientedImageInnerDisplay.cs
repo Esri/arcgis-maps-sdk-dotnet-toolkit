@@ -36,6 +36,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
+using MarkerListener = WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object, PropertyChangedEventArgs>;
+
 // Base of OrientedImageDisplay's inner displays. Owns the presentation session (one footprint and one cancellation
 // token per SetFootprint), the reported state, the marker subscriptions and the auto-update-footprint plumbing.
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Platform view types are not IDisposable by convention. The session CTS is cancel-only (no timer), so it needs no disposal; canceling it on supersede is the release.")]
@@ -48,7 +50,8 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     private IEnumerable<OrientedImageMarker>? _markerSource;
     private List<OrientedImageMarker> _markers = []; // Snapshot read from the source
     private WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
-    private readonly Dictionary<OrientedImageMarker, WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>> _markerListeners = [];
+    private readonly Dictionary<OrientedImageMarker, MarkerListener> _markerListeners = [];
+    private readonly Dictionary<OrientedImageMarker, MarkerListener> _symbolListeners = [];
     private CancellationTokenSource? _sessionCts;
     private CancellationTokenSource? _updateCts;
     private bool _autoUpdate;
@@ -163,28 +166,51 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         OnMarkersChanged(added, removed);
     }
 
-    // Weak, like the collection subscription: an app-owned long-lived marker must not keep the display alive.
+    // Weak, like the collection subscription: an app-owned long-lived marker or symbol must not keep the display alive.
+    private MarkerListener Listen(INotifyPropertyChanged source, Action<OrientedImageInnerDisplay, object?, PropertyChangedEventArgs> onEvent)
+    {
+        var listener = new MarkerListener(this, source)
+        {
+            OnEventAction = onEvent,
+            OnDetachAction = static (_, eventSource, weakEventListener) => eventSource.PropertyChanged -= weakEventListener.OnEvent,
+        };
+        source.PropertyChanged += listener.OnEvent;
+        return listener;
+    }
+
     private void ListenTo(OrientedImageMarker marker)
     {
-        var listener = new WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, marker)
-        {
-            OnEventAction = static (instance, source, eventArgs) => instance.OnMarkerPropertyChanged(source, eventArgs),
-            OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
-        };
-        marker.PropertyChanged += listener.OnEvent;
-        _markerListeners[marker] = listener;
+        _markerListeners[marker] = Listen(marker, static (instance, sender, eventArgs) => instance.OnMarkerPropertyChanged(sender, eventArgs));
+        ListenToSymbol(marker);
+    }
+
+    // The SDK symbol is what is drawn, and it notifies its own changes. The handler captures the marker, not the
+    // display, so the symbol cannot keep a discarded display alive.
+    private void ListenToSymbol(OrientedImageMarker marker)
+    {
+        if (_symbolListeners.Remove(marker, out var previous))
+            previous.Detach();
+
+        if (marker.Symbol is INotifyPropertyChanged symbol)
+            _symbolListeners[marker] = Listen(symbol, (instance, _, _) => instance.OnMarkerChanged(marker, nameof(OrientedImageMarker.Symbol)));
     }
 
     private void StopListening(OrientedImageMarker marker)
     {
         if (_markerListeners.Remove(marker, out var listener))
             listener.Detach();
+        if (_symbolListeners.Remove(marker, out var symbolListener))
+            symbolListener.Detach();
     }
 
     private void OnMarkerPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (sender is OrientedImageMarker marker)
-            OnMarkerChanged(marker, e.PropertyName);
+        if (sender is not OrientedImageMarker marker)
+            return;
+
+        if (e.PropertyName is null or nameof(OrientedImageMarker.Symbol))
+            ListenToSymbol(marker);
+        OnMarkerChanged(marker, e.PropertyName);
     }
 
     /// <summary>Enables or disables automatic recomputation of the footprint as the view changes.</summary>
@@ -244,7 +270,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     protected abstract void ClearPresentation();
 
     // Marker hooks; implementations re-render. Both can run off the UI thread, because the app raises the events
-    // behind them.
+    // behind them. A change inside the marker's symbol is reported as a change of Symbol.
     protected abstract void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed);
 
     protected abstract void OnMarkerChanged(OrientedImageMarker marker, string? propertyName);

@@ -49,13 +49,13 @@ public sealed class OrientedImageDisplayTests
     [TestMethod]
     public void MarkerSubscriptionDoesNotRetainDiscardedDisplay()
     {
-        // The application keeps the collection and marker alive after discarding the display.
+        // The application keeps the collection, marker, and symbol alive after discarding the display.
         // Their event subscriptions must not prevent the display from being collected.
         RunSta(() =>
         {
             var markers = new ObservableCollection<OrientedImageMarker>
             {
-                new(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0))),
+                new(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10)),
             };
 
             WeakReference weakDisplay = CreateDiscardedDisplay(markers);
@@ -77,6 +77,46 @@ public sealed class OrientedImageDisplayTests
         var display = new OrientedImagePanoramicDisplay();
         display.SetMarkers(markers);
         return new WeakReference(display);
+    }
+
+    [TestMethod]
+    public void MarkerChangesStartOnlyTheNeededPasses()
+    {
+        RunSta(() =>
+        {
+            // Only drawn properties start a pass. A change inside the symbol counts, since the SDK symbol is what is
+            // drawn. A replaced or removed marker's symbol is let go.
+            var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
+            var marker = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), symbol);
+            var display = new OrientedImagePanoramicDisplay();
+            display.SetMarkers(new[] { marker });
+            int passes = display.MarkerGeneration;
+
+            marker.Tag = "changed";
+            Assert.AreEqual(passes, display.MarkerGeneration, "Tag is not drawn");
+
+            symbol.Color = Color.Blue;
+            Assert.AreEqual(++passes, display.MarkerGeneration, "a symbol change");
+
+            marker.IsVisible = false;
+            Assert.AreEqual(++passes, display.MarkerGeneration, "a visibility change");
+
+            marker.Position = OrientedImageMarkerPosition.FromLocation(new MapPoint(1, 1));
+            Assert.AreEqual(++passes, display.MarkerGeneration, "a position change");
+
+            var replacement = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, Color.Red, 10);
+            marker.Symbol = replacement;
+            Assert.AreEqual(++passes, display.MarkerGeneration, "a symbol replacement");
+            symbol.Color = Color.Green;
+            Assert.AreEqual(passes, display.MarkerGeneration, "the replaced symbol is no longer watched");
+            replacement.Color = Color.Green;
+            Assert.AreEqual(++passes, display.MarkerGeneration, "the new symbol is watched");
+
+            display.SetMarkers(null);
+            passes = display.MarkerGeneration;
+            replacement.Color = Color.Blue;
+            Assert.AreEqual(passes, display.MarkerGeneration, "a removed marker's symbol is no longer watched");
+        });
     }
 
     [TestMethod]
