@@ -122,6 +122,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     public event Action<Exception>? RenderFailed;
 
+    public event Action? DeviceLost;
+
     public event Action? DeviceRecreated;
 
     public event Action? ViewChanged;
@@ -603,6 +605,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     // EGL_CONTEXT_LOST: rebuild on the spot; the display re-supplies content through DeviceRecreated.
     private void RecoverFromContextLoss()
     {
+        Post(() => DeviceLost?.Invoke());
         SurfaceTexture? surface = _surfaceTexture;
         TearDownEgl();
         if (surface is null || !_surfaceReady)
