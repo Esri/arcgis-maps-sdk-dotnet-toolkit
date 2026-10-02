@@ -210,6 +210,17 @@ public sealed class OrientedImageDisplayTests
         });
     }
 
+    [TestMethod]
+    public void ScreenToImageIsNullWithoutAnImage()
+    {
+        RunSta(() =>
+        {
+            var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
+            Assert.IsTrue(control.ApplyTemplate());
+            Assert.IsNull(control.ScreenToImage(new System.Windows.Point(10, 10)));
+        });
+    }
+
     // The keyboard-focusable element of the active display: the MapView of the raster display here.
     private static DependencyObject GetFocusableView(OrientedImageDisplay control)
     {

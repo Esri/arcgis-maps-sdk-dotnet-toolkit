@@ -40,6 +40,13 @@ using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
 
 // Disambiguate from Microsoft.Maui.Graphics.PointF (a MAUI global using)
 using PointF = System.Drawing.PointF;
+#if WPF
+using Point = System.Windows.Point;
+#elif WINDOWS_XAML
+using Point = Windows.Foundation.Point;
+#elif MAUI
+using Point = Microsoft.Maui.Graphics.Point;
+#endif
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -399,6 +406,9 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         double row = (extent.YMax - mapPoint.Y) / cellY;
         return _imageOrientation.StoredToImage(new PointF((float)col, (float)row), extent.Width / cellX, extent.Height / cellY);
     }
+
+    public override PointF? ScreenToImage(double x, double y) =>
+        IsInteractive && _mapView.ScreenToLocation(new Point(x, y)) is MapPoint location ? MapToPixel(location) : null;
 
     private async void OnMapViewTapped(object? sender, GeoViewInputEventArgs e)
     {

@@ -414,8 +414,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         if (_imageWidth <= 0 || _imageHeight <= 0)
             return null;
 
-        var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
-        if (!camera.TryGetFootprintView(width, height, out PanoramaCameraState.FootprintView view))
+        if (!Camera.TryGetFootprintView(width, height, out PanoramaCameraState.FootprintView view))
             return null;
 
         return footprint.UpdateFootprintAsync(view.Yaw, view.Pitch, view.HorizontalFieldOfView, view.VerticalFieldOfView, NextFootprintUpdateToken());
@@ -480,27 +479,32 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     protected override void OnPresentCompleted() => _ = ResolveMarkersAsync();
 
+    private PanoramaCameraState Camera => new(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
+
+    // Surface units per DIP: Android taps and view sizes are physical pixels.
+    private double SurfaceUnitsPerDip =>
+#if __ANDROID__
+        GetScaleFactor();
+#else
+        1d;
+#endif
+
+    public override PointF? ScreenToImage(double x, double y) =>
+        IsInteractive ? SurfaceToImage(x * SurfaceUnitsPerDip, y * SurfaceUnitsPerDip) : null;
+
+    // The image coordinate under a point of the surface, in surface units.
+    private PointF? SurfaceToImage(double x, double y) =>
+        Camera.TryScreenToNormalizedUv(x, y, _surface.ActualWidth, _surface.ActualHeight, out float u, out float v)
+            ? new PointF(u * _imageWidth, v * _imageHeight)
+            : null;
+
     private void OnSurfaceTapped(double x, double y)
     {
-        if (!IsInteractive || Footprint?.OrientedImage is not OrientedImage image)
+        if (!IsInteractive || Footprint?.OrientedImage is not OrientedImage image || SurfaceToImage(x, y) is not PointF pixel)
             return;
 
-        var camera = new PanoramaCameraState(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
-        if (!camera.TryScreenToNormalizedUv(x, y, _surface.ActualWidth, _surface.ActualHeight, out float u, out float v))
-            return;
-
-        var pixel = new PointF(u * _imageWidth, v * _imageHeight);
-        OrientedImageMarker? marker = HitTestMarker(camera, x, y);
+        OrientedImageMarker? marker = HitTestMarker(_resolvedMarkers, Camera, _surface.ActualWidth, _surface.ActualHeight, x, y, SurfaceUnitsPerDip);
         RaiseImageTapped(new OrientedImageTappedEventArgs(pixel, image, marker));
-    }
-
-    private OrientedImageMarker? HitTestMarker(PanoramaCameraState camera, double x, double y)
-    {
-        double dip = 1d;
-#if __ANDROID__
-        dip = GetScaleFactor(); // Android taps and view sizes are physical pixels; the tolerance and offsets are in DIPs
-#endif
-        return HitTestMarker(_resolvedMarkers, camera, _surface.ActualWidth, _surface.ActualHeight, x, y, dip);
     }
 
     // Returns the topmost marker whose swatch lies within the hit tolerance of the tap, or null, as the planar display's

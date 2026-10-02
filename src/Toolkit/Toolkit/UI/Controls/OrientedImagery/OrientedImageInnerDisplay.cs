@@ -247,6 +247,10 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 #endif
     }
 
+    /// <summary>Converts a position in the display, in device-independent pixels, to the image coordinate under it.</summary>
+    /// <returns>The image coordinate, or <c>null</c> when no image is under the position or the display is not interactive.</returns>
+    public abstract System.Drawing.PointF? ScreenToImage(double x, double y);
+
     /// <summary>Gives the focusable inner view the automation id the app gave the control, so UI tests can find it.</summary>
     /// <param name="id">The app's automation id, or <c>null</c> or empty for none.</param>
     public void SetAutomationId(string? id)

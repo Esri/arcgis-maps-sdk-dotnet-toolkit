@@ -23,13 +23,17 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 
 // Disambiguate from MAUI types from global usings
 using Color = System.Drawing.Color;
+using PointF = System.Drawing.PointF;
 
 #if WPF
 using DisplayHostElement = System.Windows.Controls.ContentPresenter;
+using Point = System.Windows.Point;
 #elif WINDOWS_XAML
 using DisplayHostElement = Microsoft.UI.Xaml.Controls.ContentPresenter;
+using Point = Windows.Foundation.Point;
 #elif MAUI
 using DisplayHostElement = Microsoft.Maui.Controls.ContentView;
+using Point = Microsoft.Maui.Graphics.Point;
 #endif
 
 #if MAUI
@@ -325,6 +329,32 @@ public partial class OrientedImageDisplay
     internal event EventHandler? StateChanged;
 
     private void OnDisplayImageTapped(object? sender, OrientedImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
+
+    /// <summary>
+    /// Converts a position in the control to the image coordinate under it, as a tap there would.
+    /// </summary>
+    /// <remarks>
+    /// For workflows that act on a position without a pointer, such as the center of the view under keyboard control.
+    /// Markers are not identified; <see cref="ImageTapped"/> reports those for taps.
+    /// </remarks>
+    /// <param name="screenPosition">The position relative to the control, in device-independent pixels.</param>
+    /// <returns>The image coordinate, or <c>null</c> when no image is under the position or the control is not
+    /// interactive.</returns>
+    public PointF? ScreenToImage(Point screenPosition)
+    {
+        if (_activeDisplay is null || !IsInteractive)
+            return null;
+
+        // The active display may sit inside the template's border.
+#if WPF
+        Point local = TranslatePoint(screenPosition, _activeDisplay);
+#elif WINDOWS_XAML
+        Point local = TransformToVisual(_activeDisplay).TransformPoint(screenPosition);
+#else
+        var local = new Point(screenPosition.X - _displayHost!.X - _activeDisplay.X, screenPosition.Y - _displayHost.Y - _activeDisplay.Y);
+#endif
+        return _activeDisplay.ScreenToImage(local.X, local.Y);
+    }
 
     // Only fires StateChanged when there is an actual change.
     private void UpdateState()
