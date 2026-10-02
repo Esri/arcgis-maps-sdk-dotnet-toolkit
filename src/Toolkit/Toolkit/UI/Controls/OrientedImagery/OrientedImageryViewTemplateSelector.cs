@@ -1,7 +1,11 @@
-#if WPF
+#if WPF || WINDOWS_XAML
 
-using System.Windows.Markup;
 using System.Collections.ObjectModel;
+#if WPF
+using System.Windows.Markup;
+#elif WINDOWS_XAML
+using Microsoft.UI.Xaml.Markup;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -12,8 +16,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// An <see cref="OrientedImageryView"/> ensures that its <see cref="OrientedImageryViewTemplateSelector"/> always contains the type-template pairs
 /// for the default toolbar items unless they have been overridden by the user.
 /// </remarks>
+#if WPF
 [ContentProperty(nameof(TypeTemplatePairs))]
-public class OrientedImageryViewTemplateSelector : DataTemplateSelector
+#endif
+public partial class OrientedImageryViewTemplateSelector : DataTemplateSelector
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryViewTemplateSelector"/> class.
@@ -42,7 +48,29 @@ public class OrientedImageryViewTemplateSelector : DataTemplateSelector
     public Collection<OrientedImageryViewTemplateSelectorItem> TypeTemplatePairs { get; private set; }
 
     /// <inheritdoc/>
+#if WPF
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
+#elif WINDOWS_XAML
+    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+#endif
+    {
+        return SelectTemplateInner(item) ??
+#if WPF
+            base.SelectTemplate(item, container);
+#elif WINDOWS_XAML
+            base.SelectTemplateCore(item, container);
+#endif
+    }
+
+#if WINDOWS_XAML
+    /// <inheritdoc/>
+    protected override DataTemplate SelectTemplateCore(object item)
+    {
+        return SelectTemplateInner(item) ?? base.SelectTemplateCore(item);
+    }
+#endif
+
+    private DataTemplate? SelectTemplateInner(object item)
     {
         foreach (var pair in TypeTemplatePairs)
         {
@@ -52,7 +80,7 @@ public class OrientedImageryViewTemplateSelector : DataTemplateSelector
             }
         }
 
-        return base.SelectTemplate(item, container);
+        return null;
     }
 
     /// <summary>
@@ -86,6 +114,6 @@ public class OrientedImageryViewTemplateSelectorItem
     /// <summary>
     /// Gets or sets the template associated with this type.
     /// </summary>
-    public DataTemplate Template { get; set; } = new DataTemplate();
+    public DataTemplate? Template { get; set; } = null;
 }
 #endif

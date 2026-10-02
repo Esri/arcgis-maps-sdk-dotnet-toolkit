@@ -6,7 +6,7 @@ The `OrientedImageryView` displays oriented imagery with a built-in toolbar for 
 
 ## Minimal implementation
 
-The following WPF example places a `MapView` next to an `OrientedImageryView`. Set `GeoView` so the control can display its managed marker overlay on the map, and set `OrientedImageryLayer` so the view model can manage footprints and image-to-map calculations.
+`OrientedImageryView` is available for WPF and WinUI. The following WPF example places a `MapView` next to an `OrientedImageryView`. Set `GeoView` so the control can display its managed marker overlay on the map, and set `OrientedImageryLayer` so the view model can manage footprints and image-to-map calculations.
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
