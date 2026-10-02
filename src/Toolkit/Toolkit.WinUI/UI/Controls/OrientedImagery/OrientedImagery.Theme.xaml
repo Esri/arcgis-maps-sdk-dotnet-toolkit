@@ -233,6 +233,7 @@
                         </Grid.ColumnDefinitions>
                         <Button
                             x:Name="PART_PreviousPage"
+                            IsTabStop="False"
                             Width="33"
                             Style="{StaticResource OrientedImageryPageButtonStyle}"
                             ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
@@ -247,26 +248,28 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="controls:OrientedImageryPage">
-                                    <Grid Width="{x:Bind Width}" Height="32">
+                                    <Grid Width="{x:Bind Width, Mode=OneWay}" Height="32">
                                         <Button
-                                            Content="{x:Bind Number}"
+                                            Content="{x:Bind Number, Mode=OneWay}"
                                             Command="{x:Bind SelectCommand}"
-                                            Width="{x:Bind Width}"
+                                            Width="{x:Bind Width, Mode=OneWay}"
                                             Style="{StaticResource OrientedImageryPageButtonStyle}"
-                                            AutomationProperties.Name="{x:Bind Number}" />
+                                            IsTabStop="{x:Bind IsTabStop, Mode=OneWay}"
+                                            AutomationProperties.Name="{x:Bind AutomationName, Mode=OneWay}" />
                                         <Border
                                             Height="2"
                                             Margin="1,0"
                                             VerticalAlignment="Bottom"
                                             Background="{ThemeResource OrientedImageryPageSelectedBrush}"
                                             IsHitTestVisible="False"
-                                            Visibility="{x:Bind SelectedIndicatorVisibility}" />
+                                            Visibility="{x:Bind SelectedIndicatorVisibility, Mode=OneWay}" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         <Button
                             x:Name="PART_NextPage"
+                            IsTabStop="False"
                             Grid.Column="2"
                             Width="33"
                             Style="{StaticResource OrientedImageryPageButtonStyle}"
@@ -286,8 +289,8 @@
         <ToggleButton
             IsChecked="{x:Bind ViewModel.ShowSelectedFootprint, Mode=TwoWay}"
             Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}">
             <Viewbox Width="30" Height="30" Stretch="Uniform">
                 <Grid Width="32" Height="32">
                     <Path Fill="{ThemeResource TextFillColorPrimaryBrush}" Data="M28.9869 20.3149L30.0339 26.5899C28.6639 26.3499 26.4439 26.0599 23.7139 26.0599C23.5449 26.0599 23.3899 26.0669 23.2279 26.0699L22.1879 27.1099C22.6649 27.0789 23.1699 27.0599 23.7139 27.0599C28.1639 27.0599 31.2539 27.8599 31.2539 27.8599L29.8559 19.4469L28.9869 20.3149ZM14.0529 27.9879C12.6329 28.3739 11.0459 28.6599 8.79392 28.6599C5.78392 28.6599 3.42392 27.7699 2.36392 27.2899L6.04392 5.07993C7.06392 5.37993 8.58392 5.72993 10.5939 5.72993C13.0939 5.72993 14.5939 5.29993 16.0339 4.87993C17.4839 4.45993 18.8539 4.06993 21.3239 4.06993C23.5139 4.06993 25.4339 4.39993 26.3739 4.58993L28.0719 14.7939L29.1319 15.1019L27.2539 3.75993C27.2539 3.75993 24.5839 3.06993 21.3239 3.06993C16.1839 3.06993 15.4039 4.72993 10.5939 4.72993C7.77392 4.72993 5.95392 3.98993 5.25392 3.75993L1.25392 27.8599C1.25392 27.8599 4.34392 29.6599 8.79392 29.6599C11.1669 29.6599 12.8529 29.3499 14.3309 28.9429L14.0529 27.9879ZM10.7539 9.85993C9.92392 9.85993 9.25392 10.5299 9.25392 11.3599C9.25392 12.1899 9.92392 12.8599 10.7539 12.8599C11.5839 12.8599 12.2539 12.1899 12.2539 11.3599C12.2539 10.5299 11.5839 9.85993 10.7539 9.85993ZM10.7539 11.8599C10.4739 11.8599 10.2539 11.6399 10.2539 11.3599C10.2539 11.0799 10.4739 10.8599 10.7539 10.8599C11.0339 10.8599 11.2539 11.0799 11.2539 11.3599C11.2539 11.6399 11.0339 11.8599 10.7539 11.8599ZM12.9699 12.4929C12.7409 12.939 12.3831 13.3059 11.9429 13.5459L13.0966 17.2199L15.3639 25.3399L16.6639 29.7999L29.2539 17.2199L12.9699 12.4929ZM14.0139 17.0699L12.9839 13.5299L27.3539 17.6999L17.1539 27.8999L14.0139 17.0699Z" />
@@ -300,8 +303,8 @@
         <ToggleButton
             IsChecked="{x:Bind ViewModel.ShowUnselectedFootprints, Mode=TwoWay}"
             Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedImageFootprints}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedImageFootprints}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
             <Viewbox Width="30" Height="30" Stretch="Uniform">
                 <Grid Width="32" Height="32">
                     <Path Fill="{ThemeResource TextFillColorPrimaryBrush}" Data="M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z" />
@@ -312,11 +315,10 @@
 
     <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" x:DataType="controls:ShowCameraMarkersVM">
         <ToggleButton
-            Command="{x:Bind ToggleCameraMarkerDisplayMode, Mode=OneWay}"
-            IsChecked="{x:Bind ViewModel.ShowCameraLocations, Mode=OneWay}"
+            IsChecked="{x:Bind ViewModel.ShowCameraLocations, Mode=TwoWay}"
             Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
-            ToolTipService.ToolTip="{x:Bind local:OrientedImageryResources.CameraMarkersToolTip(ViewModel.ShowCameraLocations), Mode=OneWay}"
-            AutomationProperties.Name="{x:Bind local:OrientedImageryResources.CameraMarkersToolTip(ViewModel.ShowCameraLocations), Mode=OneWay}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}">
             <Viewbox Width="32" Height="32" Stretch="Uniform">
                 <Grid Width="32" Height="32">
                     <Path
@@ -331,8 +333,8 @@
         <ToggleButton
             IsChecked="{x:Bind ViewModel.AllowAddingMarkers, Mode=TwoWay}"
             Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
             <Viewbox Width="32" Height="32" Stretch="Uniform">
                 <Grid Width="32" Height="32">
                     <Path
@@ -483,7 +485,7 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <ItemsControl x:Name="PART_ToolbarContainer" Style="{StaticResource ToolbarContainerStyle}" />
+                            <ItemsControl x:Name="PART_ToolbarContainer" IsTabStop="False" Style="{StaticResource ToolbarContainerStyle}" />
 
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
@@ -541,6 +543,7 @@
                                     Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
                                     Style="{StaticResource OrientedImageryNavigationButtonStyle}"
                                     Visibility="{TemplateBinding ImageNavigationVisibility}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <PathIcon Data="M20 26.1 9.9 16 20 5.9z" />
@@ -553,6 +556,7 @@
                                     Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}"
                                     Style="{StaticResource OrientedImageryNavigationButtonStyle}"
                                     Visibility="{TemplateBinding ImageNavigationVisibility}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <PathIcon Data="M12 5.9 22.1 16 12 26.1z" />
@@ -574,6 +578,7 @@
                                 Visibility="{TemplateBinding SequentialNavigationVisibility}">
                                 <Button
                                     Style="{StaticResource OrientedImageryPageButtonStyle}"
+                                    IsTabStop="False"
                                     Width="33"
                                     Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
@@ -582,6 +587,7 @@
                                 </Button>
                                 <Button
                                     Content="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                     Style="{StaticResource OrientedImageryPageButtonStyle}"
                                     Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}" />
@@ -595,11 +601,13 @@
                                 </Grid>
                                 <Button
                                     Content="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                     Style="{StaticResource OrientedImageryPageButtonStyle}"
                                     Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}" />
                                 <Button
                                     Style="{StaticResource OrientedImageryPageButtonStyle}"
+                                    IsTabStop="False"
                                     Width="33"
                                     Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"

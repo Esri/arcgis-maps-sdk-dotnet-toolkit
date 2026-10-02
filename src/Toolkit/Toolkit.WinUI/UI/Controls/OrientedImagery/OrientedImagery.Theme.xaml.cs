@@ -19,9 +19,6 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
     public static Visibility VisibleWhenBusy(object? selectedImage, bool isBusy)
         => selectedImage is not null && isBusy ? Visibility.Visible : Visibility.Collapsed;
 
-    public static string? CameraMarkersToolTip(bool showingMarkers)
-        => Properties.Resources.GetString(showingMarkers ? "OrientedImageryViewClearCameraMarkers" : "OrientedImageryViewShowCameraMarkersOnGeoView");
-
     public static string? SequentialNavigationToolTip(bool isSequential)
         => Properties.Resources.GetString(isSequential ? "OrientedImageryViewReturnToResults" : "OrientedImageryViewEnterSequentialNavigation");
 }
