@@ -121,7 +121,11 @@ public partial class OrientedImageryView : Control
     {
         IsImageViewportBusy = _viewport?.IsBusy ?? false;
         IsImageViewportInteractive = _viewport?.IsInteractive ?? false;
-        ImageViewportError = _viewport?.Error;
+
+        var error = _viewport?.Error;
+        ImageViewportErrorMessage = error?.Message ?? string.Empty;
+        ImageViewportErrorVisibility = error is null ? Visibility.Collapsed : Visibility.Visible;
+
         UpdateNavigationVisibility_WinUI();
     }
 
@@ -188,14 +192,23 @@ public partial class OrientedImageryView : Control
     internal static readonly DependencyProperty IsImageViewportInteractiveProperty =
         DependencyProperty.Register(nameof(IsImageViewportInteractive), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
 
-    internal Exception? ImageViewportError
+    internal string ImageViewportErrorMessage
     {
-        get => (Exception?)GetValue(ImageViewportErrorProperty);
-        private set => SetValue(ImageViewportErrorProperty, value);
+        get => (string)GetValue(ImageViewportErrorMessageProperty);
+        private set => SetValue(ImageViewportErrorMessageProperty, value);
     }
 
-    internal static readonly DependencyProperty ImageViewportErrorProperty =
-        DependencyProperty.Register(nameof(ImageViewportError), typeof(Exception), typeof(OrientedImageryView), new PropertyMetadata(null));
+    internal static readonly DependencyProperty ImageViewportErrorMessageProperty =
+        DependencyProperty.Register(nameof(ImageViewportErrorMessage), typeof(string), typeof(OrientedImageryView), new PropertyMetadata(string.Empty));
+
+    internal Visibility ImageViewportErrorVisibility
+    {
+        get => (Visibility)GetValue(ImageViewportErrorVisibilityProperty);
+        private set => SetValue(ImageViewportErrorVisibilityProperty, value);
+    }
+
+    internal static readonly DependencyProperty ImageViewportErrorVisibilityProperty =
+        DependencyProperty.Register(nameof(ImageViewportErrorVisibility), typeof(Visibility), typeof(OrientedImageryView), new PropertyMetadata(Visibility.Collapsed));
 }
 
 internal sealed class DefaultWinUIToolbarTemplates
