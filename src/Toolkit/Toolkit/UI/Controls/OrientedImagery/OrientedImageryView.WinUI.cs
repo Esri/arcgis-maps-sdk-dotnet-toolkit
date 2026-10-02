@@ -14,19 +14,35 @@ public partial class OrientedImageryView : Control
     private long _isInteractiveCallbackToken;
     private long _errorCallbackToken;
 
-    internal Windows.UI.Color ThemeDisplayBackgroundColor
+    private long _backgroundColorCallbackToken;
+
+    internal Microsoft.UI.Xaml.Media.SolidColorBrush? ThemeDisplayBackgroundBrush
     {
-        get => (Windows.UI.Color)GetValue(ThemeDisplayBackgroundColorProperty);
-        set => SetValue(ThemeDisplayBackgroundColorProperty, value);
+        get => (Microsoft.UI.Xaml.Media.SolidColorBrush?)GetValue(ThemeDisplayBackgroundBrushProperty);
+        set => SetValue(ThemeDisplayBackgroundBrushProperty, value);
     }
 
-    internal static readonly DependencyProperty ThemeDisplayBackgroundColorProperty =
-        DependencyProperty.Register(nameof(ThemeDisplayBackgroundColor), typeof(Windows.UI.Color), typeof(OrientedImageryView),
-            new PropertyMetadata(default(Windows.UI.Color), (sender, _) =>
+    internal static readonly DependencyProperty ThemeDisplayBackgroundBrushProperty =
+        DependencyProperty.Register(nameof(ThemeDisplayBackgroundBrush), typeof(Microsoft.UI.Xaml.Media.SolidColorBrush), typeof(OrientedImageryView),
+            new PropertyMetadata(null, (sender, args) => ((OrientedImageryView)sender).OnThemeDisplayBackgroundBrushChanged(
+                args.OldValue as Microsoft.UI.Xaml.Media.SolidColorBrush, args.NewValue as Microsoft.UI.Xaml.Media.SolidColorBrush)));
+
+    private void OnThemeDisplayBackgroundBrushChanged(Microsoft.UI.Xaml.Media.SolidColorBrush? oldBrush, Microsoft.UI.Xaml.Media.SolidColorBrush? newBrush)
+    {
+        oldBrush?.UnregisterPropertyChangedCallback(Microsoft.UI.Xaml.Media.SolidColorBrush.ColorProperty, _backgroundColorCallbackToken);
+        if (newBrush != null)
+        {
+            // Theme resources can update a shared brush in place; do not let that brush retain the view.
+            var weakView = new WeakReference<OrientedImageryView>(this);
+            _backgroundColorCallbackToken = newBrush.RegisterPropertyChangedCallback(Microsoft.UI.Xaml.Media.SolidColorBrush.ColorProperty, (_, _) =>
             {
-                var view = (OrientedImageryView)sender;
-                view.UpdateDisplayBackgroundColor(view.DisplayBackgroundColor);
-            }));
+                if (weakView.TryGetTarget(out var view))
+                    view.UpdateDisplayBackgroundColor(view.DisplayBackgroundColor);
+            });
+        }
+
+        UpdateDisplayBackgroundColor(DisplayBackgroundColor);
+    }
 
     internal DefaultWinUIToolbarTemplates? DefaultToolbarTemplates
     {
