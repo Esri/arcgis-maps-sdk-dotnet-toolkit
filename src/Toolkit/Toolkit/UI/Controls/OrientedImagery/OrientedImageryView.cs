@@ -56,6 +56,7 @@ public partial class OrientedImageryView
             WireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
+        RefreshFromViewModel();
     }
 
 #region ViewModel
@@ -100,8 +101,22 @@ public partial class OrientedImageryView
             GeoView.GraphicsOverlays.Add(newValue.MarkersOverlay);
         }
 
+        RefreshFromViewModel();
+    }
+
+    private void RefreshFromViewModel()
+    {
         if (_display != null)
-            WireDisplayToViewModel(_display);
+        {
+            _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
+            _display.Markers = ViewModel.DisplayMarkers;
+            _display.Footprint = ViewModel.SelectedImageFootprint;
+            UpdateDisplayBackgroundColor(DisplayBackgroundColor);
+            UpdateSelectedImageReady();
+        }
+        if (_toolbarContainer != null)
+            _toolbarContainer.ItemsSource = ViewModel.ToolbarItems;
+        UpdatePaginatorSelection();
     }
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -116,11 +131,8 @@ public partial class OrientedImageryView
                 }
                 break;
             case nameof(OrientedImageryViewModel.SelectedImage):
-                UpdatePaginatorSelection();
-                break;
             case nameof(OrientedImageryViewModel.Images):
-                if (_paginator != null)
-                    _paginator.TotalPages = ViewModel.Images.Count;
+                UpdatePaginatorSelection();
                 break;
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
                 if (_display != null)
@@ -158,16 +170,6 @@ public partial class OrientedImageryView
     {
         display.ImageTapped += Display_ImageTapped;
         display.StateChanged += Display_StateChanged;
-        display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
-        WireDisplayToViewModel(display);
-    }
-
-    private void WireDisplayToViewModel(OrientedImageDisplay display)
-    {
-        display.Markers = ViewModel.DisplayMarkers;
-        display.Footprint = ViewModel.SelectedImageFootprint;
-        UpdateDisplayBackgroundColor(DisplayBackgroundColor);
-        UpdateSelectedImageReady();
     }
 
     private void UnwireDisplay(OrientedImageDisplay display)
@@ -275,7 +277,6 @@ public partial class OrientedImageryView
     {
         toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
         toolbarContainer.Items.Clear();
-        toolbarContainer.ItemsSource = ViewModel?.ToolbarItems;
     }
 
     private void UnwireToolbarContainer(ItemsControl toolbarContainer)
@@ -292,13 +293,15 @@ public partial class OrientedImageryView
     {
         if (_paginator == null)
             return;
+        var images = ViewModel.Images;
         var index = -1;
-        for (var i = 0; i < ViewModel.Images.Count; i++)
+        for (var i = 0; i < images.Count; i++)
         {
-            if (ReferenceEquals(ViewModel.Images[i], ViewModel.SelectedImage))
+            if (ReferenceEquals(images[i], ViewModel.SelectedImage))
                 index = i;
         }
-        _paginator.SelectedPageIndex = index;
+        _paginator.TotalPages = images.Count;
+        _paginator.SetCurrentValue(Paginator.CurrentPageNumberProperty, index);
     }
 
     private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
