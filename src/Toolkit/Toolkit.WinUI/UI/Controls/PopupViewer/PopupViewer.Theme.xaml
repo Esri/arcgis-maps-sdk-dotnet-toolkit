@@ -62,6 +62,7 @@
         <Setter Property="RowEvenBackground" Value="{ThemeResource FieldsPopupElementViewBackgroundRowEvenBrush}" />
         <Setter Property="DividerBrush" Value="{ThemeResource FieldsPopupElementViewDividerBrush}" />
         <Setter Property="FieldTextStyle" Value="{StaticResource FieldsPopupElementViewTextStyle}" />
+        <Setter Property="AutomationProperties.AccessibilityView" Value="Raw" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="primitives:FieldsPopupElementView">
