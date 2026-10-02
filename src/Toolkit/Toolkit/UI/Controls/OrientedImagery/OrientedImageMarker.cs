@@ -32,7 +32,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// </summary>
 /// <remarks>
 /// Anchored to an image pixel or a world location (see <see cref="OrientedImageMarkerPosition"/>). Changes to
-/// <see cref="Position"/>, <see cref="Symbol"/>, and <see cref="IsVisible"/> update the rendered marker in place.
+/// <see cref="Position"/>, <see cref="Symbol"/>, and <see cref="IsVisible"/> update the rendered marker in place, as do
+/// changes within the symbol.
 /// </remarks>
 public sealed class OrientedImageMarker : INotifyPropertyChanged
 {
