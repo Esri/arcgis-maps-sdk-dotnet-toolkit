@@ -66,24 +66,22 @@ internal class PaginatorPresenterPanel : Panel
         for (var i = 0; i < InternalChildren.Count; i++)
         {
             var child = InternalChildren[i];
-            if (i >= start && i < start + visibleCount)
+            bool visible = i >= start && i < start + visibleCount;
+            if (visible)
             {
                 var top = Math.Max(0, (finalSize.Height - child.DesiredSize.Height) / 2);
                 child.Arrange(new Rect(left, top, _pageSize.Width, child.DesiredSize.Height));
                 left += _pageSize.Width;
-                if (child is Control childControl)
-                    childControl.IsTabStop = i == tabIndex;
-                else if (child is ContentPresenter childPresenter)
-                    KeyboardNavigation.SetTabNavigation(childPresenter, i == tabIndex ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
             }
             else
             {
                 child.Arrange(new Rect(0, 0, 0, 0));
-                if (child is Control childControl)
-                    childControl.IsTabStop = false;
-                else if (child is ContentPresenter childPresenter)
-                    KeyboardNavigation.SetTabNavigation(childPresenter, KeyboardNavigationMode.None);
             }
+            bool isTabStop = visible && i == tabIndex;
+            if (child is Control childControl)
+                childControl.IsTabStop = isTabStop;
+            else if (child is ContentPresenter childPresenter)
+                KeyboardNavigation.SetTabNavigation(childPresenter, isTabStop ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
         }
 
         return finalSize;
