@@ -117,7 +117,7 @@ public class Paginator : Control
             return;
 
         e.Handled = true;
-        SetCurrentValue(CurrentPageNumberProperty, Math.Clamp(index, 0, TotalPages - 1));
+        SelectPage(index);
     }
 
     private void FocusSelectedPage()
@@ -163,39 +163,35 @@ public class Paginator : Control
 
     private void RightNavigateButton_Click(object sender, RoutedEventArgs e)
     {
-        SelectedPageIndex = Math.Min(TotalPages - 1, SelectedPageIndex + 1);
+        SelectPage(SelectedPageIndex + 1);
     }
 
     private void LeftNavigateButton_Click(object sender, RoutedEventArgs e)
     {
-        SelectedPageIndex = Math.Max(0, SelectedPageIndex - 1);
+        SelectPage(SelectedPageIndex - 1);
     }
 
     private void PageNumberClicked(object sender, RoutedEventArgs e)
     {
         if (e.OriginalSource is Button { DataContext: int pageNumber })
         {
-            SelectedPageIndex = pageNumber - 1;
+            SelectPage(pageNumber - 1);
         }
+    }
+
+    private void SelectPage(int index)
+    {
+        if (TotalPages > 0)
+            SetCurrentValue(CurrentPageNumberProperty, Math.Clamp(index, 0, TotalPages - 1));
     }
 
     private void UpdateNavButtonsEnabled()
     {
         if (_leftNavigateButton != null)
-        {
-            if (SelectedPageIndex < 1)
-                _leftNavigateButton.IsEnabled = false;
-            else
-                _leftNavigateButton.IsEnabled = true;
-        }
+            _leftNavigateButton.IsEnabled = TotalPages > 0 && SelectedPageIndex > 0;
 
         if (_rightNavigateButton != null)
-        {
-            if (SelectedPageIndex >= TotalPages - 1)
-                _rightNavigateButton.IsEnabled = false;
-            else
-                _rightNavigateButton.IsEnabled = true;
-        }
+            _rightNavigateButton.IsEnabled = TotalPages > 0 && SelectedPageIndex < TotalPages - 1;
     }
 }
 
