@@ -583,8 +583,8 @@
                                     Background="{ThemeResource OrientedImageryOverlayBackgroundBrush}"
                                     BorderBrush="{ThemeResource OrientedImageryOverlayBorderBrush}"
                                     BorderThickness="1"
-                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenNotNull(ImageDisplayError), Mode=OneWay}">
-                                    <TextBlock Text="{x:Bind ImageDisplayError.Message, Mode=OneWay}" TextWrapping="Wrap" />
+                                    Visibility="{x:Bind ImageDisplayErrorVisibility, Mode=OneWay}">
+                                    <TextBlock Text="{x:Bind ImageDisplayErrorMessage, Mode=OneWay}" TextWrapping="Wrap" />
                                 </Border>
 
                                 <Button

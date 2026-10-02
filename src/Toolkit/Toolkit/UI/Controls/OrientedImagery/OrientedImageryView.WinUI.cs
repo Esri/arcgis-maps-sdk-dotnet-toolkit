@@ -100,7 +100,10 @@ public partial class OrientedImageryView : Control
     {
         IsImageDisplayBusy = _display?.IsBusy ?? false;
         IsImageDisplayInteractive = _display?.IsInteractive ?? false;
-        ImageDisplayError = _display?.Error;
+        // Publish non-null template values so clearing an error also clears the compiled binding's target.
+        var error = _display?.Error;
+        ImageDisplayErrorMessage = error?.Message ?? string.Empty;
+        ImageDisplayErrorVisibility = error is null ? Visibility.Collapsed : Visibility.Visible;
         UpdateNavigationVisibility_WinUI();
     }
 
@@ -167,14 +170,23 @@ public partial class OrientedImageryView : Control
     internal static readonly DependencyProperty IsImageDisplayInteractiveProperty =
         DependencyProperty.Register(nameof(IsImageDisplayInteractive), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
 
-    internal Exception? ImageDisplayError
+    internal string ImageDisplayErrorMessage
     {
-        get => (Exception?)GetValue(ImageDisplayErrorProperty);
-        private set => SetValue(ImageDisplayErrorProperty, value);
+        get => (string)GetValue(ImageDisplayErrorMessageProperty);
+        private set => SetValue(ImageDisplayErrorMessageProperty, value);
     }
 
-    internal static readonly DependencyProperty ImageDisplayErrorProperty =
-        DependencyProperty.Register(nameof(ImageDisplayError), typeof(Exception), typeof(OrientedImageryView), new PropertyMetadata(null));
+    internal static readonly DependencyProperty ImageDisplayErrorMessageProperty =
+        DependencyProperty.Register(nameof(ImageDisplayErrorMessage), typeof(string), typeof(OrientedImageryView), new PropertyMetadata(string.Empty));
+
+    internal Visibility ImageDisplayErrorVisibility
+    {
+        get => (Visibility)GetValue(ImageDisplayErrorVisibilityProperty);
+        private set => SetValue(ImageDisplayErrorVisibilityProperty, value);
+    }
+
+    internal static readonly DependencyProperty ImageDisplayErrorVisibilityProperty =
+        DependencyProperty.Register(nameof(ImageDisplayErrorVisibility), typeof(Visibility), typeof(OrientedImageryView), new PropertyMetadata(Visibility.Collapsed));
 
 }
 
