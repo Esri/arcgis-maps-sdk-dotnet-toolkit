@@ -54,6 +54,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         ToolbarItems = GetDefaultToolbarItems();
         ToolbarItems.CollectionChanged += ToolbarItems_CollectionChanged;
+        SynchronizeToolbarItems();
 
         SelectNextImageCommand = new Command(
             execute: async () => await SelectNextImageAsync(),
@@ -847,12 +848,15 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 #endregion Markers
 
 #region ToolbarItems
+    private HashSet<OrientedImageryToolbarItemBase> _attachedToolbarItems = new(ReferenceEqualityComparer.Instance);
+
     /// <summary>
     /// The collection of toolbar items to be displayed on the containing <see cref="OrientedImageryView"/>.
     /// </summary>
     /// <remarks>
     /// Each toolbar items is an <see cref="OrientedImageryToolbarItemBase"/> object with a reference to the containing <see cref="OrientedImageryViewModel"/>.
     /// The list is initially populated with a set of default toolbar items for the base control.
+    /// Items are disconnected from this view model when their last occurrence is removed, including when the collection is cleared.
     /// </remarks>
     public ObservableCollection<OrientedImageryToolbarItemBase> ToolbarItems { get; private set; }
 
@@ -868,7 +872,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 10)
         });
 
-        ObservableCollection<OrientedImageryToolbarItemBase> items =
+        return
         [
             new ShowSelectedFootprintVM(),
             new ShowUnselectedFootprintsVM(),
@@ -878,24 +882,24 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             new ClearMarkersVM(),
             new SequentialNavigationVM()
         ];
-
-        foreach (var item in items)
-            item.ViewModel = this;
-
-        return items;
     }
 
-    private void ToolbarItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void ToolbarItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => SynchronizeToolbarItems();
+
+    private void SynchronizeToolbarItems()
     {
-        foreach (var removedItem in e.OldItems?.OfType<OrientedImageryToolbarItemBase>() ?? [])
+        var currentItems = new HashSet<OrientedImageryToolbarItemBase>(ToolbarItems, ReferenceEqualityComparer.Instance);
+        foreach (var item in _attachedToolbarItems)
         {
-            removedItem.ViewModel = null;
+            if (!currentItems.Contains(item))
+                item.ViewModel = null;
         }
 
-        foreach (var newItem in ToolbarItems)
+        foreach (var item in ToolbarItems)
         {
-            newItem.ViewModel = this;
+            item.ViewModel = this;
         }
+        _attachedToolbarItems = currentItems;
     }
 #endregion ToolbarItems
 
