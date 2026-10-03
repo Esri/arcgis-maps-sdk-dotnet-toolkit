@@ -214,23 +214,24 @@ internal sealed class PanoramicSurface : MTKView
         if (Device is IMTLDevice device)
         {
             var markers = new List<GpuMarker>(swatches.Count);
-            try
+            foreach (MarkerSwatch swatch in swatches)
             {
-                foreach (MarkerSwatch swatch in swatches)
-                {
-                    if (swatch.Width <= 0 || swatch.Height <= 0 || swatch.Bgra.Length < swatch.Width * swatch.Height * 4)
-                        continue;
+                // A marker that can't be uploaded is skipped. It never fails the panorama.
+                if (swatch.Width <= 0 || swatch.Height <= 0 || swatch.Bgra.Length < swatch.Width * swatch.Height * 4)
+                    continue;
 
+                try
+                {
                     fixed (byte* pixels = swatch.Bgra)
                     {
                         IMTLTexture texture = CreateTexture(device, (IntPtr)pixels, swatch.Width, swatch.Height, swatch.Width * 4);
                         markers.Add(new GpuMarker(texture, swatch.U, swatch.V, swatch.Width, swatch.Height, swatch.OffsetX, swatch.OffsetY));
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                ReportRenderFailure(ex);
+                catch (Exception)
+                {
+                    // Skipped, like an invalid swatch.
+                }
             }
 
             _markers = markers;

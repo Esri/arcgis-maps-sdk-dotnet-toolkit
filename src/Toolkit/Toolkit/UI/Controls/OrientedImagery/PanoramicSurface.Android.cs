@@ -879,6 +879,10 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         DrainGlErrors(); // the per-swatch checks must only see their own upload's errors
         foreach (MarkerSwatch swatch in swatches)
         {
+            // A marker that can't be uploaded is skipped. It never fails the panorama.
+            if (swatch.Width <= 0 || swatch.Height <= 0 || swatch.Bgra.Length < swatch.Width * swatch.Height * 4)
+                continue;
+
             // Swatches arrive as BGRA (RuntimeImage raw buffer); GLES2 has no BGRA format without an
             // extension, so swap to RGBA on the CPU - swatches are tiny.
             byte[] rgba = new byte[swatch.Bgra.Length];
@@ -898,8 +902,15 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
                 GLES20.GlTexImage2D(GLES20.GlTexture2d, 0, GLES20.GlRgba, swatch.Width, swatch.Height, 0, GLES20.GlRgba, GLES20.GlUnsignedByte, buffer);
             }
 
-            ThrowOnGlError("marker texture upload");
+            bool uploaded = GLES20.GlGetError() == GLES20.GlNoError;
+            DrainGlErrors();
             GLES20.GlBindTexture(GLES20.GlTexture2d, 0);
+            if (!uploaded)
+            {
+                GLES20.GlDeleteTextures(1, new[] { textureId }, 0);
+                continue;
+            }
+
             _glMarkers.Add(new GlMarker(textureId, swatch.U, swatch.V, swatch.Width, swatch.Height, swatch.OffsetX, swatch.OffsetY));
         }
 
