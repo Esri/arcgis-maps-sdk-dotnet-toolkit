@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
@@ -163,6 +164,15 @@ public sealed class OrientedImageDisplayTests
 
         OrientedImageMarker? Hit(OrientedImagePanoramicDisplay.ResolvedMarker[] markers, double x, double y, double dip) =>
             OrientedImagePanoramicDisplay.HitTestMarker(markers, camera, 400, 300, x, y, dip);
+    }
+
+    [TestMethod]
+    public void StillImagesSpanning360DegreesArePanoramic()
+    {
+        // The SDK's image transforms treat any image that spans 360 degrees as spherical.
+        Assert.IsTrue(OrientedImageDisplay.IsPanoramic(OrientedImageType.Image360, new Dictionary<string, object?>()));
+        Assert.IsTrue(OrientedImageDisplay.IsPanoramic(OrientedImageType.Unknown, new Dictionary<string, object?> { ["HorizontalFieldOfView"] = 360d }));
+        Assert.IsFalse(OrientedImageDisplay.IsPanoramic(OrientedImageType.Horizontal, new Dictionary<string, object?> { ["HorizontalFieldOfView"] = 100.4d }));
     }
 
     [TestMethod]

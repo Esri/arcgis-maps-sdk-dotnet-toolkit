@@ -264,13 +264,12 @@ public partial class OrientedImageDisplay
         if (_displayHost is null)
             return; // Template not applied yet; OnApplyTemplate will call again.
 
-        OrientedImageType? type = Footprint?.OrientedImage?.Type;
-        OrientedImageInnerDisplay? display = SelectDisplay(type);
+        OrientedImage? image = Footprint?.OrientedImage;
+        OrientedImageInnerDisplay? display = SelectDisplay(image);
 
-        // A known type with no display is unsupported (video, or panoramic without a panoramic display); report it
-        // rather than look "not loaded".
-        _unsupportedError = display is null && type is not null
-            ? new NotSupportedException($"Oriented image type '{type}' is not supported by this control yet.")
+        // Reports an image that no display can show, such as a video, instead of looking unloaded.
+        _unsupportedError = display is null && image is not null
+            ? new NotSupportedException($"Oriented image type '{image.Type}' is not supported by this control yet.")
             : null;
 
         SetActiveDisplay(display);
@@ -372,26 +371,32 @@ public partial class OrientedImageDisplay
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private OrientedImageInnerDisplay? SelectDisplay(OrientedImageType? type)
+    private OrientedImageInnerDisplay? SelectDisplay(OrientedImage? image)
     {
-        if (type is null || IsPlanar(type.Value))
+        if (image is null)
+            return _rasterDisplay ??= new OrientedImageRasterDisplay();
+
+        if (IsVideo(image.Type))
+            return null;
+
+        if (!IsPanoramic(image.Type, image.Attributes))
             return _rasterDisplay ??= new OrientedImageRasterDisplay();
 #if WPF || WINDOWS_XAML || __ANDROID__ || (MAUI && WINDOWS)
-        if (type.Value == OrientedImageType.Image360)
-            return _panoramicDisplay ??= new OrientedImagePanoramicDisplay();
-#endif
+        return _panoramicDisplay ??= new OrientedImagePanoramicDisplay();
+#else
         // TODO: Implement panoramic on iOS/macCatalyst.
         return null;
+#endif
     }
 
-    // Everything that is not panoramic or video goes to the raster display.
-    private static bool IsPlanar(OrientedImageType type) => type switch
-    {
-        OrientedImageType.Image360 => false,
-        OrientedImageType.Aerial360Video => false,
-        OrientedImageType.AerialFrameVideo => false,
-        OrientedImageType.Terrestrial360Video => false,
-        OrientedImageType.TerrestrialFrameVideo => false,
-        _ => true,
-    };
+    // As in the SDK's image transforms, an image that spans 360 degrees is panoramic whatever its type.
+    internal static bool IsPanoramic(OrientedImageType type, IDictionary<string, object?> attributes) =>
+        type == OrientedImageType.Image360 ||
+        (attributes.TryGetValue("HorizontalFieldOfView", out object? value) && value is double degrees && degrees == 360);
+
+    private static bool IsVideo(OrientedImageType type) => type is
+        OrientedImageType.Aerial360Video or
+        OrientedImageType.AerialFrameVideo or
+        OrientedImageType.Terrestrial360Video or
+        OrientedImageType.TerrestrialFrameVideo;
 }
