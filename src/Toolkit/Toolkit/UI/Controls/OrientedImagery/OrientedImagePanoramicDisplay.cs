@@ -627,7 +627,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     }
 #elif __ANDROID__
     // Power-of-two downsample to the device budget (4096 low-RAM, else 8192) for the GPU texture only. Width and Height
-    // stay the full-resolution oriented dimensions, the pixel space that markers and taps use.
+    // stay the full-resolution oriented dimensions, the pixel space that markers and taps use. Throws when it can't
+    // decode the data, such as a TIFF.
     internal static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
@@ -646,7 +647,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 }
                 else
                 {
-                    return (PanoramaFrame?)null;
+                    throw new NotSupportedException($"Images can't be read from '{uri.Scheme}' locations.");
                 }
 
                 ExifOrientationTransform orientation;
@@ -667,7 +668,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 int width = bounds.OutWidth;
                 int height = bounds.OutHeight;
                 if (width <= 0 || height <= 0)
-                    return (PanoramaFrame?)null;
+                    throw new InvalidDataException("The image could not be decoded.");
 
                 bool lowRam = (Android.App.Application.Context.GetSystemService(Android.Content.Context.ActivityService)
                     as Android.App.ActivityManager)?.IsLowRamDevice == true;
@@ -681,11 +682,10 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                     InSampleSize = sample,
                     InPreferredConfig = Android.Graphics.Bitmap.Config.Argb8888,
                 };
-                Android.Graphics.Bitmap? bitmap = path is not null
+                Android.Graphics.Bitmap bitmap = (path is not null
                     ? Android.Graphics.BitmapFactory.DecodeFile(path, options)
-                    : Android.Graphics.BitmapFactory.DecodeByteArray(downloaded, 0, downloaded!.Length, options);
-                if (bitmap is null)
-                    return (PanoramaFrame?)null;
+                    : Android.Graphics.BitmapFactory.DecodeByteArray(downloaded, 0, downloaded!.Length, options))
+                    ?? throw new InvalidDataException("The image could not be decoded.");
 
                 try
                 {
