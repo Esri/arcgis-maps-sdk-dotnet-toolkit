@@ -745,38 +745,56 @@ internal sealed unsafe partial class PanoramicSurface
     {
         ReleaseGpuMarkers();
 
-        int count = markers.Count;
+        _markerCount = 0;
+        if (markers.Count == 0)
+            return;
+
+        if (_markerU.Length < markers.Count)
+        {
+            _markerU = new float[markers.Count];
+            _markerV = new float[markers.Count];
+            _markerW = new float[markers.Count];
+            _markerH = new float[markers.Count];
+            _markerOffsetX = new float[markers.Count];
+            _markerOffsetY = new float[markers.Count];
+            _markerTextures = new nint[markers.Count];
+            _markerViews = new nint[markers.Count];
+            _visibleBase = new int[markers.Count];
+            _visibleViews = new nint[markers.Count];
+        }
+
+        int count = 0;
+        foreach (MarkerSwatch marker in markers)
+        {
+            // A marker that can't be uploaded is skipped. It never fails the panorama.
+            if (marker.Width <= 0 || marker.Height <= 0 || marker.Bgra.Length < marker.Width * marker.Height * 4)
+                continue;
+
+            ID3D11Texture2D* texture;
+            ID3D11ShaderResourceView* view;
+            try
+            {
+                CreateBgraTexture(marker.Bgra, (uint)marker.Width, (uint)marker.Height, out texture, out view);
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+
+            _markerU[count] = marker.U;
+            _markerV[count] = marker.V;
+            _markerW[count] = marker.Width;
+            _markerH[count] = marker.Height;
+            _markerOffsetX[count] = marker.OffsetX;
+            _markerOffsetY[count] = marker.OffsetY;
+            _markerTextures[count] = (nint)texture;
+            _markerViews[count] = (nint)view;
+            count++;
+        }
+
         _markerCount = count;
         if (count == 0)
             return;
-
-        if (_markerU.Length < count)
-        {
-            _markerU = new float[count];
-            _markerV = new float[count];
-            _markerW = new float[count];
-            _markerH = new float[count];
-            _markerOffsetX = new float[count];
-            _markerOffsetY = new float[count];
-            _markerTextures = new nint[count];
-            _markerViews = new nint[count];
-            _visibleBase = new int[count];
-            _visibleViews = new nint[count];
-        }
-
-        for (int i = 0; i < count; i++)
-        {
-            MarkerSwatch marker = markers[i];
-            CreateBgraTexture(marker.Bgra, (uint)marker.Width, (uint)marker.Height, out ID3D11Texture2D* texture, out ID3D11ShaderResourceView* view);
-            _markerU[i] = marker.U;
-            _markerV[i] = marker.V;
-            _markerW[i] = marker.Width;
-            _markerH[i] = marker.Height;
-            _markerOffsetX[i] = marker.OffsetX;
-            _markerOffsetY[i] = marker.OffsetY;
-            _markerTextures[i] = (nint)texture;
-            _markerViews[i] = (nint)view;
-        }
 
         uint requiredVertices = (uint)count * 4;
         if (_markerVertexBuffer is null || _markerVertexCapacity < requiredVertices)
