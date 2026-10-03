@@ -284,39 +284,10 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         });
     }
 
-    // Image-anchored markers use their pixel directly, on their own image only; world-anchored markers project through
-    // the camera model.
     private static async Task<Uv?> ResolveUvAsync(OrientedImageMarkerPosition position, OrientedImage image, int imageWidth, int imageHeight)
     {
-        PointF pixel;
-        if (position.ImagePoint is PointF imagePoint)
-        {
-            if (!ReferenceEquals(position.Image, image))
-                return null;
-
-            pixel = imagePoint;
-        }
-        else if (position.Location is MapPoint location)
-        {
-            try
-            {
-                pixel = await image.LocationToImageAsync(location).ConfigureAwait(false);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        else
-        {
-            return null;
-        }
-
-        // A location at or behind the camera can project non-finite; keep NaN/Infinity out of the marker pipeline.
-        if (!float.IsFinite(pixel.X) || !float.IsFinite(pixel.Y))
-            return null;
-
-        return new Uv(pixel.X / imageWidth, pixel.Y / imageHeight);
+        PointF? pixel = await ResolveMarkerPixelAsync(position, image).ConfigureAwait(false);
+        return pixel is PointF p ? new Uv(p.X / imageWidth, p.Y / imageHeight) : null;
     }
 
     // Rasterizes a symbol to a tightly-packed BGRA8 swatch via RuntimeImage, with its offset.

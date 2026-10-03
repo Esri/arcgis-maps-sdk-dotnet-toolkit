@@ -279,6 +279,33 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 
     protected abstract void OnMarkerChanged(OrientedImageMarker marker, string? propertyName);
 
+    // The image pixel a marker sits on: an image point on its own image only, or a world location through the camera
+    // model. Null when the marker isn't on the image.
+    protected static async Task<System.Drawing.PointF?> ResolveMarkerPixelAsync(OrientedImageMarkerPosition position, OrientedImage? image)
+    {
+        if (image is null)
+            return null;
+
+        if (position.ImagePoint is System.Drawing.PointF imagePoint)
+            return ReferenceEquals(position.Image, image) ? imagePoint : null;
+
+        // A transform tried before the image loads makes later transforms on it fail.
+        if (position.Location is not Esri.ArcGISRuntime.Geometry.MapPoint location || image.LoadStatus != LoadStatus.Loaded)
+            return null;
+
+        try
+        {
+            System.Drawing.PointF pixel = await image.LocationToImageAsync(location).ConfigureAwait(false);
+
+            // A location at or behind the camera can project to NaN or infinity.
+            return float.IsFinite(pixel.X) && float.IsFinite(pixel.Y) ? pixel : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
     // Subscribe/unsubscribe the platform view-change event that should drive UpdateFootprint.
     protected abstract void OnAutoUpdateFootprintChanged(bool enabled);
 

@@ -311,41 +311,10 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             graphic.Geometry = mapPoint;
     }
 
-    // Marker -> image pixel (world-anchored via the camera model) -> map point; null while the raster isn't ready.
-    private async Task<MapPoint?> ResolveMarkerMapPointAsync(OrientedImageMarker marker)
-    {
-        OrientedImageMarkerPosition position = marker.Position;
-        PointF pixel;
-        if (position.ImagePoint is PointF imagePoint)
-        {
-            // An image point belongs to one image and is never drawn on another.
-            if (!ReferenceEquals(position.Image, Footprint?.OrientedImage))
-                return null;
-
-            pixel = imagePoint;
-        }
-        else if (position.Location is MapPoint location && Footprint?.OrientedImage is OrientedImage image)
-        {
-            // A transform attempted before the image loads makes every later transform on it fail; PresentAsync retries after load.
-            if (image.LoadStatus != LoadStatus.Loaded)
-                return null;
-
-            try
-            {
-                pixel = await image.LocationToImageAsync(location);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        else
-        {
-            return null;
-        }
-
-        return PixelToMap(pixel);
-    }
+    // Marker -> image pixel -> map point; null while the raster isn't ready. PresentAsync places markers again after
+    // the image loads.
+    private async Task<MapPoint?> ResolveMarkerMapPointAsync(OrientedImageMarker marker) =>
+        await ResolveMarkerPixelAsync(marker.Position, Footprint?.OrientedImage) is PointF pixel ? PixelToMap(pixel) : null;
 
     // Clockwise degrees, summed without clamping: real data exceeds the spec's +-90 roll.
     private static double GetEffectiveRotationDegrees(OrientedImage image)
