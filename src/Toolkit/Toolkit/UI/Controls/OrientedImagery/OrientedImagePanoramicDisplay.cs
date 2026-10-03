@@ -75,6 +75,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _surface.RenderFailed += OnRenderFailed;
         _surface.DeviceLost += OnDeviceLost;
         _surface.DeviceRecreated += OnDeviceRecreated;
+        _surface.ScaleChanged += OnScaleChanged;
         SetAutomationName(null);
     }
 
@@ -170,6 +171,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             UpdateState();
         }
     }
+
+    // Resolving again rasterizes the swatches at the new scale.
+    private void OnScaleChanged() => _ = ResolveMarkersAsync();
 
     // The caches belong to the UI thread.
     protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed) => this.Dispatch(() =>

@@ -119,6 +119,18 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         ViewChanged?.Invoke();
     }
 
+    // A move to a monitor with another DPI keeps the size in DIPs, so no SizeChanged follows.
+    protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+    {
+        base.OnDpiChanged(oldDpi, newDpi);
+        Safe(() =>
+        {
+            EnsureResources();
+            RequestRender();
+        });
+        ScaleChanged?.Invoke();
+    }
+
     private partial void EnsureResources()
     {
         if (ActualWidth <= 0 || ActualHeight <= 0)

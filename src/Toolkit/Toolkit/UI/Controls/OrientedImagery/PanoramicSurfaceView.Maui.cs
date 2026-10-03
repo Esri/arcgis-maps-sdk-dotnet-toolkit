@@ -57,6 +57,8 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 
     public event Action? ViewChanged;
 
+    public event Action? ScaleChanged;
+
     public float Yaw
     {
         get => _platform?.Yaw ?? _yaw;
@@ -185,6 +187,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         platform.DeviceLost += OnPlatformDeviceLost;
         platform.DeviceRecreated += OnPlatformDeviceRecreated;
         platform.ViewChanged += OnPlatformViewChanged;
+        platform.ScaleChanged += OnPlatformScaleChanged;
 
         platform.Yaw = _yaw;
         platform.Pitch = _pitch;
@@ -246,6 +249,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
             _platform.DeviceLost -= OnPlatformDeviceLost;
             _platform.DeviceRecreated -= OnPlatformDeviceRecreated;
             _platform.ViewChanged -= OnPlatformViewChanged;
+            _platform.ScaleChanged -= OnPlatformScaleChanged;
         }
 
         _platform = null;
@@ -260,6 +264,8 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
     private void OnPlatformDeviceRecreated() => DeviceRecreated?.Invoke();
 
     private void OnPlatformViewChanged() => ViewChanged?.Invoke();
+
+    private void OnPlatformScaleChanged() => ScaleChanged?.Invoke();
 }
 
 // Maps the virtual view to the platform panorama surface. Registered by UseArcGISToolkit.
