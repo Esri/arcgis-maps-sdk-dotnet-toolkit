@@ -59,6 +59,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private readonly Dictionary<OrientedImageMarker, Uv> _markerUvs = [];
     private readonly Dictionary<OrientedImageMarker, Swatch> _markerSwatches = [];
     private int _markerGeneration;
+    private bool _markerPassQueued;
     private int _imageWidth;
     private int _imageHeight;
     private bool _recovering;
@@ -149,7 +150,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             _imageHeight = frame.Height;
             ApplyTexture(frame);
             _surface.RequestRender();
-            _ = ResolveMarkersAsync();
+            QueueMarkerPass();
 
             // Recovery succeeded: clear any error latched while the device was lost (the loss itself is recoverable).
             PresentationError = null;
@@ -173,7 +174,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     }
 
     // Resolving again rasterizes the swatches at the new scale.
-    private void OnScaleChanged() => _ = ResolveMarkersAsync();
+    private void OnScaleChanged() => QueueMarkerPass();
 
     // The caches belong to the UI thread.
     protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed) => this.Dispatch(() =>
@@ -184,7 +185,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             _markerSwatches.Remove(marker);
         }
 
-        _ = ResolveMarkersAsync();
+        QueueMarkerPass();
     });
 
     // Drops the result the change invalidates and re-resolves. Tag is not drawn.
@@ -208,18 +209,38 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 break;
         }
 
-        _ = ResolveMarkersAsync();
+        QueueMarkerPass();
     });
 
-    // For tests. Bumped by each pass and by ClearPresentation.
+    // For tests. Bumped by each marker change that needs a pass, and by ClearPresentation.
     internal int MarkerGeneration => _markerGeneration;
+
+    // For tests. The number of passes that started.
+    internal int MarkerPasses { get; private set; }
+
+    // Marker changes come in bursts, such as a loop over the markers or a symbol that many of them share. Each change
+    // supersedes the pass in flight, and one pass on the next UI turn covers the whole burst.
+    private void QueueMarkerPass()
+    {
+        Interlocked.Increment(ref _markerGeneration);
+        if (_markerPassQueued)
+            return;
+
+        _markerPassQueued = true;
+        this.Post(() =>
+        {
+            _markerPassQueued = false;
+            _ = ResolveMarkersAsync();
+        });
+    }
 
     // Resolves every visible marker to a normalized (u,v) plus a rasterized swatch and pushes the set to the surface.
     // Cached results are reused, and the rest is computed off the UI thread. A superseded pass stops at its next check
     // and leaves the rest to the newer pass. Only the final apply marshals back.
     private async Task ResolveMarkersAsync()
     {
-        int generation = Interlocked.Increment(ref _markerGeneration);
+        MarkerPasses++;
+        int generation = Volatile.Read(ref _markerGeneration);
         CancellationToken token = SessionToken;
         OrientedImage? image = Footprint?.OrientedImage;
         int imageWidth = _imageWidth;
@@ -452,7 +473,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _surface.RequestRender();
     }
 
-    protected override void OnPresentCompleted() => _ = ResolveMarkersAsync();
+    protected override void OnPresentCompleted() => QueueMarkerPass();
 
     private PanoramaCameraState Camera => new(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
 
