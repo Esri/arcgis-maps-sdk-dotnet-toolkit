@@ -293,6 +293,14 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         return true;
     }
 
+    public override PointerIcon? OnResolvePointerIcon(MotionEvent? e, int pointerIndex)
+    {
+        if (e is null || !e.IsFromSource(InputSourceType.Mouse) || Context is not Context context)
+            return base.OnResolvePointerIcon(e, pointerIndex);
+
+        return PointerIcon.GetSystemIcon(context, e.IsButtonPressed(MotionEventButtonState.Primary) ? PointerIconType.Grabbing : PointerIconType.Grab);
+    }
+
     public override bool OnGenericMotionEvent(MotionEvent? e)
     {
         // A mouse wheel (emulator, ChromeOS, DeX) arrives as an ACTION_SCROLL generic motion event, not a touch. Map it
