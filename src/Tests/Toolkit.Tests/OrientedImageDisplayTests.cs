@@ -165,6 +165,15 @@ public sealed class OrientedImageDisplayTests
             OrientedImagePanoramicDisplay.HitTestMarker(markers, camera, 400, 300, x, y, dip);
     }
 
+    [TestMethod]
+    public void PanoramicHeadingTreatsUnknownAsNorth()
+    {
+        // -999 means the heading is unknown.
+        Assert.AreEqual(0f, OrientedImagePanoramicDisplay.ReadHeadingRadians(new Dictionary<string, object?> { ["CameraHeading"] = -999d }));
+        Assert.AreEqual(0f, OrientedImagePanoramicDisplay.ReadHeadingRadians(new Dictionary<string, object?>()));
+        Assert.AreEqual(MathF.PI / 2f, OrientedImagePanoramicDisplay.ReadHeadingRadians(new Dictionary<string, object?> { ["CameraHeading"] = 90d }), 1e-6f);
+    }
+
     // A marker at the image center with a square swatch of the given size in DIPs.
     private static OrientedImagePanoramicDisplay.ResolvedMarker Marker(double size, double offsetX, double offsetY) =>
         new(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0))), 0.75f, 0.5f, offsetX, offsetY, size / 2, size / 2);

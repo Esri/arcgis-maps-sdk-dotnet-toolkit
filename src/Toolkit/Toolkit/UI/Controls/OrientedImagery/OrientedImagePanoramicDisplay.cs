@@ -452,7 +452,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
         // Look north initially (JS viewer parity): the center column faces CameraHeading but the identity camera centers
         // u = 0.75, so re-anchor by -pi/2 before subtracting the heading.
-        _surface.Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image);
+        _surface.Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image.Attributes);
         _surface.Pitch = 0f;
         _surface.RequestRender();
 
@@ -529,9 +529,10 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         return null;
     }
 
-    private static float ReadHeadingRadians(OrientedImage image)
+    // CameraHeading is in degrees, and -999 means unknown. Values outside 0 to 360 wrap.
+    internal static float ReadHeadingRadians(IDictionary<string, object?> attributes)
     {
-        if (image.Attributes.TryGetValue("CameraHeading", out object? raw) && raw is double degrees && !double.IsNaN(degrees))
+        if (attributes.TryGetValue("CameraHeading", out object? raw) && raw is double degrees && !double.IsNaN(degrees) && degrees != -999)
             return (float)(degrees * Math.PI / 180.0);
 
         return 0f;
