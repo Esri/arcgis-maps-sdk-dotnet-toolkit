@@ -315,6 +315,13 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     // and whichever keys type "+" and "-" zoom. The camera steps once per frame while keys are held, so they combine.
     public override bool OnKeyDown(Keycode keyCode, KeyEvent? e)
     {
+        // Android's app quality guidelines have Esc release keyboard focus.
+        if (keyCode == Keycode.Escape)
+        {
+            ClearFocus();
+            return true;
+        }
+
         NavigationKeys key = GetNavigationKey(keyCode, e);
         if (key == NavigationKeys.None)
             return base.OnKeyDown(keyCode, e);
