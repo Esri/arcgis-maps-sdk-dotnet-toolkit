@@ -775,18 +775,17 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         if (source is null || width <= 0 || height <= 0)
             throw new InvalidDataException("The image could not be decoded.");
 
+        // ImageIO subsamples only by 2, 4, or 8.
         int sample = 1;
         while (Math.Max(width, height) / sample > MaxTextureSize)
             sample *= 2;
 
-        // Without caching, the full-size image decodes straight into the buffer it's drawn into.
-        using CoreGraphics.CGImage image = (sample == 1
-            ? source.CreateImage(0, new ImageIO.CGImageOptions { ShouldCache = false })
-            : source.CreateThumbnail(0, new ImageIO.CGImageThumbnailOptions
-            {
-                CreateThumbnailFromImageAlways = true,
-                MaxPixelSize = (int)Math.Ceiling(Math.Max(width, height) / (double)sample),
-            }))
+        if (sample > 8)
+            throw new NotSupportedException($"A {width}x{height} image is too large to display.");
+
+        // Without caching, the image decodes straight into the buffer it's drawn into. The .NET binding has the
+        // subsample factor only on the thumbnail options, which CreateImage also takes.
+        using CoreGraphics.CGImage image = source.CreateImage(0, new ImageIO.CGImageThumbnailOptions { ShouldCache = false, SubsampleFactor = sample > 1 ? sample : null })
             ?? throw new InvalidDataException("The image could not be decoded.");
         token.ThrowIfCancellationRequested();
 
@@ -805,7 +804,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         IntPtr pixels = System.Runtime.InteropServices.Marshal.AllocHGlobal((nint)bytesPerRow * height);
         try
         {
-            using (CoreGraphics.CGColorSpace colorSpace = CoreGraphics.CGColorSpace.CreateDeviceRGB())
+            // The image's own color space keeps the decoded values, as on Windows. Gray and CMYK images can't back a
+            // BGRA context, so they convert to sRGB.
+            using (CoreGraphics.CGColorSpace colorSpace = image.ColorSpace is { Model: CoreGraphics.CGColorSpaceModel.RGB } own ? own : CoreGraphics.CGColorSpace.CreateSrgb())
             using (var context = new CoreGraphics.CGBitmapContext(pixels, width, height, 8, bytesPerRow, colorSpace, CoreGraphics.CGBitmapFlags.ByteOrder32Little | CoreGraphics.CGBitmapFlags.PremultipliedFirst))
             {
                 context.ConcatCTM(OrientationTransform(orientation, storedWidth, storedHeight, height));
