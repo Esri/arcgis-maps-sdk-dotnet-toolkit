@@ -450,10 +450,11 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         ApplyTexture(frame);
         _recovering = false; // re-supplied, whether or not a rebuilt device asked; a later DeviceLost starts over
 
-        // Look north initially (JS viewer parity): the center column faces CameraHeading but the identity camera centers
-        // u = 0.75, so re-anchor by -pi/2 before subtracting the heading.
+        // Each image opens facing north at the horizon, with a 90-degree vertical field of view. The identity camera
+        // centers u = 0.75 and the center column faces CameraHeading, so yaw is -pi/2 minus the heading.
         _surface.Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image.Attributes);
         _surface.Pitch = 0f;
+        _surface.FieldOfView = MathF.PI / 2f;
         _surface.RequestRender();
 
         // Push the footprint explicitly: the push made when auto-update was enabled ran with zero dimensions, and camera
