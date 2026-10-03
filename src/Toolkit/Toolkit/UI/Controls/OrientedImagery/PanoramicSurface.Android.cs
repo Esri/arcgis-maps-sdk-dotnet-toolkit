@@ -122,7 +122,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         : base(context)
     {
         SurfaceTextureListener = this;
-        _gestureDetector = new GestureDetector(context, new PanGestureListener(this));
+        // With long press on, a finger that rests before dragging never pans.
+        _gestureDetector = new GestureDetector(context, new PanGestureListener(this)) { IsLongpressEnabled = false };
         _scaleDetector = new ScaleGestureDetector(context, new PinchListener(this));
         // Focusable in touch mode, so a touch can give it keyboard focus as on the other heads.
         Focusable = true;
