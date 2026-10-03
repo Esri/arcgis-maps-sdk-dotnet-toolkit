@@ -108,6 +108,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     private bool _keyboardFramePosted;
     private long _keyboardFrameTime;
 
+    private float _density;
+
     public PanoramicSurface(Context context)
         : base(context)
     {
@@ -115,6 +117,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         _gestureDetector = new GestureDetector(context, new PanGestureListener(this));
         _scaleDetector = new ScaleGestureDetector(context, new PinchListener(this));
         Focusable = true; // like the SDK MapView, so a hardware keyboard reaches it once focus does
+        _density = context.Resources?.DisplayMetrics?.Density ?? 0f;
     }
 
     // Same event surface as the Windows PanoramicSurface, so the display's contract layer stays shared.
@@ -127,6 +130,9 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     public event Action? DeviceRecreated;
 
     public event Action? ViewChanged;
+
+    // Raised when the pixels per DIP change, so the display can rasterize its markers again.
+    public event Action? ScaleChanged;
 
     public float Yaw
     {
@@ -164,6 +170,30 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     {
         base.OnSizeChanged(w, h, oldw, oldh);
         ViewChanged?.Invoke();
+    }
+
+    // The activity handles density changes, so this view lives through them. A detached view misses them, so attaching
+    // checks too.
+    protected override void OnConfigurationChanged(Android.Content.Res.Configuration? newConfig)
+    {
+        base.OnConfigurationChanged(newConfig);
+        CheckDensity();
+    }
+
+    protected override void OnAttachedToWindow()
+    {
+        base.OnAttachedToWindow();
+        CheckDensity();
+    }
+
+    private void CheckDensity()
+    {
+        float density = Resources?.DisplayMetrics?.Density ?? 0f;
+        if (density <= 0f || density == _density)
+            return;
+
+        _density = density;
+        ScaleChanged?.Invoke();
     }
 
     // Takes ownership of the bitmap (recycled after upload or when superseded). If it still exceeds the GL max

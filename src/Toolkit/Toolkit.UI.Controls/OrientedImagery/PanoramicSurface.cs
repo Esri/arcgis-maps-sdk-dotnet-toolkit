@@ -184,6 +184,9 @@ internal sealed unsafe partial class PanoramicSurface
     // on. The footprint's horizontal field of view follows the aspect ratio.
     internal event Action? ViewChanged;
 
+    // Raised when the pixels per DIP change, so the display can rasterize its markers again.
+    internal event Action? ScaleChanged;
+
     // Raised when the surface is tapped/clicked, carrying the position in element (DIP) coordinates.
     internal event Action<double, double>? SurfaceTapped;
 

@@ -153,6 +153,9 @@ internal sealed class PanoramicSurface : MTKView
 
     public event Action? ViewChanged;
 
+    // Raised when the drawable's pixels per point change, so the display can rasterize its markers again.
+    public event Action? ScaleChanged;
+
     public float Yaw
     {
         get => _yaw;
@@ -290,7 +293,10 @@ internal sealed class PanoramicSurface : MTKView
     {
         var scale = (nfloat)Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Density;
         if (scale > 0 && ContentScaleFactor != scale)
+        {
             ContentScaleFactor = scale;
+            ScaleChanged?.Invoke();
+        }
     }
 
     private async void WaitForPipeline()
