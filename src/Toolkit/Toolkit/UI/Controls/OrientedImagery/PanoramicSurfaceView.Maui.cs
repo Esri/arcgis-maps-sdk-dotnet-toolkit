@@ -14,11 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __ANDROID__ || (MAUI && WINDOWS)
+#if __ANDROID__ || __IOS__ || (MAUI && WINDOWS)
 using System;
 using System.Collections.Generic;
 using Microsoft.Maui.Handlers;
-#if __ANDROID__
+#if __ANDROID__ || __IOS__
 using PlatformPanoramicSurface = Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PanoramicSurface;
 #else
 using PlatformPanoramicSurface = Esri.ArcGISRuntime.Toolkit.UI.Controls.PanoramicSurface;
@@ -26,9 +26,8 @@ using PlatformPanoramicSurface = Esri.ArcGISRuntime.Toolkit.UI.Controls.Panorami
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 
-// MAUI virtual view over the platform panorama surface (GLES TextureView on Android, the D3D11 SwapChainPanel surface
-// on Windows). Forwards to the platform view once the handler connects and stashes what was set before that, since
-// the platform view exists only while attached to a window.
+// MAUI view over the platform panorama surface. It forwards to the platform view once the handler connects, and stashes
+// anything set before then.
 internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 {
     private PlatformPanoramicSurface? _platform;
@@ -42,6 +41,8 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
     private bool _everHadTexture;
 #if __ANDROID__
     private Android.Graphics.Bitmap? _pendingBitmap;
+#elif __IOS__
+    private Metal.IMTLTexture? _pendingTexture;
 #else
     private (byte[] Bgra, uint Width, uint Height)? _pendingFrame;
 #endif
@@ -89,7 +90,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         }
     }
 
-    // In the platform view's own units (physical pixels on Android, DIPs on Windows), the same units as tap coordinates.
+    // In the platform view's units, like tap coordinates: pixels on Android and DIPs elsewhere.
     public double ActualWidth => _platform?.ActualWidth ?? 0;
 
     public double ActualHeight => _platform?.ActualHeight ?? 0;
@@ -107,6 +108,21 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         {
             _pendingBitmap?.Recycle();
             _pendingBitmap = bitmap;
+        }
+    }
+#elif __IOS__
+    public void SetTexture(Metal.IMTLTexture texture)
+    {
+        _everHadTexture = true;
+        if (_platform is not null)
+        {
+            _pendingTexture = null;
+            _platform.SetTexture(texture);
+        }
+        else
+        {
+            _pendingTexture?.Dispose();
+            _pendingTexture = texture;
         }
     }
 #else
@@ -131,6 +147,9 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 #if __ANDROID__
         _pendingBitmap?.Recycle();
         _pendingBitmap = null;
+#elif __IOS__
+        _pendingTexture?.Dispose();
+        _pendingTexture = null;
 #else
         _pendingFrame = null;
 #endif
@@ -180,6 +199,14 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
             Android.Graphics.Bitmap bitmap = _pendingBitmap;
             _pendingBitmap = null;
             platform.SetTexture(bitmap);
+            applied = true;
+        }
+#elif __IOS__
+        if (_pendingTexture is not null)
+        {
+            Metal.IMTLTexture texture = _pendingTexture;
+            _pendingTexture = null;
+            platform.SetTexture(texture);
             applied = true;
         }
 #else
@@ -241,14 +268,14 @@ internal sealed class PanoramicSurfaceViewHandler : ViewHandler<PanoramicSurface
     public static readonly IPropertyMapper<PanoramicSurfaceView, PanoramicSurfaceViewHandler> Mapper =
         new PropertyMapper<PanoramicSurfaceView, PanoramicSurfaceViewHandler>(ViewMapper)
         {
-#if !__ANDROID__
+#if WINDOWS
             // SwapChainPanel rejects Background (even ClearValue throws) and the base ViewMapper sets it on connect, which
             // would unwind out of the host's set_Content and leave the display unhosted. The surface paints its own backdrop.
             [nameof(Microsoft.Maui.IView.Background)] = MapBackgroundNoOp,
 #endif
         };
 
-#if !__ANDROID__
+#if WINDOWS
     private static void MapBackgroundNoOp(PanoramicSurfaceViewHandler handler, PanoramicSurfaceView view)
     {
     }
@@ -276,8 +303,12 @@ internal sealed class PanoramicSurfaceViewHandler : ViewHandler<PanoramicSurface
         VirtualView.DetachPlatformSurface();
 #if __ANDROID__
         platformView.Dispose(); // stops the render thread and releases EGL
-#endif
+#elif __IOS__
+        // Releases the textures, not the view, which UIKit can still call during teardown.
+        platformView.ReleaseResources();
+#else
         // On Windows the surface releases its device resources from its own Unloaded handler.
+#endif
         base.DisconnectHandler(platformView);
     }
 }

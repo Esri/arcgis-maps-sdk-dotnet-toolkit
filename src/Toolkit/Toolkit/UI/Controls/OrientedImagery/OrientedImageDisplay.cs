@@ -47,9 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// </summary>
 /// <remarks>
 /// Set the <see cref="Footprint"/> to display the associated image.
-/// Supports planar images on all platforms, and panoramic/360 images on WPF, WinUI, and MAUI Windows and
-/// Android (not yet on MAUI iOS/Mac Catalyst, where a panoramic image surfaces an unsupported-type
-/// <see cref="Error"/>). Does not support video.
+/// Shows planar and panoramic still images. Video isn't supported. A video image sets <see cref="Error"/>.
 /// </remarks>
 public partial class OrientedImageDisplay
 {
@@ -57,7 +55,7 @@ public partial class OrientedImageDisplay
 
     private DisplayHostElement? _displayHost;
     private OrientedImageRasterDisplay? _rasterDisplay;
-#if WPF || WINDOWS_XAML || __ANDROID__ || (MAUI && WINDOWS)
+#if WPF || WINDOWS_XAML || __ANDROID__ || __IOS__ || (MAUI && WINDOWS)
     private OrientedImagePanoramicDisplay? _panoramicDisplay;
 #endif
     private OrientedImageInnerDisplay? _activeDisplay;
@@ -381,11 +379,10 @@ public partial class OrientedImageDisplay
 
         if (!IsPanoramic(image.Type, image.Attributes))
             return _rasterDisplay ??= new OrientedImageRasterDisplay();
-#if WPF || WINDOWS_XAML || __ANDROID__ || (MAUI && WINDOWS)
+#if WPF || WINDOWS_XAML || __ANDROID__ || __IOS__ || (MAUI && WINDOWS)
         return _panoramicDisplay ??= new OrientedImagePanoramicDisplay();
 #else
-        // TODO: Implement panoramic on iOS/macCatalyst.
-        return null;
+        return null; // no panoramic surface on the neutral MAUI target
 #endif
     }
 
