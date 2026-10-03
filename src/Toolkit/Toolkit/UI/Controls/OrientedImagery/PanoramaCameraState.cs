@@ -169,6 +169,26 @@ internal readonly struct PanoramaCameraState
         return true;
     }
 
+    // A marker's screen-aligned quad in clip space, where x points right and y up. It is the swatch's size in pixels,
+    // centered on the projection of (u,v) moved by the offset in pixels with y down. False when the marker is behind
+    // the camera.
+    public bool TryGetMarkerQuad(float u, float v, float width, float height, float offsetX, float offsetY, double viewWidth, double viewHeight, out MarkerQuad quad)
+    {
+        quad = default;
+        if (!TryNormalizedUvToScreen(u, v, viewWidth, viewHeight, out double x, out double y))
+            return false;
+
+        float centerX = (float)(((x + offsetX) / viewWidth * 2.0) - 1.0);
+        float centerY = (float)(1.0 - ((y + offsetY) / viewHeight * 2.0));
+        float halfWidth = (float)(width / viewWidth);
+        float halfHeight = (float)(height / viewHeight);
+        quad = new MarkerQuad(centerX - halfWidth, centerY + halfHeight, centerX + halfWidth, centerY - halfHeight);
+        return true;
+    }
+
+    // The clip-space edges of a marker quad.
+    public readonly record struct MarkerQuad(float Left, float Top, float Right, float Bottom);
+
     // Arguments for OrientedImageFootprint.UpdateFootprintAsync(yaw, pitch, hFov, vFov), all degrees: yaw clockwise
     // from the image's center column in [0, 360), pitch from the nadir (0) through the horizon (90) to the zenith (180).
     public readonly record struct FootprintView(double Yaw, double Pitch, double HorizontalFieldOfView, double VerticalFieldOfView);
