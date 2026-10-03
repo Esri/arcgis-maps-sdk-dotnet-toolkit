@@ -126,8 +126,11 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
                 return layerError;
 
             // GetLayerViewState throws if the layer isn't in the current map (can happen during a map swap).
+            // A Warning, such as missing Projection Engine data, still draws the image, so only Error counts.
             if (_mapView.Map?.OperationalLayers.Contains(layer) == true &&
-                _mapView.GetLayerViewState(layer)?.Error is Exception viewError)
+                _mapView.GetLayerViewState(layer) is LayerViewState viewState &&
+                viewState.Status.HasFlag(LayerViewStatus.Error) &&
+                viewState.Error is Exception viewError)
                 return viewError;
         }
 
