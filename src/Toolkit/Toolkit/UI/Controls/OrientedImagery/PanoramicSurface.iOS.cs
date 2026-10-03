@@ -91,6 +91,7 @@ internal sealed class PanoramicSurface : MTKView
     private double _keyboardTimestamp;
 
     private NSObject? _foregroundObserver;
+    private readonly Action<IMTLCommandBuffer> _onFrameCompleted;
 
     public PanoramicSurface()
         : base(CGRect.Empty, MTLDevice.SystemDefault)
@@ -105,6 +106,8 @@ internal sealed class PanoramicSurface : MTKView
 
         if (Device is null)
             _pipelineError = new NotSupportedException("Metal is not available on this device.");
+
+        _onFrameCompleted = Weakly<IMTLCommandBuffer>(static (surface, buffer) => surface.OnFrameCompleted(buffer));
 
         AddGestureRecognizer(new UITapGestureRecognizer(Weakly<UITapGestureRecognizer>(static (surface, recognizer) => surface.OnTap(recognizer))));
         AddGestureRecognizer(new UIPanGestureRecognizer(Weakly<UIPanGestureRecognizer>(static (surface, recognizer) => surface.OnPan(recognizer)))
@@ -257,12 +260,12 @@ internal sealed class PanoramicSurface : MTKView
         base.Dispose(disposing);
     }
 
-    // Creates a shared-storage BGRA8 texture with a CPU copy, so it runs on any thread without the GPU.
+    // Creates a BGRA8 texture with a CPU copy, so it runs on any thread without a GPU command. Mac GPUs without unified
+    // memory have no shared textures, so the storage mode is the default.
     internal static IMTLTexture CreateTexture(IMTLDevice device, IntPtr bgra, int width, int height, int bytesPerRow)
     {
         MTLTextureDescriptor descriptor = MTLTextureDescriptor.CreateTexture2DDescriptor(MTLPixelFormat.BGRA8Unorm, (nuint)width, (nuint)height, false);
         descriptor.Usage = MTLTextureUsage.ShaderRead;
-        descriptor.StorageMode = MTLStorageMode.Shared;
         IMTLTexture texture = device.CreateTexture(descriptor) ?? throw new InvalidOperationException($"Unable to create a {width}x{height} texture.");
         texture.ReplaceRegion(MTLRegion.Create2D(0, 0, (nuint)width, (nuint)height), 0, bgra, (nuint)bytesPerRow);
         return texture;
@@ -320,23 +323,35 @@ internal sealed class PanoramicSurface : MTKView
             return;
         }
 
-        // Without a pipeline, a size, or a drawable, the next request draws.
-        if (_pipeline is not Pipeline pipeline || Bounds.Width <= 0 || Bounds.Height <= 0 ||
-            CurrentRenderPassDescriptor is not MTLRenderPassDescriptor pass || CurrentDrawable is not ICAMetalDrawable drawable)
+        // Without a pipeline or a size, the next request draws.
+        if (_pipeline is not Pipeline pipeline || Bounds.Width <= 0 || Bounds.Height <= 0)
+            return;
+
+        // Released right after the commit, so the drawable goes back to the layer's pool without waiting for the GC.
+        using MTLRenderPassDescriptor? pass = CurrentRenderPassDescriptor;
+        using ICAMetalDrawable? drawable = CurrentDrawable;
+        if (pass is null || drawable is null)
             return;
 
         try
         {
-            IMTLCommandBuffer buffer = pipeline.Queue.CommandBuffer() ?? throw new InvalidOperationException("Unable to create a Metal command buffer.");
-            IMTLRenderCommandEncoder encoder = buffer.CreateRenderCommandEncoder(pass);
+            using IMTLCommandBuffer buffer = pipeline.Queue.CommandBuffer() ?? throw new InvalidOperationException("Unable to create a Metal command buffer.");
+            using (IMTLRenderCommandEncoder encoder = buffer.CreateRenderCommandEncoder(pass))
+            {
+                try
+                {
+                    // Without a panorama, the pass only clears.
+                    if (_texture is IMTLTexture texture)
+                        DrawScene(encoder, pipeline, texture, DrawableSize);
+                }
+                finally
+                {
+                    encoder.EndEncoding();
+                }
+            }
 
-            // Without a panorama, the pass only clears to the backdrop color.
-            if (_texture is IMTLTexture texture)
-                DrawScene(encoder, pipeline, texture, DrawableSize);
-
-            encoder.EndEncoding();
             buffer.PresentDrawable(drawable);
-            buffer.AddCompletedHandler(Weakly<IMTLCommandBuffer>(static (surface, completed) => surface.OnFrameCompleted(completed)));
+            buffer.AddCompletedHandler(_onFrameCompleted);
             buffer.Commit();
         }
         catch (Exception ex)
@@ -466,7 +481,10 @@ internal sealed class PanoramicSurface : MTKView
         nint touches = recognizer.NumberOfTouches;
         if (recognizer.State == UIGestureRecognizerState.Began)
         {
-            BecomeFirstResponder();
+            // A drag takes keyboard focus like a tap. A trackpad scroll has no touches and doesn't.
+            if (touches > 0)
+                BecomeFirstResponder();
+
             _lastPanTranslation = CGPoint.Empty;
             _lastPanTouches = touches;
         }
@@ -527,26 +545,26 @@ internal sealed class PanoramicSurface : MTKView
     // aren't passed on, since UIKit would cancel them.
     public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)
     {
-        if (!HandlePresses(presses, began: true))
-            base.PressesBegan(presses, evt);
+        if (Unhandled(presses, began: true) is NSSet<UIPress> others)
+            base.PressesBegan(others, evt);
     }
 
     public override void PressesChanged(NSSet<UIPress> presses, UIPressesEvent evt)
     {
-        if (!HandlePresses(presses, began: false, ended: false))
-            base.PressesChanged(presses, evt);
+        if (Unhandled(presses, began: false, ended: false) is NSSet<UIPress> others)
+            base.PressesChanged(others, evt);
     }
 
     public override void PressesEnded(NSSet<UIPress> presses, UIPressesEvent evt)
     {
-        if (!HandlePresses(presses, began: false))
-            base.PressesEnded(presses, evt);
+        if (Unhandled(presses, began: false) is NSSet<UIPress> others)
+            base.PressesEnded(others, evt);
     }
 
     public override void PressesCancelled(NSSet<UIPress> presses, UIPressesEvent evt)
     {
-        if (!HandlePresses(presses, began: false))
-            base.PressesCancelled(presses, evt);
+        if (Unhandled(presses, began: false) is NSSet<UIPress> others)
+            base.PressesCancelled(others, evt);
     }
 
     // Key releases after focus leaves never arrive here.
@@ -556,32 +574,32 @@ internal sealed class PanoramicSurface : MTKView
         return base.ResignFirstResponder();
     }
 
-    // Holds or releases navigation keys, and returns whether any press was one.
-    private bool HandlePresses(NSSet<UIPress> presses, bool began, bool ended = true)
+    // Holds or releases navigation keys and returns the other presses for the responder chain, or null if none.
+    private NSSet<UIPress>? Unhandled(NSSet<UIPress> presses, bool began, bool ended = true)
     {
-        bool handled = false;
+        var others = new List<UIPress>();
         foreach (UIPress press in presses)
         {
-            if (press.Key is not UIKey key)
-                continue;
-
-            if (began)
+            bool handled = false;
+            if (press.Key is UIKey key)
             {
-                NavigationKeys navigationKey = GetNavigationKey(key);
-                if (navigationKey == NavigationKeys.None)
-                    continue;
+                if (began && GetNavigationKey(key) is NavigationKeys navigationKey and not NavigationKeys.None)
+                {
+                    _heldKeys[key.KeyCode] = navigationKey;
+                    StartKeyboardNavigation();
+                    handled = true;
+                }
+                else if (!began)
+                {
+                    handled = ended ? _heldKeys.Remove(key.KeyCode) : _heldKeys.ContainsKey(key.KeyCode);
+                }
+            }
 
-                _heldKeys[key.KeyCode] = navigationKey;
-                StartKeyboardNavigation();
-                handled = true;
-            }
-            else
-            {
-                handled |= ended ? _heldKeys.Remove(key.KeyCode) : _heldKeys.ContainsKey(key.KeyCode);
-            }
+            if (!handled)
+                others.Add(press);
         }
 
-        return handled;
+        return others.Count > 0 ? new NSSet<UIPress>(others.ToArray()) : null;
     }
 
     // As in the SDK MapView, arrows count only without Shift, Control, Option, or Command, and "+" and "-" zoom with
@@ -649,6 +667,8 @@ internal sealed class PanoramicSurface : MTKView
         _keyboardTimestamp = link.Timestamp;
     }
 
+    #endregion
+
     // Recognizers, observers, and command buffers keep their callbacks alive. A callback holding the view would keep a
     // removed view and its textures alive, so callbacks reach it weakly.
     private Action<T> Weakly<T>(Action<PanoramicSurface, T> action)
@@ -666,8 +686,6 @@ internal sealed class PanoramicSurface : MTKView
         Action<object?> weak = Weakly<object?>((surface, _) => action(surface));
         return () => weak(null);
     }
-
-    #endregion
 
     // Same shape as the other surfaces' MarkerSwatch, so the display code is shared. The swatch is premultiplied BGRA8.
     // The offset runs from the anchor to the center, in pixels with y down.
