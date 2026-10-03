@@ -396,20 +396,14 @@ internal sealed class PanoramicSurface : MTKView
         float* quad = stackalloc float[16];
         foreach (GpuMarker marker in _markers)
         {
-            if (!camera.TryNormalizedUvToScreen(marker.U, marker.V, size.Width, size.Height, out double x, out double y))
+            if (!camera.TryGetMarkerQuad(marker.U, marker.V, marker.Width, marker.Height, marker.OffsetX, marker.OffsetY, size.Width, size.Height, out var edges))
                 continue;
 
-            // The offset is in pixels with y down. Clip space spans 2 units with y up.
-            float centerX = (float)(((x + marker.OffsetX) / size.Width * 2.0) - 1.0);
-            float centerY = (float)(1.0 - ((y + marker.OffsetY) / size.Height * 2.0));
-            float halfWidth = (float)(marker.Width / size.Width);
-            float halfHeight = (float)(marker.Height / size.Height);
-
             // A triangle strip: top-left, bottom-left, top-right, and bottom-right, each as x, y, u, v.
-            SetQuadVertex(quad, 0, centerX - halfWidth, centerY + halfHeight, 0f, 0f);
-            SetQuadVertex(quad, 1, centerX - halfWidth, centerY - halfHeight, 0f, 1f);
-            SetQuadVertex(quad, 2, centerX + halfWidth, centerY + halfHeight, 1f, 0f);
-            SetQuadVertex(quad, 3, centerX + halfWidth, centerY - halfHeight, 1f, 1f);
+            SetQuadVertex(quad, 0, edges.Left, edges.Top, 0f, 0f);
+            SetQuadVertex(quad, 1, edges.Left, edges.Bottom, 0f, 1f);
+            SetQuadVertex(quad, 2, edges.Right, edges.Top, 1f, 0f);
+            SetQuadVertex(quad, 3, edges.Right, edges.Bottom, 1f, 1f);
             encoder.SetVertexBytes((IntPtr)quad, 16 * sizeof(float), 0);
             encoder.SetFragmentTexture(marker.Texture, 0);
             encoder.DrawPrimitives(MTLPrimitiveType.TriangleStrip, 0, 4);

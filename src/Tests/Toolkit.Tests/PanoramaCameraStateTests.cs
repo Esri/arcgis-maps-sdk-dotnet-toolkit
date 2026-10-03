@@ -69,6 +69,30 @@ public sealed class PanoramaCameraStateTests
     }
 
     [TestMethod]
+    public void MarkerQuadIsSizedInPixelsAndMovedByTheOffset()
+    {
+        // The identity camera centers u = 0.75, v = 0.5. In an 800 by 600 view, a 40 by 20 pixel swatch spans 0.1 by 1/15
+        // of clip space, and an offset of (40, 30) pixels with y down moves it by (0.1, -0.1).
+        var camera = new PanoramaCameraState(0f, 0f, MathF.PI / 2f);
+
+        Assert.IsTrue(camera.TryGetMarkerQuad(0.75f, 0.5f, 40, 20, 0, 0, ViewWidth, ViewHeight, out var quad));
+        AssertQuad(quad, -0.05f, 1f / 30, 0.05f, -1f / 30);
+
+        Assert.IsTrue(camera.TryGetMarkerQuad(0.75f, 0.5f, 40, 20, 40, 30, ViewWidth, ViewHeight, out quad));
+        AssertQuad(quad, 0.05f, -0.1f + (1f / 30), 0.15f, -0.1f - (1f / 30));
+
+        Assert.IsFalse(camera.TryGetMarkerQuad(0.25f, 0.5f, 40, 20, 0, 0, ViewWidth, ViewHeight, out _), "behind the camera");
+
+        static void AssertQuad(PanoramaCameraState.MarkerQuad quad, float left, float top, float right, float bottom)
+        {
+            Assert.AreEqual(left, quad.Left, 1e-4f);
+            Assert.AreEqual(top, quad.Top, 1e-4f);
+            Assert.AreEqual(right, quad.Right, 1e-4f);
+            Assert.AreEqual(bottom, quad.Bottom, 1e-4f);
+        }
+    }
+
+    [TestMethod]
     public void UvToScreenBehindCameraReturnsFalse()
     {
         var camera = new PanoramaCameraState(yaw: 0f, pitch: 0f, fieldOfView: Fov90);

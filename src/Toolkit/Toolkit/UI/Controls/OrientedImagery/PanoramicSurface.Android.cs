@@ -1031,21 +1031,14 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
         foreach (GlMarker marker in _glMarkers)
         {
-            if (!camera.TryNormalizedUvToScreen(marker.U, marker.V, width, height, out double sx, out double sy))
-                continue; // behind the camera
-
-            sx += marker.OffsetX;
-            sy += marker.OffsetY;
-            float cx = (float)((sx / width * 2.0) - 1.0);
-            float cy = (float)(1.0 - (sy / height * 2.0));
-            float halfW = marker.Width / (float)width;
-            float halfH = marker.Height / (float)height;
+            if (!camera.TryGetMarkerQuad(marker.U, marker.V, marker.Width, marker.Height, marker.OffsetX, marker.OffsetY, width, height, out var quad))
+                continue;
 
             // Two triangles as a strip: top-left, bottom-left, top-right, bottom-right.
-            SetQuadVertex(0, cx - halfW, cy + halfH, 0f, 0f);
-            SetQuadVertex(1, cx - halfW, cy - halfH, 0f, 1f);
-            SetQuadVertex(2, cx + halfW, cy + halfH, 1f, 0f);
-            SetQuadVertex(3, cx + halfW, cy - halfH, 1f, 1f);
+            SetQuadVertex(0, quad.Left, quad.Top, 0f, 0f);
+            SetQuadVertex(1, quad.Left, quad.Bottom, 0f, 1f);
+            SetQuadVertex(2, quad.Right, quad.Top, 1f, 0f);
+            SetQuadVertex(3, quad.Right, quad.Bottom, 1f, 1f);
             _markerQuadBuffer.Position(0);
             _markerQuadBuffer.Put(_markerQuad);
             _markerQuadBuffer.Position(0);

@@ -526,7 +526,8 @@ internal sealed unsafe partial class PanoramicSurface
             return;
 
         float aspectRatio = MathF.Max(1f, width) / MathF.Max(1f, height);
-        Matrix4x4 worldViewProjection = new PanoramaCameraState(Yaw, Pitch, FieldOfView).GetWorldViewProjection(aspectRatio);
+        var camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView);
+        Matrix4x4 worldViewProjection = camera.GetWorldViewProjection(aspectRatio);
         Matrix4x4 transposed = Matrix4x4.Transpose(worldViewProjection);
         _context->UpdateSubresource((ID3D11Resource*)_constantBuffer, 0, (D3D11_BOX*)null, &transposed, 0, 0);
 
@@ -554,7 +555,7 @@ internal sealed unsafe partial class PanoramicSurface
         _context->PSSetSamplers(0, 1, &sampler);
         _context->DrawIndexed(_indexCount, 0, 0);
 
-        DrawMarkers(width, height, in worldViewProjection);
+        DrawMarkers(width, height, camera);
     }
 
     private void CreateDeviceResources()
@@ -806,10 +807,8 @@ internal sealed unsafe partial class PanoramicSurface
         }
     }
 
-    // Projects each marker to NDC with the frame's camera, fills the dynamic vertex buffer, and draws the visible ones
-    // as alpha-blended textured quads sized to the swatch's pixel dimensions and shifted by the symbol offset. Markers
-    // behind the camera are skipped.
-    private void DrawMarkers(uint width, uint height, in Matrix4x4 worldViewProjection)
+    // Fills the dynamic vertex buffer with the quads of the markers in front of the camera and draws them alpha-blended.
+    private void DrawMarkers(uint width, uint height, PanoramaCameraState camera)
     {
         if (_markerCount == 0 || _markerVertexBuffer is null || _markerVertexShader is null || _markerPixelShader is null ||
             _markerInputLayout is null || _markerIndexBuffer is null || _markerBlendState is null || _markerSampler is null)
@@ -821,23 +820,14 @@ internal sealed unsafe partial class PanoramicSurface
         int visible = 0;
         for (int i = 0; i < _markerCount; i++)
         {
-            float theta = _markerU[i] * 2f * MathF.PI;
-            float phi = _markerV[i] * MathF.PI;
-            var direction = new Vector4(MathF.Sin(phi) * MathF.Cos(theta), MathF.Cos(phi), MathF.Sin(phi) * MathF.Sin(theta), 1f);
-            Vector4 clip = Vector4.Transform(direction, worldViewProjection);
-            if (clip.W <= 0f)
+            if (!camera.TryGetMarkerQuad(_markerU[i], _markerV[i], _markerW[i], _markerH[i], _markerOffsetX[i], _markerOffsetY[i], width, height, out var quad))
                 continue;
 
-            // The offset is in device pixels with y down; NDC spans 2 units per viewport and points y up.
-            float ndcX = (clip.X / clip.W) + (2f * _markerOffsetX[i] / width);
-            float ndcY = (clip.Y / clip.W) - (2f * _markerOffsetY[i] / height);
-            float halfX = _markerW[i] / width;
-            float halfY = _markerH[i] / height;
             int b = visible * 4;
-            vertices[b + 0] = new MarkerVertex(new Vector2(ndcX - halfX, ndcY + halfY), new Vector2(0f, 0f));
-            vertices[b + 1] = new MarkerVertex(new Vector2(ndcX + halfX, ndcY + halfY), new Vector2(1f, 0f));
-            vertices[b + 2] = new MarkerVertex(new Vector2(ndcX - halfX, ndcY - halfY), new Vector2(0f, 1f));
-            vertices[b + 3] = new MarkerVertex(new Vector2(ndcX + halfX, ndcY - halfY), new Vector2(1f, 1f));
+            vertices[b + 0] = new MarkerVertex(new Vector2(quad.Left, quad.Top), new Vector2(0f, 0f));
+            vertices[b + 1] = new MarkerVertex(new Vector2(quad.Right, quad.Top), new Vector2(1f, 0f));
+            vertices[b + 2] = new MarkerVertex(new Vector2(quad.Left, quad.Bottom), new Vector2(0f, 1f));
+            vertices[b + 3] = new MarkerVertex(new Vector2(quad.Right, quad.Bottom), new Vector2(1f, 1f));
             _visibleBase[visible] = b;
             _visibleViews[visible] = _markerViews[i];
             visible++;
