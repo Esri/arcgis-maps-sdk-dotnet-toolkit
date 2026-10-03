@@ -36,8 +36,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 // Android surface for the panoramic display: a TextureView with its own EGL context on a dedicated render thread,
 // the host the SDK GeoView uses. The context is created once and survives backgrounding; only the window surface
 // follows the SurfaceTexture. Rendering is on demand. Mesh and camera come from PanoramaCameraState.
-internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextureListener, Choreographer.IFrameCallback
+internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextureListener, Choreographer.IFrameCallback, ViewTreeObserver.IOnTouchModeChangeListener
 {
+    private const float FocusRingDips = 3f;
+
     // GL_CULL_FACE as a glEnable/glDisable capability. Mono.Android has no constant for it (GlCullFace is the method),
     // and GlCullFaceMode (0x0B45) is the glGet enum: passing that to glDisable is GL_INVALID_ENUM.
     private const int GlCullFaceCapability = 0x0B44;
@@ -90,6 +92,12 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     private float _clearA = 1f;
     private volatile bool _surfaceReady;
     private volatile bool _hasTexture;
+
+    // Drawn while the view has keyboard focus, in the theme's accent color.
+    private volatile bool _showFocusRing;
+    private readonly float _focusRingR;
+    private readonly float _focusRingG;
+    private readonly float _focusRingB;
     private int _viewportWidth;
     private int _viewportHeight;
 
@@ -120,6 +128,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         Focusable = true;
         FocusableInTouchMode = true;
         _density = context.Resources?.DisplayMetrics?.Density ?? 0f;
+        (_focusRingR, _focusRingG, _focusRingB) = ResolveAccentColor(context);
     }
 
     // Same event surface as the Windows PanoramicSurface, so the display's contract layer stays shared.
@@ -186,7 +195,18 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     {
         base.OnAttachedToWindow();
         CheckDensity();
+        ViewTreeObserver?.AddOnTouchModeChangeListener(this);
+        UpdateFocusRing();
     }
+
+    protected override void OnDetachedFromWindow()
+    {
+        ViewTreeObserver?.RemoveOnTouchModeChangeListener(this);
+        base.OnDetachedFromWindow();
+    }
+
+    // The view keeps focus in touch mode, but the ring is only for keyboard focus.
+    void ViewTreeObserver.IOnTouchModeChangeListener.OnTouchModeChanged(bool isInTouchMode) => UpdateFocusRing();
 
     private void CheckDensity()
     {
@@ -318,6 +338,34 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         // Key-ups after focus leaves never arrive here.
         if (!gainFocus)
             _heldKeys.Clear();
+
+        UpdateFocusRing();
+    }
+
+    // A TextureView gets no default focus highlight, so the frame draws one while the view has keyboard focus.
+    private void UpdateFocusRing()
+    {
+        bool show = IsFocused && !IsInTouchMode;
+        if (show == _showFocusRing)
+            return;
+
+        _showFocusRing = show;
+        RequestRender();
+    }
+
+    private static (float R, float G, float B) ResolveAccentColor(Context context)
+    {
+        int argb = unchecked((int)0xFF1A73E8); // Material blue, for a theme without an accent
+        using var value = new Android.Util.TypedValue();
+        if (context.Theme?.ResolveAttribute(Android.Resource.Attribute.ColorAccent, value, true) == true)
+        {
+            if (value.Type >= Android.Util.DataType.FirstColorInt && value.Type <= Android.Util.DataType.LastColorInt)
+                argb = value.Data;
+            else if (value.ResourceId != 0 && context.Resources?.GetColorStateList(value.ResourceId, context.Theme) is { } colors)
+                argb = colors.DefaultColor;
+        }
+
+        return (((argb >> 16) & 255) / 255f, ((argb >> 8) & 255) / 255f, (argb & 255) / 255f);
     }
 
     // As in the SDK MapView, arrows count only without modifiers, and the keys that type "+" and "-" zoom with any.
@@ -913,8 +961,30 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             GLES20.GlDisableVertexAttribArray(_aTexCoord);
         }
 
+        if (_showFocusRing)
+            DrawFocusRing(width, height);
+
         if (!EGL14.EglSwapBuffers(_eglDisplay, _eglSurface))
             HandleEglFailure("eglSwapBuffers");
+    }
+
+    // A band along each edge, painted with scissored clears.
+    private void DrawFocusRing(int width, int height)
+    {
+        int band = Math.Min((int)MathF.Round(FocusRingDips * _density), Math.Min(width, height) / 2);
+        GLES20.GlEnable(GLES20.GlScissorTest);
+        GLES20.GlClearColor(_focusRingR, _focusRingG, _focusRingB, 1f);
+        ClearRect(0, 0, width, band);
+        ClearRect(0, height - band, width, band);
+        ClearRect(0, 0, band, height);
+        ClearRect(width - band, 0, band, height);
+        GLES20.GlDisable(GLES20.GlScissorTest);
+
+        static void ClearRect(int x, int y, int w, int h)
+        {
+            GLES20.GlScissor(x, y, w, h);
+            GLES20.GlClear(GLES20.GlColorBufferBit);
+        }
     }
 
     // Screen-aligned alpha-blended quads sized to the swatch and shifted by the symbol offset, projected with the shared
