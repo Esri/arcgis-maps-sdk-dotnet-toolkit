@@ -450,7 +450,17 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     {
         _viewportWidth = width;
         _viewportHeight = height;
-        RequestRender(); // the EGL window surface tracks the SurfaceTexture buffer; only the viewport changes
+
+        // Some EGL drivers, such as the emulator's, take the next buffer while swapping. The frame after a resize would
+        // then draw into an old-size buffer and look stretched. A new window surface gets buffers at the new size.
+        PostToRenderThread(() =>
+        {
+            if (!_surfaceReady)
+                return;
+
+            CreateWindowSurface(surface);
+            DrawCore();
+        });
     }
 
     bool TextureView.ISurfaceTextureListener.OnSurfaceTextureDestroyed(SurfaceTexture surface)
