@@ -116,7 +116,9 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         SurfaceTextureListener = this;
         _gestureDetector = new GestureDetector(context, new PanGestureListener(this));
         _scaleDetector = new ScaleGestureDetector(context, new PinchListener(this));
-        Focusable = true; // like the SDK MapView, so a hardware keyboard reaches it once focus does
+        // Focusable in touch mode, so a touch can give it keyboard focus as on the other heads.
+        Focusable = true;
+        FocusableInTouchMode = true;
         _density = context.Resources?.DisplayMetrics?.Density ?? 0f;
     }
 
@@ -261,6 +263,10 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     {
         if (e is null)
             return false;
+
+        // Keyboard input goes to the panorama the user last touched.
+        if (e.ActionMasked == MotionEventActions.Down && !IsFocused)
+            RequestFocus();
 
         _scaleDetector.OnTouchEvent(e);
         _gestureDetector.OnTouchEvent(e);
