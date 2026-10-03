@@ -51,7 +51,11 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     private List<OrientedImageMarker> _markers = []; // Snapshot read from the source
     private WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private readonly Dictionary<OrientedImageMarker, MarkerListener> _markerListeners = [];
-    private readonly Dictionary<OrientedImageMarker, MarkerListener> _symbolListeners = [];
+    private readonly Dictionary<OrientedImageMarker, INotifyPropertyChanged> _markerSymbols = [];
+
+    // One listener per symbol, however many markers share it.
+    private readonly Dictionary<INotifyPropertyChanged, (MarkerListener Listener, HashSet<OrientedImageMarker> Markers)> _symbolListeners =
+        new(ReferenceEqualityComparer.Instance);
     private CancellationTokenSource? _sessionCts;
     private CancellationTokenSource? _updateCts;
     private bool _autoUpdate;
@@ -184,23 +188,51 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         ListenToSymbol(marker);
     }
 
-    // The SDK symbol is what is drawn, and it notifies its own changes. The handler captures the marker, not the
-    // display, so the symbol cannot keep a discarded display alive.
+    // The SDK symbol is what is drawn, and it notifies its own changes.
     private void ListenToSymbol(OrientedImageMarker marker)
     {
-        if (_symbolListeners.Remove(marker, out var previous))
-            previous.Detach();
+        StopListeningToSymbol(marker);
+        if (marker.Symbol is not INotifyPropertyChanged symbol)
+            return;
 
-        if (marker.Symbol is INotifyPropertyChanged symbol)
-            _symbolListeners[marker] = Listen(symbol, (instance, _, _) => instance.OnMarkerChanged(marker, nameof(OrientedImageMarker.Symbol)));
+        if (!_symbolListeners.TryGetValue(symbol, out var entry))
+        {
+            entry = (Listen(symbol, static (instance, sender, _) => instance.OnSymbolPropertyChanged(sender)), new HashSet<OrientedImageMarker>());
+            _symbolListeners[symbol] = entry;
+        }
+
+        entry.Markers.Add(marker);
+        _markerSymbols[marker] = symbol;
+    }
+
+    private void StopListeningToSymbol(OrientedImageMarker marker)
+    {
+        if (!_markerSymbols.Remove(marker, out INotifyPropertyChanged? symbol))
+            return;
+
+        (MarkerListener listener, HashSet<OrientedImageMarker> markers) = _symbolListeners[symbol];
+        markers.Remove(marker);
+        if (markers.Count == 0)
+        {
+            listener.Detach();
+            _symbolListeners.Remove(symbol);
+        }
     }
 
     private void StopListening(OrientedImageMarker marker)
     {
         if (_markerListeners.Remove(marker, out var listener))
             listener.Detach();
-        if (_symbolListeners.Remove(marker, out var symbolListener))
-            symbolListener.Detach();
+        StopListeningToSymbol(marker);
+    }
+
+    private void OnSymbolPropertyChanged(object? sender)
+    {
+        if (sender is INotifyPropertyChanged symbol && _symbolListeners.TryGetValue(symbol, out var entry))
+        {
+            foreach (OrientedImageMarker marker in entry.Markers.ToArray())
+                OnMarkerChanged(marker, nameof(OrientedImageMarker.Symbol));
+        }
     }
 
     private void OnMarkerPropertyChanged(object? sender, PropertyChangedEventArgs e)

@@ -121,6 +121,36 @@ public sealed class OrientedImageDisplayTests
     }
 
     [TestMethod]
+    public void BurstOfMarkerChangesTakesOnePass()
+    {
+        RunSta(() =>
+        {
+            // A change to a symbol that many markers share, or a loop over the markers, runs one pass.
+            var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
+            List<OrientedImageMarker> markers = Enumerable.Range(0, 50)
+                .Select(i => new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(i, 0)), symbol))
+                .ToList();
+            var display = new OrientedImagePanoramicDisplay();
+            display.SetMarkers(markers);
+            RunPendingDispatcherWork();
+            int passes = display.MarkerPasses;
+
+            symbol.Color = Color.Blue;
+            RunPendingDispatcherWork();
+            Assert.AreEqual(passes + 1, display.MarkerPasses, "a shared symbol change");
+
+            foreach (OrientedImageMarker marker in markers)
+                marker.IsVisible = false;
+            RunPendingDispatcherWork();
+            Assert.AreEqual(passes + 2, display.MarkerPasses, "a loop over the markers");
+        });
+    }
+
+    // Runs work posted to this thread's dispatcher, which has a higher priority than Background.
+    private static void RunPendingDispatcherWork() =>
+        System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() => { }));
+
+    [TestMethod]
     public void PanoramicMarkerOffsetTurnsWithSymbolAngle()
     {
         // The map rotates a marker clockwise around its anchor, offset included; screen y points down.
