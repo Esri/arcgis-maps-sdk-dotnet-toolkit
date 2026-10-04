@@ -274,7 +274,7 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
     private void OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
     {
         int delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
-        FieldOfView = Math.Clamp(FieldOfView + (delta > 0 ? -0.1f : 0.1f), MinFieldOfView, MaxFieldOfView);
+        FieldOfView = Math.Clamp(FieldOfView + (delta > 0 ? -WheelZoomStep : WheelZoomStep), MinFieldOfView, MaxFieldOfView);
         RequestRender();
     }
 

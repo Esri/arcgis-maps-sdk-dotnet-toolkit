@@ -481,7 +481,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
         base.OnMouseWheel(e);
-        FieldOfView = Math.Clamp(FieldOfView + (e.Delta > 0 ? -0.1f : 0.1f), MinFieldOfView, MaxFieldOfView);
+        FieldOfView = Math.Clamp(FieldOfView + (e.Delta > 0 ? -WheelZoomStep : WheelZoomStep), MinFieldOfView, MaxFieldOfView);
         RequestRender();
     }
 
