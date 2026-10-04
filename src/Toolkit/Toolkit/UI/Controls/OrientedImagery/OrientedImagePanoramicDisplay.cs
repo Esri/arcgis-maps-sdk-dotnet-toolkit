@@ -247,8 +247,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         int imageHeight = _imageHeight;
 
         // Snapshot the app-owned markers and the caches on the UI thread before going async. A swatch rasterized at
-        // another display scale is a miss.
-        double scale = GetScaleFactor();
+        // another scale is a miss.
+        double scale = _surface.PixelsPerDip;
         var pending = new List<PendingMarker>();
         if (image is not null && imageWidth > 0 && imageHeight > 0)
         {
@@ -368,29 +368,6 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         return buffer.ToArray();
     }
 
-#if MAUI
-    private static double GetScaleFactor()
-    {
-        // Swatches rasterize at the surface's pixel density, which on Windows approximates the monitor's scale.
-        double density = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Density;
-        return density > 0 ? density : 1.0;
-    }
-#else
-    private double GetScaleFactor()
-    {
-#if WINDOWS_XAML
-        // CompositionScale sizes the back buffer, so swatches rasterized at it match the viewport; fall back before composition.
-        float compositionScale = _surface.CompositionScaleX;
-        if (compositionScale > 0)
-            return compositionScale;
-
-        return XamlRoot?.RasterizationScale ?? 1.0;
-#else
-        return System.Windows.PresentationSource.FromVisual(this)?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
-#endif
-    }
-#endif
-
     protected override void OnAutoUpdateFootprintChanged(bool enabled)
     {
         if (enabled)
@@ -480,7 +457,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     // Surface units per DIP: Android taps and view sizes are physical pixels.
     private double SurfaceUnitsPerDip =>
 #if __ANDROID__
-        GetScaleFactor();
+        _surface.PixelsPerDip;
 #else
         1d;
 #endif
