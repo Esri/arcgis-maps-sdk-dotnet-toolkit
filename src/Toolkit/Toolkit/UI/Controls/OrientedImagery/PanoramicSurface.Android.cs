@@ -79,7 +79,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     private readonly float[] _mvp = new float[16];
     private readonly float[] _markerQuad = new float[4 * 3];
     private readonly float[] _markerQuadUv = new float[4 * 2];
-    private readonly List<GlMarker> _glMarkers = new();
+    private readonly List<(int TextureId, PanoramaMarker Marker)> _glMarkers = new();
 
     // Cross-thread state. Camera fields are written on the UI thread and read on the render thread; float
     // reads/writes are atomic and every change is followed by a queued draw (a full fence), so no locks needed.
@@ -105,7 +105,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     // CPU copy after upload - on a real context loss DeviceRecreated asks the display to re-decode).
     private readonly object _pendingLock = new();
     private Bitmap? _pendingBitmap;
-    private MarkerSwatch[]? _pendingMarkers;
+    private PanoramaMarker[]? _pendingMarkers;
 
     private readonly GestureDetector _gestureDetector;
     private readonly ScaleGestureDetector _scaleDetector;
@@ -248,9 +248,9 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         });
     }
 
-    public void SetMarkers(IReadOnlyList<MarkerSwatch> swatches)
+    public void SetMarkers(IReadOnlyList<PanoramaMarker> markers)
     {
-        MarkerSwatch[] copy = swatches.ToArray();
+        PanoramaMarker[] copy = markers.ToArray();
         lock (_pendingLock)
         {
             _pendingMarkers = copy;
@@ -865,33 +865,34 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         if (_eglContext is null || _eglSurface is null)
             return;
 
-        MarkerSwatch[]? swatches;
+        PanoramaMarker[]? markers;
         lock (_pendingLock)
         {
-            swatches = _pendingMarkers;
+            markers = _pendingMarkers;
             _pendingMarkers = null;
         }
 
-        if (swatches is null)
+        if (markers is null)
             return;
 
         DeleteMarkerTextures();
         DrainGlErrors(); // the per-swatch checks must only see their own upload's errors
-        foreach (MarkerSwatch swatch in swatches)
+        foreach (PanoramaMarker marker in markers)
         {
             // A marker that can't be uploaded is skipped. It never fails the panorama.
-            if (swatch.Width <= 0 || swatch.Height <= 0 || swatch.Bgra.Length < swatch.Width * swatch.Height * 4)
+            if (!marker.IsValid)
                 continue;
 
             // Swatches arrive as BGRA (RuntimeImage raw buffer); GLES2 has no BGRA format without an
             // extension, so swap to RGBA on the CPU - swatches are tiny.
-            byte[] rgba = new byte[swatch.Bgra.Length];
-            for (int i = 0; i + 3 < swatch.Bgra.Length; i += 4)
+            byte[] bgra = marker.Bgra;
+            byte[] rgba = new byte[bgra.Length];
+            for (int i = 0; i + 3 < bgra.Length; i += 4)
             {
-                rgba[i] = swatch.Bgra[i + 2];
-                rgba[i + 1] = swatch.Bgra[i + 1];
-                rgba[i + 2] = swatch.Bgra[i];
-                rgba[i + 3] = swatch.Bgra[i + 3];
+                rgba[i] = bgra[i + 2];
+                rgba[i + 1] = bgra[i + 1];
+                rgba[i + 2] = bgra[i];
+                rgba[i + 3] = bgra[i + 3];
             }
 
             int textureId = CreateTexture(GLES20.GlClampToEdge);
@@ -899,7 +900,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             {
                 buffer.Put(rgba);
                 buffer.Position(0);
-                GLES20.GlTexImage2D(GLES20.GlTexture2d, 0, GLES20.GlRgba, swatch.Width, swatch.Height, 0, GLES20.GlRgba, GLES20.GlUnsignedByte, buffer);
+                GLES20.GlTexImage2D(GLES20.GlTexture2d, 0, GLES20.GlRgba, marker.Width, marker.Height, 0, GLES20.GlRgba, GLES20.GlUnsignedByte, buffer);
             }
 
             bool uploaded = GLES20.GlGetError() == GLES20.GlNoError;
@@ -911,7 +912,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
                 continue;
             }
 
-            _glMarkers.Add(new GlMarker(textureId, swatch.U, swatch.V, swatch.Width, swatch.Height, swatch.OffsetX, swatch.OffsetY));
+            _glMarkers.Add((textureId, marker));
         }
 
         DrawCore();
@@ -930,8 +931,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     private void DeleteMarkerTextures()
     {
-        foreach (GlMarker marker in _glMarkers)
-            GLES20.GlDeleteTextures(1, new[] { marker.TextureId }, 0);
+        foreach ((int textureId, _) in _glMarkers)
+            GLES20.GlDeleteTextures(1, new[] { textureId }, 0);
 
         _glMarkers.Clear();
     }
@@ -1029,9 +1030,9 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         GLES20.GlEnable(GLES20.GlBlend);
         GLES20.GlBlendFunc(GLES20.GlOne, GLES20.GlOneMinusSrcAlpha); // source-over for premultiplied swatches
 
-        foreach (GlMarker marker in _glMarkers)
+        foreach ((int textureId, PanoramaMarker marker) in _glMarkers)
         {
-            if (!camera.TryGetMarkerQuad(marker.U, marker.V, marker.Width, marker.Height, marker.OffsetX, marker.OffsetY, width, height, out var quad))
+            if (!camera.TryGetMarkerQuad(marker, width, height, out var quad))
                 continue;
 
             // Two triangles as a strip: top-left, bottom-left, top-right, bottom-right.
@@ -1046,7 +1047,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             _markerQuadUvBuffer.Put(_markerQuadUv);
             _markerQuadUvBuffer.Position(0);
 
-            GLES20.GlBindTexture(GLES20.GlTexture2d, marker.TextureId);
+            GLES20.GlBindTexture(GLES20.GlTexture2d, textureId);
             GLES20.GlVertexAttribPointer(_aPosition, 3, GLES20.GlFloat, false, 0, _markerQuadBuffer);
             GLES20.GlVertexAttribPointer(_aTexCoord, 2, GLES20.GlFloat, false, 0, _markerQuadUvBuffer);
             GLES20.GlDrawArrays(GLES20.GlTriangleStrip, 0, 4);
@@ -1207,11 +1208,5 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     }
 
     #endregion
-
-    // Same nested name and shape as the Windows PanoramicSurface.MarkerSwatch so the display code is shared. The swatch
-    // is premultiplied BGRA8; the offset runs from the anchor to the swatch center, in device pixels with y down.
-    internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY);
-
-    private readonly record struct GlMarker(int TextureId, float U, float V, int Width, int Height, float OffsetX, float OffsetY);
 }
 #endif

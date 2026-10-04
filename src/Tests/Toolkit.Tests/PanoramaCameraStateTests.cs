@@ -75,13 +75,15 @@ public sealed class PanoramaCameraStateTests
         // of clip space, and an offset of (40, 30) pixels with y down moves it by (0.1, -0.1).
         var camera = new PanoramaCameraState(0f, 0f, MathF.PI / 2f);
 
-        Assert.IsTrue(camera.TryGetMarkerQuad(0.75f, 0.5f, 40, 20, 0, 0, ViewWidth, ViewHeight, out var quad));
+        Assert.IsTrue(camera.TryGetMarkerQuad(Marker(0.75f, 0, 0), ViewWidth, ViewHeight, out var quad));
         AssertQuad(quad, -0.05f, 1f / 30, 0.05f, -1f / 30);
 
-        Assert.IsTrue(camera.TryGetMarkerQuad(0.75f, 0.5f, 40, 20, 40, 30, ViewWidth, ViewHeight, out quad));
+        Assert.IsTrue(camera.TryGetMarkerQuad(Marker(0.75f, 40, 30), ViewWidth, ViewHeight, out quad));
         AssertQuad(quad, 0.05f, -0.1f + (1f / 30), 0.15f, -0.1f - (1f / 30));
 
-        Assert.IsFalse(camera.TryGetMarkerQuad(0.25f, 0.5f, 40, 20, 0, 0, ViewWidth, ViewHeight, out _), "behind the camera");
+        Assert.IsFalse(camera.TryGetMarkerQuad(Marker(0.25f, 0, 0), ViewWidth, ViewHeight, out _), "behind the camera");
+
+        static PanoramaMarker Marker(float u, float offsetX, float offsetY) => new(u, 0.5f, [], 40, 20, offsetX, offsetY);
 
         static void AssertQuad(PanoramaCameraState.MarkerQuad quad, float left, float top, float right, float bottom)
         {

@@ -290,17 +290,17 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             if (generation != _markerGeneration || token.IsCancellationRequested)
                 return;
 
-            var swatches = new List<PanoramicSurface.MarkerSwatch>(results.Count);
+            var drawn = new List<PanoramaMarker>(results.Count);
             _resolvedMarkers.Clear();
             foreach ((OrientedImageMarker marker, Uv uv, Swatch swatch) in results)
             {
                 _markerUvs[marker] = uv;
                 _markerSwatches[marker] = swatch;
                 _resolvedMarkers.Add(new ResolvedMarker(marker, uv.U, uv.V, swatch.OffsetX, swatch.OffsetY, swatch.Width / scale / 2, swatch.Height / scale / 2));
-                swatches.Add(new PanoramicSurface.MarkerSwatch(uv.U, uv.V, swatch.Bgra, swatch.Width, swatch.Height, (float)(swatch.OffsetX * scale), (float)(swatch.OffsetY * scale)));
+                drawn.Add(new PanoramaMarker(uv.U, uv.V, swatch.Bgra, swatch.Width, swatch.Height, (float)(swatch.OffsetX * scale), (float)(swatch.OffsetY * scale)));
             }
 
-            _surface.SetMarkers(swatches);
+            _surface.SetMarkers(drawn);
             _surface.RequestRender();
         });
     }
@@ -468,7 +468,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         Interlocked.Increment(ref _markerGeneration);
         _markerUvs.Clear();
         _resolvedMarkers.Clear();
-        _surface.SetMarkers(Array.Empty<PanoramicSurface.MarkerSwatch>());
+        _surface.SetMarkers(Array.Empty<PanoramaMarker>());
 
         _surface.RequestRender();
     }
