@@ -136,15 +136,12 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 return;
 
             // A newer SetFootprint cancels the session token, aborting a now-pointless re-decode.
-            PanoramaFrame? decoded = await DecodeAsync(uri, token);
+            PanoramaFrame frame = await DecodeAsync(uri, token);
             if (token.IsCancellationRequested)
             {
-                DiscardFrame(decoded);
+                DiscardFrame(frame);
                 return;
             }
-
-            if (decoded is not PanoramaFrame frame)
-                return;
 
             _imageWidth = frame.Width;
             _imageHeight = frame.Height;
@@ -404,16 +401,10 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     protected override async Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token)
     {
-        PanoramaFrame? decoded = await DecodeAsync(dataUri, token);
+        PanoramaFrame frame = await DecodeAsync(dataUri, token);
         if (token.IsCancellationRequested)
         {
-            DiscardFrame(decoded); // never applied; release promptly rather than via finalizers
-            return;
-        }
-
-        if (decoded is not PanoramaFrame frame)
-        {
-            ClearPresentation(); // decoded to nothing displayable
+            DiscardFrame(frame); // never applied; release promptly rather than via finalizers
             return;
         }
 
@@ -499,29 +490,40 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         return 0f;
     }
 
-#if WINDOWS_XAML || (MAUI && WINDOWS)
-    internal static async Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+#if !WPF
+    // A local image's path, or the bytes of a web image.
+    private static async Task<(string? Path, byte[]? Bytes)> FetchImageAsync(Uri uri, CancellationToken token)
     {
+        if (uri.IsFile)
+            return (uri.LocalPath, null);
+
+        if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
+            throw new NotSupportedException($"Images can't be read from '{uri.Scheme}' locations.");
+
+        using var httpClient = new System.Net.Http.HttpClient();
+        return (null, await httpClient.GetByteArrayAsync(uri, token));
+    }
+#endif
+
+#if WINDOWS_XAML || (MAUI && WINDOWS)
+    internal static async Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
+    {
+        (string? path, byte[]? bytes) = await FetchImageAsync(uri, token);
         Windows.Storage.Streams.IRandomAccessStream? stream = null;
         try
         {
-            if (uri.IsFile)
+            if (path is not null)
             {
                 // Open shared (StorageFile has no share mode): the SDK owns the downloaded file.
-                stream = new FileStream(uri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).AsRandomAccessStream();
+                stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).AsRandomAccessStream();
             }
-            else if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+            else
             {
-                using var httpClient = new System.Net.Http.HttpClient();
-                byte[] bytes = await httpClient.GetByteArrayAsync(uri, token);
                 var memory = new Windows.Storage.Streams.InMemoryRandomAccessStream();
-                await memory.WriteAsync(bytes.AsBuffer());
+                await memory.WriteAsync(bytes!.AsBuffer());
                 memory.Seek(0);
                 stream = memory;
             }
-
-            if (stream is null)
-                return null;
 
             Windows.Graphics.Imaging.BitmapDecoder decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
             bool orientJpeg = decoder.DecoderInformation.CodecId == Windows.Graphics.Imaging.BitmapDecoder.JpegDecoderId;
@@ -541,7 +543,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
     }
 #elif WPF
-    internal static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    internal static Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
             () =>
@@ -582,7 +584,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 int stride = width * 4;
                 byte[] bytes = new byte[height * stride];
                 converted.CopyPixels(bytes, stride, 0);
-                return (PanoramaFrame?)new PanoramaFrame(bytes, width, height);
+                return new PanoramaFrame(bytes, width, height);
             },
             token);
     }
@@ -590,27 +592,12 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     // Power-of-two downsample to the device budget (4096 low-RAM, else 8192) for the GPU texture only. Width and Height
     // stay the full-resolution oriented dimensions, the pixel space that markers and taps use. Throws when it can't
     // decode the data, such as a TIFF.
-    internal static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    internal static Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
             async () =>
             {
-                string? path = null;
-                byte[]? downloaded = null;
-                if (uri.IsFile)
-                {
-                    path = uri.LocalPath;
-                }
-                else if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
-                {
-                    using var httpClient = new System.Net.Http.HttpClient();
-                    downloaded = await httpClient.GetByteArrayAsync(uri, token).ConfigureAwait(false);
-                }
-                else
-                {
-                    throw new NotSupportedException($"Images can't be read from '{uri.Scheme}' locations.");
-                }
-
+                (string? path, byte[]? downloaded) = await FetchImageAsync(uri, token).ConfigureAwait(false);
                 ExifOrientationTransform orientation;
                 if (path is not null)
                     orientation = ExifOrientationTransform.Read(uri);
@@ -665,7 +652,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                         bitmap = oriented;
                     }
 
-                    return (PanoramaFrame?)new PanoramaFrame(bitmap, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
+                    return new PanoramaFrame(bitmap, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
                 }
                 catch
                 {
@@ -684,31 +671,26 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     // Decodes into a texture on the shared Metal device, applying a JPEG's EXIF orientation as the SDK does. Width and
     // Height are the full-size oriented dimensions, which markers and taps use. Throws when it can't decode the data.
-    internal static Task<PanoramaFrame?> DecodeAsync(Uri uri, CancellationToken token)
+    internal static Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
     {
         return Task.Run(
             async () =>
             {
                 // Waiting for the pipeline keeps the display busy until it can draw.
                 PanoramicSurface.Pipeline pipeline = await PanoramicSurface.GetPipelineAsync().ConfigureAwait(false);
+                (string? path, byte[]? downloaded) = await FetchImageAsync(uri, token).ConfigureAwait(false);
                 ImageIO.CGImageSource? source;
                 ExifOrientationTransform orientation;
-                if (uri.IsFile)
+                if (path is not null)
                 {
-                    source = ImageIO.CGImageSource.FromUrl(Foundation.NSUrl.FromFilename(uri.LocalPath));
+                    source = ImageIO.CGImageSource.FromUrl(Foundation.NSUrl.FromFilename(path));
                     orientation = ExifOrientationTransform.Read(uri);
-                }
-                else if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
-                {
-                    using var httpClient = new System.Net.Http.HttpClient();
-                    byte[] downloaded = await httpClient.GetByteArrayAsync(uri, token).ConfigureAwait(false);
-                    source = ImageIO.CGImageSource.FromData(Foundation.NSData.FromArray(downloaded));
-                    using var metadataStream = new MemoryStream(downloaded, writable: false);
-                    orientation = ExifOrientationTransform.Read(metadataStream);
                 }
                 else
                 {
-                    throw new NotSupportedException($"Images can't be read from '{uri.Scheme}' locations.");
+                    source = ImageIO.CGImageSource.FromData(Foundation.NSData.FromArray(downloaded!));
+                    using var metadataStream = new MemoryStream(downloaded!, writable: false);
+                    orientation = ExifOrientationTransform.Read(metadataStream);
                 }
 
                 using (source)
@@ -717,7 +699,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                     try
                     {
                         token.ThrowIfCancellationRequested();
-                        return (PanoramaFrame?)Decode(pipeline.Device, source, orientation, token);
+                        return Decode(pipeline.Device, source, orientation, token);
                     }
                     finally
                     {
@@ -806,7 +788,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bitmap);
 
     // Lost a generation race: recycle now rather than via finalizers; full-size bitmaps add up during rapid paging.
-    private static void DiscardFrame(PanoramaFrame? frame) => frame?.Bitmap.Recycle();
+    private static void DiscardFrame(PanoramaFrame frame) => frame.Bitmap.Recycle();
 #elif __IOS__
     // The decoded (possibly downsampled) texture plus the image's full-resolution oriented dimensions.
     internal readonly record struct PanoramaFrame(Metal.IMTLTexture Texture, int Width, int Height);
@@ -814,7 +796,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Texture);
 
     // Releases a superseded frame now, since full-size textures add up during rapid paging.
-    private static void DiscardFrame(PanoramaFrame? frame) => frame?.Texture.Dispose();
+    private static void DiscardFrame(PanoramaFrame frame) => frame.Texture.Dispose();
 #else
     // The decoded image as tightly-packed BGRA8 plus its pixel dimensions.
     internal readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
@@ -822,7 +804,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
 
     // byte[]-backed frames are plain managed memory; nothing to release eagerly.
-    private static void DiscardFrame(PanoramaFrame? frame)
+    private static void DiscardFrame(PanoramaFrame frame)
     {
     }
 #endif
