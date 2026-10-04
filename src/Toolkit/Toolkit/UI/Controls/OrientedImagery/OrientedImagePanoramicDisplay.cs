@@ -454,37 +454,25 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     private PanoramaCameraState Camera => new(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
 
-    // Surface units per DIP: Android taps and view sizes are physical pixels.
-    private double SurfaceUnitsPerDip =>
-#if __ANDROID__
-        _surface.PixelsPerDip;
-#else
-        1d;
-#endif
-
     public override PointF? ScreenToImage(double x, double y) =>
-        IsInteractive ? SurfaceToImage(x * SurfaceUnitsPerDip, y * SurfaceUnitsPerDip) : null;
-
-    // The image coordinate under a point of the surface, in surface units.
-    private PointF? SurfaceToImage(double x, double y) =>
-        Camera.TryScreenToNormalizedUv(x, y, _surface.ActualWidth, _surface.ActualHeight, out float u, out float v)
+        IsInteractive && Camera.TryScreenToNormalizedUv(x, y, _surface.ActualWidth, _surface.ActualHeight, out float u, out float v)
             ? new PointF(u * _imageWidth, v * _imageHeight)
             : null;
 
     private void OnSurfaceTapped(double x, double y)
     {
-        if (!IsInteractive || Footprint?.OrientedImage is not OrientedImage image || SurfaceToImage(x, y) is not PointF pixel)
+        if (Footprint?.OrientedImage is not OrientedImage image || ScreenToImage(x, y) is not PointF pixel)
             return;
 
-        OrientedImageMarker? marker = HitTestMarker(_resolvedMarkers, Camera, _surface.ActualWidth, _surface.ActualHeight, x, y, SurfaceUnitsPerDip);
+        OrientedImageMarker? marker = HitTestMarker(_resolvedMarkers, Camera, _surface.ActualWidth, _surface.ActualHeight, x, y);
         RaiseImageTapped(new OrientedImageTappedEventArgs(pixel, image, marker));
     }
 
     // Returns the topmost marker whose swatch lies within the hit tolerance of the tap, or null, as the planar display's
     // identify does. Markers draw in list order, so the last one is on top. A swatch is centered on its projected anchor
-    // plus its symbol offset. dip converts DIPs to view units; it is 1 where the view measures in DIPs.
+    // plus its symbol offset. All values are in DIPs.
     internal static OrientedImageMarker? HitTestMarker(IReadOnlyList<ResolvedMarker> markers, PanoramaCameraState camera,
-        double viewWidth, double viewHeight, double x, double y, double dip)
+        double viewWidth, double viewHeight, double x, double y)
     {
         for (int i = markers.Count - 1; i >= 0; i--)
         {
@@ -492,9 +480,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             if (!camera.TryNormalizedUvToScreen(resolved.U, resolved.V, viewWidth, viewHeight, out double sx, out double sy))
                 continue;
 
-            // The tap's distance from the swatch's rectangle, in DIPs; zero inside it.
-            double dx = Math.Max(Math.Abs(((x - sx) / dip) - resolved.OffsetX) - resolved.HalfWidth, 0);
-            double dy = Math.Max(Math.Abs(((y - sy) / dip) - resolved.OffsetY) - resolved.HalfHeight, 0);
+            // The tap's distance from the swatch's rectangle; zero inside it.
+            double dx = Math.Max(Math.Abs(x - sx - resolved.OffsetX) - resolved.HalfWidth, 0);
+            double dy = Math.Max(Math.Abs(y - sy - resolved.OffsetY) - resolved.HalfHeight, 0);
             if ((dx * dx) + (dy * dy) <= MarkerHitTolerance * MarkerHitTolerance)
                 return resolved.Marker;
         }

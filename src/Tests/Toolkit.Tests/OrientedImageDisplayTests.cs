@@ -177,23 +177,22 @@ public sealed class OrientedImageDisplayTests
 
         // A 10-DIP marker drawn 15 DIPs right of and 20 DIPs above its anchor.
         var offset = Marker(size: 10, offsetX: 15, offsetY: -20);
-        Assert.AreSame(offset.Marker, Hit([offset], cx + 15, cy - 20, dip: 1), "a tap on the drawn marker hits it");
-        Assert.IsNull(Hit([offset], cx, cy, dip: 1), "a tap on the bare anchor, 18 DIPs from the drawn marker, misses");
-        Assert.AreSame(offset.Marker, Hit([offset], cx + 30, cy - 40, dip: 2), "the offset scales with the view's pixels per DIP");
+        Assert.AreSame(offset.Marker, Hit([offset], cx + 15, cy - 20), "a tap on the drawn marker hits it");
+        Assert.IsNull(Hit([offset], cx, cy), "a tap on the bare anchor, 18 DIPs from the drawn marker, misses");
 
         // The whole symbol counts, plus 12 DIPs around it.
         var large = Marker(size: 80, offsetX: 0, offsetY: 0);
-        Assert.IsNotNull(Hit([large], cx + 30, cy, dip: 1), "inside the symbol");
-        Assert.IsNotNull(Hit([large], cx + 51, cy, dip: 1), "11 DIPs outside its edge");
-        Assert.IsNull(Hit([large], cx + 55, cy, dip: 1), "15 DIPs outside its edge");
+        Assert.IsNotNull(Hit([large], cx + 30, cy), "inside the symbol");
+        Assert.IsNotNull(Hit([large], cx + 51, cy), "11 DIPs outside its edge");
+        Assert.IsNull(Hit([large], cx + 55, cy), "15 DIPs outside its edge");
 
         // As in the planar display, the topmost marker within tolerance wins, even over a direct hit beneath it.
         var upper = Marker(size: 20, offsetX: 55, offsetY: 0);
-        Assert.AreSame(upper.Marker, Hit([large, upper], cx + 38, cy, dip: 1), "inside the lower marker, 7 DIPs from the upper one");
-        Assert.AreSame(large.Marker, Hit([large, upper], cx - 20, cy, dip: 1), "out of the upper marker's reach");
+        Assert.AreSame(upper.Marker, Hit([large, upper], cx + 38, cy), "inside the lower marker, 7 DIPs from the upper one");
+        Assert.AreSame(large.Marker, Hit([large, upper], cx - 20, cy), "out of the upper marker's reach");
 
-        OrientedImageMarker? Hit(OrientedImagePanoramicDisplay.ResolvedMarker[] markers, double x, double y, double dip) =>
-            OrientedImagePanoramicDisplay.HitTestMarker(markers, camera, 400, 300, x, y, dip);
+        OrientedImageMarker? Hit(OrientedImagePanoramicDisplay.ResolvedMarker[] markers, double x, double y) =>
+            OrientedImagePanoramicDisplay.HitTestMarker(markers, camera, 400, 300, x, y);
     }
 
     [TestMethod]
