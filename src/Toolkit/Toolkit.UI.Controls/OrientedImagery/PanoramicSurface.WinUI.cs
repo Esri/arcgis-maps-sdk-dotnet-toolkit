@@ -64,6 +64,9 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         Tapped += OnTapped;
     }
 
+    // The display rasterizes markers at this scale. Before the first composition, it is the XAML root's.
+    internal double PixelsPerDip => CompositionScaleX > 0 ? CompositionScaleX : XamlRoot?.RasterizationScale ?? 1;
+
     private void OnCompositionScaleChanged(SwapChainPanel sender, object args)
     {
         Safe(EnsureOrResize);

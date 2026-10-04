@@ -179,6 +179,9 @@ internal sealed class PanoramicSurface : MTKView
 
     public double ActualHeight => Bounds.Height;
 
+    // Pixels per point. The display rasterizes markers at this scale.
+    public double PixelsPerDip => ContentScaleFactor;
+
     // The decode awaits this, so an image is presented only once it can be drawn.
     internal static Task<Pipeline> GetPipelineAsync() => s_pipeline.Value;
 
@@ -288,7 +291,7 @@ internal sealed class PanoramicSurface : MTKView
         }
     }
 
-    // The display rasterizes markers at the main display's density, so the drawable uses the same pixels per point.
+    // The drawable uses the main display's density. A change makes the display rasterize its markers again.
     private void SyncContentScale()
     {
         var scale = (nfloat)Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Density;

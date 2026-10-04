@@ -169,6 +169,9 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     public double ActualHeight => Height;
 
+    // The display rasterizes markers at this scale.
+    public double PixelsPerDip => _density > 0 ? _density : 1;
+
     private void SetCamera(ref float field, float value)
     {
         if (field == value)

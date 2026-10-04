@@ -98,6 +98,9 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 
     public double ActualHeight => _platform?.ActualHeight ?? 0;
 
+    // 1 until the platform view exists. Attaching one raises ScaleChanged.
+    public double PixelsPerDip => _platform?.PixelsPerDip ?? 1;
+
 #if __ANDROID__
     public void SetTexture(Android.Graphics.Bitmap bitmap)
     {
@@ -234,6 +237,8 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
             platform.SetMarkers(markers);
         }
 
+        // Markers rasterized before now used a scale of 1.
+        ScaleChanged?.Invoke();
         platform.RequestRender();
     }
 
