@@ -37,6 +37,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// </remarks>
 public sealed class OrientedImageMarker : INotifyPropertyChanged
 {
+    // Known limitation: markers are visual overlays only. They are not exposed individually to screen readers and
+    // do not support keyboard focus or activation.
     private OrientedImageMarkerPosition _position;
     private Symbol? _symbol;
     private bool _isVisible = true;

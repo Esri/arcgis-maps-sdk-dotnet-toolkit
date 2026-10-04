@@ -56,6 +56,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 // Inner display for planar images: a MapView showing the image as a RasterLayer, markers as overlay graphics, and
 // the visible pixel ring pushed to the footprint while auto-update is enabled.
+// Known limitation: georeferenced TIFFs are not supported by this planar display. RasterLayer honors embedded
+// georeferencing, while the display's pixel transforms assume an unreferenced, axis-aligned image grid.
 internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDisplay
 {
     private readonly MapView _mapView;
