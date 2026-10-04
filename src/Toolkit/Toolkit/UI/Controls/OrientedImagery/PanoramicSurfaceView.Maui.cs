@@ -17,6 +17,7 @@
 #if __ANDROID__ || __IOS__ || (MAUI && WINDOWS)
 using System;
 using System.Collections.Generic;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Microsoft.Maui.Handlers;
 #if __ANDROID__ || __IOS__
 using PlatformPanoramicSurface = Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PanoramicSurface;
@@ -33,7 +34,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
     private PlatformPanoramicSurface? _platform;
 
     // Stash for state set before the platform view exists; camera is write-through (kept here, pushed on attach).
-    private IReadOnlyList<PlatformPanoramicSurface.MarkerSwatch>? _pendingMarkers;
+    private IReadOnlyList<PanoramaMarker>? _pendingMarkers;
     private (float R, float G, float B, float A)? _pendingClearColor;
     private float _yaw;
     private float _pitch;
@@ -158,16 +159,16 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         _platform?.ClearTexture();
     }
 
-    public void SetMarkers(IReadOnlyList<PlatformPanoramicSurface.MarkerSwatch> swatches)
+    public void SetMarkers(IReadOnlyList<PanoramaMarker> markers)
     {
         if (_platform is not null)
         {
             _pendingMarkers = null;
-            _platform.SetMarkers(swatches);
+            _platform.SetMarkers(markers);
         }
         else
         {
-            _pendingMarkers = swatches;
+            _pendingMarkers = markers;
         }
     }
 
@@ -228,7 +229,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 
         if (_pendingMarkers is not null)
         {
-            IReadOnlyList<PlatformPanoramicSurface.MarkerSwatch> markers = _pendingMarkers;
+            IReadOnlyList<PanoramaMarker> markers = _pendingMarkers;
             _pendingMarkers = null;
             platform.SetMarkers(markers);
         }

@@ -131,18 +131,9 @@ internal sealed unsafe partial class PanoramicSurface
     private ID3D11BlendState* _markerBlendState;
     private ID3D11SamplerState* _markerSampler;
 
-    private int _markerCount;
-    private float[] _markerU = [];
-    private float[] _markerV = [];
-    private float[] _markerW = [];
-    private float[] _markerH = [];
-    private float[] _markerOffsetX = [];
-    private float[] _markerOffsetY = [];
-    private nint[] _markerTextures = [];
-    private nint[] _markerViews = [];
-    private int[] _visibleBase = [];
-    private nint[] _visibleViews = [];
-    private MarkerSwatch[]? _pendingMarkers;
+    private readonly List<(nint Texture, nint View, PanoramaMarker Marker)> _gpuMarkers = [];
+    private readonly List<nint> _visibleViews = []; // reused by each frame
+    private PanoramaMarker[]? _pendingMarkers;
 
     private float _yaw;
     private float _pitch;
@@ -695,9 +686,9 @@ internal sealed unsafe partial class PanoramicSurface
         _rasterizerState = state;
     }
 
-    // Sets the marker swatches to draw over the panorama (replaces any previous set). Each swatch is a tightly-packed
-    // BGRA8 buffer placed at a normalized (u,v). Safe to call before the device exists (stashed, built in Initialize).
-    internal void SetMarkers(IReadOnlyList<MarkerSwatch> markers)
+    // Sets the markers to draw over the panorama, replacing any previous set. Safe to call before the device exists
+    // (stashed, built in Initialize).
+    internal void SetMarkers(IReadOnlyList<PanoramaMarker> markers)
     {
         if (_device is null)
         {
@@ -735,40 +726,20 @@ internal sealed unsafe partial class PanoramicSurface
         _markerBlendState = blendState;
         _markerSampler = CreateSampler(D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP);
 
-        if (_pendingMarkers is MarkerSwatch[] pending)
+        if (_pendingMarkers is PanoramaMarker[] pending)
         {
             _pendingMarkers = null;
             BuildGpuMarkers(pending);
         }
     }
 
-    private void BuildGpuMarkers(IReadOnlyList<MarkerSwatch> markers)
+    private void BuildGpuMarkers(IReadOnlyList<PanoramaMarker> markers)
     {
         ReleaseGpuMarkers();
-
-        _markerCount = 0;
-        if (markers.Count == 0)
-            return;
-
-        if (_markerU.Length < markers.Count)
-        {
-            _markerU = new float[markers.Count];
-            _markerV = new float[markers.Count];
-            _markerW = new float[markers.Count];
-            _markerH = new float[markers.Count];
-            _markerOffsetX = new float[markers.Count];
-            _markerOffsetY = new float[markers.Count];
-            _markerTextures = new nint[markers.Count];
-            _markerViews = new nint[markers.Count];
-            _visibleBase = new int[markers.Count];
-            _visibleViews = new nint[markers.Count];
-        }
-
-        int count = 0;
-        foreach (MarkerSwatch marker in markers)
+        foreach (PanoramaMarker marker in markers)
         {
             // A marker that can't be uploaded is skipped. It never fails the panorama.
-            if (marker.Width <= 0 || marker.Height <= 0 || marker.Bgra.Length < marker.Width * marker.Height * 4)
+            if (!marker.IsValid)
                 continue;
 
             ID3D11Texture2D* texture;
@@ -782,22 +753,13 @@ internal sealed unsafe partial class PanoramicSurface
                 continue;
             }
 
-            _markerU[count] = marker.U;
-            _markerV[count] = marker.V;
-            _markerW[count] = marker.Width;
-            _markerH[count] = marker.Height;
-            _markerOffsetX[count] = marker.OffsetX;
-            _markerOffsetY[count] = marker.OffsetY;
-            _markerTextures[count] = (nint)texture;
-            _markerViews[count] = (nint)view;
-            count++;
+            _gpuMarkers.Add(((nint)texture, (nint)view, marker));
         }
 
-        _markerCount = count;
-        if (count == 0)
+        if (_gpuMarkers.Count == 0)
             return;
 
-        uint requiredVertices = (uint)count * 4;
+        uint requiredVertices = (uint)_gpuMarkers.Count * 4;
         if (_markerVertexBuffer is null || _markerVertexCapacity < requiredVertices)
         {
             Release(ref _markerVertexBuffer);
@@ -810,31 +772,30 @@ internal sealed unsafe partial class PanoramicSurface
     // Fills the dynamic vertex buffer with the quads of the markers in front of the camera and draws them alpha-blended.
     private void DrawMarkers(uint width, uint height, PanoramaCameraState camera)
     {
-        if (_markerCount == 0 || _markerVertexBuffer is null || _markerVertexShader is null || _markerPixelShader is null ||
+        if (_gpuMarkers.Count == 0 || _markerVertexBuffer is null || _markerVertexShader is null || _markerPixelShader is null ||
             _markerInputLayout is null || _markerIndexBuffer is null || _markerBlendState is null || _markerSampler is null)
             return;
 
+        // The visible markers' quads are packed in order, four vertices each.
         D3D11_MAPPED_SUBRESOURCE mapped;
         _context->Map((ID3D11Resource*)_markerVertexBuffer, 0, D3D11_MAP.D3D11_MAP_WRITE_DISCARD, 0, &mapped);
         var vertices = (MarkerVertex*)mapped.pData;
-        int visible = 0;
-        for (int i = 0; i < _markerCount; i++)
+        _visibleViews.Clear();
+        foreach ((_, nint view, PanoramaMarker marker) in _gpuMarkers)
         {
-            if (!camera.TryGetMarkerQuad(_markerU[i], _markerV[i], _markerW[i], _markerH[i], _markerOffsetX[i], _markerOffsetY[i], width, height, out var quad))
+            if (!camera.TryGetMarkerQuad(marker, width, height, out var quad))
                 continue;
 
-            int b = visible * 4;
+            int b = _visibleViews.Count * 4;
             vertices[b + 0] = new MarkerVertex(new Vector2(quad.Left, quad.Top), new Vector2(0f, 0f));
             vertices[b + 1] = new MarkerVertex(new Vector2(quad.Right, quad.Top), new Vector2(1f, 0f));
             vertices[b + 2] = new MarkerVertex(new Vector2(quad.Left, quad.Bottom), new Vector2(0f, 1f));
             vertices[b + 3] = new MarkerVertex(new Vector2(quad.Right, quad.Bottom), new Vector2(1f, 1f));
-            _visibleBase[visible] = b;
-            _visibleViews[visible] = _markerViews[i];
-            visible++;
+            _visibleViews.Add(view);
         }
 
         _context->Unmap((ID3D11Resource*)_markerVertexBuffer, 0);
-        if (visible == 0)
+        if (_visibleViews.Count == 0)
             return;
 
         uint stride = (uint)sizeof(MarkerVertex);
@@ -852,11 +813,11 @@ internal sealed unsafe partial class PanoramicSurface
         _context->PSSetSamplers(0, 1, &sampler);
         _context->OMSetBlendState(_markerBlendState, blendFactor, 0xffffffff);
 
-        for (int j = 0; j < visible; j++)
+        for (int i = 0; i < _visibleViews.Count; i++)
         {
-            ID3D11ShaderResourceView* srv = (ID3D11ShaderResourceView*)_visibleViews[j];
+            ID3D11ShaderResourceView* srv = (ID3D11ShaderResourceView*)_visibleViews[i];
             _context->PSSetShaderResources(0, 1, &srv);
-            _context->DrawIndexed(6, 0, _visibleBase[j]);
+            _context->DrawIndexed(6, 0, i * 4);
         }
 
         _context->OMSetBlendState((ID3D11BlendState*)null, (float*)null, 0xffffffff);
@@ -864,24 +825,14 @@ internal sealed unsafe partial class PanoramicSurface
 
     private void ReleaseGpuMarkers()
     {
-        for (int i = 0; i < _markerCount; i++)
+        foreach ((nint texture, nint view, _) in _gpuMarkers)
         {
-            nint view = _markerViews[i];
-            if (view != 0)
-            {
-                _ = ((IUnknown*)view)->Release();
-                _markerViews[i] = 0;
-            }
-
-            nint texture = _markerTextures[i];
-            if (texture != 0)
-            {
-                _ = ((IUnknown*)texture)->Release();
-                _markerTextures[i] = 0;
-            }
+            _ = ((IUnknown*)view)->Release();
+            _ = ((IUnknown*)texture)->Release();
         }
 
-        _markerCount = 0;
+        _gpuMarkers.Clear();
+        _visibleViews.Clear();
     }
 
     private void ReleaseMarkerResources()
@@ -972,9 +923,5 @@ internal sealed unsafe partial class PanoramicSurface
     private readonly record struct VertexPositionTexture(Vector3 Position, Vector2 TextureCoordinate);
 
     private readonly record struct MarkerVertex(Vector2 Position, Vector2 TexCoord);
-
-    // A resolved marker ready for the GPU: a tightly-packed premultiplied BGRA8 swatch, the normalized (u,v) of its
-    // anchor, and the symbol offset from the anchor to the swatch center in device pixels, y down.
-    internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY);
 }
 #endif

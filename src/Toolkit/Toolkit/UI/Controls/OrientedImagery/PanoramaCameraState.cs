@@ -169,19 +169,18 @@ internal readonly struct PanoramaCameraState
         return true;
     }
 
-    // A marker's screen-aligned quad in clip space, where x points right and y up. It is the swatch's size in pixels,
-    // centered on the projection of (u,v) moved by the offset in pixels with y down. False when the marker is behind
-    // the camera.
-    public bool TryGetMarkerQuad(float u, float v, float width, float height, float offsetX, float offsetY, double viewWidth, double viewHeight, out MarkerQuad quad)
+    // A marker's swatch as a screen-aligned quad in clip space, where x points right and y up. The view size is in
+    // pixels, like the swatch. False when the marker is behind the camera.
+    public bool TryGetMarkerQuad(PanoramaMarker marker, double viewWidth, double viewHeight, out MarkerQuad quad)
     {
         quad = default;
-        if (!TryNormalizedUvToScreen(u, v, viewWidth, viewHeight, out double x, out double y))
+        if (!TryNormalizedUvToScreen(marker.U, marker.V, viewWidth, viewHeight, out double x, out double y))
             return false;
 
-        float centerX = (float)(((x + offsetX) / viewWidth * 2.0) - 1.0);
-        float centerY = (float)(1.0 - ((y + offsetY) / viewHeight * 2.0));
-        float halfWidth = (float)(width / viewWidth);
-        float halfHeight = (float)(height / viewHeight);
+        float centerX = (float)(((x + marker.OffsetX) / viewWidth * 2.0) - 1.0);
+        float centerY = (float)(1.0 - ((y + marker.OffsetY) / viewHeight * 2.0));
+        float halfWidth = (float)(marker.Width / viewWidth);
+        float halfHeight = (float)(marker.Height / viewHeight);
         quad = new MarkerQuad(centerX - halfWidth, centerY + halfHeight, centerX + halfWidth, centerY - halfHeight);
         return true;
     }
@@ -268,5 +267,14 @@ internal readonly struct PanoramaCameraState
 
         return (positions, texCoords, indices);
     }
+}
+
+// A marker as a panoramic surface draws it: a premultiplied BGRA8 swatch, the normalized (u,v) of its anchor, and the
+// offset from the anchor to the swatch center, in pixels with y down. Bgra belongs to the display's swatch cache, so
+// surfaces must not change it.
+internal readonly record struct PanoramaMarker(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY)
+{
+    // An empty swatch, or one with fewer pixels than its size, can't be uploaded.
+    public bool IsValid => Width > 0 && Height > 0 && Bgra.Length >= Width * Height * 4;
 }
 #endif

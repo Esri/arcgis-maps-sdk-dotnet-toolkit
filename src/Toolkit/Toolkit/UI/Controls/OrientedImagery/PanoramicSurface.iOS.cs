@@ -71,7 +71,7 @@ internal sealed class PanoramicSurface : MTKView
     private Pipeline? _pipeline;
     private Exception? _pipelineError;
     private IMTLTexture? _texture;
-    private List<GpuMarker> _markers = [];
+    private List<(IMTLTexture Texture, PanoramaMarker Marker)> _markers = [];
     private CGSize _lastSize;
 
     private float _yaw;
@@ -206,26 +206,25 @@ internal sealed class PanoramicSurface : MTKView
         RequestRender();
     }
 
-    // The swatch arrays are the display's cache, so they are copied, never changed. Upload failures are reported, not
-    // thrown, since this runs in a dispatcher callback.
-    public unsafe void SetMarkers(IReadOnlyList<MarkerSwatch> swatches)
+    // Runs in a dispatcher callback, so it must not throw.
+    public unsafe void SetMarkers(IReadOnlyList<PanoramaMarker> markers)
     {
         ReleaseMarkers();
         if (Device is IMTLDevice device)
         {
-            var markers = new List<GpuMarker>(swatches.Count);
-            foreach (MarkerSwatch swatch in swatches)
+            var uploaded = new List<(IMTLTexture Texture, PanoramaMarker Marker)>(markers.Count);
+            foreach (PanoramaMarker marker in markers)
             {
                 // A marker that can't be uploaded is skipped. It never fails the panorama.
-                if (swatch.Width <= 0 || swatch.Height <= 0 || swatch.Bgra.Length < swatch.Width * swatch.Height * 4)
+                if (!marker.IsValid)
                     continue;
 
                 try
                 {
-                    fixed (byte* pixels = swatch.Bgra)
+                    fixed (byte* pixels = marker.Bgra)
                     {
-                        IMTLTexture texture = CreateTexture(device, (IntPtr)pixels, swatch.Width, swatch.Height, swatch.Width * 4);
-                        markers.Add(new GpuMarker(texture, swatch.U, swatch.V, swatch.Width, swatch.Height, swatch.OffsetX, swatch.OffsetY));
+                        IMTLTexture texture = CreateTexture(device, (IntPtr)pixels, marker.Width, marker.Height, marker.Width * 4);
+                        uploaded.Add((texture, marker));
                     }
                 }
                 catch (Exception)
@@ -234,7 +233,7 @@ internal sealed class PanoramicSurface : MTKView
                 }
             }
 
-            _markers = markers;
+            _markers = uploaded;
         }
 
         RequestRender();
@@ -394,9 +393,9 @@ internal sealed class PanoramicSurface : MTKView
         encoder.SetRenderPipelineState(pipeline.Marker);
         encoder.SetFragmentSamplerState(pipeline.MarkerSampler, 0);
         float* quad = stackalloc float[16];
-        foreach (GpuMarker marker in _markers)
+        foreach ((IMTLTexture texture, PanoramaMarker marker) in _markers)
         {
-            if (!camera.TryGetMarkerQuad(marker.U, marker.V, marker.Width, marker.Height, marker.OffsetX, marker.OffsetY, size.Width, size.Height, out var edges))
+            if (!camera.TryGetMarkerQuad(marker, size.Width, size.Height, out var edges))
                 continue;
 
             // A triangle strip: top-left, bottom-left, top-right, and bottom-right, each as x, y, u, v.
@@ -405,7 +404,7 @@ internal sealed class PanoramicSurface : MTKView
             SetQuadVertex(quad, 2, edges.Right, edges.Top, 1f, 0f);
             SetQuadVertex(quad, 3, edges.Right, edges.Bottom, 1f, 1f);
             encoder.SetVertexBytes((IntPtr)quad, 16 * sizeof(float), 0);
-            encoder.SetFragmentTexture(marker.Texture, 0);
+            encoder.SetFragmentTexture(texture, 0);
             encoder.DrawPrimitives(MTLPrimitiveType.TriangleStrip, 0, 4);
         }
 
@@ -457,8 +456,8 @@ internal sealed class PanoramicSurface : MTKView
 
     private void ReleaseMarkers()
     {
-        foreach (GpuMarker marker in _markers)
-            marker.Texture.Dispose();
+        foreach ((IMTLTexture texture, _) in _markers)
+            texture.Dispose();
 
         _markers = [];
     }
@@ -687,12 +686,6 @@ internal sealed class PanoramicSurface : MTKView
         Action<object?> weak = Weakly<object?>((surface, _) => action(surface));
         return () => weak(null);
     }
-
-    // Same shape as the other surfaces' MarkerSwatch, so the display code is shared. The swatch is premultiplied BGRA8.
-    // The offset runs from the anchor to the center, in pixels with y down.
-    internal readonly record struct MarkerSwatch(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY);
-
-    private readonly record struct GpuMarker(IMTLTexture Texture, float U, float V, int Width, int Height, float OffsetX, float OffsetY);
 
     // The device, its command queue, and the objects every surface draws with.
     internal sealed class Pipeline
