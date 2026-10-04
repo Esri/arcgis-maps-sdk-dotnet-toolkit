@@ -93,7 +93,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         }
     }
 
-    // In the platform view's units, like tap coordinates: pixels on Android and DIPs elsewhere.
+    // In DIPs, like tap positions.
     public double ActualWidth => _platform?.ActualWidth ?? 0;
 
     public double ActualHeight => _platform?.ActualHeight ?? 0;

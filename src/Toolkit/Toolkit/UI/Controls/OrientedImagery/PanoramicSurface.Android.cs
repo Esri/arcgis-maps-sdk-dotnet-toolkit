@@ -164,10 +164,10 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         set => SetCamera(ref _fieldOfView, value);
     }
 
-    // Windows-surface-compatible size accessors (physical pixels on Android).
-    public double ActualWidth => Width;
+    // In DIPs, like tap positions.
+    public double ActualWidth => Width / PixelsPerDip;
 
-    public double ActualHeight => Height;
+    public double ActualHeight => Height / PixelsPerDip;
 
     // The display rasterizes markers at this scale.
     public double PixelsPerDip => _density > 0 ? _density : 1;
@@ -429,10 +429,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
         if (_keyboardFrameTime != 0)
         {
-            // Navigate takes DIPs, like the Windows surfaces; Height is in physical pixels.
             double seconds = Math.Min((frameTimeNanos - _keyboardFrameTime) / 1e9, MaxKeyboardStepSeconds);
-            double heightDips = ActualHeight / (Resources?.DisplayMetrics?.Density ?? 1f);
-            PanoramaCameraState camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView).Navigate(keys, seconds, heightDips);
+            PanoramaCameraState camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView).Navigate(keys, seconds, ActualHeight);
             Yaw = camera.Yaw;
             Pitch = camera.Pitch;
             FieldOfView = camera.FieldOfView;
@@ -1176,7 +1174,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
         public override bool OnSingleTapUp(MotionEvent e)
         {
-            _owner.SurfaceTapped?.Invoke(e.GetX(), e.GetY());
+            _owner.SurfaceTapped?.Invoke(e.GetX() / _owner.PixelsPerDip, e.GetY() / _owner.PixelsPerDip);
             return true;
         }
 
