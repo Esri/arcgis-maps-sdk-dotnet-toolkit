@@ -70,6 +70,9 @@ public sealed class OrientedImageDisplayTests
     {
         var display = new OrientedImagePanoramicDisplay();
         display.SetMarkers(markers);
+
+        // The marker pass runs on the next UI turn, and the queued work holds the display until then.
+        RunPendingDispatcherWork();
         return new WeakReference(display);
     }
 
