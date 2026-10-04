@@ -241,6 +241,7 @@ internal sealed unsafe partial class PanoramicSurface
     private partial void RenderFrame();
 
     // The navigation keys held down now; each present layer reads its platform's key state.
+    // TODO: The WPF and WinUI heads map keys the same way. Poll Win32 GetKeyState here instead, and drop both copies.
     private partial PanoramaCameraState.NavigationKeys GetHeldNavigationKeys();
 
     // Re-renders on the next tick; rendering is on demand (camera, texture or size changes).

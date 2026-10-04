@@ -490,6 +490,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         return 0f;
     }
 
+    // TODO: Move each platform's decoder and frame type next to its surface, and let the frame release itself. Then this
+    // display and PanoramicSurfaceView need no per-platform texture code.
 #if !WPF
     // A local image's path, or the bytes of a web image.
     private static async Task<(string? Path, byte[]? Bytes)> FetchImageAsync(Uri uri, CancellationToken token)

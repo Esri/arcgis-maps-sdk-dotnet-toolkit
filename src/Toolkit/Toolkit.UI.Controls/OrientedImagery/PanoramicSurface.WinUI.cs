@@ -271,6 +271,7 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         Release(ref _swapchain);
     }
 
+    // TODO: Set e.Handled, so a ScrollViewer around the panorama doesn't also scroll. Test on Windows.
     private void OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
     {
         int delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
