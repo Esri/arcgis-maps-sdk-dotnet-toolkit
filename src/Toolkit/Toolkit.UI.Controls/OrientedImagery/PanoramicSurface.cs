@@ -27,6 +27,8 @@ using Windows.Win32.Graphics.Direct3D;
 using Windows.Win32.Graphics.Direct3D11;
 using Windows.Win32.Graphics.Dxgi.Common;
 using Windows.Win32.System.Com;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
+using static Esri.ArcGISRuntime.Toolkit.UI.Controls.PanoramaCameraState;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -75,16 +77,6 @@ internal sealed unsafe partial class PanoramicSurface
         }
         """;
 
-    private const string MarkerPixelShaderSource = """
-        Texture2D MarkerTexture : register(t0);
-        SamplerState MarkerSampler : register(s0);
-        struct PSInput { float4 Position : SV_POSITION; float2 TexCoord : TEXCOORD0; };
-        float4 main(PSInput input) : SV_TARGET
-        {
-            return MarkerTexture.Sample(MarkerSampler, input.TexCoord);
-        }
-        """;
-
     private ID3D11Device* _device;
     private ID3D11DeviceContext* _context;
     private ID3D11VertexShader* _vertexShader;
@@ -123,7 +115,6 @@ internal sealed unsafe partial class PanoramicSurface
 
     // Marker billboard pass: each swatch is drawn after the sphere as a screen-aligned, alpha-blended quad.
     private ID3D11VertexShader* _markerVertexShader;
-    private ID3D11PixelShader* _markerPixelShader;
     private ID3D11InputLayout* _markerInputLayout;
     private ID3D11Buffer* _markerIndexBuffer;
     private ID3D11Buffer* _markerVertexBuffer;
@@ -135,40 +126,24 @@ internal sealed unsafe partial class PanoramicSurface
     private readonly List<nint> _visibleViews = []; // reused by each frame
     private PanoramaMarker[]? _pendingMarkers;
 
-    private float _yaw;
-    private float _pitch;
-    private float _fieldOfView = MathF.PI / 2f;
+    private PanoramaCameraState _camera = PanoramaCameraState.Initial;
 
     // True when the D3D11 device fell back to the WARP software rasterizer (e.g. under Remote Desktop).
     // The WPF present layer reads this because a WARP D3D11 texture cannot be shared with a hardware D3D9Ex device.
     internal bool IsUsingWarp => _usingWarp;
 
     // Camera state (radians), owned by the platform input layer.
-    public float Yaw
+    public PanoramaCameraState Camera
     {
-        get => _yaw;
-        set => SetCamera(ref _yaw, value);
-    }
+        get => _camera;
+        set
+        {
+            if (_camera == value)
+                return;
 
-    public float Pitch
-    {
-        get => _pitch;
-        set => SetCamera(ref _pitch, value);
-    }
-
-    public float FieldOfView
-    {
-        get => _fieldOfView;
-        set => SetCamera(ref _fieldOfView, value);
-    }
-
-    private void SetCamera(ref float field, float value)
-    {
-        if (field == value)
-            return;
-
-        field = value;
-        ViewChanged?.Invoke();
+            _camera = value;
+            ViewChanged?.Invoke();
+        }
     }
 
     // Raised when the camera or the view size changes, so the display can update the footprint while auto-update is
@@ -240,9 +215,50 @@ internal sealed unsafe partial class PanoramicSurface
 
     private partial void RenderFrame();
 
-    // The navigation keys held down now; each present layer reads its platform's key state.
-    // TODO: The WPF and WinUI heads map keys the same way. Poll Win32 GetKeyState here instead, and drop both copies.
-    private partial PanoramaCameraState.NavigationKeys GetHeldNavigationKeys();
+    private bool TryStartKeyboardNavigation(VIRTUAL_KEY virtualKey)
+    {
+        NavigationKeys key = virtualKey switch
+        {
+            VIRTUAL_KEY.VK_LEFT => NavigationKeys.Left,
+            VIRTUAL_KEY.VK_RIGHT => NavigationKeys.Right,
+            VIRTUAL_KEY.VK_UP => NavigationKeys.Up,
+            VIRTUAL_KEY.VK_DOWN => NavigationKeys.Down,
+            VIRTUAL_KEY.VK_OEM_PLUS or VIRTUAL_KEY.VK_ADD => NavigationKeys.ZoomIn,
+            VIRTUAL_KEY.VK_OEM_MINUS or VIRTUAL_KEY.VK_SUBTRACT => NavigationKeys.ZoomOut,
+            _ => NavigationKeys.None,
+        };
+
+        if (key == NavigationKeys.None || !GetHeldNavigationKeys().HasFlag(key))
+            return false;
+
+        StartKeyboardNavigation();
+        return true;
+    }
+
+    private static bool IsKeyDown(VIRTUAL_KEY key) => PInvoke.GetKeyState((int)key) < 0;
+
+    private static NavigationKeys GetHeldNavigationKeys()
+    {
+        NavigationKeys keys = NavigationKeys.None;
+        if (!IsKeyDown(VIRTUAL_KEY.VK_CONTROL) && !IsKeyDown(VIRTUAL_KEY.VK_MENU) && !IsKeyDown(VIRTUAL_KEY.VK_SHIFT))
+        {
+            if (IsKeyDown(VIRTUAL_KEY.VK_LEFT))
+                keys |= NavigationKeys.Left;
+            if (IsKeyDown(VIRTUAL_KEY.VK_RIGHT))
+                keys |= NavigationKeys.Right;
+            if (IsKeyDown(VIRTUAL_KEY.VK_UP))
+                keys |= NavigationKeys.Up;
+            if (IsKeyDown(VIRTUAL_KEY.VK_DOWN))
+                keys |= NavigationKeys.Down;
+        }
+
+        if (IsKeyDown(VIRTUAL_KEY.VK_OEM_PLUS) || IsKeyDown(VIRTUAL_KEY.VK_ADD))
+            keys |= NavigationKeys.ZoomIn;
+        if (IsKeyDown(VIRTUAL_KEY.VK_OEM_MINUS) || IsKeyDown(VIRTUAL_KEY.VK_SUBTRACT))
+            keys |= NavigationKeys.ZoomOut;
+
+        return keys;
+    }
 
     // Re-renders on the next tick; rendering is on demand (camera, texture or size changes).
     public void RequestRender() => _needsRender = true;
@@ -266,8 +282,8 @@ internal sealed unsafe partial class PanoramicSurface
         if (!_keyboardNavigating)
             return;
 
-        PanoramaCameraState.NavigationKeys keys = GetHeldNavigationKeys();
-        if (keys == PanoramaCameraState.NavigationKeys.None)
+        NavigationKeys keys = GetHeldNavigationKeys();
+        if (keys == NavigationKeys.None)
         {
             _keyboardNavigating = false;
             return;
@@ -277,10 +293,7 @@ internal sealed unsafe partial class PanoramicSurface
         double seconds = Math.Min(Stopwatch.GetElapsedTime(_keyboardTimestamp, now).TotalSeconds, PanoramaCameraState.MaxKeyboardStepSeconds);
         _keyboardTimestamp = now;
 
-        PanoramaCameraState camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView).Navigate(keys, seconds, ActualHeight);
-        Yaw = camera.Yaw;
-        Pitch = camera.Pitch;
-        FieldOfView = camera.FieldOfView;
+        Camera = Camera.Navigate(keys, seconds, ActualHeight);
         RequestRender();
     }
 
@@ -410,7 +423,19 @@ internal sealed unsafe partial class PanoramicSurface
             return;
 
         CreateDeviceResources();
-        CreatePipeline(VertexShaderSource, PixelShaderSource, DXGI_FORMAT.DXGI_FORMAT_R32G32B32_FLOAT, 12, out _vertexShader, out _pixelShader, out _inputLayout);
+        CreatePipeline(VertexShaderSource, DXGI_FORMAT.DXGI_FORMAT_R32G32B32_FLOAT, 12, out _vertexShader, out _inputLayout);
+        ID3DBlob* pixelBlob = CompileShader(PixelShaderSource, "ps_4_0");
+        try
+        {
+            ID3D11PixelShader* pixelShader;
+            _device->CreatePixelShader(pixelBlob->GetBufferPointer(), pixelBlob->GetBufferSize(), null, &pixelShader);
+            _pixelShader = pixelShader;
+        }
+        finally
+        {
+            Release(ref pixelBlob);
+        }
+
         CreateGeometryResources();
         _constantBuffer = CreateBuffer((uint)sizeof(Matrix4x4), D3D11_BIND_FLAG.D3D11_BIND_CONSTANT_BUFFER, null);
         CreateRasterizerState();
@@ -450,20 +475,24 @@ internal sealed unsafe partial class PanoramicSurface
         CreateBgraTexture(bgra, width, height, out _panoramaTexture, out _panoramaTextureView);
     }
 
+    private static D3D11_TEXTURE2D_DESC CreateBgraTextureDescription(uint width, uint height, D3D11_BIND_FLAG bindFlags,
+        D3D11_USAGE usage = D3D11_USAGE.D3D11_USAGE_DEFAULT, D3D11_RESOURCE_MISC_FLAG miscFlags = default) => new()
+    {
+        Width = width,
+        Height = height,
+        MipLevels = 1,
+        ArraySize = 1,
+        Format = DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_UNORM,
+        SampleDesc = new DXGI_SAMPLE_DESC { Count = 1 },
+        Usage = usage,
+        BindFlags = bindFlags,
+        MiscFlags = miscFlags,
+    };
+
     // Creates an immutable BGRA8 shader-resource texture (and default SRV) from a tightly-packed buffer.
     private void CreateBgraTexture(ReadOnlySpan<byte> bgra, uint width, uint height, out ID3D11Texture2D* texture, out ID3D11ShaderResourceView* view)
     {
-        D3D11_TEXTURE2D_DESC desc = new()
-        {
-            Width = width,
-            Height = height,
-            MipLevels = 1,
-            ArraySize = 1,
-            Format = DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_UNORM,
-            SampleDesc = new DXGI_SAMPLE_DESC { Count = 1, Quality = 0 },
-            Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
-            BindFlags = D3D11_BIND_FLAG.D3D11_BIND_SHADER_RESOURCE,
-        };
+        D3D11_TEXTURE2D_DESC desc = CreateBgraTextureDescription(width, height, D3D11_BIND_FLAG.D3D11_BIND_SHADER_RESOURCE);
 
         fixed (byte* pixels = bgra)
         {
@@ -518,7 +547,7 @@ internal sealed unsafe partial class PanoramicSurface
             return;
 
         float aspectRatio = MathF.Max(1f, width) / MathF.Max(1f, height);
-        var camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView);
+        PanoramaCameraState camera = Camera;
         Matrix4x4 worldViewProjection = camera.GetWorldViewProjection(aspectRatio);
         Matrix4x4 transposed = Matrix4x4.Transpose(worldViewProjection);
         _context->UpdateSubresource((ID3D11Resource*)_constantBuffer, 0, (D3D11_BOX*)null, &transposed, 0, 0);
@@ -529,7 +558,7 @@ internal sealed unsafe partial class PanoramicSurface
         _context->OMSetRenderTargets(1, &target, null);
         _context->OMSetBlendState((ID3D11BlendState*)null, (float*)null, 0xffffffff); // opaque sphere pass
 
-        uint stride = (uint)sizeof(VertexPositionTexture);
+        uint stride = 5 * sizeof(float);
         uint offset = 0;
         ID3D11Buffer* vertexBuffer = _vertexBuffer;
         ID3D11Buffer* constantBuffer = _constantBuffer;
@@ -578,21 +607,16 @@ internal sealed unsafe partial class PanoramicSurface
         _context = context;
     }
 
-    // Compiles a vertex/pixel shader pair and the two-element (POSITION, TEXCOORD) input layout that feeds it.
-    private void CreatePipeline(string vertexSource, string pixelSource, DXGI_FORMAT positionFormat, uint texCoordOffset,
-        out ID3D11VertexShader* vertexShader, out ID3D11PixelShader* pixelShader, out ID3D11InputLayout* inputLayout)
+    // Compiles a vertex shader and the two-element (POSITION, TEXCOORD) input layout that feeds it.
+    private void CreatePipeline(string vertexSource, DXGI_FORMAT positionFormat, uint texCoordOffset,
+        out ID3D11VertexShader* vertexShader, out ID3D11InputLayout* inputLayout)
     {
         ID3DBlob* vertexBlob = CompileShader(vertexSource, "vs_4_0");
-        ID3DBlob* pixelBlob = CompileShader(pixelSource, "ps_4_0");
         try
         {
             ID3D11VertexShader* vs;
             _device->CreateVertexShader(vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), null, &vs);
             vertexShader = vs;
-
-            ID3D11PixelShader* ps;
-            _device->CreatePixelShader(pixelBlob->GetBufferPointer(), pixelBlob->GetBufferSize(), null, &ps);
-            pixelShader = ps;
 
             byte[] position = Encoding.ASCII.GetBytes("POSITION\0");
             byte[] texCoord = Encoding.ASCII.GetBytes("TEXCOORD\0");
@@ -622,7 +646,6 @@ internal sealed unsafe partial class PanoramicSurface
         }
         finally
         {
-            Release(ref pixelBlob);
             Release(ref vertexBlob);
         }
     }
@@ -657,18 +680,10 @@ internal sealed unsafe partial class PanoramicSurface
 
     private void CreateGeometryResources()
     {
-        (float[] positions, float[] texCoords, short[] indices) = PanoramaCameraState.CreateSphereMesh();
-        var vertices = new VertexPositionTexture[positions.Length / 3];
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            vertices[i] = new VertexPositionTexture(
-                new Vector3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]),
-                new Vector2(texCoords[i * 2], texCoords[(i * 2) + 1]));
-        }
-
+        (float[] vertices, short[] indices) = PanoramaCameraState.CreateSphereMesh();
         _indexCount = (uint)indices.Length;
-        fixed (VertexPositionTexture* vertexData = vertices)
-            _vertexBuffer = CreateBuffer((uint)(vertices.Length * sizeof(VertexPositionTexture)), D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER, vertexData);
+        fixed (float* vertexData = vertices)
+            _vertexBuffer = CreateBuffer((uint)(vertices.Length * sizeof(float)), D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER, vertexData);
         fixed (short* indexData = indices)
             _indexBuffer = CreateBuffer((uint)(indices.Length * sizeof(short)), D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER, indexData);
     }
@@ -702,7 +717,7 @@ internal sealed unsafe partial class PanoramicSurface
 
     private void CreateMarkerResources()
     {
-        CreatePipeline(MarkerVertexShaderSource, MarkerPixelShaderSource, DXGI_FORMAT.DXGI_FORMAT_R32G32_FLOAT, 8, out _markerVertexShader, out _markerPixelShader, out _markerInputLayout);
+        CreatePipeline(MarkerVertexShaderSource, DXGI_FORMAT.DXGI_FORMAT_R32G32_FLOAT, 8, out _markerVertexShader, out _markerInputLayout);
 
         ushort[] indices = [0, 1, 2, 2, 1, 3];
         fixed (ushort* indexData = indices)
@@ -773,7 +788,7 @@ internal sealed unsafe partial class PanoramicSurface
     // Fills the dynamic vertex buffer with the quads of the markers in front of the camera and draws them alpha-blended.
     private void DrawMarkers(uint width, uint height, PanoramaCameraState camera)
     {
-        if (_gpuMarkers.Count == 0 || _markerVertexBuffer is null || _markerVertexShader is null || _markerPixelShader is null ||
+        if (_gpuMarkers.Count == 0 || _markerVertexBuffer is null || _markerVertexShader is null || _pixelShader is null ||
             _markerInputLayout is null || _markerIndexBuffer is null || _markerBlendState is null || _markerSampler is null)
             return;
 
@@ -810,7 +825,7 @@ internal sealed unsafe partial class PanoramicSurface
         _context->IASetIndexBuffer(_markerIndexBuffer, DXGI_FORMAT.DXGI_FORMAT_R16_UINT, 0);
         _context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY.D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         _context->VSSetShader(_markerVertexShader, null, 0);
-        _context->PSSetShader(_markerPixelShader, null, 0);
+        _context->PSSetShader(_pixelShader, null, 0);
         _context->PSSetSamplers(0, 1, &sampler);
         _context->OMSetBlendState(_markerBlendState, blendFactor, 0xffffffff);
 
@@ -842,7 +857,6 @@ internal sealed unsafe partial class PanoramicSurface
         Release(ref _markerVertexBuffer);
         Release(ref _markerIndexBuffer);
         Release(ref _markerInputLayout);
-        Release(ref _markerPixelShader);
         Release(ref _markerVertexShader);
         Release(ref _markerBlendState);
         Release(ref _markerSampler);
@@ -920,8 +934,6 @@ internal sealed unsafe partial class PanoramicSurface
         Release(ref _context);
         Release(ref _device);
     }
-
-    private readonly record struct VertexPositionTexture(Vector3 Position, Vector2 TextureCoordinate);
 
     private readonly record struct MarkerVertex(Vector2 Position, Vector2 TexCoord);
 }

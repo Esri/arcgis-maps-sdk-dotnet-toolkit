@@ -23,9 +23,8 @@ using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Direct3D11;
 using Windows.Win32.Graphics.Dxgi;
-using Windows.Win32.Graphics.Dxgi.Common;
 using Windows.Win32.System.Com;
-using static Esri.ArcGISRuntime.Toolkit.UI.Controls.PanoramaCameraState;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -191,17 +190,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
         ReleaseSurfaces();
 
-        D3D11_TEXTURE2D_DESC targetDesc = new()
-        {
-            Width = width,
-            Height = height,
-            MipLevels = 1,
-            ArraySize = 1,
-            Format = DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_UNORM,
-            SampleDesc = new DXGI_SAMPLE_DESC { Count = 1, Quality = 0 },
-            Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
-            BindFlags = D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET,
-        };
+        D3D11_TEXTURE2D_DESC targetDesc = CreateBgraTextureDescription(width, height, D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET);
         ID3D11Texture2D* target;
         Device->CreateTexture2D(&targetDesc, (D3D11_SUBRESOURCE_DATA*)null, &target);
         _renderTarget = target;
@@ -254,18 +243,9 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         ReleaseSurfaces();
 
         // D3D11 shared render target the core draws into (CsWin32).
-        D3D11_TEXTURE2D_DESC desc = new()
-        {
-            Width = width,
-            Height = height,
-            MipLevels = 1,
-            ArraySize = 1,
-            Format = DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_UNORM,
-            SampleDesc = new DXGI_SAMPLE_DESC { Count = 1, Quality = 0 },
-            Usage = D3D11_USAGE.D3D11_USAGE_DEFAULT,
-            BindFlags = D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET | D3D11_BIND_FLAG.D3D11_BIND_SHADER_RESOURCE,
-            MiscFlags = D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_SHARED,
-        };
+        D3D11_TEXTURE2D_DESC desc = CreateBgraTextureDescription(width, height,
+            D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET | D3D11_BIND_FLAG.D3D11_BIND_SHADER_RESOURCE,
+            miscFlags: D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_SHARED);
 
         ID3D11Texture2D* sharedTexture;
         Device->CreateTexture2D(&desc, (D3D11_SUBRESOURCE_DATA*)null, &sharedTexture);
@@ -456,9 +436,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         bool pressed = e.LeftButton == MouseButtonState.Pressed;
         if (pressed && _wasDragging)
         {
-            float scale = DragRotationScale(FieldOfView, ActualHeight);
-            Yaw -= (float)(position.X - _lastMousePosition.X) * scale;
-            Pitch = Math.Clamp(Pitch - ((float)(position.Y - _lastMousePosition.Y) * scale), MinPitch, MaxPitch);
+            Camera = Camera.Drag((float)(position.X - _lastMousePosition.X), (float)(position.Y - _lastMousePosition.Y), ActualHeight);
             RequestRender();
         }
 
@@ -482,62 +460,21 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
         base.OnMouseWheel(e);
-        FieldOfView = Math.Clamp(FieldOfView + (e.Delta > 0 ? -WheelZoomStep : WheelZoomStep), MinFieldOfView, MaxFieldOfView);
+        Camera = Camera.ZoomWheel(e.Delta > 0 ? 1f : -1f);
         RequestRender();
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
-        NavigationKeys key = e.Key switch
-        {
-            Key.Left => NavigationKeys.Left,
-            Key.Right => NavigationKeys.Right,
-            Key.Up => NavigationKeys.Up,
-            Key.Down => NavigationKeys.Down,
-            Key.OemPlus or Key.Add => NavigationKeys.ZoomIn,
-            Key.OemMinus or Key.Subtract => NavigationKeys.ZoomOut,
-            _ => NavigationKeys.None,
-        };
-
-        // Arrows pressed with a modifier don't count as held (see GetHeldNavigationKeys) and are left to the app.
-        if (key == NavigationKeys.None || !GetHeldNavigationKeys().HasFlag(key))
-            return;
-
-        // Handled, so arrow keys do not also move focus to a neighboring control.
-        e.Handled = true;
-        StartKeyboardNavigation();
+        if (TryStartKeyboardNavigation((VIRTUAL_KEY)KeyInterop.VirtualKeyFromKey(e.Key)))
+            e.Handled = true;
     }
 
     protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
     {
         base.OnLostKeyboardFocus(e);
         StopKeyboardNavigation();
-    }
-
-    // As in the SDK MapView, arrows count only without Ctrl, Alt, or Shift, and plus and minus count with any
-    // modifier, since Shift types "+" on the main keyboard.
-    private partial NavigationKeys GetHeldNavigationKeys()
-    {
-        NavigationKeys keys = NavigationKeys.None;
-        if ((Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Alt | ModifierKeys.Shift)) == 0)
-        {
-            if (Keyboard.IsKeyDown(Key.Left))
-                keys |= NavigationKeys.Left;
-            if (Keyboard.IsKeyDown(Key.Right))
-                keys |= NavigationKeys.Right;
-            if (Keyboard.IsKeyDown(Key.Up))
-                keys |= NavigationKeys.Up;
-            if (Keyboard.IsKeyDown(Key.Down))
-                keys |= NavigationKeys.Down;
-        }
-
-        if (Keyboard.IsKeyDown(Key.OemPlus) || Keyboard.IsKeyDown(Key.Add))
-            keys |= NavigationKeys.ZoomIn;
-        if (Keyboard.IsKeyDown(Key.OemMinus) || Keyboard.IsKeyDown(Key.Subtract))
-            keys |= NavigationKeys.ZoomOut;
-
-        return keys;
     }
 
     [StructLayout(LayoutKind.Sequential)]

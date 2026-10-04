@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -24,51 +23,45 @@ namespace Toolkit.Tests;
 [TestClass]
 public sealed class OrientedImageDisplayTests
 {
-    [TestMethod]
+    [STATestMethod]
     public void ReapplyingTemplateRehostsActiveDisplay()
     {
         // A template replacement must move the existing display out of the discarded presenter.
         // Recreating the display would lose its current image and navigation state.
-        RunSta(() =>
-        {
-            var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
-            Assert.IsTrue(control.ApplyTemplate());
-            ContentPresenter firstHost = GetHost(control);
-            object? display = firstHost.Content;
-            Assert.IsNotNull(display, "the initial template's host presents the active display");
+        var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
+        Assert.IsTrue(control.ApplyTemplate());
+        ContentPresenter firstHost = GetHost(control);
+        object? display = firstHost.Content;
+        Assert.IsNotNull(display, "the initial template's host presents the active display");
 
-            control.Template = CreateHostTemplate();
-            Assert.IsTrue(control.ApplyTemplate());
-            ContentPresenter secondHost = GetHost(control);
+        control.Template = CreateHostTemplate();
+        Assert.IsTrue(control.ApplyTemplate());
+        ContentPresenter secondHost = GetHost(control);
 
-            Assert.AreNotSame(firstHost, secondHost, "sanity: re-applying the template creates a new host");
-            Assert.IsNull(firstHost.Content, "the discarded template's host must release the display");
-            Assert.AreSame(display, secondHost.Content, "the re-applied template's host must adopt the same active display");
-        });
+        Assert.AreNotSame(firstHost, secondHost, "sanity: re-applying the template creates a new host");
+        Assert.IsNull(firstHost.Content, "the discarded template's host must release the display");
+        Assert.AreSame(display, secondHost.Content, "the re-applied template's host must adopt the same active display");
     }
 
-    [TestMethod]
+    [STATestMethod]
     public void MarkerSubscriptionDoesNotRetainDiscardedDisplay()
     {
         // The application keeps the collection, marker, and symbol alive after discarding the display.
         // Their event subscriptions must not prevent the display from being collected.
-        RunSta(() =>
+        var markers = new ObservableCollection<OrientedImageMarker>
         {
-            var markers = new ObservableCollection<OrientedImageMarker>
-            {
-                new(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10)),
-            };
+            new(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10)),
+        };
 
-            WeakReference weakDisplay = CreateDiscardedDisplay(markers);
+        WeakReference weakDisplay = CreateDiscardedDisplay(markers);
 
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
 
-            Assert.IsFalse(
-                weakDisplay.IsAlive,
-                "an app-owned marker's PropertyChanged subscription must not keep a discarded display alive");
-        });
+        Assert.IsFalse(
+            weakDisplay.IsAlive,
+            "an app-owned marker's PropertyChanged subscription must not keep a discarded display alive");
     }
 
     // Not inlined, so no caller register/local can keep the display reachable across the collection above.
@@ -80,70 +73,64 @@ public sealed class OrientedImageDisplayTests
         return new WeakReference(display);
     }
 
-    [TestMethod]
+    [STATestMethod]
     public void MarkerChangesStartOnlyTheNeededPasses()
     {
-        RunSta(() =>
-        {
-            // Only drawn properties start a pass. A change inside the symbol counts, since the SDK symbol is what is
-            // drawn. A replaced or removed marker's symbol is let go.
-            var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
-            var marker = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), symbol);
-            var display = new OrientedImagePanoramicDisplay();
-            display.SetMarkers(new[] { marker });
-            int passes = display.MarkerGeneration;
+        // Only drawn properties start a pass. A change inside the symbol counts, since the SDK symbol is what is
+        // drawn. A replaced or removed marker's symbol is let go.
+        var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
+        var marker = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), symbol);
+        var display = new OrientedImagePanoramicDisplay();
+        display.SetMarkers(new[] { marker });
+        int passes = display.MarkerGeneration;
 
-            marker.Tag = "changed";
-            Assert.AreEqual(passes, display.MarkerGeneration, "Tag is not drawn");
+        marker.Tag = "changed";
+        Assert.AreEqual(passes, display.MarkerGeneration, "Tag is not drawn");
 
-            symbol.Color = Color.Blue;
-            Assert.AreEqual(++passes, display.MarkerGeneration, "a symbol change");
+        symbol.Color = Color.Blue;
+        Assert.AreEqual(++passes, display.MarkerGeneration, "a symbol change");
 
-            marker.IsVisible = false;
-            Assert.AreEqual(++passes, display.MarkerGeneration, "a visibility change");
+        marker.IsVisible = false;
+        Assert.AreEqual(++passes, display.MarkerGeneration, "a visibility change");
 
-            marker.Position = OrientedImageMarkerPosition.FromLocation(new MapPoint(1, 1));
-            Assert.AreEqual(++passes, display.MarkerGeneration, "a position change");
+        marker.Position = OrientedImageMarkerPosition.FromLocation(new MapPoint(1, 1));
+        Assert.AreEqual(++passes, display.MarkerGeneration, "a position change");
 
-            var replacement = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, Color.Red, 10);
-            marker.Symbol = replacement;
-            Assert.AreEqual(++passes, display.MarkerGeneration, "a symbol replacement");
-            symbol.Color = Color.Green;
-            Assert.AreEqual(passes, display.MarkerGeneration, "the replaced symbol is no longer watched");
-            replacement.Color = Color.Green;
-            Assert.AreEqual(++passes, display.MarkerGeneration, "the new symbol is watched");
+        var replacement = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, Color.Red, 10);
+        marker.Symbol = replacement;
+        Assert.AreEqual(++passes, display.MarkerGeneration, "a symbol replacement");
+        symbol.Color = Color.Green;
+        Assert.AreEqual(passes, display.MarkerGeneration, "the replaced symbol is no longer watched");
+        replacement.Color = Color.Green;
+        Assert.AreEqual(++passes, display.MarkerGeneration, "the new symbol is watched");
 
-            display.SetMarkers(null);
-            passes = display.MarkerGeneration;
-            replacement.Color = Color.Blue;
-            Assert.AreEqual(passes, display.MarkerGeneration, "a removed marker's symbol is no longer watched");
-        });
+        display.SetMarkers(null);
+        passes = display.MarkerGeneration;
+        replacement.Color = Color.Blue;
+        Assert.AreEqual(passes, display.MarkerGeneration, "a removed marker's symbol is no longer watched");
     }
 
-    [TestMethod]
+    [STATestMethod]
     public void BurstOfMarkerChangesTakesOnePass()
     {
-        RunSta(() =>
-        {
-            // A change to a symbol that many markers share, or a loop over the markers, runs one pass.
-            var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
-            List<OrientedImageMarker> markers = Enumerable.Range(0, 50)
-                .Select(i => new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(i, 0)), symbol))
-                .ToList();
-            var display = new OrientedImagePanoramicDisplay();
-            display.SetMarkers(markers);
-            RunPendingDispatcherWork();
-            int passes = display.MarkerPasses;
+        // A change to a symbol that many markers share, or a loop over the markers, runs one pass.
+        var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
+        List<OrientedImageMarker> markers = Enumerable.Range(0, 50)
+            .Select(i => new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(i, 0)), symbol))
+            .ToList();
+        var display = new OrientedImagePanoramicDisplay();
+        display.SetMarkers(markers);
+        RunPendingDispatcherWork();
+        int passes = display.MarkerPasses;
 
-            symbol.Color = Color.Blue;
-            RunPendingDispatcherWork();
-            Assert.AreEqual(passes + 1, display.MarkerPasses, "a shared symbol change");
+        symbol.Color = Color.Blue;
+        RunPendingDispatcherWork();
+        Assert.AreEqual(passes + 1, display.MarkerPasses, "a shared symbol change");
 
-            foreach (OrientedImageMarker marker in markers)
-                marker.IsVisible = false;
-            RunPendingDispatcherWork();
-            Assert.AreEqual(passes + 2, display.MarkerPasses, "a loop over the markers");
-        });
+        foreach (OrientedImageMarker marker in markers)
+            marker.IsVisible = false;
+        RunPendingDispatcherWork();
+        Assert.AreEqual(passes + 2, display.MarkerPasses, "a loop over the markers");
     }
 
     // Runs work posted to this thread's dispatcher, which has a higher priority than Background.
@@ -217,56 +204,47 @@ public sealed class OrientedImageDisplayTests
     private static OrientedImagePanoramicDisplay.ResolvedMarker Marker(double size, double offsetX, double offsetY) =>
         new(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0))), 0.75f, 0.5f, offsetX, offsetY, size / 2, size / 2);
 
-    [TestMethod]
+    [STATestMethod]
     public void PanoramicSurfaceHasAccessibleName()
     {
-        RunSta(() =>
-        {
-            // The surface is the keyboard-focusable element of the panoramic display; it must carry an accessible
-            // name (the raster display labels its inner MapView the same way).
-            var display = new OrientedImagePanoramicDisplay();
-            var surface = (DependencyObject)display.Content!;
-            string name = System.Windows.Automation.AutomationProperties.GetName(surface);
-            Assert.IsFalse(string.IsNullOrEmpty(name), "the panoramic surface must have an automation name");
-        });
+        // The surface is the keyboard-focusable element of the panoramic display; it must carry an accessible
+        // name (the raster display labels its inner MapView the same way).
+        var display = new OrientedImagePanoramicDisplay();
+        var surface = (DependencyObject)display.Content!;
+        string name = System.Windows.Automation.AutomationProperties.GetName(surface);
+        Assert.IsFalse(string.IsNullOrEmpty(name), "the panoramic surface must have an automation name");
     }
 
-    [TestMethod]
+    [STATestMethod]
     public void AutomationPropertiesOnControlReachFocusableView()
     {
-        RunSta(() =>
-        {
-            // Focus lands on the inner view, so the name and automation id the app gives the control must reach that
-            // view, whether set before or after the view exists, and clearing the name must restore the default label.
-            var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
-            System.Windows.Automation.AutomationProperties.SetName(control, "Rear camera");
-            System.Windows.Automation.AutomationProperties.SetAutomationId(control, "RearCamera");
-            Assert.IsTrue(control.ApplyTemplate());
-            DependencyObject view = GetFocusableView(control);
-            Assert.AreEqual("Rear camera", System.Windows.Automation.AutomationProperties.GetName(view));
-            Assert.AreEqual("RearCamera", System.Windows.Automation.AutomationProperties.GetAutomationId(view));
+        // Focus lands on the inner view, so the name and automation id the app gives the control must reach that
+        // view, whether set before or after the view exists, and clearing the name must restore the default label.
+        var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
+        System.Windows.Automation.AutomationProperties.SetName(control, "Rear camera");
+        System.Windows.Automation.AutomationProperties.SetAutomationId(control, "RearCamera");
+        Assert.IsTrue(control.ApplyTemplate());
+        DependencyObject view = GetFocusableView(control);
+        Assert.AreEqual("Rear camera", System.Windows.Automation.AutomationProperties.GetName(view));
+        Assert.AreEqual("RearCamera", System.Windows.Automation.AutomationProperties.GetAutomationId(view));
 
-            System.Windows.Automation.AutomationProperties.SetName(control, "Front camera");
-            System.Windows.Automation.AutomationProperties.SetAutomationId(control, "FrontCamera");
-            Assert.AreEqual("Front camera", System.Windows.Automation.AutomationProperties.GetName(view));
-            Assert.AreEqual("FrontCamera", System.Windows.Automation.AutomationProperties.GetAutomationId(view));
+        System.Windows.Automation.AutomationProperties.SetName(control, "Front camera");
+        System.Windows.Automation.AutomationProperties.SetAutomationId(control, "FrontCamera");
+        Assert.AreEqual("Front camera", System.Windows.Automation.AutomationProperties.GetName(view));
+        Assert.AreEqual("FrontCamera", System.Windows.Automation.AutomationProperties.GetAutomationId(view));
 
-            control.ClearValue(System.Windows.Automation.AutomationProperties.NameProperty);
-            string defaultName = System.Windows.Automation.AutomationProperties.GetName(view);
-            Assert.IsFalse(string.IsNullOrEmpty(defaultName), "the view must fall back to its default label");
-            Assert.AreNotEqual("Front camera", defaultName);
-        });
+        control.ClearValue(System.Windows.Automation.AutomationProperties.NameProperty);
+        string defaultName = System.Windows.Automation.AutomationProperties.GetName(view);
+        Assert.IsFalse(string.IsNullOrEmpty(defaultName), "the view must fall back to its default label");
+        Assert.AreNotEqual("Front camera", defaultName);
     }
 
-    [TestMethod]
+    [STATestMethod]
     public void ScreenToImageIsNullWithoutAnImage()
     {
-        RunSta(() =>
-        {
-            var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
-            Assert.IsTrue(control.ApplyTemplate());
-            Assert.IsNull(control.ScreenToImage(new System.Windows.Point(10, 10)));
-        });
+        var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
+        Assert.IsTrue(control.ApplyTemplate());
+        Assert.IsNull(control.ScreenToImage(new System.Windows.Point(10, 10)));
     }
 
     // The keyboard-focusable element of the active display: the MapView of the raster display here.
@@ -280,23 +258,26 @@ public sealed class OrientedImageDisplayTests
     }
 
     [TestMethod]
-    public void VisibleAreaIsClippedToImageNotClamped()
+    [DataRow(0)]
+    [DataRow(3857)]
+    public void VisibleAreaIsClippedToImageNotClamped(int wkid)
     {
         // A 45deg-rotated view (diamond) that fully CONTAINS the 100x100 image: the correct visible-area footprint
         // is the whole image (area 10000). Clamping each vertex independently would instead collapse the ring to
         // the diamond of the edge midpoints - half the actual footprint (area 5000).
-        var builder = new Esri.ArcGISRuntime.Geometry.PolygonBuilder((Esri.ArcGISRuntime.Geometry.SpatialReference?)null);
+        SpatialReference? reference = wkid == 0 ? null : SpatialReference.Create(wkid);
+        var builder = new Esri.ArcGISRuntime.Geometry.PolygonBuilder(reference);
         builder.AddPoint(50, 150);
         builder.AddPoint(150, 50);
         builder.AddPoint(50, -50);
         builder.AddPoint(-50, 50);
         var visibleArea = builder.ToGeometry();
-        var extent = new Esri.ArcGISRuntime.Geometry.Envelope(0, 0, 100, 100);
+        var extent = new Esri.ArcGISRuntime.Geometry.Envelope(0, 0, 100, 100, reference);
 
         List<System.Drawing.PointF> ring = OrientedImageRasterDisplay.ComputeVisibleAreaPixels(visibleArea, extent, 1, 1);
 
         Assert.IsGreaterThanOrEqualTo(4, ring.Count, $"expected a full ring, got {ring.Count} vertices");
-        Assert.AreEqual(10000d, Math.Abs(SignedRingArea(ring)), 1e-3, "the clipped footprint must cover the whole image");
+        Assert.AreEqual(10000d, SignedRingArea(ring), 1e-3, "the clipped footprint must cover the whole image clockwise");
     }
 
     // Shoelace area is positive for clockwise rings in image coordinates, where y increases downward.
@@ -393,6 +374,19 @@ public sealed class OrientedImageDisplayTests
 
         CollectionAssert.AreEquivalent(expectedCorners, pixels.Distinct().ToArray());
         Assert.AreEqual(80000d, SignedRingArea(pixels), "the full image must be covered with clockwise winding");
+
+        var partialExtent = new Envelope(100, 200, 900, 800);
+        var partialView = new Polygon([new MapPoint(-300, 1100), new(500, 1100), new(500, 500), new(-300, 500)]);
+        List<PointF> partial = OrientedImageRasterDisplay.ComputeVisibleAreaPixels(partialView, partialExtent, -2, -3, orientation);
+        PointF[] storedCorners = [new(0, 0), new(200, 0), new(200, 100), new(0, 100)];
+        CollectionAssert.AreEquivalent(storedCorners.Select(point => orientation.StoredToImage(point, 400, 200)).ToArray(), partial.Distinct().ToArray());
+        Assert.AreEqual(20000d, SignedRingArea(partial), "partial clips keep clockwise image winding");
+        Assert.AreEqual(120000d, SignedRingArea(OrientedImageRasterDisplay.ComputeVisibleAreaPixels(partialView, partialExtent, 0, 0, orientation)), "zero cell sizes use one map unit per pixel");
+
+        var outsideView = new Polygon([new MapPoint(-300, 1100), new(0, 1100), new(0, 900), new(-300, 900)]);
+        var multipart = new PolygonBuilder(outsideView);
+        multipart.AddPart(partialView.Parts[0]);
+        Assert.IsEmpty(OrientedImageRasterDisplay.ComputeVisibleAreaPixels(multipart.ToGeometry(), partialExtent, 0, 0, orientation), "only the first visible-area part counts");
     }
 
     [TestMethod]
@@ -501,26 +495,5 @@ public sealed class OrientedImageDisplayTests
         var host = control.Template.FindName("PART_DisplayHost", control) as ContentPresenter;
         Assert.IsNotNull(host, "the applied template must contain PART_DisplayHost");
         return host;
-    }
-
-    // WPF elements require an STA thread; MSTest test threads are MTA.
-    private static void RunSta(Action test)
-    {
-        ExceptionDispatchInfo? failure = null;
-        var thread = new Thread(() =>
-        {
-            try
-            {
-                test();
-            }
-            catch (Exception ex)
-            {
-                failure = ExceptionDispatchInfo.Capture(ex);
-            }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        thread.Join();
-        failure?.Throw();
     }
 }

@@ -36,8 +36,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-using MarkerListener = WeakEventListener<OrientedImageInnerDisplay, INotifyPropertyChanged, object, PropertyChangedEventArgs>;
-
 // Base of OrientedImageDisplay's inner displays. Owns the presentation session (one footprint and one cancellation
 // token per SetFootprint), the reported state, the marker subscriptions and the auto-update-footprint plumbing.
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Platform view types are not IDisposable by convention. The session CTS is cancel-only (no timer), so it needs no disposal; canceling it on supersede is the release.")]
@@ -50,12 +48,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     private IEnumerable<OrientedImageMarker>? _markerSource;
     private List<OrientedImageMarker> _markers = []; // Snapshot read from the source
     private WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
-    private readonly Dictionary<OrientedImageMarker, MarkerListener> _markerListeners = [];
-    private readonly Dictionary<OrientedImageMarker, INotifyPropertyChanged> _markerSymbols = [];
-
-    // One listener per symbol, however many markers share it.
-    private readonly Dictionary<INotifyPropertyChanged, (MarkerListener Listener, HashSet<OrientedImageMarker> Markers)> _symbolListeners =
-        new(ReferenceEqualityComparer.Instance);
+    private readonly Dictionary<OrientedImageMarker, MarkerSubscription> _markerListeners = [];
     private CancellationTokenSource? _sessionCts;
     private CancellationTokenSource? _updateCts;
     private bool _autoUpdate;
@@ -165,84 +158,77 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         var current = new HashSet<OrientedImageMarker>(_markers);
         List<OrientedImageMarker> removed = _markerListeners.Keys.Where(marker => !current.Contains(marker)).ToList();
         List<OrientedImageMarker> added = _markers.Where(marker => !_markerListeners.ContainsKey(marker)).ToList();
-        removed.ForEach(StopListening);
-        added.ForEach(ListenTo);
+        foreach (OrientedImageMarker marker in removed)
+        {
+            _markerListeners[marker].Detach();
+            _markerListeners.Remove(marker);
+        }
+        foreach (OrientedImageMarker marker in added)
+            _markerListeners[marker] = new MarkerSubscription(this, marker);
         OnMarkersChanged(added, removed);
     }
 
-    // Weak, like the collection subscription: an app-owned long-lived marker or symbol must not keep the display alive.
-    private MarkerListener Listen(INotifyPropertyChanged source, Action<OrientedImageInnerDisplay, object?, PropertyChangedEventArgs> onEvent)
+    // Weak listeners keep app-owned markers and symbols from retaining the display.
+    private sealed class MarkerSubscription
     {
-        var listener = new MarkerListener(this, source)
+        private readonly OrientedImageInnerDisplay _display;
+        private readonly OrientedImageMarker _marker;
+        private readonly WeakEventListener<MarkerSubscription, INotifyPropertyChanged, object, PropertyChangedEventArgs> _markerListener;
+        private WeakEventListener<MarkerSubscription, INotifyPropertyChanged, object, PropertyChangedEventArgs>? _symbolListener;
+
+        public MarkerSubscription(OrientedImageInnerDisplay display, OrientedImageMarker marker)
         {
-            OnEventAction = onEvent,
-            OnDetachAction = static (_, eventSource, weakEventListener) => eventSource.PropertyChanged -= weakEventListener.OnEvent,
-        };
-        source.PropertyChanged += listener.OnEvent;
-        return listener;
-    }
-
-    private void ListenTo(OrientedImageMarker marker)
-    {
-        _markerListeners[marker] = Listen(marker, static (instance, sender, eventArgs) => instance.OnMarkerPropertyChanged(sender, eventArgs));
-        ListenToSymbol(marker);
-    }
-
-    // The SDK symbol is what is drawn, and it notifies its own changes.
-    private void ListenToSymbol(OrientedImageMarker marker)
-    {
-        StopListeningToSymbol(marker);
-        if (marker.Symbol is not INotifyPropertyChanged symbol)
-            return;
-
-        if (!_symbolListeners.TryGetValue(symbol, out var entry))
-        {
-            entry = (Listen(symbol, static (instance, sender, _) => instance.OnSymbolPropertyChanged(sender)), new HashSet<OrientedImageMarker>());
-            _symbolListeners[symbol] = entry;
+            _display = display;
+            _marker = marker;
+            _markerListener = Listen(marker, static (subscription, _, args) => subscription.OnMarkerPropertyChanged(args));
+            ListenToSymbol();
         }
 
-        entry.Markers.Add(marker);
-        _markerSymbols[marker] = symbol;
-    }
-
-    private void StopListeningToSymbol(OrientedImageMarker marker)
-    {
-        if (!_markerSymbols.Remove(marker, out INotifyPropertyChanged? symbol))
-            return;
-
-        (MarkerListener listener, HashSet<OrientedImageMarker> markers) = _symbolListeners[symbol];
-        markers.Remove(marker);
-        if (markers.Count == 0)
+        private WeakEventListener<MarkerSubscription, INotifyPropertyChanged, object, PropertyChangedEventArgs> Listen(
+            INotifyPropertyChanged source, Action<MarkerSubscription, object?, PropertyChangedEventArgs> onChanged)
         {
-            listener.Detach();
-            _symbolListeners.Remove(symbol);
+            var listener = new WeakEventListener<MarkerSubscription, INotifyPropertyChanged, object, PropertyChangedEventArgs>(this, source)
+            {
+                OnEventAction = onChanged,
+                OnDetachAction = static (_, eventSource, weakListener) => eventSource.PropertyChanged -= weakListener.OnEvent,
+            };
+            source.PropertyChanged += listener.OnEvent;
+            return listener;
         }
-    }
 
-    private void StopListening(OrientedImageMarker marker)
-    {
-        if (_markerListeners.Remove(marker, out var listener))
-            listener.Detach();
-        StopListeningToSymbol(marker);
-    }
-
-    private void OnSymbolPropertyChanged(object? sender)
-    {
-        if (sender is INotifyPropertyChanged symbol && _symbolListeners.TryGetValue(symbol, out var entry))
+        private void ListenToSymbol()
         {
-            foreach (OrientedImageMarker marker in entry.Markers.ToArray())
-                OnMarkerChanged(marker, nameof(OrientedImageMarker.Symbol));
+            StopListeningToSymbol();
+            if (_marker.Symbol is INotifyPropertyChanged symbol)
+                _symbolListener = Listen(symbol, static (subscription, _, _) => subscription.OnSymbolPropertyChanged());
         }
-    }
 
-    private void OnMarkerPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (sender is not OrientedImageMarker marker)
-            return;
+        private void OnMarkerPropertyChanged(PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName is null or nameof(OrientedImageMarker.Symbol))
+                ListenToSymbol();
+            _display.OnMarkerChanged(_marker, args.PropertyName);
+        }
 
-        if (e.PropertyName is null or nameof(OrientedImageMarker.Symbol))
-            ListenToSymbol(marker);
-        OnMarkerChanged(marker, e.PropertyName);
+        private void OnSymbolPropertyChanged() => _display.OnMarkerChanged(_marker, nameof(OrientedImageMarker.Symbol));
+
+        private void StopListeningToSymbol()
+        {
+            if (_symbolListener is null)
+                return;
+
+            // Disable delivery before detaching; an event may already have captured the handler.
+            _symbolListener.OnEventAction = null;
+            _symbolListener.Detach();
+            _symbolListener = null;
+        }
+
+        public void Detach()
+        {
+            _markerListener.OnEventAction = null;
+            _markerListener.Detach();
+            StopListeningToSymbol();
+        }
     }
 
     /// <summary>Enables or disables automatic recomputation of the footprint as the view changes.</summary>
