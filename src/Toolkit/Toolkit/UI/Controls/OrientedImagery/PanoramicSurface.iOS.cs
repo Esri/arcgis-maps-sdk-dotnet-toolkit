@@ -535,7 +535,7 @@ internal sealed class PanoramicSurface : MTKView
         _lastWheelTranslation = translation;
         if (delta != 0)
         {
-            FieldOfView = Math.Clamp(FieldOfView + (delta > 0 ? -0.1f : 0.1f), MinFieldOfView, MaxFieldOfView);
+            FieldOfView = Math.Clamp(FieldOfView + (delta > 0 ? -WheelZoomStep : WheelZoomStep), MinFieldOfView, MaxFieldOfView);
             RequestRender();
         }
     }

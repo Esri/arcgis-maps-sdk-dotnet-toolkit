@@ -314,7 +314,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             float notches = e.GetAxisValue(Axis.Vscroll); // wheel up = positive = zoom in (narrower FOV)
             if (notches != 0f)
             {
-                FieldOfView = Math.Clamp(FieldOfView - (notches * 0.1f), MinFieldOfView, MaxFieldOfView);
+                FieldOfView = Math.Clamp(FieldOfView - (notches * WheelZoomStep), MinFieldOfView, MaxFieldOfView);
                 RequestRender();
                 return true;
             }

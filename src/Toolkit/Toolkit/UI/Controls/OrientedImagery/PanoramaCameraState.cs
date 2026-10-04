@@ -40,6 +40,7 @@ internal readonly struct PanoramaCameraState
     public const float MinFieldOfView = 50f * MathF.PI / 180f;
     public const float MaxFieldOfView = 120f * MathF.PI / 180f;
     public const float MouseRotationScale = 0.0035f; // fallback drag scale while the view size is unknown
+    public const float WheelZoomStep = 0.1f; // field of view change per mouse wheel notch, in radians
 
     // Held-key navigation speeds, matching the SDK MapView: arrows move the view 300 DIPs per second on screen, and
     // zooming changes the scale by a factor of 2 per second.
