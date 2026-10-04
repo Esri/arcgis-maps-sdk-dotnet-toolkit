@@ -17,7 +17,6 @@
 #if WINDOWS_XAML || (MAUI && WINDOWS)
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
-using Windows.System;
 #if MAUI
 // The WinUI head supplies these as project-level usings; the MAUI head does not.
 using Microsoft.UI.Xaml;
@@ -29,8 +28,8 @@ using Windows.Win32.Graphics.Direct3D11;
 using Windows.Win32.Graphics.Dxgi;
 using Windows.Win32.Graphics.Dxgi.Common;
 using Windows.Win32.System.Com;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using WinRT;
-using static Esri.ArcGISRuntime.Toolkit.UI.Controls.PanoramaCameraState;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -275,74 +274,25 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
     private void OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
     {
         int delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
-        FieldOfView = Math.Clamp(FieldOfView + (delta > 0 ? -WheelZoomStep : WheelZoomStep), MinFieldOfView, MaxFieldOfView);
+        Camera = Camera.ZoomWheel(delta > 0 ? 1f : -1f);
         RequestRender();
     }
 
     private void OnManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
     {
-        float scale = DragRotationScale(FieldOfView, ActualHeight);
-        Yaw -= (float)e.Delta.Translation.X * scale;
-        Pitch = Math.Clamp(Pitch - ((float)e.Delta.Translation.Y * scale), MinPitch, MaxPitch);
+        PanoramaCameraState camera = Camera.Drag((float)e.Delta.Translation.X, (float)e.Delta.Translation.Y, ActualHeight);
         if (e.Delta.Scale != 0 && e.Delta.Scale != 1f)
-            FieldOfView = Math.Clamp(FieldOfView / e.Delta.Scale, MinFieldOfView, MaxFieldOfView);
+            camera = camera.Zoom(e.Delta.Scale);
 
+        Camera = camera;
         RequestRender();
     }
 
-    // The main-keyboard plus and minus keys, VK_OEM_PLUS and VK_OEM_MINUS, have no named VirtualKey values.
-    private const VirtualKey OemPlus = (VirtualKey)0xBB;
-    private const VirtualKey OemMinus = (VirtualKey)0xBD;
-
     private void OnKeyDown(object sender, KeyRoutedEventArgs e)
     {
-        NavigationKeys key = e.Key switch
-        {
-            VirtualKey.Left => NavigationKeys.Left,
-            VirtualKey.Right => NavigationKeys.Right,
-            VirtualKey.Up => NavigationKeys.Up,
-            VirtualKey.Down => NavigationKeys.Down,
-            VirtualKey.Add or OemPlus => NavigationKeys.ZoomIn,
-            VirtualKey.Subtract or OemMinus => NavigationKeys.ZoomOut,
-            _ => NavigationKeys.None,
-        };
-
-        // Arrows pressed with a modifier don't count as held (see GetHeldNavigationKeys) and are left to the app.
-        if (key == NavigationKeys.None || !GetHeldNavigationKeys().HasFlag(key))
-            return;
-
-        // Handled, so arrow keys do not also move focus to a neighboring control.
-        e.Handled = true;
-        StartKeyboardNavigation();
+        if (TryStartKeyboardNavigation((VIRTUAL_KEY)e.Key))
+            e.Handled = true;
     }
-
-    // As in the SDK MapView, arrows count only without Ctrl, Alt, or Shift, and plus and minus count with any
-    // modifier, since Shift types "+" on the main keyboard.
-    private partial NavigationKeys GetHeldNavigationKeys()
-    {
-        NavigationKeys keys = NavigationKeys.None;
-        if (!IsKeyDown(VirtualKey.Control) && !IsKeyDown(VirtualKey.Menu) && !IsKeyDown(VirtualKey.Shift))
-        {
-            if (IsKeyDown(VirtualKey.Left))
-                keys |= NavigationKeys.Left;
-            if (IsKeyDown(VirtualKey.Right))
-                keys |= NavigationKeys.Right;
-            if (IsKeyDown(VirtualKey.Up))
-                keys |= NavigationKeys.Up;
-            if (IsKeyDown(VirtualKey.Down))
-                keys |= NavigationKeys.Down;
-        }
-
-        if (IsKeyDown(OemPlus) || IsKeyDown(VirtualKey.Add))
-            keys |= NavigationKeys.ZoomIn;
-        if (IsKeyDown(OemMinus) || IsKeyDown(VirtualKey.Subtract))
-            keys |= NavigationKeys.ZoomOut;
-
-        return keys;
-    }
-
-    private static bool IsKeyDown(VirtualKey key) =>
-        Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(key).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
 }
 
 // SwapChainPanel <-> DXGI swap chain binding (windows.ui.xaml.media.dxinterop.h)

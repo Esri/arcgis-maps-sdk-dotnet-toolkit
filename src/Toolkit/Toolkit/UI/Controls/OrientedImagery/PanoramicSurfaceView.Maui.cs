@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Microsoft.Maui.Handlers;
+using PanoramaFrame = Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagePanoramicDisplay.PanoramaFrame;
 #if __ANDROID__ || __IOS__
 using PlatformPanoramicSurface = Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PanoramicSurface;
 #else
@@ -36,17 +37,9 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
     // Stash for state set before the platform view exists; camera is write-through (kept here, pushed on attach).
     private IReadOnlyList<PanoramaMarker>? _pendingMarkers;
     private (float R, float G, float B, float A)? _pendingClearColor;
-    private float _yaw;
-    private float _pitch;
-    private float _fieldOfView = MathF.PI / 2f;
+    private PanoramaCameraState _camera = PanoramaCameraState.Initial;
     private bool _everHadTexture;
-#if __ANDROID__
-    private Android.Graphics.Bitmap? _pendingBitmap;
-#elif __IOS__
-    private Metal.IMTLTexture? _pendingTexture;
-#else
-    private (byte[] Bgra, uint Width, uint Height)? _pendingFrame;
-#endif
+    private PanoramaFrame? _pendingFrame;
 
     public event Action<double, double>? SurfaceTapped;
 
@@ -60,36 +53,14 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
 
     public event Action? ScaleChanged;
 
-    public float Yaw
+    public PanoramaCameraState Camera
     {
-        get => _platform?.Yaw ?? _yaw;
+        get => _platform?.Camera ?? _camera;
         set
         {
-            _yaw = value;
+            _camera = value;
             if (_platform is not null)
-                _platform.Yaw = value;
-        }
-    }
-
-    public float Pitch
-    {
-        get => _platform?.Pitch ?? _pitch;
-        set
-        {
-            _pitch = value;
-            if (_platform is not null)
-                _platform.Pitch = value;
-        }
-    }
-
-    public float FieldOfView
-    {
-        get => _platform?.FieldOfView ?? _fieldOfView;
-        set
-        {
-            _fieldOfView = value;
-            if (_platform is not null)
-                _platform.FieldOfView = value;
+                _platform.Camera = value;
         }
     }
 
@@ -101,64 +72,38 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
     // 1 until the platform view exists. Attaching one raises ScaleChanged.
     public double PixelsPerDip => _platform?.PixelsPerDip ?? 1;
 
+    public void SetTexture(PanoramaFrame frame)
+    {
+        _everHadTexture = true;
+        DiscardPendingFrame();
+        if (_platform is { } platform)
+            ApplyTexture(platform, frame);
+        else
+            _pendingFrame = frame;
+    }
+
+    private void DiscardPendingFrame()
+    {
+        if (_pendingFrame is { } frame)
+            frame.Discard();
+        _pendingFrame = null;
+    }
+
+    private static void ApplyTexture(PlatformPanoramicSurface platform, PanoramaFrame frame)
+    {
 #if __ANDROID__
-    public void SetTexture(Android.Graphics.Bitmap bitmap)
-    {
-        _everHadTexture = true;
-        if (_platform is not null)
-        {
-            _pendingBitmap = null;
-            _platform.SetTexture(bitmap);
-        }
-        else
-        {
-            _pendingBitmap?.Recycle();
-            _pendingBitmap = bitmap;
-        }
-    }
+        platform.SetTexture(frame.Bitmap);
 #elif __IOS__
-    public void SetTexture(Metal.IMTLTexture texture)
-    {
-        _everHadTexture = true;
-        if (_platform is not null)
-        {
-            _pendingTexture = null;
-            _platform.SetTexture(texture);
-        }
-        else
-        {
-            _pendingTexture?.Dispose();
-            _pendingTexture = texture;
-        }
-    }
+        platform.SetTexture(frame.Texture);
 #else
-    public void SetTexture(byte[] bgra, uint width, uint height)
-    {
-        _everHadTexture = true;
-        if (_platform is not null)
-        {
-            _pendingFrame = null;
-            _platform.SetTexture(bgra, width, height);
-        }
-        else
-        {
-            _pendingFrame = (bgra, width, height);
-        }
-    }
+        platform.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
 #endif
+    }
 
     public void ClearTexture()
     {
         _everHadTexture = false;
-#if __ANDROID__
-        _pendingBitmap?.Recycle();
-        _pendingBitmap = null;
-#elif __IOS__
-        _pendingTexture?.Dispose();
-        _pendingTexture = null;
-#else
-        _pendingFrame = null;
-#endif
+        DiscardPendingFrame();
         _platform?.ClearTexture();
     }
 
@@ -193,38 +138,17 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         platform.ViewChanged += OnPlatformViewChanged;
         platform.ScaleChanged += OnPlatformScaleChanged;
 
-        platform.Yaw = _yaw;
-        platform.Pitch = _pitch;
-        platform.FieldOfView = _fieldOfView;
+        platform.Camera = _camera;
         if (_pendingClearColor is (float r, float g, float b, float a))
             platform.SetClearColor(r, g, b, a);
 
-        bool applied = false;
-#if __ANDROID__
-        if (_pendingBitmap is not null)
+        if (_pendingFrame is { } frame)
         {
-            Android.Graphics.Bitmap bitmap = _pendingBitmap;
-            _pendingBitmap = null;
-            platform.SetTexture(bitmap);
-            applied = true;
-        }
-#elif __IOS__
-        if (_pendingTexture is not null)
-        {
-            Metal.IMTLTexture texture = _pendingTexture;
-            _pendingTexture = null;
-            platform.SetTexture(texture);
-            applied = true;
-        }
-#else
-        if (_pendingFrame is ({ } bgra, uint width, uint height))
-        {
+            // Clearing the stash prevents teardown from discarding a texture handed to the surface.
             _pendingFrame = null;
-            platform.SetTexture(bgra, width, height);
-            applied = true;
+            ApplyTexture(platform, frame);
         }
-#endif
-        if (!applied && _everHadTexture)
+        else if (_everHadTexture)
         {
             // Reconnected with no stashed content: the previous platform surface (and its texture) is gone.
             DeviceRecreated?.Invoke();
@@ -247,9 +171,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         if (_platform is not null)
         {
             // Keep the last camera so a re-attach resumes the same view.
-            _yaw = _platform.Yaw;
-            _pitch = _platform.Pitch;
-            _fieldOfView = _platform.FieldOfView;
+            _camera = _platform.Camera;
             _platform.SurfaceTapped -= OnPlatformTapped;
             _platform.RenderFailed -= OnPlatformRenderFailed;
             _platform.DeviceLost -= OnPlatformDeviceLost;

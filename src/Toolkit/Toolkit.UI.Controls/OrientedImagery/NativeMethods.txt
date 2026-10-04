@@ -26,3 +26,5 @@ IDXGISwapChain1
 IDXGISwapChain2
 GetSystemMetrics
 GetDesktopWindow
+GetKeyState
+VIRTUAL_KEY

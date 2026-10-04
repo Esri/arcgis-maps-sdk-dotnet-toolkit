@@ -57,7 +57,6 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     private EGLContext? _eglContext;
     private EGLSurface? _eglSurface;
     private FloatBuffer? _sphereVertices;
-    private FloatBuffer? _sphereTexCoords;
     private ShortBuffer? _sphereIndices;
     private FloatBuffer? _markerQuadBuffer;
     private FloatBuffer? _markerQuadUvBuffer;
@@ -81,11 +80,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     private readonly float[] _markerQuadUv = new float[4 * 2];
     private readonly List<(int TextureId, PanoramaMarker Marker)> _glMarkers = new();
 
-    // Cross-thread state. Camera fields are written on the UI thread and read on the render thread; float
-    // reads/writes are atomic and every change is followed by a queued draw (a full fence), so no locks needed.
-    private float _yaw;
-    private float _pitch;
-    private float _fieldOfView = MathF.PI / 2f;
+    // Cross-thread state. The UI thread replaces the immutable camera reference atomically; each draw captures it once.
+    private PanoramaCameraState _camera = PanoramaCameraState.Initial;
     private float _clearR = 0.02f;
     private float _clearG = 0.02f;
     private float _clearB = 0.02f;
@@ -146,22 +142,17 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
     // Raised when the pixels per DIP change, so the display can rasterize its markers again.
     public event Action? ScaleChanged;
 
-    public float Yaw
+    public PanoramaCameraState Camera
     {
-        get => _yaw;
-        set => SetCamera(ref _yaw, value);
-    }
+        get => _camera;
+        set
+        {
+            if (_camera == value)
+                return;
 
-    public float Pitch
-    {
-        get => _pitch;
-        set => SetCamera(ref _pitch, value);
-    }
-
-    public float FieldOfView
-    {
-        get => _fieldOfView;
-        set => SetCamera(ref _fieldOfView, value);
+            _camera = value;
+            ViewChanged?.Invoke();
+        }
     }
 
     // In DIPs, like tap positions.
@@ -171,15 +162,6 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     // The display rasterizes markers at this scale.
     public double PixelsPerDip => _density > 0 ? _density : 1;
-
-    private void SetCamera(ref float field, float value)
-    {
-        if (field == value)
-            return;
-
-        field = value;
-        ViewChanged?.Invoke();
-    }
 
     protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
     {
@@ -314,7 +296,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
             float notches = e.GetAxisValue(Axis.Vscroll); // wheel up = positive = zoom in (narrower FOV)
             if (notches != 0f)
             {
-                FieldOfView = Math.Clamp(FieldOfView - (notches * WheelZoomStep), MinFieldOfView, MaxFieldOfView);
+                Camera = Camera.ZoomWheel(notches);
                 RequestRender();
                 return true;
             }
@@ -430,10 +412,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         if (_keyboardFrameTime != 0)
         {
             double seconds = Math.Min((frameTimeNanos - _keyboardFrameTime) / 1e9, MaxKeyboardStepSeconds);
-            PanoramaCameraState camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView).Navigate(keys, seconds, ActualHeight);
-            Yaw = camera.Yaw;
-            Pitch = camera.Pitch;
-            FieldOfView = camera.FieldOfView;
+            Camera = Camera.Navigate(keys, seconds, ActualHeight);
             RequestRender();
         }
 
@@ -781,12 +760,10 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         DeleteTexture();
         DeleteMarkerTextures();
         _sphereVertices?.Dispose();
-        _sphereTexCoords?.Dispose();
         _sphereIndices?.Dispose();
         _markerQuadBuffer?.Dispose();
         _markerQuadUvBuffer?.Dispose();
         _sphereVertices = null;
-        _sphereTexCoords = null;
         _sphereIndices = null;
         _markerQuadBuffer = null;
         _markerQuadUvBuffer = null;
@@ -794,9 +771,8 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     private void CreateSphereMesh()
     {
-        (float[] positions, float[] texCoords, short[] indices) = PanoramaCameraState.CreateSphereMesh();
-        _sphereVertices = ToFloatBuffer(positions);
-        _sphereTexCoords = ToFloatBuffer(texCoords);
+        (float[] vertices, short[] indices) = PanoramaCameraState.CreateSphereMesh();
+        _sphereVertices = ToFloatBuffer(vertices);
         _sphereIndices = ToShortBuffer(indices);
         _sphereIndexCount = indices.Length;
     }
@@ -960,15 +936,13 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
         if (_hasTexture && _program != 0)
         {
-            float yaw = _yaw;
-            float pitch = _pitch;
-            float fov = _fieldOfView;
+            PanoramaCameraState camera = Camera;
 
             GLES20.GlUseProgram(_program);
 
             // Row-major System.Numerics bytes read column-major by GLSL are the transpose the row-vector math needs, so
             // upload with transpose = false.
-            WriteMatrix(new PanoramaCameraState(yaw, pitch, fov).GetWorldViewProjection(width / (float)Math.Max(1, height)), _mvp);
+            WriteMatrix(camera.GetWorldViewProjection(width / (float)Math.Max(1, height)), _mvp);
             GLES20.GlUniformMatrix4fv(_uMvp, 1, false, _mvp, 0);
 
             GLES20.GlActiveTexture(GLES20.GlTexture0);
@@ -977,14 +951,14 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
             _sphereVertices!.Position(0);
             GLES20.GlEnableVertexAttribArray(_aPosition);
-            GLES20.GlVertexAttribPointer(_aPosition, 3, GLES20.GlFloat, false, 0, _sphereVertices);
-            _sphereTexCoords!.Position(0);
+            GLES20.GlVertexAttribPointer(_aPosition, 3, GLES20.GlFloat, false, 5 * sizeof(float), _sphereVertices);
+            _sphereVertices.Position(3);
             GLES20.GlEnableVertexAttribArray(_aTexCoord);
-            GLES20.GlVertexAttribPointer(_aTexCoord, 2, GLES20.GlFloat, false, 0, _sphereTexCoords);
+            GLES20.GlVertexAttribPointer(_aTexCoord, 2, GLES20.GlFloat, false, 5 * sizeof(float), _sphereVertices);
             _sphereIndices!.Position(0);
             GLES20.GlDrawElements(GLES20.GlTriangles, _sphereIndexCount, GLES20.GlUnsignedShort, _sphereIndices);
 
-            DrawMarkers(width, height, yaw, pitch, fov);
+            DrawMarkers(width, height, camera);
 
             GLES20.GlDisableVertexAttribArray(_aPosition);
             GLES20.GlDisableVertexAttribArray(_aTexCoord);
@@ -1018,12 +992,11 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
     // Screen-aligned alpha-blended quads sized to the swatch and shifted by the symbol offset, projected with the shared
     // camera math, drawn with an identity MVP.
-    private void DrawMarkers(int width, int height, float yaw, float pitch, float fov)
+    private void DrawMarkers(int width, int height, PanoramaCameraState camera)
     {
         if (_glMarkers.Count == 0 || _markerQuadBuffer is null || _markerQuadUvBuffer is null)
             return;
 
-        var camera = new PanoramaCameraState(yaw, pitch, fov);
         Matrix4x4 identity = Matrix4x4.Identity;
         WriteMatrix(identity, _mvp);
         GLES20.GlUniformMatrix4fv(_uMvp, 1, false, _mvp, 0);
@@ -1185,9 +1158,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
 
             // distance* are previous-minus-current. Same grab feel as the Windows heads:
             // drag right pans the view left; drag down looks up.
-            float scale = DragRotationScale(_owner._fieldOfView, _owner._viewportHeight);
-            _owner.Yaw += distanceX * scale;
-            _owner.Pitch = Math.Clamp(_owner._pitch + (distanceY * scale), MinPitch, MaxPitch);
+            _owner.Camera = _owner.Camera.Drag(-distanceX, -distanceY, _owner._viewportHeight);
             _owner.RequestRender();
             return true;
         }
@@ -1202,7 +1173,7 @@ internal sealed class PanoramicSurface : TextureView, TextureView.ISurfaceTextur
         public override bool OnScale(ScaleGestureDetector detector)
         {
             // Pinch out (factor > 1) zooms in = narrower field of view (same as the WinUI pinch).
-            _owner.FieldOfView = Math.Clamp(_owner._fieldOfView / detector.ScaleFactor, MinFieldOfView, MaxFieldOfView);
+            _owner.Camera = _owner.Camera.Zoom(detector.ScaleFactor);
             _owner.RequestRender();
             return true;
         }

@@ -29,10 +29,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 //     System.Numerics row-vector convention. Angles are radians; FieldOfView is vertical. At Yaw = Pitch = 0 the view
 //     center is (u,v) = (0.75, 0.5); u_center = 0.75 + Yaw/2pi (mod 1) and v_center = 0.5 + Pitch/pi (positive looks down).
 //   - Screen: element/DIP coordinates, origin top-left, +Y down.
-internal readonly struct PanoramaCameraState
+internal sealed record PanoramaCameraState
 {
     private const float NearPlane = 0.1f;
     private const float FarPlane = 10f;
+
+    public static readonly PanoramaCameraState Initial = new(0f, 0f, MathF.PI / 2f);
 
     // Shared camera limits and input tuning, used by every platform's camera/gesture layer.
     public const float MinPitch = -(MathF.PI / 2f) + 0.01f;
@@ -80,11 +82,23 @@ internal readonly struct PanoramaCameraState
         FieldOfView = fieldOfView;
     }
 
-    public float Yaw { get; }
+    public float Yaw { get; init; }
 
-    public float Pitch { get; }
+    public float Pitch { get; init; }
 
-    public float FieldOfView { get; }
+    public float FieldOfView { get; init; }
+
+    public PanoramaCameraState Drag(float dx, float dy, double viewHeight)
+    {
+        float scale = DragRotationScale(FieldOfView, viewHeight);
+        return this with { Yaw = Yaw - (dx * scale), Pitch = Math.Clamp(Pitch - (dy * scale), MinPitch, MaxPitch) };
+    }
+
+    public PanoramaCameraState Zoom(float scale) =>
+        this with { FieldOfView = Math.Clamp(FieldOfView / scale, MinFieldOfView, MaxFieldOfView) };
+
+    public PanoramaCameraState ZoomWheel(float notches) =>
+        this with { FieldOfView = Math.Clamp(FieldOfView - (notches * WheelZoomStep), MinFieldOfView, MaxFieldOfView) };
 
     // One frame of held-key navigation. Unlike a drag, which moves the image, an arrow moves the view toward its side,
     // as in MapView: Left looks left and Up looks up. Held keys combine, so Up+Left moves diagonally. viewHeight uses
@@ -225,14 +239,13 @@ internal readonly struct PanoramaCameraState
 
     // The unit sphere every renderer draws, in the convention above: xyz positions, uv texture coordinates and a
     // 16-bit triangle list (signed for the GL buffers; the values fit either way).
-    internal static (float[] Positions, float[] TexCoords, short[] Indices) CreateSphereMesh()
+    internal static (float[] Vertices, short[] Indices) CreateSphereMesh()
     {
         const int longitudeSegments = 64;
         const int latitudeSegments = 32;
         int vertexCount = (longitudeSegments + 1) * (latitudeSegments + 1);
-        float[] positions = new float[vertexCount * 3];
-        float[] texCoords = new float[vertexCount * 2];
-        int p = 0, t = 0;
+        float[] vertices = new float[vertexCount * 5];
+        int vertexOffset = 0;
         for (int lat = 0; lat <= latitudeSegments; lat++)
         {
             float v = lat / (float)latitudeSegments;
@@ -241,11 +254,11 @@ internal readonly struct PanoramaCameraState
             {
                 float u = lon / (float)longitudeSegments;
                 float theta = u * 2f * MathF.PI;
-                positions[p++] = MathF.Sin(phi) * MathF.Cos(theta);
-                positions[p++] = MathF.Cos(phi);
-                positions[p++] = MathF.Sin(phi) * MathF.Sin(theta);
-                texCoords[t++] = u;
-                texCoords[t++] = v;
+                vertices[vertexOffset++] = MathF.Sin(phi) * MathF.Cos(theta);
+                vertices[vertexOffset++] = MathF.Cos(phi);
+                vertices[vertexOffset++] = MathF.Sin(phi) * MathF.Sin(theta);
+                vertices[vertexOffset++] = u;
+                vertices[vertexOffset++] = v;
             }
         }
 
@@ -266,7 +279,7 @@ internal readonly struct PanoramaCameraState
             }
         }
 
-        return (positions, texCoords, indices);
+        return (vertices, indices);
     }
 }
 

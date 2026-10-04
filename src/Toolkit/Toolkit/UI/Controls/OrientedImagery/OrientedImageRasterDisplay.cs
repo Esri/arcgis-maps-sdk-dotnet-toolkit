@@ -285,21 +285,11 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     // Re-places the given markers, or all of them when null.
     private async Task RefreshMarkerGeometriesAsync(IEnumerable<OrientedImageMarker>? markers = null)
     {
-        if (markers == null)
+        var markerGraphics = markers is null ? new Dictionary<OrientedImageMarker, Graphic>(_markerGraphics) : _markerGraphics;
+        foreach (OrientedImageMarker marker in markers ?? markerGraphics.Keys)
         {
-            var markerGraphicsSnapshot = new Dictionary<OrientedImageMarker, Graphic>(_markerGraphics);
-            foreach (KeyValuePair<OrientedImageMarker, Graphic> pair in markerGraphicsSnapshot)
-            {
-                await ResolveAndApplyMarkerGeometryAsync(pair.Key, pair.Value);
-            }
-        }
-        else
-        {
-            foreach (OrientedImageMarker marker in markers)
-            {
-                if (_markerGraphics.TryGetValue(marker, out Graphic? graphic))
-                    await ResolveAndApplyMarkerGeometryAsync(marker, graphic);
-            }
+            if (markerGraphics.TryGetValue(marker, out Graphic? graphic))
+                await ResolveAndApplyMarkerGeometryAsync(marker, graphic);
         }
     }
 
@@ -439,15 +429,17 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         double maxCol = extent.Width / cellX;
         double maxRow = extent.Height / cellY;
 
-        IReadOnlyList<MapPoint> points = visibleArea.Parts[0].Points;
-        var ring = new List<(double X, double Y)>(points.Count);
+        // Clip in raster coordinates; EXIF can swap axes or reflect the pixel grid.
+        var firstRing = new Polygon(visibleArea.Parts[0].Points, visibleArea.SpatialReference);
+        var clipped = (Polygon)GeometryEngine.Intersection(firstRing, extent);
+        IReadOnlyList<MapPoint> points = clipped.Parts.Count == 0 ? [] : clipped.Parts[0].Points;
+        var pixels = new List<PointF>(points.Count);
         foreach (MapPoint point in points)
-            ring.Add(((point.X - extent.XMin) / cellX, (extent.YMax - point.Y) / cellY));
-
-        List<(double X, double Y)> clipped = ClipToRectangle(ring, maxCol, maxRow);
-        var pixels = new List<PointF>(clipped.Count);
-        foreach ((double x, double y) in clipped)
-            pixels.Add(orientation.StoredToImage(new PointF((float)x, (float)y), maxCol, maxRow));
+        {
+            double col = (point.X - extent.XMin) / cellX;
+            double row = (extent.YMax - point.Y) / cellY;
+            pixels.Add(orientation.StoredToImage(new PointF((float)col, (float)row), maxCol, maxRow));
+        }
 
         // A reflection reverses the ring's winding; reverse it again to keep it clockwise.
         if (orientation.IsMirrored)
@@ -455,42 +447,4 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
         return pixels;
     }
-
-    // Sutherland-Hodgman intersection of a polygon ring with the axis-aligned rectangle [0,maxX]x[0,maxY].
-    // The clip region is convex, so this is exact for any simple subject ring. Empty when fully outside.
-    private static List<(double X, double Y)> ClipToRectangle(List<(double X, double Y)> ring, double maxX, double maxY)
-    {
-        List<(double X, double Y)> output = ring;
-        output = ClipEdge(output, p => p.X >= 0, (a, b) => IntersectAtX(a, b, 0));
-        output = ClipEdge(output, p => p.X <= maxX, (a, b) => IntersectAtX(a, b, maxX));
-        output = ClipEdge(output, p => p.Y >= 0, (a, b) => IntersectAtY(a, b, 0));
-        output = ClipEdge(output, p => p.Y <= maxY, (a, b) => IntersectAtY(a, b, maxY));
-        return output;
-    }
-
-    private static List<(double X, double Y)> ClipEdge(
-        List<(double X, double Y)> input,
-        Func<(double X, double Y), bool> inside,
-        Func<(double X, double Y), (double X, double Y), (double X, double Y)> intersect)
-    {
-        var output = new List<(double X, double Y)>(input.Count + 2);
-        for (int i = 0; i < input.Count; i++)
-        {
-            (double X, double Y) current = input[i];
-            (double X, double Y) previous = input[(i + input.Count - 1) % input.Count];
-            bool currentInside = inside(current);
-            if (currentInside != inside(previous))
-                output.Add(intersect(previous, current));
-            if (currentInside)
-                output.Add(current);
-        }
-
-        return output;
-    }
-
-    private static (double X, double Y) IntersectAtX((double X, double Y) a, (double X, double Y) b, double x)
-        => (x, a.Y + ((b.Y - a.Y) * ((x - a.X) / (b.X - a.X))));
-
-    private static (double X, double Y) IntersectAtY((double X, double Y) a, (double X, double Y) b, double y)
-        => (a.X + ((b.X - a.X) * ((y - a.Y) / (b.Y - a.Y))), y);
 }

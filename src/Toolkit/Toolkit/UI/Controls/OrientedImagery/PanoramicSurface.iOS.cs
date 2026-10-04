@@ -74,9 +74,7 @@ internal sealed class PanoramicSurface : MTKView
     private List<(IMTLTexture Texture, PanoramaMarker Marker)> _markers = [];
     private CGSize _lastSize;
 
-    private float _yaw;
-    private float _pitch;
-    private float _fieldOfView = MathF.PI / 2f;
+    private PanoramaCameraState _camera = PanoramaCameraState.Initial;
 
     // Pans apply deltas from the last update. A change in touch count or a pinch re-anchors them.
     private CGPoint _lastPanTranslation;
@@ -156,22 +154,17 @@ internal sealed class PanoramicSurface : MTKView
     // Raised when the drawable's pixels per point change, so the display can rasterize its markers again.
     public event Action? ScaleChanged;
 
-    public float Yaw
+    public PanoramaCameraState Camera
     {
-        get => _yaw;
-        set => SetCamera(ref _yaw, value);
-    }
+        get => _camera;
+        set
+        {
+            if (_camera == value)
+                return;
 
-    public float Pitch
-    {
-        get => _pitch;
-        set => SetCamera(ref _pitch, value);
-    }
-
-    public float FieldOfView
-    {
-        get => _fieldOfView;
-        set => SetCamera(ref _fieldOfView, value);
+            _camera = value;
+            ViewChanged?.Invoke();
+        }
     }
 
     // In points, like tap positions.
@@ -184,15 +177,6 @@ internal sealed class PanoramicSurface : MTKView
 
     // The decode awaits this, so an image is presented only once it can be drawn.
     internal static Task<Pipeline> GetPipelineAsync() => s_pipeline.Value;
-
-    private void SetCamera(ref float field, float value)
-    {
-        if (field == value)
-            return;
-
-        field = value;
-        ViewChanged?.Invoke();
-    }
 
     // Takes ownership of the texture.
     public void SetTexture(IMTLTexture texture)
@@ -371,7 +355,7 @@ internal sealed class PanoramicSurface : MTKView
 
     private unsafe void DrawScene(IMTLRenderCommandEncoder encoder, Pipeline pipeline, IMTLTexture texture, CGSize size)
     {
-        var camera = new PanoramaCameraState(_yaw, _pitch, _fieldOfView);
+        PanoramaCameraState camera = Camera;
         Matrix4x4 worldViewProjection = camera.GetWorldViewProjection((float)(size.Width / size.Height));
 
         // Row-major System.Numerics bytes read as a column-major float4x4 give the transpose the math needs, so the
@@ -494,9 +478,7 @@ internal sealed class PanoramicSurface : MTKView
 
         if ((recognizer.State is UIGestureRecognizerState.Began or UIGestureRecognizerState.Changed) && touches == _lastPanTouches && !_pinching)
         {
-            float scale = DragRotationScale(FieldOfView, Bounds.Height);
-            Yaw -= (float)(translation.X - _lastPanTranslation.X) * scale;
-            Pitch = Math.Clamp(Pitch - ((float)(translation.Y - _lastPanTranslation.Y) * scale), MinPitch, MaxPitch);
+            Camera = Camera.Drag((float)(translation.X - _lastPanTranslation.X), (float)(translation.Y - _lastPanTranslation.Y), Bounds.Height);
             RequestRender();
         }
 
@@ -510,7 +492,7 @@ internal sealed class PanoramicSurface : MTKView
         {
             // Spreading the fingers zooms in. Scale accumulates over the gesture, so it resets after each update.
             _pinching = true;
-            FieldOfView = Math.Clamp(FieldOfView / (float)recognizer.Scale, MinFieldOfView, MaxFieldOfView);
+            Camera = Camera.Zoom((float)recognizer.Scale);
             recognizer.Scale = 1;
             RequestRender();
         }
@@ -535,7 +517,7 @@ internal sealed class PanoramicSurface : MTKView
         _lastWheelTranslation = translation;
         if (delta != 0)
         {
-            FieldOfView = Math.Clamp(FieldOfView + (delta > 0 ? -WheelZoomStep : WheelZoomStep), MinFieldOfView, MaxFieldOfView);
+            Camera = Camera.ZoomWheel(delta > 0 ? 1f : -1f);
             RequestRender();
         }
     }
@@ -660,10 +642,7 @@ internal sealed class PanoramicSurface : MTKView
         if (_keyboardTimestamp != 0)
         {
             double seconds = Math.Min(link.Timestamp - _keyboardTimestamp, MaxKeyboardStepSeconds);
-            PanoramaCameraState camera = new PanoramaCameraState(Yaw, Pitch, FieldOfView).Navigate(keys, seconds, ActualHeight);
-            Yaw = camera.Yaw;
-            Pitch = camera.Pitch;
-            FieldOfView = camera.FieldOfView;
+            Camera = Camera.Navigate(keys, seconds, ActualHeight);
             RequestRender();
         }
 
@@ -704,17 +683,7 @@ internal sealed class PanoramicSurface : MTKView
             SphereSampler = CreateSampler(MTLSamplerAddressMode.Repeat); // wrap u across the seam
             MarkerSampler = CreateSampler(MTLSamplerAddressMode.ClampToEdge);
 
-            (float[] positions, float[] texCoords, short[] indices) = PanoramaCameraState.CreateSphereMesh();
-            float[] vertices = new float[positions.Length / 3 * 5];
-            for (int i = 0, j = 0; i < positions.Length / 3; i++)
-            {
-                vertices[j++] = positions[i * 3];
-                vertices[j++] = positions[(i * 3) + 1];
-                vertices[j++] = positions[(i * 3) + 2];
-                vertices[j++] = texCoords[i * 2];
-                vertices[j++] = texCoords[(i * 2) + 1];
-            }
-
+            (float[] vertices, short[] indices) = PanoramaCameraState.CreateSphereMesh();
             SphereVertices = Device.CreateBuffer(vertices, MTLResourceOptions.StorageModeShared) ?? throw new InvalidOperationException("Unable to create the sphere vertices.");
             SphereIndices = Device.CreateBuffer(indices, MTLResourceOptions.StorageModeShared) ?? throw new InvalidOperationException("Unable to create the sphere indices.");
             SphereIndexCount = indices.Length;

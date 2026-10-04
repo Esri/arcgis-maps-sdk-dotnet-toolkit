@@ -139,7 +139,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             PanoramaFrame frame = await DecodeAsync(uri, token);
             if (token.IsCancellationRequested)
             {
-                DiscardFrame(frame);
+                frame.Discard();
                 return;
             }
 
@@ -317,19 +317,17 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
             if (image is null)
                 return null;
 
-            Stream raw = await image.GetRawBufferAsync().ConfigureAwait(false);
+            using Stream raw = await image.GetRawBufferAsync().ConfigureAwait(false);
+            // GetRawBufferAsync returns a fresh, exact-size buffer that can be owned without copying.
             byte[] bytes;
             if (raw is MemoryStream memory && memory.TryGetBuffer(out ArraySegment<byte> segment) &&
                 segment.Array is byte[] array && segment.Offset == 0 && segment.Count == array.Length)
             {
-                bytes = array; // GetRawBufferAsync returns a fresh, exact-size, publicly-visible buffer: own it directly.
+                bytes = array;
             }
             else
             {
-                using (raw)
-                {
-                    bytes = ReadAllBytes(raw);
-                }
+                bytes = ReadAllBytes(raw);
             }
 
             (double offsetX, double offsetY) = GetMarkerOffset(symbol);
@@ -404,7 +402,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         PanoramaFrame frame = await DecodeAsync(dataUri, token);
         if (token.IsCancellationRequested)
         {
-            DiscardFrame(frame); // never applied; release promptly rather than via finalizers
+            frame.Discard(); // never applied; release promptly rather than via finalizers
             return;
         }
 
@@ -415,9 +413,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
         // Each image opens facing north at the horizon, with a 90-degree vertical field of view. The identity camera
         // centers u = 0.75 and the center column faces CameraHeading, so yaw is -pi/2 minus the heading.
-        _surface.Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image.Attributes);
-        _surface.Pitch = 0f;
-        _surface.FieldOfView = MathF.PI / 2f;
+        _surface.Camera = PanoramaCameraState.Initial with { Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image.Attributes) };
         _surface.RequestRender();
 
         // Push the footprint explicitly: the push made when auto-update was enabled ran with zero dimensions, and camera
@@ -443,7 +439,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     protected override void OnPresentCompleted() => QueueMarkerPass();
 
-    private PanoramaCameraState Camera => new(_surface.Yaw, _surface.Pitch, _surface.FieldOfView);
+    private PanoramaCameraState Camera => _surface.Camera;
 
     public override PointF? ScreenToImage(double x, double y) =>
         IsInteractive && Camera.TryScreenToNormalizedUv(x, y, _surface.ActualWidth, _surface.ActualHeight, out float u, out float v)
@@ -785,30 +781,34 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
 #if __ANDROID__
     // The decoded (possibly downsampled) bitmap plus the image's full-resolution oriented dimensions.
-    internal readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height);
-
-    private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bitmap);
-
-    // Lost a generation race: recycle now rather than via finalizers; full-size bitmaps add up during rapid paging.
-    private static void DiscardFrame(PanoramaFrame frame) => frame.Bitmap.Recycle();
+    internal readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height)
+    {
+        // Lost a generation race: recycle now rather than via finalizers; full-size bitmaps add up during rapid paging.
+        public void Discard() => Bitmap.Recycle();
+    }
 #elif __IOS__
     // The decoded (possibly downsampled) texture plus the image's full-resolution oriented dimensions.
-    internal readonly record struct PanoramaFrame(Metal.IMTLTexture Texture, int Width, int Height);
-
-    private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Texture);
-
-    // Releases a superseded frame now, since full-size textures add up during rapid paging.
-    private static void DiscardFrame(PanoramaFrame frame) => frame.Texture.Dispose();
+    internal readonly record struct PanoramaFrame(Metal.IMTLTexture Texture, int Width, int Height)
+    {
+        // Releases a superseded frame now, since full-size textures add up during rapid paging.
+        public void Discard() => Texture.Dispose();
+    }
 #else
     // The decoded image as tightly-packed BGRA8 plus its pixel dimensions.
-    internal readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height);
-
-    private void ApplyTexture(PanoramaFrame frame) => _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
-
-    // byte[]-backed frames are plain managed memory; nothing to release eagerly.
-    private static void DiscardFrame(PanoramaFrame frame)
+    internal readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height)
     {
+        // byte[]-backed frames are plain managed memory; nothing to release eagerly.
+        public void Discard()
+        {
+        }
     }
+#endif
+
+    private void ApplyTexture(PanoramaFrame frame) =>
+#if MAUI
+        _surface.SetTexture(frame);
+#else
+        _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
 #endif
 
     // A marker resolved to a normalized (u,v), its symbol offset, and its swatch's half-size, all sizes in DIPs, kept on
