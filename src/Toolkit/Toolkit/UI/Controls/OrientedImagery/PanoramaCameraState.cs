@@ -97,6 +97,7 @@ internal sealed record PanoramaCameraState
     public PanoramaCameraState Zoom(float scale) =>
         this with { FieldOfView = Math.Clamp(FieldOfView / scale, MinFieldOfView, MaxFieldOfView) };
 
+    // One wheel notch zooms in by WheelZoomStep; a precision touchpad or a high-resolution wheel sends fractions.
     public PanoramaCameraState ZoomWheel(float notches) =>
         this with { FieldOfView = Math.Clamp(FieldOfView - (notches * WheelZoomStep), MinFieldOfView, MaxFieldOfView) };
 

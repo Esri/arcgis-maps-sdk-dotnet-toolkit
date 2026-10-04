@@ -270,12 +270,17 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
         Release(ref _swapchain);
     }
 
-    // TODO: Set e.Handled, so a ScrollViewer around the panorama doesn't also scroll. Test on Windows.
+    // Handled, as in the SDK MapView, so a ScrollViewer around the panorama doesn't scroll as well. The delta is in
+    // notches of 120, and a precision touchpad sends fractions of a notch.
     private void OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
     {
-        int delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
-        Camera = Camera.ZoomWheel(delta > 0 ? 1f : -1f);
+        Microsoft.UI.Input.PointerPointProperties properties = e.GetCurrentPoint(this).Properties;
+        if (properties.IsHorizontalMouseWheel)
+            return;
+
+        Camera = Camera.ZoomWheel(properties.MouseWheelDelta / 120f);
         RequestRender();
+        e.Handled = true;
     }
 
     private void OnManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)

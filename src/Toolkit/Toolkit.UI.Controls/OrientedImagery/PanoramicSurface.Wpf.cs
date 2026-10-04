@@ -447,6 +447,9 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     protected override void OnMouseUp(MouseButtonEventArgs e)
     {
         base.OnMouseUp(e);
+        if (e.ChangedButton != MouseButton.Left)
+            return; // only the left button starts a drag or a tap
+
         ReleaseMouseCapture();
         _wasDragging = false; // reset in case the next gesture's button-down is missed or promoted (RDP)
 
@@ -456,12 +459,14 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
             SurfaceTapped?.Invoke(position.X, position.Y);
     }
 
-    // TODO: Set e.Handled, so a ScrollViewer around the panorama doesn't also scroll. Test on Windows.
+    // Handled, as in the SDK MapView, so a ScrollViewer around the panorama doesn't scroll as well. The delta is in
+    // notches of 120, and a precision touchpad sends fractions of a notch.
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
         base.OnMouseWheel(e);
-        Camera = Camera.ZoomWheel(e.Delta > 0 ? 1f : -1f);
+        Camera = Camera.ZoomWheel(e.Delta / 120f);
         RequestRender();
+        e.Handled = true;
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
