@@ -478,6 +478,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
             SurfaceTapped?.Invoke(position.X, position.Y);
     }
 
+    // TODO: Set e.Handled, so a ScrollViewer around the panorama doesn't also scroll. Test on Windows.
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
         base.OnMouseWheel(e);
