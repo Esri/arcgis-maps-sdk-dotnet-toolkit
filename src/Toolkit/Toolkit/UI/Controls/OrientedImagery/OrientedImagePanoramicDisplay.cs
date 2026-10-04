@@ -117,6 +117,12 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     // re-supply them. The camera lives on the surface and survives the rebuild.
     private async void OnDeviceRecreated()
     {
+        // A load in flight supplies the rebuilt surface when it completes, so a second decode would be wasted. A load
+        // that failed stays failed: the display never retries on its own.
+        OrientedImage? image = Footprint?.OrientedImage;
+        if (image is null || IsLoading || image.LoadStatus == LoadStatus.FailedToLoad)
+            return;
+
         // The rebuilt surface is blank until re-supplied: invalidate the dimensions so a tap isn't reported against the
         // old pixel space, and report busy/non-interactive so bound commands don't stay enabled over a blank panorama.
         _imageWidth = 0;
@@ -127,9 +133,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         CancellationToken token = SessionToken;
         try
         {
-            OrientedImage? image = Footprint?.OrientedImage;
-            if (image is null || token.IsCancellationRequested)
-                return; // nothing loaded, or an in-flight load will upload once it completes
+            if (token.IsCancellationRequested)
+                return;
 
             await image.RetryLoadAsync(); // idempotent; covers the image being unloaded/cancelled during teardown
             if (token.IsCancellationRequested || image.DataUri is not Uri uri)

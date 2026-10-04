@@ -97,6 +97,9 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     /// asynchronous render/device failures here and then call <see cref="UpdateState"/>. Cleared per session.</summary>
     protected Exception? PresentationError { get; set; }
 
+    /// <summary>Gets a value indicating whether the current footprint's image is being loaded and presented.</summary>
+    protected bool IsLoading => _isLoading;
+
     // The focusable inner view, which carries the automation name and id.
 #if MAUI
     protected abstract View AutomationTarget { get; }
