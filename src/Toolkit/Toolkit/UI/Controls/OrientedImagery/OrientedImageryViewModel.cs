@@ -45,6 +45,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         SelectedCameraMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Yellow, 15);
 
         _images = new List<OrientedImage>();
+        _readOnlyImages = _images.AsReadOnly();
 
         AutoUpdateFootprint = true;
         SelectedFootprintFillColor = System.Drawing.Color.FromArgb(32, System.Drawing.Color.Red);
@@ -148,6 +149,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
 #region Images
     private List<OrientedImage> _images;
+    private ReadOnlyCollection<OrientedImage> _readOnlyImages;
     private OrientedImage? _selectedImage;
     private OrientedImageFootprint? _selectedImageFootprint;
     private bool _isSequentialNavigation;
@@ -229,7 +231,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </summary>
     public IReadOnlyList<OrientedImage> Images
     {
-        get => _images.AsReadOnly();
+        get => _readOnlyImages;
     }
 
     /// <summary>
@@ -270,6 +272,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _imageBeforeSequentialNavigation = null;
         SelectedImage = null;
         _images = newImages;
+        _readOnlyImages = _images.AsReadOnly();
         _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
 
