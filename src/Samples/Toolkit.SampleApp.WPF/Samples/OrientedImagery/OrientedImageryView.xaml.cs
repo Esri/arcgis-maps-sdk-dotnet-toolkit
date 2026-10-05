@@ -232,7 +232,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _usingAlternateToolbarStyling = !_usingAlternateToolbarStyling;
             if (_usingAlternateToolbarStyling)
             {
-                _orientedImageryVM.ToolbarItems.RemoveAt(_orientedImageryVM.ToolbarItems.Count - 1);
+                var popupItem = _orientedImageryVM.ToolbarItems.OfType<OrientedImageryPopupToolbarItem>().FirstOrDefault();
+                if (popupItem != null)
+                    _orientedImageryVM.ToolbarItems.Remove(popupItem);
                 MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("AlternateToolbarSelector");
             }
             else
