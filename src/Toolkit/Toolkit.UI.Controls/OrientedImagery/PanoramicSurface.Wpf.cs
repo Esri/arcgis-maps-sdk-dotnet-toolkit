@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if WPF
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -548,6 +549,51 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
                 comObject = 0;
             }
         }
+    }
+}
+
+// The WPF decoder. It lives outside PanoramicSurface because an unsafe type can't contain await.
+internal readonly partial record struct PanoramaFrame
+{
+    // Decodes an image to BGRA8, applying a JPEG's EXIF orientation as the SDK does.
+    internal static async Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
+    {
+        (string? path, byte[]? downloaded) = await PanoramaImageFetcher.FetchAsync(uri, token);
+        return await Task.Run(
+            () =>
+            {
+                // Open the file shared: the SDK owns it. OnLoad reads the image fully.
+                using Stream stream = path is not null
+                    ? new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+                    : new MemoryStream(downloaded!, writable: false);
+                var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                BitmapFrame frame = decoder.Frames[0];
+                var orientation = decoder is JpegBitmapDecoder &&
+                    frame.Metadata is BitmapMetadata metadata &&
+                    metadata.GetQuery("/app1/ifd/{ushort=274}") is ushort value
+                    ? new ExifOrientationTransform(value) : default;
+                BitmapSource source = frame;
+                if (orientation.IsMirrored || orientation.RotationDegrees != 0)
+                {
+                    // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees). Matrix.Rotate and Scale
+                    // append, so the rotation applies first.
+                    var transform = System.Windows.Media.Matrix.Identity;
+                    transform.Rotate(orientation.RotationDegrees);
+                    if (orientation.IsMirrored)
+                        transform.Scale(-1, 1);
+                    source = new TransformedBitmap(frame, new System.Windows.Media.MatrixTransform(transform));
+                }
+
+                token.ThrowIfCancellationRequested();
+                var converted = new FormatConvertedBitmap(source, System.Windows.Media.PixelFormats.Bgra32, null, 0);
+                int width = converted.PixelWidth;
+                int height = converted.PixelHeight;
+                int stride = width * 4;
+                byte[] bytes = new byte[height * stride];
+                converted.CopyPixels(bytes, stride, 0);
+                return new PanoramaFrame(bytes, width, height);
+            },
+            token);
     }
 }
 #endif

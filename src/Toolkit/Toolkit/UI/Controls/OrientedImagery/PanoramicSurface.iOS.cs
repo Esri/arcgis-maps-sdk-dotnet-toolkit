@@ -178,11 +178,11 @@ internal sealed class PanoramicSurface : MTKView
     // The decode awaits this, so an image is presented only once it can be drawn.
     internal static Task<Pipeline> GetPipelineAsync() => s_pipeline.Value;
 
-    // Takes ownership of the texture.
-    public void SetTexture(IMTLTexture texture)
+    // Takes ownership of the frame's texture.
+    public void SetTexture(PanoramaFrame frame)
     {
         _texture?.Dispose();
-        _texture = texture;
+        _texture = frame.Texture;
         RequestRender();
     }
 
@@ -738,6 +738,130 @@ internal sealed class PanoramicSurface : MTKView
                 SAddressMode = addressU,
                 TAddressMode = MTLSamplerAddressMode.ClampToEdge,
             }) ?? throw new InvalidOperationException("Unable to create a Metal sampler.");
+    }
+}
+
+// A decoded panorama: the (possibly downsampled) texture plus the image's full-resolution oriented dimensions.
+internal readonly record struct PanoramaFrame(Metal.IMTLTexture Texture, int Width, int Height) : IDisposable
+{
+    // Releases a frame that is never shown now, since full-size textures add up during rapid paging.
+    public void Dispose() => Texture.Dispose();
+
+    // The longest texture side, 128 MB as BGRA8. Larger images decode at a power-of-two fraction of their size.
+    private const int MaxTextureSize = 8192;
+
+    // One decode at a time, so rapid paging never holds several full-size buffers.
+    private static readonly SemaphoreSlim s_decodeGate = new(1, 1);
+
+    // Decodes into a texture on the shared Metal device, applying a JPEG's EXIF orientation as the SDK does. Width and
+    // Height are the full-size oriented dimensions, which markers and taps use. Throws when it can't decode the data.
+    internal static Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
+    {
+        return Task.Run(
+            async () =>
+            {
+                // Waiting for the pipeline keeps the display busy until it can draw.
+                PanoramicSurface.Pipeline pipeline = await PanoramicSurface.GetPipelineAsync().ConfigureAwait(false);
+                (string? path, byte[]? downloaded) = await PanoramaImageFetcher.FetchAsync(uri, token).ConfigureAwait(false);
+                ImageIO.CGImageSource? source;
+                ExifOrientationTransform orientation;
+                if (path is not null)
+                {
+                    source = ImageIO.CGImageSource.FromUrl(Foundation.NSUrl.FromFilename(path));
+                    orientation = ExifOrientationTransform.Read(uri);
+                }
+                else
+                {
+                    source = ImageIO.CGImageSource.FromData(Foundation.NSData.FromArray(downloaded!));
+                    using var metadataStream = new MemoryStream(downloaded!, writable: false);
+                    orientation = ExifOrientationTransform.Read(metadataStream);
+                }
+
+                using (source)
+                {
+                    await s_decodeGate.WaitAsync(token).ConfigureAwait(false);
+                    try
+                    {
+                        token.ThrowIfCancellationRequested();
+                        return Decode(pipeline.Device, source, orientation, token);
+                    }
+                    finally
+                    {
+                        s_decodeGate.Release();
+                    }
+                }
+            },
+            token);
+    }
+
+    private static PanoramaFrame Decode(Metal.IMTLDevice device, ImageIO.CGImageSource? source, ExifOrientationTransform orientation, CancellationToken token)
+    {
+        CoreGraphics.CGImageProperties? properties = source?.ImageCount > 0 ? source.GetProperties(0, null) : null;
+        int width = properties?.PixelWidth ?? 0;
+        int height = properties?.PixelHeight ?? 0;
+        if (source is null || width <= 0 || height <= 0)
+            throw new InvalidDataException("The image could not be decoded.");
+
+        // ImageIO subsamples only by 2, 4, or 8.
+        int sample = 1;
+        while (Math.Max(width, height) / sample > MaxTextureSize)
+            sample *= 2;
+
+        if (sample > 8)
+            throw new NotSupportedException($"A {width}x{height} image is too large to display.");
+
+        // Without caching, the image decodes straight into the buffer it's drawn into. The .NET binding has the
+        // subsample factor only on the thumbnail options, which CreateImage also takes.
+        using CoreGraphics.CGImage image = source.CreateImage(0, new ImageIO.CGImageThumbnailOptions { ShouldCache = false, SubsampleFactor = sample > 1 ? sample : null })
+            ?? throw new InvalidDataException("The image could not be decoded.");
+        token.ThrowIfCancellationRequested();
+
+        Metal.IMTLTexture texture = DrawToTexture(device, image, orientation);
+        return new PanoramaFrame(texture, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
+    }
+
+    // Draws the image upright into a BGRA8 texture on the CPU, so it works in the background.
+    private static Metal.IMTLTexture DrawToTexture(Metal.IMTLDevice device, CoreGraphics.CGImage image, ExifOrientationTransform orientation)
+    {
+        int storedWidth = (int)image.Width;
+        int storedHeight = (int)image.Height;
+        int width = orientation.SwapsDimensions ? storedHeight : storedWidth;
+        int height = orientation.SwapsDimensions ? storedWidth : storedHeight;
+        int bytesPerRow = width * 4;
+        IntPtr pixels = System.Runtime.InteropServices.Marshal.AllocHGlobal((nint)bytesPerRow * height);
+        try
+        {
+            // The image's own color space keeps the decoded values, as on Windows. Gray and CMYK images can't back a
+            // BGRA context, so they convert to sRGB.
+            using (CoreGraphics.CGColorSpace colorSpace = image.ColorSpace is { Model: CoreGraphics.CGColorSpaceModel.RGB } own ? own : CoreGraphics.CGColorSpace.CreateSrgb())
+            using (var context = new CoreGraphics.CGBitmapContext(pixels, width, height, 8, bytesPerRow, colorSpace, CoreGraphics.CGBitmapFlags.ByteOrder32Little | CoreGraphics.CGBitmapFlags.PremultipliedFirst))
+            {
+                context.ConcatCTM(OrientationTransform(orientation, storedWidth, storedHeight, height));
+                context.DrawImage(new CoreGraphics.CGRect(0, 0, storedWidth, storedHeight), image);
+            }
+
+            return PanoramicSurface.CreateTexture(device, pixels, width, height, bytesPerRow);
+        }
+        finally
+        {
+            System.Runtime.InteropServices.Marshal.FreeHGlobal(pixels);
+        }
+    }
+
+    // Maps the stored image onto the oriented canvas as ExifOrientationTransform.StoredToImage does. CoreGraphics
+    // measures y from the bottom, so both sides flip y.
+    private static CoreGraphics.CGAffineTransform OrientationTransform(ExifOrientationTransform orientation, int width, int height, int orientedHeight)
+    {
+        System.Drawing.PointF origin = Map(0, 0);
+        System.Drawing.PointF unitX = Map(1, 0);
+        System.Drawing.PointF unitY = Map(0, 1);
+        return new CoreGraphics.CGAffineTransform(unitX.X - origin.X, unitX.Y - origin.Y, unitY.X - origin.X, unitY.Y - origin.Y, origin.X, origin.Y);
+
+        System.Drawing.PointF Map(float x, float y)
+        {
+            System.Drawing.PointF pixel = orientation.StoredToImage(new System.Drawing.PointF(x, height - y), width, height);
+            return new System.Drawing.PointF(pixel.X, orientedHeight - pixel.Y);
+        }
     }
 }
 #endif

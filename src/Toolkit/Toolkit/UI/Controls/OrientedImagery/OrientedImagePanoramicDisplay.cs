@@ -27,9 +27,6 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using PointF = System.Drawing.PointF;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
-#if WINDOWS_XAML || (MAUI && WINDOWS)
-using System.Runtime.InteropServices.WindowsRuntime;
-#endif
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -141,16 +138,16 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 return;
 
             // A newer SetFootprint cancels the session token, aborting a now-pointless re-decode.
-            PanoramaFrame frame = await DecodeAsync(uri, token);
+            PanoramaFrame frame = await PanoramaFrame.DecodeAsync(uri, token);
             if (token.IsCancellationRequested)
             {
-                frame.Discard();
+                frame.Dispose();
                 return;
             }
 
             _imageWidth = frame.Width;
             _imageHeight = frame.Height;
-            ApplyTexture(frame);
+            _surface.SetTexture(frame);
             _surface.RequestRender();
             QueueMarkerPass();
 
@@ -404,16 +401,16 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     protected override async Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token)
     {
-        PanoramaFrame frame = await DecodeAsync(dataUri, token);
+        PanoramaFrame frame = await PanoramaFrame.DecodeAsync(dataUri, token);
         if (token.IsCancellationRequested)
         {
-            frame.Discard(); // never applied; release promptly rather than via finalizers
+            frame.Dispose(); // never applied; release promptly rather than via finalizers
             return;
         }
 
         _imageWidth = frame.Width;
         _imageHeight = frame.Height;
-        ApplyTexture(frame);
+        _surface.SetTexture(frame);
         _recovering = false; // re-supplied, whether or not a rebuilt device asked; a later DeviceLost starts over
 
         // Each image opens facing north at the horizon, with a 90-degree vertical field of view. The identity camera
@@ -490,331 +487,6 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
         return 0f;
     }
-
-    // TODO: Move each platform's decoder and frame type next to its surface, and let the frame release itself. Then this
-    // display and PanoramicSurfaceView need no per-platform texture code.
-#if !WPF
-    // A local image's path, or the bytes of a web image.
-    private static async Task<(string? Path, byte[]? Bytes)> FetchImageAsync(Uri uri, CancellationToken token)
-    {
-        if (uri.IsFile)
-            return (uri.LocalPath, null);
-
-        if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
-            throw new NotSupportedException($"Images can't be read from '{uri.Scheme}' locations.");
-
-        using var httpClient = new System.Net.Http.HttpClient();
-        return (null, await httpClient.GetByteArrayAsync(uri, token));
-    }
-#endif
-
-#if WINDOWS_XAML || (MAUI && WINDOWS)
-    internal static async Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
-    {
-        (string? path, byte[]? bytes) = await FetchImageAsync(uri, token);
-        Windows.Storage.Streams.IRandomAccessStream? stream = null;
-        try
-        {
-            if (path is not null)
-            {
-                // Open shared (StorageFile has no share mode): the SDK owns the downloaded file.
-                stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).AsRandomAccessStream();
-            }
-            else
-            {
-                var memory = new Windows.Storage.Streams.InMemoryRandomAccessStream();
-                await memory.WriteAsync(bytes!.AsBuffer());
-                memory.Seek(0);
-                stream = memory;
-            }
-
-            Windows.Graphics.Imaging.BitmapDecoder decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
-            bool orientJpeg = decoder.DecoderInformation.CodecId == Windows.Graphics.Imaging.BitmapDecoder.JpegDecoderId;
-            Windows.Graphics.Imaging.PixelDataProvider pixels = await decoder.GetPixelDataAsync(
-                Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
-                Windows.Graphics.Imaging.BitmapAlphaMode.Ignore,
-                new Windows.Graphics.Imaging.BitmapTransform(),
-                orientJpeg ? Windows.Graphics.Imaging.ExifOrientationMode.RespectExifOrientation : Windows.Graphics.Imaging.ExifOrientationMode.IgnoreExifOrientation,
-                Windows.Graphics.Imaging.ColorManagementMode.DoNotColorManage);
-            return new PanoramaFrame(pixels.DetachPixelData(),
-                (int)(orientJpeg ? decoder.OrientedPixelWidth : decoder.PixelWidth),
-                (int)(orientJpeg ? decoder.OrientedPixelHeight : decoder.PixelHeight));
-        }
-        finally
-        {
-            stream?.Dispose();
-        }
-    }
-#elif WPF
-    internal static Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
-    {
-        return Task.Run(
-            () =>
-            {
-                System.Windows.Media.Imaging.BitmapDecoder decoder;
-                if (uri.IsFile)
-                {
-                    // Open shared (a Uri-based decoder can't): the SDK owns the downloaded file. OnLoad reads it fully.
-                    using var fileStream = new FileStream(uri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                    decoder = System.Windows.Media.Imaging.BitmapDecoder.Create(fileStream, System.Windows.Media.Imaging.BitmapCreateOptions.None, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
-                }
-                else
-                {
-                    decoder = System.Windows.Media.Imaging.BitmapDecoder.Create(uri, System.Windows.Media.Imaging.BitmapCreateOptions.None, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
-                }
-
-                System.Windows.Media.Imaging.BitmapFrame frame = decoder.Frames[0];
-                var orientation = decoder is System.Windows.Media.Imaging.JpegBitmapDecoder &&
-                    frame.Metadata is System.Windows.Media.Imaging.BitmapMetadata metadata &&
-                    metadata.GetQuery("/app1/ifd/{ushort=274}") is ushort value
-                    ? new ExifOrientationTransform(value) : default;
-                System.Windows.Media.Imaging.BitmapSource source = frame;
-                if (orientation.IsMirrored || orientation.RotationDegrees != 0)
-                {
-                    // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees). Matrix.Rotate and Scale
-                    // append, so the rotation applies first.
-                    var transform = System.Windows.Media.Matrix.Identity;
-                    transform.Rotate(orientation.RotationDegrees);
-                    if (orientation.IsMirrored)
-                        transform.Scale(-1, 1);
-                    source = new System.Windows.Media.Imaging.TransformedBitmap(frame, new System.Windows.Media.MatrixTransform(transform));
-                }
-
-                token.ThrowIfCancellationRequested();
-                var converted = new System.Windows.Media.Imaging.FormatConvertedBitmap(source, System.Windows.Media.PixelFormats.Bgra32, null, 0);
-                int width = converted.PixelWidth;
-                int height = converted.PixelHeight;
-                int stride = width * 4;
-                byte[] bytes = new byte[height * stride];
-                converted.CopyPixels(bytes, stride, 0);
-                return new PanoramaFrame(bytes, width, height);
-            },
-            token);
-    }
-#elif __ANDROID__
-    // Power-of-two downsample to the device budget (4096 low-RAM, else 8192) for the GPU texture only. Width and Height
-    // stay the full-resolution oriented dimensions, the pixel space that markers and taps use. Throws when it can't
-    // decode the data, such as a TIFF.
-    internal static Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
-    {
-        return Task.Run(
-            async () =>
-            {
-                (string? path, byte[]? downloaded) = await FetchImageAsync(uri, token).ConfigureAwait(false);
-                ExifOrientationTransform orientation;
-                if (path is not null)
-                    orientation = ExifOrientationTransform.Read(uri);
-                else
-                {
-                    using var metadataStream = new MemoryStream(downloaded!, writable: false);
-                    orientation = ExifOrientationTransform.Read(metadataStream);
-                }
-
-                var bounds = new Android.Graphics.BitmapFactory.Options { InJustDecodeBounds = true };
-                if (path is not null)
-                    Android.Graphics.BitmapFactory.DecodeFile(path, bounds);
-                else
-                    Android.Graphics.BitmapFactory.DecodeByteArray(downloaded, 0, downloaded!.Length, bounds);
-
-                int width = bounds.OutWidth;
-                int height = bounds.OutHeight;
-                if (width <= 0 || height <= 0)
-                    throw new InvalidDataException("The image could not be decoded.");
-
-                bool lowRam = (Android.App.Application.Context.GetSystemService(Android.Content.Context.ActivityService)
-                    as Android.App.ActivityManager)?.IsLowRamDevice == true;
-                int budget = lowRam ? 4096 : 8192;
-                int sample = 1;
-                while (Math.Max(width, height) / sample > budget)
-                    sample *= 2;
-
-                var options = new Android.Graphics.BitmapFactory.Options
-                {
-                    InSampleSize = sample,
-                    InPreferredConfig = Android.Graphics.Bitmap.Config.Argb8888,
-                };
-                Android.Graphics.Bitmap bitmap = (path is not null
-                    ? Android.Graphics.BitmapFactory.DecodeFile(path, options)
-                    : Android.Graphics.BitmapFactory.DecodeByteArray(downloaded, 0, downloaded!.Length, options))
-                    ?? throw new InvalidDataException("The image could not be decoded.");
-
-                try
-                {
-                    token.ThrowIfCancellationRequested();
-                    if (orientation.IsMirrored || orientation.RotationDegrees != 0)
-                    {
-                        // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees).
-                        using var transform = new Android.Graphics.Matrix();
-                        transform.SetRotate((float)orientation.RotationDegrees);
-                        if (orientation.IsMirrored)
-                            transform.PostScale(-1, 1);
-                        Android.Graphics.Bitmap oriented = Android.Graphics.Bitmap.CreateBitmap(bitmap, 0, 0, bitmap.Width, bitmap.Height, transform, false)
-                            ?? throw new InvalidOperationException("Unable to apply the image orientation.");
-                        if (!ReferenceEquals(oriented, bitmap))
-                            bitmap.Recycle();
-                        bitmap = oriented;
-                    }
-
-                    return new PanoramaFrame(bitmap, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
-                }
-                catch
-                {
-                    bitmap.Recycle();
-                    throw;
-                }
-            },
-            token);
-    }
-#elif __IOS__
-    // The longest texture side, 128 MB as BGRA8. Larger images decode at a power-of-two fraction of their size.
-    private const int MaxTextureSize = 8192;
-
-    // One decode at a time, so rapid paging never holds several full-size buffers.
-    private static readonly SemaphoreSlim s_decodeGate = new(1, 1);
-
-    // Decodes into a texture on the shared Metal device, applying a JPEG's EXIF orientation as the SDK does. Width and
-    // Height are the full-size oriented dimensions, which markers and taps use. Throws when it can't decode the data.
-    internal static Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
-    {
-        return Task.Run(
-            async () =>
-            {
-                // Waiting for the pipeline keeps the display busy until it can draw.
-                PanoramicSurface.Pipeline pipeline = await PanoramicSurface.GetPipelineAsync().ConfigureAwait(false);
-                (string? path, byte[]? downloaded) = await FetchImageAsync(uri, token).ConfigureAwait(false);
-                ImageIO.CGImageSource? source;
-                ExifOrientationTransform orientation;
-                if (path is not null)
-                {
-                    source = ImageIO.CGImageSource.FromUrl(Foundation.NSUrl.FromFilename(path));
-                    orientation = ExifOrientationTransform.Read(uri);
-                }
-                else
-                {
-                    source = ImageIO.CGImageSource.FromData(Foundation.NSData.FromArray(downloaded!));
-                    using var metadataStream = new MemoryStream(downloaded!, writable: false);
-                    orientation = ExifOrientationTransform.Read(metadataStream);
-                }
-
-                using (source)
-                {
-                    await s_decodeGate.WaitAsync(token).ConfigureAwait(false);
-                    try
-                    {
-                        token.ThrowIfCancellationRequested();
-                        return Decode(pipeline.Device, source, orientation, token);
-                    }
-                    finally
-                    {
-                        s_decodeGate.Release();
-                    }
-                }
-            },
-            token);
-    }
-
-    private static PanoramaFrame Decode(Metal.IMTLDevice device, ImageIO.CGImageSource? source, ExifOrientationTransform orientation, CancellationToken token)
-    {
-        CoreGraphics.CGImageProperties? properties = source?.ImageCount > 0 ? source.GetProperties(0, null) : null;
-        int width = properties?.PixelWidth ?? 0;
-        int height = properties?.PixelHeight ?? 0;
-        if (source is null || width <= 0 || height <= 0)
-            throw new InvalidDataException("The image could not be decoded.");
-
-        // ImageIO subsamples only by 2, 4, or 8.
-        int sample = 1;
-        while (Math.Max(width, height) / sample > MaxTextureSize)
-            sample *= 2;
-
-        if (sample > 8)
-            throw new NotSupportedException($"A {width}x{height} image is too large to display.");
-
-        // Without caching, the image decodes straight into the buffer it's drawn into. The .NET binding has the
-        // subsample factor only on the thumbnail options, which CreateImage also takes.
-        using CoreGraphics.CGImage image = source.CreateImage(0, new ImageIO.CGImageThumbnailOptions { ShouldCache = false, SubsampleFactor = sample > 1 ? sample : null })
-            ?? throw new InvalidDataException("The image could not be decoded.");
-        token.ThrowIfCancellationRequested();
-
-        Metal.IMTLTexture texture = DrawToTexture(device, image, orientation);
-        return new PanoramaFrame(texture, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
-    }
-
-    // Draws the image upright into a BGRA8 texture on the CPU, so it works in the background.
-    private static Metal.IMTLTexture DrawToTexture(Metal.IMTLDevice device, CoreGraphics.CGImage image, ExifOrientationTransform orientation)
-    {
-        int storedWidth = (int)image.Width;
-        int storedHeight = (int)image.Height;
-        int width = orientation.SwapsDimensions ? storedHeight : storedWidth;
-        int height = orientation.SwapsDimensions ? storedWidth : storedHeight;
-        int bytesPerRow = width * 4;
-        IntPtr pixels = System.Runtime.InteropServices.Marshal.AllocHGlobal((nint)bytesPerRow * height);
-        try
-        {
-            // The image's own color space keeps the decoded values, as on Windows. Gray and CMYK images can't back a
-            // BGRA context, so they convert to sRGB.
-            using (CoreGraphics.CGColorSpace colorSpace = image.ColorSpace is { Model: CoreGraphics.CGColorSpaceModel.RGB } own ? own : CoreGraphics.CGColorSpace.CreateSrgb())
-            using (var context = new CoreGraphics.CGBitmapContext(pixels, width, height, 8, bytesPerRow, colorSpace, CoreGraphics.CGBitmapFlags.ByteOrder32Little | CoreGraphics.CGBitmapFlags.PremultipliedFirst))
-            {
-                context.ConcatCTM(OrientationTransform(orientation, storedWidth, storedHeight, height));
-                context.DrawImage(new CoreGraphics.CGRect(0, 0, storedWidth, storedHeight), image);
-            }
-
-            return PanoramicSurface.CreateTexture(device, pixels, width, height, bytesPerRow);
-        }
-        finally
-        {
-            System.Runtime.InteropServices.Marshal.FreeHGlobal(pixels);
-        }
-    }
-
-    // Maps the stored image onto the oriented canvas as ExifOrientationTransform.StoredToImage does. CoreGraphics
-    // measures y from the bottom, so both sides flip y.
-    private static CoreGraphics.CGAffineTransform OrientationTransform(ExifOrientationTransform orientation, int width, int height, int orientedHeight)
-    {
-        PointF origin = Map(0, 0);
-        PointF unitX = Map(1, 0);
-        PointF unitY = Map(0, 1);
-        return new CoreGraphics.CGAffineTransform(unitX.X - origin.X, unitX.Y - origin.Y, unitY.X - origin.X, unitY.Y - origin.Y, origin.X, origin.Y);
-
-        PointF Map(float x, float y)
-        {
-            PointF pixel = orientation.StoredToImage(new PointF(x, height - y), width, height);
-            return new PointF(pixel.X, orientedHeight - pixel.Y);
-        }
-    }
-#endif
-
-#if __ANDROID__
-    // The decoded (possibly downsampled) bitmap plus the image's full-resolution oriented dimensions.
-    internal readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, int Width, int Height)
-    {
-        // Lost a generation race: recycle now rather than via finalizers; full-size bitmaps add up during rapid paging.
-        public void Discard() => Bitmap.Recycle();
-    }
-#elif __IOS__
-    // The decoded (possibly downsampled) texture plus the image's full-resolution oriented dimensions.
-    internal readonly record struct PanoramaFrame(Metal.IMTLTexture Texture, int Width, int Height)
-    {
-        // Releases a superseded frame now, since full-size textures add up during rapid paging.
-        public void Discard() => Texture.Dispose();
-    }
-#else
-    // The decoded image as tightly-packed BGRA8 plus its pixel dimensions.
-    internal readonly record struct PanoramaFrame(byte[] Bgra, int Width, int Height)
-    {
-        // byte[]-backed frames are plain managed memory; nothing to release eagerly.
-        public void Discard()
-        {
-        }
-    }
-#endif
-
-    private void ApplyTexture(PanoramaFrame frame) =>
-#if MAUI
-        _surface.SetTexture(frame);
-#else
-        _surface.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
-#endif
 
     // A marker resolved to a normalized (u,v), its symbol offset, and its swatch's half-size, all sizes in DIPs, kept on
     // the UI side for tap hit-testing (the surface owns the GPU side).

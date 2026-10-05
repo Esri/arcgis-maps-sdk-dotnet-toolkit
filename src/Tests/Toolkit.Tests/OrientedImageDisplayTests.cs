@@ -421,7 +421,7 @@ public sealed class OrientedImageDisplayTests
                 "the JPEG reader must recover the orientation written to the fixture");
 
             var expected = new RuntimeImage(uri);
-            OrientedImagePanoramicDisplay.PanoramaFrame actual = await OrientedImagePanoramicDisplay.DecodeAsync(uri, CancellationToken.None);
+            PanoramaFrame actual = await PanoramaFrame.DecodeAsync(uri, CancellationToken.None);
             Assert.AreEqual(expected.Width, actual.Width);
             Assert.AreEqual(expected.Height, actual.Height);
             await AssertDecodedPixelsMatchAsync(expected, actual, exifOrientation);
@@ -461,7 +461,7 @@ public sealed class OrientedImageDisplayTests
         encoder.Save(output);
     }
 
-    private static async Task AssertDecodedPixelsMatchAsync(RuntimeImage expected, OrientedImagePanoramicDisplay.PanoramaFrame actual, int exifOrientation)
+    private static async Task AssertDecodedPixelsMatchAsync(RuntimeImage expected, PanoramaFrame actual, int exifOrientation)
     {
         using Stream raw = await expected.GetRawBufferAsync();
         using var buffer = new MemoryStream();

@@ -451,6 +451,9 @@ internal sealed unsafe partial class PanoramicSurface
         }
     }
 
+    // Sets (or replaces) the equirectangular panorama texture from a decoded frame.
+    public void SetTexture(PanoramaFrame frame) => SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
+
     // Sets (or replaces) the equirectangular panorama texture from a tightly-packed BGRA8 buffer.
     public void SetTexture(ReadOnlySpan<byte> bgra, uint width, uint height)
     {
@@ -936,5 +939,14 @@ internal sealed unsafe partial class PanoramicSurface
     }
 
     private readonly record struct MarkerVertex(Vector2 Position, Vector2 TexCoord);
+}
+
+// A decoded panorama as tightly-packed BGRA8, with its pixel dimensions. Each present layer adds its DecodeAsync.
+internal readonly partial record struct PanoramaFrame(byte[] Bgra, int Width, int Height) : IDisposable
+{
+    // Plain managed memory, so there is nothing to release early.
+    public void Dispose()
+    {
+    }
 }
 #endif

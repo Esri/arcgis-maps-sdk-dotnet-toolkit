@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Microsoft.Maui.Handlers;
-using PanoramaFrame = Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagePanoramicDisplay.PanoramaFrame;
 #if __ANDROID__ || __IOS__
 using PlatformPanoramicSurface = Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PanoramicSurface;
 #else
@@ -77,27 +76,15 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         _everHadTexture = true;
         DiscardPendingFrame();
         if (_platform is { } platform)
-            ApplyTexture(platform, frame);
+            platform.SetTexture(frame);
         else
             _pendingFrame = frame;
     }
 
     private void DiscardPendingFrame()
     {
-        if (_pendingFrame is { } frame)
-            frame.Discard();
+        _pendingFrame?.Dispose();
         _pendingFrame = null;
-    }
-
-    private static void ApplyTexture(PlatformPanoramicSurface platform, PanoramaFrame frame)
-    {
-#if __ANDROID__
-        platform.SetTexture(frame.Bitmap);
-#elif __IOS__
-        platform.SetTexture(frame.Texture);
-#else
-        platform.SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
-#endif
     }
 
     public void ClearTexture()
@@ -146,7 +133,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         {
             // Clearing the stash prevents teardown from discarding a texture handed to the surface.
             _pendingFrame = null;
-            ApplyTexture(platform, frame);
+            platform.SetTexture(frame);
         }
         else if (_everHadTexture)
         {

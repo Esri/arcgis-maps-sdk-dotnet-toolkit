@@ -17,6 +17,7 @@
 #if WINDOWS_XAML || (MAUI && WINDOWS)
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using System.Runtime.InteropServices.WindowsRuntime;
 #if MAUI
 // The WinUI head supplies these as project-level usings; the MAUI head does not.
 using Microsoft.UI.Xaml;
@@ -297,6 +298,48 @@ internal sealed unsafe partial class PanoramicSurface : SwapChainPanel
     {
         if (TryStartKeyboardNavigation((VIRTUAL_KEY)e.Key))
             e.Handled = true;
+    }
+}
+
+// The WinUI decoder. It lives outside PanoramicSurface because an unsafe type can't contain await.
+internal readonly partial record struct PanoramaFrame
+{
+    // Decodes an image to BGRA8, applying a JPEG's EXIF orientation as the SDK does.
+    internal static async Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
+    {
+        (string? path, byte[]? bytes) = await PanoramaImageFetcher.FetchAsync(uri, token);
+        Windows.Storage.Streams.IRandomAccessStream? stream = null;
+        try
+        {
+            if (path is not null)
+            {
+                // Open shared (StorageFile has no share mode): the SDK owns the downloaded file.
+                stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).AsRandomAccessStream();
+            }
+            else
+            {
+                var memory = new Windows.Storage.Streams.InMemoryRandomAccessStream();
+                await memory.WriteAsync(bytes!.AsBuffer());
+                memory.Seek(0);
+                stream = memory;
+            }
+
+            Windows.Graphics.Imaging.BitmapDecoder decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+            bool orientJpeg = decoder.DecoderInformation.CodecId == Windows.Graphics.Imaging.BitmapDecoder.JpegDecoderId;
+            Windows.Graphics.Imaging.PixelDataProvider pixels = await decoder.GetPixelDataAsync(
+                Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
+                Windows.Graphics.Imaging.BitmapAlphaMode.Ignore,
+                new Windows.Graphics.Imaging.BitmapTransform(),
+                orientJpeg ? Windows.Graphics.Imaging.ExifOrientationMode.RespectExifOrientation : Windows.Graphics.Imaging.ExifOrientationMode.IgnoreExifOrientation,
+                Windows.Graphics.Imaging.ColorManagementMode.DoNotColorManage);
+            return new PanoramaFrame(pixels.DetachPixelData(),
+                (int)(orientJpeg ? decoder.OrientedPixelWidth : decoder.PixelWidth),
+                (int)(orientJpeg ? decoder.OrientedPixelHeight : decoder.PixelHeight));
+        }
+        finally
+        {
+            stream?.Dispose();
+        }
     }
 }
 
