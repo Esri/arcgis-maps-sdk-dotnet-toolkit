@@ -33,10 +33,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     {
         _allowAddingMarkers = false;
         _markers = new ObservableCollection<OrientedImageMarker>();
-        _managedMarkers = new ObservableCollection<OrientedImageMarker>();
+        _managedMarkers = new List<OrientedImageMarker>();
         _displayMarkers = new ObservableCollection<OrientedImageMarker>();
         _markers.CollectionChanged += Markers_CollectionChanged;
-        _managedMarkers.CollectionChanged += ManagedMarkers_CollectionChanged;
 
         _markersOverlay = new GraphicsOverlay() { Id = "OrientedImageryView_Markers_Overlay" };
         NewMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 15);
@@ -101,6 +100,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             SelectedImage = null;
             Markers.Clear();
             _managedMarkers.Clear();
+            SynchronizeMarkers();
 
             _oiLayer = value;
             if (_oiLayer != null)
@@ -620,7 +620,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 #region Markers
     // Application markers remain public; toolkit markers are merged internally for rendering.
     private readonly ObservableCollection<OrientedImageMarker> _markers;
-    private readonly ObservableCollection<OrientedImageMarker> _managedMarkers;
+    private readonly List<OrientedImageMarker> _managedMarkers;
     private readonly ObservableCollection<OrientedImageMarker> _displayMarkers;
     private readonly GraphicsOverlay _markersOverlay;
     private readonly HashSet<OrientedImageMarker> _overlayMarkerSubscriptions = [];
@@ -721,8 +721,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         SynchronizeMarkers();
     }
 
-    private void ManagedMarkers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => SynchronizeMarkers();
-
     private void SynchronizeMarkers()
     {
         foreach (var marker in _overlayMarkerSubscriptions)
@@ -791,14 +789,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             _managedMarkers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), SearchPointMarkerSymbol) { Tag = SearchPointMarkerTag });
         }
+        SynchronizeMarkers();
     }
 
     private void UpdateCameraMarkers()
     {
-        foreach (var marker in _managedMarkers.Where(mk => mk.Tag is MarkerTag tag && tag.Identifier == AllCamerasMarkerTag.Identifier).ToArray())
-        {
-            _managedMarkers.Remove(marker);
-        }
+        _managedMarkers.RemoveAll(marker => marker.Tag is MarkerTag tag && tag.Identifier == AllCamerasMarkerTag.Identifier);
 
         if (ShowCameraLocations)
         {
@@ -811,6 +807,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 });
             }
         }
+        SynchronizeMarkers();
     }
 
     private void UpdateSelectedCameraMarker()
@@ -833,6 +830,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             _managedMarkers.Remove(currentMarker);
         }
+        SynchronizeMarkers();
     }
 
     private struct MarkerTag(string identifier, int zIndex = 0)
