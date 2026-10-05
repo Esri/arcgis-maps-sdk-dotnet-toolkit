@@ -54,7 +54,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\UtilityNetworkTraceTool.Appearance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\UtilityNetworkTraceTool.Windows.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OrientedImagery\PanoramicSurface.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OrientedImagery\PanoramicSurface.WinUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OrientedImagery\PanoramicSurface.Wpf.cs" />
   </ItemGroup>
   <ItemGroup>
