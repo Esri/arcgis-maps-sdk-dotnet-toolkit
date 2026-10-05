@@ -76,15 +76,15 @@ internal readonly struct ExifOrientationTransform
         _ => point,
     };
 
-    internal static ExifOrientationTransform Read(Uri? dataUri)
-    {
-        if (dataUri is null || !dataUri.IsAbsoluteUri || !dataUri.IsFile)
-            return default;
+    internal static ExifOrientationTransform Read(Uri? dataUri) =>
+        dataUri is { IsAbsoluteUri: true, IsFile: true } ? Read(dataUri.LocalPath) : default;
 
+    internal static ExifOrientationTransform Read(string path)
+    {
         try
         {
             // Open shared: the SDK owns the downloaded file.
-            using FileStream stream = new(dataUri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using FileStream stream = new(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             return Read(stream);
         }
         catch (IOException)

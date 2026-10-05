@@ -552,20 +552,17 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     }
 }
 
-// The WPF decoder. It lives outside PanoramicSurface because an unsafe type can't contain await.
+// The WPF decoder. Like the other platforms' decoders, it is a member of this record struct.
 internal readonly partial record struct PanoramaFrame
 {
-    // Decodes an image to BGRA8, applying a JPEG's EXIF orientation as the SDK does.
-    internal static async Task<PanoramaFrame> DecodeAsync(Uri uri, CancellationToken token)
+    // Decodes an image file to BGRA8, applying a JPEG's EXIF orientation as the SDK does.
+    internal static Task<PanoramaFrame> DecodeAsync(string path, CancellationToken token)
     {
-        (string? path, byte[]? downloaded) = await PanoramaImageFetcher.FetchAsync(uri, token);
-        return await Task.Run(
+        return Task.Run(
             () =>
             {
                 // Open the file shared: the SDK owns it. OnLoad reads the image fully.
-                using Stream stream = path is not null
-                    ? new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-                    : new MemoryStream(downloaded!, writable: false);
+                using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
                 BitmapFrame frame = decoder.Frames[0];
                 var orientation = decoder is JpegBitmapDecoder &&

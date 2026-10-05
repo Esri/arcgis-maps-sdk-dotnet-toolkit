@@ -287,9 +287,10 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 #endif
     }
 
-    // Makes the loaded image visible. Runs inside the load skeleton's try: throw (or let cancellation throw) to
-    // record a presentation failure; check the token after every await before touching display state.
-    protected abstract Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token);
+    // Makes the loaded image visible from the local file at path. Runs inside the load skeleton's try: throw (or let
+    // cancellation throw) to record a presentation failure; check the token after every await before touching display
+    // state.
+    protected abstract Task PresentAsync(OrientedImage image, string path, CancellationToken token);
 
     // Blanks the presentation synchronously: visuals, dimensions and on-image markers.
     protected abstract void ClearPresentation();
@@ -427,7 +428,11 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
                 return;
             }
 
-            await PresentAsync(image, uri, token);
+            // Loading downloads the image, so its data is a local file. No other location is read.
+            if (!uri.IsAbsoluteUri || !uri.IsFile)
+                throw new NotSupportedException("The oriented image's data isn't a local file.");
+
+            await PresentAsync(image, uri.LocalPath, token);
         }
         catch (OperationCanceledException)
         {

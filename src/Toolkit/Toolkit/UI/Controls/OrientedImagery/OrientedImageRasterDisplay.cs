@@ -139,13 +139,13 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return PresentationError;
     }
 
-    protected override async Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token)
+    protected override async Task PresentAsync(OrientedImage image, string path, CancellationToken token)
     {
         // Abort a previous layer's load and keep the view locked until the new raster is framed.
         _rasterLayer?.CancelLoad();
         SetInteractive(false);
 
-        RasterLayer layer = new(CreateRaster(dataUri));
+        RasterLayer layer = new(new Raster(path));
         layer.ResamplingType = RasterResamplingType.BilinearInterpolation;
         Map map = new();
         map.OperationalLayers.Add(layer);
@@ -153,7 +153,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         _rasterLayer = layer;
         await layer.LoadAsync();
         token.ThrowIfCancellationRequested();
-        _imageOrientation = ExifOrientationTransform.Read(dataUri);
+        _imageOrientation = ExifOrientationTransform.Read(path);
 
         if (layer.Raster?.RasterInfo?.Extent is Envelope extent)
         {
@@ -217,15 +217,6 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
             return;
 
         _mapView.InteractionOptions = new MapViewInteractionOptions { IsEnabled = enabled };
-    }
-
-    private static Raster CreateRaster(Uri uri)
-    {
-        bool isHttp = uri.IsAbsoluteUri && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
-        if (isHttp)
-            return new ImageServiceRaster(uri);
-
-        return new Raster(uri.IsAbsoluteUri && uri.IsFile ? uri.LocalPath : uri.OriginalString);
     }
 
     // Graphics are kept per marker, so only added markers need placing. The overlay follows collection order, which

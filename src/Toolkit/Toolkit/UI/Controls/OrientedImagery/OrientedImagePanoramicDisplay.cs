@@ -134,11 +134,11 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                 return;
 
             await image.RetryLoadAsync(); // idempotent; covers the image being unloaded/cancelled during teardown
-            if (token.IsCancellationRequested || image.DataUri is not Uri uri)
+            if (token.IsCancellationRequested || image.DataUri is not { IsAbsoluteUri: true, IsFile: true } uri)
                 return;
 
             // A newer SetFootprint cancels the session token, aborting a now-pointless re-decode.
-            PanoramaFrame frame = await PanoramaFrame.DecodeAsync(uri, token);
+            PanoramaFrame frame = await PanoramaFrame.DecodeAsync(uri.LocalPath, token);
             if (token.IsCancellationRequested)
             {
                 frame.Dispose();
@@ -399,9 +399,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         _surface.RequestRender();
     }
 
-    protected override async Task PresentAsync(OrientedImage image, Uri dataUri, CancellationToken token)
+    protected override async Task PresentAsync(OrientedImage image, string path, CancellationToken token)
     {
-        PanoramaFrame frame = await PanoramaFrame.DecodeAsync(dataUri, token);
+        PanoramaFrame frame = await PanoramaFrame.DecodeAsync(path, token);
         if (token.IsCancellationRequested)
         {
             frame.Dispose(); // never applied; release promptly rather than via finalizers

@@ -421,7 +421,7 @@ public sealed class OrientedImageDisplayTests
                 "the JPEG reader must recover the orientation written to the fixture");
 
             var expected = new RuntimeImage(uri);
-            PanoramaFrame actual = await PanoramaFrame.DecodeAsync(uri, CancellationToken.None);
+            PanoramaFrame actual = await PanoramaFrame.DecodeAsync(path, CancellationToken.None);
             Assert.AreEqual(expected.Width, actual.Width);
             Assert.AreEqual(expected.Height, actual.Height);
             await AssertDecodedPixelsMatchAsync(expected, actual, exifOrientation);
