@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,26 +33,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Grid/Table, so Narrator and other assistive technology can navigate it like a table instead of a
     /// generic panel of unrelated text.
     /// </summary>
-    internal sealed partial class FieldsPopupElementViewAutomationPeer : FrameworkElementAutomationPeer, IGridProvider, ITableProvider
+    internal sealed partial class FieldsPopupElementViewAutomationPeer : FrameworkElementAutomationPeer
+#if WINUI
+        , IGridProvider, ITableProvider
+#endif
     {
         public FieldsPopupElementViewAutomationPeer(FieldsPopupElementView owner)
             : base(owner)
         {
         }
 
-        private FieldsPopupElementView TableView => (FieldsPopupElementView)Owner;
-
 #if WPF
         /// <inheritdoc />
-        public override object GetPattern(PatternInterface patternInterface)
+        protected override bool IsContentElementCore()
         {
-            if (patternInterface == PatternInterface.Grid || patternInterface == PatternInterface.Table)
-            {
-                return this;
-            }
-            return base.GetPattern(patternInterface);
+            return false;
         }
-#elif WINUI
+
+        /// <inheritdoc />
+        protected override bool IsControlElementCore()
+        {
+            return false;
+        }
+#else
+
+        private FieldsPopupElementView TableView => (FieldsPopupElementView)Owner;
+
         /// <inheritdoc />
         protected override object GetPatternCore(PatternInterface patternInterface)
         {
@@ -62,7 +68,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             return base.GetPatternCore(patternInterface);
         }
-#endif
 
         /// <inheritdoc />
         protected override string GetClassNameCore() => nameof(FieldsPopupElementView);
@@ -88,11 +93,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return null!;
             }
             var element = column == 0 ? cells[row].Label : cells[row].Value;
-#if WPF
-            var peer = UIElementAutomationPeer.CreatePeerForElement(element) ?? UIElementAutomationPeer.FromElement(element);
-#elif WINUI
             var peer = FrameworkElementAutomationPeer.FromElement(element);
-#endif
+
             return peer is null ? null! : ProviderFromPeer(peer);
         }
 
@@ -104,6 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         /// <inheritdoc />
         public IRawElementProviderSimple[]? GetColumnHeaders() => null;
+#endif
     }
 
     // Implemented by the label/value cell elements created in FieldsPopupElementView.RefreshTable() (set
