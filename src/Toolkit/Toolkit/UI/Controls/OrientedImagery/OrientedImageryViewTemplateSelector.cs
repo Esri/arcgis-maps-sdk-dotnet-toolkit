@@ -20,17 +20,7 @@ public class OrientedImageryViewTemplateSelector : DataTemplateSelector
     /// </summary>
     public OrientedImageryViewTemplateSelector()
     {
-        TypeTemplatePairs = new ObservableCollection<OrientedImageryViewTemplateSelectorItem>();
-        ((ObservableCollection<OrientedImageryViewTemplateSelectorItem>)TypeTemplatePairs).CollectionChanged += (s, e) =>
-        {
-            foreach (var newItem in e.NewItems?.OfType<OrientedImageryViewTemplateSelectorItem>() ?? [])
-            {
-                if (TypeTemplatePairs.FirstOrDefault((item) => item.Type == newItem.Type) is OrientedImageryViewTemplateSelectorItem existingItem)
-                {
-                    existingItem.Template = newItem.Template;
-                }
-            }
-        };
+        TypeTemplatePairs = new TemplateCollection();
     }
 
     /// <summary>
@@ -38,6 +28,7 @@ public class OrientedImageryViewTemplateSelector : DataTemplateSelector
     /// </summary>
     /// <remarks>
     /// Items with duplicate <see cref="OrientedImageryViewTemplateSelectorItem.Type"/> are not allowed in this collection. If an item with a duplicate type is added it will replace the existing item with the same type.
+    /// Replacing an entry also removes any other entry with the replacement's type.
     /// </remarks>
     public Collection<OrientedImageryViewTemplateSelectorItem> TypeTemplatePairs { get; private set; }
 
@@ -60,6 +51,7 @@ public class OrientedImageryViewTemplateSelector : DataTemplateSelector
     /// </summary>
     /// <remarks>
     /// If a type on <paramref name="other"/> is already registered on this instance, it will be skipped.
+    /// Entries are copied so changing a merged entry does not modify the source selector. The templates themselves are shared.
     /// </remarks>
     public void Merge(OrientedImageryViewTemplateSelector other)
     {
@@ -67,8 +59,33 @@ public class OrientedImageryViewTemplateSelector : DataTemplateSelector
         {
             if (!TypeTemplatePairs.Any(p => p.Type == pair.Type))
             {
-                TypeTemplatePairs.Add(pair);
+                TypeTemplatePairs.Add(new OrientedImageryViewTemplateSelectorItem { Type = pair.Type, Template = pair.Template });
             }
+        }
+    }
+
+    private sealed class TemplateCollection : ObservableCollection<OrientedImageryViewTemplateSelectorItem>
+    {
+        protected override void InsertItem(int index, OrientedImageryViewTemplateSelectorItem item)
+        {
+            var existing = this.FirstOrDefault(pair => pair.Type == item.Type);
+            if (existing != null)
+                base.SetItem(IndexOf(existing), item);
+            else
+                base.InsertItem(index, item);
+        }
+
+        protected override void SetItem(int index, OrientedImageryViewTemplateSelectorItem item)
+        {
+            var existing = this.FirstOrDefault(pair => pair.Type == item.Type);
+            int duplicateIndex = existing == null ? -1 : IndexOf(existing);
+            if (duplicateIndex >= 0 && duplicateIndex != index)
+            {
+                RemoveItem(duplicateIndex);
+                if (duplicateIndex < index)
+                    index--;
+            }
+            base.SetItem(index, item);
         }
     }
 }
