@@ -266,17 +266,27 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public void SetImages(IEnumerable<OrientedImage> images, MapPoint? searchPoint = null)
     {
         var newImages = images.ToList();
-        IsSequentialNavigation = false;
-        ResetSequentialNavigationState();
-        _imageBeforeSequentialNavigation = null;
-        SelectedImage = null;
-        _images = newImages;
-        _readOnlyImages = _images.AsReadOnly();
-        _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
+        _deferMarkerSynchronization = true;
+        try
+        {
+            IsSequentialNavigation = false;
+            ResetSequentialNavigationState();
+            _imageBeforeSequentialNavigation = null;
+            SelectedImage = null;
+            _images = newImages;
+            _readOnlyImages = _images.AsReadOnly();
+            _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
 
-        UpdateSearchPointMarker(searchPoint);
-        UpdateCameraMarkers();
+            UpdateSearchPointMarker(searchPoint);
+            UpdateCameraMarkers();
+        }
+        finally
+        {
+            _deferMarkerSynchronization = false;
+            SynchronizeMarkers();
+        }
+
         UpdateVisibleFootprints();
 
         ChangeNavigationCommandCanExecute();
@@ -623,6 +633,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private readonly ResettableObservableCollection<OrientedImageMarker> _displayMarkers;
     private readonly GraphicsOverlay _markersOverlay;
     private readonly HashSet<OrientedImageMarker> _overlayMarkerSubscriptions = [];
+    private bool _deferMarkerSynchronization;
     private bool _showCameraLocations = true;
     private bool _canClearMarkers;
     private static readonly MarkerTag SearchPointMarkerTag = new MarkerTag("SearchPointMarker");
@@ -722,6 +733,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void SynchronizeMarkers()
     {
+        if (_deferMarkerSynchronization)
+            return;
+
         foreach (var marker in _overlayMarkerSubscriptions)
             marker.PropertyChanged -= Marker_PropertyChanged;
         _overlayMarkerSubscriptions.Clear();
