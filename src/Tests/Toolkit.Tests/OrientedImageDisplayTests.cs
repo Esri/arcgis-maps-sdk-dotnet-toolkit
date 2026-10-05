@@ -77,6 +77,18 @@ public sealed class OrientedImageDisplayTests
     }
 
     [STATestMethod]
+    public void DeviceRecoveryWithNothingToResupplyIsNotBusy()
+    {
+        // Without an image, a rebuilt device has nothing to re-supply, so recovery ends there.
+        var display = new OrientedImagePanoramicDisplay();
+        display.OnDeviceLost();
+        Assert.IsTrue(display.IsBusy, "a lost device reports busy");
+
+        display.OnDeviceRecreated();
+        Assert.IsFalse(display.IsBusy, "recovery ends when there is no image to re-supply");
+    }
+
+    [STATestMethod]
     public void MarkerChangesStartOnlyTheNeededPasses()
     {
         // Only drawn properties start a pass. A change inside the symbol counts, since the SDK symbol is what is

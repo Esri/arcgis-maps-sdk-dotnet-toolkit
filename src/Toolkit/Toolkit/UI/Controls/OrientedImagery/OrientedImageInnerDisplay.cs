@@ -287,9 +287,8 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 #endif
     }
 
-    // Makes the loaded image visible from the local file at path. Runs inside the load skeleton's try: throw (or let
-    // cancellation throw) to record a presentation failure; check the token after every await before touching display
-    // state.
+    // Shows the loaded image from the local file at path. It runs inside the load skeleton's try, so throw (or let
+    // cancellation throw) to record a presentation failure. Check the token after every await before touching state.
     protected abstract Task PresentAsync(OrientedImage image, string path, CancellationToken token);
 
     // Blanks the presentation synchronously: visuals, dimensions and on-image markers.

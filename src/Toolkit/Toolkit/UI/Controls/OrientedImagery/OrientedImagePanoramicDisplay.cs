@@ -91,7 +91,8 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     // Device recovery is presentation work: the surface is blank from the loss until it is rebuilt and re-supplied.
     protected override bool IsPresentationBusy => _recovering;
 
-    private void OnDeviceLost()
+    // Internal for tests, which can't lose or rebuild a device.
+    internal void OnDeviceLost()
     {
         _recovering = true;
         UpdateState();
@@ -112,13 +113,18 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     // After a device-lost rebuild the GPU texture and markers are gone (the surface keeps no CPU copy): re-decode and
     // re-supply them. The camera lives on the surface and survives the rebuild.
-    private async void OnDeviceRecreated()
+    internal async void OnDeviceRecreated()
     {
         // A load in flight supplies the rebuilt surface when it completes, so a second decode would be wasted. A load
-        // that failed stays failed: the display never retries on its own.
+        // that failed stays failed: the display never retries on its own. Without an image there is nothing to
+        // re-supply. In all three cases the recovery ends here, and a load in flight still reports busy on its own.
         OrientedImage? image = Footprint?.OrientedImage;
         if (image is null || IsLoading || image.LoadStatus == LoadStatus.FailedToLoad)
+        {
+            _recovering = false;
+            UpdateState();
             return;
+        }
 
         // The rebuilt surface is blank until re-supplied: invalidate the dimensions so a tap isn't reported against the
         // old pixel space, and report busy/non-interactive so bound commands don't stay enabled over a blank panorama.

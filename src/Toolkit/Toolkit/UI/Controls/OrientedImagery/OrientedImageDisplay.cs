@@ -48,6 +48,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// <remarks>
 /// Set the <see cref="Footprint"/> to display the associated image.
 /// Shows planar and panoramic still images. Video isn't supported. A video image sets <see cref="Error"/>.
+/// Planar images are displayed with a <see cref="Esri.ArcGISRuntime.Mapping.RasterLayer"/>, so they require the
+/// <see cref="Esri.ArcGISRuntime.LicenseLevel.Standard"/> license level or higher.
 /// </remarks>
 public partial class OrientedImageDisplay
 {

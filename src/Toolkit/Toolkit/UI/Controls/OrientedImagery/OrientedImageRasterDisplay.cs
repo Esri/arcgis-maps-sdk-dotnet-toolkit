@@ -318,8 +318,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     // Raster cell sizes can be negative (flipped axis) or zero (unknown); a pixel is one unit in either case.
     private static double CellSize(double size) => size == 0 ? 1 : Math.Abs(size);
 
-    // Maps an image pixel, in the oriented space OrientedImage uses, to the stored raster's map space; the inverse of
-    // MapToPixel.
+    // Maps an image pixel, in the oriented space OrientedImage uses,
+    // to the stored raster's map space; the inverse of MapToPixel.
     private MapPoint? PixelToMap(PointF pixel)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)

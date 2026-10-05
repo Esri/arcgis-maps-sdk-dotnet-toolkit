@@ -526,9 +526,15 @@ internal sealed unsafe partial class PanoramicSurface
         Release(ref _panoramaTexture);
     }
 
-    // Sets the backdrop clear color (RGBA, 0..1).
+    // Sets the backdrop clear color (RGBA, 0..1, straight alpha).
     public void SetClearColor(float r, float g, float b, float a)
     {
+#if WPF
+        // WPF composites premultiplied BGRA. The WinUI swap chain ignores alpha, so it uses the color unchanged.
+        r *= a;
+        g *= a;
+        b *= a;
+#endif
         _clearR = r;
         _clearG = g;
         _clearB = b;
