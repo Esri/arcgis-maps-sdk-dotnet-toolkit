@@ -34,7 +34,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _allowAddingMarkers = false;
         _markers = new ObservableCollection<OrientedImageMarker>();
         _managedMarkers = new List<OrientedImageMarker>();
-        _displayMarkers = new ObservableCollection<OrientedImageMarker>();
+        _displayMarkers = new ResettableObservableCollection<OrientedImageMarker>();
         _markers.CollectionChanged += Markers_CollectionChanged;
 
         _markersOverlay = new GraphicsOverlay() { Id = "OrientedImageryView_Markers_Overlay" };
@@ -98,9 +98,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
             _footprints.Clear();
             SelectedImage = null;
-            Markers.Clear();
             _managedMarkers.Clear();
-            SynchronizeMarkers();
+            Markers.Clear();
 
             _oiLayer = value;
             if (_oiLayer != null)
@@ -621,7 +620,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     // Application markers remain public; toolkit markers are merged internally for rendering.
     private readonly ObservableCollection<OrientedImageMarker> _markers;
     private readonly List<OrientedImageMarker> _managedMarkers;
-    private readonly ObservableCollection<OrientedImageMarker> _displayMarkers;
+    private readonly ResettableObservableCollection<OrientedImageMarker> _displayMarkers;
     private readonly GraphicsOverlay _markersOverlay;
     private readonly HashSet<OrientedImageMarker> _overlayMarkerSubscriptions = [];
     private bool _showCameraLocations = true;
@@ -727,16 +726,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             marker.PropertyChanged -= Marker_PropertyChanged;
         _overlayMarkerSubscriptions.Clear();
 
-        _displayMarkers.Clear();
-        foreach (var marker in _managedMarkers)
+        var markers = _managedMarkers.Concat(_markers).ToArray();
+        _displayMarkers.ReplaceAll(markers);
+        foreach (var marker in markers)
         {
-            _displayMarkers.Add(marker);
-            marker.PropertyChanged += Marker_PropertyChanged;
-            _overlayMarkerSubscriptions.Add(marker);
-        }
-        foreach (var marker in _markers)
-        {
-            _displayMarkers.Add(marker);
             marker.PropertyChanged += Marker_PropertyChanged;
             _overlayMarkerSubscriptions.Add(marker);
         }
@@ -837,6 +830,20 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     {
         public string Identifier = identifier;
         public int ZIndex = zIndex;
+    }
+
+    private sealed class ResettableObservableCollection<T> : ObservableCollection<T>
+    {
+        public void ReplaceAll(IEnumerable<T> items)
+        {
+            Items.Clear();
+            foreach (var item in items)
+                Items.Add(item);
+
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
+            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
     }
 #endregion Markers
 
