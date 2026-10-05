@@ -57,11 +57,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         SynchronizeToolbarItems();
 
         SelectNextImageCommand = new Command(
-            execute: async () => await SelectNextImageAsync(),
-            canExecute: () => IsSequentialNavigation ? SupportsSequentialNavigation && !_noNextImage && SelectedImage != null : _images.Count > 0 && (SelectedImage == null || _images.IndexOf(SelectedImage) < _images.Count - 1));
+            execute: async () => await NavigateAsync(SequenceStep.Next),
+            canExecute: () => CanNavigate(SequenceStep.Next));
         SelectPreviousImageCommand = new Command(
-            execute: async () => await SelectPreviousImageAsync(),
-            canExecute: () => IsSequentialNavigation ? SupportsSequentialNavigation && !_noPreviousImage && SelectedImage != null : _images.Count > 0 && (SelectedImage != null && _images.IndexOf(SelectedImage) > 0));
+            execute: async () => await NavigateAsync(SequenceStep.Previous),
+            canExecute: () => CanNavigate(SequenceStep.Previous));
         ToggleSequentialNavigationCommand = new Command(
             execute: async () => await ToggleSequentialNavigationAsync(),
             canExecute: () => IsSequentialNavigation || (SupportsSequentialNavigation && SelectedImage != null && _isSelectedImageReady));
@@ -280,40 +280,32 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         ChangeNavigationCommandCanExecute();
     }
 
-    private async Task SelectNextImageAsync()
+    private bool CanNavigate(SequenceStep step)
     {
         if (IsSequentialNavigation)
-        {
-            await FetchAdjacentImageAsync(SequenceStep.Next);
-            return;
-        }
+            return SupportsSequentialNavigation && SelectedImage != null &&
+                !(step == SequenceStep.Next ? _noNextImage : _noPreviousImage);
 
         if (_images.Count == 0)
-            return;
+            return false;
 
-        var currentIndex = SelectedImage != null ? _images.IndexOf(SelectedImage) : -1;
-        if (currentIndex < _images.Count - 1)
-        {
-            SelectedImage = _images[currentIndex + 1];
-        }
+        int index = SelectedImage == null ? -1 : _images.IndexOf(SelectedImage);
+        return step == SequenceStep.Next ? index < _images.Count - 1 : index > 0;
     }
 
-    private async Task SelectPreviousImageAsync()
+    private async Task NavigateAsync(SequenceStep step)
     {
+        if (!CanNavigate(step))
+            return;
+
         if (IsSequentialNavigation)
         {
-            await FetchAdjacentImageAsync(SequenceStep.Previous);
+            await FetchAdjacentImageAsync(step);
             return;
         }
 
-        if (_images.Count == 0)
-            return;
-
-        var currentIndex = SelectedImage != null ? _images.IndexOf(SelectedImage) : _images.Count;
-        if (currentIndex > 0)
-        {
-            SelectedImage = _images[currentIndex - 1];
-        }
+        int index = SelectedImage == null ? -1 : _images.IndexOf(SelectedImage);
+        SelectedImage = _images[index + (step == SequenceStep.Next ? 1 : -1)];
     }
 
     private Task ToggleSequentialNavigationAsync()
