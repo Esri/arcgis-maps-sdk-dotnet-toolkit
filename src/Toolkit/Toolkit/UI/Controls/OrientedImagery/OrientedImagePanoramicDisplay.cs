@@ -449,8 +449,10 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
 
     private PanoramaCameraState Camera => _surface.Camera;
 
+    // The projection answers for any direction, so points off the surface are rejected first.
     public override PointF? ScreenToImage(double x, double y) =>
-        IsInteractive && Camera.TryScreenToNormalizedUv(x, y, _surface.ActualWidth, _surface.ActualHeight, out float u, out float v)
+        IsInteractive && x >= 0 && y >= 0 && x <= _surface.ActualWidth && y <= _surface.ActualHeight &&
+        Camera.TryScreenToNormalizedUv(x, y, _surface.ActualWidth, _surface.ActualHeight, out float u, out float v)
             ? new PointF(u * _imageWidth, v * _imageHeight)
             : null;
 

@@ -506,7 +506,17 @@ internal sealed unsafe partial class PanoramicSurface
         }
 
         ID3D11ShaderResourceView* srv;
-        _device->CreateShaderResourceView((ID3D11Resource*)texture, (D3D11_SHADER_RESOURCE_VIEW_DESC*)null, &srv);
+        try
+        {
+            _device->CreateShaderResourceView((ID3D11Resource*)texture, (D3D11_SHADER_RESOURCE_VIEW_DESC*)null, &srv);
+        }
+        catch
+        {
+            // A caller that skips the failed marker never sees the texture, so release it here.
+            Release(ref texture);
+            throw;
+        }
+
         view = srv;
     }
 

@@ -287,17 +287,23 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     private async Task ResolveAndApplyMarkerGeometryAsync(OrientedImageMarker marker, Graphic graphic)
     {
         CancellationToken token = SessionToken;
-        MapPoint? mapPoint = await ResolveMarkerMapPointAsync(marker);
-        // Apply only if the graphic is still the marker's and the session is unchanged: a pixel projected through the old
-        // image's camera model must not land on the new raster. A null point clears the geometry.
-        if (!token.IsCancellationRequested && _markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
+        OrientedImageMarkerPosition position = marker.Position;
+        MapPoint? mapPoint = await ResolveMarkerMapPointAsync(position);
+
+        // Apply only if the session, the marker's graphic, and its position are unchanged. A pixel projected through
+        // the old image's camera model must not land on the new raster, and a slower projection of an earlier
+        // position must not replace a newer one. A null point clears the geometry.
+        if (!token.IsCancellationRequested && marker.Position == position &&
+            _markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
+        {
             graphic.Geometry = mapPoint;
+        }
     }
 
-    // Marker -> image pixel -> map point; null while the raster isn't ready. PresentAsync places markers again after
-    // the image loads.
-    private async Task<MapPoint?> ResolveMarkerMapPointAsync(OrientedImageMarker marker) =>
-        await ResolveMarkerPixelAsync(marker.Position, Footprint?.OrientedImage) is PointF pixel ? PixelToMap(pixel) : null;
+    // Position -> image pixel -> map point; null while the raster isn't ready.
+    // PresentAsync places markers again after the image loads.
+    private async Task<MapPoint?> ResolveMarkerMapPointAsync(OrientedImageMarkerPosition position) =>
+        await ResolveMarkerPixelAsync(position, Footprint?.OrientedImage) is PointF pixel ? PixelToMap(pixel) : null;
 
     // Clockwise degrees, summed without clamping: real data exceeds the spec's +-90 roll.
     private static double GetEffectiveRotationDegrees(OrientedImage image)
@@ -349,7 +355,8 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return value >= -margin && value <= max + margin;
     }
 
-    // Maps a point in the display's map space back to an image pixel (to report ImageTapped in image coordinates).
+    // Maps a point in the display's map space back to an image pixel, as taps and ScreenToImage report it. A point on
+    // the background around the image has no pixel.
     private PointF? MapToPixel(MapPoint mapPoint)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
@@ -357,9 +364,14 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
 
         double cellX = CellSize(info.CellSizeX);
         double cellY = CellSize(info.CellSizeY);
+        double width = extent.Width / cellX;
+        double height = extent.Height / cellY;
         double col = (mapPoint.X - extent.XMin) / cellX;
         double row = (extent.YMax - mapPoint.Y) / cellY;
-        return _imageOrientation.StoredToImage(new PointF((float)col, (float)row), extent.Width / cellX, extent.Height / cellY);
+        if (col < 0 || row < 0 || col > width || row > height)
+            return null;
+
+        return _imageOrientation.StoredToImage(new PointF((float)col, (float)row), width, height);
     }
 
     public override PointF? ScreenToImage(double x, double y) =>
