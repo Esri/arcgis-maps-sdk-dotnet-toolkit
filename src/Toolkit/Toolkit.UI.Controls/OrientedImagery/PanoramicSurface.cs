@@ -122,7 +122,10 @@ internal sealed unsafe partial class PanoramicSurface
     private ID3D11BlendState* _markerBlendState;
     private ID3D11SamplerState* _markerSampler;
 
-    private readonly List<(nint Texture, nint View, PanoramaMarker Marker)> _gpuMarkers = [];
+    // One texture per swatch, shared by the markers drawn with it. The display hands every marker of a swatch the same
+    // pixel array, so the array identifies the swatch.
+    private readonly Dictionary<byte[], (nint Texture, nint View)> _swatchTextures = new(ReferenceEqualityComparer.Instance);
+    private readonly List<(nint View, PanoramaMarker Marker)> _gpuMarkers = [];
     private readonly List<nint> _visibleViews = []; // reused by each frame
     private PanoramaMarker[]? _pendingMarkers;
 
@@ -768,29 +771,39 @@ internal sealed unsafe partial class PanoramicSurface
         }
     }
 
+    // Uploads only the swatches the previous set didn't use, and releases the ones this set doesn't.
     private void BuildGpuMarkers(IReadOnlyList<PanoramaMarker> markers)
     {
-        ReleaseGpuMarkers();
+        _gpuMarkers.Clear();
+        _visibleViews.Clear();
+        var usedSwatches = new HashSet<byte[]>(ReferenceEqualityComparer.Instance);
         foreach (PanoramaMarker marker in markers)
         {
             // A marker that can't be uploaded is skipped. It never fails the panorama.
             if (!marker.IsValid)
                 continue;
 
-            ID3D11Texture2D* texture;
-            ID3D11ShaderResourceView* view;
-            try
+            if (!_swatchTextures.TryGetValue(marker.Bgra, out (nint Texture, nint View) swatch))
             {
-                CreateBgraTexture(marker.Bgra, (uint)marker.Width, (uint)marker.Height, out texture, out view);
-            }
-            catch (Exception)
-            {
-                continue;
+                try
+                {
+                    CreateBgraTexture(marker.Bgra, (uint)marker.Width, (uint)marker.Height,
+                        out ID3D11Texture2D* texture, out ID3D11ShaderResourceView* view);
+                    swatch = ((nint)texture, (nint)view);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+
+                _swatchTextures.Add(marker.Bgra, swatch);
             }
 
-            _gpuMarkers.Add(((nint)texture, (nint)view, marker));
+            usedSwatches.Add(marker.Bgra);
+            _gpuMarkers.Add((swatch.View, marker));
         }
 
+        ReleaseSwatchTextures(swatch => !usedSwatches.Contains(swatch));
         if (_gpuMarkers.Count == 0)
             return;
 
@@ -816,7 +829,7 @@ internal sealed unsafe partial class PanoramicSurface
         _context->Map((ID3D11Resource*)_markerVertexBuffer, 0, D3D11_MAP.D3D11_MAP_WRITE_DISCARD, 0, &mapped);
         var vertices = (MarkerVertex*)mapped.pData;
         _visibleViews.Clear();
-        foreach ((_, nint view, PanoramaMarker marker) in _gpuMarkers)
+        foreach ((nint view, PanoramaMarker marker) in _gpuMarkers)
         {
             if (!camera.TryGetMarkerQuad(marker, width, height, out var quad))
                 continue;
@@ -860,14 +873,23 @@ internal sealed unsafe partial class PanoramicSurface
 
     private void ReleaseGpuMarkers()
     {
-        foreach ((nint texture, nint view, _) in _gpuMarkers)
-        {
-            _ = ((IUnknown*)view)->Release();
-            _ = ((IUnknown*)texture)->Release();
-        }
-
+        ReleaseSwatchTextures(_ => true);
         _gpuMarkers.Clear();
         _visibleViews.Clear();
+    }
+
+    // Dictionary allows removing the current entry while enumerating.
+    private void ReleaseSwatchTextures(Func<byte[], bool> shouldRelease)
+    {
+        foreach ((byte[] swatch, (nint texture, nint view)) in _swatchTextures)
+        {
+            if (!shouldRelease(swatch))
+                continue;
+
+            _ = ((IUnknown*)view)->Release();
+            _ = ((IUnknown*)texture)->Release();
+            _swatchTextures.Remove(swatch);
+        }
     }
 
     private void ReleaseMarkerResources()
