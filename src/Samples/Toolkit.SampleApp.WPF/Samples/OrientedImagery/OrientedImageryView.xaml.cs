@@ -124,7 +124,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private async void MainOrientedImageryView_ImageTapped(object? sender, OrientedImageTappedEventArgs e)
         {
             // Image taps are used for marker creation only while marker-creation mode is enabled.
-            if (!_orientedImageryVM.AllowAddingMarkers || e.Marker != null)
+            if (!_orientedImageryVM.AllowAddingMarkers)
+                return;
+
+            // Do not add a new marker if there is already one in close proximity to the tapped location.
+            if (e.Marker != null)
                 return;
 
             try
