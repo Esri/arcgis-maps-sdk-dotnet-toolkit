@@ -152,6 +152,65 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ToolbarComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      ClickMode="Press"
+                                      Focusable="False"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Padding="{TemplateBinding Padding}"
+                                      Style="{StaticResource ToolbarToggleButtonStyle}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              IsHitTestVisible="False" />
+                        </ToggleButton>
+                        <Popup x:Name="PART_Popup"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               Placement="Bottom"
+                               PopupAnimation="Slide">
+                            <Border MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                    BorderThickness="1">
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False">
+                <Setter Property="Background" Value="Transparent" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ImageNavigationButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
@@ -264,12 +323,26 @@
     </DataTemplate>
 
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
-        <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding SelectNextSymbol}" Visibility="{Binding ViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
-            <Viewbox Width="32" Height="32" Stretch="Uniform">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                      Data="M23 14.8499C21.843 14.8499 20.7119 14.5068 19.7499 13.864C18.7879 13.2212 18.0381 12.3076 17.5953 11.2386C17.1525 10.1697 17.0367 8.99342 17.2624 7.85863C17.4881 6.72384 18.0453 5.68147 18.8634 4.86333C19.6816 4.04519 20.7239 3.48803 21.8587 3.26231C22.9935 3.03659 24.1698 3.15244 25.2387 3.59521C26.3076 4.03798 27.2213 4.78779 27.8641 5.74982C28.5069 6.71185 28.85 7.84288 28.85 8.99991C28.8481 10.5509 28.2312 12.0377 27.1345 13.1344C26.0378 14.2311 24.5509 14.8481 23 14.8499ZM23 4.04991C22.021 4.04991 21.064 4.34022 20.2499 4.88413C19.4359 5.42804 18.8014 6.20113 18.4268 7.10562C18.0521 8.01012 17.9541 9.0054 18.1451 9.9656C18.3361 10.9258 18.8076 11.8078 19.4998 12.5001C20.1921 13.1924 21.0741 13.6638 22.0343 13.8548C22.9945 14.0458 23.9898 13.9478 24.8943 13.5731C25.7988 13.1985 26.5719 12.564 27.1158 11.75C27.6597 10.936 27.95 9.97892 27.95 8.99991C27.9484 7.68757 27.4264 6.42944 26.4984 5.50148C25.5705 4.57352 24.3123 4.05149 23 4.04991ZM14.262 23.9899L4.623 23.9999L2 15.1059L9.5 9.99991L17 15.1099L14.262 23.9899ZM5.377 22.9999H13.517L15.799 15.5199L9.5 11.2359L3.191 15.5219L5.377 22.9999ZM23.5 18.2349L18 22.3089L20.399 28.9999H26.791L29 22.3099L23.5 18.2349Z" />
-            </Viewbox>
-        </Button>
+        <ComboBox ItemsSource="{Binding SymbolOptions}"
+                  SelectedItem="{Binding SelectedSymbol, Mode=TwoWay}"
+                  Style="{StaticResource ToolbarComboBoxStyle}"
+                  Visibility="{Binding ViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="MinWidth" Value="40" />
+                    <Setter Property="MinHeight" Value="40" />
+                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </ComboBox.ItemContainerStyle>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <controls:SymbolDisplay Symbol="{Binding}" Width="32" Height="32" Focusable="False" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </DataTemplate>
 
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
