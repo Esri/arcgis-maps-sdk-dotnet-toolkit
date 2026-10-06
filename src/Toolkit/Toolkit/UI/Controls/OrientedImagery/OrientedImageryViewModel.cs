@@ -32,10 +32,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public OrientedImageryViewModel() : base()
     {
         _allowAddingMarkers = false;
-        _markers = new ObservableCollection<OrientedImageMarker>();
+        _appMarkers = new ObservableCollection<OrientedImageMarker>();
         _managedMarkers = new List<OrientedImageMarker>();
         _displayMarkers = new ResettableObservableCollection<OrientedImageMarker>();
-        _markers.CollectionChanged += Markers_CollectionChanged;
+        _appMarkers.CollectionChanged += Markers_CollectionChanged;
 
         _markersOverlay = new GraphicsOverlay() { Id = "OrientedImageryView_Markers_Overlay" };
         NewMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 15);
@@ -64,10 +64,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             canExecute: () => CanNavigate(SequenceStep.Previous));
         ToggleSequentialNavigationCommand = new Command(
             execute: async () => await ToggleSequentialNavigationAsync(),
-            canExecute: () => IsSequentialNavigation || (SupportsSequentialNavigation && SelectedImage != null && _isSelectedImageReady));
+            canExecute: () => IsSequentialNavigationEnabled || (SupportsSequentialNavigation && SelectedImage != null && _isSelectedImageReady));
         ClearMarkersCommand = new Command(
-            execute: () => ClearMarkers(),
-            canExecute: () => CanClearMarkers);
+            execute: () => Markers.Clear(),
+            canExecute: () => Markers.Count > 0);
     }
 
 #region GeoModel
@@ -91,7 +91,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 _oiLayerSceneProperties!.PropertyChanged -= OrientedImageryLayer_SceneProperties_PropertyChanged;
             }
 
-            IsSequentialNavigation = false;
+            IsSequentialNavigationEnabled = false;
             ResetSequentialNavigationState();
             _imageBeforeSequentialNavigation = null;
             _images.Clear();
@@ -151,7 +151,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private ReadOnlyCollection<OrientedImage> _readOnlyImages;
     private OrientedImage? _selectedImage;
     private OrientedImageFootprint? _selectedImageFootprint;
-    private bool _isSequentialNavigation;
+    private bool _isSequentialNavigationEnabled;
     private bool _isFetchingAdjacentImage;
     private Task? _adjacentImagesFetchTask;
     private OrientedImage? _nextSequentialImage;
@@ -172,20 +172,20 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// <summary>
     /// Gets a value indicating whether sequential navigation is active.
     /// </summary>
-    public bool IsSequentialNavigation
+    public bool IsSequentialNavigationEnabled
     {
-        get => _isSequentialNavigation;
+        get => _isSequentialNavigationEnabled;
         private set
         {
-            if (_isSequentialNavigation == value) return;
+            if (_isSequentialNavigationEnabled == value) return;
             ResetSequentialNavigationState();
-            SetProperty(ref _isSequentialNavigation, value);
+            SetProperty(ref _isSequentialNavigationEnabled, value);
             ChangeNavigationCommandCanExecute();
         }
     }
 
     /// <summary>
-    /// Gets the error produced while loading an adjacent image.
+    /// Gets the error, if any, produced while loading an adjacent image.
     /// </summary>
     public Exception? SequentialNavigationError
     {
@@ -220,7 +220,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             UpdateSelectedCameraMarker();
 
             ChangeNavigationCommandCanExecute();
-            if (IsSequentialNavigation)
+            if (IsSequentialNavigationEnabled)
                 _ = PrefetchAdjacentImagesAsync();
         }
     }
@@ -269,7 +269,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _deferMarkerSynchronization = true;
         try
         {
-            IsSequentialNavigation = false;
+            IsSequentialNavigationEnabled = false;
             ResetSequentialNavigationState();
             _imageBeforeSequentialNavigation = null;
             SelectedImage = null;
@@ -294,7 +294,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private bool CanNavigate(SequenceStep step)
     {
-        if (IsSequentialNavigation)
+        if (IsSequentialNavigationEnabled)
             return SupportsSequentialNavigation && SelectedImage != null &&
                 !(step == SequenceStep.Next ? _noNextImage : _noPreviousImage);
 
@@ -310,7 +310,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         if (!CanNavigate(step))
             return;
 
-        if (IsSequentialNavigation)
+        if (IsSequentialNavigationEnabled)
         {
             await FetchAdjacentImageAsync(step);
             return;
@@ -322,9 +322,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private Task ToggleSequentialNavigationAsync()
     {
-        if (IsSequentialNavigation)
+        if (IsSequentialNavigationEnabled)
         {
-            IsSequentialNavigation = false;
+            IsSequentialNavigationEnabled = false;
             SelectedImage = _imageBeforeSequentialNavigation;
             _imageBeforeSequentialNavigation = null;
             ChangeNavigationCommandCanExecute();
@@ -335,13 +335,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             return Task.CompletedTask;
 
         _imageBeforeSequentialNavigation = SelectedImage;
-        IsSequentialNavigation = true;
+        IsSequentialNavigationEnabled = true;
         return PrefetchAdjacentImagesAsync();
     }
 
     private async Task FetchAdjacentImageAsync(SequenceStep step)
     {
-        if (!IsSequentialNavigation || !SupportsSequentialNavigation || SelectedImage == null || OrientedImageryLayer == null ||
+        if (!IsSequentialNavigationEnabled || !SupportsSequentialNavigation || SelectedImage == null || OrientedImageryLayer == null ||
             (step == SequenceStep.Next ? _noNextImage : _noPreviousImage))
             return;
 
@@ -365,7 +365,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private async Task PrefetchAdjacentImagesAsync()
     {
-        if (!IsSequentialNavigation || !SupportsSequentialNavigation || SelectedImage == null || OrientedImageryLayer == null || _isFetchingAdjacentImage)
+        if (!IsSequentialNavigationEnabled || !SupportsSequentialNavigation || SelectedImage == null || OrientedImageryLayer == null || _isFetchingAdjacentImage)
             return;
 
         var cancellation = new CancellationTokenSource();
@@ -628,14 +628,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
 #region Markers
     // Application markers remain public; toolkit markers are merged internally for rendering.
-    private readonly ObservableCollection<OrientedImageMarker> _markers;
+    private readonly ObservableCollection<OrientedImageMarker> _appMarkers;
     private readonly List<OrientedImageMarker> _managedMarkers;
     private readonly ResettableObservableCollection<OrientedImageMarker> _displayMarkers;
     private readonly GraphicsOverlay _markersOverlay;
     private readonly HashSet<OrientedImageMarker> _overlayMarkerSubscriptions = [];
     private bool _deferMarkerSynchronization;
     private bool _showCameraLocations = true;
-    private bool _canClearMarkers;
     private static readonly MarkerTag SearchPointMarkerTag = new MarkerTag("SearchPointMarker");
     private static readonly MarkerTag SelectedImageMarkerTag = new MarkerTag("SelectedImageMarker", int.MaxValue);
     private static readonly MarkerTag AllCamerasMarkerTag = new MarkerTag("AllSelectedCamerasMarker", -1);
@@ -649,13 +648,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </remarks>
     public ObservableCollection<OrientedImageMarker> Markers
     {
-        get { return _markers; }
+        get { return _appMarkers; }
     }
-
-    /// <summary>
-    /// Gets a value indicating whether application-owned markers can be cleared.
-    /// </summary>
-    public bool CanClearMarkers => _canClearMarkers;
 
     internal ObservableCollection<OrientedImageMarker> DisplayMarkers => _displayMarkers;
 
@@ -720,13 +714,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void Markers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        bool canClearMarkers = Markers.Count > 0;
-        if (_canClearMarkers != canClearMarkers)
-        {
-            _canClearMarkers = canClearMarkers;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanClearMarkers)));
-        }
-
         ((Command)ClearMarkersCommand).ChangeCanExecute();
         SynchronizeMarkers();
     }
@@ -740,7 +727,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             marker.PropertyChanged -= Marker_PropertyChanged;
         _overlayMarkerSubscriptions.Clear();
 
-        var markers = _managedMarkers.Concat(_markers).ToArray();
+        var markers = _managedMarkers.Concat(_appMarkers).ToArray();
         _displayMarkers.ReplaceAll(markers);
         foreach (var marker in markers)
         {
@@ -750,7 +737,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         _markersOverlay.Graphics.Clear();
         AddOverlayMarkers(_managedMarkers, true);
-        AddOverlayMarkers(_markers);
+        AddOverlayMarkers(_appMarkers);
     }
 
     private void Marker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -779,11 +766,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             });
         }
     }
-
-    /// <summary>
-    /// Clears all application-owned markers. Toolkit-managed markers are not affected.
-    /// </summary>
-    public void ClearMarkers() => Markers.Clear();
 
     private void UpdateSearchPointMarker(MapPoint? location)
     {
