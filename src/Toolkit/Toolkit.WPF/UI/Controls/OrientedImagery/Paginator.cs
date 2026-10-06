@@ -99,7 +99,7 @@ public class Paginator : Control
     protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
         base.OnPreviewKeyDown(e);
-        if (e.Handled || _pagesPresenter?.IsKeyboardFocusWithin != true || TotalPages <= 0 || Keyboard.Modifiers != ModifierKeys.None)
+        if (e.Handled || _pagesPresenter?.IsKeyboardFocusWithin != true || TotalPages <= 0)
             return;
 
         int direction = FlowDirection == FlowDirection.RightToLeft ? -1 : 1;
