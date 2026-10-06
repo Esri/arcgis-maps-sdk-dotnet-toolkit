@@ -37,9 +37,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if WPF
         /// <inheritdoc />
         protected override AutomationPeer OnCreateAutomationPeer() => new FieldsPopupElementViewAutomationPeer(this);
-#elif WINUI
-        /// <inheritdoc />
-        protected override Microsoft.UI.Xaml.Automation.Peers.AutomationPeer OnCreateAutomationPeer() => new FieldsPopupElementViewAutomationPeer(this);
 #endif
 
 #if WPF
