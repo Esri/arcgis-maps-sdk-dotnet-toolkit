@@ -126,7 +126,7 @@ public class SequentialNavigationVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
 /// View model for the "Select New Marker Symbol" toolbar control in the Oriented Imagery View.
-/// This control allows the user to loop through a collection of marker symbols and select one to be used for new markers in the oriented imagery view.
+/// This control allows the user to select a marker symbol to be used for new markers in the oriented imagery view.
 /// </summary>
 public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
 {
@@ -146,26 +146,6 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
         SymbolOptions.CollectionChanged += MarkerSymbolOptions_CollectionChanged;
 
         _selectedSymbol = SymbolOptions.Count > 0 ? SymbolOptions[0] : DefaultSymbol;
-
-        SelectNextSymbol = new Command(
-        execute: () =>
-        {
-            if (SymbolOptions.Count < 1)
-            {
-                SelectedSymbol = DefaultSymbol;
-                return;
-            }
-            var currentIndex = SymbolOptions.IndexOf(SelectedSymbol);
-            if (currentIndex < 0 || currentIndex >= SymbolOptions.Count - 1)
-            {
-                SelectedSymbol = SymbolOptions[0];
-            }
-            else
-            {
-                SelectedSymbol = SymbolOptions[currentIndex + 1];
-            }
-        },
-        canExecute: () => true);
     }
 
     private void MarkerSymbolOptions_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -182,12 +162,12 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
 
     private MarkerSymbol _selectedSymbol;
     /// <summary>
-    /// Gets the currently-selected marker symbol.
+    /// Gets or sets the currently-selected marker symbol.
     /// </summary>
     public MarkerSymbol SelectedSymbol
     {
         get => _selectedSymbol;
-        private set
+        set
         {
             if (value == _selectedSymbol) { return; }
             SetProperty(ref _selectedSymbol, value);
@@ -197,14 +177,6 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
             }
         }
     }
-
-    /// <summary>
-    /// Selects the next symbol from <see cref="SymbolOptions"/>.
-    /// </summary>
-    /// <remarks>
-    /// If the current <see cref="SelectedSymbol"/> is at the end of the <see cref="SymbolOptions"/> collection, this command will wrap around and select the first symbol in the collection.
-    /// </remarks>
-    public ICommand SelectNextSymbol { get; private set; }
 
     /// <inheritdoc />
     protected override void OnMainViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
