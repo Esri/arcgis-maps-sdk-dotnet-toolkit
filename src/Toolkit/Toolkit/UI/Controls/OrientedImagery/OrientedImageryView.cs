@@ -61,7 +61,7 @@ public partial class OrientedImageryView
             WireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
-        RefreshFromViewModel();
+        RewireViewModel();
     }
 
 #region ViewModel
@@ -105,17 +105,16 @@ public partial class OrientedImageryView
             GeoView.GraphicsOverlays.Add(newValue.MarkersOverlay);
         }
 
-        RefreshFromViewModel();
+        RewireViewModel();
     }
 
-    private void RefreshFromViewModel()
+    private void RewireViewModel()
     {
         if (_display != null)
         {
             _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
             _display.Markers = ViewModel.DisplayMarkers;
             _display.Footprint = ViewModel.SelectedImageFootprint;
-            UpdateDisplayBackgroundColor(DisplayBackgroundColor);
         }
         if (_toolbarContainer != null)
             _toolbarContainer.ItemsSource = ViewModel.ToolbarItems;
