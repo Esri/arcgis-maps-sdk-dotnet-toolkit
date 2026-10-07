@@ -3,12 +3,14 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -44,7 +46,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _mapView = new MapView() { Map = new Map(new Uri(MapBasemap)) };
             _sceneView = new SceneView() { Scene = new Scene(new Uri(SceneBasemap)) };
             _usingMapView = true;
-            _mapView.GeoViewTapped += CurrentGeoView_GeoViewTapped;
             GeoViewContainer.Children.Add(_mapView);
 
             _orientedImageryVM = new OrientedImageryViewModel();
@@ -54,7 +55,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
             MainOrientedImageryView.GeoView = _mapView;
             MainOrientedImageryView.ViewModel = _orientedImageryVM;
-            MainOrientedImageryView.ImageTapped += MainOrientedImageryView_ImageTapped;
         }
 
         private async Task ApplyLayer(Uri layerUri)
@@ -95,53 +95,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             await ApplyLayer(new Uri(LayerUriTextBox.Text));
         }
 
-        private async void CurrentGeoView_GeoViewTapped(object? sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
-        {
-            if (e.Location == null || _oiLayer == null)
-                return;
-
-            // In this case we are choosing to interpret OrientedImageryViewModel.AllowAddingMarkers as mutually exclusive with image searching.
-            if (_orientedImageryVM.AllowAddingMarkers)
-            {
-                _orientedImageryVM.AddMarkerLocation(e.Location);
-                return;
-            }
-
-            var identifyResult = await _currentGeoView.IdentifyLayerAsync(_oiLayer, e.Position, 0, false);
-            if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
-            {
-                _orientedImageryVM.SelectedImage = await _oiLayer.FetchImageForFeatureAsync(feature);
-            }
-            else
-            {
-                var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
-                var images = await _oiLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
-                _orientedImageryVM.SetImages(images.ToList(), e.Location);
-                _orientedImageryVM.SelectedImage = images.Count < 1 ? null : images[0];
-            }
-        }
-
-        private async void MainOrientedImageryView_ImageTapped(object? sender, OrientedImageTappedEventArgs e)
-        {
-            // Image taps are used for marker creation only while marker-creation mode is enabled.
-            if (!_orientedImageryVM.AllowAddingMarkers)
-                return;
-
-            // Do not add a new marker if there is already one in close proximity to the tapped location.
-            if (e.Marker != null)
-                return;
-
-            try
-            {
-                var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
-                _orientedImageryVM.AddMarkerLocation(location);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error converting image point to location: {ex.Message}");
-            }
-        }
-
         private void OpenSelectedImagePopupButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedImage = _orientedImageryVM.SelectedImage;
@@ -172,7 +125,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private void Toggle2DButton_Click(object sender, RoutedEventArgs e)
         {
             GeoViewContainer.Children.Clear();
-            _currentGeoView.GeoViewTapped -= CurrentGeoView_GeoViewTapped;
             if (_usingMapView)
                 _mapView.Map!.OperationalLayers.Clear();
             else
@@ -180,7 +132,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
             _usingMapView = !_usingMapView;
             MainOrientedImageryView.GeoView = _currentGeoView;
-            _currentGeoView.GeoViewTapped += CurrentGeoView_GeoViewTapped;
             GeoViewContainer.Children.Add(_currentGeoView);
 
             if (_oiLayer == null)
@@ -245,6 +196,42 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             {
                 _orientedImageryVM.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
                 MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("CustomToolbarSelector");
+            }
+        }
+
+        private void OverrideClickHandlersButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainOrientedImageryView.OnGeoViewTappedOverride == null)
+                MainOrientedImageryView.OnGeoViewTappedOverride = OnGeoViewTappedOverride;
+            else
+                MainOrientedImageryView.OnGeoViewTappedOverride = null;
+
+            if (MainOrientedImageryView.OnImageTappedOverride == null)
+                MainOrientedImageryView.OnImageTappedOverride = OnImageTappedOverride;
+            else
+                MainOrientedImageryView.OnImageTappedOverride = null;
+        }
+
+        private async void OnGeoViewTappedOverride(object? sender, GeoViewInputEventArgs e)
+        {
+            if (e.Location == null)
+                return;
+
+            var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Green, 20);
+            _orientedImageryVM.AddMarkerLocation(e.Location, symbol);
+        }
+
+        private async void OnImageTappedOverride(object? sender, OrientedImageTappedEventArgs e)
+        {
+            try
+            {
+                var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
+                var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Pink, 20);
+                _orientedImageryVM.AddMarkerLocation(location, symbol);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error converting image point to location: {ex.Message}");
             }
         }
     }
