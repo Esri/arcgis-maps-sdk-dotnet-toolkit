@@ -79,6 +79,7 @@
                 <Button x:Name="ToggleElevationSurfaceButton" Content="Toggle elevation surface (3D only)" Click="ToggleElevationSurfaceButton_Click" />
                 <Button x:Name="ScenePropertiesButton" Content="Update scene properties" Click="ScenePropertiesButton_Click" />
                 <Button x:Name="UpdateToolbarButton" Content="Update toolbar" Click="UpdateToolbarButton_Click" />
+                <Button x:Name="OverrideClickHandlersButton"  Content="Override clicks" Click="OverrideClickHandlersButton_Click" />
             </StackPanel>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.Column="1" Width="5"
