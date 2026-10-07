@@ -1,8 +1,11 @@
 #if WPF
 
+using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
+using System.Diagnostics;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -21,6 +24,8 @@ public partial class OrientedImageryView
     public OrientedImageryView() : base()
     {
         ViewModel = new OrientedImageryViewModel();
+        _onImageTapped = OnImageTapped_Default;
+        _onGeoViewTapped = GeoViewTapped_Default;
 
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -144,12 +149,27 @@ public partial class OrientedImageryView
 
 #region Display
     private OrientedImageDisplay? _display;
+    private Action<object?, OrientedImageTappedEventArgs>? _onImageTappedOverride;
+    private Action<object?, OrientedImageTappedEventArgs> _onImageTapped;
 
     /// <summary>
-    /// Occurs whenever a user taps on the image display.
+    /// Set this function to override the default event handler when the image is tapped. A <c>null</c> value means the default behavior is active.
     /// </summary>
-    /// <remarks>Toolkit-managed marker hits raise this event with <c>Marker</c> set to <c>null</c>.</remarks>
-    public event EventHandler<OrientedImageTappedEventArgs>? ImageTapped;
+    /// <remarks>Toolkit-managed marker hits raise this event with <see cref="OrientedImageTappedEventArgs.Marker"/> set to <c>null</c>.</remarks>
+    public Action<object?, OrientedImageTappedEventArgs>? OnImageTappedOverride
+    {
+        get => _onImageTappedOverride;
+
+        set
+        {
+            if (value == null)
+                _onImageTapped = OnImageTapped_Default;
+            else
+                _onImageTapped = value;
+
+            _onImageTappedOverride = value;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -188,13 +208,29 @@ public partial class OrientedImageryView
     private void UpdateSelectedImageReady() => ViewModel.SetSelectedImageReady(
         _display?.IsInteractive == true && ViewModel.SelectedImage != null && _display.Footprint?.OrientedImage == ViewModel.SelectedImage);
 
-    private void Display_ImageTapped(object? sender, OrientedImageTappedEventArgs e) =>
-        ImageTapped?.Invoke(this, ViewModel.GetPublicImageTappedEventArgs(e));
-
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
         if (_display != null)
             _display.DisplayBackgroundColor = displayBackgroundColor;
+    }
+
+    private void Display_ImageTapped(object? sender, OrientedImageTappedEventArgs e) => _onImageTapped(this, ViewModel.GetPublicImageTappedEventArgs(e));
+
+    private async void OnImageTapped_Default(object? _, OrientedImageTappedEventArgs e)
+    {
+        // Only add taps if AllowAddingMarkers is true and there is not already a marker nearby
+        if (!ViewModel.AllowAddingMarkers || e.Marker != null)
+            return;
+
+        try
+        {
+            var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
+            ViewModel.AddMarkerLocation(location);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error converting image point to location: {ex.Message}");
+        }
     }
 #endregion Display
 
@@ -221,6 +257,7 @@ public partial class OrientedImageryView
         if (oldGeoView != null)
         {
             oldGeoView.GraphicsOverlays?.Remove(ViewModel.MarkersOverlay);
+            oldGeoView.GeoViewTapped -= GeoView_GeoViewTapped;
         }
 
         if (newGeoView != null)
@@ -228,6 +265,56 @@ public partial class OrientedImageryView
             if (newGeoView.GraphicsOverlays == null)
                 newGeoView.GraphicsOverlays = new GraphicsOverlayCollection();
             newGeoView.GraphicsOverlays.Add(ViewModel.MarkersOverlay);
+            newGeoView.GeoViewTapped += GeoView_GeoViewTapped;
+        }
+    }
+
+    private Action<object?, GeoViewInputEventArgs>? _onGeoViewTappedOverride;
+    private Action<object?, GeoViewInputEventArgs> _onGeoViewTapped;
+
+    /// <summary>
+    /// Set this function to override the default event handler when the connected <see cref="GeoView"/> is tapped. A <c>null</c> value means the default behavior is active.
+    /// </summary>
+    public Action<object?, GeoViewInputEventArgs>? OnGeoViewTappedOverride
+    {
+        get => _onGeoViewTappedOverride;
+
+        set
+        {
+            if (value == null)
+                _onGeoViewTapped = GeoViewTapped_Default;
+            else
+                _onGeoViewTapped = value;
+
+            _onGeoViewTappedOverride = value;
+        }
+    }
+
+    private async void GeoView_GeoViewTapped(object? sender, GeoViewInputEventArgs e) => _onGeoViewTapped(this, e);
+
+    private async void GeoViewTapped_Default(object? _, GeoViewInputEventArgs e)
+    {
+        if (e.Location == null || GeoView == null || ViewModel.OrientedImageryLayer == null)
+            return;
+
+        // In this case we are choosing to interpret OrientedImageryViewModel.AllowAddingMarkers as mutually exclusive with image searching.
+        if (ViewModel.AllowAddingMarkers)
+        {
+            ViewModel.AddMarkerLocation(e.Location);
+            return;
+        }
+
+        var identifyResult = await GeoView.IdentifyLayerAsync(ViewModel.OrientedImageryLayer, e.Position, 0, false);
+        if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
+        {
+            ViewModel.SelectedImage = await ViewModel.OrientedImageryLayer.FetchImageForFeatureAsync(feature);
+        }
+        else
+        {
+            var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
+            var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
+            ViewModel.SetImages(images.ToList(), e.Location);
+            ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
         }
     }
 #endregion GeoView
