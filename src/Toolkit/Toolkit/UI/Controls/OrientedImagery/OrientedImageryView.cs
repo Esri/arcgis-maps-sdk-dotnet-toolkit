@@ -84,7 +84,6 @@ public partial class OrientedImageryView
     {
         if (oldValue != null)
         {
-            oldValue.SetSelectedImageReady(false);
             oldValue.PropertyChanged -= ViewModel_PropertyChanged;
 
             if (GeoView?.GraphicsOverlays != null)
@@ -117,7 +116,6 @@ public partial class OrientedImageryView
             _display.Markers = ViewModel.DisplayMarkers;
             _display.Footprint = ViewModel.SelectedImageFootprint;
             UpdateDisplayBackgroundColor(DisplayBackgroundColor);
-            UpdateSelectedImageReady();
         }
         if (_toolbarContainer != null)
             _toolbarContainer.ItemsSource = ViewModel.ToolbarItems;
@@ -130,10 +128,7 @@ public partial class OrientedImageryView
         {
             case nameof(OrientedImageryViewModel.SelectedImageFootprint):
                 if (_display != null)
-                {
                     _display.Footprint = ViewModel.SelectedImageFootprint;
-                    UpdateSelectedImageReady();
-                }
                 break;
             case nameof(OrientedImageryViewModel.SelectedImage):
             case nameof(OrientedImageryViewModel.Images):
@@ -189,24 +184,16 @@ public partial class OrientedImageryView
     private void WireDisplay(OrientedImageDisplay display)
     {
         display.ImageTapped += Display_ImageTapped;
-        display.StateChanged += Display_StateChanged;
     }
 
     private void UnwireDisplay(OrientedImageDisplay display)
     {
         display.ImageTapped -= Display_ImageTapped;
-        display.StateChanged -= Display_StateChanged;
-        ViewModel.SetSelectedImageReady(false);
         display.ClearValue(OrientedImageDisplay.AutoUpdateFootprintProperty);
         display.ClearValue(OrientedImageDisplay.MarkersProperty);
         display.ClearValue(OrientedImageDisplay.FootprintProperty);
         display.ClearValue(OrientedImageDisplay.DisplayBackgroundColorProperty);
     }
-
-    private void Display_StateChanged(object? sender, EventArgs e) => UpdateSelectedImageReady();
-
-    private void UpdateSelectedImageReady() => ViewModel.SetSelectedImageReady(
-        _display?.IsInteractive == true && ViewModel.SelectedImage != null && _display.Footprint?.OrientedImage == ViewModel.SelectedImage);
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
