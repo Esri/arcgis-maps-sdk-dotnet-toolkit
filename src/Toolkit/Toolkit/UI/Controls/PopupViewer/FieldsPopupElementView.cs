@@ -126,13 +126,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             g = new Grid();
 #endif
 
-            g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
+            g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
 #if MAUI
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Absolute) });
 #else
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Pixel) });
 #endif
-            g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(6, GridUnitType.Star) });
             int i = 0;
             var rowCount = Math.Min(Element.Labels.Count, Element.FormattedValues.Count);
             for (i = 0; i < rowCount; i++)
@@ -148,7 +148,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Grid.SetRow(b, i);
                 g.Children.Add(b);
 
-                var label = CreateTextCell(Element.Labels[i], wrap: false);
+                var label = CreateTextCell(Element.Labels[i], true);
 
                 Grid.SetRow(label, i);
                 g.Children.Add(label);
