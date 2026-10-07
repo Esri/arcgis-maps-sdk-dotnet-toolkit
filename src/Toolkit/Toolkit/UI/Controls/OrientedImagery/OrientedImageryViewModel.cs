@@ -109,7 +109,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 _oiLayerSceneProperties.PropertyChanged += OrientedImageryLayer_SceneProperties_PropertyChanged;
             }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SupportsSequentialNavigation)));
-            ChangeNavigationCommandCanExecute();
+            ChangeNavigationCommandsCanExecute();
             MatchSceneProperties();
             UpdateVisibleFootprints();
         }
@@ -126,7 +126,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         if (e.PropertyName == nameof(OrientedImageryLayer.SupportsSequentialNavigation))
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SupportsSequentialNavigation)));
-            ChangeNavigationCommandCanExecute();
+            ChangeNavigationCommandsCanExecute();
             return;
         }
 
@@ -179,7 +179,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             if (_isSequentialNavigationEnabled == value) return;
             ResetSequentialNavigationState();
             SetProperty(ref _isSequentialNavigationEnabled, value);
-            ChangeNavigationCommandCanExecute();
+            ChangeNavigationCommandsCanExecute();
             if (IsSequentialNavigationEnabled && SelectedImage != null)
                 _ = PrefetchAdjacentImagesAsync();
         }
@@ -219,7 +219,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             UpdateVisibleFootprints();
             UpdateSelectedCameraMarker();
 
-            ChangeNavigationCommandCanExecute();
+            ChangeNavigationCommandsCanExecute();
             if (IsSequentialNavigationEnabled)
                 _ = PrefetchAdjacentImagesAsync();
         }
@@ -289,7 +289,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         UpdateVisibleFootprints();
 
-        ChangeNavigationCommandCanExecute();
+        ChangeNavigationCommandsCanExecute();
     }
 
     private bool CanNavigate(SequenceStep step)
@@ -327,7 +327,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             IsSequentialNavigationEnabled = false;
             SelectedImage = _imageBeforeSequentialNavigation;
             _imageBeforeSequentialNavigation = null;
-            ChangeNavigationCommandCanExecute();
+            ChangeNavigationCommandsCanExecute();
             return;
         }
 
@@ -424,7 +424,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         else
             _hasPreviousImage = hasAdjacentImage;
 
-        ChangeNavigationCommandCanExecute();
+        ChangeNavigationCommandsCanExecute();
     }
 
     private void ResetSequentialNavigationState()
@@ -441,7 +441,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         SequentialNavigationError = null;
     }
 
-    private void ChangeNavigationCommandCanExecute()
+    private void ChangeNavigationCommandsCanExecute()
     {
         ((Command)SelectNextImageCommand).ChangeCanExecute();
         ((Command)SelectPreviousImageCommand).ChangeCanExecute();
@@ -688,7 +688,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// Adds a marker at a geographic location. The marker uses <see cref="NewMarkerSymbol"/> unless
     /// overridden using the <paramref name="symbol"/> parameter.
     /// </summary>
-    /// <remarks><see cref="AllowAddingMarkers"/> does not restrict this method.</remarks>
+    /// <remarks>
+    /// Applications may also add markers directly to <see cref="Markers"/>.
+    /// <see cref="AllowAddingMarkers"/> does not restrict this method.
+    /// </remarks>
     /// <param name="location">The geographic location of the marker.</param>
     /// <param name="symbol">The optional symbol to use for the marker.</param>
     public void AddMarkerLocation(MapPoint location, MarkerSymbol? symbol = null)
