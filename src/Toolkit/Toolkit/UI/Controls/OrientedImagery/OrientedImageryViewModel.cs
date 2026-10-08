@@ -45,6 +45,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         _images = new List<OrientedImage>();
         _readOnlyImages = _images.AsReadOnly();
+        _markersBeforeSequentialNavigation = new List<OrientedImageMarker>();
 
         AutoUpdateFootprint = true;
         SelectedFootprintFillColor = System.Drawing.Color.FromArgb(32, System.Drawing.Color.Red);
@@ -161,6 +162,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _hasPreviousImage;
     private int _sequentialNavigationVersion;
     private Exception? _sequentialNavigationError;
+    private List<OrientedImageMarker> _markersBeforeSequentialNavigation;
     private OrientedImage? _imageBeforeSequentialNavigation;
 
     /// <summary>
@@ -177,11 +179,35 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         private set
         {
             if (_isSequentialNavigationEnabled == value) return;
-            ResetSequentialNavigationState();
             SetProperty(ref _isSequentialNavigationEnabled, value);
+            ResetSequentialNavigationState();
             ChangeNavigationCommandsCanExecute();
-            if (IsSequentialNavigationEnabled && SelectedImage != null)
+
+            if (!IsSequentialNavigationEnabled)
+            {
+                SelectedImage = _imageBeforeSequentialNavigation;
+                _imageBeforeSequentialNavigation = null;
+                _managedMarkers.AddRange(_markersBeforeSequentialNavigation);
+                _markersBeforeSequentialNavigation.Clear();
+                SynchronizeMarkers();
+                ChangeNavigationCommandsCanExecute();
+            }
+            else if (SelectedImage != null)
+            {
                 _ = PrefetchAdjacentImagesAsync();
+
+                _imageBeforeSequentialNavigation = SelectedImage;
+                for (int i = 0; i < _managedMarkers.Count; i++)
+                {
+                    if (_managedMarkers[i].Tag is MarkerTag tag && (tag.Identifier == AllCamerasMarkerTag.Identifier || tag.Identifier == SearchPointMarkerTag.Identifier))
+                    {
+                        _markersBeforeSequentialNavigation.Add(_managedMarkers[i]);
+                        _managedMarkers.RemoveAt(i);
+                        i--;
+                    }
+                }
+                SynchronizeMarkers();
+            }
         }
     }
 
@@ -204,7 +230,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             if (value == _selectedImage) return;
 
-            ResetSequentialNavigationState();
             SetProperty(ref _selectedImage, value);
 
             if (_selectedImage != null)
@@ -219,6 +244,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             UpdateVisibleFootprints();
             UpdateSelectedCameraMarker();
 
+            ResetSequentialNavigationState();
             ChangeNavigationCommandsCanExecute();
             if (IsSequentialNavigationEnabled)
                 _ = PrefetchAdjacentImagesAsync();
@@ -323,19 +349,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private void ToggleSequentialNavigation()
     {
         if (IsSequentialNavigationEnabled)
-        {
             IsSequentialNavigationEnabled = false;
-            SelectedImage = _imageBeforeSequentialNavigation;
-            _imageBeforeSequentialNavigation = null;
-            ChangeNavigationCommandsCanExecute();
-            return;
-        }
-
-        if (!SupportsSequentialNavigation || SelectedImage == null)
-            return;
-
-        _imageBeforeSequentialNavigation = SelectedImage;
-        IsSequentialNavigationEnabled = true;
+        else if (SupportsSequentialNavigation && SelectedImage != null)
+            IsSequentialNavigationEnabled = true;
     }
 
     private void SelectAdjacentImageIfAvailable(SequenceStep step)
