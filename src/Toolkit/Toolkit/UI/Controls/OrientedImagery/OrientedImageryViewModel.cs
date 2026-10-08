@@ -31,7 +31,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </summary>
     public OrientedImageryViewModel() : base()
     {
-        _allowAddingMarkers = false;
         _appMarkers = new ObservableCollection<OrientedImageMarker>();
         _managedMarkers = new List<OrientedImageMarker>();
         _displayMarkers = new ResettableObservableCollection<OrientedImageMarker>();
@@ -56,6 +55,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         ToolbarItems = GetDefaultToolbarItems();
         ToolbarItems.CollectionChanged += ToolbarItems_CollectionChanged;
         SynchronizeToolbarItems();
+
+        _sketchModeEnabled = false;
+        _imageSearchEnabled = true;
 
         SelectNextImageCommand = new Command(
             execute: () => Navigate(SequenceStep.Next),
@@ -522,17 +524,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         set => SetProperty(ref _autoUpdateFootprint, value);
     }
 
-    private bool _allowAddingMarkers;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether marker-creation mode is enabled.
-    /// </summary>
-    public bool AllowAddingMarkers
-    {
-        get => _allowAddingMarkers;
-        set => SetProperty(ref _allowAddingMarkers, value);
-    }
-
     private System.Drawing.Color _selectedFootprintFillColor;
 
     /// <summary>
@@ -873,6 +864,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         return
         [
+            new ImageSearchModeVM(),
             new ShowSelectedFootprintVM(),
             new ShowUnselectedFootprintsVM(),
             new ShowCameraMarkersVM(),
@@ -901,6 +893,32 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _attachedToolbarItems = currentItems;
     }
 #endregion ToolbarItems
+
+#region InteractionStateFlags
+    // These are only used by the View, but because of the toolbar setup binding is easiest if they are kept in the ViewModel
+    private bool _sketchModeEnabled;
+    private bool _imageSearchEnabled;
+
+    /// <summary>
+    /// If <see cref="OrientedImageryView.OnGeoViewTappedOverride"/> and <see cref="OrientedImageryView.OnImageTappedOverride"/>
+    /// have not been set, toggles whether new taps will add markers to the geo view or image viewport.
+    /// </summary>
+    public bool SketchModeEnabled
+    {
+        get => _sketchModeEnabled;
+        set => SetProperty(ref _sketchModeEnabled, value);
+    }
+
+    /// <summary>
+    /// If <see cref="OrientedImageryView.OnGeoViewTappedOverride"/> has not been set, toggles whether taps on the geo view
+    /// will do an image search or an image select when <see cref="SketchModeEnabled"/> is toggled off.
+    /// </summary>
+    public bool ImageSearchEnabled
+    {
+        get => _imageSearchEnabled;
+        set => SetProperty(ref _imageSearchEnabled, value);
+    }
+#endregion InteractionStateFlags
 
 #region INotifyPropertyChanged
     /// <inheritdoc/>

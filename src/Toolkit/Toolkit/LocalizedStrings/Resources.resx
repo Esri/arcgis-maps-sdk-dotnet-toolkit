@@ -1137,6 +1137,14 @@
     <value>Add markers</value>
     <comment>Name for the marker-creation toggle. Assistive technology announces its on/off state separately.</comment>
   </data>
+  <data name="OrientedImageryViewSwitchToImageSearch" xml:space="preserve">
+    <value>Switch to image search mode</value>
+    <comment>Tooltip for the button that switches from image selection to image search mode.</comment>
+  </data>
+  <data name="OrientedImageryViewSwitchToImageSelection" xml:space="preserve">
+    <value>Switch to image selection mode</value>
+    <comment>Tooltip for the button that switches from image search to image selection mode.</comment>
+  </data>
   <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
     <value>Go to image {0} of {1}</value>
     <comment>Pagination automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
