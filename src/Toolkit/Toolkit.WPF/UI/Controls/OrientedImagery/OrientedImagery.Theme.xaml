@@ -304,7 +304,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
-        <ToggleButton IsChecked="{Binding ViewModel.AllowAddingMarkers}"
+        <ToggleButton IsChecked="{Binding ViewModel.SketchModeEnabled}"
                       Style="{StaticResource ToolbarToggleButtonStyle}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
             <Viewbox Width="32" Height="32" Stretch="Uniform">
@@ -316,11 +316,42 @@
         </ToggleButton>
     </DataTemplate>
 
+    <DataTemplate x:Key="ImageSearchModeToolbarTemplate" DataType="controls:ImageSearchModeVM">
+        <Button Command="{Binding ToggleImageSearchModeCommand}">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+                    <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewSwitchToImageSearch}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewModel.ImageSearchEnabled}" Value="True">
+                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewSwitchToImageSelection}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Viewbox Width="32" Height="32" Stretch="Uniform">
+                <TextBlock FontSize="24"
+                           FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Text" Value="&#xea74;" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewModel.ImageSearchEnabled}" Value="True">
+                                    <Setter Property="Text" Value="&#xea72;" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Viewbox>
+        </Button>
+    </DataTemplate>
+
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
         <ComboBox ItemsSource="{Binding SymbolOptions}"
                   SelectedItem="{Binding SelectedSymbol, Mode=TwoWay}"
                   Style="{StaticResource ToolbarComboBoxStyle}"
-                  Visibility="{Binding ViewModel.AllowAddingMarkers, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  Visibility="{Binding ViewModel.SketchModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
                   ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ComboBoxItem}">
@@ -433,6 +464,7 @@
     <controls:OrientedImageryViewTemplateSelector x:Key="DefaultOrientedImageryToolbarSelector">
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:AllowAddingMarkersVM}" Template="{StaticResource AllowAddingMarkersToolbarTemplate}" />
+        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ImageSearchModeVM}" Template="{StaticResource ImageSearchModeToolbarTemplate}" />
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowSelectedFootprintVM}" Template="{StaticResource ShowSelectedFootprintToolbarTemplate}" />
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
