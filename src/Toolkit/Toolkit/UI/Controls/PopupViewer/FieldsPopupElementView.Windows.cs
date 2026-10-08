@@ -84,6 +84,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 VerticalContentAlignment = VerticalAlignment.Top,
             };
 
+            TextScaledFontSizeExtension.SetFontSize(tb, FieldsTableCellTextBlock.FontSizeProperty, 14d);
+
             if (canApplyBoxStyle)
                 tb.Style = FieldTextStyle;
 
@@ -111,6 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             hl.Click += Hyperlink_Click;
             hl.Inlines.Add(Properties.Resources.GetString("PopupViewerViewHyperlinkText"));
             t.Inlines.Add(hl);
+            TextScaledFontSizeExtension.SetFontSize(t, FieldsTableCellTextBlock.FontSizeProperty, 14d);
             return t;
         }
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
