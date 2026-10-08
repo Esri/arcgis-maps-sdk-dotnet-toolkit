@@ -78,6 +78,31 @@ public class AutoUpdateFootprintVM : OrientedImageryToolbarItemBase { }
 public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
+/// View model for the image search mode toolbar control in the Oriented Imagery View.
+/// </summary>
+public class ImageSearchModeVM : OrientedImageryToolbarItemBase
+{
+    /// <summary>
+    /// Gets the command that toggles between image search and image selection modes.
+    /// </summary>
+    public ICommand ToggleImageSearchModeCommand { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImageSearchModeVM"/> class.
+    /// </summary>
+    public ImageSearchModeVM()
+    {
+        ToggleImageSearchModeCommand = new Command(
+            execute: () =>
+            {
+                if (ViewModel != null)
+                    ViewModel.ImageSearchEnabled = !ViewModel.ImageSearchEnabled;
+            },
+            canExecute: () => true);
+    }
+}
+
+/// <summary>
 /// View model for the "Show Selected Footprint" toolbar control in the Oriented Imagery View.
 /// </summary>
 public class ShowSelectedFootprintVM : OrientedImageryToolbarItemBase { }
