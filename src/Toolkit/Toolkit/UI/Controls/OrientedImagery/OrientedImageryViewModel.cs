@@ -166,6 +166,45 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private OrientedImage? _imageBeforeSequentialNavigation;
 
     /// <summary>
+    /// Gets or sets the currently selected oriented image.
+    /// </summary>
+    public OrientedImage? SelectedImage
+    {
+        get => _selectedImage;
+        set
+        {
+            if (value == _selectedImage) return;
+
+            SetProperty(ref _selectedImage, value);
+
+            if (_selectedImage != null)
+            {
+                var footprint = _footprints.FirstOrDefault((fpt) => fpt.OrientedImage == _selectedImage);
+                SelectedImageFootprint = footprint ?? new OrientedImageFootprint(_selectedImage);
+            }
+            else
+            {
+                SelectedImageFootprint = null;
+            }
+            UpdateVisibleFootprints();
+            UpdateSelectedCameraMarker();
+
+            ResetSequentialNavigationState();
+            ChangeNavigationCommandsCanExecute();
+            if (IsSequentialNavigationEnabled)
+                _ = PrefetchAdjacentImagesAsync();
+        }
+    }
+
+    /// <summary>
+    /// Gets a read-only view of the list of selected and unselected images currently assigned to the control.
+    /// </summary>
+    public IReadOnlyList<OrientedImage> Images
+    {
+        get => _readOnlyImages;
+    }
+
+    /// <summary>
     /// Gets a value indicating whether the current layer supports sequential navigation.
     /// </summary>
     public bool SupportsSequentialNavigation => OrientedImageryLayer?.SupportsSequentialNavigation == true;
@@ -218,45 +257,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     {
         get => _sequentialNavigationError;
         private set => SetProperty(ref _sequentialNavigationError, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the currently selected oriented image.
-    /// </summary>
-    public OrientedImage? SelectedImage
-    {
-        get => _selectedImage;
-        set
-        {
-            if (value == _selectedImage) return;
-
-            SetProperty(ref _selectedImage, value);
-
-            if (_selectedImage != null)
-            {
-                var footprint = _footprints.FirstOrDefault((fpt) => fpt.OrientedImage == _selectedImage);
-                SelectedImageFootprint = footprint ?? new OrientedImageFootprint(_selectedImage);
-            }
-            else
-            {
-                SelectedImageFootprint = null;
-            }
-            UpdateVisibleFootprints();
-            UpdateSelectedCameraMarker();
-
-            ResetSequentialNavigationState();
-            ChangeNavigationCommandsCanExecute();
-            if (IsSequentialNavigationEnabled)
-                _ = PrefetchAdjacentImagesAsync();
-        }
-    }
-
-    /// <summary>
-    /// Gets a read-only view of the list of selected and unselected images currently assigned to the control.
-    /// </summary>
-    public IReadOnlyList<OrientedImage> Images
-    {
-        get => _readOnlyImages;
     }
 
     /// <summary>
@@ -730,9 +730,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             marker.PropertyChanged -= Marker_PropertyChanged;
         _overlayMarkerSubscriptions.Clear();
 
-        var markers = _managedMarkers.Concat(_appMarkers).ToArray();
-        _displayMarkers.ReplaceAll(markers);
-        foreach (var marker in markers)
+        var allMarkers = _managedMarkers.Concat(_appMarkers).ToArray();
+        _displayMarkers.ReplaceAll(allMarkers);
+        foreach (var marker in allMarkers)
         {
             marker.PropertyChanged += Marker_PropertyChanged;
             _overlayMarkerSubscriptions.Add(marker);
