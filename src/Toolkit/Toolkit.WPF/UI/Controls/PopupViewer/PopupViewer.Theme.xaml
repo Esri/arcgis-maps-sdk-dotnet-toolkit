@@ -201,7 +201,7 @@
                         <StackPanel DataContext="{TemplateBinding CurrentItem}" Grid.Column="1" Grid.Row="1">
                             <primitives:PopupMediaView x:Name="CurrentMediaView" PopupMedia="{Binding}" Margin="0,5" IsTabStop="False"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Grid.Row="2" Margin="0,0,0,20">
+                        <StackPanel DataContext="{TemplateBinding CurrentItem}" Grid.Column="1" Grid.Row="2" Margin="0,0,0,20">
                             <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                             <primitives:AccessibleTextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" IsAccessible="{Binding Caption,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         </StackPanel>
