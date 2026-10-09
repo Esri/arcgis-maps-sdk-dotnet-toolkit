@@ -1,14 +1,16 @@
-#if WPF
+#if WPF || WINDOWS_XAML
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 using System.ComponentModel;
 using System.Diagnostics;
+#if WPF
 using System.Windows.Automation;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -56,28 +58,34 @@ public partial class OrientedImageryView
 
         if (_viewport != null)
             UnwireViewport(_viewport);
+#if WPF
         if (_toolbarContainer != null)
             UnwireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged -= Paginator_SelectedPageIndexChanged;
+#endif
 
         _viewport = GetTemplateChild(ImageViewportName) as OrientedImageViewport;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
+#if WPF
         _paginator = GetTemplateChild(PaginatorName) as Paginator;
         _mainErrorMessagePresenter = GetTemplateChild(MainErrorMessagePresenterName) as TextBlock;
+#endif
         RewireDismissTransientErrorButton();
 
         if (_viewport != null)
             WireViewport(_viewport);
+#if WPF
         if (_toolbarContainer != null)
             WireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
+#endif
 
         RewireViewModel();
+#if WPF
         UpdatePaginatorSelection();
         UpdateErrorMessages();
-#if WPF
         UpdateDetailsFocus();
 #endif
     }
@@ -145,8 +153,17 @@ public partial class OrientedImageryView
         }
 
         RewireViewModel();
+#if WPF
         UpdatePaginatorSelection();
         UpdateErrorMessages();
+#endif
+
+#if WINDOWS_XAML
+        // Temporary workaround to avoid doing full toolbar implementation
+        MarkerSymbolPicker = ViewModel.ToolbarCategories.Single(c => c.Name == OrientedImageryToolbarCategory.MarkersCategoryName).ToolbarItems.OfType<SelectNewMarkerSymbolVM>().Single();
+        CameraMarkers = ViewModel.ToolbarCategories.Single(c => c.Name == OrientedImageryToolbarCategory.OverlaysCategoryName).ToolbarItems.OfType<ShowCameraMarkersVM>().Single();
+        AllowAddingMarkers = ViewModel.ToolbarCategories.Single(c => c.Name == OrientedImageryToolbarCategory.MarkersCategoryName).ToolbarItems.OfType<AllowAddingMarkersVM>().Single();
+#endif
     }
 
     private void RewireViewModel()
@@ -159,7 +176,9 @@ public partial class OrientedImageryView
         }
         if (_toolbarContainer != null)
             _toolbarContainer.ItemsSource = ViewModel.ToolbarCategories;
+#if WPF
         UpdatePaginatorSelection();
+#endif
     }
 
     private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -171,11 +190,13 @@ public partial class OrientedImageryView
                 UpdateViewportImage();
                 goto case nameof(OrientedImageryViewModel.Images);
             case nameof(OrientedImageryViewModel.Images):
+#if WPF
                 UpdatePaginatorSelection();
                 UpdateImageStateMessages();
                 break;
             case nameof(OrientedImageryViewModel.InteractionState):
                 UpdateImageStateMessages();
+#endif
                 break;
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
                 if (_viewport != null)
@@ -184,7 +205,9 @@ public partial class OrientedImageryView
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
                 CancelGeoViewTappedHandler();
                 HasSearchedForImages = false;
+#if WPF
                 UpdateErrorMessages();
+#endif
                 break;
             case nameof(OrientedImageryViewModel.SequentialNavigationError):
                 if (ViewModel.SequentialNavigationError?.Message != null)
@@ -269,6 +292,9 @@ public partial class OrientedImageryView
     {
         viewport.ImageTapped += Viewport_ImageTapped;
         viewport.StateChanged += Viewport_StateChanged;
+#if WINDOWS_XAML
+        WireViewport_WinUI(viewport);
+#endif
     }
 
     private void UnwireViewport(OrientedImageViewport viewport)
@@ -279,6 +305,9 @@ public partial class OrientedImageryView
         viewport.ClearValue(OrientedImageViewport.MarkersProperty);
         viewport.ClearValue(OrientedImageViewport.FootprintProperty);
         viewport.ClearValue(OrientedImageViewport.DisplayBackgroundColorProperty);
+#if WINDOWS_XAML
+        UnwireViewport_WinUI(viewport);
+#endif
     }
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
@@ -408,7 +437,9 @@ public partial class OrientedImageryView
             ViewModel.OrientedImageryLayer = null;
         }
 
+#if WPF
         UpdateErrorMessages();
+#endif
     }
 
     private async void GeoView_GeoViewTapped(object? _, GeoViewInputEventArgs e)
@@ -505,6 +536,8 @@ public partial class OrientedImageryView
 
 #region Toolbar
     private ItemsControl? _toolbarContainer;
+
+#if WPF
     private OrientedImageryViewToolbarSelector? _defaultItemTemplateSelector;
 
     /// <summary>
@@ -550,8 +583,10 @@ public partial class OrientedImageryView
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
     }
+#endif
 #endregion Toolbar
 
+#if WPF
 #region Pagination
     private Paginator? _paginator;
 
