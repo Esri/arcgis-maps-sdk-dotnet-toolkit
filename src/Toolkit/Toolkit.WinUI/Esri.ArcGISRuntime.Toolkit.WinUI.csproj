@@ -43,16 +43,13 @@
     <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'" />
     <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="$(WinUIVersion)" />
     <PackageReference Include="Markdig" Version="0.31.0" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.298">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
 
   <Import Project="..\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems" Label="Shared" />
   <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
-
-  <!-- OrientedImageViewport isn't implemented for WinUI yet. -->
-  <ItemGroup>
-    <Compile Remove="..\Toolkit\UI\Controls\OrientedImagery\**" />
-    <Compile Remove="..\Toolkit.UI.Controls\OrientedImagery\**" />
-  </ItemGroup>
 </Project>
