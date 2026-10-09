@@ -67,11 +67,6 @@
     <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
     <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 
-    <!-- OrientedImageViewport isn't implemented for Android yet. -->
-    <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
-      <Compile Remove="..\Toolkit\UI\Controls\OrientedImagery\**" />
-    </ItemGroup>
-
     <!-- OrientedImageViewport isn't implemented for iOS and Mac Catalyst yet. -->
     <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
       <Compile Remove="..\Toolkit\UI\Controls\OrientedImagery\**" />
