@@ -1,0 +1,596 @@
+// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+#if WPF
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Direct3D11;
+using Windows.Win32.Graphics.Dxgi;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
+
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+
+// WPF present layer for the shared D3D11 core. Hardware path: render into a shared D3D11 texture, open it on a
+// D3D9Ex device and present through a D3DImage. Software path (Remote Desktop, no GPU, WARP): read the render
+// target back through a staging texture into a WriteableBitmap. Direct3D 9 has no CsWin32 metadata, so the
+// nested D3D9 helper calls its few methods through vtable slots.
+internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.Image
+{
+    // D3D9Ex create flags: HARDWARE_VERTEXPROCESSING | MULTITHREADED | FPU_PRESERVE.
+    private const uint D3D9CreateFlags = 0x40 | 0x4 | 0x2;
+    private const uint D3D9SdkVersion = 32; // D3D_SDK_VERSION
+    private const uint D3DDevTypeHal = 1;
+    private const uint D3DSwapEffectDiscard = 1;
+    private const uint D3DFmtUnknown = 0;
+    private const uint D3DFmtA8R8G8B8 = 21;
+    private const uint D3DPoolDefault = 0;
+    private const uint D3DUsageRenderTarget = 0x1;
+
+    private D3DImage? _d3dImage;
+    private nint _d3d9;        // IDirect3D9Ex*
+    private nint _device9;     // IDirect3DDevice9Ex*
+    private nint _texture9;    // IDirect3DTexture9*
+    private nint _surface9;    // IDirect3DSurface9*
+    private ID3D11Texture2D* _sharedTexture;
+    private ID3D11RenderTargetView* _sharedView;
+
+    private bool _useSoftware;
+    private ID3D11Texture2D* _renderTarget;
+    private ID3D11RenderTargetView* _renderTargetView;
+    private ID3D11Texture2D* _stagingTexture;
+    private WriteableBitmap? _writeableBitmap;
+
+    private bool _renderHooked;
+    private Point _lastMousePosition;
+    private Point _mouseDownPosition;
+    private bool _wasDragging; // the previous move sample had the left button pressed (so a delta is meaningful)
+    private uint _surfaceWidth;
+    private uint _surfaceHeight;
+
+    public PanoramicSurface()
+    {
+        Focusable = true;
+        Stretch = Stretch.Fill;
+        UseLayoutRounding = true; // Avoids blur at fractional DPI by snapping the element to whole device pixels.
+
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
+        SizeChanged += OnSizeChanged;
+    }
+
+    protected override System.Windows.Size MeasureOverride(System.Windows.Size constraint)
+    {
+        // An Image with no Source measures to (0,0). Report the available size so the parent allots real space.
+        double width = double.IsInfinity(constraint.Width) ? 0d : constraint.Width;
+        double height = double.IsInfinity(constraint.Height) ? 0d : constraint.Height;
+        return new System.Windows.Size(width, height);
+    }
+
+    protected override System.Windows.Size ArrangeOverride(System.Windows.Size arrangeSize)
+    {
+        // Image.ArrangeOverride sizes RenderSize from the Source, so with none the element collapses to 0x0 and the
+        // device is never created. Fill the slot; once Source is set, Stretch.Fill draws it over the same area.
+        return arrangeSize;
+    }
+
+    private (uint Width, uint Height) GetPixelSize()
+    {
+        DpiScale dpi = VisualTreeHelper.GetDpi(this);
+        uint width = (uint)Math.Max(1, Math.Ceiling(ActualWidth * dpi.DpiScaleX));
+        uint height = (uint)Math.Max(1, Math.Ceiling(ActualHeight * dpi.DpiScaleY));
+        return (width, height);
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e) => Safe(HandleLoaded);
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        UnhookRendering();
+        ReleasePresentResources();
+        ReleaseDeviceResources();
+    }
+
+    private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        Safe(() =>
+        {
+            EnsureResources();
+            RequestRender();
+        });
+        ViewChanged?.Invoke();
+    }
+
+    // The panoramic viewport rasterizes markers at this scale.
+    internal double PixelsPerDip => VisualTreeHelper.GetDpi(this).DpiScaleX;
+
+    // A move to a monitor with another DPI keeps the size in DIPs, so no SizeChanged follows.
+    protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+    {
+        base.OnDpiChanged(oldDpi, newDpi);
+        Safe(() =>
+        {
+            EnsureResources();
+            RequestRender();
+        });
+        ScaleChanged?.Invoke();
+    }
+
+    private partial void EnsureResources()
+    {
+        if (ActualWidth <= 0 || ActualHeight <= 0)
+            return;
+
+        Initialize(); // core: create the D3D11 device and device resources
+
+        _useSoftware = IsUsingWarp || ShouldUseSoftware();
+
+        (uint width, uint height) = GetPixelSize();
+        bool presentReady = _useSoftware ? _writeableBitmap is not null : _surface9 != 0;
+        if (width == _surfaceWidth && height == _surfaceHeight && presentReady)
+            return;
+
+        if (_useSoftware)
+        {
+            CreateSoftwareSurfaces(width, height);
+            return;
+        }
+
+        try
+        {
+            EnsureDevice9();
+            CreateSurfaces(width, height);
+        }
+        catch
+        {
+            // The hardware bridge can fail at runtime (e.g. adapter mismatch, RDP).
+            // Fall back to the software path rather than leaving the surface blank.
+            ReleaseSurfaces();
+            ReleaseDevice9();
+            _useSoftware = true;
+            CreateSoftwareSurfaces(width, height);
+        }
+    }
+
+    private bool ShouldUseSoftware()
+    {
+        if ((RenderCapability.Tier >> 16) < 2)
+            return true;
+
+        if (RenderOptions.ProcessRenderMode == RenderMode.SoftwareOnly)
+            return true;
+
+        if (PresentationSource.FromVisual(this) is HwndSource hwnd && hwnd.CompositionTarget?.RenderMode == RenderMode.SoftwareOnly)
+            return true;
+
+        return PInvoke.GetSystemMetrics(Windows.Win32.UI.WindowsAndMessaging.SYSTEM_METRICS_INDEX.SM_REMOTESESSION) != 0;
+    }
+
+    private void CreateSoftwareSurfaces(uint width, uint height)
+    {
+        if (Device is null)
+            return;
+
+        ReleaseSurfaces();
+
+        D3D11_TEXTURE2D_DESC targetDesc = CreateBgraTextureDescription(width, height, D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET);
+        ID3D11Texture2D* target;
+        Device->CreateTexture2D(&targetDesc, (D3D11_SUBRESOURCE_DATA*)null, &target);
+        _renderTarget = target;
+
+        ID3D11RenderTargetView* targetView;
+        Device->CreateRenderTargetView((ID3D11Resource*)target, (D3D11_RENDER_TARGET_VIEW_DESC*)null, &targetView);
+        _renderTargetView = targetView;
+
+        D3D11_TEXTURE2D_DESC stagingDesc = targetDesc;
+        stagingDesc.Usage = D3D11_USAGE.D3D11_USAGE_STAGING;
+        stagingDesc.BindFlags = 0;
+        stagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG.D3D11_CPU_ACCESS_READ;
+        ID3D11Texture2D* staging;
+        Device->CreateTexture2D(&stagingDesc, (D3D11_SUBRESOURCE_DATA*)null, &staging);
+        _stagingTexture = staging;
+
+        DpiScale dpi = VisualTreeHelper.GetDpi(this);
+        _writeableBitmap = new WriteableBitmap((int)width, (int)height, 96.0 * dpi.DpiScaleX, 96.0 * dpi.DpiScaleY, PixelFormats.Pbgra32, null);
+        Source = _writeableBitmap;
+
+        _surfaceWidth = width;
+        _surfaceHeight = height;
+    }
+
+    private void EnsureDevice9()
+    {
+        if (_device9 != 0)
+            return;
+
+        ThrowIfFailed(D3D9.Direct3DCreate9Ex(D3D9SdkVersion, out _d3d9), "Direct3DCreate9Ex");
+
+        nint focusWindow = (nint)PInvoke.GetDesktopWindow().Value;
+        D3DPRESENT_PARAMETERS pp = new()
+        {
+            BackBufferWidth = 1,
+            BackBufferHeight = 1,
+            BackBufferFormat = D3DFmtUnknown,
+            SwapEffect = D3DSwapEffectDiscard,
+            hDeviceWindow = focusWindow,
+            Windowed = 1,
+        };
+        ThrowIfFailed(D3D9.CreateDeviceEx(_d3d9, 0, D3DDevTypeHal, focusWindow, D3D9CreateFlags, &pp, out _device9), "CreateDeviceEx");
+    }
+
+    private void CreateSurfaces(uint width, uint height)
+    {
+        if (Device is null || _device9 == 0)
+            return;
+
+        ReleaseSurfaces();
+
+        // D3D11 shared render target the core draws into (CsWin32).
+        D3D11_TEXTURE2D_DESC desc = CreateBgraTextureDescription(width, height,
+            D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET | D3D11_BIND_FLAG.D3D11_BIND_SHADER_RESOURCE,
+            miscFlags: D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_SHARED);
+
+        ID3D11Texture2D* sharedTexture;
+        Device->CreateTexture2D(&desc, (D3D11_SUBRESOURCE_DATA*)null, &sharedTexture);
+        _sharedTexture = sharedTexture;
+
+        ID3D11RenderTargetView* sharedView;
+        Device->CreateRenderTargetView((ID3D11Resource*)sharedTexture, (D3D11_RENDER_TARGET_VIEW_DESC*)null, &sharedView);
+        _sharedView = sharedView;
+
+        HANDLE sharedHandle = GetSharedHandle(sharedTexture);
+
+        // Open the same surface on the D3D9Ex device and point the D3DImage at it.
+        ThrowIfFailed(D3D9.CreateTexture(_device9, width, height, D3DUsageRenderTarget, D3DFmtA8R8G8B8, D3DPoolDefault, out _texture9, sharedHandle), "CreateTexture(shared)");
+        ThrowIfFailed(D3D9.GetSurfaceLevel(_texture9, 0, out _surface9), "GetSurfaceLevel");
+
+        DpiScale dpi = VisualTreeHelper.GetDpi(this);
+        _d3dImage = new D3DImage(96.0 * dpi.DpiScaleX, 96.0 * dpi.DpiScaleY);
+        _d3dImage.IsFrontBufferAvailableChanged += OnFrontBufferAvailableChanged;
+        _d3dImage.Lock();
+        _d3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, _surface9);
+        _d3dImage.Unlock();
+        Source = _d3dImage;
+
+        _surfaceWidth = width;
+        _surfaceHeight = height;
+    }
+
+    private static HANDLE GetSharedHandle(ID3D11Texture2D* texture)
+    {
+        IDXGIResource* resource;
+        Guid riid = IDXGIResource.IID_Guid;
+        ((IUnknown*)texture)->QueryInterface(&riid, (void**)&resource).ThrowOnFailure();
+        try
+        {
+            HANDLE handle;
+            resource->GetSharedHandle(&handle);
+            return handle;
+        }
+        finally
+        {
+            _ = ((IUnknown*)resource)->Release();
+        }
+    }
+
+    private partial void HookRendering()
+    {
+        if (!_renderHooked)
+        {
+            CompositionTarget.Rendering += OnRendering;
+            _renderHooked = true;
+        }
+    }
+
+    private void UnhookRendering()
+    {
+        if (_renderHooked)
+        {
+            CompositionTarget.Rendering -= OnRendering;
+            _renderHooked = false;
+        }
+    }
+
+    private void OnRendering(object? sender, EventArgs e) => RenderTick();
+
+    private partial bool IsReadyToRender() =>
+        Context is not null && (_useSoftware
+            ? _writeableBitmap is not null && _renderTargetView is not null
+            : _d3dImage is not null && _sharedView is not null && _d3dImage.IsFrontBufferAvailable);
+
+    // The surfaces are created by the first sized EnsureResources; the tick waits for them.
+    private partial bool PresentResourcesReady() => true;
+
+    private partial void RenderFrame()
+    {
+        if (_useSoftware)
+            RenderSoftware();
+        else
+            RenderHardware();
+    }
+
+    private partial void ReleasePresentResources()
+    {
+        ReleaseSurfaces();
+        ReleaseDevice9();
+    }
+
+    private void RenderHardware()
+    {
+        RenderScene(_sharedView, _surfaceWidth, _surfaceHeight);
+        Context->Flush(); // ensure D3D11 writes complete before WPF copies the D3D9 surface
+
+        _d3dImage!.Lock();
+        _d3dImage.AddDirtyRect(new Int32Rect(0, 0, _d3dImage.PixelWidth, _d3dImage.PixelHeight));
+        _d3dImage.Unlock();
+    }
+
+    private void RenderSoftware()
+    {
+        RenderScene(_renderTargetView, _surfaceWidth, _surfaceHeight);
+        Context->CopyResource((ID3D11Resource*)_stagingTexture, (ID3D11Resource*)_renderTarget);
+
+        D3D11_MAPPED_SUBRESOURCE mapped;
+        Context->Map((ID3D11Resource*)_stagingTexture, 0, D3D11_MAP.D3D11_MAP_READ, 0, &mapped);
+        try
+        {
+            _writeableBitmap!.Lock();
+            byte* src = (byte*)mapped.pData;
+            byte* dst = (byte*)_writeableBitmap.BackBuffer;
+            int dstStride = _writeableBitmap.BackBufferStride;
+            uint rowBytes = _surfaceWidth * 4;
+            for (uint y = 0; y < _surfaceHeight; y++)
+            {
+                Buffer.MemoryCopy(src + (y * mapped.RowPitch), dst + (y * dstStride), dstStride, rowBytes);
+            }
+
+            _writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, (int)_surfaceWidth, (int)_surfaceHeight));
+            _writeableBitmap.Unlock();
+        }
+        finally
+        {
+            Context->Unmap((ID3D11Resource*)_stagingTexture, 0);
+        }
+    }
+
+    private void OnFrontBufferAvailableChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        // The front buffer came back (RDP reconnect, display change): rebuild on the next tick, which also recreates
+        // the D3D11 device if it was removed, not just the D3D9 surfaces.
+        if (_d3dImage?.IsFrontBufferAvailable == true)
+            NotifyDeviceLost();
+    }
+
+    private void ReleaseSurfaces()
+    {
+        if (_d3dImage is not null)
+        {
+            _d3dImage.IsFrontBufferAvailableChanged -= OnFrontBufferAvailableChanged;
+            _d3dImage.Lock();
+            _d3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, IntPtr.Zero);
+            _d3dImage.Unlock();
+            _d3dImage = null;
+        }
+
+        D3D9.Release(ref _surface9);
+        D3D9.Release(ref _texture9);
+        Release(ref _sharedView);
+        Release(ref _sharedTexture);
+
+        _writeableBitmap = null;
+        Release(ref _renderTargetView);
+        Release(ref _renderTarget);
+        Release(ref _stagingTexture);
+
+        _surfaceWidth = 0;
+        _surfaceHeight = 0;
+    }
+
+    private void ReleaseDevice9()
+    {
+        D3D9.Release(ref _device9);
+        D3D9.Release(ref _d3d9);
+    }
+
+    private static void ThrowIfFailed(int hr, string what)
+    {
+        if (hr < 0)
+            throw new InvalidOperationException($"{what} failed (HRESULT 0x{hr:X8}).");
+    }
+
+    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+    {
+        base.OnMouseLeftButtonDown(e);
+        _mouseDownPosition = e.GetPosition(this);
+
+        // Re-seed the drag anchor per gesture; touch and RDP may deliver no hover move between gestures.
+        _wasDragging = false;
+        Focus();
+        CaptureMouse();
+    }
+
+    protected override void OnMouseMove(MouseEventArgs e)
+    {
+        base.OnMouseMove(e);
+
+        // The drag is driven by move events and button state only: under RDP the press can be missed or promoted.
+        // A delta applies only between two consecutive pressed moves, so there is no first-frame jump.
+        Point position = e.GetPosition(this);
+        bool pressed = e.LeftButton == MouseButtonState.Pressed;
+        if (pressed && _wasDragging)
+        {
+            Camera = Camera.Drag((float)(position.X - _lastMousePosition.X), (float)(position.Y - _lastMousePosition.Y), ActualHeight);
+            RequestRender();
+        }
+
+        _lastMousePosition = position;
+        _wasDragging = pressed;
+    }
+
+    protected override void OnMouseUp(MouseButtonEventArgs e)
+    {
+        base.OnMouseUp(e);
+        if (e.ChangedButton != MouseButton.Left)
+            return; // only the left button starts a drag or a tap
+
+        ReleaseMouseCapture();
+        _wasDragging = false; // reset in case the next gesture's button-down is missed or promoted (RDP)
+
+        // A press-release with negligible movement is a tap (not a drag).
+        Point position = e.GetPosition(this);
+        if (Math.Abs(position.X - _mouseDownPosition.X) < 3 && Math.Abs(position.Y - _mouseDownPosition.Y) < 3)
+            SurfaceTapped?.Invoke(position.X, position.Y);
+    }
+
+    // Handled, as in the SDK MapView, so a ScrollViewer around the panorama doesn't scroll as well. The delta is in
+    // notches of 120, and a precision touchpad sends fractions of a notch.
+    protected override void OnMouseWheel(MouseWheelEventArgs e)
+    {
+        base.OnMouseWheel(e);
+        Camera = Camera.ZoomWheel(e.Delta / 120f);
+        RequestRender();
+        e.Handled = true;
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        base.OnKeyDown(e);
+        if (TryStartKeyboardNavigation((VIRTUAL_KEY)KeyInterop.VirtualKeyFromKey(e.Key)))
+            e.Handled = true;
+    }
+
+    protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+    {
+        base.OnLostKeyboardFocus(e);
+        StopKeyboardNavigation();
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct D3DPRESENT_PARAMETERS
+    {
+        public uint BackBufferWidth;
+        public uint BackBufferHeight;
+        public uint BackBufferFormat;
+        public uint BackBufferCount;
+        public uint MultiSampleType;
+        public uint MultiSampleQuality;
+        public uint SwapEffect;
+        public nint hDeviceWindow;
+        public int Windowed;
+        public int EnableAutoDepthStencil;
+        public uint AutoDepthStencilFormat;
+        public uint Flags;
+        public uint FullScreen_RefreshRateInHz;
+        public uint PresentationInterval;
+    }
+
+    // Direct3D9Ex interop based on COM vtable slots (d3d9.h):
+    // - IUnknown::Release=2
+    // - IDirect3D9Ex::CreateDeviceEx=20
+    // - IDirect3DDevice9::CreateTexture=23
+    // - IDirect3DTexture9::GetSurfaceLevel=18
+    private static unsafe partial class D3D9
+    {
+        [LibraryImport("d3d9.dll")]
+        internal static partial int Direct3DCreate9Ex(uint sdkVersion, out nint d3d9ex);
+
+        internal static int CreateDeviceEx(nint self, uint adapter, uint deviceType, nint focusWindow, uint behaviorFlags, void* presentParams, out nint device)
+        {
+            var fn = (delegate* unmanaged[Stdcall]<nint, uint, uint, nint, uint, void*, void*, nint*, int>)(*(void***)self)[20];
+            nint result;
+            int hr = fn(self, adapter, deviceType, focusWindow, behaviorFlags, presentParams, null, &result);
+            device = result;
+            return hr;
+        }
+
+        internal static int CreateTexture(nint device, uint width, uint height, uint usage, uint format, uint pool, out nint texture, nint sharedHandle)
+        {
+            var fn = (delegate* unmanaged[Stdcall]<nint, uint, uint, uint, uint, uint, uint, nint*, nint*, int>)(*(void***)device)[23];
+            nint result;
+            nint handle = sharedHandle;
+            int hr = fn(device, width, height, 1, usage, format, pool, &result, &handle);
+            texture = result;
+            return hr;
+        }
+
+        internal static int GetSurfaceLevel(nint texture, uint level, out nint surface)
+        {
+            var fn = (delegate* unmanaged[Stdcall]<nint, uint, nint*, int>)(*(void***)texture)[18];
+            nint result;
+            int hr = fn(texture, level, &result);
+            surface = result;
+            return hr;
+        }
+
+        internal static void Release(ref nint comObject)
+        {
+            if (comObject != 0)
+            {
+                var fn = (delegate* unmanaged[Stdcall]<nint, uint>)(*(void***)comObject)[2];
+                _ = fn(comObject);
+                comObject = 0;
+            }
+        }
+    }
+}
+
+// The WPF decoder. Like the other platforms' decoders, it is a member of this record struct.
+internal readonly partial record struct PanoramaFrame
+{
+    // Decodes an image file to BGRA8, applying a JPEG's EXIF orientation as the SDK does.
+    internal static Task<PanoramaFrame> DecodeAsync(string path, CancellationToken token)
+    {
+        return Task.Run(
+            () =>
+            {
+                // Open the file shared: the SDK owns it. OnLoad reads the image fully.
+                using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                BitmapFrame frame = decoder.Frames[0];
+                var orientation = decoder is JpegBitmapDecoder &&
+                    frame.Metadata is BitmapMetadata metadata &&
+                    metadata.GetQuery("/app1/ifd/{ushort=274}") is ushort value
+                    ? new ExifOrientationTransform(value) : default;
+                BitmapSource source = frame;
+                if (orientation.IsMirrored || orientation.RotationDegrees != 0)
+                {
+                    // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees). Matrix.Rotate and Scale
+                    // append, so the rotation applies first.
+                    var transform = System.Windows.Media.Matrix.Identity;
+                    transform.Rotate(orientation.RotationDegrees);
+                    if (orientation.IsMirrored)
+                        transform.Scale(-1, 1);
+                    source = new TransformedBitmap(frame, new System.Windows.Media.MatrixTransform(transform));
+                }
+
+                token.ThrowIfCancellationRequested();
+                var converted = new FormatConvertedBitmap(source, System.Windows.Media.PixelFormats.Bgra32, null, 0);
+                int width = converted.PixelWidth;
+                int height = converted.PixelHeight;
+                int stride = width * 4;
+                byte[] bytes = new byte[height * stride];
+                converted.CopyPixels(bytes, stride, 0);
+                return new PanoramaFrame(bytes, width, height);
+            },
+            token);
+    }
+}
+#endif
