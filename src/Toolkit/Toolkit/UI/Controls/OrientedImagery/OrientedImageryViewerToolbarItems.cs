@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 ﻿#if WPF || MAUI
+||||||| parent of 91d1aa915 (Initial winui implementation - non-extensible toolbar)
+﻿#if WPF
+=======
+﻿#if WPF || WINDOWS_XAML
+>>>>>>> 91d1aa915 (Initial winui implementation - non-extensible toolbar)
 using Esri.ArcGISRuntime.Symbology;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;

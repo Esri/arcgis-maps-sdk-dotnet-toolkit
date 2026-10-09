@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -24,10 +25,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 #if WPF
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+<<<<<<< HEAD
 #elif MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
 #endif
 #if WPF || MAUI
+||||||| parent of 91d1aa915 (Initial winui implementation - non-extensible toolbar)
+
+=======
+
+#if WPF || WINDOWS_XAML
+>>>>>>> 91d1aa915 (Initial winui implementation - non-extensible toolbar)
 /// <summary>
 /// Manages oriented imagery selection, footprints, and map markers for an oriented imagery view.
 /// </summary>
@@ -863,12 +871,16 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
             _ = dispatcher.BeginInvoke(SynchronizeMarkers);
             return;
         }
+<<<<<<< HEAD
 #elif MAUI
         if (DispatchAction != null)
         {
             DispatchAction(SynchronizeMarkers);
             return;
         }
+||||||| parent of 91d1aa915 (Initial winui implementation - non-extensible toolbar)
+=======
+>>>>>>> 91d1aa915 (Initial winui implementation - non-extensible toolbar)
 #endif
 
         SynchronizeMarkers();
