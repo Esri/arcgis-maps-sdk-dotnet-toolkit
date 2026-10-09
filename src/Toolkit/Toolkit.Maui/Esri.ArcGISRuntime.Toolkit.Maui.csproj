@@ -55,7 +55,7 @@
     <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
     <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 
-    <!-- OrientedImageDisplay isn't implemented for MAUI yet. -->
+    <!-- OrientedImageViewport isn't implemented for MAUI yet. -->
     <ItemGroup>
       <Compile Remove="..\Toolkit\UI\Controls\OrientedImagery\**" />
     </ItemGroup>

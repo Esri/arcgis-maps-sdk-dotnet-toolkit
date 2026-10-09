@@ -16,76 +16,76 @@ using PointF = System.Drawing.PointF;
 namespace Toolkit.Tests;
 
 /// <summary>
-/// Contracts of <see cref="OrientedImageDisplay"/> and its inner displays that hold without a running app:
-/// template re-hosting, marker subscriptions that must not retain a discarded display, marker offsets and hit-testing,
-/// accessibility, visible-area clipping, and EXIF coordinate and decoder agreement.
+/// Contracts of <see cref="OrientedImageViewport"/> and its inner viewports that hold without a running app:
+/// template re-hosting, marker subscriptions that must not retain a discarded inner viewport, marker offsets and
+/// hit-testing, accessibility, visible-area clipping, and EXIF coordinate and decoder agreement.
 /// </summary>
 [TestClass]
-public sealed class OrientedImageDisplayTests
+public sealed class OrientedImageViewportTests
 {
     [STATestMethod]
-    public void ReapplyingTemplateRehostsActiveDisplay()
+    public void ReapplyingTemplateRehostsActiveViewport()
     {
-        // A template replacement must move the existing display out of the discarded presenter.
-        // Recreating the display would lose its current image and navigation state.
-        var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
+        // A template replacement must move the existing inner viewport out of the discarded presenter.
+        // Recreating the inner viewport would lose its current image and navigation state.
+        var control = new OrientedImageViewport { Template = CreateHostTemplate() };
         Assert.IsTrue(control.ApplyTemplate());
         ContentPresenter firstHost = GetHost(control);
-        object? display = firstHost.Content;
-        Assert.IsNotNull(display, "the initial template's host presents the active display");
+        object? viewport = firstHost.Content;
+        Assert.IsNotNull(viewport, "the initial template's host presents the active inner viewport");
 
         control.Template = CreateHostTemplate();
         Assert.IsTrue(control.ApplyTemplate());
         ContentPresenter secondHost = GetHost(control);
 
         Assert.AreNotSame(firstHost, secondHost, "sanity: re-applying the template creates a new host");
-        Assert.IsNull(firstHost.Content, "the discarded template's host must release the display");
-        Assert.AreSame(display, secondHost.Content, "the re-applied template's host must adopt the same active display");
+        Assert.IsNull(firstHost.Content, "the discarded template's host must release the inner viewport");
+        Assert.AreSame(viewport, secondHost.Content, "the re-applied template's host must adopt the same active inner viewport");
     }
 
     [STATestMethod]
-    public void MarkerSubscriptionDoesNotRetainDiscardedDisplay()
+    public void MarkerSubscriptionDoesNotRetainDiscardedViewport()
     {
-        // The application keeps the collection, marker, and symbol alive after discarding the display.
-        // Their event subscriptions must not prevent the display from being collected.
+        // The application keeps the collection, marker, and symbol alive after discarding the panoramic viewport.
+        // Their event subscriptions must not prevent the panoramic viewport from being collected.
         var markers = new ObservableCollection<OrientedImageMarker>
         {
             new(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10)),
         };
 
-        WeakReference weakDisplay = CreateDiscardedDisplay(markers);
+        WeakReference weakViewport = CreateDiscardedViewport(markers);
 
         GC.Collect();
         GC.WaitForPendingFinalizers();
         GC.Collect();
 
         Assert.IsFalse(
-            weakDisplay.IsAlive,
-            "an app-owned marker's PropertyChanged subscription must not keep a discarded display alive");
+            weakViewport.IsAlive,
+            "an app-owned marker's PropertyChanged subscription must not keep a discarded panoramic viewport alive");
     }
 
-    // Not inlined, so no caller register/local can keep the display reachable across the collection above.
+    // Not inlined, so no caller register/local can keep the panoramic viewport reachable across the collection above.
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private static WeakReference CreateDiscardedDisplay(ObservableCollection<OrientedImageMarker> markers)
+    private static WeakReference CreateDiscardedViewport(ObservableCollection<OrientedImageMarker> markers)
     {
-        var display = new OrientedImagePanoramicDisplay();
-        display.SetMarkers(markers);
+        var viewport = new OrientedImagePanoramicViewport();
+        viewport.SetMarkers(markers);
 
-        // The marker pass runs on the next UI turn, and the queued work holds the display until then.
+        // The marker pass runs on the next UI turn, and the queued work holds the panoramic viewport until then.
         RunPendingDispatcherWork();
-        return new WeakReference(display);
+        return new WeakReference(viewport);
     }
 
     [STATestMethod]
     public void DeviceRecoveryWithNothingToResupplyIsNotBusy()
     {
         // Without an image, a rebuilt device has nothing to re-supply, so recovery ends there.
-        var display = new OrientedImagePanoramicDisplay();
-        display.OnDeviceLost();
-        Assert.IsTrue(display.IsBusy, "a lost device reports busy");
+        var viewport = new OrientedImagePanoramicViewport();
+        viewport.OnDeviceLost();
+        Assert.IsTrue(viewport.IsBusy, "a lost device reports busy");
 
-        display.OnDeviceRecreated();
-        Assert.IsFalse(display.IsBusy, "recovery ends when there is no image to re-supply");
+        viewport.OnDeviceRecreated();
+        Assert.IsFalse(viewport.IsBusy, "recovery ends when there is no image to re-supply");
     }
 
     [STATestMethod]
@@ -95,34 +95,34 @@ public sealed class OrientedImageDisplayTests
         // drawn. A replaced or removed marker's symbol is let go.
         var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
         var marker = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), symbol);
-        var display = new OrientedImagePanoramicDisplay();
-        display.SetMarkers(new[] { marker });
-        int passes = display.MarkerGeneration;
+        var viewport = new OrientedImagePanoramicViewport();
+        viewport.SetMarkers(new[] { marker });
+        int passes = viewport.MarkerGeneration;
 
         marker.Tag = "changed";
-        Assert.AreEqual(passes, display.MarkerGeneration, "Tag is not drawn");
+        Assert.AreEqual(passes, viewport.MarkerGeneration, "Tag is not drawn");
 
         symbol.Color = Color.Blue;
-        Assert.AreEqual(++passes, display.MarkerGeneration, "a symbol change");
+        Assert.AreEqual(++passes, viewport.MarkerGeneration, "a symbol change");
 
         marker.IsVisible = false;
-        Assert.AreEqual(++passes, display.MarkerGeneration, "a visibility change");
+        Assert.AreEqual(++passes, viewport.MarkerGeneration, "a visibility change");
 
         marker.Position = OrientedImageMarkerPosition.FromLocation(new MapPoint(1, 1));
-        Assert.AreEqual(++passes, display.MarkerGeneration, "a position change");
+        Assert.AreEqual(++passes, viewport.MarkerGeneration, "a position change");
 
         var replacement = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, Color.Red, 10);
         marker.Symbol = replacement;
-        Assert.AreEqual(++passes, display.MarkerGeneration, "a symbol replacement");
+        Assert.AreEqual(++passes, viewport.MarkerGeneration, "a symbol replacement");
         symbol.Color = Color.Green;
-        Assert.AreEqual(passes, display.MarkerGeneration, "the replaced symbol is no longer watched");
+        Assert.AreEqual(passes, viewport.MarkerGeneration, "the replaced symbol is no longer watched");
         replacement.Color = Color.Green;
-        Assert.AreEqual(++passes, display.MarkerGeneration, "the new symbol is watched");
+        Assert.AreEqual(++passes, viewport.MarkerGeneration, "the new symbol is watched");
 
-        display.SetMarkers(null);
-        passes = display.MarkerGeneration;
+        viewport.SetMarkers(null);
+        passes = viewport.MarkerGeneration;
         replacement.Color = Color.Blue;
-        Assert.AreEqual(passes, display.MarkerGeneration, "a removed marker's symbol is no longer watched");
+        Assert.AreEqual(passes, viewport.MarkerGeneration, "a removed marker's symbol is no longer watched");
     }
 
     [STATestMethod]
@@ -133,19 +133,19 @@ public sealed class OrientedImageDisplayTests
         List<OrientedImageMarker> markers = Enumerable.Range(0, 50)
             .Select(i => new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(i, 0)), symbol))
             .ToList();
-        var display = new OrientedImagePanoramicDisplay();
-        display.SetMarkers(markers);
+        var viewport = new OrientedImagePanoramicViewport();
+        viewport.SetMarkers(markers);
         RunPendingDispatcherWork();
-        int passes = display.MarkerPasses;
+        int passes = viewport.MarkerPasses;
 
         symbol.Color = Color.Blue;
         RunPendingDispatcherWork();
-        Assert.AreEqual(passes + 1, display.MarkerPasses, "a shared symbol change");
+        Assert.AreEqual(passes + 1, viewport.MarkerPasses, "a shared symbol change");
 
         foreach (OrientedImageMarker marker in markers)
             marker.IsVisible = false;
         RunPendingDispatcherWork();
-        Assert.AreEqual(passes + 2, display.MarkerPasses, "a loop over the markers");
+        Assert.AreEqual(passes + 2, viewport.MarkerPasses, "a loop over the markers");
     }
 
     // Runs work posted to this thread's dispatcher, which has a higher priority than Background.
@@ -164,7 +164,7 @@ public sealed class OrientedImageDisplayTests
 
         static void AssertOffset(Symbol symbol, double x, double y)
         {
-            (double X, double Y) offset = OrientedImagePanoramicDisplay.GetMarkerOffset(symbol);
+            (double X, double Y) offset = OrientedImagePanoramicViewport.GetMarkerOffset(symbol);
             Assert.AreEqual(x, offset.X, 1e-9, $"{symbol.GetType().Name} X");
             Assert.AreEqual(y, offset.Y, 1e-9, $"{symbol.GetType().Name} Y");
         }
@@ -188,44 +188,44 @@ public sealed class OrientedImageDisplayTests
         Assert.IsNotNull(Hit([large], cx + 51, cy), "11 DIPs outside its edge");
         Assert.IsNull(Hit([large], cx + 55, cy), "15 DIPs outside its edge");
 
-        // As in the planar display, the topmost marker within tolerance wins, even over a direct hit beneath it.
+        // As in the planar viewport, the topmost marker within tolerance wins, even over a direct hit beneath it.
         var upper = Marker(size: 20, offsetX: 55, offsetY: 0);
         Assert.AreSame(upper.Marker, Hit([large, upper], cx + 38, cy), "inside the lower marker, 7 DIPs from the upper one");
         Assert.AreSame(large.Marker, Hit([large, upper], cx - 20, cy), "out of the upper marker's reach");
 
-        OrientedImageMarker? Hit(OrientedImagePanoramicDisplay.ResolvedMarker[] markers, double x, double y) =>
-            OrientedImagePanoramicDisplay.HitTestMarker(markers, camera, 400, 300, x, y);
+        OrientedImageMarker? Hit(OrientedImagePanoramicViewport.ResolvedMarker[] markers, double x, double y) =>
+            OrientedImagePanoramicViewport.HitTestMarker(markers, camera, 400, 300, x, y);
     }
 
     [TestMethod]
     public void StillImagesSpanning360DegreesArePanoramic()
     {
         // The SDK's image transforms treat any image that spans 360 degrees as spherical.
-        Assert.IsTrue(OrientedImageDisplay.IsPanoramic(OrientedImageType.Image360, new Dictionary<string, object?>()));
-        Assert.IsTrue(OrientedImageDisplay.IsPanoramic(OrientedImageType.Unknown, new Dictionary<string, object?> { ["HorizontalFieldOfView"] = 360d }));
-        Assert.IsFalse(OrientedImageDisplay.IsPanoramic(OrientedImageType.Horizontal, new Dictionary<string, object?> { ["HorizontalFieldOfView"] = 100.4d }));
+        Assert.IsTrue(OrientedImageViewport.IsPanoramic(OrientedImageType.Image360, new Dictionary<string, object?>()));
+        Assert.IsTrue(OrientedImageViewport.IsPanoramic(OrientedImageType.Unknown, new Dictionary<string, object?> { ["HorizontalFieldOfView"] = 360d }));
+        Assert.IsFalse(OrientedImageViewport.IsPanoramic(OrientedImageType.Horizontal, new Dictionary<string, object?> { ["HorizontalFieldOfView"] = 100.4d }));
     }
 
     [TestMethod]
     public void PanoramicHeadingTreatsUnknownAsNorth()
     {
         // -999 means the heading is unknown.
-        Assert.AreEqual(0f, OrientedImagePanoramicDisplay.ReadHeadingRadians(new Dictionary<string, object?> { ["CameraHeading"] = -999d }));
-        Assert.AreEqual(0f, OrientedImagePanoramicDisplay.ReadHeadingRadians(new Dictionary<string, object?>()));
-        Assert.AreEqual(MathF.PI / 2f, OrientedImagePanoramicDisplay.ReadHeadingRadians(new Dictionary<string, object?> { ["CameraHeading"] = 90d }), 1e-6f);
+        Assert.AreEqual(0f, OrientedImagePanoramicViewport.ReadHeadingRadians(new Dictionary<string, object?> { ["CameraHeading"] = -999d }));
+        Assert.AreEqual(0f, OrientedImagePanoramicViewport.ReadHeadingRadians(new Dictionary<string, object?>()));
+        Assert.AreEqual(MathF.PI / 2f, OrientedImagePanoramicViewport.ReadHeadingRadians(new Dictionary<string, object?> { ["CameraHeading"] = 90d }), 1e-6f);
     }
 
     // A marker at the image center with a square swatch of the given size in DIPs.
-    private static OrientedImagePanoramicDisplay.ResolvedMarker Marker(double size, double offsetX, double offsetY) =>
+    private static OrientedImagePanoramicViewport.ResolvedMarker Marker(double size, double offsetX, double offsetY) =>
         new(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0))), 0.75f, 0.5f, offsetX, offsetY, size / 2, size / 2);
 
     [STATestMethod]
     public void PanoramicSurfaceHasAccessibleName()
     {
-        // The surface is the keyboard-focusable element of the panoramic display; it must carry an accessible
-        // name (the raster display labels its inner MapView the same way).
-        var display = new OrientedImagePanoramicDisplay();
-        var surface = (DependencyObject)display.Content!;
+        // The surface is the keyboard-focusable element of the panoramic viewport; it must carry an accessible
+        // name (the raster viewport labels its inner MapView the same way).
+        var viewport = new OrientedImagePanoramicViewport();
+        var surface = (DependencyObject)viewport.Content!;
         string name = System.Windows.Automation.AutomationProperties.GetName(surface);
         Assert.IsFalse(string.IsNullOrEmpty(name), "the panoramic surface must have an automation name");
     }
@@ -233,9 +233,10 @@ public sealed class OrientedImageDisplayTests
     [STATestMethod]
     public void AutomationPropertiesOnControlReachFocusableView()
     {
-        // Focus lands on the inner view, so the name and automation id the app gives the control must reach that
-        // view, whether set before or after the view exists, and clearing the name must restore the default label.
-        var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
+        // Focus lands on the MapView or panoramic surface, not the control, so the name and automation id the app
+        // gives the control must reach that view, whether set before or after the view exists, and clearing the name
+        // must restore the default label.
+        var control = new OrientedImageViewport { Template = CreateHostTemplate() };
         System.Windows.Automation.AutomationProperties.SetName(control, "Rear camera");
         System.Windows.Automation.AutomationProperties.SetAutomationId(control, "RearCamera");
         Assert.IsTrue(control.ApplyTemplate());
@@ -257,18 +258,18 @@ public sealed class OrientedImageDisplayTests
     [STATestMethod]
     public void ScreenToImageIsNullWithoutAnImage()
     {
-        var control = new OrientedImageDisplay { Template = CreateHostTemplate() };
+        var control = new OrientedImageViewport { Template = CreateHostTemplate() };
         Assert.IsTrue(control.ApplyTemplate());
         Assert.IsNull(control.ScreenToImage(new System.Windows.Point(10, 10)));
     }
 
-    // The keyboard-focusable element of the active display: the MapView of the raster display here.
-    private static DependencyObject GetFocusableView(OrientedImageDisplay control)
+    // The keyboard-focusable element of the active inner viewport: the MapView of the raster viewport here.
+    private static DependencyObject GetFocusableView(OrientedImageViewport control)
     {
-        var display = GetHost(control).Content as ContentControl;
-        Assert.IsNotNull(display, "the host presents the active display");
-        var view = display.Content as DependencyObject;
-        Assert.IsNotNull(view, "the display presents its focusable view");
+        var viewport = GetHost(control).Content as ContentControl;
+        Assert.IsNotNull(viewport, "the host presents the active inner viewport");
+        var view = viewport.Content as DependencyObject;
+        Assert.IsNotNull(view, "the inner viewport presents its focusable view");
         return view;
     }
 
@@ -289,7 +290,7 @@ public sealed class OrientedImageDisplayTests
         var visibleArea = builder.ToGeometry();
         var extent = new Esri.ArcGISRuntime.Geometry.Envelope(0, 0, 100, 100, reference);
 
-        List<System.Drawing.PointF> ring = OrientedImageRasterDisplay.ComputeVisibleAreaPixels(visibleArea, extent, 1, 1);
+        List<System.Drawing.PointF> ring = OrientedImageRasterViewport.ComputeVisibleAreaPixels(visibleArea, extent, 1, 1);
 
         Assert.IsGreaterThanOrEqualTo(4, ring.Count, $"expected a full ring, got {ring.Count} vertices");
         Assert.AreEqual(10000d, SignedRingArea(ring), 1e-3, "the clipped footprint must cover the whole image clockwise");
@@ -329,7 +330,7 @@ public sealed class OrientedImageDisplayTests
         Assert.AreEqual(new PointF(expectedX, expectedY), image);
         Assert.AreEqual(stored, orientation.ImageToStored(image, 400, 200));
 
-        // The planar display can rotate but not reflect, so the reflection must come last. Rotating clockwise by
+        // The planar viewport can rotate but not reflect, so the reflection must come last. Rotating clockwise by
         // RotationDegrees, then reflecting horizontally if mirrored, must reproduce the mapping.
         (PointF rotated, float rotatedWidth) = orientation.RotationDegrees switch
         {
@@ -376,7 +377,7 @@ public sealed class OrientedImageDisplayTests
         builder.AddPoint(400, 200);
         builder.AddPoint(400, 0);
         builder.AddPoint(0, 0);
-        List<PointF> pixels = OrientedImageRasterDisplay.ComputeVisibleAreaPixels(
+        List<PointF> pixels = OrientedImageRasterViewport.ComputeVisibleAreaPixels(
             builder.ToGeometry(), new Envelope(0, 0, 400, 200), 1, 1, orientation);
 
         PointF[] expectedCorners =
@@ -392,16 +393,16 @@ public sealed class OrientedImageDisplayTests
 
         var partialExtent = new Envelope(100, 200, 900, 800);
         var partialView = new Polygon([new MapPoint(-300, 1100), new(500, 1100), new(500, 500), new(-300, 500)]);
-        List<PointF> partial = OrientedImageRasterDisplay.ComputeVisibleAreaPixels(partialView, partialExtent, -2, -3, orientation);
+        List<PointF> partial = OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, partialExtent, -2, -3, orientation);
         PointF[] storedCorners = [new(0, 0), new(200, 0), new(200, 100), new(0, 100)];
         CollectionAssert.AreEquivalent(storedCorners.Select(point => orientation.StoredToImage(point, 400, 200)).ToArray(), partial.Distinct().ToArray());
         Assert.AreEqual(20000d, SignedRingArea(partial), "partial clips keep clockwise image winding");
-        Assert.AreEqual(120000d, SignedRingArea(OrientedImageRasterDisplay.ComputeVisibleAreaPixels(partialView, partialExtent, 0, 0, orientation)), "zero cell sizes use one map unit per pixel");
+        Assert.AreEqual(120000d, SignedRingArea(OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, partialExtent, 0, 0, orientation)), "zero cell sizes use one map unit per pixel");
 
         var outsideView = new Polygon([new MapPoint(-300, 1100), new(0, 1100), new(0, 900), new(-300, 900)]);
         var multipart = new PolygonBuilder(outsideView);
         multipart.AddPart(partialView.Parts[0]);
-        Assert.IsEmpty(OrientedImageRasterDisplay.ComputeVisibleAreaPixels(multipart.ToGeometry(), partialExtent, 0, 0, orientation), "only the first visible-area part counts");
+        Assert.IsEmpty(OrientedImageRasterViewport.ComputeVisibleAreaPixels(multipart.ToGeometry(), partialExtent, 0, 0, orientation), "only the first visible-area part counts");
     }
 
     [TestMethod]
@@ -500,12 +501,12 @@ public sealed class OrientedImageDisplayTests
     }
 
     // Mirrors the shape of the control's default template: a single named host presenter.
-    private static ControlTemplate CreateHostTemplate() => new(typeof(OrientedImageDisplay))
+    private static ControlTemplate CreateHostTemplate() => new(typeof(OrientedImageViewport))
     {
         VisualTree = new FrameworkElementFactory(typeof(ContentPresenter), "PART_DisplayHost"),
     };
 
-    private static ContentPresenter GetHost(OrientedImageDisplay control)
+    private static ContentPresenter GetHost(OrientedImageViewport control)
     {
         var host = control.Template.FindName("PART_DisplayHost", control) as ContentPresenter;
         Assert.IsNotNull(host, "the applied template must contain PART_DisplayHost");

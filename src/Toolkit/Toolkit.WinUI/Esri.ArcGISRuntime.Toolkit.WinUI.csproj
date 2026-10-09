@@ -50,7 +50,7 @@
   <Import Project="..\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems" Label="Shared" />
   <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 
-  <!-- OrientedImageDisplay isn't implemented for WinUI yet. -->
+  <!-- OrientedImageViewport isn't implemented for WinUI yet. -->
   <ItemGroup>
     <Compile Remove="..\Toolkit\UI\Controls\OrientedImagery\**" />
     <Compile Remove="..\Toolkit.UI.Controls\OrientedImagery\**" />

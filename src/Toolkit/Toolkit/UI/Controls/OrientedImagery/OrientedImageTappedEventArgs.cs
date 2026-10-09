@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 /// <summary>
-/// Provides data for a tap on an oriented image, such as the <see cref="OrientedImageDisplay.ImageTapped"/> event.
+/// Provides data for a tap on an oriented image, such as the <see cref="OrientedImageViewport.ImageTapped"/> event.
 /// </summary>
 public class OrientedImageTappedEventArgs : EventArgs
 {

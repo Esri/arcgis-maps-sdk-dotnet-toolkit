@@ -36,44 +36,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Base of OrientedImageDisplay's inner displays. Owns the presentation session (one footprint and one cancellation
+// Base of OrientedImageViewport's inner viewports. Owns the presentation session (one footprint and one cancellation
 // token per SetFootprint), the reported state, the marker subscriptions and the auto-update-footprint plumbing.
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Platform view types are not IDisposable by convention. The session CTS is cancel-only (no timer), so it needs no disposal; canceling it on supersede is the release.")]
 #if MAUI
-internal abstract class OrientedImageInnerDisplay : ContentView
+internal abstract class OrientedImageInnerViewport : ContentView
 #else
-internal abstract class OrientedImageInnerDisplay : ContentControl
+internal abstract class OrientedImageInnerViewport : ContentControl
 #endif
 {
     private IEnumerable<OrientedImageMarker>? _markerSource;
     private List<OrientedImageMarker> _markers = []; // Snapshot read from the source
-    private WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
+    private WeakEventListener<OrientedImageInnerViewport, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private readonly Dictionary<OrientedImageMarker, MarkerSubscription> _markerListeners = [];
     private CancellationTokenSource? _sessionCts;
     private CancellationTokenSource? _updateCts;
     private bool _autoUpdate;
     private bool _isLoading;
 
-    private protected OrientedImageInnerDisplay()
+    private protected OrientedImageInnerViewport()
     {
 #if !MAUI
-        // ContentControl content defaults to Left/Top; the inner view has to be stretched to fill.
+        // ContentControl content defaults to Left/Top; the content has to be stretched to fill.
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
         VerticalContentAlignment = VerticalAlignment.Stretch;
 
-        // The inner view is the focusable element.
+        // The content, not this control, is the focusable element.
         IsTabStop = false;
 #endif
     }
 
-    /// <summary>Gets a value indicating whether the display is busy loading, initializing, or drawing (not in a steady state).</summary>
+    /// <summary>Gets a value indicating whether the viewport is busy loading, initializing, or drawing (not in a steady state).</summary>
     public bool IsBusy { get; private set; }
 
-    /// <summary>Gets a value indicating whether the display has a presented, unlocked image and no <see cref="Error"/>.
-    /// Independent of <see cref="IsBusy"/>: a presented display stays interactive while it redraws.</summary>
+    /// <summary>
+    /// Gets a value indicating whether the viewport has a presented, unlocked image and no <see cref="Error"/>.
+    /// Independent of <see cref="IsBusy"/>: a presented viewport stays interactive while it redraws.
+    /// </summary>
     public bool IsInteractive { get; private set; }
 
-    /// <summary>Gets the error that prevents the display from showing its image, or <c>null</c> when there is none.</summary>
+    /// <summary>Gets the error that prevents the viewport from showing its image, or <c>null</c> when there is none.</summary>
     public Exception? Error { get; private set; }
 
     /// <summary>Occurs when <see cref="IsBusy"/>, <see cref="IsInteractive"/>, or <see cref="Error"/> changes.</summary>
@@ -90,17 +92,17 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     protected IReadOnlyList<OrientedImageMarker> Markers => _markers;
 
     /// <summary>Gets the session token: canceled when a later <see cref="SetFootprint"/> supersedes this one, and
-    /// before the first one. Capture it before an await and re-check it before touching display state.</summary>
+    /// before the first one. Capture it before an await and re-check it before touching viewport state.</summary>
     protected CancellationToken SessionToken => _sessionCts?.Token ?? new CancellationToken(canceled: true);
 
-    /// <summary>Gets or sets a presentation failure to surface through <see cref="Error"/>; derived displays record
+    /// <summary>Gets or sets a presentation failure to surface through <see cref="Error"/>; derived viewports record
     /// asynchronous render/device failures here and then call <see cref="UpdateState"/>. Cleared per session.</summary>
     protected Exception? PresentationError { get; set; }
 
     /// <summary>Gets a value indicating whether the current footprint's image is being loaded and presented.</summary>
     protected bool IsLoading => _isLoading;
 
-    // The focusable inner view, which carries the automation name and id.
+    // The focusable view, which carries the automation name and id.
 #if MAUI
     protected abstract View AutomationTarget { get; }
 #elif WPF
@@ -138,8 +140,8 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 
         if (markers is INotifyCollectionChanged incc)
         {
-            // Weak: the app-owned collection must not keep a discarded display alive through this subscription.
-            _markersListener = new WeakEventListener<OrientedImageInnerDisplay, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
+            // Weak: the app-owned collection must not keep a discarded viewport alive through this subscription.
+            _markersListener = new WeakEventListener<OrientedImageInnerViewport, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
             {
                 OnEventAction = static (instance, source, eventArgs) => instance.SyncMarkers(),
                 OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
@@ -151,7 +153,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     }
 
     // Reads the source and reports which markers were added and removed since the last read. Comparing by marker
-    // identity keeps the display in step with the source, whatever notifications it raises. A marker that appears more
+    // identity keeps the viewport in step with the source, whatever notifications it raises. A marker that appears more
     // than once is shown once, and null items are skipped.
     private void SyncMarkers()
     {
@@ -171,17 +173,17 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         OnMarkersChanged(added, removed);
     }
 
-    // Weak listeners keep app-owned markers and symbols from retaining the display.
+    // Weak listeners keep app-owned markers and symbols from retaining the viewport.
     private sealed class MarkerSubscription
     {
-        private readonly OrientedImageInnerDisplay _display;
+        private readonly OrientedImageInnerViewport _viewport;
         private readonly OrientedImageMarker _marker;
         private readonly WeakEventListener<MarkerSubscription, INotifyPropertyChanged, object, PropertyChangedEventArgs> _markerListener;
         private WeakEventListener<MarkerSubscription, INotifyPropertyChanged, object, PropertyChangedEventArgs>? _symbolListener;
 
-        public MarkerSubscription(OrientedImageInnerDisplay display, OrientedImageMarker marker)
+        public MarkerSubscription(OrientedImageInnerViewport viewport, OrientedImageMarker marker)
         {
-            _display = display;
+            _viewport = viewport;
             _marker = marker;
             _markerListener = Listen(marker, static (subscription, _, args) => subscription.OnMarkerPropertyChanged(args));
             ListenToSymbol();
@@ -210,10 +212,10 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         {
             if (args.PropertyName is null or nameof(OrientedImageMarker.Symbol))
                 ListenToSymbol();
-            _display.OnMarkerChanged(_marker, args.PropertyName);
+            _viewport.OnMarkerChanged(_marker, args.PropertyName);
         }
 
-        private void OnSymbolPropertyChanged() => _display.OnMarkerChanged(_marker, nameof(OrientedImageMarker.Symbol));
+        private void OnSymbolPropertyChanged() => _viewport.OnMarkerChanged(_marker, nameof(OrientedImageMarker.Symbol));
 
         private void StopListeningToSymbol()
         {
@@ -249,16 +251,16 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
             _updateCts?.Cancel(); // don't let an in-flight update land after auto-update was turned off
     }
 
-    /// <summary>Sets the background color shown where the image does not fill the display.</summary>
-    /// <param name="color">The background color, or <see cref="System.Drawing.Color.Empty"/> to keep the display's default.</param>
+    /// <summary>Sets the background color shown where the image does not fill the viewport.</summary>
+    /// <param name="color">The background color, or <see cref="System.Drawing.Color.Empty"/> to keep the viewport's default.</param>
     public abstract void SetBackgroundColor(System.Drawing.Color color);
 
-    /// <summary>Labels the focusable inner view for screen readers with the name the app gave the control.</summary>
+    /// <summary>Labels the focusable view for screen readers with the name the app gave the control.</summary>
     /// <param name="name">The app's name, or <c>null</c> or empty for the localized default.</param>
     public void SetAutomationName(string? name)
     {
         if (string.IsNullOrEmpty(name))
-            name = Properties.Resources.GetString("OrientedImageDisplayAutomationName") ?? "Oriented image display";
+            name = Properties.Resources.GetString("OrientedImageViewportAutomationName") ?? "Oriented image";
 #if WPF
         System.Windows.Automation.AutomationProperties.SetName(AutomationTarget, name);
 #elif WINDOWS_XAML
@@ -268,11 +270,11 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
 #endif
     }
 
-    /// <summary>Converts a position in the display, in device-independent pixels, to the image coordinate under it.</summary>
-    /// <returns>The image coordinate, or <c>null</c> when no image is under the position or the display is not interactive.</returns>
+    /// <summary>Converts a position in the viewport, in device-independent pixels, to the image coordinate under it.</summary>
+    /// <returns>The image coordinate, or <c>null</c> when no image is under the position or the viewport is not interactive.</returns>
     public abstract System.Drawing.PointF? ScreenToImage(double x, double y);
 
-    /// <summary>Gives the focusable inner view the automation id the app gave the control, so UI tests can find it.</summary>
+    /// <summary>Gives the focusable view the automation id the app gave the control, so UI tests can find it.</summary>
     /// <param name="id">The app's automation id, or <c>null</c> or empty for none.</param>
     public void SetAutomationId(string? id)
     {
@@ -335,7 +337,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
     protected abstract Task? BeginFootprintUpdate(OrientedImageFootprint footprint);
 
     // The load skeleton finished for the current session (present, clear, or failure) - state and image dimensions
-    // are settled. Derived displays re-resolve dimension-dependent visuals (e.g. panoramic markers) here.
+    // are settled. Derived viewports re-resolve dimension-dependent visuals (e.g. panoramic markers) here.
     protected virtual void OnPresentCompleted()
     {
     }
@@ -394,7 +396,7 @@ internal abstract class OrientedImageInnerDisplay : ContentControl
         if (imageChanged)
             Footprint?.OrientedImage?.CancelLoad();
 
-        // An in-flight footprint update must not mutate a footprint this display no longer manages.
+        // An in-flight footprint update must not mutate a footprint this viewport no longer manages.
         if (!ReferenceEquals(Footprint, footprint))
             _updateCts?.Cancel();
 

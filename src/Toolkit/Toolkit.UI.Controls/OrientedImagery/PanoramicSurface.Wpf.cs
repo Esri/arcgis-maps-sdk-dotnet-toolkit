@@ -119,7 +119,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         ViewChanged?.Invoke();
     }
 
-    // The display rasterizes markers at this scale.
+    // The panoramic viewport rasterizes markers at this scale.
     internal double PixelsPerDip => VisualTreeHelper.GetDpi(this).DpiScaleX;
 
     // A move to a monitor with another DPI keeps the size in DIPs, so no SizeChanged follows.

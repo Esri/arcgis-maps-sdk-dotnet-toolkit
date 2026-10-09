@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 /// <summary>
-/// A point of interest rendered over the image in an <see cref="OrientedImageDisplay"/>.
+/// A point of interest rendered over the image in an <see cref="OrientedImageViewport"/>.
 /// </summary>
 /// <remarks>
 /// Anchored to an image pixel or a world location (see <see cref="OrientedImageMarkerPosition"/>). Changes to
@@ -48,7 +48,7 @@ public sealed class OrientedImageMarker : INotifyPropertyChanged
     /// Initializes a new instance of the <see cref="OrientedImageMarker"/> class.
     /// </summary>
     /// <param name="position">The position the marker is anchored to.</param>
-    /// <param name="symbol">The symbol used to draw the marker, or <c>null</c> to use the display's default.</param>
+    /// <param name="symbol">The symbol used to draw the marker, or <c>null</c> to use the viewport's default.</param>
     public OrientedImageMarker(OrientedImageMarkerPosition position, Symbol? symbol = null)
     {
         _position = position;
@@ -63,7 +63,7 @@ public sealed class OrientedImageMarker : INotifyPropertyChanged
         set => SetProperty(ref _position, value);
     }
 
-    /// <summary>Gets or sets the symbol used to draw the marker. If <c>null</c>, the display's default is used.</summary>
+    /// <summary>Gets or sets the symbol used to draw the marker. If <c>null</c>, the viewport's default is used.</summary>
     /// <value>The marker symbol, or <c>null</c>.</value>
     public Symbol? Symbol
     {

@@ -38,9 +38,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Panoramic (equirectangular 360) inner display: decodes the image to a texture on the platform PanoramicSurface
+// Panoramic (equirectangular 360) inner viewport: decodes the image to a texture on the platform PanoramicSurface
 // and surfaces taps. All screen<->pixel math goes through PanoramaCameraState.
-internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInnerDisplay
+internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInnerViewport
 {
     private const double MarkerHitTolerance = 12d;
 
@@ -61,7 +61,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     private int _imageHeight;
     private bool _recovering;
 
-    internal OrientedImagePanoramicDisplay()
+    internal OrientedImagePanoramicViewport()
     {
 #if MAUI
         _surface = new PanoramicSurfaceView();
@@ -98,7 +98,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         UpdateState();
     }
 
-    // Present-layer (device/bridge/render) failures happen outside the load path: blank the display and surface them
+    // Present-layer (device/bridge/render) failures happen outside the load path: blank the viewport and surface them
     // as Error. The blanking render can fail too; that is not reported again.
     private void OnRenderFailed(Exception ex)
     {
@@ -116,7 +116,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
     internal async void OnDeviceRecreated()
     {
         // A load in flight supplies the rebuilt surface when it completes, so a second decode would be wasted. A load
-        // that failed stays failed: the display never retries on its own. Without an image there is nothing to
+        // that failed stays failed: the viewport never retries on its own. Without an image there is nothing to
         // re-supply. In all three cases the recovery ends here, and a load in flight still reports busy on its own.
         OrientedImage? image = Footprint?.OrientedImage;
         if (image is null || IsLoading || image.LoadStatus == LoadStatus.FailedToLoad)
@@ -166,7 +166,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         }
         catch (Exception ex)
         {
-            // A footprint swapped in mid-recovery owns the display state now; don't overwrite it.
+            // A footprint swapped in mid-recovery owns the viewport state now; don't overwrite it.
             if (!token.IsCancellationRequested)
                 PresentationError = ex;
         }
@@ -263,7 +263,7 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
                     continue;
 
                 Swatch? swatch = _markerSwatches.GetValueOrDefault(marker) is { } cached && cached.Scale == scale ? cached : null;
-                pending.Add(new PendingMarker(marker, marker.Position, marker.Symbol ?? OrientedImageDisplay.DefaultMarkerSymbol, _markerUvs.GetValueOrDefault(marker), swatch));
+                pending.Add(new PendingMarker(marker, marker.Position, marker.Symbol ?? OrientedImageViewport.DefaultMarkerSymbol, _markerUvs.GetValueOrDefault(marker), swatch));
             }
         }
 
@@ -465,9 +465,9 @@ internal sealed partial class OrientedImagePanoramicDisplay : OrientedImageInner
         RaiseImageTapped(new OrientedImageTappedEventArgs(pixel, image, marker));
     }
 
-    // Returns the topmost marker whose swatch lies within the hit tolerance of the tap, or null, as the planar display's
-    // identify does. Markers draw in list order, so the last one is on top. A swatch is centered on its projected anchor
-    // plus its symbol offset. All values are in DIPs.
+    // Returns the topmost marker whose swatch lies within the hit tolerance of the tap, or null, as the planar
+    // viewport's identify does. Markers draw in list order, so the last one is on top. A swatch is centered on its
+    // projected anchor plus its symbol offset. All values are in DIPs.
     internal static OrientedImageMarker? HitTestMarker(IReadOnlyList<ResolvedMarker> markers, PanoramaCameraState camera,
         double viewWidth, double viewHeight, double x, double y)
     {

@@ -285,8 +285,8 @@ internal sealed record PanoramaCameraState
 }
 
 // A marker as a panoramic surface draws it: a premultiplied BGRA8 swatch, the normalized (u,v) of its anchor, and the
-// offset from the anchor to the swatch center, in pixels with y down. Bgra belongs to the display's swatch cache, so
-// surfaces must not change it.
+// offset from the anchor to the swatch center, in pixels with y down. Bgra belongs to the panoramic viewport's swatch
+// cache, so surfaces must not change it.
 internal readonly record struct PanoramaMarker(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY)
 {
     // An empty swatch, or one with fewer pixels than its size, can't be uploaded.

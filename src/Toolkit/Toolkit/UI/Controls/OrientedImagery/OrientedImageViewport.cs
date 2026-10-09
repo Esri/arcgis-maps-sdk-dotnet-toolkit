@@ -51,30 +51,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// Planar images are displayed with a <see cref="Esri.ArcGISRuntime.Mapping.RasterLayer"/>, so they require the
 /// <see cref="Esri.ArcGISRuntime.LicenseLevel.Standard"/> license level or higher.
 /// </remarks>
-public partial class OrientedImageDisplay
+public partial class OrientedImageViewport
 {
     private const string DisplayHostName = "PART_DisplayHost";
 
     private DisplayHostElement? _displayHost;
-    private OrientedImageRasterDisplay? _rasterDisplay;
+    private OrientedImageRasterViewport? _rasterViewport;
 #if WPF || WINDOWS_XAML || __ANDROID__ || __IOS__ || (MAUI && WINDOWS)
-    private OrientedImagePanoramicDisplay? _panoramicDisplay;
+    private OrientedImagePanoramicViewport? _panoramicViewport;
 #endif
-    private OrientedImageInnerDisplay? _activeDisplay;
+    private OrientedImageInnerViewport? _activeViewport;
     private Exception? _unsupportedError;
 
     internal static readonly SimpleMarkerSymbol DefaultMarkerSymbol =
         new(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(255, 0, 122, 194), 10);
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrientedImageDisplay"/> class.
+    /// Initializes a new instance of the <see cref="OrientedImageViewport"/> class.
     /// </summary>
-    public OrientedImageDisplay()
+    public OrientedImageViewport()
     {
 #if MAUI
         ControlTemplate = DefaultControlTemplate;
 #else
-        DefaultStyleKey = typeof(OrientedImageDisplay);
+        DefaultStyleKey = typeof(OrientedImageViewport);
 #endif
 #if WINDOWS_XAML
         RegisterPropertyChangedCallback(Microsoft.UI.Xaml.Automation.AutomationProperties.NameProperty, (_, _) => PushAutomationProperties());
@@ -82,20 +82,20 @@ public partial class OrientedImageDisplay
 #endif
     }
 
-    // Focus lands on the active display's inner view, so the name and automation id go there too.
+    // Focus lands inside the active inner viewport, so the name and automation id go there too.
     private void PushAutomationProperties()
     {
-        if (_activeDisplay is null)
+        if (_activeViewport is null)
             return;
 #if WPF
-        _activeDisplay.SetAutomationName(System.Windows.Automation.AutomationProperties.GetName(this));
-        _activeDisplay.SetAutomationId(System.Windows.Automation.AutomationProperties.GetAutomationId(this));
+        _activeViewport.SetAutomationName(System.Windows.Automation.AutomationProperties.GetName(this));
+        _activeViewport.SetAutomationId(System.Windows.Automation.AutomationProperties.GetAutomationId(this));
 #elif WINDOWS_XAML
-        _activeDisplay.SetAutomationName(Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(this));
-        _activeDisplay.SetAutomationId(Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(this));
+        _activeViewport.SetAutomationName(Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(this));
+        _activeViewport.SetAutomationId(Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(this));
 #else
-        _activeDisplay.SetAutomationName(Microsoft.Maui.Controls.SemanticProperties.GetDescription(this));
-        _activeDisplay.SetAutomationId(AutomationId);
+        _activeViewport.SetAutomationName(Microsoft.Maui.Controls.SemanticProperties.GetDescription(this));
+        _activeViewport.SetAutomationId(AutomationId);
 #endif
     }
 
@@ -136,7 +136,7 @@ public partial class OrientedImageDisplay
 
     /// <summary>
     /// Gets or sets a value indicating whether the displayed footprint is automatically recomputed when the
-    /// viewport changes.
+    /// visible part of the image changes.
     /// </summary>
     /// <remarks>
     /// When <c>true</c>, panning or zooming pushes the visible part of the image to the footprint so the footprint drawn on the map stays in sync:
@@ -154,29 +154,29 @@ public partial class OrientedImageDisplay
     /// Gets a value indicating whether the control is loading, initializing, or drawing its image.
     /// </summary>
     /// <remarks>Independent of <see cref="IsInteractive"/>: a loaded image stays interactive while it redraws.</remarks>
-    /// <value><c>true</c> while the active display is loading, initializing, or drawing; otherwise <c>false</c>.</value>
+    /// <value><c>true</c> while the active inner viewport is loading, initializing, or drawing; otherwise <c>false</c>.</value>
     public bool IsBusy => (bool)GetValue(IsBusyProperty);
 
     /// <summary>
     /// Gets a value indicating whether the image is loaded, can be panned and zoomed, and has no <see cref="Error"/>.
     /// </summary>
     /// <remarks>Use this to enable UI that acts on the displayed image, such as controls that add markers.</remarks>
-    /// <value><c>true</c> when the image is loaded and the view can be interacted with; otherwise <c>false</c>.</value>
+    /// <value><c>true</c> when the image is loaded and the user can interact with it; otherwise <c>false</c>.</value>
     public bool IsInteractive => (bool)GetValue(IsInteractiveProperty);
 
     /// <summary>
     /// Gets the error preventing the image from being shown, or <c>null</c> when there is none.
     /// </summary>
-    /// <remarks>An image load or layer rendering error from the active display. While non-<c>null</c>, <see cref="IsInteractive"/> is <c>false</c>.</remarks>
+    /// <remarks>An image load or layer rendering error from the active inner viewport. While non-<c>null</c>, <see cref="IsInteractive"/> is <c>false</c>.</remarks>
     /// <value>The current error, or <c>null</c>.</value>
     public Exception? Error => GetValue(ErrorProperty) as Exception;
 
     /// <summary>
-    /// Gets or sets the background color shown where the image does not fill the display (for example, the area
+    /// Gets or sets the background color shown where the image does not fill the viewport (for example, the area
     /// exposed when panning or rotating beyond the image).
     /// </summary>
-    /// <remarks>The default, <see cref="System.Drawing.Color.Empty"/>, keeps each display's own default background.</remarks>
-    /// <value>The display background color.</value>
+    /// <remarks>The default, <see cref="System.Drawing.Color.Empty"/>, keeps each inner viewport's own default background.</remarks>
+    /// <value>The background color.</value>
     public System.Drawing.Color DisplayBackgroundColor
     {
         get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
@@ -187,29 +187,29 @@ public partial class OrientedImageDisplay
     /// Identifies the <see cref="Footprint"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty FootprintProperty =
-        PropertyHelper.CreateProperty<OrientedImageFootprint, OrientedImageDisplay>(nameof(Footprint), null, (s, oldValue, newValue) => s.UpdateDisplay());
+        PropertyHelper.CreateProperty<OrientedImageFootprint, OrientedImageViewport>(nameof(Footprint), null, (s, oldValue, newValue) => s.UpdateViewport());
 
     /// <summary>
     /// Identifies the <see cref="Markers"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty MarkersProperty =
-        PropertyHelper.CreateProperty<IEnumerable<OrientedImageMarker>, OrientedImageDisplay>(nameof(Markers), null, (s, oldValue, newValue) => s._activeDisplay?.SetMarkers(newValue));
+        PropertyHelper.CreateProperty<IEnumerable<OrientedImageMarker>, OrientedImageViewport>(nameof(Markers), null, (s, oldValue, newValue) => s._activeViewport?.SetMarkers(newValue));
 
     /// <summary>
     /// Identifies the <see cref="AutoUpdateFootprint"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty AutoUpdateFootprintProperty =
-        PropertyHelper.CreateProperty<bool, OrientedImageDisplay>(nameof(AutoUpdateFootprint), true, (s, oldValue, newValue) => s._activeDisplay?.SetAutoUpdateFootprint(newValue));
+        PropertyHelper.CreateProperty<bool, OrientedImageViewport>(nameof(AutoUpdateFootprint), true, (s, oldValue, newValue) => s._activeViewport?.SetAutoUpdateFootprint(newValue));
 
     // Computed state, read-only where the platform supports it (see PropertyHelper.CreateReadOnlyProperty).
     private static readonly DependencyPropertyKey IsBusyPropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsBusy));
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageViewport>(nameof(IsBusy));
 
     private static readonly DependencyPropertyKey IsInteractivePropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageDisplay>(nameof(IsInteractive));
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageViewport>(nameof(IsInteractive));
 
     private static readonly DependencyPropertyKey ErrorPropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<Exception, OrientedImageDisplay>(nameof(Error));
+        PropertyHelper.CreateReadOnlyProperty<Exception, OrientedImageViewport>(nameof(Error));
 
     /// <summary>
     /// Identifies the <see cref="IsBusy"/> dependency property.
@@ -230,7 +230,7 @@ public partial class OrientedImageDisplay
     /// Identifies the <see cref="DisplayBackgroundColor"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
-        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageDisplay>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s._activeDisplay?.SetBackgroundColor(newValue));
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageViewport>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s._activeViewport?.SetBackgroundColor(newValue));
 
     /// <inheritdoc/>
 #if WINDOWS_XAML || MAUI
@@ -243,7 +243,7 @@ public partial class OrientedImageDisplay
         DisplayHostElement? previousHost = _displayHost;
         _displayHost = GetTemplateChild(DisplayHostName) as DisplayHostElement;
 
-        // On a template re-apply the active display is still parented to the discarded template's host; release
+        // On a template re-apply the active inner viewport is still parented to the discarded template's host; release
         // it there or the new host cannot adopt it.
         if (previousHost is not null && !ReferenceEquals(previousHost, _displayHost))
             previousHost.Content = null;
@@ -251,117 +251,117 @@ public partial class OrientedImageDisplay
         if (_displayHost is null)
             return; // a template without the host part shows nothing; a later template can re-host
 
-        // First host: run the full pipeline (a footprint set before the template existed was deferred by UpdateDisplay).
+        // First host: run the full pipeline (UpdateViewport deferred any footprint set before the template existed).
         // Re-applied template: only re-host; re-presenting would reload the image and cancel in-flight work.
         if (previousHost is null)
-            UpdateDisplay();
+            UpdateViewport();
         else
-            HostActiveDisplay();
+            HostActiveViewport();
     }
 
-    private void UpdateDisplay()
+    private void UpdateViewport()
     {
         if (_displayHost is null)
             return; // Template not applied yet; OnApplyTemplate will call again.
 
         OrientedImage? image = Footprint?.OrientedImage;
-        OrientedImageInnerDisplay? display = SelectDisplay(image);
+        OrientedImageInnerViewport? viewport = SelectViewport(image);
 
-        // Reports an image that no display can show, such as a video, instead of looking unloaded.
-        _unsupportedError = display is null && image is not null
+        // Reports an image that no inner viewport can show, such as a video, instead of looking unloaded.
+        _unsupportedError = viewport is null && image is not null
             ? new NotSupportedException($"Oriented image type '{image.Type}' is not supported by this control yet.")
             : null;
 
-        SetActiveDisplay(display);
+        SetActiveViewport(viewport);
 
-        if (display is not null)
+        if (viewport is not null)
         {
             PushAutomationProperties();
-            display.SetFootprint(Footprint);
-            display.SetMarkers(Markers);
-            display.SetAutoUpdateFootprint(AutoUpdateFootprint);
-            display.SetBackgroundColor(DisplayBackgroundColor);
+            viewport.SetFootprint(Footprint);
+            viewport.SetMarkers(Markers);
+            viewport.SetAutoUpdateFootprint(AutoUpdateFootprint);
+            viewport.SetBackgroundColor(DisplayBackgroundColor);
         }
     }
 
-    // Subscribes before the caller pushes state in, so the display's first notifications aren't missed.
-    private void SetActiveDisplay(OrientedImageInnerDisplay? display)
+    // Subscribes before the caller pushes state in, so the inner viewport's first notifications aren't missed.
+    private void SetActiveViewport(OrientedImageInnerViewport? viewport)
     {
-        if (ReferenceEquals(_activeDisplay, display))
+        if (ReferenceEquals(_activeViewport, viewport))
         {
-            // Same display (including null -> null):
+            // Same inner viewport (including null -> null):
             // re-host and publish state anyway; only this path surfaces a recomputed _unsupportedError.
-            HostActiveDisplay();
+            HostActiveViewport();
             UpdateState();
             return;
         }
 
-        if (_activeDisplay is not null)
+        if (_activeViewport is not null)
         {
-            _activeDisplay.StateChanged -= OnDisplayStateChanged;
-            _activeDisplay.ImageTapped -= OnDisplayImageTapped;
+            _activeViewport.StateChanged -= OnViewportStateChanged;
+            _activeViewport.ImageTapped -= OnViewportImageTapped;
 
-            // Release the outgoing display's image, map/device content and marker subscriptions.
-            _activeDisplay.SetMarkers(null);
-            _activeDisplay.SetFootprint(null);
+            // Release the outgoing inner viewport's image, map/device content and marker subscriptions.
+            _activeViewport.SetMarkers(null);
+            _activeViewport.SetFootprint(null);
         }
 
-        _activeDisplay = display;
-        HostActiveDisplay();
+        _activeViewport = viewport;
+        HostActiveViewport();
 
-        if (display is not null)
+        if (viewport is not null)
         {
-            display.StateChanged += OnDisplayStateChanged;
-            display.ImageTapped += OnDisplayImageTapped;
+            viewport.StateChanged += OnViewportStateChanged;
+            viewport.ImageTapped += OnViewportImageTapped;
         }
 
         UpdateState();
     }
 
-    private void HostActiveDisplay()
+    private void HostActiveViewport()
     {
-        _displayHost!.Content = _activeDisplay;
+        _displayHost!.Content = _activeViewport;
     }
 
-    private void OnDisplayStateChanged(object? sender, EventArgs e) => UpdateState();
+    private void OnViewportStateChanged(object? sender, EventArgs e) => UpdateState();
 
     internal event EventHandler? StateChanged;
 
-    private void OnDisplayImageTapped(object? sender, OrientedImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
+    private void OnViewportImageTapped(object? sender, OrientedImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
 
     /// <summary>
     /// Converts a position in the control to the image coordinate under it, as a tap there would.
     /// </summary>
     /// <remarks>
-    /// For workflows that act on a position without a pointer, such as the center of the view under keyboard control.
-    /// Markers are not identified; <see cref="ImageTapped"/> reports those for taps.
+    /// For workflows that act on a position without a pointer, such as the control's center during keyboard
+    /// navigation. Markers are not identified; <see cref="ImageTapped"/> reports those for taps.
     /// </remarks>
     /// <param name="screenPosition">The position relative to the control, in device-independent pixels.</param>
     /// <returns>The image coordinate, or <c>null</c> when no image is under the position or the control is not
     /// interactive.</returns>
     public PointF? ScreenToImage(Point screenPosition)
     {
-        if (_activeDisplay is null || !IsInteractive)
+        if (_activeViewport is null || !IsInteractive)
             return null;
 
-        // The active display may sit inside the template's border.
+        // The active inner viewport may sit inside the template's border.
 #if WPF
-        Point local = TranslatePoint(screenPosition, _activeDisplay);
+        Point local = TranslatePoint(screenPosition, _activeViewport);
 #elif WINDOWS_XAML
-        Point local = TransformToVisual(_activeDisplay).TransformPoint(screenPosition);
+        Point local = TransformToVisual(_activeViewport).TransformPoint(screenPosition);
 #else
-        var local = new Point(screenPosition.X - _displayHost!.X - _activeDisplay.X, screenPosition.Y - _displayHost.Y - _activeDisplay.Y);
+        var local = new Point(screenPosition.X - _displayHost!.X - _activeViewport.X, screenPosition.Y - _displayHost.Y - _activeViewport.Y);
 #endif
-        return _activeDisplay.ScreenToImage(local.X, local.Y);
+        return _activeViewport.ScreenToImage(local.X, local.Y);
     }
 
     // Only fires StateChanged when there is an actual change.
     private void UpdateState()
     {
-        // An unsupported image type has no display, so its error is merged in here.
-        bool busy = _unsupportedError is null && (_activeDisplay?.IsBusy ?? false);
-        bool interactive = _unsupportedError is null && (_activeDisplay?.IsInteractive ?? false);
-        Exception? error = _unsupportedError ?? _activeDisplay?.Error;
+        // An unsupported image type has no inner viewport, so its error is merged in here.
+        bool busy = _unsupportedError is null && (_activeViewport?.IsBusy ?? false);
+        bool interactive = _unsupportedError is null && (_activeViewport?.IsInteractive ?? false);
+        Exception? error = _unsupportedError ?? _activeViewport?.Error;
         if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
             return;
 
@@ -371,18 +371,18 @@ public partial class OrientedImageDisplay
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private OrientedImageInnerDisplay? SelectDisplay(OrientedImage? image)
+    private OrientedImageInnerViewport? SelectViewport(OrientedImage? image)
     {
         if (image is null)
-            return _rasterDisplay ??= new OrientedImageRasterDisplay();
+            return _rasterViewport ??= new OrientedImageRasterViewport();
 
         if (IsVideo(image.Type))
             return null;
 
         if (!IsPanoramic(image.Type, image.Attributes))
-            return _rasterDisplay ??= new OrientedImageRasterDisplay();
+            return _rasterViewport ??= new OrientedImageRasterViewport();
 #if WPF || WINDOWS_XAML || __ANDROID__ || __IOS__ || (MAUI && WINDOWS)
-        return _panoramicDisplay ??= new OrientedImagePanoramicDisplay();
+        return _panoramicViewport ??= new OrientedImagePanoramicViewport();
 #else
         return null; // no panoramic surface on the neutral MAUI target
 #endif

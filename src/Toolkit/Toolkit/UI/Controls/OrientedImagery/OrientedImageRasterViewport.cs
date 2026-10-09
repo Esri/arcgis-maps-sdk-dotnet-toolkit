@@ -54,11 +54,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Inner display for planar images: a MapView showing the image as a RasterLayer, markers as overlay graphics, and
+// Inner viewport for planar images: a MapView showing the image as a RasterLayer, markers as overlay graphics, and
 // the visible pixel ring pushed to the footprint while auto-update is enabled.
-// Known limitation: georeferenced TIFFs are not supported by this planar display. RasterLayer honors embedded
-// georeferencing, while the display's pixel transforms assume an unreferenced, axis-aligned image grid.
-internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDisplay
+// Known limitation: georeferenced TIFFs are not supported by this planar viewport. RasterLayer honors embedded
+// georeferencing, while the viewport's pixel transforms assume an unreferenced, axis-aligned image grid.
+internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerViewport
 {
     private readonly MapView _mapView;
     private readonly GraphicsOverlay _markersOverlay;
@@ -71,7 +71,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
     private readonly Dictionary<Graphic, OrientedImageMarker> _graphicMarkers = [];
     private bool _interactive;
 
-    internal OrientedImageRasterDisplay()
+    internal OrientedImageRasterViewport()
     {
         // Lock map interaction until the image has loaded
         _mapView = new MapView { IsAttributionTextVisible = false, InteractionOptions = new MapViewInteractionOptions { IsEnabled = false } };
@@ -83,7 +83,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         // Default symbol for markers without their own; a marker's own Symbol overrides this renderer.
         _markersOverlay = new GraphicsOverlay
         {
-            Renderer = new SimpleRenderer(OrientedImageDisplay.DefaultMarkerSymbol),
+            Renderer = new SimpleRenderer(OrientedImageViewport.DefaultMarkerSymbol),
         };
         _mapView.GraphicsOverlays ??= new GraphicsOverlayCollection();
         _mapView.GraphicsOverlays.Add(_markersOverlay);
@@ -355,7 +355,7 @@ internal sealed partial class OrientedImageRasterDisplay : OrientedImageInnerDis
         return value >= -margin && value <= max + margin;
     }
 
-    // Maps a point in the display's map space back to an image pixel, as taps and ScreenToImage report it. A point on
+    // Maps a point in the viewport's map space back to an image pixel, as taps and ScreenToImage report it. A point on
     // the background around the image has no pixel.
     private PointF? MapToPixel(MapPoint mapPoint)
     {
