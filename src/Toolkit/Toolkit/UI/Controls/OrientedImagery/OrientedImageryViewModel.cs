@@ -47,9 +47,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _markersBeforeSequentialNavigation = new List<OrientedImageMarker>();
 
         AutoUpdateFootprint = true;
-        SelectedFootprintFillColor = System.Drawing.Color.FromArgb(32, System.Drawing.Color.Red);
+        SelectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Red);
         SelectedFootprintOutlineColor = System.Drawing.Color.Red;
-        UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(16, System.Drawing.Color.Blue);
+        UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(64, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
         ToolbarItems = GetDefaultToolbarItems();
@@ -697,7 +697,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </summary>
     /// <remarks>
     /// Applications may also add markers directly to <see cref="Markers"/>.
-    /// <see cref="AllowAddingMarkers"/> does not restrict this method.
+    /// <see cref="SketchModeEnabled"/> does not restrict this method.
     /// </remarks>
     /// <param name="location">The geographic location of the marker.</param>
     /// <param name="symbol">The optional symbol to use for the marker.</param>
