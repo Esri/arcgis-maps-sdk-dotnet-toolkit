@@ -495,16 +495,28 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <ItemsControl x:Name="PART_ToolbarContainer" IsTabStop="False" Focusable="False"
+                            <Border BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                    BorderThickness="0,0,0,1">
+                                <ComboBox Margin="8"
+                                          MinHeight="40"
+                                          HorizontalContentAlignment="Stretch"
+                                          ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=OrientedImageryLayers}"
+                                          SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedLayer, Mode=TwoWay}"
+                                          DisplayMemberPath="Name"
+                                          AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewLayerSelection}" />
+                            </Border>
+
+                            <ItemsControl x:Name="PART_ToolbarContainer" Grid.Row="1" IsTabStop="False" Focusable="False"
                                           Style="{StaticResource OrientedImageryToolbarContainerStyle}"
                                           ItemTemplateSelector="{StaticResource DefaultOrientedImageryToolbarSelector}" />
 
-                            <Grid Grid.Row="1">
+                            <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
@@ -625,7 +637,30 @@
                                 </Button>
                             </Grid>
 
-                            <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="2">
+                            <Border Grid.Row="1"
+                                    Grid.RowSpan="2"
+                                    Padding="16"
+                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                    TextElement.Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           MaxWidth="400"
+                                           Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap" />
+                            </Border>
+
+                            <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="3">
                                 <local:Paginator.Style>
                                     <Style TargetType="{x:Type local:Paginator}">
                                         <Setter Property="Visibility" Value="Visible" />
@@ -640,7 +675,7 @@
                                     </Style>
                                 </local:Paginator.Style>
                             </local:Paginator>
-                            <StackPanel Grid.Row="2"
+                            <StackPanel Grid.Row="3"
                                         Orientation="Horizontal"
                                         HorizontalAlignment="Center">
                                 <StackPanel.Style>
@@ -690,7 +725,7 @@
                                     <TextBlock Text="&gt;" />
                                 </Button>
                             </StackPanel>
-                            <TextBlock Grid.Row="3"
+                            <TextBlock Grid.Row="4"
                                        Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError.Message}"
                                        Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
                                        TextWrapping="Wrap"
