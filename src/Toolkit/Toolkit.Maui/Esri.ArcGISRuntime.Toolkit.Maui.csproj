@@ -72,11 +72,6 @@
       <Compile Remove="..\Toolkit\UI\Controls\OrientedImagery\**" />
     </ItemGroup>
 
-    <!-- OrientedImageViewport isn't implemented for iOS and Mac Catalyst yet. -->
-    <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
-      <Compile Remove="..\Toolkit\UI\Controls\OrientedImagery\**" />
-    </ItemGroup>
-
     <!-- Analyzers -->
     <ItemGroup>
         <ProjectReference Include="..\..\Analyzers\Toolkit.Maui.Analyzers.CodeFixes\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.csproj" PrivateAssets="all" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
