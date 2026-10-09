@@ -68,17 +68,17 @@ public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
 }
 
 /// <summary>
-/// View model for the "Auto Update Footprint" toolbar control in the Oriented Imagery View.
+/// View model for the "Auto Update Footprint" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class AutoUpdateFootprintVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
-/// View model for the "Allow Adding Markers" toolbar control in the Oriented Imagery View.
+/// View model for the "Allow Adding Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
-/// View model for the image search mode toolbar control in the Oriented Imagery View.
+/// View model for the image search mode toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 {
@@ -103,17 +103,17 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 }
 
 /// <summary>
-/// View model for the "Show Selected Footprint" toolbar control in the Oriented Imagery View.
+/// View model for the "Show Selected Footprint" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class ShowSelectedFootprintVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
-/// View model for the "Show Unselected Footprints" toolbar control in the Oriented Imagery View.
+/// View model for the "Show Unselected Footprints" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class ShowUnselectedFootprintsVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
-/// View model for the "Show Camera Markers" toolbar control in the Oriented Imagery View.
+/// View model for the "Show Camera Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
 {
@@ -140,18 +140,18 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
 }
 
 /// <summary>
-/// View model for the "Clear Markers" toolbar control in the Oriented Imagery View.
+/// View model for the "Clear Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class ClearMarkersVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
-/// View model for the sequential navigation toolbar control in the Oriented Imagery View.
+/// View model for the sequential navigation toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class SequentialNavigationVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
-/// View model for the "Select New Marker Symbol" toolbar control in the Oriented Imagery View.
-/// This control allows the user to select a marker symbol to be used for new markers in the oriented imagery view.
+/// View model for the "Select New Marker Symbol" toolbar control in the <see cref="OrientedImageryView"/>.
+/// This control allows the user to select a marker symbol to be used for new markers in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
 {
