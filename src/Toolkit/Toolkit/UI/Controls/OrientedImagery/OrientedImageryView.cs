@@ -1,10 +1,13 @@
 #if WPF
 
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -26,6 +29,11 @@ public partial class OrientedImageryView
         ViewModel = new OrientedImageryViewModel();
         _onImageTapped = OnImageTapped_Default;
         _onGeoViewTapped = GeoViewTapped_Default;
+
+        _orientedImageryLayers = new ResettableObservableCollection<OrientedImageryLayer>();
+        _readOnlyOrientedImageryLayers = new ReadOnlyObservableCollection<OrientedImageryLayer>(_orientedImageryLayers);
+
+        UpdateErrorMessage();
 
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -121,7 +129,7 @@ public partial class OrientedImageryView
         UpdatePaginatorSelection();
     }
 
-    private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
@@ -136,6 +144,9 @@ public partial class OrientedImageryView
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
                 if (_display != null)
                     _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
+                break;
+            case nameof(OrientedImageryViewModel.OrientedImageryLayer):
+                SelectedLayer = ViewModel.OrientedImageryLayer;
                 break;
         }
     }
@@ -221,6 +232,13 @@ public partial class OrientedImageryView
 #endregion Display
 
 #region GeoView
+    private GeoModel? _currentGeoModel;
+    private LayerCollection? _currentOperationalLayers;
+    private ResettableObservableCollection<OrientedImageryLayer> _orientedImageryLayers;
+    private ReadOnlyObservableCollection<OrientedImageryLayer> _readOnlyOrientedImageryLayers;
+    private Action<object?, GeoViewInputEventArgs>? _onGeoViewTappedOverride;
+    private Action<object?, GeoViewInputEventArgs> _onGeoViewTapped;
+
     /// <summary>
     /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/> on which marker graphics are displayed.
     /// </summary>
@@ -244,6 +262,7 @@ public partial class OrientedImageryView
         {
             oldGeoView.GraphicsOverlays?.Remove(ViewModel.MarkersOverlay);
             oldGeoView.GeoViewTapped -= GeoView_GeoViewTapped;
+            ((INotifyPropertyChanged)oldGeoView).PropertyChanged -= GeoView_PropertyChanged;
         }
 
         if (newGeoView != null)
@@ -252,11 +271,72 @@ public partial class OrientedImageryView
                 newGeoView.GraphicsOverlays = new GraphicsOverlayCollection();
             newGeoView.GraphicsOverlays.Add(ViewModel.MarkersOverlay);
             newGeoView.GeoViewTapped += GeoView_GeoViewTapped;
+            ((INotifyPropertyChanged)newGeoView).PropertyChanged += GeoView_PropertyChanged;
+        }
+
+        UpdateCurrentGeoModel();
+    }
+
+    /// <summary>
+    /// The <see cref="OrientedImageryLayer"/> currently selected for inspection. The selected layer must be present
+    /// in <see cref="OrientedImageryLayers"/> or the <see cref="OrientedImageryView"/> will not function correctly.
+    /// </summary>
+    /// <remarks>
+    /// Layers will be made visible when assigned as the <see cref="SelectedLayer"/>.
+    /// </remarks>
+    public OrientedImageryLayer? SelectedLayer
+    {
+        get => (OrientedImageryLayer?)GetValue(SelectedLayerProperty);
+        set => SetValue(SelectedLayerProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="GeoView"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty SelectedLayerProperty =
+        PropertyHelper.CreateProperty<OrientedImageryLayer?, OrientedImageryView>(nameof(SelectedLayer), null, (s, oldValue, newValue) => s.UpdateSelectedLayer(oldValue, newValue));
+
+    private void UpdateSelectedLayer(OrientedImageryLayer? oldLayer, OrientedImageryLayer? newLayer)
+    {
+        if (ViewModel.OrientedImageryLayer != newLayer)
+            ViewModel.OrientedImageryLayer = newLayer;
+
+        UpdateErrorMessage();
+
+        if (GeoView != null && newLayer != null)
+        {
+            if (newLayer.LoadStatus != LoadStatus.Loaded)
+                newLayer.Loaded += NewLayer_Loaded;
+            else
+                ZoomToLayer();
         }
     }
 
-    private Action<object?, GeoViewInputEventArgs>? _onGeoViewTappedOverride;
-    private Action<object?, GeoViewInputEventArgs> _onGeoViewTapped;
+    private void NewLayer_Loaded(object? sender, EventArgs e)
+    {
+        System.Windows.Threading.Dispatcher? dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher is not null && !dispatcher.CheckAccess())
+            _ = dispatcher.BeginInvoke(ZoomToLayer);
+        else
+            ZoomToLayer();
+
+        if (sender is ILoadable loadable)
+            loadable.Loaded -= NewLayer_Loaded;
+    }
+
+    private void ZoomToLayer()
+    {
+        if (GeoView != null &&
+            ViewModel.OrientedImageryLayer?.LoadStatus == LoadStatus.Loaded &&
+            ViewModel.OrientedImageryLayer.FullExtent is Envelope extent)
+            GeoView.SetViewpoint(new Viewpoint(extent));
+    }
+
+    /// <summary>
+    /// A read-only collection of <see cref="OrientedImageryLayer"/>s held in the <see cref="GeoModel.OperationalLayers"/>
+    /// of the connected <see cref="GeoView"/>'s geo model.
+    /// </summary>
+    public ReadOnlyObservableCollection<OrientedImageryLayer> OrientedImageryLayers => _readOnlyOrientedImageryLayers;
 
     /// <summary>
     /// Set this function to override the default event handler when the connected <see cref="GeoView"/> is tapped. A <c>null</c> value means the default behavior is active.
@@ -306,6 +386,82 @@ public partial class OrientedImageryView
                 ViewModel.SelectedImage = image;
             }
         }
+    }
+
+    private void GeoView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "Scene" || e.PropertyName == "Map")
+        {
+            UpdateCurrentGeoModel();
+        }
+    }
+
+    private void UpdateCurrentGeoModel()
+    {
+        if (_currentGeoModel != null)
+        {
+            _currentGeoModel.PropertyChanged -= _currentGeoModel_PropertyChanged;
+        }
+
+        if (GeoView is SceneView sceneView)
+            _currentGeoModel = sceneView.Scene;
+        else if (GeoView is MapView mapView)
+            _currentGeoModel = mapView.Map;
+        else
+            _currentGeoModel = null;
+
+        if (_currentGeoModel != null)
+            _currentGeoModel.PropertyChanged += _currentGeoModel_PropertyChanged;
+
+        UpdateCurrentOperationalLayers();
+    }
+
+    private void _currentGeoModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(GeoModel.OperationalLayers))
+        {
+            UpdateCurrentOperationalLayers();
+        }
+    }
+
+    private void UpdateCurrentOperationalLayers()
+    {
+        if (_currentOperationalLayers != null)
+            _currentOperationalLayers.CollectionChanged -= _currentOperationalLayers_CollectionChanged;
+
+        if (GeoView is SceneView sceneView && sceneView.Scene != null)
+            _currentOperationalLayers = sceneView.Scene.OperationalLayers;
+        else if (GeoView is MapView mapView && mapView.Map != null)
+            _currentOperationalLayers = mapView.Map.OperationalLayers;
+        else
+            _currentOperationalLayers = null;
+
+        if (_currentOperationalLayers != null)
+            _currentOperationalLayers.CollectionChanged += _currentOperationalLayers_CollectionChanged;
+
+        ResetOrientedImageryLayers();
+    }
+
+    private void _currentOperationalLayers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        => ResetOrientedImageryLayers();
+
+    private void ResetOrientedImageryLayers()
+    {
+        if (GeoView != null)
+        {
+            var currentLayers = new List<OrientedImageryLayer>();
+            foreach (var layer in _currentOperationalLayers ?? [])
+            {
+                if (layer is OrientedImageryLayer oiLayer)
+                    currentLayers.Add(oiLayer);
+            }
+            _orientedImageryLayers.ReplaceAll(currentLayers);
+
+            if (_orientedImageryLayers.Count < 1)
+                SelectedLayer = null;
+        }
+
+        UpdateErrorMessage();
     }
 #endregion GeoView
 
@@ -386,7 +542,43 @@ public partial class OrientedImageryView
         if (newPageIndex >= 0 && newPageIndex < ViewModel.Images.Count)
             ViewModel.SelectedImage = ViewModel.Images[newPageIndex];
     }
-#endregion
+#endregion Pagination
+
+#region Error
+    private const string NoGeoViewMessageKey = "OrientedImageryViewNoGeoView";
+    private const string NoOrientedImageryLayersKey = "OrientedImageryViewNoOrientedImageryLayers";
+    private const string NoLayerSelectedKey = "OrientedImageryViewNoLayerSelected";
+    private const string SelectedLayerNotOnGeoViewKey = "OrientedImageryViewSelectedLayerNotOnGeoView";
+
+    /// <summary>
+    /// The message shown when the <see cref="OrientedImageryView"/> is in an invalid state.
+    /// </summary>
+    public string? ErrorMessage
+    {
+        get => (string?)GetValue(ErrorMessageProperty);
+        private set => SetValue(ErrorMessageProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="ErrorMessage" /> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty ErrorMessageProperty =
+        PropertyHelper.CreateProperty<string?, OrientedImageryView>(nameof(ErrorMessage), null);
+
+    private void UpdateErrorMessage()
+    {
+        if (GeoView == null)
+            ErrorMessage = Properties.Resources.GetString(NoGeoViewMessageKey);
+        else if (_orientedImageryLayers.Count < 1)
+            ErrorMessage = Properties.Resources.GetString(NoOrientedImageryLayersKey);
+        else if (SelectedLayer == null)
+            ErrorMessage = Properties.Resources.GetString(NoLayerSelectedKey);
+        else if (!_orientedImageryLayers.Contains(SelectedLayer))
+            ErrorMessage = Properties.Resources.GetString(SelectedLayerNotOnGeoViewKey);
+        else
+            ErrorMessage = null;
+    }
+#endregion Error
 }
 
 #endif
