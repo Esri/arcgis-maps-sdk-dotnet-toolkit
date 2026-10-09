@@ -821,20 +821,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         public string Identifier = identifier;
         public int ZIndex = zIndex;
     }
-
-    private sealed class ResettableObservableCollection<T> : ObservableCollection<T>
-    {
-        public void ReplaceAll(IEnumerable<T> items)
-        {
-            Items.Clear();
-            foreach (var item in items)
-                Items.Add(item);
-
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
-            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-    }
 #endregion Markers
 
 #region ToolbarItems

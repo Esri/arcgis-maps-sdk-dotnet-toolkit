@@ -27,8 +27,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private const string SceneBasemap = "https://runtime.maps.arcgis.com/home/item.html?id=0560e29930dc4d5ebeb58c635c0909c9";
         private const string ElevationUrl = "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer";
 
+        private List<string> _layerUrls =
+        [
+            "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0",
+            "https://services.arcgis.com/gfpXnknjcY6QHKhU/arcgis/rest/services/CDOT00R20021_360_IMAGERY/FeatureServer/3",
+            "https://services5.arcgis.com/N82JbI5EYtAkuUKU/ArcGIS/rest/services/EsriCampus_sequenceTest_attachment/FeatureServer/1"
+        ];
+
         private OrientedImageryViewModel _orientedImageryVM;
-        private OrientedImageryLayer? _oiLayer;
 
         private MapView _mapView;
         private SceneView _sceneView;
@@ -38,6 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private ElevationSource _elevationSource;
 
         private bool _usingAlternateToolbarStyling = false;
+        private bool _layersRemoved = false;
 
         public OrientedImageryView()
         {
@@ -55,34 +62,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
             MainOrientedImageryView.GeoView = _mapView;
             MainOrientedImageryView.ViewModel = _orientedImageryVM;
+
+            _ = InitializeAsync();
         }
 
-        private async Task ApplyLayer(Uri layerUri)
+        private async Task InitializeAsync()
         {
             try
             {
-                var oiLayer = new OrientedImageryLayer(layerUri);
-                await oiLayer.LoadAsync();
-                if (oiLayer.LoadStatus == LoadStatus.FailedToLoad)
-                    return;
-                oiLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Relative;
-
-                _oiLayer = oiLayer;
-
-                if (_currentGeoView is MapView mapView)
+                foreach (var layerUrl in _layerUrls)
                 {
-                    mapView.Map!.OperationalLayers.Clear();
-                    mapView.Map.OperationalLayers.Add(_oiLayer);
+                    _mapView.Map!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
+                    _sceneView.Scene!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
                 }
-                else if (_currentGeoView is SceneView sceneView)
-                {
-                    sceneView.Scene!.OperationalLayers.Clear();
-                    sceneView.Scene.OperationalLayers.Add(_oiLayer);
-                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
 
-                _orientedImageryVM.OrientedImageryLayer = _oiLayer;
-                if (_oiLayer?.FullExtent != null)
-                    _currentGeoView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
+        private async Task AddLayer(string layerUrl)
+        {
+            if (_layerUrls.Contains(layerUrl))
+                return;
+
+            try
+            {
+                _mapView.Map!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
+
+                var sceneLayer = new OrientedImageryLayer(new Uri(layerUrl));
+                sceneLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Relative;
+                _sceneView.Scene!.OperationalLayers.Add(sceneLayer);
             }
             catch (Exception ex)
             {
@@ -90,9 +101,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             }
         }
 
-        private async void ApplyLayerButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void AddLayerButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            await ApplyLayer(new Uri(LayerUriTextBox.Text));
+            await AddLayer(LayerUriTextBox.Text);
         }
 
         private void OpenSelectedImagePopupButton_Click(object sender, RoutedEventArgs e)
@@ -125,24 +136,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private void Toggle2DButton_Click(object sender, RoutedEventArgs e)
         {
             GeoViewContainer.Children.Clear();
-            if (_usingMapView)
-                _mapView.Map!.OperationalLayers.Clear();
-            else
-                _sceneView.Scene!.OperationalLayers.Clear();
-
             _usingMapView = !_usingMapView;
             MainOrientedImageryView.GeoView = _currentGeoView;
             GeoViewContainer.Children.Add(_currentGeoView);
-
-            if (_oiLayer == null)
-                return;
-            if (_usingMapView)
-                _mapView.Map!.OperationalLayers.Add(_oiLayer);
-            else
-                _sceneView.Scene!.OperationalLayers.Add(_oiLayer);
-
-            if (_oiLayer?.FullExtent != null)
-                _currentGeoView.SetViewpoint(new Viewpoint(_oiLayer.FullExtent));
         }
 
         private void ToggleElevationSurfaceButton_Click(object sender, RoutedEventArgs e)
@@ -159,24 +155,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private int _scenePropertiesState = 0;
         private void ScenePropertiesButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_oiLayer == null)
+            if (MainOrientedImageryView.SelectedLayer is not OrientedImageryLayer activeLayer)
                 return;
 
             if (_scenePropertiesState == 0)
             {
-                _oiLayer.SceneProperties.SurfacePlacement = SurfacePlacement.DrapedFlat;
+                activeLayer.SceneProperties.SurfacePlacement = SurfacePlacement.DrapedFlat;
             }
             else if (_scenePropertiesState == 1)
             {
-                _oiLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Absolute;
+                activeLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Absolute;
             }
             else if (_scenePropertiesState == 2)
             {
-                _oiLayer.SceneProperties.AltitudeOffset = 50;
+                activeLayer.SceneProperties.AltitudeOffset = 50;
             }
             else if (_scenePropertiesState == 3)
             {
-                _oiLayer.SceneProperties = new LayerSceneProperties(SurfacePlacement.Relative);
+                activeLayer.SceneProperties = new LayerSceneProperties(SurfacePlacement.Relative);
             }
 
             _scenePropertiesState = (_scenePropertiesState + 1) % 4;
@@ -233,6 +229,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             {
                 Debug.WriteLine($"Error converting image point to location: {ex.Message}");
             }
+        }
+
+        private void RemoveReAddLayers_Click(object sender, RoutedEventArgs e)
+        {
+            if (_layersRemoved)
+            {
+                foreach (var layerUrl in _layerUrls)
+                {
+                    _mapView.Map!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
+                    _sceneView.Scene!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
+                }
+            }
+            else
+            {
+                _mapView.Map!.OperationalLayers.Clear();
+                _sceneView.Scene!.OperationalLayers.Clear();
+            }
+            _layersRemoved = !_layersRemoved;
         }
     }
 }
