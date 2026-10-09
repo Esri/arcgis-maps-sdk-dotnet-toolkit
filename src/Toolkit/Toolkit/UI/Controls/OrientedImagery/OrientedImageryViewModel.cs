@@ -20,7 +20,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-#if WPF
+#if WPF || WINDOWS_XAML
 /// <summary>
 /// Manages oriented imagery selection, footprints, and map markers for an oriented imagery view.
 /// </summary>
@@ -736,12 +736,14 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void Marker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+#if WPF
         System.Windows.Threading.Dispatcher? dispatcher = System.Windows.Application.Current?.Dispatcher;
         if (dispatcher is not null && !dispatcher.CheckAccess())
         {
             _ = dispatcher.BeginInvoke(SynchronizeMarkers);
             return;
         }
+#endif
 
         SynchronizeMarkers();
     }
