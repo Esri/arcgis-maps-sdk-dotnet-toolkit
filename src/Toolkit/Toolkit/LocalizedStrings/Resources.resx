@@ -1193,6 +1193,26 @@
     <value>No images selected</value>
     <comment>Message shown by OrientedImageryView when no images are selected.</comment>
   </data>
+  <data name="OrientedImageryViewLayerSelection" xml:space="preserve">
+    <value>Oriented imagery layer</value>
+    <comment>Accessibility name for the OrientedImageryView layer selection control.</comment>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>Connect a GeoView to view oriented imagery.</value>
+    <comment>Error shown by OrientedImageryView when no GeoView is connected.</comment>
+  </data>
+  <data name="OrientedImageryViewNoOrientedImageryLayers" xml:space="preserve">
+    <value>The GeoView does not contain any oriented imagery layers.</value>
+    <comment>Error shown by OrientedImageryView when the connected GeoView has no oriented imagery layers.</comment>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>Select an oriented imagery layer from the dropdown to start exploring.</value>
+    <comment>Error shown by OrientedImageryView when the connected GeoView has oriented imagery layers but none have been selected.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectedLayerNotOnGeoView" xml:space="preserve">
+    <value>The selected oriented imagery layer is not on the GeoView.</value>
+    <comment>Error shown by OrientedImageryView when the selected layer is not part of the connected GeoView.</comment>
+  </data>
   <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
     <value>Prev</value>
   </data>
