@@ -101,6 +101,14 @@ internal sealed record PanoramaCameraState
     public PanoramaCameraState ZoomWheel(float notches) =>
         this with { FieldOfView = Math.Clamp(FieldOfView - (notches * WheelZoomStep), MinFieldOfView, MaxFieldOfView) };
 
+    // The camera that centers image column u and row v, keeping the field of view: the inverse of the center relation
+    // in the convention above. Without v the pitch is kept; with it, the pitch clamps to the interaction limits.
+    public PanoramaCameraState LookAt(float u, float? v = null)
+    {
+        float pitch = v is float row ? Math.Clamp((row - 0.5f) * MathF.PI, MinPitch, MaxPitch) : Pitch;
+        return this with { Yaw = (u - 0.75f) * 2f * MathF.PI, Pitch = pitch };
+    }
+
     // One frame of held-key navigation. Unlike a drag, which moves the image, an arrow moves the view toward its side,
     // as in MapView: Left looks left and Up looks up. Held keys combine, so Up+Left moves diagonally. viewHeight uses
     // the same units as DragRotationScale.

@@ -20,6 +20,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if WPF
@@ -51,6 +52,9 @@ internal abstract class OrientedImageInnerViewport : ContentControl
     private readonly Dictionary<OrientedImageMarker, MarkerSubscription> _markerListeners = [];
     private CancellationTokenSource? _sessionCts;
     private CancellationTokenSource? _updateCts;
+    private int _lookAtCalls; // Bumped by each LookAtAsync call and footprint change; a superseded call reports false
+    private MapPoint? _heldLookAt; // The latest target given while the image loads
+    private TaskCompletionSource _loadSettled = new(); // Completes when the load settles or is replaced
     private bool _autoUpdate;
     private bool _isLoading;
 
@@ -289,9 +293,43 @@ internal abstract class OrientedImageInnerViewport : ContentControl
 #endif
     }
 
-    // Shows the loaded image from the local file at path. It runs inside the load skeleton's try, so throw (or let
-    // cancellation throw) to record a presentation failure. Check the token after every await before touching state.
+    // Backs OrientedImageViewport.LookAtAsync. A call made while the image loads is held, so the image opens facing it.
+    public async Task<bool> LookAtAsync(MapPoint target)
+    {
+        int call = ++_lookAtCalls;
+        if (Footprint?.OrientedImage is not OrientedImage image || (!_isLoading && !IsInteractive))
+            return false;
+
+        if (_isLoading)
+        {
+            // The presentation reads the held target for the first frame. After the load the call goes on like a new
+            // one, which reports the result.
+            _heldLookAt = target;
+            await _loadSettled.Task;
+            if (call != _lookAtCalls || !IsInteractive)
+                return false;
+        }
+
+        LookAtTarget? pixel = await ConvertLookAtTargetAsync(image, target);
+        return call == _lookAtCalls && pixel is LookAtTarget p && TryLookAt(p);
+    }
+
+    // Shows the loaded image from the local file at path, opening facing the target from ConvertHeldLookAtAsync when
+    // there is one. It runs inside the load skeleton's try, so throw (or let cancellation throw) to record a
+    // presentation failure. Check the token after every await before touching state.
     protected abstract Task PresentAsync(OrientedImage image, string path, CancellationToken token);
+
+    // Centers the target, keeping the zoom; true when it is centered, or as near as the view allows. Called only while
+    // the viewport is interactive.
+    protected abstract bool TryLookAt(LookAtTarget target);
+
+    // A look-at target resolved to an image pixel, and whether its row is part of the aim. The row of a map location
+    // without a z-value comes from a guessed elevation, so only its column is aimed at.
+    protected readonly record struct LookAtTarget(System.Drawing.PointF Pixel, bool AimAtRow);
+
+    // Converts the held target, so the image can open facing it; null when no call is held or the conversion fails.
+    protected async Task<LookAtTarget?> ConvertHeldLookAtAsync(OrientedImage image) =>
+        _heldLookAt is MapPoint target ? await ConvertLookAtTargetAsync(image, target) : null;
 
     // Blanks the presentation synchronously: visuals, dimensions and on-image markers.
     protected abstract void ClearPresentation();
@@ -312,8 +350,15 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         if (position.ImagePoint is System.Drawing.PointF imagePoint)
             return ReferenceEquals(position.Image, image) ? imagePoint : null;
 
+        return position.Location is MapPoint location ? await LocationToPixelAsync(image, location).ConfigureAwait(false) : null;
+    }
+
+    // A map location's pixel through the camera model, or null when the image hasn't loaded, the conversion fails, or
+    // the pixel isn't finite.
+    private static async Task<System.Drawing.PointF?> LocationToPixelAsync(OrientedImage image, MapPoint location)
+    {
         // A transform tried before the image loads makes later transforms on it fail.
-        if (position.Location is not Esri.ArcGISRuntime.Geometry.MapPoint location || image.LoadStatus != LoadStatus.Loaded)
+        if (image.LoadStatus != LoadStatus.Loaded)
             return null;
 
         try
@@ -387,6 +432,13 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         return _updateCts.Token;
     }
 
+    // The image pixel a map location converts to, as a look-at target.
+    private static async Task<LookAtTarget?> ConvertLookAtTargetAsync(OrientedImage image, MapPoint target)
+    {
+        System.Drawing.PointF? pixel = await LocationToPixelAsync(image, target);
+        return pixel is System.Drawing.PointF p ? new LookAtTarget(p, target.HasZ) : null;
+    }
+
     private async Task SetFootprintAsync(OrientedImageFootprint? footprint, CancellationToken token)
     {
         OrientedImage? image = footprint?.OrientedImage;
@@ -399,6 +451,11 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         // An in-flight footprint update must not mutate a footprint this viewport no longer manages.
         if (!ReferenceEquals(Footprint, footprint))
             _updateCts?.Cancel();
+
+        // A footprint change supersedes look-at calls in progress and wakes a held one, which then reports false.
+        _lookAtCalls++;
+        _heldLookAt = null;
+        _loadSettled.TrySetResult();
 
         Footprint = footprint;
         PresentationError = null;
@@ -415,6 +472,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         }
 
         _isLoading = true;
+        _loadSettled = new(TaskCreationOptions.RunContinuationsAsynchronously);
         UpdateState();
         try
         {
@@ -452,6 +510,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
                 _isLoading = false;
                 UpdateState();
                 OnPresentCompleted();
+                _loadSettled.TrySetResult();
             }
         }
     }

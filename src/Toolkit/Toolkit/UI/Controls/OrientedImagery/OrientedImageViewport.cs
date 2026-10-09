@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -248,12 +250,9 @@ public partial class OrientedImageViewport
         if (previousHost is not null && !ReferenceEquals(previousHost, _displayHost))
             previousHost.Content = null;
 
-        if (_displayHost is null)
-            return; // a template without the host part shows nothing; a later template can re-host
-
-        // First host: run the full pipeline (UpdateViewport deferred any footprint set before the template existed).
-        // Re-applied template: only re-host; re-presenting would reload the image and cancel in-flight work.
-        if (previousHost is null)
+        // The inner viewport exists as soon as a footprint is set, so a template only hosts it; re-presenting here
+        // would reload the image and cancel in-flight work. Without a footprint, the first template creates one.
+        if (_activeViewport is null)
             UpdateViewport();
         else
             HostActiveViewport();
@@ -261,9 +260,6 @@ public partial class OrientedImageViewport
 
     private void UpdateViewport()
     {
-        if (_displayHost is null)
-            return; // Template not applied yet; OnApplyTemplate will call again.
-
         OrientedImage? image = Footprint?.OrientedImage;
         OrientedImageInnerViewport? viewport = SelectViewport(image);
 
@@ -318,9 +314,11 @@ public partial class OrientedImageViewport
         UpdateState();
     }
 
+    // Before the template is applied there is no host yet; OnApplyTemplate hosts the inner viewport then.
     private void HostActiveViewport()
     {
-        _displayHost!.Content = _activeViewport;
+        if (_displayHost is not null)
+            _displayHost.Content = _activeViewport;
     }
 
     private void OnViewportStateChanged(object? sender, EventArgs e) => UpdateState();
@@ -353,6 +351,27 @@ public partial class OrientedImageViewport
         var local = new Point(screenPosition.X - _displayHost!.X - _activeViewport.X, screenPosition.Y - _displayHost.Y - _activeViewport.Y);
 #endif
         return _activeViewport.ScreenToImage(local.X, local.Y);
+    }
+
+    /// <summary>
+    /// Centers the view on a map location, keeping the zoom.
+    /// </summary>
+    /// <remarks>
+    /// A panorama turns toward the target: with a z-value the target is centered, without one the view turns to its
+    /// direction and keeps its pitch. A planar image pans so the target is at the center. The target converts to an
+    /// image pixel the way a location-anchored marker does. Called while the image loads, the target becomes the
+    /// initial view, so the default view never shows first. The view does not animate.
+    /// </remarks>
+    /// <param name="target">The map location to look at.</param>
+    /// <returns><c>true</c> when the target is at the view center, or as near it as the view allows; <c>false</c>
+    /// when there is no image, the target can't be converted, a planar image doesn't contain it, or a newer call or
+    /// a change of <see cref="Footprint"/> replaces this call.</returns>
+    public Task<bool> LookAtAsync(MapPoint target)
+    {
+        if (target is null)
+            throw new ArgumentNullException(nameof(target));
+
+        return _activeViewport?.LookAtAsync(target) ?? Task.FromResult(false);
     }
 
     // Only fires StateChanged when there is an actual change.

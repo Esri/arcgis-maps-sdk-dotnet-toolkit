@@ -198,6 +198,42 @@ public sealed class OrientedImageViewportTests
     }
 
     [TestMethod]
+    public void LookAtPutsThePixelAtTheViewCenter()
+    {
+        // LookAt inverts the projection: the (u,v) it was given reads back at the view center.
+        var camera = new PanoramaCameraState(yaw: 0.3f, pitch: -0.2f, fieldOfView: 1.2f);
+        foreach ((float u, float v) in new[] { (0.75f, 0.5f), (0f, 0.5f), (0.1f, 0.3f), (0.6f, 0.9f), (0.999f, 0.1f) })
+        {
+            PanoramaCameraState aimed = camera.LookAt(u, v);
+            Assert.AreEqual(1.2f, aimed.FieldOfView, $"({u}, {v}) keeps the field of view");
+            Assert.IsTrue(aimed.TryScreenToNormalizedUv(200, 150, 400, 300, out float centerU, out float centerV));
+            Assert.AreEqual(0f, WrappedDistance(u, centerU), 1e-3f, $"({u}, {v}) column at the center");
+            Assert.AreEqual(v, centerV, 1e-3f, $"({u}, {v}) row at the center");
+        }
+
+        PanoramaCameraState turned = camera.LookAt(0.1f);
+        Assert.AreEqual(-0.2f, turned.Pitch, "a column alone keeps the pitch");
+        Assert.IsTrue(turned.TryScreenToNormalizedUv(200, 150, 400, 300, out float turnedU, out _));
+        Assert.AreEqual(0f, WrappedDistance(0.1f, turnedU), 1e-3f, "the column at the center");
+
+        Assert.AreEqual(PanoramaCameraState.MinPitch, camera.LookAt(0.5f, 0f).Pitch, "the zenith clamps to the pitch limit");
+        Assert.AreEqual(PanoramaCameraState.MaxPitch, camera.LookAt(0.5f, 1f).Pitch, "the nadir clamps to the pitch limit");
+
+        // The distance between two columns across the seam.
+        static float WrappedDistance(float a, float b) => MathF.Abs(((b - a + 1.5f) % 1f) - 0.5f);
+    }
+
+    [STATestMethod]
+    public void LookAtWithoutAnImageIsFalse()
+    {
+        var control = new OrientedImageViewport { Template = CreateHostTemplate() };
+        Assert.IsTrue(control.ApplyTemplate());
+        Assert.ThrowsExactly<ArgumentNullException>(() => control.LookAtAsync(null!));
+        Assert.IsFalse(control.LookAtAsync(new MapPoint(0, 0)).Result, "with a template but no footprint");
+        Assert.IsFalse(new OrientedImageViewport().LookAtAsync(new MapPoint(0, 0)).Result, "without a template or a footprint");
+    }
+
+    [TestMethod]
     public void StillImagesSpanning360DegreesArePanoramic()
     {
         // The SDK's image transforms treat any image that spans 360 degrees as spherical.

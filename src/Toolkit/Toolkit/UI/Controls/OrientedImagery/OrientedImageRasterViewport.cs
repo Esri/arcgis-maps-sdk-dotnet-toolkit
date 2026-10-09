@@ -155,16 +155,17 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         token.ThrowIfCancellationRequested();
         _imageOrientation = ExifOrientationTransform.Read(path);
 
+        // A held target is converted after the layer loads, so the first framing faces it.
+        LookAtTarget? lookAt = await ConvertHeldLookAtAsync(image);
+        token.ThrowIfCancellationRequested();
+
         if (layer.Raster?.RasterInfo?.Extent is Envelope extent)
         {
-            // The raster layer draws the file's stored pixel grid and ignores EXIF orientation, so the view applies the
-            // orientation's rotation too. A view can't reflect, so mirrored images appear upright but reversed. Both
-            // rotations are clockwise; MapView rotation is counter-clockwise.
-            double viewRotation = -(GetEffectiveRotationDegrees(image) + _imageOrientation.RotationDegrees);
+            MapPoint? target = lookAt is LookAtTarget held ? PixelToMap(held.Pixel, onImage: true) : null;
             try
             {
                 // Frame and rotate in one animation-free viewpoint set.
-                _mapView.SetViewpoint(new Viewpoint(extent, viewRotation));
+                _mapView.SetViewpoint(FitViewpoint(image, extent, target ?? extent.GetCenter()));
             }
             catch
             {
@@ -179,6 +180,28 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         }
 
         SetInteractive(true);
+    }
+
+    // Pans so the target is at the view center, keeping the scale and rotation. The target must be on the image.
+    protected override bool TryLookAt(LookAtTarget target)
+    {
+        if (PixelToMap(target.Pixel, onImage: true) is not MapPoint center || Footprint?.OrientedImage is not OrientedImage image
+            || _rasterLayer?.Raster?.RasterInfo?.Extent is not Envelope extent)
+            return false;
+
+        try
+        {
+            // The view has no viewpoint until it has had a size, and until then the pending fit is the scale to keep.
+            _mapView.SetViewpoint(_mapView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint current
+                ? new Viewpoint(center, current.TargetScale, current.Rotation)
+                : FitViewpoint(image, extent, center));
+            return true;
+        }
+        catch
+        {
+            // The view rejects viewpoints during map teardown.
+            return false;
+        }
     }
 
     protected override void ClearPresentation()
@@ -305,6 +328,17 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     private async Task<MapPoint?> ResolveMarkerMapPointAsync(OrientedImageMarkerPosition position) =>
         await ResolveMarkerPixelAsync(position, Footprint?.OrientedImage) is PointF pixel ? PixelToMap(pixel) : null;
 
+    // Fits the image in the view, centered on a point of it. An image-sized area fits at the same scale wherever it is
+    // centered, and the view defers the fit until it has a size.
+    private Viewpoint FitViewpoint(OrientedImage image, Envelope extent, MapPoint center)
+    {
+        // The raster layer draws the file's stored pixel grid and ignores EXIF orientation, so the view applies the
+        // orientation's rotation too. A view can't reflect, so mirrored images appear upright but reversed. Both
+        // rotations are clockwise; MapView rotation is counter-clockwise.
+        double viewRotation = -(GetEffectiveRotationDegrees(image) + _imageOrientation.RotationDegrees);
+        return new Viewpoint(new Envelope(center, extent.Width, extent.Height), viewRotation);
+    }
+
     // Clockwise degrees, summed without clamping: real data exceeds the spec's +-90 roll.
     private static double GetEffectiveRotationDegrees(OrientedImage image)
     {
@@ -324,19 +358,25 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     // Raster cell sizes can be negative (flipped axis) or zero (unknown); a pixel is one unit in either case.
     private static double CellSize(double size) => size == 0 ? 1 : Math.Abs(size);
 
-    // Maps an image pixel, in the oriented space OrientedImage uses,
-    // to the stored raster's map space; the inverse of MapToPixel.
-    private MapPoint? PixelToMap(PointF pixel)
+    // Maps an image pixel, in the oriented space OrientedImage uses, to the stored raster's map space; the inverse of
+    // MapToPixel. A pixel past the image edge is placed within a wide margin, so a marker just off the image still
+    // draws, unless onImage limits placement to the image rectangle.
+    private MapPoint? PixelToMap(PointF pixel, bool onImage = false)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
             return null;
 
         double cellX = CellSize(info.CellSizeX);
         double cellY = CellSize(info.CellSizeY);
-        pixel = _imageOrientation.ImageToStored(pixel, extent.Width / cellX, extent.Height / cellY);
+        double width = extent.Width / cellX;
+        double height = extent.Height / cellY;
+        pixel = _imageOrientation.ImageToStored(pixel, width, height);
 
         // Drop non-finite or wildly off-image pixels (e.g. the camera's own location projected onto its image).
-        if (!IsPlaceablePixel(pixel.X, extent.Width / cellX) || !IsPlaceablePixel(pixel.Y, extent.Height / cellY))
+        bool placeable = onImage
+            ? pixel.X >= 0 && pixel.X <= width && pixel.Y >= 0 && pixel.Y <= height
+            : IsPlaceablePixel(pixel.X, width) && IsPlaceablePixel(pixel.Y, height);
+        if (!placeable)
             return null;
 
         double x = extent.XMin + (pixel.X * cellX);

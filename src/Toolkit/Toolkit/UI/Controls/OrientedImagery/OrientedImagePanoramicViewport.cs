@@ -408,6 +408,9 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
     protected override async Task PresentAsync(OrientedImage image, string path, CancellationToken token)
     {
         PanoramaFrame frame = await PanoramaFrame.DecodeAsync(path, token);
+
+        // A held target is converted after the decode, so a call made during it still shapes the first frame.
+        LookAtTarget? lookAt = await ConvertHeldLookAtAsync(image);
         if (token.IsCancellationRequested)
         {
             frame.Dispose(); // never applied; release promptly rather than via finalizers
@@ -419,15 +422,31 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         _surface.SetTexture(frame);
         _recovering = false; // re-supplied, whether or not a rebuilt device asked; a later DeviceLost starts over
 
-        // Each image opens facing north at the horizon, with a 90-degree vertical field of view. The identity camera
-        // centers u = 0.75 and the center column faces CameraHeading, so yaw is -pi/2 minus the heading.
-        _surface.Camera = PanoramaCameraState.Initial with { Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image.Attributes) };
+        // Each image opens facing north at the horizon, with a 90-degree vertical field of view, unless a look-at
+        // target was held while it loaded. The identity camera centers u = 0.75 and the center column faces
+        // CameraHeading, so yaw is -pi/2 minus the heading.
+        PanoramaCameraState camera = PanoramaCameraState.Initial with { Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image.Attributes) };
+        if (lookAt is LookAtTarget target)
+            camera = LookAtCamera(camera, target);
+        _surface.Camera = camera;
         _surface.RequestRender();
 
         // Push the footprint explicitly: the push made when auto-update was enabled ran with zero dimensions, and camera
         // assignments that don't change the values raise no ViewChanged.
         UpdateFootprint();
     }
+
+    // The camera change raises ViewChanged, which updates the footprint.
+    protected override bool TryLookAt(LookAtTarget target)
+    {
+        _surface.Camera = LookAtCamera(Camera, target);
+        _surface.RequestRender();
+        return true;
+    }
+
+    // The camera facing the target: the yaw from its column, and the pitch from its row when AimAtRow is set.
+    private PanoramaCameraState LookAtCamera(PanoramaCameraState camera, LookAtTarget target) =>
+        camera.LookAt(target.Pixel.X / _imageWidth, target.AimAtRow ? target.Pixel.Y / _imageHeight : null);
 
     protected override void ClearPresentation()
     {
