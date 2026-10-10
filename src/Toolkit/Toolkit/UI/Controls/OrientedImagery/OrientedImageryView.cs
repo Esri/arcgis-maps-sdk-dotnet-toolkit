@@ -1,14 +1,18 @@
-#if WPF
+#if WPF || WINDOWS_XAML
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+#if WPF
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#elif WINDOWS_XAML
+using Paginator = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryPaginator;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -33,7 +37,9 @@ public partial class OrientedImageryView
         _orientedImageryLayers = new ResettableObservableCollection<OrientedImageryLayer>();
         _readOnlyOrientedImageryLayers = new ReadOnlyObservableCollection<OrientedImageryLayer>(_orientedImageryLayers);
 
+#if WPF
         UpdateErrorMessage();
+#endif
 
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -69,7 +75,9 @@ public partial class OrientedImageryView
             WireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
+
         RewireViewModel();
+        UpdatePaginatorSelection();
     }
 
 #region ViewModel
@@ -100,7 +108,7 @@ public partial class OrientedImageryView
 
         if (newValue == null)
         {
-            SetCurrentValue(ViewModelProperty, new OrientedImageryViewModel());
+            SetValue(ViewModelProperty, new OrientedImageryViewModel());
             return;
         }
 
@@ -114,6 +122,7 @@ public partial class OrientedImageryView
         }
 
         RewireViewModel();
+        UpdatePaginatorSelection();
     }
 
     private void RewireViewModel()
@@ -126,6 +135,7 @@ public partial class OrientedImageryView
         }
         if (_toolbarContainer != null)
             _toolbarContainer.ItemsSource = ViewModel.ToolbarItems;
+
         UpdatePaginatorSelection();
     }
 
@@ -139,6 +149,7 @@ public partial class OrientedImageryView
                 break;
             case nameof(OrientedImageryViewModel.SelectedImage):
             case nameof(OrientedImageryViewModel.Images):
+            case nameof(OrientedImageryViewModel.IsSequentialNavigationEnabled):
                 UpdatePaginatorSelection();
                 break;
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
@@ -179,6 +190,8 @@ public partial class OrientedImageryView
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
     /// </summary>
+    /// <remarks>On WinUI, the default <see cref="System.Drawing.Color.Empty"/> follows the active theme.
+    /// Set an explicit color to override it, or restore <see cref="System.Drawing.Color.Empty"/> to follow the theme again.</remarks>
     public System.Drawing.Color DisplayBackgroundColor
     {
         get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
@@ -189,11 +202,20 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="DisplayBackgroundColor" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
+#if WINDOWS_XAML
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#else
         PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#endif
 
     private void WireDisplay(OrientedImageDisplay display)
     {
         display.ImageTapped += Display_ImageTapped;
+
+#if WINDOWS_XAML
+        if (_display != null)
+            WireDisplay_WinUI(_display);
+#endif
     }
 
     private void UnwireDisplay(OrientedImageDisplay display)
@@ -203,10 +225,22 @@ public partial class OrientedImageryView
         display.ClearValue(OrientedImageDisplay.MarkersProperty);
         display.ClearValue(OrientedImageDisplay.FootprintProperty);
         display.ClearValue(OrientedImageDisplay.DisplayBackgroundColorProperty);
+
+#if WINDOWS_XAML
+        if (_display != null)
+            UnwireDisplay_WinUI(_display);
+#endif
     }
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
+#if WINDOWS_XAML
+        if (displayBackgroundColor.IsEmpty)
+        {
+            var color = ThemeDisplayBackgroundBrush?.Color ?? default;
+            displayBackgroundColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+#endif
         if (_display != null)
             _display.DisplayBackgroundColor = displayBackgroundColor;
     }
@@ -301,7 +335,9 @@ public partial class OrientedImageryView
         if (ViewModel.OrientedImageryLayer != newLayer)
             ViewModel.OrientedImageryLayer = newLayer;
 
+#if WPF
         UpdateErrorMessage();
+#endif
 
         if (GeoView != null && newLayer != null)
         {
@@ -314,12 +350,7 @@ public partial class OrientedImageryView
 
     private void NewLayer_Loaded(object? sender, EventArgs e)
     {
-        System.Windows.Threading.Dispatcher? dispatcher = Application.Current?.Dispatcher;
-        if (dispatcher is not null && !dispatcher.CheckAccess())
-            _ = dispatcher.BeginInvoke(ZoomToLayer);
-        else
-            ZoomToLayer();
-
+        this.Dispatch(ZoomToLayer);
         if (sender is ILoadable loadable)
             loadable.Loaded -= NewLayer_Loaded;
     }
@@ -461,7 +492,9 @@ public partial class OrientedImageryView
                 SelectedLayer = null;
         }
 
+#if WPF
         UpdateErrorMessage();
+#endif
     }
 #endregion GeoView
 
@@ -510,12 +543,19 @@ public partial class OrientedImageryView
     {
         toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
         toolbarContainer.Items.Clear();
+        toolbarContainer.ItemsSource = ViewModel?.ToolbarItems;
+#if WINDOWS_XAML
+        WireToolbarWinUI(toolbarContainer);
+#endif
     }
 
     private void UnwireToolbarContainer(ItemsControl toolbarContainer)
     {
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
+#if WINDOWS_XAML
+        UnwireToolbarWinUI(toolbarContainer);
+#endif
     }
 #endregion Toolbar
 
@@ -534,7 +574,11 @@ public partial class OrientedImageryView
                 index = i;
         }
         _paginator.TotalPages = images.Count;
-        _paginator.SetCurrentValue(Paginator.CurrentPageNumberProperty, index);
+        _paginator.SelectedPageIndex = index;
+
+#if WINDOWS_XAML
+    UpdateNavigationVisibility_WinUI();
+#endif
     }
 
     private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
