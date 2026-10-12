@@ -1,4 +1,4 @@
-#if WPF // Limiting this to WPF for now to keep things simple
+#if WPF
 
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 

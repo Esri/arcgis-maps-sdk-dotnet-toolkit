@@ -69,7 +69,9 @@ public partial class OrientedImageryView
             WireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged += Paginator_SelectedPageIndexChanged;
+
         RewireViewModel();
+        UpdatePaginatorSelection();
     }
 
 #region ViewModel
@@ -100,7 +102,7 @@ public partial class OrientedImageryView
 
         if (newValue == null)
         {
-            SetCurrentValue(ViewModelProperty, new OrientedImageryViewModel());
+            ViewModel = new OrientedImageryViewModel();
             return;
         }
 
@@ -114,6 +116,7 @@ public partial class OrientedImageryView
         }
 
         RewireViewModel();
+        UpdatePaginatorSelection();
     }
 
     private void RewireViewModel()
@@ -319,12 +322,7 @@ public partial class OrientedImageryView
 
     private void NewLayer_Loaded(object? sender, EventArgs e)
     {
-        System.Windows.Threading.Dispatcher? dispatcher = Application.Current?.Dispatcher;
-        if (dispatcher is not null && !dispatcher.CheckAccess())
-            _ = dispatcher.BeginInvoke(ZoomToLayer);
-        else
-            ZoomToLayer();
-
+        this.Dispatch(ZoomToLayer);
         if (sender is ILoadable loadable)
             loadable.Loaded -= NewLayer_Loaded;
     }
@@ -539,7 +537,7 @@ public partial class OrientedImageryView
                 index = i;
         }
         _paginator.TotalPages = images.Count;
-        _paginator.SetCurrentValue(Paginator.CurrentPageNumberProperty, index);
+        _paginator.SelectedPageIndex = index;
     }
 
     private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
