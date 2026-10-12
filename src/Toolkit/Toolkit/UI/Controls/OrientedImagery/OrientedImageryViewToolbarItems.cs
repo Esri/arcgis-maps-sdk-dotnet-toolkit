@@ -1,4 +1,4 @@
-﻿#if WPF
+﻿#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System;
