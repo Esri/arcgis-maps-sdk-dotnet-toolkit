@@ -137,7 +137,7 @@
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single" AutomationProperties.Name="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" AutomationProperties.Name="{Binding Name, Mode=OneTime}"/>
+                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" AutomationProperties.Name="{Binding Name}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
