@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
         private List<string> _layerUrls =
         [
-            "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0",
+            "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/ArcGIS/rest/services/Oakwood_camori_corrected/FeatureServer/0",
             "https://services.arcgis.com/gfpXnknjcY6QHKhU/arcgis/rest/services/CDOT00R20021_360_IMAGERY/FeatureServer/3",
             "https://services5.arcgis.com/N82JbI5EYtAkuUKU/ArcGIS/rest/services/EsriCampus_sequenceTest_attachment/FeatureServer/1"
         ];
@@ -94,6 +94,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 var sceneLayer = new OrientedImageryLayer(new Uri(layerUrl));
                 sceneLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Relative;
                 _sceneView.Scene!.OperationalLayers.Add(sceneLayer);
+
+                _layerUrls.Add(layerUrl);
             }
             catch (Exception ex)
             {
@@ -172,7 +174,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             }
             else if (_scenePropertiesState == 3)
             {
-                activeLayer.SceneProperties = new LayerSceneProperties(SurfacePlacement.Relative);
+                activeLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Relative;
+                activeLayer.SceneProperties.AltitudeOffset = 0;
             }
 
             _scenePropertiesState = (_scenePropertiesState + 1) % 4;
@@ -247,6 +250,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 _sceneView.Scene!.OperationalLayers.Clear();
             }
             _layersRemoved = !_layersRemoved;
+        }
+
+        private async void BackgroundThreadUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                foreach (var marker in _orientedImageryVM.Markers)
+                {
+                    marker.IsVisible = !marker.IsVisible;
+                }
+            });
+        }
+
+        private async void ToggleButtonsBackgroundThread_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                _orientedImageryVM.ImageSearchEnabled = !_orientedImageryVM.ImageSearchEnabled;
+                _orientedImageryVM.ShowCameraLocations = !_orientedImageryVM.ShowCameraLocations;
+                _orientedImageryVM.ShowUnselectedFootprints = !_orientedImageryVM.ShowUnselectedFootprints;
+            });
         }
     }
 }
