@@ -224,7 +224,7 @@ public partial class OrientedImageryView
             var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
             ViewModel.AddMarkerLocation(location);
         }
-        catch (Exception ex)
+        catch (ArcGISRuntimeException ex)
         {
             Debug.WriteLine($"Error converting image point to location: {ex.Message}");
         }
@@ -278,11 +278,15 @@ public partial class OrientedImageryView
     }
 
     /// <summary>
-    /// The <see cref="OrientedImageryLayer"/> currently selected for inspection. The selected layer must be present
-    /// in <see cref="OrientedImageryLayers"/> or the <see cref="OrientedImageryView"/> will not function correctly.
+    /// The <see cref="OrientedImageryLayer"/> currently selected for inspection.
     /// </summary>
     /// <remarks>
-    /// Layers will be made visible when assigned as the <see cref="SelectedLayer"/>.
+    ///   <para>
+    ///   When a new layer is selected, the geo view will zoom to the layer's extent.
+    ///   </para>
+    ///   <para>
+    ///   The selected layer must be present on the <see cref="GeoView"/> otherwise the <see cref="OrientedImageryView"/> will not function and an error message will be displayed.
+    ///   </para>
     /// </remarks>
     public OrientedImageryLayer? SelectedLayer
     {
@@ -303,7 +307,8 @@ public partial class OrientedImageryView
 
         UpdateErrorMessage();
 
-        if (GeoView != null && newLayer != null)
+        // Only zoom if layer is actually on the connected geo view
+        if (GeoView != null && newLayer != null && OrientedImageryLayers.Contains(newLayer))
         {
             if (newLayer.LoadStatus != LoadStatus.Loaded)
                 newLayer.Loaded += NewLayer_Loaded;
