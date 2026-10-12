@@ -69,7 +69,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBox x:Name="LayerUriTextBox" />
-            <Button Grid.Column="1" Content="Add Layer" Click="AddLayerButton_Click" />
+            <Button Grid.Column="1" Content="Add layer to geoview" Click="AddLayerButton_Click" />
             <Button Grid.Column="2" Content="2D/3D" Click="Toggle2DButton_Click" />
         </Grid>
 
@@ -77,10 +77,12 @@
             <Grid x:Name="GeoViewContainer"/>
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Button x:Name="ToggleElevationSurfaceButton" Content="Toggle elevation surface (3D only)" Click="ToggleElevationSurfaceButton_Click" />
-                <Button x:Name="ScenePropertiesButton" Content="Update scene properties" Click="ScenePropertiesButton_Click" />
+                <Button x:Name="ScenePropertiesButton" Content="Cycle scene properties" Click="ScenePropertiesButton_Click" />
                 <Button x:Name="UpdateToolbarButton" Content="Update toolbar" Click="UpdateToolbarButton_Click" />
                 <Button x:Name="OverrideClickHandlersButton"  Content="Override clicks" Click="OverrideClickHandlersButton_Click" />
-                <Button x:Name="RemoveReAddLayers"  Content="Remove/Re-add layers" Click="RemoveReAddLayers_Click" />
+                <Button x:Name="RemoveReAddLayers"  Content="Remove/Re-add all layers" Click="RemoveReAddLayers_Click" />
+                <Button x:Name="BackgroundThreadUpdate"  Content="Update markers on background thread" Click="BackgroundThreadUpdate_Click" />
+                <Button x:Name="ToggleButtonsBackgroundThread"  Content="Update some button states from a background thread" Click="ToggleButtonsBackgroundThread_Click" />
             </StackPanel>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.Column="1" Width="5"
