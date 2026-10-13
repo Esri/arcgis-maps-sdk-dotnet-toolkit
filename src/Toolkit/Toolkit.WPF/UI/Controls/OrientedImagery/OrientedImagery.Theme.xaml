@@ -524,7 +524,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <controls:OrientedImageViewport Grid.ColumnSpan="3"
-                                                               x:Name="PART_ImageDisplay"
+                                                               x:Name="PART_ImageViewport"
                                                                DisplayBackgroundColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayBackgroundColor}" />
 
                                 <Border Grid.ColumnSpan="3"
@@ -533,7 +533,7 @@
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=PART_ImageDisplay, Path=IsBusy}" Value="True">
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=IsBusy}" Value="True">
                                                     <Setter Property="Visibility" Value="Visible" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
@@ -555,7 +555,7 @@
                                         <Style TargetType="{x:Type ProgressBar}">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=PART_ImageDisplay, Path=IsBusy}" Value="True">
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=IsBusy}" Value="True">
                                                     <Setter Property="Visibility" Value="Visible" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
@@ -583,14 +583,14 @@
                                                Text="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelected}" />
                                 </Border>
 
-                                <Popup PlacementTarget="{Binding ElementName=PART_ImageDisplay}"
+                                <Popup PlacementTarget="{Binding ElementName=PART_ImageViewport}"
                                        Placement="Center"
                                        StaysOpen="True">
                                     <Popup.Style>
                                         <Style TargetType="{x:Type Popup}">
                                             <Setter Property="IsOpen" Value="True" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=PART_ImageDisplay, Path=Error}" Value="{x:Null}">
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=Error}" Value="{x:Null}">
                                                     <Setter Property="IsOpen" Value="False" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -602,7 +602,7 @@
                                             BorderThickness="1"
                                             Padding="8">
                                         <TextBlock MaxWidth="300"
-                                                   Text="{Binding ElementName=PART_ImageDisplay, Path=Error.Message}"
+                                                   Text="{Binding ElementName=PART_ImageViewport, Path=Error.Message}"
                                                    TextWrapping="Wrap" />
                                     </Border>
                                 </Popup>
