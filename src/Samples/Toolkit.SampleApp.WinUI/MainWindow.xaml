@@ -27,7 +27,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{x:Bind Name}" HorizontalAlignment="Left" Style="{StaticResource BodyStrongTextBlockStyle}" TextWrapping="WrapWholeWords"/>
-                                <TextBlock Grid.Row="1">
+                                <TextBlock Grid.Row="1" TextWrapping="WrapWholeWords">
                                     <Run Text="Category: " FontWeight="Bold" />
                                     <Run Text="{x:Bind Category}" Foreground="CornflowerBlue" />
                                 </TextBlock>
