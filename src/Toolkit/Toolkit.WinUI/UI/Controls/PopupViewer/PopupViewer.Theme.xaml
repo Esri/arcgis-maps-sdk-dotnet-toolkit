@@ -117,7 +117,7 @@
                             <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw" />
                             <ProgressRing Visibility="Collapsed" x:Name="DownloadSpinner" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Attachment.Name, Mode=OneWay}" Margin="5" AutomationProperties.AccessibilityView="Raw" />
+                        <TextBlock Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Margin="5" AutomationProperties.AccessibilityView="Raw" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -136,7 +136,7 @@
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single" AutomationProperties.Name="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" AutomationProperties.Name="{Binding Path=Attachment.Name}"/>
+                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" AutomationProperties.Name="{Binding Text, RelativeSource={RelativeSource Self}}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

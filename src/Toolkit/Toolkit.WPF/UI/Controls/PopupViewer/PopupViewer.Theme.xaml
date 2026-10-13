@@ -120,7 +120,7 @@
                             </primitives:AccessibleTextBlock>
                             <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
-                        <TextBlock Text="{Binding Name}" Margin="5" Cursor="Hand"/>
+                        <TextBlock Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Margin="5" Cursor="Hand"/>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
