@@ -1141,6 +1141,18 @@
     <value>Switch to image selection mode</value>
     <comment>Tooltip for the button that switches from image search to image selection mode.</comment>
   </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>Image search mode</value>
+    <comment>Tooltip for the image search mode selector.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeSearch" xml:space="preserve">
+    <value>Search</value>
+    <comment>Label for the mode that searches for oriented images.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeSelect" xml:space="preserve">
+    <value>Select</value>
+    <comment>Label for the mode that selects oriented images.</comment>
+  </data>
   <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
     <value>Go to image {0} of {1}</value>
     <comment>Pagination automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
