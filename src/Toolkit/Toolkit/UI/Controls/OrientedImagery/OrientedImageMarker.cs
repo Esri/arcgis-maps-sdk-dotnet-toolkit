@@ -31,14 +31,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// A point of interest rendered over the image in an <see cref="OrientedImageViewport"/>.
 /// </summary>
 /// <remarks>
-/// Anchored to an image pixel or a world location (see <see cref="OrientedImageMarkerPosition"/>). Changes to
-/// <see cref="Position"/>, <see cref="Symbol"/>, and <see cref="IsVisible"/> update the rendered marker in place, as do
-/// changes within the symbol.
+/// Changes to <see cref="Position"/>, <see cref="Symbol"/>, <see cref="IsVisible"/>, and the symbol's own properties
+/// update the rendered marker.
 /// </remarks>
 public sealed class OrientedImageMarker : INotifyPropertyChanged
 {
-    // Known limitation: markers are visual overlays only. They are not exposed individually to screen readers and
-    // do not support keyboard focus or activation.
+    // Known limitation: markers are visual only, with no screen reader exposure or keyboard focus.
     private OrientedImageMarkerPosition _position;
     private Symbol? _symbol;
     private bool _isVisible = true;
@@ -56,15 +54,13 @@ public sealed class OrientedImageMarker : INotifyPropertyChanged
     }
 
     /// <summary>Gets or sets the position the marker is anchored to.</summary>
-    /// <value>The marker position.</value>
     public OrientedImageMarkerPosition Position
     {
         get => _position;
         set => SetProperty(ref _position, value);
     }
 
-    /// <summary>Gets or sets the symbol used to draw the marker. If <c>null</c>, the viewport's default is used.</summary>
-    /// <value>The marker symbol, or <c>null</c>.</value>
+    /// <summary>Gets or sets the marker's symbol, or <c>null</c> to use the viewport's default.</summary>
     public Symbol? Symbol
     {
         get => _symbol;
@@ -72,16 +68,13 @@ public sealed class OrientedImageMarker : INotifyPropertyChanged
     }
 
     /// <summary>Gets or sets a value indicating whether the marker is shown. The default is <c>true</c>.</summary>
-    /// <value><c>true</c> if the marker is shown; otherwise <c>false</c>.</value>
     public bool IsVisible
     {
         get => _isVisible;
         set => SetProperty(ref _isVisible, value);
     }
 
-    /// <summary>Gets or sets an arbitrary value associated with the marker (for example, a domain identifier).</summary>
-    /// <remarks>Not used by the control; provided so applications can correlate <see cref="OrientedImageTappedEventArgs.Marker"/>.</remarks>
-    /// <value>The associated value, or <c>null</c>.</value>
+    /// <summary>Gets or sets an arbitrary value associated with the marker. The control does not use it.</summary>
     public object? Tag
     {
         get => _tag;

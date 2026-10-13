@@ -38,8 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Panoramic (equirectangular 360) inner viewport: decodes the image to a texture on the platform PanoramicSurface
-// and surfaces taps. All screen<->pixel math goes through PanoramaCameraState.
+// Inner viewport for equirectangular 360 images. PanoramaCameraState holds the screen and pixel math.
 internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInnerViewport
 {
     private const double MarkerHitTolerance = 12d;
@@ -51,8 +50,8 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
 #endif
     private readonly List<ResolvedMarker> _resolvedMarkers = [];
 
-    // Kept across passes. A marker's (u,v) depends on its position and the image, and its swatch on its symbol.
-    // Failures are not kept.
+    // Cached across passes: a (u,v) until its position or the image changes, and a swatch until its symbol changes.
+    // Failures are not cached.
     private readonly Dictionary<OrientedImageMarker, Uv> _markerUvs = [];
     private readonly Dictionary<OrientedImageMarker, Swatch> _markerSwatches = [];
     private int _markerGeneration;
@@ -85,10 +84,8 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
     protected override Microsoft.UI.Xaml.DependencyObject AutomationTarget => _surface;
 #endif
 
-    // Interactive once a panorama is decoded and shown, and not while recovering.
     protected override bool IsPresentationInteractive => _imageWidth > 0 && _imageHeight > 0 && !_recovering;
 
-    // Device recovery is presentation work: the surface is blank from the loss until it is rebuilt and re-supplied.
     protected override bool IsPresentationBusy => _recovering;
 
     // Internal for tests, which can't lose or rebuild a device.
@@ -98,8 +95,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         UpdateState();
     }
 
-    // Present-layer (device/bridge/render) failures happen outside the load path: blank the viewport and surface them
-    // as Error. The blanking render can fail too; that is not reported again.
+    // The first render failure wins, since the blanking render below can fail too.
     private void OnRenderFailed(Exception ex)
     {
         if (PresentationError is not null)
@@ -111,13 +107,11 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         UpdateState();
     }
 
-    // After a device-lost rebuild the GPU texture and markers are gone (the surface keeps no CPU copy): re-decode and
-    // re-supply them. The camera lives on the surface and survives the rebuild.
+    // A rebuilt device has lost the texture and markers, and the surface keeps no CPU copy. The camera survives.
     internal async void OnDeviceRecreated()
     {
-        // A load in flight supplies the rebuilt surface when it completes, so a second decode would be wasted. A load
-        // that failed stays failed: the viewport never retries on its own. Without an image there is nothing to
-        // re-supply. In all three cases the recovery ends here, and a load in flight still reports busy on its own.
+        // A load in flight re-supplies the surface itself and reports busy. A failed load stays failed, since the
+        // viewport never retries on its own.
         OrientedImage? image = Footprint?.OrientedImage;
         if (image is null || IsLoading || image.LoadStatus == LoadStatus.FailedToLoad)
         {
@@ -126,8 +120,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
             return;
         }
 
-        // The rebuilt surface is blank until re-supplied: invalidate the dimensions so a tap isn't reported against the
-        // old pixel space, and report busy/non-interactive so bound commands don't stay enabled over a blank panorama.
+        // Until re-supplied, zero dimensions keep taps off the old pixel space, and the viewport reports busy.
         _imageWidth = 0;
         _imageHeight = 0;
         _recovering = true;
@@ -139,11 +132,10 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
             if (token.IsCancellationRequested)
                 return;
 
-            await image.RetryLoadAsync(); // idempotent; covers the image being unloaded/cancelled during teardown
+            await image.RetryLoadAsync(); // a no-op when loaded; reloads an image canceled during teardown
             if (token.IsCancellationRequested || image.DataUri is not { IsAbsoluteUri: true, IsFile: true } uri)
                 return;
 
-            // A newer SetFootprint cancels the session token, aborting a now-pointless re-decode.
             PanoramaFrame frame = await PanoramaFrame.DecodeAsync(uri.LocalPath, token);
             if (token.IsCancellationRequested)
             {
@@ -157,7 +149,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
             _surface.RequestRender();
             QueueMarkerPass();
 
-            // Recovery succeeded: clear any error latched while the device was lost (the loss itself is recoverable).
+            // A render error raised while the device was lost ends with the recovery.
             PresentationError = null;
         }
         catch (OperationCanceledException)
@@ -166,7 +158,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         }
         catch (Exception ex)
         {
-            // A footprint swapped in mid-recovery owns the viewport state now; don't overwrite it.
+            // A footprint swapped in mid-recovery owns the viewport state.
             if (!token.IsCancellationRequested)
                 PresentationError = ex;
         }
@@ -178,7 +170,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         }
     }
 
-    // Resolving again rasterizes the swatches at the new scale.
     private void OnScaleChanged() => QueueMarkerPass();
 
     // The caches belong to the UI thread.
@@ -193,7 +184,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         QueueMarkerPass();
     });
 
-    // Drops the result the change invalidates and re-resolves. Tag is not drawn.
+    // Tag is not drawn.
     protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName) => this.Dispatch(() =>
     {
         switch (propertyName)
@@ -217,14 +208,13 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         QueueMarkerPass();
     });
 
-    // For tests. Bumped by each marker change that needs a pass, and by ClearPresentation.
+    // For tests.
     internal int MarkerGeneration => _markerGeneration;
 
-    // For tests. The number of passes that started.
+    // For tests.
     internal int MarkerPasses { get; private set; }
 
-    // Marker changes come in bursts, such as a loop over the markers or a symbol that many of them share. Each change
-    // supersedes the pass in flight, and one pass on the next UI turn covers the whole burst.
+    // Changes come in bursts: each supersedes the pass in flight, and one pass on the next UI turn covers the burst.
     private void QueueMarkerPass()
     {
         Interlocked.Increment(ref _markerGeneration);
@@ -239,9 +229,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         });
     }
 
-    // Resolves every visible marker to a normalized (u,v) plus a rasterized swatch and pushes the set to the surface.
-    // Cached results are reused, and the rest is computed off the UI thread. A superseded pass stops at its next check
-    // and leaves the rest to the newer pass. Only the final apply marshals back.
     private async Task ResolveMarkersAsync()
     {
         MarkerPasses++;
@@ -251,8 +238,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         int imageWidth = _imageWidth;
         int imageHeight = _imageHeight;
 
-        // Snapshot the app-owned markers and the caches on the UI thread before going async. A swatch rasterized at
-        // another scale is a miss.
+        // Snapshot the markers and caches on the UI thread. A swatch rasterized at another scale is a miss.
         double scale = _surface.PixelsPerDip;
         var pending = new List<PendingMarker>();
         if (image is not null && imageWidth > 0 && imageHeight > 0)
@@ -291,7 +277,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
 
         this.Dispatch(() =>
         {
-            // Superseded, or the image changed meanwhile: the results are stale.
             if (generation != _markerGeneration || token.IsCancellationRequested)
                 return;
 
@@ -316,7 +301,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         return pixel is PointF p ? new Uv(p.X / imageWidth, p.Y / imageHeight) : null;
     }
 
-    // Rasterizes a symbol to a tightly-packed BGRA8 swatch via RuntimeImage, with its offset.
     private static async Task<Swatch?> CreateSwatchAsync(Symbol symbol, double scale)
     {
         try
@@ -347,9 +331,8 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         }
     }
 
-    // Where a symbol draws relative to its anchor, in DIPs with y down. The map rotates a marker clockwise around its
-    // anchor, so the offset turns with the angle; swatches include the angle but not the offset. Composite and
-    // multilayer symbols carry per-layer offsets that one swatch cannot represent.
+    // Offset from the anchor in DIPs, y down, turned clockwise with the angle as on the map. Swatches include the angle
+    // but not the offset. Composite and multilayer symbols get none, since their offsets vary per layer.
     internal static (double X, double Y) GetMarkerOffset(Symbol symbol)
     {
         if (symbol is not MarkerSymbol marker)
@@ -381,7 +364,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
 
     private void OnViewChanged() => UpdateFootprint();
 
-    // UpdateFootprintAsync derives the 360 ground footprint from the camera orientation and the view's angular extent.
     protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
     {
         double width = _surface.ActualWidth;
@@ -413,26 +395,24 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         LookAtTarget? lookAt = await ConvertHeldLookAtAsync(image);
         if (token.IsCancellationRequested)
         {
-            frame.Dispose(); // never applied; release promptly rather than via finalizers
+            frame.Dispose();
             return;
         }
 
         _imageWidth = frame.Width;
         _imageHeight = frame.Height;
         _surface.SetTexture(frame);
-        _recovering = false; // re-supplied, whether or not a rebuilt device asked; a later DeviceLost starts over
+        _recovering = false; // a fresh texture ends any device recovery
 
-        // Each image opens facing north at the horizon, with a 90-degree vertical field of view, unless a look-at
-        // target was held while it loaded. The identity camera centers u = 0.75 and the center column faces
-        // CameraHeading, so yaw is -pi/2 minus the heading.
+        // Open facing north at the horizon unless a look-at target is held. The identity camera centers u = 0.75 and
+        // the image's center column faces CameraHeading, so yaw is -pi/2 minus the heading.
         PanoramaCameraState camera = PanoramaCameraState.Initial with { Yaw = (-MathF.PI / 2f) - ReadHeadingRadians(image.Attributes) };
         if (lookAt is LookAtTarget target)
             camera = LookAtCamera(camera, target);
         _surface.Camera = camera;
         _surface.RequestRender();
 
-        // Push the footprint explicitly: the push made when auto-update was enabled ran with zero dimensions, and camera
-        // assignments that don't change the values raise no ViewChanged.
+        // Push explicitly: the earlier push had no image dimensions, and an unchanged camera raises no ViewChanged.
         UpdateFootprint();
     }
 
@@ -444,7 +424,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         return true;
     }
 
-    // The camera facing the target: the yaw from its column, and the pitch from its row when AimAtRow is set.
     private PanoramaCameraState LookAtCamera(PanoramaCameraState camera, LookAtTarget target) =>
         camera.LookAt(target.Pixel.X / _imageWidth, target.AimAtRow ? target.Pixel.Y / _imageHeight : null);
 
@@ -454,8 +433,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         _imageWidth = 0;
         _imageHeight = 0;
 
-        // Bump the generation so an in-flight resolve can't apply stale markers to the next texture. The (u,v)s go with
-        // the image. The swatches stay.
+        // Keeps an in-flight pass from applying stale markers. The (u,v)s depend on the image, but the swatches don't.
         Interlocked.Increment(ref _markerGeneration);
         _markerUvs.Clear();
         _resolvedMarkers.Clear();
@@ -484,9 +462,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         RaiseImageTapped(new OrientedImageTappedEventArgs(pixel, image, marker));
     }
 
-    // Returns the topmost marker whose swatch lies within the hit tolerance of the tap, or null, as the planar
-    // viewport's identify does. Markers draw in list order, so the last one is on top. A swatch is centered on its
-    // projected anchor plus its symbol offset. All values are in DIPs.
+    // Markers draw in list order, so the last hit is on top, as in the planar viewport. All values are in DIPs.
     internal static OrientedImageMarker? HitTestMarker(IReadOnlyList<ResolvedMarker> markers, PanoramaCameraState camera,
         double viewWidth, double viewHeight, double x, double y)
     {
@@ -515,18 +491,14 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         return 0f;
     }
 
-    // A marker resolved to a normalized (u,v), its symbol offset, and its swatch's half-size, all sizes in DIPs, kept on
-    // the UI side for tap hit-testing (the surface owns the GPU side).
+    // A drawn marker as tap hit-testing sees it. Offsets and half-sizes are in DIPs.
     internal readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY, double HalfWidth, double HalfHeight);
 
-    // A marker's normalized (u,v) on the image.
     private sealed record Uv(float U, float V);
 
-    // A rasterized symbol: its tightly-packed BGRA8 pixels, its offset from the anchor in DIPs, and the display scale
-    // it was rasterized at.
+    // Tightly packed BGRA8 pixels, the offset from the anchor in DIPs, and the display scale it was rasterized at.
     private sealed record Swatch(byte[] Bgra, int Width, int Height, double OffsetX, double OffsetY, double Scale);
 
-    // A visible marker snapshotted for a pass, with its cached (u,v) and swatch if any.
     private readonly record struct PendingMarker(OrientedImageMarker Marker, OrientedImageMarkerPosition Position, Symbol Symbol, Uv? Uv, Swatch? Swatch);
 }
 #endif

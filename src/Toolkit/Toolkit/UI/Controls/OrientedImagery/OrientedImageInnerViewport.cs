@@ -37,8 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Base of OrientedImageViewport's inner viewports. Owns the presentation session (one footprint and one cancellation
-// token per SetFootprint), the reported state, the marker subscriptions and the auto-update-footprint plumbing.
+// Base of the planar and panoramic inner viewports. Each SetFootprint call starts a new presentation session.
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Platform view types are not IDisposable by convention. The session CTS is cancel-only (no timer), so it needs no disposal; canceling it on supersede is the release.")]
 #if MAUI
 internal abstract class OrientedImageInnerViewport : ContentView
@@ -47,13 +46,13 @@ internal abstract class OrientedImageInnerViewport : ContentControl
 #endif
 {
     private IEnumerable<OrientedImageMarker>? _markerSource;
-    private List<OrientedImageMarker> _markers = []; // Snapshot read from the source
+    private List<OrientedImageMarker> _markers = [];
     private WeakEventListener<OrientedImageInnerViewport, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
     private readonly Dictionary<OrientedImageMarker, MarkerSubscription> _markerListeners = [];
     private CancellationTokenSource? _sessionCts;
     private CancellationTokenSource? _updateCts;
-    private int _lookAtCalls; // Bumped by each LookAtAsync call and footprint change; a superseded call reports false
-    private MapPoint? _heldLookAt; // The latest target given while the image loads
+    private int _lookAtCalls; // A LookAtAsync call that sees a newer count reports false
+    private MapPoint? _heldLookAt;
     private TaskCompletionSource _loadSettled = new(); // Completes when the load settles or is replaced
     private bool _autoUpdate;
     private bool _isLoading;
@@ -61,49 +60,39 @@ internal abstract class OrientedImageInnerViewport : ContentControl
     private protected OrientedImageInnerViewport()
     {
 #if !MAUI
-        // ContentControl content defaults to Left/Top; the content has to be stretched to fill.
+        // ContentControl aligns its content Left/Top by default.
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
         VerticalContentAlignment = VerticalAlignment.Stretch;
 
-        // The content, not this control, is the focusable element.
+        // The content is the focusable element.
         IsTabStop = false;
 #endif
     }
 
-    /// <summary>Gets a value indicating whether the viewport is busy loading, initializing, or drawing (not in a steady state).</summary>
     public bool IsBusy { get; private set; }
 
-    /// <summary>
-    /// Gets a value indicating whether the viewport has a presented, unlocked image and no <see cref="Error"/>.
-    /// Independent of <see cref="IsBusy"/>: a presented viewport stays interactive while it redraws.
-    /// </summary>
+    // Independent of IsBusy: a presented viewport stays interactive while it redraws.
     public bool IsInteractive { get; private set; }
 
-    /// <summary>Gets the error that prevents the viewport from showing its image, or <c>null</c> when there is none.</summary>
     public Exception? Error { get; private set; }
 
-    /// <summary>Occurs when <see cref="IsBusy"/>, <see cref="IsInteractive"/>, or <see cref="Error"/> changes.</summary>
     public event EventHandler? StateChanged;
 
-    /// <summary>Occurs when the user taps the image; a tapped marker (if any) is carried on the event args.</summary>
     public event EventHandler<OrientedImageTappedEventArgs>? ImageTapped;
 
-    /// <summary>Gets the footprint of the current presentation session.</summary>
     protected OrientedImageFootprint? Footprint { get; private set; }
 
-    /// <summary>Gets the markers rendered over the image, in the app's collection order.
-    /// The list is replaced on each change, never modified, so a reference to it is a stable snapshot.</summary>
+    // In collection order. Each change replaces the list, so a captured reference is a stable snapshot.
     protected IReadOnlyList<OrientedImageMarker> Markers => _markers;
 
-    /// <summary>Gets the session token: canceled when a later <see cref="SetFootprint"/> supersedes this one, and
-    /// before the first one. Capture it before an await and re-check it before touching viewport state.</summary>
+    // Canceled when a later SetFootprint call supersedes the session, and before the first call. Capture it before an
+    // await and check it again before touching viewport state.
     protected CancellationToken SessionToken => _sessionCts?.Token ?? new CancellationToken(canceled: true);
 
-    /// <summary>Gets or sets a presentation failure to surface through <see cref="Error"/>; derived viewports record
-    /// asynchronous render/device failures here and then call <see cref="UpdateState"/>. Cleared per session.</summary>
+    // Derived viewports record asynchronous render or device failures here, then call UpdateState.
     protected Exception? PresentationError { get; set; }
 
-    /// <summary>Gets a value indicating whether the current footprint's image is being loaded and presented.</summary>
+    // Stays true through PresentAsync, not only while the image loads.
     protected bool IsLoading => _isLoading;
 
     // The focusable view, which carries the automation name and id.
@@ -115,24 +104,17 @@ internal abstract class OrientedImageInnerViewport : ContentControl
     protected abstract Microsoft.UI.Xaml.DependencyObject AutomationTarget { get; }
 #endif
 
-    /// <summary>Gets a value indicating whether a presented image is ready for interaction (state permitting).</summary>
     protected abstract bool IsPresentationInteractive { get; }
 
-    /// <summary>Gets a value indicating whether the presentation itself is busy (e.g. still drawing) beyond loading.</summary>
     protected virtual bool IsPresentationBusy => false;
 
-    /// <summary>Sets the footprint whose oriented image should be displayed.</summary>
-    /// <param name="footprint">The footprint to display, or <c>null</c> to clear.</param>
     public void SetFootprint(OrientedImageFootprint? footprint)
     {
-        // Each call supersedes the previous presentation session (see SessionToken).
         _sessionCts?.Cancel();
         _sessionCts = new CancellationTokenSource();
         _ = SetFootprintAsync(footprint, _sessionCts.Token);
     }
 
-    /// <summary>Sets the markers rendered over the image.</summary>
-    /// <param name="markers">The markers to render, or <c>null</c>.</param>
     public void SetMarkers(IEnumerable<OrientedImageMarker>? markers)
     {
         if (ReferenceEquals(_markerSource, markers))
@@ -144,7 +126,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
 
         if (markers is INotifyCollectionChanged incc)
         {
-            // Weak: the app-owned collection must not keep a discarded viewport alive through this subscription.
+            // Weak, so the app's collection can't keep a discarded viewport alive.
             _markersListener = new WeakEventListener<OrientedImageInnerViewport, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
             {
                 OnEventAction = static (instance, source, eventArgs) => instance.SyncMarkers(),
@@ -156,14 +138,11 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         SyncMarkers();
     }
 
-    // Reads the source and reports which markers were added and removed since the last read. Comparing by marker
-    // identity keeps the viewport in step with the source, whatever notifications it raises. A marker that appears more
-    // than once is shown once, and null items are skipped.
+    // Diffs by identity against the last read, so the viewport stays in step whatever notifications the source raises.
     private void SyncMarkers()
     {
         _markers = _markerSource?.OfType<OrientedImageMarker>().Distinct().ToList() ?? [];
 
-        // The markers being listened to are those from the last read.
         var current = new HashSet<OrientedImageMarker>(_markers);
         List<OrientedImageMarker> removed = _markerListeners.Keys.Where(marker => !current.Contains(marker)).ToList();
         List<OrientedImageMarker> added = _markers.Where(marker => !_markerListeners.ContainsKey(marker)).ToList();
@@ -177,7 +156,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         OnMarkersChanged(added, removed);
     }
 
-    // Weak listeners keep app-owned markers and symbols from retaining the viewport.
+    // Weak, so app-owned markers and symbols can't keep the viewport alive.
     private sealed class MarkerSubscription
     {
         private readonly OrientedImageInnerViewport _viewport;
@@ -226,7 +205,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
             if (_symbolListener is null)
                 return;
 
-            // Disable delivery before detaching; an event may already have captured the handler.
+            // Disable delivery before detaching, because an event in flight may hold the handler.
             _symbolListener.OnEventAction = null;
             _symbolListener.Detach();
             _symbolListener = null;
@@ -240,8 +219,6 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         }
     }
 
-    /// <summary>Enables or disables automatic recomputation of the footprint as the view changes.</summary>
-    /// <param name="enabled">Whether the footprint is automatically updated.</param>
     public void SetAutoUpdateFootprint(bool enabled)
     {
         if (enabled == _autoUpdate)
@@ -250,17 +227,14 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         _autoUpdate = enabled;
         OnAutoUpdateFootprintChanged(enabled);
         if (enabled)
-            UpdateFootprint(); // push the current view immediately; the view may be static until interaction
+            UpdateFootprint(); // the view may not change until the user interacts
         else
-            _updateCts?.Cancel(); // don't let an in-flight update land after auto-update was turned off
+            _updateCts?.Cancel();
     }
 
-    /// <summary>Sets the background color shown where the image does not fill the viewport.</summary>
-    /// <param name="color">The background color, or <see cref="System.Drawing.Color.Empty"/> to keep the viewport's default.</param>
+    // Color.Empty restores the viewport's default background.
     public abstract void SetBackgroundColor(System.Drawing.Color color);
 
-    /// <summary>Labels the focusable view for screen readers with the name the app gave the control.</summary>
-    /// <param name="name">The app's name, or <c>null</c> or empty for the localized default.</param>
     public void SetAutomationName(string? name)
     {
         if (string.IsNullOrEmpty(name))
@@ -274,12 +248,9 @@ internal abstract class OrientedImageInnerViewport : ContentControl
 #endif
     }
 
-    /// <summary>Converts a position in the viewport, in device-independent pixels, to the image coordinate under it.</summary>
-    /// <returns>The image coordinate, or <c>null</c> when no image is under the position or the viewport is not interactive.</returns>
+    // x and y are in device-independent pixels. Returns null off the image or while not interactive.
     public abstract System.Drawing.PointF? ScreenToImage(double x, double y);
 
-    /// <summary>Gives the focusable view the automation id the app gave the control, so UI tests can find it.</summary>
-    /// <param name="id">The app's automation id, or <c>null</c> or empty for none.</param>
     public void SetAutomationId(string? id)
     {
 #if WPF
@@ -287,13 +258,13 @@ internal abstract class OrientedImageInnerViewport : ContentControl
 #elif WINDOWS_XAML
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(AutomationTarget, id ?? string.Empty);
 #elif MAUI
-        // An element's AutomationId can be set once, so only a first, non-empty id is applied.
+        // MAUI lets an element's AutomationId be set only once, so only the first non-empty id applies.
         if (!string.IsNullOrEmpty(id) && AutomationTarget.AutomationId is null)
             AutomationTarget.AutomationId = id;
 #endif
     }
 
-    // Backs OrientedImageViewport.LookAtAsync. A call made while the image loads is held, so the image opens facing it.
+    // A call made while the image loads is held, so the image opens facing it.
     public async Task<bool> LookAtAsync(MapPoint target)
     {
         int call = ++_lookAtCalls;
@@ -302,8 +273,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
 
         if (_isLoading)
         {
-            // The presentation reads the held target for the first frame. After the load the call goes on like a new
-            // one, which reports the result.
+            // After the load, the call proceeds like a new one to report the result.
             _heldLookAt = target;
             await _loadSettled.Task;
             if (call != _lookAtCalls || !IsInteractive)
@@ -314,34 +284,30 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         return call == _lookAtCalls && pixel is LookAtTarget p && TryLookAt(p);
     }
 
-    // Shows the loaded image from the local file at path, opening facing the target from ConvertHeldLookAtAsync when
-    // there is one. It runs inside the load skeleton's try, so throw (or let cancellation throw) to record a
-    // presentation failure. Check the token after every await before touching state.
+    // Shows the image from the local file at path, facing the target from ConvertHeldLookAtAsync if there is one. Throw
+    // to record a presentation failure, and check the token after every await.
     protected abstract Task PresentAsync(OrientedImage image, string path, CancellationToken token);
 
-    // Centers the target, keeping the zoom; true when it is centered, or as near as the view allows. Called only while
-    // the viewport is interactive.
+    // Centers the target at the current zoom, or as near as the view allows, and returns false if it can't. Called
+    // only while the viewport is interactive.
     protected abstract bool TryLookAt(LookAtTarget target);
 
-    // A look-at target resolved to an image pixel, and whether its row is part of the aim. The row of a map location
-    // without a z-value comes from a guessed elevation, so only its column is aimed at.
+    // AimAtRow is false for a map location without z, because its row comes from a guessed elevation.
     protected readonly record struct LookAtTarget(System.Drawing.PointF Pixel, bool AimAtRow);
 
-    // Converts the held target, so the image can open facing it; null when no call is held or the conversion fails.
     protected async Task<LookAtTarget?> ConvertHeldLookAtAsync(OrientedImage image) =>
         _heldLookAt is MapPoint target ? await ConvertLookAtTargetAsync(image, target) : null;
 
-    // Blanks the presentation synchronously: visuals, dimensions and on-image markers.
+    // Clears synchronously, including the image dimensions and marker placements.
     protected abstract void ClearPresentation();
 
-    // Marker hooks; implementations re-render. Both can run off the UI thread, because the app raises the events
-    // behind them. A change inside the marker's symbol is reported as a change of Symbol.
+    // Both marker hooks can run off the UI thread, because the app raises the events behind them. A change inside a
+    // marker's symbol arrives as a Symbol change.
     protected abstract void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed);
 
     protected abstract void OnMarkerChanged(OrientedImageMarker marker, string? propertyName);
 
-    // The image pixel a marker sits on: an image point on its own image only, or a world location through the camera
-    // model. Null when the marker isn't on the image.
+    // An image point applies only to its own image; a map location goes through the camera model.
     protected static async Task<System.Drawing.PointF?> ResolveMarkerPixelAsync(OrientedImageMarkerPosition position, OrientedImage? image)
     {
         if (image is null)
@@ -353,8 +319,6 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         return position.Location is MapPoint location ? await LocationToPixelAsync(image, location).ConfigureAwait(false) : null;
     }
 
-    // A map location's pixel through the camera model, or null when the image hasn't loaded, the conversion fails, or
-    // the pixel isn't finite.
     private static async Task<System.Drawing.PointF?> LocationToPixelAsync(OrientedImage image, MapPoint location)
     {
         // A transform tried before the image loads makes later transforms on it fail.
@@ -374,23 +338,20 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         }
     }
 
-    // Subscribe/unsubscribe the platform view-change event that should drive UpdateFootprint.
+    // Subscribes to or unsubscribes from the view changes that drive UpdateFootprint.
     protected abstract void OnAutoUpdateFootprintChanged(bool enabled);
 
-    // Pushes the current view through the UpdateFootprintAsync overload for the image type, or returns null when the
-    // view can't be computed yet. Take the token from NextFootprintUpdateToken last, so a bad view never cancels a good update.
+    // Starts UpdateFootprintAsync for the current view, or returns null when the view can't be computed. Take the token
+    // from NextFootprintUpdateToken last, so a bad view never cancels a good update.
     protected abstract Task? BeginFootprintUpdate(OrientedImageFootprint footprint);
 
-    // The load skeleton finished for the current session (present, clear, or failure) - state and image dimensions
-    // are settled. Derived viewports re-resolve dimension-dependent visuals (e.g. panoramic markers) here.
+    // Runs when the session's load ends without being superseded, with state and image dimensions settled.
     protected virtual void OnPresentCompleted()
     {
     }
 
-    // Error precedence: the image's own load error, then anything the presentation recorded (decode/present/render).
     protected virtual Exception? ResolveError() => Footprint?.OrientedImage?.LoadError ?? PresentationError;
 
-    /// <summary>Raises <see cref="ImageTapped"/>.</summary>
     protected void RaiseImageTapped(OrientedImageTappedEventArgs args) => ImageTapped?.Invoke(this, args);
 
     protected void UpdateState()
@@ -407,7 +368,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    // Pushes the current view to the footprint. Latest wins: NextFootprintUpdateToken cancels the in-flight update.
+    // Latest wins: NextFootprintUpdateToken cancels the update in flight.
     protected async void UpdateFootprint()
     {
         if (!_autoUpdate || Footprint is not OrientedImageFootprint footprint)
@@ -420,11 +381,10 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         }
         catch
         {
-            // Ignore cancellation/failures from a superseded update.
+            // Ignore cancellation by a newer update and any failure.
         }
     }
 
-    // Cancels the in-flight footprint update and returns the token for the next one.
     protected CancellationToken NextFootprintUpdateToken()
     {
         _updateCts?.Cancel();
@@ -432,7 +392,6 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         return _updateCts.Token;
     }
 
-    // The image pixel a map location converts to, as a look-at target.
     private static async Task<LookAtTarget?> ConvertLookAtTargetAsync(OrientedImage image, MapPoint target)
     {
         System.Drawing.PointF? pixel = await LocationToPixelAsync(image, target);
@@ -444,11 +403,11 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         OrientedImage? image = footprint?.OrientedImage;
         bool imageChanged = !ReferenceEquals(Footprint?.OrientedImage, image);
 
-        // Cancel abandoned downloads during paging. This also cancels other callers loading the same image.
+        // Cancel an abandoned download when paging, which also cancels other callers loading the same image.
         if (imageChanged)
             Footprint?.OrientedImage?.CancelLoad();
 
-        // An in-flight footprint update must not mutate a footprint this viewport no longer manages.
+        // An update in flight must not change a footprint that this viewport has stopped managing.
         if (!ReferenceEquals(Footprint, footprint))
             _updateCts?.Cancel();
 
@@ -476,18 +435,17 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         UpdateState();
         try
         {
-            // The image resolves its DataUri during load (downloads the image file or first attachment).
             await image.RetryLoadAsync();
             token.ThrowIfCancellationRequested();
 
             if (image.DataUri is not Uri uri)
             {
-                // Loaded with nothing displayable (attachment without image, or a load failure surfaced via Error).
+                // Loaded with nothing to display, such as an attachment without an image.
                 ClearPresentation();
                 return;
             }
 
-            // Loading downloads the image, so its data is a local file. No other location is read.
+            // Loading downloads the image file or first attachment, so its data is a local file. Nothing else is read.
             if (!uri.IsAbsoluteUri || !uri.IsFile)
                 throw new NotSupportedException("The oriented image's data isn't a local file.");
 
@@ -495,7 +453,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         }
         catch (OperationCanceledException)
         {
-            // Superseded by a newer footprint, or torn down; not an error to surface.
+            // Superseded or torn down, which is not an error.
         }
         catch (Exception ex)
         {

@@ -26,9 +26,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Maps stored JPEG pixels to the EXIF-oriented pixel space used by OrientedImage, and back.
-// Missing metadata, including the default struct value, means identity.
-// This is a minimal implementation inspired by https://stackoverflow.com/q/7584794/383361
+// Maps stored JPEG pixels to OrientedImage's EXIF-oriented pixel space and back. The default value is identity.
+// A minimal reader inspired by https://stackoverflow.com/q/7584794/383361
 // Full spec: https://www.cipa.jp/std/documents/download_e.html?CIPA_DC-008-2026-E
 internal readonly struct ExifOrientationTransform
 {
@@ -40,8 +39,8 @@ internal readonly struct ExifOrientationTransform
 
     internal bool IsMirrored => _value is 2 or 4 or 5 or 7;
 
-    // Clockwise rotation from the stored grid to the oriented image. A mirrored orientation then also reflects the
-    // rotated image horizontally, so a view that can only rotate still shows it upright, though reversed.
+    // Clockwise rotation from the stored grid to the oriented image. A mirrored orientation also reflects horizontally
+    // after the rotation, so rotating alone shows it upright but reversed.
     internal double RotationDegrees => _value switch
     {
         3 or 4 => 180,
@@ -50,8 +49,8 @@ internal readonly struct ExifOrientationTransform
         _ => 0,
     };
 
-    // Both mappings take the stored image's width and height. They use the full size rather than the last pixel index
-    // because footprint vertices can lie on the image boundary.
+    // Both take the stored image's width and height rather than its last pixel index, because footprint vertices can
+    // lie on the image boundary.
     internal PointF StoredToImage(PointF point, double width, double height) => _value switch
     {
         2 => new((float)(width - point.X), point.Y),
@@ -118,7 +117,7 @@ internal readonly struct ExifOrientationTransform
             }
             while (marker == 0xFF);
             if (marker < 0 || marker == 0xDA || marker == 0xD9)
-                return default; // EOF, start of scan, or end of image: no more metadata to inspect.
+                return default; // EOF, start of scan, or end of image
 
             if (marker == 0x01 || (marker >= 0xD0 && marker <= 0xD7))
                 continue; // Standalone TEM/restart markers have no length field.
@@ -126,12 +125,12 @@ internal readonly struct ExifOrientationTransform
             int high = stream.ReadByte();
             int low = stream.ReadByte();
             if (high < 0 || low < 0)
-                return default; // Truncated length field.
+                return default;
 
-            // JPEG segment lengths are big-endian and include the two length bytes, but not the marker.
+            // The big-endian segment length counts its own two bytes.
             int payloadLength = ((high << 8) | low) - 2;
             if (payloadLength < 0 || payloadLength > stream.Length - stream.Position)
-                return default; // Malformed length field.
+                return default;
 
             // APP1 must fit the six-byte EXIF identifier and eight-byte TIFF header.
             if (marker == 0xE1 && payloadLength >= 14)
@@ -141,7 +140,7 @@ internal readonly struct ExifOrientationTransform
                 int orientation = ParseExifOrientation(payload);
                 if (orientation is >= 1 and <= 8)
                     return new ExifOrientationTransform(orientation);
-                // APP1 may contain XMP instead of EXIF; keep scanning if no Orientation tag was found.
+                // APP1 may hold XMP rather than EXIF, so keep scanning.
             }
             else
             {
@@ -150,7 +149,7 @@ internal readonly struct ExifOrientationTransform
         }
     }
 
-    // Reads Orientation (1..8) from APP1: "Exif\0\0", a TIFF header, then IFD0. Zero means absent or invalid.
+    // APP1 holds "Exif\0\0", a TIFF header, then IFD0. Returns zero when Orientation is absent or invalid.
     private static int ParseExifOrientation(ReadOnlySpan<byte> app1)
     {
         if (!app1.StartsWith("Exif\0\0"u8))
@@ -163,7 +162,7 @@ internal readonly struct ExifOrientationTransform
 
         bool littleEndian = tiff.StartsWith("II"u8);
         if (!littleEndian && !tiff.StartsWith("MM"u8))
-            return 0; // Unknown byte order.
+            return 0;
 
         if (ReadUInt16(tiff[2..], littleEndian) != 42)
             return 0; // Not a TIFF header.
@@ -181,7 +180,7 @@ internal readonly struct ExifOrientationTransform
             if (start + 12 > tiff.Length)
                 return 0;
 
-            // Orientation (0x0112) must be one SHORT (type 3), stored inline rather than at an offset.
+            // Orientation is tag 0x0112, a single SHORT (type 3) stored inline rather than at an offset.
             ReadOnlySpan<byte> entry = tiff.Slice((int)start, 12);
             if (ReadUInt16(entry, littleEndian) == 0x0112 &&
                 ReadUInt16(entry[2..], littleEndian) == 3 &&

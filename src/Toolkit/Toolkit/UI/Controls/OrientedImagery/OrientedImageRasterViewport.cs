@@ -38,7 +38,7 @@ using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
 #endif
 #endif
 
-// Disambiguate from Microsoft.Maui.Graphics.PointF (a MAUI global using)
+// Disambiguate from Microsoft.Maui.Graphics.PointF, a MAUI global using.
 using PointF = System.Drawing.PointF;
 #if WPF
 using Point = System.Windows.Point;
@@ -54,10 +54,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Inner viewport for planar images: a MapView showing the image as a RasterLayer, markers as overlay graphics, and
-// the visible pixel ring pushed to the footprint while auto-update is enabled.
-// Known limitation: georeferenced TIFFs are not supported by this planar viewport. RasterLayer honors embedded
-// georeferencing, while the viewport's pixel transforms assume an unreferenced, axis-aligned image grid.
+// Shows a planar image as a RasterLayer in a MapView. Georeferenced TIFFs are unsupported: RasterLayer honors their
+// georeferencing, but the pixel transforms here assume an unreferenced, axis-aligned grid.
 internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerViewport
 {
     private readonly MapView _mapView;
@@ -73,14 +71,13 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     internal OrientedImageRasterViewport()
     {
-        // Lock map interaction until the image has loaded
         _mapView = new MapView { IsAttributionTextVisible = false, InteractionOptions = new MapViewInteractionOptions { IsEnabled = false } };
 #if MAUI
         _mapView.HorizontalOptions = LayoutOptions.Fill;
         _mapView.VerticalOptions = LayoutOptions.Fill;
 #endif
 
-        // Default symbol for markers without their own; a marker's own Symbol overrides this renderer.
+        // For markers without a symbol; a graphic's own symbol overrides the renderer.
         _markersOverlay = new GraphicsOverlay
         {
             Renderer = new SimpleRenderer(OrientedImageViewport.DefaultMarkerSymbol),
@@ -93,8 +90,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         {
             UpdateState();
 
-            // The initial ViewpointChanged can fire while still drawing, where BeginFootprintUpdate rejects it, and no
-            // later viewpoint event is guaranteed; push once drawing settles. Redundant pushes are safe (latest wins).
+            // BeginFootprintUpdate rejects the initial ViewpointChanged while drawing, and no later one is guaranteed.
             if (e.Status == DrawStatus.Completed)
                 UpdateFootprint();
         };
@@ -110,13 +106,11 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     protected override Microsoft.UI.Xaml.DependencyObject AutomationTarget => _mapView;
 #endif
 
-    // A MapView with no Map sits at DrawStatus.InProgress forever, so only count drawing when there's a map.
+    // A MapView without a Map stays at DrawStatus.InProgress.
     protected override bool IsPresentationBusy => _mapView.Map is not null && _mapView.DrawStatus == DrawStatus.InProgress;
 
     protected override bool IsPresentationInteractive => _interactive;
 
-    // Error precedence: the image load error, the raster layer load error, the layer's view-state error, then
-    // anything the load skeleton captured (e.g. a raster/layer construction failure that produces no LoadError).
     protected override Exception? ResolveError()
     {
         if (Footprint?.OrientedImage?.LoadError is Exception imageError)
@@ -127,8 +121,8 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
             if (layer.LoadError is Exception layerError)
                 return layerError;
 
-            // GetLayerViewState throws if the layer isn't in the current map (can happen during a map swap).
-            // A Warning, such as missing Projection Engine data, still draws the image, so only Error counts.
+            // GetLayerViewState throws for a layer outside the current map, as during a map swap. A Warning still draws
+            // the image, so only Error counts.
             if (_mapView.Map?.OperationalLayers.Contains(layer) == true &&
                 _mapView.GetLayerViewState(layer) is LayerViewState viewState &&
                 viewState.Status.HasFlag(LayerViewStatus.Error) &&
@@ -141,7 +135,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     protected override async Task PresentAsync(OrientedImage image, string path, CancellationToken token)
     {
-        // Abort a previous layer's load and keep the view locked until the new raster is framed.
         _rasterLayer?.CancelLoad();
         SetInteractive(false);
 
@@ -155,7 +148,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         token.ThrowIfCancellationRequested();
         _imageOrientation = ExifOrientationTransform.Read(path);
 
-        // A held target is converted after the layer loads, so the first framing faces it.
         LookAtTarget? lookAt = await ConvertHeldLookAtAsync(image);
         token.ThrowIfCancellationRequested();
 
@@ -164,25 +156,23 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
             MapPoint? target = lookAt is LookAtTarget held ? PixelToMap(held.Pixel, onImage: true) : null;
             try
             {
-                // Frame and rotate in one animation-free viewpoint set.
                 _mapView.SetViewpoint(FitViewpoint(image, extent, target ?? extent.GetCenter()));
             }
             catch
             {
-                // Framing is best-effort; never let it block the unlock below.
+                // Framing is best-effort and must not block the unlock.
             }
 
             if (token.IsCancellationRequested)
                 return;
 
-            // Markers set before the raster loaded can now be placed (the pixel-map transform exists).
+            // Place markers set while the raster loaded, when no pixel-to-map transform existed.
             _ = RefreshMarkerGeometriesAsync();
         }
 
         SetInteractive(true);
     }
 
-    // Pans so the target is at the view center, keeping the scale and rotation. The target must be on the image.
     protected override bool TryLookAt(LookAtTarget target)
     {
         if (PixelToMap(target.Pixel, onImage: true) is not MapPoint center || Footprint?.OrientedImage is not OrientedImage image
@@ -191,7 +181,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
         try
         {
-            // The view has no viewpoint until it has had a size, and until then the pending fit is the scale to keep.
+            // The view has no viewpoint until it has a size. Until then, keep the scale of the pending fit.
             _mapView.SetViewpoint(_mapView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint current
                 ? new Viewpoint(center, current.TargetScale, current.Rotation)
                 : FitViewpoint(image, extent, center));
@@ -211,13 +201,12 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         _rasterLayer = null;
         _imageOrientation = default;
         foreach (Graphic graphic in _markerGraphics.Values)
-            graphic.Geometry = null; // placed on the old image; re-placed once the next one is framed
+            graphic.Geometry = null;
         SetInteractive(false);
     }
 
     public override void SetBackgroundColor(System.Drawing.Color color)
     {
-        // Empty restores the default grid; otherwise a solid color with zero-width grid lines.
         _mapView.BackgroundGrid = color.IsEmpty
             ? new BackgroundGrid()
             : new BackgroundGrid(color, System.Drawing.Color.Transparent, 0f, 16f);
@@ -231,8 +220,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
             _mapView.ViewpointChanged -= OnViewpointChanged;
     }
 
-    // Locks/unlocks user interaction; programmatic SetViewpoint still works while locked. Replace the whole
-    // MapViewInteractionOptions object: an in-place IsEnabled flip is ignored.
+    // SetViewpoint still works while locked. Replace the options object; the view ignores an in-place IsEnabled change.
     private void SetInteractive(bool enabled)
     {
         _interactive = enabled;
@@ -242,8 +230,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         _mapView.InteractionOptions = new MapViewInteractionOptions { IsEnabled = enabled };
     }
 
-    // Graphics are kept per marker, so only added markers need placing. The overlay follows collection order, which
-    // is the drawing order.
+    // The overlay follows collection order, which is the drawing order.
     protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed)
     {
         IReadOnlyList<OrientedImageMarker> markers = Markers;
@@ -273,7 +260,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         });
     }
 
-    // Dispatch so marker updates can't touch the graphic/dictionaries off the UI thread.
     protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName)
     {
         this.Dispatch(() =>
@@ -296,7 +282,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         });
     }
 
-    // Re-places the given markers, or all of them when null.
     private async Task RefreshMarkerGeometriesAsync(IEnumerable<OrientedImageMarker>? markers = null)
     {
         var markerGraphics = markers is null ? new Dictionary<OrientedImageMarker, Graphic>(_markerGraphics) : _markerGraphics;
@@ -313,9 +298,8 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         OrientedImageMarkerPosition position = marker.Position;
         MapPoint? mapPoint = await ResolveMarkerMapPointAsync(position);
 
-        // Apply only if the session, the marker's graphic, and its position are unchanged. A pixel projected through
-        // the old image's camera model must not land on the new raster, and a slower projection of an earlier
-        // position must not replace a newer one. A null point clears the geometry.
+        // A pixel from the old image's camera model must not land on the new raster, and a slow projection of an
+        // earlier position must not replace a newer one.
         if (!token.IsCancellationRequested && marker.Position == position &&
             _markerGraphics.TryGetValue(marker, out Graphic? current) && ReferenceEquals(current, graphic))
         {
@@ -323,18 +307,14 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         }
     }
 
-    // Position -> image pixel -> map point; null while the raster isn't ready.
-    // PresentAsync places markers again after the image loads.
     private async Task<MapPoint?> ResolveMarkerMapPointAsync(OrientedImageMarkerPosition position) =>
         await ResolveMarkerPixelAsync(position, Footprint?.OrientedImage) is PointF pixel ? PixelToMap(pixel) : null;
 
-    // Fits the image in the view, centered on a point of it. An image-sized area fits at the same scale wherever it is
-    // centered, and the view defers the fit until it has a size.
+    // An image-sized envelope fits at the same scale wherever centered. The view defers the fit until it has a size.
     private Viewpoint FitViewpoint(OrientedImage image, Envelope extent, MapPoint center)
     {
-        // The raster layer draws the file's stored pixel grid and ignores EXIF orientation, so the view applies the
-        // orientation's rotation too. A view can't reflect, so mirrored images appear upright but reversed. Both
-        // rotations are clockwise; MapView rotation is counter-clockwise.
+        // RasterLayer draws the stored pixel grid, ignoring EXIF orientation, so the view applies its rotation too.
+        // Both rotations are clockwise, and MapView rotation is counter-clockwise.
         double viewRotation = -(GetEffectiveRotationDegrees(image) + _imageOrientation.RotationDegrees);
         return new Viewpoint(new Envelope(center, extent.Width, extent.Height), viewRotation);
     }
@@ -347,7 +327,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         return roll + imageRotation;
     }
 
-    // CameraRoll and ImageRotation are esriFieldTypeDouble, so a boxed double is the only shape to accept.
+    // CameraRoll and ImageRotation are esriFieldTypeDouble, so only a boxed double is accepted.
     private static double ReadRotationAttribute(OrientedImage image, string name)
     {
         if (image.Attributes.TryGetValue(name, out object? raw) && raw is double value && !double.IsNaN(value))
@@ -355,12 +335,11 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         return 0d;
     }
 
-    // Raster cell sizes can be negative (flipped axis) or zero (unknown); a pixel is one unit in either case.
+    // Cell sizes can be negative for a flipped axis. An unknown size of zero counts as one unit.
     private static double CellSize(double size) => size == 0 ? 1 : Math.Abs(size);
 
-    // Maps an image pixel, in the oriented space OrientedImage uses, to the stored raster's map space; the inverse of
-    // MapToPixel. A pixel past the image edge is placed within a wide margin, so a marker just off the image still
-    // draws, unless onImage limits placement to the image rectangle.
+    // Maps a pixel in OrientedImage's oriented space to the stored raster's map space. Unless onImage is set, a pixel
+    // within a wide margin past the edge still maps, so a marker just off the image draws.
     private MapPoint? PixelToMap(PointF pixel, bool onImage = false)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
@@ -372,7 +351,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         double height = extent.Height / cellY;
         pixel = _imageOrientation.ImageToStored(pixel, width, height);
 
-        // Drop non-finite or wildly off-image pixels (e.g. the camera's own location projected onto its image).
+        // Drop wildly off-image pixels, such as the camera's own location projected onto its image.
         bool placeable = onImage
             ? pixel.X >= 0 && pixel.X <= width && pixel.Y >= 0 && pixel.Y <= height
             : IsPlaceablePixel(pixel.X, width) && IsPlaceablePixel(pixel.Y, height);
@@ -389,14 +368,11 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         if (!double.IsFinite(value))
             return false;
 
-        // Pixels beyond this many image-sizes off the raster are treated as unplaceable
         const double MarkerPlacementMarginFactor = 100d;
         double margin = Math.Max(Math.Abs(max), 1d) * MarkerPlacementMarginFactor;
         return value >= -margin && value <= max + margin;
     }
 
-    // Maps a point in the viewport's map space back to an image pixel, as taps and ScreenToImage report it. A point on
-    // the background around the image has no pixel.
     private PointF? MapToPixel(MapPoint mapPoint)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
@@ -435,7 +411,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
             // Identify can fail during map teardown. Report the tap without a marker.
         }
 
-        // The image may have changed while identifying; the captured pixel is in the old image's space.
+        // The image may have changed while identifying, leaving the pixel in the old image's space.
         if (token.IsCancellationRequested)
             return;
 
@@ -444,7 +420,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     private void OnViewpointChanged(object? sender, EventArgs e) => UpdateFootprint();
 
-    // Planar image: push the visible part of the raster as a pixel ring.
     protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
     {
         if (_mapView.DrawStatus != DrawStatus.Completed)
@@ -463,8 +438,8 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         return footprint.UpdateFootprintAsync(pixels, NextFootprintUpdateToken());
     }
 
-    // Visible-area ring -> image-pixel ring clipped to the image rectangle. A true polygon clip, not per-vertex
-    // clamping, which collapses a rotated view enclosing the whole image to a diamond. Internal for unit tests.
+    // Clips the visible area to the image as a polygon, because clamping each vertex collapses a rotated view that
+    // encloses the whole image to a diamond. Internal for unit tests.
     internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY, ExifOrientationTransform orientation = default)
     {
         double cellX = CellSize(cellSizeX);

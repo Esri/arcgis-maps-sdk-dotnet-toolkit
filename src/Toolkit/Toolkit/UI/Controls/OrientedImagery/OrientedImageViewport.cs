@@ -23,7 +23,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 
-// Disambiguate from MAUI types from global usings
+// Disambiguate from MAUI global usings.
 using Color = System.Drawing.Color;
 using PointF = System.Drawing.PointF;
 
@@ -48,9 +48,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// A control that displays an oriented image and allows interaction with it.
 /// </summary>
 /// <remarks>
-/// Set the <see cref="Footprint"/> to display the associated image.
-/// Shows planar and panoramic still images. Video isn't supported. A video image sets <see cref="Error"/>.
-/// Planar images are displayed with a <see cref="Esri.ArcGISRuntime.Mapping.RasterLayer"/>, so they require the
+/// Shows planar and panoramic still images; a video image sets <see cref="Error"/>. Planar images are displayed
+/// with a <see cref="Esri.ArcGISRuntime.Mapping.RasterLayer"/>, so they require the
 /// <see cref="Esri.ArcGISRuntime.LicenseLevel.Standard"/> license level or higher.
 /// </remarks>
 public partial class OrientedImageViewport
@@ -104,10 +103,7 @@ public partial class OrientedImageViewport
     /// <summary>
     /// Occurs when the user taps the oriented image.
     /// </summary>
-    /// <remarks>
-    /// Raised for every tap on the image; the image coordinates are always populated.
-    /// If the tap also hit a marker, that marker is carried on <see cref="OrientedImageTappedEventArgs.Marker"/>.
-    /// </remarks>
+    /// <remarks>Also raised for a tap on a marker; see <see cref="OrientedImageTappedEventArgs.Marker"/>.</remarks>
     public event EventHandler<OrientedImageTappedEventArgs>? ImageTapped;
 
     /// <summary>
@@ -124,12 +120,9 @@ public partial class OrientedImageViewport
     /// Gets or sets the markers to render on top of the oriented image.
     /// </summary>
     /// <remarks>
-    /// Like an items source, this accepts any collection. If the collection is observable (implements
-    /// <see cref="INotifyCollectionChanged"/>), the control follows its changes; otherwise it reads the collection
-    /// once when assigned. Either way, the control follows changes to the markers themselves and never modifies the
-    /// collection.
+    /// If the collection implements <see cref="INotifyCollectionChanged"/>, the control follows its changes; otherwise
+    /// it reads the collection once. The control follows changes to each marker and never modifies the collection.
     /// </remarks>
-    /// <value>The markers drawn over the image, or <c>null</c>.</value>
     public IEnumerable<OrientedImageMarker>? Markers
     {
         get => GetValue(MarkersProperty) as IEnumerable<OrientedImageMarker>;
@@ -137,15 +130,13 @@ public partial class OrientedImageViewport
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the displayed footprint is automatically recomputed when the
-    /// visible part of the image changes.
+    /// Gets or sets a value indicating whether the footprint is updated when the visible part of the image changes.
     /// </summary>
     /// <remarks>
-    /// When <c>true</c>, panning or zooming pushes the visible part of the image to the footprint so the footprint drawn on the map stays in sync:
-    /// a planar image calls <see cref="OrientedImageFootprint.UpdateFootprintAsync(System.Collections.Generic.IEnumerable{System.Drawing.PointF}, System.Threading.CancellationToken)"/>,
-    /// a 360 image calls <see cref="OrientedImageFootprint.UpdateFootprintAsync(double, double, double, double, System.Threading.CancellationToken)"/>. This control does not draw the footprint.
+    /// Panning or zooming passes the visible part of the image to the footprint's <c>UpdateFootprintAsync</c>, so a
+    /// footprint drawn on the map stays in sync. The control does not draw the footprint.
     /// </remarks>
-    /// <value>A value indicating whether the footprint is automatically updated. The default is <c>true</c>.</value>
+    /// <value><c>true</c> to update the footprint; otherwise <c>false</c>. The default is <c>true</c>.</value>
     public bool AutoUpdateFootprint
     {
         get => (bool)GetValue(AutoUpdateFootprintProperty);
@@ -155,30 +146,30 @@ public partial class OrientedImageViewport
     /// <summary>
     /// Gets a value indicating whether the control is loading, initializing, or drawing its image.
     /// </summary>
-    /// <remarks>Independent of <see cref="IsInteractive"/>: a loaded image stays interactive while it redraws.</remarks>
-    /// <value><c>true</c> while the active inner viewport is loading, initializing, or drawing; otherwise <c>false</c>.</value>
+    /// <remarks>Independent of <see cref="IsInteractive"/>: an image stays interactive while it redraws.</remarks>
     public bool IsBusy => (bool)GetValue(IsBusyProperty);
 
     /// <summary>
     /// Gets a value indicating whether the image is loaded, can be panned and zoomed, and has no <see cref="Error"/>.
     /// </summary>
-    /// <remarks>Use this to enable UI that acts on the displayed image, such as controls that add markers.</remarks>
-    /// <value><c>true</c> when the image is loaded and the user can interact with it; otherwise <c>false</c>.</value>
     public bool IsInteractive => (bool)GetValue(IsInteractiveProperty);
 
     /// <summary>
     /// Gets the error preventing the image from being shown, or <c>null</c> when there is none.
     /// </summary>
-    /// <remarks>An image load or layer rendering error from the active inner viewport. While non-<c>null</c>, <see cref="IsInteractive"/> is <c>false</c>.</remarks>
-    /// <value>The current error, or <c>null</c>.</value>
+    /// <remarks>
+    /// Reports image load failures, rendering failures, and image types the control cannot show. While set,
+    /// <see cref="IsInteractive"/> is <c>false</c>.
+    /// </remarks>
     public Exception? Error => GetValue(ErrorProperty) as Exception;
 
     /// <summary>
-    /// Gets or sets the background color shown where the image does not fill the viewport (for example, the area
-    /// exposed when panning or rotating beyond the image).
+    /// Gets or sets the background color shown where the image does not fill the viewport.
     /// </summary>
-    /// <remarks>The default, <see cref="System.Drawing.Color.Empty"/>, keeps each inner viewport's own default background.</remarks>
-    /// <value>The background color.</value>
+    /// <remarks>
+    /// The default, <see cref="System.Drawing.Color.Empty"/>, shows a grid behind planar images and a dark backdrop
+    /// behind panoramas.
+    /// </remarks>
     public System.Drawing.Color DisplayBackgroundColor
     {
         get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
@@ -203,7 +194,6 @@ public partial class OrientedImageViewport
     public static readonly DependencyProperty AutoUpdateFootprintProperty =
         PropertyHelper.CreateProperty<bool, OrientedImageViewport>(nameof(AutoUpdateFootprint), true, (s, oldValue, newValue) => s._activeViewport?.SetAutoUpdateFootprint(newValue));
 
-    // Computed state, read-only where the platform supports it (see PropertyHelper.CreateReadOnlyProperty).
     private static readonly DependencyPropertyKey IsBusyPropertyKey =
         PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageViewport>(nameof(IsBusy));
 
@@ -245,13 +235,11 @@ public partial class OrientedImageViewport
         DisplayHostElement? previousHost = _displayHost;
         _displayHost = GetTemplateChild(DisplayHostName) as DisplayHostElement;
 
-        // On a template re-apply the active inner viewport is still parented to the discarded template's host; release
-        // it there or the new host cannot adopt it.
+        // The inner viewport is still parented to the old template's host; release it so the new host can adopt it.
         if (previousHost is not null && !ReferenceEquals(previousHost, _displayHost))
             previousHost.Content = null;
 
-        // The inner viewport exists as soon as a footprint is set, so a template only hosts it; re-presenting here
-        // would reload the image and cancel in-flight work. Without a footprint, the first template creates one.
+        // Re-presenting an existing inner viewport would reload the image and cancel in-flight work, so only host it.
         if (_activeViewport is null)
             UpdateViewport();
         else
@@ -263,7 +251,6 @@ public partial class OrientedImageViewport
         OrientedImage? image = Footprint?.OrientedImage;
         OrientedImageInnerViewport? viewport = SelectViewport(image);
 
-        // Reports an image that no inner viewport can show, such as a video, instead of looking unloaded.
         _unsupportedError = viewport is null && image is not null
             ? new NotSupportedException($"Oriented image type '{image.Type}' is not supported by this control yet.")
             : null;
@@ -280,13 +267,12 @@ public partial class OrientedImageViewport
         }
     }
 
-    // Subscribes before the caller pushes state in, so the inner viewport's first notifications aren't missed.
+    // Subscribes before the caller pushes state, so the viewport's first notifications aren't missed.
     private void SetActiveViewport(OrientedImageInnerViewport? viewport)
     {
         if (ReferenceEquals(_activeViewport, viewport))
         {
-            // Same inner viewport (including null -> null):
-            // re-host and publish state anyway; only this path surfaces a recomputed _unsupportedError.
+            // _unsupportedError can change while the viewport stays the same, so re-host and publish state anyway.
             HostActiveViewport();
             UpdateState();
             return;
@@ -297,7 +283,7 @@ public partial class OrientedImageViewport
             _activeViewport.StateChanged -= OnViewportStateChanged;
             _activeViewport.ImageTapped -= OnViewportImageTapped;
 
-            // Release the outgoing inner viewport's image, map/device content and marker subscriptions.
+            // The outgoing viewport stays cached, so release its image and marker subscriptions.
             _activeViewport.SetMarkers(null);
             _activeViewport.SetFootprint(null);
         }
@@ -314,7 +300,6 @@ public partial class OrientedImageViewport
         UpdateState();
     }
 
-    // Before the template is applied there is no host yet; OnApplyTemplate hosts the inner viewport then.
     private void HostActiveViewport()
     {
         if (_displayHost is not null)
@@ -330,13 +315,9 @@ public partial class OrientedImageViewport
     /// <summary>
     /// Converts a position in the control to the image coordinate under it, as a tap there would.
     /// </summary>
-    /// <remarks>
-    /// For workflows that act on a position without a pointer, such as the control's center during keyboard
-    /// navigation. Markers are not identified; <see cref="ImageTapped"/> reports those for taps.
-    /// </remarks>
     /// <param name="screenPosition">The position relative to the control, in device-independent pixels.</param>
-    /// <returns>The image coordinate, or <c>null</c> when no image is under the position or the control is not
-    /// interactive.</returns>
+    /// <returns>The image coordinate, or <c>null</c> when no image is under the position
+    /// or the control is not interactive.</returns>
     public PointF? ScreenToImage(Point screenPosition)
     {
         if (_activeViewport is null || !IsInteractive)
@@ -357,10 +338,8 @@ public partial class OrientedImageViewport
     /// Centers the view on a map location, keeping the zoom.
     /// </summary>
     /// <remarks>
-    /// A panorama turns toward the target: with a z-value the target is centered, without one the view turns to its
-    /// direction and keeps its pitch. A planar image pans so the target is at the center. The target converts to an
-    /// image pixel the way a location-anchored marker does. Called while the image loads, the target becomes the
-    /// initial view, so the default view never shows first. The view does not animate.
+    /// For a target without a z-value, a panorama turns toward it and keeps its pitch. Called while the image loads,
+    /// the target becomes the initial view. The view does not animate.
     /// </remarks>
     /// <param name="target">The map location to look at.</param>
     /// <returns><c>true</c> when the target is at the view center, or as near it as the view allows; <c>false</c>
@@ -374,10 +353,8 @@ public partial class OrientedImageViewport
         return _activeViewport?.LookAtAsync(target) ?? Task.FromResult(false);
     }
 
-    // Only fires StateChanged when there is an actual change.
     private void UpdateState()
     {
-        // An unsupported image type has no inner viewport, so its error is merged in here.
         bool busy = _unsupportedError is null && (_activeViewport?.IsBusy ?? false);
         bool interactive = _unsupportedError is null && (_activeViewport?.IsInteractive ?? false);
         Exception? error = _unsupportedError ?? _activeViewport?.Error;
@@ -407,7 +384,7 @@ public partial class OrientedImageViewport
 #endif
     }
 
-    // As in the SDK's image transforms, an image that spans 360 degrees is panoramic whatever its type.
+    // As in the SDK's image transforms, an image spanning 360 degrees is panoramic whatever its type.
     internal static bool IsPanoramic(OrientedImageType type, IDictionary<string, object?> attributes) =>
         type == OrientedImageType.Image360 ||
         (attributes.TryGetValue("HorizontalFieldOfView", out object? value) && value is double degrees && degrees == 360);

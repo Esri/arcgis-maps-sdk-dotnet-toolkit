@@ -16,9 +16,7 @@ using PointF = System.Drawing.PointF;
 namespace Toolkit.Tests;
 
 /// <summary>
-/// Contracts of <see cref="OrientedImageViewport"/> and its inner viewports that hold without a running app:
-/// template re-hosting, marker subscriptions that must not retain a discarded inner viewport, marker offsets and
-/// hit-testing, accessibility, visible-area clipping, and EXIF coordinate and decoder agreement.
+/// Contracts of <see cref="OrientedImageViewport"/> and its inner viewports that hold without a running app.
 /// </summary>
 [TestClass]
 public sealed class OrientedImageViewportTests
@@ -26,8 +24,7 @@ public sealed class OrientedImageViewportTests
     [STATestMethod]
     public void ReapplyingTemplateRehostsActiveViewport()
     {
-        // A template replacement must move the existing inner viewport out of the discarded presenter.
-        // Recreating the inner viewport would lose its current image and navigation state.
+        // Recreating the inner viewport would lose its image and navigation state.
         var control = new OrientedImageViewport { Template = CreateHostTemplate() };
         Assert.IsTrue(control.ApplyTemplate());
         ContentPresenter firstHost = GetHost(control);
@@ -46,8 +43,6 @@ public sealed class OrientedImageViewportTests
     [STATestMethod]
     public void MarkerSubscriptionDoesNotRetainDiscardedViewport()
     {
-        // The application keeps the collection, marker, and symbol alive after discarding the panoramic viewport.
-        // Their event subscriptions must not prevent the panoramic viewport from being collected.
         var markers = new ObservableCollection<OrientedImageMarker>
         {
             new(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10)),
@@ -64,14 +59,14 @@ public sealed class OrientedImageViewportTests
             "an app-owned marker's PropertyChanged subscription must not keep a discarded panoramic viewport alive");
     }
 
-    // Not inlined, so no caller register/local can keep the panoramic viewport reachable across the collection above.
+    // Not inlined, so no local or register in the caller keeps the viewport reachable across the collection.
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static WeakReference CreateDiscardedViewport(ObservableCollection<OrientedImageMarker> markers)
     {
         var viewport = new OrientedImagePanoramicViewport();
         viewport.SetMarkers(markers);
 
-        // The marker pass runs on the next UI turn, and the queued work holds the panoramic viewport until then.
+        // The queued marker pass holds the viewport until the next UI turn.
         RunPendingDispatcherWork();
         return new WeakReference(viewport);
     }
@@ -79,7 +74,6 @@ public sealed class OrientedImageViewportTests
     [STATestMethod]
     public void DeviceRecoveryWithNothingToResupplyIsNotBusy()
     {
-        // Without an image, a rebuilt device has nothing to re-supply, so recovery ends there.
         var viewport = new OrientedImagePanoramicViewport();
         viewport.OnDeviceLost();
         Assert.IsTrue(viewport.IsBusy, "a lost device reports busy");
@@ -91,8 +85,6 @@ public sealed class OrientedImageViewportTests
     [STATestMethod]
     public void MarkerChangesStartOnlyTheNeededPasses()
     {
-        // Only drawn properties start a pass. A change inside the symbol counts, since the SDK symbol is what is
-        // drawn. A replaced or removed marker's symbol is let go.
         var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
         var marker = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0)), symbol);
         var viewport = new OrientedImagePanoramicViewport();
@@ -128,7 +120,6 @@ public sealed class OrientedImageViewportTests
     [STATestMethod]
     public void BurstOfMarkerChangesTakesOnePass()
     {
-        // A change to a symbol that many markers share, or a loop over the markers, runs one pass.
         var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);
         List<OrientedImageMarker> markers = Enumerable.Range(0, 50)
             .Select(i => new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(i, 0)), symbol))
@@ -148,14 +139,14 @@ public sealed class OrientedImageViewportTests
         Assert.AreEqual(passes + 2, viewport.MarkerPasses, "a loop over the markers");
     }
 
-    // Runs work posted to this thread's dispatcher, which has a higher priority than Background.
+    // Flushes work posted to this thread's dispatcher at priorities above Background.
     private static void RunPendingDispatcherWork() =>
         System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() => { }));
 
     [TestMethod]
     public void PanoramicMarkerOffsetTurnsWithSymbolAngle()
     {
-        // The map rotates a marker clockwise around its anchor, offset included; screen y points down.
+        // The offset turns clockwise with the angle, and screen y points down.
         AssertOffset(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10), 0, 0);
         AssertOffset(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10) { OffsetX = 15, OffsetY = 20 }, 15, -20);
         AssertOffset(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10) { OffsetX = 10, Angle = 90 }, 0, 10);
@@ -173,11 +164,9 @@ public sealed class OrientedImageViewportTests
     [TestMethod]
     public void PanoramicHitTestFollowsTheDrawnMarker()
     {
-        // Looking at the image center: (0.75, 0.5) projects to the middle of a 400 x 300 view.
         var camera = new PanoramaCameraState(yaw: 0f, pitch: 0f, fieldOfView: MathF.PI / 2f);
         Assert.IsTrue(camera.TryNormalizedUvToScreen(0.75f, 0.5f, 400, 300, out double cx, out double cy));
 
-        // A 10-DIP marker drawn 15 DIPs right of and 20 DIPs above its anchor.
         var offset = Marker(size: 10, offsetX: 15, offsetY: -20);
         Assert.AreSame(offset.Marker, Hit([offset], cx + 15, cy - 20), "a tap on the drawn marker hits it");
         Assert.IsNull(Hit([offset], cx, cy), "a tap on the bare anchor, 18 DIPs from the drawn marker, misses");
@@ -188,7 +177,7 @@ public sealed class OrientedImageViewportTests
         Assert.IsNotNull(Hit([large], cx + 51, cy), "11 DIPs outside its edge");
         Assert.IsNull(Hit([large], cx + 55, cy), "15 DIPs outside its edge");
 
-        // As in the planar viewport, the topmost marker within tolerance wins, even over a direct hit beneath it.
+        // As in the planar viewport, the topmost marker within tolerance wins over a direct hit beneath it.
         var upper = Marker(size: 20, offsetX: 55, offsetY: 0);
         Assert.AreSame(upper.Marker, Hit([large, upper], cx + 38, cy), "inside the lower marker, 7 DIPs from the upper one");
         Assert.AreSame(large.Marker, Hit([large, upper], cx - 20, cy), "out of the upper marker's reach");
@@ -200,7 +189,6 @@ public sealed class OrientedImageViewportTests
     [TestMethod]
     public void LookAtPutsThePixelAtTheViewCenter()
     {
-        // LookAt inverts the projection: the (u,v) it was given reads back at the view center.
         var camera = new PanoramaCameraState(yaw: 0.3f, pitch: -0.2f, fieldOfView: 1.2f);
         foreach ((float u, float v) in new[] { (0.75f, 0.5f), (0f, 0.5f), (0.1f, 0.3f), (0.6f, 0.9f), (0.999f, 0.1f) })
         {
@@ -219,7 +207,6 @@ public sealed class OrientedImageViewportTests
         Assert.AreEqual(PanoramaCameraState.MinPitch, camera.LookAt(0.5f, 0f).Pitch, "the zenith clamps to the pitch limit");
         Assert.AreEqual(PanoramaCameraState.MaxPitch, camera.LookAt(0.5f, 1f).Pitch, "the nadir clamps to the pitch limit");
 
-        // The distance between two columns across the seam.
         static float WrappedDistance(float a, float b) => MathF.Abs(((b - a + 1.5f) % 1f) - 0.5f);
     }
 
@@ -245,21 +232,19 @@ public sealed class OrientedImageViewportTests
     [TestMethod]
     public void PanoramicHeadingTreatsUnknownAsNorth()
     {
-        // -999 means the heading is unknown.
         Assert.AreEqual(0f, OrientedImagePanoramicViewport.ReadHeadingRadians(new Dictionary<string, object?> { ["CameraHeading"] = -999d }));
         Assert.AreEqual(0f, OrientedImagePanoramicViewport.ReadHeadingRadians(new Dictionary<string, object?>()));
         Assert.AreEqual(MathF.PI / 2f, OrientedImagePanoramicViewport.ReadHeadingRadians(new Dictionary<string, object?> { ["CameraHeading"] = 90d }), 1e-6f);
     }
 
-    // A marker at the image center with a square swatch of the given size in DIPs.
+    // A marker at the identity camera's view center, with a square swatch of the given size in DIPs.
     private static OrientedImagePanoramicViewport.ResolvedMarker Marker(double size, double offsetX, double offsetY) =>
         new(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(new MapPoint(0, 0))), 0.75f, 0.5f, offsetX, offsetY, size / 2, size / 2);
 
     [STATestMethod]
     public void PanoramicSurfaceHasAccessibleName()
     {
-        // The surface is the keyboard-focusable element of the panoramic viewport; it must carry an accessible
-        // name (the raster viewport labels its inner MapView the same way).
+        // The surface, not the viewport, takes keyboard focus.
         var viewport = new OrientedImagePanoramicViewport();
         var surface = (DependencyObject)viewport.Content!;
         string name = System.Windows.Automation.AutomationProperties.GetName(surface);
@@ -269,9 +254,7 @@ public sealed class OrientedImageViewportTests
     [STATestMethod]
     public void AutomationPropertiesOnControlReachFocusableView()
     {
-        // Focus lands on the MapView or panoramic surface, not the control, so the name and automation id the app
-        // gives the control must reach that view, whether set before or after the view exists, and clearing the name
-        // must restore the default label.
+        // Focus lands on the inner view, not the control, so the app's name and automation id must reach the view.
         var control = new OrientedImageViewport { Template = CreateHostTemplate() };
         System.Windows.Automation.AutomationProperties.SetName(control, "Rear camera");
         System.Windows.Automation.AutomationProperties.SetAutomationId(control, "RearCamera");
@@ -299,7 +282,7 @@ public sealed class OrientedImageViewportTests
         Assert.IsNull(control.ScreenToImage(new System.Windows.Point(10, 10)));
     }
 
-    // The keyboard-focusable element of the active inner viewport: the MapView of the raster viewport here.
+    // The active inner viewport's focusable view; here, the raster viewport's MapView.
     private static DependencyObject GetFocusableView(OrientedImageViewport control)
     {
         var viewport = GetHost(control).Content as ContentControl;
@@ -314,9 +297,8 @@ public sealed class OrientedImageViewportTests
     [DataRow(3857)]
     public void VisibleAreaIsClippedToImageNotClamped(int wkid)
     {
-        // A 45deg-rotated view (diamond) that fully CONTAINS the 100x100 image: the correct visible-area footprint
-        // is the whole image (area 10000). Clamping each vertex independently would instead collapse the ring to
-        // the diamond of the edge midpoints - half the actual footprint (area 5000).
+        // The diamond view contains the whole 100 by 100 image. Clamping each vertex, rather than clipping, would give
+        // the diamond of the edge midpoints, with half the area.
         SpatialReference? reference = wkid == 0 ? null : SpatialReference.Create(wkid);
         var builder = new Esri.ArcGISRuntime.Geometry.PolygonBuilder(reference);
         builder.AddPoint(50, 150);
@@ -357,8 +339,8 @@ public sealed class OrientedImageViewportTests
     [DataRow(8, 30f, 360f)]
     public void ExifOrientationMapsStoredPixelsToDecodedPixels(int exifOrientation, float expectedX, float expectedY)
     {
-        // A non-square image and an off-center point distinguish rotations from reflections.
-        // Check the expected coordinate as well as the round-trip: two incorrect inverses could still round-trip.
+        // A non-square image and an off-center point tell rotations from reflections. Two wrong inverses could still
+        // round-trip, so the expected point is checked too.
         var orientation = new ExifOrientationTransform(exifOrientation);
         var stored = new PointF(40, 30);
         PointF image = orientation.StoredToImage(stored, 400, 200);
@@ -366,8 +348,8 @@ public sealed class OrientedImageViewportTests
         Assert.AreEqual(new PointF(expectedX, expectedY), image);
         Assert.AreEqual(stored, orientation.ImageToStored(image, 400, 200));
 
-        // The planar viewport can rotate but not reflect, so the reflection must come last. Rotating clockwise by
-        // RotationDegrees, then reflecting horizontally if mirrored, must reproduce the mapping.
+        // The planar viewport can rotate but not reflect, so a clockwise rotation by RotationDegrees followed by an
+        // optional horizontal mirror must reproduce the mapping.
         (PointF rotated, float rotatedWidth) = orientation.RotationDegrees switch
         {
             90 => (new PointF(200 - stored.Y, stored.X), 200f),
@@ -405,8 +387,7 @@ public sealed class OrientedImageViewportTests
     [DataRow(8, 200f, 400f)]
     public void ExifFootprintUsesDecodedDimensionsAndClockwiseWinding(int exifOrientation, float expectedWidth, float expectedHeight)
     {
-        // A full-image footprint must reach the decoded grid's corners, including swapped dimensions.
-        // Reflection reverses winding, so the output must restore the clockwise order required by the SDK.
+        // Reflection reverses winding, and the SDK requires clockwise rings.
         var orientation = new ExifOrientationTransform(exifOrientation);
         var builder = new PolygonBuilder((SpatialReference?)null);
         builder.AddPoint(0, 200);
@@ -452,8 +433,7 @@ public sealed class OrientedImageViewportTests
     [DataRow(8)]
     public async Task PanoramicJpegDecodeMatchesSdkOrientation(int exifOrientation)
     {
-        // Keep the stored pixels unchanged and vary only the EXIF tag, exercising the real metadata reader.
-        // RuntimeImage supplies the SDK's decoded pixel space; the panorama decoder must agree with it.
+        // Only the EXIF tag varies. RuntimeImage gives the SDK's decoded pixels, which the panorama decoder must match.
         const int StoredWidth = 60;
         const int StoredHeight = 40;
         string path = Path.Combine(Path.GetTempPath(), $"toolkit-exif-{Guid.NewGuid():N}.jpg");
@@ -483,7 +463,7 @@ public sealed class OrientedImageViewportTests
 
     private static void WriteExifJpeg(string path, int exifOrientation, int width, int height)
     {
-        // Four distinct quadrants reveal flips and rotations that a uniform or symmetric image would hide.
+        // Four distinct quadrants reveal flips and rotations.
         const int BytesPerPixel = 4;
         Color[] quadrantColors = [Color.Red, Color.Yellow, Color.Blue, Color.Cyan];
         byte[] pixels = new byte[width * height * BytesPerPixel];
@@ -517,7 +497,7 @@ public sealed class OrientedImageViewportTests
         await raw.CopyToAsync(buffer);
         byte[] expectedPixels = buffer.ToArray();
 
-        // Sample inside each quadrant, away from JPEG edges. WIC and the SDK can differ slightly in JPEG rounding.
+        // Sample inside each quadrant, away from edges, since WIC and the SDK round JPEG decoding slightly differently.
         const int BytesPerPixel = 4;
         const int ChannelTolerance = 3;
         int[] sampleRows = [actual.Height / 4, actual.Height * 3 / 4];
@@ -536,7 +516,7 @@ public sealed class OrientedImageViewportTests
         }
     }
 
-    // Mirrors the shape of the control's default template: a single named host presenter.
+    // A single named host presenter, like the default template.
     private static ControlTemplate CreateHostTemplate() => new(typeof(OrientedImageViewport))
     {
         VisualTree = new FrameworkElementFactory(typeof(ContentPresenter), "PART_DisplayHost"),

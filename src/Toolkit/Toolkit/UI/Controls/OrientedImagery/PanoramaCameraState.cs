@@ -20,14 +20,13 @@ using System.Numerics;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-// Platform-neutral inverse of the panorama render projection: screen point <-> normalized equirectangular (u,v) in
-// [0,1]. Multiply (u,v) by the image pixel dimensions to reach the pixel space the OrientedImage transforms use.
+// Maps screen points to and from normalized equirectangular (u,v) in [0,1]; scale (u,v) by the image size for pixels.
 // Every renderer's sphere mesh and camera matrices must match this convention, or taps and markers are mirrored:
 //   - Sphere: unit sphere around the camera, x = sin(phi)*cos(theta), y = cos(phi), z = sin(phi)*sin(theta);
 //     u = theta/2pi (wrap), v = phi/pi (clamp), so v = 0 is up and the horizon is v = 0.5.
 //   - Camera: right-handed at the origin looking down -Z; world = RotationY(Yaw) * RotationX(Pitch) in the
-//     System.Numerics row-vector convention. Angles are radians; FieldOfView is vertical. At Yaw = Pitch = 0 the view
-//     center is (u,v) = (0.75, 0.5); u_center = 0.75 + Yaw/2pi (mod 1) and v_center = 0.5 + Pitch/pi (positive looks down).
+//     System.Numerics row-vector convention. Angles are radians, and FieldOfView is vertical.
+//   - View center: u = 0.75 + Yaw/2pi (mod 1) and v = 0.5 + Pitch/pi; +Yaw turns right and +Pitch looks down.
 //   - Screen: element/DIP coordinates, origin top-left, +Y down.
 internal sealed record PanoramaCameraState
 {
@@ -36,23 +35,20 @@ internal sealed record PanoramaCameraState
 
     public static readonly PanoramaCameraState Initial = new(0f, 0f, MathF.PI / 2f);
 
-    // Shared camera limits and input tuning, used by every platform's camera/gesture layer.
     public const float MinPitch = -(MathF.PI / 2f) + 0.01f;
     public const float MaxPitch = (MathF.PI / 2f) - 0.01f;
     public const float MinFieldOfView = 50f * MathF.PI / 180f;
     public const float MaxFieldOfView = 120f * MathF.PI / 180f;
     public const float MouseRotationScale = 0.0035f; // fallback drag scale while the view size is unknown
-    public const float WheelZoomStep = 0.1f; // field of view change per mouse wheel notch, in radians
+    public const float WheelZoomStep = 0.1f; // radians of field of view per wheel notch
 
-    // Held-key navigation speeds, matching the SDK MapView: arrows move the view 300 DIPs per second on screen, and
-    // zooming changes the scale by a factor of 2 per second.
+    // Held-key speeds, matching MapView: a pan of 300 DIPs per second, and a zoom that scales the view by 2 per second.
     public const double KeyboardPanSpeed = 300;
     public const double KeyboardZoomRate = 2;
 
-    // Caps the time step of a single keyboard frame, so a stalled frame doesn't make the view jump.
+    // Keeps a stalled frame from making the view jump.
     public const double MaxKeyboardStepSeconds = 0.1;
 
-    // The navigation keys currently held down, as polled by each platform's input layer every frame.
     [Flags]
     public enum NavigationKeys
     {
@@ -65,12 +61,11 @@ internal sealed record PanoramaCameraState
         ZoomOut = 32,
     }
 
-    // Rad-per-DIP drag scale so the grabbed point tracks the pointer at screen center regardless of control size,
-    // zoom and DPI. The same factor serves yaw (the aspect's width cancels).
+    // Radians per DIP that keep the grabbed point under the pointer at screen center, for pitch and yaw alike.
     public static float DragRotationScale(float fieldOfView, double viewHeight)
     {
         if (viewHeight <= 0)
-            return MouseRotationScale; // defensive: dragging is not really reachable before size is known
+            return MouseRotationScale;
 
         return (float)(2.0 * Math.Tan(fieldOfView / 2.0) / viewHeight);
     }
@@ -97,21 +92,18 @@ internal sealed record PanoramaCameraState
     public PanoramaCameraState Zoom(float scale) =>
         this with { FieldOfView = Math.Clamp(FieldOfView / scale, MinFieldOfView, MaxFieldOfView) };
 
-    // One wheel notch zooms in by WheelZoomStep; a precision touchpad or a high-resolution wheel sends fractions.
+    // Precision touchpads and high-resolution wheels send fractional notches.
     public PanoramaCameraState ZoomWheel(float notches) =>
         this with { FieldOfView = Math.Clamp(FieldOfView - (notches * WheelZoomStep), MinFieldOfView, MaxFieldOfView) };
 
-    // The camera that centers image column u and row v, keeping the field of view: the inverse of the center relation
-    // in the convention above. Without v the pitch is kept; with it, the pitch clamps to the interaction limits.
+    // Inverts the view-center relation above. Without v the pitch is kept; with it, the pitch clamps to the limits.
     public PanoramaCameraState LookAt(float u, float? v = null)
     {
         float pitch = v is float row ? Math.Clamp((row - 0.5f) * MathF.PI, MinPitch, MaxPitch) : Pitch;
         return this with { Yaw = (u - 0.75f) * 2f * MathF.PI, Pitch = pitch };
     }
 
-    // One frame of held-key navigation. Unlike a drag, which moves the image, an arrow moves the view toward its side,
-    // as in MapView: Left looks left and Up looks up. Held keys combine, so Up+Left moves diagonally. viewHeight uses
-    // the same units as DragRotationScale.
+    // Unlike a drag, which moves the image, an arrow turns the view toward its side, as in MapView: Left looks left.
     public PanoramaCameraState Navigate(NavigationKeys keys, double seconds, double viewHeight)
     {
         float angle = (float)(KeyboardPanSpeed * seconds) * DragRotationScale(FieldOfView, viewHeight);
@@ -119,11 +111,10 @@ internal sealed record PanoramaCameraState
         int down = Axis(NavigationKeys.Down, NavigationKeys.Up);
         int zoomIn = Axis(NavigationKeys.ZoomIn, NavigationKeys.ZoomOut);
 
-        // Yaw turns the view right and Pitch turns it down (see the convention above).
         float yaw = Yaw + (right * angle);
         float pitch = Math.Clamp(Pitch + (down * angle), MinPitch, MaxPitch);
 
-        // The view's scale is 1 / tan(FieldOfView / 2), so zooming in for a second doubles it, as it does in MapView.
+        // The view's scale is 1 / tan(FieldOfView / 2), so a second of zooming in doubles it, as in MapView.
         float fieldOfView = FieldOfView;
         if (zoomIn != 0)
         {
@@ -133,12 +124,10 @@ internal sealed record PanoramaCameraState
 
         return new PanoramaCameraState(yaw, pitch, fieldOfView);
 
-        // +1, -1, or 0 when both or neither of an opposing key pair are held.
         int Axis(NavigationKeys positive, NavigationKeys negative) =>
             (keys.HasFlag(positive) ? 1 : 0) - (keys.HasFlag(negative) ? 1 : 0);
     }
 
-    // Screen point -> normalized (u,v): the inverse of the render's world*projection.
     public bool TryScreenToNormalizedUv(double screenX, double screenY, double viewWidth, double viewHeight, out float u, out float v)
     {
         u = 0f;
@@ -146,7 +135,7 @@ internal sealed record PanoramaCameraState
         if (viewWidth <= 0 || viewHeight <= 0)
             return false;
 
-        // Reject non-finite inputs: NaN passes every comparison below (finite inputs keep the math finite).
+        // NaN passes every comparison below, so non-finite input is rejected here.
         if (!double.IsFinite(screenX) || !double.IsFinite(screenY))
             return false;
 
@@ -169,7 +158,7 @@ internal sealed record PanoramaCameraState
         return true;
     }
 
-    // Normalized (u,v) -> screen point; false when the point is behind the camera.
+    // False when the point is behind the camera.
     public bool TryNormalizedUvToScreen(float u, float v, double viewWidth, double viewHeight, out double screenX, out double screenY)
     {
         screenX = 0;
@@ -177,7 +166,6 @@ internal sealed record PanoramaCameraState
         if (viewWidth <= 0 || viewHeight <= 0)
             return false;
 
-        // Reject non-finite inputs: NaN passes every comparison below, including the behind-camera test.
         if (!float.IsFinite(u) || !float.IsFinite(v))
             return false;
 
@@ -193,8 +181,7 @@ internal sealed record PanoramaCameraState
         return true;
     }
 
-    // A marker's swatch as a screen-aligned quad in clip space, where x points right and y up. The view size is in
-    // pixels, like the swatch. False when the marker is behind the camera.
+    // The swatch's screen-aligned quad in clip space, x right and y up. The view size is in pixels, like the swatch.
     public bool TryGetMarkerQuad(PanoramaMarker marker, double viewWidth, double viewHeight, out MarkerQuad quad)
     {
         quad = default;
@@ -209,15 +196,14 @@ internal sealed record PanoramaCameraState
         return true;
     }
 
-    // The clip-space edges of a marker quad.
     public readonly record struct MarkerQuad(float Left, float Top, float Right, float Bottom);
 
-    // Arguments for OrientedImageFootprint.UpdateFootprintAsync(yaw, pitch, hFov, vFov), all degrees: yaw clockwise
-    // from the image's center column in [0, 360), pitch from the nadir (0) through the horizon (90) to the zenith (180).
+    // UpdateFootprintAsync arguments, in degrees: yaw runs clockwise from the image's center column in [0, 360),
+    // and pitch is 0 at the nadir, 90 at the horizon, and 180 at the zenith.
     public readonly record struct FootprintView(double Yaw, double Pitch, double HorizontalFieldOfView, double VerticalFieldOfView);
 
-    // Image column u = 0.5 + yaw/360 and row v = 1 - pitch/180, so yaw = 90 + Yaw and pitch = 90 - Pitch (degrees); the
-    // horizontal field of view is the frustum's, widened from the vertical by the aspect ratio.
+    // The footprint API puts yaw at column u = 0.5 + yaw/360 and pitch at row v = 1 - pitch/180.
+    // In degrees, that makes yaw = 90 + Yaw and pitch = 90 - Pitch.
     public bool TryGetFootprintView(double viewWidth, double viewHeight, out FootprintView view)
     {
         view = default;
@@ -238,7 +224,7 @@ internal sealed record PanoramaCameraState
         return true;
     }
 
-    // The renderers upload this matrix, so the drawn sphere and the click/marker math above cannot drift apart.
+    // Renderers upload this matrix, so drawing and hit-testing cannot drift apart.
     internal Matrix4x4 GetWorldViewProjection(float aspectRatio)
     {
         Matrix4x4 world = Matrix4x4.CreateRotationY(Yaw) * Matrix4x4.CreateRotationX(Pitch);
@@ -246,8 +232,7 @@ internal sealed record PanoramaCameraState
         return world * projection;
     }
 
-    // The unit sphere every renderer draws, in the convention above: xyz positions, uv texture coordinates and a
-    // 16-bit triangle list (signed for the GL buffers; the values fit either way).
+    // Indices are signed for the GL buffers; the values fit either way.
     internal static (float[] Vertices, short[] Indices) CreateSphereMesh()
     {
         const int longitudeSegments = 64;
@@ -292,12 +277,10 @@ internal sealed record PanoramaCameraState
     }
 }
 
-// A marker as a panoramic surface draws it: a premultiplied BGRA8 swatch, the normalized (u,v) of its anchor, and the
-// offset from the anchor to the swatch center, in pixels with y down. Bgra belongs to the panoramic viewport's swatch
-// cache, so surfaces must not change it.
+// Bgra is a premultiplied BGRA8 swatch owned by the viewport's swatch cache, so surfaces must not change it. The offset
+// runs from the anchor to the swatch center, in pixels with y down.
 internal readonly record struct PanoramaMarker(float U, float V, byte[] Bgra, int Width, int Height, float OffsetX, float OffsetY)
 {
-    // An empty swatch, or one with fewer pixels than its size, can't be uploaded.
     public bool IsValid => Width > 0 && Height > 0 && Bgra.Length >= Width * Height * 4;
 }
 #endif

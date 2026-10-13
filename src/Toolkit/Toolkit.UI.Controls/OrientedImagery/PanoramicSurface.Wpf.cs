@@ -29,15 +29,13 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-// WPF present layer for the shared D3D11 core. Hardware path: render into a shared D3D11 texture, open it on a
-// D3D9Ex device and present through a D3DImage. Software path (Remote Desktop, no GPU, WARP): read the render
-// target back through a staging texture into a WriteableBitmap. Direct3D 9 has no CsWin32 metadata, so the
-// nested D3D9 helper calls its few methods through vtable slots.
+// WPF present layer. The hardware path opens the shared D3D11 render target on a D3D9Ex device for a D3DImage. The
+// software path (WARP, Remote Desktop, or no GPU) copies it through a staging texture into a WriteableBitmap.
 internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.Image
 {
-    // D3D9Ex create flags: HARDWARE_VERTEXPROCESSING | MULTITHREADED | FPU_PRESERVE.
+    // HARDWARE_VERTEXPROCESSING | MULTITHREADED | FPU_PRESERVE
     private const uint D3D9CreateFlags = 0x40 | 0x4 | 0x2;
-    private const uint D3D9SdkVersion = 32; // D3D_SDK_VERSION
+    private const uint D3D9SdkVersion = 32;
     private const uint D3DDevTypeHal = 1;
     private const uint D3DSwapEffectDiscard = 1;
     private const uint D3DFmtUnknown = 0;
@@ -62,7 +60,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     private bool _renderHooked;
     private Point _lastMousePosition;
     private Point _mouseDownPosition;
-    private bool _wasDragging; // the previous move sample had the left button pressed (so a delta is meaningful)
+    private bool _wasDragging;
     private uint _surfaceWidth;
     private uint _surfaceHeight;
 
@@ -70,7 +68,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     {
         Focusable = true;
         Stretch = Stretch.Fill;
-        UseLayoutRounding = true; // Avoids blur at fractional DPI by snapping the element to whole device pixels.
+        UseLayoutRounding = true; // avoids blur at fractional DPI
 
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
@@ -79,7 +77,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
     protected override System.Windows.Size MeasureOverride(System.Windows.Size constraint)
     {
-        // An Image with no Source measures to (0,0). Report the available size so the parent allots real space.
+        // An Image with no Source measures to 0x0.
         double width = double.IsInfinity(constraint.Width) ? 0d : constraint.Width;
         double height = double.IsInfinity(constraint.Height) ? 0d : constraint.Height;
         return new System.Windows.Size(width, height);
@@ -87,8 +85,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
     protected override System.Windows.Size ArrangeOverride(System.Windows.Size arrangeSize)
     {
-        // Image.ArrangeOverride sizes RenderSize from the Source, so with none the element collapses to 0x0 and the
-        // device is never created. Fill the slot; once Source is set, Stretch.Fill draws it over the same area.
+        // Image arranges to its Source size, so without one the element stays 0x0 and the device is never created.
         return arrangeSize;
     }
 
@@ -119,7 +116,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         ViewChanged?.Invoke();
     }
 
-    // The panoramic viewport rasterizes markers at this scale.
     internal double PixelsPerDip => VisualTreeHelper.GetDpi(this).DpiScaleX;
 
     // A move to a monitor with another DPI keeps the size in DIPs, so no SizeChanged follows.
@@ -139,7 +135,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         if (ActualWidth <= 0 || ActualHeight <= 0)
             return;
 
-        Initialize(); // core: create the D3D11 device and device resources
+        Initialize();
 
         _useSoftware = IsUsingWarp || ShouldUseSoftware();
 
@@ -161,8 +157,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         }
         catch
         {
-            // The hardware bridge can fail at runtime (e.g. adapter mismatch, RDP).
-            // Fall back to the software path rather than leaving the surface blank.
+            // The D3D9Ex bridge can fail at runtime, for example on an adapter mismatch or under RDP.
             ReleaseSurfaces();
             ReleaseDevice9();
             _useSoftware = true;
@@ -243,7 +238,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
         ReleaseSurfaces();
 
-        // D3D11 shared render target the core draws into (CsWin32).
         D3D11_TEXTURE2D_DESC desc = CreateBgraTextureDescription(width, height,
             D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET | D3D11_BIND_FLAG.D3D11_BIND_SHADER_RESOURCE,
             miscFlags: D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_SHARED);
@@ -258,7 +252,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
         HANDLE sharedHandle = GetSharedHandle(sharedTexture);
 
-        // Open the same surface on the D3D9Ex device and point the D3DImage at it.
+        // Given a shared handle, D3D9Ex CreateTexture opens the D3D11 texture rather than allocating one.
         ThrowIfFailed(D3D9.CreateTexture(_device9, width, height, D3DUsageRenderTarget, D3DFmtA8R8G8B8, D3DPoolDefault, out _texture9, sharedHandle), "CreateTexture(shared)");
         ThrowIfFailed(D3D9.GetSurfaceLevel(_texture9, 0, out _surface9), "GetSurfaceLevel");
 
@@ -316,7 +310,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
             ? _writeableBitmap is not null && _renderTargetView is not null
             : _d3dImage is not null && _sharedView is not null && _d3dImage.IsFrontBufferAvailable);
 
-    // The surfaces are created by the first sized EnsureResources; the tick waits for them.
+    // EnsureResources creates the surfaces once the element has a size, and IsReadyToRender holds the tick until then.
     private partial bool PresentResourcesReady() => true;
 
     private partial void RenderFrame()
@@ -336,7 +330,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     private void RenderHardware()
     {
         RenderScene(_sharedView, _surfaceWidth, _surfaceHeight);
-        Context->Flush(); // ensure D3D11 writes complete before WPF copies the D3D9 surface
+        Context->Flush(); // submit the D3D11 work before WPF reads the shared surface through D3D9
 
         _d3dImage!.Lock();
         _d3dImage.AddDirtyRect(new Int32Rect(0, 0, _d3dImage.PixelWidth, _d3dImage.PixelHeight));
@@ -373,8 +367,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
     private void OnFrontBufferAvailableChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        // The front buffer came back (RDP reconnect, display change): rebuild on the next tick, which also recreates
-        // the D3D11 device if it was removed, not just the D3D9 surfaces.
+        // The front buffer returns after an RDP reconnect or display change; rebuild the D3D11 device too.
         if (_d3dImage?.IsFrontBufferAvailable == true)
             NotifyDeviceLost();
     }
@@ -431,8 +424,8 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     {
         base.OnMouseMove(e);
 
-        // The drag is driven by move events and button state only: under RDP the press can be missed or promoted.
-        // A delta applies only between two consecutive pressed moves, so there is no first-frame jump.
+        // Drags use move events and button state only, since RDP can miss or promote the press. A delta needs two
+        // consecutive pressed moves, so the first frame does not jump.
         Point position = e.GetPosition(this);
         bool pressed = e.LeftButton == MouseButtonState.Pressed;
         if (pressed && _wasDragging)
@@ -449,19 +442,17 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     {
         base.OnMouseUp(e);
         if (e.ChangedButton != MouseButton.Left)
-            return; // only the left button starts a drag or a tap
+            return;
 
         ReleaseMouseCapture();
-        _wasDragging = false; // reset in case the next gesture's button-down is missed or promoted (RDP)
+        _wasDragging = false;
 
-        // A press-release with negligible movement is a tap (not a drag).
         Point position = e.GetPosition(this);
         if (Math.Abs(position.X - _mouseDownPosition.X) < 3 && Math.Abs(position.Y - _mouseDownPosition.Y) < 3)
             SurfaceTapped?.Invoke(position.X, position.Y);
     }
 
-    // Handled, as in the SDK MapView, so a ScrollViewer around the panorama doesn't scroll as well. The delta is in
-    // notches of 120, and a precision touchpad sends fractions of a notch.
+    // Handled so an enclosing ScrollViewer does not scroll too. Precision touchpads send fractions of a 120 notch.
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
         base.OnMouseWheel(e);
@@ -502,11 +493,8 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         public uint PresentationInterval;
     }
 
-    // Direct3D9Ex interop based on COM vtable slots (d3d9.h):
-    // - IUnknown::Release=2
-    // - IDirect3D9Ex::CreateDeviceEx=20
-    // - IDirect3DDevice9::CreateTexture=23
-    // - IDirect3DTexture9::GetSurfaceLevel=18
+    // Direct3D 9 has no CsWin32 metadata, so these call d3d9.h vtable slots: IUnknown::Release 2,
+    // IDirect3D9Ex::CreateDeviceEx 20, IDirect3DDevice9::CreateTexture 23, and IDirect3DTexture9::GetSurfaceLevel 18.
     private static unsafe partial class D3D9
     {
         [LibraryImport("d3d9.dll")]
@@ -552,16 +540,15 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     }
 }
 
-// The WPF decoder. Like the other platforms' decoders, it is a member of this record struct.
 internal readonly partial record struct PanoramaFrame
 {
-    // Decodes an image file to BGRA8, applying a JPEG's EXIF orientation as the SDK does.
+    // Applies a JPEG's EXIF orientation, as the SDK does.
     internal static Task<PanoramaFrame> DecodeAsync(string path, CancellationToken token)
     {
         return Task.Run(
             () =>
             {
-                // Open the file shared: the SDK owns it. OnLoad reads the image fully.
+                // The SDK owns the file, so open it shared. OnLoad decodes fully before the stream closes.
                 using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
                 BitmapFrame frame = decoder.Frames[0];
@@ -572,8 +559,8 @@ internal readonly partial record struct PanoramaFrame
                 BitmapSource source = frame;
                 if (orientation.IsMirrored || orientation.RotationDegrees != 0)
                 {
-                    // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees). Matrix.Rotate and Scale
-                    // append, so the rotation applies first.
+                    // Rotate, then reflect, as ExifOrientationTransform.RotationDegrees defines. Matrix.Rotate
+                    // and Scale append, so the rotation applies first.
                     var transform = System.Windows.Media.Matrix.Identity;
                     transform.Rotate(orientation.RotationDegrees);
                     if (orientation.IsMirrored)

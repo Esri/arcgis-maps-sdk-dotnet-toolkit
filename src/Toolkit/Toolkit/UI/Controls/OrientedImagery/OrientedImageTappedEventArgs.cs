@@ -45,19 +45,16 @@ public class OrientedImageTappedEventArgs : EventArgs
     /// <summary>
     /// Gets the tapped position in image (pixel) coordinates.
     /// </summary>
-    /// <remarks>Use <see cref="OrientedImage.ImageToLocationAsync"/> on <see cref="Image"/> to get the world location.</remarks>
-    /// <value>The tapped image coordinate.</value>
+    /// <remarks><see cref="OrientedImage.ImageToLocationAsync"/> converts it to a world location.</remarks>
     public PointF ImagePoint { get; }
 
     /// <summary>
     /// Gets the oriented image that was tapped.
     /// </summary>
-    /// <value>The tapped oriented image.</value>
     public OrientedImage Image { get; }
 
     /// <summary>
     /// Gets the marker the tap hit, or <c>null</c> if the tap did not hit a marker.
     /// </summary>
-    /// <value>The tapped marker, or <c>null</c>.</value>
     public OrientedImageMarker? Marker { get; }
 }
