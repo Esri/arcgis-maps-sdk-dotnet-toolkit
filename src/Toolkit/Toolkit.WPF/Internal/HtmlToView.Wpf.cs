@@ -24,7 +24,8 @@ internal static class HtmlToView
 {
     internal static FlowDocument ToFlowDocument(string html, RequestNavigateEventHandler? urlClickHandler)
     {
-        var doc = new FlowDocument { FontSize = 14d }; // match the default "content" font size on AGOL
+        var doc = new FlowDocument();
+        TextScaledFontSizeExtension.SetFontSize(doc, FlowDocument.FontSizeProperty, 14d);
         try
         {
             var htmlRoot = HtmlUtility.BuildDocumentTree(html);
@@ -263,7 +264,7 @@ internal static class HtmlToView
         if (node.BackColor.HasValue)
             el.Background = new SolidColorBrush(ConvertColor(node.BackColor.Value));
         if (node.FontSize.HasValue)
-            el.FontSize = 16d * node.FontSize.Value; // based on AGOL's default font size
+            TextScaledFontSizeExtension.SetFontSize(el, TextElement.FontSizeProperty, 16d * node.FontSize.Value); // based on AGOL's default font size
         if (node.Alignment.HasValue)
         {
             // Unfortunately the TextAlignment property is separately defined for these FlowDocument elements

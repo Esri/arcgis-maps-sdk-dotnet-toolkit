@@ -55,13 +55,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 // Fallback to TextBlock if user specifically provided a custom style for it.
                 // Previous versions of this control used TextBlock, so this allows users to keep their existing styling.
-                return new FieldsTableCellTextBlock
+                var txb = new FieldsTableCellTextBlock
                 {
                     Style = FieldTextStyle,
                     Text = text ?? "",
                     TextWrapping = wrap ? TextWrapping.Wrap : TextWrapping.NoWrap,
                     Focusable = true,
                 };
+                TextScaledFontSizeExtension.SetFontSize(txb, FieldsTableCellTextBlock.FontSizeProperty, txb.FontSize);
+                return txb;
             }
 
             // Default: Use a TextBox styled to look like a TextBlock, which allows text selection and copying.
@@ -72,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                 IsReadOnly = true,
                 IsReadOnlyCaretVisible = false,
-                
+
                 // Set to false to have tab work between interactive controls.
                 IsTabStop = false,
 
@@ -86,6 +88,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             if (canApplyBoxStyle)
                 tb.Style = FieldTextStyle;
+
+            TextScaledFontSizeExtension.SetFontSize(tb, FieldsTableCellTextBox.FontSizeProperty, tb.FontSize);
 
             if (wrap)
             {
@@ -111,6 +115,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             hl.Click += Hyperlink_Click;
             hl.Inlines.Add(Properties.Resources.GetString("PopupViewerViewHyperlinkText"));
             t.Inlines.Add(hl);
+            TextScaledFontSizeExtension.SetFontSize(t, FieldsTableCellTextBlock.FontSizeProperty, t.FontSize);
             return t;
         }
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
