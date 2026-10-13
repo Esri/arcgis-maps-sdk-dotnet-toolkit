@@ -17,7 +17,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// </summary>
 public partial class OrientedImageryView
 {
-    private const string ImageDisplayName = "PART_ImageDisplay";
+    private const string ImageViewportName = "PART_ImageViewport";
     private const string ToolbarContainerName = "PART_ToolbarContainer";
     private const string PaginatorName = "PART_Paginator";
 
@@ -52,19 +52,19 @@ public partial class OrientedImageryView
     {
         base.OnApplyTemplate();
 
-        if (_display != null)
-            UnwireDisplay(_display);
+        if (_viewport != null)
+            UnwireViewport(_viewport);
         if (_toolbarContainer != null)
             UnwireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
             _paginator.SelectedPageIndexChanged -= Paginator_SelectedPageIndexChanged;
 
-        _display = GetTemplateChild(ImageDisplayName) as OrientedImageDisplay;
+        _viewport = GetTemplateChild(ImageViewportName) as OrientedImageViewport;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
         _paginator = GetTemplateChild(PaginatorName) as Paginator;
 
-        if (_display != null)
-            WireDisplay(_display);
+        if (_viewport != null)
+            WireViewport(_viewport);
         if (_toolbarContainer != null)
             WireToolbarContainer(_toolbarContainer);
         if (_paginator != null)
@@ -121,11 +121,11 @@ public partial class OrientedImageryView
 
     private void RewireViewModel()
     {
-        if (_display != null)
+        if (_viewport != null)
         {
-            _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
-            _display.Markers = ViewModel.DisplayMarkers;
-            _display.Footprint = ViewModel.SelectedImageFootprint;
+            _viewport.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
+            _viewport.Markers = ViewModel.DisplayMarkers;
+            _viewport.Footprint = ViewModel.SelectedImageFootprint;
         }
         if (_toolbarContainer != null)
             _toolbarContainer.ItemsSource = ViewModel.ToolbarItems;
@@ -137,16 +137,16 @@ public partial class OrientedImageryView
         switch (e.PropertyName)
         {
             case nameof(OrientedImageryViewModel.SelectedImageFootprint):
-                if (_display != null)
-                    _display.Footprint = ViewModel.SelectedImageFootprint;
+                if (_viewport != null)
+                    _viewport.Footprint = ViewModel.SelectedImageFootprint;
                 break;
             case nameof(OrientedImageryViewModel.SelectedImage):
             case nameof(OrientedImageryViewModel.Images):
                 UpdatePaginatorSelection();
                 break;
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
-                if (_display != null)
-                    _display.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
+                if (_viewport != null)
+                    _viewport.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
                 break;
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
                 SelectedLayer = ViewModel.OrientedImageryLayer;
@@ -156,7 +156,7 @@ public partial class OrientedImageryView
 #endregion ViewModel
 
 #region Display
-    private OrientedImageDisplay? _display;
+    private OrientedImageViewport? _viewport;
     private Action<object?, OrientedImageTappedEventArgs>? _onImageTappedOverride;
     private Action<object?, OrientedImageTappedEventArgs> _onImageTapped;
 
@@ -194,27 +194,27 @@ public partial class OrientedImageryView
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
         PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
 
-    private void WireDisplay(OrientedImageDisplay display)
+    private void WireViewport(OrientedImageViewport viewport)
     {
-        display.ImageTapped += Display_ImageTapped;
+        viewport.ImageTapped += Viewport_ImageTapped;
     }
 
-    private void UnwireDisplay(OrientedImageDisplay display)
+    private void UnwireViewport(OrientedImageViewport viewport)
     {
-        display.ImageTapped -= Display_ImageTapped;
-        display.ClearValue(OrientedImageDisplay.AutoUpdateFootprintProperty);
-        display.ClearValue(OrientedImageDisplay.MarkersProperty);
-        display.ClearValue(OrientedImageDisplay.FootprintProperty);
-        display.ClearValue(OrientedImageDisplay.DisplayBackgroundColorProperty);
+        viewport.ImageTapped -= Viewport_ImageTapped;
+        viewport.ClearValue(OrientedImageViewport.AutoUpdateFootprintProperty);
+        viewport.ClearValue(OrientedImageViewport.MarkersProperty);
+        viewport.ClearValue(OrientedImageViewport.FootprintProperty);
+        viewport.ClearValue(OrientedImageViewport.DisplayBackgroundColorProperty);
     }
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
-        if (_display != null)
-            _display.DisplayBackgroundColor = displayBackgroundColor;
+        if (_viewport != null)
+            _viewport.DisplayBackgroundColor = displayBackgroundColor;
     }
 
-    private void Display_ImageTapped(object? sender, OrientedImageTappedEventArgs e) => _onImageTapped(this, ViewModel.GetPublicImageTappedEventArgs(e));
+    private void Viewport_ImageTapped(object? sender, OrientedImageTappedEventArgs e) => _onImageTapped(this, ViewModel.GetPublicImageTappedEventArgs(e));
 
     private async void OnImageTapped_Default(object? _, OrientedImageTappedEventArgs e)
     {
