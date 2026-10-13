@@ -117,8 +117,7 @@
                             <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw" />
                             <ProgressRing Visibility="Collapsed" x:Name="DownloadSpinner" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
-                        <!-- OneTime: PopupAttachment raises PropertyChanged from a background thread while loading, which crashes WinUI bindings that listen to it. -->
-                        <TextBlock Text="{Binding Name, Mode=OneTime}" Margin="5" AutomationProperties.AccessibilityView="Raw" />
+                        <TextBlock Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Margin="5" AutomationProperties.AccessibilityView="Raw" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -137,7 +136,7 @@
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single" AutomationProperties.Name="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" AutomationProperties.Name="{Binding Name}"/>
+                                    <primitives:AttachmentThumbnailImage Attachment="{Binding}" AutomationProperties.Name="{Binding Text, RelativeSource={RelativeSource Self}}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
