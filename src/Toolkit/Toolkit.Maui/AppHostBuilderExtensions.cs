@@ -18,6 +18,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #if WINDOWS || __IOS__
             builder.ConfigureMauiHandlers(handler => handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>());
 #endif
+#if WINDOWS
+            builder.ConfigureMauiHandlers(handler => handler.AddHandler<HyperlinkLabel, HyperlinkLabelHandler>());
+#endif
             builder.ConfigureFonts(fonts => fonts
                 .AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "toolkit-icons.ttf", ToolkitIcons.FontFamilyName)
                 );

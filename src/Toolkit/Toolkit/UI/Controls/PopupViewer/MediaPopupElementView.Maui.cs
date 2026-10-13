@@ -63,6 +63,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             IndicatorView iv = new IndicatorView() { HorizontalOptions = LayoutOptions.Center };
+#if WINDOWS
+            Internal.PopupMediaIndicator.Configure(iv);
+#endif
             cv.IndicatorView = iv;
             root.Add(cv);
             root.Add(iv);
