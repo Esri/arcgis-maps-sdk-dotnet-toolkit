@@ -529,14 +529,6 @@
     <value>Next media</value>
     <comment>Accessible name and tooltip for the button that shows the next item in a MediaPopupElement with multiple media</comment>
   </data>
-  <data name="PopupViewerMediaPage" xml:space="preserve">
-    <value>Page {0} of {1}</value>
-    <comment>Accessible name for a popup media indicator button. {0} is the page number and {1} is the page count.</comment>
-  </data>
-  <data name="PopupViewerSelectedMediaPage" xml:space="preserve">
-    <value>Page {0} of {1}, selected</value>
-    <comment>Accessible name for the selected popup media indicator button. {0} is the page number and {1} is the page count.</comment>
-  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Associations</value>
     <comment>The default title used when UtilityAssociationsPopupElement's title is empty</comment>
