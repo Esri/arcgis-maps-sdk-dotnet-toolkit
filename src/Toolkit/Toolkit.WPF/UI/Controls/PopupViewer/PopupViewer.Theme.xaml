@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    xmlns:converter="using:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
 
     <internal:VisibilityConverter x:Key="PopupViewerVisibilityConverter"/>
@@ -12,16 +11,16 @@
     <internal:HtmlToPlainTextConverter x:Key="PopupViewerHtmlToPlainTextConverter"/>
     <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
     <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=16}" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="TextBlock" x:Key="PopupViewerTitleStyle">
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=16}" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
-        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=12}" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="Foreground" Value="Gray" />
     </Style>
@@ -55,7 +54,7 @@
                         <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                                         AutomationHeadingLevel="Level2" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
-                                                        AutomationHeadingLevel="Level3" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}"/>
+                                                        AutomationHeadingLevel="Level3" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         <ContentPresenter x:Name="TableAreaContent" />
                     </StackPanel>
                 </ControlTemplate>
@@ -113,7 +112,7 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Grid Width="{TemplateBinding ThumbnailSize}" Height="{TemplateBinding ThumbnailSize}">
-                            <primitives:AccessibleTextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Text="&#xE896;" RenderTransformOrigin=".5,.5"
+                            <primitives:AccessibleTextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="{internal:TextScaledFontSize FontSize=18}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Text="&#xE896;" RenderTransformOrigin=".5,.5"
                                                             IsAccessible="False">
                                 <primitives:AccessibleTextBlock.RenderTransform>
                                     <RotateTransform />
@@ -182,13 +181,14 @@
                 <ControlTemplate TargetType="{x:Type primitives:MediaPopupElementView}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="25" />
+                            <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="25" />
+                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         
                         <StackPanel Grid.ColumnSpan="3">
@@ -198,22 +198,24 @@
                                                                 AutomationHeadingLevel="Level3" IsAccessible="{Binding Description,Converter={StaticResource EmptyStringToBooleanConverter}}"/>
                             </StackPanel>
 
-                        <StackPanel Grid.Row="1" Margin="0,0,0,20" DataContext="{TemplateBinding CurrentItem}" Grid.Column="1">
+                        <StackPanel DataContext="{TemplateBinding CurrentItem}" Grid.Column="1" Grid.Row="1">
                             <primitives:PopupMediaView x:Name="CurrentMediaView" PopupMedia="{Binding}" Margin="0,5" IsTabStop="False"/>
+                        </StackPanel>
+                        <StackPanel DataContext="{TemplateBinding CurrentItem}" Grid.Column="1" Grid.Row="2" Margin="0,0,0,20">
                             <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                             <primitives:AccessibleTextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" IsAccessible="{Binding Caption,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="1" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}">
+                        <Button Grid.Column="0" Grid.Row="1" Background="Transparent" MinHeight="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}" Padding="0">
                             <Button.Content>
-                                <primitives:AccessibleTextBlock Text="" FontFamily="Segoe MDL2 Assets" IsAccessible="False" />
+                                <primitives:AccessibleTextBlock Text="" FontFamily="Segoe MDL2 Assets" IsAccessible="False" FontSize="{internal:TextScaledFontSize FontSize=12}" />
                             </Button.Content>
                             <Button.ToolTip>
                                 <ToolTip Content="{TemplateBinding PreviousMediaButtonText}" FontFamily="{x:Static SystemFonts.MessageFontFamily}" />
                             </Button.ToolTip>
                         </Button>
-                        <Button Grid.Column="2" Grid.Row="1" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}">
+                        <Button Grid.Column="2" Grid.Row="1" Background="Transparent" MinHeight="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}" Padding="0">
                             <Button.Content>
-                                <primitives:AccessibleTextBlock Text="" FontFamily="Segoe MDL2 Assets" IsAccessible="False" />
+                                <primitives:AccessibleTextBlock Text="" FontFamily="Segoe MDL2 Assets" IsAccessible="False" FontSize="{internal:TextScaledFontSize FontSize=12}" />
                             </Button.Content>
                             <Button.ToolTip>
                                 <ToolTip Content="{TemplateBinding NextMediaButtonText}" FontFamily="{x:Static SystemFonts.MessageFontFamily}" />
@@ -334,7 +336,7 @@
                         <Button x:Name="ExpandIcon" Background="{TemplateBinding Background}" BorderThickness="0"
                                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
                                 Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}">
-                            <TextBlock Text="&#xE79B;" FontSize="16" FontFamily="{StaticResource ToolkitIconsFontFamily}" VerticalAlignment="Center" Margin="5"/>
+                            <TextBlock Text="&#xE79B;" FontSize="{internal:TextScaledFontSize FontSize=16}" FontFamily="{StaticResource ToolkitIconsFontFamily}" VerticalAlignment="Center" Margin="5"/>
                         </Button>
                         <TextBlock x:Name="Title" Text="{Binding Name}" Style="{StaticResource PopupViewerTitleStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1"
                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSearchable, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
@@ -384,12 +386,12 @@
                                     <RowDefinition Height=".25*" />
                                     <RowDefinition Height=".25*" />
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsShowAll}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" FontSize="12"/>
+                                <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsShowAll}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" FontSize="{internal:TextScaledFontSize FontSize=12}"/>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
                                     <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsTotal}" Style="{StaticResource PopupViewerCaptionStyle}" VerticalAlignment="Top" Margin="0,0,2,0" />
                                     <TextBlock Text="{Binding AssociationResults.Count}" VerticalAlignment="Top" Style="{StaticResource PopupViewerCaptionStyle}" />
                                 </StackPanel>
-                                <TextBlock Text="&#xE8FD;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Stretch" FontSize="18" Grid.Column="1" Grid.RowSpan="2" Margin="2"/>
+                                <TextBlock Text="&#xE8FD;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Stretch" FontSize="{internal:TextScaledFontSize FontSize=18}" Grid.Column="1" Grid.RowSpan="2" Margin="2"/>
                                 <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.ColumnSpan="3" Grid.Row="2"/>
                             </Grid>
                         </Button>
@@ -416,7 +418,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock x:Name="Icon" Width="20" FontSize="16" VerticalAlignment="Center" Margin="5" FontFamily="{StaticResource ToolkitIconsFontFamily}" Grid.RowSpan="2" />
+                        <TextBlock x:Name="Icon" Width="20" FontSize="{internal:TextScaledFontSize FontSize=16}" VerticalAlignment="Center" Margin="5" FontFamily="{StaticResource ToolkitIconsFontFamily}" Grid.RowSpan="2" />
                         <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="{Binding AssociationResult.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource PopupViewerTitleStyle}"
                                    VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" />
                         <TextBlock x:Name="FractionAlong" Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=FractionAlong, Path=Text}" />
@@ -443,17 +445,22 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
                             <Button x:Name="NavigateBack" Background="Transparent" BorderThickness="0,0,1,0" VerticalAlignment="Center"
                                     Height="40" Width="40" Visibility="Visible" Margin="0,0,10,0">
                                 <TextBlock Text="&#xE76B;" FontFamily="Segoe MDL2 Assets" />
                             </Button>
-                            <Button x:Name="NavigateUp" Background="Transparent" Width="40" Height="40" BorderThickness="0" VerticalAlignment="Center" >
+                            <Button x:Name="NavigateUp" Grid.Column="1" Background="Transparent" Width="40" Height="40" BorderThickness="0" VerticalAlignment="Center" >
                                 <TextBlock Text="&#xE74A;" FontFamily="Segoe MDL2 Assets" />
                             </Button>
-                            <ContentControl ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Margin="{TemplateBinding Padding}"
+                            <ContentControl Grid.Column="2" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Margin="{TemplateBinding Padding}"
                                             VerticalAlignment="Stretch" VerticalContentAlignment="Center" x:Name="Header" IsTabStop="False" />
-                        </StackPanel>
+                        </Grid>
                         <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1">
                             <ContentControl x:Name="Content" IsTabStop="False"
                                 BorderBrush="{TemplateBinding BorderBrush}"
