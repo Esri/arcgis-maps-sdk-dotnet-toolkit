@@ -101,9 +101,10 @@ public class PopupViewerTests : AppiumTestBase
         // On WinUI the position is announced from the pager pip that selects the item ("Page 2, 2 of 2").
         var secondPip = FindMediaPagerPips()[1];
         Click(secondPip);
-        Assert.IsTrue(ElementExistsByName(ChartMediaTitle, DefaultTimeout), "Expected clicking the second pager pip to show the second media item.");
 
-        var positionInSet = secondPip.GetAttribute("PositionInSet");
+        // WinAppDriver does not expose the selected FlipView item's content in the UIA tree. The pip itself is
+        // the accessible navigation surface and carries the position and set-size metadata announced by Narrator.
+        var positionInSet = await WaitForAttributeAsync(secondPip, "PositionInSet", "2");
         var sizeOfSet = secondPip.GetAttribute("SizeOfSet");
         TestContext.WriteLine($"Second pip PositionInSet=\"{positionInSet}\" SizeOfSet=\"{sizeOfSet}\"");
         Assert.AreEqual("2", positionInSet, "Expected the second media item's pip to report position 2 in the set.");
