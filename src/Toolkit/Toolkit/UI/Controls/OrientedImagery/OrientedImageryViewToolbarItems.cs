@@ -82,23 +82,35 @@ public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase { }
 /// </summary>
 public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 {
-    /// <summary>
-    /// Gets the command that toggles between image search and image selection modes.
-    /// </summary>
-    public ICommand ToggleImageSearchModeCommand { get; }
+    private bool _selectedImageSearchMode = true;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ImageSearchModeVM"/> class.
+    /// Gets the available image search modes. A value of <see langword="true"/> represents search mode and <see langword="false"/> represents selection mode.
     /// </summary>
-    public ImageSearchModeVM()
+    public IReadOnlyList<bool> ImageSearchModes { get; } = new[] { true, false };
+
+    /// <summary>
+    /// Gets or sets the selected image search mode.
+    /// </summary>
+    public bool SelectedImageSearchMode
     {
-        ToggleImageSearchModeCommand = new Command(
-            execute: () =>
+        get => _selectedImageSearchMode;
+        set
+        {
+            SetProperty(ref _selectedImageSearchMode, value);
+            if (ViewModel is not null)
             {
-                if (ViewModel != null)
-                    ViewModel.ImageSearchEnabled = !ViewModel.ImageSearchEnabled;
-            },
-            canExecute: () => true);
+                ViewModel.ImageSearchEnabled = value;
+                ViewModel.SketchModeEnabled = false;
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnMainViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    {
+        if (newValue != null)
+            SetProperty(ref _selectedImageSearchMode, newValue.ImageSearchEnabled, nameof(SelectedImageSearchMode));
     }
 }
 
