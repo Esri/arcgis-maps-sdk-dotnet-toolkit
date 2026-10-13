@@ -211,6 +211,59 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="ImageSearchModeComboBoxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ToolbarComboBoxStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      ClickMode="Press"
+                                      Focusable="False"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Padding="{TemplateBinding Padding}"
+                                      Style="{StaticResource ToolbarToggleButtonStyle}">
+                            <Viewbox Width="32" Height="32" Stretch="Uniform">
+                                <TextBlock FontSize="24"
+                                           FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Text" Value="&#xea74;" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" Value="True">
+                                                    <Setter Property="Text" Value="&#xea72;" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Viewbox>
+                        </ToggleButton>
+                        <Popup x:Name="PART_Popup"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               Placement="Bottom"
+                               PopupAnimation="Slide">
+                            <Border MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                    BorderThickness="1">
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="ImageNavigationButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
@@ -317,34 +370,52 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ImageSearchModeToolbarTemplate" DataType="controls:ImageSearchModeVM">
-        <Button Command="{Binding ToggleImageSearchModeCommand}">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
-                    <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewSwitchToImageSearch}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ViewModel.ImageSearchEnabled}" Value="True">
-                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewSwitchToImageSelection}" />
-                        </DataTrigger>
-                    </Style.Triggers>
+        <ComboBox ItemsSource="{Binding ImageSearchModes}"
+                  SelectedItem="{Binding SelectedImageSearchMode, Mode=TwoWay}"
+                  Style="{StaticResource ImageSearchModeComboBoxStyle}"
+                  ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="MinHeight" Value="40" />
+                    <Setter Property="Padding" Value="8,4" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
                 </Style>
-            </Button.Style>
-            <Viewbox Width="32" Height="32" Stretch="Uniform">
-                <TextBlock FontSize="24"
-                           FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Text" Value="&#xea74;" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ViewModel.ImageSearchEnabled}" Value="True">
-                                    <Setter Property="Text" Value="&#xea72;" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-            </Viewbox>
-        </Button>
+            </ComboBox.ItemContainerStyle>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="0,0,8,0"
+                                   FontSize="24"
+                                   FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Text" Value="&#xea74;" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding}" Value="True">
+                                            <Setter Property="Text" Value="&#xea72;" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeSelect}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding}" Value="True">
+                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeSearch}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </DataTemplate>
 
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
