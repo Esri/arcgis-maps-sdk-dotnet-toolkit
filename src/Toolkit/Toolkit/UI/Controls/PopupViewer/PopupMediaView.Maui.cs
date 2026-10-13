@@ -25,6 +25,48 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     /// </summary>
     public partial class PopupMediaView : ContentView
     {
+#if WINDOWS
+        /// <inheritdoc />
+        protected override void OnHandlerChanged()
+        {
+            base.OnHandlerChanged();
+            UpdateChartTabStop();
+        }
+
+        private void UpdateChartTabStop()
+        {
+            if (PopupMedia?.Type != PopupMediaType.Image && Content is Image image)
+                UpdateImageAccessibility(image);
+
+            if (Handler?.PlatformView is Microsoft.UI.Xaml.UIElement platformView)
+            {
+                bool isChart = PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image;
+                platformView.IsTabStop = isChart;
+                platformView.UseSystemFocusVisuals = isChart;
+            }
+        }
+
+        private void Image_HandlerChanged(object? sender, EventArgs e)
+        {
+            if (sender is Image image)
+                UpdateImageAccessibility(image);
+        }
+
+        private void UpdateImageAccessibility(Image image)
+        {
+            bool hasLink = PopupMedia?.Type == PopupMediaType.Image && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out _);
+            SemanticProperties.SetDescription(image, hasLink ? GetAltText() : null);
+            if (!hasLink)
+                image.GestureRecognizers.Clear();
+
+            if (image.Handler?.PlatformView is Microsoft.UI.Xaml.UIElement platformView)
+            {
+                platformView.IsTabStop = hasLink;
+                platformView.UseSystemFocusVisuals = hasLink;
+            }
+        }
+#endif
+
         /// <inheritdoc />
         protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
         {

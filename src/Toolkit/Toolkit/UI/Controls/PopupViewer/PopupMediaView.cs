@@ -92,6 +92,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _lastChartSize = 0;
                 Image img = Content as Image ?? new Image();
+#if MAUI && WINDOWS
+                img.HandlerChanged -= Image_HandlerChanged;
+                img.HandlerChanged += Image_HandlerChanged;
+#endif
                 var sourceUrl = PopupMedia.Value?.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
@@ -162,6 +166,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #endif
                 }
+#if MAUI && WINDOWS
+                UpdateImageAccessibility(img);
+#endif
                 Content = img;
             }
         }
@@ -273,6 +280,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
             }
             UpdateAltText();
+#if MAUI && WINDOWS
+            UpdateChartTabStop();
+#endif
         }
 
         private void UpdateAltText()
