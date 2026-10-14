@@ -56,7 +56,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             GeoViewContainer.Children.Add(_mapView);
 
             _orientedImageryVM = new OrientedImageryViewModel();
-            _orientedImageryVM.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
 
             _elevationSource = new ArcGISTiledElevationSource(new Uri(ElevationUrl));
 
@@ -186,15 +185,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _usingAlternateToolbarStyling = !_usingAlternateToolbarStyling;
             if (_usingAlternateToolbarStyling)
             {
-                var popupItem = _orientedImageryVM.ToolbarItems.OfType<OrientedImageryPopupToolbarItem>().FirstOrDefault();
-                if (popupItem != null)
-                    _orientedImageryVM.ToolbarItems.Remove(popupItem);
+                _orientedImageryVM.ToolbarItems.Add(new CustomToolbarItem());
                 MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("AlternateToolbarSelector");
             }
             else
             {
-                _orientedImageryVM.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
-                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("CustomToolbarSelector");
+                var customToolbarItem = _orientedImageryVM.ToolbarItems.OfType<CustomToolbarItem>().FirstOrDefault();
+                if (customToolbarItem != null)
+                    _orientedImageryVM.ToolbarItems.Remove(customToolbarItem);
+                _orientedImageryVM.ToolbarItems.Add(new ShowSelectedImagePopupVM());
+                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("DefaultOrientedImageryToolbarSelector");
             }
         }
 
@@ -273,4 +273,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             });
         }
     }
+
+    public class CustomToolbarItem : OrientedImageryToolbarItemBase
+    { }
 }
