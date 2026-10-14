@@ -389,6 +389,7 @@
                   ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="controls:ImageSearchModeSelectionBehavior.RepeatSelection" Value="True" />
                     <Setter Property="MinHeight" Value="40" />
                     <Setter Property="Padding" Value="8,4" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
