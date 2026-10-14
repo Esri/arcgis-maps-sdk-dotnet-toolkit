@@ -1153,6 +1153,14 @@
     <value>Select</value>
     <comment>Label for the mode that selects oriented images.</comment>
   </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>Open popup for selected image</value>
+    <comment>Tooltip for the button that opens the popup for the selected oriented image.</comment>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>Close popup</value>
+    <comment>Tooltip for the button that closes the selected oriented image popup.</comment>
+  </data>
   <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
     <value>Go to image {0} of {1}</value>
     <comment>Pagination automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
