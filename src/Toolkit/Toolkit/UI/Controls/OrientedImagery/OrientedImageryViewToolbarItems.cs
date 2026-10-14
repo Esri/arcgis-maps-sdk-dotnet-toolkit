@@ -157,6 +157,11 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
 public class ClearMarkersVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
+/// View model for the selected image popup toolbar control in the <see cref="OrientedImageryView"/>.
+/// </summary>
+public class ShowSelectedImagePopupVM : OrientedImageryToolbarItemBase { }
+
+/// <summary>
 /// View model for the sequential navigation toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class SequentialNavigationVM : OrientedImageryToolbarItemBase { }
