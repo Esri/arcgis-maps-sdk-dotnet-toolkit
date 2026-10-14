@@ -898,13 +898,16 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         return
         [
             new ImageSearchModeVM(),
+            new ToolbarDividerVM(),
             new ShowSelectedFootprintVM(),
             new ShowUnselectedFootprintsVM(),
             new ShowCameraMarkersVM(),
             new ShowSelectedImagePopupVM(),
+            new ToolbarDividerVM(),
             new AllowAddingMarkersVM(),
             markerSymbolPickerVM,
             new ClearMarkersVM(),
+            new ToolbarDividerVM(),
             new SequentialNavigationVM()
         ];
     }

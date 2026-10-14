@@ -1145,6 +1145,30 @@
     <value>Image search mode</value>
     <comment>Tooltip for the image search mode selector.</comment>
   </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>Current Footprint</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>Additional Footprints</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>Camera Locations</value>
+  </data>
+  <data name="OrientedImageryViewPopupLabel" xml:space="preserve">
+    <value>Image Details</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkerLabel" xml:space="preserve">
+    <value>Add Marker</value>
+  </data>
+  <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
+    <value>Select Symbol</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>Clear Markers</value>
+  </data>
+  <data name="OrientedImageryViewNavigationModeLabel" xml:space="preserve">
+    <value>Nav mode</value>
+  </data>
   <data name="OrientedImageryViewImageSearchModeSearch" xml:space="preserve">
     <value>Search</value>
     <comment>Label for the mode that searches for oriented images.</comment>
@@ -1154,11 +1178,11 @@
     <comment>Label for the mode that selects oriented images.</comment>
   </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
-    <value>Open popup for selected image</value>
+    <value>Open details for selected image</value>
     <comment>Tooltip for the button that opens the popup for the selected oriented image.</comment>
   </data>
   <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
-    <value>Close popup</value>
+    <value>Close details</value>
     <comment>Tooltip for the button that closes the selected oriented image popup.</comment>
   </data>
   <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
