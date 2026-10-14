@@ -104,14 +104,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty ElementProperty =
             PropertyHelper.CreateProperty<FieldsPopupElement, FieldsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.RefreshTable());
 
+#if !MAUI
         // The (label, value) cell pairs of the currently displayed table, in row order. Backs the
         // Grid/Table UIA control pattern exposed via FieldsPopupElementViewAutomationPeer (see .Windows.cs).
         internal IReadOnlyList<(ChildElement Label, ChildElement Value)> Cells => _cells;
         private readonly List<(ChildElement Label, ChildElement Value)> _cells = new();
+#endif
 
         private void RefreshTable()
         {
+#if !MAUI
             _cells.Clear();
+#endif
             var presenter = GetTemplateChild(TableAreaContentName) as ContentPresenter;
             if (presenter is null) return;
             if (Element is null || !Element.Fields.Any())
@@ -119,11 +123,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 presenter.Content = null;
                 return;
             }
-            Grid g = null;
-#if WPF || WINUI
-            g = new AccessibleGrid();
+#if MAUI
+            var g = new Internal.FieldsTableGrid();
+#elif WPF || WINUI
+            var g = new AccessibleGrid();
 #else
-            g = new Grid();
+            var g = new Grid();
 #endif
 
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
@@ -137,8 +142,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var rowCount = Math.Min(Element.Labels.Count, Element.FormattedValues.Count);
             for (i = 0; i < rowCount; i++)
             {
-
+#if !MAUI
                 g.RowDefinitions.Add(new RowDefinition());
+#endif
                 Border b = new Border() { Background = i % 2 == 1 ? RowEvenBackground : RowOddBackground };
 #if MAUI
                 b.StrokeThickness = 0;
@@ -149,9 +155,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 g.Children.Add(b);
 
                 var label = CreateTextCell(Element.Labels[i], true);
-
-                Grid.SetRow(label, i);
-                g.Children.Add(label);
 
                 ChildElement valueCell;
                 var strValue = Element.FormattedValues[i];
@@ -168,11 +171,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     valueCell = CreateTextCell(strValue, wrap: true);
                 }
 
+                AutomationProperties.SetLabeledBy(valueCell, label);
+#if MAUI
+                g.AddRow(label, valueCell, Element.Labels[i]);
+#else
+                Grid.SetRow(label, i);
+                g.Children.Add(label);
                 Grid.SetRow(valueCell, i);
                 Grid.SetColumn(valueCell, 2);
                 g.Children.Add(valueCell);
-                AutomationProperties.SetLabeledBy(valueCell, label);
                 _cells.Add((label, valueCell));
+#endif
 
 #if WPF || WINUI
                 // Gives each cell's own automation peer (FieldsTableCellAutomationPeer) enough info to report
