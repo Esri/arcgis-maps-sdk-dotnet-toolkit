@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
@@ -71,6 +72,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         ClearMarkersCommand = new Command(
             execute: () => Markers.Clear(),
             canExecute: () => Markers.Count > 0);
+        OpenSelectedImagePopupCommand = new Command(
+            execute: SetSelectedImagePopup,
+            canExecute: () => SelectedImage != null );
+        CloseSelectedImagePopupCommand = new Command(
+            execute: () => SelectedImagePopup = null,
+            canExecute: () => true);
     }
 
 #region GeoModel
@@ -154,6 +161,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private ReadOnlyCollection<OrientedImage> _readOnlyImages;
     private OrientedImage? _selectedImage;
     private OrientedImageFootprint? _selectedImageFootprint;
+    private Popup? _selectedImagePopup;
     private bool _isSequentialNavigationEnabled;
     private bool _isFetchingAdjacentImage;
     private Task? _adjacentImagesFetchTask;
@@ -177,6 +185,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             if (value == _selectedImage) return;
 
+            SelectedImagePopup = null;
             SetProperty(ref _selectedImage, value);
 
             if (_selectedImage != null)
@@ -195,7 +204,45 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             ChangeNavigationCommandsCanExecute();
             if (IsSequentialNavigationEnabled)
                 _ = PrefetchAdjacentImagesAsync();
+
+            ((Command)OpenSelectedImagePopupCommand).ChangeCanExecute();
         }
+    }
+
+    /// <summary>
+    /// Gets the popup for the currently selected image, or <see langword="null"/> when the popup is closed.
+    /// </summary>
+    public Popup? SelectedImagePopup
+    {
+        get => _selectedImagePopup;
+        private set => SetProperty(ref _selectedImagePopup, value);
+    }
+
+    /// <summary>
+    /// Gets the command that opens the popup for the currently selected image.
+    /// </summary>
+    public ICommand OpenSelectedImagePopupCommand { get; }
+
+    /// <summary>
+    /// Gets the command that closes the selected image popup.
+    /// </summary>
+    public ICommand CloseSelectedImagePopupCommand { get; }
+
+    private void SetSelectedImagePopup()
+    {
+        if (SelectedImage is null)
+        {
+            SelectedImagePopup = null;
+            return;
+        }
+
+        var graphic = new Graphic(SelectedImage.Geometry);
+        foreach (var attribute in SelectedImage.Attributes)
+        {
+            graphic.Attributes[attribute.Key] = attribute.Value;
+        }
+
+        SelectedImagePopup = Popup.FromGeoElement(graphic);
     }
 
     /// <summary>
@@ -854,6 +901,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             new ShowSelectedFootprintVM(),
             new ShowUnselectedFootprintsVM(),
             new ShowCameraMarkersVM(),
+            new ShowSelectedImagePopupVM(),
             new AllowAddingMarkersVM(),
             markerSymbolPickerVM,
             new ClearMarkersVM(),
