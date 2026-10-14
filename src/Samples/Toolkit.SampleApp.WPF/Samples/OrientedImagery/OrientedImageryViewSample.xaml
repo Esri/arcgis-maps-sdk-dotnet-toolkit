@@ -54,7 +54,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition x:Name="OrientedImageryColumn" Width="0"/>
         </Grid.ColumnDefinitions>
 
         <Grid x:Name="ControlPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" >
@@ -76,14 +76,34 @@
                 <Button x:Name="UpdateToolbarButton" Content="Update toolbar" Click="UpdateToolbarButton_Click" />
                 <Button x:Name="OverrideClickHandlersButton"  Content="Override clicks" Click="OverrideClickHandlersButton_Click" />
                 <Button x:Name="RemoveReAddLayers"  Content="Remove/Re-add all layers" Click="RemoveReAddLayers_Click" />
+                <Button x:Name="RemoveLastLayer"  Content="Remove last layer" Click="RemoveLastLayer_Click" />
                 <Button x:Name="BackgroundThreadUpdate"  Content="Update markers on background thread" Click="BackgroundThreadUpdate_Click" />
                 <Button x:Name="ToggleButtonsBackgroundThread"  Content="Update some button states from a background thread" Click="ToggleButtonsBackgroundThread_Click" />
             </StackPanel>
+            <Button x:Name="OpenOrientedImageryButton"
+                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="8"
+                    Content="Open oriented imagery view"
+                    ToolTip="Open oriented imagery view"
+                    Click="OpenOrientedImageryButton_Click" />
         </Grid>
-        <GridSplitter Grid.Row="1" Grid.Column="1" Width="5"
+        <GridSplitter x:Name="OrientedImagerySplitter" Grid.Row="1" Grid.Column="1" Width="5"
+                      Visibility="Collapsed"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       ResizeBehavior="PreviousAndNext" />
-        <esri:OrientedImageryView x:Name="MainOrientedImageryView" Grid.Row="1" Grid.Column="2"/>
+        <Grid x:Name="OrientedImageryPanel" Grid.Row="1" Grid.Column="2" Visibility="Collapsed">
+            <esri:OrientedImageryView x:Name="MainOrientedImageryView"/>
+        </Grid>
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                Style="{x:Null}" Background="White" BorderThickness="0"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,8,0,0" Width="32" Height="32"
+                Visibility="{Binding Visibility, ElementName=OrientedImageryPanel}"
+                AutomationProperties.Name="Close oriented imagery view"
+                Click="CloseOrientedImageryButton_Click">
+            <Viewbox Width="28" Height="28" Stretch="Uniform">
+                <TextBlock Text="&#x00D7;" FontSize="24" />
+            </Viewbox>
+        </Button>
 
         <Grid x:Name="SelectedImagePopupBackground"
               Grid.RowSpan="2"
