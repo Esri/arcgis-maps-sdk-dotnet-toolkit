@@ -157,6 +157,11 @@ public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
 public class ClearMarkersVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
+/// View model for a divider between groups of oriented imagery toolbar controls.
+/// </summary>
+public class ToolbarDividerVM : OrientedImageryToolbarItemBase { }
+
+/// <summary>
 /// View model for the selected image popup toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class ShowSelectedImagePopupVM : OrientedImageryToolbarItemBase { }
