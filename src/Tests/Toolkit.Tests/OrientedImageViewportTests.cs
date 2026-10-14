@@ -293,20 +293,21 @@ public sealed class OrientedImageViewportTests
     }
 
     [TestMethod]
-    [DataRow(0)]
-    [DataRow(3857)]
-    public void VisibleAreaIsClippedToImageNotClamped(int wkid)
+    [DataRow(0, 0)]
+    [DataRow(3857, 3857)]
+    [DataRow(3857, 0)]
+    public void VisibleAreaIsClippedToImageNotClamped(int viewWkid, int extentWkid)
     {
         // The diamond view contains the whole 100 by 100 image. Clamping each vertex, rather than clipping, would give
-        // the diamond of the edge midpoints, with half the area.
-        SpatialReference? reference = wkid == 0 ? null : SpatialReference.Create(wkid);
-        var builder = new Esri.ArcGISRuntime.Geometry.PolygonBuilder(reference);
+        // the diamond of the edge midpoints, with half the area. The last row matches the raster viewport, where only
+        // the visible area has a spatial reference.
+        var builder = new Esri.ArcGISRuntime.Geometry.PolygonBuilder(viewWkid == 0 ? null : SpatialReference.Create(viewWkid));
         builder.AddPoint(50, 150);
         builder.AddPoint(150, 50);
         builder.AddPoint(50, -50);
         builder.AddPoint(-50, 50);
         var visibleArea = builder.ToGeometry();
-        var extent = new Esri.ArcGISRuntime.Geometry.Envelope(0, 0, 100, 100, reference);
+        var extent = new Esri.ArcGISRuntime.Geometry.Envelope(0, 0, 100, 100, extentWkid == 0 ? null : SpatialReference.Create(extentWkid));
 
         List<System.Drawing.PointF> ring = OrientedImageRasterViewport.ComputeVisibleAreaPixels(visibleArea, extent, 1, 1);
 

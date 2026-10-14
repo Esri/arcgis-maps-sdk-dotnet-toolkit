@@ -448,8 +448,10 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         double maxRow = extent.Height / cellY;
 
         // Clip in raster coordinates; EXIF can swap axes or reflect the pixel grid.
+        // The raster extent has no spatial reference but the visible area does, and Intersection wants identical SRs.
         var firstRing = new Polygon(visibleArea.Parts[0].Points, visibleArea.SpatialReference);
-        var clipped = (Polygon)GeometryEngine.Intersection(firstRing, extent);
+        var bounds = new Envelope(extent.XMin, extent.YMin, extent.XMax, extent.YMax, visibleArea.SpatialReference);
+        var clipped = (Polygon)GeometryEngine.Intersection(firstRing, bounds);
         IReadOnlyList<MapPoint> points = clipped.Parts.Count == 0 ? [] : clipped.Parts[0].Points;
         var pixels = new List<PointF>(points.Count);
         foreach (MapPoint point in points)
