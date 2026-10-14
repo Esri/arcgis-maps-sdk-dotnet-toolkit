@@ -397,7 +397,8 @@ public partial class OrientedImageryView
 
     private void GeoView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == "Scene" || e.PropertyName == "Map")
+        // Listening for DrawStatus helps us catch changes that may be made off the UI thread
+        if (e.PropertyName == "DrawStatus" || e.PropertyName == "Scene" || e.PropertyName == "Map")
         {
             UpdateCurrentGeoModel();
         }
@@ -405,17 +406,21 @@ public partial class OrientedImageryView
 
     private void UpdateCurrentGeoModel()
     {
+        GeoModel? actualGeoModel;
+        if (GeoView is SceneView sceneView)
+            actualGeoModel = sceneView.Scene;
+        else if (GeoView is MapView mapView)
+            actualGeoModel = mapView.Map;
+        else
+            actualGeoModel = null;
+
+        if (_currentGeoModel == actualGeoModel)
+            return;
+
         if (_currentGeoModel != null)
         {
             _currentGeoModel.PropertyChanged -= _currentGeoModel_PropertyChanged;
         }
-
-        if (GeoView is SceneView sceneView)
-            _currentGeoModel = sceneView.Scene;
-        else if (GeoView is MapView mapView)
-            _currentGeoModel = mapView.Map;
-        else
-            _currentGeoModel = null;
 
         if (_currentGeoModel != null)
             _currentGeoModel.PropertyChanged += _currentGeoModel_PropertyChanged;
