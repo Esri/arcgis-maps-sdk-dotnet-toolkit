@@ -107,6 +107,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             await AddLayer(LayerUriTextBox.Text);
         }
 
+        private GridLength _orientedImageryPanelWidth = new GridLength(2, GridUnitType.Star);
+
+        private void OpenOrientedImageryButton_Click(object sender, RoutedEventArgs e)
+        {
+            OrientedImageryColumn.Width = _orientedImageryPanelWidth;
+            OrientedImageryPanel.Visibility = Visibility.Visible;
+            OrientedImagerySplitter.Visibility = Visibility.Visible;
+            OpenOrientedImageryButton.Visibility = Visibility.Collapsed;
+
+            MainOrientedImageryView.GeoView ??= _currentGeoView;
+        }
+
+        private void CloseOrientedImageryButton_Click(object sender, RoutedEventArgs e)
+        {
+            _orientedImageryPanelWidth = OrientedImageryColumn.Width;
+            OrientedImageryPanel.Visibility = Visibility.Collapsed;
+            OrientedImagerySplitter.Visibility = Visibility.Collapsed;
+            OrientedImageryColumn.Width = new GridLength(0);
+            OpenOrientedImageryButton.Visibility = Visibility.Visible;
+            OpenOrientedImageryButton.Focus();
+
+            MainOrientedImageryView.GeoView = null;
+        }
+
         private void OpenSelectedImagePopupButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedImage = _orientedImageryVM.SelectedImage;
@@ -250,6 +274,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 _sceneView.Scene!.OperationalLayers.Clear();
             }
             _layersRemoved = !_layersRemoved;
+        }
+
+        private void RemoveLastLayer_Click(object sender, RoutedEventArgs e)
+        {
+            _mapView.Map!.OperationalLayers.RemoveAt(_mapView.Map.OperationalLayers.Count - 1);
+            _sceneView.Scene!.OperationalLayers.RemoveAt(_sceneView.Scene.OperationalLayers.Count - 1);
         }
 
         private async void BackgroundThreadUpdate_Click(object sender, RoutedEventArgs e)
