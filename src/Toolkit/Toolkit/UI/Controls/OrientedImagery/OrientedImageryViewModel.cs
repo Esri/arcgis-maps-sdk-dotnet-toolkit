@@ -53,12 +53,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(64, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
+        _sketchModeEnabled = false;
+        _imageSearchEnabled = true;
+
         ToolbarItems = GetDefaultToolbarItems();
         ToolbarItems.CollectionChanged += ToolbarItems_CollectionChanged;
         SynchronizeToolbarItems();
-
-        _sketchModeEnabled = false;
-        _imageSearchEnabled = true;
 
         SelectNextImageCommand = new Command(
             execute: () => Navigate(SequenceStep.Next),
