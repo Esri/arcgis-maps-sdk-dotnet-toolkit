@@ -422,6 +422,8 @@ public partial class OrientedImageryView
             _currentGeoModel.PropertyChanged -= _currentGeoModel_PropertyChanged;
         }
 
+        _currentGeoModel = actualGeoModel;
+
         if (_currentGeoModel != null)
             _currentGeoModel.PropertyChanged += _currentGeoModel_PropertyChanged;
 
@@ -466,17 +468,26 @@ public partial class OrientedImageryView
         }
 
         var currentLayers = new List<OrientedImageryLayer>();
-        foreach (var layer in _currentOperationalLayers ?? [])
-        {
-            if (layer is OrientedImageryLayer oiLayer)
-                currentLayers.Add(oiLayer);
-        }
+        SearchLayersInner(_currentOperationalLayers ?? [], ref currentLayers);
         _orientedImageryLayers.ReplaceAll(currentLayers);
 
         if (_orientedImageryLayers.Count < 1 || (ViewModel.OrientedImageryLayer != null && OrientedImageryLayers.Contains(ViewModel.OrientedImageryLayer)))
             SelectedLayer = null;
 
         UpdateErrorMessage();
+    }
+
+    private void SearchLayersInner(IEnumerable<Layer> layers, ref List<OrientedImageryLayer> outList)
+    {
+        foreach (var layer in layers)
+        {
+            if (layer is OrientedImageryLayer oiLayer)
+                outList.Add(oiLayer);
+            else if (layer is GroupLayer groupLayer)
+            {
+                SearchLayersInner(groupLayer.Layers, ref outList);
+            }
+        }
     }
 #endregion GeoView
 
