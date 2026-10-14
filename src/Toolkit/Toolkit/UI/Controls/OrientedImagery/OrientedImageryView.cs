@@ -245,6 +245,10 @@ public partial class OrientedImageryView
     /// <summary>
     /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/> on which marker graphics are displayed.
     /// </summary>
+    /// <remarks>
+    /// Setting <see cref="GeoView"/> to <c>null</c> will clear all markers and footprints from the geo view and set
+    /// <see cref="OrientedImageryViewModel.OrientedImageryLayer"/>  on <see cref="ViewModel"/> to <c>null</c>.
+    /// </remarks>
     public GeoView? GeoView
     {
         get => (GeoView?)GetValue(GeoViewProperty);
@@ -450,19 +454,22 @@ public partial class OrientedImageryView
 
     private void ResetOrientedImageryLayers()
     {
-        if (GeoView != null)
+        if (GeoView == null)
         {
-            var currentLayers = new List<OrientedImageryLayer>();
-            foreach (var layer in _currentOperationalLayers ?? [])
-            {
-                if (layer is OrientedImageryLayer oiLayer)
-                    currentLayers.Add(oiLayer);
-            }
-            _orientedImageryLayers.ReplaceAll(currentLayers);
-
-            if (_orientedImageryLayers.Count < 1)
-                SelectedLayer = null;
+            _orientedImageryLayers.Clear();
+            return;
         }
+
+        var currentLayers = new List<OrientedImageryLayer>();
+        foreach (var layer in _currentOperationalLayers ?? [])
+        {
+            if (layer is OrientedImageryLayer oiLayer)
+                currentLayers.Add(oiLayer);
+        }
+        _orientedImageryLayers.ReplaceAll(currentLayers);
+
+        if (_orientedImageryLayers.Count < 1 || (ViewModel.OrientedImageryLayer != null && OrientedImageryLayers.Contains(ViewModel.OrientedImageryLayer)))
+            SelectedLayer = null;
 
         UpdateErrorMessage();
     }
