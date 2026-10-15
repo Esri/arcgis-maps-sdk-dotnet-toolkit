@@ -389,6 +389,16 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         bool restoreFocus = focused != null && PlatformView.Children.OfType<StackPanel>().Any(panel => panel.Children.Contains(focused));
         string? focusedId = restoreFocus ? AutomationProperties.GetAutomationId(focused!) : null;
         var focusState = restoreFocus ? focused!.FocusState : FocusState.Unfocused;
+        if (_model == model && _navigationState is { } previous &&
+            previous.Sequential == state.Sequential && (state.Sequential || previous.Count == state.Count) &&
+            PlatformView.Children.FirstOrDefault() is StackPanel existingRow)
+        {
+            _navigationState = state;
+            UpdateNavigationRow(existingRow, state);
+            if (restoreFocus)
+                RestoreNavigationFocus(existingRow, focusedId, selected, focusState);
+            return;
+        }
         Clear();
         _navigationState = state;
         _model = model;
@@ -422,7 +432,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         {
             for (int i = start; i < start + count; i++)
             {
-                int index = i;
+                int slot = i - start;
                 var button = new NativeButton
                 {
                     Content = PageIndicator((i + 1).ToString(CultureInfo.CurrentCulture), i == selected),
@@ -434,6 +444,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 AutomationProperties.SetAutomationId(button, "OrientedImageryPage" + i.ToString(CultureInfo.InvariantCulture));
                 button.Click += (_, _) =>
                 {
+                    int index = (_navigationState?.Start ?? 0) + slot;
                     if (VirtualView.Owner?.ViewModel == model && !model.IsSequentialNavigationEnabled && index < model.Images.Count)
                         model.SelectedImage = model.Images[index];
                 };
@@ -444,10 +455,40 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         row.Children.Add(NavigateButton(true, false));
         VirtualView.HeightRequest = 32;
         if (restoreFocus)
+            RestoreNavigationFocus(row, focusedId, selected, focusState);
+    }
+
+    private static void RestoreNavigationFocus(StackPanel row, string? focusedId, int selected, FocusState focusState)
+    {
+        var target = row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == focusedId);
+        target ??= row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == "OrientedImageryPage" + selected.ToString(CultureInfo.InvariantCulture));
+        target?.Focus(focusState);
+    }
+
+    private static void UpdateNavigationRow(StackPanel row, NavigationState state)
+    {
+        var previous = (NativeButton)row.Children[0];
+        previous.IsEnabled = !state.Searching && state.Previous;
+        var next = (NativeButton)row.Children[row.Children.Count - 1];
+        next.IsEnabled = !state.Searching && state.Next;
+        if (state.Sequential)
         {
-            var target = row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == focusedId);
-            target ??= row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == "OrientedImageryPage" + selected.ToString(CultureInfo.InvariantCulture));
-            target?.Focus(focusState);
+            ((NativeButton)row.Children[1]).IsEnabled = previous.IsEnabled;
+            ((NativeButton)row.Children[3]).IsEnabled = next.IsEnabled;
+            return;
+        }
+        for (int slot = 0; slot < state.Count; slot++)
+        {
+            int index = state.Start + slot;
+            var button = (NativeButton)row.Children[slot + 1];
+            var indicator = (NativeGrid)button.Content;
+            ((TextBlock)indicator.Children[0]).Text = (index + 1).ToString(CultureInfo.CurrentCulture);
+            ((Microsoft.UI.Xaml.Controls.Border)indicator.Children[1]).Visibility =
+                index == state.Selected ? NativeVisibility.Visible : NativeVisibility.Collapsed;
+            button.IsEnabled = !state.Searching;
+            AutomationProperties.SetName(button, string.Format(CultureInfo.CurrentCulture,
+                Text(index == state.Selected ? "SelectedPageFormat" : "GoToPageFormat"), index + 1, state.Total));
+            AutomationProperties.SetAutomationId(button, "OrientedImageryPage" + index.ToString(CultureInfo.InvariantCulture));
         }
     }
 
