@@ -316,62 +316,80 @@ internal readonly record struct PanoramaFrame(Android.Graphics.Bitmap Bitmap, in
     // For a frame that is never shown, since full-size bitmaps add up during rapid paging.
     public void Dispose() => Bitmap.Recycle();
 
+    // One decode at a time, so rapid paging never holds several full-size bitmaps.
+    private static readonly SemaphoreSlim s_decodeGate = new(1, 1);
+
     // Throws for a format BitmapFactory can't decode, such as TIFF.
     internal static Task<PanoramaFrame> DecodeAsync(string path, CancellationToken token)
     {
         return Task.Run(
-            () =>
+            async () =>
             {
-                ExifOrientationTransform orientation = ExifOrientationTransform.Read(path);
-                var bounds = new Android.Graphics.BitmapFactory.Options { InJustDecodeBounds = true };
-                Android.Graphics.BitmapFactory.DecodeFile(path, bounds);
-
-                int width = bounds.OutWidth;
-                int height = bounds.OutHeight;
-                if (width <= 0 || height <= 0)
-                    throw new InvalidDataException("The image could not be decoded.");
-
-                bool lowRam = (Android.App.Application.Context.GetSystemService(Android.Content.Context.ActivityService)
-                    as Android.App.ActivityManager)?.IsLowRamDevice == true;
-                int budget = lowRam ? 4096 : 8192;
-                int sample = 1;
-                while (Math.Max(width, height) / sample > budget)
-                    sample *= 2;
-
-                var options = new Android.Graphics.BitmapFactory.Options
-                {
-                    InSampleSize = sample,
-                    InPreferredConfig = Android.Graphics.Bitmap.Config.Argb8888,
-                };
-                Android.Graphics.Bitmap bitmap = Android.Graphics.BitmapFactory.DecodeFile(path, options)
-                    ?? throw new InvalidDataException("The image could not be decoded.");
-
+                await s_decodeGate.WaitAsync(token).ConfigureAwait(false);
                 try
                 {
                     token.ThrowIfCancellationRequested();
-                    if (orientation.IsMirrored || orientation.RotationDegrees != 0)
-                    {
-                        // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees).
-                        using var transform = new Android.Graphics.Matrix();
-                        transform.SetRotate((float)orientation.RotationDegrees);
-                        if (orientation.IsMirrored)
-                            transform.PostScale(-1, 1);
-                        Android.Graphics.Bitmap oriented = Android.Graphics.Bitmap.CreateBitmap(bitmap, 0, 0, bitmap.Width, bitmap.Height, transform, false)
-                            ?? throw new InvalidOperationException("Unable to apply the image orientation.");
-                        if (!ReferenceEquals(oriented, bitmap))
-                            bitmap.Recycle();
-                        bitmap = oriented;
-                    }
-
-                    return new PanoramaFrame(bitmap, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
+                    return Decode(path, token);
                 }
-                catch
+                finally
                 {
-                    bitmap.Recycle();
-                    throw;
+                    s_decodeGate.Release();
                 }
             },
             token);
+    }
+
+    private static PanoramaFrame Decode(string path, CancellationToken token)
+    {
+        ExifOrientationTransform orientation = ExifOrientationTransform.Read(path);
+        var bounds = new Android.Graphics.BitmapFactory.Options { InJustDecodeBounds = true };
+        Android.Graphics.BitmapFactory.DecodeFile(path, bounds);
+
+        int width = bounds.OutWidth;
+        int height = bounds.OutHeight;
+        if (width <= 0 || height <= 0)
+            throw new InvalidDataException("The image could not be decoded.");
+
+        bool lowRam = (Android.App.Application.Context.GetSystemService(Android.Content.Context.ActivityService)
+            as Android.App.ActivityManager)?.IsLowRamDevice == true;
+        int budget = lowRam ? 4096 : 8192;
+        int sample = 1;
+        while (Math.Max(width, height) / sample > budget)
+            sample *= 2;
+
+        var options = new Android.Graphics.BitmapFactory.Options
+        {
+            InSampleSize = sample,
+            InPreferredConfig = Android.Graphics.Bitmap.Config.Argb8888,
+        };
+        token.ThrowIfCancellationRequested();
+        Android.Graphics.Bitmap bitmap = Android.Graphics.BitmapFactory.DecodeFile(path, options)
+            ?? throw new InvalidDataException("The image could not be decoded.");
+
+        try
+        {
+            token.ThrowIfCancellationRequested();
+            if (orientation.IsMirrored || orientation.RotationDegrees != 0)
+            {
+                // Rotate, then reflect (see ExifOrientationTransform.RotationDegrees).
+                using var transform = new Android.Graphics.Matrix();
+                transform.SetRotate((float)orientation.RotationDegrees);
+                if (orientation.IsMirrored)
+                    transform.PostScale(-1, 1);
+                Android.Graphics.Bitmap oriented = Android.Graphics.Bitmap.CreateBitmap(bitmap, 0, 0, bitmap.Width, bitmap.Height, transform, false)
+                    ?? throw new InvalidOperationException("Unable to apply the image orientation.");
+                if (!ReferenceEquals(oriented, bitmap))
+                    bitmap.Recycle();
+                bitmap = oriented;
+            }
+
+            return new PanoramaFrame(bitmap, orientation.SwapsDimensions ? height : width, orientation.SwapsDimensions ? width : height);
+        }
+        catch
+        {
+            bitmap.Recycle();
+            throw;
+        }
     }
 }
 #endif
