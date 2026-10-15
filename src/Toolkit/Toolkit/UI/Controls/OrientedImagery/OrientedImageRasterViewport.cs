@@ -69,6 +69,9 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     private readonly Dictionary<Graphic, OrientedImageMarker> _graphicMarkers = [];
     private bool _interactive;
 
+    // The visible area reflects the fit only after the first draw, so footprint updates wait for it.
+    private bool _hasDrawn;
+
     internal OrientedImageRasterViewport()
     {
         _mapView = new MapView { IsAttributionTextVisible = false, InteractionOptions = new MapViewInteractionOptions { IsEnabled = false } };
@@ -88,9 +91,12 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         _mapView.LayerViewStateChanged += (s, e) => UpdateState();
         _mapView.DrawStatusChanged += (s, e) =>
         {
-            // BeginFootprintUpdate rejects the initial ViewpointChanged while drawing, and no later one is guaranteed.
-            if (e.Status == DrawStatus.Completed)
-                UpdateFootprint();
+            if (e.Status != DrawStatus.Completed)
+                return;
+
+            // The initial ViewpointChanged came before the first draw and was rejected, so update here.
+            _hasDrawn = true;
+            UpdateFootprint();
         };
         ShowMapView(false);
         SetAutomationName(null);
@@ -139,6 +145,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         map.OperationalLayers.Add(layer);
         _mapView.Map = map;
         _rasterLayer = layer;
+        _hasDrawn = false;
         ShowMapView(true);
         await layer.LoadAsync();
         token.ThrowIfCancellationRequested();
@@ -195,6 +202,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         _rasterLayer?.CancelLoad();
         _mapView.Map = null;
         _rasterLayer = null;
+        _hasDrawn = false;
         ShowMapView(false);
         _imageOrientation = default;
         foreach (Graphic graphic in _markerGraphics.Values)
@@ -431,7 +439,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
     {
-        if (_mapView.DrawStatus != DrawStatus.Completed)
+        if (!_hasDrawn)
             return null;
 
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)

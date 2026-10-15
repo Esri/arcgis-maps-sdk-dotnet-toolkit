@@ -35,6 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The cancellation sources are cancel-only (no timer), so they need no disposal; canceling on supersede is the release.")]
 internal abstract class OrientedImageInnerViewport
 {
+    private static readonly TimeSpan FootprintUpdateInterval = TimeSpan.FromMilliseconds(250);
+
     private IEnumerable<OrientedImageMarker>? _markerSource;
     private List<OrientedImageMarker> _markers = [];
     private WeakEventListener<OrientedImageInnerViewport, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>? _markersListener;
@@ -46,6 +48,8 @@ internal abstract class OrientedImageInnerViewport
     private Task _present = Task.CompletedTask; // the current session's SetFootprintAsync
     private bool _autoUpdate;
     private bool _isLoading; // true through PresentAsync, not only while the image loads
+    private DateTime _lastFootprintUpdate; // MinValue, so the first update runs at once
+    private bool _footprintUpdatePending;
 
     // The focusable view, which carries the automation name and id.
 #if MAUI
@@ -336,12 +340,25 @@ internal abstract class OrientedImageInnerViewport
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    // Latest wins: NextFootprintUpdateToken cancels the update in flight.
+    // Navigation raises a view change per frame, so runs are at most four per second, with a trailing run after the
+    // last change. Latest wins: NextFootprintUpdateToken cancels the update in flight.
     protected async void UpdateFootprint()
     {
+        if (!_autoUpdate || Footprint is null || _footprintUpdatePending)
+            return;
+
+        TimeSpan wait = _lastFootprintUpdate + FootprintUpdateInterval - DateTime.UtcNow;
+        if (wait > TimeSpan.Zero)
+        {
+            _footprintUpdatePending = true;
+            await Task.Delay(wait);
+            _footprintUpdatePending = false;
+        }
+
         if (!_autoUpdate || Footprint is not OrientedImageFootprint footprint)
             return;
 
+        _lastFootprintUpdate = DateTime.UtcNow;
         try
         {
             if (BeginFootprintUpdate(footprint) is Task update)
