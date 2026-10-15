@@ -86,6 +86,9 @@ public partial class OrientedImageryView
             RowSpacing = 0,
         };
         root.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
+#if __IOS__ && !MACCATALYST
+        root.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F2F2F7"), Color.FromArgb("#1C1C1E"));
+#endif
         INameScope scope = new NameScope();
         NameScope.SetNameScope(root, scope);
         void Add(string name, View view, Grid parent, int row = 0, int column = 0)
@@ -104,11 +107,20 @@ public partial class OrientedImageryView
         root.Children.Add(heading);
         var title = new Label { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation, FontSize = 16 };
         title.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
+#if __IOS__ && !MACCATALYST
+        title.FontSize = 20;
+        title.FontAttributes = FontAttributes.Bold;
+        heading.Padding = new Thickness(12, 4);
+#endif
         Add("PART_Title", title, heading);
         var layerButton = ToolButton("SelectLayer", "", "OrientedImageryLayers");
         layerButton.Text = null;
         layerButton.WidthRequest = 44;
         layerButton.BorderWidth = 0;
+#if __IOS__ && !MACCATALYST
+        layerButton.CornerRadius = 22;
+        layerButton.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
+#endif
         Add("PART_Layers", layerButton, heading, column: 1);
         var layerIcon = MenuIcon(null, LayerGeometry);
         layerIcon.InputTransparent = true;
@@ -125,7 +137,12 @@ public partial class OrientedImageryView
         void AddToolbarTool(string name, string key, View icon, int column)
         {
             var cell = new Grid { MinimumHeightRequest = 44 };
-            var content = new HorizontalStackLayout
+            StackBase content =
+#if __IOS__ && !MACCATALYST
+                new VerticalStackLayout
+#else
+                new HorizontalStackLayout
+#endif
             {
                 Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center,
             };
@@ -141,6 +158,31 @@ public partial class OrientedImageryView
                 Stroke = Color.FromArgb("#CCCCCC"), StrokeThickness = 1,
                 StrokeShape = new RoundRectangle { CornerRadius = 13 }, InputTransparent = true,
             };
+#if __IOS__ && !MACCATALYST
+            cell.MinimumHeightRequest = 60;
+            icon.WidthRequest = 22;
+            icon.HeightRequest = 22;
+            label.FontSize = 11;
+            label.TextColor = IosAccent;
+            label.HandlerChanged += (sender, _) =>
+            {
+                if (sender is Label { Handler.PlatformView: UIKit.UILabel nativeLabel })
+                    nativeLabel.Font = UIKit.UIFont.SystemFontOfSize(nativeLabel.Font.PointSize, UIKit.UIFontWeight.Semibold);
+            };
+            pill.HeightRequest = -1;
+            pill.VerticalOptions = LayoutOptions.Fill;
+            pill.Margin = new Thickness(0, 4, 0, 8);
+            pill.StrokeThickness = 0;
+            pill.StrokeShape = new RoundRectangle { CornerRadius = 10 };
+            pill.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
+#endif
+#if ANDROID
+            label.HandlerChanged += (sender, _) =>
+            {
+                if (sender is Label { Handler.PlatformView: Android.Widget.TextView nativeLabel })
+                    nativeLabel.Typeface = Android.Graphics.Typeface.Create(nativeLabel.Typeface, 600, false);
+            };
+#endif
             cell.Add(pill);
             var button = ToolButton(key, "", "OrientedImagery" + key);
             button.Text = null;
@@ -188,6 +230,11 @@ public partial class OrientedImageryView
         popupClose.HorizontalOptions = LayoutOptions.End;
         popupClose.VerticalOptions = LayoutOptions.Start;
         popupClose.IsVisible = false;
+#if __IOS__ && !MACCATALYST
+        popupClose.Text = "\u00D7";
+        popupClose.FontSize = 24;
+        popupClose.CornerRadius = 22;
+#endif
         popupClose.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E6FFFFFF"), Color.FromArgb("#E6202020"));
         Add("PART_Popup", new PopupViewer
         {
@@ -539,7 +586,7 @@ public partial class OrientedImageryView
         if (_modeButton?.ImageSource is FontImageSource modeIcon)
             modeIcon.Glyph = ViewModel.ImageSearchEnabled ? ToolkitIcons.Search : "\uEA74";
 #if !WINDOWS
-        if (_modeButton?.Parent is Grid modeCell && modeCell.Children.OfType<Border>().FirstOrDefault()?.Content is HorizontalStackLayout modeContent &&
+        if (_modeButton?.Parent is Grid modeCell && modeCell.Children.OfType<Border>().FirstOrDefault()?.Content is Layout modeContent &&
             modeContent.Children[0] is Image { Source: FontImageSource mobileModeIcon })
             mobileModeIcon.Glyph = ViewModel.ImageSearchEnabled ? ToolkitIcons.Search : "\uEA74";
 #endif
@@ -790,7 +837,7 @@ public partial class OrientedImageryView
 
     private const string CurrentFootprintGeometry = "M28.9869 20.3149L30.0339 26.5899C28.6639 26.3499 26.4439 26.0599 23.7139 26.0599C23.5449 26.0599 23.3899 26.0669 23.2279 26.0699L22.1879 27.1099C22.6649 27.0789 23.1699 27.0599 23.7139 27.0599C28.1639 27.0599 31.2539 27.8599 31.2539 27.8599L29.8559 19.4469L28.9869 20.3149ZM14.0529 27.9879C12.6329 28.3739 11.0459 28.6599 8.79392 28.6599C5.78392 28.6599 3.42392 27.7699 2.36392 27.2899L6.04392 5.07993C7.06392 5.37993 8.58392 5.72993 10.5939 5.72993C13.0939 5.72993 14.5939 5.29993 16.0339 4.87993C17.4839 4.45993 18.8539 4.06993 21.3239 4.06993C23.5139 4.06993 25.4339 4.39993 26.3739 4.58993L28.0719 14.7939L29.1319 15.1019L27.2539 3.75993C27.2539 3.75993 24.5839 3.06993 21.3239 3.06993C16.1839 3.06993 15.4039 4.72993 10.5939 4.72993C7.77392 4.72993 5.95392 3.98993 5.25392 3.75993L1.25392 27.8599C1.25392 27.8599 4.34392 29.6599 8.79392 29.6599C11.1669 29.6599 12.8529 29.3499 14.3309 28.9429L14.0529 27.9879ZM10.7539 9.85993C9.92392 9.85993 9.25392 10.5299 9.25392 11.3599C9.25392 12.1899 9.92392 12.8599 10.7539 12.8599C11.5839 12.8599 12.2539 12.1899 12.2539 11.3599C12.2539 10.5299 11.5839 9.85993 10.7539 9.85993ZM10.7539 11.8599C10.4739 11.8599 10.2539 11.6399 10.2539 11.3599C10.2539 11.0799 10.4739 10.8599 10.7539 10.8599C11.0339 10.8599 11.2539 11.0799 11.2539 11.3599C11.2539 11.6399 11.0339 11.8599 10.7539 11.8599ZM12.9699 12.4929C12.7409 12.939 12.3831 13.3059 11.9429 13.5459L13.0966 17.2199L15.3639 25.3399L16.6639 29.7999L29.2539 17.2199L12.9699 12.4929ZM14.0139 17.0699L12.9839 13.5299L27.3539 17.6999L17.1539 27.8999L14.0139 17.0699Z";
 
-    private const string OverlayGeometry = "M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z";
+    private const string OverlayGeometry = "M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM21.8676 26H20.1324L13.5324 15H28.4676L21.8676 26Z";
     private const string LayerGeometry = "M12 1L23 7L12 13L1 7ZM1 12L12 18L23 12M1 17L12 23L23 17";
     private const string SequenceGeometry = "M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z";
     private const string ReturnGeometry = "M4 18H3V29H29V3H12V4H28V28H4V18ZM5.66 13.354L1.807 9.5L5.66 5.646L6.367 6.353L3.767 9H11.5C13.7489 8.9923 15.9086 9.87918 17.503 11.4652C19.0974 13.0512 19.9958 15.2061 20 17.455V22.855H19V17.455C18.9956 13.3147 15.6403 9.95941 11.5 9.955H3.675L6.367 12.646L5.66 13.354Z";
@@ -798,13 +845,17 @@ public partial class OrientedImageryView
 
     private static View MenuIcon(string? glyph, string? geometry)
     {
+        var accent = Color.FromArgb("#007AC2");
+#if __IOS__ && !MACCATALYST
+        accent = IosAccent;
+#endif
         if (geometry != null)
         {
             var path = new Microsoft.Maui.Controls.Shapes.Path
             {
                 Data = (Microsoft.Maui.Controls.Shapes.Geometry)new PathGeometryConverter().ConvertFromInvariantString(geometry),
-                Fill = geometry == LayerGeometry ? Colors.Transparent : Color.FromArgb("#007AC2"),
-                Stroke = geometry == LayerGeometry ? Color.FromArgb("#007AC2") : Colors.Transparent,
+                Fill = geometry == LayerGeometry ? Colors.Transparent : accent,
+                Stroke = geometry == LayerGeometry ? accent : Colors.Transparent,
                 StrokeThickness = 1.5, Aspect = Stretch.Uniform,
                 WidthRequest = 22, HeightRequest = 22, VerticalOptions = LayoutOptions.Center,
             };
@@ -812,7 +863,7 @@ public partial class OrientedImageryView
         }
         return new Image
         {
-            Source = new FontImageSource { Glyph = glyph ?? ToolkitIcons.Search, FontFamily = ToolkitIcons.FontFamilyName, Size = 22, Color = Color.FromArgb("#007AC2") },
+            Source = new FontImageSource { Glyph = glyph ?? ToolkitIcons.Search, FontFamily = ToolkitIcons.FontFamilyName, Size = 22, Color = accent },
             WidthRequest = 22, HeightRequest = 22, VerticalOptions = LayoutOptions.Center,
         };
     }
@@ -849,6 +900,10 @@ public partial class OrientedImageryView
         };
         border.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#EEEEEE"), Color.FromArgb("#444444"));
         border.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#666666"));
+#if __IOS__ && !MACCATALYST
+        border.StrokeThickness = 0;
+        border.BackgroundColor = Colors.Transparent;
+#endif
         return border;
     }
 
@@ -1122,9 +1177,30 @@ public partial class OrientedImageryView
         }
         var title = new Label { Text = action.Title, VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.WordWrap, InputTransparent = true };
         title.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
+#if __IOS__ && !MACCATALYST
+        title.FontSize = 15;
+        if (action.Title == Text("ClearMarkers"))
+        {
+            title.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#FF3B30"), Color.FromArgb("#FF453A"));
+            if (row.Children.OfType<Border>().FirstOrDefault()?.Content is Image { Source: FontImageSource clearIcon })
+                clearIcon.Color = Color.FromArgb("#FF3B30");
+        }
+        if (_panelKind == "Layers")
+        {
+            row.ColumnDefinitions[0].Width = 0;
+            row.ColumnSpacing = 0;
+            foreach (var icon in row.Children.OfType<Border>())
+                icon.IsVisible = false;
+        }
+#endif
         row.Add(title, 1);
         var selection = new Label { Text = "\u2022", TextColor = Color.FromArgb("#007AC2"), VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center,
             FontSize = 24, InputTransparent = true };
+#if __IOS__ && !MACCATALYST
+        selection.Text = "\u2713";
+        selection.FontSize = 17;
+        selection.TextColor = IosAccent;
+#endif
         if (action.IsSelection) row.Add(selection, 2);
         if (action.IsSubmenu)
         {
@@ -1174,6 +1250,11 @@ public partial class OrientedImageryView
         content.Spacing = 0;
 #endif
         var heading = new Label { Text = title, FontSize = 16, FontAttributes = FontAttributes.Bold, Margin = new Thickness(0, 0, 0, 4) };
+#if __IOS__ && !MACCATALYST
+        heading.FontSize = 15;
+        heading.VerticalTextAlignment = TextAlignment.Center;
+        content.Spacing = 4;
+#endif
         heading.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
         content.Add(heading);
         return content;
@@ -1185,9 +1266,22 @@ public partial class OrientedImageryView
         var label = new Label { Text = Text(key), VerticalOptions = LayoutOptions.Center };
         label.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
         var toggle = new Switch { IsToggled = get(), MinimumHeightRequest = 44, AutomationId = "OrientedImagery" + key };
+#if __IOS__ && !MACCATALYST
+        row.MinimumHeightRequest = 44;
+        label.FontSize = 15;
+        label.LineBreakMode = LineBreakMode.WordWrap;
+        label.VerticalTextAlignment = TextAlignment.Center;
+        toggle.MinimumHeightRequest = -1;
+        toggle.VerticalOptions = LayoutOptions.Center;
+        toggle.OnColor = Color.FromArgb("#34C759");
+#endif
         SemanticProperties.SetDescription(toggle, Text(key));
         toggle.Toggled += (_, e) => { if (!_updatingPanel && _connected && _panelAnchor != null) set(e.Value); };
-        if (icon != null) row.Add(FlyoutIcon(icon()));
+        if (icon != null)
+        {
+            var view = FlyoutIcon(icon());
+            row.Add(view);
+        }
         row.Add(label, 1);
         row.Add(toggle, 2);
         _panelUpdates.Add(() => toggle.IsToggled = get());
@@ -1200,7 +1294,18 @@ public partial class OrientedImageryView
         if (content.Children.Count > 1)
             content.Add(PanelDivider());
 #endif
+#if __IOS__ && !MACCATALYST
+        var group = new Border
+        {
+            Content = item, StrokeThickness = 0,
+            StrokeShape = new RoundRectangle { CornerRadius = 12 },
+            Padding = new Thickness(10, 0), MinimumHeightRequest = 44,
+        };
+        group.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#598E8E93"), Color.FromArgb("#5948484A"));
+        content.Add(group);
+#else
         content.Add(item);
+#endif
     }
 
 #if ANDROID
@@ -1251,6 +1356,11 @@ public partial class OrientedImageryView
         header.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
         var closeButton = ToolButton("ClosePanel", "", "OrientedImageryPanelClose");
         closeButton.Text = "X";
+#if __IOS__ && !MACCATALYST
+        closeButton.Text = "\u00D7";
+        closeButton.FontSize = 22;
+        closeButton.TextColor = IosAccent;
+#endif
         closeButton.WidthRequest = 44;
         closeButton.BorderWidth = 0;
         closeButton.Clicked += (_, _) => DismissPanel();
@@ -1266,9 +1376,19 @@ public partial class OrientedImageryView
             VerticalOptions = LayoutOptions.Start,
             MaximumWidthRequest = 320,
             Margin = 4,
-            Content = _panelLayout,
         };
+#if __IOS__ && !MACCATALYST
+        panel.BackgroundColor = Colors.Transparent;
+        panel.StrokeThickness = 0;
+        _panelLayout.Padding = new Thickness(10, 4, 10, 10);
+        var surface = new Grid();
+        surface.Add(new IosPanelMaterial());
+        surface.Add(_panelLayout);
+        panel.Content = surface;
+#else
+        panel.Content = _panelLayout;
         panel.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#303030"));
+#endif
         _panel = panel;
         _panelHost.Add(panel);
         _panelHost.IsVisible = true;
@@ -1363,6 +1483,10 @@ public partial class OrientedImageryView
 
     private void DismissPanel()
     {
+#if __IOS__ && !MACCATALYST
+        if (_panel?.Content is Grid surface)
+            surface.Children.OfType<IosPanelMaterial>().FirstOrDefault()?.Dispose();
+#endif
         _menuVersion++;
         foreach (var cleanup in _panelCleanup) cleanup();
         _panelCleanup.Clear();
@@ -1397,6 +1521,9 @@ public partial class OrientedImageryView
             _overlaysIcon.IsVisible = _overlaysButton.IsVisible;
             _overlaysIcon.Opacity = _overlaysButton.IsEnabled ? 1 : 0.45;
             _overlaysIcon.Fill = _overlaysButton == _panelAnchor ? Colors.White : Color.FromArgb("#007AC2");
+#if __IOS__ && !MACCATALYST
+            _overlaysIcon.Fill = _overlaysButton == _panelAnchor ? Colors.White : IosAccent;
+#endif
         }
         foreach (var button in _toolButtons)
         {
@@ -1416,7 +1543,7 @@ public partial class OrientedImageryView
                     icon.Color = active ? Colors.White : Color.FromArgb("#007AC2");
             }
 #if !WINDOWS
-            if (button.Parent is Grid cell && cell.Children.OfType<Border>().FirstOrDefault() is { Content: HorizontalStackLayout content } pill)
+            if (button.Parent is Grid cell && cell.Children.OfType<Border>().FirstOrDefault() is { Content: Layout content } pill)
             {
                 pill.Opacity = button.IsEnabled ? 1 : 0.45;
                 if (!changed) continue;
@@ -1433,6 +1560,16 @@ public partial class OrientedImageryView
                 }
                 if (content.Children[0] is Image { Source: FontImageSource mobileIcon })
                     mobileIcon.Color = active ? Colors.White : Color.FromArgb("#007AC2");
+#if __IOS__ && !MACCATALYST
+                if (active)
+                    pill.BackgroundColor = IosAccent;
+                else
+                    pill.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
+                foreach (var label in content.Children.OfType<Label>())
+                    label.TextColor = active ? Colors.White : IosAccent;
+                if (content.Children[0] is Image { Source: FontImageSource iosIcon })
+                    iosIcon.Color = active ? Colors.White : IosAccent;
+#endif
             }
 #endif
         }
