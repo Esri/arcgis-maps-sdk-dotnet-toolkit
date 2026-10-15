@@ -86,6 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateContent();
 #elif WINUI
             UpdatePipsVisibility();
+            AttachFlipView();
 #endif
             base.OnApplyTemplate();
         }
@@ -193,6 +194,145 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GetTemplateChild("PipsPager") is UIElement pager)
             {
                 pager.Visibility = (Element?.Media?.Count ?? 0) > 1 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        // FlipView doesn't size to its content: each FlipViewItem is stretched to the FlipView's viewport, so the
+        // items can never report a desired height larger than the FlipView itself. To make the FlipView fit the
+        // currently selected item, that item's content is measured with the available width and unconstrained
+        // height, and the FlipView's Height is set explicitly from the result.
+        private FlipView? _flipView;
+        private FrameworkElement? _currentItemRoot;
+        private Windows.UI.ViewManagement.UISettings? _uiSettings;
+        private bool _flipViewHeightUpdatePending;
+
+        private void AttachFlipView()
+        {
+            if (_flipView != null)
+            {
+                _flipView.SelectionChanged -= OnFlipViewSelectionChanged;
+                _flipView.SizeChanged -= OnFlipViewSizeChanged;
+            }
+            _flipView = GetTemplateChild("FlipView") as FlipView;
+            if (_flipView != null)
+            {
+                _flipView.SelectionChanged += OnFlipViewSelectionChanged;
+                _flipView.SizeChanged += OnFlipViewSizeChanged;
+            }
+
+            Loaded -= OnMediaPopupElementViewLoaded;
+            Loaded += OnMediaPopupElementViewLoaded;
+            Unloaded -= OnMediaPopupElementViewUnloaded;
+            Unloaded += OnMediaPopupElementViewUnloaded;
+            if (IsLoaded)
+            {
+                SubscribeTextScaleFactorChanged();
+            }
+        }
+
+        private void OnMediaPopupElementViewLoaded(object sender, RoutedEventArgs e)
+        {
+            SubscribeTextScaleFactorChanged();
+            UpdateFlipViewHeight();
+        }
+
+        private void OnMediaPopupElementViewUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (_uiSettings != null)
+            {
+                _uiSettings.TextScaleFactorChanged -= OnTextScaleFactorChanged;
+                _uiSettings = null;
+            }
+            SetCurrentItemRoot(null);
+        }
+
+        private void SubscribeTextScaleFactorChanged()
+        {
+            if (_uiSettings is null)
+            {
+                _uiSettings = new Windows.UI.ViewManagement.UISettings();
+                _uiSettings.TextScaleFactorChanged += OnTextScaleFactorChanged;
+            }
+        }
+
+        // Larger text grows the title/caption inside the item, but since the item is clamped to the FlipView's
+        // height its size doesn't change and no SizeChanged is raised, so re-measure explicitly.
+        // UISettings raises this event on a background thread.
+        private void OnTextScaleFactorChanged(Windows.UI.ViewManagement.UISettings sender, object args) => QueueFlipViewHeightUpdate();
+
+        private void OnFlipViewSelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateFlipViewHeight();
+
+        private void OnFlipViewSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // Setting Height raises SizeChanged as well, so only react to width changes (which affect image
+            // aspect-ratio scaling and text wrapping).
+            if (e.PreviousSize.Width != e.NewSize.Width)
+            {
+                UpdateFlipViewHeight();
+            }
+        }
+
+        // Raised when the item content's own size changes, e.g. when an image finishes downloading.
+        private void OnCurrentItemRootSizeChanged(object sender, SizeChangedEventArgs e) => UpdateFlipViewHeight();
+
+        private void SetCurrentItemRoot(FrameworkElement? root)
+        {
+            if (ReferenceEquals(_currentItemRoot, root))
+            {
+                return;
+            }
+            if (_currentItemRoot != null)
+            {
+                _currentItemRoot.SizeChanged -= OnCurrentItemRootSizeChanged;
+            }
+            _currentItemRoot = root;
+            if (_currentItemRoot != null)
+            {
+                _currentItemRoot.SizeChanged += OnCurrentItemRootSizeChanged;
+            }
+        }
+
+        private void QueueFlipViewHeightUpdate()
+        {
+            if (_flipViewHeightUpdatePending)
+            {
+                return;
+            }
+            if (DispatcherQueue?.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+                {
+                    _flipViewHeightUpdatePending = false;
+                    UpdateFlipViewHeight();
+                }) == true)
+            {
+                _flipViewHeightUpdatePending = true;
+            }
+        }
+
+        private void UpdateFlipViewHeight()
+        {
+            if (_flipView is null || _flipView.ActualWidth <= 0 || _flipView.SelectedIndex < 0)
+            {
+                return;
+            }
+            if (_flipView.ContainerFromIndex(_flipView.SelectedIndex) is not FlipViewItem item || item.ContentTemplateRoot is not FrameworkElement root)
+            {
+                // The selected item's container may not be realized yet; try again after the next layout pass.
+                QueueFlipViewHeightUpdate();
+                return;
+            }
+            SetCurrentItemRoot(root);
+
+            var availableWidth = Math.Max(0, _flipView.ActualWidth - item.Padding.Left - item.Padding.Right);
+            root.Measure(new Windows.Foundation.Size(availableWidth, double.PositiveInfinity));
+            var height = root.DesiredSize.Height + item.Padding.Top + item.Padding.Bottom;
+            if (height <= 0)
+            {
+                return;
+            }
+            height = Math.Min(height, _flipView.MaxHeight);
+            if (double.IsNaN(_flipView.Height) || Math.Abs(_flipView.Height - height) > 0.5)
+            {
+                _flipView.Height = height;
             }
         }
 #endif
