@@ -521,6 +521,10 @@
     <value>View</value>
     <comment>The text displayed for a hyperlink, that when clicked will view that webpage/link</comment>
   </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>Downloading attachment</value>
+    <comment>Accessible name of the progress indicator while a popup attachment is downloading.</comment>
+  </data>
   <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
     <value>Previous media</value>
     <comment>Accessible name and tooltip for the button that shows the previous item in a MediaPopupElement with multiple media</comment>
