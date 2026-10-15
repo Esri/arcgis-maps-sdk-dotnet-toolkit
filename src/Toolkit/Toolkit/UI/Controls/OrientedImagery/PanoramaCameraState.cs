@@ -192,22 +192,22 @@ internal sealed record PanoramaCameraState
 
     public readonly record struct MarkerQuad(float Left, float Top, float Right, float Bottom);
 
-    // UpdateFootprintAsync arguments, in degrees: yaw runs clockwise from the image's center column in [0, 360),
-    // and pitch is 0 at the nadir, 90 at the horizon, and 180 at the zenith.
+    // UpdateFootprintAsync arguments, in degrees: yaw is the view center's compass azimuth, clockwise from north in
+    // [0, 360), and pitch is 0 at the nadir, 90 at the horizon, and 180 at the zenith.
     public readonly record struct FootprintView(double Yaw, double Pitch, double HorizontalFieldOfView, double VerticalFieldOfView);
 
-    // The footprint API puts yaw at column u = 0.5 + yaw/360 and pitch at row v = 1 - pitch/180.
-    // In degrees, that makes yaw = 90 + Yaw and pitch = 90 - Pitch.
-    public bool TryGetFootprintView(double viewWidth, double viewHeight, out FootprintView view)
+    // Column u faces cameraHeading + (u - 0.5) * 360 and the view center is at u = 0.75 + Yaw/2pi, so the azimuth is
+    // cameraHeading + 90 + Yaw in degrees. The footprint API puts pitch at row v = 1 - pitch/180, or 90 - Pitch.
+    public bool TryGetFootprintView(double viewWidth, double viewHeight, double cameraHeadingDegrees, out FootprintView view)
     {
         view = default;
         if (viewWidth <= 0 || viewHeight <= 0)
             return false;
 
-        if (!float.IsFinite(Yaw) || !float.IsFinite(Pitch) || !float.IsFinite(FieldOfView) || FieldOfView <= 0f || FieldOfView >= MathF.PI)
+        if (!float.IsFinite(Yaw) || !float.IsFinite(Pitch) || !float.IsFinite(FieldOfView) || FieldOfView <= 0f || FieldOfView >= MathF.PI || !double.IsFinite(cameraHeadingDegrees))
             return false;
 
-        double yaw = (90.0 + (Yaw * 180.0 / Math.PI)) % 360.0;
+        double yaw = (cameraHeadingDegrees + 90.0 + (Yaw * 180.0 / Math.PI)) % 360.0;
         if (yaw < 0)
             yaw += 360.0;
 

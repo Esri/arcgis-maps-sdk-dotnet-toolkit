@@ -256,7 +256,8 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         if (_imageWidth <= 0 || _imageHeight <= 0)
             return null;
 
-        if (!Camera.TryGetFootprintView(width, height, out PanoramaCameraState.FootprintView view))
+        double heading = footprint.OrientedImage is OrientedImage image ? ReadHeadingDegrees(image.Attributes) : 0d;
+        if (!Camera.TryGetFootprintView(width, height, heading, out PanoramaCameraState.FootprintView view))
             return null;
 
         return footprint.UpdateFootprintAsync(view.Yaw, view.Pitch, view.HorizontalFieldOfView, view.VerticalFieldOfView, NextFootprintUpdateToken());
@@ -365,14 +366,11 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         return null;
     }
 
-    // CameraHeading is in degrees, and -999 means unknown. Values outside 0 to 360 wrap.
-    internal static float ReadHeadingRadians(IDictionary<string, object?> attributes)
-    {
-        if (attributes.TryGetValue("CameraHeading", out object? raw) && raw is double degrees && !double.IsNaN(degrees) && degrees != -999)
-            return (float)(degrees * Math.PI / 180.0);
+    // CameraHeading is in degrees, and -999 means unknown. Values outside 0 to 360 wrap where they are used.
+    internal static double ReadHeadingDegrees(IDictionary<string, object?> attributes) =>
+        attributes.TryGetValue("CameraHeading", out object? raw) && raw is double degrees && !double.IsNaN(degrees) && degrees != -999 ? degrees : 0d;
 
-        return 0f;
-    }
+    internal static float ReadHeadingRadians(IDictionary<string, object?> attributes) => (float)(ReadHeadingDegrees(attributes) * Math.PI / 180.0);
 
     // A drawn marker as tap hit-testing sees it. Offsets and half-sizes are in DIPs.
     internal readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY, double HalfWidth, double HalfHeight);
