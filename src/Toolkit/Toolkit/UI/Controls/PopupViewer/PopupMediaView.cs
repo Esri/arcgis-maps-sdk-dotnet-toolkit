@@ -92,10 +92,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _lastChartSize = 0;
                 Image img = Content as Image ?? new Image();
-#if MAUI && WINDOWS
-                img.HandlerChanged -= Image_HandlerChanged;
-                img.HandlerChanged += Image_HandlerChanged;
-#endif
                 var sourceUrl = PopupMedia.Value?.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
@@ -138,7 +134,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                     img.GestureRecognizers.Clear();
                     var tapGesture = new TapGestureRecognizer();
+#if WINDOWS
+                    tapGesture.Tapped += Image_Tapped;
+#else
                     tapGesture.Tapped += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
+#endif
                     img.GestureRecognizers.Add(tapGesture);
 #else
                     img.Tag = linkUrl;
@@ -384,6 +384,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
 #if WINUI
             UpdateFlipViewItemAutomationName(GetAltText());
+#elif MAUI && WINDOWS
+            if (PopupMedia?.Type == PopupMediaType.Image && Content is Image image)
+                UpdateImageAccessibility(image);
 #endif
         }
 
@@ -428,6 +431,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             e)
         {
             StopRefreshTimer();
+#if MAUI && WINDOWS
+            DisconnectImage();
+#endif
         }
 
         private void StartRefreshTimer(TimeSpan interval)
