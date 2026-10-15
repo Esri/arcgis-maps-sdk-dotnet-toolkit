@@ -903,7 +903,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             new ShowSelectedFootprintVM(),
             new ShowUnselectedFootprintsVM(),
             new ShowCameraMarkersVM(),
-            new ShowSelectedImagePopupVM(),
             new ToolbarDividerVM(),
             new AllowAddingMarkersVM(),
             markerSymbolPickerVM,
