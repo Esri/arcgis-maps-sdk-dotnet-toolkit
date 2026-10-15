@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// Create through <see cref="FromImagePoint(OrientedImage, PointF)"/> or <see cref="FromLocation(MapPoint)"/>. To keep
 /// a tapped location across images, anchor the marker to a world location.
 /// </remarks>
-public readonly struct OrientedImageMarkerPosition : IEquatable<OrientedImageMarkerPosition>
+public readonly record struct OrientedImageMarkerPosition
 {
     private OrientedImageMarkerPosition(OrientedImage? image, PointF? imagePoint, MapPoint? location)
     {
@@ -78,26 +78,4 @@ public readonly struct OrientedImageMarkerPosition : IEquatable<OrientedImageMar
     /// <exception cref="ArgumentNullException"><paramref name="location"/> is <c>null</c>.</exception>
     public static OrientedImageMarkerPosition FromLocation(MapPoint location) =>
         new(null, null, location ?? throw new ArgumentNullException(nameof(location)));
-
-    /// <inheritdoc/>
-    public bool Equals(OrientedImageMarkerPosition other) =>
-        ReferenceEquals(Image, other.Image) && Nullable.Equals(ImagePoint, other.ImagePoint) && Equals(Location, other.Location);
-
-    /// <inheritdoc/>
-    public override bool Equals(object? obj) => obj is OrientedImageMarkerPosition other && Equals(other);
-
-    /// <inheritdoc/>
-    public override int GetHashCode() => (Image, ImagePoint, Location).GetHashCode();
-
-    /// <summary>Determines whether two positions are equal.</summary>
-    /// <param name="left">The first position.</param>
-    /// <param name="right">The second position.</param>
-    /// <returns><c>true</c> if the positions are equal; otherwise <c>false</c>.</returns>
-    public static bool operator ==(OrientedImageMarkerPosition left, OrientedImageMarkerPosition right) => left.Equals(right);
-
-    /// <summary>Determines whether two positions are not equal.</summary>
-    /// <param name="left">The first position.</param>
-    /// <param name="right">The second position.</param>
-    /// <returns><c>true</c> if the positions are not equal; otherwise <c>false</c>.</returns>
-    public static bool operator !=(OrientedImageMarkerPosition left, OrientedImageMarkerPosition right) => !left.Equals(right);
 }
