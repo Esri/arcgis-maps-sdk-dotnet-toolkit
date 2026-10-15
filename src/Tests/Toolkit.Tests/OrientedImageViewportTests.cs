@@ -67,6 +67,14 @@ public sealed class OrientedImageViewportTests
     }
 
     [STATestMethod]
+    public void InnerViewportsHideTheirViewWithoutAnImage()
+    {
+        // A shown view would paint its own backdrop over the host's color.
+        Assert.AreEqual(Visibility.Collapsed, new OrientedImageRasterViewport().View.Visibility, "planar");
+        Assert.AreEqual(Visibility.Collapsed, new OrientedImagePanoramicViewport().View.Visibility, "panoramic");
+    }
+
+    [STATestMethod]
     public void MarkerSubscriptionDoesNotRetainDiscardedViewport()
     {
         var markers = new ObservableCollection<OrientedImageMarker>

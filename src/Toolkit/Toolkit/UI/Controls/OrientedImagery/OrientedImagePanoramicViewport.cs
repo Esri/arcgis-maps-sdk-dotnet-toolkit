@@ -67,6 +67,11 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         _surface.SurfaceTapped += OnSurfaceTapped;
         _surface.RenderFailed += OnRenderFailed;
         _surface.ScaleChanged += OnScaleChanged;
+
+        // Shown only while an image loads or is presented, so a failed viewport shows the control's background as the
+        // planar viewport does. Paging goes straight from interactive to busy and keeps the surface shown.
+        StateChanged += (_, _) => SetViewVisible(IsBusy || IsInteractive);
+        SetViewVisible(false);
         SetAutomationName(null);
     }
 

@@ -206,6 +206,18 @@ internal abstract class OrientedImageInnerViewport
     // Color.Empty restores the viewport's default background.
     public abstract void SetBackgroundColor(System.Drawing.Color color);
 
+    // A hidden view lets the control's background show where the view would paint its own backdrop.
+    protected void SetViewVisible(bool visible)
+    {
+#if MAUI
+        View.IsVisible = visible;
+#elif WPF
+        View.Visibility = visible ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+#else
+        View.Visibility = visible ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+#endif
+    }
+
     public void SetAutomationName(string? name)
     {
         if (string.IsNullOrEmpty(name))
