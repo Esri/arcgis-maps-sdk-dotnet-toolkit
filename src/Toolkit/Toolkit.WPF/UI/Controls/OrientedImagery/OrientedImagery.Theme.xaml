@@ -740,7 +740,7 @@
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=IsInteractive}" Value="False">
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=IsBusy}" Value="True">
                                                     <Setter Property="Visibility" Value="Visible" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
