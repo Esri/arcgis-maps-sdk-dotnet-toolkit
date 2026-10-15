@@ -53,7 +53,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
     private CancellationTokenSource? _updateCts;
     private int _lookAtCalls; // A LookAtAsync call that sees a newer count reports false
     private MapPoint? _heldLookAt;
-    private TaskCompletionSource _loadSettled = new(); // Completes when the load settles or is replaced
+    private Task _present = Task.CompletedTask; // the current session's SetFootprintAsync
     private bool _autoUpdate;
     private bool _isLoading;
 
@@ -112,7 +112,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
     {
         _sessionCts?.Cancel();
         _sessionCts = new CancellationTokenSource();
-        _ = SetFootprintAsync(footprint, _sessionCts.Token);
+        _present = SetFootprintAsync(footprint, _sessionCts.Token);
     }
 
     public void SetMarkers(IEnumerable<OrientedImageMarker>? markers)
@@ -202,18 +202,12 @@ internal abstract class OrientedImageInnerViewport : ContentControl
 
         private void StopListeningToSymbol()
         {
-            if (_symbolListener is null)
-                return;
-
-            // Disable delivery before detaching, because an event in flight may hold the handler.
-            _symbolListener.OnEventAction = null;
-            _symbolListener.Detach();
+            _symbolListener?.Detach();
             _symbolListener = null;
         }
 
         public void Detach()
         {
-            _markerListener.OnEventAction = null;
             _markerListener.Detach();
             StopListeningToSymbol();
         }
@@ -275,7 +269,7 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         {
             // After the load, the call proceeds like a new one to report the result.
             _heldLookAt = target;
-            await _loadSettled.Task;
+            await _present;
             if (call != _lookAtCalls || !IsInteractive)
                 return false;
         }
@@ -412,10 +406,9 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         if (!ReferenceEquals(Footprint, footprint))
             _updateCts?.Cancel();
 
-        // A footprint change supersedes look-at calls in progress and wakes a held one, which then reports false.
+        // A footprint change supersedes look-at calls in progress; a held one reports false when it wakes.
         _lookAtCalls++;
         _heldLookAt = null;
-        _loadSettled.TrySetResult();
 
         Footprint = footprint;
         PresentationError = null;
@@ -432,23 +425,19 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         }
 
         _isLoading = true;
-        _loadSettled = new(TaskCreationOptions.RunContinuationsAsynchronously);
         UpdateState();
         try
         {
             await image.RetryLoadAsync();
             token.ThrowIfCancellationRequested();
 
+            // Loading downloads the image or its first attachment to a local file. An attachment without an image
+            // leaves nothing to display.
             if (image.DataUri is not Uri uri)
             {
-                // Loaded with nothing to display, such as an attachment without an image.
                 ClearPresentation();
                 return;
             }
-
-            // Loading downloads the image file or first attachment, so its data is a local file. Nothing else is read.
-            if (!uri.IsAbsoluteUri || !uri.IsFile)
-                throw new NotSupportedException("The oriented image's data isn't a local file.");
 
             await PresentAsync(image, uri.LocalPath, token);
         }
@@ -469,7 +458,6 @@ internal abstract class OrientedImageInnerViewport : ContentControl
                 _isLoading = false;
                 UpdateState();
                 OnPresentCompleted();
-                _loadSettled.TrySetResult();
             }
         }
     }
