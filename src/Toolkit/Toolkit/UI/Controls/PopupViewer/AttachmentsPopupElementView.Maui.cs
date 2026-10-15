@@ -105,6 +105,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Label name = new Label() { VerticalOptions = LayoutOptions.End };
             name.SetBinding(Label.TextProperty, static (AttachmentViewModel vm) => vm.Name);
+#if WINDOWS
+            AutomationProperties.SetIsInAccessibleTree(name, false);
+#endif
             Grid.SetColumn(name, 1);
             layout.Add(name);
 
