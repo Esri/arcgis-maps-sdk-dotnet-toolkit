@@ -27,17 +27,43 @@ public sealed class OrientedImageViewportTests
         // Recreating the inner viewport would lose its image and navigation state.
         var control = new OrientedImageViewport { Template = CreateHostTemplate() };
         Assert.IsTrue(control.ApplyTemplate());
-        ContentPresenter firstHost = GetHost(control);
-        object? view = firstHost.Content;
-        Assert.IsNotNull(view, "the initial template's host presents the active inner viewport's view");
+        Border firstHost = GetHost(control);
+        Assert.IsNull(firstHost.Child, "an empty viewport hosts no inner viewport");
+
+        control.SetActiveViewport(new OrientedImageRasterViewport());
+        UIElement? view = firstHost.Child;
+        Assert.IsNotNull(view, "the host presents the active inner viewport's view");
 
         control.Template = CreateHostTemplate();
         Assert.IsTrue(control.ApplyTemplate());
-        ContentPresenter secondHost = GetHost(control);
+        Border secondHost = GetHost(control);
 
         Assert.AreNotSame(firstHost, secondHost, "sanity: re-applying the template creates a new host");
-        Assert.IsNull(firstHost.Content, "the discarded template's host must release the view");
-        Assert.AreSame(view, secondHost.Content, "the re-applied template's host must adopt the same view");
+        Assert.IsNull(firstHost.Child, "the discarded template's host must release the view");
+        Assert.AreSame(view, secondHost.Child, "the re-applied template's host must adopt the same view");
+    }
+
+    [STATestMethod]
+    public void EmptyViewportPaintsTheBackgroundColor()
+    {
+        // With no inner viewport, the host is the only thing that can show the configured color.
+        var control = new OrientedImageViewport { Template = CreateHostTemplate() };
+        Assert.IsTrue(control.ApplyTemplate());
+        Border host = GetHost(control);
+        Assert.IsNull(host.Background, "the default leaves an empty viewport transparent");
+
+        control.DisplayBackgroundColor = Color.SteelBlue;
+        var brush = host.Background as SolidColorBrush;
+        Assert.IsNotNull(brush, "a set color paints the host");
+        Assert.AreEqual(System.Windows.Media.Color.FromArgb(255, 70, 130, 180), brush.Color);
+
+        control.DisplayBackgroundColor = Color.Empty;
+        Assert.IsNull(host.Background, "clearing the color clears the host");
+
+        control.DisplayBackgroundColor = Color.SteelBlue;
+        control.Template = CreateHostTemplate();
+        Assert.IsTrue(control.ApplyTemplate());
+        Assert.IsNotNull(GetHost(control).Background as SolidColorBrush, "a re-applied template is painted too");
     }
 
     [STATestMethod]
@@ -247,6 +273,7 @@ public sealed class OrientedImageViewportTests
         System.Windows.Automation.AutomationProperties.SetName(control, "Rear camera");
         System.Windows.Automation.AutomationProperties.SetAutomationId(control, "RearCamera");
         Assert.IsTrue(control.ApplyTemplate());
+        control.SetActiveViewport(new OrientedImageRasterViewport());
         DependencyObject view = GetFocusableView(control);
         Assert.AreEqual("Rear camera", System.Windows.Automation.AutomationProperties.GetName(view));
         Assert.AreEqual("RearCamera", System.Windows.Automation.AutomationProperties.GetAutomationId(view));
@@ -273,7 +300,7 @@ public sealed class OrientedImageViewportTests
     // The active inner viewport's focusable view; here, the raster viewport's MapView.
     private static DependencyObject GetFocusableView(OrientedImageViewport control)
     {
-        var view = GetHost(control).Content as DependencyObject;
+        var view = GetHost(control).Child as DependencyObject;
         Assert.IsNotNull(view, "the host presents the active inner viewport's view");
         return view;
     }
@@ -503,15 +530,15 @@ public sealed class OrientedImageViewportTests
         }
     }
 
-    // A single named host presenter, like the default template.
+    // A single named host border, like the default template.
     private static ControlTemplate CreateHostTemplate() => new(typeof(OrientedImageViewport))
     {
-        VisualTree = new FrameworkElementFactory(typeof(ContentPresenter), "PART_DisplayHost"),
+        VisualTree = new FrameworkElementFactory(typeof(Border), "PART_DisplayHost"),
     };
 
-    private static ContentPresenter GetHost(OrientedImageViewport control)
+    private static Border GetHost(OrientedImageViewport control)
     {
-        var host = control.Template.FindName("PART_DisplayHost", control) as ContentPresenter;
+        var host = control.Template.FindName("PART_DisplayHost", control) as Border;
         Assert.IsNotNull(host, "the applied template must contain PART_DisplayHost");
         return host;
     }

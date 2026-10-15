@@ -425,9 +425,13 @@ internal abstract class OrientedImageInnerViewport
         }
         catch (Exception ex)
         {
-            // A superseded load's late exception must not mark the newer image as failed.
+            // A failed load leaves nothing behind the error. A superseded load's late exception must not touch the
+            // newer image.
             if (!token.IsCancellationRequested)
+            {
                 PresentationError = ex;
+                ClearPresentation();
+            }
         }
         finally
         {

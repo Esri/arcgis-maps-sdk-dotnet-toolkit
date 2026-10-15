@@ -28,10 +28,10 @@ using Color = System.Drawing.Color;
 using PointF = System.Drawing.PointF;
 
 #if WPF
-using DisplayHostElement = System.Windows.Controls.ContentPresenter;
+using DisplayHostElement = System.Windows.Controls.Border;
 using Point = System.Windows.Point;
 #elif WINDOWS_XAML
-using DisplayHostElement = Microsoft.UI.Xaml.Controls.ContentPresenter;
+using DisplayHostElement = Microsoft.UI.Xaml.Controls.Border;
 using Point = Windows.Foundation.Point;
 #elif MAUI
 using DisplayHostElement = Microsoft.Maui.Controls.ContentView;
@@ -164,11 +164,11 @@ public partial class OrientedImageViewport
     public Exception? Error => GetValue(ErrorProperty) as Exception;
 
     /// <summary>
-    /// Gets or sets the background color shown where the image does not fill the viewport.
+    /// Gets or sets the background color shown where the image does not fill the viewport, and while no image is shown.
     /// </summary>
     /// <remarks>
     /// The default, <see cref="System.Drawing.Color.Empty"/>, shows a grid behind planar images and a dark backdrop
-    /// behind panoramas.
+    /// behind panoramas, and leaves an empty or failed viewport transparent.
     /// </remarks>
     public System.Drawing.Color DisplayBackgroundColor
     {
@@ -222,7 +222,7 @@ public partial class OrientedImageViewport
     /// Identifies the <see cref="DisplayBackgroundColor"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
-        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageViewport>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s._activeViewport?.SetBackgroundColor(newValue));
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageViewport>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s.OnDisplayBackgroundColorChanged(newValue));
 
     /// <inheritdoc/>
 #if WINDOWS_XAML || MAUI
@@ -237,13 +237,38 @@ public partial class OrientedImageViewport
 
         // The inner viewport's view is still parented to the old template's host; release it so the new host can adopt it.
         if (previousHost is not null && !ReferenceEquals(previousHost, _displayHost))
-            previousHost.Content = null;
+            SetHostContent(previousHost, null);
+
+        PaintHostBackground();
 
         // Re-presenting an existing inner viewport would reload the image and cancel in-flight work, so only host it.
         if (_activeViewport is null)
             UpdateViewport();
         else
             HostActiveViewport();
+    }
+
+    private void OnDisplayBackgroundColorChanged(System.Drawing.Color color)
+    {
+        _activeViewport?.SetBackgroundColor(color);
+        PaintHostBackground();
+    }
+
+    // The host shows the color where no inner viewport paints: while the viewport is empty or has failed.
+    private void PaintHostBackground()
+    {
+        if (_displayHost is null)
+            return;
+
+        System.Drawing.Color color = DisplayBackgroundColor;
+#if WPF
+        _displayHost.Background = color.IsEmpty ? null : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B));
+#elif WINDOWS_XAML
+        _displayHost.Background = color.IsEmpty ? null : new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(color.A, color.R, color.G, color.B));
+#else
+        // A null color leaves the native background as it was on iOS, so an empty color paints transparent.
+        _displayHost.BackgroundColor = Microsoft.Maui.Graphics.Color.FromRgba(color.R, color.G, color.B, color.A);
+#endif
     }
 
     private void UpdateViewport()
@@ -259,7 +284,6 @@ public partial class OrientedImageViewport
 
         if (viewport is not null)
         {
-            PushAutomationProperties();
             viewport.SetFootprint(Footprint);
             viewport.SetMarkers(Markers);
             viewport.SetAutoUpdateFootprint(AutoUpdateFootprint);
@@ -267,8 +291,8 @@ public partial class OrientedImageViewport
         }
     }
 
-    // Subscribes before the caller pushes state, so the viewport's first notifications aren't missed.
-    private void SetActiveViewport(OrientedImageInnerViewport? viewport)
+    // Subscribes before the caller pushes state, so the viewport's first notifications aren't missed. Internal for tests.
+    internal void SetActiveViewport(OrientedImageInnerViewport? viewport)
     {
         if (ReferenceEquals(_activeViewport, viewport))
         {
@@ -295,6 +319,7 @@ public partial class OrientedImageViewport
         {
             viewport.StateChanged += OnViewportStateChanged;
             viewport.ImageTapped += OnViewportImageTapped;
+            PushAutomationProperties();
         }
 
         UpdateState();
@@ -303,7 +328,16 @@ public partial class OrientedImageViewport
     private void HostActiveViewport()
     {
         if (_displayHost is not null)
-            _displayHost.Content = _activeViewport?.View;
+            SetHostContent(_displayHost, _activeViewport);
+    }
+
+    private static void SetHostContent(DisplayHostElement host, OrientedImageInnerViewport? viewport)
+    {
+#if MAUI
+        host.Content = viewport?.View;
+#else
+        host.Child = viewport?.View;
+#endif
     }
 
     private void OnViewportStateChanged(object? sender, EventArgs e) => UpdateState();
@@ -367,12 +401,10 @@ public partial class OrientedImageViewport
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    // No image needs no inner viewport, so a panorama-only app never creates the planar viewport's MapView.
     private OrientedImageInnerViewport? SelectViewport(OrientedImage? image)
     {
-        if (image is null)
-            return _rasterViewport ??= new OrientedImageRasterViewport();
-
-        if (IsVideo(image.Type))
+        if (image is null || IsVideo(image.Type))
             return null;
 
         if (!IsPanoramic(image.Type, image.Attributes))
