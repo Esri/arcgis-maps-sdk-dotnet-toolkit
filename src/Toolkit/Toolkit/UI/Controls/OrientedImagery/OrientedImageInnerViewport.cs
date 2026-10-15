@@ -280,8 +280,9 @@ internal abstract class OrientedImageInnerViewport : ContentControl
                 return false;
         }
 
+        // A device loss or render failure during the conversion ends interactivity without superseding the call.
         LookAtTarget? pixel = await ConvertLookAtTargetAsync(image, target);
-        return call == _lookAtCalls && pixel is LookAtTarget p && TryLookAt(p);
+        return call == _lookAtCalls && IsInteractive && pixel is LookAtTarget p && TryLookAt(p);
     }
 
     // Shows the image from the local file at path, facing the target from ConvertHeldLookAtAsync if there is one. Throw
