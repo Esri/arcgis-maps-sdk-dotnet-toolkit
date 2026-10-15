@@ -12,7 +12,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter x:Name="PART_DisplayHost" />
+                        <Border x:Name="PART_DisplayHost" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
