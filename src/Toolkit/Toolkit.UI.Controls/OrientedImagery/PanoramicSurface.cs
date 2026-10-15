@@ -117,8 +117,7 @@ internal sealed unsafe partial class PanoramicSurface
     private ID3D11BlendState* _markerBlendState;
     private ID3D11SamplerState* _markerSampler;
 
-    // One texture per swatch, keyed by reference: the viewport gives every marker of a swatch the same pixel array.
-    private readonly Dictionary<byte[], (nint Texture, nint View)> _swatchTextures = new(ReferenceEqualityComparer.Instance);
+    private readonly List<(nint Texture, nint View)> _swatchTextures = [];
     private readonly List<(nint View, PanoramaMarker Marker)> _gpuMarkers = [];
     private readonly List<nint> _visibleViews = [];
     private IReadOnlyList<PanoramaMarker> _markers = []; // uploaded whenever a device is created
@@ -692,38 +691,37 @@ internal sealed unsafe partial class PanoramicSurface
         _markerSampler = CreateSampler(D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP);
     }
 
+    // Markers sharing a swatch share its texture: the viewport gives them the same pixel array.
     private void BuildGpuMarkers(IReadOnlyList<PanoramaMarker> markers)
     {
-        _gpuMarkers.Clear();
-        _visibleViews.Clear();
-        var usedSwatches = new HashSet<byte[]>(ReferenceEqualityComparer.Instance);
+        ReleaseGpuMarkers();
+        var views = new Dictionary<byte[], nint>(ReferenceEqualityComparer.Instance);
         foreach (PanoramaMarker marker in markers)
         {
             // A marker that cannot be uploaded is skipped, so it never fails the panorama.
             if (!marker.IsValid)
                 continue;
 
-            if (!_swatchTextures.TryGetValue(marker.Bgra, out (nint Texture, nint View) swatch))
+            if (!views.TryGetValue(marker.Bgra, out nint view))
             {
                 try
                 {
                     CreateBgraTexture(marker.Bgra, (uint)marker.Width, (uint)marker.Height,
-                        out ID3D11Texture2D* texture, out ID3D11ShaderResourceView* view);
-                    swatch = ((nint)texture, (nint)view);
+                        out ID3D11Texture2D* texture, out ID3D11ShaderResourceView* srv);
+                    view = (nint)srv;
+                    _swatchTextures.Add(((nint)texture, view));
                 }
                 catch (Exception)
                 {
                     continue;
                 }
 
-                _swatchTextures.Add(marker.Bgra, swatch);
+                views.Add(marker.Bgra, view);
             }
 
-            usedSwatches.Add(marker.Bgra);
-            _gpuMarkers.Add((swatch.View, marker));
+            _gpuMarkers.Add((view, marker));
         }
 
-        ReleaseSwatchTextures(swatch => !usedSwatches.Contains(swatch));
         if (_gpuMarkers.Count == 0)
             return;
 
@@ -791,23 +789,15 @@ internal sealed unsafe partial class PanoramicSurface
 
     private void ReleaseGpuMarkers()
     {
-        ReleaseSwatchTextures(_ => true);
-        _gpuMarkers.Clear();
-        _visibleViews.Clear();
-    }
-
-    // Dictionary allows removing the current entry while enumerating.
-    private void ReleaseSwatchTextures(Func<byte[], bool> shouldRelease)
-    {
-        foreach ((byte[] swatch, (nint texture, nint view)) in _swatchTextures)
+        foreach ((nint texture, nint view) in _swatchTextures)
         {
-            if (!shouldRelease(swatch))
-                continue;
-
             _ = ((IUnknown*)view)->Release();
             _ = ((IUnknown*)texture)->Release();
-            _swatchTextures.Remove(swatch);
         }
+
+        _swatchTextures.Clear();
+        _gpuMarkers.Clear();
+        _visibleViews.Clear();
     }
 
     private void ReleaseMarkerResources()
