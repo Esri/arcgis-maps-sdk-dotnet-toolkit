@@ -311,7 +311,7 @@ public partial class OrientedImageryView
         if (_viewport != null)
         {
             _viewport.ImageTapped += ImageTapped;
-            _viewport.PropertyChanged += ViewportChanged;
+            _viewport.StateChanged += ViewportChanged;
         }
 
         if (_layerButton != null) _layerButton.Clicked += SelectLayer;
@@ -405,7 +405,7 @@ public partial class OrientedImageryView
         if (_viewport != null)
         {
             _viewport.ImageTapped -= ImageTapped;
-            _viewport.PropertyChanged -= ViewportChanged;
+            _viewport.StateChanged -= ViewportChanged;
             _viewport.Footprint = null;
             _viewport.Markers = null;
         }
@@ -455,13 +455,32 @@ public partial class OrientedImageryView
 #endif
     }
 
-    private void ViewportChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName is nameof(OrientedImageViewport.IsBusy) or nameof(OrientedImageViewport.IsInteractive) or nameof(OrientedImageViewport.Error))
-            Refresh();
-    }
+    private void ViewportChanged(object? sender, EventArgs e) => Refresh();
+
+    private bool _refreshing;
+    private bool _refreshPending;
 
     private void Refresh()
+    {
+        _refreshPending = true;
+        if (_refreshing) return;
+        _refreshing = true;
+        try
+        {
+            do
+            {
+                _refreshPending = false;
+                RefreshPresentation();
+            }
+            while (_refreshPending);
+        }
+        finally
+        {
+            _refreshing = false;
+        }
+    }
+
+    private void RefreshPresentation()
     {
         if (ViewModel == null)
             return;
