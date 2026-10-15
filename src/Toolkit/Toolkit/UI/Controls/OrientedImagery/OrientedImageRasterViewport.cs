@@ -94,6 +94,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
             if (e.Status == DrawStatus.Completed)
                 UpdateFootprint();
         };
+        ShowMapView(false);
         SetAutomationName(null);
     }
 
@@ -143,6 +144,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         map.OperationalLayers.Add(layer);
         _mapView.Map = map;
         _rasterLayer = layer;
+        ShowMapView(true);
         await layer.LoadAsync();
         token.ThrowIfCancellationRequested();
         _imageOrientation = ExifOrientationTransform.Read(path);
@@ -198,10 +200,23 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         _rasterLayer?.CancelLoad();
         _mapView.Map = null;
         _rasterLayer = null;
+        ShowMapView(false);
         _imageOrientation = default;
         foreach (Graphic graphic in _markerGraphics.Values)
             graphic.Geometry = null;
         SetInteractive(false);
+    }
+
+    // Without an image the view would paint its own backdrop over the control's background.
+    private void ShowMapView(bool visible)
+    {
+#if MAUI
+        _mapView.IsVisible = visible;
+#elif WPF
+        _mapView.Visibility = visible ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+#else
+        _mapView.Visibility = visible ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+#endif
     }
 
     public override void SetBackgroundColor(System.Drawing.Color color)
