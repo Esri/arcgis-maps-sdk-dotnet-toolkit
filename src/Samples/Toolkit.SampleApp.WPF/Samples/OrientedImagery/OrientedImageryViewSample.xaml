@@ -14,8 +14,8 @@
                 <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OrientedImagery/OrientedImagery.Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Define an alternate data template for a custom toolbar item type -->
-            <DataTemplate x:Key="PopupToolbarItemTemplate" DataType="{x:Type esri:ShowSelectedImagePopupVM}">
+            <!-- Define a data template for a custom toolbar item type -->
+            <DataTemplate x:Key="PopupToolbarItemTemplate" DataType="{x:Type local:ShowSelectedImagePopupVM}">
                 <Button Click="OpenSelectedImagePopupButton_Click" ToolTip="Open popup for selected image">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
@@ -34,14 +34,8 @@
                 </Button>
             </DataTemplate>
 
-            <!-- Define a template for an entirely custom item -->
-            <DataTemplate x:Key="CustomToolbarItemTemplate" DataType="{x:Type local:CustomToolbarItem}">
-                <Button  Content="Custom" />
-            </DataTemplate>
-
             <esri:OrientedImageryViewTemplateSelector x:Key="AlternateToolbarSelector">
-                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type esri:ShowSelectedImagePopupVM}" Template="{StaticResource PopupToolbarItemTemplate}" />
-                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:CustomToolbarItem}" Template="{StaticResource CustomToolbarItemTemplate}" />
+                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:ShowSelectedImagePopupVM}" Template="{StaticResource PopupToolbarItemTemplate}" />
             </esri:OrientedImageryViewTemplateSelector>
         </ResourceDictionary>
     </UserControl.Resources>
