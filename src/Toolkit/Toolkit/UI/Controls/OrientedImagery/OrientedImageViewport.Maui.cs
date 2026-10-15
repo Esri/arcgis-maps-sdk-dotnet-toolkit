@@ -44,8 +44,8 @@ public partial class OrientedImageViewport : TemplatedView
     {
         base.OnPropertyChanged(propertyName);
 
-        // AutomationId can be set only once, normally before an inner viewport activates and receives it.
-        if (propertyName == SemanticProperties.DescriptionProperty.PropertyName)
+        // MAUI applies an element's AutomationId once, so the inner viewport takes the first non-empty id it is given.
+        if (propertyName == SemanticProperties.DescriptionProperty.PropertyName || propertyName == AutomationIdProperty.PropertyName)
             PushAutomationProperties();
     }
 }
