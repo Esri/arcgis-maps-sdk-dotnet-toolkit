@@ -1,4 +1,4 @@
-﻿#if WPF
+﻿#if WPF || MAUI
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Collections.ObjectModel;
@@ -7,7 +7,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 /// <summary>
 /// View model for a toolbar representing a category of items. Used for nested views.

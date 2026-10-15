@@ -21,12 +21,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-#if WPF
+#if WPF || MAUI
 /// <summary>
 /// Manages oriented imagery selection, footprints, and map markers for an oriented imagery view.
 /// </summary>
 public class OrientedImageryViewModel : INotifyPropertyChanged
 {
+#if MAUI
+    internal Action<Action>? DispatchAction { get; set; }
+#endif
+
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryViewModel"/> class.
     /// </summary>
@@ -810,12 +814,20 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void Marker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+#if WPF
         System.Windows.Threading.Dispatcher? dispatcher = System.Windows.Application.Current?.Dispatcher;
         if (dispatcher is not null && !dispatcher.CheckAccess())
         {
             _ = dispatcher.BeginInvoke(SynchronizeMarkers);
             return;
         }
+#elif MAUI
+        if (DispatchAction != null)
+        {
+            DispatchAction(SynchronizeMarkers);
+            return;
+        }
+#endif
 
         SynchronizeMarkers();
     }
