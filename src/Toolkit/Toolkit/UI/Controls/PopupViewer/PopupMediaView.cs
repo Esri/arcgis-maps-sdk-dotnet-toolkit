@@ -295,7 +295,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateFlipViewItemAutomationName(altText);
 #elif MAUI
             ToolTipProperties.SetText(this, altText);
+#if WINDOWS
+            SemanticProperties.SetDescription(this, PopupMedia?.Type == PopupMediaType.Image ? null : altText);
+            // A recycled chart can leave an unnamed wrapper peer after its description is cleared.
+            AutomationProperties.SetIsInAccessibleTree(this, PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image);
+#else
             SemanticProperties.SetDescription(this, altText);
+#endif
 #endif
         }
 
