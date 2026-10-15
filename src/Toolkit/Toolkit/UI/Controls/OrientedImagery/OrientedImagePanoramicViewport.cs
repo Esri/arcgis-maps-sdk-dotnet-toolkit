@@ -50,10 +50,8 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
 #endif
     private readonly List<ResolvedMarker> _resolvedMarkers = [];
 
-    // Cached across passes: a (u,v) until its position or the image changes, and a swatch until its symbol changes.
-    // Failures are not cached.
-    private readonly Dictionary<OrientedImageMarker, Uv> _markerUvs = [];
-    private readonly Dictionary<OrientedImageMarker, Swatch> _markerSwatches = [];
+    // One swatch per symbol, kept until the symbol changes or no visible marker uses it. Failures are not cached.
+    private readonly Dictionary<Symbol, Swatch> _swatches = [];
     private int _markerGeneration;
     private bool _markerPassQueued;
     private int _imageWidth;
@@ -96,39 +94,18 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
 
     private void OnScaleChanged() => QueueMarkerPass();
 
-    // The caches belong to the UI thread.
-    protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed) => this.Dispatch(() =>
-    {
-        foreach (OrientedImageMarker marker in removed)
-        {
-            _markerUvs.Remove(marker);
-            _markerSwatches.Remove(marker);
-        }
+    // Marker state belongs to the UI thread; the hooks can run on any thread.
+    protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed) =>
+        this.Dispatch(QueueMarkerPass);
 
-        QueueMarkerPass();
-    });
-
-    // Tag is not drawn.
+    // Tag is not drawn. A symbol change, replaced or edited in place, re-rasterizes the symbol the marker has now.
     protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName) => this.Dispatch(() =>
     {
-        switch (propertyName)
-        {
-            case nameof(OrientedImageMarker.Tag):
-                return;
-            case nameof(OrientedImageMarker.IsVisible):
-                break;
-            case nameof(OrientedImageMarker.Position):
-                _markerUvs.Remove(marker);
-                break;
-            case nameof(OrientedImageMarker.Symbol):
-                _markerSwatches.Remove(marker);
-                break;
-            default:
-                _markerUvs.Remove(marker);
-                _markerSwatches.Remove(marker);
-                break;
-        }
+        if (propertyName == nameof(OrientedImageMarker.Tag))
+            return;
 
+        if (propertyName is null or nameof(OrientedImageMarker.Symbol))
+            _swatches.Remove(marker.Symbol ?? OrientedImageViewport.DefaultMarkerSymbol);
         QueueMarkerPass();
     });
 
@@ -141,7 +118,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
     // Changes come in bursts: each supersedes the pass in flight, and one pass on the next UI turn covers the burst.
     private void QueueMarkerPass()
     {
-        Interlocked.Increment(ref _markerGeneration);
+        _markerGeneration++;
         if (_markerPassQueued)
             return;
 
@@ -153,18 +130,21 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         });
     }
 
+    // Resolves every visible marker to a (u,v) and a swatch, then hands the set to the surface. Every await resumes on
+    // the UI thread, and a superseded pass stops at the next one.
     private async Task ResolveMarkersAsync()
     {
         MarkerPasses++;
-        int generation = Volatile.Read(ref _markerGeneration);
+        int generation = _markerGeneration;
         CancellationToken token = SessionToken;
         OrientedImage? image = Footprint?.OrientedImage;
         int imageWidth = _imageWidth;
         int imageHeight = _imageHeight;
+        double scale = _surface.PixelsPerDip; // a swatch rasterized at another scale is a miss
 
-        // Snapshot the markers and caches on the UI thread. A swatch rasterized at another scale is a miss.
-        double scale = _surface.PixelsPerDip;
-        var pending = new List<PendingMarker>();
+        var resolved = new List<ResolvedMarker>();
+        var drawn = new List<PanoramaMarker>();
+        var usedSymbols = new HashSet<Symbol>();
         if (image is not null && imageWidth > 0 && imageHeight > 0)
         {
             foreach (OrientedImageMarker marker in Markers)
@@ -172,57 +152,39 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
                 if (!marker.IsVisible)
                     continue;
 
-                Swatch? swatch = _markerSwatches.GetValueOrDefault(marker) is { } cached && cached.Scale == scale ? cached : null;
-                pending.Add(new PendingMarker(marker, marker.Position, marker.Symbol ?? OrientedImageViewport.DefaultMarkerSymbol, _markerUvs.GetValueOrDefault(marker), swatch));
+                PointF? pixel = await ResolveMarkerPixelAsync(marker.Position, image);
+                if (generation != _markerGeneration || token.IsCancellationRequested)
+                    return;
+                if (pixel is not PointF p)
+                    continue;
+
+                Symbol symbol = marker.Symbol ?? OrientedImageViewport.DefaultMarkerSymbol;
+                Swatch? swatch = _swatches.GetValueOrDefault(symbol);
+                if (swatch is null || swatch.Scale != scale)
+                {
+                    swatch = await CreateSwatchAsync(symbol, scale);
+                    if (generation != _markerGeneration || token.IsCancellationRequested)
+                        return;
+                    if (swatch is null)
+                        continue;
+                    _swatches[symbol] = swatch;
+                }
+
+                usedSymbols.Add(symbol);
+                float u = p.X / imageWidth;
+                float v = p.Y / imageHeight;
+                resolved.Add(new ResolvedMarker(marker, u, v, swatch.OffsetX, swatch.OffsetY, swatch.Width / scale / 2, swatch.Height / scale / 2));
+                drawn.Add(new PanoramaMarker(u, v, swatch.Bgra, swatch.Width, swatch.Height, (float)(swatch.OffsetX * scale), (float)(swatch.OffsetY * scale)));
             }
         }
 
-        // Markers sharing a symbol share the swatch this pass rasterizes, never a cached one: a symbol change
-        // invalidates its markers one at a time, so another marker's cache can be stale.
-        var rasterized = new Dictionary<Symbol, Swatch>();
-        var results = new List<(OrientedImageMarker Marker, Uv Uv, Swatch Swatch)>(pending.Count);
-        foreach (PendingMarker item in pending)
-        {
-            Uv? uv = item.Uv ?? await ResolveUvAsync(item.Position, image!, imageWidth, imageHeight).ConfigureAwait(false);
-            Swatch? swatch = item.Swatch ?? rasterized.GetValueOrDefault(item.Symbol);
-            if (uv is not null && swatch is null)
-            {
-                swatch = await CreateSwatchAsync(item.Symbol, scale).ConfigureAwait(false);
-                if (swatch is not null)
-                    rasterized[item.Symbol] = swatch;
-            }
+        foreach (Symbol symbol in _swatches.Keys.Where(symbol => !usedSymbols.Contains(symbol)).ToList())
+            _swatches.Remove(symbol);
 
-            if (generation != Volatile.Read(ref _markerGeneration) || token.IsCancellationRequested)
-                return;
-
-            if (uv is not null && swatch is not null)
-                results.Add((item.Marker, uv, swatch));
-        }
-
-        this.Dispatch(() =>
-        {
-            if (generation != _markerGeneration || token.IsCancellationRequested)
-                return;
-
-            var drawn = new List<PanoramaMarker>(results.Count);
-            _resolvedMarkers.Clear();
-            foreach ((OrientedImageMarker marker, Uv uv, Swatch swatch) in results)
-            {
-                _markerUvs[marker] = uv;
-                _markerSwatches[marker] = swatch;
-                _resolvedMarkers.Add(new ResolvedMarker(marker, uv.U, uv.V, swatch.OffsetX, swatch.OffsetY, swatch.Width / scale / 2, swatch.Height / scale / 2));
-                drawn.Add(new PanoramaMarker(uv.U, uv.V, swatch.Bgra, swatch.Width, swatch.Height, (float)(swatch.OffsetX * scale), (float)(swatch.OffsetY * scale)));
-            }
-
-            _surface.SetMarkers(drawn);
-            _surface.RequestRender();
-        });
-    }
-
-    private static async Task<Uv?> ResolveUvAsync(OrientedImageMarkerPosition position, OrientedImage image, int imageWidth, int imageHeight)
-    {
-        PointF? pixel = await ResolveMarkerPixelAsync(position, image).ConfigureAwait(false);
-        return pixel is PointF p ? new Uv(p.X / imageWidth, p.Y / imageHeight) : null;
+        _resolvedMarkers.Clear();
+        _resolvedMarkers.AddRange(resolved);
+        _surface.SetMarkers(drawn);
+        _surface.RequestRender();
     }
 
     private static async Task<Swatch?> CreateSwatchAsync(Symbol symbol, double scale)
@@ -356,9 +318,8 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         _imageWidth = 0;
         _imageHeight = 0;
 
-        // Keeps an in-flight pass from applying stale markers. The (u,v)s depend on the image, but the swatches don't.
-        Interlocked.Increment(ref _markerGeneration);
-        _markerUvs.Clear();
+        // Keeps an in-flight pass from applying stale markers. The swatches don't depend on the image.
+        _markerGeneration++;
         _resolvedMarkers.Clear();
         _surface.SetMarkers(Array.Empty<PanoramaMarker>());
 
@@ -417,11 +378,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
     // A drawn marker as tap hit-testing sees it. Offsets and half-sizes are in DIPs.
     internal readonly record struct ResolvedMarker(OrientedImageMarker Marker, float U, float V, double OffsetX, double OffsetY, double HalfWidth, double HalfHeight);
 
-    private sealed record Uv(float U, float V);
-
     // Tightly packed BGRA8 pixels, the offset from the anchor in DIPs, and the display scale it was rasterized at.
     private sealed record Swatch(byte[] Bgra, int Width, int Height, double OffsetX, double OffsetY, double Scale);
-
-    private readonly record struct PendingMarker(OrientedImageMarker Marker, OrientedImageMarkerPosition Position, Symbol Symbol, Uv? Uv, Swatch? Swatch);
 }
 #endif
