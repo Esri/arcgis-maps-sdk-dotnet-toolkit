@@ -152,6 +152,46 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ImageInfoButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" />
+        <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Root" CornerRadius="20" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Source={x:Static SystemParameters.HighContrast}}" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ToolbarLabeledButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
         <Setter Property="MinWidth" Value="76" />
         <Setter Property="MinHeight" Value="84" />
@@ -425,22 +465,6 @@
         </ToggleButton>
     </DataTemplate>
 
-    <DataTemplate x:Key="ShowSelectedImagePopupToolbarTemplate" DataType="controls:ShowSelectedImagePopupVM">
-        <Button Style="{StaticResource ToolbarLabeledButtonStyle}"
-                Command="{Binding ViewModel.OpenSelectedImagePopupCommand}"
-                ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}" >
-            <StackPanel>
-                <Viewbox Width="32" Height="32" Stretch="Uniform">
-                    <TextBlock Text="&#xea02;"
-                               FontSize="24"
-                               FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                </Viewbox>
-                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewPopupLabel}" />
-            </StackPanel>
-        </Button>
-    </DataTemplate>
-
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
         <ToggleButton IsChecked="{Binding ViewModel.SketchModeEnabled}"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
@@ -643,7 +667,6 @@
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowSelectedImagePopupVM}" Template="{StaticResource ShowSelectedImagePopupToolbarTemplate}" />
         <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SequentialNavigationVM}" Template="{StaticResource SequentialNavigationToolbarTemplate}" />
     </controls:OrientedImageryViewTemplateSelector>
 
@@ -810,16 +833,33 @@
                                         </Grid>
                                     </Viewbox>
                                 </Button>
+                                <Button Grid.ColumnSpan="3"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Margin="16"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.OpenSelectedImagePopupCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ImageInfoButtonStyle}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <TextBlock Text="&#xE8FA;"
+                                               FontSize="20"
+                                               FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                </Button>
                             </Grid>
 
-                            <Grid Grid.Row="1"
-                                  Grid.RowSpan="2"
-                                  Panel.ZIndex="2"
-                                  Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                            <Grid Grid.Row="2" Panel.ZIndex="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.35*" />
+                                    <ColumnDefinition Width="0.65*" />
+                                </Grid.ColumnDefinitions>
                                 <Grid.Style>
                                     <Style TargetType="{x:Type Grid}">
                                         <Setter Property="Visibility" Value="Visible" />
@@ -830,20 +870,34 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Grid.Style>
-                                <controls:PopupViewer Grid.Row="1"
-                                                      Margin="8,0,8,8"
-                                                      Popup="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImagePopup}" />
-                                <Button HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        Margin="8,8,8,0"
-                                        MinWidth="32"
-                                        MinHeight="32"
-                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.CloseSelectedImagePopupCommand}"
-                                        Content="&#xeb49;"
-                                        FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                                        FontSize="20"
-                                        Style="{StaticResource ToolbarButtonStyle}"
-                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}" />
+                                <Border Grid.Column="1"
+                                        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                        BorderThickness="1,0,0,0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <controls:PopupViewer Grid.Row="1"
+                                                              Margin="16,0,8,8"
+                                                              Popup="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImagePopup}" />
+                                        <Button HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Margin="8"
+                                                Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.CloseSelectedImagePopupCommand}"
+                                                Style="{StaticResource ToolbarButtonStyle}"
+                                                ToolTip="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock VerticalAlignment="Center" FontSize="16"
+                                                           Text="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}" />
+                                                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center"
+                                                           Text="&#xeb49;" FontSize="20"
+                                                           FontFamily="{StaticResource ToolkitIconsFontFamily}" />
+                                            </StackPanel>
+                                        </Button>
+                                    </Grid>
+                                </Border>
                             </Grid>
 
                             <Border Grid.Row="1"

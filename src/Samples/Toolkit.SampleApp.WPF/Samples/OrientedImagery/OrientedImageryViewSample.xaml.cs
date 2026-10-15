@@ -209,15 +209,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _usingAlternateToolbarStyling = !_usingAlternateToolbarStyling;
             if (_usingAlternateToolbarStyling)
             {
-                _orientedImageryVM.ToolbarItems.Add(new CustomToolbarItem());
+                _orientedImageryVM.ToolbarItems.Add(new ShowSelectedImagePopupVM());
                 MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("AlternateToolbarSelector");
             }
             else
             {
-                var customToolbarItem = _orientedImageryVM.ToolbarItems.OfType<CustomToolbarItem>().FirstOrDefault();
-                if (customToolbarItem != null)
-                    _orientedImageryVM.ToolbarItems.Remove(customToolbarItem);
-                _orientedImageryVM.ToolbarItems.Add(new ShowSelectedImagePopupVM());
+                var popupToolbarItem = _orientedImageryVM.ToolbarItems.OfType<ShowSelectedImagePopupVM>().FirstOrDefault();
+                if (popupToolbarItem != null)
+                    _orientedImageryVM.ToolbarItems.Remove(popupToolbarItem);
                 MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("DefaultOrientedImageryToolbarSelector");
             }
         }
@@ -304,6 +303,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         }
     }
 
-    public class CustomToolbarItem : OrientedImageryToolbarItemBase
+    public class ShowSelectedImagePopupVM : OrientedImageryToolbarItemBase
     { }
 }
