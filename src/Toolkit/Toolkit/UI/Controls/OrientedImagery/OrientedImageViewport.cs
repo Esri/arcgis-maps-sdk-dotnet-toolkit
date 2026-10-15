@@ -331,12 +331,16 @@ public partial class OrientedImageViewport
             SetHostContent(_displayHost, _activeViewport);
     }
 
+    // Every footprint change re-hosts the active viewport. WinUI's Border unloads a child that is set again, and an
+    // unloaded panoramic surface releases its device, so only a different view is set.
     private static void SetHostContent(DisplayHostElement host, OrientedImageInnerViewport? viewport)
     {
 #if MAUI
-        host.Content = viewport?.View;
+        if (!ReferenceEquals(host.Content, viewport?.View))
+            host.Content = viewport?.View;
 #else
-        host.Child = viewport?.View;
+        if (!ReferenceEquals(host.Child, viewport?.View))
+            host.Child = viewport?.View;
 #endif
     }
 
