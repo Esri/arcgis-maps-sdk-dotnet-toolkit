@@ -73,6 +73,7 @@
                 <Button x:Name="RemoveLastLayer"  Content="Remove last layer" Click="RemoveLastLayer_Click" />
                 <Button x:Name="BackgroundThreadUpdate"  Content="Update markers on background thread" Click="BackgroundThreadUpdate_Click" />
                 <Button x:Name="ToggleButtonsBackgroundThread"  Content="Update some button states from a background thread" Click="ToggleButtonsBackgroundThread_Click" />
+                <Button x:Name="ToggleLayerDropdownButton"  Content="Toggle layer dropdown" Click="ToggleLayerDropdownButton_Click" />
             </StackPanel>
             <Button x:Name="OpenOrientedImageryButton"
                     HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="8"

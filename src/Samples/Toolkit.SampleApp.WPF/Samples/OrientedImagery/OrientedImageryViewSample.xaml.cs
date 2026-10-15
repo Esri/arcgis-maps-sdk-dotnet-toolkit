@@ -301,6 +301,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 _orientedImageryVM.ShowUnselectedFootprints = !_orientedImageryVM.ShowUnselectedFootprints;
             });
         }
+
+        private void ToggleLayerDropdownButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainOrientedImageryView.IsLayerSelectionDropdownEnabled = !MainOrientedImageryView.IsLayerSelectionDropdownEnabled;
+        }
     }
 
     public class ShowSelectedImagePopupVM : OrientedImageryToolbarItemBase
