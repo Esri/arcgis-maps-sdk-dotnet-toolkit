@@ -53,14 +53,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _mapView = new MapView() { Map = new Map(new Uri(MapBasemap)) };
             _sceneView = new SceneView() { Scene = new Scene(new Uri(SceneBasemap)) };
             _usingMapView = true;
-            GeoViewContainer.Children.Add(_mapView);
-
-            _orientedImageryVM = new OrientedImageryViewModel();
+            GeoViewContainer.Children.Add(_currentGeoView);
 
             _elevationSource = new ArcGISTiledElevationSource(new Uri(ElevationUrl));
 
-            MainOrientedImageryView.GeoView = _mapView;
-            MainOrientedImageryView.ViewModel = _orientedImageryVM;
+            MainOrientedImageryView.GeoView = _currentGeoView;
+            _orientedImageryVM = MainOrientedImageryView.ViewModel;
 
             _ = InitializeAsync();
         }
@@ -72,7 +70,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 foreach (var layerUrl in _layerUrls)
                 {
                     _mapView.Map!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
-                    _sceneView.Scene!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
+                    _sceneView.Scene!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl))
+                    {
+                        SceneProperties = new LayerSceneProperties() {  SurfacePlacement = SurfacePlacement.Absolute }
+                    });
                 }
             }
             catch (Exception ex)
