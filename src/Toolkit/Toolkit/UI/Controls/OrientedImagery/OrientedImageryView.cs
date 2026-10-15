@@ -285,6 +285,21 @@ public partial class OrientedImageryView
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether to show the built-in layer selection dropdown. Defaults to <c>true</c>.
+    /// </summary>
+    public bool IsLayerSelectionDropdownEnabled
+    {
+        get => (bool)GetValue(IsLayerSelectionDropdownEnabledProperty);
+        set => SetValue(IsLayerSelectionDropdownEnabledProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="IsLayerSelectionDropdownEnabled"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty IsLayerSelectionDropdownEnabledProperty =
+        PropertyHelper.CreateProperty<bool, OrientedImageryView>(nameof(IsLayerSelectionDropdownEnabled), defaultValue: true);
+
+    /// <summary>
     /// The <see cref="OrientedImageryLayer"/> currently selected for inspection.
     /// </summary>
     /// <remarks>
