@@ -98,6 +98,7 @@ internal sealed unsafe partial class PanoramicSurface
     private bool _needsRender = true;
     private bool _deviceLost;
     private bool _deviceEverCreated;
+    private bool _reloadPending; // a reload that has yet to get its device
 
     private static readonly TimeSpan RecoveryRetryInterval = TimeSpan.FromMilliseconds(500);
     private static readonly TimeSpan RecoveryReportDelay = TimeSpan.FromSeconds(10);
@@ -314,14 +315,26 @@ internal sealed unsafe partial class PanoramicSurface
     // that the viewport must re-supply; on first load the load path supplies it, and raising would decode twice.
     private void HandleLoaded()
     {
-        bool isReload = _deviceEverCreated;
+        _reloadPending = _deviceEverCreated;
         HookRendering();
         EnsureResources();
         RequestRender();
-        if (IsDeviceInitialized)
-            _deviceEverCreated = true;
+        OnResourcesEnsured();
+    }
 
-        if (isReload && IsDeviceInitialized && !HasTexture)
+    // Runs after EnsureResources in the lifecycle handlers. The device needs a size, which a reloaded element may get
+    // after Loaded. The reload notification therefore waits for the device, not the event.
+    private void OnResourcesEnsured()
+    {
+        if (!IsDeviceInitialized)
+            return;
+
+        _deviceEverCreated = true;
+        if (!_reloadPending)
+            return;
+
+        _reloadPending = false;
+        if (!HasTexture)
             DeviceRecreated?.Invoke();
     }
 

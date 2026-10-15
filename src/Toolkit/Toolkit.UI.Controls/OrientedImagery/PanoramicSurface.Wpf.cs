@@ -112,6 +112,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         {
             EnsureResources();
             RequestRender();
+            OnResourcesEnsured();
         });
         ViewChanged?.Invoke();
     }
@@ -126,6 +127,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         {
             EnsureResources();
             RequestRender();
+            OnResourcesEnsured();
         });
         ScaleChanged?.Invoke();
     }
