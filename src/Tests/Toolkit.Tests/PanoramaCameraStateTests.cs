@@ -112,14 +112,15 @@ public sealed class PanoramaCameraStateTests
 
         Assert.IsFalse(camera.TryScreenToNormalizedUv(0, 0, 0, ViewHeight, out _, out _));
         Assert.IsFalse(camera.TryNormalizedUvToScreen(0.5f, 0.5f, ViewWidth, 0, out _, out _));
-        Assert.IsFalse(camera.TryGetFootprintView(0, ViewHeight, out _));
-        Assert.IsFalse(camera.TryGetFootprintView(ViewWidth, -1, out _));
+        Assert.IsFalse(camera.TryGetFootprintView(0, ViewHeight, 0, out _));
+        Assert.IsFalse(camera.TryGetFootprintView(ViewWidth, -1, 0, out _));
 
         // Cameras the footprint API cannot express.
-        Assert.IsFalse(new PanoramaCameraState(float.NaN, 0f, Fov90).TryGetFootprintView(ViewWidth, ViewHeight, out _));
-        Assert.IsFalse(new PanoramaCameraState(0f, float.PositiveInfinity, Fov90).TryGetFootprintView(ViewWidth, ViewHeight, out _));
-        Assert.IsFalse(new PanoramaCameraState(0f, 0f, 0f).TryGetFootprintView(ViewWidth, ViewHeight, out _));
-        Assert.IsFalse(new PanoramaCameraState(0f, 0f, MathF.PI).TryGetFootprintView(ViewWidth, ViewHeight, out _));
+        Assert.IsFalse(new PanoramaCameraState(float.NaN, 0f, Fov90).TryGetFootprintView(ViewWidth, ViewHeight, 0, out _));
+        Assert.IsFalse(new PanoramaCameraState(0f, float.PositiveInfinity, Fov90).TryGetFootprintView(ViewWidth, ViewHeight, 0, out _));
+        Assert.IsFalse(new PanoramaCameraState(0f, 0f, 0f).TryGetFootprintView(ViewWidth, ViewHeight, 0, out _));
+        Assert.IsFalse(new PanoramaCameraState(0f, 0f, MathF.PI).TryGetFootprintView(ViewWidth, ViewHeight, 0, out _));
+        Assert.IsFalse(camera.TryGetFootprintView(ViewWidth, ViewHeight, double.NaN, out _));
     }
 
     [TestMethod]
@@ -197,21 +198,30 @@ public sealed class PanoramaCameraStateTests
     [TestMethod]
     public void FootprintViewMatchesTheProjectedViewCenter()
     {
-        foreach (float yaw in new[] { -2.5f, -0.8f, 0f, 0.4f, 1.9f, 3.1f, 7f })
+        // The footprint yaw is the view center's compass azimuth: the image's center column faces the camera heading.
+        foreach (double heading in new[] { 0.0, 188.4, 325.16, 449.67 })
         {
-            foreach (float pitch in new[] { -1.2f, -0.3f, 0f, 0.3f, 1.2f })
+            foreach (float yaw in new[] { -2.5f, -0.8f, 0f, 0.4f, 1.9f, 3.1f, 7f })
             {
-                var camera = new PanoramaCameraState(yaw, pitch, Fov90);
-                Assert.IsTrue(camera.TryGetFootprintView(ViewWidth, ViewHeight, out PanoramaCameraState.FootprintView view));
-                Assert.IsTrue(camera.TryScreenToNormalizedUv(ViewWidth / 2, ViewHeight / 2, ViewWidth, ViewHeight, out float u, out float v));
+                foreach (float pitch in new[] { -1.2f, -0.3f, 0f, 0.3f, 1.2f })
+                {
+                    var camera = new PanoramaCameraState(yaw, pitch, Fov90);
+                    Assert.IsTrue(camera.TryGetFootprintView(ViewWidth, ViewHeight, heading, out PanoramaCameraState.FootprintView view));
+                    Assert.IsTrue(camera.TryScreenToNormalizedUv(ViewWidth / 2, ViewHeight / 2, ViewWidth, ViewHeight, out float u, out float v));
 
-                double expectedYaw = ((u - 0.5) * 360.0 + 720.0) % 360.0;
-                double expectedPitch = (1.0 - v) * 180.0;
-                Assert.AreEqual(expectedYaw, view.Yaw % 360.0, 0.5, $"yaw at yaw={yaw}, pitch={pitch}");
-                Assert.AreEqual(expectedPitch, view.Pitch, 0.5, $"pitch at yaw={yaw}, pitch={pitch}");
-                Assert.IsTrue(view.Yaw >= 0 && view.Yaw < 360, $"yaw range at yaw={yaw}: {view.Yaw}");
+                    double expectedYaw = (heading + ((u - 0.5) * 360.0) + 1080.0) % 360.0;
+                    double expectedPitch = (1.0 - v) * 180.0;
+                    Assert.AreEqual(expectedYaw, view.Yaw % 360.0, 0.5, $"yaw at heading={heading}, yaw={yaw}, pitch={pitch}");
+                    Assert.AreEqual(expectedPitch, view.Pitch, 0.5, $"pitch at yaw={yaw}, pitch={pitch}");
+                    Assert.IsTrue(view.Yaw >= 0 && view.Yaw < 360, $"yaw range at heading={heading}, yaw={yaw}: {view.Yaw}");
+                }
             }
         }
+
+        // The initial view faces north whatever the heading, so its footprint yaw is 0.
+        var north = PanoramaCameraState.Initial with { Yaw = (-MathF.PI / 2f) - (float)(325.16 * Math.PI / 180.0) };
+        Assert.IsTrue(north.TryGetFootprintView(ViewWidth, ViewHeight, 325.16, out PanoramaCameraState.FootprintView northView));
+        Assert.AreEqual(0.0, Math.Min(northView.Yaw, 360.0 - northView.Yaw), 0.01);
     }
 
     [TestMethod]
@@ -220,7 +230,7 @@ public sealed class PanoramaCameraStateTests
         // A 90 degree vertical field of view on 4:3 spans 2 atan(4/3), or 106.26 degrees, horizontally.
         var camera = new PanoramaCameraState(0f, 0f, Fov90);
 
-        Assert.IsTrue(camera.TryGetFootprintView(ViewWidth, ViewHeight, out PanoramaCameraState.FootprintView view));
+        Assert.IsTrue(camera.TryGetFootprintView(ViewWidth, ViewHeight, 0, out PanoramaCameraState.FootprintView view));
         Assert.AreEqual(106.26, view.HorizontalFieldOfView, 0.01);
         Assert.AreEqual(90.0, view.VerticalFieldOfView, 1e-4);
 
@@ -229,7 +239,7 @@ public sealed class PanoramaCameraStateTests
         double halfSpan = ((centerU - leftU) * 360.0 + 720.0) % 360.0;
         Assert.AreEqual(view.HorizontalFieldOfView / 2, halfSpan, 0.5);
 
-        Assert.IsTrue(camera.TryGetFootprintView(1600, 600, out PanoramaCameraState.FootprintView wide));
+        Assert.IsTrue(camera.TryGetFootprintView(1600, 600, 0, out PanoramaCameraState.FootprintView wide));
         Assert.IsGreaterThan(view.HorizontalFieldOfView, wide.HorizontalFieldOfView);
         Assert.AreEqual(view.VerticalFieldOfView, wide.VerticalFieldOfView, 1e-6);
     }
