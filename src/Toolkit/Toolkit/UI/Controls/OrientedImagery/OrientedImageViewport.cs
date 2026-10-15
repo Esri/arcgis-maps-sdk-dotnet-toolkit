@@ -235,7 +235,7 @@ public partial class OrientedImageViewport
         DisplayHostElement? previousHost = _displayHost;
         _displayHost = GetTemplateChild(DisplayHostName) as DisplayHostElement;
 
-        // The inner viewport is still parented to the old template's host; release it so the new host can adopt it.
+        // The inner viewport's view is still parented to the old template's host; release it so the new host can adopt it.
         if (previousHost is not null && !ReferenceEquals(previousHost, _displayHost))
             previousHost.Content = null;
 
@@ -303,7 +303,7 @@ public partial class OrientedImageViewport
     private void HostActiveViewport()
     {
         if (_displayHost is not null)
-            _displayHost.Content = _activeViewport;
+            _displayHost.Content = _activeViewport?.View;
     }
 
     private void OnViewportStateChanged(object? sender, EventArgs e) => UpdateState();
@@ -323,13 +323,13 @@ public partial class OrientedImageViewport
         if (_activeViewport is null || !IsInteractive)
             return null;
 
-        // The active inner viewport may sit inside the template's border.
+        // The active inner viewport's view may sit inside the template's border.
 #if WPF
-        Point local = TranslatePoint(screenPosition, _activeViewport);
+        Point local = TranslatePoint(screenPosition, _activeViewport.View);
 #elif WINDOWS_XAML
-        Point local = TransformToVisual(_activeViewport).TransformPoint(screenPosition);
+        Point local = TransformToVisual(_activeViewport.View).TransformPoint(screenPosition);
 #else
-        var local = new Point(screenPosition.X - _displayHost!.X - _activeViewport.X, screenPosition.Y - _displayHost.Y - _activeViewport.Y);
+        var local = new Point(screenPosition.X - _displayHost!.X - _activeViewport.View.X, screenPosition.Y - _displayHost.Y - _activeViewport.View.Y);
 #endif
         return _activeViewport.ScreenToImage(local.X, local.Y);
     }

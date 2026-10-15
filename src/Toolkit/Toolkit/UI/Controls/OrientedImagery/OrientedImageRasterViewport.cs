@@ -94,16 +94,15 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
             if (e.Status == DrawStatus.Completed)
                 UpdateFootprint();
         };
-        Content = _mapView;
         SetAutomationName(null);
     }
 
 #if MAUI
-    protected override View AutomationTarget => _mapView;
+    public override View View => _mapView;
 #elif WPF
-    protected override System.Windows.DependencyObject AutomationTarget => _mapView;
+    public override System.Windows.FrameworkElement View => _mapView;
 #else
-    protected override Microsoft.UI.Xaml.DependencyObject AutomationTarget => _mapView;
+    public override Microsoft.UI.Xaml.FrameworkElement View => _mapView;
 #endif
 
     // A MapView without a Map stays at DrawStatus.InProgress.
@@ -234,7 +233,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed)
     {
         IReadOnlyList<OrientedImageMarker> markers = Markers;
-        this.Dispatch(() =>
+        _mapView.Dispatch(() =>
         {
             foreach (OrientedImageMarker marker in removed)
             {
@@ -262,7 +261,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName)
     {
-        this.Dispatch(() =>
+        _mapView.Dispatch(() =>
         {
             if (!_markerGraphics.TryGetValue(marker, out Graphic? graphic))
                 return;

@@ -64,7 +64,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
 #else
         _surface = new PanoramicSurface();
 #endif
-        Content = _surface;
         _surface.SurfaceTapped += OnSurfaceTapped;
         _surface.RenderFailed += OnRenderFailed;
         _surface.ScaleChanged += OnScaleChanged;
@@ -72,11 +71,11 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
     }
 
 #if MAUI
-    protected override View AutomationTarget => _surface;
+    public override View View => _surface;
 #elif WPF
-    protected override System.Windows.DependencyObject AutomationTarget => _surface;
+    public override System.Windows.FrameworkElement View => _surface;
 #else
-    protected override Microsoft.UI.Xaml.DependencyObject AutomationTarget => _surface;
+    public override Microsoft.UI.Xaml.FrameworkElement View => _surface;
 #endif
 
     protected override bool IsPresentationInteractive => _imageWidth > 0 && _imageHeight > 0;
@@ -96,10 +95,10 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
 
     // Marker state belongs to the UI thread; the hooks can run on any thread.
     protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed) =>
-        this.Dispatch(QueueMarkerPass);
+        _surface.Dispatch(QueueMarkerPass);
 
     // Tag is not drawn. A symbol change, replaced or edited in place, re-rasterizes the symbol the marker has now.
-    protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName) => this.Dispatch(() =>
+    protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName) => _surface.Dispatch(() =>
     {
         if (propertyName == nameof(OrientedImageMarker.Tag))
             return;
@@ -123,7 +122,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
             return;
 
         _markerPassQueued = true;
-        this.Post(() =>
+        _surface.Post(() =>
         {
             _markerPassQueued = false;
             _ = ResolveMarkersAsync();

@@ -23,13 +23,6 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-#if WPF
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
-using VerticalAlignment = System.Windows.VerticalAlignment;
-#elif WINDOWS_XAML
-using HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment;
-using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
-#endif
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -37,13 +30,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Base of the planar and panoramic inner viewports. Each SetFootprint call starts a new presentation session.
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Platform view types are not IDisposable by convention. The session CTS is cancel-only (no timer), so it needs no disposal; canceling it on supersede is the release.")]
-#if MAUI
-internal abstract class OrientedImageInnerViewport : ContentView
-#else
-internal abstract class OrientedImageInnerViewport : ContentControl
-#endif
+// Base of the planar and panoramic inner viewports, each of which presents through a platform view that the control
+// hosts. Each SetFootprint call starts a new presentation session.
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The cancellation sources are cancel-only (no timer), so they need no disposal; canceling on supersede is the release.")]
+internal abstract class OrientedImageInnerViewport
 {
     private IEnumerable<OrientedImageMarker>? _markerSource;
     private List<OrientedImageMarker> _markers = [];
@@ -57,17 +47,14 @@ internal abstract class OrientedImageInnerViewport : ContentControl
     private bool _autoUpdate;
     private bool _isLoading;
 
-    private protected OrientedImageInnerViewport()
-    {
-#if !MAUI
-        // ContentControl aligns its content Left/Top by default.
-        HorizontalContentAlignment = HorizontalAlignment.Stretch;
-        VerticalContentAlignment = VerticalAlignment.Stretch;
-
-        // The content is the focusable element.
-        IsTabStop = false;
+    // The focusable view, which carries the automation name and id.
+#if MAUI
+    public abstract View View { get; }
+#elif WPF
+    public abstract System.Windows.FrameworkElement View { get; }
+#else
+    public abstract Microsoft.UI.Xaml.FrameworkElement View { get; }
 #endif
-    }
 
     public bool IsBusy { get; private set; }
 
@@ -94,15 +81,6 @@ internal abstract class OrientedImageInnerViewport : ContentControl
 
     // Stays true through PresentAsync, not only while the image loads.
     protected bool IsLoading => _isLoading;
-
-    // The focusable view, which carries the automation name and id.
-#if MAUI
-    protected abstract View AutomationTarget { get; }
-#elif WPF
-    protected abstract System.Windows.DependencyObject AutomationTarget { get; }
-#else
-    protected abstract Microsoft.UI.Xaml.DependencyObject AutomationTarget { get; }
-#endif
 
     protected abstract bool IsPresentationInteractive { get; }
 
@@ -234,11 +212,11 @@ internal abstract class OrientedImageInnerViewport : ContentControl
         if (string.IsNullOrEmpty(name))
             name = Properties.Resources.GetString("OrientedImageViewportAutomationName") ?? "Oriented image";
 #if WPF
-        System.Windows.Automation.AutomationProperties.SetName(AutomationTarget, name);
+        System.Windows.Automation.AutomationProperties.SetName(View, name);
 #elif WINDOWS_XAML
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(AutomationTarget, name);
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(View, name);
 #elif MAUI
-        SemanticProperties.SetDescription(AutomationTarget, name);
+        SemanticProperties.SetDescription(View, name);
 #endif
     }
 
@@ -248,13 +226,13 @@ internal abstract class OrientedImageInnerViewport : ContentControl
     public void SetAutomationId(string? id)
     {
 #if WPF
-        System.Windows.Automation.AutomationProperties.SetAutomationId(AutomationTarget, id ?? string.Empty);
+        System.Windows.Automation.AutomationProperties.SetAutomationId(View, id ?? string.Empty);
 #elif WINDOWS_XAML
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(AutomationTarget, id ?? string.Empty);
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(View, id ?? string.Empty);
 #elif MAUI
         // MAUI lets an element's AutomationId be set only once, so only the first non-empty id applies.
-        if (!string.IsNullOrEmpty(id) && AutomationTarget.AutomationId is null)
-            AutomationTarget.AutomationId = id;
+        if (!string.IsNullOrEmpty(id) && View.AutomationId is null)
+            View.AutomationId = id;
 #endif
     }
 

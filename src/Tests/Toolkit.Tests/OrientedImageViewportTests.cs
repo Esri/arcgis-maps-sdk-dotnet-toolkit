@@ -28,16 +28,16 @@ public sealed class OrientedImageViewportTests
         var control = new OrientedImageViewport { Template = CreateHostTemplate() };
         Assert.IsTrue(control.ApplyTemplate());
         ContentPresenter firstHost = GetHost(control);
-        object? viewport = firstHost.Content;
-        Assert.IsNotNull(viewport, "the initial template's host presents the active inner viewport");
+        object? view = firstHost.Content;
+        Assert.IsNotNull(view, "the initial template's host presents the active inner viewport's view");
 
         control.Template = CreateHostTemplate();
         Assert.IsTrue(control.ApplyTemplate());
         ContentPresenter secondHost = GetHost(control);
 
         Assert.AreNotSame(firstHost, secondHost, "sanity: re-applying the template creates a new host");
-        Assert.IsNull(firstHost.Content, "the discarded template's host must release the inner viewport");
-        Assert.AreSame(viewport, secondHost.Content, "the re-applied template's host must adopt the same active inner viewport");
+        Assert.IsNull(firstHost.Content, "the discarded template's host must release the view");
+        Assert.AreSame(view, secondHost.Content, "the re-applied template's host must adopt the same view");
     }
 
     [STATestMethod]
@@ -235,8 +235,7 @@ public sealed class OrientedImageViewportTests
     {
         // The surface, not the viewport, takes keyboard focus.
         var viewport = new OrientedImagePanoramicViewport();
-        var surface = (DependencyObject)viewport.Content!;
-        string name = System.Windows.Automation.AutomationProperties.GetName(surface);
+        string name = System.Windows.Automation.AutomationProperties.GetName(viewport.View);
         Assert.IsFalse(string.IsNullOrEmpty(name), "the panoramic surface must have an automation name");
     }
 
@@ -274,10 +273,8 @@ public sealed class OrientedImageViewportTests
     // The active inner viewport's focusable view; here, the raster viewport's MapView.
     private static DependencyObject GetFocusableView(OrientedImageViewport control)
     {
-        var viewport = GetHost(control).Content as ContentControl;
-        Assert.IsNotNull(viewport, "the host presents the active inner viewport");
-        var view = viewport.Content as DependencyObject;
-        Assert.IsNotNull(view, "the inner viewport presents its focusable view");
+        var view = GetHost(control).Content as DependencyObject;
+        Assert.IsNotNull(view, "the host presents the active inner viewport's view");
         return view;
     }
 
