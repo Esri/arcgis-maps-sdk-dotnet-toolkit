@@ -27,6 +27,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private static readonly Style DefaultPopupViewerHeaderStyle;
         private static readonly Style DefaultPopupViewerTitleStyle;
         private static readonly Style DefaultPopupViewerCaptionStyle;
+        private static readonly IValueConverter? HeaderTextConverter =
+#if WINDOWS
+            new Toolkit.Internal.HtmlToPlainTextConverter();
+#else
+            null;
+#endif
 
         /// <summary>
         /// Template name of the <see cref="IBindableLayout"/> items layout view.
@@ -86,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #if WINDOWS
                 SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
 #endif
-                roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup?.Title);
+                roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup?.Title, converter: HeaderTextConverter);
                 roottitle.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 return roottitle;
             });
@@ -97,12 +103,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
                 Label title = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 title.Style = GetPopupViewerHeaderStyle();
-                title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
+                title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: HeaderTextConverter);
                 root.Children.Add(title);
 
                 Label desc = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 desc.Style = GetPopupViewerCaptionStyle();
-                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
+                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: HeaderTextConverter);
                 desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(desc);
 

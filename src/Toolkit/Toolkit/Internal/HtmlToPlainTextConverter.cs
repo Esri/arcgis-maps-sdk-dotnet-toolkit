@@ -14,8 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || WINDOWS_XAML
+#if WPF || WINDOWS_XAML || (MAUI && WINDOWS)
 using System.Globalization;
+#if MAUI
+using IValueConverter = Microsoft.Maui.Controls.IValueConverter;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -23,7 +26,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Strips out html-code to return plain text.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+#if MAUI
+    internal sealed partial class HtmlToPlainTextConverter : IValueConverter
+#else
     public sealed partial class HtmlToPlainTextConverter : IValueConverter
+#endif
     {
         /// <inheritdoc />
         object? IValueConverter.Convert(object? value, Type targetType, object parameter,
