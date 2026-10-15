@@ -127,7 +127,7 @@ internal sealed unsafe partial class PanoramicSurface
     // A WARP texture cannot be shared with the hardware D3D9Ex device of the WPF present layer.
     internal bool IsUsingWarp => _usingWarp;
 
-    public PanoramaCameraState Camera
+    internal PanoramaCameraState Camera
     {
         get => _camera;
         set
@@ -234,7 +234,7 @@ internal sealed unsafe partial class PanoramicSurface
         return keys;
     }
 
-    public void RequestRender() => _needsRender = true;
+    internal void RequestRender() => _needsRender = true;
 
     // Held keys are polled every tick, so they combine and move the view smoothly rather than at the key repeat rate.
     private void StartKeyboardNavigation()
@@ -373,7 +373,7 @@ internal sealed unsafe partial class PanoramicSurface
         return false;
     }
 
-    public void Initialize()
+    internal void Initialize()
     {
         if (_device is not null)
             return;
@@ -475,7 +475,7 @@ internal sealed unsafe partial class PanoramicSurface
     }
 
     // Takes straight-alpha components in 0..1.
-    public void SetClearColor(float r, float g, float b, float a)
+    internal void SetClearColor(float r, float g, float b, float a)
     {
 #if WPF
         // WPF composites premultiplied BGRA. The WinUI swap chain ignores alpha, so it uses the color unchanged.
@@ -490,7 +490,7 @@ internal sealed unsafe partial class PanoramicSurface
     }
 
     // Size in device pixels. Without a texture it still clears, so the last frame does not stay on screen.
-    public void RenderScene(ID3D11RenderTargetView* target, uint width, uint height)
+    internal void RenderScene(ID3D11RenderTargetView* target, uint width, uint height)
     {
         if (_context is null || target is null)
             return;

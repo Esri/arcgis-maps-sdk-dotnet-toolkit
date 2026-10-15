@@ -22,6 +22,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Direct3D9;
 using Windows.Win32.Graphics.Direct3D11;
 using Windows.Win32.Graphics.Dxgi;
 using Windows.Win32.System.Com;
@@ -33,16 +34,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 // software path (WARP, Remote Desktop, or no GPU) copies it through a staging texture into a WriteableBitmap.
 internal sealed unsafe partial class PanoramicSurface : FrameworkElement
 {
-    // HARDWARE_VERTEXPROCESSING | MULTITHREADED | FPU_PRESERVE
-    private const uint D3D9CreateFlags = 0x40 | 0x4 | 0x2;
-    private const uint D3D9SdkVersion = 32;
-    private const uint D3DDevTypeHal = 1;
-    private const uint D3DSwapEffectDiscard = 1;
-    private const uint D3DFmtUnknown = 0;
-    private const uint D3DFmtA8R8G8B8 = 21;
-    private const uint D3DPoolDefault = 0;
-    private const uint D3DUsageRenderTarget = 0x1;
-
     private D3DImage? _d3dImage;
     private nint _d3d9;        // IDirect3D9Ex*
     private nint _device9;     // IDirect3DDevice9Ex*
@@ -217,19 +208,20 @@ internal sealed unsafe partial class PanoramicSurface : FrameworkElement
         if (_device9 != 0)
             return;
 
-        ThrowIfFailed(D3D9.Direct3DCreate9Ex(D3D9SdkVersion, out _d3d9), "Direct3DCreate9Ex");
+        ThrowIfFailed(D3D9.Direct3DCreate9Ex(PInvoke.D3D_SDK_VERSION, out _d3d9), "Direct3DCreate9Ex");
 
-        nint focusWindow = (nint)PInvoke.GetDesktopWindow().Value;
+        HWND focusWindow = PInvoke.GetDesktopWindow();
         D3DPRESENT_PARAMETERS pp = new()
         {
             BackBufferWidth = 1,
             BackBufferHeight = 1,
-            BackBufferFormat = D3DFmtUnknown,
-            SwapEffect = D3DSwapEffectDiscard,
+            BackBufferFormat = D3DFORMAT.D3DFMT_UNKNOWN,
+            SwapEffect = D3DSWAPEFFECT.D3DSWAPEFFECT_DISCARD,
             hDeviceWindow = focusWindow,
-            Windowed = 1,
+            Windowed = true,
         };
-        ThrowIfFailed(D3D9.CreateDeviceEx(_d3d9, 0, D3DDevTypeHal, focusWindow, D3D9CreateFlags, &pp, out _device9), "CreateDeviceEx");
+        const uint createFlags = (uint)(PInvoke.D3DCREATE_HARDWARE_VERTEXPROCESSING | PInvoke.D3DCREATE_MULTITHREADED | PInvoke.D3DCREATE_FPU_PRESERVE);
+        ThrowIfFailed(D3D9.CreateDeviceEx(_d3d9, 0, (uint)D3DDEVTYPE.D3DDEVTYPE_HAL, (nint)focusWindow.Value, createFlags, &pp, out _device9), "CreateDeviceEx");
     }
 
     private void CreateSurfaces(uint width, uint height)
@@ -254,7 +246,7 @@ internal sealed unsafe partial class PanoramicSurface : FrameworkElement
         HANDLE sharedHandle = GetSharedHandle(sharedTexture);
 
         // Given a shared handle, D3D9Ex CreateTexture opens the D3D11 texture rather than allocating one.
-        ThrowIfFailed(D3D9.CreateTexture(_device9, width, height, D3DUsageRenderTarget, D3DFmtA8R8G8B8, D3DPoolDefault, out _texture9, sharedHandle), "CreateTexture(shared)");
+        ThrowIfFailed(D3D9.CreateTexture(_device9, width, height, (uint)PInvoke.D3DUSAGE_RENDERTARGET, (uint)D3DFORMAT.D3DFMT_A8R8G8B8, (uint)D3DPOOL.D3DPOOL_DEFAULT, out _texture9, sharedHandle), "CreateTexture(shared)");
         ThrowIfFailed(D3D9.GetSurfaceLevel(_texture9, 0, out _surface9), "GetSurfaceLevel");
 
         DpiScale dpi = VisualTreeHelper.GetDpi(this);
@@ -480,27 +472,9 @@ internal sealed unsafe partial class PanoramicSurface : FrameworkElement
         StopKeyboardNavigation();
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    private struct D3DPRESENT_PARAMETERS
-    {
-        public uint BackBufferWidth;
-        public uint BackBufferHeight;
-        public uint BackBufferFormat;
-        public uint BackBufferCount;
-        public uint MultiSampleType;
-        public uint MultiSampleQuality;
-        public uint SwapEffect;
-        public nint hDeviceWindow;
-        public int Windowed;
-        public int EnableAutoDepthStencil;
-        public uint AutoDepthStencilFormat;
-        public uint Flags;
-        public uint FullScreen_RefreshRateInHz;
-        public uint PresentationInterval;
-    }
-
-    // Direct3D 9 has no CsWin32 metadata, so these call d3d9.h vtable slots: IUnknown::Release 2,
-    // IDirect3D9Ex::CreateDeviceEx 20, IDirect3DDevice9::CreateTexture 23, and IDirect3DTexture9::GetSurfaceLevel 18.
+    // CsWin32 generates the Direct3D 9 interfaces only for a specific CPU architecture, and this assembly is AnyCPU, so
+    // these call d3d9.h vtable slots: IUnknown::Release 2, IDirect3D9Ex::CreateDeviceEx 20,
+    // IDirect3DDevice9::CreateTexture 23, and IDirect3DTexture9::GetSurfaceLevel 18.
     private static unsafe partial class D3D9
     {
         [LibraryImport("d3d9.dll")]
