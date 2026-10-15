@@ -327,14 +327,21 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         ReleaseDevice9();
     }
 
+    // Rendering inside the lock keeps WPF from copying the back buffer to the front buffer mid-frame.
     private void RenderHardware()
     {
-        RenderScene(_sharedView, _surfaceWidth, _surfaceHeight);
-        Context->Flush(); // submit the D3D11 work before WPF reads the shared surface through D3D9
-
-        _d3dImage!.Lock();
-        _d3dImage.AddDirtyRect(new Int32Rect(0, 0, _d3dImage.PixelWidth, _d3dImage.PixelHeight));
-        _d3dImage.Unlock();
+        D3DImage image = _d3dImage!;
+        image.Lock();
+        try
+        {
+            RenderScene(_sharedView, _surfaceWidth, _surfaceHeight);
+            Context->Flush(); // submit the D3D11 work before WPF reads the shared surface through D3D9
+            image.AddDirtyRect(new Int32Rect(0, 0, image.PixelWidth, image.PixelHeight));
+        }
+        finally
+        {
+            image.Unlock();
+        }
     }
 
     private void RenderSoftware()
