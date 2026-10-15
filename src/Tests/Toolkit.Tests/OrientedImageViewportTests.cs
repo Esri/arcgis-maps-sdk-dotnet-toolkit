@@ -72,17 +72,6 @@ public sealed class OrientedImageViewportTests
     }
 
     [STATestMethod]
-    public void DeviceRecoveryWithNothingToResupplyIsNotBusy()
-    {
-        var viewport = new OrientedImagePanoramicViewport();
-        viewport.OnDeviceLost();
-        Assert.IsTrue(viewport.IsBusy, "a lost device reports busy");
-
-        viewport.OnDeviceRecreated();
-        Assert.IsFalse(viewport.IsBusy, "recovery ends when there is no image to re-supply");
-    }
-
-    [STATestMethod]
     public void MarkerChangesStartOnlyTheNeededPasses()
     {
         var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Red, 10);

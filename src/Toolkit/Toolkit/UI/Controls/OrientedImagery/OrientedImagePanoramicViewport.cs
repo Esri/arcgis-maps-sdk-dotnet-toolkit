@@ -58,7 +58,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
     private bool _markerPassQueued;
     private int _imageWidth;
     private int _imageHeight;
-    private bool _recovering;
 
     internal OrientedImagePanoramicViewport()
     {
@@ -70,8 +69,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
         Content = _surface;
         _surface.SurfaceTapped += OnSurfaceTapped;
         _surface.RenderFailed += OnRenderFailed;
-        _surface.DeviceLost += OnDeviceLost;
-        _surface.DeviceRecreated += OnDeviceRecreated;
         _surface.ScaleChanged += OnScaleChanged;
         SetAutomationName(null);
     }
@@ -84,16 +81,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
     protected override Microsoft.UI.Xaml.DependencyObject AutomationTarget => _surface;
 #endif
 
-    protected override bool IsPresentationInteractive => _imageWidth > 0 && _imageHeight > 0 && !_recovering;
-
-    protected override bool IsPresentationBusy => _recovering;
-
-    // Internal for tests, which can't lose or rebuild a device.
-    internal void OnDeviceLost()
-    {
-        _recovering = true;
-        UpdateState();
-    }
+    protected override bool IsPresentationInteractive => _imageWidth > 0 && _imageHeight > 0;
 
     // The first render failure wins, since the blanking render below can fail too.
     private void OnRenderFailed(Exception ex)
@@ -102,72 +90,8 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
             return;
 
         PresentationError = ex;
-        _recovering = false;
         ClearPresentation();
         UpdateState();
-    }
-
-    // A rebuilt device has lost the texture and markers, and the surface keeps no CPU copy. The camera survives.
-    internal async void OnDeviceRecreated()
-    {
-        // A load in flight re-supplies the surface itself and reports busy. A failed load stays failed, since the
-        // viewport never retries on its own.
-        OrientedImage? image = Footprint?.OrientedImage;
-        if (image is null || IsLoading || image.LoadStatus == LoadStatus.FailedToLoad)
-        {
-            _recovering = false;
-            UpdateState();
-            return;
-        }
-
-        // Until re-supplied, zero dimensions keep taps off the old pixel space, and the viewport reports busy.
-        _imageWidth = 0;
-        _imageHeight = 0;
-        _recovering = true;
-        UpdateState();
-
-        CancellationToken token = SessionToken;
-        try
-        {
-            if (token.IsCancellationRequested)
-                return;
-
-            await image.RetryLoadAsync(); // a no-op when loaded; reloads an image canceled during teardown
-            if (token.IsCancellationRequested || image.DataUri is not { IsAbsoluteUri: true, IsFile: true } uri)
-                return;
-
-            PanoramaFrame frame = await PanoramaFrame.DecodeAsync(uri.LocalPath, token);
-            if (token.IsCancellationRequested)
-            {
-                frame.Dispose();
-                return;
-            }
-
-            _imageWidth = frame.Width;
-            _imageHeight = frame.Height;
-            _surface.SetTexture(frame);
-            _surface.RequestRender();
-            QueueMarkerPass();
-
-            // A render error raised while the device was lost ends with the recovery.
-            PresentationError = null;
-        }
-        catch (OperationCanceledException)
-        {
-            // Superseded by a newer footprint; its own load re-supplies the surface.
-        }
-        catch (Exception ex)
-        {
-            // A footprint swapped in mid-recovery owns the viewport state.
-            if (!token.IsCancellationRequested)
-                PresentationError = ex;
-        }
-        finally
-        {
-            // Safe when superseded: UpdateState reads only the current session's state.
-            _recovering = false;
-            UpdateState();
-        }
     }
 
     private void OnScaleChanged() => QueueMarkerPass();
@@ -401,8 +325,7 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
 
         _imageWidth = frame.Width;
         _imageHeight = frame.Height;
-        _surface.SetTexture(frame);
-        _recovering = false; // a fresh texture ends any device recovery
+        _surface.SetTexture(frame, path);
 
         // Open facing north at the horizon unless a look-at target is held. The identity camera centers u = 0.75 and
         // the image's center column faces CameraHeading, so yaw is -pi/2 minus the heading.

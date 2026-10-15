@@ -112,7 +112,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         {
             EnsureResources();
             RequestRender();
-            OnResourcesEnsured();
         });
         ViewChanged?.Invoke();
     }
@@ -127,7 +126,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         {
             EnsureResources();
             RequestRender();
-            OnResourcesEnsured();
         });
         ScaleChanged?.Invoke();
     }
@@ -311,9 +309,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         Context is not null && (_useSoftware
             ? _writeableBitmap is not null && _renderTargetView is not null
             : _d3dImage is not null && _sharedView is not null && _d3dImage.IsFrontBufferAvailable);
-
-    // EnsureResources creates the surfaces once the element has a size, and IsReadyToRender holds the tick until then.
-    private partial bool PresentResourcesReady() => true;
 
     private partial void RenderFrame()
     {

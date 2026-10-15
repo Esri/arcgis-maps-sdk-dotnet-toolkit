@@ -21,6 +21,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Direct3D;
@@ -90,15 +92,13 @@ internal sealed unsafe partial class PanoramicSurface
     private uint _indexCount;
     private float _clearR = 0.02f, _clearG = 0.02f, _clearB = 0.02f, _clearA = 1f;
 
-    // Holds a texture set before the device exists, until Initialize uploads it.
-    private byte[]? _pendingBgra;
-    private uint _pendingWidth, _pendingHeight;
+    // The file behind the texture. A device created or rebuilt without the texture decodes it again, so no CPU copy
+    // of the pixels is kept.
+    private string? _texturePath;
     private bool _usingWarp;
 
     private bool _needsRender = true;
     private bool _deviceLost;
-    private bool _deviceEverCreated;
-    private bool _reloadPending; // a reload that has yet to get its device
 
     private static readonly TimeSpan RecoveryRetryInterval = TimeSpan.FromMilliseconds(500);
     private static readonly TimeSpan RecoveryReportDelay = TimeSpan.FromSeconds(10);
@@ -121,7 +121,7 @@ internal sealed unsafe partial class PanoramicSurface
     private readonly Dictionary<byte[], (nint Texture, nint View)> _swatchTextures = new(ReferenceEqualityComparer.Instance);
     private readonly List<(nint View, PanoramaMarker Marker)> _gpuMarkers = [];
     private readonly List<nint> _visibleViews = [];
-    private PanoramaMarker[]? _pendingMarkers;
+    private IReadOnlyList<PanoramaMarker> _markers = []; // uploaded whenever a device is created
 
     private PanoramaCameraState _camera = PanoramaCameraState.Initial;
 
@@ -153,13 +153,7 @@ internal sealed unsafe partial class PanoramicSurface
     // Device, present, and render failures outside the load path, which the viewport reports as Error.
     internal event Action<Exception>? RenderFailed;
 
-    internal event Action? DeviceLost;
-
-    // Raised after a rebuild or reload, not on first creation. The viewport re-supplies the texture and markers; the
-    // camera survives because it lives on this surface.
-    internal event Action? DeviceRecreated;
-
-    public bool IsDeviceInitialized => _device is not null;
+    internal bool IsDeviceInitialized => _device is not null;
 
     internal bool IsDeviceRemoved
     {
@@ -181,14 +175,11 @@ internal sealed unsafe partial class PanoramicSurface
         }
     }
 
-    public bool HasTexture => _panoramaTextureView is not null;
-
     internal ID3D11Device* Device => _device;
 
     internal ID3D11DeviceContext* Context => _context;
 
-    // Present-layer hooks. EnsureResources also creates the device, and PresentResourcesReady tells a recovery whether
-    // the present resources exist.
+    // Present-layer hooks. EnsureResources also creates the device.
     private partial void EnsureResources();
 
     private partial void ReleasePresentResources();
@@ -196,8 +187,6 @@ internal sealed unsafe partial class PanoramicSurface
     private partial void HookRendering();
 
     private partial bool IsReadyToRender();
-
-    private partial bool PresentResourcesReady();
 
     private partial void RenderFrame();
 
@@ -292,7 +281,6 @@ internal sealed unsafe partial class PanoramicSurface
         _recoveryStarted = Stopwatch.GetTimestamp();
         _lastRecoveryAttempt = 0; // the first attempt is immediate
         _recoveryReported = false;
-        DeviceLost?.Invoke();
     }
 
     // Guards XAML lifecycle handlers, which run outside the render tick's error handling.
@@ -311,31 +299,12 @@ internal sealed unsafe partial class PanoramicSurface
         }
     }
 
-    // Hook the tick first, so a device removed during creation still recovers. A reload starts with an empty device
-    // that the viewport must re-supply; on first load the load path supplies it, and raising would decode twice.
+    // Hook the tick first, so a device removed during creation still recovers.
     private void HandleLoaded()
     {
-        _reloadPending = _deviceEverCreated;
         HookRendering();
         EnsureResources();
         RequestRender();
-        OnResourcesEnsured();
-    }
-
-    // Runs after EnsureResources in the lifecycle handlers. The device needs a size, which a reloaded element may get
-    // after Loaded. The reload notification therefore waits for the device, not the event.
-    private void OnResourcesEnsured()
-    {
-        if (!IsDeviceInitialized)
-            return;
-
-        _deviceEverCreated = true;
-        if (!_reloadPending)
-            return;
-
-        _reloadPending = false;
-        if (!HasTexture)
-            DeviceRecreated?.Invoke();
     }
 
     private void RenderTick()
@@ -368,7 +337,7 @@ internal sealed unsafe partial class PanoramicSurface
             RenderFailed?.Invoke(failure);
     }
 
-    // Retries while the GPU is unavailable. A success after a reported failure lets the viewport clear its error.
+    // Retries while the GPU is unavailable. After a reported failure, setting the footprint again retries the image.
     private bool TryRecoverDevice()
     {
         long now = Stopwatch.GetTimestamp();
@@ -388,11 +357,10 @@ internal sealed unsafe partial class PanoramicSurface
             failure = ex;
         }
 
-        if (failure is null && IsDeviceInitialized && PresentResourcesReady())
+        if (failure is null && IsDeviceInitialized)
         {
             _deviceLost = false;
             _needsRender = true;
-            DeviceRecreated?.Invoke();
             return true;
         }
 
@@ -430,40 +398,25 @@ internal sealed unsafe partial class PanoramicSurface
         CreateRasterizerState();
         _samplerState = CreateSampler(D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_WRAP); // wrap u across the seam
         CreateMarkerResources();
-
-        if (_pendingBgra is byte[] pending)
-        {
-            byte[] bytes = pending;
-            uint w = _pendingWidth, h = _pendingHeight;
-            _pendingBgra = null;
-            UploadTexture(bytes, w, h);
-        }
+        BuildGpuMarkers(_markers);
+        if (_texturePath is string path)
+            _ = RestoreTextureAsync(path);
     }
 
-    public void SetTexture(PanoramaFrame frame) => SetTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height);
-
-    // Takes an equirectangular image as tightly packed BGRA8.
-    public void SetTexture(ReadOnlySpan<byte> bgra, uint width, uint height)
+    // Takes the decoded equirectangular image and the file it came from. Without a device yet, Initialize decodes the
+    // file again.
+    internal void SetTexture(PanoramaFrame frame, string path)
     {
-        if (width == 0 || height == 0 || bgra.Length < (int)(width * height * 4))
-            return;
-
-        if (_device is null)
-        {
-            _pendingBgra = bgra.ToArray();
-            _pendingWidth = width;
-            _pendingHeight = height;
-            return;
-        }
-
-        UploadTexture(bgra, width, height);
+        _texturePath = path;
+        if (_device is not null)
+            UploadTexture(frame);
     }
 
-    private void UploadTexture(ReadOnlySpan<byte> bgra, uint width, uint height)
+    private void UploadTexture(PanoramaFrame frame)
     {
         Release(ref _panoramaTextureView);
         Release(ref _panoramaTexture);
-        CreateBgraTexture(bgra, width, height, out _panoramaTexture, out _panoramaTextureView);
+        CreateBgraTexture(frame.Bgra, (uint)frame.Width, (uint)frame.Height, out _panoramaTexture, out _panoramaTextureView);
     }
 
     private static D3D11_TEXTURE2D_DESC CreateBgraTextureDescription(uint width, uint height, D3D11_BIND_FLAG bindFlags,
@@ -507,9 +460,9 @@ internal sealed unsafe partial class PanoramicSurface
         view = srv;
     }
 
-    public void ClearTexture()
+    internal void ClearTexture()
     {
-        _pendingBgra = null;
+        _texturePath = null;
 
         // The context references the bound view, so unbind it to free the texture while the backdrop is blank.
         if (_context is not null)
@@ -706,13 +659,9 @@ internal sealed unsafe partial class PanoramicSurface
 
     internal void SetMarkers(IReadOnlyList<PanoramaMarker> markers)
     {
-        if (_device is null)
-        {
-            _pendingMarkers = markers.ToArray();
-            return;
-        }
-
-        BuildGpuMarkers(markers);
+        _markers = markers;
+        if (_device is not null)
+            BuildGpuMarkers(markers);
     }
 
     private void CreateMarkerResources()
@@ -741,12 +690,6 @@ internal sealed unsafe partial class PanoramicSurface
         _device->CreateBlendState(&blendDesc, &blendState);
         _markerBlendState = blendState;
         _markerSampler = CreateSampler(D3D11_TEXTURE_ADDRESS_MODE.D3D11_TEXTURE_ADDRESS_CLAMP);
-
-        if (_pendingMarkers is PanoramaMarker[] pending)
-        {
-            _pendingMarkers = null;
-            BuildGpuMarkers(pending);
-        }
     }
 
     private void BuildGpuMarkers(IReadOnlyList<PanoramaMarker> markers)
@@ -951,6 +894,29 @@ internal sealed unsafe partial class PanoramicSurface
     }
 
     private readonly record struct MarkerVertex(Vector2 Position, Vector2 TexCoord);
+}
+
+// An async method can't be declared in the unsafe part of the class.
+internal sealed partial class PanoramicSurface
+{
+    // Decodes the file behind the texture again for a device that was created or rebuilt without it.
+    private async Task RestoreTextureAsync(string path)
+    {
+        try
+        {
+            PanoramaFrame frame = await PanoramaFrame.DecodeAsync(path, CancellationToken.None);
+            if (IsDeviceInitialized && path == _texturePath)
+            {
+                UploadTexture(frame);
+                RequestRender();
+            }
+        }
+        catch (Exception ex)
+        {
+            if (path == _texturePath)
+                RenderFailed?.Invoke(ex);
+        }
+    }
 }
 
 // Tightly packed BGRA8. Each present layer adds its DecodeAsync.
