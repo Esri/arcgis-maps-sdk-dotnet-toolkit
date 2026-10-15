@@ -1097,4 +1097,8 @@
     <value>An error occured. Tap to remove.</value>
     <comment>Accessibility text for error button</comment>
   </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>Oriented image</value>
+    <comment>UIA AutomationProperties.Name for the OrientedImageViewport control, used by screen readers to identify the control</comment>
+  </data>
 </root>
