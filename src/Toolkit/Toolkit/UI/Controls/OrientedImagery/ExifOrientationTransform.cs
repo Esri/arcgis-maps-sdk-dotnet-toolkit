@@ -75,9 +75,6 @@ internal readonly struct ExifOrientationTransform
         _ => point,
     };
 
-    internal static ExifOrientationTransform Read(Uri? dataUri) =>
-        dataUri is { IsAbsoluteUri: true, IsFile: true } ? Read(dataUri.LocalPath) : default;
-
     internal static ExifOrientationTransform Read(string path)
     {
         try

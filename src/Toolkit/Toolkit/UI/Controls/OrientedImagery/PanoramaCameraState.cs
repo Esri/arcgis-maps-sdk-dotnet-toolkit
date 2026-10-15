@@ -39,7 +39,6 @@ internal sealed record PanoramaCameraState
     public const float MaxPitch = (MathF.PI / 2f) - 0.01f;
     public const float MinFieldOfView = 50f * MathF.PI / 180f;
     public const float MaxFieldOfView = 120f * MathF.PI / 180f;
-    public const float MouseRotationScale = 0.0035f; // fallback drag scale while the view size is unknown
     public const float WheelZoomStep = 0.1f; // radians of field of view per wheel notch
 
     // Held-key speeds, matching MapView: a pan of 300 DIPs per second, and a zoom that scales the view by 2 per second.
@@ -62,13 +61,8 @@ internal sealed record PanoramaCameraState
     }
 
     // Radians per DIP that keep the grabbed point under the pointer at screen center, for pitch and yaw alike.
-    public static float DragRotationScale(float fieldOfView, double viewHeight)
-    {
-        if (viewHeight <= 0)
-            return MouseRotationScale;
-
-        return (float)(2.0 * Math.Tan(fieldOfView / 2.0) / viewHeight);
-    }
+    public static float DragRotationScale(float fieldOfView, double viewHeight) =>
+        (float)(2.0 * Math.Tan(fieldOfView / 2.0) / viewHeight);
 
     public PanoramaCameraState(float yaw, float pitch, float fieldOfView)
     {

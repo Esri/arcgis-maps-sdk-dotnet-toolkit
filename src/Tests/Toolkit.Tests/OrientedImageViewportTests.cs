@@ -433,7 +433,7 @@ public sealed class OrientedImageViewportTests
             var uri = new Uri(path);
             var storedPoint = new PointF(10, 15);
             var expectedOrientation = new ExifOrientationTransform(exifOrientation);
-            ExifOrientationTransform parsedOrientation = ExifOrientationTransform.Read(uri);
+            ExifOrientationTransform parsedOrientation = ExifOrientationTransform.Read(path);
             Assert.AreEqual(
                 expectedOrientation.StoredToImage(storedPoint, StoredWidth, StoredHeight),
                 parsedOrientation.StoredToImage(storedPoint, StoredWidth, StoredHeight),

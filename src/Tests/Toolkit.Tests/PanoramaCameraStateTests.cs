@@ -123,7 +123,7 @@ public sealed class PanoramaCameraStateTests
     }
 
     [TestMethod]
-    public void DragRotationScaleMatchesFormulaAndFallsBackWhenSizeUnknown()
+    public void DragRotationScaleMatchesFormula()
     {
         // 2 tan(fov/2) / height is 0.002 radians per DIP at 90 degrees and 1000 DIPs.
         Assert.AreEqual(0.002f, PanoramaCameraState.DragRotationScale(Fov90, 1000), 1e-6f);
@@ -131,9 +131,6 @@ public sealed class PanoramaCameraStateTests
         // A wider field of view or a shorter view rotates faster per DIP.
         Assert.IsGreaterThan(PanoramaCameraState.DragRotationScale(PanoramaCameraState.MinFieldOfView, 1000), PanoramaCameraState.DragRotationScale(PanoramaCameraState.MaxFieldOfView, 1000));
         Assert.IsGreaterThan(PanoramaCameraState.DragRotationScale(Fov90, 1000), PanoramaCameraState.DragRotationScale(Fov90, 500));
-
-        Assert.AreEqual(PanoramaCameraState.MouseRotationScale, PanoramaCameraState.DragRotationScale(Fov90, 0));
-        Assert.AreEqual(PanoramaCameraState.MouseRotationScale, PanoramaCameraState.DragRotationScale(Fov90, -5));
     }
 
     [TestMethod]
