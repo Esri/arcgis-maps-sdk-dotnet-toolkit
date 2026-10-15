@@ -88,8 +88,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         _mapView.LayerViewStateChanged += (s, e) => UpdateState();
         _mapView.DrawStatusChanged += (s, e) =>
         {
-            UpdateState();
-
             // BeginFootprintUpdate rejects the initial ViewpointChanged while drawing, and no later one is guaranteed.
             if (e.Status == DrawStatus.Completed)
                 UpdateFootprint();
@@ -105,9 +103,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 #else
     public override Microsoft.UI.Xaml.FrameworkElement View => _mapView;
 #endif
-
-    // A MapView without a Map stays at DrawStatus.InProgress.
-    protected override bool IsPresentationBusy => _mapView.Map is not null && _mapView.DrawStatus == DrawStatus.InProgress;
 
     protected override bool IsPresentationInteractive => _interactive;
 

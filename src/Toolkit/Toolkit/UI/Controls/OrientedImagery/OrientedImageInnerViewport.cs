@@ -45,7 +45,7 @@ internal abstract class OrientedImageInnerViewport
     private MapPoint? _heldLookAt;
     private Task _present = Task.CompletedTask; // the current session's SetFootprintAsync
     private bool _autoUpdate;
-    private bool _isLoading;
+    private bool _isLoading; // true through PresentAsync, not only while the image loads
 
     // The focusable view, which carries the automation name and id.
 #if MAUI
@@ -58,7 +58,7 @@ internal abstract class OrientedImageInnerViewport
 
     public bool IsBusy { get; private set; }
 
-    // Independent of IsBusy: a presented viewport stays interactive while it redraws.
+    // False while an image loads or after an error.
     public bool IsInteractive { get; private set; }
 
     public Exception? Error { get; private set; }
@@ -79,12 +79,7 @@ internal abstract class OrientedImageInnerViewport
     // Derived viewports record asynchronous render or device failures here, then call UpdateState.
     protected Exception? PresentationError { get; set; }
 
-    // Stays true through PresentAsync, not only while the image loads.
-    protected bool IsLoading => _isLoading;
-
     protected abstract bool IsPresentationInteractive { get; }
-
-    protected virtual bool IsPresentationBusy => false;
 
     public void SetFootprint(OrientedImageFootprint? footprint)
     {
@@ -330,7 +325,7 @@ internal abstract class OrientedImageInnerViewport
     protected void UpdateState()
     {
         Exception? error = ResolveError();
-        bool busy = _isLoading || IsPresentationBusy;
+        bool busy = _isLoading;
         bool interactive = !_isLoading && error is null && IsPresentationInteractive;
         if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
             return;

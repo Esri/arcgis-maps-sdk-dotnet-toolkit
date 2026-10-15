@@ -144,9 +144,9 @@ public partial class OrientedImageViewport
     }
 
     /// <summary>
-    /// Gets a value indicating whether the control is loading, initializing, or drawing its image.
+    /// Gets a value indicating whether the control is loading or presenting its image.
     /// </summary>
-    /// <remarks>Independent of <see cref="IsInteractive"/>: an image stays interactive while it redraws.</remarks>
+    /// <remarks>Redraws of a shown image, such as during panning, do not count.</remarks>
     public bool IsBusy => (bool)GetValue(IsBusyProperty);
 
     /// <summary>
