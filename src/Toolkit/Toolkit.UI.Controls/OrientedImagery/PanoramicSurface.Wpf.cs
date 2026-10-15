@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 // WPF present layer. The hardware path opens the shared D3D11 render target on a D3D9Ex device for a D3DImage. The
 // software path (WARP, Remote Desktop, or no GPU) copies it through a staging texture into a WriteableBitmap.
-internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.Image
+internal sealed unsafe partial class PanoramicSurface : FrameworkElement
 {
     // HARDWARE_VERTEXPROCESSING | MULTITHREADED | FPU_PRESERVE
     private const uint D3D9CreateFlags = 0x40 | 0x4 | 0x2;
@@ -56,6 +56,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     private ID3D11RenderTargetView* _renderTargetView;
     private ID3D11Texture2D* _stagingTexture;
     private WriteableBitmap? _writeableBitmap;
+    private ImageSource? _source; // the D3DImage or the WriteableBitmap, whichever path is in use
 
     private bool _renderHooked;
     private Point _lastMousePosition;
@@ -67,7 +68,6 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
     public PanoramicSurface()
     {
         Focusable = true;
-        Stretch = Stretch.Fill;
         UseLayoutRounding = true; // avoids blur at fractional DPI
 
         Loaded += OnLoaded;
@@ -75,18 +75,19 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         SizeChanged += OnSizeChanged;
     }
 
-    protected override System.Windows.Size MeasureOverride(System.Windows.Size constraint)
+    // The transparent fill keeps the element hit-testable before the first frame.
+    protected override void OnRender(DrawingContext drawingContext)
     {
-        // An Image with no Source measures to 0x0.
-        double width = double.IsInfinity(constraint.Width) ? 0d : constraint.Width;
-        double height = double.IsInfinity(constraint.Height) ? 0d : constraint.Height;
-        return new System.Windows.Size(width, height);
+        var bounds = new Rect(RenderSize);
+        drawingContext.DrawRectangle(Brushes.Transparent, null, bounds);
+        if (_source is not null)
+            drawingContext.DrawImage(_source, bounds);
     }
 
-    protected override System.Windows.Size ArrangeOverride(System.Windows.Size arrangeSize)
+    private void SetSource(ImageSource? source)
     {
-        // Image arranges to its Source size, so without one the element stays 0x0 and the device is never created.
-        return arrangeSize;
+        _source = source;
+        InvalidateVisual();
     }
 
     private (uint Width, uint Height) GetPixelSize()
@@ -205,7 +206,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
 
         DpiScale dpi = VisualTreeHelper.GetDpi(this);
         _writeableBitmap = new WriteableBitmap((int)width, (int)height, 96.0 * dpi.DpiScaleX, 96.0 * dpi.DpiScaleY, PixelFormats.Pbgra32, null);
-        Source = _writeableBitmap;
+        SetSource(_writeableBitmap);
 
         _surfaceWidth = width;
         _surfaceHeight = height;
@@ -262,7 +263,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         _d3dImage.Lock();
         _d3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, _surface9);
         _d3dImage.Unlock();
-        Source = _d3dImage;
+        SetSource(_d3dImage);
 
         _surfaceWidth = width;
         _surfaceHeight = height;
@@ -396,6 +397,7 @@ internal sealed unsafe partial class PanoramicSurface : System.Windows.Controls.
         Release(ref _renderTargetView);
         Release(ref _renderTarget);
         Release(ref _stagingTexture);
+        SetSource(null);
 
         _surfaceWidth = 0;
         _surfaceHeight = 0;
