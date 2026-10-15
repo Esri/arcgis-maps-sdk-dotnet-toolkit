@@ -1,5 +1,9 @@
-#if WPF || WINDOWS_XAML
+#if WPF || WINDOWS_XAML || MAUI
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 internal static class OrientedImageryPagination
 {

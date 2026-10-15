@@ -1,4 +1,4 @@
-﻿#if WPF
+﻿#if WPF || MAUI
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System;
@@ -9,7 +9,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 /// <summary>
 /// Base class for view models backing the toolbar controls of an <see cref="OrientedImageryView"/>.
