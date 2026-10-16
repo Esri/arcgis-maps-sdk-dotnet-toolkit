@@ -511,8 +511,8 @@ public partial class OrientedImageryView
     private OrientedImageryViewToolbarSelector? _defaultItemTemplateSelector;
 
     /// <summary>
-    /// Gets or sets the <see cref="DataTemplateSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar items in
-    /// <see cref="OrientedImageryViewModel.ToolbarItems"/>.
+    /// Gets or sets the <see cref="DataTemplateSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar categories and
+    /// items in <see cref="OrientedImageryViewModel.ToolbarCategories"/>.
     /// </summary>
     public DataTemplateSelector? ToolbarItemTemplateSelector
     {
