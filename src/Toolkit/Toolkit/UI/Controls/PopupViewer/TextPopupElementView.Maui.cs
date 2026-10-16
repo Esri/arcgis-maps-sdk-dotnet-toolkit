@@ -54,11 +54,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             var container = GetTemplateChild(TextAreaName) as StackLayout;
             var text = Element?.Text;
-            if (container is null || string.IsNullOrEmpty(text))
+            if (container is null)
                 return;
 
             container.Children.Clear();
-            foreach (var block in HtmlToView.ToView(text, (s,e) => PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(e)))
+            if (string.IsNullOrEmpty(text))
+                return;
+
+#if WINDOWS
+            const bool useNativeHyperlinks = true;
+#else
+            const bool useNativeHyperlinks = false;
+#endif
+            foreach (var block in HtmlToView.ToView(text, (s,e) => PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(e), useNativeHyperlinks))
                 container.Children.Add(block);
         }
     }

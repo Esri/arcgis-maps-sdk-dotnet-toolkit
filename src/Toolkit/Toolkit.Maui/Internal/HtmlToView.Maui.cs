@@ -23,13 +23,13 @@ internal static class HtmlToView
 {
     private static Thickness ParagraphMargin = new(0, 0, 0, 16);
 
-    internal static IEnumerable<View> ToView(string html, EventHandler<Uri>? urlClickHandler)
+    internal static IEnumerable<View> ToView(string html, EventHandler<Uri>? urlClickHandler, bool useNativeHyperlinks = false)
     {
         IEnumerable<View> blocks;
         try
         {
             var htmlRoot = HtmlUtility.BuildDocumentTree(html);
-            blocks = VisitChildren(htmlRoot, urlClickHandler);
+            blocks = VisitChildren(htmlRoot, urlClickHandler, useNativeHyperlinks);
         }
         catch
         {
@@ -49,7 +49,7 @@ internal static class HtmlToView
     }
 
 
-    internal static IEnumerable<View> VisitChildren(MarkupNode parent, EventHandler<Uri>? urlClickHandler)
+    internal static IEnumerable<View> VisitChildren(MarkupNode parent, EventHandler<Uri>? urlClickHandler, bool useNativeHyperlinks = false)
     {
         // Create views for all the children of a given node.
         // Nodes with blocks are converted individually, but consecutive inline-only nodes are grouped into labels.
@@ -61,12 +61,12 @@ internal static class HtmlToView
             {
                 if (inlineNodes != null)
                 {
-                    var label = CreateFormattedText(inlineNodes, urlClickHandler);
+                    var label = CreateFormattedText(inlineNodes, urlClickHandler, useNativeHyperlinks);
                     ApplyStyle(label, parent);
                     inlineNodes = null;
                     yield return label;
                 }
-                yield return CreateBlock(node, urlClickHandler);
+                yield return CreateBlock(node, urlClickHandler, useNativeHyperlinks);
             }
             else
             {
@@ -76,7 +76,7 @@ internal static class HtmlToView
         }
         if (inlineNodes != null)
         {
-            var label = CreateFormattedText(inlineNodes, urlClickHandler);
+            var label = CreateFormattedText(inlineNodes, urlClickHandler, useNativeHyperlinks);
             ApplyStyle(label, parent);
             yield return label;
         }
@@ -84,7 +84,7 @@ internal static class HtmlToView
 
     // CreateBlock builds a view for a single *blocky* node. It is called for nodes that are
     // blocks themselves (List/Table/Block/Divider/Image) and also for nodes that contain block descendants.
-    private static View CreateBlock(MarkupNode node, EventHandler<Uri>? urlClickHandler)
+    private static View CreateBlock(MarkupNode node, EventHandler<Uri>? urlClickHandler, bool useNativeHyperlinks)
     {
         // Create a view for a single block node.
         switch (node.Type)
@@ -112,7 +112,7 @@ internal static class HtmlToView
                     listGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
                     var markerText = isOrdered ? $"{row + 1}." : "\u2022";
                     listGrid.Add(new Label { Text = markerText, HorizontalTextAlignment = TextAlignment.End, Margin = new Thickness(5, 0) }, 0, row);
-                    var item = CreateBlock(childItems[row], urlClickHandler);
+                    var item = CreateBlock(childItems[row], urlClickHandler, useNativeHyperlinks);
                     listGrid.Add(item, 1, row);
                 }
                 return listGrid;
@@ -130,7 +130,7 @@ internal static class HtmlToView
                     if (node.BackColor.HasValue)
                         container.BackgroundColor = ConvertColor(node.BackColor.Value);
 
-                    var blocks = VisitChildren(node, urlClickHandler);
+                    var blocks = VisitChildren(node, urlClickHandler, useNativeHyperlinks);
                     foreach (var block in blocks)
                     {
                         container.Children.Add(block);
@@ -141,7 +141,7 @@ internal static class HtmlToView
                 {
                     foreach (var child in node.Children) // We have to copy the style down to FormattedText's elements
                         child.InheritAttributes(node);
-                    var label = CreateFormattedText(node.Children, urlClickHandler);
+                    var label = CreateFormattedText(node.Children, urlClickHandler, useNativeHyperlinks);
                     if (isPara)
                         label.Margin = ParagraphMargin;
                     ApplyStyle(label, node);
@@ -155,7 +155,7 @@ internal static class HtmlToView
                 return new BoxView { HeightRequest = 1, Color = Colors.Gray }; // TODO: Do we need to set a color?
 
             case MarkupType.Table:
-                return ConvertTableToGrid(node, urlClickHandler);
+                return ConvertTableToGrid(node, urlClickHandler, useNativeHyperlinks);
 
             case MarkupType.Image:
                 var imageElement = new Image();
@@ -199,7 +199,7 @@ internal static class HtmlToView
 #endif
 
             case MarkupType.Link:
-                // If the link wraps block content (like <img>), render it as a tappable ContentView.
+                // Links containing blocks keep their content layout inside a single clickable wrapper.
                 if (Uri.TryCreate(node.Content, UriKind.Absolute, out var linkUri))
                 {
                     View content;
@@ -207,7 +207,7 @@ internal static class HtmlToView
                     {
                         var child = node.Children[0];
                         child.InheritAttributes(node);
-                        content = CreateBlock(child, urlClickHandler);
+                        content = CreateBlock(child, urlClickHandler, useNativeHyperlinks);
                     }
                     else
                     {
@@ -215,11 +215,15 @@ internal static class HtmlToView
                         foreach (var child in node.Children)
                         {
                             child.InheritAttributes(node);
-                            stack.Children.Add(CreateBlock(child, urlClickHandler));
+                            stack.Children.Add(CreateBlock(child, urlClickHandler, useNativeHyperlinks));
                         }
                         content = stack;
                     }
 
+#if WINDOWS
+                    if (useNativeHyperlinks && urlClickHandler is not null)
+                        return new HyperlinkContentView(content, linkUri, urlClickHandler);
+#endif
                     var wrapper = new ContentView { Content = content, Padding = 0 };
                     if (urlClickHandler != null)
                     {
@@ -235,7 +239,7 @@ internal static class HtmlToView
                 foreach (var child in node.Children)
                 {
                     child.InheritAttributes(node);
-                    fallback.Children.Add(CreateBlock(child, urlClickHandler));
+                    fallback.Children.Add(CreateBlock(child, urlClickHandler, useNativeHyperlinks));
                 }
                 return fallback;
 
@@ -262,7 +266,7 @@ internal static class HtmlToView
         }
     }
 
-    private static Label CreateFormattedText(IEnumerable<MarkupNode> nodes, EventHandler<Uri>? urlClickHandler)
+    private static Label CreateFormattedText(IEnumerable<MarkupNode> nodes, EventHandler<Uri>? urlClickHandler, bool useNativeHyperlinks)
     {
         // Flattens given tree of inline nodes into a single label.
         var str = new FormattedString();
@@ -273,12 +277,16 @@ internal static class HtmlToView
                 str.Spans.Add(span);
             }
         }
+#if WINDOWS
+        if (useNativeHyperlinks && str.Spans.OfType<HyperlinkSpan>().Any())
+            return new HyperlinkLabel(str) { LineBreakMode = LineBreakMode.WordWrap };
+#endif
         return new Label { FormattedText = str, LineBreakMode = LineBreakMode.WordWrap };
     }
 
     // Flattens an *inline-only* subtree into text spans for a single Label.
     // It is only used when VisitChildren has verified there are no block elements underneath.
-    private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri>? urlClickHandler)
+    private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri>? urlClickHandler, Action<Element>? activateLink = null)
     {
         // Converts a single inline node into a sequence of spans.
         // The whole tree is expected to only contain inline nodes. Other nodes are handled by VisitBlock.
@@ -289,21 +297,23 @@ internal static class HtmlToView
                 {
                     // The gesture recognizer will be shared by all the individual spans
                     TapGestureRecognizer? tapRecognizer = null;
+                    Action<Element>? activate = null;
                     if (urlClickHandler != null)
                     {
+                        activate = sender => urlClickHandler(sender, linkUri);
                         tapRecognizer = new TapGestureRecognizer();
                         tapRecognizer.Tapped += (s, e) =>
                         {
                             if (s is Element element)
                             {
-                                urlClickHandler?.Invoke(s, linkUri);
+                                activate(element);
                             }
                         };
                     }
                     foreach (var subNode in node.Children)
                     {
                         subNode.InheritAttributes(node);
-                        foreach (var subSpan in VisitInline(subNode, urlClickHandler))
+                        foreach (var subSpan in VisitInline(subNode, urlClickHandler, activate))
                         {
                             ApplyStyle(subSpan, node);
                             if (node.IsUnderline != false) // Add underline to links by default (unless specifically disabled)
@@ -328,7 +338,7 @@ internal static class HtmlToView
                 foreach (var subNode in node.Children)
                 {
                     subNode.InheritAttributes(node);
-                    foreach (var subSpan in VisitInline(subNode, urlClickHandler))
+                    foreach (var subSpan in VisitInline(subNode, urlClickHandler, activateLink))
                     {
                         yield return subSpan;
                     }
@@ -336,18 +346,28 @@ internal static class HtmlToView
                 break;
 
             case MarkupType.Break:
-                yield return new Span { Text = Environment.NewLine };
+                var lineBreak = activateLink is null ? new Span() : new HyperlinkSpan(activateLink);
+                lineBreak.Text = Environment.NewLine;
+                yield return lineBreak;
                 break;
 
             case MarkupType.Text:
-                var textSpan = new Span { Text = node.Content };
+                var textSpan = activateLink is null ? new Span() : new HyperlinkSpan(activateLink);
+                textSpan.Text = node.Content;
                 ApplyStyle(textSpan, node);
                 yield return textSpan;
                 break;
         }
     }
 
-    private static Grid ConvertTableToGrid(MarkupNode table, EventHandler<Uri>? urlClickHandler)
+    internal sealed class HyperlinkSpan : Span
+    {
+        internal HyperlinkSpan(Action<Element> activate) => Activate = activate;
+
+        internal Action<Element> Activate { get; }
+    }
+
+    private static Grid ConvertTableToGrid(MarkupNode table, EventHandler<Uri>? urlClickHandler, bool useNativeHyperlinks)
     {
         // Determines the dimensions of a grid necessary to hold a given table.
         // Utilizes a dynamically-sized 2D bitmap (`gridMap`) to mark occupied cells while iterating over the table.
@@ -379,7 +399,7 @@ internal static class HtmlToView
 
                 // Create a View for the current table-cell, and add it to the grid.
                 td.InheritAttributes(tr);
-                var cellView = CreateBlock(td, urlClickHandler);
+                var cellView = CreateBlock(td, urlClickHandler, useNativeHyperlinks);
                 var attr = HtmlUtility.ParseAttributes(td.Token?.Attributes);
                 if (attr.TryGetValue("colspan", out var colSpanStr) && ushort.TryParse(colSpanStr, out var colSpanFromAttr))
                 {

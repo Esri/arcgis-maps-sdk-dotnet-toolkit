@@ -30,9 +30,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Children.Add(content);
             Button previous = new Button() { WidthRequest = 20, Padding = new Thickness(0), HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Fill, BorderWidth = 0, Text = "", FontFamily = "Segoe MDL2 Assets", BackgroundColor = Colors.Transparent };
             previous.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
+            SemanticProperties.SetDescription(previous, Properties.Resources.GetString("PopupViewerPreviousMediaButtonText"));
             root.Children.Add(previous);
             Button next = new Button() { WidthRequest = 20, Padding = new Thickness(0), HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Fill, BorderWidth = 0, Text = "", FontFamily = "Segoe MDL2 Assets", BackgroundColor = Colors.Transparent };
             next.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
+            SemanticProperties.SetDescription(next, Properties.Resources.GetString("PopupViewerNextMediaButtonText"));
             Grid.SetColumn(next, 2);
             root.Children.Add(next);
             INameScope nameScope = new NameScope();
