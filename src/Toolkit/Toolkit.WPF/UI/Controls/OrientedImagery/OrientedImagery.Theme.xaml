@@ -280,6 +280,31 @@
         </Style.Triggers>
     </Style>
 
+    <DataTemplate x:Key="ImageSearchModeIconTemplate">
+        <Grid Width="33" Height="34">
+            <TextBlock x:Name="SelectionIcon" Text="&#xea74;" FontSize="32"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       FontFamily="{StaticResource ToolkitIconsFontFamily}" />
+            <Path x:Name="SearchIcon" Visibility="Collapsed"
+                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                <Path.Data>
+                    <GeometryGroup FillRule="Nonzero">
+                        <PathGeometry FillRule="Nonzero" Figures="M26.7358 19.6048L27.7447 18.5074L32.9375 12.8587L24.2416 11.0883L11.1977 8.43275L7.75234 12.1806L13.9879 33.4721L26.7358 19.6048ZM24.2416 11.0883L32.9375 12.8587L25.6458 11.3742L24.2416 11.0883ZM9.1681 12.5122L11.647 9.81567L30.469 13.6722L14.5913 30.944L9.1681 12.5122Z" />
+                        <PathGeometry FillRule="Nonzero" Figures="M6.59961 5.13663C7.92743 5.13684 8.99902 6.21202 8.99902 7.54385C8.99895 8.87562 7.92738 9.95087 6.59961 9.95108C5.27167 9.95107 4.1993 8.87575 4.19922 7.54385C4.19922 6.21189 5.27162 5.13664 6.59961 5.13663ZM6.59961 6.74112C6.15162 6.74113 5.79883 7.09452 5.79883 7.54385C5.7989 7.99312 6.15167 8.34658 6.59961 8.34659C7.04738 8.34638 7.39934 7.99299 7.39941 7.54385C7.39941 7.09465 7.04742 6.74132 6.59961 6.74112Z" />
+                        <PathGeometry Figures="M21.6003 19.6003L20.2007 21L14.6003 15.3997L16 14L21.6003 19.6003Z" />
+                        <PathGeometry Figures="M21.6003 15.3997L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3997Z" />
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding}" Value="True">
+                <Setter TargetName="SelectionIcon" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="SearchIcon" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
     <Style x:Key="ImageSearchModeComboBoxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ToolbarComboBoxStyle}">
         <Setter Property="Template">
             <Setter.Value>
@@ -296,20 +321,10 @@
                                       Style="{StaticResource ToolbarToggleButtonStyle}">
                             <StackPanel>
                                 <Viewbox Width="32" Height="32" Stretch="Uniform">
-                                    <TextBlock FontSize="24"
-                                               FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}">
-                                        <TextBlock.Style>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Text" Value="&#xea74;" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" Value="True">
-                                                        <Setter Property="Text" Value="&#xea72;" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
+                                    <ContentControl Content="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}"
+                                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                                    Focusable="False" IsTabStop="False" />
                                 </Viewbox>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <TextBlock>
@@ -432,7 +447,10 @@
             <StackPanel>
                 <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
                     <Grid Width="32" Height="32">
-                        <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Data="M28.9869 20.3149L30.0339 26.5899C28.6639 26.3499 26.4439 26.0599 23.7139 26.0599C23.5449 26.0599 23.3899 26.0669 23.2279 26.0699L22.1879 27.1099C22.6649 27.0789 23.1699 27.0599 23.7139 27.0599C28.1639 27.0599 31.2539 27.8599 31.2539 27.8599L29.8559 19.4469L28.9869 20.3149ZM14.0529 27.9879C12.6329 28.3739 11.0459 28.6599 8.79392 28.6599C5.78392 28.6599 3.42392 27.7699 2.36392 27.2899L6.04392 5.07993C7.06392 5.37993 8.58392 5.72993 10.5939 5.72993C13.0939 5.72993 14.5939 5.29993 16.0339 4.87993C17.4839 4.45993 18.8539 4.06993 21.3239 4.06993C23.5139 4.06993 25.4339 4.39993 26.3739 4.58993L28.0719 14.7939L29.1319 15.1019L27.2539 3.75993C27.2539 3.75993 24.5839 3.06993 21.3239 3.06993C16.1839 3.06993 15.4039 4.72993 10.5939 4.72993C7.77392 4.72993 5.95392 3.98993 5.25392 3.75993L1.25392 27.8599C1.25392 27.8599 4.34392 29.6599 8.79392 29.6599C11.1669 29.6599 12.8529 29.3499 14.3309 28.9429L14.0529 27.9879ZM10.7539 9.85993C9.92392 9.85993 9.25392 10.5299 9.25392 11.3599C9.25392 12.1899 9.92392 12.8599 10.7539 12.8599C11.5839 12.8599 12.2539 12.1899 12.2539 11.3599C12.2539 10.5299 11.5839 9.85993 10.7539 9.85993ZM10.7539 11.8599C10.4739 11.8599 10.2539 11.6399 10.2539 11.3599C10.2539 11.0799 10.4739 10.8599 10.7539 10.8599C11.0339 10.8599 11.2539 11.0799 11.2539 11.3599C11.2539 11.6399 11.0339 11.8599 10.7539 11.8599ZM12.9699 12.4929C12.7409 12.939 12.3831 13.3059 11.9429 13.5459L13.0966 17.2199L15.3639 25.3399L16.6639 29.7999L29.2539 17.2199L12.9699 12.4929ZM14.0139 17.0699L12.9839 13.5299L27.3539 17.6999L17.1539 27.8999L14.0139 17.0699Z"/>
+                        <Path Width="28" Height="19" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              SnapsToDevicePixels="true"
+                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                              Data="F1 M9.16358 9.4374e-07L7.67295 0L0 9.4374e-07L4.5818 7.6L11.4546 19H16.5455L28 9.4374e-07H9.16358ZM4.5818 7.6L0 9.4374e-07L3.84195 6.37269L4.5818 7.6ZM15.8314 17.7333H12.1686L2.26954 1.26667H25.7305L15.8314 17.7333Z" />
                     </Grid>
                 </Viewbox>
                 <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}" />
@@ -514,21 +532,12 @@
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="0,0,8,0"
-                                   FontSize="24"
-                                   FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}">
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Text" Value="&#xea74;" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding}" Value="True">
-                                            <Setter Property="Text" Value="&#xea72;" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
+                        <Viewbox Width="24" Height="24" Margin="0,0,8,0" Stretch="Uniform">
+                            <ContentControl Content="{Binding}"
+                                            ContentTemplate="{StaticResource ImageSearchModeIconTemplate}"
+                                            Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}"
+                                            Focusable="False" IsTabStop="False" />
+                        </Viewbox>
                         <TextBlock VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
