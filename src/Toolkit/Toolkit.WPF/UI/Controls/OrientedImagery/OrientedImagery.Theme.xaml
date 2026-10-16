@@ -416,6 +416,15 @@
                       Margin="0" IsTabStop="False" Focusable="False" />
     </DataTemplate>
 
+    <DataTemplate x:Key="MoreCategoryTemplate" DataType="controls:OrientedImageryToolbarCategory">
+        <ItemsControl ItemsSource="{Binding ToolbarItems}"
+                      ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                      Visibility="{Binding ViewModel.SupportsSequentialNavigation, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Style="{DynamicResource OrientedImageryToolbarContainerStyle}"
+                      Margin="0" IsTabStop="False" Focusable="False">
+        </ItemsControl>
+    </DataTemplate>
+
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowSelectedFootprint}"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
@@ -684,7 +693,7 @@
         <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.MarkersCategoryName}"
                                                              Template="{StaticResource ToolbarCategoryTemplate}" />
         <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.MoreCategoryName}"
-                                                             Template="{StaticResource ToolbarCategoryTemplate}" />
+                                                             Template="{StaticResource MoreCategoryTemplate}" />
         <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ToolbarDividerVM}" Template="{StaticResource ToolbarDividerTemplate}" />
         <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
         <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:AllowAddingMarkersVM}" Template="{StaticResource AllowAddingMarkersToolbarTemplate}" />
