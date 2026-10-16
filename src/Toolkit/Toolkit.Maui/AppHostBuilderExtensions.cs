@@ -23,6 +23,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 handler.AddHandler<HyperlinkLabel, HyperlinkLabelHandler>();
                 handler.AddHandler<HyperlinkContentView, HyperlinkContentViewHandler>();
+                handler.AddHandler<FieldsTableGrid, FieldsTableGridHandler>();
+                handler.AddHandler<FieldsTableCell, FieldsTableCellHandler>();
             });
 #endif
             builder.ConfigureFonts(fonts => fonts
