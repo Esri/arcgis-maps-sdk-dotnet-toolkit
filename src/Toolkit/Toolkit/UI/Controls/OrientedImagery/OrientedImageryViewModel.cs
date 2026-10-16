@@ -56,9 +56,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _sketchModeEnabled = false;
         _imageSearchEnabled = true;
 
-        ToolbarItems = GetDefaultToolbarItems();
-        ToolbarItems.CollectionChanged += ToolbarItems_CollectionChanged;
-        SynchronizeToolbarItems();
+        ToolbarCategories = GetDefaultToolbarCategories();
+        ToolbarCategories.CollectionChanged += ToolbarCategories_CollectionChanged;
+        SynchronizeToolbarCategories();
 
         SelectNextImageCommand = new Command(
             execute: () => Navigate(SequenceStep.Next),
@@ -871,22 +871,22 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 #endregion Markers
 
 #region ToolbarItems
-    private HashSet<OrientedImageryToolbarItemBase> _attachedToolbarItems = new(ReferenceEqualityComparer.Instance);
+    private HashSet<OrientedImageryToolbarCategory> _attachedToolbarCategories = new(ReferenceEqualityComparer.Instance);
 
     /// <summary>
-    /// The collection of toolbar items to be displayed on the containing <see cref="OrientedImageryView"/>.
+    /// The collection of toolbar categories to be displayed on the containing <see cref="OrientedImageryView"/>.
     /// </summary>
     /// <remarks>
-    /// Each toolbar items is an <see cref="OrientedImageryToolbarItemBase"/> object with a reference to the containing <see cref="OrientedImageryViewModel"/>.
-    /// The list is initially populated with a set of default toolbar items for the base control.
-    /// Items are disconnected from this view model when their last occurrence is removed, including when the collection is cleared.
+    /// Each toolbar item is an <see cref="OrientedImageryToolbarCategory"/> object with a reference to the containing 
+    /// <see cref="OrientedImageryViewModel"/>. The list is initially populated with a set of default toolbar items for
+    /// the base control. Items are disconnected from the view model when they are removed from the collection.
     /// </remarks>
-    public ObservableCollection<OrientedImageryToolbarItemBase> ToolbarItems { get; private set; }
+    public ObservableCollection<OrientedImageryToolbarCategory> ToolbarCategories { get; private set; }
 
     /// <summary>
-    /// Gets the default toolbar items for a <see cref="OrientedImageryViewModel"/>.
+    /// Gets the default toolbar categories for a <see cref="OrientedImageryViewModel"/>.
     /// </summary>
-    private ObservableCollection<OrientedImageryToolbarItemBase> GetDefaultToolbarItems()
+    private ObservableCollection<OrientedImageryToolbarCategory> GetDefaultToolbarCategories()
     {
         var symbolOutline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Black, 1);
         var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<MarkerSymbol>()
@@ -896,38 +896,62 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 10) { Outline =  symbolOutline }
         });
 
-        return
+        ObservableCollection<OrientedImageryToolbarCategory> categories =
         [
-            new ImageSearchModeVM(),
-            new ToolbarDividerVM(),
-            new ShowSelectedFootprintVM(),
-            new ShowUnselectedFootprintsVM(),
-            new ShowCameraMarkersVM(),
-            new ToolbarDividerVM(),
-            new AllowAddingMarkersVM(),
-            markerSymbolPickerVM,
-            new ClearMarkersVM(),
-            new ToolbarDividerVM(),
-            new SequentialNavigationVM()
+            new OrientedImageryToolbarCategory(OrientedImageryToolbarCategory.ModeCategoryName)
+            {
+                ToolbarItems = { new ImageSearchModeVM() }
+            },
+            new OrientedImageryToolbarCategory(OrientedImageryToolbarCategory.OverlaysCategoryName)
+            {
+                ToolbarItems =
+                {
+                    new ShowSelectedFootprintVM(),
+                    new ShowUnselectedFootprintsVM(),
+                    new ShowCameraMarkersVM()
+                }
+            },
+            new OrientedImageryToolbarCategory(OrientedImageryToolbarCategory.MarkersCategoryName)
+            {
+                ToolbarItems =
+                {
+                    new AllowAddingMarkersVM(),
+                    markerSymbolPickerVM,
+                    new ClearMarkersVM()
+                }
+            },
+            new OrientedImageryToolbarCategory(OrientedImageryToolbarCategory.MoreCategoryName)
+            {
+                ToolbarItems = { new SequentialNavigationVM() }
+            }
         ];
+
+#if WPF || WINDOWS_XAML
+        for (var i = 1; i < categories.Count; i++)
+        {
+            categories[i].ToolbarItems.Insert(0, new ToolbarDividerVM());
+        }
+#endif
+
+        return categories;
     }
 
-    private void ToolbarItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => SynchronizeToolbarItems();
+    private void ToolbarCategories_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => SynchronizeToolbarCategories();
 
-    private void SynchronizeToolbarItems()
+    private void SynchronizeToolbarCategories()
     {
-        var currentItems = new HashSet<OrientedImageryToolbarItemBase>(ToolbarItems, ReferenceEqualityComparer.Instance);
-        foreach (var item in _attachedToolbarItems)
+        var currentItems = new HashSet<OrientedImageryToolbarCategory>(ToolbarCategories, ReferenceEqualityComparer.Instance);
+        foreach (var item in _attachedToolbarCategories)
         {
             if (!currentItems.Contains(item))
                 item.ViewModel = null;
         }
 
-        foreach (var item in ToolbarItems)
+        foreach (var item in ToolbarCategories)
         {
             item.ViewModel = this;
         }
-        _attachedToolbarItems = currentItems;
+        _attachedToolbarCategories = currentItems;
     }
 #endregion ToolbarItems
 
