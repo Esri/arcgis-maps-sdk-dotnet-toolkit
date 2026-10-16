@@ -199,7 +199,7 @@ internal static class HtmlToView
 #endif
 
             case MarkupType.Link:
-                // If the link wraps block content (like <img>), render it as a tappable ContentView.
+                // Links containing blocks keep their content layout inside a single clickable wrapper.
                 if (Uri.TryCreate(node.Content, UriKind.Absolute, out var linkUri))
                 {
                     View content;
@@ -220,6 +220,10 @@ internal static class HtmlToView
                         content = stack;
                     }
 
+#if WINDOWS
+                    if (useNativeHyperlinks && urlClickHandler is not null)
+                        return new HyperlinkContentView(content, linkUri, urlClickHandler);
+#endif
                     var wrapper = new ContentView { Content = content, Padding = 0 };
                     if (urlClickHandler != null)
                     {
