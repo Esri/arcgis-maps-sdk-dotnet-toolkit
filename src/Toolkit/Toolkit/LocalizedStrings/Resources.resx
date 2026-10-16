@@ -1166,16 +1166,19 @@
   <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
     <value>Clear Markers</value>
   </data>
-  <data name="OrientedImageryViewNavigationModeLabel" xml:space="preserve">
-    <value>Nav mode</value>
+  <data name="EnterSequentialNavigationModeLabel" xml:space="preserve">
+    <value>Sequential navigation</value>
   </data>
-  <data name="OrientedImageryViewImageSearchModeSearch" xml:space="preserve">
-    <value>Search</value>
-    <comment>Label for the mode that searches for oriented images.</comment>
+  <data name="ExitSequentialNavigationModeLabel" xml:space="preserve">
+    <value>Return to results</value>
   </data>
-  <data name="OrientedImageryViewImageSearchModeSelect" xml:space="preserve">
-    <value>Select</value>
-    <comment>Label for the mode that selects oriented images.</comment>
+  <data name="OrientedImageryViewImageSearchModeExplore" xml:space="preserve">
+    <value>Explore images</value>
+    <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeExamine" xml:space="preserve">
+    <value>Examine images</value>
+    <comment>Label for the mode that examines individual tapped oriented images.</comment>
   </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
     <value>Open details for selected image</value>
