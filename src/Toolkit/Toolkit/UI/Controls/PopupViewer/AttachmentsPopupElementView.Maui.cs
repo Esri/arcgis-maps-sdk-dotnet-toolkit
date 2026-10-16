@@ -21,6 +21,9 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 #if WINDOWS
+using Microsoft.Maui.Controls.Platform;
+using NativeItemClickEventArgs = Microsoft.UI.Xaml.Controls.ItemClickEventArgs;
+using NativeListViewBase = Microsoft.UI.Xaml.Controls.ListViewBase;
 using WinRT;
 #endif
 
@@ -56,10 +59,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             rootcaption.SetBinding(Label.TextProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
+#if WINDOWS
+            SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
+            SemanticProperties.SetHeadingLevel(rootcaption, SemanticHeadingLevel.Level2);
+#endif
             root.Add(rootcaption);
             root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0,5) });
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (AttachmentsPopupElementView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
+#if WINDOWS
+            cv.SetBinding(SemanticProperties.DescriptionProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
+            cv.HandlerChanged += AttachmentList_HandlerChanged;
+            cv.HandlerChanging += AttachmentList_HandlerChanging;
+#endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             root.Add(cv);
             INameScope nameScope = new NameScope();
@@ -71,9 +83,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultItemTemplate()
         {
             Grid layout = new Grid();
+#if !WINDOWS
             TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
             itemTapGesture.Tapped += Attachment_Tapped;
             layout.GestureRecognizers.Add(itemTapGesture);
+#endif
             layout.ColumnDefinitions.Add(new ColumnDefinition(30));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
@@ -82,12 +96,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.SetBinding(Grid.BindingContextProperty, static (PopupAttachment attachment) => attachment, converter: AttachmentViewModelConverter.Instance);
             Image image = new Image() { WidthRequest = 24, HeightRequest = 24, HorizontalOptions = LayoutOptions.Start, Aspect = Aspect.Fill };
+#if WINDOWS
+            AutomationProperties.SetIsInAccessibleTree(image, false);
+#endif
             layout.Add(image);
             image.SetBinding(Image.SourceProperty, static (AttachmentViewModel vm) => vm.Thumbnail);
             Grid.SetRowSpan(image, 2);
 
             Label name = new Label() { VerticalOptions = LayoutOptions.End };
             name.SetBinding(Label.TextProperty, static (AttachmentViewModel vm) => vm.Name);
+#if WINDOWS
+            AutomationProperties.SetIsInAccessibleTree(name, false);
+#endif
             Grid.SetColumn(name, 1);
             layout.Add(name);
 
@@ -98,6 +118,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(size);
 
             Image image2 = new Image() { WidthRequest = 18, HeightRequest = 18 };
+#if WINDOWS
+            AutomationProperties.SetIsInAccessibleTree(image2, false);
+#endif
             image2.SetBinding(Image.IsVisibleProperty, static (AttachmentViewModel vm) => vm.IsDownloadButtonVisible);
             image2.Source = new FontImageSource() { Glyph = ToolkitIcons.Inbox, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
             Grid.SetColumn(image2, 2);
@@ -105,6 +128,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(image2);
 
             ActivityIndicator indicator = new ActivityIndicator() { WidthRequest = 24, HeightRequest = 24, IsRunning = true };
+#if WINDOWS
+            SemanticProperties.SetDescription(indicator, Properties.Resources.GetString("PopupViewerAttachmentDownloading"));
+#endif
             indicator.SetBinding(ActivityIndicator.IsRunningProperty, static (AttachmentViewModel vm) => vm.IsDownloading);
             Grid.SetColumn(indicator, 2);
             Grid.SetRowSpan(indicator, 2);
@@ -115,20 +141,59 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(divider, 3);
             layout.Add(divider);
             Border root = new Border() { StrokeThickness = 0, Content = layout };
+#if WINDOWS
+            // MAUI forwards the root's semantics to the native list item; don't expose a duplicate named group.
+            root.SetBinding(SemanticProperties.DescriptionProperty, static (PopupAttachment attachment) => attachment.Name);
+            AutomationProperties.SetIsInAccessibleTree(root, false);
+#endif
             return root;
         }
 
+#if WINDOWS
+        private static void AttachmentList_HandlerChanged(object? sender, EventArgs e)
+        {
+            if (sender is CollectionView { Handler.PlatformView: NativeListViewBase list })
+            {
+                list.IsItemClickEnabled = true;
+                list.ItemClick += AttachmentList_ItemClick;
+            }
+        }
+
+        private static void AttachmentList_HandlerChanging(object? sender, HandlerChangingEventArgs e)
+        {
+            if (e.OldHandler?.PlatformView is NativeListViewBase list)
+            {
+                list.ItemClick -= AttachmentList_ItemClick;
+            }
+        }
+
+        private static void AttachmentList_ItemClick(object sender, NativeItemClickEventArgs e)
+        {
+            if (e.ClickedItem is ItemTemplateContext { Item: PopupAttachment attachment, Container: View view })
+            {
+                OpenAttachment(view, attachment);
+            }
+        }
+#else
         private static void Attachment_Tapped(object? sender, EventArgs e)
         {
-            var cell = sender as View;
-            Element? parent = cell?.Parent;
-            while(parent is View && parent is not AttachmentsPopupElementView)
+            if (sender is View { BindingContext: AttachmentViewModel vm } view)
+            {
+                OpenAttachment(view, vm.Attachment);
+            }
+        }
+#endif
+
+        private static void OpenAttachment(View view, PopupAttachment attachment)
+        {
+            Element? parent = view.Parent;
+            while (parent is View && parent is not AttachmentsPopupElementView)
             {
                 parent = parent.Parent;
             }
-            if(parent is AttachmentsPopupElementView a && cell?.BindingContext is AttachmentViewModel vm)
+            if (parent is AttachmentsPopupElementView a)
             {
-                a.OnAttachmentClicked(vm.Attachment);
+                a.OnAttachmentClicked(attachment);
             }
         }
 
