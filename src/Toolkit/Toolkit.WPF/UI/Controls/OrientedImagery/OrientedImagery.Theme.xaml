@@ -501,6 +501,7 @@
 
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
         <ToggleButton IsChecked="{Binding ViewModel.SketchModeEnabled}"
+                      MinWidth="0" Padding="0,4"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
             <StackPanel>
@@ -510,7 +511,7 @@
                                FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" />
                 </Viewbox>
-                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkerLabel}" />
+                <TextBlock Width="40" Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkerLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
@@ -559,10 +560,49 @@
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
         <ComboBox ItemsSource="{Binding SymbolOptions}"
                   SelectedItem="{Binding SelectedSymbol, Mode=TwoWay}"
+                  MinWidth="0" Padding="0"
                   Style="{StaticResource ToolbarComboBoxStyle}"
-                  Visibility="{Binding ViewModel.SketchModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                  Tag="{internal:LocalizedString Key=OrientedImageryViewChooseMarkersLabel}"
                   ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
+            <ComboBox.Template>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton x:Name="MarkerSymbolDropdownButton"
+                                      MinWidth="0" MinHeight="84" Padding="0"
+                                      ClickMode="Press" Focusable="False"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      Style="{StaticResource ToolbarToggleButtonStyle}"
+                                      ToolTip="{TemplateBinding ToolTip}">
+                            <StackPanel>
+                                <controls:SymbolDisplay Symbol="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                                                        Width="16" Height="32" Focusable="False" />
+                                <Grid Height="32" Margin="0,8,0,0">
+                                    <Path Width="12" Height="8" VerticalAlignment="Center"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                          StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round" Data="M1 1L6 6L11 1" />
+                                </Grid>
+                            </StackPanel>
+                        </ToggleButton>
+                        <Popup x:Name="PART_Popup"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               Placement="Bottom"
+                               PopupAnimation="Slide">
+                            <Border MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                    BorderThickness="1">
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </ComboBox.Template>
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ComboBoxItem}">
                     <Setter Property="MinWidth" Value="40" />
