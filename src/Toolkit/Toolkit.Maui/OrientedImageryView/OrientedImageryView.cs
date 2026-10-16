@@ -13,6 +13,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 public partial class OrientedImageryView : TemplatedView
 {
     private readonly ObservableCollection<OrientedImageryLayer> _layers = new();
+    private readonly ObservableCollection<OrientedImageryToolbarItemBase> _toolbarItems = new();
+    private readonly HashSet<OrientedImageryToolbarCategory> _toolbarCategories = new();
+    private bool _imageSearchEnabled = true;
+    internal IReadOnlyList<OrientedImageryToolbarItemBase> ToolbarItems => _toolbarItems;
+    internal bool ImageSearchEnabled => ViewModel.InteractionState switch
+    {
+        OrientedImageryViewInteractionState.ExploreImages => true,
+        OrientedImageryViewInteractionState.ExamineImage => false,
+        _ => _imageSearchEnabled,
+    };
+    internal bool IsAddingMarkers => ViewModel.InteractionState == OrientedImageryViewInteractionState.AddMarkers;
     private GeoView? _connectedGeoView;
     private GeoModel? _geoModel;
     private LayerCollection? _operationalLayers;
@@ -130,7 +141,7 @@ public partial class OrientedImageryView : TemplatedView
 
     /// <summary>
     /// Gets or sets the <see cref="DataTemplateSelector"/> used to display the toolbar items in
-    /// <see cref="OrientedImageryViewModel.ToolbarItems"/>.
+    /// <see cref="OrientedImageryToolbarCategory.ToolbarItems"/> across <see cref="OrientedImageryViewModel.ToolbarCategories"/>.
     /// </summary>
     public DataTemplateSelector? ToolbarItemTemplateSelector
     {
@@ -188,19 +199,21 @@ public partial class OrientedImageryView : TemplatedView
         if (_connectedModel != null)
         {
             _connectedModel.PropertyChanged -= ModelChanged;
-            _connectedModel.ToolbarItems.CollectionChanged -= ToolbarChanged;
+            _connectedModel.ToolbarCategories.CollectionChanged -= ToolbarChanged;
             _connectedModel.SelectNextImageCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedModel.SelectPreviousImageCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedModel.ToggleSequentialNavigationCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedModel.ClearMarkersCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedGeoView?.GraphicsOverlays?.Remove(_connectedModel.MarkersOverlay);
             _connectedModel.DispatchAction = null;
-#if !WINDOWS
             _connectedModel.CloseSelectedImagePopupCommand.Execute(null);
-#endif
             _connectedModel.OrientedImageryLayer = null;
             _connectedModel.Markers.Clear();
         }
+
+        foreach (var category in _toolbarCategories)
+            category.ToolbarItems.CollectionChanged -= ToolbarChanged;
+        _toolbarCategories.Clear();
 
         if (_connectedGeoView != null)
         {
@@ -238,7 +251,8 @@ public partial class OrientedImageryView : TemplatedView
         _connectedModel = ViewModel;
         _connectedModel.DispatchAction = DispatchUpdate;
         _connectedModel.PropertyChanged += ModelChanged;
-        _connectedModel.ToolbarItems.CollectionChanged += ToolbarChanged;
+        _connectedModel.ToolbarCategories.CollectionChanged += ToolbarChanged;
+        SynchronizeToolbarItems();
         _connectedModel.SelectNextImageCommand.CanExecuteChanged += NavigationAvailabilityChanged;
         _connectedModel.SelectPreviousImageCommand.CanExecuteChanged += NavigationAvailabilityChanged;
         _connectedModel.ToggleSequentialNavigationCommand.CanExecuteChanged += NavigationAvailabilityChanged;
@@ -318,7 +332,37 @@ public partial class OrientedImageryView : TemplatedView
 
     private void LayersChanged(object? sender, NotifyCollectionChangedEventArgs e) => DispatchUpdate(UpdateLayers);
 
-    private void ToolbarChanged(object? sender, NotifyCollectionChangedEventArgs e) => DispatchUpdate(Refresh);
+    private void ToolbarChanged(object? sender, NotifyCollectionChangedEventArgs e) => DispatchUpdate(() =>
+    {
+        SynchronizeToolbarItems();
+        Refresh();
+    });
+
+    private void SynchronizeToolbarItems()
+    {
+        foreach (var category in _toolbarCategories)
+            category.ToolbarItems.CollectionChanged -= ToolbarChanged;
+        _toolbarCategories.Clear();
+        foreach (var category in ViewModel.ToolbarCategories)
+        {
+            if (_toolbarCategories.Add(category))
+                category.ToolbarItems.CollectionChanged += ToolbarChanged;
+        }
+
+        var items = ViewModel.ToolbarCategories.SelectMany(category => category.ToolbarItems).ToArray();
+        if (_toolbarItems.SequenceEqual(items))
+            return;
+        _toolbarItems.Clear();
+        foreach (var item in items)
+            _toolbarItems.Add(item);
+    }
+
+    internal void SetAddingMarkers(bool enabled)
+    {
+        _imageSearchEnabled = ImageSearchEnabled;
+        ViewModel.InteractionState = enabled ? OrientedImageryViewInteractionState.AddMarkers :
+            _imageSearchEnabled ? OrientedImageryViewInteractionState.ExploreImages : OrientedImageryViewInteractionState.ExamineImage;
+    }
 
     private void DispatchUpdate(Action action)
     {
@@ -403,7 +447,7 @@ public partial class OrientedImageryView : TemplatedView
 
     private void NavigationAvailabilityChanged(object? sender, EventArgs e) => DispatchUpdate(Refresh);
 
-    private bool HasTool<T>() where T : OrientedImageryToolbarItemBase => ViewModel.ToolbarItems.Any(item => item is T);
+    private bool HasTool<T>() where T : OrientedImageryToolbarItemBase => _toolbarItems.Any(item => item is T);
 
     private async void GeoViewTapped(object? sender, GeoViewInputEventArgs e)
     {
@@ -420,12 +464,12 @@ public partial class OrientedImageryView : TemplatedView
         var model = ViewModel;
         if (!_connected || geoView == null || layer == null || e.Location == null || !_layers.Contains(layer))
             return;
-        if (model.SketchModeEnabled)
+        if (model.InteractionState == OrientedImageryViewInteractionState.AddMarkers)
         {
             model.AddMarkerLocation(e.Location);
             return;
         }
-        if (model.IsSequentialNavigationEnabled)
+        if (model.IsSequentialNavigationEnabled || model.InteractionState == OrientedImageryViewInteractionState.None)
             return;
 
         CancelOperation();
@@ -435,7 +479,7 @@ public partial class OrientedImageryView : TemplatedView
         try
         {
             IReadOnlyList<OrientedImage> images;
-            if (model.ImageSearchEnabled)
+            if (model.InteractionState == OrientedImageryViewInteractionState.ExploreImages)
             {
                 images = await layer.SearchImagesAsync(e.Location, new OrientedImageSearchParameters { MaxResults = -1 });
             }
@@ -451,7 +495,7 @@ public partial class OrientedImageryView : TemplatedView
 
             if (version == _operationVersion && layer == SelectedLayer && geoView == GeoView && model == ViewModel)
             {
-                model.SetImages(images, model.ImageSearchEnabled ? e.Location : null);
+                model.SetImages(images, model.InteractionState == OrientedImageryViewInteractionState.ExploreImages ? e.Location : null);
                 model.SelectedImage = images.FirstOrDefault();
             }
         }
@@ -485,12 +529,12 @@ public partial class OrientedImageryView : TemplatedView
         var model = ViewModel;
         var layer = SelectedLayer;
         int version = _operationVersion;
-        if (!model.SketchModeEnabled || e.Marker != null || _viewport?.IsInteractive != true)
+        if (model.InteractionState != OrientedImageryViewInteractionState.AddMarkers || e.Marker != null || _viewport?.IsInteractive != true)
             return;
         try
         {
             var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
-            if (_connected && version == _operationVersion && model == ViewModel && layer == SelectedLayer && e.Image == model.SelectedImage && model.SketchModeEnabled)
+            if (_connected && version == _operationVersion && model == ViewModel && layer == SelectedLayer && e.Image == model.SelectedImage && model.InteractionState == OrientedImageryViewInteractionState.AddMarkers)
                 model.AddMarkerLocation(location);
         }
         catch (Exception ex)
