@@ -881,7 +881,21 @@
                                     </Border.Style>
                                     <TextBlock HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
-                                               Text="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelected}" />
+                                               Margin="16"
+                                               MaxWidth="400"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelectedExamine}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.ImageSearchEnabled}" Value="True">
+                                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelectedExplore}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Border>
 
                                 <Popup PlacementTarget="{Binding ElementName=PART_ImageViewport}"
