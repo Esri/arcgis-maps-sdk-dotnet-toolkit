@@ -1256,6 +1256,10 @@
     <value>Select an oriented imagery layer from the dropdown to start exploring.</value>
     <comment>Error shown by OrientedImageryView when the connected GeoView has oriented imagery layers but none have been selected.</comment>
   </data>
+  <data name="OrientedImageryViewNoLayerSelectedWithoutDropdown" xml:space="preserve">
+    <value>No layer selected</value>
+    <comment>Error shown by OrientedImageryView when no layer is selected and the layer selection dropdown has been toggled off by the developer.</comment>
+  </data>
   <data name="OrientedImageryViewSelectedLayerNotOnGeoView" xml:space="preserve">
     <value>The selected oriented imagery layer is not on the GeoView.</value>
     <comment>Error shown by OrientedImageryView when the selected layer is not part of the connected GeoView.</comment>

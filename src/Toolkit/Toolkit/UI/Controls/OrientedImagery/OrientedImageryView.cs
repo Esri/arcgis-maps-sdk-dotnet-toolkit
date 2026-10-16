@@ -297,7 +297,7 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="IsLayerSelectionDropdownEnabled"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty IsLayerSelectionDropdownEnabledProperty =
-        PropertyHelper.CreateProperty<bool, OrientedImageryView>(nameof(IsLayerSelectionDropdownEnabled), defaultValue: true);
+        PropertyHelper.CreateProperty<bool, OrientedImageryView>(nameof(IsLayerSelectionDropdownEnabled), true, (s, oldValue, newValue) => s.UpdateErrorMessage());
 
     /// <summary>
     /// The <see cref="OrientedImageryLayer"/> currently selected for inspection.
@@ -486,7 +486,9 @@ public partial class OrientedImageryView
         SearchLayersInner(_currentOperationalLayers ?? [], ref currentLayers);
         _orientedImageryLayers.ReplaceAll(currentLayers);
 
-        if (_orientedImageryLayers.Count < 1 || (ViewModel.OrientedImageryLayer != null && OrientedImageryLayers.Contains(ViewModel.OrientedImageryLayer)))
+        if (_orientedImageryLayers.Count == 1)
+            SelectedLayer = _orientedImageryLayers[0];
+        else if (_orientedImageryLayers.Count < 1 || (ViewModel.OrientedImageryLayer != null && OrientedImageryLayers.Contains(ViewModel.OrientedImageryLayer)))
             SelectedLayer = null;
 
         UpdateErrorMessage();
@@ -589,6 +591,7 @@ public partial class OrientedImageryView
     private const string NoGeoViewMessageKey = "OrientedImageryViewNoGeoView";
     private const string NoOrientedImageryLayersKey = "OrientedImageryViewNoOrientedImageryLayers";
     private const string NoLayerSelectedKey = "OrientedImageryViewNoLayerSelected";
+    private const string NoLayerSelectedWithoutDropdownKey = "OrientedImageryViewNoLayerSelectedWithoutDropdown";
     private const string SelectedLayerNotOnGeoViewKey = "OrientedImageryViewSelectedLayerNotOnGeoView";
 
     /// <summary>
@@ -613,7 +616,7 @@ public partial class OrientedImageryView
         else if (_orientedImageryLayers.Count < 1)
             ErrorMessage = Properties.Resources.GetString(NoOrientedImageryLayersKey);
         else if (SelectedLayer == null)
-            ErrorMessage = Properties.Resources.GetString(NoLayerSelectedKey);
+            ErrorMessage = Properties.Resources.GetString(IsLayerSelectionDropdownEnabled ? NoLayerSelectedKey : NoLayerSelectedWithoutDropdownKey);
         else if (!_orientedImageryLayers.Contains(SelectedLayer))
             ErrorMessage = Properties.Resources.GetString(SelectedLayerNotOnGeoViewKey);
         else
