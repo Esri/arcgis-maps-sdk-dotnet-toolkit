@@ -316,10 +316,10 @@
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ToolbarLabelStyle}">
                                                 <Setter Property="Width" Value="48" />
-                                                <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeSelect}" />
+                                                <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExamine}" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" Value="True">
-                                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeSearch}" />
+                                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -516,10 +516,10 @@
                         <TextBlock VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeSelect}" />
+                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExamine}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding}" Value="True">
-                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeSearch}" />
+                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -561,7 +561,7 @@
                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
             <StackPanel>
                 <Viewbox Width="28" Height="28" Stretch="Uniform">
-                    <TextBlock Text="&#xe83e;"
+                    <TextBlock Text="&#xeb04;"
                                FontSize="24"
                                FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
@@ -619,7 +619,18 @@
                         </Path.Style>
                     </Path>
                 </Grid>
-                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewNavigationModeLabel}" />
+                <TextBlock>
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ToolbarLabelStyle}">
+                            <Setter Property="Text" Value="{internal:LocalizedString Key=EnterSequentialNavigationModeLabel}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
+                                    <Setter Property="Text" Value="{internal:LocalizedString Key=ExitSequentialNavigationModeLabel}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
             </StackPanel>
         </Button>
     </DataTemplate>
