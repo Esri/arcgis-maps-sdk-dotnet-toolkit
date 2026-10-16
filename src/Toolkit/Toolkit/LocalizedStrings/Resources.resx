@@ -1232,9 +1232,13 @@
     <value>Loading...</value>
     <comment>Message shown by OrientedImageryView while an image is loading.</comment>
   </data>
-  <data name="OrientedImageryViewNoImagesSelected" xml:space="preserve">
-    <value>No images selected</value>
-    <comment>Message shown by OrientedImageryView when no images are selected.</comment>
+  <data name="OrientedImageryViewNoImagesSelectedExamine" xml:space="preserve">
+    <value>No images selected: Click a camera point on the map to examine an image</value>
+    <comment>Message shown by OrientedImageryView when no images are selected in Examine mode.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImagesSelectedExplore" xml:space="preserve">
+    <value>No images selected: Click a location on the map to explore images that view the selected point</value>
+    <comment>Message shown by OrientedImageryView when no images are selected in Explore mode.</comment>
   </data>
   <data name="OrientedImageryViewLayerSelection" xml:space="preserve">
     <value>Oriented imagery layer</value>
