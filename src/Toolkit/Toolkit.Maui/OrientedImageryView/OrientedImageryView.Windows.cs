@@ -78,6 +78,7 @@ public partial class OrientedImageryView
         Grid.SetColumnSpan(busy, 3);
         Add("PART_Previous", DesktopImageArrow(false), image);
         Add("PART_Next", DesktopImageArrow(true), image, column: 2);
+        AddPopupPresentation(image, scope);
         var panel = new Grid { IsVisible = false };
         Add("PART_PanelHost", panel, image);
         Grid.SetColumnSpan(panel, 3);
