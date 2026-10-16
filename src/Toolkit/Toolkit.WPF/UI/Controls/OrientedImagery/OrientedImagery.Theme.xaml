@@ -144,6 +144,7 @@
                         </MultiDataTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Root" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="Root" Property="BorderBrush" Value="Transparent" />
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -200,6 +201,17 @@
     <Style x:Key="ToolbarLabeledToggleButtonStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarToggleButtonStyle}">
         <Setter Property="MinWidth" Value="76" />
         <Setter Property="MinHeight" Value="84" />
+    </Style>
+
+    <Style x:Key="MultipleImagesToolbarToggleButtonStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ViewModel.Images.Count}" Value="0">
+                <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ViewModel.Images.Count}" Value="1">
+                <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="ToolbarLabelStyle" TargetType="{x:Type TextBlock}">
@@ -460,7 +472,7 @@
 
     <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowUnselectedFootprints}"
-                      Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
+                      Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
             <StackPanel>
                 <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
@@ -475,7 +487,7 @@
 
     <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="controls:ShowCameraMarkersVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowCameraLocations, Mode=TwoWay}"
-                      Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
+                      Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
