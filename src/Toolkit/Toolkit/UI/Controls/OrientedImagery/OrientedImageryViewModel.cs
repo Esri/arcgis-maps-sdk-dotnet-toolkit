@@ -776,6 +776,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </summary>
     /// <remarks>
     /// Applications may also add markers directly to <see cref="Markers"/>.
+    /// <see cref="InteractionState"/> does not restrict this method.
     /// </remarks>
     /// <param name="location">The geographic location of the marker.</param>
     /// <param name="symbol">The optional symbol to use for the marker.</param>
