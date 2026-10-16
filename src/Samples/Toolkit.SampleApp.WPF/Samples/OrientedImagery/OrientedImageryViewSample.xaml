@@ -34,9 +34,9 @@
                 </Button>
             </DataTemplate>
 
-            <esri:OrientedImageryViewTemplateSelector x:Key="AlternateToolbarSelector">
-                <esri:OrientedImageryViewTemplateSelectorItem Type="{x:Type local:ShowSelectedImagePopupVM}" Template="{StaticResource PopupToolbarItemTemplate}" />
-            </esri:OrientedImageryViewTemplateSelector>
+            <esri:OrientedImageryViewToolbarSelector x:Key="AlternateToolbarSelector">
+                <esri:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type local:ShowSelectedImagePopupVM}" Template="{StaticResource PopupToolbarItemTemplate}" />
+            </esri:OrientedImageryViewToolbarSelector>
         </ResourceDictionary>
     </UserControl.Resources>
 

@@ -409,6 +409,13 @@
 
     <!-- Toolbar data templates -->
 
+    <DataTemplate x:Key="ToolbarCategoryTemplate" DataType="controls:OrientedImageryToolbarCategory">
+        <ItemsControl ItemsSource="{Binding ToolbarItems}"
+                      ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                      Style="{DynamicResource OrientedImageryToolbarContainerStyle}"
+                      Margin="0" IsTabStop="False" Focusable="False" />
+    </DataTemplate>
+
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowSelectedFootprint}"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
@@ -669,17 +676,25 @@
         </Setter>
     </Style>
 
-    <controls:OrientedImageryViewTemplateSelector x:Key="DefaultOrientedImageryToolbarSelector">
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ToolbarDividerVM}" Template="{StaticResource ToolbarDividerTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:AllowAddingMarkersVM}" Template="{StaticResource AllowAddingMarkersToolbarTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ImageSearchModeVM}" Template="{StaticResource ImageSearchModeToolbarTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowSelectedFootprintVM}" Template="{StaticResource ShowSelectedFootprintToolbarTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
-        <controls:OrientedImageryViewTemplateSelectorItem Type="{x:Type controls:SequentialNavigationVM}" Template="{StaticResource SequentialNavigationToolbarTemplate}" />
-    </controls:OrientedImageryViewTemplateSelector>
+    <controls:OrientedImageryViewToolbarSelector x:Key="DefaultOrientedImageryToolbarSelector">
+        <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.ModeCategoryName}"
+                                                             Template="{StaticResource ToolbarCategoryTemplate}" />
+        <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.OverlaysCategoryName}"
+                                                             Template="{StaticResource ToolbarCategoryTemplate}" />
+        <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.MarkersCategoryName}"
+                                                             Template="{StaticResource ToolbarCategoryTemplate}" />
+        <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.MoreCategoryName}"
+                                                             Template="{StaticResource ToolbarCategoryTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ToolbarDividerVM}" Template="{StaticResource ToolbarDividerTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:AllowAddingMarkersVM}" Template="{StaticResource AllowAddingMarkersToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ImageSearchModeVM}" Template="{StaticResource ImageSearchModeToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ShowSelectedFootprintVM}" Template="{StaticResource ShowSelectedFootprintToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:SequentialNavigationVM}" Template="{StaticResource SequentialNavigationToolbarTemplate}" />
+    </controls:OrientedImageryViewToolbarSelector>
 
     <!-- Main view style -->
     <Style TargetType="{x:Type controls:OrientedImageryView}">

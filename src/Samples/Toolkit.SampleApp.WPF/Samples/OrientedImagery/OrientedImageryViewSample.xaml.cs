@@ -208,17 +208,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private void UpdateToolbarButton_Click(object sender, RoutedEventArgs e)
         {
             _usingAlternateToolbarStyling = !_usingAlternateToolbarStyling;
+            var overlaysCategory = _orientedImageryVM.ToolbarCategories.First(c => c.Name == OrientedImageryToolbarCategory.OverlaysCategoryName);
             if (_usingAlternateToolbarStyling)
             {
-                _orientedImageryVM.ToolbarItems.Add(new ShowSelectedImagePopupVM());
-                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("AlternateToolbarSelector");
+                overlaysCategory.ToolbarItems.Add(new ShowSelectedImagePopupVM());
+                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewToolbarSelector)this.FindResource("AlternateToolbarSelector");
             }
             else
             {
-                var popupToolbarItem = _orientedImageryVM.ToolbarItems.OfType<ShowSelectedImagePopupVM>().FirstOrDefault();
+                var popupToolbarItem = overlaysCategory.ToolbarItems.OfType<ShowSelectedImagePopupVM>().FirstOrDefault();
                 if (popupToolbarItem != null)
-                    _orientedImageryVM.ToolbarItems.Remove(popupToolbarItem);
-                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewTemplateSelector)this.FindResource("DefaultOrientedImageryToolbarSelector");
+                    overlaysCategory.ToolbarItems.Remove(popupToolbarItem);
+                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewToolbarSelector)this.FindResource("DefaultOrientedImageryToolbarSelector");
             }
         }
 
