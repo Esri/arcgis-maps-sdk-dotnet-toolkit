@@ -161,11 +161,11 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     private void RefreshToolbar(OrientedImageryView owner)
     {
         var model = owner.ViewModel;
-        if (_model != model || !_items.SequenceEqual(model.ToolbarItems))
+        if (_model != model || !_items.SequenceEqual(owner.ToolbarItems))
         {
             Clear();
             _model = model;
-            _items = model.ToolbarItems.ToArray();
+            _items = owner.ToolbarItems.ToArray();
             foreach (var item in _items)
             {
                 NativeView? control = item switch
@@ -174,7 +174,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                     ShowSelectedFootprintVM => Toggle(owner, "CurrentFootprint", Geometry(CurrentFootprint), () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value),
                     ShowUnselectedFootprintsVM => Toggle(owner, "AdditionalFootprints", Geometry(AdditionalFootprints), () => model.ShowUnselectedFootprints, value => model.ShowUnselectedFootprints = value),
                     ShowCameraMarkersVM => Toggle(owner, "CameraLocations", Geometry(Camera), () => model.ShowCameraLocations, value => model.ShowCameraLocations = value),
-                    AllowAddingMarkersVM => Toggle(owner, "AddMarker", Glyph("\uE8ED"), () => model.SketchModeEnabled, value => model.SketchModeEnabled = value),
+                    AllowAddingMarkersVM => Toggle(owner, "AddMarker", Glyph("\uE8ED"), () => owner.IsAddingMarkers, owner.SetAddingMarkers),
                     AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", Glyph(ToolkitIcons.Refresh), () => model.AutoUpdateFootprint, value => model.AutoUpdateFootprint = value),
                     SelectNewMarkerSymbolVM picker => SymbolPicker(owner, picker),
                     ClearMarkersVM => ActionButton(owner, "ClearMarkers", Glyph("\uE83E"), () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
@@ -279,11 +279,11 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
         var model = owner.ViewModel;
         var icon = Glyph("\uEA72");
-        var button = ActionButton(owner, "Mode", icon, () => model.ImageSearchEnabled = !model.ImageSearchEnabled, () => !model.IsSequentialNavigationEnabled);
+        var button = ActionButton(owner, "Mode", icon, () => owner.SelectImageMode(!owner.ImageSearchEnabled), () => !model.IsSequentialNavigationEnabled);
         _updates.Add(() =>
         {
-            icon.Glyph = model.ImageSearchEnabled ? "\uEA72" : "\uEA74";
-            string key = model.ImageSearchEnabled ? "SwitchToSelect" : "SwitchToSearch";
+            icon.Glyph = owner.ImageSearchEnabled ? "\uEA72" : "\uEA74";
+            string key = owner.ImageSearchEnabled ? "SwitchToSelect" : "SwitchToSearch";
             if (AutomationProperties.GetName(button) != Text(key))
                 Describe(button, key, "OrientedImageryDesktopMode");
         });
@@ -353,7 +353,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         {
             UpdateSymbols();
             combo.SelectedIndex = Array.IndexOf(symbols, picker.SelectedSymbol);
-            combo.Visibility = owner.ViewModel.SketchModeEnabled ? NativeVisibility.Visible : NativeVisibility.Collapsed;
+            combo.Visibility = owner.IsAddingMarkers ? NativeVisibility.Visible : NativeVisibility.Collapsed;
             combo.IsEnabled = owner.DesktopHasLayer;
         });
         return combo;

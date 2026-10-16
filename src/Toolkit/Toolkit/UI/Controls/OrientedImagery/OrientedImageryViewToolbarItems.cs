@@ -39,6 +39,7 @@ public class OrientedImageryToolbarCategory
         Name = name;
         _attachedToolbarItems = new(ReferenceEqualityComparer.Instance);
         ToolbarItems = new ObservableCollection<OrientedImageryToolbarItemBase>();
+        ToolbarItems.CollectionChanged += ToolbarItems_CollectionChanged;
     }
 
     /// <summary>
