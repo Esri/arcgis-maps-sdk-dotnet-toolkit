@@ -93,12 +93,12 @@ public class OrientedImageryToolbarCategory
 /// </summary>
 /// <remarks>
 /// <para>
-///   <see cref="OrientedImageryToolbarItemBase"/> objects are meant to be held in <see cref="OrientedImageryViewModel.ToolbarItems"/>.
-///   They supply an <see cref="ViewModel"/> property for convenient access to the containing <see cref="OrientedImageryViewModel"/>, and implement
+///   <see cref="OrientedImageryToolbarItemBase"/> objects are meant to be held in <see cref="OrientedImageryToolbarCategory.ToolbarItems"/>.
+///   They supply a <see cref="ViewModel"/> property for convenient access to the containing <see cref="OrientedImageryViewModel"/>, and implement
 ///   <see cref="INotifyPropertyChanged"/>.
 /// </para>
 /// <para>
-///   <see cref="ViewModel"/> is populated when an <see cref="OrientedImageryToolbarItemBase"/> instance is added to <see cref="OrientedImageryViewModel.ToolbarItems"/>.
+///   <see cref="ViewModel"/> is populated when an <see cref="OrientedImageryToolbarItemBase"/> instance is added to <see cref="OrientedImageryToolbarCategory.ToolbarItems"/>.
 ///   The same <see cref="OrientedImageryToolbarItemBase"/> instance should not be shared between multiple <see cref="OrientedImageryViewModel"/> instances, as only
 ///   one view model can be referenced by the <see cref="ViewModel"/> property at a time.
 /// </para>
@@ -108,7 +108,7 @@ public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
     private OrientedImageryViewModel? _mainViewModel;
 
     /// <summary>
-    /// Gets or sets the linked <see cref="OrientedImageryViewModel"/>. This property will be set automatically when the toolbar item is added to <see cref="OrientedImageryViewModel.ToolbarItems"/>.
+    /// Gets or sets the linked <see cref="OrientedImageryViewModel"/>. This property will be set automatically when the toolbar item is added to <see cref="OrientedImageryToolbarCategory.ToolbarItems"/>.
     /// </summary>
     public OrientedImageryViewModel? ViewModel
     {
