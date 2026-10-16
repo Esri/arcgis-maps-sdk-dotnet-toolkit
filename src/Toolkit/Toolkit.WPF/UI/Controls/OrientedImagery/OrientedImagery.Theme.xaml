@@ -804,8 +804,18 @@
                             </Border>
 
                             <ItemsControl x:Name="PART_ToolbarContainer" Grid.Row="1" IsTabStop="False" Focusable="False"
-                                          Style="{StaticResource OrientedImageryToolbarContainerStyle}"
-                                          ItemTemplateSelector="{StaticResource DefaultOrientedImageryToolbarSelector}" />
+                                          ItemTemplateSelector="{StaticResource DefaultOrientedImageryToolbarSelector}">
+                                <ItemsControl.Style>
+                                    <Style TargetType="{x:Type ItemsControl}" BasedOn="{StaticResource OrientedImageryToolbarContainerStyle}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ItemsControl.Style>
+                            </ItemsControl>
 
                             <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
