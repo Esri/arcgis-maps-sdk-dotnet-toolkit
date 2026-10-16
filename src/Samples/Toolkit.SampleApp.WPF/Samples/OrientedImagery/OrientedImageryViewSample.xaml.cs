@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
@@ -176,6 +175,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 surface.ElevationSources.Clear();
             else
                 surface.ElevationSources.Add(_elevationSource);
+        }
+
+        private void ToggleElevationSurfaceTransparencyAndNavigabilityButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_sceneView.Scene?.BaseSurface is not Surface surface)
+                return;
+
+            if (surface.NavigationConstraint == NavigationConstraint.None)
+            {
+                surface.NavigationConstraint = NavigationConstraint.StayAbove;
+                surface.Opacity = 1;
+            }
+            else
+            {
+                surface.NavigationConstraint = NavigationConstraint.None;
+                surface.Opacity = 0.7;
+            }
+        }
+
+        private void ToggleElevationSurfaceExaggerationButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_sceneView.Scene?.BaseSurface is Surface surface)
+                surface.ElevationExaggeration = surface.ElevationExaggeration == 1 ? 3 : 1;
         }
 
         private int _scenePropertiesState = 0;

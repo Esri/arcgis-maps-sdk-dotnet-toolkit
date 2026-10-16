@@ -64,17 +64,21 @@
 
         <Grid Grid.Row="1" Grid.Column="0" >
             <Grid x:Name="GeoViewContainer"/>
-            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Button x:Name="ToggleElevationSurfaceButton" Content="Toggle elevation surface (3D only)" Click="ToggleElevationSurfaceButton_Click" />
-                <Button x:Name="ScenePropertiesButton" Content="Cycle scene properties" Click="ScenePropertiesButton_Click" />
-                <Button x:Name="UpdateToolbarButton" Content="Update toolbar" Click="UpdateToolbarButton_Click" />
-                <Button x:Name="OverrideClickHandlersButton"  Content="Override clicks" Click="OverrideClickHandlersButton_Click" />
-                <Button x:Name="RemoveReAddLayers"  Content="Remove/Re-add all layers" Click="RemoveReAddLayers_Click" />
-                <Button x:Name="RemoveLastLayer"  Content="Remove last layer" Click="RemoveLastLayer_Click" />
-                <Button x:Name="BackgroundThreadUpdate"  Content="Update markers on background thread" Click="BackgroundThreadUpdate_Click" />
-                <Button x:Name="ToggleButtonsBackgroundThread"  Content="Update some button states from a background thread" Click="ToggleButtonsBackgroundThread_Click" />
-                <Button x:Name="ToggleLayerDropdownButton"  Content="Toggle layer dropdown" Click="ToggleLayerDropdownButton_Click" />
-            </StackPanel>
+            <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Top" MaxHeight="200">
+                <StackPanel>
+                    <Button x:Name="ToggleElevationSurfaceButton" Content="Toggle elevation surface (3D only)" Click="ToggleElevationSurfaceButton_Click" />
+                    <Button x:Name="ScenePropertiesButton" Content="Cycle scene properties" Click="ScenePropertiesButton_Click" />
+                    <Button x:Name="UpdateToolbarButton" Content="Update toolbar" Click="UpdateToolbarButton_Click" />
+                    <Button x:Name="OverrideClickHandlersButton"  Content="Override clicks" Click="OverrideClickHandlersButton_Click" />
+                    <Button x:Name="RemoveReAddLayers"  Content="Remove/Re-add all layers" Click="RemoveReAddLayers_Click" />
+                    <Button x:Name="RemoveLastLayer"  Content="Remove last layer" Click="RemoveLastLayer_Click" />
+                    <Button x:Name="BackgroundThreadUpdate"  Content="Update markers on background thread" Click="BackgroundThreadUpdate_Click" />
+                    <Button x:Name="ToggleButtonsBackgroundThread"  Content="Update some button states from a background thread" Click="ToggleButtonsBackgroundThread_Click" />
+                    <Button x:Name="ToggleLayerDropdownButton"  Content="Toggle layer dropdown" Click="ToggleLayerDropdownButton_Click" />
+                    <Button x:Name="ToggleElevationSurfaceTransparencyAndNavigabilityButton"  Content="Toggle surface navigability" Click="ToggleElevationSurfaceTransparencyAndNavigabilityButton_Click" />
+                    <Button x:Name="ToggleElevationSurfaceExaggerationButton"  Content="Toggle elevation exaggeration" Click="ToggleElevationSurfaceExaggerationButton_Click" />
+                </StackPanel>
+            </ScrollViewer>
             <Button x:Name="OpenOrientedImageryButton"
                     HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="8"
                     Content="Open oriented imagery view"
