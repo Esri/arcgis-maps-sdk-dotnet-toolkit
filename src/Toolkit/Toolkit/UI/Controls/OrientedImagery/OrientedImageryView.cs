@@ -128,7 +128,7 @@ public partial class OrientedImageryView
             _viewport.Footprint = ViewModel.SelectedImageFootprint;
         }
         if (_toolbarContainer != null)
-            _toolbarContainer.ItemsSource = ViewModel.ToolbarItems;
+            _toolbarContainer.ItemsSource = ViewModel.ToolbarCategories;
         UpdatePaginatorSelection();
     }
 
@@ -508,7 +508,7 @@ public partial class OrientedImageryView
 
 #region Toolbar
     private ItemsControl? _toolbarContainer;
-    private OrientedImageryViewTemplateSelector? _defaultItemTemplateSelector;
+    private OrientedImageryViewToolbarSelector? _defaultItemTemplateSelector;
 
     /// <summary>
     /// Gets or sets the <see cref="DataTemplateSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar items in
@@ -528,7 +528,7 @@ public partial class OrientedImageryView
 
     private void OnItemTemplateSelectorChanged(DataTemplateSelector? oldItemTemplateSelector, DataTemplateSelector? newItemTemplateSelector)
     {
-        if (newItemTemplateSelector is not OrientedImageryViewTemplateSelector newSelector)
+        if (newItemTemplateSelector is not OrientedImageryViewToolbarSelector newSelector)
         {
             return;
         }
