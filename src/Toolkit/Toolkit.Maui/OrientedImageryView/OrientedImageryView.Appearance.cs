@@ -46,11 +46,11 @@ public partial class OrientedImageryView
     private Page? _presentationPage;
     private bool? _pageLandscape;
 #endif
-#if !WINDOWS
     private PopupViewer? _popupViewer;
     private Grid? _popupHost;
+    private Button? _popupOpenButton;
     private Button? _popupCloseButton;
-    private Grid? _navigation;
+#if !WINDOWS
     private Grid? _symbolGrid;
     private readonly List<Border> _symbolTiles = new();
 #endif
@@ -217,31 +217,7 @@ public partial class OrientedImageryView
         Add("PART_Busy", new ActivityIndicator { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, AutomationId = "OrientedImageryBusy" }, image);
         Add("PART_ImagePrevious", MobileImageArrow(false), image);
         Add("PART_ImageNext", MobileImageArrow(true), image);
-        var popupHost = new Grid
-        {
-            IsVisible = false,
-            RowDefinitions = { new RowDefinition(GridLength.Star) },
-        };
-        Add("PART_PopupHost", popupHost, image);
-        var popupClose = ToolButton("CloseSelectedImagePopup", "", "OrientedImageryPopupClose");
-        popupClose.Text = "X";
-        popupClose.WidthRequest = 44;
-        popupClose.BorderWidth = 0;
-        popupClose.HorizontalOptions = LayoutOptions.End;
-        popupClose.VerticalOptions = LayoutOptions.Start;
-        popupClose.IsVisible = false;
-#if __IOS__ && !MACCATALYST
-        popupClose.Text = "\u00D7";
-        popupClose.FontSize = 24;
-        popupClose.CornerRadius = 22;
-#endif
-        popupClose.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E6FFFFFF"), Color.FromArgb("#E6202020"));
-        Add("PART_Popup", new PopupViewer
-        {
-            AutomationId = "OrientedImageryPopupViewer", Padding = 0,
-            Margin = 0,
-        }, popupHost);
-        Add("PART_PopupClose", popupClose, popupHost);
+        AddPopupPresentation(image, scope);
 
         var navigation = new Grid
         {
@@ -270,6 +246,96 @@ public partial class OrientedImageryView
         Grid.SetRowSpan(panels, 5);
         return root;
     });
+#endif
+
+    private static void AddPopupPresentation(Grid image, INameScope scope)
+    {
+        var open = ToolButton("OpenSelectedImagePopup", "\uE8FA", "OrientedImageryPopupOpen");
+#if ANDROID
+        open.Text = null;
+#else
+        open.ImageSource = null;
+        open.Text = "\uE8FA";
+        open.FontFamily = ToolkitIcons.FontFamilyName;
+        open.FontSize = 20;
+        open.FontAttributes = FontAttributes.Bold;
+        open.TextColor = Color.FromArgb("#007AC2");
+#endif
+        open.WidthRequest = 44;
+        open.HeightRequest = 44;
+        open.BorderWidth = 1;
+        open.CornerRadius = 22;
+        open.Margin = 16;
+        open.Padding = 0;
+        open.HorizontalOptions = LayoutOptions.End;
+        open.VerticalOptions = LayoutOptions.Start;
+        open.IsVisible = false;
+        open.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
+#if ANDROID
+        StyleAndroidPopupButton(open);
+#endif
+        ToolTipProperties.SetText(open, Text("OpenSelectedImagePopup"));
+        scope.RegisterName("PART_PopupOpen", open);
+        image.Add(open);
+        Grid.SetColumnSpan(open, image.ColumnDefinitions.Count == 0 ? 1 : image.ColumnDefinitions.Count);
+
+        var host = new Grid
+        {
+            IsVisible = false,
+            InputTransparent = true,
+            CascadeInputTransparent = false,
+            ColumnSpacing = 0,
+            ColumnDefinitions = { new ColumnDefinition(new GridLength(0.35, GridUnitType.Star)), new ColumnDefinition(new GridLength(0.65, GridUnitType.Star)) },
+        };
+        scope.RegisterName("PART_PopupHost", host);
+        image.Add(host);
+        Grid.SetColumnSpan(host, image.ColumnDefinitions.Count == 0 ? 1 : image.ColumnDefinitions.Count);
+
+        var surface = new Grid
+        {
+            RowSpacing = 0,
+            RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) },
+        };
+        surface.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
+        var close = ToolButton("CloseSelectedImagePopup", "\uEB49", "OrientedImageryPopupClose");
+        close.Text = null;
+        close.WidthRequest = 44;
+        close.Padding = 0;
+        close.HorizontalOptions = LayoutOptions.End;
+        close.Margin = 8;
+        close.BorderWidth = 1;
+        close.SetAppThemeColor(Button.BorderColorProperty, Color.FromArgb("#999999"), Color.FromArgb("#888888"));
+        close.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
+#if ANDROID
+        StyleAndroidPopupButton(close);
+#endif
+        ToolTipProperties.SetText(close, Text("CloseSelectedImagePopup"));
+        scope.RegisterName("PART_PopupClose", close);
+        surface.Add(close);
+        var popup = new PopupViewer
+        {
+            AutomationId = "OrientedImageryPopupViewer",
+            Padding = 0,
+            Margin = new Thickness(16, 0, 8, 8),
+        };
+        scope.RegisterName("PART_Popup", popup);
+        surface.Add(popup, 0, 1);
+        var border = new Border { Content = surface, StrokeThickness = 1 };
+        border.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#444444"));
+        host.Add(border, 1);
+    }
+
+#if ANDROID
+    private static void StyleAndroidPopupButton(Button button)
+    {
+        button.CornerRadius = 12;
+        button.HeightRequest = 44;
+        button.ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 0);
+        if (button.ImageSource is FontImageSource icon)
+            icon.Size = 22;
+        button.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#EEEEEE"), Color.FromArgb("#444444"));
+        button.SetAppThemeColor(Button.BorderColorProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#666666"));
+    }
 #endif
 
     private static Button MobileImageArrow(bool next)
@@ -324,13 +390,10 @@ public partial class OrientedImageryView
         UnwireTemplate();
         base.OnApplyTemplate();
         _viewport = GetTemplateChild("PART_Viewport") as OrientedImageViewport;
-#if !WINDOWS
         _popupViewer = GetTemplateChild("PART_Popup") as PopupViewer;
         _popupHost = GetTemplateChild("PART_PopupHost") as Grid;
+        _popupOpenButton = GetTemplateChild("PART_PopupOpen") as Button;
         _popupCloseButton = GetTemplateChild("PART_PopupClose") as Button;
-        if (_popupCloseButton != null) _popupCloseButton.Clicked += ClosePopup;
-        _navigation = GetTemplateChild("PART_Navigation") as Grid;
-#endif
         _title = GetTemplateChild("PART_Title") as Label;
         _status = GetTemplateChild("PART_Status") as Label;
         _notice = GetTemplateChild("PART_Notice") as Label;
@@ -492,14 +555,13 @@ public partial class OrientedImageryView
         _customToolbarScroll = null;
         _tools = null;
         _panelHost = null;
-#if !WINDOWS
         if (_popupViewer != null) _popupViewer.Popup = null;
-        if (_popupCloseButton != null) _popupCloseButton.Clicked -= ClosePopup;
+        if (_popupOpenButton != null) _popupOpenButton.Command = null;
+        if (_popupCloseButton != null) _popupCloseButton.Command = null;
+        _popupOpenButton = null;
         _popupCloseButton = null;
         _popupHost = null;
         _popupViewer = null;
-        _navigation = null;
-#endif
     }
 
     private void ViewportChanged(object? sender, EventArgs e) => Refresh();
@@ -572,9 +634,6 @@ public partial class OrientedImageryView
 
         bool hasLayer = SelectedLayer != null && _layers.Contains(SelectedLayer);
         bool hasOverlays = HasTool<ShowSelectedFootprintVM>() || HasTool<ShowUnselectedFootprintsVM>() || HasTool<ShowCameraMarkersVM>();
-#if !WINDOWS
-        hasOverlays |= HasTool<ShowSelectedImagePopupVM>();
-#endif
         SetToolState(_overlaysButton, hasLayer, hasOverlays);
         SetToolState(_markersButton, hasLayer && !_searching, HasTool<AllowAddingMarkersVM>() || HasTool<SelectNewMarkerSymbolVM>() || HasTool<ClearMarkersVM>());
         SetToolState(_modeButton, hasLayer && !ViewModel.IsSequentialNavigationEnabled, HasTool<ImageSearchModeVM>());
@@ -613,26 +672,19 @@ public partial class OrientedImageryView
         }
 
         RefreshPages();
-#if !WINDOWS
         bool showingPopup = ViewModel.SelectedImagePopup != null;
+        if (_popupOpenButton != null)
+        {
+            _popupOpenButton.Command = ViewModel.OpenSelectedImagePopupCommand;
+            _popupOpenButton.IsVisible = ViewModel.SelectedImage != null && !showingPopup;
+        }
         if (_popupViewer != null)
         {
             _popupViewer.Popup = ViewModel.SelectedImagePopup;
             _popupViewer.IsVisible = showingPopup;
         }
         if (_popupHost != null) _popupHost.IsVisible = showingPopup;
-        if (_popupCloseButton != null) _popupCloseButton.IsVisible = showingPopup;
-        if (_viewport != null) _viewport.IsVisible = !showingPopup;
-        if (_navigation != null) _navigation.IsVisible = !showingPopup;
-        if (showingPopup)
-        {
-            if (_status != null) _status.IsVisible = false;
-            if (_busy != null) _busy.IsVisible = false;
-            if (_imagePreviousButton != null) _imagePreviousButton.IsVisible = false;
-            if (_imageNextButton != null) _imageNextButton.IsVisible = false;
-            if (_notice != null) _notice.IsVisible = false;
-        }
-#endif
+        if (_popupCloseButton != null) _popupCloseButton.Command = ViewModel.CloseSelectedImagePopupCommand;
         UpdateOpenPanel();
         RefreshDesktopPresentation();
         UpdateBackNavigation();
@@ -667,9 +719,6 @@ public partial class OrientedImageryView
         }
 #endif
         bool visible = ViewModel.SelectedImage != null;
-#if !WINDOWS
-        visible &= ViewModel.SelectedImagePopup == null;
-#endif
         SetToolState(_imagePreviousButton, !_searching && ViewModel.SelectPreviousImageCommand.CanExecute(null), visible);
         SetToolState(_imageNextButton, !_searching && ViewModel.SelectNextImageCommand.CanExecute(null), visible);
         if (_previousButton != null)
@@ -841,7 +890,6 @@ public partial class OrientedImageryView
     private const string LayerGeometry = "M12 1L23 7L12 13L1 7ZM1 12L12 18L23 12M1 17L12 23L23 17";
     private const string SequenceGeometry = "M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z";
     private const string ReturnGeometry = "M4 18H3V29H29V3H12V4H28V28H4V18ZM5.66 13.354L1.807 9.5L5.66 5.646L6.367 6.353L3.767 9H11.5C13.7489 8.9923 15.9086 9.87918 17.503 11.4652C19.0974 13.0512 19.9958 15.2061 20 17.455V22.855H19V17.455C18.9956 13.3147 15.6403 9.95941 11.5 9.955H3.675L6.367 12.646L5.66 13.354Z";
-    private const string PopupGeometry = "M7 10h18v10H7zm17 9v-8H8v8zM15 7H7v1h8zm9 1h1V7h-1zm5 14a2 2 0 0 1-2 2h-6.69l-4.277 6.33L11.757 24H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2zM28 5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v17a1 1 0 0 0 1 1h7.289l3.744 5.543L19.778 23H27a1 1 0 0 0 1-1z";
 
     private static View MenuIcon(string? glyph, string? geometry)
     {
@@ -1081,37 +1129,8 @@ public partial class OrientedImageryView
                 () => ViewModel.ToggleSequentialNavigationCommand.Execute(null),
                 Enabled: () => ViewModel.ToggleSequentialNavigationCommand.CanExecute(null),
                 Geometry: ViewModel.IsSequentialNavigationEnabled ? ReturnGeometry : SequenceGeometry));
-#if WINDOWS
-        actions.Add(new MenuAction(Text("Popup"), () => ShowImagePopup(anchor), Enabled: () => ViewModel.SelectedImage != null, Geometry: PopupGeometry));
-#endif
         ShowActions(anchor, Text("MoreTools"), actions);
     }
-
-#if WINDOWS
-    private void ShowImagePopup(View anchor)
-    {
-        if (ViewModel.SelectedImage is not { } image) return;
-        DismissPanel();
-        _panelKind = "Popup";
-        var content = PanelContent(Text("Popup"));
-        foreach (var attribute in image.Attributes)
-        {
-            var name = new Label { Text = attribute.Key, FontAttributes = FontAttributes.Bold, Margin = new Thickness(0, 8, 0, 0) };
-            var value = new Label { Text = Convert.ToString(attribute.Value, CultureInfo.CurrentCulture), LineBreakMode = LineBreakMode.WordWrap };
-            name.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-            value.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-            content.Add(name);
-            content.Add(value);
-        }
-        if (image.Attributes.Count == 0)
-        {
-            var empty = new Label { Text = Text("NoAttributes") };
-            empty.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-            content.Add(empty);
-        }
-        PresentPanel(anchor, content);
-    }
-#endif
 
     private void ShowActions(View anchor, string title, IReadOnlyList<MenuAction> actions, Action? back = null)
     {
@@ -1145,10 +1164,6 @@ public partial class OrientedImageryView
             },
         };
     }
-
-#if !WINDOWS
-    private void ClosePopup(object? sender, EventArgs e) => ViewModel.CloseSelectedImagePopupCommand.Execute(null);
-#endif
 
     private void AddActionRow(VerticalStackLayout content, MenuAction action)
     {
@@ -1234,12 +1249,6 @@ public partial class OrientedImageryView
         if (HasTool<ShowCameraMarkersVM>()) AddSwitch(content, "MobileCameraLocations", () => ViewModel.ShowCameraLocations, value => ViewModel.ShowCameraLocations = value,
             CameraLocationsIcon);
         if (HasTool<AutoUpdateFootprintVM>()) AddSwitch(content, "AutoUpdate", () => ViewModel.AutoUpdateFootprint, value => ViewModel.AutoUpdateFootprint = value);
-#if !WINDOWS
-        if (HasTool<ShowSelectedImagePopupVM>())
-            AddActionRow(content, GuardAction(new MenuAction(Text("Popup"),
-                () => ViewModel.OpenSelectedImagePopupCommand.Execute(null),
-                Enabled: () => ViewModel.OpenSelectedImagePopupCommand.CanExecute(null), Geometry: PopupGeometry)));
-#endif
         PresentPanel(anchor, content);
     }
 
@@ -1471,13 +1480,11 @@ public partial class OrientedImageryView
     {
         bool open = _panelAnchor != null;
         DismissPanel();
-#if !WINDOWS
         if (!open && ViewModel.SelectedImagePopup != null)
         {
             ViewModel.CloseSelectedImagePopupCommand.Execute(null);
             return true;
         }
-#endif
         return open;
     }
 

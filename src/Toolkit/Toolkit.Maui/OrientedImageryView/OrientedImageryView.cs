@@ -195,9 +195,7 @@ public partial class OrientedImageryView : TemplatedView
             _connectedModel.ClearMarkersCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedGeoView?.GraphicsOverlays?.Remove(_connectedModel.MarkersOverlay);
             _connectedModel.DispatchAction = null;
-#if !WINDOWS
             _connectedModel.CloseSelectedImagePopupCommand.Execute(null);
-#endif
             _connectedModel.OrientedImageryLayer = null;
             _connectedModel.Markers.Clear();
         }
