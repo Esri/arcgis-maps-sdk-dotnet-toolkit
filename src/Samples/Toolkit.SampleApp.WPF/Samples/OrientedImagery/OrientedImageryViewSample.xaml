@@ -1,0 +1,122 @@
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery.OrientedImageryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Import styles from the default OrientedImageryView theme -->
+                <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OrientedImagery/OrientedImagery.Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Define a data template for a custom toolbar item type -->
+            <DataTemplate x:Key="PopupToolbarItemTemplate" DataType="{x:Type local:ShowSelectedImagePopupVM}">
+                <Button Click="OpenSelectedImagePopupButton_Click" ToolTip="Open popup for selected image">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewModel.SelectedImage}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Viewbox Width="32" Height="32" Stretch="Uniform">
+                        <Grid Width="16" Height="16">
+                            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Data="M15 12C14.9994 12.5521 14.5521 12.9994 14 13H9.828L8 15.828L6.172 13H2C1.44794 12.9994 1.00055 12.5521 1 12V2C1.00055 1.44794 1.44794 1.00055 2 1H14C14.5521 1.00055 14.9994 1.44794 15 2V12ZM8 13.986L9.284 12H14V2H2V12H6.716L8 13.986ZM5.204 7.972L4.004 7.528V6.472L5.204 6.028C5.23533 5.93733 5.27067 5.849 5.31 5.763L4.784 4.569L5.548 3.798L6.711 4.333C6.797 4.291 6.88467 4.25333 6.974 4.22L7.445 3H8.532L8.976 4.2C9.06667 4.23133 9.155 4.267 9.241 4.307L10.435 3.78L11.205 4.545L10.671 5.708C10.7123 5.79333 10.7497 5.88067 10.783 5.97L12 6.441V7.558L10.783 8.03C10.7497 8.11933 10.7123 8.20667 10.671 8.292L11.206 9.455L10.435 10.22L9.241 9.693C9.15433 9.733 9.066 9.76867 8.976 9.8L8.532 11H7.445L6.975 9.78C6.885 9.74667 6.797 9.709 6.711 9.667L5.548 10.202L4.784 9.431L5.31 8.237C5.27 8.15033 5.23467 8.062 5.204 7.972ZM5 7.102L5.818 7.406C5.87489 7.71453 5.99694 8.00738 6.176 8.265L5.791 9.033L5.951 9.193L6.743 8.829C7.00185 9.00703 7.29574 9.12773 7.605 9.183L7.875 10H8.101L8.403 9.181C8.71196 9.12394 9.00517 9.00154 9.263 8.822L10.031 9.208L10.192 9.048L9.827 8.256C10.0054 7.99724 10.1264 7.70334 10.182 7.394L10.997 7.124V6.876L10.182 6.606C10.1264 6.29666 10.0054 6.00276 9.827 5.744L10.192 4.951L10.031 4.791L9.264 5.178C9.00596 4.99797 8.71239 4.87523 8.403 4.818L8.102 4H7.875L7.605 4.817C7.29609 4.87241 7.00255 4.9931 6.744 5.171L5.951 4.807L5.792 4.967L6.177 5.735C5.99781 5.99292 5.87576 6.28612 5.819 6.595L5 6.897V7.102ZM8 6C7.44772 6 7 6.44772 7 7C7 7.55228 7.44772 8 8 8C8.55228 8 9 7.55228 9 7C9 6.44772 8.55228 6 8 6Z" />
+                        </Grid>
+                    </Viewbox>
+                </Button>
+            </DataTemplate>
+
+            <esri:OrientedImageryViewToolbarSelector x:Key="AlternateToolbarSelector">
+                <esri:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type local:ShowSelectedImagePopupVM}" Template="{StaticResource PopupToolbarItemTemplate}" />
+            </esri:OrientedImageryViewToolbarSelector>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition x:Name="OrientedImageryColumn" Width="0"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="ControlPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="LayerUriTextBox" />
+            <Button Grid.Column="1" Content="Add layer to geoview" Click="AddLayerButton_Click" />
+            <Button Grid.Column="2" Content="2D/3D" Click="Toggle2DButton_Click" />
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="0" >
+            <Grid x:Name="GeoViewContainer"/>
+            <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Top" MaxHeight="200">
+                <StackPanel>
+                    <Button x:Name="ToggleElevationSurfaceButton" Content="Toggle elevation surface (3D only)" Click="ToggleElevationSurfaceButton_Click" />
+                    <Button x:Name="ScenePropertiesButton" Content="Cycle scene properties" Click="ScenePropertiesButton_Click" />
+                    <Button x:Name="UpdateToolbarButton" Content="Update toolbar" Click="UpdateToolbarButton_Click" />
+                    <Button x:Name="OverrideClickHandlersButton"  Content="Override clicks" Click="OverrideClickHandlersButton_Click" />
+                    <Button x:Name="RemoveReAddLayers"  Content="Remove/Re-add all layers" Click="RemoveReAddLayers_Click" />
+                    <Button x:Name="RemoveLastLayer"  Content="Remove last layer" Click="RemoveLastLayer_Click" />
+                    <Button x:Name="BackgroundThreadUpdate"  Content="Update markers on background thread" Click="BackgroundThreadUpdate_Click" />
+                    <Button x:Name="ToggleButtonsBackgroundThread"  Content="Update some button states from a background thread" Click="ToggleButtonsBackgroundThread_Click" />
+                    <Button x:Name="ToggleLayerDropdownButton"  Content="Toggle layer dropdown" Click="ToggleLayerDropdownButton_Click" />
+                    <Button x:Name="ToggleElevationSurfaceTransparencyAndNavigabilityButton"  Content="Toggle surface navigability" Click="ToggleElevationSurfaceTransparencyAndNavigabilityButton_Click" />
+                    <Button x:Name="ToggleElevationSurfaceExaggerationButton"  Content="Toggle elevation exaggeration" Click="ToggleElevationSurfaceExaggerationButton_Click" />
+                </StackPanel>
+            </ScrollViewer>
+            <Button x:Name="OpenOrientedImageryButton"
+                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="8"
+                    Content="Open oriented imagery view"
+                    ToolTip="Open oriented imagery view"
+                    Click="OpenOrientedImageryButton_Click" />
+        </Grid>
+        <GridSplitter x:Name="OrientedImagerySplitter" Grid.Row="1" Grid.Column="1" Width="5"
+                      Visibility="Collapsed"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      ResizeBehavior="PreviousAndNext" />
+        <Grid x:Name="OrientedImageryPanel" Grid.Row="1" Grid.Column="2" Visibility="Collapsed">
+            <esri:OrientedImageryView x:Name="MainOrientedImageryView"/>
+        </Grid>
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                Style="{x:Null}" Background="White" BorderThickness="0"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,8,0,0" Width="32" Height="32"
+                Visibility="{Binding Visibility, ElementName=OrientedImageryPanel}"
+                AutomationProperties.Name="Close oriented imagery view"
+                Click="CloseOrientedImageryButton_Click">
+            <Viewbox Width="28" Height="28" Stretch="Uniform">
+                <TextBlock Text="&#x00D7;" FontSize="24" />
+            </Viewbox>
+        </Button>
+
+        <Grid x:Name="SelectedImagePopupBackground"
+              Grid.RowSpan="2"
+              Grid.ColumnSpan="3"
+              Background="#AA333333"
+              Visibility="Collapsed"
+              MouseDown="SelectedImagePopupBackground_MouseDown">
+            <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                    BorderThickness="1"
+                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <esri:PopupViewer x:Name="SelectedImagePopupViewer" Margin="5" Width="400" MaxHeight="500" />
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

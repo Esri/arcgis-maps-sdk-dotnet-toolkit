@@ -1101,4 +1101,173 @@
     <value>Oriented image</value>
     <comment>UIA AutomationProperties.Name for the OrientedImageViewport control, used by screen readers to identify the control</comment>
   </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>Select marker symbol</value>
+    <comment>Tooltip for the OrientedImageryView button that selects the marker symbol.</comment>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>Toggle add markers</value>
+    <comment>Tooltip for the OrientedImageryView button that enables or disables adding markers.</comment>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>Show selected image footprint</value>
+    <comment>Tooltip for the OrientedImageryView button that shows the selected image footprint.</comment>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Show unselected image footprints</value>
+    <comment>Tooltip for the OrientedImageryView button that shows unselected image footprints.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectedFootprintAutomationName" xml:space="preserve">
+    <value>Selected image footprint</value>
+    <comment>Name for the footprint toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsAutomationName" xml:space="preserve">
+    <value>Camera locations on GeoView</value>
+    <comment>Name for the camera locations toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewUnselectedFootprintsAutomationName" xml:space="preserve">
+    <value>Unselected image footprints</value>
+    <comment>Name for the footprints toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewAddMarkersAutomationName" xml:space="preserve">
+    <value>Add markers</value>
+    <comment>Name for the marker-creation toggle. Assistive technology announces its on/off state separately.</comment>
+  </data>
+  <data name="OrientedImageryViewSwitchToImageSearch" xml:space="preserve">
+    <value>Switch to image search mode</value>
+    <comment>Tooltip for the button that switches from image selection to image search mode.</comment>
+  </data>
+  <data name="OrientedImageryViewSwitchToImageSelection" xml:space="preserve">
+    <value>Switch to image selection mode</value>
+    <comment>Tooltip for the button that switches from image search to image selection mode.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>Image search mode</value>
+    <comment>Tooltip for the image search mode selector.</comment>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>Current Footprint</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>Additional Footprints</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>Camera Locations</value>
+  </data>
+  <data name="OrientedImageryViewPopupLabel" xml:space="preserve">
+    <value>Image Details</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkerLabel" xml:space="preserve">
+    <value>Add Marker</value>
+  </data>
+  <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
+    <value>Select Symbol</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>Clear Markers</value>
+  </data>
+  <data name="EnterSequentialNavigationModeLabel" xml:space="preserve">
+    <value>Sequential navigation</value>
+  </data>
+  <data name="ExitSequentialNavigationModeLabel" xml:space="preserve">
+    <value>Return to results</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeExplore" xml:space="preserve">
+    <value>Explore images</value>
+    <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeExamine" xml:space="preserve">
+    <value>Examine images</value>
+    <comment>Label for the mode that examines individual tapped oriented images.</comment>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>Open details for selected image</value>
+    <comment>Tooltip for the button that opens the popup for the selected oriented image.</comment>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>Close details</value>
+    <comment>Tooltip for the button that closes the selected oriented image popup.</comment>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>Go to image {0} of {1}</value>
+    <comment>Pagination automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>Image {0} of {1}, selected</value>
+    <comment>Selected pagination button automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
+  </data>
+  <data name="OrientedImageryViewShowCameraMarkersOnGeoView" xml:space="preserve">
+    <value>Show camera markers on GeoView</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the GeoView.</comment>
+  </data>
+  <data name="OrientedImageryViewHideCameraMarkers" xml:space="preserve">
+    <value>Hide camera markers on GeoView</value>
+    <comment>Tooltip for the OrientedImageryView button when camera markers are visible on the GeoView.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkers" xml:space="preserve">
+    <value>Clear markers</value>
+    <comment>Tooltip for the OrientedImageryView button that clears markers.</comment>
+  </data>
+  <data name="OrientedImageryViewEnterSequentialNavigation" xml:space="preserve">
+    <value>Enter sequential navigation</value>
+    <comment>Tooltip for the OrientedImageryView button that enters sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewReturnToResults" xml:space="preserve">
+    <value>Return to results</value>
+    <comment>Tooltip for the OrientedImageryView button that returns from sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>Seq.Navigation</value>
+    <comment>Underlined label between the previous and next image buttons in sequential navigation mode.</comment>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>Previous image</value>
+    <comment>Tooltip and accessibility name for the previous image button.</comment>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>Next image</value>
+    <comment>Tooltip and accessibility name for the next image button.</comment>
+  </data>
+  <data name="OrientedImageryViewLoading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>Message shown by OrientedImageryView while an image is loading.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImagesSelectedExamine" xml:space="preserve">
+    <value>No images selected: Click a camera point on the map to examine an image</value>
+    <comment>Message shown by OrientedImageryView when no images are selected in Examine mode.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImagesSelectedExplore" xml:space="preserve">
+    <value>No images selected: Click a location on the map to explore images that view the selected point</value>
+    <comment>Message shown by OrientedImageryView when no images are selected in Explore mode.</comment>
+  </data>
+  <data name="OrientedImageryViewLayerSelection" xml:space="preserve">
+    <value>Oriented imagery layer</value>
+    <comment>Accessibility name for the OrientedImageryView layer selection control.</comment>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>Connect a GeoView to view oriented imagery.</value>
+    <comment>Error shown by OrientedImageryView when no GeoView is connected.</comment>
+  </data>
+  <data name="OrientedImageryViewNoOrientedImageryLayers" xml:space="preserve">
+    <value>The GeoView does not contain any oriented imagery layers.</value>
+    <comment>Error shown by OrientedImageryView when the connected GeoView has no oriented imagery layers.</comment>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>Select an oriented imagery layer from the dropdown to start exploring.</value>
+    <comment>Error shown by OrientedImageryView when the connected GeoView has oriented imagery layers but none have been selected.</comment>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelectedWithoutDropdown" xml:space="preserve">
+    <value>No layer selected</value>
+    <comment>Error shown by OrientedImageryView when no layer is selected and the layer selection dropdown has been toggled off by the developer.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectedLayerNotOnGeoView" xml:space="preserve">
+    <value>The selected oriented imagery layer is not on the GeoView.</value>
+    <comment>Error shown by OrientedImageryView when the selected layer is not part of the connected GeoView.</comment>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>Next</value>
+  </data>
 </root>
