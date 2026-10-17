@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private List<string> _layerUrls =
         [
             "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/ArcGIS/rest/services/Oakwood_camori_corrected/FeatureServer/0",
-            "https://services.arcgis.com/gfpXnknjcY6QHKhU/arcgis/rest/services/CDOT00R20021_360_IMAGERY/FeatureServer/3",
+            "https://services8.arcgis.com/joda3ARQ9znLf0hf/ArcGIS/rest/services/HopefulHeights_360/FeatureServer/1",
             "https://services5.arcgis.com/N82JbI5EYtAkuUKU/ArcGIS/rest/services/EsriCampus_sequenceTest_attachment/FeatureServer/1"
         ];
 
@@ -91,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 _mapView.Map!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
 
                 var sceneLayer = new OrientedImageryLayer(new Uri(layerUrl));
-                sceneLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Relative;
+                sceneLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Absolute;
                 _sceneView.Scene!.OperationalLayers.Add(sceneLayer);
 
                 _layerUrls.Add(layerUrl);
