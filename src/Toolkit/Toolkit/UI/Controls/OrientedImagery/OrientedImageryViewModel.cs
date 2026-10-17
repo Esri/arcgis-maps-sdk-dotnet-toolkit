@@ -37,11 +37,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _displayMarkers = new ResettableObservableCollection<OrientedImageMarker>();
         _appMarkers.CollectionChanged += Markers_CollectionChanged;
 
+        var symbolOutline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.White, 1);
         _markersOverlay = new GraphicsOverlay() { Id = "OrientedImageryView_Markers_Overlay" };
         NewMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 15);
-        SearchPointMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 12);
-        AllCamerasMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.FromArgb(200,0,0,255), 15);
-        SelectedCameraMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 15);
+        SearchPointMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 12) { Outline = symbolOutline };
+        AllCamerasMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.FromArgb(200,0,0,255), 15) { Outline = symbolOutline };
+        SelectedCameraMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 15) { Outline = symbolOutline };
 
         _images = new List<OrientedImage>();
         _readOnlyImages = _images.AsReadOnly();
@@ -174,6 +175,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private Exception? _sequentialNavigationError;
     private List<OrientedImageMarker> _markersBeforeSequentialNavigation;
     private OrientedImage? _imageBeforeSequentialNavigation;
+    private MapPoint? _searchPoint;
 
     /// <summary>
     /// Gets or sets the currently selected oriented image.
@@ -251,6 +253,19 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public IReadOnlyList<OrientedImage> Images
     {
         get => _readOnlyImages;
+    }
+
+    /// <summary>
+    /// Gets the search location used to retrieve <see cref="Images"/> as passed into <see cref="SetImages(IEnumerable{OrientedImage}, MapPoint?)"/>.
+    /// </summary>
+    public MapPoint? SearchPoint
+    {
+        get => _searchPoint;
+        private set
+        {
+            SetProperty(ref _searchPoint, value);
+            UpdateSearchPointMarker(_searchPoint);
+        }
     }
 
     /// <summary>
@@ -353,7 +368,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
 
-            UpdateSearchPointMarker(searchPoint);
+            SearchPoint = searchPoint;
             UpdateCameraMarkers();
         }
         finally
