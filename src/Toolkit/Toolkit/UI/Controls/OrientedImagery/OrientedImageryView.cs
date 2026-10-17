@@ -136,11 +136,13 @@ public partial class OrientedImageryView
     {
         switch (e.PropertyName)
         {
+            case nameof(OrientedImageryViewModel.SearchPoint):
             case nameof(OrientedImageryViewModel.SelectedImageFootprint):
                 if (_viewport != null)
                     _viewport.Footprint = ViewModel.SelectedImageFootprint;
-                break;
-            case nameof(OrientedImageryViewModel.SelectedImage):
+                if (_viewport != null && ViewModel?.SearchPoint is MapPoint searchPoint)
+                    _viewport.LookAtAsync(searchPoint);
+                goto case nameof(OrientedImageryViewModel.Images);
             case nameof(OrientedImageryViewModel.Images):
                 UpdatePaginatorSelection();
                 break;
