@@ -54,8 +54,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(64, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
-        _sketchModeEnabled = false;
-        _imageSearchEnabled = true;
+        _interactionState = OrientedImageryViewInteractionState.ExploreImages;
 
         ToolbarCategories = GetDefaultToolbarCategories();
         ToolbarCategories.CollectionChanged += ToolbarCategories_CollectionChanged;
@@ -972,27 +971,15 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
 #region InteractionStateFlags
     // These are only used by the View, but because of the toolbar setup binding is easiest if they are kept in the ViewModel
-    private bool _sketchModeEnabled;
-    private bool _imageSearchEnabled;
+    private OrientedImageryViewInteractionState _interactionState;
 
     /// <summary>
-    /// If <see cref="OrientedImageryView.OnGeoViewTappedOverride"/> and <see cref="OrientedImageryView.OnImageTappedOverride"/>
-    /// have not been set, toggles whether new taps will add markers to the geo view or image viewport.
+    /// Gets or sets the current interaction state for the Viewport and connected <see cref="GeoView"/>.
     /// </summary>
-    public bool SketchModeEnabled
+    public OrientedImageryViewInteractionState InteractionState
     {
-        get => _sketchModeEnabled;
-        set => SetProperty(ref _sketchModeEnabled, value);
-    }
-
-    /// <summary>
-    /// If <see cref="OrientedImageryView.OnGeoViewTappedOverride"/> has not been set, toggles whether taps on the geo view
-    /// will do an image search or an image select when <see cref="SketchModeEnabled"/> is toggled off.
-    /// </summary>
-    public bool ImageSearchEnabled
-    {
-        get => _imageSearchEnabled;
-        set => SetProperty(ref _imageSearchEnabled, value);
+        get => _interactionState;
+        set => SetProperty(ref _interactionState, value);
     }
 #endregion InteractionStateFlags
 
@@ -1010,4 +997,26 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     }
 #endregion INotifyPropertyChanged
 }
+
+/// <summary>
+/// Represents the current interaction state of an <see cref="OrientedImageryView"/>.
+/// </summary>
+public enum OrientedImageryViewInteractionState
+{
+    /// <summary>No behavior when the GeoView or viewport is tapped.</summary>
+    None,
+
+    /// <summary>Taps on the GeoView will search for all images with a view on the tapped location. No behavior for taps on the viewport.</summary>
+    ExploreImages,
+
+    /// <summary>
+    /// Taps on the GeoView will attempt to retrieve an OrientedImagery feature at the tapped location and display it on the viewport.
+    /// No behavior for taps on the viewport.
+    /// </summary>
+    ExamineImage,
+
+    /// <summary>Taps on both the GeoView and viewport will add reference markers.</summary>
+    AddMarkers
+}
+
 #endif
