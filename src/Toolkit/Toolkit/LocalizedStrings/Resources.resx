@@ -1177,7 +1177,7 @@
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeExamine" xml:space="preserve">
-    <value>Examine images</value>
+    <value>Examine image</value>
     <comment>Label for the mode that examines individual tapped oriented images.</comment>
   </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
@@ -1239,6 +1239,10 @@
   <data name="OrientedImageryViewNoImagesSelectedExplore" xml:space="preserve">
     <value>No images selected: Click a location on the map to explore images that view the selected point</value>
     <comment>Message shown by OrientedImageryView when no images are selected in Explore mode.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImagesSelectedNone" xml:space="preserve">
+    <value>No images selected: Enable image selection in the toolbar</value>
+    <comment>Message shown by OrientedImageryView when no images are selected and image selection is disabled.</comment>
   </data>
   <data name="OrientedImageryViewLayerSelection" xml:space="preserve">
     <value>Oriented imagery layer</value>

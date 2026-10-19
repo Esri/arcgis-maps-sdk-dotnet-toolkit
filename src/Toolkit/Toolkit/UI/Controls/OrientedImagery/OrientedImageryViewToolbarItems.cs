@@ -119,14 +119,14 @@ public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
             var oldValue = _mainViewModel;
             _mainViewModel = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
-            OnMainViewModelChanged(oldValue, value);
+            OnViewModelChanged(oldValue, value);
         }
     }
 
     /// <summary>
     /// Called when the <see cref="ViewModel"/> property changes. Override this method to handle changes to the main view model.
     /// </summary>
-    protected virtual void OnMainViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue) { }
+    protected virtual void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue) { }
 
     /// <inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -142,6 +142,14 @@ public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
+    /// <summary>
+    /// Raises the <see cref="PropertyChanged"/> event wihout setting the value of the property.
+    /// </summary>
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
 
 /// <summary>
@@ -152,42 +160,129 @@ public class AutoUpdateFootprintVM : OrientedImageryToolbarItemBase { }
 /// <summary>
 /// View model for the "Allow Adding Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase { }
+public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase
+{
+    /// <summary>
+    /// Gets or sets a value indicating whether adding markers is enabled. If set to <see langword="false"/>, the 
+    /// view model's interaction state will be set to <see cref="OrientedImageryViewInteractionState.None"/>.
+    /// </summary>
+    public bool IsAddingMarkersEnabled
+    {
+        get => ViewModel == null ? false : ViewModel.InteractionState == OrientedImageryViewInteractionState.AddMarkers;
+        set
+        {
+            if (ViewModel == null)
+            {
+                OnPropertyChanged();
+                return;
+            }
+
+            if (value)
+                ViewModel.InteractionState = OrientedImageryViewInteractionState.AddMarkers;
+            else
+                ViewModel.InteractionState = OrientedImageryViewInteractionState.None;
+
+            OnPropertyChanged();
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    {
+        if (oldValue != null)
+            oldValue.PropertyChanged -= ViewModel_PropertyChanged;
+
+        if (newValue != null)
+            newValue.PropertyChanged += ViewModel_PropertyChanged;
+
+        OnPropertyChanged(nameof(IsAddingMarkersEnabled));
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(OrientedImageryViewModel.InteractionState))
+            OnPropertyChanged(nameof(IsAddingMarkersEnabled));
+    }
+}
 
 /// <summary>
 /// View model for the image search mode toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 {
-    private bool _selectedImageSearchMode = true;
+    private OrientedImageryViewInteractionState _selectedInteractionState = OrientedImageryViewInteractionState.ExploreImages;
 
     /// <summary>
-    /// Gets the available image search modes. A value of <see langword="true"/> represents search mode and <see langword="false"/> represents selection mode.
+    /// True when <see cref="OrientedImageryViewModel.InteractionState"/> is either <see cref="OrientedImageryViewInteractionState.ExploreImages"/>
+    /// or <see cref="OrientedImageryViewInteractionState.ExamineImage"/>, <see langword="false"/> otherwise. When explicitly set to <see langword="false"/>,
+    /// the view model's interaction state will be set to <see cref="OrientedImageryViewInteractionState.None"/>.
     /// </summary>
-    public IReadOnlyList<bool> ImageSearchModes { get; } = new[] { true, false };
+    public bool IsImageSelectionEnabled
+    {
+        get
+        {
+            if (ViewModel == null)
+                return false;
+
+            return ViewModel.InteractionState == OrientedImageryViewInteractionState.ExploreImages ||
+                ViewModel.InteractionState == OrientedImageryViewInteractionState.ExamineImage;
+        }
+        set
+        {
+            if (ViewModel == null)
+                return;
+            else if (value)
+                ViewModel.InteractionState = _selectedInteractionState;
+            else
+                ViewModel.InteractionState = OrientedImageryViewInteractionState.None;
+        }
+    }
+
+    /// <summary>
+    /// Gets the available image search modes.
+    /// </summary>
+    public IReadOnlyList<OrientedImageryViewInteractionState> ImageSearchModes { get; } = new[]
+    {
+        OrientedImageryViewInteractionState.ExploreImages,
+        OrientedImageryViewInteractionState.ExamineImage
+    };
 
     /// <summary>
     /// Gets or sets the selected image search mode.
     /// </summary>
-    public bool SelectedImageSearchMode
+    public OrientedImageryViewInteractionState SelectedInteractionState
     {
-        get => _selectedImageSearchMode;
+        get => _selectedInteractionState;
         set
         {
-            SetProperty(ref _selectedImageSearchMode, value);
+            SetProperty(ref _selectedInteractionState, value);
             if (ViewModel is not null)
             {
-                ViewModel.ImageSearchEnabled = value;
-                ViewModel.SketchModeEnabled = false;
+                ViewModel.InteractionState = SelectedInteractionState;
             }
         }
     }
 
     /// <inheritdoc/>
-    protected override void OnMainViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
     {
+        if (oldValue != null)
+            oldValue.PropertyChanged -= ViewModel_PropertyChanged;
+
         if (newValue != null)
-            SetProperty(ref _selectedImageSearchMode, newValue.ImageSearchEnabled, nameof(SelectedImageSearchMode));
+        {
+            if (ImageSearchModes.Contains(newValue.InteractionState))
+                SetProperty(ref _selectedInteractionState, newValue.InteractionState, nameof(SelectedInteractionState));
+            newValue.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        OnPropertyChanged(nameof(IsImageSelectionEnabled));
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(OrientedImageryViewModel.InteractionState))
+            OnPropertyChanged(nameof(IsImageSelectionEnabled));
     }
 }
 
@@ -298,9 +393,9 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
     }
 
     /// <inheritdoc />
-    protected override void OnMainViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
     {
-        base.OnMainViewModelChanged(oldValue, newValue);
+        base.OnViewModelChanged(oldValue, newValue);
         if (ViewModel != null)
             ViewModel.NewMarkerSymbol = _selectedSymbol;
     }
