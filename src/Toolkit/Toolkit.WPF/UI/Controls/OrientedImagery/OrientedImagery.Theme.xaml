@@ -292,12 +292,12 @@
         </Style.Triggers>
     </Style>
 
-    <DataTemplate x:Key="ImageSearchModeIconTemplate">
+    <DataTemplate x:Key="ImageSearchModeIconTemplate" DataType="controls:OrientedImageryViewInteractionState">
         <Grid Width="33" Height="34">
-            <TextBlock x:Name="SelectionIcon" Text="&#xea74;" FontSize="32"
+            <TextBlock x:Name="ExamineIcon" Text="&#xea74;" FontSize="32"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        FontFamily="{StaticResource ToolkitIconsFontFamily}" />
-            <Path x:Name="SearchIcon" Visibility="Collapsed"
+            <Path x:Name="ExploreIcon" Visibility="Collapsed"
                   Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                 <Path.Data>
                     <GeometryGroup FillRule="Nonzero">
@@ -310,9 +310,9 @@
             </Path>
         </Grid>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding}" Value="True">
-                <Setter TargetName="SelectionIcon" Property="Visibility" Value="Collapsed" />
-                <Setter TargetName="SearchIcon" Property="Visibility" Value="Visible" />
+            <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
+                <Setter TargetName="ExamineIcon" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="ExploreIcon" Property="Visibility" Value="Visible" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -322,15 +322,18 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
                         <ToggleButton Background="{TemplateBinding Background}"
                                       BorderBrush="{TemplateBinding BorderBrush}"
                                       BorderThickness="{TemplateBinding BorderThickness}"
-                                      ClickMode="Press"
-                                      Focusable="False"
                                       Foreground="{TemplateBinding Foreground}"
-                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                      Padding="{TemplateBinding Padding}"
-                                      Style="{StaticResource ToolbarToggleButtonStyle}">
+                                      IsChecked="{Binding IsImageSelectionEnabled}"
+                                      MinWidth="0" Padding="0,4"
+                                      Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
+                                      ToolTip="{TemplateBinding ToolTip}">
                             <StackPanel>
                                 <Viewbox Width="32" Height="32" Stretch="Uniform">
                                     <ContentControl Content="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"
@@ -338,24 +341,36 @@
                                                     Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
                                                     Focusable="False" IsTabStop="False" />
                                 </Viewbox>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock>
-                                        <TextBlock.Style>
-                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ToolbarLabelStyle}">
-                                                <Setter Property="Width" Value="48" />
-                                                <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExamine}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" Value="True">
-                                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                    <Path Width="10" Height="6" Margin="4,8,0,0" VerticalAlignment="Top"
+                                <TextBlock>
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ToolbarLabelStyle}">
+                                            <Setter Property="Width" Value="48" />
+                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExamine}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
+                                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </ToggleButton>
+                        <ToggleButton Grid.Column="1"
+                                      MinWidth="0" MinHeight="84" Padding="0"
+                                      ClickMode="Press" Focusable="False"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      Style="{StaticResource ToolbarToggleButtonStyle}"
+                                      ToolTip="{TemplateBinding ToolTip}">
+                            <StackPanel>
+                                <Grid Width="16" Height="32" />
+                                <Grid Height="32" Margin="0,8,0,0">
+                                    <Path Width="12" Height="8" VerticalAlignment="Center"
                                           Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                          StrokeThickness="1.5" Data="M0 0L5 5L10 0" />
-                                </StackPanel>
+                                          StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round" Data="M1 1L6 6L11 1" />
+                                </Grid>
                             </StackPanel>
                         </ToggleButton>
                         <Popup x:Name="PART_Popup"
@@ -512,7 +527,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
-        <ToggleButton IsChecked="{Binding ViewModel.SketchModeEnabled}"
+        <ToggleButton IsChecked="{Binding  IsAddingMarkersEnabled}"
                       MinWidth="0" Padding="0,4"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
@@ -530,7 +545,7 @@
 
     <DataTemplate x:Key="ImageSearchModeToolbarTemplate" DataType="controls:ImageSearchModeVM">
         <ComboBox ItemsSource="{Binding ImageSearchModes}"
-                  SelectedItem="{Binding SelectedImageSearchMode, Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedInteractionState, Mode=TwoWay}"
                   Style="{StaticResource ImageSearchModeComboBoxStyle}"
                   ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
             <ComboBox.ItemContainerStyle>
@@ -556,7 +571,7 @@
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExamine}" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding}" Value="True">
+                                        <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
                                             <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -901,8 +916,11 @@
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelectedExamine}" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.ImageSearchEnabled}" Value="True">
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
                                                         <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelectedExplore}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.None}">
+                                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelectedNone}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>

@@ -221,7 +221,7 @@ public partial class OrientedImageryView
     private async void OnImageTapped_Default(object? _, OrientedImageTappedEventArgs e)
     {
         // Only adds a marker if sketch mode is enabled and there is not already a marker nearby
-        if (!ViewModel.SketchModeEnabled || e.Marker != null)
+        if (ViewModel.InteractionState != OrientedImageryViewInteractionState.AddMarkers || e.Marker != null)
             return;
 
         try
@@ -387,28 +387,31 @@ public partial class OrientedImageryView
         if (e.Location == null || GeoView == null || ViewModel.OrientedImageryLayer == null)
             return;
 
-        if (ViewModel.SketchModeEnabled)
+        switch (ViewModel.InteractionState)
         {
-            ViewModel.AddMarkerLocation(e.Location);
-            return;
-        }
+            case OrientedImageryViewInteractionState.AddMarkers:
+                ViewModel.AddMarkerLocation(e.Location);
+                break;
 
-        if (ViewModel.ImageSearchEnabled)
-        {
-            var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
-            var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
-            ViewModel.SetImages(images.ToList(), e.Location);
-            ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
-        }
-        else
-        {
-            var identifyResult = await GeoView.IdentifyLayerAsync(ViewModel.OrientedImageryLayer, e.Position, 0, false);
-            if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
-            {
-                var image = await ViewModel.OrientedImageryLayer.FetchImageForFeatureAsync(feature);
-                ViewModel.SetImages([image]);
-                ViewModel.SelectedImage = image;
-            }
+            case OrientedImageryViewInteractionState.ExploreImages:
+                var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
+                var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
+                ViewModel.SetImages(images.ToList(), e.Location);
+                ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
+                break;
+
+            case OrientedImageryViewInteractionState.ExamineImage:
+                var identifyResult = await GeoView.IdentifyLayerAsync(ViewModel.OrientedImageryLayer, e.Position, 0, false);
+                if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
+                {
+                    var image = await ViewModel.OrientedImageryLayer.FetchImageForFeatureAsync(feature);
+                    ViewModel.SetImages([image]);
+                    ViewModel.SelectedImage = image;
+                }
+                break;
+
+            default:
+                return;
         }
     }
 

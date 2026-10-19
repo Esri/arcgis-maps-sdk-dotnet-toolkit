@@ -320,7 +320,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         {
             await Task.Run(() =>
             {
-                _orientedImageryVM.ImageSearchEnabled = !_orientedImageryVM.ImageSearchEnabled;
+                _orientedImageryVM.InteractionState = OrientedImageryViewInteractionState.None;
                 _orientedImageryVM.ShowCameraLocations = !_orientedImageryVM.ShowCameraLocations;
                 _orientedImageryVM.ShowUnselectedFootprints = !_orientedImageryVM.ShowUnselectedFootprints;
             });
