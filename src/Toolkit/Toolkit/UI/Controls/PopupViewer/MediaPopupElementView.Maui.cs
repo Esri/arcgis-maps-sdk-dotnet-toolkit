@@ -63,6 +63,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             IndicatorView iv = new IndicatorView() { HorizontalOptions = LayoutOptions.Center };
+#if WINDOWS
+            iv.HandlerChanged += (_, _) =>
+            {
+                if (iv.Handler?.PlatformView is Microsoft.UI.Xaml.UIElement platformView)
+                    platformView.IsTabStop = false;
+            };
+#endif
             cv.IndicatorView = iv;
             root.Add(cv);
             root.Add(iv);

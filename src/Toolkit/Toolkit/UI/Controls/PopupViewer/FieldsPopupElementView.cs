@@ -234,6 +234,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private ChildElement CreateHyperlinkCell(Uri uri)
         {
+#if MAUI && WINDOWS
+            var text = new FormattedString();
+            text.Spans.Add(new HtmlToView.HyperlinkSpan(_ => PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri))
+            {
+                Text = Properties.Resources.GetString("PopupViewerViewHyperlinkText"),
+                TextDecorations = TextDecorations.Underline,
+            });
+            return new Internal.HyperlinkLabel(text)
+            {
+                Style = FieldTextStyle,
+                LineBreakMode = LineBreakMode.WordWrap,
+            };
+#else
 #if MAUI
             // Don't use the SelectableLabel here since hyperlinks don't need to be selectable and it can cause issues with the tap gesture recognizer.
             var t = new Microsoft.Maui.Controls.Label
@@ -277,6 +290,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             t.Inlines.Add(hl);
 #endif
             return t;
+#endif
         }
 #endif
 
