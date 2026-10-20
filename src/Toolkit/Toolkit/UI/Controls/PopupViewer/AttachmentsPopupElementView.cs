@@ -32,6 +32,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class AttachmentsPopupElementView
     {
+        private Selector? _attachmentList;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AttachmentsPopupElementView"/> class.
         /// </summary>
@@ -52,10 +54,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
-            var itemsList = GetTemplateChild(AttachmentListName) as Selector;
-            if (itemsList != null)
+            if (_attachmentList is not null)
+                _attachmentList.SelectionChanged -= ItemsList_SelectionChanged;
+
+            _attachmentList = GetTemplateChild(AttachmentListName) as Selector;
+            if (_attachmentList is not null)
             {
-                itemsList.SelectionChanged += ItemsList_SelectionChanged;
+                _attachmentList.SelectionChanged += ItemsList_SelectionChanged;
                 LoadAttachments();
             }
         }
