@@ -315,7 +315,7 @@ public partial class OrientedImageryView
                 ViewModel.IsSequentialNavigationEnabled = false;
                 break;
 
-            case OrientedImageryViewInteractionState.ExamineImage:
+            case OrientedImageryViewInteractionState.DisplayImage:
                 var identifyResult = await GeoView.IdentifyLayerAsync(ViewModel.OrientedImageryLayer, e.Position, 0, false);
                 if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
                 {
