@@ -54,6 +54,8 @@ internal sealed class HyperlinkLabelHandler : ViewHandler<HyperlinkLabel, UIText
             Editable = false,
             Selectable = true,
             ScrollEnabled = false,
+            // Display-only links belong to the popup's focus group, not a separate text-entry group.
+            FocusGroupIdentifier = null,
             BackgroundColor = UIColor.Clear,
             TextContainerInset = UIEdgeInsets.Zero,
             WeakLinkTextAttributes = linkAttributes,
