@@ -533,14 +533,6 @@
     <value>Next media</value>
     <comment>Accessible name and tooltip for the button that shows the next item in a MediaPopupElement with multiple media</comment>
   </data>
-  <data name="PopupViewerScrollUp" xml:space="preserve">
-    <value>Scroll up</value>
-    <comment>iOS accessibility action to scroll popup content up one page.</comment>
-  </data>
-  <data name="PopupViewerScrollDown" xml:space="preserve">
-    <value>Scroll down</value>
-    <comment>iOS accessibility action to scroll popup content down one page.</comment>
-  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Associations</value>
     <comment>The default title used when UtilityAssociationsPopupElement's title is empty</comment>

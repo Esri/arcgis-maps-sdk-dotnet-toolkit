@@ -94,17 +94,6 @@ internal sealed class HyperlinkContentViewHandler : ViewHandler<HyperlinkContent
 
 internal sealed class HyperlinkContentButton : UIButton
 {
-    private readonly PopupScrollActions _scrollActions = new();
-
-    public override UIAccessibilityCustomAction[]? AccessibilityCustomActions
-    {
-        get => _scrollActions.GetActions(this, base.AccessibilityCustomActions);
-        set => base.AccessibilityCustomActions = value;
-    }
-
-    public override bool AccessibilityScroll(UIAccessibilityScrollDirection direction) =>
-        NativePopupScrollView.ForwardVerticalScroll(this, direction) || base.AccessibilityScroll(direction);
-
     internal NativeContentView ContentPanel { get; } = new()
     {
         UserInteractionEnabled = false,
@@ -125,13 +114,6 @@ internal sealed class HyperlinkContentButton : UIButton
         ContentPanel.Frame = Bounds;
         using var effect = UIFocusHaloEffect.Create(Bounds);
         FocusEffect = effect;
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-            _scrollActions.Dispose();
-        base.Dispose(disposing);
     }
 }
 #endif

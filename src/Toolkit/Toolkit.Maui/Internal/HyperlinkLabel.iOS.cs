@@ -49,13 +49,11 @@ internal sealed class HyperlinkLabelHandler : ViewHandler<HyperlinkLabel, UIText
     protected override UITextView CreatePlatformView()
     {
         using var linkAttributes = new NSDictionary();
-        var textView = new HyperlinkTextView
+        var textView = new UITextView
         {
             Editable = false,
             Selectable = true,
             ScrollEnabled = false,
-            // Rendered links should not form a separate text-input region in the Tab loop.
-            FocusGroupIdentifier = null,
             BackgroundColor = UIColor.Clear,
             TextContainerInset = UIEdgeInsets.Zero,
             WeakLinkTextAttributes = linkAttributes,
@@ -152,28 +150,6 @@ internal sealed class HyperlinkLabelHandler : ViewHandler<HyperlinkLabel, UIText
             }
             return defaultAction;
         }
-    }
-}
-
-internal sealed class HyperlinkTextView : UITextView
-{
-    private readonly PopupScrollActions _scrollActions = new();
-
-    public override UIAccessibilityCustomAction[]? AccessibilityCustomActions
-    {
-        get => _scrollActions.GetActions(this, base.AccessibilityCustomActions);
-        set => base.AccessibilityCustomActions = value;
-    }
-
-    // This text renderer cannot scroll; its popup owns vertical accessibility scrolling.
-    public override bool AccessibilityScroll(UIAccessibilityScrollDirection direction) =>
-        NativePopupScrollView.ForwardVerticalScroll(this, direction) || base.AccessibilityScroll(direction);
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-            _scrollActions.Dispose();
-        base.Dispose(disposing);
     }
 }
 #endif
