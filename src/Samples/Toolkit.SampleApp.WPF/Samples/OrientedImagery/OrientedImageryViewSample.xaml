@@ -70,11 +70,8 @@
                     <Button x:Name="ScenePropertiesButton" Content="Cycle scene properties" Click="ScenePropertiesButton_Click" />
                     <Button x:Name="UpdateToolbarButton" Content="Update toolbar" Click="UpdateToolbarButton_Click" />
                     <Button x:Name="OverrideClickHandlersButton"  Content="Override clicks" Click="OverrideClickHandlersButton_Click" />
-                    <Button x:Name="RemoveReAddLayers"  Content="Remove/Re-add all layers" Click="RemoveReAddLayers_Click" />
-                    <Button x:Name="RemoveLastLayer"  Content="Remove last layer" Click="RemoveLastLayer_Click" />
                     <Button x:Name="BackgroundThreadUpdate"  Content="Update markers on background thread" Click="BackgroundThreadUpdate_Click" />
                     <Button x:Name="ToggleButtonsBackgroundThread"  Content="Update some button states from a background thread" Click="ToggleButtonsBackgroundThread_Click" />
-                    <Button x:Name="ToggleLayerDropdownButton"  Content="Toggle layer dropdown" Click="ToggleLayerDropdownButton_Click" />
                     <Button x:Name="ToggleElevationSurfaceTransparencyAndNavigabilityButton"  Content="Toggle surface navigability" Click="ToggleElevationSurfaceTransparencyAndNavigabilityButton_Click" />
                     <Button x:Name="ToggleElevationSurfaceExaggerationButton"  Content="Toggle elevation exaggeration" Click="ToggleElevationSurfaceExaggerationButton_Click" />
                 </StackPanel>
@@ -90,7 +87,13 @@
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       ResizeBehavior="PreviousAndNext" />
         <Grid x:Name="OrientedImageryPanel" Grid.Row="1" Grid.Column="2" Visibility="Collapsed">
-            <esri:OrientedImageryView x:Name="MainOrientedImageryView"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ComboBox x:Name="SelectLayerDropdown" Text="Select Layer" SelectionChanged="SelectLayerDropdown_SelectionChanged" />
+            <esri:OrientedImageryView x:Name="MainOrientedImageryView"  Grid.Row="1"/>
         </Grid>
         <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                 Style="{x:Null}" Background="White" BorderThickness="0"
