@@ -66,6 +66,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Add(rootcaption);
             root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0,5) });
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
+#if __IOS__
+            cv.SelectionMode = SelectionMode.Single;
+            cv.HandlerChanged += static (sender, _) =>
+            {
+                if (sender is CollectionView { Handler.PlatformView: UIKit.UIView nativeView })
+                {
+                    // The optimized MAUI handler hosts the collection inside a container view.
+                    var list = nativeView as UIKit.UICollectionView ?? nativeView.Subviews.OfType<UIKit.UICollectionView>().FirstOrDefault();
+                    if (list is not null)
+                    {
+                        list.AllowsFocus = true;
+                        list.SelectionFollowsFocus = false;
+                    }
+                }
+            };
+#endif
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (AttachmentsPopupElementView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
 #if WINDOWS
             cv.SetBinding(SemanticProperties.DescriptionProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
@@ -146,30 +162,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(divider, 3);
             layout.Add(divider);
             Border root = new Border() { StrokeThickness = 0, Content = layout };
+#if WINDOWS || __IOS__
+            root.SetBinding(SemanticProperties.DescriptionProperty, static (PopupAttachment attachment) => attachment.Name);
+#endif
 #if WINDOWS
             // MAUI forwards the root's semantics to the native list item; don't expose a duplicate named group.
-            root.SetBinding(SemanticProperties.DescriptionProperty, static (PopupAttachment attachment) => attachment.Name);
             AutomationProperties.SetIsInAccessibleTree(root, false);
-            return root;
-#elif __IOS__
-            Grid item = new Grid();
-            item.Children.Add(root);
-            Button itemButton = new Button()
-            {
-                Padding = 0,
-                BorderWidth = 0,
-                BackgroundColor = Colors.Transparent,
-                TextColor = Colors.Transparent,
-                HorizontalOptions = LayoutOptions.Fill,
-                VerticalOptions = LayoutOptions.Fill,
-            };
-            itemButton.SetBinding(SemanticProperties.DescriptionProperty, static (PopupAttachment attachment) => attachment.Name);
-            itemButton.Clicked += AttachmentButton_Clicked;
-            item.Children.Add(itemButton);
-            return item;
-#else
-            return root;
 #endif
+            return root;
         }
 
 #if WINDOWS
@@ -197,8 +197,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 OpenAttachment(view, attachment);
             }
         }
-#else
-#if !__IOS__
+#elif !__IOS__
         private static void Attachment_Tapped(object? sender, EventArgs e)
         {
             if (sender is View { BindingContext: AttachmentViewModel vm } view)
@@ -206,15 +205,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 OpenAttachment(view, vm.Attachment);
             }
         }
-#else
-        private static void AttachmentButton_Clicked(object? sender, EventArgs e)
-        {
-            if (sender is Button { BindingContext: PopupAttachment attachment } button)
-            {
-                OpenAttachment(button, attachment);
-            }
-        }
-#endif
 #endif
 
         private static void OpenAttachment(View view, PopupAttachment attachment)
