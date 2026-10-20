@@ -23,9 +23,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 handler.AddHandler<HyperlinkLabel, HyperlinkLabelHandler>();
                 handler.AddHandler<HyperlinkContentView, HyperlinkContentViewHandler>();
-#if __IOS__
-                handler.AddHandler<PopupScrollView, PopupScrollViewHandler>();
-#endif
 #if WINDOWS
                 handler.AddHandler<FieldsTableGrid, FieldsTableGridHandler>();
                 handler.AddHandler<FieldsTableCell, FieldsTableCellHandler>();
