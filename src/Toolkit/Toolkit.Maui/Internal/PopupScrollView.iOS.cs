@@ -35,39 +35,48 @@ internal sealed class PopupScrollViewHandler : ScrollViewHandler
 internal sealed class NativePopupScrollView : MauiScrollView
 {
     private NSObject? _accessibilityFocusObserver;
-    private NSArray? _orderedAccessibilityElements;
-    private List<NSObject> _accessibilityElements = new();
 
-    [Export("accessibilityElements")]
-    public NSObject GetOrderedAccessibilityElements()
+    internal NativePopupScrollView()
     {
-        // Include off-screen elements in content order, not just the current viewport.
-        var elements = new List<NSObject>();
-        foreach (var child in Subviews)
-            CollectAccessibilityElements(child, elements);
-        if (_orderedAccessibilityElements is null || !_accessibilityElements.SequenceEqual(elements))
-        {
-            _orderedAccessibilityElements?.Dispose();
-            _accessibilityElements = elements;
-            _orderedAccessibilityElements = NSArray.FromNSObjects(elements.ToArray());
-        }
-        return _orderedAccessibilityElements;
+        ShouldGroupAccessibilityChildren = true;
     }
 
-    private static void CollectAccessibilityElements(UIView view, List<NSObject> elements)
+    internal static bool ForwardVerticalScroll(UIView view, UIAccessibilityScrollDirection direction)
     {
-        if (view.Hidden || view.Alpha <= 0.01 || view.AccessibilityElementsHidden)
-            return;
-
-        // Native lists retain responsibility for their cells, including carousel pages.
-        if (view.IsAccessibilityElement || view is UICollectionView or UITableView)
+        if (direction is UIAccessibilityScrollDirection.Up or UIAccessibilityScrollDirection.Down)
         {
-            elements.Add(view);
-            return;
+            for (var parent = view.Superview; parent is not null; parent = parent.Superview)
+            {
+                if (parent is NativePopupScrollView scrollView)
+                    return scrollView.AccessibilityScroll(direction);
+            }
         }
+        return false;
+    }
 
-        foreach (var child in view.Subviews)
-            CollectAccessibilityElements(child, elements);
+    public override bool AccessibilityScroll(UIAccessibilityScrollDirection direction)
+    {
+        if (direction is not (UIAccessibilityScrollDirection.Up or UIAccessibilityScrollDirection.Down))
+            return base.AccessibilityScroll(direction);
+        if (Window is null || Hidden || !ScrollEnabled)
+            return false;
+
+        var inset = AdjustedContentInset;
+        double pageHeight = Bounds.Height - inset.Top - inset.Bottom;
+        if (pageHeight <= 0)
+            return false;
+
+        double minimum = -inset.Top;
+        double maximum = Math.Max(minimum, ContentSize.Height - Bounds.Height + inset.Bottom);
+        double offset = Math.Clamp(ContentOffset.Y +
+            (direction == UIAccessibilityScrollDirection.Down ? pageHeight : -pageHeight), minimum, maximum);
+        // UIKit rounds offsets to pixels, including fractional content extents at the bottom.
+        if (Math.Abs(offset - ContentOffset.Y) < 0.5 / Window.Screen.Scale)
+            return false;
+
+        SetContentOffset(new CGPoint(ContentOffset.X, offset), false);
+        UIAccessibility.PostNotification(UIAccessibilityPostNotification.PageScrolled, null);
+        return true;
     }
 
     public override void MovedToWindow()
@@ -143,12 +152,7 @@ internal sealed class NativePopupScrollView : MauiScrollView
     protected override void Dispose(bool disposing)
     {
         if (disposing)
-        {
             DisconnectAccessibilityFocusObserver();
-            _orderedAccessibilityElements?.Dispose();
-            _orderedAccessibilityElements = null;
-            _accessibilityElements.Clear();
-        }
         base.Dispose(disposing);
     }
 }
