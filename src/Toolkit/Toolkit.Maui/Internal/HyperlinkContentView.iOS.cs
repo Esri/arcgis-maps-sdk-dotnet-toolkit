@@ -94,6 +94,9 @@ internal sealed class HyperlinkContentViewHandler : ViewHandler<HyperlinkContent
 
 internal sealed class HyperlinkContentButton : UIButton
 {
+    public override bool AccessibilityScroll(UIAccessibilityScrollDirection direction) =>
+        NativePopupScrollView.ForwardVerticalScroll(this, direction) || base.AccessibilityScroll(direction);
+
     internal NativeContentView ContentPanel { get; } = new()
     {
         UserInteractionEnabled = false,
