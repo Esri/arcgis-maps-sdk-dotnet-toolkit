@@ -133,10 +133,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     }
                 }
 
+#if MAUI && __IOS__
+                UpdateImageContent(img);
+#else
                 if (!string.IsNullOrEmpty(PopupMedia.Value?.LinkUrl) && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out var linkUrl))
                 {
 #if MAUI
-#if !__IOS__
                     img.GestureRecognizers.Clear();
                     var tapGesture = new TapGestureRecognizer();
 #if WINDOWS
@@ -145,7 +147,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     tapGesture.Tapped += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
 #endif
                     img.GestureRecognizers.Add(tapGesture);
-#endif
 #else
                     img.Tag = linkUrl;
 #if WPF
@@ -175,9 +176,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI && WINDOWS
                 UpdateImageAccessibility(img);
 #endif
-#if MAUI && __IOS__
-                UpdateImageContent(img);
-#else
                 Content = img;
 #endif
             }

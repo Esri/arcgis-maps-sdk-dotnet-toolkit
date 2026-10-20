@@ -16,11 +16,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         public static MauiAppBuilder UseArcGISToolkit(this MauiAppBuilder builder)
         {
 #if WINDOWS || __IOS__
-            builder.ConfigureMauiHandlers(handler => handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>());
-#endif
-#if WINDOWS || __IOS__
             builder.ConfigureMauiHandlers(handler =>
             {
+                handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>();
                 handler.AddHandler<HyperlinkLabel, HyperlinkLabelHandler>();
                 handler.AddHandler<HyperlinkContentView, HyperlinkContentViewHandler>();
 #if WINDOWS
