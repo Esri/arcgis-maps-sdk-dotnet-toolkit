@@ -75,12 +75,72 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             };
 #endif
             cv.IndicatorView = iv;
+#if __IOS__
+            Grid carouselHost = new Grid();
+            carouselHost.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            carouselHost.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            carouselHost.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+
+            Button previous = new Button()
+            {
+                WidthRequest = 40,
+                Padding = 0,
+                BorderWidth = 0,
+                BackgroundColor = Colors.Transparent,
+                Text = ToolkitIcons.ChevronLeft,
+                FontFamily = ToolkitIcons.FontFamilyName,
+                VerticalOptions = LayoutOptions.Center,
+                AutomationId = "PreviousMediaButton",
+            };
+            SemanticProperties.SetDescription(previous, Properties.Resources.GetString("PopupViewerPreviousMediaButtonText"));
+            previous.Clicked += (_, _) =>
+            {
+                int count = cv.ItemsSource?.Cast<object>().Count() ?? 0;
+                if (count > 0)
+                    cv.Position = cv.Position > 0 ? cv.Position - 1 : count - 1;
+            };
+            carouselHost.Add(previous);
+
+            Grid.SetColumn(cv, 1);
+            carouselHost.Add(cv);
+
+            Button next = new Button()
+            {
+                WidthRequest = 40,
+                Padding = 0,
+                BorderWidth = 0,
+                BackgroundColor = Colors.Transparent,
+                Text = ToolkitIcons.ChevronRight,
+                FontFamily = ToolkitIcons.FontFamilyName,
+                VerticalOptions = LayoutOptions.Center,
+                AutomationId = "NextMediaButton",
+            };
+            SemanticProperties.SetDescription(next, Properties.Resources.GetString("PopupViewerNextMediaButtonText"));
+            next.Clicked += (_, _) =>
+            {
+                int count = cv.ItemsSource?.Cast<object>().Count() ?? 0;
+                if (count > 0)
+                    cv.Position = (cv.Position + 1) % count;
+            };
+            Grid.SetColumn(next, 2);
+            carouselHost.Add(next);
+
+            root.Add(carouselHost);
+            root.Add(iv);
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName(CarouselName, cv);
+            nameScope.RegisterName("PreviousButton", previous);
+            nameScope.RegisterName("NextButton", next);
+            return root;
+#else
             root.Add(cv);
             root.Add(iv);
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(CarouselName, cv);
             return root;
+#endif
         }
 
         private static object BuildDefaultItemTemplate()
@@ -118,7 +178,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 carousel.IsSwipeEnabled = count > 1;
             }
+#if __IOS__
+            if (GetTemplateChild("PreviousButton") is Button previous)
+                previous.IsVisible = count > 1;
+            if (GetTemplateChild("NextButton") is Button next)
+                next.IsVisible = count > 1;
+#endif
         }
+
+#if __IOS__
+        /// <inheritdoc/>
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            OnElementPropertyChanged();
+        }
+#endif
     }
 }
 #endif

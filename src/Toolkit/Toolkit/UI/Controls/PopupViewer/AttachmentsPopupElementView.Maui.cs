@@ -83,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultItemTemplate()
         {
             Grid layout = new Grid();
-#if !WINDOWS
+#if !WINDOWS && !__IOS__
             TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
             itemTapGesture.Tapped += Attachment_Tapped;
             layout.GestureRecognizers.Add(itemTapGesture);
@@ -96,7 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.SetBinding(Grid.BindingContextProperty, static (PopupAttachment attachment) => attachment, converter: AttachmentViewModelConverter.Instance);
             Image image = new Image() { WidthRequest = 24, HeightRequest = 24, HorizontalOptions = LayoutOptions.Start, Aspect = Aspect.Fill };
-#if WINDOWS
+#if WINDOWS || __IOS__
             AutomationProperties.SetIsInAccessibleTree(image, false);
 #endif
             layout.Add(image);
@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Label name = new Label() { VerticalOptions = LayoutOptions.End };
             name.SetBinding(Label.TextProperty, static (AttachmentViewModel vm) => vm.Name);
-#if WINDOWS
+#if WINDOWS || __IOS__
             AutomationProperties.SetIsInAccessibleTree(name, false);
 #endif
             Grid.SetColumn(name, 1);
@@ -113,12 +113,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Label size = new Label() { VerticalOptions = LayoutOptions.Start, TextColor = Colors.Gray, FontSize = 12 };
             size.SetBinding(Label.TextProperty, static (AttachmentViewModel vm) => vm.Size);
+#if __IOS__
+            AutomationProperties.SetIsInAccessibleTree(size, false);
+#endif
             Grid.SetColumn(size, 1);
             Grid.SetRow(size, 1);
             layout.Add(size);
 
             Image image2 = new Image() { WidthRequest = 18, HeightRequest = 18 };
-#if WINDOWS
+#if WINDOWS || __IOS__
             AutomationProperties.SetIsInAccessibleTree(image2, false);
 #endif
             image2.SetBinding(Image.IsVisibleProperty, static (AttachmentViewModel vm) => vm.IsDownloadButtonVisible);
@@ -130,6 +133,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             ActivityIndicator indicator = new ActivityIndicator() { WidthRequest = 24, HeightRequest = 24, IsRunning = true };
 #if WINDOWS
             SemanticProperties.SetDescription(indicator, Properties.Resources.GetString("PopupViewerAttachmentDownloading"));
+#elif __IOS__
+            AutomationProperties.SetIsInAccessibleTree(indicator, false);
 #endif
             indicator.SetBinding(ActivityIndicator.IsRunningProperty, static (AttachmentViewModel vm) => vm.IsDownloading);
             Grid.SetColumn(indicator, 2);
@@ -145,8 +150,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             // MAUI forwards the root's semantics to the native list item; don't expose a duplicate named group.
             root.SetBinding(SemanticProperties.DescriptionProperty, static (PopupAttachment attachment) => attachment.Name);
             AutomationProperties.SetIsInAccessibleTree(root, false);
-#endif
             return root;
+#elif __IOS__
+            Grid item = new Grid();
+            item.Children.Add(root);
+            Button itemButton = new Button()
+            {
+                Padding = 0,
+                BorderWidth = 0,
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.Transparent,
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+            };
+            itemButton.SetBinding(BindableObject.BindingContextProperty, static (PopupAttachment attachment) => attachment, converter: AttachmentViewModelConverter.Instance);
+            itemButton.SetBinding(SemanticProperties.DescriptionProperty, static (AttachmentViewModel vm) => vm.Name);
+            itemButton.Clicked += AttachmentButton_Clicked;
+            item.Children.Add(itemButton);
+            return item;
+#else
+            return root;
+#endif
         }
 
 #if WINDOWS
@@ -175,6 +199,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 #else
+#if !__IOS__
         private static void Attachment_Tapped(object? sender, EventArgs e)
         {
             if (sender is View { BindingContext: AttachmentViewModel vm } view)
@@ -182,6 +207,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 OpenAttachment(view, vm.Attachment);
             }
         }
+#else
+        private static void AttachmentButton_Clicked(object? sender, EventArgs e)
+        {
+            if (sender is Button { BindingContext: AttachmentViewModel vm } button)
+            {
+                OpenAttachment(button, vm.Attachment);
+            }
+        }
+#endif
 #endif
 
         private static void OpenAttachment(View view, PopupAttachment attachment)
