@@ -982,10 +982,10 @@ public enum OrientedImageryViewInteractionState
     ExploreImages,
 
     /// <summary>
-    /// Taps on the GeoView will attempt to retrieve an OrientedImagery feature at the tapped location and display it on the viewport.
+    /// Taps on the GeoView will attempt to retrieve a single OrientedImagery feature at the tapped location and display it on the viewport.
     /// No behavior for taps on the viewport.
     /// </summary>
-    ExamineImage,
+    DisplayImage,
 
     /// <summary>Taps on both the GeoView and viewport will add reference markers.</summary>
     AddMarkers

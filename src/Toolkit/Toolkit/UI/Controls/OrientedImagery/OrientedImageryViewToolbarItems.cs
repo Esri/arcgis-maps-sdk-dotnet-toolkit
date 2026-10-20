@@ -214,7 +214,7 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 
     /// <summary>
     /// True when <see cref="OrientedImageryViewModel.InteractionState"/> is either <see cref="OrientedImageryViewInteractionState.ExploreImages"/>
-    /// or <see cref="OrientedImageryViewInteractionState.ExamineImage"/>, <see langword="false"/> otherwise. When explicitly set to <see langword="false"/>,
+    /// or <see cref="OrientedImageryViewInteractionState.DisplayImage"/>, <see langword="false"/> otherwise. When explicitly set to <see langword="false"/>,
     /// the view model's interaction state will be set to <see cref="OrientedImageryViewInteractionState.None"/>.
     /// </summary>
     public bool IsImageSelectionEnabled
@@ -225,7 +225,7 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
                 return false;
 
             return ViewModel.InteractionState == OrientedImageryViewInteractionState.ExploreImages ||
-                ViewModel.InteractionState == OrientedImageryViewInteractionState.ExamineImage;
+                ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage;
         }
         set
         {
@@ -244,7 +244,7 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
     public IReadOnlyList<OrientedImageryViewInteractionState> ImageSearchModes { get; } = new[]
     {
         OrientedImageryViewInteractionState.ExploreImages,
-        OrientedImageryViewInteractionState.ExamineImage
+        OrientedImageryViewInteractionState.DisplayImage
     };
 
     /// <summary>

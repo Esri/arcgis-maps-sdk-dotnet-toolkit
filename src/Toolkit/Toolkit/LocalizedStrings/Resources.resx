@@ -1173,9 +1173,9 @@
     <value>Explore images</value>
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
   </data>
-  <data name="OrientedImageryViewImageSearchModeExamine" xml:space="preserve">
-    <value>Examine image</value>
-    <comment>Label for the mode that examines individual tapped oriented images.</comment>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>Display image</value>
+    <comment>Label for the mode that displays individual tapped oriented images.</comment>
   </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
     <value>Open details for selected image</value>
@@ -1229,17 +1229,29 @@
     <value>Loading...</value>
     <comment>Message shown by OrientedImageryView while an image is loading.</comment>
   </data>
-  <data name="OrientedImageryViewNoImagesSelectedExamine" xml:space="preserve">
-    <value>No images selected: Click a camera point on the map to examine an image</value>
-    <comment>Message shown by OrientedImageryView when no images are selected in Examine mode.</comment>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>No image to display</value>
+    <comment>Heading shown by OrientedImageryView when no image is selected.</comment>
   </data>
-  <data name="OrientedImageryViewNoImagesSelectedExplore" xml:space="preserve">
-    <value>No images selected: Click a location on the map to explore images that view the selected point</value>
-    <comment>Message shown by OrientedImageryView when no images are selected in Explore mode.</comment>
+  <data name="OrientedImageryViewImageSelectionClickOn" xml:space="preserve">
+    <value>Click on</value>
+    <comment>Instruction before the Explore icon: Click on [Explore icon] or [Examine icon] and tap on the map to search.</comment>
   </data>
-  <data name="OrientedImageryViewNoImagesSelectedNone" xml:space="preserve">
-    <value>No images selected: Enable image selection in the toolbar</value>
-    <comment>Message shown by OrientedImageryView when no images are selected and image selection is disabled.</comment>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>or</value>
+    <comment>Instruction between the Explore and Examine icons in the no-image-selected message.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionAndTap" xml:space="preserve">
+    <value>and tap</value>
+    <comment>Instruction after the Examine icon, followed on the next line by 'on the map to search'.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMap" xml:space="preserve">
+    <value>on the map to search</value>
+    <comment>Final line of the no-image-selected instruction, following 'and tap'.</comment>
+  </data>
+  <data name="OrientedImageryViewEnableImageSelection" xml:space="preserve">
+    <value>Enable image selection in the toolbar</value>
+    <comment>Instruction below the no-image heading when image selection is disabled.</comment>
   </data>
   <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
     <value>Connect a GeoView to view oriented imagery.</value>

@@ -294,24 +294,25 @@
 
     <DataTemplate x:Key="ImageSearchModeIconTemplate" DataType="controls:OrientedImageryViewInteractionState">
         <Grid Width="33" Height="34">
-            <TextBlock x:Name="ExamineIcon" Text="&#xea74;" FontSize="32"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                       FontFamily="{StaticResource ToolkitIconsFontFamily}" />
+            <Path x:Name="DisplayIcon" Width="32" Height="32" Stretch="Uniform"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                  Data="M31.1864 15.1864H27.5786C27.1609 9.41668 22.5833 4.83905 16.8515 4.42359L16.8136 4.42142V0.813559C16.8136 0.364475 16.4491 0 16 0C15.5509 0 15.1864 0.364475 15.1864 0.813559V4.42142C9.41668 4.83905 4.83905 9.41668 4.42359 15.1485L4.42142 15.1864H0.813559C0.364475 15.1864 0 15.5509 0 16C0 16.4491 0.364475 16.8136 0.813559 16.8136H4.42142C4.83905 22.5833 9.41668 27.1609 15.1485 27.5764L15.1864 27.5786V31.1864C15.1864 31.6355 15.5509 32 16 32C16.4491 32 16.8136 31.6355 16.8136 31.1864V27.5786C22.5833 27.1609 27.1609 22.5833 27.5764 16.8515L27.5786 16.8136H31.1864C31.6355 16.8136 32 16.4491 32 16C32 15.5509 31.6355 15.1864 31.1864 15.1864ZM16.8136 25.9515V22.5085C16.8136 22.0594 16.4491 21.6949 16 21.6949C15.5509 21.6949 15.1864 22.0594 15.1864 22.5085V25.9515C10.3138 25.5414 6.45858 21.6862 6.05071 16.8504L6.04854 16.8136H9.49153C9.94061 16.8136 10.3051 16.4491 10.3051 16C10.3051 15.5509 9.94061 15.1864 9.49153 15.1864H6.04854C6.45858 10.3138 10.3138 6.45858 15.1496 6.05071L15.1864 6.04854V9.49153C15.1864 9.94061 15.5509 10.3051 16 10.3051C16.4491 10.3051 16.8136 9.94061 16.8136 9.49153V6.04854C21.6862 6.45858 25.5414 10.3138 25.9493 15.1496L25.9515 15.1864H22.5085C22.0594 15.1864 21.6949 15.5509 21.6949 16C21.6949 16.4491 22.0594 16.8136 22.5085 16.8136H25.9515C25.5403 21.6862 21.6862 25.5403 16.8504 25.9493L16.8136 25.9515Z" />
             <Path x:Name="ExploreIcon" Visibility="Collapsed"
                   Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                 <Path.Data>
                     <GeometryGroup FillRule="Nonzero">
-                        <PathGeometry FillRule="Nonzero" Figures="M26.7358 19.6048L27.7447 18.5074L32.9375 12.8587L24.2416 11.0883L11.1977 8.43275L7.75234 12.1806L13.9879 33.4721L26.7358 19.6048ZM24.2416 11.0883L32.9375 12.8587L25.6458 11.3742L24.2416 11.0883ZM9.1681 12.5122L11.647 9.81567L30.469 13.6722L14.5913 30.944L9.1681 12.5122Z" />
-                        <PathGeometry FillRule="Nonzero" Figures="M6.59961 5.13663C7.92743 5.13684 8.99902 6.21202 8.99902 7.54385C8.99895 8.87562 7.92738 9.95087 6.59961 9.95108C5.27167 9.95107 4.1993 8.87575 4.19922 7.54385C4.19922 6.21189 5.27162 5.13664 6.59961 5.13663ZM6.59961 6.74112C6.15162 6.74113 5.79883 7.09452 5.79883 7.54385C5.7989 7.99312 6.15167 8.34658 6.59961 8.34659C7.04738 8.34638 7.39934 7.99299 7.39941 7.54385C7.39941 7.09465 7.04742 6.74132 6.59961 6.74112Z" />
-                        <PathGeometry Figures="M21.6003 19.6003L20.2007 21L14.6003 15.3997L16 14L21.6003 19.6003Z" />
-                        <PathGeometry Figures="M21.6003 15.3997L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3997Z" />
+                        <PathGeometry FillRule="Nonzero" Figures="M26.7358 19.6048L27.7447 18.5074L32.9375 12.8586L24.2416 11.0883L11.1977 8.43274L7.75234 12.1806L13.9879 33.472L26.7358 19.6048ZM24.2416 11.0883L32.9375 12.8586L25.6458 11.3742L24.2416 11.0883ZM9.1681 12.5122L11.647 9.81565L30.469 13.6722L14.5913 30.944L9.1681 12.5122Z" />
+                        <PathGeometry FillRule="Nonzero" Figures="M6.59961 5.1366C7.92743 5.13681 8.99902 6.21199 8.99902 7.54382C8.99895 8.87559 7.92738 9.95084 6.59961 9.95105C5.27167 9.95104 4.1993 8.87572 4.19922 7.54382C4.19922 6.21186 5.27162 5.13661 6.59961 5.1366ZM6.59961 6.74109C6.15162 6.7411 5.79883 7.09449 5.79883 7.54382C5.7989 7.99309 6.15167 8.34655 6.59961 8.34656C7.04738 8.34635 7.39934 7.99296 7.39941 7.54382C7.39941 7.09462 7.04742 6.74129 6.59961 6.74109Z" />
+                        <PathGeometry FillRule="EvenOdd" Figures="M21.6003 19.6003L20.2007 21L14.6003 15.3996L16 14L21.6003 19.6003Z" />
+                        <PathGeometry FillRule="EvenOdd" Figures="M21.6003 15.3996L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3996Z" />
                     </GeometryGroup>
                 </Path.Data>
             </Path>
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
-                <Setter TargetName="ExamineIcon" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="DisplayIcon" Property="Visibility" Value="Collapsed" />
                 <Setter TargetName="ExploreIcon" Property="Visibility" Value="Visible" />
             </DataTrigger>
         </DataTemplate.Triggers>
@@ -329,7 +330,6 @@
                         <ToggleButton Background="{TemplateBinding Background}"
                                       BorderBrush="{TemplateBinding BorderBrush}"
                                       BorderThickness="{TemplateBinding BorderThickness}"
-                                      Foreground="{TemplateBinding Foreground}"
                                       IsChecked="{Binding IsImageSelectionEnabled}"
                                       MinWidth="0" Padding="0,4"
                                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
@@ -341,11 +341,11 @@
                                                     Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
                                                     Focusable="False" IsTabStop="False" />
                                 </Viewbox>
-                                <TextBlock>
+                                <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}">
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ToolbarLabelStyle}">
                                             <Setter Property="Width" Value="48" />
-                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExamine}" />
+                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeDisplay}" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
                                                     <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
@@ -551,10 +551,20 @@
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ComboBoxItem}">
                     <Setter Property="controls:ImageSearchModeSelectionBehavior.RepeatSelection" Value="True" />
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
                     <Setter Property="MinHeight" Value="40" />
                     <Setter Property="Padding" Value="8,4" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Style.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </ComboBox.ItemContainerStyle>
             <ComboBox.ItemTemplate>
@@ -566,10 +576,11 @@
                                             Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}"
                                             Focusable="False" IsTabStop="False" />
                         </Viewbox>
-                        <TextBlock VerticalAlignment="Center">
+                        <TextBlock VerticalAlignment="Center"
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExamine}" />
+                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeDisplay}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
                                             <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
@@ -846,26 +857,34 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-                                    <TextBlock HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               Margin="16"
-                                               MaxWidth="400"
-                                               TextAlignment="Center"
-                                               TextWrapping="Wrap">
-                                        <TextBlock.Style>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelectedExamine}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
-                                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelectedExplore}" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.None}">
-                                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesSelectedNone}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
+                                    <StackPanel HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Margin="16"
+                                                MaxWidth="400"
+                                                TextElement.FontSize="18"
+                                                TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
+                                        <TextBlock Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}"
+                                                   TextAlignment="Center" TextWrapping="Wrap" Margin="0,0,0,6" />
+                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
+                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionClickOn}" />
+                                            <InlineUIContainer BaselineAlignment="Center">
+                                                <Viewbox Width="24" Height="24" Margin="4,0">
+                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}"
+                                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                </Viewbox>
+                                            </InlineUIContainer>
+                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionOr}" />
+                                            <InlineUIContainer BaselineAlignment="Center">
+                                                <Viewbox Width="24" Height="24" Margin="4,0">
+                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}"
+                                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                </Viewbox>
+                                            </InlineUIContainer>
+                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionAndTap}" />
+                                            <LineBreak />
+                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMap}" />
+                                        </TextBlock>
+                                    </StackPanel>
                                 </Border>
 
                                 <Popup PlacementTarget="{Binding ElementName=PART_ImageViewport}"
@@ -991,7 +1010,8 @@
                                     Grid.RowSpan="2"
                                     Padding="16"
                                     Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
-                                    TextElement.Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+                                    TextElement.FontSize="18"
+                                    TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
                                 <Border.Style>
                                     <Style TargetType="{x:Type Border}">
                                         <Setter Property="Visibility" Value="Visible" />
@@ -1007,6 +1027,7 @@
                                            MaxWidth="400"
                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}"
                                            TextAlignment="Center"
+                                           LineHeight="30"
                                            TextWrapping="Wrap" />
                             </Border>
 
