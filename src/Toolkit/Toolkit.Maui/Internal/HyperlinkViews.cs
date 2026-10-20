@@ -31,14 +31,13 @@ internal sealed class HyperlinkLabel : Label
 
 internal sealed class HyperlinkContentView : ContentView
 {
-    private readonly Uri _uri;
     private readonly EventHandler<Uri> _clickHandler;
 
     internal HyperlinkContentView(View content, Uri uri, EventHandler<Uri> clickHandler)
     {
         Content = content;
         Padding = 0;
-        _uri = uri;
+        Uri = uri;
         _clickHandler = clickHandler;
 #if __IOS__
         SemanticProperties.SetDescription(this, SemanticProperties.GetDescription(content) ??
@@ -46,8 +45,8 @@ internal sealed class HyperlinkContentView : ContentView
 #endif
     }
 
-    internal Uri Uri => _uri;
+    internal Uri Uri { get; }
 
-    internal void Activate() => _clickHandler(this, _uri);
+    internal void Activate() => _clickHandler(this, Uri);
 }
 #endif
