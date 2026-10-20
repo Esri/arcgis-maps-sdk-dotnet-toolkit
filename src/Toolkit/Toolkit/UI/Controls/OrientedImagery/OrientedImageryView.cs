@@ -312,6 +312,7 @@ public partial class OrientedImageryView
                 var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
                 ViewModel.SetImages(images.ToList(), e.Location);
                 ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
+                ViewModel.IsSequentialNavigationEnabled = false;
                 break;
 
             case OrientedImageryViewInteractionState.ExamineImage:
@@ -319,7 +320,7 @@ public partial class OrientedImageryView
                 if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
                 {
                     var image = await ViewModel.OrientedImageryLayer.FetchImageForFeatureAsync(feature);
-                    ViewModel.SetImages([image]);
+                    ViewModel.SetImages([]);
                     ViewModel.SelectedImage = image;
                 }
                 break;
