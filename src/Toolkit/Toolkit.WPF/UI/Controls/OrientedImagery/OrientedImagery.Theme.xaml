@@ -664,10 +664,11 @@
     </DataTemplate>
 
     <DataTemplate x:Key="SequentialNavigationToolbarTemplate" DataType="controls:SequentialNavigationVM">
-        <Button Command="{Binding ViewModel.ToggleSequentialNavigationCommand}"
-                IsEnabled="{Binding ViewModel.SupportsSequentialNavigation}">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarLabeledButtonStyle}">
+        <ToggleButton Command="{Binding ViewModel.ToggleSequentialNavigationCommand}"
+                      IsChecked="{Binding ViewModel.IsSequentialNavigationEnabled, Mode=OneWay}"
+                      IsEnabled="{Binding ViewModel.SupportsSequentialNavigation}">
+            <ToggleButton.Style>
+                <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
                     <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
@@ -675,56 +676,16 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Button.Style>
+            </ToggleButton.Style>
             <StackPanel>
-                <Grid Width="28" Height="28">
-                    <Path Width="28"
-                          Height="28"
-                          Stretch="Uniform"
-                          Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                          Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z">
-                        <Path.Style>
-                            <Style TargetType="{x:Type Path}">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Path.Style>
-                    </Path>
-                    <Path Width="28"
-                          Height="28"
-                          Stretch="Uniform"
-                          Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                          Data="M4 18H3V29H29V3H12V4H28V28H4V18ZM5.66 13.354L1.807 9.5L5.66 5.646L6.367 6.353L3.767 9H11.5C13.7489 8.9923 15.9086 9.87918 17.503 11.4652C19.0974 13.0512 19.9958 15.2061 20 17.455V22.855H19V17.455C18.9956 13.3147 15.6403 9.95941 11.5 9.955H3.675L6.367 12.646L5.66 13.354Z">
-                        <Path.Style>
-                            <Style TargetType="{x:Type Path}">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Path.Style>
-                    </Path>
-                </Grid>
-                <TextBlock>
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ToolbarLabelStyle}">
-                            <Setter Property="Text" Value="{internal:LocalizedString Key=EnterSequentialNavigationModeLabel}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
-                                    <Setter Property="Text" Value="{internal:LocalizedString Key=ExitSequentialNavigationModeLabel}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                <Path Width="28"
+                      Height="28"
+                      Stretch="Uniform"
+                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                      Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z" />
+                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=EnterSequentialNavigationModeLabel}" />
             </StackPanel>
-        </Button>
+        </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="ToolbarDividerTemplate" DataType="controls:ToolbarDividerVM">
