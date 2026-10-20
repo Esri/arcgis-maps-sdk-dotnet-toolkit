@@ -11,7 +11,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
-    private DesktopImageryBar? _desktopToolbar;
     private DesktopImageryBar? _desktopNavigation;
     private Microsoft.UI.Xaml.FrameworkElement? _nativeView;
 
@@ -38,8 +37,7 @@ public partial class OrientedImageryView
             parent.Children.Add(view);
         }
         var custom = new ToolbarWrapLayout { Margin = 8 };
-        scope.RegisterName("PART_CustomToolbar", custom);
-        Add("PART_CustomToolbarScroll", custom, root);
+        Add("PART_CustomToolbar", custom, root);
 
         var image = new Grid
         {
@@ -60,7 +58,7 @@ public partial class OrientedImageryView
         var panel = new Grid { IsVisible = false };
         Add("PART_PanelHost", panel, image);
         Grid.SetColumnSpan(panel, 3);
-        Add("PART_DesktopNavigation", new DesktopImageryBar { IsNavigation = true }, root, 2);
+        Add("PART_DesktopNavigation", new DesktopImageryBar(), root, 2);
         var notice = new Label { HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(8, 4), AutomationId = "OrientedImageryNotice" };
         notice.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
         Add("PART_Notice", notice, root, 3);
@@ -92,7 +90,6 @@ public partial class OrientedImageryView
     {
         if (_nativeView != null) _nativeView.KeyDown -= NativeKeyDown;
         _nativeView = null;
-        if (_desktopToolbar != null) _desktopToolbar.Owner = null;
         if (_desktopNavigation != null) _desktopNavigation.Owner = null;
     }
 
@@ -104,26 +101,17 @@ public partial class OrientedImageryView
 
     private void ReleaseDesktopTemplate()
     {
-        if (_desktopToolbar != null) _desktopToolbar.Owner = null;
         if (_desktopNavigation != null) _desktopNavigation.Owner = null;
-        _desktopToolbar = null;
         _desktopNavigation = null;
     }
 
     private void InitializeDesktopTemplate()
     {
-        _desktopToolbar = GetTemplateChild("PART_DesktopToolbar") as DesktopImageryBar;
         _desktopNavigation = GetTemplateChild("PART_DesktopNavigation") as DesktopImageryBar;
     }
 
     partial void RefreshDesktopPresentation()
     {
-        if (_desktopToolbar != null)
-        {
-            _desktopToolbar.IsVisible = HasValidLayer;
-            if (_desktopToolbar.Owner != this) _desktopToolbar.Owner = this;
-            else _desktopToolbar.Refresh();
-        }
         if (_desktopNavigation != null)
         {
             _desktopNavigation.IsVisible = ViewModel.SelectedImage != null;

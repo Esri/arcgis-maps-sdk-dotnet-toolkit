@@ -32,38 +32,36 @@ public class OrientedImageryViewToolbarSelector : DataTemplateSelector
     /// Pairs with duplicate <see cref="OrientedImageryToolbarSelectorPair.BaseKey"/>s are not allowed in this collection. If a
     /// pair with a duplicate key is added it will replace the existing pair with the same key.
     /// </remarks>
-    public Collection<OrientedImageryToolbarSelectorPair> SelectionPairs { get; private set; }
+    public Collection<OrientedImageryToolbarSelectorPair> SelectionPairs { get; }
+
+#if MAUI
+    // The owning control supplies its platform presentation when no override matches.
+    internal static DataTemplate DefaultTemplate { get; } = new DataTemplate();
 
     /// <inheritdoc/>
-#if MAUI
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container) =>
-        FindTemplate(item) ?? throw new InvalidOperationException($"No oriented imagery toolbar template is registered for '{item.GetType().Name}'.");
+        FindTemplate(item) ?? (container is OrientedImageryView ? DefaultTemplate :
+            throw new InvalidOperationException($"No oriented imagery toolbar template is registered for '{item.GetType().Name}'."));
 #else
+    /// <inheritdoc/>
     public override DataTemplate SelectTemplate(object item, DependencyObject container) =>
         FindTemplate(item) ?? base.SelectTemplate(item, container);
 #endif
 
-    internal DataTemplate? FindTemplate(object item)
+    private DataTemplate? FindTemplate(object item)
     {
-        if (item is OrientedImageryToolbarCategory category)
+        foreach (var pair in SelectionPairs)
         {
-            foreach (var pair in SelectionPairs.Where(p => p.TargetType == OrientedImageryToolbarSelectorPair.ToolbarType.Category))
+            bool matches = pair.TargetType switch
             {
-                if ((string?)pair.BaseKey != null && (string)pair.BaseKey == category.Name)
-                {
-                    return pair.Template;
-                }
-            }
-        }
-        else if (item is OrientedImageryToolbarItemBase)
-        {
-            foreach (var pair in SelectionPairs.Where(p => p.TargetType == OrientedImageryToolbarSelectorPair.ToolbarType.Item))
-            {
-                if ((Type?)pair.BaseKey != null && ((Type)pair.BaseKey).IsInstanceOfType(item))
-                {
-                    return pair.Template;
-                }
-            }
+                OrientedImageryToolbarSelectorPair.ToolbarType.Category =>
+                    item is OrientedImageryToolbarCategory category && pair.BaseKey is string name && name == category.Name,
+                OrientedImageryToolbarSelectorPair.ToolbarType.Item =>
+                    item is OrientedImageryToolbarItemBase && pair.BaseKey is Type type && type.IsInstanceOfType(item),
+                _ => false,
+            };
+            if (matches)
+                return pair.Template;
         }
 
         return null;
@@ -92,16 +90,7 @@ public class OrientedImageryViewToolbarSelector : DataTemplateSelector
 
     internal static bool SelectorKeysAreEqual(OrientedImageryToolbarSelectorPair itemA, OrientedImageryToolbarSelectorPair itemB)
     {
-        if (itemA.TargetType != itemB.TargetType)
-            return false;
-
-        if (itemA.TargetType == OrientedImageryToolbarSelectorPair.ToolbarType.Category)
-            return (string?)itemA.BaseKey == (string?)itemB.BaseKey;
-
-        if (itemA.TargetType == OrientedImageryToolbarSelectorPair.ToolbarType.Item)
-            return (Type?)itemA.BaseKey == (Type?)itemB.BaseKey;
-
-        return false;
+        return itemA.TargetType == itemB.TargetType && Equals(itemA.BaseKey, itemB.BaseKey);
     }
 
     private sealed class TemplateCollection : ObservableCollection<OrientedImageryToolbarSelectorPair>
@@ -128,15 +117,8 @@ public class OrientedImageryViewToolbarSelector : DataTemplateSelector
             base.SetItem(index, item);
         }
 
-        private OrientedImageryToolbarSelectorPair? GetExistingEntry(OrientedImageryToolbarSelectorPair newItem)
-        {
-            OrientedImageryToolbarSelectorPair? existing = null;
-            if (newItem.TargetType == OrientedImageryToolbarSelectorPair.ToolbarType.Category)
-                existing = this.FirstOrDefault(pair => SelectorKeysAreEqual(pair, newItem));
-            else if (newItem.TargetType == OrientedImageryToolbarSelectorPair.ToolbarType.Item)
-                existing = this.FirstOrDefault(pair => SelectorKeysAreEqual(pair, newItem));
-            return existing;
-        }
+        private OrientedImageryToolbarSelectorPair? GetExistingEntry(OrientedImageryToolbarSelectorPair newItem) =>
+            this.FirstOrDefault(pair => SelectorKeysAreEqual(pair, newItem));
     }
 }
 
@@ -181,7 +163,7 @@ public sealed class OrientedImageryToolbarItemSelectorPair : OrientedImageryTool
 }
 
 /// <summary>
-/// Represents a <see cref="DataTemplate"/> object paired to some key value of type <see paramref="T"/> for use in an <see cref="OrientedImageryViewToolbarSelector"/>.
+/// Represents a <see cref="DataTemplate"/> paired with a category name or toolbar item type.
 /// </summary>
 public class OrientedImageryToolbarSelectorPair
 {

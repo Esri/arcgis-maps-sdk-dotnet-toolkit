@@ -1264,6 +1264,12 @@
   <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
     <value>No layer selected.</value>
   </data>
+  <data name="OrientedImageryViewNoLayers" xml:space="preserve">
+    <value>No oriented imagery layers are available in the connected map or scene.</value>
+  </data>
+  <data name="OrientedImageryViewInvalidLayer" xml:space="preserve">
+    <value>The selected oriented imagery layer does not belong to the connected map or scene.</value>
+  </data>
   <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
     <value>Prev</value>
   </data>
@@ -1276,15 +1282,11 @@
   <data name="OrientedImageryViewMarkers" xml:space="preserve"><value>Markers</value></data>
   <data name="OrientedImageryViewMode" xml:space="preserve"><value>Mode</value></data>
   <data name="OrientedImageryViewMore" xml:space="preserve"><value>More</value></data>
-  <data name="OrientedImageryViewNoLayerTitle" xml:space="preserve"><value>No layer selected</value></data>
-  <data name="OrientedImageryViewNoImage" xml:space="preserve"><value>No image to display. Tap on the map to search or select an image.</value></data>
   <data name="OrientedImageryViewPage" xml:space="preserve"><value>Image {0} of {1}</value></data>
   <data name="OrientedImageryViewSelectLayer" xml:space="preserve"><value>Select layer</value></data>
-  <data name="OrientedImageryViewModeSelection" xml:space="preserve"><value>Mode selection</value></data>
   <data name="OrientedImageryViewSelectMode" xml:space="preserve"><value>Select Image</value></data>
   <data name="OrientedImageryViewSearchMode" xml:space="preserve"><value>Search Images</value></data>
   <data name="OrientedImageryViewAddMarker" xml:space="preserve"><value>Add markers</value></data>
-  <data name="OrientedImageryViewMarkerTools" xml:space="preserve"><value>Marker tools</value></data>
   <data name="OrientedImageryViewMarkerSelection" xml:space="preserve"><value>Marker selection</value></data>
   <data name="OrientedImageryViewMarkerOption" xml:space="preserve"><value>Marker {0}</value></data>
   <data name="OrientedImageryViewMarkerCircle" xml:space="preserve"><value>Circle marker</value></data>
@@ -1292,30 +1294,16 @@
   <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve"><value>Triangle marker</value></data>
   <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve"><value>Diamond marker</value></data>
   <data name="OrientedImageryViewMarkerX" xml:space="preserve"><value>Cross marker</value></data>
-  <data name="OrientedImageryViewMoreTools" xml:space="preserve"><value>More tools</value></data>
   <data name="OrientedImageryViewSequentialMode" xml:space="preserve"><value>Sequential Navigation</value></data>
   <data name="OrientedImageryViewNavigation" xml:space="preserve"><value>Navigation</value></data>
-  <data name="OrientedImageryViewOverlaySelection" xml:space="preserve"><value>Overlays selection</value></data>
   <data name="OrientedImageryViewAutoUpdate" xml:space="preserve"><value>Automatically update footprint</value></data>
   <data name="OrientedImageryViewOpen" xml:space="preserve"><value>Open oriented imagery</value></data>
-  <data name="OrientedImageryViewResize" xml:space="preserve"><value>Drag to resize the oriented imagery panel</value></data>
-  <data name="OrientedImageryViewControlWidth" xml:space="preserve"><value>Control width</value></data>
   <data name="OrientedImageryViewOn" xml:space="preserve"><value>On</value></data>
   <data name="OrientedImageryViewOff" xml:space="preserve"><value>Off</value></data>
-  <data name="OrientedImageryViewPopup" xml:space="preserve">
-    <value>Pop-up</value>
-    <comment>Action and panel title for viewing the selected oriented image attributes.</comment>
-  </data>
-  <data name="OrientedImageryViewNoAttributes" xml:space="preserve">
-    <value>No attributes available for this image.</value>
-  </data>
   <data name="OrientedImageryViewSelected" xml:space="preserve"><value>Selected</value></data>
   <data name="OrientedImageryViewNotSelected" xml:space="preserve"><value>Not selected</value></data>
   <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve"><value>Back to Marker Tools</value></data>
   <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve"><value>Show Current Footprint</value></data>
   <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve"><value>Show Additional Footprints</value></data>
   <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve"><value>Show camera locations</value></data>
-  <data name="OrientedImageryViewCustomizeToolbar" xml:space="preserve">
-    <value>Customize toolbar</value>
-  </data>
 </root>
