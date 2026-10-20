@@ -54,6 +54,8 @@ internal sealed class HyperlinkLabelHandler : ViewHandler<HyperlinkLabel, UIText
             Editable = false,
             Selectable = true,
             ScrollEnabled = false,
+            // Rendered links should not form a separate text-input region in the Tab loop.
+            FocusGroupIdentifier = null,
             BackgroundColor = UIColor.Clear,
             TextContainerInset = UIEdgeInsets.Zero,
             WeakLinkTextAttributes = linkAttributes,
