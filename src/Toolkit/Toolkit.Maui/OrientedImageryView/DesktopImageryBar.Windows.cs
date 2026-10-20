@@ -356,6 +356,13 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             dropdown.IsEnabled = button.IsEnabled;
             button.IsChecked = mode.IsImageSelectionEnabled;
         });
+        System.ComponentModel.PropertyChangedEventHandler changed = (_, e) =>
+        {
+            if (e.PropertyName is null or "" or nameof(ImageSearchModeVM.SelectedInteractionState) or nameof(ImageSearchModeVM.IsImageSelectionEnabled))
+                Refresh();
+        };
+        mode.PropertyChanged += changed;
+        _detachSymbols.Add(() => mode.PropertyChanged -= changed);
         return host;
     }
 
@@ -412,7 +419,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 images.Add(image);
                 string name = symbol is SimpleMarkerSymbol simple ? Text("Marker" + simple.Style) :
                     string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), menu.Items.Count + 1);
-                var item = new RadioMenuFlyoutItem { Text = name, Icon = new ImageIcon(), GroupName = groupName };
+                var item = new RadioMenuFlyoutItem { Icon = new ImageIcon(), GroupName = groupName };
                 AutomationProperties.SetName(item, name);
                 item.Click += (_, _) =>
                 {
