@@ -81,67 +81,59 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             carouselHost.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             carouselHost.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
 
-            Button previous = new Button()
-            {
-                WidthRequest = 40,
-                Padding = 0,
-                BorderWidth = 0,
-                BackgroundColor = Colors.Transparent,
-                Text = ToolkitIcons.ChevronLeft,
-                FontFamily = ToolkitIcons.FontFamilyName,
-                VerticalOptions = LayoutOptions.Center,
-                AutomationId = "PreviousMediaButton",
-            };
-            SemanticProperties.SetDescription(previous, Properties.Resources.GetString("PopupViewerPreviousMediaButtonText"));
+            Button previous = CreateMediaNavigationButton(ToolkitIcons.ChevronLeft, "PopupViewerPreviousMediaButtonText", "PreviousMediaButton");
             previous.Clicked += (_, _) =>
             {
-                int count = cv.ItemsSource?.Cast<object>().Count() ?? 0;
-                if (count > 0)
-                    cv.Position = cv.Position > 0 ? cv.Position - 1 : count - 1;
+                if (cv.ItemsSource is IList<PopupMedia> { Count: > 0 } media)
+                    cv.Position = cv.Position > 0 ? cv.Position - 1 : media.Count - 1;
             };
             carouselHost.Add(previous);
 
             Grid.SetColumn(cv, 1);
             carouselHost.Add(cv);
 
-            Button next = new Button()
-            {
-                WidthRequest = 40,
-                Padding = 0,
-                BorderWidth = 0,
-                BackgroundColor = Colors.Transparent,
-                Text = ToolkitIcons.ChevronRight,
-                FontFamily = ToolkitIcons.FontFamilyName,
-                VerticalOptions = LayoutOptions.Center,
-                AutomationId = "NextMediaButton",
-            };
-            SemanticProperties.SetDescription(next, Properties.Resources.GetString("PopupViewerNextMediaButtonText"));
+            Button next = CreateMediaNavigationButton(ToolkitIcons.ChevronRight, "PopupViewerNextMediaButtonText", "NextMediaButton");
             next.Clicked += (_, _) =>
             {
-                int count = cv.ItemsSource?.Cast<object>().Count() ?? 0;
-                if (count > 0)
-                    cv.Position = (cv.Position + 1) % count;
+                if (cv.ItemsSource is IList<PopupMedia> { Count: > 0 } media)
+                    cv.Position = (cv.Position + 1) % media.Count;
             };
             Grid.SetColumn(next, 2);
             carouselHost.Add(next);
 
             root.Add(carouselHost);
-            root.Add(iv);
-            INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(root, nameScope);
-            nameScope.RegisterName(CarouselName, cv);
-            nameScope.RegisterName("PreviousButton", previous);
-            nameScope.RegisterName("NextButton", next);
-            return root;
 #else
             root.Add(cv);
+#endif
             root.Add(iv);
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(CarouselName, cv);
-            return root;
+#if __IOS__
+            nameScope.RegisterName("PreviousButton", previous);
+            nameScope.RegisterName("NextButton", next);
 #endif
+            return root;
         }
+
+#if __IOS__
+        private static Button CreateMediaNavigationButton(string glyph, string descriptionKey, string automationId)
+        {
+            var button = new Button()
+            {
+                WidthRequest = 40,
+                Padding = 0,
+                BorderWidth = 0,
+                BackgroundColor = Colors.Transparent,
+                Text = glyph,
+                FontFamily = ToolkitIcons.FontFamilyName,
+                VerticalOptions = LayoutOptions.Center,
+                AutomationId = automationId,
+            };
+            SemanticProperties.SetDescription(button, Properties.Resources.GetString(descriptionKey));
+            return button;
+        }
+#endif
 
         private static object BuildDefaultItemTemplate()
         {

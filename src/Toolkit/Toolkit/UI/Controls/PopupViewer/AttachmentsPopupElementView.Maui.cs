@@ -163,8 +163,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 HorizontalOptions = LayoutOptions.Fill,
                 VerticalOptions = LayoutOptions.Fill,
             };
-            itemButton.SetBinding(BindableObject.BindingContextProperty, static (PopupAttachment attachment) => attachment, converter: AttachmentViewModelConverter.Instance);
-            itemButton.SetBinding(SemanticProperties.DescriptionProperty, static (AttachmentViewModel vm) => vm.Name);
+            itemButton.SetBinding(SemanticProperties.DescriptionProperty, static (PopupAttachment attachment) => attachment.Name);
             itemButton.Clicked += AttachmentButton_Clicked;
             item.Children.Add(itemButton);
             return item;
@@ -210,9 +209,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #else
         private static void AttachmentButton_Clicked(object? sender, EventArgs e)
         {
-            if (sender is Button { BindingContext: AttachmentViewModel vm } button)
+            if (sender is Button { BindingContext: PopupAttachment attachment } button)
             {
-                OpenAttachment(button, vm.Attachment);
+                OpenAttachment(button, attachment);
             }
         }
 #endif
