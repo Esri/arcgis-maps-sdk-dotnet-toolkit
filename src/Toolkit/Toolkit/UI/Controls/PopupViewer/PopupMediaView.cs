@@ -91,7 +91,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             else if (PopupMedia.Type == PopupMediaType.Image)
             {
                 _lastChartSize = 0;
+#if MAUI && __IOS__
+                Image img = Content as Image ?? (Content as Maui.Internal.HyperlinkContentView)?.Content as Image ?? new Image();
+#else
                 Image img = Content as Image ?? new Image();
+#endif
                 var sourceUrl = PopupMedia.Value?.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
@@ -132,6 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (!string.IsNullOrEmpty(PopupMedia.Value?.LinkUrl) && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out var linkUrl))
                 {
 #if MAUI
+#if !__IOS__
                     img.GestureRecognizers.Clear();
                     var tapGesture = new TapGestureRecognizer();
 #if WINDOWS
@@ -140,6 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     tapGesture.Tapped += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
 #endif
                     img.GestureRecognizers.Add(tapGesture);
+#endif
 #else
                     img.Tag = linkUrl;
 #if WPF
@@ -169,7 +175,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI && WINDOWS
                 UpdateImageAccessibility(img);
 #endif
+#if MAUI && __IOS__
+                UpdateImageContent(img);
+#else
                 Content = img;
+#endif
             }
         }
         private async void UpdateChart(Size desiredSize)
@@ -277,6 +287,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             else
             {
+#if MAUI && __IOS__
+                Content = null;
+#endif
                 InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
             }
             UpdateAltText();
@@ -299,6 +312,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             SemanticProperties.SetDescription(this, PopupMedia?.Type == PopupMediaType.Image ? null : altText);
             // A recycled chart can leave an unnamed wrapper peer after its description is cleared.
             AutomationProperties.SetIsInAccessibleTree(this, PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image);
+#elif __IOS__
+            // Expose the native image link rather than hiding it behind the media wrapper's description.
+            bool isChart = PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image;
+            SemanticProperties.SetDescription(this, isChart ? altText : null);
+            AutomationProperties.SetIsInAccessibleTree(this, isChart);
 #else
             SemanticProperties.SetDescription(this, altText);
 #endif

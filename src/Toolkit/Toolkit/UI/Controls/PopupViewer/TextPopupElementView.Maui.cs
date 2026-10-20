@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (string.IsNullOrEmpty(text))
                 return;
 
-#if WINDOWS
+#if WINDOWS || __IOS__
             const bool useNativeHyperlinks = true;
 #else
             const bool useNativeHyperlinks = false;

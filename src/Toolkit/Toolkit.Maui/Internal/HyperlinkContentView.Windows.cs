@@ -22,22 +22,6 @@ using NativeHyperlinkButton = Microsoft.UI.Xaml.Controls.HyperlinkButton;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 
-internal sealed class HyperlinkContentView : ContentView
-{
-    private readonly Uri _uri;
-    private readonly EventHandler<Uri> _clickHandler;
-
-    internal HyperlinkContentView(View content, Uri uri, EventHandler<Uri> clickHandler)
-    {
-        Content = content;
-        Padding = 0;
-        _uri = uri;
-        _clickHandler = clickHandler;
-    }
-
-    internal void Activate() => _clickHandler(this, _uri);
-}
-
 internal sealed class HyperlinkContentViewHandler : ViewHandler<HyperlinkContentView, NativeHyperlinkButton>
 {
     private static readonly IPropertyMapper<HyperlinkContentView, HyperlinkContentViewHandler> PropertyMapper =

@@ -243,9 +243,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private ChildElement CreateHyperlinkCell(Uri uri)
         {
-#if MAUI && WINDOWS
+#if MAUI && (WINDOWS || __IOS__)
             var text = new FormattedString();
-            text.Spans.Add(new HtmlToView.HyperlinkSpan(_ => PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri))
+            text.Spans.Add(new HtmlToView.HyperlinkSpan(_ => PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri), uri)
             {
                 Text = Properties.Resources.GetString("PopupViewerViewHyperlinkText"),
                 TextDecorations = TextDecorations.Underline,
