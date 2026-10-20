@@ -1338,10 +1338,12 @@ navigation</value>
   <data name="OrientedImageryViewMarkerX" xml:space="preserve"><value>Cross marker</value></data>
   <data name="OrientedImageryViewMoreTools" xml:space="preserve"><value>More tools</value></data>
   <data name="OrientedImageryViewSequentialMode" xml:space="preserve"><value>Sequential Navigation</value></data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve"><value>Navigation</value></data>
   <data name="OrientedImageryViewOverlaySelection" xml:space="preserve"><value>Overlays selection</value></data>
   <data name="OrientedImageryViewAutoUpdate" xml:space="preserve"><value>Automatically update footprint</value></data>
   <data name="OrientedImageryViewOpen" xml:space="preserve"><value>Open oriented imagery</value></data>
   <data name="OrientedImageryViewResize" xml:space="preserve"><value>Drag to resize the oriented imagery panel</value></data>
+  <data name="OrientedImageryViewControlWidth" xml:space="preserve"><value>Control width</value></data>
   <data name="OrientedImageryViewOn" xml:space="preserve"><value>On</value></data>
   <data name="OrientedImageryViewOff" xml:space="preserve"><value>Off</value></data>
   <data name="OrientedImageryViewPopup" xml:space="preserve">
@@ -1357,4 +1359,7 @@ navigation</value>
   <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve"><value>Show Current Footprint</value></data>
   <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve"><value>Show Additional Footprints</value></data>
   <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve"><value>Show camera locations</value></data>
+  <data name="OrientedImageryViewCustomizeToolbar" xml:space="preserve">
+    <value>Customize toolbar</value>
+  </data>
 </root>

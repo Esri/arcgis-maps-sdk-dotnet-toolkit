@@ -4,21 +4,16 @@ using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Layouts;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
-    private Label? _title;
     private Label? _status;
+    private View? _statusHost;
     private Label? _notice;
     private ActivityIndicator? _busy;
-    private Button? _layerButton;
-    private Button? _overlaysButton;
-    private Microsoft.Maui.Controls.Shapes.Path? _overlaysIcon;
-    private Button? _markersButton;
-    private Button? _modeButton;
-    private Button? _moreButton;
     private Button? _previousButton;
     private Button? _nextButton;
     private Button? _imagePreviousButton;
@@ -27,10 +22,7 @@ public partial class OrientedImageryView
     private Grid? _panelLayout;
     private ScrollView? _panelScroll;
     private HorizontalStackLayout? _pages;
-    private HorizontalStackLayout? _customToolbar;
-    private View? _customToolbarScroll;
-    private Grid? _tools;
-    private Button?[] _toolButtons = [];
+    private Layout? _customToolbar;
     private (bool Sequential, int Start, int Count, int Total)? _pageState;
     private int _selectedPage = -1;
     private View? _panelAnchor;
@@ -64,8 +56,10 @@ public partial class OrientedImageryView
         "AdditionalFootprints" => "ShowUnselectedImageFootprints",
         "CameraLocations" => "ShowCameraMarkersOnGeoView",
         "NoLayers" => "NoOrientedImageryLayers",
-        "NoLayer" => "NoLayerSelected",
         "InvalidLayer" => "SelectedLayerNotOnGeoView",
+        "ImageSearchModeSearch" => "ImageSearchModeExplore",
+        "ImageSearchModeSelect" => "ImageSearchModeExamine",
+        "NavigationModeLabel" => "SequentialNavigationLabel",
         _ => key,
     }));
 
@@ -79,7 +73,7 @@ public partial class OrientedImageryView
         {
             RowDefinitions =
             {
-                new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Auto),
+                new RowDefinition(GridLength.Auto),
                 new RowDefinition(GridLength.Star), new RowDefinition(GridLength.Auto),
                 new RowDefinition(GridLength.Auto),
             },
@@ -99,121 +93,15 @@ public partial class OrientedImageryView
             parent.Children.Add(view);
         }
 
-        var heading = new Grid
-        {
-            ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
-            Padding = new Thickness(8, 0),
-        };
-        root.Children.Add(heading);
-        var title = new Label { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation, FontSize = 16 };
-        title.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-#if __IOS__ && !MACCATALYST
-        title.FontSize = 20;
-        title.FontAttributes = FontAttributes.Bold;
-        heading.Padding = new Thickness(12, 4);
-#endif
-        Add("PART_Title", title, heading);
-        var layerButton = ToolButton("SelectLayer", "", "OrientedImageryLayers");
-        layerButton.Text = null;
-        layerButton.WidthRequest = 44;
-        layerButton.BorderWidth = 0;
-#if __IOS__ && !MACCATALYST
-        layerButton.CornerRadius = 22;
-        layerButton.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
-#endif
-        Add("PART_Layers", layerButton, heading, column: 1);
-        var layerIcon = MenuIcon(null, LayerGeometry);
-        layerIcon.InputTransparent = true;
-        layerIcon.HorizontalOptions = LayoutOptions.Center;
-        heading.Add(layerIcon, 1);
-
-        var tools = new Grid
-        {
-            ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star) },
-            ColumnSpacing = 4,
-            Padding = new Thickness(8, 0),
-        };
-        Add("PART_Tools", tools, root, 1);
-        void AddToolbarTool(string name, string key, View icon, int column)
-        {
-            var cell = new Grid { MinimumHeightRequest = 44 };
-            StackBase content =
-#if __IOS__ && !MACCATALYST
-                new VerticalStackLayout
-#else
-                new HorizontalStackLayout
-#endif
-            {
-                Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center,
-            };
-            icon.WidthRequest = 16;
-            icon.HeightRequest = 16;
-            content.Add(icon);
-            var label = new Label { Text = Text(key), FontSize = 12, VerticalOptions = LayoutOptions.Center, MaxLines = 1 };
-            label.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-            content.Add(label);
-            var pill = new Border
-            {
-                Content = content, HeightRequest = 26, VerticalOptions = LayoutOptions.Center,
-                Stroke = Color.FromArgb("#CCCCCC"), StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = 13 }, InputTransparent = true,
-            };
-#if __IOS__ && !MACCATALYST
-            cell.MinimumHeightRequest = 60;
-            icon.WidthRequest = 22;
-            icon.HeightRequest = 22;
-            label.FontSize = 11;
-            label.TextColor = IosAccent;
-            label.HandlerChanged += (sender, _) =>
-            {
-                if (sender is Label { Handler.PlatformView: UIKit.UILabel nativeLabel })
-                    nativeLabel.Font = UIKit.UIFont.SystemFontOfSize(nativeLabel.Font.PointSize, UIKit.UIFontWeight.Semibold);
-            };
-            pill.HeightRequest = -1;
-            pill.VerticalOptions = LayoutOptions.Fill;
-            pill.Margin = new Thickness(0, 4, 0, 8);
-            pill.StrokeThickness = 0;
-            pill.StrokeShape = new RoundRectangle { CornerRadius = 10 };
-            pill.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
-#endif
-#if ANDROID
-            label.HandlerChanged += (sender, _) =>
-            {
-                if (sender is Label { Handler.PlatformView: Android.Widget.TextView nativeLabel })
-                    nativeLabel.Typeface = Android.Graphics.Typeface.Create(nativeLabel.Typeface, 600, false);
-            };
-#endif
-            cell.Add(pill);
-            var button = ToolButton(key, "", "OrientedImagery" + key);
-            button.Text = null;
-            button.BorderWidth = 0;
-            button.Padding = 0;
-            Add(name, button, cell);
-            tools.Add(cell, column);
-            cell.SetBinding(IsVisibleProperty, Binding.Create(static (Button b) => b.IsVisible, source: button));
-        }
-        AddToolbarTool("PART_Mode", "Mode", MenuIcon(ToolkitIcons.Search, null), 0);
-        var overlayIcon = MenuIcon(null, OverlayGeometry);
-        scope.RegisterName("PART_OverlaysIcon", overlayIcon);
-        AddToolbarTool("PART_Overlays", "Overlays", overlayIcon, 1);
-        AddToolbarTool("PART_Markers", "Markers", MenuIcon("\uE8ED", null), 2);
-        AddToolbarTool("PART_More", "More", new Label
-        {
-            Text = "\u2022\u2022\u2022", FontSize = 12, TextColor = Color.FromArgb("#007AC2"),
-            VerticalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center,
-        }, 3);
-        var custom = new HorizontalStackLayout { Spacing = 4 };
+        var custom = new FlexLayout { Wrap = FlexWrap.Wrap, AlignItems = FlexAlignItems.Center, Margin = new Thickness(8, 0) };
         scope.RegisterName("PART_CustomToolbar", custom);
-        var customScroll = new ScrollView { Orientation = ScrollOrientation.Horizontal, Content = custom };
-        Add("PART_CustomToolbarScroll", customScroll, root, 1);
+        Add("PART_CustomToolbarScroll", custom, root);
 
         var image = new Grid();
-        Grid.SetRow(image, 2);
+        Grid.SetRow(image, 1);
         root.Children.Add(image);
         Add("PART_Viewport", new OrientedImageViewport { AutomationId = "OrientedImageryViewport" }, image);
-        var status = new Label { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, Margin = 20, AutomationId = "OrientedImageryStatus" };
-        status.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#DDDDDD"));
-        Add("PART_Status", status, image);
+        AddStatusPresentation(image, scope);
         Add("PART_Busy", new ActivityIndicator { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, AutomationId = "OrientedImageryBusy" }, image);
         Add("PART_ImagePrevious", MobileImageArrow(false), image);
         Add("PART_ImageNext", MobileImageArrow(true), image);
@@ -226,7 +114,7 @@ public partial class OrientedImageryView
             ColumnSpacing = 0,
             Padding = new Thickness(8, 0),
         };
-        Add("PART_Navigation", navigation, root, 3);
+        Add("PART_Navigation", navigation, root, 2);
         var previous = ToolButton("PreviousLabel", ToolkitIcons.ChevronLeft, "OrientedImageryPrevious");
         previous.Text = null;
         previous.WidthRequest = 44;
@@ -240,7 +128,7 @@ public partial class OrientedImageryView
         Add("PART_Next", next, navigation, column: 2);
         var notice = new Label { HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(8, 4), AutomationId = "OrientedImageryNotice" };
         notice.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-        Add("PART_Notice", notice, root, 4);
+        Add("PART_Notice", notice, root, 3);
         var panels = new Grid { IsVisible = false, InputTransparent = true, CascadeInputTransparent = false };
         Add("PART_PanelHost", panels, root);
         Grid.SetRowSpan(panels, 5);
@@ -325,6 +213,24 @@ public partial class OrientedImageryView
         host.Add(border, 1);
     }
 
+    private static void AddStatusPresentation(Grid image, INameScope scope)
+    {
+        var status = new Label
+        {
+            HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center,
+            HorizontalTextAlignment = TextAlignment.Center, MaximumWidthRequest = 400, Margin = 16,
+            AutomationId = "OrientedImageryStatus",
+        };
+        status.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
+        var host = new Grid();
+        host.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
+        host.Add(status);
+        scope.RegisterName("PART_Status", status);
+        scope.RegisterName("PART_StatusHost", host);
+        image.Add(host);
+        Grid.SetColumnSpan(host, Math.Max(1, image.ColumnDefinitions.Count));
+    }
+
 #if ANDROID
     private static void StyleAndroidPopupButton(Button button)
     {
@@ -394,17 +300,10 @@ public partial class OrientedImageryView
         _popupHost = GetTemplateChild("PART_PopupHost") as Grid;
         _popupOpenButton = GetTemplateChild("PART_PopupOpen") as Button;
         _popupCloseButton = GetTemplateChild("PART_PopupClose") as Button;
-        _title = GetTemplateChild("PART_Title") as Label;
         _status = GetTemplateChild("PART_Status") as Label;
+        _statusHost = GetTemplateChild("PART_StatusHost") as View;
         _notice = GetTemplateChild("PART_Notice") as Label;
         _busy = GetTemplateChild("PART_Busy") as ActivityIndicator;
-        _layerButton = GetTemplateChild("PART_Layers") as Button;
-        _overlaysButton = GetTemplateChild("PART_Overlays") as Button;
-        _overlaysIcon = GetTemplateChild("PART_OverlaysIcon") as Microsoft.Maui.Controls.Shapes.Path;
-        _markersButton = GetTemplateChild("PART_Markers") as Button;
-        _modeButton = GetTemplateChild("PART_Mode") as Button;
-        _moreButton = GetTemplateChild("PART_More") as Button;
-        _toolButtons = [_overlaysButton, _markersButton, _modeButton, _moreButton];
         _previousButton = GetTemplateChild("PART_Previous") as Button;
         _nextButton = GetTemplateChild("PART_Next") as Button;
         _imagePreviousButton = GetTemplateChild("PART_ImagePrevious") as Button;
@@ -412,9 +311,7 @@ public partial class OrientedImageryView
         _pages = GetTemplateChild("PART_Pages") as HorizontalStackLayout;
         _panelHost = GetTemplateChild("PART_PanelHost") as Grid;
         if (_panelHost != null) _panelHost.SizeChanged += PanelHostSizeChanged;
-        _customToolbar = GetTemplateChild("PART_CustomToolbar") as HorizontalStackLayout;
-        _customToolbarScroll = GetTemplateChild("PART_CustomToolbarScroll") as View;
-        _tools = GetTemplateChild("PART_Tools") as Grid;
+        _customToolbar = GetTemplateChild("PART_CustomToolbar") as Layout;
 #if WINDOWS
         InitializeDesktopTemplate();
 #endif
@@ -424,23 +321,20 @@ public partial class OrientedImageryView
             _viewport.StateChanged += ViewportChanged;
         }
 
-        if (_layerButton != null) _layerButton.Clicked += SelectLayer;
-        if (_overlaysButton != null) _overlaysButton.Clicked += ShowOverlays;
-        if (_markersButton != null) _markersButton.Clicked += ShowMarkers;
-        if (_modeButton != null) _modeButton.Clicked += ShowModes;
-        if (_moreButton != null) _moreButton.Clicked += ShowMore;
         if (_previousButton != null) _previousButton.Clicked += Previous;
         if (_nextButton != null) _nextButton.Clicked += Next;
         if (_imagePreviousButton != null) _imagePreviousButton.Clicked += Previous;
         if (_imageNextButton != null) _imageNextButton.Clicked += Next;
         if (_pages != null) _pages.SizeChanged += PageSizeChanged;
         Refresh();
+        _ = LookAtSearchPointAsync();
     }
 
     /// <inheritdoc/>
     protected override void OnHandlerChanging(HandlerChangingEventArgs args)
     {
         DetachPlatformPresentation();
+        ReleaseToolbarPresentation();
 #if !WINDOWS
         SetPresentationPage(null);
 #endif
@@ -510,7 +404,7 @@ public partial class OrientedImageryView
         ReleaseDesktopTemplate();
 #endif
         DismissPanel();
-        _toolHighlights.Clear();
+        ReleaseToolbarPresentation();
         if (_panelHost != null) _panelHost.SizeChanged -= PanelHostSizeChanged;
         if (_viewport != null)
         {
@@ -520,28 +414,16 @@ public partial class OrientedImageryView
             _viewport.Markers = null;
         }
 
-        if (_layerButton != null) _layerButton.Clicked -= SelectLayer;
-        if (_overlaysButton != null) _overlaysButton.Clicked -= ShowOverlays;
-        if (_markersButton != null) _markersButton.Clicked -= ShowMarkers;
-        if (_modeButton != null) _modeButton.Clicked -= ShowModes;
-        if (_moreButton != null) _moreButton.Clicked -= ShowMore;
         if (_previousButton != null) _previousButton.Clicked -= Previous;
         if (_nextButton != null) _nextButton.Clicked -= Next;
         if (_imagePreviousButton != null) _imagePreviousButton.Clicked -= Previous;
         if (_imageNextButton != null) _imageNextButton.Clicked -= Next;
         if (_pages != null) _pages.SizeChanged -= PageSizeChanged;
-        if (_customToolbar != null) BindableLayout.SetItemsSource(_customToolbar, null);
         _viewport = null;
-        _title = null;
         _status = null;
+        _statusHost = null;
         _notice = null;
         _busy = null;
-        _layerButton = null;
-        _overlaysButton = null;
-        _overlaysIcon = null;
-        _markersButton = null;
-        _modeButton = null;
-        _moreButton = null;
         _previousButton = null;
         _nextButton = null;
         _imagePreviousButton = null;
@@ -550,10 +432,7 @@ public partial class OrientedImageryView
         _pages = null;
         _pageState = null;
         _selectedPage = -1;
-        _toolButtons = [];
         _customToolbar = null;
-        _customToolbarScroll = null;
-        _tools = null;
         _panelHost = null;
         if (_popupViewer != null) _popupViewer.Popup = null;
         if (_popupOpenButton != null) _popupOpenButton.Command = null;
@@ -607,8 +486,6 @@ public partial class OrientedImageryView
             _viewport.Footprint = _connected ? ViewModel.SelectedImageFootprint : null;
         }
 
-        if (_title != null) _title.Text = SelectedLayer?.Name ?? Text("NoLayerTitle");
-        if (_layerButton != null) _layerButton.IsEnabled = _layers.Count > 0;
         if (_busy != null)
         {
             _busy.IsRunning = _searching || _viewport?.IsBusy == true || SelectedLayer?.LoadStatus == LoadStatus.Loading;
@@ -621,9 +498,17 @@ public partial class OrientedImageryView
         {
             if (GeoView == null) message = Text("NoGeoView");
             else if (_layers.Count == 0) message = Text("NoLayers");
-            else if (SelectedLayer == null) message = Text("NoLayer");
+            else if (SelectedLayer == null) message = Text("NoLayerSelectedWithoutDropdown");
             else if (!_layers.Contains(SelectedLayer)) message = Text("InvalidLayer");
-            else if (ViewModel.SelectedImage == null && !_searching) message = Text("NoImage");
+            else if (_searching || _viewport?.IsBusy == true || SelectedLayer.LoadStatus == LoadStatus.Loading)
+                message = Text("Loading");
+            else if (ViewModel.SelectedImage == null)
+                message = Text(ViewModel.InteractionState switch
+                {
+                    OrientedImageryViewInteractionState.ExploreImages => "NoImagesSelectedExplore",
+                    OrientedImageryViewInteractionState.ExamineImage => "NoImagesSelectedExamine",
+                    _ => "NoImagesSelectedNone",
+                });
         }
         ErrorMessage = error ?? ViewModel.SequentialNavigationError?.Message ?? message;
 
@@ -632,37 +517,10 @@ public partial class OrientedImageryView
             _status.Text = message;
             _status.IsVisible = message != null;
         }
+        if (_statusHost != null)
+            _statusHost.IsVisible = message != null;
 
-        bool hasLayer = SelectedLayer != null && _layers.Contains(SelectedLayer);
-        bool hasOverlays = HasTool<ShowSelectedFootprintVM>() || HasTool<ShowUnselectedFootprintsVM>() || HasTool<ShowCameraMarkersVM>();
-        SetToolState(_overlaysButton, hasLayer, hasOverlays);
-        SetToolState(_markersButton, hasLayer && !_searching, HasTool<AllowAddingMarkersVM>() || HasTool<SelectNewMarkerSymbolVM>() || HasTool<ClearMarkersVM>());
-        SetToolState(_modeButton, hasLayer && !ViewModel.IsSequentialNavigationEnabled, HasTool<ImageSearchModeVM>());
-#if WINDOWS
-        SetToolState(_moreButton, ViewModel.ToggleSequentialNavigationCommand.CanExecute(null), HasTool<SequentialNavigationVM>());
-#else
-        SetToolState(_moreButton, hasLayer, HasTool<SequentialNavigationVM>());
-#endif
-        if (_modeButton?.ImageSource is FontImageSource modeIcon)
-            modeIcon.Glyph = ImageSearchEnabled ? ToolkitIcons.Search : "\uEA74";
-#if !WINDOWS
-        if (_modeButton?.Parent is Grid modeCell && modeCell.Children.OfType<Border>().FirstOrDefault()?.Content is Layout modeContent &&
-            modeContent.Children[0] is Image { Source: FontImageSource mobileModeIcon })
-            mobileModeIcon.Glyph = ImageSearchEnabled ? ToolkitIcons.Search : "\uEA74";
-#endif
-        UpdateToolHighlights();
-        if (_tools != null) _tools.IsVisible = ToolbarItemTemplateSelector == null;
-        if (_customToolbar != null)
-        {
-            if (BindableLayout.GetItemTemplateSelector(_customToolbar) != ToolbarItemTemplateSelector)
-                BindableLayout.SetItemTemplateSelector(_customToolbar, ToolbarItemTemplateSelector);
-            var items = ToolbarItemTemplateSelector == null ? null : _toolbarItems;
-            if (BindableLayout.GetItemsSource(_customToolbar) != items)
-                BindableLayout.SetItemsSource(_customToolbar, items);
-        }
-
-        if (_customToolbarScroll != null)
-            _customToolbarScroll.IsVisible = ToolbarItemTemplateSelector != null;
+        RefreshToolbarPresentation();
         if (_notice != null)
         {
             _notice.Text = ViewModel.SequentialNavigationError?.Message;
@@ -885,12 +743,18 @@ public partial class OrientedImageryView
         string? Glyph = null, string? Geometry = null, bool IsSelection = false,
         Func<bool>? Enabled = null, Func<bool>? Checked = null, Func<View>? Icon = null, bool IsSubmenu = false);
 
-    private const string CurrentFootprintGeometry = "M28.9869 20.3149L30.0339 26.5899C28.6639 26.3499 26.4439 26.0599 23.7139 26.0599C23.5449 26.0599 23.3899 26.0669 23.2279 26.0699L22.1879 27.1099C22.6649 27.0789 23.1699 27.0599 23.7139 27.0599C28.1639 27.0599 31.2539 27.8599 31.2539 27.8599L29.8559 19.4469L28.9869 20.3149ZM14.0529 27.9879C12.6329 28.3739 11.0459 28.6599 8.79392 28.6599C5.78392 28.6599 3.42392 27.7699 2.36392 27.2899L6.04392 5.07993C7.06392 5.37993 8.58392 5.72993 10.5939 5.72993C13.0939 5.72993 14.5939 5.29993 16.0339 4.87993C17.4839 4.45993 18.8539 4.06993 21.3239 4.06993C23.5139 4.06993 25.4339 4.39993 26.3739 4.58993L28.0719 14.7939L29.1319 15.1019L27.2539 3.75993C27.2539 3.75993 24.5839 3.06993 21.3239 3.06993C16.1839 3.06993 15.4039 4.72993 10.5939 4.72993C7.77392 4.72993 5.95392 3.98993 5.25392 3.75993L1.25392 27.8599C1.25392 27.8599 4.34392 29.6599 8.79392 29.6599C11.1669 29.6599 12.8529 29.3499 14.3309 28.9429L14.0529 27.9879ZM10.7539 9.85993C9.92392 9.85993 9.25392 10.5299 9.25392 11.3599C9.25392 12.1899 9.92392 12.8599 10.7539 12.8599C11.5839 12.8599 12.2539 12.1899 12.2539 11.3599C12.2539 10.5299 11.5839 9.85993 10.7539 9.85993ZM10.7539 11.8599C10.4739 11.8599 10.2539 11.6399 10.2539 11.3599C10.2539 11.0799 10.4739 10.8599 10.7539 10.8599C11.0339 10.8599 11.2539 11.0799 11.2539 11.3599C11.2539 11.6399 11.0339 11.8599 10.7539 11.8599ZM12.9699 12.4929C12.7409 12.939 12.3831 13.3059 11.9429 13.5459L13.0966 17.2199L15.3639 25.3399L16.6639 29.7999L29.2539 17.2199L12.9699 12.4929ZM14.0139 17.0699L12.9839 13.5299L27.3539 17.6999L17.1539 27.8999L14.0139 17.0699Z";
+    private const string CurrentFootprintGeometry = "F1 M9.16358 0L7.67295 0L0 0L4.5818 7.6L11.4546 19H16.5455L28 0H9.16358Z M15.8314 17.7333H12.1686L2.26954 1.26667H25.7305L15.8314 17.7333Z";
 
-    private const string OverlayGeometry = "M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM21.8676 26H20.1324L13.5324 15H28.4676L21.8676 26Z";
-    private const string LayerGeometry = "M12 1L23 7L12 13L1 7ZM1 12L12 18L23 12M1 17L12 23L23 17";
+    private const string OverlayGeometry = "M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z";
+    private const string ExploreImagesGeometry =
+        "F1 M26.7358 19.6048L27.7447 18.5074L32.9375 12.8587L24.2416 11.0883L11.1977 8.43275L7.75234 12.1806L13.9879 33.4721L26.7358 19.6048Z " +
+        "M9.1681 12.5122L11.647 9.81567L30.469 13.6722L14.5913 30.944L9.1681 12.5122Z " +
+        "M6.59961 5.13663C7.92743 5.13684 8.99902 6.21202 8.99902 7.54385C8.99895 8.87562 7.92738 9.95087 6.59961 9.95108C5.27167 9.95107 4.1993 8.87575 4.19922 7.54385C4.19922 6.21189 5.27162 5.13664 6.59961 5.13663Z " +
+        "M6.59961 6.74112C6.15162 6.74113 5.79883 7.09452 5.79883 7.54385C5.7989 7.99312 6.15167 8.34658 6.59961 8.34659C7.04738 8.34638 7.39934 7.99299 7.39941 7.54385C7.39941 7.09465 7.04742 6.74132 6.59961 6.74112Z " +
+        "M21.6003 19.6003L20.2007 21L14.6003 15.3997L16 14L21.6003 19.6003Z " +
+        "M21.6003 15.3997L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3997Z";
+    private const string NavigationGeometry = "M6.44996 17.216L14.431 13.371L17.411 6.25595L10.295 9.23595L6.44996 17.216ZM13.191 12.858L8.59196 15.074L10.808 10.474L13.191 12.858ZM12 1.19995C9.86392 1.19995 7.77585 1.83336 5.9998 3.02008C4.22375 4.2068 2.83948 5.89353 2.02206 7.86697C1.20463 9.84041 0.990755 12.0119 1.40747 14.1069C1.8242 16.2019 2.8528 18.1263 4.3632 19.6367C5.87361 21.1471 7.79799 22.1757 9.89298 22.5924C11.988 23.0092 14.1595 22.7953 16.1329 21.9778C18.1064 21.1604 19.7931 19.7762 20.9798 18.0001C22.1665 16.2241 22.8 14.136 22.8 12C22.7968 9.13659 21.6579 6.39141 19.6332 4.36671C17.6085 2.342 14.8633 1.20313 12 1.19995ZM12 21.7999C10.0617 21.7999 8.16697 21.2252 6.55537 20.1484C4.94377 19.0715 3.68768 17.541 2.94594 15.7502C2.2042 13.9595 2.01013 11.9891 2.38826 10.0881C2.7664 8.18705 3.69975 6.44086 5.07031 5.0703C6.44086 3.69975 8.18706 2.76639 10.0881 2.38826C11.9891 2.01012 13.9595 2.20419 15.7503 2.94593C17.541 3.68767 19.0715 4.94376 20.1484 6.55536C21.2252 8.16696 21.8 10.0617 21.8 12C21.7973 14.5983 20.764 17.0894 18.9267 18.9267C17.0894 20.764 14.5983 21.7973 12 21.7999Z";
     private const string SequenceGeometry = "M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z";
-    private const string ReturnGeometry = "M4 18H3V29H29V3H12V4H28V28H4V18ZM5.66 13.354L1.807 9.5L5.66 5.646L6.367 6.353L3.767 9H11.5C13.7489 8.9923 15.9086 9.87918 17.503 11.4652C19.0974 13.0512 19.9958 15.2061 20 17.455V22.855H19V17.455C18.9956 13.3147 15.6403 9.95941 11.5 9.955H3.675L6.367 12.646L5.66 13.354Z";
 
     private static View MenuIcon(string? glyph, string? geometry)
     {
@@ -903,8 +767,8 @@ public partial class OrientedImageryView
             var path = new Microsoft.Maui.Controls.Shapes.Path
             {
                 Data = (Microsoft.Maui.Controls.Shapes.Geometry)new PathGeometryConverter().ConvertFromInvariantString(geometry),
-                Fill = geometry == LayerGeometry ? Colors.Transparent : accent,
-                Stroke = geometry == LayerGeometry ? accent : Colors.Transparent,
+                Fill = accent,
+                Stroke = Colors.Transparent,
                 StrokeThickness = 1.5, Aspect = Stretch.Uniform,
                 WidthRequest = 22, HeightRequest = 22, VerticalOptions = LayoutOptions.Center,
             };
@@ -931,9 +795,21 @@ public partial class OrientedImageryView
 
     private View FootprintIcon(bool additional) => MenuIcon(null, additional ? OverlayGeometry : CurrentFootprintGeometry);
 
+    private static View ImageModeIcon(bool explore) => explore
+        ? MenuIcon(null, ExploreImagesGeometry)
+        : MenuIcon("\uEA74", null);
+
     private View CameraLocationsIcon()
     {
-        var icon = OutlineIcon("M4 1A3 3 0 1 0 4 7A3 3 0 1 0 4 1ZM20 1A3 3 0 1 0 20 7A3 3 0 1 0 20 1ZM12 9A3 3 0 1 0 12 15A3 3 0 1 0 12 9ZM4 17A3 3 0 1 0 4 23A3 3 0 1 0 4 17ZM20 17A3 3 0 1 0 20 23A3 3 0 1 0 20 17Z");
+        var icon = (Microsoft.Maui.Controls.Shapes.Path)MenuIcon(null,
+            "M5.5 23A3.5 3.5 0 1 0 12.5 23A3.5 3.5 0 1 0 5.5 23Z " +
+            "M13.5 17A3.5 3.5 0 1 0 20.5 17A3.5 3.5 0 1 0 13.5 17Z " +
+            "M5.5 5A3.5 3.5 0 1 0 12.5 5A3.5 3.5 0 1 0 5.5 5Z " +
+            "M21.5 26A3.5 3.5 0 1 0 28.5 26A3.5 3.5 0 1 0 21.5 26Z " +
+            "M19.5 8A3.5 3.5 0 1 0 26.5 8A3.5 3.5 0 1 0 19.5 8Z");
+        icon.Stroke = icon.Fill;
+        icon.Fill = Colors.Transparent;
+        icon.StrokeThickness = 1;
         return icon;
     }
 
@@ -983,72 +859,10 @@ public partial class OrientedImageryView
         UpdatePanelSize();
     }
 
-    private void SelectLayer(object? sender, EventArgs e)
-    {
-        if (sender is View anchor)
-        {
-            if (TogglePanel(anchor)) return;
-            _panelKind = "Layers";
-            ShowActions(anchor, Text("SelectLayer"), _layers.Select(layer => new MenuAction(layer.Name, () => SelectedLayer = layer, layer == SelectedLayer,
-                Geometry: LayerGeometry, IsSelection: true)).ToArray());
-        }
-    }
-
-    private void ShowModes(object? sender, EventArgs e)
-    {
-        if (sender is not View anchor) return;
-        if (TogglePanel(anchor)) return;
-        _panelKind = "Modes";
-        ShowActions(anchor, Text("ModeSelection"), new[]
-        {
-            new MenuAction(Text("SelectMode"), () => SelectImageMode(false), Glyph: "\uEA74", IsSelection: true, Checked: () => !ImageSearchEnabled),
-            new MenuAction(Text("SearchMode"), () => SelectImageMode(true), Glyph: ToolkitIcons.Search, IsSelection: true, Checked: () => ImageSearchEnabled),
-        });
-    }
-
-    internal void SelectImageMode(bool search)
-    {
-        _imageSearchEnabled = search;
-        ViewModel.InteractionState = search ? OrientedImageryViewInteractionState.ExploreImages : OrientedImageryViewInteractionState.ExamineImage;
-    }
-
-    private void ShowMarkers(object? sender, EventArgs e)
-    {
-        if (sender is not View anchor) return;
-        if (TogglePanel(anchor)) return;
-        OpenMarkerTools(anchor);
-    }
-
-    private void OpenMarkerTools(View anchor)
-    {
-        DismissPanel();
-        _panelKind = "Markers";
-        var content = PanelContent(Text("MarkerTools"));
-        if (HasTool<AllowAddingMarkersVM>())
-            AddSwitch(content, "AddMarker", () => IsAddingMarkers, SetAddingMarkers,
-                () => MenuIcon("\uE8ED", null));
-        if (_toolbarItems.OfType<SelectNewMarkerSymbolVM>().FirstOrDefault() is { } picker)
-        {
-            var preview = new SymbolDisplay { Symbol = picker.SelectedSymbol, WidthRequest = 24, HeightRequest = 24, VerticalOptions = LayoutOptions.Center };
-            AddActionRow(content, new MenuAction(Text("SelectMarkers"), () => ShowSymbols(anchor),
-                Icon: () => preview, IsSubmenu: true, Enabled: () => IsAddingMarkers));
-            _panelUpdates.Add(() => preview.Symbol = picker.SelectedSymbol);
-            PropertyChangedEventHandler changed = (_, _) => DispatchUpdate(UpdateOpenPanel);
-            picker.PropertyChanged += changed;
-            _panelCleanup.Add(() => picker.PropertyChanged -= changed);
-        }
-        if (HasTool<ClearMarkersVM>())
-            AddActionRow(content, new MenuAction(Text("ClearMarkers"), () => ViewModel.ClearMarkersCommand.Execute(null),
-                Enabled: () => ViewModel.ClearMarkersCommand.CanExecute(null), Glyph: "\uE83E"));
-        PresentPanel(anchor, content);
-    }
-
-    private void ShowSymbols(View anchor)
+    private void ShowSymbols(View anchor, SelectNewMarkerSymbolVM picker, Action back)
     {
         DismissPanel();
         _panelKind = "Symbols";
-        var picker = _toolbarItems.OfType<SelectNewMarkerSymbolVM>().FirstOrDefault();
-        if (picker == null) return;
         var actions = picker.SymbolOptions.Select((symbol, index) =>
         {
             string? key = symbol is SimpleMarkerSymbol simple ? simple.Style switch
@@ -1061,12 +875,12 @@ public partial class OrientedImageryView
                 _ => null,
             } : null;
             string title = key != null ? Text("Marker" + key) : string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), index + 1);
-            return new MenuAction(title, () => { picker.SelectedSymbol = symbol; OpenMarkerTools(anchor); },
+            return new MenuAction(title, () => { picker.SelectedSymbol = symbol; back(); },
                 IsSelection: true, Checked: () => symbol == picker.SelectedSymbol, Enabled: () => IsAddingMarkers,
                 Icon: () => MarkerOptionIcon(symbol));
         }).ToArray();
 #if WINDOWS
-        ShowActions(anchor, Text("MarkerSelection"), actions, back: () => OpenMarkerTools(anchor));
+        ShowActions(anchor, Text("MarkerSelection"), actions, back);
 #else
         var content = PanelContent(Text("MarkerSelection"));
         _symbolGrid = new Grid { ColumnSpacing = 4, RowSpacing = 0 };
@@ -1104,31 +918,17 @@ public partial class OrientedImageryView
             _symbolTiles.Add(tile);
         }
         content.Add(_symbolGrid);
-        PresentPanel(anchor, content, back: () => OpenMarkerTools(anchor));
+        PresentPanel(anchor, content, back);
 #endif
         PropertyChangedEventHandler changed = (_, _) => DispatchUpdate(UpdateOpenPanel);
         picker.PropertyChanged += changed;
         _panelCleanup.Add(() => picker.PropertyChanged -= changed);
         System.Collections.Specialized.NotifyCollectionChangedEventHandler optionsChanged = (_, _) => DispatchUpdate(() =>
         {
-            if (_panelKind == "Symbols") ShowSymbols(anchor);
+            if (_panelKind == "Symbols") ShowSymbols(anchor, picker, back);
         });
         picker.SymbolOptions.CollectionChanged += optionsChanged;
         _panelCleanup.Add(() => picker.SymbolOptions.CollectionChanged -= optionsChanged);
-    }
-
-    private void ShowMore(object? sender, EventArgs e)
-    {
-        if (sender is not View anchor) return;
-        if (TogglePanel(anchor)) return;
-        _panelKind = "More";
-        var actions = new List<MenuAction>();
-        if (HasTool<SequentialNavigationVM>())
-            actions.Add(new MenuAction(Text(ViewModel.IsSequentialNavigationEnabled ? "ReturnToResults" : "SequentialMode"),
-                () => ViewModel.ToggleSequentialNavigationCommand.Execute(null),
-                Enabled: () => ViewModel.ToggleSequentialNavigationCommand.CanExecute(null),
-                Geometry: ViewModel.IsSequentialNavigationEnabled ? ReturnGeometry : SequenceGeometry));
-        ShowActions(anchor, Text("MoreTools"), actions);
     }
 
     private void ShowActions(View anchor, string title, IReadOnlyList<MenuAction> actions, Action? back = null)
@@ -1234,23 +1034,6 @@ public partial class OrientedImageryView
         AddPanelItem(content, row);
     }
 
-    private void ShowOverlays(object? sender, EventArgs e)
-    {
-        if (sender is not View anchor) return;
-        if (TogglePanel(anchor)) return;
-        DismissPanel();
-        _panelKind = "Overlays";
-        var content = PanelContent(Text("OverlaySelection"));
-        if (HasTool<ShowSelectedFootprintVM>()) AddSwitch(content, "MobileCurrentFootprint", () => ViewModel.ShowSelectedFootprint, value => ViewModel.ShowSelectedFootprint = value,
-            () => FootprintIcon(false));
-        if (HasTool<ShowUnselectedFootprintsVM>()) AddSwitch(content, "MobileAdditionalFootprints", () => ViewModel.ShowUnselectedFootprints, value => ViewModel.ShowUnselectedFootprints = value,
-            () => FootprintIcon(true));
-        if (HasTool<ShowCameraMarkersVM>()) AddSwitch(content, "MobileCameraLocations", () => ViewModel.ShowCameraLocations, value => ViewModel.ShowCameraLocations = value,
-            CameraLocationsIcon);
-        if (HasTool<AutoUpdateFootprintVM>()) AddSwitch(content, "AutoUpdate", () => ViewModel.AutoUpdateFootprint, value => ViewModel.AutoUpdateFootprint = value);
-        PresentPanel(anchor, content);
-    }
-
     private static VerticalStackLayout PanelContent(string title)
     {
         var content = new VerticalStackLayout { Spacing = 2, Padding = 8 };
@@ -1268,7 +1051,7 @@ public partial class OrientedImageryView
         return content;
     }
 
-    private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View>? icon = null)
+    private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View>? icon = null, Func<bool>? enabled = null)
     {
         var row = new Grid { ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }, ColumnSpacing = 6 };
         var label = new Label { Text = Text(key), VerticalOptions = LayoutOptions.Center };
@@ -1284,7 +1067,11 @@ public partial class OrientedImageryView
         toggle.OnColor = Color.FromArgb("#34C759");
 #endif
         SemanticProperties.SetDescription(toggle, Text(key));
-        toggle.Toggled += (_, e) => { if (!_updatingPanel && _connected && _panelAnchor != null) set(e.Value); };
+        toggle.Toggled += (_, e) =>
+        {
+            if (!_updatingPanel && _connected && _panelAnchor != null && (enabled?.Invoke() ?? true))
+                set(e.Value);
+        };
         if (icon != null)
         {
             var view = FlyoutIcon(icon());
@@ -1292,7 +1079,12 @@ public partial class OrientedImageryView
         }
         row.Add(label, 1);
         row.Add(toggle, 2);
-        _panelUpdates.Add(() => toggle.IsToggled = get());
+        _panelUpdates.Add(() =>
+        {
+            toggle.IsToggled = get();
+            row.IsEnabled = enabled?.Invoke() ?? true;
+            row.Opacity = row.IsEnabled ? 1 : 0.45;
+        });
         AddPanelItem(content, row);
     }
 
@@ -1429,7 +1221,7 @@ public partial class OrientedImageryView
         _panel.Margin = new Thickness(x, y, 4, 4);
         if (_panelBackdrop != null)
         {
-            double toolbarBottom = _tools is null ? y : _tools.Y + _tools.Height;
+            double toolbarBottom = _customToolbar is null ? y : _customToolbar.Y + _customToolbar.Height;
             _panelBackdrop.Margin = new Thickness(0, toolbarBottom, 0, 0);
         }
         double width = Math.Max(0, panelWidth - _panelLayout.Padding.HorizontalThickness - 2 * _panel.StrokeThickness);
@@ -1518,71 +1310,10 @@ public partial class OrientedImageryView
         anchor?.Focus();
     }
 
-    private readonly Dictionary<Button, bool> _toolHighlights = new();
-
     private void UpdateToolHighlights()
     {
-        if (_overlaysIcon != null && _overlaysButton != null)
-        {
-            _overlaysIcon.IsVisible = _overlaysButton.IsVisible;
-            _overlaysIcon.Opacity = _overlaysButton.IsEnabled ? 1 : 0.45;
-            _overlaysIcon.Fill = _overlaysButton == _panelAnchor ? Colors.White : Color.FromArgb("#007AC2");
-#if __IOS__ && !MACCATALYST
-            _overlaysIcon.Fill = _overlaysButton == _panelAnchor ? Colors.White : IosAccent;
-#endif
-        }
-        foreach (var button in _toolButtons)
-        {
-            if (button == null) continue;
-            bool active = button == _panelAnchor || (button == _markersButton && IsAddingMarkers) ||
-                (button == _moreButton && ViewModel.IsSequentialNavigationEnabled);
-            bool changed = !_toolHighlights.TryGetValue(button, out bool previous) || previous != active;
-            _toolHighlights[button] = active;
-            if (changed)
-            {
-                button.BackgroundColor = active ? Color.FromArgb("#007AC2") : Colors.Transparent;
-                if (active)
-                    button.TextColor = Colors.White;
-                else
-                    button.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
-                if (button.ImageSource is FontImageSource icon)
-                    icon.Color = active ? Colors.White : Color.FromArgb("#007AC2");
-            }
-#if !WINDOWS
-            if (button.Parent is Grid cell && cell.Children.OfType<Border>().FirstOrDefault() is { Content: Layout content } pill)
-            {
-                pill.Opacity = button.IsEnabled ? 1 : 0.45;
-                if (!changed) continue;
-                pill.BackgroundColor = active ? Color.FromArgb("#007AC2") : Colors.Transparent;
-                button.BackgroundColor = Colors.Transparent;
-                foreach (var label in content.Children.OfType<Label>())
-                {
-                    if (label == content.Children[0])
-                        label.TextColor = active ? Colors.White : Color.FromArgb("#007AC2");
-                    else if (active)
-                        label.TextColor = Colors.White;
-                    else
-                        label.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-                }
-                if (content.Children[0] is Image { Source: FontImageSource mobileIcon })
-                    mobileIcon.Color = active ? Colors.White : Color.FromArgb("#007AC2");
-#if __IOS__ && !MACCATALYST
-                if (active)
-                    pill.BackgroundColor = IosAccent;
-                else
-                    pill.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
-                foreach (var label in content.Children.OfType<Label>())
-                    label.TextColor = active ? Colors.White : IosAccent;
-                if (content.Children[0] is Image { Source: FontImageSource iosIcon })
-                    iosIcon.Color = active ? Colors.White : IosAccent;
-#endif
-            }
-#endif
-        }
-        if (_modeButton != null)
-            SemanticProperties.SetHint(_modeButton, Text(ImageSearchEnabled ? "SearchMode" : "SelectMode"));
-        if (_markersButton != null)
-            SemanticProperties.SetHint(_markersButton, Text(IsAddingMarkers ? "On" : "Off"));
+        foreach (var update in _toolbarUpdates)
+            update();
     }
 
     partial void RefreshDesktopPresentation();
