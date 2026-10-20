@@ -157,8 +157,23 @@ internal sealed class HyperlinkLabelHandler : ViewHandler<HyperlinkLabel, UIText
 
 internal sealed class HyperlinkTextView : UITextView
 {
+    private readonly PopupScrollActions _scrollActions = new();
+
+    public override UIAccessibilityCustomAction[]? AccessibilityCustomActions
+    {
+        get => _scrollActions.GetActions(this, base.AccessibilityCustomActions);
+        set => base.AccessibilityCustomActions = value;
+    }
+
     // This text renderer cannot scroll; its popup owns vertical accessibility scrolling.
     public override bool AccessibilityScroll(UIAccessibilityScrollDirection direction) =>
         NativePopupScrollView.ForwardVerticalScroll(this, direction) || base.AccessibilityScroll(direction);
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+            _scrollActions.Dispose();
+        base.Dispose(disposing);
+    }
 }
 #endif
