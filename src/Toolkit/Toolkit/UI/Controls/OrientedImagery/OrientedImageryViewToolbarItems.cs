@@ -287,7 +287,11 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
     private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(OrientedImageryViewModel.InteractionState))
+        {
+            if (ViewModel != null && ImageSearchModes.Contains(ViewModel.InteractionState))
+                SetProperty(ref _selectedInteractionState, ViewModel.InteractionState, nameof(SelectedInteractionState));
             OnPropertyChanged(nameof(IsImageSelectionEnabled));
+        }
     }
 }
 
