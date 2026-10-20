@@ -1169,9 +1169,6 @@
   <data name="EnterSequentialNavigationModeLabel" xml:space="preserve">
     <value>Sequential navigation</value>
   </data>
-  <data name="ExitSequentialNavigationModeLabel" xml:space="preserve">
-    <value>Return to results</value>
-  </data>
   <data name="OrientedImageryViewImageSearchModeExplore" xml:space="preserve">
     <value>Explore images</value>
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
