@@ -6,13 +6,17 @@
         <CollectionView x:Name="SamplesList" SelectionChanged="SamplesList_SelectionChanged" Margin="{OnPlatform 0, WinUI=20}" SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="10,6" HeightRequest="{OnPlatform 60, WinUI=45}">
+                    <Grid Padding="10,6" MinimumHeightRequest="{OnPlatform 60, WinUI=45}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Label Text="{Binding Name}" TextColor="CornflowerBlue" />
-                        <Label Grid.Row="1" Text="{Binding Description}" TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" FontSize="12" />
+                        <Label Text="{Binding Name}" TextColor="CornflowerBlue" LineBreakMode="WordWrap" />
+                        <Label Grid.Row="1" Text="{Binding Description}" TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" FontSize="12" LineBreakMode="WordWrap" />
+                        <!-- Separator: negative margin cancels the grid padding so the line spans the full item width -->
+                        <BoxView Grid.Row="2" HeightRequest="1" Margin="-10,6,-10,-6"
+                                 Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
