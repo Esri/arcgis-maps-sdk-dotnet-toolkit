@@ -41,24 +41,43 @@ internal sealed class NativePopupScrollView : MauiScrollView
         ShouldGroupAccessibilityChildren = true;
     }
 
-    internal static bool ForwardVerticalScroll(UIView view, UIAccessibilityScrollDirection direction)
+    internal static NativePopupScrollView? FindParent(UIView view)
     {
-        if (direction is UIAccessibilityScrollDirection.Up or UIAccessibilityScrollDirection.Down)
+        for (var parent = view.Superview; parent is not null; parent = parent.Superview)
         {
-            for (var parent = view.Superview; parent is not null; parent = parent.Superview)
-            {
-                if (parent is NativePopupScrollView scrollView)
-                    return scrollView.AccessibilityScroll(direction);
-            }
+            if (parent is NativePopupScrollView scrollView)
+                return scrollView;
         }
-        return false;
+        return null;
+    }
+
+    internal static bool ForwardVerticalScroll(UIView view, UIAccessibilityScrollDirection direction) =>
+        direction is UIAccessibilityScrollDirection.Up or UIAccessibilityScrollDirection.Down &&
+        FindParent(view)?.AccessibilityScroll(direction) == true;
+
+    internal bool CanScroll(UIAccessibilityScrollDirection direction)
+    {
+        if (Window is null || Hidden || !ScrollEnabled)
+            return false;
+
+        var inset = AdjustedContentInset;
+        if (Bounds.Height <= inset.Top + inset.Bottom)
+            return false;
+
+        double tolerance = 0.5 / Window.Screen.Scale;
+        return direction switch
+        {
+            UIAccessibilityScrollDirection.Up => ContentOffset.Y > -inset.Top + tolerance,
+            UIAccessibilityScrollDirection.Down => ContentOffset.Y < ContentSize.Height - Bounds.Height + inset.Bottom - tolerance,
+            _ => false,
+        };
     }
 
     public override bool AccessibilityScroll(UIAccessibilityScrollDirection direction)
     {
         if (direction is not (UIAccessibilityScrollDirection.Up or UIAccessibilityScrollDirection.Down))
             return base.AccessibilityScroll(direction);
-        if (Window is null || Hidden || !ScrollEnabled)
+        if (!CanScroll(direction))
             return false;
 
         var inset = AdjustedContentInset;
@@ -154,6 +173,47 @@ internal sealed class NativePopupScrollView : MauiScrollView
         if (disposing)
             DisconnectAccessibilityFocusObserver();
         base.Dispose(disposing);
+    }
+}
+
+internal sealed class PopupScrollActions : IDisposable
+{
+    private UIAccessibilityCustomAction? _up;
+    private UIAccessibilityCustomAction? _down;
+
+    internal UIAccessibilityCustomAction[]? GetActions(UIView view, UIAccessibilityCustomAction[]? existing)
+    {
+        if (NativePopupScrollView.FindParent(view) is not NativePopupScrollView scrollView)
+            return existing;
+
+        var actions = new List<UIAccessibilityCustomAction>(existing ?? Array.Empty<UIAccessibilityCustomAction>());
+        if (scrollView.CanScroll(UIAccessibilityScrollDirection.Up))
+        {
+            _up ??= CreateAction(view, "PopupViewerScrollUp", UIAccessibilityScrollDirection.Up);
+            actions.Add(_up);
+        }
+        if (scrollView.CanScroll(UIAccessibilityScrollDirection.Down))
+        {
+            _down ??= CreateAction(view, "PopupViewerScrollDown", UIAccessibilityScrollDirection.Down);
+            actions.Add(_down);
+        }
+        return actions.ToArray();
+    }
+
+    private static UIAccessibilityCustomAction CreateAction(UIView view, string resourceKey, UIAccessibilityScrollDirection direction)
+    {
+        var target = new WeakReference<UIView>(view);
+        UIAccessibilityCustomActionHandler activate = _ =>
+            target.TryGetTarget(out var current) && NativePopupScrollView.ForwardVerticalScroll(current, direction);
+        return new UIAccessibilityCustomAction(Properties.Resources.GetString(resourceKey), activate);
+    }
+
+    public void Dispose()
+    {
+        _up?.Dispose();
+        _down?.Dispose();
+        _up = null;
+        _down = null;
     }
 }
 #endif
