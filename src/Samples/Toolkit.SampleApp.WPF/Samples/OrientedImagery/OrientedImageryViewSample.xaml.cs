@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private const string SceneBasemap = "https://runtime.maps.arcgis.com/home/item.html?id=0560e29930dc4d5ebeb58c635c0909c9";
         private const string ElevationUrl = "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer";
 
-        private List<string> _layerUrls =
+        private List<string> _exampleLayers =
         [
             "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/ArcGIS/rest/services/Oakwood_camori_corrected/FeatureServer/0",
             "https://services8.arcgis.com/joda3ARQ9znLf0hf/ArcGIS/rest/services/HopefulHeights_360/FeatureServer/1",
@@ -43,7 +43,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private ElevationSource _elevationSource;
 
         private bool _usingAlternateToolbarStyling = false;
-        private bool _layersRemoved = false;
 
         public OrientedImageryView()
         {
@@ -59,42 +58,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             MainOrientedImageryView.GeoView = _currentGeoView;
             _orientedImageryVM = MainOrientedImageryView.ViewModel;
 
-            _ = InitializeAsync();
+            SelectLayerDropdown.ItemsSource = _exampleLayers;
         }
 
-        private async Task InitializeAsync()
+        private async Task ApplyLayer(string layerUrl)
         {
             try
             {
-                foreach (var layerUrl in _layerUrls)
+                var layer = new OrientedImageryLayer(new Uri(layerUrl));
+                if (_usingMapView)
                 {
-                    _mapView.Map!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
-                    _sceneView.Scene!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl))
-                    {
-                        SceneProperties = new LayerSceneProperties() {  SurfacePlacement = SurfacePlacement.Absolute }
-                    });
+                    _mapView.Map!.OperationalLayers.Clear();
+                    _mapView.Map!.OperationalLayers.Add(layer);
+                    _orientedImageryVM.OrientedImageryLayer = layer;
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-        }
-
-        private async Task AddLayer(string layerUrl)
-        {
-            if (_layerUrls.Contains(layerUrl))
-                return;
-
-            try
-            {
-                _mapView.Map!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
-
-                var sceneLayer = new OrientedImageryLayer(new Uri(layerUrl));
-                sceneLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Absolute;
-                _sceneView.Scene!.OperationalLayers.Add(sceneLayer);
-
-                _layerUrls.Add(layerUrl);
+                else
+                {
+                    layer.SceneProperties.SurfacePlacement = SurfacePlacement.Absolute;
+                    _sceneView.Scene!.OperationalLayers.Clear();
+                    _sceneView.Scene!.OperationalLayers.Add(layer);
+                    _orientedImageryVM.OrientedImageryLayer = layer;
+                }
+                await layer.LoadAsync();
+                _currentGeoView.SetViewpoint(new Viewpoint(layer.FullExtent!));
             }
             catch (Exception ex)
             {
@@ -102,9 +88,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             }
         }
 
-        private async void AddLayerButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void SelectLayerDropdown_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            await AddLayer(LayerUriTextBox.Text);
+            await ApplyLayer((string)SelectLayerDropdown.SelectedItem);
+        }
+
+        private void AddLayerButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            try
+            {
+                var _ = new OrientedImageryLayer(new Uri(LayerUriTextBox.Text));
+                _exampleLayers.Add(LayerUriTextBox.Text);
+                SelectLayerDropdown.ItemsSource = null;
+                SelectLayerDropdown.ItemsSource = _exampleLayers;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
 
         private GridLength _orientedImageryPanelWidth = new GridLength(2, GridUnitType.Star);
@@ -164,6 +165,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _usingMapView = !_usingMapView;
             MainOrientedImageryView.GeoView = _currentGeoView;
             GeoViewContainer.Children.Add(_currentGeoView);
+            SelectLayerDropdown.SelectedItem = null;
+            _orientedImageryVM.OrientedImageryLayer = null;
         }
 
         private void ToggleElevationSurfaceButton_Click(object sender, RoutedEventArgs e)
@@ -203,7 +206,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private int _scenePropertiesState = 0;
         private void ScenePropertiesButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MainOrientedImageryView.SelectedLayer is not OrientedImageryLayer activeLayer)
+            if (_orientedImageryVM.OrientedImageryLayer is not OrientedImageryLayer activeLayer)
                 return;
 
             if (_scenePropertiesState == 0)
@@ -281,30 +284,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             }
         }
 
-        private void RemoveReAddLayers_Click(object sender, RoutedEventArgs e)
-        {
-            if (_layersRemoved)
-            {
-                foreach (var layerUrl in _layerUrls)
-                {
-                    _mapView.Map!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
-                    _sceneView.Scene!.OperationalLayers.Add(new OrientedImageryLayer(new Uri(layerUrl)));
-                }
-            }
-            else
-            {
-                _mapView.Map!.OperationalLayers.Clear();
-                _sceneView.Scene!.OperationalLayers.Clear();
-            }
-            _layersRemoved = !_layersRemoved;
-        }
-
-        private void RemoveLastLayer_Click(object sender, RoutedEventArgs e)
-        {
-            _mapView.Map!.OperationalLayers.RemoveAt(_mapView.Map.OperationalLayers.Count - 1);
-            _sceneView.Scene!.OperationalLayers.RemoveAt(_sceneView.Scene.OperationalLayers.Count - 1);
-        }
-
         private async void BackgroundThreadUpdate_Click(object sender, RoutedEventArgs e)
         {
             await Task.Run(() =>
@@ -324,11 +303,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 _orientedImageryVM.ShowCameraLocations = !_orientedImageryVM.ShowCameraLocations;
                 _orientedImageryVM.ShowUnselectedFootprints = !_orientedImageryVM.ShowUnselectedFootprints;
             });
-        }
-
-        private void ToggleLayerDropdownButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainOrientedImageryView.IsLayerSelectionDropdownEnabled = !MainOrientedImageryView.IsLayerSelectionDropdownEnabled;
         }
     }
 

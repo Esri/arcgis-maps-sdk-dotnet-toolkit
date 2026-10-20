@@ -111,7 +111,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             _managedMarkers.Clear();
             Markers.Clear();
 
-            _oiLayer = value;
+            SetProperty(ref _oiLayer, value);
             if (_oiLayer != null)
             {
                 _oiLayer.PropertyChanged += OrientedImageryLayer_PropertyChanged;
