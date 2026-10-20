@@ -94,6 +94,8 @@ internal sealed class HyperlinkContentViewHandler : ViewHandler<HyperlinkContent
 
 internal sealed class HyperlinkContentButton : UIButton
 {
+    private CGRect? _focusBounds;
+
     internal NativeContentView ContentPanel { get; } = new()
     {
         UserInteractionEnabled = false,
@@ -111,9 +113,14 @@ internal sealed class HyperlinkContentButton : UIButton
     public override void LayoutSubviews()
     {
         base.LayoutSubviews();
-        ContentPanel.Frame = Bounds;
-        using var effect = UIFocusHaloEffect.Create(Bounds);
-        FocusEffect = effect;
+        var bounds = Bounds;
+        ContentPanel.Frame = bounds;
+        if (_focusBounds != bounds)
+        {
+            using var effect = UIFocusHaloEffect.Create(bounds);
+            FocusEffect = effect;
+            _focusBounds = bounds;
+        }
     }
 }
 #endif
