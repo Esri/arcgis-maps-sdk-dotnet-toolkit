@@ -5,36 +5,33 @@
              xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              x:Class="Toolkit.SampleApp.Maui.Samples.OrientedImageryViewSample">
-    <Grid x:Name="LayoutRoot" RowDefinitions="*,0" ColumnDefinitions="*,0" RowSpacing="0" ColumnSpacing="0">
-        <Grid x:Name="MapHost">
-            <esri:MapView x:Name="MyMapView" />
-            <Button x:Name="OpenButton"
-                    Text="{internal:LocalizedString Key=OrientedImageryViewOpen}"
-                    AutomationId="OpenOrientedImagery"
-                    HorizontalOptions="End" VerticalOptions="Start"
-                    Margin="8" Clicked="OpenClicked" />
-            <Button x:Name="CloseButton"
-                    Text="{internal:LocalizedString Key=OrientedImageryViewClose}"
-                    AutomationId="CloseOrientedImagery"
-                    HorizontalOptions="End" VerticalOptions="Start"
-                    Margin="8" IsVisible="False" Clicked="CloseClicked" />
-            <Label x:Name="LoadError" Margin="12" Padding="8"
-                   BackgroundColor="{AppThemeBinding Light=White, Dark=#202020}"
-                   TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                   VerticalOptions="End" IsVisible="False" />
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
+        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Padding="8">
+            <Label Text="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
+                   VerticalOptions="Center" />
+            <Picker x:Name="LayerPicker" Grid.Column="1"
+                    Title="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
+                    SemanticProperties.Description="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
+                    AutomationId="SampleOrientedImageryLayerPicker"
+                    SelectedIndexChanged="LayerSelected" />
         </Grid>
-        <Grid x:Name="ViewerHost" Grid.Row="1" RowDefinitions="20,*" ColumnDefinitions="*,0" IsVisible="False"
-              BackgroundColor="{AppThemeBinding Light=White, Dark=#202020}">
-            <Grid x:Name="ResizeHandle"
-                  SemanticProperties.Description="{internal:LocalizedString Key=OrientedImageryViewResize}"
-                  BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#303030}">
-                <Grid.GestureRecognizers>
-                    <PanGestureRecognizer PanUpdated="ResizePanel" />
-                </Grid.GestureRecognizers>
-                <BoxView x:Name="ResizeGrip" WidthRequest="28" HeightRequest="3" CornerRadius="2"
-                         Color="Gray" HorizontalOptions="Center" VerticalOptions="Center" />
+        <Label x:Name="LoadError" Grid.Row="1" Margin="8"
+               TextColor="{AppThemeBinding Light=Black, Dark=White}" IsVisible="False" />
+        <Grid x:Name="LayoutRoot" Grid.Row="2" RowDefinitions="*,0" RowSpacing="0" ColumnSpacing="0">
+            <Grid>
+                <esri:MapView x:Name="MyMapView" />
+                <Button x:Name="OpenButton"
+                        Text="{internal:LocalizedString Key=OrientedImageryViewOpen}"
+                        AutomationId="OpenOrientedImagery"
+                        HorizontalOptions="End" VerticalOptions="Start"
+                        Margin="8" Clicked="OpenClicked" />
+                <Button x:Name="CloseButton"
+                        Text="{internal:LocalizedString Key=OrientedImageryViewClose}"
+                        AutomationId="CloseOrientedImagery"
+                        HorizontalOptions="End" VerticalOptions="Start"
+                        Margin="8" IsVisible="False" Clicked="CloseClicked" />
             </Grid>
-            <toolkit:OrientedImageryView x:Name="ImageryView" Grid.Row="1" />
+            <toolkit:OrientedImageryView x:Name="ImageryView" Grid.Row="1" IsVisible="False" />
         </Grid>
     </Grid>
 </ContentPage>
