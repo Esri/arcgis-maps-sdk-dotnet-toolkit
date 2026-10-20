@@ -55,6 +55,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             ImageButton clearButton = new ImageButton() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(5) };
             clearButton.Source = new FontImageSource() { Glyph = ToolkitIcons.X, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+#if WINDOWS
+            SemanticProperties.SetDescription(clearButton, Properties.Resources.GetString("SearchViewClearSearchTooltip"));
+#endif
             clearButton.IsVisible = false;
             Grid.SetColumn(clearButton, 2);
             searchGrid.Add(clearButton);

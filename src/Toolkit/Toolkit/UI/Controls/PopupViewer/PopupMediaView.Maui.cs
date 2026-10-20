@@ -76,7 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
 
             bool hasLink = TryGetImageLink(out _);
-            SemanticProperties.SetDescription(image, hasLink ? GetAltText() : null);
+            SemanticProperties.SetDescription(image, PopupMedia?.Type == PopupMediaType.Image ? GetAltText() : null);
             if (!hasLink)
                 image.GestureRecognizers.Clear();
 
