@@ -244,7 +244,7 @@ public partial class OrientedImageryView : TemplatedView
         _connectedModel.DispatchAction = DispatchUpdate;
         _connectedModel.PropertyChanged += ModelChanged;
         _connectedModel.ToolbarCategories.CollectionChanged += ToolbarChanged;
-        SynchronizeToolbarItems();
+        ObserveToolbarCategories();
         _connectedModel.SelectNextImageCommand.CanExecuteChanged += NavigationAvailabilityChanged;
         _connectedModel.SelectPreviousImageCommand.CanExecuteChanged += NavigationAvailabilityChanged;
         _connectedModel.ToggleSequentialNavigationCommand.CanExecuteChanged += NavigationAvailabilityChanged;

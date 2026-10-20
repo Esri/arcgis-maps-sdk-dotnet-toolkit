@@ -39,7 +39,6 @@ internal sealed class DesktopImageryBar : Microsoft.Maui.Controls.View
         }
     }
 
-    public bool IsNavigation { get; init; }
     public OrientedImageryToolbarItemBase? ToolbarItem { get; init; }
 
     public void Refresh() => (Handler as DesktopImageryBarHandler)?.Refresh();
@@ -48,15 +47,12 @@ internal sealed class DesktopImageryBar : Microsoft.Maui.Controls.View
 internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, NativeGrid>
 {
     private OrientedImageryViewModel? _model;
-    private OrientedImageryToolbarItemBase[] _items = [];
+    private OrientedImageryToolbarItemBase? _item;
     private readonly List<Action> _updates = [];
-    private readonly List<NativeView> _tools = [];
-    private readonly List<NativeView> _visibleTools = [];
     private readonly List<Action> _detachSymbols = [];
     private bool _updating;
     private NavigationState? _navigationState;
     private FontFamily? _iconFont;
-    private double _toolbarWidth;
     private bool _rendering;
     private int _generation;
 
@@ -179,13 +175,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
 
     private IconElement ImageModeIcon(bool explore) => explore
         ? (PathIcon)XamlReader.Load(
-            "<PathIcon xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Data=\"F1 " +
-            "M26.7358 19.6048L27.7447 18.5074L32.9375 12.8587L24.2416 11.0883L11.1977 8.43275L7.75234 12.1806L13.9879 33.4721L26.7358 19.6048Z " +
-            "M9.1681 12.5122L11.647 9.81567L30.469 13.6722L14.5913 30.944L9.1681 12.5122Z " +
-            "M6.59961 5.13663C7.92743 5.13684 8.99902 6.21202 8.99902 7.54385C8.99895 8.87562 7.92738 9.95087 6.59961 9.95108C5.27167 9.95107 4.1993 8.87575 4.19922 7.54385C4.19922 6.21189 5.27162 5.13664 6.59961 5.13663Z " +
-            "M6.59961 6.74112C6.15162 6.74113 5.79883 7.09452 5.79883 7.54385C5.7989 7.99312 6.15167 8.34658 6.59961 8.34659C7.04738 8.34638 7.39934 7.99299 7.39941 7.54385C7.39941 7.09465 7.04742 6.74132 6.59961 6.74112Z " +
-            "M21.6003 19.6003L20.2007 21L14.6003 15.3997L16 14L21.6003 19.6003Z " +
-            "M21.6003 15.3997L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3997Z\"/>")
+            "<PathIcon xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Data=\"" +
+            OrientedImageryView.ExploreImagesGeometry + "\"/>")
         : new FontIcon { Glyph = "\uEA74", FontFamily = IconFont, FontSize = 32 };
 
     private static void Describe(NativeView control, string key, string? id = null)
@@ -202,10 +193,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         _rendering = true;
         try
         {
-            if (VirtualView.IsNavigation)
-                RefreshNavigation(VirtualView.Owner);
+            if (VirtualView.ToolbarItem is { } item)
+                RefreshToolbar(VirtualView.Owner, item);
             else
-                RefreshToolbar(VirtualView.Owner);
+                RefreshNavigation(VirtualView.Owner);
         }
         finally
         {
@@ -217,14 +208,11 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
         _generation++;
         _model = null;
-        _items = [];
+        _item = null;
         _navigationState = null;
         foreach (var detach in _detachSymbols) detach();
         _detachSymbols.Clear();
         _updates.Clear();
-        _tools.Clear();
-        _visibleTools.Clear();
-        _toolbarWidth = 0;
         platformView ??= ((IElementHandler)this).PlatformView as NativeGrid;
         if (platformView != null)
         {
@@ -234,100 +222,38 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         }
     }
 
-    private void RefreshToolbar(OrientedImageryView owner)
+    private void RefreshToolbar(OrientedImageryView owner, OrientedImageryToolbarItemBase item)
     {
         var model = owner.ViewModel;
-        var items = VirtualView.ToolbarItem is { } toolbarItem ? new[] { toolbarItem } : owner.ToolbarItems;
-        if (_model != model || !_items.SequenceEqual(items))
+        if (_model != model || _item != item)
         {
             Clear();
             _model = model;
-            _items = items.ToArray();
-            foreach (var item in _items)
+            _item = item;
+            NativeView? control = item switch
             {
-                NativeView? control = item switch
-                {
-                    ImageSearchModeVM mode => ModePicker(owner, mode),
-                    ToolbarDividerVM => Divider(),
-                    ShowSelectedFootprintVM => Toggle(owner, "CurrentFootprint", "CurrentFootprintLabel", Geometry(CurrentFootprint), () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value),
-                    ShowUnselectedFootprintsVM => Toggle(owner, "AdditionalFootprints", "AdditionalFootprintsLabel", Geometry(AdditionalFootprints), () => model.ShowUnselectedFootprints, value => model.ShowUnselectedFootprints = value, () => model.Images.Count > 1),
-                    ShowCameraMarkersVM => Toggle(owner, "CameraLocations", "CameraLocationsLabel", CameraLocationsIcon(), () => model.ShowCameraLocations, value => model.ShowCameraLocations = value, () => model.Images.Count > 1),
-                    AllowAddingMarkersVM => Toggle(owner, "AddMarker", "AddMarkerLabel", Glyph("\uE8ED"), () => owner.IsAddingMarkers, owner.SetAddingMarkers),
-                    AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdate", Glyph(ToolkitIcons.Refresh), () => model.AutoUpdateFootprint, value => model.AutoUpdateFootprint = value),
-                    SelectNewMarkerSymbolVM picker => SymbolPicker(owner, picker),
-                    ClearMarkersVM => ActionButton(owner, "ClearMarkers", "ClearMarkersLabel", Glyph("\uEB04"), () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
-                    SequentialNavigationVM => SequenceButton(owner),
-                    _ => null,
-                };
-                if (control != null)
-                {
-                    _tools.Add(control);
-                    PlatformView.Children.Add(control);
-                }
+                ImageSearchModeVM mode => ModePicker(owner, mode),
+                ToolbarDividerVM => Divider(),
+                ShowSelectedFootprintVM => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintLabel", Geometry(OrientedImageryView.CurrentFootprintGeometry), () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value, automationId: "OrientedImageryDesktopCurrentFootprint"),
+                ShowUnselectedFootprintsVM => Toggle(owner, "ShowUnselectedImageFootprints", "AdditionalFootprintsLabel", Geometry(OrientedImageryView.OverlayGeometry), () => model.ShowUnselectedFootprints, value => model.ShowUnselectedFootprints = value, () => model.Images.Count > 1, "OrientedImageryDesktopAdditionalFootprints"),
+                ShowCameraMarkersVM => Toggle(owner, "ShowCameraMarkersOnGeoView", "CameraLocationsLabel", CameraLocationsIcon(), () => model.ShowCameraLocations, value => model.ShowCameraLocations = value, () => model.Images.Count > 1, "OrientedImageryDesktopCameraLocations"),
+                AllowAddingMarkersVM => Toggle(owner, "AddMarker", "AddMarkerLabel", Glyph("\uE8ED"), () => owner.IsAddingMarkers, owner.SetAddingMarkers),
+                AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdate", Glyph(ToolkitIcons.Refresh), () => model.AutoUpdateFootprint, value => model.AutoUpdateFootprint = value),
+                SelectNewMarkerSymbolVM picker => SymbolPicker(owner, picker),
+                ClearMarkersVM => ActionButton(owner, "ClearMarkers", "ClearMarkersLabel", Glyph("\uEB04"), () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
+                SequentialNavigationVM => SequenceButton(owner),
+                _ => null,
+            };
+            if (control != null)
+            {
+                control.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
+                control.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
+                PlatformView.Children.Add(control);
             }
         }
         _updating = true;
         try { foreach (var update in _updates) update(); }
         finally { _updating = false; }
-        LayoutToolbar();
-    }
-
-    private void LayoutToolbar()
-    {
-        if (VirtualView.ToolbarItem != null)
-        {
-            // MAUI owns category wrapping; each presenter must measure only its own tool.
-            foreach (var tool in _tools)
-            {
-                tool.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
-                tool.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
-            }
-            VirtualView.HeightRequest = 84;
-            return;
-        }
-        double width = Math.Max(1, Math.Floor(VirtualView.Width > 0 ? VirtualView.Width : VirtualView.Owner?.Width ?? 76));
-        var visible = _tools.Where(tool => tool.Visibility == NativeVisibility.Visible).ToArray();
-        if (_toolbarWidth == width && _visibleTools.SequenceEqual(visible))
-            return;
-        _toolbarWidth = width;
-        _visibleTools.Clear();
-        _visibleTools.AddRange(visible);
-        PlatformView.ColumnDefinitions.Clear();
-        PlatformView.RowDefinitions.Clear();
-        var rows = new List<List<NativeView>>();
-        double rowWidth = 0;
-        double ToolWidth(NativeView tool) => tool is Microsoft.UI.Xaml.Controls.Border ? 17 :
-            tool is NativeGrid ? 80 :
-            tool is NativeButton { Flyout: not null } button ? button.MinWidth :
-            AutomationProperties.GetAutomationId(tool) == "OrientedImageryDesktopAddMarker" ? 48 : 78;
-        foreach (var tool in _visibleTools)
-        {
-            double toolWidth = Math.Min(width, ToolWidth(tool));
-            if (rows.Count == 0 || rowWidth + toolWidth > width)
-            {
-                rows.Add([]);
-                rowWidth = 0;
-            }
-            rows[rows.Count - 1].Add(tool);
-            rowWidth += toolWidth;
-        }
-        for (int row = 0; row < rows.Count; row++)
-        {
-            PlatformView.RowDefinitions.Add(new Microsoft.UI.Xaml.Controls.RowDefinition { Height = new Microsoft.UI.Xaml.GridLength(84) });
-            double left = Math.Max(0, (width - rows[row].Sum(tool => Math.Min(width, ToolWidth(tool)))) / 2);
-            foreach (var tool in rows[row])
-            {
-                bool divider = tool is Microsoft.UI.Xaml.Controls.Border;
-                tool.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Left;
-                tool.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
-                tool.Margin = new NativeThickness(left + (divider ? 8 : 0), 0, 0, 0);
-                tool.Width = divider ? 1 : Math.Min(width, ToolWidth(tool));
-                NativeGrid.SetRow(tool, row);
-                left += Math.Min(width, ToolWidth(tool));
-            }
-        }
-        PlatformView.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
-        VirtualView.HeightRequest = rows.Count * 84;
     }
 
     private NativeButton ActionButton(OrientedImageryView owner, string key, string labelKey, UIElement icon, Action execute, Func<bool> enabled)
@@ -344,7 +270,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         return button;
     }
 
-    private ToggleButton Toggle(OrientedImageryView owner, string key, string labelKey, UIElement icon, Func<bool> get, Action<bool> set, Func<bool>? enabled = null)
+    private ToggleButton Toggle(OrientedImageryView owner, string key, string labelKey, UIElement icon, Func<bool> get, Action<bool> set, Func<bool>? enabled = null, string? automationId = null)
     {
         var toggle = new ToggleButton
         {
@@ -353,7 +279,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             BorderThickness = new NativeThickness(0),
             Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), CornerRadius = new CornerRadius(0),
         };
-        Describe(toggle, key);
+        Describe(toggle, key, automationId);
         toggle.Click += (_, _) => { if (!_updating) set(toggle.IsChecked == true); };
         _updates.Add(() =>
         {
@@ -402,7 +328,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         foreach (var state in mode.ImageSearchModes)
         {
             bool search = state == OrientedImageryViewInteractionState.ExploreImages;
-            string key = search ? "ImageSearchModeSearch" : "ImageSearchModeSelect";
+            string key = search ? "ImageSearchModeExplore" : "ImageSearchModeExamine";
             var item = new RadioMenuFlyoutItem
             {
                 Text = Text(key), Icon = ImageModeIcon(search), GroupName = groupName,
@@ -423,7 +349,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             if (previous != search)
             {
                 button.Content = LabeledContent(ImageModeIcon(search),
-                    search ? "ImageSearchModeSearch" : "ImageSearchModeSelect", 48);
+                    search ? "ImageSearchModeExplore" : "ImageSearchModeExamine", 48);
                 previous = search;
             }
             button.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching;
@@ -444,14 +370,14 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     private NativeButton SequenceButton(OrientedImageryView owner)
     {
         var model = owner.ViewModel;
-        var button = ActionButton(owner, "SequentialMode", "NavigationModeLabel", Geometry(Sequence), () => model.ToggleSequentialNavigationCommand.Execute(null), () => model.ToggleSequentialNavigationCommand.CanExecute(null));
+        var button = ActionButton(owner, "SequentialMode", "SequentialNavigationLabel", Geometry(OrientedImageryView.SequenceGeometry), () => model.ToggleSequentialNavigationCommand.Execute(null), () => model.ToggleSequentialNavigationCommand.CanExecute(null));
         bool previous = false;
         Describe(button, "SequentialMode", "OrientedImageryDesktopSequentialMode");
         _updates.Add(() =>
         {
             if (previous != model.IsSequentialNavigationEnabled)
             {
-                button.Content = LabeledContent(Geometry(model.IsSequentialNavigationEnabled ? ReturnToResults : Sequence), "NavigationModeLabel");
+                button.Content = LabeledContent(Geometry(model.IsSequentialNavigationEnabled ? ReturnToResults : OrientedImageryView.SequenceGeometry), "SequentialNavigationLabel");
                 previous = model.IsSequentialNavigationEnabled;
             }
             string key = model.IsSequentialNavigationEnabled ? "ReturnToResults" : "SequentialMode";
@@ -471,7 +397,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         string groupName = Guid.NewGuid().ToString("N");
         button.Flyout = menu;
         _detachSymbols.Add(menu.Hide);
-        Describe(button, "SelectMarkers");
+        Describe(button, "SelectMarkerSymbol", "OrientedImageryDesktopSelectMarkers");
         MarkerSymbol[] symbols = [];
         var images = new List<Microsoft.UI.Xaml.Controls.Image>();
         void UpdateSymbols()
@@ -670,9 +596,6 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         return grid;
     }
 
-    private const string AdditionalFootprints = "M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z";
-    private const string Sequence = "M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z";
     private const string ReturnToResults = "M4 18H3V29H29V3H12V4H28V28H4V18ZM5.66 13.354L1.807 9.5L5.66 5.646L6.367 6.353L3.767 9H11.5C13.7489 8.9923 15.9086 9.87918 17.503 11.4652C19.0974 13.0512 19.9958 15.2061 20 17.455V22.855H19V17.455C18.9956 13.3147 15.6403 9.95941 11.5 9.955H3.675L6.367 12.646L5.66 13.354Z";
-    private const string CurrentFootprint = "F1 M9.16358 0L7.67295 0L0 0L4.5818 7.6L11.4546 19H16.5455L28 0H9.16358Z M15.8314 17.7333H12.1686L2.26954 1.26667H25.7305L15.8314 17.7333Z";
 }
 #endif
