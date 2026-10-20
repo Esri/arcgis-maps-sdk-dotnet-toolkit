@@ -23,7 +23,7 @@ public partial class OrientedImageryView
     private ScrollView? _panelScroll;
     private HorizontalStackLayout? _pages;
     private Layout? _customToolbar;
-    private (bool Sequential, int Start, int Count, int Total)? _pageState;
+    private (bool Sequential, int Start, int Count)? _pageState;
     private int _selectedPage = -1;
     private View? _panelAnchor;
     private int _menuVersion;
@@ -33,8 +33,8 @@ public partial class OrientedImageryView
     private Border? _panel;
     private Grid? _panelBackdrop;
     private bool _updatingPanel;
-    private string? _panelKind;
 #if !WINDOWS
+    private bool _showingSymbols;
     private Page? _presentationPage;
     private bool? _pageLandscape;
 #endif
@@ -47,21 +47,7 @@ public partial class OrientedImageryView
     private readonly List<Border> _symbolTiles = new();
 #endif
 
-    private static string Text(string key) => Properties.Resources.GetString("OrientedImageryView" + (key switch
-    {
-        "SwitchToSearch" => "SwitchToImageSearch",
-        "SwitchToSelect" => "SwitchToImageSelection",
-        "SelectMarkers" => "SelectMarkerSymbol",
-        "CurrentFootprint" => "ShowSelectedImageFootprint",
-        "AdditionalFootprints" => "ShowUnselectedImageFootprints",
-        "CameraLocations" => "ShowCameraMarkersOnGeoView",
-        "NoLayers" => "NoOrientedImageryLayers",
-        "InvalidLayer" => "SelectedLayerNotOnGeoView",
-        "ImageSearchModeSearch" => "ImageSearchModeExplore",
-        "ImageSearchModeSelect" => "ImageSearchModeExamine",
-        "NavigationModeLabel" => "SequentialNavigationLabel",
-        _ => key,
-    }));
+    private static string Text(string key) => Properties.Resources.GetString("OrientedImageryView" + key);
 
     private static readonly ControlTemplate DefaultControlTemplate =
 #if WINDOWS
@@ -94,8 +80,7 @@ public partial class OrientedImageryView
         }
 
         var custom = new FlexLayout { Wrap = FlexWrap.Wrap, AlignItems = FlexAlignItems.Center, Margin = new Thickness(8, 0) };
-        scope.RegisterName("PART_CustomToolbar", custom);
-        Add("PART_CustomToolbarScroll", custom, root);
+        Add("PART_CustomToolbar", custom, root);
 
         var image = new Grid();
         Grid.SetRow(image, 1);
@@ -131,7 +116,7 @@ public partial class OrientedImageryView
         Add("PART_Notice", notice, root, 3);
         var panels = new Grid { IsVisible = false, InputTransparent = true, CascadeInputTransparent = false };
         Add("PART_PanelHost", panels, root);
-        Grid.SetRowSpan(panels, 5);
+        Grid.SetRowSpan(panels, root.RowDefinitions.Count);
         return root;
     });
 #endif
@@ -498,7 +483,7 @@ public partial class OrientedImageryView
         {
             if (GeoView == null) message = Text("NoGeoView");
             else if (_layers.Count == 0) message = Text("NoLayers");
-            else if (SelectedLayer == null) message = Text("NoLayerSelectedWithoutDropdown");
+            else if (SelectedLayer == null) message = Text("NoLayerSelected");
             else if (!_layers.Contains(SelectedLayer)) message = Text("InvalidLayer");
             else if (_searching || _viewport?.IsBusy == true || SelectedLayer.LoadStatus == LoadStatus.Loading)
                 message = Text("Loading");
@@ -620,11 +605,10 @@ public partial class OrientedImageryView
         double available = Width > 0 ? Math.Max(pageWidth, Width - 104) : 7 * pageWidth;
         var (start, count) = ViewModel.IsSequentialNavigationEnabled ? (0, 0) :
             OrientedImageryPagination.GetRange(ViewModel.Images.Count, selected, Math.Min(available, 9 * pageWidth), pageWidth);
-        var state = (ViewModel.IsSequentialNavigationEnabled, start, count, ViewModel.Images.Count);
         var previousState = _pageState;
         bool rebuild = previousState == null || previousState.Value.Sequential != ViewModel.IsSequentialNavigationEnabled ||
             previousState.Value.Count != count;
-        _pageState = state;
+        _pageState = (ViewModel.IsSequentialNavigationEnabled, start, count);
         if (rebuild)
         {
             _pages.Clear();
@@ -739,14 +723,13 @@ public partial class OrientedImageryView
         Refresh();
     }
 
-    private sealed record MenuAction(string Title, Action Execute, bool IsChecked = false, bool IsEnabled = true,
-        string? Glyph = null, string? Geometry = null, bool IsSelection = false,
-        Func<bool>? Enabled = null, Func<bool>? Checked = null, Func<View>? Icon = null, bool IsSubmenu = false);
+    private sealed record MenuAction(string Title, Action Execute, Func<bool> Enabled, Func<View> Icon,
+        Func<bool>? Checked = null, bool IsSubmenu = false);
 
-    private const string CurrentFootprintGeometry = "F1 M9.16358 0L7.67295 0L0 0L4.5818 7.6L11.4546 19H16.5455L28 0H9.16358Z M15.8314 17.7333H12.1686L2.26954 1.26667H25.7305L15.8314 17.7333Z";
+    internal const string CurrentFootprintGeometry = "F1 M9.16358 0L7.67295 0L0 0L4.5818 7.6L11.4546 19H16.5455L28 0H9.16358Z M15.8314 17.7333H12.1686L2.26954 1.26667H25.7305L15.8314 17.7333Z";
 
-    private const string OverlayGeometry = "M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z";
-    private const string ExploreImagesGeometry =
+    internal const string OverlayGeometry = "M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z";
+    internal const string ExploreImagesGeometry =
         "F1 M26.7358 19.6048L27.7447 18.5074L32.9375 12.8587L24.2416 11.0883L11.1977 8.43275L7.75234 12.1806L13.9879 33.4721L26.7358 19.6048Z " +
         "M9.1681 12.5122L11.647 9.81567L30.469 13.6722L14.5913 30.944L9.1681 12.5122Z " +
         "M6.59961 5.13663C7.92743 5.13684 8.99902 6.21202 8.99902 7.54385C8.99895 8.87562 7.92738 9.95087 6.59961 9.95108C5.27167 9.95107 4.1993 8.87575 4.19922 7.54385C4.19922 6.21189 5.27162 5.13664 6.59961 5.13663Z " +
@@ -754,7 +737,7 @@ public partial class OrientedImageryView
         "M21.6003 19.6003L20.2007 21L14.6003 15.3997L16 14L21.6003 19.6003Z " +
         "M21.6003 15.3997L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3997Z";
     private const string NavigationGeometry = "M6.44996 17.216L14.431 13.371L17.411 6.25595L10.295 9.23595L6.44996 17.216ZM13.191 12.858L8.59196 15.074L10.808 10.474L13.191 12.858ZM12 1.19995C9.86392 1.19995 7.77585 1.83336 5.9998 3.02008C4.22375 4.2068 2.83948 5.89353 2.02206 7.86697C1.20463 9.84041 0.990755 12.0119 1.40747 14.1069C1.8242 16.2019 2.8528 18.1263 4.3632 19.6367C5.87361 21.1471 7.79799 22.1757 9.89298 22.5924C11.988 23.0092 14.1595 22.7953 16.1329 21.9778C18.1064 21.1604 19.7931 19.7762 20.9798 18.0001C22.1665 16.2241 22.8 14.136 22.8 12C22.7968 9.13659 21.6579 6.39141 19.6332 4.36671C17.6085 2.342 14.8633 1.20313 12 1.19995ZM12 21.7999C10.0617 21.7999 8.16697 21.2252 6.55537 20.1484C4.94377 19.0715 3.68768 17.541 2.94594 15.7502C2.2042 13.9595 2.01013 11.9891 2.38826 10.0881C2.7664 8.18705 3.69975 6.44086 5.07031 5.0703C6.44086 3.69975 8.18706 2.76639 10.0881 2.38826C11.9891 2.01012 13.9595 2.20419 15.7503 2.94593C17.541 3.68767 19.0715 4.94376 20.1484 6.55536C21.2252 8.16696 21.8 10.0617 21.8 12C21.7973 14.5983 20.764 17.0894 18.9267 18.9267C17.0894 20.764 14.5983 21.7973 12 21.7999Z";
-    private const string SequenceGeometry = "M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z";
+    internal const string SequenceGeometry = "M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z";
 
     private static View MenuIcon(string? glyph, string? geometry)
     {
@@ -779,15 +762,6 @@ public partial class OrientedImageryView
             Source = new FontImageSource { Glyph = glyph ?? ToolkitIcons.Search, FontFamily = ToolkitIcons.FontFamilyName, Size = 22, Color = accent },
             WidthRequest = 22, HeightRequest = 22, VerticalOptions = LayoutOptions.Center,
         };
-    }
-
-    private static Microsoft.Maui.Controls.Shapes.Path OutlineIcon(string geometry)
-    {
-        var icon = (Microsoft.Maui.Controls.Shapes.Path)MenuIcon(null, geometry);
-        icon.Fill = Colors.Transparent;
-        icon.Stroke = Color.FromArgb("#007AC2");
-        icon.StrokeThickness = 1;
-        return icon;
     }
 
     private static View MarkerOptionIcon(MarkerSymbol symbol) =>
@@ -859,10 +833,11 @@ public partial class OrientedImageryView
         UpdatePanelSize();
     }
 
+#if !WINDOWS
     private void ShowSymbols(View anchor, SelectNewMarkerSymbolVM picker, Action back)
     {
         DismissPanel();
-        _panelKind = "Symbols";
+        _showingSymbols = true;
         var actions = picker.SymbolOptions.Select((symbol, index) =>
         {
             string? key = symbol is SimpleMarkerSymbol simple ? simple.Style switch
@@ -876,12 +851,9 @@ public partial class OrientedImageryView
             } : null;
             string title = key != null ? Text("Marker" + key) : string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), index + 1);
             return new MenuAction(title, () => { picker.SelectedSymbol = symbol; back(); },
-                IsSelection: true, Checked: () => symbol == picker.SelectedSymbol, Enabled: () => IsAddingMarkers,
+                Checked: () => symbol == picker.SelectedSymbol, Enabled: () => IsAddingMarkers,
                 Icon: () => MarkerOptionIcon(symbol));
         }).ToArray();
-#if WINDOWS
-        ShowActions(anchor, Text("MarkerSelection"), actions, back);
-#else
         var content = PanelContent(Text("MarkerSelection"));
         _symbolGrid = new Grid { ColumnSpacing = 4, RowSpacing = 0 };
         foreach (var action in actions)
@@ -909,7 +881,7 @@ public partial class OrientedImageryView
             };
             _panelUpdates.Add(() =>
             {
-                bool selected = action.Checked();
+                bool selected = action.Checked?.Invoke() == true;
                 tile.Stroke = selected ? Color.FromArgb("#007AC2") : Color.FromArgb("#888888");
                 tile.IsEnabled = action.Enabled();
                 tile.Opacity = tile.IsEnabled ? 1 : 0.45;
@@ -919,34 +891,19 @@ public partial class OrientedImageryView
         }
         content.Add(_symbolGrid);
         PresentPanel(anchor, content, back);
-#endif
         PropertyChangedEventHandler changed = (_, _) => DispatchUpdate(UpdateOpenPanel);
         picker.PropertyChanged += changed;
         _panelCleanup.Add(() => picker.PropertyChanged -= changed);
         System.Collections.Specialized.NotifyCollectionChangedEventHandler optionsChanged = (_, _) => DispatchUpdate(() =>
         {
-            if (_panelKind == "Symbols") ShowSymbols(anchor, picker, back);
+            if (_showingSymbols) ShowSymbols(anchor, picker, back);
         });
         picker.SymbolOptions.CollectionChanged += optionsChanged;
         _panelCleanup.Add(() => picker.SymbolOptions.CollectionChanged -= optionsChanged);
     }
+#endif
 
-    private void ShowActions(View anchor, string title, IReadOnlyList<MenuAction> actions, Action? back = null)
-    {
-        var kind = _panelKind;
-        DismissPanel();
-        _panelKind = kind;
-        _panelAnchor = anchor;
-        UpdateToolHighlights();
-        UpdateBackNavigation();
-        var guarded = actions.Select(GuardAction).ToArray();
-        var content = PanelContent(title);
-        foreach (var action in guarded)
-            AddActionRow(content, action);
-        PresentPanel(anchor, content, back);
-    }
-
-    private MenuAction GuardAction(MenuAction action)
+    private MenuAction GuardAction(MenuAction action, bool dismiss = true)
     {
         int version = _menuVersion;
         var model = ViewModel;
@@ -955,9 +912,9 @@ public partial class OrientedImageryView
         {
             Execute = () =>
             {
-                if (version != _menuVersion || !_connected || model != ViewModel || layer != SelectedLayer || !(action.Enabled?.Invoke() ?? action.IsEnabled))
+                if (version != _menuVersion || !_connected || model != ViewModel || layer != SelectedLayer || !action.Enabled())
                     return;
-                DismissPanel();
+                if (dismiss) DismissPanel();
                 action.Execute();
                 Refresh();
             },
@@ -966,29 +923,23 @@ public partial class OrientedImageryView
 
     private void AddActionRow(VerticalStackLayout content, MenuAction action)
     {
+        action = GuardAction(action, dismiss: action.Checked != null);
         var row = new Grid
         {
             ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(28) },
             ColumnSpacing = 6, Padding = new Thickness(4, 2), MinimumHeightRequest = 44,
-            IsEnabled = action.IsEnabled, Opacity = action.IsEnabled ? 1 : 0.45,
         };
 #if !WINDOWS
         row.Padding = new Thickness(4, 0);
 #endif
         var button = new Button { BackgroundColor = Colors.Transparent, Padding = 0 };
         SemanticProperties.SetDescription(button, action.Title);
-        button.Clicked += (_, _) =>
-        {
-            if (action.Enabled?.Invoke() ?? action.IsEnabled) action.Execute();
-        };
+        button.Clicked += (_, _) => action.Execute();
         row.Add(button, 0, 0);
         Grid.SetColumnSpan(button, 3);
-        if (action.Glyph != null || action.Geometry != null || action.Icon != null)
-        {
-            var icon = action.Icon?.Invoke() ?? MenuIcon(action.Glyph, action.Geometry);
-            icon.InputTransparent = true;
-            row.Add(FlyoutIcon(icon));
-        }
+        var icon = action.Icon();
+        icon.InputTransparent = true;
+        row.Add(FlyoutIcon(icon));
         var title = new Label { Text = action.Title, VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.WordWrap, InputTransparent = true };
         title.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
 #if __IOS__ && !MACCATALYST
@@ -999,13 +950,6 @@ public partial class OrientedImageryView
             if (row.Children.OfType<Border>().FirstOrDefault()?.Content is Image { Source: FontImageSource clearIcon })
                 clearIcon.Color = Color.FromArgb("#FF3B30");
         }
-        if (_panelKind == "Layers")
-        {
-            row.ColumnDefinitions[0].Width = 0;
-            row.ColumnSpacing = 0;
-            foreach (var icon in row.Children.OfType<Border>())
-                icon.IsVisible = false;
-        }
 #endif
         row.Add(title, 1);
         var selection = new Label { Text = "\u2022", TextColor = Color.FromArgb("#007AC2"), VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center,
@@ -1015,7 +959,7 @@ public partial class OrientedImageryView
         selection.FontSize = 17;
         selection.TextColor = IosAccent;
 #endif
-        if (action.IsSelection) row.Add(selection, 2);
+        if (action.Checked != null) row.Add(selection, 2);
         if (action.IsSubmenu)
         {
             var chevron = MenuIcon(ToolkitIcons.ChevronRight, null);
@@ -1024,12 +968,12 @@ public partial class OrientedImageryView
         }
         _panelUpdates.Add(() =>
         {
-            bool enabled = action.Enabled?.Invoke() ?? action.IsEnabled;
+            bool enabled = action.Enabled();
             row.IsEnabled = enabled;
             row.Opacity = enabled ? 1 : 0.45;
-            bool selected = action.Checked?.Invoke() ?? action.IsChecked;
+            bool selected = action.Checked?.Invoke() == true;
             selection.IsVisible = selected;
-            if (action.IsSelection) SemanticProperties.SetHint(button, Text(selected ? "Selected" : "NotSelected"));
+            if (action.Checked != null) SemanticProperties.SetHint(button, Text(selected ? "Selected" : "NotSelected"));
         });
         AddPanelItem(content, row);
     }
@@ -1289,7 +1233,9 @@ public partial class OrientedImageryView
         foreach (var cleanup in _panelCleanup) cleanup();
         _panelCleanup.Clear();
         _panelUpdates.Clear();
-        _panelKind = null;
+#if !WINDOWS
+        _showingSymbols = false;
+#endif
         _panel = null;
         _panelBackdrop = null;
         _panelScroll = null;
