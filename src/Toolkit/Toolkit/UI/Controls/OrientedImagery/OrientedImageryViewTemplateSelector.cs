@@ -1,9 +1,15 @@
-#if WPF
+#if WPF || MAUI
 
 using System.Collections.ObjectModel;
+#if WPF
 using System.Windows.Markup;
+#endif
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 /// <summary>
 /// An implementation of <see cref="DataTemplateSelector"/> for selecting templates based on a set of predefined key-template pairs.
@@ -29,7 +35,15 @@ public class OrientedImageryViewToolbarSelector : DataTemplateSelector
     public Collection<OrientedImageryToolbarSelectorPair> SelectionPairs { get; private set; }
 
     /// <inheritdoc/>
-    public override DataTemplate SelectTemplate(object item, DependencyObject container)
+#if MAUI
+    protected override DataTemplate OnSelectTemplate(object item, BindableObject container) =>
+        FindTemplate(item) ?? throw new InvalidOperationException($"No oriented imagery toolbar template is registered for '{item.GetType().Name}'.");
+#else
+    public override DataTemplate SelectTemplate(object item, DependencyObject container) =>
+        FindTemplate(item) ?? base.SelectTemplate(item, container);
+#endif
+
+    internal DataTemplate? FindTemplate(object item)
     {
         if (item is OrientedImageryToolbarCategory category)
         {
@@ -52,7 +66,7 @@ public class OrientedImageryViewToolbarSelector : DataTemplateSelector
             }
         }
 
-        return base.SelectTemplate(item, container);
+        return null;
     }
 
     /// <summary>
