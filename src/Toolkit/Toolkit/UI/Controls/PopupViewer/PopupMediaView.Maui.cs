@@ -25,6 +25,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     /// </summary>
     public partial class PopupMediaView : ContentView
     {
+#if __IOS__
+        private void UpdateImageContent(Image image)
+        {
+            image.GestureRecognizers.Clear();
+            if (Uri.TryCreate(PopupMedia?.Value?.LinkUrl, UriKind.Absolute, out var uri))
+            {
+                var link = Content as Internal.HyperlinkContentView;
+                if (link is null || link.Uri != uri)
+                {
+                    // Detach the image before moving it from a previous link wrapper.
+                    if (link is not null)
+                        link.Content = null;
+                    Content = null;
+                    link = new Internal.HyperlinkContentView(image, uri,
+                        (_, target) => _ = Toolkit.Internal.Launcher.LaunchUriAsync(target));
+                }
+                SemanticProperties.SetDescription(link, GetAltText() ?? uri.AbsoluteUri);
+                Content = link;
+            }
+            else
+            {
+                if (Content is Internal.HyperlinkContentView link)
+                    link.Content = null;
+                SemanticProperties.SetDescription(image, GetAltText());
+                Content = image;
+            }
+        }
+#endif
 #if WINDOWS
         private Image? _image;
         private Microsoft.UI.Xaml.UIElement? _imagePlatformView;

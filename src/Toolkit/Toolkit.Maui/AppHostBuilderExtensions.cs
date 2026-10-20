@@ -18,13 +18,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #if WINDOWS || __IOS__
             builder.ConfigureMauiHandlers(handler => handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>());
 #endif
-#if WINDOWS
+#if WINDOWS || __IOS__
             builder.ConfigureMauiHandlers(handler =>
             {
                 handler.AddHandler<HyperlinkLabel, HyperlinkLabelHandler>();
                 handler.AddHandler<HyperlinkContentView, HyperlinkContentViewHandler>();
+#if WINDOWS
                 handler.AddHandler<FieldsTableGrid, FieldsTableGridHandler>();
                 handler.AddHandler<FieldsTableCell, FieldsTableCellHandler>();
+#endif
             });
 #endif
             builder.ConfigureFonts(fonts => fonts

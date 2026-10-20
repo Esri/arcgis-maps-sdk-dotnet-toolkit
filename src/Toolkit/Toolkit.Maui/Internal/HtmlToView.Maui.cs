@@ -220,7 +220,7 @@ internal static class HtmlToView
                         content = stack;
                     }
 
-#if WINDOWS
+#if WINDOWS || __IOS__
                     if (useNativeHyperlinks && urlClickHandler is not null)
                         return new HyperlinkContentView(content, linkUri, urlClickHandler);
 #endif
@@ -277,7 +277,7 @@ internal static class HtmlToView
                 str.Spans.Add(span);
             }
         }
-#if WINDOWS
+#if WINDOWS || __IOS__
         if (useNativeHyperlinks && str.Spans.OfType<HyperlinkSpan>().Any())
             return new HyperlinkLabel(str) { LineBreakMode = LineBreakMode.WordWrap };
 #endif
@@ -286,7 +286,7 @@ internal static class HtmlToView
 
     // Flattens an *inline-only* subtree into text spans for a single Label.
     // It is only used when VisitChildren has verified there are no block elements underneath.
-    private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri>? urlClickHandler, Action<Element>? activateLink = null)
+    private static IEnumerable<Span> VisitInline(MarkupNode node, EventHandler<Uri>? urlClickHandler, Action<Element>? activateLink = null, Uri? targetUri = null)
     {
         // Converts a single inline node into a sequence of spans.
         // The whole tree is expected to only contain inline nodes. Other nodes are handled by VisitBlock.
@@ -313,7 +313,7 @@ internal static class HtmlToView
                     foreach (var subNode in node.Children)
                     {
                         subNode.InheritAttributes(node);
-                        foreach (var subSpan in VisitInline(subNode, urlClickHandler, activate))
+                        foreach (var subSpan in VisitInline(subNode, urlClickHandler, activate, linkUri))
                         {
                             ApplyStyle(subSpan, node);
                             if (node.IsUnderline != false) // Add underline to links by default (unless specifically disabled)
@@ -338,7 +338,7 @@ internal static class HtmlToView
                 foreach (var subNode in node.Children)
                 {
                     subNode.InheritAttributes(node);
-                    foreach (var subSpan in VisitInline(subNode, urlClickHandler, activateLink))
+                    foreach (var subSpan in VisitInline(subNode, urlClickHandler, activateLink, targetUri))
                     {
                         yield return subSpan;
                     }
@@ -346,13 +346,13 @@ internal static class HtmlToView
                 break;
 
             case MarkupType.Break:
-                var lineBreak = activateLink is null ? new Span() : new HyperlinkSpan(activateLink);
+                var lineBreak = activateLink is not null && targetUri is not null ? new HyperlinkSpan(activateLink, targetUri) : new Span();
                 lineBreak.Text = Environment.NewLine;
                 yield return lineBreak;
                 break;
 
             case MarkupType.Text:
-                var textSpan = activateLink is null ? new Span() : new HyperlinkSpan(activateLink);
+                var textSpan = activateLink is not null && targetUri is not null ? new HyperlinkSpan(activateLink, targetUri) : new Span();
                 textSpan.Text = node.Content;
                 ApplyStyle(textSpan, node);
                 yield return textSpan;
@@ -362,9 +362,15 @@ internal static class HtmlToView
 
     internal sealed class HyperlinkSpan : Span
     {
-        internal HyperlinkSpan(Action<Element> activate) => Activate = activate;
+        internal HyperlinkSpan(Action<Element> activate, Uri uri)
+        {
+            Activate = activate;
+            Uri = uri;
+        }
 
         internal Action<Element> Activate { get; }
+
+        internal Uri Uri { get; }
     }
 
     private static Grid ConvertTableToGrid(MarkupNode table, EventHandler<Uri>? urlClickHandler, bool useNativeHyperlinks)
