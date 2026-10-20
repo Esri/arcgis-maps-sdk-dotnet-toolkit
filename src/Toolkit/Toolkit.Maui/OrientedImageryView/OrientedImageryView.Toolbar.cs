@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
@@ -9,16 +8,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
-    private readonly ObservableCollection<OrientedImageryToolbarItemBase> _toolbarItems = new();
     private readonly HashSet<OrientedImageryToolbarCategory> _toolbarCategories = new();
+    // Keep the last image mode even if an app removes all ImageSearchModeVM items.
     private bool _imageSearchEnabled = true;
     private int _toolbarRevision;
     private int _renderedToolbarRevision = -1;
     private readonly List<Action> _toolbarUpdates = new();
     private readonly List<Action> _toolbarCleanup = new();
     private INotifyCollectionChanged? _selectorEntries;
-
-    internal IReadOnlyList<OrientedImageryToolbarItemBase> ToolbarItems => _toolbarItems;
 
     internal bool ImageSearchEnabled => ViewModel.InteractionState switch
     {
@@ -43,11 +40,11 @@ public partial class OrientedImageryView
             Dispatcher.Dispatch(() => ToolbarChanged(sender, e));
             return;
         }
-        SynchronizeToolbarItems();
+        ObserveToolbarCategories();
         Refresh();
     }
 
-    private void SynchronizeToolbarItems()
+    private void ObserveToolbarCategories()
     {
         _toolbarRevision++;
         DismissPanel();
@@ -59,13 +56,6 @@ public partial class OrientedImageryView
             if (_toolbarCategories.Add(category))
                 category.ToolbarItems.CollectionChanged += ToolbarChanged;
         }
-
-        var items = ViewModel.ToolbarCategories.SelectMany(category => category.ToolbarItems).ToArray();
-        if (_toolbarItems.SequenceEqual(items))
-            return;
-        _toolbarItems.Clear();
-        foreach (var item in items)
-            _toolbarItems.Add(item);
     }
 
     private void InvalidateToolbar()
@@ -102,10 +92,8 @@ public partial class OrientedImageryView
 
     private View? CreateCustomToolbarView(object item)
     {
-        var template = ToolbarItemTemplateSelector is OrientedImageryViewToolbarSelector selector
-            ? selector.FindTemplate(item)
-            : ToolbarItemTemplateSelector?.SelectTemplate(item, this);
-        if (template == null)
+        var template = ToolbarItemTemplateSelector?.SelectTemplate(item, this);
+        if (template == null || template == OrientedImageryViewToolbarSelector.DefaultTemplate)
             return null;
         if (template.CreateContent() is not View view)
             throw new InvalidOperationException("An oriented imagery toolbar template must create a MAUI View.");
@@ -325,7 +313,6 @@ public partial class OrientedImageryView
     private void ShowToolbarCategory(OrientedImageryToolbarCategory category, View anchor, string title)
     {
         DismissPanel();
-        _panelKind = category.Name;
         var panel = PanelContent(title);
         foreach (var item in category.ToolbarItems.Where(IsToolbarItemVisible))
         {
@@ -347,10 +334,9 @@ public partial class OrientedImageryView
                 foreach (var state in mode.ImageSearchModes)
                 {
                     bool search = state == OrientedImageryViewInteractionState.ExploreImages;
-                    AddActionRow(content, GuardAction(new MenuAction(Text(search ? "SearchMode" : "SelectMode"),
+                    AddActionRow(content, new MenuAction(Text(search ? "SearchMode" : "SelectMode"),
                         () => mode.SelectedInteractionState = state, Icon: () => ImageModeIcon(search),
-                        IsSelection: true, Checked: () => ViewModel.InteractionState == state,
-                        Enabled: Enabled)));
+                        Checked: () => ViewModel.InteractionState == state, Enabled: Enabled));
                 }
                 break;
             case ShowSelectedFootprintVM:
@@ -369,7 +355,7 @@ public partial class OrientedImageryView
                 break;
             case SelectNewMarkerSymbolVM picker:
                 var preview = new SymbolDisplay { Symbol = picker.SelectedSymbol, WidthRequest = 24, HeightRequest = 24 };
-                AddActionRow(content, new MenuAction(Text("SelectMarkers"), () => ShowSymbols(anchor, picker, back),
+                AddActionRow(content, new MenuAction(Text("SelectMarkerSymbol"), () => ShowSymbols(anchor, picker, back),
                     Icon: () => preview, IsSubmenu: true, Enabled: () => Enabled() && IsAddingMarkers));
                 _panelUpdates.Add(() => preview.Symbol = picker.SelectedSymbol);
                 System.ComponentModel.PropertyChangedEventHandler changed = (_, _) => DispatchUpdate(UpdateOpenPanel);
@@ -378,7 +364,7 @@ public partial class OrientedImageryView
                 break;
             case ClearMarkersVM:
                 AddActionRow(content, new MenuAction(Text("ClearMarkers"), () => ViewModel.ClearMarkersCommand.Execute(null),
-                    Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Glyph: ToolkitIcons.Trash));
+                    Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Icon: () => MenuIcon(ToolkitIcons.Trash, null)));
                 break;
             case SequentialNavigationVM:
                 AddSwitch(content, "SequentialMode", () => ViewModel.IsSequentialNavigationEnabled,
