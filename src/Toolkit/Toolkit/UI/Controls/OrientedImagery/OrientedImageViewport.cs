@@ -107,6 +107,12 @@ public partial class OrientedImageViewport
     public event EventHandler<OrientedImageTappedEventArgs>? ImageTapped;
 
     /// <summary>
+    /// Occurs when <see cref="IsBusy"/>, <see cref="IsInteractive"/>, or <see cref="Error"/> changes.
+    /// </summary>
+    /// <remarks>Raised once per change, after all three properties hold their new values.</remarks>
+    public event EventHandler? StateChanged;
+
+    /// <summary>
     /// Gets or sets the footprint of the oriented image to display.
     /// </summary>
     /// <value>The footprint whose <see cref="OrientedImageFootprint.OrientedImage"/> is shown by the control.</value>
@@ -345,8 +351,6 @@ public partial class OrientedImageViewport
     }
 
     private void OnViewportStateChanged(object? sender, EventArgs e) => UpdateState();
-
-    internal event EventHandler? StateChanged;
 
     private void OnViewportImageTapped(object? sender, OrientedImageTappedEventArgs e) => ImageTapped?.Invoke(this, e);
 

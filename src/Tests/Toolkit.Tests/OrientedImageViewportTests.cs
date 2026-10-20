@@ -305,6 +305,35 @@ public sealed class OrientedImageViewportTests
         Assert.IsNull(control.ScreenToImage(new System.Windows.Point(10, 10)));
     }
 
+    [STATestMethod]
+    public void StateChangedFollowsTheStateProperties()
+    {
+        // An app reacting to the state as a whole gets one event per change, after every property is current.
+        var control = new OrientedImageViewport { Template = CreateHostTemplate() };
+        Assert.IsTrue(control.ApplyTemplate());
+        var viewport = new FakeInnerViewport();
+        control.SetActiveViewport(viewport);
+
+        var log = new List<string>();
+        foreach (DependencyProperty property in new[] { OrientedImageViewport.IsBusyProperty, OrientedImageViewport.IsInteractiveProperty, OrientedImageViewport.ErrorProperty })
+            System.ComponentModel.DependencyPropertyDescriptor.FromProperty(property, typeof(OrientedImageViewport)).AddValueChanged(control, (_, _) => log.Add(property.Name));
+        control.StateChanged += (_, _) => log.Add($"StateChanged: interactive={control.IsInteractive}, error={control.Error?.Message ?? "none"}");
+
+        viewport.Publish(interactive: true);
+        CollectionAssert.AreEqual(new[] { "IsInteractive", "StateChanged: interactive=True, error=none" }, log, "an image becomes interactive");
+
+        log.Clear();
+        viewport.Publish(interactive: true);
+        Assert.IsEmpty(log, "an unchanged state raises nothing");
+
+        viewport.Publish(interactive: true, error: new InvalidOperationException("render failed"));
+        CollectionAssert.AreEqual(new[] { "IsInteractive", "Error", "StateChanged: interactive=False, error=render failed" }, log, "one event follows both property changes");
+
+        log.Clear();
+        control.SetActiveViewport(null);
+        CollectionAssert.AreEqual(new[] { "Error", "StateChanged: interactive=False, error=none" }, log, "removing the inner viewport clears the error");
+    }
+
     // The active inner viewport's focusable view; here, the raster viewport's MapView.
     private static DependencyObject GetFocusableView(OrientedImageViewport control)
     {
@@ -549,5 +578,50 @@ public sealed class OrientedImageViewportTests
         var host = control.Template.FindName("PART_DisplayHost", control) as Border;
         Assert.IsNotNull(host, "the applied template must contain PART_DisplayHost");
         return host;
+    }
+
+    // An inner viewport whose state the test sets directly, without loading an image.
+    private sealed class FakeInnerViewport : OrientedImageInnerViewport
+    {
+        private bool _interactive;
+
+        public override FrameworkElement View { get; } = new Border();
+
+        protected override bool IsPresentationInteractive => _interactive;
+
+        public void Publish(bool interactive, Exception? error = null)
+        {
+            _interactive = interactive;
+            PresentationError = error;
+            UpdateState();
+        }
+
+        public override void SetBackgroundColor(Color color)
+        {
+        }
+
+        public override PointF? ScreenToImage(double x, double y) => null;
+
+        protected override Task PresentAsync(OrientedImage image, string path, CancellationToken token) => Task.CompletedTask;
+
+        protected override bool TryLookAt(LookAtTarget target) => false;
+
+        protected override void ClearPresentation()
+        {
+        }
+
+        protected override void OnMarkersChanged(IReadOnlyList<OrientedImageMarker> added, IReadOnlyList<OrientedImageMarker> removed)
+        {
+        }
+
+        protected override void OnMarkerChanged(OrientedImageMarker marker, string? propertyName)
+        {
+        }
+
+        protected override void OnAutoUpdateFootprintChanged(bool enabled)
+        {
+        }
+
+        protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint) => null;
     }
 }
