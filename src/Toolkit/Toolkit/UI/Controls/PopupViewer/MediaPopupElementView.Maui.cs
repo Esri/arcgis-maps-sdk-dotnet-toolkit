@@ -50,6 +50,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             rootcaption.SetBinding(Label.TextProperty, static (MediaPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
+#if WINDOWS
+            SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
+            SemanticProperties.SetHeadingLevel(rootcaption, SemanticHeadingLevel.Level2);
+#endif
             root.Add(rootcaption);
 #if WINDOWS
             CarouselView2 cv = new CarouselView2();
@@ -63,6 +67,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             IndicatorView iv = new IndicatorView() { HorizontalOptions = LayoutOptions.Center };
+#if WINDOWS
+            iv.HandlerChanged += (_, _) =>
+            {
+                if (iv.Handler?.PlatformView is Microsoft.UI.Xaml.UIElement platformView)
+                    platformView.IsTabStop = false;
+            };
+#endif
             cv.IndicatorView = iv;
             root.Add(cv);
             root.Add(iv);
