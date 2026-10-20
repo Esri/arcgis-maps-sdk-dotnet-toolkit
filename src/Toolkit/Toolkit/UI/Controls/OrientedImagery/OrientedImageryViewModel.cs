@@ -46,7 +46,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         _images = new List<OrientedImage>();
         _readOnlyImages = _images.AsReadOnly();
-        _markersBeforeSequentialNavigation = new List<OrientedImageMarker>();
 
         AutoUpdateFootprint = true;
         SelectedFootprintFillColor = System.Drawing.Color.FromArgb(128, System.Drawing.Color.Red);
@@ -103,10 +102,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
             IsSequentialNavigationEnabled = false;
             ResetSequentialNavigationState();
-            _imageBeforeSequentialNavigation = null;
             _images.Clear();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
             _footprints.Clear();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
             SelectedImage = null;
             _managedMarkers.Clear();
             Markers.Clear();
@@ -172,8 +170,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _hasPreviousImage;
     private int _sequentialNavigationVersion;
     private Exception? _sequentialNavigationError;
-    private List<OrientedImageMarker> _markersBeforeSequentialNavigation;
-    private OrientedImage? _imageBeforeSequentialNavigation;
     private MapPoint? _searchPoint;
 
     /// <summary>
@@ -278,7 +274,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public bool IsSequentialNavigationEnabled
     {
         get => _isSequentialNavigationEnabled;
-        private set
+        set
         {
             if (_isSequentialNavigationEnabled == value) return;
             SetProperty(ref _isSequentialNavigationEnabled, value);
@@ -287,28 +283,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
             if (!IsSequentialNavigationEnabled)
             {
-                SelectedImage = _imageBeforeSequentialNavigation;
-                _imageBeforeSequentialNavigation = null;
-                _managedMarkers.AddRange(_markersBeforeSequentialNavigation);
-                _markersBeforeSequentialNavigation.Clear();
-                SynchronizeMarkers();
                 ChangeNavigationCommandsCanExecute();
             }
             else if (SelectedImage != null)
             {
                 _ = PrefetchAdjacentImagesAsync();
-
-                _imageBeforeSequentialNavigation = SelectedImage;
-                for (int i = 0; i < _managedMarkers.Count; i++)
-                {
-                    if (_managedMarkers[i].Tag is MarkerTag tag && (tag.Identifier == AllCamerasMarkerTag.Identifier || tag.Identifier == SearchPointMarkerTag.Identifier))
-                    {
-                        _markersBeforeSequentialNavigation.Add(_managedMarkers[i]);
-                        _managedMarkers.RemoveAt(i);
-                        i--;
-                    }
-                }
-                SynchronizeMarkers();
+                SetImages([]);
             }
         }
     }
@@ -348,7 +328,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </summary>
     /// <remarks>
     /// Pass the <paramref name="searchPoint"/> parameter to display a marker at the location from which the images were searched.
-    /// Assigning results exits sequential navigation and clears the selected image and any previous navigation state.
     /// </remarks>
     /// <param name="images">The oriented images to display.</param>
     /// <param name="searchPoint">The point from which the images were searched.</param>
@@ -358,10 +337,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _deferMarkerSynchronization = true;
         try
         {
-            IsSequentialNavigationEnabled = false;
-            ResetSequentialNavigationState();
-            _imageBeforeSequentialNavigation = null;
-            SelectedImage = null;
             _images = newImages;
             _readOnlyImages = _images.AsReadOnly();
             _footprints = _images.Select((img) => new OrientedImageFootprint(img)).ToList();
@@ -374,11 +349,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             _deferMarkerSynchronization = false;
             SynchronizeMarkers();
+            UpdateVisibleFootprints();
+            ChangeNavigationCommandsCanExecute();
         }
-
-        UpdateVisibleFootprints();
-
-        ChangeNavigationCommandsCanExecute();
     }
 
     private bool CanNavigate(SequenceStep step)
