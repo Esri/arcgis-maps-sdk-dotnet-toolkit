@@ -13,20 +13,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 public partial class OrientedImageryView : TemplatedView
 {
     private readonly ObservableCollection<OrientedImageryLayer> _layers = new();
-    private readonly ObservableCollection<OrientedImageryToolbarItemBase> _toolbarItems = new();
-    private readonly HashSet<OrientedImageryToolbarCategory> _toolbarCategories = new();
-    private bool _imageSearchEnabled = true;
-    internal IReadOnlyList<OrientedImageryToolbarItemBase> ToolbarItems => _toolbarItems;
-    internal bool ImageSearchEnabled => ViewModel.InteractionState switch
-    {
-        OrientedImageryViewInteractionState.ExploreImages => true,
-        OrientedImageryViewInteractionState.ExamineImage => false,
-        _ => _imageSearchEnabled,
-    };
-    internal bool IsAddingMarkers => ViewModel.InteractionState == OrientedImageryViewInteractionState.AddMarkers;
     private GeoView? _connectedGeoView;
     private GeoModel? _geoModel;
     private LayerCollection? _operationalLayers;
+    private readonly HashSet<LayerCollection> _nestedLayerCollections = new();
+    private readonly HashSet<GroupLayer> _groupLayers = new();
     private OrientedImageryViewModel? _connectedModel;
     private OrientedImageryLayer? _observedLayer;
     private OrientedImageryLayer? _lastZoomedLayer;
@@ -37,6 +28,8 @@ public partial class OrientedImageryView : TemplatedView
     private bool _searching;
     private Exception? _operationError;
     private OrientedImageViewport? _viewport;
+    private int _lookAtVersion;
+    private bool HasValidLayer => GeoView != null && SelectedLayer != null && _layers.Contains(SelectedLayer);
     private static readonly BindableProperty ThemeImageBackgroundProperty = BindableProperty.Create(
         "ThemeImageBackground", typeof(Color), typeof(OrientedImageryView), Colors.White,
         propertyChanged: (s, _, _) => ((OrientedImageryView)s).Refresh());
@@ -50,6 +43,7 @@ public partial class OrientedImageryView : TemplatedView
         ViewModel = new OrientedImageryViewModel();
         this.SetAppThemeColor(ThemeImageBackgroundProperty, Colors.White, Color.FromArgb("#202020"));
         ControlTemplate = DefaultControlTemplate;
+        SizeChanged += (_, _) => Refresh();
 #if !WINDOWS
         Loaded += PresentationLoaded;
         Unloaded += PresentationUnloaded;
@@ -77,15 +71,12 @@ public partial class OrientedImageryView : TemplatedView
         propertyChanged: (s, _, _) => ((OrientedImageryView)s).Reconnect());
 
     /// <summary>
-    /// The <see cref="OrientedImageryLayer"/> currently selected for inspection.
+    /// Gets or sets the oriented imagery layer to inspect.
     /// </summary>
     /// <remarks>
-    ///   <para>
-    ///   When a new layer is selected, the geo view will zoom to the layer's extent.
-    ///   </para>
-    ///   <para>
-    ///   The selected layer must be present on the <see cref="GeoView"/> otherwise the <see cref="OrientedImageryView"/> will not function and an error message will be displayed.
-    ///   </para>
+    /// Set this property explicitly; the control does not select a layer automatically or provide a layer selector.
+    /// Selection is retained while <see cref="GeoView"/> is disconnected.
+    /// The layer must belong to the connected map or scene. Selecting a valid layer zooms to its extent after loading.
     /// </remarks>
     public OrientedImageryLayer? SelectedLayer
     {
@@ -101,8 +92,7 @@ public partial class OrientedImageryView : TemplatedView
         propertyChanged: (s, _, _) => ((OrientedImageryView)s).ChangeLayer());
 
     /// <summary>
-    /// A read-only collection of <see cref="OrientedImageryLayer"/>s held in the <see cref="GeoModel.OperationalLayers"/>
-    /// of the connected <see cref="GeoView"/>'s geo model.
+    /// Gets the oriented imagery layers in the connected map or scene, including nested group layers.
     /// </summary>
     public ReadOnlyObservableCollection<OrientedImageryLayer> OrientedImageryLayers { get; }
 
@@ -126,6 +116,7 @@ public partial class OrientedImageryView : TemplatedView
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
     /// </summary>
+    /// <remarks><see cref="System.Drawing.Color.Empty"/> uses the current theme's background color.</remarks>
     public System.Drawing.Color DisplayBackgroundColor
     {
         get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
@@ -140,9 +131,9 @@ public partial class OrientedImageryView : TemplatedView
         propertyChanged: (s, _, _) => ((OrientedImageryView)s).Refresh());
 
     /// <summary>
-    /// Gets or sets the <see cref="DataTemplateSelector"/> used to display the toolbar items in
-    /// <see cref="OrientedImageryToolbarCategory.ToolbarItems"/> across <see cref="OrientedImageryViewModel.ToolbarCategories"/>.
+    /// Gets or sets the template selector for toolbar categories and their items.
     /// </summary>
+    /// <remarks>Templates apply to <see cref="OrientedImageryViewModel.ToolbarCategories"/> and their <see cref="OrientedImageryToolbarCategory.ToolbarItems"/>.</remarks>
     public DataTemplateSelector? ToolbarItemTemplateSelector
     {
         get => (DataTemplateSelector?)GetValue(ToolbarItemTemplateSelectorProperty);
@@ -154,7 +145,7 @@ public partial class OrientedImageryView : TemplatedView
     /// </summary>
     public static readonly BindableProperty ToolbarItemTemplateSelectorProperty = BindableProperty.Create(
         nameof(ToolbarItemTemplateSelector), typeof(DataTemplateSelector), typeof(OrientedImageryView), null,
-        propertyChanged: (s, _, _) => ((OrientedImageryView)s).Refresh());
+        propertyChanged: (s, _, _) => ((OrientedImageryView)s).InvalidateToolbar());
 
     /// <summary>
     /// Identifies the <see cref="ErrorMessage"/> bindable property.
@@ -163,7 +154,7 @@ public partial class OrientedImageryView : TemplatedView
         nameof(ErrorMessage), typeof(string), typeof(OrientedImageryView), null);
 
     /// <summary>
-    /// The message shown when the <see cref="OrientedImageryView"/> is in an invalid state.
+    /// Gets the current error or status message.
     /// </summary>
     public string? ErrorMessage
     {
@@ -172,13 +163,13 @@ public partial class OrientedImageryView : TemplatedView
     }
 
     /// <summary>
-    /// Set this function to override the default event handler when the image is tapped. A <c>null</c> value means the default behavior is active.
+    /// Gets or sets a handler that replaces the default image-tap behavior. Set to <c>null</c> to use the default behavior.
     /// </summary>
     /// <remarks>Toolkit-managed marker hits raise this event with <see cref="OrientedImageTappedEventArgs.Marker"/> set to <c>null</c>.</remarks>
     public Action<object?, OrientedImageTappedEventArgs>? OnImageTappedOverride { get; set; }
 
     /// <summary>
-    /// Set this function to override the default event handler when the connected <see cref="GeoView"/> is tapped. A <c>null</c> value means the default behavior is active.
+    /// Gets or sets a handler that replaces the default map or scene tap behavior. Set to <c>null</c> to use the default behavior.
     /// </summary>
     public Action<object?, GeoViewInputEventArgs>? OnGeoViewTappedOverride { get; set; }
 
@@ -191,6 +182,7 @@ public partial class OrientedImageryView : TemplatedView
 
     private void Disconnect()
     {
+        _lookAtVersion++;
         DetachBackNavigation();
         _connected = false;
         DismissPanel();
@@ -225,6 +217,7 @@ public partial class OrientedImageryView : TemplatedView
             _geoModel.PropertyChanged -= GeoModelChanged;
         if (_operationalLayers != null)
             _operationalLayers.CollectionChanged -= LayersChanged;
+        UnwireGroupLayers();
         if (_observedLayer != null)
             _observedLayer.PropertyChanged -= LayerChanged;
         _connectedGeoView = null;
@@ -232,7 +225,6 @@ public partial class OrientedImageryView : TemplatedView
         _geoModel = null;
         _operationalLayers = null;
         _observedLayer = null;
-        SelectedLayer = null;
         if (_viewport != null)
         {
             _viewport.Footprint = null;
@@ -275,7 +267,6 @@ public partial class OrientedImageryView : TemplatedView
 
     private void UpdateLayers()
     {
-        CancelOperation();
         GeoModel? geoModel = GeoView is MapView map ? map.Map : GeoView is SceneView scene ? scene.Scene : null;
         if (_geoModel != geoModel)
         {
@@ -294,25 +285,43 @@ public partial class OrientedImageryView : TemplatedView
             if (_operationalLayers != null)
                 _operationalLayers.CollectionChanged += LayersChanged;
         }
-        int index = 0;
-        if (_operationalLayers != null)
+        UnwireGroupLayers();
+        var discovered = new List<OrientedImageryLayer>();
+        void CollectLayers(IEnumerable<Layer> layers)
         {
-            foreach (var layer in _operationalLayers.OfType<OrientedImageryLayer>())
+            foreach (var layer in layers)
             {
-                if (index >= _layers.Count || _layers[index] != layer)
+                if (layer is OrientedImageryLayer imagery && !discovered.Contains(imagery))
+                    discovered.Add(imagery);
+                else if (layer is GroupLayer group && _groupLayers.Add(group))
                 {
-                    int existing = _layers.IndexOf(layer);
-                    if (existing >= 0)
-                        _layers.Move(existing, index);
-                    else
-                        _layers.Insert(index, layer);
+                    group.PropertyChanged += GroupLayerChanged;
+                    if (_nestedLayerCollections.Add(group.Layers))
+                        group.Layers.CollectionChanged += LayersChanged;
+                    CollectLayers(group.Layers);
                 }
-                index++;
             }
+        }
+        if (_operationalLayers != null)
+            CollectLayers(_operationalLayers);
+        if (!_layers.SequenceEqual(discovered))
+            CancelOperation();
+        int index = 0;
+        foreach (var layer in discovered)
+        {
+            if (index >= _layers.Count || _layers[index] != layer)
+            {
+                int existing = _layers.IndexOf(layer);
+                if (existing >= 0)
+                    _layers.Move(existing, index);
+                else
+                    _layers.Insert(index, layer);
+            }
+            index++;
         }
         while (_layers.Count > index)
             _layers.RemoveAt(_layers.Count - 1);
-        if (SelectedLayer != null && !_layers.Contains(SelectedLayer))
+        if (_connected && SelectedLayer != null && !_layers.Contains(SelectedLayer))
             SelectedLayer = null;
         DismissPanel();
         Refresh();
@@ -321,47 +330,46 @@ public partial class OrientedImageryView : TemplatedView
     private void GeoViewChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName is "Map" or "Scene")
-            DispatchUpdate(UpdateLayers);
+            UpdateLayersOnDispatcher();
+        else if (e.PropertyName == "DrawStatus")
+            DispatchUpdate(() =>
+            {
+                GeoModel? model = GeoView is MapView map ? map.Map : GeoView is SceneView scene ? scene.Scene : null;
+                if (model != _geoModel)
+                    UpdateLayers();
+            });
     }
 
     private void GeoModelChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(GeoModel.OperationalLayers))
-            DispatchUpdate(UpdateLayers);
+            UpdateLayersOnDispatcher();
     }
 
-    private void LayersChanged(object? sender, NotifyCollectionChangedEventArgs e) => DispatchUpdate(UpdateLayers);
+    private void LayersChanged(object? sender, NotifyCollectionChangedEventArgs e) => UpdateLayersOnDispatcher();
 
-    private void ToolbarChanged(object? sender, NotifyCollectionChangedEventArgs e) => DispatchUpdate(() =>
+    private void UpdateLayersOnDispatcher()
     {
-        SynchronizeToolbarItems();
-        Refresh();
-    });
-
-    private void SynchronizeToolbarItems()
-    {
-        foreach (var category in _toolbarCategories)
-            category.ToolbarItems.CollectionChanged -= ToolbarChanged;
-        _toolbarCategories.Clear();
-        foreach (var category in ViewModel.ToolbarCategories)
-        {
-            if (_toolbarCategories.Add(category))
-                category.ToolbarItems.CollectionChanged += ToolbarChanged;
-        }
-
-        var items = ViewModel.ToolbarCategories.SelectMany(category => category.ToolbarItems).ToArray();
-        if (_toolbarItems.SequenceEqual(items))
-            return;
-        _toolbarItems.Clear();
-        foreach (var item in items)
-            _toolbarItems.Add(item);
+        if (Dispatcher.IsDispatchRequired)
+            Dispatcher.Dispatch(UpdateLayers);
+        else
+            UpdateLayers();
     }
 
-    internal void SetAddingMarkers(bool enabled)
+    private void GroupLayerChanged(object? sender, PropertyChangedEventArgs e)
     {
-        _imageSearchEnabled = ImageSearchEnabled;
-        ViewModel.InteractionState = enabled ? OrientedImageryViewInteractionState.AddMarkers :
-            _imageSearchEnabled ? OrientedImageryViewInteractionState.ExploreImages : OrientedImageryViewInteractionState.ExamineImage;
+        if (e.PropertyName == nameof(GroupLayer.Layers))
+            UpdateLayersOnDispatcher();
+    }
+
+    private void UnwireGroupLayers()
+    {
+        foreach (var layers in _nestedLayerCollections)
+            layers.CollectionChanged -= LayersChanged;
+        _nestedLayerCollections.Clear();
+        foreach (var group in _groupLayers)
+            group.PropertyChanged -= GroupLayerChanged;
+        _groupLayers.Clear();
     }
 
     private void DispatchUpdate(Action action)
@@ -375,9 +383,9 @@ public partial class OrientedImageryView : TemplatedView
 
     private void ChangeLayer()
     {
-        if (!_connected && SelectedLayer != null)
+        if (!_connected)
         {
-            SelectedLayer = null;
+            Refresh();
             return;
         }
         _layerVersion++;
@@ -431,10 +439,53 @@ public partial class OrientedImageryView : TemplatedView
 
     private void ModelChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(OrientedImageryViewModel.OrientedImageryLayer))
-            DispatchUpdate(SynchronizeSelectedLayer);
-        else
-            DispatchUpdate(Refresh);
+        switch (e.PropertyName)
+        {
+            case nameof(OrientedImageryViewModel.OrientedImageryLayer):
+                DispatchUpdate(SynchronizeSelectedLayer);
+                break;
+            case nameof(OrientedImageryViewModel.SearchPoint):
+            case nameof(OrientedImageryViewModel.SelectedImageFootprint):
+                DispatchUpdate(() =>
+                {
+                    Refresh();
+                    _ = LookAtSearchPointAsync();
+                });
+                break;
+            case nameof(OrientedImageryViewModel.InteractionState):
+                DispatchUpdate(() =>
+                {
+                    CancelOperation();
+                    Refresh();
+                });
+                break;
+            default:
+                DispatchUpdate(Refresh);
+                break;
+        }
+    }
+
+    private async Task LookAtSearchPointAsync()
+    {
+        int version = ++_lookAtVersion;
+        var viewport = _viewport;
+        var model = ViewModel;
+        if (!_connected || viewport == null || model.SearchPoint is not { } point ||
+            model.SelectedImageFootprint?.OrientedImage is not { } image ||
+            !OrientedImageViewport.IsPanoramic(image.Type, image.Attributes))
+            return;
+        try
+        {
+            await viewport.LookAtAsync(point);
+        }
+        catch (Exception ex)
+        {
+            if (version == _lookAtVersion && _connected && viewport == _viewport && model == ViewModel)
+            {
+                _operationError = ex;
+                Refresh();
+            }
+        }
     }
 
     private void SynchronizeSelectedLayer()
@@ -446,8 +497,6 @@ public partial class OrientedImageryView : TemplatedView
     }
 
     private void NavigationAvailabilityChanged(object? sender, EventArgs e) => DispatchUpdate(Refresh);
-
-    private bool HasTool<T>() where T : OrientedImageryToolbarItemBase => _toolbarItems.Any(item => item is T);
 
     private async void GeoViewTapped(object? sender, GeoViewInputEventArgs e)
     {
@@ -469,7 +518,7 @@ public partial class OrientedImageryView : TemplatedView
             model.AddMarkerLocation(e.Location);
             return;
         }
-        if (model.IsSequentialNavigationEnabled || model.InteractionState == OrientedImageryViewInteractionState.None)
+        if (model.InteractionState == OrientedImageryViewInteractionState.None)
             return;
 
         CancelOperation();
@@ -488,9 +537,9 @@ public partial class OrientedImageryView : TemplatedView
                 var identified = await geoView.IdentifyLayerAsync(layer, e.Position, 10, false);
                 if (version != _operationVersion)
                     return;
-                images = identified.GeoElements.FirstOrDefault() is Feature feature
-                    ? new[] { await layer.FetchImageForFeatureAsync(feature) }
-                    : Array.Empty<OrientedImage>();
+                if (identified.GeoElements.FirstOrDefault() is not Feature feature)
+                    return;
+                images = new[] { await layer.FetchImageForFeatureAsync(feature) };
             }
 
             if (version == _operationVersion && layer == SelectedLayer && geoView == GeoView && model == ViewModel)

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1416,11 +1416,15 @@ Navigation</value>
   <data name="OrientedImageryViewOverlaySelection" xml:space="preserve"><value>Overlays selection</value></data>
   <data name="OrientedImageryViewAutoUpdate" xml:space="preserve"><value>Automatically update footprint</value></data>
   <data name="OrientedImageryViewResize" xml:space="preserve"><value>Drag to resize the oriented imagery panel</value></data>
+  <data name="OrientedImageryViewControlWidth" xml:space="preserve"><value>Control width</value></data>
   <data name="OrientedImageryViewPopup" xml:space="preserve">
     <value>Pop-up</value>
     <comment>Action and panel title for viewing the selected oriented image attributes.</comment>
   </data>
   <data name="OrientedImageryViewNoAttributes" xml:space="preserve">
     <value>No attributes available for this image.</value>
+  </data>
+  <data name="OrientedImageryViewCustomizeToolbar" xml:space="preserve">
+    <value>Customize toolbar</value>
   </data>
 </root>
