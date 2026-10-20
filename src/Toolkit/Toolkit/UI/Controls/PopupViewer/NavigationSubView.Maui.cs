@@ -52,6 +52,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             topheader.Children.Add(header);
             root.Children.Add(topheader);
             ScrollView scrollview = new ScrollView();
+#if __IOS__
+            scrollview.HandlerChanged += static (sender, _) =>
+            {
+                if (sender is ScrollView { Handler.PlatformView: UIKit.UIScrollView nativeScrollView })
+                    nativeScrollView.AllowsKeyboardScrolling = true;
+            };
+#endif
             scrollview.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (NavigationSubView viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(scrollview, 1);
             ContentControl content = new ContentControl() { VerticalOptions = new LayoutOptions(LayoutAlignment.Fill, true) };
