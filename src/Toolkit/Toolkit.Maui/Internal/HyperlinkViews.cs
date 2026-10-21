@@ -42,6 +42,7 @@ internal sealed class HyperlinkContentView : ContentView
 #if __IOS__
         SemanticProperties.SetDescription(this, SemanticProperties.GetDescription(content) ??
             (content is Label label ? label.Text ?? label.FormattedText?.ToString() : null) ?? uri.AbsoluteUri);
+        SemanticProperties.SetHeadingLevel(this, SemanticProperties.GetHeadingLevel(content));
 #endif
     }
 
