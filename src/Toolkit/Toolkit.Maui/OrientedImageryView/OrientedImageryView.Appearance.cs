@@ -124,17 +124,14 @@ public partial class OrientedImageryView
 
     private static void AddPopupPresentation(Grid image, INameScope scope)
     {
-        var open = ToolButton("OpenSelectedImagePopup", "\uE8FA", "OrientedImageryPopupOpen");
-#if ANDROID
+        var open = ToolButton("OpenSelectedImagePopup", ToolkitIcons.MoreInformation, "OrientedImageryPopupOpen");
         open.Text = null;
+        open.ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 0);
         if (open.ImageSource is FontImageSource infoIcon)
+        {
             infoIcon.Size = 30;
-#else
-        open.ImageSource = null;
-        open.Text = "\uE8FA";
-        open.FontFamily = ToolkitIcons.FontFamilyName;
-        open.FontSize = 30;
-#endif
+            infoIcon.SetAppThemeColor(FontImageSource.ColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
+        }
         open.WidthRequest = 44;
         open.HeightRequest = 44;
         open.BorderWidth = 0;
@@ -145,21 +142,6 @@ public partial class OrientedImageryView
         open.VerticalOptions = LayoutOptions.Start;
         open.IsVisible = false;
         open.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
-        open.SetAppThemeColor(Button.TextColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
-#if WINDOWS
-        open.BackgroundColor = Colors.Transparent;
-        open.HandlerChanged += (_, _) =>
-        {
-            if (open.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.Button nativeButton)
-                nativeButton.Content = Microsoft.UI.Xaml.Markup.XamlReader.Load(
-                    "<Grid xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Width=\"32\" Height=\"32\">" +
-                    "<Path Fill=\"{ThemeResource SolidBackgroundFillColorBaseBrush}\" Stroke=\"{ThemeResource TextFillColorPrimaryBrush}\" StrokeThickness=\"1\" " +
-                    "Data=\"M16 3C8.8205 3 3 8.8205 3 16C3 23.1795 8.8205 29 16 29C23.1795 29 29 23.1795 29 16C29 8.8205 23.1795 3 16 3Z\"/>" +
-                    "<Path Fill=\"{ThemeResource AccentTextFillColorPrimaryBrush}\" " +
-                    "Data=\"M16.0105 8C16.7775 8 17.5 8.673 17.5 9.4905C17.5 10.3635 16.7775 11 16.0105 11C15.1125 11 14.5 10.3635 14.5 9.4905C14.5 8.673 15.1125 8 16.0105 8ZM19.5 23.5H17H15H12.5V22L15 21.5V15H13V13.5L17 13V21.5L19.5 22V23.5Z\"/>" +
-                    "</Grid>");
-        };
-#endif
         ToolTipProperties.SetText(open, Text("OpenSelectedImagePopup"));
         scope.RegisterName("PART_PopupOpen", open);
         image.Add(open);
@@ -186,15 +168,21 @@ public partial class OrientedImageryView
         var close = ToolButton("CloseSelectedImagePopup", "\uEB49", "OrientedImageryPopupClose");
         close.Text = null;
         close.WidthRequest = 44;
+        close.HeightRequest = 44;
+        close.MinimumWidthRequest = 44;
+        close.CornerRadius = 12;
+        close.ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 0);
+        if (close.ImageSource is FontImageSource closeIcon)
+        {
+            closeIcon.Size = 22;
+            closeIcon.SetAppThemeColor(FontImageSource.ColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
+        }
         close.Padding = 0;
         close.HorizontalOptions = LayoutOptions.End;
-        close.Margin = 8;
+        close.Margin = new Thickness(8, 8, 8, 0);
         close.BorderWidth = 1;
-        close.SetAppThemeColor(Button.BorderColorProperty, Color.FromArgb("#999999"), Color.FromArgb("#888888"));
-        close.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
-#if ANDROID
-        StyleAndroidPopupButton(close);
-#endif
+        close.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#EEEEEE"), Color.FromArgb("#444444"));
+        close.SetAppThemeColor(Button.BorderColorProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#666666"));
         ToolTipProperties.SetText(close, Text("CloseSelectedImagePopup"));
         scope.RegisterName("PART_PopupClose", close);
         surface.Add(close);
@@ -266,19 +254,6 @@ public partial class OrientedImageryView
         image.Add(host);
         Grid.SetColumnSpan(host, Math.Max(1, image.ColumnDefinitions.Count));
     }
-
-#if ANDROID
-    private static void StyleAndroidPopupButton(Button button)
-    {
-        button.CornerRadius = 12;
-        button.HeightRequest = 44;
-        button.ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 0);
-        if (button.ImageSource is FontImageSource icon)
-            icon.Size = 22;
-        button.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#EEEEEE"), Color.FromArgb("#444444"));
-        button.SetAppThemeColor(Button.BorderColorProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#666666"));
-    }
-#endif
 
     private static Button MobileImageArrow(bool next)
     {
