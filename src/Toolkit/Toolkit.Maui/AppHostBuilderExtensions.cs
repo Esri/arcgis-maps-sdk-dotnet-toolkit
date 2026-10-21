@@ -24,6 +24,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #if WINDOWS
                 handler.AddHandler<FieldsTableGrid, FieldsTableGridHandler>();
                 handler.AddHandler<FieldsTableCell, FieldsTableCellHandler>();
+#elif __IOS__
+                handler.AddHandler<PopupViewer, PopupViewerHandler>();
 #endif
             });
 #endif
