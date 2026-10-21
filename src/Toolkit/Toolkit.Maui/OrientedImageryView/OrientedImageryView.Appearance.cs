@@ -12,6 +12,7 @@ public partial class OrientedImageryView
 {
     private Label? _status;
     private View? _statusHost;
+    private View? _selectionGuidance;
     private Label? _notice;
     private ActivityIndicator? _busy;
     private Button? _previousButton;
@@ -126,26 +127,38 @@ public partial class OrientedImageryView
         var open = ToolButton("OpenSelectedImagePopup", "\uE8FA", "OrientedImageryPopupOpen");
 #if ANDROID
         open.Text = null;
+        if (open.ImageSource is FontImageSource infoIcon)
+            infoIcon.Size = 30;
 #else
         open.ImageSource = null;
         open.Text = "\uE8FA";
         open.FontFamily = ToolkitIcons.FontFamilyName;
-        open.FontSize = 20;
-        open.FontAttributes = FontAttributes.Bold;
-        open.TextColor = Color.FromArgb("#007AC2");
+        open.FontSize = 30;
 #endif
         open.WidthRequest = 44;
         open.HeightRequest = 44;
-        open.BorderWidth = 1;
+        open.BorderWidth = 0;
         open.CornerRadius = 22;
         open.Margin = 16;
         open.Padding = 0;
         open.HorizontalOptions = LayoutOptions.End;
         open.VerticalOptions = LayoutOptions.Start;
         open.IsVisible = false;
-        open.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
-#if ANDROID
-        StyleAndroidPopupButton(open);
+        open.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
+        open.SetAppThemeColor(Button.TextColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
+#if WINDOWS
+        open.BackgroundColor = Colors.Transparent;
+        open.HandlerChanged += (_, _) =>
+        {
+            if (open.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.Button nativeButton)
+                nativeButton.Content = Microsoft.UI.Xaml.Markup.XamlReader.Load(
+                    "<Grid xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Width=\"32\" Height=\"32\">" +
+                    "<Path Fill=\"{ThemeResource SolidBackgroundFillColorBaseBrush}\" Stroke=\"{ThemeResource TextFillColorPrimaryBrush}\" StrokeThickness=\"1\" " +
+                    "Data=\"M16 3C8.8205 3 3 8.8205 3 16C3 23.1795 8.8205 29 16 29C23.1795 29 29 23.1795 29 16C29 8.8205 23.1795 3 16 3Z\"/>" +
+                    "<Path Fill=\"{ThemeResource AccentTextFillColorPrimaryBrush}\" " +
+                    "Data=\"M16.0105 8C16.7775 8 17.5 8.673 17.5 9.4905C17.5 10.3635 16.7775 11 16.0105 11C15.1125 11 14.5 10.3635 14.5 9.4905C14.5 8.673 15.1125 8 16.0105 8ZM19.5 23.5H17H15H12.5V22L15 21.5V15H13V13.5L17 13V21.5L19.5 22V23.5Z\"/>" +
+                    "</Grid>");
+        };
 #endif
         ToolTipProperties.SetText(open, Text("OpenSelectedImagePopup"));
         scope.RegisterName("PART_PopupOpen", open);
@@ -203,14 +216,52 @@ public partial class OrientedImageryView
         var status = new Label
         {
             HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center,
-            HorizontalTextAlignment = TextAlignment.Center, MaximumWidthRequest = 400, Margin = 16,
-            AutomationId = "OrientedImageryStatus",
+            HorizontalTextAlignment = TextAlignment.Center,
+            AutomationId = "OrientedImageryStatus", FontSize = 18,
         };
-        status.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
+        status.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
+        var choices = new FlexLayout
+        {
+            Direction = FlexDirection.Row, Wrap = FlexWrap.Wrap,
+            JustifyContent = FlexJustify.Center, AlignItems = FlexAlignItems.Center,
+        };
+        foreach (var view in new View[]
+        {
+            new Label { Text = Text("ImageSelectionClickOn"), FontSize = 18 },
+            ImageModeIcon(true),
+            new Label { Text = Text("ImageSelectionOr"), FontSize = 18 },
+            ImageModeIcon(false),
+            new Label { Text = Text("ImageSelectionAndTap"), FontSize = 18 },
+        })
+        {
+            view.Margin = new Thickness(4, 0);
+            AutomationProperties.SetIsInAccessibleTree(view, false);
+            if (view is Label label)
+                label.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
+            else
+                view.WidthRequest = view.HeightRequest = 24;
+            choices.Add(view);
+        }
+        var searchMap = new Label
+        {
+            Text = Text("ImageSelectionSearchMap"), FontSize = 18, HorizontalTextAlignment = TextAlignment.Center,
+        };
+        searchMap.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
+        var guidance = new VerticalStackLayout { Spacing = 6, Children = { choices, searchMap } };
+        SemanticProperties.SetDescription(guidance, Text("ImageSelectionInstructions"));
+        AutomationProperties.SetIsInAccessibleTree(guidance, true);
+        AutomationProperties.SetIsInAccessibleTree(choices, false);
+        AutomationProperties.SetIsInAccessibleTree(searchMap, false);
+        var content = new VerticalStackLayout
+        {
+            HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center,
+            MaximumWidthRequest = 400, Margin = 16, Spacing = 6, Children = { status, guidance },
+        };
         var host = new Grid();
         host.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
-        host.Add(status);
+        host.Add(content);
         scope.RegisterName("PART_Status", status);
+        scope.RegisterName("PART_SelectionGuidance", guidance);
         scope.RegisterName("PART_StatusHost", host);
         image.Add(host);
         Grid.SetColumnSpan(host, Math.Max(1, image.ColumnDefinitions.Count));
@@ -287,6 +338,7 @@ public partial class OrientedImageryView
         _popupCloseButton = GetTemplateChild("PART_PopupClose") as Button;
         _status = GetTemplateChild("PART_Status") as Label;
         _statusHost = GetTemplateChild("PART_StatusHost") as View;
+        _selectionGuidance = GetTemplateChild("PART_SelectionGuidance") as View;
         _notice = GetTemplateChild("PART_Notice") as Label;
         _busy = GetTemplateChild("PART_Busy") as ActivityIndicator;
         _previousButton = GetTemplateChild("PART_Previous") as Button;
@@ -407,6 +459,7 @@ public partial class OrientedImageryView
         _viewport = null;
         _status = null;
         _statusHost = null;
+        _selectionGuidance = null;
         _notice = null;
         _busy = null;
         _previousButton = null;
@@ -479,6 +532,7 @@ public partial class OrientedImageryView
 
         string? error = _operationError?.Message ?? _viewport?.Error?.Message;
         string? message = error;
+        bool showSelectionGuidance = false;
         if (message == null)
         {
             if (GeoView == null) message = Text("NoGeoView");
@@ -488,14 +542,13 @@ public partial class OrientedImageryView
             else if (_searching || _viewport?.IsBusy == true || SelectedLayer.LoadStatus == LoadStatus.Loading)
                 message = Text("Loading");
             else if (ViewModel.SelectedImage == null)
-                message = Text(ViewModel.InteractionState switch
-                {
-                    OrientedImageryViewInteractionState.ExploreImages => "NoImagesSelectedExplore",
-                    OrientedImageryViewInteractionState.ExamineImage => "NoImagesSelectedExamine",
-                    _ => "NoImagesSelectedNone",
-                });
+            {
+                message = Text("NoImageToDisplay");
+                showSelectionGuidance = true;
+            }
         }
-        ErrorMessage = error ?? ViewModel.SequentialNavigationError?.Message ?? message;
+        ErrorMessage = error ?? ViewModel.SequentialNavigationError?.Message ??
+            (showSelectionGuidance ? $"{message}. {Text("ImageSelectionInstructions")}" : message);
 
         if (_status != null)
         {
@@ -504,6 +557,8 @@ public partial class OrientedImageryView
         }
         if (_statusHost != null)
             _statusHost.IsVisible = message != null;
+        if (_selectionGuidance != null)
+            _selectionGuidance.IsVisible = showSelectionGuidance;
 
         RefreshToolbarPresentation();
         if (_notice != null)
