@@ -399,7 +399,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         var adjacentImage = step == SequenceStep.Next ? _nextSequentialImage : _previousSequentialImage;
         if (adjacentImage != null)
+        {
             SelectedImage = adjacentImage;
+            SetImages([SelectedImage]);
+        }
     }
 
     private async Task PrefetchAdjacentImagesAsync()

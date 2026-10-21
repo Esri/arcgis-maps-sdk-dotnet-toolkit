@@ -88,6 +88,7 @@ public partial class OrientedImageryView
 
     private void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
     {
+        HasSearchedForImages = false;
         if (oldValue != null)
         {
             oldValue.PropertyChanged -= ViewModel_PropertyChanged;
@@ -144,6 +145,7 @@ public partial class OrientedImageryView
                     _viewport.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
                 break;
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
+                HasSearchedForImages = false;
                 UpdateErrorMessage();
                 break;
         }
@@ -151,6 +153,21 @@ public partial class OrientedImageryView
 #endregion ViewModel
 
 #region Display
+    /// <summary>
+    /// Gets a value indicating whether an image selection search has completed after a map tap.
+    /// </summary>
+    public bool HasSearchedForImages
+    {
+        get => (bool)GetValue(HasSearchedForImagesProperty);
+        private set => SetValue(HasSearchedForImagesProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="HasSearchedForImages" /> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty HasSearchedForImagesProperty =
+        PropertyHelper.CreateProperty<bool, OrientedImageryView>(nameof(HasSearchedForImages), false);
+
     private OrientedImageViewport? _viewport;
     private Action<object?, OrientedImageTappedEventArgs>? _onImageTappedOverride;
     private Action<object?, OrientedImageTappedEventArgs> _onImageTapped;
@@ -341,6 +358,7 @@ public partial class OrientedImageryView
                 ViewModel.SetImages(images.ToList(), e.Location);
                 ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
                 ViewModel.IsSequentialNavigationEnabled = false;
+                HasSearchedForImages = true;
                 break;
 
             case OrientedImageryViewInteractionState.DisplayImage:
@@ -348,9 +366,15 @@ public partial class OrientedImageryView
                 if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
                 {
                     var image = await ViewModel.OrientedImageryLayer.FetchImageForFeatureAsync(feature);
-                    ViewModel.SetImages([]);
+                    ViewModel.SetImages([image]);
                     ViewModel.SelectedImage = image;
                 }
+                else
+                {
+                    ViewModel.SetImages([], e.Location);
+                    ViewModel.SelectedImage = null;
+                }
+                HasSearchedForImages = true;
                 break;
 
             default:

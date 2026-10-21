@@ -860,9 +860,28 @@
                                                 MaxWidth="400"
                                                 TextElement.FontSize="18"
                                                 TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
-                                        <TextBlock Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}"
-                                                   TextAlignment="Center" TextWrapping="Wrap" Margin="0,0,0,6" />
+                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" Margin="0,0,0,6">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HasSearchedForImages}" Value="True">
+                                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesFound}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                         <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HasSearchedForImages}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionClickOn}" />
                                             <InlineUIContainer BaselineAlignment="Center">
                                                 <Viewbox Width="24" Height="24" Margin="4,0">

@@ -1233,6 +1233,10 @@
     <value>No image to display</value>
     <comment>Heading shown by OrientedImageryView when no image is selected.</comment>
   </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>No images found for the tapped location</value>
+    <comment>Message shown when no images found for a tapped location.</comment>
+  </data>
   <data name="OrientedImageryViewImageSelectionClickOn" xml:space="preserve">
     <value>Click on</value>
     <comment>Instruction before the Explore icon: Click on [Explore icon] or [Examine icon] and tap on the map to search.</comment>
