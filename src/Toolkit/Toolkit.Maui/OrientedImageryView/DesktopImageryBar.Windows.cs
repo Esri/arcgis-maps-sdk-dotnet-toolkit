@@ -19,7 +19,6 @@ using NativeView = Microsoft.UI.Xaml.FrameworkElement;
 using SolidColorBrush = Microsoft.UI.Xaml.Media.SolidColorBrush;
 using CornerRadius = Microsoft.UI.Xaml.CornerRadius;
 using AutomationProperties = Microsoft.UI.Xaml.Automation.AutomationProperties;
-using MenuFlyout = Microsoft.UI.Xaml.Controls.MenuFlyout;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -64,7 +63,46 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
     }
 
-    protected override NativeGrid CreatePlatformView() => new();
+    protected override NativeGrid CreatePlatformView() => new() { Resources = CreateToolbarResources() };
+
+    private static Microsoft.UI.Xaml.ResourceDictionary CreateToolbarResources()
+    {
+        // Override native state brushes, not templates, to retain focus and accessibility behavior.
+        var xaml = new System.Text.StringBuilder(
+            "<ResourceDictionary xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" " +
+            "xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"><ResourceDictionary.ThemeDictionaries>");
+        foreach (bool highContrast in new[] { false, true })
+        {
+            xaml.Append("<ResourceDictionary x:Key=\"").Append(highContrast ? "HighContrast" : "Default").Append("\">");
+            foreach (string control in new[] { "Button", "ToggleButton" })
+            {
+                foreach (string state in new[] { "PointerOver", "Pressed", "Checked", "CheckedPointerOver", "CheckedPressed", "CheckedDisabled" })
+                {
+                    if (control == "Button" && state.StartsWith("Checked", StringComparison.Ordinal))
+                        continue;
+                    bool disabled = state == "CheckedDisabled";
+                    string background = highContrast
+                        ? disabled ? "SystemColorButtonFaceColor" : "SystemColorHighlightColor"
+                        : disabled ? "ControlFillColorDisabled" :
+                            state == "Checked" ? "SystemBaseLowColor" : "SystemBaseMediumLowColor";
+                    string foreground = highContrast
+                        ? disabled ? "SystemColorGrayTextColor" : "SystemColorHighlightTextColor"
+                        : disabled ? "TextFillColorDisabled" : "TextFillColorPrimary";
+                    AddBrush(control + "Background" + state, background);
+                    AddBrush(control + "Foreground" + state, foreground);
+                    if (state.StartsWith("Checked", StringComparison.Ordinal))
+                        AddBrush(control + "BorderBrush" + state, disabled ? "ControlFillColorTransparent" : foreground);
+                }
+            }
+            xaml.Append("</ResourceDictionary>");
+        }
+        xaml.Append("</ResourceDictionary.ThemeDictionaries></ResourceDictionary>");
+        return (Microsoft.UI.Xaml.ResourceDictionary)XamlReader.Load(xaml.ToString());
+
+        void AddBrush(string key, string color) =>
+            xaml.Append("<SolidColorBrush x:Key=\"").Append(key).Append("\" Color=\"{ThemeResource ")
+                .Append(color).Append("}\"/>");
+    }
 
     protected override void ConnectHandler(NativeGrid platformView)
     {
@@ -114,24 +152,6 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         };
         label.Margin = new NativeThickness(0, 8, 0, 0);
         panel.Children.Add(label);
-        return panel;
-    }
-
-    private static StackPanel DropdownContent(UIElement icon)
-    {
-        var panel = new StackPanel
-        {
-            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
-            VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center,
-        };
-        panel.Children.Add(new NativeGrid { Width = 16, Height = 32, Children = { icon } });
-        var caption = new NativeGrid { Height = 32, Margin = new NativeThickness(0, 8, 0, 0) };
-        caption.Children.Add((Microsoft.UI.Xaml.Shapes.Path)XamlReader.Load(
-            "<Path xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" " +
-            "Width=\"12\" Height=\"8\" VerticalAlignment=\"Center\" " +
-            "Stroke=\"{ThemeResource TextFillColorPrimaryBrush}\" StrokeThickness=\"2\" " +
-            "StrokeStartLineCap=\"Round\" StrokeEndLineCap=\"Round\" StrokeLineJoin=\"Round\" Data=\"M1 1L6 6L11 1\"/>"));
-        panel.Children.Add(caption);
         return panel;
     }
 
@@ -276,7 +296,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         {
             Content = LabeledContent(icon, labelKey, key == "AddMarker" ? 40 : 68),
             MinWidth = 0, Height = 84, Padding = new NativeThickness(4),
-            BorderThickness = new NativeThickness(0),
+            BorderThickness = new NativeThickness(1),
+            BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
             Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), CornerRadius = new CornerRadius(0),
         };
         Describe(toggle, key, automationId);
@@ -290,9 +311,63 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         return toggle;
     }
 
+    private sealed class ToolbarComboBox : ComboBox
+    {
+        private readonly bool _showSymbol;
+
+        public ToolbarComboBox(bool showSymbol)
+        {
+            _showSymbol = showSymbol;
+            MinWidth = 0;
+            Height = 84;
+            Padding = new NativeThickness(0);
+            BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+            Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+            CornerRadius = new CornerRadius(0);
+            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
+            UseSystemFocusVisuals = true;
+        }
+
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            // Rearrange native parts rather than copying WinUI's keyboard, focus and state template.
+            if (GetTemplateChild("LayoutRoot") is NativeGrid root && root.ColumnDefinitions.Count > 1)
+                root.ColumnDefinitions[1].Width = new Microsoft.UI.Xaml.GridLength(0);
+            if (GetTemplateChild("Background") is Microsoft.UI.Xaml.Controls.Border background)
+                background.MinWidth = 0;
+            if (GetTemplateChild("ContentPresenter") is Microsoft.UI.Xaml.Controls.ContentPresenter content)
+            {
+                content.Visibility = _showSymbol ? NativeVisibility.Visible : NativeVisibility.Collapsed;
+                content.Width = content.Height = 32;
+                content.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center;
+                content.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
+                content.Margin = new NativeThickness(0, 0, 0, 40);
+                content.RenderTransform = new ScaleTransform { ScaleX = 0.5, ScaleY = 0.5, CenterX = 16, CenterY = 16 };
+            }
+            if (GetTemplateChild("DropDownGlyph") is NativeView chevron)
+            {
+                NativeGrid.SetColumn(chevron, 0);
+                chevron.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center;
+                chevron.Margin = new NativeThickness(0, 40, 0, 0);
+            }
+            if (GetTemplateChild("Pill") is NativeView pill)
+                pill.Visibility = NativeVisibility.Collapsed;
+            if (GetTemplateChild("PopupBorder") is Microsoft.UI.Xaml.Controls.Border border)
+            {
+                border.MinWidth = 40;
+                border.CornerRadius = new CornerRadius(0);
+            }
+            if (GetTemplateChild("Popup") is Microsoft.UI.Xaml.Controls.Primitives.Popup popup)
+            {
+                popup.PlacementTarget = this;
+                popup.DesiredPlacement = PopupPlacementMode.BottomEdgeAlignedLeft;
+            }
+        }
+    }
+
     private NativeGrid ModePicker(OrientedImageryView owner, ImageSearchModeVM mode)
     {
-        var model = owner.ViewModel;
         var host = new NativeGrid
         {
             Height = 84,
@@ -305,7 +380,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         var button = new ToggleButton
         {
             MinWidth = 0, Height = 84, Padding = new NativeThickness(4),
-            BorderThickness = new NativeThickness(0), Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+            BorderThickness = new NativeThickness(1), Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+            BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
             CornerRadius = new CornerRadius(0),
         };
         button.Click += (_, _) =>
@@ -313,35 +389,49 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             if (!_updating && button.IsEnabled)
                 mode.IsImageSelectionEnabled = button.IsChecked == true;
         };
-        var dropdown = DropdownButton(24);
-        dropdown.Padding = new NativeThickness(0);
-        dropdown.Content = DropdownContent(new NativeGrid());
+        var dropdown = new ToolbarComboBox(false);
         NativeGrid.SetColumn(dropdown, 1);
         host.Children.Add(button);
         host.Children.Add(dropdown);
-        var menu = new MenuFlyout();
-        string groupName = Guid.NewGuid().ToString("N");
-        dropdown.Flyout = menu;
-        _detachSymbols.Add(menu.Hide);
+        _detachSymbols.Add(() => dropdown.IsDropDownOpen = false);
         Describe(button, "ImageSearchMode", "OrientedImageryDesktopMode");
         Describe(dropdown, "ImageSearchMode", "OrientedImageryDesktopModeDropdown");
         foreach (var state in mode.ImageSearchModes)
         {
             bool search = state == OrientedImageryViewInteractionState.ExploreImages;
             string key = search ? "ImageSearchModeExplore" : "ImageSearchModeExamine";
-            var item = new RadioMenuFlyoutItem
+            var content = new StackPanel { Orientation = Microsoft.UI.Xaml.Controls.Orientation.Horizontal, Spacing = 8 };
+            content.Children.Add(new Viewbox { Width = 24, Height = 24, Child = ImageModeIcon(search) });
+            content.Children.Add(new TextBlock { Text = Text(key), VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center });
+            var item = new ComboBoxItem
             {
-                Text = Text(key), Icon = ImageModeIcon(search), GroupName = groupName,
+                Content = content, Tag = state, MinHeight = 40, Padding = new NativeThickness(8, 4, 8, 4),
             };
             AutomationProperties.SetName(item, Text(key));
-            item.Click += (_, _) =>
+            item.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler((_, e) =>
             {
-                if (!_updating && button.IsEnabled)
+                if (!_updating && dropdown.IsEnabled && item.IsSelected &&
+                    e.GetCurrentPoint(item).Properties.IsLeftButtonPressed)
                     mode.SelectedInteractionState = state;
-            };
-            _updates.Add(() => item.IsChecked = model.InteractionState == state);
-            menu.Items.Add(item);
+            }), true);
+            dropdown.Items.Add(item);
         }
+        dropdown.PreviewKeyDown += (_, e) =>
+        {
+            if (!_updating && dropdown.IsEnabled && dropdown.IsDropDownOpen &&
+                e.Key is Windows.System.VirtualKey.Enter or Windows.System.VirtualKey.Space &&
+                FocusManager.GetFocusedElement(dropdown.XamlRoot) is ComboBoxItem
+                {
+                    IsSelected: true, Tag: OrientedImageryViewInteractionState state,
+                })
+                mode.SelectedInteractionState = state;
+        };
+        dropdown.SelectionChanged += (_, _) =>
+        {
+            if (!_updating && dropdown.IsEnabled &&
+                dropdown.SelectedItem is ComboBoxItem { Tag: OrientedImageryViewInteractionState state })
+                mode.SelectedInteractionState = state;
+        };
         bool? previous = null;
         _updates.Add(() =>
         {
@@ -352,6 +442,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                     search ? "ImageSearchModeExplore" : "ImageSearchModeExamine", 48);
                 previous = search;
             }
+            dropdown.SelectedItem = dropdown.Items.OfType<ComboBoxItem>()
+                .FirstOrDefault(item => item.Tag is OrientedImageryViewInteractionState state && state == mode.SelectedInteractionState);
             button.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching;
             dropdown.IsEnabled = button.IsEnabled;
             button.IsChecked = mode.IsImageSelectionEnabled;
@@ -365,14 +457,6 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         _detachSymbols.Add(() => mode.PropertyChanged -= changed);
         return host;
     }
-
-    private static NativeButton DropdownButton(double width) => new()
-    {
-        MinWidth = width, Height = 84, Padding = new NativeThickness(4),
-        BorderThickness = new NativeThickness(0), Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-        CornerRadius = new CornerRadius(0),
-        HorizontalContentAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
-    };
 
     private NativeButton SequenceButton(OrientedImageryView owner)
     {
@@ -394,38 +478,36 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         return button;
     }
 
-    private NativeButton SymbolPicker(OrientedImageryView owner, SelectNewMarkerSymbolVM picker)
+    private ComboBox SymbolPicker(OrientedImageryView owner, SelectNewMarkerSymbolVM picker)
     {
-        var button = DropdownButton(32);
-        button.Padding = new NativeThickness(0);
-        var selectedImage = new Microsoft.UI.Xaml.Controls.Image { Width = 16, Height = 32 };
-        button.Content = DropdownContent(selectedImage);
-        var menu = new MenuFlyout();
-        string groupName = Guid.NewGuid().ToString("N");
-        button.Flyout = menu;
-        _detachSymbols.Add(menu.Hide);
-        Describe(button, "SelectMarkerSymbol", "OrientedImageryDesktopSelectMarkers");
+        var combo = new ToolbarComboBox(true);
+        Describe(combo, "SelectMarkerSymbol", "OrientedImageryDesktopSelectMarkers");
+        _detachSymbols.Add(() => combo.IsDropDownOpen = false);
         MarkerSymbol[] symbols = [];
-        var images = new List<Microsoft.UI.Xaml.Controls.Image>();
+        combo.SelectionChanged += (_, _) =>
+        {
+            if (!_updating && combo.IsEnabled && combo.SelectedIndex >= 0 && combo.SelectedIndex < symbols.Length)
+                picker.SelectedSymbol = symbols[combo.SelectedIndex];
+        };
         void UpdateSymbols()
         {
             if (symbols.SequenceEqual(picker.SymbolOptions)) return;
             symbols = picker.SymbolOptions.ToArray();
-            menu.Items.Clear();
-            images.Clear();
+            _generation++;
+            combo.Items.Clear();
             foreach (var symbol in symbols)
             {
                 var image = new Microsoft.UI.Xaml.Controls.Image { Width = 32, Height = 32 };
-                images.Add(image);
                 string name = symbol is SimpleMarkerSymbol simple ? Text("Marker" + simple.Style) :
-                    string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), menu.Items.Count + 1);
-                var item = new RadioMenuFlyoutItem { Icon = new ImageIcon(), GroupName = groupName };
-                AutomationProperties.SetName(item, name);
-                item.Click += (_, _) =>
+                    string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), combo.Items.Count + 1);
+                var item = new ComboBoxItem
                 {
-                    if (!_updating && button.IsEnabled) picker.SelectedSymbol = symbol;
+                    Content = image, Padding = new NativeThickness(4),
+                    MinWidth = 40, MinHeight = 40,
+                    HorizontalContentAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
                 };
-                menu.Items.Add(item);
+                AutomationProperties.SetName(item, name);
+                combo.Items.Add(item);
                 _ = RenderSymbolAsync(owner, symbol, image, _generation);
             }
         }
@@ -441,17 +523,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         _updates.Add(() =>
         {
             UpdateSymbols();
-            int selected = Array.IndexOf(symbols, picker.SelectedSymbol);
-            selectedImage.Source = selected >= 0 ? images[selected].Source : null;
-            for (int i = 0; i < menu.Items.Count; i++)
-            {
-                var item = (RadioMenuFlyoutItem)menu.Items[i];
-                item.IsChecked = i == selected;
-                ((ImageIcon)item.Icon).Source = images[i].Source;
-            }
-            button.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching;
+            combo.SelectedIndex = Array.IndexOf(symbols, picker.SelectedSymbol);
+            combo.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching;
         });
-        return button;
+        return combo;
     }
 
     private async Task RenderSymbolAsync(OrientedImageryView owner, MarkerSymbol symbol, Microsoft.UI.Xaml.Controls.Image image, int generation)
