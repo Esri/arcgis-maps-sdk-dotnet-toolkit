@@ -286,7 +286,9 @@ public partial class OrientedImageViewport
             ? new NotSupportedException($"Oriented image type '{image.Type}' is not supported by this control yet.")
             : null;
 
-        SetActiveViewport(viewport);
+        // The state is published once the incoming viewport has the footprint, so a switch between
+        // inner viewports goes straight to loading.
+        ActivateViewport(viewport);
 
         if (viewport is not null)
         {
@@ -295,16 +297,24 @@ public partial class OrientedImageViewport
             viewport.SetAutoUpdateFootprint(AutoUpdateFootprint);
             viewport.SetBackgroundColor(DisplayBackgroundColor);
         }
+
+        UpdateState();
     }
 
-    // Subscribes before the caller pushes state, so the viewport's first notifications aren't missed. Internal for tests.
+    // Internal for tests.
     internal void SetActiveViewport(OrientedImageInnerViewport? viewport)
+    {
+        ActivateViewport(viewport);
+        UpdateState();
+    }
+
+    // Subscribes before the caller pushes the footprint, so the viewport's first notifications aren't missed.
+    // The caller publishes the state afterwards.
+    private void ActivateViewport(OrientedImageInnerViewport? viewport)
     {
         if (ReferenceEquals(_activeViewport, viewport))
         {
-            // _unsupportedError can change while the viewport stays the same, so re-host and publish state anyway.
             HostActiveViewport();
-            UpdateState();
             return;
         }
 
@@ -327,8 +337,6 @@ public partial class OrientedImageViewport
             viewport.ImageTapped += OnViewportImageTapped;
             PushAutomationProperties();
         }
-
-        UpdateState();
     }
 
     private void HostActiveViewport()
