@@ -60,6 +60,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             cv.SetBinding(CarouselView2.ItemsSourceProperty, static (MediaPopupElementView view) => view.Element?.Media, source: RelativeBindingSource.TemplatedParent);
 #else
             CarouselView cv = new CarouselView();
+#if __IOS__
+            cv.Loop = false;
+#endif
             cv.SetBinding(CarouselView.ItemsSourceProperty, static (MediaPopupElementView view) => view.Element?.Media, source: RelativeBindingSource.TemplatedParent);
 #endif
 #if __IOS__ // Workaround for https://github.com/dotnet/maui/issues/12911
@@ -84,8 +87,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Button previous = CreateMediaNavigationButton(ToolkitIcons.ChevronLeft, "PopupViewerPreviousMediaButtonText", "PreviousMediaButton");
             previous.Clicked += (_, _) =>
             {
-                if (cv.ItemsSource is IList<PopupMedia> { Count: > 0 } media)
-                    cv.Position = cv.Position > 0 ? cv.Position - 1 : media.Count - 1;
+                if (cv.ItemsSource is IList<PopupMedia> media && cv.Position > 0 && cv.Position < media.Count)
+                    cv.Position--;
             };
             carouselHost.Add(previous);
 
@@ -95,11 +98,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Button next = CreateMediaNavigationButton(ToolkitIcons.ChevronRight, "PopupViewerNextMediaButtonText", "NextMediaButton");
             next.Clicked += (_, _) =>
             {
-                if (cv.ItemsSource is IList<PopupMedia> { Count: > 0 } media)
-                    cv.Position = (cv.Position + 1) % media.Count;
+                if (cv.ItemsSource is IList<PopupMedia> media && cv.Position >= 0 && cv.Position < media.Count - 1)
+                    cv.Position++;
             };
             Grid.SetColumn(next, 2);
             carouselHost.Add(next);
+
+            void UpdateNavigationButtons()
+            {
+                int count = (cv.ItemsSource as IList<PopupMedia>)?.Count ?? 0;
+                previous.IsVisible = next.IsVisible = count > 1;
+                previous.IsEnabled = count > 1 && cv.Position > 0 && cv.Position < count;
+                next.IsEnabled = count > 1 && cv.Position >= 0 && cv.Position < count - 1;
+            }
+            cv.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName is nameof(CarouselView.Position) or nameof(CarouselView.ItemsSource))
+                    UpdateNavigationButtons();
+            };
+            UpdateNavigationButtons();
 
             root.Add(carouselHost);
 #else
@@ -170,12 +187,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 carousel.IsSwipeEnabled = count > 1;
             }
-#if __IOS__
-            if (GetTemplateChild("PreviousButton") is Button previous)
-                previous.IsVisible = count > 1;
-            if (GetTemplateChild("NextButton") is Button next)
-                next.IsVisible = count > 1;
-#endif
         }
 
 #if __IOS__
