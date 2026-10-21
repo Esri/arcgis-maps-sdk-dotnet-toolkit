@@ -1237,7 +1237,7 @@ Image</value>
     <value>Image Details</value>
   </data>
   <data name="OrientedImageryViewAddMarkerLabel" xml:space="preserve">
-    <value>Add Marker</value>
+    <value>Mark location</value>
   </data>
   <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
     <value>Select Symbol</value>
