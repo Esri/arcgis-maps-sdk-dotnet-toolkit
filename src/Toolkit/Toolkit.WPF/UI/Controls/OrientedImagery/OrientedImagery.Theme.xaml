@@ -154,29 +154,26 @@
     </Style>
 
     <Style x:Key="ImageInfoButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="24" />
-        <Setter Property="Height" Value="24" />
-        <Setter Property="Background" Value="White" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" />
+        <Setter Property="Width" Value="26pt" />
+        <Setter Property="Height" Value="26pt" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="Root" CornerRadius="20" Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border Background="Transparent">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
@@ -187,8 +184,8 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Source={x:Static SystemParameters.HighContrast}}" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -538,7 +535,7 @@
                                FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" />
                 </Viewbox>
-                <TextBlock Width="40" Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkerLabel}" />
+                <TextBlock Width="48" Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkerLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
@@ -954,10 +951,15 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Button.Style>
-                                    <TextBlock Text="&#xE8FA;"
-                                               FontSize="20"
-                                               FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                    <Viewbox Width="23pt" Height="23pt" Stretch="Uniform">
+                                        <Grid Width="32" Height="32">
+                                            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                                  Stroke="Black" StrokeThickness="1"
+                                                  Data="M16 3C8.8205 3 3 8.8205 3 16C3 23.1795 8.8205 29 16 29C23.1795 29 29 23.1795 29 16C29 8.8205 23.1795 3 16 3Z" />
+                                            <Path Fill="{Binding Background, RelativeSource={RelativeSource AncestorType=Button}}"
+                                                  Data="M16.0105 8C16.7775 8 17.5 8.673 17.5 9.4905C17.5 10.3635 16.7775 11 16.0105 11C15.1125 11 14.5 10.3635 14.5 9.4905C14.5 8.673 15.1125 8 16.0105 8ZM19.5 23.5H17H15H12.5V22L15 21.5V15H13V13.5L17 13V21.5L19.5 22V23.5Z" />
+                                        </Grid>
+                                    </Viewbox>
                                 </Button>
                             </Grid>
 
