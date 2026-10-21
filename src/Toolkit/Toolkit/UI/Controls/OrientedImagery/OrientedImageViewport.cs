@@ -64,6 +64,11 @@ public partial class OrientedImageViewport
     private OrientedImageInnerViewport? _activeViewport;
     private Exception? _unsupportedError;
 
+    // A handler of a state property can set Footprint while UpdateState writes the properties. The nested UpdateState
+    // then only marks the state dirty, and the outer one recomputes instead of writing stale values.
+    private bool _updatingState;
+    private bool _stateDirty;
+
     internal static readonly SimpleMarkerSymbol DefaultMarkerSymbol =
         new(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(255, 0, 122, 194), 10);
 
@@ -405,16 +410,41 @@ public partial class OrientedImageViewport
 
     private void UpdateState()
     {
-        bool busy = _unsupportedError is null && (_activeViewport?.IsBusy ?? false);
-        bool interactive = _unsupportedError is null && (_activeViewport?.IsInteractive ?? false);
-        Exception? error = _unsupportedError ?? _activeViewport?.Error;
-        if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
+        if (_updatingState)
+        {
+            _stateDirty = true;
             return;
+        }
 
-        SetValue(IsBusyPropertyKey, busy);
-        SetValue(IsInteractivePropertyKey, interactive);
-        SetValue(ErrorPropertyKey, error);
-        StateChanged?.Invoke(this, EventArgs.Empty);
+        var oldState = (IsBusy, IsInteractive, Error);
+        _updatingState = true;
+        try
+        {
+            do
+            {
+                _stateDirty = false;
+                bool busy = _unsupportedError is null && (_activeViewport?.IsBusy ?? false);
+                bool interactive = _unsupportedError is null && (_activeViewport?.IsInteractive ?? false);
+                Exception? error = _unsupportedError ?? _activeViewport?.Error;
+                if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
+                    break;
+
+                SetValue(IsBusyPropertyKey, busy);
+                if (!_stateDirty)
+                    SetValue(IsInteractivePropertyKey, interactive);
+                if (!_stateDirty)
+                    SetValue(ErrorPropertyKey, error);
+            }
+            while (_stateDirty);
+        }
+        finally
+        {
+            _updatingState = false;
+        }
+
+        // Raised outside the guard, so a StateChanged handler that changes the footprint runs a full update of its own.
+        if ((IsBusy, IsInteractive, Error) != oldState)
+            StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
     // No image needs no inner viewport, so a panorama-only app never creates the planar viewport's MapView.

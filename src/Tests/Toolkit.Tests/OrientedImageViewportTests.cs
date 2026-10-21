@@ -317,7 +317,7 @@ public sealed class OrientedImageViewportTests
         var log = new List<string>();
         foreach (DependencyProperty property in new[] { OrientedImageViewport.IsBusyProperty, OrientedImageViewport.IsInteractiveProperty, OrientedImageViewport.ErrorProperty })
             System.ComponentModel.DependencyPropertyDescriptor.FromProperty(property, typeof(OrientedImageViewport)).AddValueChanged(control, (_, _) => log.Add(property.Name));
-        control.StateChanged += (_, _) => log.Add($"StateChanged: interactive={control.IsInteractive}, error={control.Error?.Message ?? "none"}");
+        LogStateChanged(control, log);
 
         viewport.Publish(interactive: true);
         CollectionAssert.AreEqual(new[] { "IsInteractive", "StateChanged: interactive=True, error=none" }, log, "an image becomes interactive");
@@ -333,6 +333,61 @@ public sealed class OrientedImageViewportTests
         control.SetActiveViewport(null);
         CollectionAssert.AreEqual(new[] { "Error", "StateChanged: interactive=False, error=none" }, log, "removing the inner viewport clears the error");
     }
+
+    [STATestMethod]
+    public void StateChangedReportsTheNewestStateWhenAHandlerClearsTheImage()
+    {
+        // The handler runs after IsInteractive is set and before Error is, so a stale write would restore the error.
+        var control = new OrientedImageViewport { Template = CreateHostTemplate() };
+        Assert.IsTrue(control.ApplyTemplate());
+        var viewport = new FakeInnerViewport();
+        control.SetActiveViewport(viewport);
+        viewport.Publish(interactive: true);
+        OnceWhenNotInteractive(control, () => control.SetActiveViewport(null));
+        var log = new List<string>();
+        LogStateChanged(control, log);
+
+        viewport.Publish(interactive: true, error: new InvalidOperationException("render failed"));
+
+        CollectionAssert.AreEqual(new[] { "StateChanged: interactive=False, error=none" }, log);
+    }
+
+    [STATestMethod]
+    public void StateChangedReportsTheNewestStateWhenAHandlerSwitchesImages()
+    {
+        // The handler moves on to an image that has failed too, so a stale write would report the first image's error.
+        var control = new OrientedImageViewport { Template = CreateHostTemplate() };
+        Assert.IsTrue(control.ApplyTemplate());
+        var first = new FakeInnerViewport();
+        control.SetActiveViewport(first);
+        first.Publish(interactive: true);
+        var second = new FakeInnerViewport();
+        second.Publish(interactive: false, error: new InvalidOperationException("second failed"));
+        OnceWhenNotInteractive(control, () => control.SetActiveViewport(second));
+        var log = new List<string>();
+        LogStateChanged(control, log);
+
+        first.Publish(interactive: true, error: new InvalidOperationException("first failed"));
+
+        CollectionAssert.AreEqual(new[] { "StateChanged: interactive=False, error=second failed" }, log);
+    }
+
+    // Runs the action from inside the control's state update, the first time IsInteractive turns false.
+    private static void OnceWhenNotInteractive(OrientedImageViewport control, Action action)
+    {
+        bool done = false;
+        System.ComponentModel.DependencyPropertyDescriptor.FromProperty(OrientedImageViewport.IsInteractiveProperty, typeof(OrientedImageViewport)).AddValueChanged(control, (_, _) =>
+        {
+            if (control.IsInteractive || done)
+                return;
+
+            done = true;
+            action();
+        });
+    }
+
+    private static void LogStateChanged(OrientedImageViewport control, List<string> log) =>
+        control.StateChanged += (_, _) => log.Add($"StateChanged: interactive={control.IsInteractive}, error={control.Error?.Message ?? "none"}");
 
     // The active inner viewport's focusable view; here, the raster viewport's MapView.
     private static DependencyObject GetFocusableView(OrientedImageViewport control)
