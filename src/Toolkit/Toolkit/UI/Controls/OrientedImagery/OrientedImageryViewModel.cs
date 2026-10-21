@@ -159,6 +159,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private ReadOnlyCollection<OrientedImage> _readOnlyImages;
     private OrientedImage? _selectedImage;
     private OrientedImageFootprint? _selectedImageFootprint;
+    private bool _isSelectedFootprintVisible;
     private Popup? _selectedImagePopup;
     private bool _isSequentialNavigationEnabled;
     private bool _isFetchingAdjacentImage;
@@ -626,11 +627,30 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to display available footprints.
+    /// </summary>
+    public bool AreFootprintsEnabled
+    {
+        get => _isSelectedFootprintVisible;
+        set
+        {
+            _isSelectedFootprintVisible = value;
+            if (OrientedImageryLayer != null && SelectedImageFootprint != null)
+                UpdateVisibleFootprints();
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AreFootprintsEnabled)));
+        }
+    }
+
     private void UpdateVisibleFootprints()
     {
         if (OrientedImageryLayer == null) return;
 
         OrientedImageryLayer.VisibleFootprints.Clear();
+
+        if (!AreFootprintsEnabled)
+            return;
 
         foreach (var ftp in _footprints)
         {

@@ -134,10 +134,7 @@ public partial class OrientedImageryView
         {
             case nameof(OrientedImageryViewModel.SearchPoint):
             case nameof(OrientedImageryViewModel.SelectedImageFootprint):
-                if (_viewport != null)
-                    _viewport.Footprint = ViewModel.SelectedImageFootprint;
-                if (_viewport != null && ViewModel?.SearchPoint is MapPoint searchPoint)
-                    _viewport.LookAtAsync(searchPoint);
+                UpdateViewportImage();
                 goto case nameof(OrientedImageryViewModel.Images);
             case nameof(OrientedImageryViewModel.Images):
                 UpdatePaginatorSelection();
@@ -228,6 +225,37 @@ public partial class OrientedImageryView
         catch (ArcGISRuntimeException ex)
         {
             Debug.WriteLine($"Error converting image point to location: {ex.Message}");
+        }
+    }
+
+    private void UpdateViewportImage()
+    {
+        if (_viewport == null)
+            return;
+
+        _viewport.Footprint = ViewModel.SelectedImageFootprint;
+        if (ViewModel?.SearchPoint is MapPoint searchPoint && _viewport.Footprint != null)
+        {
+            _viewport.LookAtAsync(searchPoint);
+            ViewModel.AreFootprintsEnabled = false;
+            _viewport.StateChanged += Viewport_StateChanged;
+        }
+
+    }
+
+    private void Viewport_StateChanged(object? sender, EventArgs e)
+    {
+        if (sender is not OrientedImageViewport viewport)
+            return;
+
+        if (viewport != _viewport)
+        {
+            viewport.StateChanged -= Viewport_StateChanged;
+        }
+        else if (viewport.IsInteractive == true)
+        {
+            ViewModel.AreFootprintsEnabled = true;
+            _viewport.StateChanged -= Viewport_StateChanged;
         }
     }
 #endregion Display
