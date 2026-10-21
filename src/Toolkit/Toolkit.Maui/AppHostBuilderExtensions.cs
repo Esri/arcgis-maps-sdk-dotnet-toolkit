@@ -21,11 +21,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>();
                 handler.AddHandler<HyperlinkLabel, HyperlinkLabelHandler>();
                 handler.AddHandler<HyperlinkContentView, HyperlinkContentViewHandler>();
-#if WINDOWS
                 handler.AddHandler<FieldsTableGrid, FieldsTableGridHandler>();
+#if WINDOWS
                 handler.AddHandler<FieldsTableCell, FieldsTableCellHandler>();
 #elif __IOS__
                 handler.AddHandler<PopupViewer, PopupViewerHandler>();
+                handler.AddHandler<FieldsTableLabel, FieldsTableLabelHandler>();
 #endif
             });
 #endif
