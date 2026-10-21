@@ -1188,10 +1188,6 @@ images</value>
 image</value>
     <comment>Same as OrientedImageryViewImageSearchModeDisplay, but with manual line breaks for formatting.</comment>
   </data>
-  <data name="OrientedImageryViewDisplayImage" xml:space="preserve">
-    <value>Display Image</value>
-    <comment>MAUI label for the ExamineImage interaction mode that displays a tapped oriented image.</comment>
-  </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
     <value>Open details for selected image</value>
     <comment>Tooltip for the button that opens the popup for the selected oriented image.</comment>
@@ -1285,13 +1281,21 @@ navigation</value>
     <value>Tap on a feature to view its image</value>
     <comment>Instructions for Display Image mode.</comment>
   </data>
-  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
-    <value>or switch to</value>
-    <comment>First part of "or switch to [icon] mode". Follows OrientedImageryViewImageSelectionDisplayImage/FindImages instructions. (e.g. "Tap on a feature to view its image or switch to [icon] mode")</comment>
+  <data name="OrientedImageryViewImageSelectionUsing" xml:space="preserve">
+    <value>using</value>
+    <comment>Second instruction line, before the Find images icon in MAUI.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
     <value>mode</value>
     <comment>Last word in "or switch to [icon] mode"</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMap" xml:space="preserve">
+    <value>Tap on the map to search</value>
+    <comment>First line of the no-image-selected instruction, followed by 'using [Search icon] or [Examine icon] mode'.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionInstructions" xml:space="preserve">
+    <value>Select Explore images or Display image, then tap on the map to search.</value>
+    <comment>Accessible text alternative to the icon-based no-image-selected instructions in MAUI.</comment>
   </data>
   <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
     <value>Connect a GeoView to view oriented imagery.</value>

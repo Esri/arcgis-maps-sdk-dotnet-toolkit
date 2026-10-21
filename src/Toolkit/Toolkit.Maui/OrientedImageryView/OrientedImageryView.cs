@@ -544,8 +544,11 @@ public partial class OrientedImageryView : TemplatedView
 
             if (version == _operationVersion && layer == SelectedLayer && geoView == GeoView && model == ViewModel)
             {
-                model.SetImages(images, model.InteractionState == OrientedImageryViewInteractionState.ExploreImages ? e.Location : null);
+                bool explore = model.InteractionState == OrientedImageryViewInteractionState.ExploreImages;
+                model.SetImages(explore ? images : [], explore ? e.Location : null);
                 model.SelectedImage = images.FirstOrDefault();
+                if (explore)
+                    model.IsSequentialNavigationEnabled = false;
             }
         }
         catch (OperationCanceledException) when (version != _operationVersion)
