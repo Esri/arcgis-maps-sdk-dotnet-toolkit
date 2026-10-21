@@ -53,7 +53,7 @@ Allows measurement of distances and areas on the map view.
 
 Allows you to take a web map offline by downloading map areas ahead-of-time or on-demand.
 
-![Preplanned map areas in OfflineMapAreasView on WPF](https://user-images.githubusercontent.com/3453182/680713789-a833393b-34ca-4d66-bc90-309d9bc131b6.png)
+![Preplanned map areas in OfflineMapAreasView on WPF](https://github.com/user-attachments/assets/3182ebc8-c6ec-483f-891c-41ed65fe98c0)
 
 [Documentation](offline-map-areas-view.md)
 
