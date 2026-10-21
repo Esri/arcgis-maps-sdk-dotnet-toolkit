@@ -1130,7 +1130,7 @@
     <comment>Name for the footprints toggle. Assistive technology announces its on/off state separately.</comment>
   </data>
   <data name="OrientedImageryViewAddMarkersAutomationName" xml:space="preserve">
-    <value>Add markers</value>
+    <value>Mark location</value>
     <comment>Name for the marker-creation toggle. Assistive technology announces its on/off state separately.</comment>
   </data>
   <data name="OrientedImageryViewSwitchToImageSearch" xml:space="preserve">
@@ -1158,7 +1158,7 @@
     <value>Image Details</value>
   </data>
   <data name="OrientedImageryViewAddMarkerLabel" xml:space="preserve">
-    <value>Add Marker</value>
+    <value>Mark location</value>
   </data>
   <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
     <value>Select Symbol</value>
