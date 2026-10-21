@@ -183,14 +183,22 @@ public partial class OrientedImageryView
             ColumnSpacing = 2, Padding = new Thickness(4, 0),
             VerticalOptions = LayoutOptions.Center,
         } : new HorizontalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-        var icon = navigation ? MenuIcon(null, NavigationGeometry) : key switch
+        var icon = MainMenuIcon(navigation ? MenuIcon(null, NavigationGeometry) : key switch
         {
             OrientedImageryToolbarCategory.ModeCategoryName => ImageModeIcon(ImageSearchEnabled),
             OrientedImageryToolbarCategory.OverlaysCategoryName => MenuIcon(null, OverlayGeometry),
-            OrientedImageryToolbarCategory.MarkersCategoryName => MenuIcon("\uE8ED", null),
+            OrientedImageryToolbarCategory.MarkersCategoryName => new Label
+            {
+                Text = "\uE8ED", FontFamily = ToolkitIcons.FontFamilyName, FontSize = 16,
+                FontAttributes = FontAttributes.Bold,
+                FontAutoScalingEnabled = false, LineBreakMode = LineBreakMode.NoWrap,
+                HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center,
+            },
             _ => new Label { Text = "\u2022\u2022\u2022", TextColor = Color.FromArgb("#007AC2") },
-        };
+        });
         icon.WidthRequest = icon.HeightRequest = navigation ? 14 : 16;
+        if (key == OrientedImageryToolbarCategory.MarkersCategoryName)
+            icon.HeightRequest = 22;
         var iconHost = new Grid { WidthRequest = icon.WidthRequest, HeightRequest = icon.HeightRequest };
         iconHost.Add(icon);
         content.Add(iconHost);
@@ -226,6 +234,11 @@ public partial class OrientedImageryView
         cell.MinimumHeightRequest = 60;
         icon.WidthRequest = icon.HeightRequest = 22;
         iconHost.WidthRequest = iconHost.HeightRequest = 22;
+        if (key == OrientedImageryToolbarCategory.MarkersCategoryName && icon is Label markerIcon)
+        {
+            markerIcon.FontSize = 22;
+            icon.HeightRequest = iconHost.HeightRequest = 28;
+        }
         label.FontSize = 11;
         label.FontAttributes = FontAttributes.Bold;
         label.TextColor = IosAccent;
@@ -268,7 +281,7 @@ public partial class OrientedImageryView
             if (modeChanged)
             {
                 iconHost.Clear();
-                icon = ImageModeIcon(ImageSearchEnabled);
+                icon = MainMenuIcon(ImageModeIcon(ImageSearchEnabled));
                 icon.WidthRequest = iconHost.WidthRequest;
                 icon.HeightRequest = iconHost.HeightRequest;
                 iconHost.Add(icon);
@@ -287,7 +300,7 @@ public partial class OrientedImageryView
                 if (icon is Image { Source: FontImageSource font })
                     font.Color = active ? Colors.White : accent;
                 if (icon is Microsoft.Maui.Controls.Shapes.Path path)
-                    path.Fill = active ? Colors.White : accent;
+                    path.Stroke = path.Fill = active ? Colors.White : accent;
                 if (icon is Label moreIcon)
                     moreIcon.TextColor = active ? Colors.White : accent;
 #if __IOS__ && !MACCATALYST
@@ -310,6 +323,16 @@ public partial class OrientedImageryView
     }
 
 #if !WINDOWS
+    private static View MainMenuIcon(View icon)
+    {
+        if (icon is Microsoft.Maui.Controls.Shapes.Path path)
+        {
+            path.Stroke = path.Fill;
+            path.StrokeThickness = 0.75;
+        }
+        return icon;
+    }
+
     private void ShowToolbarCategory(OrientedImageryToolbarCategory category, View anchor, string title)
     {
         DismissPanel();
