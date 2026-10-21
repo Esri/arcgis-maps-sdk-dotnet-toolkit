@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1187,6 +1187,10 @@ images</value>
     <value>Display
 image</value>
     <comment>Same as OrientedImageryViewImageSearchModeDisplay, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewDisplayImage" xml:space="preserve">
+    <value>Display Image</value>
+    <comment>MAUI label for the ExamineImage interaction mode that displays a tapped oriented image.</comment>
   </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
     <value>Open details for selected image</value>
