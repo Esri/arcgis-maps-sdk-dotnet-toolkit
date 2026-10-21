@@ -49,17 +49,15 @@ internal sealed class HyperlinkLabelHandler : ViewHandler<HyperlinkLabel, UIText
     protected override UITextView CreatePlatformView()
     {
         using var linkAttributes = new NSDictionary();
-        var textView = new UITextView
-        {
-            Editable = false,
-            Selectable = true,
-            ScrollEnabled = false,
-            // Display-only links belong to the popup's focus group, not a separate text-entry group.
-            FocusGroupIdentifier = null,
-            BackgroundColor = UIColor.Clear,
-            TextContainerInset = UIEdgeInsets.Zero,
-            WeakLinkTextAttributes = linkAttributes,
-        };
+        var textView = VirtualView.Parent is FieldsTableCell cell ? new FieldsTableLinkView(cell) : new UITextView();
+        textView.Editable = false;
+        textView.Selectable = true;
+        textView.ScrollEnabled = false;
+        // Display-only links belong to the popup's focus group, not a separate text-entry group.
+        textView.FocusGroupIdentifier = null;
+        textView.BackgroundColor = UIColor.Clear;
+        textView.TextContainerInset = UIEdgeInsets.Zero;
+        textView.WeakLinkTextAttributes = linkAttributes;
         textView.TextContainer.LineFragmentPadding = 0;
         return textView;
     }
