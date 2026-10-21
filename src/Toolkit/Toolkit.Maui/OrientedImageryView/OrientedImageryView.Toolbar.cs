@@ -271,8 +271,7 @@ public partial class OrientedImageryView
         {
             cell.IsVisible = category.ToolbarItems.Any(item => item is not ToolbarDividerVM && IsToolbarItemVisible(item));
             button.IsEnabled = HasValidLayer && !_searching;
-            bool active = _panelAnchor == button ||
-                (key == OrientedImageryToolbarCategory.ModeCategoryName &&
+            bool active = (key == OrientedImageryToolbarCategory.ModeCategoryName &&
                     ViewModel.InteractionState is OrientedImageryViewInteractionState.ExploreImages or OrientedImageryViewInteractionState.DisplayImage) ||
                 (key == OrientedImageryToolbarCategory.MarkersCategoryName && IsAddingMarkers) ||
                 (key == OrientedImageryToolbarCategory.MoreCategoryName && ViewModel.IsSequentialNavigationEnabled);
