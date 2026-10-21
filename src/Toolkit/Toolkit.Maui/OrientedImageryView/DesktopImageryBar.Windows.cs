@@ -460,7 +460,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     private ToggleButton SequenceButton(OrientedImageryView owner)
     {
         var model = owner.ViewModel;
-        return Toggle(owner, "SequentialMode", "SequentialNavigationLabel", Geometry(OrientedImageryView.SequenceGeometry),
+        return Toggle(owner, "SequentialMode", "SequentialMode", Geometry(OrientedImageryView.SequenceGeometry),
             () => model.IsSequentialNavigationEnabled, value => model.IsSequentialNavigationEnabled = value,
             () => model.ToggleSequentialNavigationCommand.CanExecute(null), "OrientedImageryDesktopSequentialMode");
     }
