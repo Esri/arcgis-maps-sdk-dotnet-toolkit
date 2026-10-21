@@ -352,7 +352,7 @@ public partial class OrientedImageryView
                 ViewModel.AddMarkerLocation(e.Location);
                 break;
 
-            case OrientedImageryViewInteractionState.ExploreImages:
+            case OrientedImageryViewInteractionState.SearchImages:
                 var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
                 var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
                 ViewModel.SetImages(images.ToList(), e.Location);

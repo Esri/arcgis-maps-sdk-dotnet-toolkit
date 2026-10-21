@@ -295,7 +295,7 @@
                   HorizontalAlignment="Center" VerticalAlignment="Center"
                   Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                   Data="M31.1864 15.1864H27.5786C27.1609 9.41668 22.5833 4.83905 16.8515 4.42359L16.8136 4.42142V0.813559C16.8136 0.364475 16.4491 0 16 0C15.5509 0 15.1864 0.364475 15.1864 0.813559V4.42142C9.41668 4.83905 4.83905 9.41668 4.42359 15.1485L4.42142 15.1864H0.813559C0.364475 15.1864 0 15.5509 0 16C0 16.4491 0.364475 16.8136 0.813559 16.8136H4.42142C4.83905 22.5833 9.41668 27.1609 15.1485 27.5764L15.1864 27.5786V31.1864C15.1864 31.6355 15.5509 32 16 32C16.4491 32 16.8136 31.6355 16.8136 31.1864V27.5786C22.5833 27.1609 27.1609 22.5833 27.5764 16.8515L27.5786 16.8136H31.1864C31.6355 16.8136 32 16.4491 32 16C32 15.5509 31.6355 15.1864 31.1864 15.1864ZM16.8136 25.9515V22.5085C16.8136 22.0594 16.4491 21.6949 16 21.6949C15.5509 21.6949 15.1864 22.0594 15.1864 22.5085V25.9515C10.3138 25.5414 6.45858 21.6862 6.05071 16.8504L6.04854 16.8136H9.49153C9.94061 16.8136 10.3051 16.4491 10.3051 16C10.3051 15.5509 9.94061 15.1864 9.49153 15.1864H6.04854C6.45858 10.3138 10.3138 6.45858 15.1496 6.05071L15.1864 6.04854V9.49153C15.1864 9.94061 15.5509 10.3051 16 10.3051C16.4491 10.3051 16.8136 9.94061 16.8136 9.49153V6.04854C21.6862 6.45858 25.5414 10.3138 25.9493 15.1496L25.9515 15.1864H22.5085C22.0594 15.1864 21.6949 15.5509 21.6949 16C21.6949 16.4491 22.0594 16.8136 22.5085 16.8136H25.9515C25.5403 21.6862 21.6862 25.5403 16.8504 25.9493L16.8136 25.9515Z" />
-            <Path x:Name="ExploreIcon" Visibility="Collapsed"
+            <Path x:Name="SearchIcon" Visibility="Collapsed"
                   Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                 <Path.Data>
                     <GeometryGroup FillRule="Nonzero">
@@ -308,9 +308,9 @@
             </Path>
         </Grid>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
+            <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.SearchImages}">
                 <Setter TargetName="DisplayIcon" Property="Visibility" Value="Collapsed" />
-                <Setter TargetName="ExploreIcon" Property="Visibility" Value="Visible" />
+                <Setter TargetName="SearchIcon" Property="Visibility" Value="Visible" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -344,8 +344,8 @@
                                             <Setter Property="Width" Value="48" />
                                             <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeDisplay}" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
-                                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
+                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" Value="{x:Static controls:OrientedImageryViewInteractionState.SearchImages}">
+                                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeSearch}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -466,8 +466,16 @@
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowSelectedFootprint}"
-                      Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}">
+            <ToggleButton.Style>
+                <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewModel.SelectedImage}" Value="{x:Null}">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToggleButton.Style>
             <StackPanel>
                 <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
                     <Grid Width="32" Height="32">
@@ -579,8 +587,8 @@
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeDisplay}" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}">
-                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeExplore}" />
+                                        <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.SearchImages}">
+                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeSearch}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -882,10 +890,10 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>
-                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionClickOn}" />
+                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionEnable}" />
                                             <InlineUIContainer BaselineAlignment="Center">
                                                 <Viewbox Width="24" Height="24" Margin="4,0">
-                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.ExploreImages}"
+                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.SearchImages}"
                                                                     ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
                                                 </Viewbox>
                                             </InlineUIContainer>
