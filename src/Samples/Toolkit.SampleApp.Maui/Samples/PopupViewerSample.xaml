@@ -6,7 +6,7 @@
              xmlns:popups="clr-namespace:Esri.ArcGISRuntime.Mapping.Popups;assembly=Esri.ArcGISRuntime"
              x:Class="Toolkit.SampleApp.Maui.Samples.PopupViewerSample" Title="PopupViewer">
     <ContentPage.Content>
-        <Grid>
+        <Grid x:Name="RootGrid">
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="WidthStates">
                     <VisualState x:Name="PhoneState">
