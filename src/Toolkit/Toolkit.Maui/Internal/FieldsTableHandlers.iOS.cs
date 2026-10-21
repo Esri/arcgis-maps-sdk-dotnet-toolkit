@@ -75,7 +75,11 @@ internal sealed class FieldsTableLabelView : MauiLabel, IUIAccessibilityContaine
 {
     private readonly FieldsTableCellAccessibility _cell;
 
-    internal FieldsTableLabelView(FieldsTableCell cell) => _cell = new(cell);
+    internal FieldsTableLabelView(FieldsTableCell cell)
+    {
+        _cell = new(cell);
+        IsAccessibilityElement = true;
+    }
 
     public NSRange GetAccessibilityRowRange() => _cell.RowRange;
 
