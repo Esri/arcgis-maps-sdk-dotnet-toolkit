@@ -53,7 +53,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(64, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
-        _interactionState = OrientedImageryViewInteractionState.ExploreImages;
+        _interactionState = OrientedImageryViewInteractionState.None;
 
         ToolbarCategories = GetDefaultToolbarCategories();
         ToolbarCategories.CollectionChanged += ToolbarCategories_CollectionChanged;
@@ -1002,7 +1002,7 @@ public enum OrientedImageryViewInteractionState
     None,
 
     /// <summary>Taps on the GeoView will search for all images with a view on the tapped location. No behavior for taps on the viewport.</summary>
-    ExploreImages,
+    SearchImages,
 
     /// <summary>
     /// Taps on the GeoView will attempt to retrieve a single OrientedImagery feature at the tapped location and display it on the viewport.

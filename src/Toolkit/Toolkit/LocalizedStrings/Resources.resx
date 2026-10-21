@@ -1169,8 +1169,8 @@
   <data name="EnterSequentialNavigationModeLabel" xml:space="preserve">
     <value>Sequential navigation</value>
   </data>
-  <data name="OrientedImageryViewImageSearchModeExplore" xml:space="preserve">
-    <value>Explore images</value>
+  <data name="OrientedImageryViewImageSearchModeSearch" xml:space="preserve">
+    <value>Search images</value>
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
@@ -1237,13 +1237,13 @@
     <value>No images found for the tapped location</value>
     <comment>Message shown when no images found for a tapped location.</comment>
   </data>
-  <data name="OrientedImageryViewImageSelectionClickOn" xml:space="preserve">
-    <value>Click on</value>
-    <comment>Instruction before the Explore icon: Click on [Explore icon] or [Examine icon] and tap on the map to search.</comment>
+  <data name="OrientedImageryViewImageSelectionEnable" xml:space="preserve">
+    <value>Enable</value>
+    <comment>Instruction before the Search icon: Enable [Search icon] or [Examine icon] and tap on the map to search.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
     <value>or</value>
-    <comment>Instruction between the Explore and Examine icons in the no-image-selected message.</comment>
+    <comment>Instruction between the Search and Examine icons in the no-image-selected message.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionAndTap" xml:space="preserve">
     <value>and tap</value>
