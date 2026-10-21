@@ -193,11 +193,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         "M19 8 A4 4 0 1 0 27 8 A4 4 0 1 0 19 8 Z " +
         "M20 8 A3 3 0 1 0 26 8 A3 3 0 1 0 20 8 Z");
 
-    private IconElement ImageModeIcon(bool explore) => explore
-        ? (PathIcon)XamlReader.Load(
+    private static IconElement ImageModeIcon(bool explore) =>
+        (PathIcon)XamlReader.Load(
             "<PathIcon xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Data=\"" +
-            OrientedImageryView.ExploreImagesGeometry + "\"/>")
-        : new FontIcon { Glyph = "\uEA74", FontFamily = IconFont, FontSize = 32 };
+            (explore ? OrientedImageryView.ExploreImagesGeometry : OrientedImageryView.DisplayImageGeometry) + "\"/>");
 
     private static void Describe(NativeView control, string key, string? id = null)
     {
@@ -399,7 +398,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         foreach (var state in mode.ImageSearchModes)
         {
             bool search = state == OrientedImageryViewInteractionState.ExploreImages;
-            string key = search ? "ImageSearchModeExplore" : "ImageSearchModeExamine";
+            string key = search ? "ImageSearchModeExplore" : "DisplayImage";
             var content = new StackPanel { Orientation = Microsoft.UI.Xaml.Controls.Orientation.Horizontal, Spacing = 8 };
             content.Children.Add(new Viewbox { Width = 24, Height = 24, Child = ImageModeIcon(search) });
             content.Children.Add(new TextBlock { Text = Text(key), VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center });
@@ -439,7 +438,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             if (previous != search)
             {
                 button.Content = LabeledContent(ImageModeIcon(search),
-                    search ? "ImageSearchModeExplore" : "ImageSearchModeExamine", 48);
+                    search ? "ImageSearchModeExplore" : "DisplayImage", 48);
                 previous = search;
             }
             dropdown.SelectedItem = dropdown.Items.OfType<ComboBoxItem>()
