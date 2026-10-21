@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             var presenter = new ContentPresenter();
-#if WINDOWS
+#if WINDOWS || __IOS__
             var root = new VerticalStackLayout();
             Label title = new Label();
             title.SetBinding(Label.TextProperty, static (FieldsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
@@ -59,7 +59,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             description.SetBinding(Label.TextProperty, static (FieldsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             description.SetBinding(VisualElement.IsVisibleProperty, static (FieldsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             description.Style = PopupViewer.GetPopupViewerCaptionStyle();
+#if WINDOWS
             SemanticProperties.SetHeadingLevel(description, SemanticHeadingLevel.Level2);
+#endif
             root.Add(description);
             root.Add(presenter);
 #else
