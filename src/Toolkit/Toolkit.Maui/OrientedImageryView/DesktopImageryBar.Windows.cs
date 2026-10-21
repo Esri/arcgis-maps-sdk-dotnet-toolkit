@@ -256,7 +256,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 ShowSelectedFootprintVM => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintLabel", Geometry(OrientedImageryView.CurrentFootprintGeometry), () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value, automationId: "OrientedImageryDesktopCurrentFootprint"),
                 ShowUnselectedFootprintsVM => Toggle(owner, "ShowUnselectedImageFootprints", "AdditionalFootprintsLabel", Geometry(OrientedImageryView.OverlayGeometry), () => model.ShowUnselectedFootprints, value => model.ShowUnselectedFootprints = value, () => model.Images.Count > 1, "OrientedImageryDesktopAdditionalFootprints"),
                 ShowCameraMarkersVM => Toggle(owner, "ShowCameraMarkersOnGeoView", "CameraLocationsLabel", CameraLocationsIcon(), () => model.ShowCameraLocations, value => model.ShowCameraLocations = value, () => model.Images.Count > 1, "OrientedImageryDesktopCameraLocations"),
-                AllowAddingMarkersVM => Toggle(owner, "AddMarker", "AddMarkerLabel", Glyph("\uE8ED"), () => owner.IsAddingMarkers, owner.SetAddingMarkers),
+                AllowAddingMarkersVM => Toggle(owner, "AddMarkersAutomationName", "AddMarkerLabel", Glyph("\uE8ED"), () => owner.IsAddingMarkers, owner.SetAddingMarkers, automationId: "OrientedImageryDesktopAddMarker"),
                 AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdate", Glyph(ToolkitIcons.Refresh), () => model.AutoUpdateFootprint, value => model.AutoUpdateFootprint = value),
                 SelectNewMarkerSymbolVM picker => SymbolPicker(owner, picker),
                 ClearMarkersVM => ActionButton(owner, "ClearMarkers", "ClearMarkersLabel", Glyph("\uEB04"), () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
@@ -293,7 +293,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
         var toggle = new ToggleButton
         {
-            Content = LabeledContent(icon, labelKey, key == "AddMarker" ? 40 : 68),
+            Content = LabeledContent(icon, labelKey, key == "AddMarkersAutomationName" ? 48 : 68),
             MinWidth = 0, Height = 84, Padding = new NativeThickness(4),
             BorderThickness = new NativeThickness(1),
             BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
@@ -398,7 +398,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         foreach (var state in mode.ImageSearchModes)
         {
             bool search = state == OrientedImageryViewInteractionState.ExploreImages;
-            string key = search ? "ImageSearchModeExplore" : "DisplayImage";
+            string key = search ? "ImageSearchModeExplore" : "ImageSearchModeDisplay";
             var content = new StackPanel { Orientation = Microsoft.UI.Xaml.Controls.Orientation.Horizontal, Spacing = 8 };
             content.Children.Add(new Viewbox { Width = 24, Height = 24, Child = ImageModeIcon(search) });
             content.Children.Add(new TextBlock { Text = Text(key), VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center });
@@ -438,7 +438,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             if (previous != search)
             {
                 button.Content = LabeledContent(ImageModeIcon(search),
-                    search ? "ImageSearchModeExplore" : "DisplayImage", 48);
+                    search ? "ImageSearchModeExplore" : "ImageSearchModeDisplay", 48);
                 previous = search;
             }
             dropdown.SelectedItem = dropdown.Items.OfType<ComboBoxItem>()
@@ -457,24 +457,12 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         return host;
     }
 
-    private NativeButton SequenceButton(OrientedImageryView owner)
+    private ToggleButton SequenceButton(OrientedImageryView owner)
     {
         var model = owner.ViewModel;
-        var button = ActionButton(owner, "SequentialMode", "SequentialNavigationLabel", Geometry(OrientedImageryView.SequenceGeometry), () => model.ToggleSequentialNavigationCommand.Execute(null), () => model.ToggleSequentialNavigationCommand.CanExecute(null));
-        bool previous = false;
-        Describe(button, "SequentialMode", "OrientedImageryDesktopSequentialMode");
-        _updates.Add(() =>
-        {
-            if (previous != model.IsSequentialNavigationEnabled)
-            {
-                button.Content = LabeledContent(Geometry(model.IsSequentialNavigationEnabled ? ReturnToResults : OrientedImageryView.SequenceGeometry), "SequentialNavigationLabel");
-                previous = model.IsSequentialNavigationEnabled;
-            }
-            string key = model.IsSequentialNavigationEnabled ? "ReturnToResults" : "SequentialMode";
-            if (AutomationProperties.GetName(button) != Text(key))
-                Describe(button, key, "OrientedImageryDesktopSequentialMode");
-        });
-        return button;
+        return Toggle(owner, "SequentialMode", "SequentialNavigationLabel", Geometry(OrientedImageryView.SequenceGeometry),
+            () => model.IsSequentialNavigationEnabled, value => model.IsSequentialNavigationEnabled = value,
+            () => model.ToggleSequentialNavigationCommand.CanExecute(null), "OrientedImageryDesktopSequentialMode");
     }
 
     private ComboBox SymbolPicker(OrientedImageryView owner, SelectNewMarkerSymbolVM picker)
@@ -677,6 +665,5 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         return grid;
     }
 
-    private const string ReturnToResults = "M4 18H3V29H29V3H12V4H28V28H4V18ZM5.66 13.354L1.807 9.5L5.66 5.646L6.367 6.353L3.767 9H11.5C13.7489 8.9923 15.9086 9.87918 17.503 11.4652C19.0974 13.0512 19.9958 15.2061 20 17.455V22.855H19V17.455C18.9956 13.3147 15.6403 9.95941 11.5 9.955H3.675L6.367 12.646L5.66 13.354Z";
 }
 #endif
