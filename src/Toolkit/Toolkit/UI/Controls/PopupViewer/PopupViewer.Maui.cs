@@ -18,6 +18,11 @@
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
+#if __IOS__
+using Microsoft.Maui.Handlers;
+using UIKit;
+using NativeContentView = Microsoft.Maui.Platform.ContentView;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -193,5 +198,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return parent as T;
         }
     }
+
+#if __IOS__
+    internal sealed class PopupViewerHandler : ContentViewHandler
+    {
+        protected override NativeContentView CreatePlatformView() => new PopupViewerContentView
+        {
+            CrossPlatformLayout = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} must be set before creating the popup view."),
+            FocusGroupIdentifier = $"{nameof(PopupViewer)}-{((PopupViewer)VirtualView).Id}",
+            ShouldGroupAccessibilityChildren = true,
+        };
+    }
+
+    internal sealed class PopupViewerContentView : NativeContentView
+    {
+        public override bool ShouldUpdateFocus(UIFocusUpdateContext context)
+        {
+            bool leavesPopup = context.FocusHeading is UIFocusHeading.Left or UIFocusHeading.Right &&
+                context.PreviouslyFocusedItem is { } previous && UIFocusSystem.Contains(this, previous) &&
+                context.NextFocusedItem is { } next && !UIFocusSystem.Contains(this, next);
+            return !leavesPopup && base.ShouldUpdateFocus(context);
+        }
+    }
+#endif
 }
 #endif

@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using System.Diagnostics.CodeAnalysis;
 using Esri.ArcGISRuntime.Mapping.Popups;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -25,6 +26,41 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     /// </summary>
     public partial class PopupMediaView : ContentView
     {
+#if WINDOWS || __IOS__
+        private bool TryGetImageLink([NotNullWhen(true)] out Uri? link)
+        {
+            link = null;
+            return PopupMedia?.Type == PopupMediaType.Image && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out link);
+        }
+#endif
+#if __IOS__
+        private void UpdateImageContent(Image image)
+        {
+            image.GestureRecognizers.Clear();
+            if (TryGetImageLink(out var uri))
+            {
+                var link = Content as Internal.HyperlinkContentView;
+                if (link is null || link.Uri != uri)
+                {
+                    // Detach the image before moving it from a previous link wrapper.
+                    if (link is not null)
+                        link.Content = null;
+                    Content = null;
+                    link = new Internal.HyperlinkContentView(image, uri,
+                        (_, target) => _ = Toolkit.Internal.Launcher.LaunchUriAsync(target));
+                }
+                SemanticProperties.SetDescription(link, GetAltText() ?? uri.AbsoluteUri);
+                Content = link;
+            }
+            else
+            {
+                if (Content is Internal.HyperlinkContentView link)
+                    link.Content = null;
+                SemanticProperties.SetDescription(image, GetAltText());
+                Content = image;
+            }
+        }
+#endif
 #if WINDOWS
         private Image? _image;
         private Microsoft.UI.Xaml.UIElement? _imagePlatformView;
@@ -116,12 +152,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 platformView.KeyDown += Image_KeyDown;
                 platformView.KeyUp += Image_KeyUp;
             }
-        }
-
-        private bool TryGetImageLink(out Uri? link)
-        {
-            link = null;
-            return PopupMedia?.Type == PopupMediaType.Image && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out link);
         }
 
         private bool OpenImageLink()
