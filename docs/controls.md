@@ -49,6 +49,14 @@ Allows measurement of distances and areas on the map view.
 
 ![MeasureToolbar](https://user-images.githubusercontent.com/1378165/73389958-0f6dde00-428a-11ea-8c78-7192d49ea605.png)
 
+### OfflineMapAreasView
+
+Allows you to take a web map offline by downloading map areas ahead-of-time or on-demand.
+
+![Preplanned map areas in OfflineMapAreasView on WPF](https://user-images.githubusercontent.com/3453182/680713789-a833393b-34ca-4d66-bc90-309d9bc131b6.png)
+
+[Documentation](offline-map-areas-view.md)
+
 ### OverviewMap
 
 Displays an interactive inset map for a map or scene.
@@ -107,6 +115,7 @@ Use named trace configurations defined in a web map to perform connected trace o
 |[GeoViewController](geoviewcontroller.md) | ✔  | ✔ | ✔ | ✔ |
 |[Legend](legend.md)   | ✔ | ✔ | ✔ | ✔ |
 |[MeasureToolbar](measure-toolbar.md)   | ✔ | ✔ | ❌ | ❌ |
+| [OfflineMapAreasView](offline-map-areas-view.md) | ✔ | ✔ | ✔ | ✔ |
 |[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ | ✔ |
 |[PopupViewer](popup-viewer.md) | ✔ | ✔ | ❌ | ❌ |
 |[ScaleLine](scale-line.md)   | ✔ | ✔ | ✔ | ✔ |
