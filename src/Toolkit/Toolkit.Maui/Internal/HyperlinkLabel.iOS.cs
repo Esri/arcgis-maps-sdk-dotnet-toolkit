@@ -129,6 +129,12 @@ internal sealed class HyperlinkLabelHandler : ViewHandler<HyperlinkLabel, UIText
             }
         }
         PlatformView.AttributedText = text;
+        // Heading semantics override UITextView's inferred traits before its text is assigned.
+        if (SemanticProperties.GetHeadingLevel(label) != SemanticHeadingLevel.None &&
+            _links.Count == 1 && _links[0].Range.Location == 0 && _links[0].Range.Length == text.Length)
+        {
+            PlatformView.AccessibilityTraits |= UIAccessibilityTrait.Link;
+        }
         PlatformView.InvalidateIntrinsicContentSize();
     }
 

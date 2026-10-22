@@ -50,8 +50,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             rootcaption.SetBinding(Label.TextProperty, static (MediaPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
-#if WINDOWS
+#if WINDOWS || __IOS__
             SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
+#endif
+#if WINDOWS
             SemanticProperties.SetHeadingLevel(rootcaption, SemanticHeadingLevel.Level2);
 #endif
             root.Add(rootcaption);
@@ -168,6 +170,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             title.SetBinding(Label.TextProperty, static (PopupMedia media) => media.Title);
             title.SetBinding(VisualElement.IsVisibleProperty, static (PopupMedia media) => media.Title, converter: Internal.EmptyToFalseConverter.Instance);
             title.Style = PopupViewer.GetPopupViewerTitleStyle();
+#if __IOS__
+            SemanticProperties.SetHeadingLevel(title, SemanticHeadingLevel.Level2);
+#endif
             layout.Add(title);
             Grid.SetRow(title, 1);
             Label caption = new Label();
