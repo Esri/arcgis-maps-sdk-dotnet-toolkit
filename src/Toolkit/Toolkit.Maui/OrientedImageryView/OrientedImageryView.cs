@@ -26,6 +26,7 @@ public partial class OrientedImageryView : TemplatedView
     private int _layerVersion;
     private bool _connected;
     private bool _searching;
+    private bool _hasSearchedForImages;
     private Exception? _operationError;
     private OrientedImageViewport? _viewport;
     private int _lookAtVersion;
@@ -111,7 +112,12 @@ public partial class OrientedImageryView : TemplatedView
     public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
         nameof(ViewModel), typeof(OrientedImageryViewModel), typeof(OrientedImageryView), null,
         validateValue: (_, value) => value is OrientedImageryViewModel,
-        propertyChanged: (s, _, _) => ((OrientedImageryView)s).Reconnect());
+        propertyChanged: (s, _, _) =>
+        {
+            var view = (OrientedImageryView)s;
+            view._hasSearchedForImages = false;
+            view.Reconnect();
+        });
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -383,6 +389,7 @@ public partial class OrientedImageryView : TemplatedView
 
     private void ChangeLayer()
     {
+        _hasSearchedForImages = false;
         if (!_connected)
         {
             Refresh();
@@ -442,7 +449,11 @@ public partial class OrientedImageryView : TemplatedView
         switch (e.PropertyName)
         {
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
-                DispatchUpdate(SynchronizeSelectedLayer);
+                DispatchUpdate(() =>
+                {
+                    _hasSearchedForImages = false;
+                    SynchronizeSelectedLayer();
+                });
                 break;
             case nameof(OrientedImageryViewModel.SearchPoint):
             case nameof(OrientedImageryViewModel.SelectedImageFootprint):
@@ -551,6 +562,7 @@ public partial class OrientedImageryView : TemplatedView
                 model.SelectedImage = images.FirstOrDefault();
                 if (explore)
                     model.IsSequentialNavigationEnabled = false;
+                _hasSearchedForImages = true;
             }
         }
         catch (OperationCanceledException) when (version != _operationVersion)
