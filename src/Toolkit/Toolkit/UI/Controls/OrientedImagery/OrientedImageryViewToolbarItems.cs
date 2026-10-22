@@ -210,10 +210,10 @@ public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase
 /// </summary>
 public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 {
-    private OrientedImageryViewInteractionState _selectedInteractionState = OrientedImageryViewInteractionState.SearchImages;
+    private OrientedImageryViewInteractionState _selectedInteractionState = OrientedImageryViewInteractionState.FindImages;
 
     /// <summary>
-    /// True when <see cref="OrientedImageryViewModel.InteractionState"/> is either <see cref="OrientedImageryViewInteractionState.SearchImages"/>
+    /// True when <see cref="OrientedImageryViewModel.InteractionState"/> is either <see cref="OrientedImageryViewInteractionState.FindImages"/>
     /// or <see cref="OrientedImageryViewInteractionState.DisplayImage"/>, <see langword="false"/> otherwise. When explicitly set to <see langword="false"/>,
     /// the view model's interaction state will be set to <see cref="OrientedImageryViewInteractionState.None"/>.
     /// </summary>
@@ -224,7 +224,7 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
             if (ViewModel == null)
                 return false;
 
-            return ViewModel.InteractionState == OrientedImageryViewInteractionState.SearchImages ||
+            return ViewModel.InteractionState == OrientedImageryViewInteractionState.FindImages ||
                 ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage;
         }
         set
@@ -243,7 +243,7 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
     /// </summary>
     public IReadOnlyList<OrientedImageryViewInteractionState> ImageSearchModes { get; } = new[]
     {
-        OrientedImageryViewInteractionState.SearchImages,
+        OrientedImageryViewInteractionState.FindImages,
         OrientedImageryViewInteractionState.DisplayImage
     };
 
