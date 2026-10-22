@@ -191,7 +191,7 @@ public partial class OrientedImageryView
             ColumnSpacing = 2, Padding = new Thickness(4, 0),
             VerticalOptions = LayoutOptions.Center,
         } : new HorizontalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-        var icon = MainMenuIcon(navigation ? MenuIcon(null, NavigationGeometry) : key switch
+        var icon = MainMenuIcon(navigation ? MenuIcon(null, SequenceGeometry) : key switch
         {
             OrientedImageryToolbarCategory.ModeCategoryName => ImageModeIcon(ImageSearchEnabled),
             OrientedImageryToolbarCategory.OverlaysCategoryName => MenuIcon(null, OverlayGeometry),
