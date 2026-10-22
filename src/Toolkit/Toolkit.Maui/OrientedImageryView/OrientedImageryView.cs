@@ -476,7 +476,9 @@ public partial class OrientedImageryView : TemplatedView
             return;
         try
         {
-            await viewport.LookAtAsync(point);
+            var imageType = _viewport.Footprint.OrientedImage.Type;
+            if (imageType == OrientedImageType.Image360 || imageType == OrientedImageType.Terrestrial360Video || imageType == OrientedImageType.Aerial360Video)
+                await viewport.LookAtAsync(point);
         }
         catch (Exception ex)
         {
