@@ -7,7 +7,6 @@
     <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
 
     <Style x:Key="PaginatorNavigationButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Width" Value="33" />
         <Setter Property="Height" Value="32" />
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
@@ -157,6 +156,7 @@
 
                         <Button x:Name="PART_LeftNavigate"
                                 IsTabStop="False"
+                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                 Content="&#xe79f;"
                                 Style="{StaticResource PaginatorNavigationButtonStyle}"
@@ -190,6 +190,7 @@
 
                         <Button x:Name="PART_RightNavigate"
                                 IsTabStop="False"
+                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                 FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                 FontSize="16"
