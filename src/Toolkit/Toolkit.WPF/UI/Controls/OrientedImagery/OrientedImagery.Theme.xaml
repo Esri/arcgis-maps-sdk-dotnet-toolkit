@@ -485,12 +485,11 @@
                 </Style>
             </ToggleButton.Style>
             <StackPanel>
-                <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
+                <Viewbox SnapsToDevicePixels="true" Width="32" Height="32" Stretch="Uniform">
                     <Grid Width="32" Height="32">
-                        <Path Width="28" Height="19" HorizontalAlignment="Center" VerticalAlignment="Center"
-                              SnapsToDevicePixels="true"
+                        <Path SnapsToDevicePixels="true"
                               Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                              Data="F1 M9.16358 9.4374e-07L7.67295 0L0 9.4374e-07L4.5818 7.6L11.4546 19H16.5455L28 9.4374e-07H9.16358ZM4.5818 7.6L0 9.4374e-07L3.84195 6.37269L4.5818 7.6ZM15.8314 17.7333H12.1686L2.26954 1.26667H25.7305L15.8314 17.7333Z" />
+                              Data="F1 M28.9874 20.3151L30.0344 26.5901C28.6644 26.3501 26.4444 26.0601 23.7144 26.0601C23.5454 26.0601 23.3904 26.0671 23.2284 26.0701L22.1884 27.1101C22.6654 27.0791 23.1704 27.0601 23.7144 27.0601C28.1644 27.0601 31.2544 27.8601 31.2544 27.8601L29.8564 19.4471L28.9874 20.3151ZM14.0534 27.9881C12.6334 28.3741 11.0464 28.6601 8.79441 28.6601C5.78441 28.6601 3.42441 27.7701 2.36441 27.2901L6.04441 5.08005C7.06441 5.38005 8.58441 5.73005 10.5944 5.73005C13.0944 5.73005 14.5944 5.30005 16.0344 4.88005C17.4844 4.46005 18.8544 4.07005 21.3244 4.07005C23.5144 4.07005 25.4344 4.40005 26.3744 4.59005L28.0724 14.7941L29.1324 15.1021L27.2544 3.76005C27.2544 3.76005 24.5844 3.07005 21.3244 3.07005C16.1844 3.07005 15.4044 4.73005 10.5944 4.73005C7.77441 4.73005 5.95441 3.99005 5.25441 3.76005L1.25441 27.8601C1.25441 27.8601 4.34441 29.6601 8.79441 29.6601C11.1674 29.6601 12.8534 29.3501 14.3314 28.9431L14.0534 27.9881ZM10.7544 9.86005C9.92441 9.86005 9.25441 10.5301 9.25441 11.3601C9.25441 12.1901 9.92441 12.8601 10.7544 12.8601C11.5844 12.8601 12.2544 12.1901 12.2544 11.3601C12.2544 10.5301 11.5844 9.86005 10.7544 9.86005ZM10.7544 11.8601C10.4744 11.8601 10.2544 11.6401 10.2544 11.3601C10.2544 11.0801 10.4744 10.8601 10.7544 10.8601C11.0344 10.8601 11.2544 11.0801 11.2544 11.3601C11.2544 11.6401 11.0344 11.8601 10.7544 11.8601ZM12.9704 12.4931C12.7414 12.9391 12.3836 13.306 11.9434 13.5461L13.0971 17.2201L15.3644 25.3401L16.6644 29.8001L29.2544 17.2201L12.9704 12.4931ZM14.0144 17.0701L12.9844 13.5301L27.3544 17.7001L17.1544 27.9001L14.0144 17.0701Z" />
                     </Grid>
                 </Viewbox>
                 <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}" />
@@ -503,9 +502,12 @@
                       Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
             <StackPanel>
-                <Viewbox SnapsToDevicePixels="true" Width="30" Height="30" Stretch="Uniform">
+                <Viewbox SnapsToDevicePixels="true" Width="32" Height="32" Stretch="Uniform">
                     <Grid Width="32" Height="32">
-                        <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Data="M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z"/>
+                        <Path Opacity="0.25"
+                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                              Data="M10 13L13.0187 18.0311L12.439 19H9.56104L1.7832 6H20.2168L16.0287 13H10Z" />
+                        <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Data="F1 M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z" />
                     </Grid>
                 </Viewbox>
                 <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAdditionalFootprintsLabel}" />
@@ -525,9 +527,9 @@
                             <Path.Data>
                                 <GeometryGroup>
                                     <EllipseGeometry Center="9,23" RadiusX="3.5" RadiusY="3.5" />
-                                    <EllipseGeometry Center="17,17" RadiusX="3.5" RadiusY="3.5" />
-                                    <EllipseGeometry Center="9,5" RadiusX="3.5" RadiusY="3.5" />
-                                    <EllipseGeometry Center="25,26" RadiusX="3.5" RadiusY="3.5" />
+                                    <EllipseGeometry Center="16,16" RadiusX="3.5" RadiusY="3.5" />
+                                    <EllipseGeometry Center="9,8" RadiusX="3.5" RadiusY="3.5" />
+                                    <EllipseGeometry Center="23,25" RadiusX="3.5" RadiusY="3.5" />
                                     <EllipseGeometry Center="23,8" RadiusX="3.5" RadiusY="3.5" />
                                 </GeometryGroup>
                             </Path.Data>
