@@ -68,6 +68,9 @@ public partial class OrientedImageryView
 
         RewireViewModel();
         UpdatePaginatorSelection();
+#if WPF
+        FocusCloseDetailsButton();
+#endif
     }
 
 #region ViewModel
@@ -148,6 +151,11 @@ public partial class OrientedImageryView
                 HasSearchedForImages = false;
                 UpdateErrorMessage();
                 break;
+#if WPF
+            case nameof(OrientedImageryViewModel.SelectedImagePopup):
+                FocusCloseDetailsButton();
+                break;
+#endif
         }
     }
 #endregion ViewModel
