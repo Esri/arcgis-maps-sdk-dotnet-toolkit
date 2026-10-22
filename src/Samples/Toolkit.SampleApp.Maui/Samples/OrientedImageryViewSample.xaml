@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
              xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              x:Class="Toolkit.SampleApp.Maui.Samples.OrientedImageryViewSample">
     <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
-        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Padding="8">
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" Padding="8">
             <Label Text="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
                    VerticalOptions="Center" />
             <Picker x:Name="LayerPicker" Grid.Column="1"
@@ -14,12 +13,17 @@
                     SemanticProperties.Description="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
                     AutomationId="SampleOrientedImageryLayerPicker"
                     SelectedIndexChanged="LayerSelected" />
+            <Button Grid.Column="2"
+                    Text="{internal:LocalizedString Key=OrientedImagerySampleToggleView}"
+                    SemanticProperties.Description="{internal:LocalizedString Key=OrientedImagerySampleToggleViewDescription}"
+                    AutomationId="SampleOrientedImageryToggleView"
+                    Clicked="ToggleViewClicked" />
         </Grid>
         <Label x:Name="LoadError" Grid.Row="1" Margin="8"
                TextColor="{AppThemeBinding Light=Black, Dark=White}" IsVisible="False" />
         <Grid x:Name="LayoutRoot" Grid.Row="2" RowDefinitions="*,0" RowSpacing="0" ColumnSpacing="0">
             <Grid>
-                <esri:MapView x:Name="MyMapView" />
+                <Grid x:Name="GeoViewContainer" />
                 <Button x:Name="OpenButton"
                         Text="{internal:LocalizedString Key=OrientedImageryViewOpen}"
                         AutomationId="OpenOrientedImagery"
