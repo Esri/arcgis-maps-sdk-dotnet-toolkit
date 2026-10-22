@@ -36,29 +36,25 @@ public partial class OrientedImageryView
             Grid.SetColumn(view, column);
             parent.Children.Add(view);
         }
-        var custom = new ToolbarWrapLayout { Margin = 8 };
+        var custom = new ToolbarWrapLayout { Margin = 8, CenterRows = true };
         Add("PART_CustomToolbar", custom, root);
 
         var image = new Grid
         {
             MinimumHeightRequest = MinimumImageAreaHeight,
-            ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
         };
         Grid.SetRow(image, 1);
         root.Children.Add(image);
         var viewport = new OrientedImageViewport { AutomationId = "OrientedImageryViewport" };
         Add("PART_Viewport", viewport, image);
-        Grid.SetColumnSpan(viewport, 3);
         AddStatusPresentation(image, scope);
         var busy = new ActivityIndicator { VerticalOptions = LayoutOptions.Start, HeightRequest = 24, AutomationId = "OrientedImageryBusy" };
         Add("PART_Busy", busy, image);
-        Grid.SetColumnSpan(busy, 3);
         Add("PART_Previous", DesktopImageArrow(false), image);
-        Add("PART_Next", DesktopImageArrow(true), image, column: 2);
+        Add("PART_Next", DesktopImageArrow(true), image);
         AddPopupPresentation(image, scope);
         var panel = new Grid { IsVisible = false };
         Add("PART_PanelHost", panel, image);
-        Grid.SetColumnSpan(panel, 3);
         Add("PART_DesktopNavigation", new DesktopImageryBar(), root, 2);
         var notice = new Label { HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(8, 4), AutomationId = "OrientedImageryNotice" };
         notice.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
@@ -74,6 +70,7 @@ public partial class OrientedImageryView
             FontFamily = ToolkitIcons.FontFamilyName, FontSize = 20,
             WidthRequest = 25, HeightRequest = 60, MinimumWidthRequest = 0, Padding = 4, BorderWidth = 0, CornerRadius = 0,
             VerticalOptions = LayoutOptions.Center, BackgroundColor = Colors.Transparent,
+            HorizontalOptions = next ? LayoutOptions.End : LayoutOptions.Start,
             AutomationId = next ? "OrientedImageryNext" : "OrientedImageryPrevious",
         };
         SemanticProperties.SetDescription(button, Text(next ? "NextLabel" : "PreviousLabel"));
@@ -133,11 +130,15 @@ public partial class OrientedImageryView
 
     private sealed class ToolbarWrapLayout : Layout
     {
+        public bool CenterRows { get; init; }
+
         protected override ILayoutManager CreateLayoutManager() => new ToolbarWrapLayoutManager(this);
     }
 
     private sealed class ToolbarWrapLayoutManager(ToolbarWrapLayout layout) : ILayoutManager
     {
+        // WinUI can round the arranged width down by a fraction of a DIP.
+        private const double WrapTolerance = 1;
         private readonly Dictionary<IView, Microsoft.Maui.Graphics.Size> _sizes = new();
 
         private static bool IsDivider(IView child) =>
@@ -158,7 +159,7 @@ public partial class OrientedImageryView
                 if (size.Width > itemWidth)
                     size = child.Measure(itemWidth, heightConstraint);
                 _sizes.Add(child, size);
-                if (rowWidth > 0 && rowWidth + size.Width > availableWidth)
+                if (rowWidth > 0 && rowWidth + size.Width > availableWidth + WrapTolerance)
                 {
                     width = Math.Max(width, rowWidth);
                     height += rowHeight;
@@ -181,14 +182,12 @@ public partial class OrientedImageryView
             var row = new List<IView>();
             void ArrangeRow()
             {
-                int flexible = row.Count(child => !IsDivider(child));
-                double extra = flexible == 0 ? 0 : Math.Max(0, availableWidth - rowWidth) / flexible;
-                double x = bounds.X + layout.Padding.Left;
+                double x = bounds.X + layout.Padding.Left +
+                    (layout.CenterRows ? Math.Max(0, availableWidth - rowWidth) / 2 : 0);
                 foreach (var child in row)
                 {
                     var size = _sizes[child];
-                    bool divider = IsDivider(child);
-                    double width = Math.Min(availableWidth, size.Width) + (divider ? 0 : extra);
+                    double width = Math.Min(availableWidth, size.Width);
                     child.Arrange(new Microsoft.Maui.Graphics.Rect(x, y, width, rowHeight));
                     x += width;
                 }
@@ -201,7 +200,7 @@ public partial class OrientedImageryView
                 if (child.Visibility == Visibility.Collapsed || !_sizes.TryGetValue(child, out var size))
                     continue;
                 double width = Math.Min(availableWidth, size.Width);
-                if (row.Count > 0 && rowWidth + width > availableWidth)
+                if (row.Count > 0 && rowWidth + width > availableWidth + WrapTolerance)
                     ArrangeRow();
                 row.Add(child);
                 rowWidth += width;

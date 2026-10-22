@@ -1173,6 +1173,16 @@
     <value>Find images</value>
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
   </data>
+  <data name="OrientedImageryViewImageSearchModeFindToolbarLabel" xml:space="preserve">
+    <value>Find
+images</value>
+    <comment>Two-line MAUI Windows toolbar caption for Find images mode. Preserve a suitable line break between the action and its object.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayToolbarLabel" xml:space="preserve">
+    <value>Display
+image</value>
+    <comment>Two-line MAUI Windows toolbar caption for Display image mode. Preserve a suitable line break between the action and its object.</comment>
+  </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
     <value>Display image</value>
     <comment>Label for the mode that displays individual tapped oriented images.</comment>

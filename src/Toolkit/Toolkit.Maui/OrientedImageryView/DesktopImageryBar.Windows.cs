@@ -55,6 +55,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     private bool _rendering;
     private int _generation;
     private readonly Windows.UI.ViewManagement.UISettings _uiSettings = new();
+    private readonly List<TextBlock> _captions = [];
+    private readonly List<ToolbarComboBox> _toolbarSelectors = [];
 
     private readonly record struct NavigationState(bool Sequential, int Selected, int Start, int Count, int Total,
         bool Previous, bool Next, bool Searching);
@@ -95,6 +97,9 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                         AddBrush(control + "BorderBrush" + state, disabled ? "ControlFillColorTransparent" : foreground);
                 }
             }
+            AddBrush("ComboBoxBackgroundPointerOver", highContrast ? "SystemColorHighlightColor" : "SystemBaseMediumLowColor");
+            AddBrush("ComboBoxForegroundPointerOver", highContrast ? "SystemColorHighlightTextColor" : "TextFillColorPrimary");
+            AddBrush("ComboBoxBorderBrushPointerOver", highContrast ? "SystemColorHighlightTextColor" : "ControlFillColorTransparent");
             xaml.Append("</ResourceDictionary>");
         }
         xaml.Append("</ResourceDictionary.ThemeDictionaries></ResourceDictionary>");
@@ -133,6 +138,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         view.Dispatcher.Dispatch(() =>
         {
             if (view.Handler != this) return;
+            foreach (var caption in _captions)
+                SizeCaption(caption);
+            foreach (var selector in _toolbarSelectors)
+                selector.UpdateCaptionHeight(_uiSettings.TextScaleFactor);
             PlatformView.InvalidateMeasure();
             ((IView)view).InvalidateMeasure();
         });
@@ -146,7 +155,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         (Microsoft.UI.Xaml.Controls.Border)XamlReader.Load(
             "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Background=\"{ThemeResource " + key + "}\"/>");
 
-    private static StackPanel LabeledContent(UIElement icon, string key)
+    private StackPanel LabeledContent(UIElement icon, string key)
     {
         var panel = new StackPanel
         {
@@ -165,8 +174,17 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
         };
         label.Margin = new NativeThickness(0, 8, 0, 0);
+        SizeCaption(label);
+        _captions.Add(label);
         panel.Children.Add(label);
         return panel;
+    }
+
+    private void SizeCaption(TextBlock caption)
+    {
+        // Prefer compact, two-line captions without fixing their height or limiting text scaling.
+        caption.MaxWidth = 68 * _uiSettings.TextScaleFactor;
+        caption.MinHeight = 32 * _uiSettings.TextScaleFactor;
     }
 
     private static NativeView Divider()
@@ -246,6 +264,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         foreach (var detach in _detachSymbols) detach();
         _detachSymbols.Clear();
         _updates.Clear();
+        _captions.Clear();
+        _toolbarSelectors.Clear();
         platformView ??= ((IElementHandler)this).PlatformView as NativeGrid;
         if (platformView != null)
         {
@@ -328,6 +348,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     private sealed class ToolbarComboBox : ComboBox
     {
         private readonly bool _showSymbol;
+        private double _captionHeight = 32;
 
         public ToolbarComboBox(bool showSymbol)
         {
@@ -340,6 +361,14 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             CornerRadius = new CornerRadius(0);
             HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
             UseSystemFocusVisuals = true;
+        }
+
+        public void UpdateCaptionHeight(double textScale)
+        {
+            _captionHeight = 32 * textScale;
+            MinHeight = Math.Max(84, 48 + _captionHeight);
+            if (GetTemplateChild("ContentPresenter") is NativeView content)
+                content.Margin = new NativeThickness(0, 0, 0, 8 + _captionHeight);
         }
 
         protected override void OnApplyTemplate()
@@ -356,7 +385,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 content.Width = content.Height = 32;
                 content.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center;
                 content.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
-                content.Margin = new NativeThickness(0, 0, 0, 40);
+                content.Margin = new NativeThickness(0, 0, 0, 8 + _captionHeight);
                 content.RenderTransform = new ScaleTransform { ScaleX = 0.5, ScaleY = 0.5, CenterX = 16, CenterY = 16 };
             }
             if (GetTemplateChild("DropDownGlyph") is NativeView chevron)
@@ -378,6 +407,14 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 popup.DesiredPlacement = PopupPlacementMode.BottomEdgeAlignedLeft;
             }
         }
+    }
+
+    private ToolbarComboBox CreateToolbarSelector(bool showSymbol)
+    {
+        var selector = new ToolbarComboBox(showSymbol);
+        selector.UpdateCaptionHeight(_uiSettings.TextScaleFactor);
+        _toolbarSelectors.Add(selector);
+        return selector;
     }
 
     private NativeGrid ModePicker(OrientedImageryView owner, ImageSearchModeVM mode)
@@ -403,7 +440,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             if (!_updating && button.IsEnabled)
                 mode.IsImageSelectionEnabled = button.IsChecked == true;
         };
-        var dropdown = new ToolbarComboBox(false);
+        var dropdown = CreateToolbarSelector(false);
         bool selectionChangedWhileOpen = false;
         dropdown.DropDownOpened += (_, _) => selectionChangedWhileOpen = false;
         NativeGrid.SetColumn(dropdown, 1);
@@ -466,8 +503,11 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             bool search = mode.SelectedInteractionState == OrientedImageryViewInteractionState.FindImages;
             if (previous != search)
             {
+                if (button.Content is StackPanel previousContent)
+                    foreach (var caption in previousContent.Children.OfType<TextBlock>())
+                        _captions.Remove(caption);
                 button.Content = LabeledContent(ImageModeIcon(search),
-                    search ? "ImageSearchModeFind" : "ImageSearchModeDisplay");
+                    search ? "ImageSearchModeFindToolbarLabel" : "ImageSearchModeDisplayToolbarLabel");
                 previous = search;
                 ((IView)VirtualView).InvalidateMeasure();
             }
@@ -497,7 +537,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
 
     private ComboBox SymbolPicker(OrientedImageryView owner, SelectNewMarkerSymbolVM picker)
     {
-        var combo = new ToolbarComboBox(true);
+        var combo = CreateToolbarSelector(true);
         Describe(combo, "SelectMarkerSymbol", "OrientedImageryDesktopSelectMarkers");
         _detachSymbols.Add(() => combo.IsDropDownOpen = false);
         MarkerSymbol[] symbols = [];
