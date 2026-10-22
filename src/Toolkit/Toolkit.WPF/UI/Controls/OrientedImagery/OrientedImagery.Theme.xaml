@@ -16,7 +16,6 @@
     <!-- Helper styles -->
     <Style x:Key="OrientedImageryToolbarButtonBaseStyle" TargetType="{x:Type primitives:ButtonBase}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-        <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="MinWidth" Value="40" />
         <Setter Property="MinHeight" Value="40" />
         <Setter Property="Padding" Value="4" />
@@ -159,7 +158,6 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
-        <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -253,7 +251,6 @@
 
     <Style x:Key="ToolbarComboBoxStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-        <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="MinWidth" Value="40" />
         <Setter Property="MinHeight" Value="40" />
         <Setter Property="Padding" Value="4" />
@@ -268,6 +265,7 @@
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid>
                         <ToggleButton Background="{TemplateBinding Background}"
+                                      AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
                                       BorderBrush="{TemplateBinding BorderBrush}"
                                       BorderThickness="{TemplateBinding BorderThickness}"
                                       ClickMode="Press"
@@ -351,6 +349,7 @@
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid>
                         <ToggleButton MinWidth="0" MinHeight="84" Padding="0"
+                                      AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
                                       ClickMode="Press" Focusable="False"
                                       IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                       Foreground="{TemplateBinding Foreground}"
@@ -390,7 +389,6 @@
 
     <Style x:Key="ImageNavigationButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
-        <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Width" Value="25" />
         <Setter Property="MinHeight" Value="60" />
         <Setter Property="Padding" Value="4" />
@@ -474,6 +472,7 @@
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowSelectedFootprint}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}">
             <ToggleButton.Style>
                 <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
@@ -500,6 +499,7 @@
     <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowUnselectedFootprints}"
                       Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
             <StackPanel>
                 <Viewbox SnapsToDevicePixels="true" Width="32" Height="32" Stretch="Uniform">
@@ -518,6 +518,7 @@
     <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="controls:ShowCameraMarkersVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowCameraLocations, Mode=TwoWay}"
                       Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
@@ -545,6 +546,7 @@
         <ToggleButton IsChecked="{Binding  IsAddingMarkersEnabled}"
                       MinWidth="0" Padding="0,4"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
@@ -567,6 +569,7 @@
             <ToggleButton IsChecked="{Binding IsImageSelectionEnabled}"
                           TabIndex="0" MinWidth="0" Padding="0,4"
                           Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
+                          AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
                           ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
                 <StackPanel>
                     <Viewbox Width="32" Height="32" Stretch="Uniform">
@@ -594,6 +597,7 @@
                       ItemsSource="{Binding ImageSearchModes}"
                       SelectedItem="{Binding SelectedInteractionState, Mode=TwoWay}"
                       Style="{StaticResource ImageSearchModeComboBoxStyle}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ToolbarComboBoxItemStyle}">
@@ -638,11 +642,13 @@
                   SelectedItem="{Binding SelectedSymbol, Mode=TwoWay}"
                   MinWidth="0" Padding="0"
                   Style="{StaticResource ToolbarComboBoxStyle}"
+                  AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
                   ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
             <ComboBox.Template>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid>
                         <ToggleButton x:Name="MarkerSymbolDropdownButton"
+                                      AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
                                       MinWidth="0" MinHeight="84" Padding="0"
                                       ClickMode="Press" Focusable="False"
                                       IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
@@ -699,6 +705,7 @@
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
         <Button Style="{StaticResource ToolbarLabeledButtonStyle}"
                 Command="{Binding ViewModel.ClearMarkersCommand}"
+                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}"
                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
             <StackPanel>
                 <Viewbox Width="28" Height="28" Stretch="Uniform">
@@ -719,9 +726,11 @@
             <ToggleButton.Style>
                 <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
                     <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
+                    <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
                             <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
+                            <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -960,6 +969,7 @@
                                         TabIndex="1"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                         VerticalAlignment="Center">
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <Grid Width="32" Height="32">
@@ -975,6 +985,7 @@
                                         TabIndex="2"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                         Grid.Column="2" VerticalAlignment="Center">
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <Grid Width="32" Height="32">
@@ -992,6 +1003,7 @@
                                         VerticalAlignment="Top"
                                         Margin="16"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.OpenSelectedImagePopupCommand}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}">
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ImageInfoButtonStyle}">
@@ -1046,6 +1058,7 @@
                                                 Margin="8"
                                                 Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.CloseSelectedImagePopupCommand}"
                                                 Style="{StaticResource ToolbarButtonStyle}"
+                                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}"
                                                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}">
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock VerticalAlignment="Center" FontSize="16"
@@ -1118,6 +1131,7 @@
                                 <Button Style="{StaticResource PaginatorNavigationButtonStyle}"
                                         IsTabStop="False"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
                                     <TextBlock Text="&lt;" />
                                 </Button>
@@ -1145,6 +1159,7 @@
                                 <Button Style="{StaticResource PaginatorNavigationButtonStyle}"
                                         IsTabStop="False"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
                                     <TextBlock Text="&gt;" />
                                 </Button>
