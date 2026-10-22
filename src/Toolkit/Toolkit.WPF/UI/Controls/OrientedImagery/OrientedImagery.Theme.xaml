@@ -221,6 +221,36 @@
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
+    <Style x:Key="ToolbarComboBoxItemStyle" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsHighlighted" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ToolbarComboBoxStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
@@ -446,12 +476,24 @@
         </Setter>
     </Style>
 
+    <!-- Toolbar container style -->
+    <Style x:Key="OrientedImageryToolbarContainerStyle" TargetType="{x:Type ItemsControl}">
+        <Setter Property="Margin" Value="8" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Toolbar data templates -->
 
     <DataTemplate x:Key="ToolbarCategoryTemplate" DataType="controls:OrientedImageryToolbarCategory">
         <ItemsControl ItemsSource="{Binding ToolbarItems}"
                       ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                      Style="{DynamicResource OrientedImageryToolbarContainerStyle}"
+                      Style="{StaticResource OrientedImageryToolbarContainerStyle}"
                       Margin="0" IsTabStop="False" Focusable="False" />
     </DataTemplate>
 
@@ -459,7 +501,7 @@
         <ItemsControl ItemsSource="{Binding ToolbarItems}"
                       ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                       Visibility="{Binding ViewModel.SupportsSequentialNavigation, Converter={StaticResource BooleanToVisibilityConverter}}"
-                      Style="{DynamicResource OrientedImageryToolbarContainerStyle}"
+                      Style="{StaticResource OrientedImageryToolbarContainerStyle}"
                       Margin="0" IsTabStop="False" Focusable="False">
         </ItemsControl>
     </DataTemplate>
@@ -554,22 +596,12 @@
                   Style="{StaticResource ImageSearchModeComboBoxStyle}"
                   ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
             <ComboBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ComboBoxItem}">
+                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ToolbarComboBoxItemStyle}">
                     <Setter Property="controls:ImageSearchModeSelectionBehavior.RepeatSelection" Value="True" />
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
                     <Setter Property="MinHeight" Value="40" />
                     <Setter Property="Padding" Value="8,4" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Style.Triggers>
-                        <Trigger Property="IsHighlighted" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                        </Trigger>
-                    </Style.Triggers>
                 </Style>
             </ComboBox.ItemContainerStyle>
             <ComboBox.ItemTemplate>
@@ -647,7 +679,7 @@
                 </ControlTemplate>
             </ComboBox.Template>
             <ComboBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ComboBoxItem}">
+                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ToolbarComboBoxItemStyle}">
                     <Setter Property="MinWidth" Value="40" />
                     <Setter Property="MinHeight" Value="40" />
                     <Setter Property="Padding" Value="4" />
@@ -722,18 +754,6 @@
                         <Border x:Name="PART_DisplayHost" />
                     </Border>
                 </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- Toolbar container style -->
-    <Style x:Key="OrientedImageryToolbarContainerStyle" TargetType="{x:Type ItemsControl}">
-        <Setter Property="Margin" Value="8" />
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal" />
-                </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
     </Style>
