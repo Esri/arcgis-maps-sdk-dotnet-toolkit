@@ -620,6 +620,20 @@ public partial class OrientedImageryView
 
     private void RefreshPages()
     {
+#if __IOS__ && !MACCATALYST
+        var previousState = _pageState;
+#endif
+        RefreshPageItems();
+#if __IOS__ && !MACCATALYST
+        // iOS stops child measure invalidation at ScrollViews, leaving the initially empty row at zero height.
+        if ((previousState?.Sequential != _pageState?.Sequential || previousState?.Count != _pageState?.Count) &&
+            _pages?.Parent?.Parent is ScrollView navigationScroll)
+            ((IView)navigationScroll).InvalidateMeasure();
+#endif
+    }
+
+    private void RefreshPageItems()
+    {
 #if WINDOWS
         if (_desktopNavigation != null)
         {
