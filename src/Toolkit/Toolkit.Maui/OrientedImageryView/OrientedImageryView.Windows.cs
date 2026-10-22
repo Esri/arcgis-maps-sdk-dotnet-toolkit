@@ -41,6 +41,7 @@ public partial class OrientedImageryView
 
         var image = new Grid
         {
+            MinimumHeightRequest = MinimumImageAreaHeight,
             ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
         };
         Grid.SetRow(image, 1);
@@ -62,7 +63,7 @@ public partial class OrientedImageryView
         var notice = new Label { HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(8, 4), AutomationId = "OrientedImageryNotice" };
         notice.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
         Add("PART_Notice", notice, root, 3);
-        return root;
+        return ScrollablePresentation(root, image, scope);
     }
 
     private static Microsoft.Maui.Controls.Button DesktopImageArrow(bool next)
@@ -139,28 +140,34 @@ public partial class OrientedImageryView
     {
         private readonly Dictionary<IView, Microsoft.Maui.Graphics.Size> _sizes = new();
 
+        private static bool IsDivider(IView child) =>
+            child is BoxView or DesktopImageryBar { ToolbarItem: ToolbarDividerVM };
+
         public Microsoft.Maui.Graphics.Size Measure(double widthConstraint, double heightConstraint)
         {
             _sizes.Clear();
             double availableWidth = Math.Max(0, widthConstraint - layout.Padding.HorizontalThickness);
             double width = 0, height = 0, rowWidth = 0, rowHeight = 0;
+            bool onlyDividers = true;
             foreach (var child in layout.Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
-                var size = child.Measure(availableWidth, heightConstraint);
-                size = new Microsoft.Maui.Graphics.Size(
-                    child.Width >= 0 ? child.Width + child.Margin.HorizontalThickness : size.Width,
-                    child.Height >= 0 ? child.Height + child.Margin.VerticalThickness : size.Height);
+                var size = child.Measure(double.PositiveInfinity, heightConstraint);
+                double itemWidth = onlyDividers ? Math.Max(0, availableWidth - rowWidth) : availableWidth;
+                if (size.Width > itemWidth)
+                    size = child.Measure(itemWidth, heightConstraint);
                 _sizes.Add(child, size);
                 if (rowWidth > 0 && rowWidth + size.Width > availableWidth)
                 {
                     width = Math.Max(width, rowWidth);
                     height += rowHeight;
                     rowWidth = rowHeight = 0;
+                    onlyDividers = true;
                 }
                 rowWidth += Math.Min(availableWidth, size.Width);
                 rowHeight = Math.Max(rowHeight, size.Height);
+                onlyDividers &= IsDivider(child);
             }
             return new Microsoft.Maui.Graphics.Size(
                 Math.Max(width, rowWidth) + layout.Padding.HorizontalThickness,
@@ -174,12 +181,15 @@ public partial class OrientedImageryView
             var row = new List<IView>();
             void ArrangeRow()
             {
-                double x = bounds.X + layout.Padding.Left + Math.Max(0, (availableWidth - rowWidth) / 2);
+                int flexible = row.Count(child => !IsDivider(child));
+                double extra = flexible == 0 ? 0 : Math.Max(0, availableWidth - rowWidth) / flexible;
+                double x = bounds.X + layout.Padding.Left;
                 foreach (var child in row)
                 {
                     var size = _sizes[child];
-                    double width = Math.Min(availableWidth, size.Width);
-                    child.Arrange(new Microsoft.Maui.Graphics.Rect(x, y, width, size.Height));
+                    bool divider = IsDivider(child);
+                    double width = Math.Min(availableWidth, size.Width) + (divider ? 0 : extra);
+                    child.Arrange(new Microsoft.Maui.Graphics.Rect(x, y, width, rowHeight));
                     x += width;
                 }
                 y += rowHeight;
