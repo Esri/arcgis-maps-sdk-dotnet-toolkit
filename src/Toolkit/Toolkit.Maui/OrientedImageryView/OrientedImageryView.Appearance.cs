@@ -137,7 +137,8 @@ public partial class OrientedImageryView
 
     private static View ScrollablePresentation(Grid root, Grid image, INameScope scope)
     {
-        var scroll = new ScrollView { Content = root };
+        // Neither measures content with infinite width on Windows, allowing popup fields to expand the entire viewer.
+        var scroll = new ScrollView { Content = root, Orientation = ScrollOrientation.Vertical };
         NameScope.SetNameScope(scroll, scope);
         var chrome = root.Children.OfType<View>().Where(view => Grid.GetRow(view) != 1 && Grid.GetRowSpan(view) == 1).ToArray();
         void UpdateSize(object? sender, EventArgs e)
@@ -147,7 +148,9 @@ public partial class OrientedImageryView
                 .Sum(view => view.Measure(scroll.Width, double.PositiveInfinity).Height);
             // Keep the image bounded even when a popup contains a long list of fields.
             root.HeightRequest = Math.Max(scroll.Height, chromeHeight + image.MinimumHeightRequest);
+#if !WINDOWS
             scroll.Orientation = root.HeightRequest > scroll.Height ? ScrollOrientation.Vertical : ScrollOrientation.Neither;
+#endif
         }
         scroll.SizeChanged += UpdateSize;
         foreach (var view in chrome)
@@ -186,7 +189,7 @@ public partial class OrientedImageryView
             InputTransparent = true,
             CascadeInputTransparent = false,
             ColumnSpacing = 0,
-            ColumnDefinitions = { new ColumnDefinition(new GridLength(0.35, GridUnitType.Star)), new ColumnDefinition(new GridLength(0.65, GridUnitType.Star)) },
+            ColumnDefinitions = { new ColumnDefinition(new GridLength(0.20, GridUnitType.Star)), new ColumnDefinition(new GridLength(0.80, GridUnitType.Star)) },
         };
         scope.RegisterName("PART_PopupHost", host);
         image.Add(host);
@@ -194,8 +197,8 @@ public partial class OrientedImageryView
 
         var surface = new Grid
         {
-            RowSpacing = 0,
-            RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) },
+            ColumnSpacing = 0,
+            ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
         };
         surface.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
         var close = ToolButton("CloseSelectedImagePopup", "\uEB49", "OrientedImageryPopupClose");
@@ -203,22 +206,23 @@ public partial class OrientedImageryView
         close.WidthRequest = 44;
         close.HeightRequest = 44;
         close.MinimumWidthRequest = 44;
+        close.MinimumHeightRequest = 44;
         close.CornerRadius = 12;
         close.ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 0);
         if (close.ImageSource is FontImageSource closeIcon)
         {
-            closeIcon.Size = 22;
+            closeIcon.Size = 16;
             closeIcon.SetAppThemeColor(FontImageSource.ColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
         }
         close.Padding = 0;
         close.HorizontalOptions = LayoutOptions.End;
-        close.Margin = new Thickness(8, 8, 8, 0);
-        close.BorderWidth = 1;
-        close.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#EEEEEE"), Color.FromArgb("#444444"));
-        close.SetAppThemeColor(Button.BorderColorProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#666666"));
+        close.VerticalOptions = LayoutOptions.Start;
+        close.Margin = new Thickness(0, 4, 4, 0);
+        close.BorderWidth = 0;
+        close.BackgroundColor = Colors.Transparent;
         ToolTipProperties.SetText(close, Text("CloseSelectedImagePopup"));
         scope.RegisterName("PART_PopupClose", close);
-        surface.Add(close);
+        surface.Add(close, 1);
         var popup = new PopupViewer
         {
             AutomationId = "OrientedImageryPopupViewer",
@@ -226,7 +230,7 @@ public partial class OrientedImageryView
             Margin = new Thickness(16, 0, 8, 8),
         };
         scope.RegisterName("PART_Popup", popup);
-        surface.Add(popup, 0, 1);
+        surface.Add(popup);
         var border = new Border { Content = surface, StrokeThickness = 1 };
         border.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#444444"));
         host.Add(border, 1);
@@ -248,11 +252,11 @@ public partial class OrientedImageryView
         };
         foreach (var view in new View[]
         {
-            new Label { Text = Text("ImageSelectionEnable"), FontSize = 18 },
+            new Label { Text = Text("ImageSelectionUsing"), FontSize = 18 },
             ImageModeIcon(true),
             new Label { Text = Text("ImageSelectionOr"), FontSize = 18 },
             ImageModeIcon(false),
-            new Label { Text = Text("ImageSelectionAndTap"), FontSize = 18 },
+            new Label { Text = Text("ImageSelectionMode"), FontSize = 18 },
         })
         {
             view.Margin = new Thickness(4, 0);
@@ -268,7 +272,7 @@ public partial class OrientedImageryView
             Text = Text("ImageSelectionSearchMap"), FontSize = 18, HorizontalTextAlignment = TextAlignment.Center,
         };
         searchMap.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
-        var guidance = new VerticalStackLayout { Spacing = 6, Children = { choices, searchMap } };
+        var guidance = new VerticalStackLayout { Spacing = 6, Children = { searchMap, choices } };
         SemanticProperties.SetDescription(guidance, Text("ImageSelectionInstructions"));
         AutomationProperties.SetIsInAccessibleTree(guidance, true);
         AutomationProperties.SetIsInAccessibleTree(choices, false);
