@@ -920,7 +920,9 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>
-                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionEnable}" />
+                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMap}" />
+                                            <LineBreak />
+                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionUsing}" />
                                             <InlineUIContainer BaselineAlignment="Center">
                                                 <Viewbox Width="24" Height="24" Margin="4,0">
                                                     <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
@@ -934,9 +936,7 @@
                                                                     ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
                                                 </Viewbox>
                                             </InlineUIContainer>
-                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionAndTap}" />
-                                            <LineBreak />
-                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMap}" />
+                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
                                         </TextBlock>
                                     </StackPanel>
                                 </Border>

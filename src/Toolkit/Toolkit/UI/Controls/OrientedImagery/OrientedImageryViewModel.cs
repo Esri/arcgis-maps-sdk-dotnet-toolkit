@@ -53,7 +53,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(64, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
-        _interactionState = OrientedImageryViewInteractionState.None;
+        _interactionState = OrientedImageryViewInteractionState.FindImages;
 
         ToolbarCategories = GetDefaultToolbarCategories();
         ToolbarCategories.CollectionChanged += ToolbarCategories_CollectionChanged;
