@@ -1,14 +1,32 @@
 #if WPF
 
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+using System.Windows.Threading;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 [TemplatePart(Name = ImageViewportName, Type = typeof(OrientedImageViewport))]
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
 [TemplatePart(Name = PaginatorName, Type = typeof(Paginator))]
+[TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
+    private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
+
+    private void FocusCloseDetailsButton()
+    {
+        if (ViewModel.SelectedImagePopup == null)
+            return;
+
+        Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() =>
+        {
+            if (ViewModel.SelectedImagePopup != null &&
+                GetTemplateChild(CloseDetailsButtonName) is Button { IsVisible: true, IsEnabled: true } button)
+            {
+                button.Focus();
+            }
+        }));
+    }
 }
 
 /// <summary>
