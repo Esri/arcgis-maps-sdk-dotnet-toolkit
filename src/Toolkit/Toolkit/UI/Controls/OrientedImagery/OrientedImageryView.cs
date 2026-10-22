@@ -261,8 +261,10 @@ public partial class OrientedImageryView
         _viewport.Footprint = ViewModel.SelectedImageFootprint;
         if (ViewModel?.SearchPoint is MapPoint searchPoint && _viewport.Footprint != null)
         {
-            var imageType = _viewport.Footprint.OrientedImage.Type;
-            if (imageType == OrientedImageType.Image360 || imageType == OrientedImageType.Terrestrial360Video || imageType == OrientedImageType.Aerial360Video)
+            var image = _viewport.Footprint.OrientedImage;
+            if (OrientedImageViewport.IsPanoramic(image.Type, image.Attributes) ||
+                image.Type == OrientedImageType.Terrestrial360Video ||
+                image.Type == OrientedImageType.Aerial360Video)
                 _viewport.LookAtAsync(searchPoint);
             ViewModel.AreFootprintsEnabled = false;
             _viewport.StateChanged += Viewport_StateChanged;
