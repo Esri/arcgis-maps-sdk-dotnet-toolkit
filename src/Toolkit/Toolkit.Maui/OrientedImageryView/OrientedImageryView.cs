@@ -528,7 +528,7 @@ public partial class OrientedImageryView : TemplatedView
         try
         {
             IReadOnlyList<OrientedImage> images;
-            if (model.InteractionState == OrientedImageryViewInteractionState.ExploreImages)
+            if (model.InteractionState == OrientedImageryViewInteractionState.FindImages)
             {
                 images = await layer.SearchImagesAsync(e.Location, new OrientedImageSearchParameters { MaxResults = -1 });
             }
@@ -537,15 +537,15 @@ public partial class OrientedImageryView : TemplatedView
                 var identified = await geoView.IdentifyLayerAsync(layer, e.Position, 10, false);
                 if (version != _operationVersion)
                     return;
-                if (identified.GeoElements.FirstOrDefault() is not Feature feature)
-                    return;
-                images = new[] { await layer.FetchImageForFeatureAsync(feature) };
+                images = identified.GeoElements.FirstOrDefault() is Feature feature
+                    ? new[] { await layer.FetchImageForFeatureAsync(feature) }
+                    : [];
             }
 
             if (version == _operationVersion && layer == SelectedLayer && geoView == GeoView && model == ViewModel)
             {
-                bool explore = model.InteractionState == OrientedImageryViewInteractionState.ExploreImages;
-                model.SetImages(explore ? images : [], explore ? e.Location : null);
+                bool explore = model.InteractionState == OrientedImageryViewInteractionState.FindImages;
+                model.SetImages(explore ? images : [], explore || images.Count == 0 ? e.Location : null);
                 model.SelectedImage = images.FirstOrDefault();
                 if (explore)
                     model.IsSequentialNavigationEnabled = false;

@@ -215,7 +215,7 @@ public partial class OrientedImageryView
         };
         foreach (var view in new View[]
         {
-            new Label { Text = Text("ImageSelectionClickOn"), FontSize = 18 },
+            new Label { Text = Text("ImageSelectionEnable"), FontSize = 18 },
             ImageModeIcon(true),
             new Label { Text = Text("ImageSelectionOr"), FontSize = 18 },
             ImageModeIcon(false),
@@ -499,6 +499,10 @@ public partial class OrientedImageryView
             _viewport.Footprint = _connected ? ViewModel.SelectedImageFootprint : null;
         }
 
+        bool footprintsEnabled = _connected && _viewport?.Footprint != null && _viewport.IsInteractive;
+        if (ViewModel.AreFootprintsEnabled != footprintsEnabled)
+            ViewModel.AreFootprintsEnabled = footprintsEnabled;
+
         if (_busy != null)
         {
             _busy.IsRunning = _searching || _viewport?.IsBusy == true || SelectedLayer?.LoadStatus == LoadStatus.Loading;
@@ -518,8 +522,9 @@ public partial class OrientedImageryView
                 message = Text("Loading");
             else if (ViewModel.SelectedImage == null)
             {
-                message = Text("NoImageToDisplay");
-                showSelectionGuidance = true;
+                bool noImagesFound = ViewModel.SearchPoint != null;
+                message = Text(noImagesFound ? "NoImagesFound" : "NoImageToDisplay");
+                showSelectionGuidance = !noImagesFound;
             }
         }
         ErrorMessage = error ?? ViewModel.SequentialNavigationError?.Message ??
