@@ -1250,7 +1250,7 @@
     <comment>Final word after the Examine icon: using [Search icon] or [Examine icon] mode.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionSearchMap" xml:space="preserve">
-    <value>tap on the map to search</value>
+    <value>Tap on the map to search</value>
     <comment>First line of the no-image-selected instruction, followed by 'using [Search icon] or [Examine icon] mode'.</comment>
   </data>
   <data name="OrientedImageryViewEnableImageSelection" xml:space="preserve">
