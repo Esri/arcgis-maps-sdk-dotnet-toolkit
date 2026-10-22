@@ -261,7 +261,9 @@ public partial class OrientedImageryView
         _viewport.Footprint = ViewModel.SelectedImageFootprint;
         if (ViewModel?.SearchPoint is MapPoint searchPoint && _viewport.Footprint != null)
         {
-            _viewport.LookAtAsync(searchPoint);
+            var imageType = _viewport.Footprint.OrientedImage.Type;
+            if (imageType == OrientedImageType.Image360 || imageType == OrientedImageType.Terrestrial360Video || imageType == OrientedImageType.Aerial360Video)
+                _viewport.LookAtAsync(searchPoint);
             ViewModel.AreFootprintsEnabled = false;
             _viewport.StateChanged += Viewport_StateChanged;
         }
