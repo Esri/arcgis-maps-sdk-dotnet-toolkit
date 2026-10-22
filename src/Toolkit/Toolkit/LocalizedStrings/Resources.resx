@@ -1133,12 +1133,12 @@
     <value>Mark location</value>
     <comment>Name for the marker-creation toggle. Assistive technology announces its on/off state separately.</comment>
   </data>
-  <data name="OrientedImageryViewSwitchToImageSearch" xml:space="preserve">
-    <value>Switch to image search mode</value>
+  <data name="OrientedImageryViewSwitchToFindImages" xml:space="preserve">
+    <value>Switch to find images mode</value>
     <comment>Tooltip for the button that switches from image selection to image search mode.</comment>
   </data>
-  <data name="OrientedImageryViewSwitchToImageSelection" xml:space="preserve">
-    <value>Switch to image selection mode</value>
+  <data name="OrientedImageryViewSwitchToDisplayImage" xml:space="preserve">
+    <value>Switch to display image mode</value>
     <comment>Tooltip for the button that switches from image search to image selection mode.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
@@ -1169,8 +1169,8 @@
   <data name="EnterSequentialNavigationModeLabel" xml:space="preserve">
     <value>Sequential navigation</value>
   </data>
-  <data name="OrientedImageryViewImageSearchModeSearch" xml:space="preserve">
-    <value>Search images</value>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>Find images</value>
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
