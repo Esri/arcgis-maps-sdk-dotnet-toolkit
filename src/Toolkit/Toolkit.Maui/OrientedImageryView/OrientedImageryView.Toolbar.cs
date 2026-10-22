@@ -154,15 +154,7 @@ public partial class OrientedImageryView
                 var bar = new DesktopImageryBar
                 {
                     Owner = this, ToolbarItem = item,
-                    WidthRequest = item switch
-                    {
-                        ToolbarDividerVM => 17,
-                        ImageSearchModeVM => 80,
-                        AllowAddingMarkersVM => 56,
-                        SelectNewMarkerSymbolVM => 32,
-                        _ => 78,
-                    },
-                    HeightRequest = 84,
+                    MinimumHeightRequest = 84,
                 };
                 view = bar;
                 _toolbarUpdates.Add(bar.Refresh);
@@ -184,13 +176,8 @@ public partial class OrientedImageryView
             category.ToolbarItems.Count == 1 && category.ToolbarItems[0] is SequentialNavigationVM;
         bool known = key is OrientedImageryToolbarCategory.ModeCategoryName or OrientedImageryToolbarCategory.OverlaysCategoryName or
             OrientedImageryToolbarCategory.MarkersCategoryName or OrientedImageryToolbarCategory.MoreCategoryName;
-        var cell = new Grid { MinimumHeightRequest = 44, Padding = new Thickness(2, 0) };
-        Layout content = navigation ? new Grid
-        {
-            ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) },
-            ColumnSpacing = 2, Padding = new Thickness(4, 0),
-            VerticalOptions = LayoutOptions.Center,
-        } : new HorizontalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
+        var cell = new Grid { MinimumWidthRequest = 44, MinimumHeightRequest = 44 };
+        Layout content = new HorizontalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
         var icon = MainMenuIcon(navigation ? MenuIcon(null, SequenceGeometry) : key switch
         {
             OrientedImageryToolbarCategory.ModeCategoryName => ImageModeIcon(ImageSearchEnabled),
@@ -202,7 +189,7 @@ public partial class OrientedImageryView
                 FontAutoScalingEnabled = false, LineBreakMode = LineBreakMode.NoWrap,
                 HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center,
             },
-            _ => new Label { Text = "\u2022\u2022\u2022", TextColor = Color.FromArgb("#007AC2") },
+            _ => new Label { Text = "\u2022\u2022\u2022", FontAutoScalingEnabled = false, TextColor = Color.FromArgb("#007AC2") },
         });
         icon.WidthRequest = icon.HeightRequest = navigation ? 14 : 16;
         if (key == OrientedImageryToolbarCategory.MarkersCategoryName)
@@ -214,7 +201,7 @@ public partial class OrientedImageryView
         {
             Text = navigation ? Text("Navigation") : known ? Text(key) : key,
             FontSize = navigation ? 11 : 12, VerticalOptions = LayoutOptions.Center, MaxLines = 1,
-            HorizontalTextAlignment = TextAlignment.Center, LineBreakMode = LineBreakMode.TailTruncation,
+            HorizontalTextAlignment = TextAlignment.Center, LineBreakMode = LineBreakMode.NoWrap,
         };
         label.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
 #if ANDROID
@@ -224,11 +211,11 @@ public partial class OrientedImageryView
                 nativeLabel.Typeface = Android.Graphics.Typeface.Create(nativeLabel.Typeface, 600, false);
         };
 #endif
-        Grid.SetColumn(label, 1);
         content.Add(label);
         var pill = new Border
         {
-            Content = content, HeightRequest = 26, VerticalOptions = LayoutOptions.Center,
+            Content = content, MinimumHeightRequest = 26, Padding = new Thickness(4, 2),
+            VerticalOptions = LayoutOptions.Center, Margin = new Thickness(2, 0),
             Stroke = Color.FromArgb("#CCCCCC"), StrokeThickness = 1,
             StrokeShape = new RoundRectangle { CornerRadius = 13 }, InputTransparent = true,
         };
@@ -250,23 +237,21 @@ public partial class OrientedImageryView
         label.FontSize = 11;
         label.FontAttributes = FontAttributes.Bold;
         label.TextColor = IosAccent;
-        pill.HeightRequest = -1;
         pill.VerticalOptions = LayoutOptions.Fill;
-        pill.Margin = new Thickness(0, 4, 0, 8);
+        pill.Margin = new Thickness(2, 4, 2, 8);
         pill.StrokeThickness = 0;
         pill.StrokeShape = new RoundRectangle { CornerRadius = 10 };
         pill.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
 #endif
         var button = new Button
         {
-            BackgroundColor = Colors.Transparent, BorderWidth = 0, Padding = 0, MinimumHeightRequest = cell.MinimumHeightRequest,
+            BackgroundColor = Colors.Transparent, BorderWidth = 0, Padding = 0,
+            MinimumWidthRequest = 44, MinimumHeightRequest = cell.MinimumHeightRequest,
             AutomationId = "OrientedImagery" + (navigation ? "Navigation" : key),
         };
         SemanticProperties.SetDescription(button, label.Text);
         cell.Add(pill);
         cell.Add(button);
-        FlexLayout.SetGrow(cell, 1);
-        FlexLayout.SetBasis(cell, new FlexBasis(0.25f, true));
         button.Clicked += (_, _) =>
         {
             if (TogglePanel(button))
@@ -330,6 +315,31 @@ public partial class OrientedImageryView
     }
 
 #if !WINDOWS
+    private sealed class ToolbarRowLayout : HorizontalStackLayout
+    {
+        protected override ILayoutManager CreateLayoutManager() => new ToolbarRowLayoutManager(this);
+    }
+
+    private sealed class ToolbarRowLayoutManager(ToolbarRowLayout layout) : HorizontalStackLayoutManager(layout)
+    {
+        public override Microsoft.Maui.Graphics.Size ArrangeChildren(Microsoft.Maui.Graphics.Rect bounds)
+        {
+            var children = layout.Children.Where(child => child.Visibility != Visibility.Collapsed).ToArray();
+            double contentWidth = children.Sum(child => child.DesiredSize.Width);
+            double extra = children.Length == 0 ? 0 :
+                Math.Max(0, bounds.Width - layout.Padding.HorizontalThickness - contentWidth) / children.Length;
+            double x = bounds.X + layout.Padding.Left;
+            foreach (var child in children)
+            {
+                double width = child.DesiredSize.Width + extra;
+                child.Arrange(new Microsoft.Maui.Graphics.Rect(x, bounds.Y + layout.Padding.Top,
+                    width, bounds.Height - layout.Padding.VerticalThickness));
+                x += width;
+            }
+            return bounds.Size;
+        }
+    }
+
     private static View MainMenuIcon(View icon)
     {
         if (icon is Microsoft.Maui.Controls.Shapes.Path path)

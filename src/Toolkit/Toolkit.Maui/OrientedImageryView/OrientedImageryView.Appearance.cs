@@ -10,6 +10,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
+    private const double MinimumImageAreaHeight = 200;
     private Label? _status;
     private View? _statusHost;
     private View? _selectionGuidance;
@@ -24,6 +25,7 @@ public partial class OrientedImageryView
     private ScrollView? _panelScroll;
     private HorizontalStackLayout? _pages;
     private Layout? _customToolbar;
+    private ScrollView? _toolbarScroll;
     private (bool Sequential, int Start, int Count)? _pageState;
     private int _selectedPage = -1;
     private View? _panelAnchor;
@@ -80,10 +82,18 @@ public partial class OrientedImageryView
             parent.Children.Add(view);
         }
 
-        var custom = new FlexLayout { Wrap = FlexWrap.Wrap, AlignItems = FlexAlignItems.Center, Margin = new Thickness(8, 0) };
-        Add("PART_CustomToolbar", custom, root);
+        var custom = new ToolbarRowLayout();
+        var toolbarScroll = new ScrollView
+        {
+            Orientation = ScrollOrientation.Horizontal, Content = custom,
+            Margin = new Thickness(8, 0), HorizontalScrollBarVisibility = ScrollBarVisibility.Default,
+            AutomationId = "OrientedImageryToolbarScroll",
+        };
+        toolbarScroll.SizeChanged += (_, _) => custom.MinimumWidthRequest = Math.Max(0, toolbarScroll.Width);
+        scope.RegisterName("PART_CustomToolbar", custom);
+        Add("PART_ToolbarScroll", toolbarScroll, root);
 
-        var image = new Grid();
+        var image = new Grid { MinimumHeightRequest = MinimumImageAreaHeight };
         Grid.SetRow(image, 1);
         root.Children.Add(image);
         Add("PART_Viewport", new OrientedImageViewport { AutomationId = "OrientedImageryViewport" }, image);
@@ -100,7 +110,10 @@ public partial class OrientedImageryView
             ColumnSpacing = 0,
             Padding = new Thickness(8, 0),
         };
-        Add("PART_Navigation", navigation, root, 2);
+        scope.RegisterName("PART_Navigation", navigation);
+        var navigationScroll = new ScrollView { Orientation = ScrollOrientation.Horizontal, Content = navigation };
+        Grid.SetRow(navigationScroll, 2);
+        root.Add(navigationScroll);
         var previous = ToolButton("PreviousLabel", ToolkitIcons.ChevronLeft, "OrientedImageryPrevious");
         previous.Text = null;
         previous.WidthRequest = 44;
@@ -118,9 +131,29 @@ public partial class OrientedImageryView
         var panels = new Grid { IsVisible = false, InputTransparent = true, CascadeInputTransparent = false };
         Add("PART_PanelHost", panels, root);
         Grid.SetRowSpan(panels, root.RowDefinitions.Count);
-        return root;
+        return ScrollablePresentation(root, image, scope);
     });
 #endif
+
+    private static View ScrollablePresentation(Grid root, Grid image, INameScope scope)
+    {
+        var scroll = new ScrollView { Content = root };
+        NameScope.SetNameScope(scroll, scope);
+        var chrome = root.Children.OfType<View>().Where(view => Grid.GetRow(view) != 1 && Grid.GetRowSpan(view) == 1).ToArray();
+        void UpdateSize(object? sender, EventArgs e)
+        {
+            if (scroll.Width <= 0 || scroll.Height <= 0) return;
+            double chromeHeight = chrome.Where(view => view.IsVisible)
+                .Sum(view => view.Measure(scroll.Width, double.PositiveInfinity).Height);
+            // Keep the image bounded even when a popup contains a long list of fields.
+            root.HeightRequest = Math.Max(scroll.Height, chromeHeight + image.MinimumHeightRequest);
+            scroll.Orientation = root.HeightRequest > scroll.Height ? ScrollOrientation.Vertical : ScrollOrientation.Neither;
+        }
+        scroll.SizeChanged += UpdateSize;
+        foreach (var view in chrome)
+            view.SizeChanged += UpdateSize;
+        return scroll;
+    }
 
     private static void AddPopupPresentation(Grid image, INameScope scope)
     {
@@ -203,8 +236,8 @@ public partial class OrientedImageryView
     {
         var status = new Label
         {
-            HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center,
-            HorizontalTextAlignment = TextAlignment.Center,
+            VerticalOptions = LayoutOptions.Center,
+            HorizontalTextAlignment = TextAlignment.Center, LineBreakMode = LineBreakMode.WordWrap,
             AutomationId = "OrientedImageryStatus", FontSize = 18,
         };
         status.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
@@ -242,12 +275,12 @@ public partial class OrientedImageryView
         AutomationProperties.SetIsInAccessibleTree(searchMap, false);
         var content = new VerticalStackLayout
         {
-            HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center,
             MaximumWidthRequest = 400, Margin = 16, Spacing = 6, Children = { status, guidance },
         };
         var host = new Grid();
         host.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
-        host.Add(content);
+        host.Add(new ScrollView { Content = content, VerticalOptions = LayoutOptions.Center });
         scope.RegisterName("PART_Status", status);
         scope.RegisterName("PART_SelectionGuidance", guidance);
         scope.RegisterName("PART_StatusHost", host);
@@ -324,6 +357,8 @@ public partial class OrientedImageryView
         _panelHost = GetTemplateChild("PART_PanelHost") as Grid;
         if (_panelHost != null) _panelHost.SizeChanged += PanelHostSizeChanged;
         _customToolbar = GetTemplateChild("PART_CustomToolbar") as Layout;
+        _toolbarScroll = GetTemplateChild("PART_ToolbarScroll") as ScrollView;
+        if (_toolbarScroll != null) _toolbarScroll.Scrolled += ToolbarScrolled;
 #if WINDOWS
         InitializeDesktopTemplate();
 #endif
@@ -418,6 +453,7 @@ public partial class OrientedImageryView
         DismissPanel();
         ReleaseToolbarPresentation();
         if (_panelHost != null) _panelHost.SizeChanged -= PanelHostSizeChanged;
+        if (_toolbarScroll != null) _toolbarScroll.Scrolled -= ToolbarScrolled;
         if (_viewport != null)
         {
             _viewport.ImageTapped -= ImageTapped;
@@ -446,6 +482,7 @@ public partial class OrientedImageryView
         _pageState = null;
         _selectedPage = -1;
         _customToolbar = null;
+        _toolbarScroll = null;
         _panelHost = null;
         if (_popupViewer != null) _popupViewer.Popup = null;
         if (_popupOpenButton != null) _popupOpenButton.Command = null;
@@ -522,9 +559,8 @@ public partial class OrientedImageryView
                 message = Text("Loading");
             else if (ViewModel.SelectedImage == null)
             {
-                bool noImagesFound = ViewModel.SearchPoint != null;
-                message = Text(noImagesFound ? "NoImagesFound" : "NoImageToDisplay");
-                showSelectionGuidance = !noImagesFound;
+                message = Text(_hasSearchedForImages ? "NoImagesFound" : "NoImageToDisplay");
+                showSelectionGuidance = !_hasSearchedForImages;
             }
         }
         ErrorMessage = error ?? ViewModel.SequentialNavigationError?.Message ??
@@ -662,7 +698,7 @@ public partial class OrientedImageryView
                 return button;
             }
             _pages.Add(SequenceButton(false));
-            var current = new Grid { WidthRequest = 35, HeightRequest = 44 };
+            var current = new Grid { MinimumWidthRequest = 35, MinimumHeightRequest = 44 };
             var sequenceLabel = new Label
             {
                 Text = "\u00B7", VerticalOptions = LayoutOptions.Center,
@@ -990,7 +1026,7 @@ public partial class OrientedImageryView
 #endif
         row.Add(title, 1);
         var selection = new Label { Text = "\u2022", TextColor = Color.FromArgb("#007AC2"), VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center,
-            FontSize = 24, InputTransparent = true };
+            FontSize = 24, FontAutoScalingEnabled = false, InputTransparent = true };
 #if __IOS__ && !MACCATALYST
         selection.Text = "\u2713";
         selection.FontSize = 17;
@@ -1137,6 +1173,7 @@ public partial class OrientedImageryView
         header.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
         var closeButton = ToolButton("ClosePanel", "", "OrientedImageryPanelClose");
         closeButton.Text = "X";
+        closeButton.FontAutoScalingEnabled = false;
 #if __IOS__ && !MACCATALYST
         closeButton.Text = "\u00D7";
         closeButton.FontSize = 22;
@@ -1179,6 +1216,8 @@ public partial class OrientedImageryView
 
     private void PanelHostSizeChanged(object? sender, EventArgs e) => UpdatePanelSize();
 
+    private void ToolbarScrolled(object? sender, ScrolledEventArgs e) => UpdatePanelSize();
+
     private void UpdatePanelSize()
     {
         if (_panelHost == null || _panelLayout == null || _panelScroll == null || _panel == null || _panelAnchor == null) return;
@@ -1188,6 +1227,11 @@ public partial class OrientedImageryView
         {
             x += visual.X;
             y += visual.Y;
+            if (visual is ScrollView scroll)
+            {
+                x -= scroll.ScrollX;
+                y -= scroll.ScrollY;
+            }
             element = visual.Parent;
         }
         double maximumWidth = Math.Max(0, Math.Min(320, _panelHost.Width - 8));

@@ -54,6 +54,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     private FontFamily? _iconFont;
     private bool _rendering;
     private int _generation;
+    private readonly Windows.UI.ViewManagement.UISettings _uiSettings = new();
 
     private readonly record struct NavigationState(bool Sequential, int Selected, int Start, int Count, int Total,
         bool Previous, bool Next, bool Searching);
@@ -109,6 +110,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         base.ConnectHandler(platformView);
         platformView.SizeChanged += SizeChanged;
         VirtualView.SizeChanged += ViewSizeChanged;
+        _uiSettings.TextScaleFactorChanged += TextScaleFactorChanged;
         Refresh();
     }
 
@@ -116,6 +118,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
         platformView.SizeChanged -= SizeChanged;
         VirtualView.SizeChanged -= ViewSizeChanged;
+        _uiSettings.TextScaleFactorChanged -= TextScaleFactorChanged;
         Clear(platformView);
         _iconFont = null;
         base.DisconnectHandler(platformView);
@@ -123,6 +126,17 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
 
     private void SizeChanged(object sender, SizeChangedEventArgs e) => Refresh();
     private void ViewSizeChanged(object? sender, EventArgs e) => Refresh();
+
+    private void TextScaleFactorChanged(Windows.UI.ViewManagement.UISettings sender, object args)
+    {
+        if (((IElementHandler)this).VirtualView is not DesktopImageryBar view) return;
+        view.Dispatcher.Dispatch(() =>
+        {
+            if (view.Handler != this) return;
+            PlatformView.InvalidateMeasure();
+            ((IView)view).InvalidateMeasure();
+        });
+    }
 
     internal void Reset() => Clear();
 
@@ -132,7 +146,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         (Microsoft.UI.Xaml.Controls.Border)XamlReader.Load(
             "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Background=\"{ThemeResource " + key + "}\"/>");
 
-    private static StackPanel LabeledContent(UIElement icon, string key, double labelWidth = 68)
+    private static StackPanel LabeledContent(UIElement icon, string key)
     {
         var panel = new StackPanel
         {
@@ -146,7 +160,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         });
         var label = new TextBlock
         {
-            Text = Text(key), Width = labelWidth, Height = 32, FontSize = 12,
+            Text = Text(key), FontSize = 12,
             TextAlignment = Microsoft.UI.Xaml.TextAlignment.Center,
             TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
         };
@@ -268,6 +282,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 control.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
                 control.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
                 PlatformView.Children.Add(control);
+                ((IView)VirtualView).InvalidateMeasure();
             }
         }
         _updating = true;
@@ -279,7 +294,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
         var button = new NativeButton
         {
-            Content = LabeledContent(icon, labelKey), MinWidth = 0, Height = 84, Padding = new NativeThickness(4),
+            Content = LabeledContent(icon, labelKey), MinWidth = 0, MinHeight = 84, Padding = new NativeThickness(4),
             BorderThickness = new NativeThickness(0), Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
             CornerRadius = new CornerRadius(0), HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
         };
@@ -293,8 +308,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
         var toggle = new ToggleButton
         {
-            Content = LabeledContent(icon, labelKey, key == "AddMarkersAutomationName" ? 48 : 68),
-            MinWidth = 0, Height = 84, Padding = new NativeThickness(4),
+            Content = LabeledContent(icon, labelKey),
+            MinWidth = 0, MinHeight = 84, Padding = new NativeThickness(4),
             BorderThickness = new NativeThickness(1),
             BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
             Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), CornerRadius = new CornerRadius(0),
@@ -318,7 +333,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         {
             _showSymbol = showSymbol;
             MinWidth = 0;
-            Height = 84;
+            MinHeight = 84;
             Padding = new NativeThickness(0);
             BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
             Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
@@ -369,16 +384,16 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
         var host = new NativeGrid
         {
-            Height = 84,
+            MinHeight = 84,
             ColumnDefinitions =
             {
-                new Microsoft.UI.Xaml.Controls.ColumnDefinition { Width = new Microsoft.UI.Xaml.GridLength(56) },
+                new Microsoft.UI.Xaml.Controls.ColumnDefinition { Width = new Microsoft.UI.Xaml.GridLength(1, Microsoft.UI.Xaml.GridUnitType.Star) },
                 new Microsoft.UI.Xaml.Controls.ColumnDefinition { Width = new Microsoft.UI.Xaml.GridLength(24) },
             },
         };
         var button = new ToggleButton
         {
-            MinWidth = 0, Height = 84, Padding = new NativeThickness(4),
+            MinWidth = 0, MinHeight = 84, Padding = new NativeThickness(4),
             BorderThickness = new NativeThickness(1), Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
             BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
             CornerRadius = new CornerRadius(0),
@@ -452,8 +467,9 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             if (previous != search)
             {
                 button.Content = LabeledContent(ImageModeIcon(search),
-                    search ? "ImageSearchModeFind" : "ImageSearchModeDisplay", 48);
+                    search ? "ImageSearchModeFind" : "ImageSearchModeDisplay");
                 previous = search;
+                ((IView)VirtualView).InvalidateMeasure();
             }
             dropdown.SelectedItem = mode.IsImageSelectionEnabled ? dropdown.Items.OfType<ComboBoxItem>()
                 .FirstOrDefault(item => item.Tag is OrientedImageryViewInteractionState state && state == mode.SelectedInteractionState) : null;
@@ -560,15 +576,16 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             model.SelectPreviousImageCommand.CanExecute(null), model.SelectNextImageCommand.CanExecute(null), owner.DesktopIsSearching);
         if (_navigationState == state && _model == model) return;
         var focused = PlatformView.XamlRoot == null ? null : FocusManager.GetFocusedElement(PlatformView.XamlRoot) as NativeButton;
-        bool restoreFocus = focused != null && PlatformView.Children.OfType<StackPanel>().Any(panel => panel.Children.Contains(focused));
+        bool restoreFocus = focused != null && PlatformView.Children.OfType<NavigationRow>().Any(panel => panel.Children.Contains(focused));
         string? focusedId = restoreFocus ? AutomationProperties.GetAutomationId(focused!) : null;
         var focusState = restoreFocus ? focused!.FocusState : FocusState.Unfocused;
         if (_model == model && _navigationState is { } previous &&
             previous.Sequential == state.Sequential && (state.Sequential || previous.Count == state.Count) &&
-            PlatformView.Children.FirstOrDefault() is StackPanel existingRow)
+            PlatformView.Children.FirstOrDefault() is NavigationRow existingRow)
         {
             _navigationState = state;
             UpdateNavigationRow(existingRow, state);
+            ((IView)VirtualView).InvalidateMeasure();
             if (restoreFocus)
                 RestoreNavigationFocus(existingRow, focusedId, selected, focusState);
             return;
@@ -576,7 +593,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         Clear();
         _navigationState = state;
         _model = model;
-        var row = new StackPanel { Orientation = Microsoft.UI.Xaml.Controls.Orientation.Horizontal, HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center, Height = 32 };
+        var row = new NavigationRow();
         PlatformView.Children.Add(row);
         NativeButton NavigateButton(bool next, bool label)
         {
@@ -588,7 +605,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                     Glyph = next ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronLeft,
                     FontFamily = IconFont, FontSize = 16,
                 },
-                Height = 32, MinHeight = 0, MinWidth = 0, Padding = new NativeThickness(label ? 4 : 0),
+                MinHeight = 32, MinWidth = 0, Padding = new NativeThickness(label ? 4 : 0),
                 BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
                 Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
                 IsEnabled = !owner.DesktopIsSearching && command.CanExecute(null),
@@ -610,7 +627,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 var button = new NativeButton
                 {
                     Content = PageIndicator((i + 1).ToString(CultureInfo.CurrentCulture), i == selected),
-                    Width = 35, Height = 32, MinWidth = 0, MinHeight = 0, Padding = new NativeThickness(0),
+                    MinWidth = 35, MinHeight = 32, Padding = new NativeThickness(0),
                     BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
                     Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), IsEnabled = !owner.DesktopIsSearching,
                 };
@@ -627,19 +644,19 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         }
         if (model.IsSequentialNavigationEnabled) row.Children.Add(NavigateButton(true, true));
         row.Children.Add(NavigateButton(true, false));
-        VirtualView.HeightRequest = 32;
+        ((IView)VirtualView).InvalidateMeasure();
         if (restoreFocus)
             RestoreNavigationFocus(row, focusedId, selected, focusState);
     }
 
-    private static void RestoreNavigationFocus(StackPanel row, string? focusedId, int selected, FocusState focusState)
+    private static void RestoreNavigationFocus(NavigationRow row, string? focusedId, int selected, FocusState focusState)
     {
         var target = row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == focusedId);
         target ??= row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == "OrientedImageryPage" + selected.ToString(CultureInfo.InvariantCulture));
         target?.Focus(focusState);
     }
 
-    private static void UpdateNavigationRow(StackPanel row, NavigationState state)
+    private static void UpdateNavigationRow(NavigationRow row, NavigationState state)
     {
         var previous = (NativeButton)row.Children[0];
         previous.IsEnabled = !state.Searching && state.Previous;
@@ -668,8 +685,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
 
     private static NativeGrid PageIndicator(string text, bool selected)
     {
-        var grid = new NativeGrid { Width = 35, Height = 32 };
-        grid.Children.Add(new TextBlock { Text = text, FontSize = 14, HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center, VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center });
+        var grid = new NativeGrid { MinWidth = 35, MinHeight = 32 };
+        grid.Children.Add(new TextBlock { Text = text, FontSize = 14, Margin = new NativeThickness(4, 2, 4, 4), HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center, VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center });
         var underline = ThemeBorder("SystemControlHighlightAccentBrush");
         underline.Height = 2;
         underline.Margin = new NativeThickness(1, 0, 1, 0);
@@ -677,6 +694,56 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         underline.Visibility = selected ? NativeVisibility.Visible : NativeVisibility.Collapsed;
         grid.Children.Add(underline);
         return grid;
+    }
+
+    private sealed class NavigationRow : Panel
+    {
+        protected override Windows.Foundation.Size MeasureOverride(Windows.Foundation.Size availableSize)
+        {
+            double width = 0, height = 0, rowWidth = 0, rowHeight = 0;
+            foreach (var child in Children)
+            {
+                child.Measure(new Windows.Foundation.Size(availableSize.Width, double.PositiveInfinity));
+                var size = child.DesiredSize;
+                if (rowWidth > 0 && rowWidth + size.Width > availableSize.Width)
+                {
+                    width = Math.Max(width, rowWidth);
+                    height += rowHeight;
+                    rowWidth = rowHeight = 0;
+                }
+                rowWidth += size.Width;
+                rowHeight = Math.Max(rowHeight, size.Height);
+            }
+            return new Windows.Foundation.Size(Math.Max(width, rowWidth), height + rowHeight);
+        }
+
+        protected override Windows.Foundation.Size ArrangeOverride(Windows.Foundation.Size finalSize)
+        {
+            double y = 0, width = 0, height = 0;
+            var row = new List<UIElement>();
+            void ArrangeRow()
+            {
+                double x = Math.Max(0, (finalSize.Width - width) / 2);
+                foreach (var child in row)
+                {
+                    child.Arrange(new Windows.Foundation.Rect(x, y, child.DesiredSize.Width, height));
+                    x += child.DesiredSize.Width;
+                }
+                y += height;
+                row.Clear();
+                width = height = 0;
+            }
+            foreach (var child in Children)
+            {
+                if (width > 0 && width + child.DesiredSize.Width > finalSize.Width)
+                    ArrangeRow();
+                row.Add(child);
+                width += child.DesiredSize.Width;
+                height = Math.Max(height, child.DesiredSize.Height);
+            }
+            ArrangeRow();
+            return finalSize;
+        }
     }
 
 }
