@@ -70,9 +70,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
 #if __IOS__
             cv.SelectionMode = SelectionMode.Single;
-            cv.HandlerChanged += static (sender, _) =>
+            void UpdateAttachmentList()
             {
-                if (sender is CollectionView { Handler.PlatformView: UIKit.UIView nativeView })
+                if (cv.Handler?.PlatformView is UIKit.UIView nativeView)
                 {
                     // The optimized MAUI handler hosts the collection inside a container view.
                     var list = nativeView as UIKit.UICollectionView ?? nativeView.Subviews.OfType<UIKit.UICollectionView>().FirstOrDefault();
@@ -80,8 +80,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     {
                         list.AllowsFocus = true;
                         list.SelectionFollowsFocus = false;
+                        // Name the container without hiding its individually accessible rows.
+                        list.IsAccessibilityElement = false;
+                        list.AccessibilityLabel = roottitle.Text;
                     }
                 }
+            }
+            cv.HandlerChanged += (_, _) => UpdateAttachmentList();
+            roottitle.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(Label.Text))
+                    UpdateAttachmentList();
             };
 #endif
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (AttachmentsPopupElementView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
@@ -164,7 +173,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(divider, 3);
             layout.Add(divider);
             Border root = new Border() { StrokeThickness = 0, Content = layout };
-#if WINDOWS || __IOS__
+#if __IOS__
+            root.SetBinding(SemanticProperties.DescriptionProperty, static (Grid grid) => (grid.BindingContext as AttachmentViewModel)?.AccessibilityDescription, source: layout);
+#elif WINDOWS
             root.SetBinding(SemanticProperties.DescriptionProperty, static (PopupAttachment attachment) => attachment.Name);
 #endif
 #if WINDOWS
@@ -244,6 +255,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             public string Name => Attachment.Name;
 
+#if __IOS__
+            public string AccessibilityDescription => IsDownloading
+                ? $"{Name}, {Size}, {Properties.Resources.GetString("PopupViewerAttachmentDownloading")}"
+                : $"{Name}, {Size}";
+#endif
+
             public string Size
             {
                 get
@@ -264,6 +281,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     OnPropertyChanged(nameof(IsDownloadButtonVisible));
                     OnPropertyChanged(nameof(IsDownloading));
+#if __IOS__
+                    OnPropertyChanged(nameof(AccessibilityDescription));
+#endif
                     if (Attachment.LoadStatus == LoadStatus.Loaded)
                     {
                         CreateThumbnail();
