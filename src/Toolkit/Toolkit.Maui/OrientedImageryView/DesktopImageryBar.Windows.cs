@@ -389,6 +389,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 mode.IsImageSelectionEnabled = button.IsChecked == true;
         };
         var dropdown = new ToolbarComboBox(false);
+        bool selectionChangedWhileOpen = false;
+        dropdown.DropDownOpened += (_, _) => selectionChangedWhileOpen = false;
         NativeGrid.SetColumn(dropdown, 1);
         host.Children.Add(button);
         host.Children.Add(dropdown);
@@ -397,8 +399,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         Describe(dropdown, "ImageSearchMode", "OrientedImageryDesktopModeDropdown");
         foreach (var state in mode.ImageSearchModes)
         {
-            bool search = state == OrientedImageryViewInteractionState.ExploreImages;
-            string key = search ? "ImageSearchModeExplore" : "ImageSearchModeDisplay";
+            bool search = state == OrientedImageryViewInteractionState.FindImages;
+            string key = search ? "ImageSearchModeFind" : "ImageSearchModeDisplay";
             var content = new StackPanel { Orientation = Microsoft.UI.Xaml.Controls.Orientation.Horizontal, Spacing = 8 };
             content.Children.Add(new Viewbox { Width = 24, Height = 24, Child = ImageModeIcon(search) });
             content.Children.Add(new TextBlock { Text = Text(key), VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center });
@@ -411,38 +413,50 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             {
                 if (!_updating && dropdown.IsEnabled && item.IsSelected &&
                     e.GetCurrentPoint(item).Properties.IsLeftButtonPressed)
-                    mode.SelectedInteractionState = state;
+                {
+                    e.Handled = true;
+                    dropdown.IsDropDownOpen = false;
+                    OrientedImageryView.ToggleImageMode(mode, state);
+                }
             }), true);
             dropdown.Items.Add(item);
         }
         dropdown.PreviewKeyDown += (_, e) =>
         {
-            if (!_updating && dropdown.IsEnabled && dropdown.IsDropDownOpen &&
+            // Arrow navigation already activates its selection; Enter only confirms it.
+            if (!_updating && dropdown.IsEnabled && dropdown.IsDropDownOpen && !selectionChangedWhileOpen &&
                 e.Key is Windows.System.VirtualKey.Enter or Windows.System.VirtualKey.Space &&
                 FocusManager.GetFocusedElement(dropdown.XamlRoot) is ComboBoxItem
                 {
                     IsSelected: true, Tag: OrientedImageryViewInteractionState state,
                 })
-                mode.SelectedInteractionState = state;
+            {
+                e.Handled = true;
+                dropdown.IsDropDownOpen = false;
+                OrientedImageryView.ToggleImageMode(mode, state);
+            }
         };
         dropdown.SelectionChanged += (_, _) =>
         {
             if (!_updating && dropdown.IsEnabled &&
                 dropdown.SelectedItem is ComboBoxItem { Tag: OrientedImageryViewInteractionState state })
-                mode.SelectedInteractionState = state;
+            {
+                selectionChangedWhileOpen = dropdown.IsDropDownOpen;
+                OrientedImageryView.ToggleImageMode(mode, state);
+            }
         };
         bool? previous = null;
         _updates.Add(() =>
         {
-            bool search = mode.SelectedInteractionState == OrientedImageryViewInteractionState.ExploreImages;
+            bool search = mode.SelectedInteractionState == OrientedImageryViewInteractionState.FindImages;
             if (previous != search)
             {
                 button.Content = LabeledContent(ImageModeIcon(search),
-                    search ? "ImageSearchModeExplore" : "ImageSearchModeDisplay", 48);
+                    search ? "ImageSearchModeFind" : "ImageSearchModeDisplay", 48);
                 previous = search;
             }
-            dropdown.SelectedItem = dropdown.Items.OfType<ComboBoxItem>()
-                .FirstOrDefault(item => item.Tag is OrientedImageryViewInteractionState state && state == mode.SelectedInteractionState);
+            dropdown.SelectedItem = mode.IsImageSelectionEnabled ? dropdown.Items.OfType<ComboBoxItem>()
+                .FirstOrDefault(item => item.Tag is OrientedImageryViewInteractionState state && state == mode.SelectedInteractionState) : null;
             button.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching;
             dropdown.IsEnabled = button.IsEnabled;
             button.IsChecked = mode.IsImageSelectionEnabled;

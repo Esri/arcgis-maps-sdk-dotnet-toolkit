@@ -19,12 +19,20 @@ public partial class OrientedImageryView
 
     internal bool ImageSearchEnabled => ViewModel.InteractionState switch
     {
-        OrientedImageryViewInteractionState.ExploreImages => true,
+        OrientedImageryViewInteractionState.FindImages => true,
         OrientedImageryViewInteractionState.DisplayImage => false,
         _ => _imageSearchEnabled,
     };
 
     internal bool IsAddingMarkers => ViewModel.InteractionState == OrientedImageryViewInteractionState.AddMarkers;
+
+    internal static void ToggleImageMode(ImageSearchModeVM mode, OrientedImageryViewInteractionState state)
+    {
+        if (mode.IsImageSelectionEnabled && mode.SelectedInteractionState == state)
+            mode.IsImageSelectionEnabled = false;
+        else
+            mode.SelectedInteractionState = state;
+    }
 
     internal void SetAddingMarkers(bool enabled)
     {
@@ -272,7 +280,7 @@ public partial class OrientedImageryView
             cell.IsVisible = category.ToolbarItems.Any(item => item is not ToolbarDividerVM && IsToolbarItemVisible(item));
             button.IsEnabled = HasValidLayer && !_searching;
             bool active = (key == OrientedImageryToolbarCategory.ModeCategoryName &&
-                    ViewModel.InteractionState is OrientedImageryViewInteractionState.ExploreImages or OrientedImageryViewInteractionState.DisplayImage) ||
+                    ViewModel.InteractionState is OrientedImageryViewInteractionState.FindImages or OrientedImageryViewInteractionState.DisplayImage) ||
                 (key == OrientedImageryToolbarCategory.MarkersCategoryName && IsAddingMarkers) ||
                 (key == OrientedImageryToolbarCategory.MoreCategoryName && ViewModel.IsSequentialNavigationEnabled);
             pill.Opacity = button.IsEnabled ? 1 : 0.45;
@@ -309,7 +317,7 @@ public partial class OrientedImageryView
 #endif
             }
             if (key == OrientedImageryToolbarCategory.ModeCategoryName)
-                SemanticProperties.SetHint(button, $"{Text(ImageSearchEnabled ? "ImageSearchModeExplore" : "ImageSearchModeDisplay")}, {Text(active ? "On" : "Off")}");
+                SemanticProperties.SetHint(button, $"{Text(ImageSearchEnabled ? "ImageSearchModeFind" : "ImageSearchModeDisplay")}, {Text(active ? "On" : "Off")}");
             else if (key == OrientedImageryToolbarCategory.MarkersCategoryName)
                 SemanticProperties.SetHint(button, Text(IsAddingMarkers ? "On" : "Off"));
             else if (navigation)
@@ -355,9 +363,9 @@ public partial class OrientedImageryView
             case ImageSearchModeVM mode:
                 foreach (var state in mode.ImageSearchModes)
                 {
-                    bool search = state == OrientedImageryViewInteractionState.ExploreImages;
-                    AddActionRow(content, new MenuAction(Text(search ? "ImageSearchModeExplore" : "ImageSearchModeDisplay"),
-                        () => mode.SelectedInteractionState = state, Icon: () => ImageModeIcon(search),
+                    bool search = state == OrientedImageryViewInteractionState.FindImages;
+                    AddActionRow(content, new MenuAction(Text(search ? "ImageSearchModeFind" : "ImageSearchModeDisplay"),
+                        () => ToggleImageMode(mode, state), Icon: () => ImageModeIcon(search),
                         Checked: () => ViewModel.InteractionState == state, Enabled: Enabled));
                 }
                 break;
