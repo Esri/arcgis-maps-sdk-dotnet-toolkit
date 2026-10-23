@@ -47,7 +47,6 @@ internal abstract class OrientedImageInnerViewport
     private MapPoint? _heldLookAt;
     private Task _present = Task.CompletedTask; // the current session's SetFootprintAsync
     private bool _autoUpdate;
-    private bool _isLoading; // true through PresentAsync, not only while the image loads
     private DateTime _lastFootprintUpdate; // MinValue, so the first update runs at once
     private bool _footprintUpdatePending;
 
@@ -84,6 +83,9 @@ internal abstract class OrientedImageInnerViewport
     protected Exception? PresentationError { get; set; }
 
     protected abstract bool IsPresentationInteractive { get; }
+
+    // true through PresentAsync, not only while the image loads
+    protected bool _isLoading { get; private set; }
 
     public void SetFootprint(OrientedImageFootprint? footprint)
     {
@@ -334,7 +336,12 @@ internal abstract class OrientedImageInnerViewport
     {
     }
 
-    protected virtual Exception? ResolveError() => Footprint?.OrientedImage?.LoadError ?? PresentationError;
+    protected virtual Exception? ResolveError()
+    {
+        if (!_isLoading && Footprint?.OrientedImage?.LoadError is Exception)
+            return Footprint?.OrientedImage?.LoadError;
+        return PresentationError;
+    }
 
     protected void RaiseImageTapped(OrientedImageTappedEventArgs args) => ImageTapped?.Invoke(this, args);
 
