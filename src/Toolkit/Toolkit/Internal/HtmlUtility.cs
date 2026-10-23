@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Color = System.Drawing.Color;
@@ -70,6 +71,8 @@ internal class MarkupNode
         sb.Append(Type);
         if (IsBold.HasValue)
             sb.Append(" bold=" + IsBold.Value);
+        if (IsMonospace.HasValue)
+            sb.Append(" monospace=" + IsMonospace.Value);
         if (IsItalic.HasValue)
             sb.Append(" italic=" + IsItalic.Value);
         if (IsUnderline.HasValue)
@@ -83,7 +86,14 @@ internal class MarkupNode
         if (Alignment.HasValue)
             sb.Append(" align=" + Alignment.Value);
         if (Content != null)
-            sb.Append(" text=" + Content);
+        {
+            if (Type == MarkupType.Link)
+                sb.Append(" href=" + Content);
+            else if (Type == MarkupType.Image)
+                sb.Append(" src=" + Content);
+            else
+                sb.Append(" text=\"" + Content + "\"");
+        }
         if (Children.Any())
             sb.Append(" children=" + Children.Count);
         sb.Append('}');
@@ -94,12 +104,26 @@ internal class MarkupNode
     {
         // Copy style attributes from the parent node, unless overridden on this node
         IsBold ??= parent.IsBold;
+        IsMonospace ??= parent.IsMonospace;
         IsItalic ??= parent.IsItalic;
         IsUnderline ??= parent.IsUnderline;
         FontSize ??= parent.FontSize;
         FontColor ??= parent.FontColor;
         BackColor ??= parent.BackColor;
         Alignment ??= parent.Alignment;
+    }
+
+    public bool HasAnyTextAttributes => IsBold.HasValue || IsMonospace.HasValue || IsItalic.HasValue || IsUnderline.HasValue || FontSize.HasValue || FontColor.HasValue || BackColor.HasValue;
+
+    public bool HasSameTextAttributes(MarkupNode other)
+    {
+        return IsBold == other.IsBold &&
+               IsMonospace == other.IsMonospace &&
+               IsItalic == other.IsItalic &&
+               IsUnderline == other.IsUnderline &&
+               FontSize == other.FontSize &&
+               FontColor == other.FontColor &&
+               BackColor == other.BackColor;
     }
 }
 
@@ -119,6 +143,7 @@ internal class HtmlUtility
             => string.IsNullOrWhiteSpace(value) ? value : HtmlTagExpression.Replace(value, string.Empty);
 
 
+    private static readonly Regex AttributeRegex = new Regex(@"([\w-]+)\s*(=\s*('([^']+)'|""([^""]+)""|([^'""\s]+)))?\s*", RegexOptions.Compiled);
 
     /// <summary>
     /// Parses a string with HTML attribute declarations into a dictionary.
@@ -128,16 +153,15 @@ internal class HtmlUtility
     /// <returns>A dictionary of attribute-names to unescaped attribute-values.</returns>
     internal static Dictionary<string, string> ParseAttributes(string? attrString)
     {
-        var result = new Dictionary<string, string>();
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         if (string.IsNullOrEmpty(attrString))
             return result;
 
-        var attributeRegex = new Regex(@"([\w-]+)\s*(=\s*('([^']+)'|""([^""]+)""|([^'""\s]+)))?\s*");
-        var matches = attributeRegex.Matches(attrString);
+        var matches = AttributeRegex.Matches(attrString);
 
         foreach (Match match in matches)
         {
-            string attrName = match.Groups[1].Value;
+            string attrName = match.Groups[1].Value.ToLowerInvariant();
             string attrValue = match.Groups[4].Success ? match.Groups[4].Value :
                                match.Groups[5].Success ? match.Groups[5].Value :
                                match.Groups[6].Success ? match.Groups[6].Value : "";
@@ -157,68 +181,37 @@ internal class HtmlUtility
     {
         if (string.IsNullOrEmpty(input))
             return input;
-        var regex = new Regex(@"&(?:#(?<numeric>\d+)|#x(?<hex>[0-9a-fA-F]+)|(?<named>\w+));");
-        var result = regex.Replace(input, m =>
-        {
-            if (m.Groups["numeric"].Success) // Decimal character reference
-            {
-                var code = int.Parse(m.Groups[1].Value);
-                return char.ConvertFromUtf32(code);
-            }
-            else if (m.Groups["hex"].Success) // Hexadecimal character reference
-            {
-                var code = int.Parse(m.Groups[2].Value, System.Globalization.NumberStyles.HexNumber);
-                return char.ConvertFromUtf32(code);
-            }
-            else // Named character reference
-            {
-                var entity = m.Groups["named"].Value;
-                return entity switch
-                {
-                    // XML predefined entities
-                    "quot" => "\"",
-                    "amp" => "&",
-                    "apos" => "'",
-                    "lt" => "<",
-                    "gt" => ">",
-                    // Common HTML entities used for typography
-                    "nbsp" => "\xA0",
-                    "copy" => "\xA9",
-                    "deg" => "\xB0",
-                    "para" => "\xB6",
-                    "pound" => "\xA3",
-                    "mdash" => "\u2014",
-                    "euro" => "\u20AC",
-                    "trade" => "\u2122",
-                    "ne" => "\u2260",
-                    // Add more named character references if necessary
-                    // https://html.spec.whatwg.org/multipage/named-characters.html#named-character-references
-                    _ => m.Value,
-                };
-            }
-        });
-
-        return result;
+        return WebUtility.HtmlDecode(input);
     }
 
     /// <summary>
     /// Parses a string with CSS declarations into a dictionary.
     /// If the same key is declared multiple times, the last value is used.
+    /// Keys are case-insensitive, values are trimmed of whitespace.
     /// </summary>
     /// <param name="styleAttribute">Unescaped value of the "style" attribute.</param>
     /// <returns>A dictionary of property-names to property-values.</returns>
     internal static IDictionary<string, string> ParseStyleAttribute(string styleAttribute)
     {
-        var styles = new Dictionary<string, string>();
+        var styles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        if (string.IsNullOrEmpty(styleAttribute))
+        if (string.IsNullOrWhiteSpace(styleAttribute))
             return styles;
 
-        foreach (var declaration in styleAttribute.Split(';'))
+        // TODO: handle data URLs, which are special-cased to allow semicolons in values
+        // e.g. "background-image: url(data:image/png;base64,...)"
+        foreach (var raw in styleAttribute.Split(';'))
         {
-            var parts = declaration.Split(':');
-            if (parts.Length == 2)
-                styles[parts[0].Trim().ToLowerInvariant()] = parts[1].Trim(); // store all keys in lowercase
+            var declaration = raw.Trim();
+            if (declaration.Length == 0) continue;
+
+            int colon = declaration.IndexOf(':');
+            if (colon <= 0 || colon == declaration.Length - 1) continue; // malformed
+
+            string key = declaration.Substring(0, colon).Trim().ToLowerInvariant();
+            string value = declaration.Substring(colon + 1).Trim();
+
+            styles[key] = value;
         }
         return styles;
     }
@@ -237,9 +230,7 @@ internal class HtmlUtility
         stack.Push(root);
         var tokenator = new HtmlTokenParser(snippet);
 
-        bool isInParagraph = false;
-
-        while (tokenator.NextToken(out HtmlToken? t))
+        while (tokenator.NextToken(out HtmlToken t))
         {
             var parent = stack.Peek();
             var name = t.Name;
@@ -252,7 +243,6 @@ internal class HtmlUtility
             }
             var tokenType = t.Type;
             bool isVoid = IsVoidElement(name);
-            bool isBlock = IsBlockContent(name);
 
             if (tokenType == HtmlTokenType.CloseTag && isVoid) // Ignore unnecessary closing tags like </img>
                 continue;
@@ -260,16 +250,20 @@ internal class HtmlUtility
             if (tokenType == HtmlTokenType.OpenTag && isVoid) // Automatically close tags that cannot have any content (like <br>)
                 tokenType = HtmlTokenType.SelfClosingTag;
 
-            if (isInParagraph && isBlock && tokenType != HtmlTokenType.CloseTag) // Start of any block content implicitly closes the nearest paragraph
+            // handle implicit closing for optional end tags
+            if (tokenType == HtmlTokenType.OpenTag || tokenType == HtmlTokenType.SelfClosingTag)
             {
-                while (stack.Peek().Token?.Name != "p")
-                    stack.Pop();
-                stack.Pop();
-                parent = stack.Peek();
-                isInParagraph = false;
+                // Walk up the document and pop everything that must close when <name> appears.
+                while (stack.Count > 1)
+                {
+                    var open = stack.Peek().Token?.Name;
+                    if (open == null || !ShouldImplicitlyClose(open, name))
+                        break;
+
+                    var popped = stack.Pop();
+                    parent = stack.Peek(); // Update parent to the new top of the stack
+                }
             }
-            // TODO handle unclosed elements other than "p"
-            // static bool IsClosingOptional(string tagName) => tagName is "p" or "dt" or "dd" or "li" or "th" or "tbody" or "tr" or "td";
 
             if (name is "script" or "style")
             {
@@ -349,7 +343,7 @@ internal class HtmlUtility
 #else
                             newNode.FontColor = ColorTranslator.FromHtml(fontColor);
 #endif
-                        if (attr.TryGetValue("size", out var fontSizeStr) && Int32.TryParse(fontSizeStr, out var fontSize))
+                        if (attr.TryGetValue("size", out var fontSizeStr) && Int32.TryParse(fontSizeStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var fontSize))
                             newNode.FontSize = ParseHtmlFontSize(fontSize);
                     }
                     // TODO abbr title -> tooltip
@@ -405,7 +399,8 @@ internal class HtmlUtility
                         newNode.Content = sourceSrc;
                     break;
                 case "thead": // ignore optional groupings; they carry no useful attributes
-                case "tbody": // ignore optional groupings; they carry no useful attributes
+                case "tbody":
+                case "tfoot":
                     continue;
                 case "video":
                     newNode.Type = MarkupType.Video;
@@ -458,31 +453,14 @@ internal class HtmlUtility
                 if (!hiddenNodes.Contains(newNode))
                     parent.Children.Add(newNode);
                 stack.Push(newNode);
-                if (t.Name == "p")
-                    isInParagraph = true;
             }
             else if (tokenType == HtmlTokenType.CloseTag)
             {
-                while (stack.Any() && stack.Peek().Token?.Name != t.Name)
-                {
-                    // The close tags must be out-of-order! Skip towards the root until we find a matching parent.
-                    var popped = stack.Pop();
-                    if (popped.Token?.Name == "p")
-                        isInParagraph = false;
-                }
-                if (!stack.Any())
-                {
-                    // We walked all the way up to root, no more nodes left to close.
-                    // It's possible that HTML had mismatched closing tags.
-                    isInParagraph = false;
-                    stack.Push(root);
-                }
-                else
-                {
-                    var openTag = stack.Pop();
-                    if (openTag.Token?.Name == "p")
-                        isInParagraph = false;
-                }
+                // Pop until we find a matching opener, or until we reach the root
+                while (stack.Count > 1 && stack.Peek().Token?.Name != name)
+                    stack.Pop();
+                if (stack.Count > 1)
+                    stack.Pop();
             }
             else
             {
@@ -515,12 +493,15 @@ internal class HtmlUtility
                     optimizedChildren.Add(child);
                     break;
                 case NodeAction.MergeUp:
-                    // Eliminate grandchild, merge it up
+                    // Eliminate grandchild, apply its attributes up to the child
                     optimizedChildren.Add(Merge(child, child.Children[0], NodeAction.MergeUp));
                     break;
                 case NodeAction.MergeDown:
-                    // Eliminate child, merge it down
-                    optimizedChildren.Add(Merge(child, child.Children[0], NodeAction.MergeDown));
+                    // Eliminate child, apply its attributes down to its grandchildren, then "inline" grandchildren into child's place
+                    foreach (var grandchild in child.Children)
+                    {
+                        optimizedChildren.Add(Merge(child, grandchild, NodeAction.MergeDown));
+                    }
                     break;
                 case NodeAction.Skip:
                     continue;
@@ -532,7 +513,7 @@ internal class HtmlUtility
         {
             for (int i = 0; i < optimizedChildren.Count; i++)
             {
-                if (optimizedChildren[i].Type == MarkupType.Text && optimizedChildren[i].Content == " ")
+                if (optimizedChildren[i].Type == MarkupType.Text && (string.IsNullOrEmpty(optimizedChildren[i].Content) || optimizedChildren[i].Content == " "))
                 {
                     // A whitespace node is considered redundant if it is adjacent to a blocky node, or immediately follows/precedes whitespace in another text node
                     var prev = i > 0 ? optimizedChildren[i - 1] : null;
@@ -541,6 +522,20 @@ internal class HtmlUtility
                         next != null && (!IsInlineContainer(next) && next.Type != MarkupType.Text || StartsWithSpace(next)))
                     {
                         // This whitespace is redundant, remove it
+                        optimizedChildren.RemoveAt(i);
+                        i--;
+                    }
+                }
+                // else check if there are multiple adjacent TEXT nodes with exact same attributes, e.g. "<p>Hello <span>World</span></p>" can be simplified to a p-block with a single text node.
+                else if (i > 0 && optimizedChildren[i].Type == MarkupType.Text && optimizedChildren[i - 1].Type == MarkupType.Text)
+                {
+                    // If the text node is not empty, check if it can be merged with the previous text node
+                    if (optimizedChildren[i - 1].HasSameTextAttributes(optimizedChildren[i]))
+                    {
+                        // Merge the two adjacent text nodes into one, normalizing spaces between
+                        var baseText = optimizedChildren[i - 1].Content ?? "";
+                        var textToMerge = optimizedChildren[i].Content ?? "";
+                        optimizedChildren[i - 1].Content = baseText + textToMerge;
                         optimizedChildren.RemoveAt(i);
                         i--;
                     }
@@ -563,6 +558,12 @@ internal class HtmlUtility
         // Go over all children and find groups of inline nodes (i.e. IsInlineContainer, Text, or Break).
         // There might be one group, or many groups, or none. Each group should have at least 1 member.
         // Groups are separated by one or more block (non-inline) nodes.
+        //
+        // Example:
+        //      <div>  foo foo <br> <table>...</table>  bar <br><br> </div>
+        //           |---group-1---|                  |---group-2---|
+        // Becomes:
+        //      <div>foo foo<table>...</table>bar <br></div>
         var inlineGroup = new List<MarkupNode>();
         for (int i = 0; i < optimizedChildren.Count; i++)
         {
@@ -573,11 +574,11 @@ internal class HtmlUtility
             }
             else
             {
-                ProcessInlineGroup();
+                ProcessInlineGroup(); // a blocky child interrupts and ends the current inline group (if any)
                 newChildren.Add(child);
             }
         }
-        ProcessInlineGroup();
+        ProcessInlineGroup(); // process the trailing inline group (if any)
 
         void ProcessInlineGroup()
         {
@@ -595,8 +596,7 @@ internal class HtmlUtility
                 inlineGroup.Clear();
             }
         }
-        optimizedChildren = newChildren;
-        return optimizedChildren;
+        return newChildren;
     }
 
     private static void TrimLeadingWhitespace(List<MarkupNode> group)
@@ -717,6 +717,10 @@ internal class HtmlUtility
         if (node.Children.Count == 0 && (node.Type is MarkupType.Block || IsInlineContainer(node)))
             return NodeAction.Skip;
 
+        // Span nodes without useful attributes can be "inlined" by merging span's children into span's parent.
+        if (node.Type == MarkupType.Span && !node.HasAnyTextAttributes)
+            return NodeAction.MergeDown;
+
         // The rest of the analysis only looks at single-child nodes
         if (node.Children.Count != 1)
             return NodeAction.None;
@@ -726,11 +730,6 @@ internal class HtmlUtility
         // e.g. <span><b>foo</b></span> ==> <b>foo</b>
         if (node.Type is MarkupType.Span)
             return NodeAction.MergeDown;
-
-        // Elide a single inline child inside a link,
-        // e.g. <a href="..."><span>foo</span></a> ==> <a href="...">foo</a>
-        if (node.Type is MarkupType.Link && child.Type is MarkupType.Span)
-            return NodeAction.MergeUp;
 
         // Merge a block node with its single blocky child,
         // e.g. <div><table>...</table></div> ==> <table>...</table>
@@ -771,11 +770,10 @@ internal class HtmlUtility
     #endregion
 
     // True if tags of given tokenType cannot have any children/content.
-    private static bool IsVoidElement(string tagName) => tagName is "br" or "hr" or "img" or "source";
+    // https://html.spec.whatwg.org/multipage/syntax.html#void-elements
+    private static bool IsVoidElement(string tagName) => tagName is "area" or "base" or "br" or "col" or "embed" or "hr" or "img" or "input" or "link" or "meta" or "source" or "track" or "wbr";
 
     private static bool CanContainText(string? parentTag) => parentTag is not ("table" or "dl" or "tr" or "ol" or "ul");
-
-    private static bool IsBlockContent(string tagName) => tagName is "div" or "h1" or "h2" or "h3" or "h4" or "h5" or "h6" or "figure" or "ol" or "ul" or "dl" or "hr" or "table" or "p";
 
     private static bool IsInlineContainer(MarkupNode node) => node.Type is MarkupType.Span or MarkupType.Link or MarkupType.Sub or MarkupType.Sup;
 
@@ -795,37 +793,48 @@ internal class HtmlUtility
         };
 
     // Parses CSS font-size values into em units.
-    private static bool TryParseCssFontSize(string fontSizeString, out double emValue)
+    internal static bool TryParseCssFontSize(string fontSizeString, out double emValue)
     {
         emValue = double.NaN;
         if (string.IsNullOrEmpty(fontSizeString))
             return false;
 
-        fontSizeString = fontSizeString.Trim().ToLowerInvariant();
-        if (fontSizeString.EndsWith("px") || fontSizeString.EndsWith("pt"))
-        {
-            if (double.TryParse(fontSizeString.Substring(0, fontSizeString.Length - 2), out var pValue))
-            {
-                // Approximate conversion: 1em == 16px == 12pt
-                var conversionFactor = fontSizeString.EndsWith("px") ? 16 : 12;
-                emValue = pValue / conversionFactor;
-                return true;
-            }
-        }
-        emValue = fontSizeString switch
-        {
-            "xx-small" => 0.5,
-            "x-small" => ParseHtmlFontSize(1),
-            "small" => ParseHtmlFontSize(2),
-            "medium" => ParseHtmlFontSize(3),
-            "large" => ParseHtmlFontSize(4),
-            "x-large" => ParseHtmlFontSize(5),
-            "xx-large" => ParseHtmlFontSize(6),
-            "xxx-large" => ParseHtmlFontSize(7),
-            _ => double.NaN
-        };
+        var s = fontSizeString.Trim().ToLowerInvariant();
 
-        return !double.IsNaN(emValue);
+        switch (s)
+        {
+            case "xx-small": emValue = 0.5; return true;
+            case "x-small": emValue = ParseHtmlFontSize(1); return true;
+            case "small": emValue = ParseHtmlFontSize(2); return true;
+            case "medium": emValue = ParseHtmlFontSize(3); return true;
+            case "large": emValue = ParseHtmlFontSize(4); return true;
+            case "x-large": emValue = ParseHtmlFontSize(5); return true;
+            case "xx-large": emValue = ParseHtmlFontSize(6); return true;
+            case "xxx-large": emValue = ParseHtmlFontSize(7); return true;
+        }
+
+        // Split number and unit
+        int unitStart = s.Length;
+        while (unitStart > 0 && (char.IsLetter(s[unitStart - 1]) || s[unitStart - 1] == '%'))
+            unitStart--;
+
+        var numberStr = s.Substring(0, unitStart).Trim();
+        var unit = s.Substring(unitStart);
+
+        if (!double.TryParse(numberStr, NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+            return false;
+
+        // Unit conversion is pragmatic and approximate
+        switch (unit)
+        {
+            case "px":  emValue = value / 16;   return true; // 1em == 16px
+            case "pt":  emValue = value / 12;   return true; // 1em == 12pt
+            case "em":  emValue = value;        return true;
+            case "rem": emValue = value;        return true;
+            case "%":   emValue = value / 100;  return true;
+            default:
+                return false;
+        }
     }
 
     // Parses the value of CSS font-weight into a boolean. Returns null for invalid values.
@@ -844,7 +853,7 @@ internal class HtmlUtility
             case "bolder":
                 return true;
             default:
-                if (int.TryParse(normalizedValue, out int numericValue) && numericValue > 0)
+                if (int.TryParse(normalizedValue, NumberStyles.None, CultureInfo.InvariantCulture, out int numericValue) && numericValue > 0)
                 {
                     // Any numeric value greater than 400 represents a bolder-than-normal font weight
                     return numericValue > 400;
@@ -867,10 +876,49 @@ internal class HtmlUtility
 
         if (cssColor[0] == '#')
             return ParseHexCssColor(cssColor);
-        else if (cssColor.StartsWith("rgb"))
-            return null; // TODO: support CSS colors with rgb/rgba syntax
+        else if (cssColor.StartsWith("rgb", StringComparison.OrdinalIgnoreCase))
+            return ParseRgbColor(cssColor);
         else
             return ParseNamedCssColor(cssColor);
+    }
+
+    private static readonly Regex RgbRegex = new Regex(
+        @"^rgba?\(\s*" +
+          @"(\d{1,3})[,\s]\s*" +        // R
+          @"(\d{1,3})[,\s]\s*" +        // G
+          @"(\d{1,3})" +                // B
+          @"(?:[,\s]\s*(?:\/\s*)?(\d*\.?\d+))?" + // optional alpha
+        @"\s*\)$",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant
+    );
+
+    private static Color? ParseRgbColor(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return null;
+
+        var m = RgbRegex.Match(input.Trim());
+        if (!m.Success)
+            return null;
+
+        // Helper to parse and clamp 0-255
+        static int ParseClamp8(string v)
+        {
+            if (int.TryParse(v, NumberStyles.None, CultureInfo.InvariantCulture, out int i))
+                return Math.Min(255, Math.Max(0, i));
+            return 0;
+        }
+
+        int r = ParseClamp8(m.Groups[1].Value);
+        int g = ParseClamp8(m.Groups[2].Value);
+        int b = ParseClamp8(m.Groups[3].Value);
+
+        double aFrac = 1.0;
+        if (m.Groups[4].Success && double.TryParse(m.Groups[4].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out aFrac))
+            aFrac = Math.Min(1.0, Math.Max(0.0, aFrac)); // Clamp to 0-1
+
+        byte a = (byte)Math.Round(aFrac * 255);
+        return Color.FromArgb(a, r, g, b);
     }
 
     private static Color? ParseHexCssColor(string hexColor)
@@ -1064,6 +1112,38 @@ internal class HtmlUtility
             _ => null
         };
     }
+
+    // Returns a list of tags that can implicitly close the given tag
+    // https://html.spec.whatwg.org/multipage/syntax.html#syntax-tag-omission
+    private static readonly Dictionary<string, string[]> _optionalClosers = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["p"] = new[] { "address", "article", "aside", "blockquote", "details", "dialog",
+                        "div", "dl", "fieldset", "figcaption", "figure", "footer", "form",
+                        "h1", "h2", "h3", "h4", "h5", "h6", "header", "hgroup", "hr", "main",
+                        "menu", "nav", "ol", "ul", "pre", "search", "section", "table", "p" },
+        ["li"] = new[] { "li" },
+        ["dt"] = new[] { "dt", "dd" },
+        ["dd"] = new[] { "dt", "dd" },
+        ["rt"] = new[] { "rt", "rp" },
+        ["rp"] = new[] { "rt", "rp" },
+        ["optgroup"] = new[] { "optgroup", "hr" },
+        ["option"] = new[] { "option", "optgroup", "hr" },
+        ["thead"] = new[] { "tbody", "tfoot" },
+        ["tbody"] = new[] { "tbody", "tfoot" },
+        ["tfoot"] = new[] { "tbody" },
+        ["tr"] = new[] { "tr" },
+        ["td"] = new[] { "td", "th" },
+        ["th"] = new[] { "td", "th" },
+        // Not in the spec, but de-facto browser behavior: anchors cannot be nested
+        ["a"] = new[] { "a" },
+    };
+
+    /// <summary>Returns <c>true</c> if <paramref name="incoming"/> closes <paramref name="openTag"/> implicitly.</summary>
+    private static bool ShouldImplicitlyClose(string openTag, string incoming)
+    {
+        return _optionalClosers.TryGetValue(openTag, out var triggers) &&
+               triggers.Contains(incoming, StringComparer.OrdinalIgnoreCase);
+    }
 }
 
 /// <summary>
@@ -1089,9 +1169,9 @@ internal class HtmlTokenParser
     /// </summary>
     /// <param name="token">The output token, if one is found.</param>
     /// <returns>True if a token was found, false otherwise.</returns>
-    public bool NextToken([NotNullWhen(true)] out HtmlToken? token)
+    public bool NextToken([NotNullWhen(true)] out HtmlToken token)
     {
-        token = null;
+        token = default;
         while (_idx < _html.Length) // Loop to skip comments or handle empty text results
         {
             // Comments start with <!-- and end with -->
@@ -1123,9 +1203,9 @@ internal class HtmlTokenParser
     }
 
     // Parses the next token when in Normal mode (tags or text).
-    private bool TryParseNormal([NotNullWhen(true)] out HtmlToken? token)
+    private bool TryParseNormal([NotNullWhen(true)] out HtmlToken token)
     {
-        token = null;
+        token = default;
         if (_idx >= _html.Length) return false;
 
         // Check if we have a '<' that is actually the start/end of a tag.
@@ -1187,9 +1267,9 @@ internal class HtmlTokenParser
 
     // Attempts to parse a tag (open, close, or self-closing) starting at the current index.
     // Also handles state transitions into RawText mode.
-    private bool TryParseTag([NotNullWhen(true)] out HtmlToken? token)
+    private bool TryParseTag([NotNullWhen(true)] out HtmlToken token)
     {
-        token = null;
+        token = default;
         int startTagContentIdx = _idx + 1;
         if (startTagContentIdx >= _html.Length)
         {
@@ -1199,7 +1279,7 @@ internal class HtmlTokenParser
         }
 
         // Find the end of the tag
-        int endTagCloseIdx = _html.IndexOf('>', startTagContentIdx);
+        int endTagCloseIdx = FindTagEnd(startTagContentIdx);
         if (endTagCloseIdx == -1)
         {
             // Unclosed tag. Consume the rest of the string and stop
@@ -1288,10 +1368,26 @@ internal class HtmlTokenParser
         return true;
     }
 
+    // Finds end of the tag using HTML's more-forgiving-than-XML rules.
+    // Unescaped angle brackets are allowed as long as they are within quoted attribute values.
+    // See https://html.spec.whatwg.org/multipage/parsing.html#attribute-value-(double-quoted)-state
+    private int FindTagEnd(int from)
+    {
+        bool inSingle = false, inDouble = false;
+        for (int i = from; i < _html.Length; i++)
+        {
+            char c = _html[i];
+            if (c == '\'' && !inDouble) inSingle = !inSingle;
+            else if (c == '"' && !inSingle) inDouble = !inDouble;
+            else if (c == '>' && !inSingle && !inDouble) return i;
+        }
+        return -1;
+    }
+
     // Parses content when in RawText mode, that treats content as literal characters until the specific end tag,
     // and does not interpret entities. Returns the content as a single PlainText token.
     // See https://www.w3.org/TR/2010/WD-html5-20101019/syntax.html#raw-text-elements
-    private bool TryParseRawText([NotNullWhen(true)] out HtmlToken? token)
+    private bool TryParseRawText([NotNullWhen(true)] out HtmlToken token)
     {
         Debug.Assert(_expectedEndTag != null, "Raw parsing mode should have an expected end tag.");
 
@@ -1321,7 +1417,7 @@ internal class HtmlTokenParser
         token = new HtmlToken(rawText, null, HtmlTokenType.PlainText);
         return true;
     }
-    
+
     private static readonly Regex WhitespaceRegex = new Regex(@"[^\S\u00A0]+", RegexOptions.Compiled);
 
     private static string ProcessNormalText(string rawText)
@@ -1333,7 +1429,7 @@ internal class HtmlTokenParser
     }
 }
 
-internal class HtmlToken
+internal readonly record struct HtmlToken
 {
     public HtmlToken(string name, string? attributes, HtmlTokenType type)
     {
@@ -1346,26 +1442,7 @@ internal class HtmlToken
     public string? Attributes { get; }
     public HtmlTokenType Type { get; }
 
-    // Equatable for testing purposes
-    public override bool Equals(object? obj)
-    {
-        return obj is HtmlToken token &&
-               Name == token.Name &&
-               Attributes == token.Attributes &&
-               Type == token.Type;
-    }
-
-    public override int GetHashCode()
-    {
-        int hashCode = 1279282087;
-        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-        if (Attributes != null)
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Attributes);
-        hashCode = hashCode * -1521134295 + Type.GetHashCode();
-        return hashCode;
-    }
-
-    public override string ToString()
+    public override readonly string ToString()
     {
         var attrString = Attributes == null ?
             "null" :
@@ -1374,7 +1451,7 @@ internal class HtmlToken
     }
 }
 
-internal enum HtmlTokenType
+internal enum HtmlTokenType : byte
 {
     PlainText,
     OpenTag,
@@ -1382,7 +1459,7 @@ internal enum HtmlTokenType
     SelfClosingTag,
 }
 
-internal enum HtmlAlignment
+internal enum HtmlAlignment : byte
 {
     Left,
     Right,
