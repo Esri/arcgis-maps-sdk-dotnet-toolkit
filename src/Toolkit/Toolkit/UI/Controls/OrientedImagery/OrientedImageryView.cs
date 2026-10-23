@@ -255,21 +255,22 @@ public partial class OrientedImageryView
 
     private void UpdateViewportImage()
     {
-        if (_viewport == null)
+        if (_viewport == null || ViewModel == null)
             return;
 
         _viewport.Footprint = ViewModel.SelectedImageFootprint;
-        if (ViewModel?.SearchPoint is MapPoint searchPoint && _viewport.Footprint != null)
+        if (_viewport.Footprint != null)
         {
             var image = _viewport.Footprint.OrientedImage;
-            if (OrientedImageViewport.IsPanoramic(image.Type, image.Attributes) ||
+            if (ViewModel.SearchPoint is MapPoint searchPoint &&
+                (OrientedImageViewport.IsPanoramic(image.Type, image.Attributes) ||
                 image.Type == OrientedImageType.Terrestrial360Video ||
-                image.Type == OrientedImageType.Aerial360Video)
+                image.Type == OrientedImageType.Aerial360Video))
                 _viewport.LookAtAsync(searchPoint);
+
             ViewModel.AreFootprintsEnabled = false;
             _viewport.StateChanged += Viewport_StateChanged;
         }
-
     }
 
     private void Viewport_StateChanged(object? sender, EventArgs e)
