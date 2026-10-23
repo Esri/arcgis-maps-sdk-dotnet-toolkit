@@ -1096,17 +1096,28 @@ public partial class OrientedImageryView
         row.MinimumHeightRequest = 44;
         label.FontSize = 15;
         label.LineBreakMode = LineBreakMode.WordWrap;
-        label.VerticalTextAlignment = TextAlignment.Center;
         toggle.MinimumHeightRequest = -1;
         toggle.VerticalOptions = LayoutOptions.Center;
         toggle.OnColor = Color.FromArgb("#34C759");
 #endif
+        bool CanInteract() => !_updatingPanel && _connected && _panelAnchor != null && (enabled?.Invoke() ?? true);
         SemanticProperties.SetDescription(toggle, Text(key));
         toggle.Toggled += (_, e) =>
         {
-            if (!_updatingPanel && _connected && _panelAnchor != null && (enabled?.Invoke() ?? true))
+            if (CanInteract())
                 set(e.Value);
         };
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        label.VerticalOptions = LayoutOptions.Fill;
+        label.VerticalTextAlignment = TextAlignment.Center;
+        var labelTap = new TapGestureRecognizer();
+        labelTap.Tapped += (_, _) =>
+        {
+            if (toggle.IsEnabled && CanInteract())
+                toggle.IsToggled = !toggle.IsToggled;
+        };
+        label.GestureRecognizers.Add(labelTap);
+#endif
         if (icon != null)
         {
             var view = FlyoutIcon(icon());
