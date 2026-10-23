@@ -657,7 +657,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         foreach (var ftp in _footprints)
         {
-            if (ftp != SelectedImageFootprint && ShowUnselectedFootprints)
+            if (ShowUnselectedFootprints && ftp.OrientedImage != SelectedImage)
             {
                 ftp.FillColor = UnselectedFootprintFillColor;
                 ftp.OutlineColor = UnselectedFootprintOutlineColor;
@@ -837,7 +837,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         if (ShowCameraLocations)
         {
-            foreach (var image in _images)
+            foreach (var image in _images.Where(img => img != SelectedImage))
             {
                 _managedMarkers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation((MapPoint)image.Geometry!), AllCamerasMarkerSymbol)
                 {
