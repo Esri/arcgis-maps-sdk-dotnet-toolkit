@@ -1383,18 +1383,23 @@ internal class HtmlTokenParser
 
     // Finds end of the tag using HTML's more-forgiving-than-XML rules.
     // Unescaped angle brackets are allowed as long as they are within quoted attribute values.
-    // See https://html.spec.whatwg.org/multipage/parsing.html#attribute-value-(double-quoted)-state
+    // A quote opens a value only right after '='. Elsewhere it is literal, as in class=O'Brien.
+    // See https://html.spec.whatwg.org/multipage/parsing.html#before-attribute-value-state
     private int FindTagEnd(int from)
     {
-        bool inSingle = false, inDouble = false;
+        char quote = '\0';
+        bool afterEquals = false;
         for (int i = from; i < _html.Length; i++)
         {
             char c = _html[i];
-            if (c == '\'' && !inDouble) inSingle = !inSingle;
-            else if (c == '"' && !inSingle) inDouble = !inDouble;
-            else if (c == '>' && !inSingle && !inDouble) return i;
+            if (quote != '\0') { if (c == quote) quote = '\0'; }
+            else if (c == '>') return i;
+            else if (c == '=') afterEquals = true;
+            else if (afterEquals && (c == '\'' || c == '"')) { quote = c; afterEquals = false; }
+            else if (!char.IsWhiteSpace(c)) afterEquals = false;
         }
-        return -1;
+        // An unterminated quoted value would swallow the rest of the document, so end the tag at the first '>'.
+        return _html.IndexOf('>', from);
     }
 
     // Parses content when in RawText mode, that treats content as literal characters until the specific end tag,

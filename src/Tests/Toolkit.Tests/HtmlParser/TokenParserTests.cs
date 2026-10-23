@@ -129,6 +129,36 @@ public class TokenParserTests
     }
 
     [TestMethod]
+    public void QuotesInUnquotedAttributes()
+    {
+        string input = "<p class=O'Brien title=it's>x</p>y";
+        var expectedTokens = new List<HtmlToken>
+        {
+            new HtmlToken("p", "class=O'Brien title=it's", HtmlTokenType.OpenTag),
+            new HtmlToken("x", null, HtmlTokenType.PlainText),
+            new HtmlToken("p", null, HtmlTokenType.CloseTag),
+            new HtmlToken("y", null, HtmlTokenType.PlainText),
+        };
+        var tokens = GetTokens(input).ToList();
+        AssertEqual(expectedTokens, tokens);
+    }
+
+    [TestMethod]
+    public void UnterminatedQuotedAttribute()
+    {
+        string input = "<a href=\"x>link</a>y";
+        var expectedTokens = new List<HtmlToken>
+        {
+            new HtmlToken("a", "href=\"x", HtmlTokenType.OpenTag),
+            new HtmlToken("link", null, HtmlTokenType.PlainText),
+            new HtmlToken("a", null, HtmlTokenType.CloseTag),
+            new HtmlToken("y", null, HtmlTokenType.PlainText),
+        };
+        var tokens = GetTokens(input).ToList();
+        AssertEqual(expectedTokens, tokens);
+    }
+
+    [TestMethod]
     public void TestHtmlSnippetWithEscapedCharacters()
     {
         string input = "<p>&lt;Hello&gt;, &amp; welcome!</p>";
