@@ -196,7 +196,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                 SelectedImageFootprint = null;
             }
             UpdateVisibleFootprints();
-            UpdateSelectedCameraMarker();
+            UpdateCameraMarkers();
 
             ResetSequentialNavigationState();
             ChangeNavigationCommandsCanExecute();
@@ -344,11 +344,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Images)));
 
             SearchPoint = searchPoint;
-            UpdateCameraMarkers();
         }
         finally
         {
             _deferMarkerSynchronization = false;
+            UpdateCameraMarkers();
             SynchronizeMarkers();
             UpdateVisibleFootprints();
             ChangeNavigationCommandsCanExecute();
@@ -683,9 +683,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private readonly HashSet<OrientedImageMarker> _overlayMarkerSubscriptions = [];
     private bool _deferMarkerSynchronization;
     private bool _showCameraLocations = true;
-    private static readonly MarkerTag SearchPointMarkerTag = new MarkerTag("SearchPointMarker");
-    private static readonly MarkerTag SelectedImageMarkerTag = new MarkerTag("SelectedImageMarker", int.MaxValue);
-    private static readonly MarkerTag AllCamerasMarkerTag = new MarkerTag("AllSelectedCamerasMarker", -1);
+    private static readonly string SearchPointMarkerTag = "SearchPointMarker";
+    private static readonly string CamerasMarkerTag = "CamerasMarker";
 
     /// <summary>
     /// Gets the application-owned markers displayed by this view model.
@@ -811,15 +810,14 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
             _markersOverlay.Graphics.Add(new Graphic(location, marker.Symbol)
             {
-                IsVisible = showHiddenMarkers || marker.IsVisible,
-                ZIndex = marker.Tag is MarkerTag markerTag ? markerTag.ZIndex : 0
+                IsVisible = showHiddenMarkers || marker.IsVisible
             });
         }
     }
 
     private void UpdateSearchPointMarker(MapPoint? location)
     {
-        var existingMarker = _managedMarkers.FirstOrDefault((marker) => marker.Tag is MarkerTag tag && tag.Identifier == SearchPointMarkerTag.Identifier);
+        var existingMarker = _managedMarkers.FirstOrDefault((marker) => marker.Tag is string tag && tag == SearchPointMarkerTag);
 
         if (existingMarker != null)
             _managedMarkers.Remove(existingMarker);
@@ -833,7 +831,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void UpdateCameraMarkers()
     {
-        _managedMarkers.RemoveAll(marker => marker.Tag is MarkerTag tag && tag.Identifier == AllCamerasMarkerTag.Identifier);
+        _managedMarkers.RemoveAll(marker => marker.Tag is string tag && tag == CamerasMarkerTag);
 
         if (ShowCameraLocations)
         {
@@ -841,41 +839,23 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             {
                 _managedMarkers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation((MapPoint)image.Geometry!), AllCamerasMarkerSymbol)
                 {
-                    Tag = AllCamerasMarkerTag,
+                    Tag = CamerasMarkerTag,
                     IsVisible = false
                 });
             }
         }
-        SynchronizeMarkers();
-    }
-
-    private void UpdateSelectedCameraMarker()
-    {
-        var currentMarker = _managedMarkers.FirstOrDefault(mk => mk.Tag is MarkerTag tag && tag.Identifier == SelectedImageMarkerTag.Identifier);
 
         if (SelectedImage != null)
         {
             var newMarker = new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation((MapPoint)SelectedImage.Geometry!), SelectedCameraMarkerSymbol)
             {
-                Tag = SelectedImageMarkerTag,
+                Tag = CamerasMarkerTag,
                 IsVisible = false
             };
-            if (currentMarker != null)
-                _managedMarkers[_managedMarkers.IndexOf(currentMarker)] = newMarker;
-            else
-                _managedMarkers.Add(newMarker);
+            _managedMarkers.Add(newMarker);
         }
-        else if (currentMarker != null)
-        {
-            _managedMarkers.Remove(currentMarker);
-        }
-        SynchronizeMarkers();
-    }
 
-    private struct MarkerTag(string identifier, int zIndex = 0)
-    {
-        public string Identifier = identifier;
-        public int ZIndex = zIndex;
+        SynchronizeMarkers();
     }
 #endregion Markers
 
