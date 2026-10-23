@@ -93,7 +93,12 @@ public partial class OrientedImageryView
         scope.RegisterName("PART_CustomToolbar", custom);
         Add("PART_ToolbarScroll", toolbarScroll, root);
 
-        var image = new Grid { MinimumHeightRequest = MinimumImageAreaHeight };
+        var image = new Grid
+        {
+#if !ANDROID
+            MinimumHeightRequest = MinimumImageAreaHeight,
+#endif
+        };
         Grid.SetRow(image, 1);
         root.Children.Add(image);
         Add("PART_Viewport", new OrientedImageViewport { AutomationId = "OrientedImageryViewport" }, image);
@@ -131,7 +136,11 @@ public partial class OrientedImageryView
         var panels = new Grid { IsVisible = false, InputTransparent = true, CascadeInputTransparent = false };
         Add("PART_PanelHost", panels, root);
         Grid.SetRowSpan(panels, root.RowDefinitions.Count);
+#if ANDROID
+        return root;
+#else
         return ScrollablePresentation(root, image, scope);
+#endif
     });
 #endif
 
