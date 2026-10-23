@@ -432,8 +432,12 @@ internal class HtmlUtility
                 var styles = ParseStyleAttribute(styleString);
                 if (styles.TryGetValue("color", out var colorString))
                     newNode.FontColor = ParseCssColor(colorString);
-                if (styles.TryGetValue("font-size", out var fontSizeString) && TryParseCssFontSize(fontSizeString, out var fontSize))
-                    newNode.FontSize = fontSize;
+                if (styles.TryGetValue("font-size", out var fontSizeString))
+                {
+                    var parentFontSize = stack.FirstOrDefault(ancestor => ancestor.FontSize.HasValue)?.FontSize ?? 1.0;
+                    if (TryParseCssFontSize(fontSizeString, out var fontSize, parentFontSize))
+                        newNode.FontSize = fontSize;
+                }
                 if (styles.TryGetValue("font-weight", out var fontWeightStr) && ParseCssFontWeight(fontWeightStr) is bool isBold)
                     newNode.IsBold = isBold;
                 if (styles.TryGetValue("text-align", out var alignStr) && Enum.TryParse<HtmlAlignment>(alignStr, true, out var align))
@@ -508,39 +512,48 @@ internal class HtmlUtility
             }
         }
 
-        // Remove redundant empty text nodes
+        // Remove redundant whitespace and coalesce adjacent text nodes.
         if (IsBlockContainer(parent) || IsInlineContainer(parent))
         {
-            for (int i = 0; i < optimizedChildren.Count; i++)
+            // Keep retained nodes in the prefix, leaving unread neighbors intact for whitespace checks.
+            // Remove the unused tail once to avoid repeated list shifts.
+            int writeIndex = 0;
+            for (int readIndex = 0; readIndex < optimizedChildren.Count; readIndex++)
             {
-                if (optimizedChildren[i].Type == MarkupType.Text && (string.IsNullOrEmpty(optimizedChildren[i].Content) || optimizedChildren[i].Content == " "))
+                var child = optimizedChildren[readIndex];
+                if (child.Type == MarkupType.Text && (string.IsNullOrEmpty(child.Content) || child.Content == " "))
                 {
                     // A whitespace node is considered redundant if it is adjacent to a blocky node, or immediately follows/precedes whitespace in another text node
-                    var prev = i > 0 ? optimizedChildren[i - 1] : null;
-                    var next = i < optimizedChildren.Count - 1 ? optimizedChildren[i + 1] : null;
+                    var prev = writeIndex > 0 ? optimizedChildren[writeIndex - 1] : null;
+                    var next = readIndex < optimizedChildren.Count - 1 ? optimizedChildren[readIndex + 1] : null;
                     if (prev != null && (!IsInlineContainer(prev) && prev.Type != MarkupType.Text || EndsWithSpace(prev)) ||
                         next != null && (!IsInlineContainer(next) && next.Type != MarkupType.Text || StartsWithSpace(next)))
                     {
-                        // This whitespace is redundant, remove it
-                        optimizedChildren.RemoveAt(i);
-                        i--;
+                        continue;
                     }
                 }
-                // else check if there are multiple adjacent TEXT nodes with exact same attributes, e.g. "<p>Hello <span>World</span></p>" can be simplified to a p-block with a single text node.
-                else if (i > 0 && optimizedChildren[i].Type == MarkupType.Text && optimizedChildren[i - 1].Type == MarkupType.Text)
-                {
-                    // If the text node is not empty, check if it can be merged with the previous text node
-                    if (optimizedChildren[i - 1].HasSameTextAttributes(optimizedChildren[i]))
-                    {
-                        // Merge the two adjacent text nodes into one, normalizing spaces between
-                        var baseText = optimizedChildren[i - 1].Content ?? "";
-                        var textToMerge = optimizedChildren[i].Content ?? "";
-                        optimizedChildren[i - 1].Content = baseText + textToMerge;
-                        optimizedChildren.RemoveAt(i);
-                        i--;
-                    }
-                }
+                optimizedChildren[writeIndex++] = child;
             }
+            optimizedChildren.RemoveRange(writeIndex, optimizedChildren.Count - writeIndex);
+
+            // Coalesce each run of equally styled text into its first node, preserving inline boundaries.
+            // Buffer the run so appending text does not repeatedly copy the accumulated prefix.
+            writeIndex = 0;
+            for (int readIndex = 0; readIndex < optimizedChildren.Count; readIndex++)
+            {
+                var child = optimizedChildren[readIndex];
+                StringBuilder? content = null;
+                while (child.Type == MarkupType.Text && readIndex + 1 < optimizedChildren.Count &&
+                       optimizedChildren[readIndex + 1].Type == MarkupType.Text && child.HasSameTextAttributes(optimizedChildren[readIndex + 1]))
+                {
+                    content ??= new StringBuilder(child.Content);
+                    content.Append(optimizedChildren[++readIndex].Content);
+                }
+                if (content != null)
+                    child.Content = content.ToString();
+                optimizedChildren[writeIndex++] = child;
+            }
+            optimizedChildren.RemoveRange(writeIndex, optimizedChildren.Count - writeIndex);
         }
 
         if (IsBlockContainer(parent) && optimizedChildren.Count > 0)
@@ -792,8 +805,8 @@ internal class HtmlUtility
             _ => 3.0, // 7+
         };
 
-    // Parses CSS font-size values into em units.
-    internal static bool TryParseCssFontSize(string fontSizeString, out double emValue)
+    // Parses CSS font-size values relative to the 16px base font size.
+    internal static bool TryParseCssFontSize(string fontSizeString, out double emValue, double parentFontSize = 1.0)
     {
         emValue = double.NaN;
         if (string.IsNullOrEmpty(fontSizeString))
@@ -829,9 +842,9 @@ internal class HtmlUtility
         {
             case "px":  emValue = value / 16;   return true; // 1em == 16px
             case "pt":  emValue = value / 12;   return true; // 1em == 12pt
-            case "em":  emValue = value;        return true;
+            case "em":  emValue = value * parentFontSize; return true;
             case "rem": emValue = value;        return true;
-            case "%":   emValue = value / 100;  return true;
+            case "%":   emValue = value / 100 * parentFontSize; return true;
             default:
                 return false;
         }

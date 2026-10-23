@@ -388,6 +388,33 @@ public class NodeTreeTests
     }
 
     [TestMethod]
+    [DataRow("<div style='font-size:32px'><span style='font-size:1em'>Test</span></div>", 2.0)]
+    [DataRow("<div style='font-size:32px'><span style='font-size:50%'>Test</span></div>", 1.0)]
+    [DataRow("<h2><span style='font-size:100%'>Test</span></h2>", 1.5)]
+    [DataRow("<div style='font-size:32px'><span style='font-size:1rem'>Test</span></div>", 1.0)]
+    [DataRow("<div style='font-size:32px'><span style='font-size:16px'>Test</span></div>", 1.0)]
+    [DataRow("<div style='font-size:32px'><span style='font-size:12pt'>Test</span></div>", 1.0)]
+    [DataRow("<div style='font-size:32px'><span style='font-size:medium'>Test</span></div>", 1.0)]
+    [DataRow("<div style='font-size:32px'><b><span style='font-size:1em'>Test</span></b></div>", 2.0)]
+    [DataRow("<div style='font-size:32px'><span style='font-size:150%'><i><span style='font-size:0.5em'>Test</span></i></span></div>", 1.5)]
+    [DataRow("<span style='font-size:1.5em'>Test</span>", 1.5)]
+    [DataRow("<font size='6'><span style='font-size:50%'>Test</span></font>", 1.0)]
+    [DataRow("<div style='font-size:32px'><h2 style='font-size:1em'>Test</h2></div>", 2.0)]
+    public void TestCssFontSizeInContext(string html, double expectedFontSize)
+    {
+        var node = BuildNodeTree(html).Children.Single();
+        double? fontSize = node.FontSize;
+        while (node.Type != MarkupType.Text)
+        {
+            node = node.Children.Single();
+            fontSize = node.FontSize ?? fontSize;
+        }
+
+        Assert.AreEqual("Test", node.Content);
+        Assert.AreEqual(expectedFontSize, fontSize);
+    }
+
+    [TestMethod]
     public void TestFontWeight()
     {
         // The <b> tag should be overridden by font-weight
@@ -528,6 +555,60 @@ public class NodeTreeTests
         Assert.AreEqual("Hello", textNode.Content);
         Assert.IsTrue(textNode.IsBold.HasValue && textNode.IsBold.Value);
         Assert.IsTrue(textNode.IsItalic.HasValue && textNode.IsItalic.Value);
+    }
+
+    [TestMethod]
+    public void Simplify_MergesAdjacentTextWithBoundedAllocations()
+    {
+        const int spanCount = 1000;
+        const long maxAllocatedBytes = 8 * 1024 * 1024;
+        var text = new string('x', 32);
+        var span = "<span>" + text + "</span>";
+        var html = string.Concat(Enumerable.Repeat(span, spanCount));
+        BuildNodeTree(span + span);
+
+        var allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+        var doc = BuildNodeTree(html);
+        var allocatedBytes = GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
+
+        var textNode = doc.Children.Single();
+        Assert.AreEqual(MarkupType.Text, textNode.Type);
+        Assert.AreEqual(string.Concat(Enumerable.Repeat(text, spanCount)), textNode.Content);
+        Assert.IsLessThan(maxAllocatedBytes, allocatedBytes, $"Allocated {allocatedBytes:N0} bytes for {spanCount} adjacent spans.");
+    }
+
+    [TestMethod]
+    [DataRow("<span>A</span><span> </span><span>B</span>", "A B")]
+    [DataRow("<span>A </span><span> </span><span>B</span>", "A B")]
+    [DataRow("<span>A</span><span> </span><span> B</span>", "A B")]
+    [DataRow("<span>A </span><span> B</span>", "A  B")]
+    [DataRow("<span> </span><span>A</span><span> </span>", "A")]
+    public void Simplify_CoalescesAdjacentWhitespace(string html, string expectedText)
+    {
+        var doc = BuildNodeTree(html);
+
+        var textNode = doc.Children.Single();
+        Assert.AreEqual(MarkupType.Text, textNode.Type);
+        Assert.AreEqual(expectedText, textNode.Content);
+    }
+
+    [TestMethod]
+    public void Simplify_PreservesTextRunBoundaries()
+    {
+        var html = "<span>A</span><span>B</span><a href='x'>Link</a><span>C</span><span>D</span><br><span>E</span><span>F</span>";
+        var doc = BuildNodeTree(html);
+
+        Assert.HasCount(5, doc.Children);
+        Assert.AreEqual(MarkupType.Text, doc.Children[0].Type);
+        Assert.AreEqual("AB", doc.Children[0].Content);
+        Assert.AreEqual(MarkupType.Link, doc.Children[1].Type);
+        Assert.AreEqual("x", doc.Children[1].Content);
+        Assert.AreEqual("Link", doc.Children[1].Children.Single().Content);
+        Assert.AreEqual(MarkupType.Text, doc.Children[2].Type);
+        Assert.AreEqual("CD", doc.Children[2].Content);
+        Assert.AreEqual(MarkupType.Break, doc.Children[3].Type);
+        Assert.AreEqual(MarkupType.Text, doc.Children[4].Type);
+        Assert.AreEqual("EF", doc.Children[4].Content);
     }
 
     [TestMethod]
