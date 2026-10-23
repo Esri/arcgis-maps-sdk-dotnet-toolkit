@@ -1054,9 +1054,11 @@ public partial class OrientedImageryView
         row.Add(title, 1);
         var selection = new Label { Text = "\u2022", TextColor = Color.FromArgb("#007AC2"), VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center,
             FontSize = 24, FontAutoScalingEnabled = false, InputTransparent = true };
-#if __IOS__ && !MACCATALYST
+#if ANDROID || (__IOS__ && !MACCATALYST)
         selection.Text = "\u2713";
         selection.FontSize = 17;
+#endif
+#if __IOS__ && !MACCATALYST
         selection.TextColor = IosAccent;
 #endif
         if (action.Checked != null) row.Add(selection, 2);
