@@ -104,6 +104,7 @@
                     </VisualState>
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
+                            <Setter Target="Root.BorderBrush" Value="Transparent" />
                             <Setter Target="ButtonContent.Foreground" Value="{ThemeResource OrientedImageryDisabledForegroundBrush}" />
                             <Setter Target="ButtonContent.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
                         </VisualState.Setters>
@@ -130,17 +131,20 @@
                     <VisualState x:Name="CheckedDisabled">
                         <VisualState.Setters>
                             <Setter Target="ButtonContent.Foreground" Value="{ThemeResource OrientedImageryDisabledForegroundBrush}" />
-                            <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonDisabledBorderBrush}" />
+                            <Setter Target="Root.BorderBrush" Value="Transparent" />
                             <Setter Target="ButtonContent.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
-            <ContentPresenter
+            <ContentControl
                 x:Name="ButtonContent"
+                IsTabStop="False"
                 Margin="{TemplateBinding Padding}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
                 Content="{TemplateBinding Content}"
                 ContentTemplate="{TemplateBinding ContentTemplate}"
                 Foreground="{TemplateBinding Foreground}" />
@@ -159,28 +163,58 @@
     </Style>
 
     <Style x:Key="OrientedImageryToolbarComboBoxStyle" TargetType="ComboBox">
-        <Setter Property="MinWidth" Value="40" />
-        <Setter Property="MinHeight" Value="40" />
-        <Setter Property="Padding" Value="4" />
+        <Setter Property="MinWidth" Value="16" />
+        <Setter Property="MinHeight" Value="84" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
                     <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonHoverBackgroundBrush}" />
+                                        <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonHoverBorderBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonPressedBackgroundBrush}" />
+                                        <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonPressedBorderBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                         <Border
+                            x:Name="Root"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding CornerRadius}">
-                            <ContentPresenter
-                                Margin="{TemplateBinding Padding}"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Content="{TemplateBinding SelectedItem}"
-                                ContentTemplate="{TemplateBinding ItemTemplate}" />
+                            <StackPanel Spacing="8" VerticalAlignment="Center">
+                                <Viewbox Width="16" Height="32" Stretch="Uniform">
+                                    <ContentPresenter
+                                        Content="{TemplateBinding SelectedItem}"
+                                        ContentTemplate="{TemplateBinding ItemTemplate}"
+                                        Foreground="{TemplateBinding Foreground}" />
+                                </Viewbox>
+                                <Grid Height="32">
+                                    <FontIcon Glyph="&#xE70D;" FontSize="12" Foreground="{TemplateBinding Foreground}" />
+                                </Grid>
+                            </StackPanel>
                         </Border>
                         <Popup x:Name="Popup" ShouldConstrainToRootBounds="False">
                             <Border
@@ -270,6 +304,26 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="UseSystemFocusVisuals" Value="True" />
         <Setter Property="Template" Value="{StaticResource OrientedImageryButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarLabeledButtonStyle" TargetType="Button" BasedOn="{StaticResource OrientedImageryToolbarButtonStyle}">
+        <Setter Property="MinWidth" Value="76" />
+        <Setter Property="MinHeight" Value="84" />
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarLabeledToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource OrientedImageryToolbarToggleButtonStyle}">
+        <Setter Property="MinWidth" Value="76" />
+        <Setter Property="MinHeight" Value="84" />
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarLabelStyle" TargetType="TextBlock">
+        <Setter Property="Width" Value="68" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Margin" Value="0,8,0,0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
     <ControlTemplate x:Key="OrientedImageryNavigationButtonTemplate" TargetType="Button">
@@ -426,12 +480,13 @@
     <DataTemplate x:Key="ToolbarDividerTemplate" x:DataType="controls:ToolbarDividerVM">
         <Border
             Width="1"
-            Height="28"
+            Height="72"
             Margin="8,6"
             Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
     </DataTemplate>
 
     <local:ImageSearchModeLabelConverter x:Key="ImageSearchModeLabelConverter" />
+    <local:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
 
     <DataTemplate x:Key="ImageSearchModeIconTemplate" x:DataType="controls:ImageSearchModeVM">
         <Grid Width="33" Height="34">
@@ -497,62 +552,97 @@
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" x:DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton
             IsChecked="{x:Bind ViewModel.ShowSelectedFootprint, Mode=TwoWay}"
-            Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
+            IsEnabled="{x:Bind ViewModel.SelectedImage, Mode=OneWay, Converter={StaticResource NotNullToBooleanConverter}}"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
             ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}"
             AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}">
-            <Viewbox Width="30" Height="30" Stretch="Uniform">
-                <Grid Width="32" Height="32">
-                    <Path Fill="{ThemeResource TextFillColorPrimaryBrush}" Data="M28.9869 20.3149L30.0339 26.5899C28.6639 26.3499 26.4439 26.0599 23.7139 26.0599C23.5449 26.0599 23.3899 26.0669 23.2279 26.0699L22.1879 27.1099C22.6649 27.0789 23.1699 27.0599 23.7139 27.0599C28.1639 27.0599 31.2539 27.8599 31.2539 27.8599L29.8559 19.4469L28.9869 20.3149ZM14.0529 27.9879C12.6329 28.3739 11.0459 28.6599 8.79392 28.6599C5.78392 28.6599 3.42392 27.7699 2.36392 27.2899L6.04392 5.07993C7.06392 5.37993 8.58392 5.72993 10.5939 5.72993C13.0939 5.72993 14.5939 5.29993 16.0339 4.87993C17.4839 4.45993 18.8539 4.06993 21.3239 4.06993C23.5139 4.06993 25.4339 4.39993 26.3739 4.58993L28.0719 14.7939L29.1319 15.1019L27.2539 3.75993C27.2539 3.75993 24.5839 3.06993 21.3239 3.06993C16.1839 3.06993 15.4039 4.72993 10.5939 4.72993C7.77392 4.72993 5.95392 3.98993 5.25392 3.75993L1.25392 27.8599C1.25392 27.8599 4.34392 29.6599 8.79392 29.6599C11.1669 29.6599 12.8529 29.3499 14.3309 28.9429L14.0529 27.9879ZM10.7539 9.85993C9.92392 9.85993 9.25392 10.5299 9.25392 11.3599C9.25392 12.1899 9.92392 12.8599 10.7539 12.8599C11.5839 12.8599 12.2539 12.1899 12.2539 11.3599C12.2539 10.5299 11.5839 9.85993 10.7539 9.85993ZM10.7539 11.8599C10.4739 11.8599 10.2539 11.6399 10.2539 11.3599C10.2539 11.0799 10.4739 10.8599 10.7539 10.8599C11.0339 10.8599 11.2539 11.0799 11.2539 11.3599C11.2539 11.6399 11.0339 11.8599 10.7539 11.8599ZM12.9699 12.4929C12.7409 12.939 12.3831 13.3059 11.9429 13.5459L13.0966 17.2199L15.3639 25.3399L16.6639 29.7999L29.2539 17.2199L12.9699 12.4929ZM14.0139 17.0699L12.9839 13.5299L27.3539 17.6999L17.1539 27.8999L14.0139 17.0699Z" />
-                </Grid>
-            </Viewbox>
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <PathIcon Data="F1 M28.9874 20.3151L30.0344 26.5901C28.6644 26.3501 26.4444 26.0601 23.7144 26.0601C23.5454 26.0601 23.3904 26.0671 23.2284 26.0701L22.1884 27.1101C22.6654 27.0791 23.1704 27.0601 23.7144 27.0601C28.1644 27.0601 31.2544 27.8601 31.2544 27.8601L29.8564 19.4471L28.9874 20.3151ZM14.0534 27.9881C12.6334 28.3741 11.0464 28.6601 8.79441 28.6601C5.78441 28.6601 3.42441 27.7701 2.36441 27.2901L6.04441 5.08005C7.06441 5.38005 8.58441 5.73005 10.5944 5.73005C13.0944 5.73005 14.5944 5.30005 16.0344 4.88005C17.4844 4.46005 18.8544 4.07005 21.3244 4.07005C23.5144 4.07005 25.4344 4.40005 26.3744 4.59005L28.0724 14.7941L29.1324 15.1021L27.2544 3.76005C27.2544 3.76005 24.5844 3.07005 21.3244 3.07005C16.1844 3.07005 15.4044 4.73005 10.5944 4.73005C7.77441 4.73005 5.95441 3.99005 5.25441 3.76005L1.25441 27.8601C1.25441 27.8601 4.34441 29.6601 8.79441 29.6601C11.1674 29.6601 12.8534 29.3501 14.3314 28.9431L14.0534 27.9881ZM10.7544 9.86005C9.92441 9.86005 9.25441 10.5301 9.25441 11.3601C9.25441 12.1901 9.92441 12.8601 10.7544 12.8601C11.5844 12.8601 12.2544 12.1901 12.2544 11.3601C12.2544 10.5301 11.5844 9.86005 10.7544 9.86005ZM10.7544 11.8601C10.4744 11.8601 10.2544 11.6401 10.2544 11.3601C10.2544 11.0801 10.4744 10.8601 10.7544 10.8601C11.0344 10.8601 11.2544 11.0801 11.2544 11.3601C11.2544 11.6401 11.0344 11.8601 10.7544 11.8601ZM12.9704 12.4931C12.7414 12.9391 12.3836 13.306 11.9434 13.5461L13.0971 17.2201L15.3644 25.3401L16.6644 29.8001L29.2544 17.2201L12.9704 12.4931ZM14.0144 17.0701L12.9844 13.5301L27.3544 17.7001L17.1544 27.9001L14.0144 17.0701Z" />
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}" />
+            </StackPanel>
         </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" x:DataType="controls:ShowUnselectedFootprintsVM">
         <ToggleButton
             IsChecked="{x:Bind ViewModel.ShowUnselectedFootprints, Mode=TwoWay}"
-            Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
+            IsEnabled="{x:Bind local:OrientedImageryResources.HasMultipleImages(ViewModel.Images.Count), Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
             ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}"
             AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
-            <Viewbox Width="30" Height="30" Stretch="Uniform">
-                <Grid Width="32" Height="32">
-                    <Path Fill="{ThemeResource TextFillColorPrimaryBrush}" Data="M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z" />
-                </Grid>
-            </Viewbox>
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <ContentControl IsTabStop="False">
+                        <ContentControl.Template>
+                            <ControlTemplate TargetType="ContentControl">
+                                <Grid Width="32" Height="32">
+                                    <Path Opacity="0.25"
+                                          Fill="{TemplateBinding Foreground}"
+                                          Data="M10 13L13.0187 18.0311L12.439 19H9.56104L1.7832 6H20.2168L16.0287 13H10Z" />
+                                    <Path Fill="{TemplateBinding Foreground}"
+                                          Data="F1 M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z" />
+                                </Grid>
+                            </ControlTemplate>
+                        </ContentControl.Template>
+                    </ContentControl>
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAdditionalFootprintsLabel}" />
+            </StackPanel>
         </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" x:DataType="controls:ShowCameraMarkersVM">
         <ToggleButton
-            Command="{x:Bind ToggleCameraMarkerDisplayMode, Mode=OneWay}"
-            Style="{StaticResource OrientedImageryToolbarButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleCameraMarkers}"
+            IsChecked="{x:Bind ViewModel.ShowCameraLocations, Mode=TwoWay}"
+            IsEnabled="{x:Bind local:OrientedImageryResources.HasMultipleImages(ViewModel.Images.Count), Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}"
             AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}">
-            <Grid Width="32" Height="32" UseLayoutRounding="True">
-                <Viewbox Width="32" Height="32">
-                    <FontIcon
-                        Glyph="&#xe77a;"
-                        FontSize="32"
-                        FontFamily="{StaticResource toolkit-icons}"
-                        Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <ContentControl IsTabStop="False">
+                        <ContentControl.Template>
+                            <ControlTemplate TargetType="ContentControl">
+                                <Grid Width="32" Height="32">
+                                    <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="1">
+                                        <Path.Data>
+                                            <GeometryGroup>
+                                                <EllipseGeometry Center="9,23" RadiusX="3.5" RadiusY="3.5" />
+                                                <EllipseGeometry Center="16,16" RadiusX="3.5" RadiusY="3.5" />
+                                                <EllipseGeometry Center="9,8" RadiusX="3.5" RadiusY="3.5" />
+                                                <EllipseGeometry Center="23,25" RadiusX="3.5" RadiusY="3.5" />
+                                                <EllipseGeometry Center="23,8" RadiusX="3.5" RadiusY="3.5" />
+                                            </GeometryGroup>
+                                        </Path.Data>
+                                    </Path>
+                                </Grid>
+                            </ControlTemplate>
+                        </ContentControl.Template>
+                    </ContentControl>
                 </Viewbox>
-            </Grid>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsLabel}" />
+            </StackPanel>
         </ToggleButton>
     </DataTemplate>
 
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" x:DataType="controls:AllowAddingMarkersVM">
         <ToggleButton
             IsChecked="{x:Bind IsAddingMarkersEnabled, Mode=TwoWay}"
-            Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
+            MinWidth="0" Padding="0,4"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
             ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}"
             AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
-            <Viewbox Width="32" Height="32" Stretch="Uniform">
-                <FontIcon
-                    Glyph="&#xe8ed;"
-                    FontSize="24"
-                    FontFamily="{StaticResource toolkit-icons}"
-                    Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
-            </Viewbox>
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <FontIcon
+                        Glyph="&#xe8ed;"
+                        FontSize="24"
+                        FontFamily="{StaticResource toolkit-icons}" />
+                </Viewbox>
+                <TextBlock Width="48" Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkerLabel}" />
+            </StackPanel>
         </ToggleButton>
     </DataTemplate>
 
@@ -562,8 +652,7 @@
             SelectedItem="{x:Bind SelectedSymbol, Mode=TwoWay}"
             Style="{StaticResource OrientedImageryToolbarComboBoxStyle}"
             ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
-            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenAddingMarkers(ViewModel.InteractionState), Mode=OneWay}">
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
                     <Setter Property="MinWidth" Value="40" />
@@ -584,43 +673,36 @@
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" x:DataType="controls:ClearMarkersVM">
         <Button
             Command="{x:Bind ViewModel.ClearMarkersCommand, Mode=OneWay}"
-            Style="{StaticResource OrientedImageryToolbarButtonStyle}"
+            Style="{StaticResource OrientedImageryToolbarLabeledButtonStyle}"
             ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}"
             AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
-            <Viewbox Width="32" Height="32" Stretch="Uniform">
-                <FontIcon
-                    Glyph="&#xe83e;"
-                    FontSize="24"
-                    FontFamily="{StaticResource toolkit-icons}" />
-            </Viewbox>
+            <StackPanel>
+                <Viewbox Width="28" Height="28" Stretch="Uniform">
+                    <FontIcon
+                        Glyph="&#xeb04;"
+                        FontSize="24"
+                        FontFamily="{StaticResource toolkit-icons}" />
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}" />
+            </StackPanel>
         </Button>
     </DataTemplate>
 
     <DataTemplate x:Key="SequentialNavigationToolbarTemplate" x:DataType="controls:SequentialNavigationVM">
-        <Button
+        <ToggleButton
             Command="{x:Bind ViewModel.ToggleSequentialNavigationCommand, Mode=OneWay}"
-            Style="{StaticResource OrientedImageryToolbarButtonStyle}"
+            IsChecked="{x:Bind ViewModel.IsSequentialNavigationEnabled, Mode=OneWay}"
+            IsEnabled="{x:Bind ViewModel.SupportsSequentialNavigation, Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
             ToolTipService.ToolTip="{x:Bind local:OrientedImageryResources.SequentialNavigationToolTip(ViewModel.IsSequentialNavigationEnabled), Mode=OneWay}"
             AutomationProperties.Name="{x:Bind local:OrientedImageryResources.SequentialNavigationToolTip(ViewModel.IsSequentialNavigationEnabled), Mode=OneWay}">
-            <Viewbox Width="28" Height="28" Stretch="Uniform">
-                <Grid Width="32" Height="32">
-                    <Path
-                        Width="32"
-                        Height="32"
-                        Stretch="Uniform"
-                        Fill="{ThemeResource TextFillColorPrimaryBrush}"
-                        Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(ViewModel.IsSequentialNavigationEnabled), Mode=OneWay}"
-                        Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z" />
-                    <Path
-                        Width="32"
-                        Height="32"
-                        Stretch="Uniform"
-                        Fill="{ThemeResource TextFillColorPrimaryBrush}"
-                        Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.IsSequentialNavigationEnabled), Mode=OneWay}"
-                        Data="M4 18H3V29H29V3H12V4H28V28H4V18ZM5.66 13.354L1.807 9.5L5.66 5.646L6.367 6.353L3.767 9H11.5C13.7489 8.9923 15.9086 9.87918 17.503 11.4652C19.0974 13.0512 19.9958 15.2061 20 17.455V22.855H19V17.455C18.9956 13.3147 15.6403 9.95941 11.5 9.955H3.675L6.367 12.646L5.66 13.354Z" />
-                </Grid>
-            </Viewbox>
-        </Button>
+            <StackPanel>
+                <Viewbox Width="28" Height="28" Stretch="Uniform">
+                    <PathIcon Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z" />
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=EnterSequentialNavigationModeLabel}" />
+            </StackPanel>
+        </ToggleButton>
     </DataTemplate>
 
     <!-- OrientedImageDisplay Style -->
