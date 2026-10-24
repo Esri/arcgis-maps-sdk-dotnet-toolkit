@@ -11,6 +11,14 @@ internal sealed partial class ImageSearchModeLabelConverter : IValueConverter
         => throw new NotSupportedException();
 }
 
+internal sealed partial class NotNullToBooleanConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object parameter, string language) => value is not null;
+
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+        => throw new NotSupportedException();
+}
+
 internal static class ImageSearchModeSelectionBehavior
 {
     private static readonly PointerEventHandler PointerPressedHandler = Item_PointerPressed;
@@ -92,6 +100,8 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
     }
 
     public static Visibility VisibleWhen(bool value) => value ? Visibility.Visible : Visibility.Collapsed;
+
+    public static bool HasMultipleImages(int imageCount) => imageCount > 1;
 
     public static Visibility VisibleWhenFindingImages(OrientedImageryViewInteractionState state)
         => state == OrientedImageryViewInteractionState.FindImages ? Visibility.Visible : Visibility.Collapsed;
