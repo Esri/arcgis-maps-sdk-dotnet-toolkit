@@ -622,7 +622,9 @@ public class NodeTreeTests
     [DataRow("<span>A</span><span> </span><span>B</span>", "A B")]
     [DataRow("<span>A </span><span> </span><span>B</span>", "A B")]
     [DataRow("<span>A</span><span> </span><span> B</span>", "A B")]
-    [DataRow("<span>A </span><span> B</span>", "A  B")]
+    [DataRow("<span>A </span><span> B</span>", "A B")]
+    [DataRow("<span>A </span><span> </span><span> B</span>", "A B")]
+    [DataRow("<span>A&nbsp;</span><span> B</span>", "A  B")]
     [DataRow("<span> </span><span>A</span><span> </span>", "A")]
     public void Simplify_CoalescesAdjacentWhitespace(string html, string expectedText)
     {
@@ -631,6 +633,30 @@ public class NodeTreeTests
         var textNode = doc.Children.Single();
         Assert.AreEqual(MarkupType.Text, textNode.Type);
         Assert.AreEqual(expectedText, textNode.Content);
+    }
+
+    [TestMethod]
+    public void Simplify_CollapsesSpaceAcrossInlineBoundaries()
+    {
+        // The second of two spaces collapses, so each remaining space keeps the style of the run it ends.
+        var doc = BuildNodeTree("<b>A </b><i> B </i><a href='x'> C</a>");
+
+        Assert.HasCount(3, doc.Children);
+        Assert.AreEqual("A ", doc.Children[0].Content);
+        Assert.IsTrue(doc.Children[0].IsBold);
+        Assert.AreEqual("B ", doc.Children[1].Content);
+        Assert.IsTrue(doc.Children[1].IsItalic);
+        Assert.AreEqual(MarkupType.Link, doc.Children[2].Type);
+        Assert.AreEqual("C", doc.Children[2].Children.Single().Content);
+
+        // A link that starts with a whitespace-only run loses that run.
+        doc = BuildNodeTree("A <a href='x'> <b>B</b></a>");
+
+        Assert.HasCount(2, doc.Children);
+        Assert.AreEqual("A ", doc.Children[0].Content);
+        var boldText = doc.Children[1].Children.Single();
+        Assert.AreEqual("B", boldText.Content);
+        Assert.IsTrue(boldText.IsBold);
     }
 
     [TestMethod]
@@ -679,7 +705,7 @@ public class NodeTreeTests
 
         var visibleText = doc.Children[0];
         Assert.AreEqual(MarkupType.Text, visibleText.Type);
-        Assert.AreEqual("Visible text  More visible text", visibleText.Content);
+        Assert.AreEqual("Visible text More visible text", visibleText.Content);
     }
 
     [TestMethod]

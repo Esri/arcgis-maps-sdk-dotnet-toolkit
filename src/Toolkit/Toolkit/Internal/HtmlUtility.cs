@@ -520,16 +520,21 @@ internal class HtmlUtility
             for (int readIndex = 0; readIndex < optimizedChildren.Count; readIndex++)
             {
                 var child = optimizedChildren[readIndex];
+                var prev = writeIndex > 0 ? optimizedChildren[writeIndex - 1] : null;
                 if (child.Type == MarkupType.Text && (string.IsNullOrEmpty(child.Content) || child.Content == " "))
                 {
                     // A whitespace node is considered redundant if it is adjacent to a blocky node, or immediately follows/precedes whitespace in another text node
-                    var prev = writeIndex > 0 ? optimizedChildren[writeIndex - 1] : null;
                     var next = readIndex < optimizedChildren.Count - 1 ? optimizedChildren[readIndex + 1] : null;
                     if (prev != null && (!IsInlineContainer(prev) && prev.Type != MarkupType.Text || EndsWithSpace(prev)) ||
                         next != null && (!IsInlineContainer(next) && next.Type != MarkupType.Text || StartsWithSpace(next)))
                     {
                         continue;
                     }
+                }
+                else if (prev != null && EndsWithSpace(prev) && StartsWithSpace(child))
+                {
+                    // A space that follows another space collapses, also across inline element boundaries.
+                    TrimLeadingSpace(child);
                 }
                 optimizedChildren[writeIndex++] = child;
             }
@@ -719,6 +724,20 @@ internal class HtmlUtility
         if (IsInlineContainer(node))
             return node.Children.Count > 0 && StartsWithSpace(node.Children.First());
         return false;
+    }
+
+    // Removes the leading space that StartsWithSpace found in the first leaf Text node, and drops the leaf if it becomes empty.
+    private static void TrimLeadingSpace(MarkupNode node)
+    {
+        if (node.Type == MarkupType.Text)
+        {
+            node.Content = node.Content!.Substring(1);
+            return;
+        }
+        var first = node.Children[0];
+        TrimLeadingSpace(first);
+        if (first.Type == MarkupType.Text && first.Content!.Length == 0)
+            node.Children.RemoveAt(0);
     }
 
     enum NodeAction { None, MergeUp, MergeDown, Skip }
