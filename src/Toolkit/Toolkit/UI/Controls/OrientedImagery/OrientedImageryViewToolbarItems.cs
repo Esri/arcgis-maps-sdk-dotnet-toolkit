@@ -1,4 +1,4 @@
-﻿#if WPF
+﻿#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Collections.ObjectModel;
@@ -171,6 +171,9 @@ public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase
         get => ViewModel == null ? false : ViewModel.InteractionState == OrientedImageryViewInteractionState.AddMarkers;
         set
         {
+            if (IsAddingMarkersEnabled == value)
+                return;
+
             if (ViewModel == null)
             {
                 OnPropertyChanged();
@@ -214,7 +217,7 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 
     /// <summary>
     /// True when <see cref="OrientedImageryViewModel.InteractionState"/> is either <see cref="OrientedImageryViewInteractionState.FindImages"/>
-    /// or <see cref="OrientedImageryViewInteractionState.DisplayImage"/>, <see langword="false"/> otherwise. When explicitly set to <see langword="false"/>,
+    /// or <see cref="OrientedImageryViewInteractionState.DisplayImage"/>, <see langword="false"/> otherwise. When set to <see langword="false"/>,
     /// the view model's interaction state will be set to <see cref="OrientedImageryViewInteractionState.None"/>.
     /// </summary>
     public bool IsImageSelectionEnabled
@@ -229,7 +232,7 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
         }
         set
         {
-            if (ViewModel == null)
+            if (IsImageSelectionEnabled == value || ViewModel == null)
                 return;
             else if (value)
                 ViewModel.InteractionState = _selectedInteractionState;
@@ -248,13 +251,16 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
     };
 
     /// <summary>
-    /// Gets or sets the selected image search mode.
+    /// Gets or sets the selected image search mode. If set to a new value, will update <see cref="OrientedImageryViewModel.InteractionState"/>.
     /// </summary>
     public OrientedImageryViewInteractionState SelectedInteractionState
     {
         get => _selectedInteractionState;
         set
         {
+            if (_selectedInteractionState == value)
+                return;
+
             SetProperty(ref _selectedInteractionState, value);
             if (ViewModel is not null)
             {

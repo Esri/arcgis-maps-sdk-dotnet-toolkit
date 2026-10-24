@@ -1,8 +1,712 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     x:Class="Esri.ArcGISRuntime.Toolkit.OrientedImageryResources"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:symbology="using:Esri.ArcGISRuntime.Symbology"
+    xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <StaticResource x:Key="OrientedImageryDisabledForegroundBrush" ResourceKey="TextFillColorPrimaryBrush" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationBackgroundBrush" Color="#202020" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationForegroundBrush" Color="White" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationHoverBackgroundBrush" Color="#303030" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationPressedBackgroundBrush" Color="#404040" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationActiveForegroundBrush" Color="White" />
+            <SolidColorBrush x:Key="OrientedImageryDisplayBackgroundBrush" Color="{ThemeResource SolidBackgroundFillColorBase}" />
+            <StaticResource x:Key="OrientedImageryButtonHoverBackgroundBrush" ResourceKey="ControlFillColorSecondaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonHoverBorderBrush" ResourceKey="TextFillColorSecondaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonPressedBackgroundBrush" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonPressedBorderBrush" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonSelectedBackgroundBrush" ResourceKey="SystemControlBackgroundBaseLowBrush" />
+            <StaticResource x:Key="OrientedImageryButtonSelectedHoverBackgroundBrush" ResourceKey="SystemControlBackgroundBaseMediumLowBrush" />
+            <StaticResource x:Key="OrientedImageryButtonSelectedBorderBrush" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonDisabledBorderBrush" ResourceKey="TextFillColorDisabledBrush" />
+            <StaticResource x:Key="OrientedImageryPageSelectedBrush" ResourceKey="AccentFillColorDefaultBrush" />
+            <StaticResource x:Key="OrientedImageryOverlayBackgroundBrush" ResourceKey="CardBackgroundFillColorDefaultBrush" />
+            <StaticResource x:Key="OrientedImageryOverlayBorderBrush" ResourceKey="CardStrokeColorDefaultBrush" />
+            <x:Double x:Key="OrientedImageryDisabledContentOpacity">0.35</x:Double>
+            <x:Double x:Key="OrientedImageryPressedContentOpacity">0.7</x:Double>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <StaticResource x:Key="OrientedImageryDisabledForegroundBrush" ResourceKey="TextFillColorPrimaryBrush" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationBackgroundBrush" Color="White" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationForegroundBrush" Color="#202020" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationHoverBackgroundBrush" Color="#EFEFEF" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationPressedBackgroundBrush" Color="#D3D3D3" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationActiveForegroundBrush" Color="#202020" />
+            <SolidColorBrush x:Key="OrientedImageryDisplayBackgroundBrush" Color="{ThemeResource SolidBackgroundFillColorBase}" />
+            <StaticResource x:Key="OrientedImageryButtonHoverBackgroundBrush" ResourceKey="ControlFillColorSecondaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonHoverBorderBrush" ResourceKey="TextFillColorSecondaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonPressedBackgroundBrush" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonPressedBorderBrush" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonSelectedBackgroundBrush" ResourceKey="SystemControlBackgroundBaseLowBrush" />
+            <StaticResource x:Key="OrientedImageryButtonSelectedHoverBackgroundBrush" ResourceKey="SystemControlBackgroundBaseMediumLowBrush" />
+            <StaticResource x:Key="OrientedImageryButtonSelectedBorderBrush" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="OrientedImageryButtonDisabledBorderBrush" ResourceKey="TextFillColorDisabledBrush" />
+            <StaticResource x:Key="OrientedImageryPageSelectedBrush" ResourceKey="AccentFillColorDefaultBrush" />
+            <StaticResource x:Key="OrientedImageryOverlayBackgroundBrush" ResourceKey="CardBackgroundFillColorDefaultBrush" />
+            <StaticResource x:Key="OrientedImageryOverlayBorderBrush" ResourceKey="CardStrokeColorDefaultBrush" />
+            <x:Double x:Key="OrientedImageryDisabledContentOpacity">0.35</x:Double>
+            <x:Double x:Key="OrientedImageryPressedContentOpacity">0.7</x:Double>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="HighContrast">
+            <SolidColorBrush x:Key="OrientedImageryDisabledForegroundBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationForegroundBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationHoverBackgroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationPressedBackgroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="OrientedImageryNavigationActiveForegroundBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+            <SolidColorBrush x:Key="OrientedImageryDisplayBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="OrientedImageryButtonHoverBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="OrientedImageryButtonHoverBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="OrientedImageryButtonPressedBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="OrientedImageryButtonPressedBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="OrientedImageryButtonSelectedBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="OrientedImageryButtonSelectedHoverBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="OrientedImageryButtonSelectedBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="OrientedImageryButtonDisabledBorderBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+            <SolidColorBrush x:Key="OrientedImageryPageSelectedBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="OrientedImageryOverlayBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="OrientedImageryOverlayBorderBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <x:Double x:Key="OrientedImageryDisabledContentOpacity">1</x:Double>
+            <x:Double x:Key="OrientedImageryPressedContentOpacity">1</x:Double>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <!-- Helper Styles -->
+
+    <ControlTemplate x:Key="OrientedImageryButtonTemplate" TargetType="ButtonBase">
+        <Border
+            x:Name="Root"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{TemplateBinding CornerRadius}">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonHoverBackgroundBrush}" />
+                            <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonHoverBorderBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonPressedBackgroundBrush}" />
+                            <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonPressedBorderBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Target="Root.BorderBrush" Value="Transparent" />
+                            <Setter Target="ButtonContent.Foreground" Value="{ThemeResource OrientedImageryDisabledForegroundBrush}" />
+                            <Setter Target="ButtonContent.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Checked">
+                        <VisualState.Setters>
+                            <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonSelectedBackgroundBrush}" />
+                            <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonSelectedBorderBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="CheckedPointerOver">
+                        <VisualState.Setters>
+                            <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonSelectedHoverBackgroundBrush}" />
+                            <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonSelectedBorderBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="CheckedPressed">
+                        <VisualState.Setters>
+                            <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonSelectedHoverBackgroundBrush}" />
+                            <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonSelectedBorderBrush}" />
+                            <Setter Target="ButtonContent.Opacity" Value="{ThemeResource OrientedImageryPressedContentOpacity}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="CheckedDisabled">
+                        <VisualState.Setters>
+                            <Setter Target="ButtonContent.Foreground" Value="{ThemeResource OrientedImageryDisabledForegroundBrush}" />
+                            <Setter Target="Root.BorderBrush" Value="Transparent" />
+                            <Setter Target="ButtonContent.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <ContentControl
+                x:Name="ButtonContent"
+                IsTabStop="False"
+                Margin="{TemplateBinding Padding}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="{TemplateBinding Content}"
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                Foreground="{TemplateBinding Foreground}" />
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="OrientedImageryToolbarButtonStyle" TargetType="Button">
+        <Setter Property="MinWidth" Value="44" />
+        <Setter Property="MinHeight" Value="44" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="Template" Value="{StaticResource OrientedImageryButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="MinWidth" Value="16" />
+        <Setter Property="MinHeight" Value="84" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonHoverBackgroundBrush}" />
+                                        <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonHoverBorderBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonPressedBackgroundBrush}" />
+                                        <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonPressedBorderBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border
+                            x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <StackPanel Spacing="8" VerticalAlignment="Center">
+                                <Viewbox Width="16" Height="32" Stretch="Uniform">
+                                    <ContentPresenter
+                                        Content="{TemplateBinding SelectedItem}"
+                                        ContentTemplate="{TemplateBinding ItemTemplate}"
+                                        Foreground="{TemplateBinding Foreground}" />
+                                </Viewbox>
+                                <Grid Height="32">
+                                    <FontIcon Glyph="&#xE70D;" FontSize="12" Foreground="{TemplateBinding Foreground}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        <Popup x:Name="Popup" ShouldConstrainToRootBounds="False">
+                            <Border
+                                x:Name="PopupBorder"
+                                Background="{ThemeResource ComboBoxDropDownBackground}"
+                                BorderBrush="{ThemeResource ComboBoxDropDownBorderBrush}"
+                                BorderThickness="{ThemeResource ComboBoxDropdownBorderThickness}"
+                                CornerRadius="{ThemeResource OverlayCornerRadius}">
+                                <ScrollViewer>
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ImageSearchModeComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource OrientedImageryToolbarComboBoxStyle}">
+        <Setter Property="MinWidth" Value="16" />
+        <Setter Property="MinHeight" Value="84" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonHoverBackgroundBrush}" />
+                                        <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonHoverBorderBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonPressedBackgroundBrush}" />
+                                        <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonPressedBorderBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border
+                            x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <StackPanel Spacing="8" VerticalAlignment="Center">
+                                <Grid Width="16" Height="32" />
+                                <Grid Height="32">
+                                    <FontIcon Glyph="&#xE70D;" FontSize="12" Foreground="{TemplateBinding Foreground}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        <Popup x:Name="Popup" ShouldConstrainToRootBounds="False">
+                            <Border
+                                x:Name="PopupBorder"
+                                Background="{ThemeResource ComboBoxDropDownBackground}"
+                                BorderBrush="{ThemeResource ComboBoxDropDownBorderBrush}"
+                                BorderThickness="{ThemeResource ComboBoxDropdownBorderThickness}"
+                                CornerRadius="{ThemeResource OverlayCornerRadius}">
+                                <ScrollViewer>
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="MinWidth" Value="44" />
+        <Setter Property="MinHeight" Value="44" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="Template" Value="{StaticResource OrientedImageryButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarLabeledButtonStyle" TargetType="Button" BasedOn="{StaticResource OrientedImageryToolbarButtonStyle}">
+        <Setter Property="MinWidth" Value="76" />
+        <Setter Property="MinHeight" Value="84" />
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarLabeledToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource OrientedImageryToolbarToggleButtonStyle}">
+        <Setter Property="MinWidth" Value="76" />
+        <Setter Property="MinHeight" Value="84" />
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarLabelStyle" TargetType="TextBlock">
+        <Setter Property="Width" Value="68" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Margin" Value="0,8,0,0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <ControlTemplate x:Key="OrientedImageryNavigationButtonTemplate" TargetType="Button">
+        <Border
+            x:Name="Root"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{TemplateBinding CornerRadius}">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryNavigationHoverBackgroundBrush}" />
+                            <Setter Target="ButtonContent.Foreground" Value="{ThemeResource OrientedImageryNavigationActiveForegroundBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryNavigationPressedBackgroundBrush}" />
+                            <Setter Target="ButtonContent.Foreground" Value="{ThemeResource OrientedImageryNavigationActiveForegroundBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Target="ButtonContent.Foreground" Value="{ThemeResource OrientedImageryDisabledForegroundBrush}" />
+                            <Setter Target="ButtonContent.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <ContentPresenter
+                x:Name="ButtonContent"
+                Margin="{TemplateBinding Padding}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{TemplateBinding Content}"
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                Foreground="{TemplateBinding Foreground}" />
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="OrientedImageryNavigationButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="28" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="60" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="{ThemeResource OrientedImageryNavigationBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource OrientedImageryNavigationForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template" Value="{StaticResource OrientedImageryNavigationButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="OrientedImageryPageButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template" Value="{StaticResource OrientedImageryNavigationButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="OrientedImageryPaginatorStyle" TargetType="controls:OrientedImageryPaginator">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:OrientedImageryPaginator">
+                    <Grid Height="32" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            x:Name="PART_PreviousPage"
+                            IsTabStop="False"
+                            Width="33"
+                            Style="{StaticResource OrientedImageryPageButtonStyle}"
+                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                            <FontIcon Glyph="&#xe79f;" FontFamily="{StaticResource toolkit-icons}" FontSize="16" />
+                        </Button>
+                        <ItemsControl x:Name="PART_PagesPresenter" Grid.Column="1" IsTabStop="False">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="controls:OrientedImageryPage">
+                                    <Grid Width="{x:Bind Width, Mode=OneWay}" Height="32">
+                                        <Button
+                                            Content="{x:Bind Number, Mode=OneWay}"
+                                            Command="{x:Bind SelectCommand}"
+                                            Width="{x:Bind Width, Mode=OneWay}"
+                                            Style="{StaticResource OrientedImageryPageButtonStyle}"
+                                            IsTabStop="{x:Bind IsTabStop, Mode=OneWay}"
+                                            AutomationProperties.Name="{x:Bind AutomationName, Mode=OneWay}" />
+                                        <Border
+                                            Height="2"
+                                            Margin="1,0"
+                                            VerticalAlignment="Bottom"
+                                            Background="{ThemeResource OrientedImageryPageSelectedBrush}"
+                                            IsHitTestVisible="False"
+                                            Visibility="{x:Bind SelectedIndicatorVisibility, Mode=OneWay}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button
+                            x:Name="PART_NextPage"
+                            IsTabStop="False"
+                            Grid.Column="2"
+                            Width="33"
+                            Style="{StaticResource OrientedImageryPageButtonStyle}"
+                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                            <FontIcon Glyph="&#xe7a0;" FontFamily="{StaticResource toolkit-icons}" FontSize="16" />
+                        </Button>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Toolbar Data Templates -->
+
+    <Style x:Key="ToolbarContainerStyle" TargetType="ItemsControl">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="ToolbarCategoryTemplate" x:DataType="controls:OrientedImageryToolbarCategory">
+        <ItemsControl
+            ItemsSource="{x:Bind ToolbarItems, Mode=OneWay}"
+            Loaded="ToolbarCategory_Loaded"
+            Style="{StaticResource ToolbarContainerStyle}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="MoreCategoryTemplate" x:DataType="controls:OrientedImageryToolbarCategory">
+        <ItemsControl
+            ItemsSource="{x:Bind ToolbarItems, Mode=OneWay}"
+            Loaded="ToolbarCategory_Loaded"
+            Style="{StaticResource ToolbarContainerStyle}"
+            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.SupportsSequentialNavigation), Mode=OneWay}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="ToolbarDividerTemplate" x:DataType="controls:ToolbarDividerVM">
+        <Border
+            Width="1"
+            Height="72"
+            Margin="8,6"
+            Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+    </DataTemplate>
+
+    <local:ImageSearchModeLabelConverter x:Key="ImageSearchModeLabelConverter" />
+    <local:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
+
+    <DataTemplate x:Key="ImageSearchModeIconTemplate" x:DataType="controls:ImageSearchModeVM">
+        <Grid Width="33" Height="34">
+            <PathIcon
+                Width="32" Height="32"
+                Data="M31.1864 15.1864H27.5786C27.1609 9.41668 22.5833 4.83905 16.8515 4.42359L16.8136 4.42142V0.813559C16.8136 0.364475 16.4491 0 16 0C15.5509 0 15.1864 0.364475 15.1864 0.813559V4.42142C9.41668 4.83905 4.83905 9.41668 4.42359 15.1485L4.42142 15.1864H0.813559C0.364475 15.1864 0 15.5509 0 16C0 16.4491 0.364475 16.8136 0.813559 16.8136H4.42142C4.83905 22.5833 9.41668 27.1609 15.1485 27.5764L15.1864 27.5786V31.1864C15.1864 31.6355 15.5509 32 16 32C16.4491 32 16.8136 31.6355 16.8136 31.1864V27.5786C22.5833 27.1609 27.1609 22.5833 27.5764 16.8515L27.5786 16.8136H31.1864C31.6355 16.8136 32 16.4491 32 16C32 15.5509 31.6355 15.1864 31.1864 15.1864ZM16.8136 25.9515V22.5085C16.8136 22.0594 16.4491 21.6949 16 21.6949C15.5509 21.6949 15.1864 22.0594 15.1864 22.5085V25.9515C10.3138 25.5414 6.45858 21.6862 6.05071 16.8504L6.04854 16.8136H9.49153C9.94061 16.8136 10.3051 16.4491 10.3051 16C10.3051 15.5509 9.94061 15.1864 9.49153 15.1864H6.04854C6.45858 10.3138 10.3138 6.45858 15.1496 6.05071L15.1864 6.04854V9.49153C15.1864 9.94061 15.5509 10.3051 16 10.3051C16.4491 10.3051 16.8136 9.94061 16.8136 9.49153V6.04854C21.6862 6.45858 25.5414 10.3138 25.9493 15.1496L25.9515 15.1864H22.5085C22.0594 15.1864 21.6949 15.5509 21.6949 16C21.6949 16.4491 22.0594 16.8136 22.5085 16.8136H25.9515C25.5403 21.6862 21.6862 25.5403 16.8504 25.9493L16.8136 25.9515Z"
+                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenDisplayingImage(SelectedInteractionState), Mode=OneWay}" />
+            <PathIcon
+                Width="33" Height="34"
+                Data="F1 M26.7358 19.6048L27.7447 18.5074L32.9375 12.8586L24.2416 11.0883L11.1977 8.43274L7.75234 12.1806L13.9879 33.472L26.7358 19.6048ZM9.1681 12.5122L11.647 9.81565L30.469 13.6722L14.5913 30.944L9.1681 12.5122ZM6.59961 5.1366C7.92743 5.13681 8.99902 6.21199 8.99902 7.54382C8.99895 8.87559 7.92738 9.95084 6.59961 9.95105C5.27167 9.95104 4.1993 8.87572 4.19922 7.54382C4.19922 6.21186 5.27162 5.13661 6.59961 5.1366ZM6.59961 6.74109C6.15162 6.7411 5.79883 7.09449 5.79883 7.54382C5.7989 7.99309 6.15167 8.34655 6.59961 8.34656C7.04738 8.34635 7.39934 7.99296 7.39941 7.54382C7.39941 7.09462 7.04742 6.74129 6.59961 6.74109ZM21.6003 19.6003L20.2007 21L14.6003 15.3996L16 14L21.6003 19.6003ZM21.6003 15.3996L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3996Z"
+                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFindingImages(SelectedInteractionState), Mode=OneWay}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ImageSearchModeToolbarTemplate" x:DataType="controls:ImageSearchModeVM">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ToggleButton
+                IsChecked="{x:Bind IsImageSelectionEnabled, Mode=TwoWay}"
+                MinWidth="0" MinHeight="84" Padding="0,4"
+                Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
+                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
+                ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                <StackPanel Spacing="8">
+                    <Viewbox Width="32" Height="32" Stretch="Uniform">
+                        <ContentControl
+                            Content="{x:Bind}"
+                            ContentTemplate="{StaticResource ImageSearchModeIconTemplate}"
+                            IsTabStop="False" />
+                    </Viewbox>
+                    <TextBlock
+                        Width="48" Height="32" FontSize="12"
+                        TextAlignment="Center" TextWrapping="Wrap"
+                        Text="{x:Bind local:OrientedImageryResources.ImageSearchModeLabel(SelectedInteractionState), Mode=OneWay}" />
+                </StackPanel>
+            </ToggleButton>
+            <ComboBox
+                Grid.Column="1"
+                Style="{StaticResource ImageSearchModeComboBoxStyle}"
+                ItemsSource="{x:Bind ImageSearchModes}"
+                SelectedItem="{x:Bind SelectedInteractionState, Mode=TwoWay}"
+                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
+                ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="local:ImageSearchModeSelectionBehavior.RepeatSelection" Value="True" />
+                        <Setter Property="MinHeight" Value="40" />
+                        <Setter Property="Padding" Value="8,4" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="controls:OrientedImageryViewInteractionState">
+                        <TextBlock Text="{x:Bind Converter={StaticResource ImageSearchModeLabelConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" x:DataType="controls:ShowSelectedFootprintVM">
+        <ToggleButton
+            IsChecked="{x:Bind ViewModel.ShowSelectedFootprint, Mode=TwoWay}"
+            IsEnabled="{x:Bind ViewModel.SelectedImage, Mode=OneWay, Converter={StaticResource NotNullToBooleanConverter}}"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}">
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <PathIcon Data="F1 M28.9874 20.3151L30.0344 26.5901C28.6644 26.3501 26.4444 26.0601 23.7144 26.0601C23.5454 26.0601 23.3904 26.0671 23.2284 26.0701L22.1884 27.1101C22.6654 27.0791 23.1704 27.0601 23.7144 27.0601C28.1644 27.0601 31.2544 27.8601 31.2544 27.8601L29.8564 19.4471L28.9874 20.3151ZM14.0534 27.9881C12.6334 28.3741 11.0464 28.6601 8.79441 28.6601C5.78441 28.6601 3.42441 27.7701 2.36441 27.2901L6.04441 5.08005C7.06441 5.38005 8.58441 5.73005 10.5944 5.73005C13.0944 5.73005 14.5944 5.30005 16.0344 4.88005C17.4844 4.46005 18.8544 4.07005 21.3244 4.07005C23.5144 4.07005 25.4344 4.40005 26.3744 4.59005L28.0724 14.7941L29.1324 15.1021L27.2544 3.76005C27.2544 3.76005 24.5844 3.07005 21.3244 3.07005C16.1844 3.07005 15.4044 4.73005 10.5944 4.73005C7.77441 4.73005 5.95441 3.99005 5.25441 3.76005L1.25441 27.8601C1.25441 27.8601 4.34441 29.6601 8.79441 29.6601C11.1674 29.6601 12.8534 29.3501 14.3314 28.9431L14.0534 27.9881ZM10.7544 9.86005C9.92441 9.86005 9.25441 10.5301 9.25441 11.3601C9.25441 12.1901 9.92441 12.8601 10.7544 12.8601C11.5844 12.8601 12.2544 12.1901 12.2544 11.3601C12.2544 10.5301 11.5844 9.86005 10.7544 9.86005ZM10.7544 11.8601C10.4744 11.8601 10.2544 11.6401 10.2544 11.3601C10.2544 11.0801 10.4744 10.8601 10.7544 10.8601C11.0344 10.8601 11.2544 11.0801 11.2544 11.3601C11.2544 11.6401 11.0344 11.8601 10.7544 11.8601ZM12.9704 12.4931C12.7414 12.9391 12.3836 13.306 11.9434 13.5461L13.0971 17.2201L15.3644 25.3401L16.6644 29.8001L29.2544 17.2201L12.9704 12.4931ZM14.0144 17.0701L12.9844 13.5301L27.3544 17.7001L17.1544 27.9001L14.0144 17.0701Z" />
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" x:DataType="controls:ShowUnselectedFootprintsVM">
+        <ToggleButton
+            IsChecked="{x:Bind ViewModel.ShowUnselectedFootprints, Mode=TwoWay}"
+            IsEnabled="{x:Bind local:OrientedImageryResources.HasMultipleImages(ViewModel.Images.Count), Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <ContentControl IsTabStop="False">
+                        <ContentControl.Template>
+                            <ControlTemplate TargetType="ContentControl">
+                                <Grid Width="32" Height="32">
+                                    <Path Opacity="0.25"
+                                          Fill="{TemplateBinding Foreground}"
+                                          Data="M10 13L13.0187 18.0311L12.439 19H9.56104L1.7832 6H20.2168L16.0287 13H10Z" />
+                                    <Path Fill="{TemplateBinding Foreground}"
+                                          Data="F1 M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z" />
+                                </Grid>
+                            </ControlTemplate>
+                        </ContentControl.Template>
+                    </ContentControl>
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAdditionalFootprintsLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" x:DataType="controls:ShowCameraMarkersVM">
+        <ToggleButton
+            IsChecked="{x:Bind ViewModel.ShowCameraLocations, Mode=TwoWay}"
+            IsEnabled="{x:Bind local:OrientedImageryResources.HasMultipleImages(ViewModel.Images.Count), Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}">
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <ContentControl IsTabStop="False">
+                        <ContentControl.Template>
+                            <ControlTemplate TargetType="ContentControl">
+                                <Grid Width="32" Height="32">
+                                    <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="1">
+                                        <Path.Data>
+                                            <GeometryGroup>
+                                                <EllipseGeometry Center="9,23" RadiusX="3.5" RadiusY="3.5" />
+                                                <EllipseGeometry Center="16,16" RadiusX="3.5" RadiusY="3.5" />
+                                                <EllipseGeometry Center="9,8" RadiusX="3.5" RadiusY="3.5" />
+                                                <EllipseGeometry Center="23,25" RadiusX="3.5" RadiusY="3.5" />
+                                                <EllipseGeometry Center="23,8" RadiusX="3.5" RadiusY="3.5" />
+                                            </GeometryGroup>
+                                        </Path.Data>
+                                    </Path>
+                                </Grid>
+                            </ControlTemplate>
+                        </ContentControl.Template>
+                    </ContentControl>
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" x:DataType="controls:AllowAddingMarkersVM">
+        <ToggleButton
+            IsChecked="{x:Bind IsAddingMarkersEnabled, Mode=TwoWay}"
+            MinWidth="0" Padding="0,4"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <FontIcon
+                        Glyph="&#xe8ed;"
+                        FontSize="24"
+                        FontFamily="{StaticResource toolkit-icons}" />
+                </Viewbox>
+                <TextBlock Width="48" Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkerLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="MarkerPickerToolbarTemplate" x:DataType="controls:SelectNewMarkerSymbolVM">
+        <ComboBox
+            ItemsSource="{x:Bind SymbolOptions, Mode=OneWay}"
+            SelectedItem="{x:Bind SelectedSymbol, Mode=TwoWay}"
+            Style="{StaticResource OrientedImageryToolbarComboBoxStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="MinWidth" Value="40" />
+                    <Setter Property="MinHeight" Value="40" />
+                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </ComboBox.ItemContainerStyle>
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="symbology:MarkerSymbol">
+                    <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ClearMarkersToolbarTemplate" x:DataType="controls:ClearMarkersVM">
+        <Button
+            Command="{x:Bind ViewModel.ClearMarkersCommand, Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarLabeledButtonStyle}"
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
+            <StackPanel>
+                <Viewbox Width="28" Height="28" Stretch="Uniform">
+                    <FontIcon
+                        Glyph="&#xeb04;"
+                        FontSize="24"
+                        FontFamily="{StaticResource toolkit-icons}" />
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}" />
+            </StackPanel>
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SequentialNavigationToolbarTemplate" x:DataType="controls:SequentialNavigationVM">
+        <ToggleButton
+            Command="{x:Bind ViewModel.ToggleSequentialNavigationCommand, Mode=OneWay}"
+            IsChecked="{x:Bind ViewModel.IsSequentialNavigationEnabled, Mode=OneWay}"
+            IsEnabled="{x:Bind ViewModel.SupportsSequentialNavigation, Mode=OneWay}"
+            Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
+            ToolTipService.ToolTip="{x:Bind local:OrientedImageryResources.SequentialNavigationToolTip(ViewModel.IsSequentialNavigationEnabled), Mode=OneWay}"
+            AutomationProperties.Name="{x:Bind local:OrientedImageryResources.SequentialNavigationToolTip(ViewModel.IsSequentialNavigationEnabled), Mode=OneWay}">
+            <StackPanel>
+                <Viewbox Width="28" Height="28" Stretch="Uniform">
+                    <PathIcon Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z" />
+                </Viewbox>
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=EnterSequentialNavigationModeLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <!-- OrientedImageDisplay Style -->
+
     <Style TargetType="controls:OrientedImageViewport">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
@@ -13,6 +717,211 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <Border x:Name="PART_DisplayHost" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ToolbarContainer Style -->
+    <!--<Style x:Key="ToolbarContainerStyle" TargetType="ItemsControl">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ItemsControl">
+                    <ItemsPresenter HorizontalAlignment="Stretch" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <controls:OrientedImageryToolbarPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+    <!-- OrientedImageryView Style -->
+
+    <Style TargetType="controls:OrientedImageryView">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="ThemeDisplayBackgroundBrush" Value="{ThemeResource OrientedImageryDisplayBackgroundBrush}" />
+
+        <Setter Property="DefaultToolbarTemplates">
+            <Setter.Value>
+                <controls:DefaultWinUIToolbarTemplates
+                    CategoryTemplate="{StaticResource ToolbarCategoryTemplate}"
+                    MoreCategoryTemplate="{StaticResource MoreCategoryTemplate}"
+                    ToolbarDividerVMTemplate="{StaticResource ToolbarDividerTemplate}"
+                    ImageSearchModeVMTemplate="{StaticResource ImageSearchModeToolbarTemplate}"
+                    SequentialNavigationVMTemplate="{StaticResource SequentialNavigationToolbarTemplate}"
+                    AllowAddingMarkersVMTemplate="{StaticResource AllowAddingMarkersToolbarTemplate}"
+                    ClearMarkersVMTemplate="{StaticResource ClearMarkersToolbarTemplate}"
+                    MarkerPickerVMTemplate="{StaticResource MarkerPickerToolbarTemplate}"
+                    ShowCameraMarkersVMTemplate="{StaticResource ShowCameraMarkersToolbarTemplate}"
+                    ShowSelectedFootprintVMTemplate="{StaticResource ShowSelectedFootprintToolbarTemplate}"
+                    ShowUnselectedFootprintsVMTemplate="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:OrientedImageryView">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <ItemsControl x:Name="PART_ToolbarContainer" IsTabStop="False" Style="{StaticResource ToolbarContainerStyle}" />
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <controls:OrientedImageViewport
+                                    x:Name="PART_ImageViewport"
+                                    Grid.ColumnSpan="3"
+                                    DisplayBackgroundColor="{TemplateBinding DisplayBackgroundColor}" />
+
+                                        <Border
+                                    Grid.ColumnSpan="3"
+                                    Background="#80FFFFFF"
+                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenLoading(ViewModel.SelectedImage, IsImageViewportInteractive), Mode=OneWay}">
+                                            <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{internal:LocalizedString Key=OrientedImageryViewLoading}" />
+                                </Border>
+
+                                <ProgressBar
+                                    Grid.ColumnSpan="3"
+                                    Height="2"
+                                    VerticalAlignment="Top"
+                                    IsIndeterminate="True"
+                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenBusy(ViewModel.SelectedImage, IsImageViewportBusy), Mode=OneWay}" />
+
+                                <Border
+                                    Grid.ColumnSpan="3"
+                                    Background="{ThemeResource OrientedImageryOverlayBackgroundBrush}"
+                                    Visibility="{TemplateBinding NoImageSelectedVisibility}">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
+                                </Border>
+
+                                <Border
+                                    Grid.ColumnSpan="3"
+                                    MaxWidth="300"
+                                    Padding="8"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="{ThemeResource OrientedImageryOverlayBackgroundBrush}"
+                                    BorderBrush="{ThemeResource OrientedImageryOverlayBorderBrush}"
+                                    BorderThickness="1"
+                                    Visibility="{x:Bind ImageViewportErrorVisibility, Mode=OneWay}">
+                                    <TextBlock Text="{x:Bind ImageViewportErrorMessage, Mode=OneWay}" TextWrapping="Wrap" />
+                                </Border>
+
+                                <Button
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
+                                    Style="{StaticResource OrientedImageryNavigationButtonStyle}"
+                                    Visibility="{TemplateBinding ImageNavigationVisibility}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                                    <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                        <PathIcon Data="M20 26.1 9.9 16 20 5.9z" />
+                                    </Viewbox>
+                                </Button>
+
+                                <Button
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}"
+                                    Style="{StaticResource OrientedImageryNavigationButtonStyle}"
+                                    Visibility="{TemplateBinding ImageNavigationVisibility}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                                    <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                        <PathIcon Data="M12 5.9 22.1 16 12 26.1z" />
+                                    </Viewbox>
+                                </Button>
+                            </Grid>
+
+                            <controls:OrientedImageryPaginator
+                                x:Name="PART_Paginator"
+                                Grid.Row="2"
+                                HorizontalAlignment="Stretch"
+                                Style="{StaticResource OrientedImageryPaginatorStyle}"
+                                Visibility="{TemplateBinding ResultNavigationVisibility}" />
+
+                            <StackPanel
+                                Grid.Row="2"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Visibility="{TemplateBinding SequentialNavigationVisibility}">
+                                <Button
+                                    Style="{StaticResource OrientedImageryPageButtonStyle}"
+                                    IsTabStop="False"
+                                    Width="33"
+                                    Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                                    <FontIcon Glyph="&#xe79f;" FontFamily="{StaticResource toolkit-icons}" FontSize="16" />
+                                </Button>
+                                <Button
+                                    Content="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                    Style="{StaticResource OrientedImageryPageButtonStyle}"
+                                    Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}" />
+                                <Grid Width="35" Height="32">
+                                    <TextBlock Text="." HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <Border
+                                        Height="2"
+                                        Margin="1,0"
+                                        VerticalAlignment="Bottom"
+                                        Background="{ThemeResource OrientedImageryPageSelectedBrush}" />
+                                </Grid>
+                                <Button
+                                    Content="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                    Style="{StaticResource OrientedImageryPageButtonStyle}"
+                                    Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}" />
+                                <Button
+                                    Style="{StaticResource OrientedImageryPageButtonStyle}"
+                                    IsTabStop="False"
+                                    Width="33"
+                                    Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                                    <FontIcon Glyph="&#xe7a0;" FontFamily="{StaticResource toolkit-icons}" FontSize="16" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock
+                                Grid.Row="3"
+                                Margin="8,0,8,4"
+                                Text="{x:Bind ViewModel.SequentialNavigationError, Mode=OneWay}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap"
+                                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenNotNull(ViewModel.SequentialNavigationError), Mode=OneWay}" />
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

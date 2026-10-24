@@ -55,10 +55,10 @@ internal static class ImageSearchModeSelectionBehavior
 
     private static void Item_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-        if (sender is ComboBoxItem { IsSelected: true, DataContext: OrientedImageryViewInteractionState interactionState } item &&
+        if (sender is ComboBoxItem { IsSelected: true, DataContext: OrientedImageryViewInteractionState } item &&
             ItemsControl.ItemsControlFromItemContainer(item) is ComboBox { DataContext: ImageSearchModeVM viewModel })
         {
-            viewModel.SelectedInteractionState = interactionState;
+            viewModel.IsImageSelectionEnabled = true;
         }
     }
 }
