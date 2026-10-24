@@ -253,14 +253,13 @@ internal class HtmlUtility
             // handle implicit closing for optional end tags
             if (tokenType == HtmlTokenType.OpenTag || tokenType == HtmlTokenType.SelfClosingTag)
             {
-                // Walk up the document and pop everything that must close when <name> appears.
-                while (stack.Count > 1)
+                // Pop everything that must close when <name> appears.
+                // Open inline elements, such as the spans that editors wrap around pasted content,
+                // do not keep a p, li, or td open, so look past them as browsers do.
+                while (FindImplicitlyClosed(stack, name) is int depth)
                 {
-                    var open = stack.Peek().Token?.Name;
-                    if (open == null || !ShouldImplicitlyClose(open, name))
-                        break;
-
-                    var popped = stack.Pop();
+                    for (int i = 0; i <= depth; i++)
+                        stack.Pop();
                     parent = stack.Peek(); // Update parent to the new top of the stack
                 }
             }
@@ -1150,6 +1149,22 @@ internal class HtmlUtility
         // Not in the spec, but de-facto browser behavior: anchors cannot be nested
         ["a"] = new[] { "a" },
     };
+
+    // Returns the stack depth of the open element that <incoming> closes implicitly, or null if there is none.
+    // Only open inline elements may lie above it.
+    private static int? FindImplicitlyClosed(Stack<MarkupNode> stack, string incoming)
+    {
+        int depth = 0;
+        foreach (var open in stack)
+        {
+            if (open.Token?.Name is string openName && ShouldImplicitlyClose(openName, incoming))
+                return depth;
+            if (!IsInlineContainer(open))
+                return null;
+            depth++;
+        }
+        return null;
+    }
 
     /// <summary>Returns <c>true</c> if <paramref name="incoming"/> closes <paramref name="openTag"/> implicitly.</summary>
     private static bool ShouldImplicitlyClose(string openTag, string incoming)

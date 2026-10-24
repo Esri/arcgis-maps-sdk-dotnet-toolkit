@@ -175,6 +175,47 @@ public class NodeTreeTests
     }
 
     [TestMethod]
+    public void TestParaClosesPastOpenInline()
+    {
+        // Editors wrap pasted content in spans, so a table or div can start while a span is open inside the p.
+        var html = "<p><span>Title<table><tr><td>Cell</td></tr></table></span></p><p><span>Intro<div>Block</div></span></p>";
+        var doc = BuildNodeTree(html);
+
+        Assert.HasCount(4, doc.Children);
+        Assert.AreEqual(MarkupType.Block, doc.Children[0].Type);
+        Assert.AreEqual("Title", doc.Children[0].Children.Single().Content);
+        Assert.AreEqual(MarkupType.Table, doc.Children[1].Type);
+        Assert.AreEqual(MarkupType.Block, doc.Children[2].Type);
+        Assert.AreEqual("Intro", doc.Children[2].Children.Single().Content);
+        Assert.AreEqual(MarkupType.Block, doc.Children[3].Type);
+        Assert.AreEqual("Block", doc.Children[3].Children.Single().Content);
+    }
+
+    [TestMethod]
+    public void TestListItemClosesPastOpenInline()
+    {
+        var doc = BuildNodeTree("<ul><li><span>One<li><span>Two</ul>");
+
+        var list = doc.Children.Single();
+        Assert.AreEqual(MarkupType.List, list.Type);
+        Assert.HasCount(2, list.Children);
+        Assert.AreEqual("One", list.Children[0].Children.Single().Content);
+        Assert.AreEqual("Two", list.Children[1].Children.Single().Content);
+    }
+
+    [TestMethod]
+    public void TestCellClosesPastOpenInline()
+    {
+        var doc = BuildNodeTree("<table><tr><td><span>x<td>y</tr></table>");
+
+        var row = doc.Children.Single().Children.Single();
+        Assert.AreEqual(MarkupType.TableRow, row.Type);
+        Assert.HasCount(2, row.Children);
+        Assert.AreEqual("x", row.Children[0].Children.Single().Content);
+        Assert.AreEqual("y", row.Children[1].Children.Single().Content);
+    }
+
+    [TestMethod]
     public void TestUnclosedListItems()
     {
         var htmlSnippet = "<ul><li>Item 1<li>Item 2</ul>";
