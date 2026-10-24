@@ -200,6 +200,67 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ImageSearchModeComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource OrientedImageryToolbarComboBoxStyle}">
+        <Setter Property="MinWidth" Value="16" />
+        <Setter Property="MinHeight" Value="84" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonHoverBackgroundBrush}" />
+                                        <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonHoverBorderBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource OrientedImageryButtonPressedBackgroundBrush}" />
+                                        <Setter Target="Root.BorderBrush" Value="{ThemeResource OrientedImageryButtonPressedBorderBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="{ThemeResource OrientedImageryDisabledContentOpacity}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border
+                            x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <StackPanel Spacing="8" VerticalAlignment="Center">
+                                <Grid Width="16" Height="32" />
+                                <Grid Height="32">
+                                    <FontIcon Glyph="&#xE70D;" FontSize="12" Foreground="{TemplateBinding Foreground}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        <Popup x:Name="Popup" ShouldConstrainToRootBounds="False">
+                            <Border
+                                x:Name="PopupBorder"
+                                Background="{ThemeResource ComboBoxDropDownBackground}"
+                                BorderBrush="{ThemeResource ComboBoxDropDownBorderBrush}"
+                                BorderThickness="{ThemeResource ComboBoxDropdownBorderThickness}"
+                                CornerRadius="{ThemeResource OverlayCornerRadius}">
+                                <ScrollViewer>
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="OrientedImageryToolbarToggleButtonStyle" TargetType="ToggleButton">
         <Setter Property="MinWidth" Value="44" />
         <Setter Property="MinHeight" Value="44" />
@@ -370,12 +431,67 @@
             Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
     </DataTemplate>
 
+    <local:ImageSearchModeLabelConverter x:Key="ImageSearchModeLabelConverter" />
+
+    <DataTemplate x:Key="ImageSearchModeIconTemplate" x:DataType="controls:ImageSearchModeVM">
+        <Grid Width="33" Height="34">
+            <PathIcon
+                Width="32" Height="32"
+                Data="M31.1864 15.1864H27.5786C27.1609 9.41668 22.5833 4.83905 16.8515 4.42359L16.8136 4.42142V0.813559C16.8136 0.364475 16.4491 0 16 0C15.5509 0 15.1864 0.364475 15.1864 0.813559V4.42142C9.41668 4.83905 4.83905 9.41668 4.42359 15.1485L4.42142 15.1864H0.813559C0.364475 15.1864 0 15.5509 0 16C0 16.4491 0.364475 16.8136 0.813559 16.8136H4.42142C4.83905 22.5833 9.41668 27.1609 15.1485 27.5764L15.1864 27.5786V31.1864C15.1864 31.6355 15.5509 32 16 32C16.4491 32 16.8136 31.6355 16.8136 31.1864V27.5786C22.5833 27.1609 27.1609 22.5833 27.5764 16.8515L27.5786 16.8136H31.1864C31.6355 16.8136 32 16.4491 32 16C32 15.5509 31.6355 15.1864 31.1864 15.1864ZM16.8136 25.9515V22.5085C16.8136 22.0594 16.4491 21.6949 16 21.6949C15.5509 21.6949 15.1864 22.0594 15.1864 22.5085V25.9515C10.3138 25.5414 6.45858 21.6862 6.05071 16.8504L6.04854 16.8136H9.49153C9.94061 16.8136 10.3051 16.4491 10.3051 16C10.3051 15.5509 9.94061 15.1864 9.49153 15.1864H6.04854C6.45858 10.3138 10.3138 6.45858 15.1496 6.05071L15.1864 6.04854V9.49153C15.1864 9.94061 15.5509 10.3051 16 10.3051C16.4491 10.3051 16.8136 9.94061 16.8136 9.49153V6.04854C21.6862 6.45858 25.5414 10.3138 25.9493 15.1496L25.9515 15.1864H22.5085C22.0594 15.1864 21.6949 15.5509 21.6949 16C21.6949 16.4491 22.0594 16.8136 22.5085 16.8136H25.9515C25.5403 21.6862 21.6862 25.5403 16.8504 25.9493L16.8136 25.9515Z"
+                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenDisplayingImage(SelectedInteractionState), Mode=OneWay}" />
+            <PathIcon
+                Width="33" Height="34"
+                Data="F1 M26.7358 19.6048L27.7447 18.5074L32.9375 12.8586L24.2416 11.0883L11.1977 8.43274L7.75234 12.1806L13.9879 33.472L26.7358 19.6048ZM9.1681 12.5122L11.647 9.81565L30.469 13.6722L14.5913 30.944L9.1681 12.5122ZM6.59961 5.1366C7.92743 5.13681 8.99902 6.21199 8.99902 7.54382C8.99895 8.87559 7.92738 9.95084 6.59961 9.95105C5.27167 9.95104 4.1993 8.87572 4.19922 7.54382C4.19922 6.21186 5.27162 5.13661 6.59961 5.1366ZM6.59961 6.74109C6.15162 6.7411 5.79883 7.09449 5.79883 7.54382C5.7989 7.99309 6.15167 8.34655 6.59961 8.34656C7.04738 8.34635 7.39934 7.99296 7.39941 7.54382C7.39941 7.09462 7.04742 6.74129 6.59961 6.74109ZM21.6003 19.6003L20.2007 21L14.6003 15.3996L16 14L21.6003 19.6003ZM21.6003 15.3996L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3996Z"
+                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFindingImages(SelectedInteractionState), Mode=OneWay}" />
+        </Grid>
+    </DataTemplate>
+
     <DataTemplate x:Key="ImageSearchModeToolbarTemplate" x:DataType="controls:ImageSearchModeVM">
-        <Button
-            IsEnabled="False"
-            Content="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
-            Style="{StaticResource OrientedImageryToolbarButtonStyle}" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ToggleButton
+                IsChecked="{x:Bind IsImageSelectionEnabled, Mode=TwoWay}"
+                MinWidth="0" MinHeight="84" Padding="0,4"
+                Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
+                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
+                ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                <StackPanel Spacing="8">
+                    <Viewbox Width="32" Height="32" Stretch="Uniform">
+                        <ContentControl
+                            Content="{x:Bind}"
+                            ContentTemplate="{StaticResource ImageSearchModeIconTemplate}"
+                            IsTabStop="False" />
+                    </Viewbox>
+                    <TextBlock
+                        Width="48" Height="32" FontSize="12"
+                        TextAlignment="Center" TextWrapping="Wrap"
+                        Text="{x:Bind local:OrientedImageryResources.ImageSearchModeLabel(SelectedInteractionState), Mode=OneWay}" />
+                </StackPanel>
+            </ToggleButton>
+            <ComboBox
+                Grid.Column="1"
+                Style="{StaticResource ImageSearchModeComboBoxStyle}"
+                ItemsSource="{x:Bind ImageSearchModes}"
+                SelectedItem="{x:Bind SelectedInteractionState, Mode=TwoWay}"
+                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
+                ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="local:ImageSearchModeSelectionBehavior.RepeatSelection" Value="True" />
+                        <Setter Property="MinHeight" Value="40" />
+                        <Setter Property="Padding" Value="8,4" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="controls:OrientedImageryViewInteractionState">
+                        <TextBlock Text="{x:Bind Converter={StaticResource ImageSearchModeLabelConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
     </DataTemplate>
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" x:DataType="controls:ShowSelectedFootprintVM">
