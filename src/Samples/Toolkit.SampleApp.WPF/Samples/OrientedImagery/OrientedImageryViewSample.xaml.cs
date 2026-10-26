@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private List<string> _exampleLayers =
         [
             "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/ArcGIS/rest/services/Oakwood_camori_corrected/FeatureServer/0",
-            "https://services8.arcgis.com/joda3ARQ9znLf0hf/ArcGIS/rest/services/HopefulHeights_360/FeatureServer/1",
+            "https://services3.arcgis.com/juvie9NFXORsK38U/ArcGIS/rest/services/WalkerOrientedImagery/FeatureServer/0",
             "https://services5.arcgis.com/N82JbI5EYtAkuUKU/ArcGIS/rest/services/EsriCampus_sequenceTest_attachment/FeatureServer/1"
         ];
 
