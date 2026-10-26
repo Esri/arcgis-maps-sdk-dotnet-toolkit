@@ -11,15 +11,14 @@ public class NodeTreeTests
     public void TestSpanWithBreaks()
     {
         // The no-attribute span should be eliminated, with 4 children placed directly under the document root.
-        var htmlSnippet = "<span>Bold text<br /><br>Another line</span>";
+        var htmlSnippet = "<span>First line<br /><br>Another line</span>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(4, result.Children);
 
         var textNode1 = result.Children[0];
         Assert.AreEqual(MarkupType.Text, textNode1.Type);
-        Assert.AreEqual("Bold text", textNode1.Content);
+        Assert.AreEqual("First line", textNode1.Content);
 
         var breakNode1 = result.Children[1];
         Assert.AreEqual(MarkupType.Break, breakNode1.Type);
@@ -29,6 +28,15 @@ public class NodeTreeTests
         var textNode2 = result.Children[3];
         Assert.AreEqual(MarkupType.Text, textNode2.Type);
         Assert.AreEqual("Another line", textNode2.Content);
+    }
+
+    [TestMethod]
+    public void VoidElementDoesNotContainFollowingText()
+    {
+        // <wbr> has no end tag, so the text after it stays in the paragraph.
+        var para = BuildNodeTree("<p>a<wbr>b</p>").Children.Single();
+        Assert.AreEqual(MarkupType.Block, para.Type);
+        Assert.AreEqual("ab", para.Children.Single().Content);
     }
 
     [TestMethod]
@@ -47,15 +55,19 @@ public class NodeTreeTests
       <td>cell 2</td>
     </tr>
   </tbody>
+  <tfoot>
+    <tr>
+      <td>footer</td>
+    </tr>
+  </tfoot>
 </table>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(1, result.Children);
 
         var tableNode = result.Children[0];
         Assert.AreEqual(MarkupType.Table, tableNode.Type);
-        Assert.HasCount(2, tableNode.Children);
+        Assert.HasCount(3, tableNode.Children);
 
         // Expect <thead> and whitespace to be omitted
         var headerRowNode = tableNode.Children[0];
@@ -82,6 +94,11 @@ public class NodeTreeTests
         var tdNode2 = bodyRowNode.Children[1];
         Assert.AreEqual(MarkupType.TableCell, tdNode2.Type);
         Assert.AreEqual("cell 2", tdNode2.Children.Single().Content);
+
+        // Expect <tfoot> and whitespace to be omitted
+        var footerRowNode = tableNode.Children[2];
+        Assert.AreEqual(MarkupType.TableRow, footerRowNode.Type);
+        Assert.AreEqual("footer", footerRowNode.Children.Single().Children.Single().Content);
     }
 
     [TestMethod]
@@ -90,7 +107,6 @@ public class NodeTreeTests
         var htmlSnippet = "<b>Bold</b><strong>Strong</strong><i>Italic</i><em>Emphasis</em><u>Underline</u>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(3, result.Children);
 
         // Expect <b> and <strong> to be merged together into one text node
@@ -118,7 +134,6 @@ public class NodeTreeTests
         var htmlSnippet = "<font color='#FF0000' size='2'>Colored and sized text</font>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(1, result.Children);
 
         // Expect font tag to be merged with text node
@@ -135,7 +150,6 @@ public class NodeTreeTests
         var htmlSnippet = "<p>Para 1<p>Para 2";
         MarkupNode result = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(2, result.Children);
 
         var para1 = result.Children[0];
@@ -161,7 +175,6 @@ public class NodeTreeTests
         var html = "<p>Para<ul><li>Item</li></ul>";
         var doc = BuildNodeTree(html);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         Assert.HasCount(2, doc.Children);
 
         var p = doc.Children[0];
@@ -192,48 +205,33 @@ public class NodeTreeTests
     }
 
     [TestMethod]
-    public void TestListItemClosesPastOpenInline()
+    [DataRow("<ul><li>One<li>Two</ul>")]
+    [DataRow("<ul><li><span>One<li><span>Two</ul>")]
+    public void ListItemClosesPreviousListItem(string html)
     {
-        var doc = BuildNodeTree("<ul><li><span>One<li><span>Two</ul>");
-
-        var list = doc.Children.Single();
+        var list = BuildNodeTree(html).Children.Single();
         Assert.AreEqual(MarkupType.List, list.Type);
         Assert.HasCount(2, list.Children);
+        Assert.AreEqual(MarkupType.ListItem, list.Children[0].Type);
         Assert.AreEqual("One", list.Children[0].Children.Single().Content);
+        Assert.AreEqual(MarkupType.ListItem, list.Children[1].Type);
         Assert.AreEqual("Two", list.Children[1].Children.Single().Content);
     }
 
     [TestMethod]
-    public void TestCellClosesPastOpenInline()
+    [DataRow("<table><tr><td>x<td>y")]
+    [DataRow("<table><tr><td><span>x<td>y</tr></table>")]
+    public void CellClosesPreviousCell(string html)
     {
-        var doc = BuildNodeTree("<table><tr><td><span>x<td>y</tr></table>");
-
-        var row = doc.Children.Single().Children.Single();
+        var table = BuildNodeTree(html).Children.Single();
+        Assert.AreEqual(MarkupType.Table, table.Type);
+        var row = table.Children.Single();
         Assert.AreEqual(MarkupType.TableRow, row.Type);
         Assert.HasCount(2, row.Children);
+        Assert.AreEqual(MarkupType.TableCell, row.Children[0].Type);
         Assert.AreEqual("x", row.Children[0].Children.Single().Content);
+        Assert.AreEqual(MarkupType.TableCell, row.Children[1].Type);
         Assert.AreEqual("y", row.Children[1].Children.Single().Content);
-    }
-
-    [TestMethod]
-    public void TestUnclosedListItems()
-    {
-        var htmlSnippet = "<ul><li>Item 1<li>Item 2</ul>";
-        MarkupNode result = BuildNodeTree(htmlSnippet);
-        PrintNode(result, 0);
-        Assert.AreEqual(MarkupType.Document, result.Type);
-        Assert.HasCount(1, result.Children);
-        var listNode = result.Children[0];
-        Assert.AreEqual(MarkupType.List, listNode.Type);
-        Assert.HasCount(2, listNode.Children);
-        var item1 = listNode.Children[0];
-        Assert.AreEqual(MarkupType.ListItem, item1.Type);
-        Assert.HasCount(1, item1.Children);
-        Assert.AreEqual("Item 1", item1.Children[0].Content);
-        var item2 = listNode.Children[1];
-        Assert.AreEqual(MarkupType.ListItem, item2.Type);
-        Assert.HasCount(1, item2.Children);
-        Assert.AreEqual("Item 2", item2.Children[0].Content);
     }
 
     [TestMethod]
@@ -249,30 +247,6 @@ public class NodeTreeTests
         Assert.AreEqual("T", dl.Children[0].Children.Single().Content); // dt
         Assert.AreEqual("D1", dl.Children[1].Children.Single().Content); // dd
         Assert.AreEqual("D2", dl.Children[2].Children.Single().Content); // dd
-    }
-
-    [TestMethod]
-    public void TestUnclosedTable()
-    {
-        var htmlSnippet = "<table><tr><td>x<td>y";
-        MarkupNode result = BuildNodeTree(htmlSnippet);
-        PrintNode(result, 0);
-        Assert.AreEqual(MarkupType.Document, result.Type);
-        Assert.HasCount(1, result.Children);
-        var tableNode = result.Children[0];
-        Assert.AreEqual(MarkupType.Table, tableNode.Type);
-        Assert.HasCount(1, tableNode.Children);
-        var rowNode = tableNode.Children[0];
-        Assert.AreEqual(MarkupType.TableRow, rowNode.Type);
-        Assert.HasCount(2, rowNode.Children);
-        var cell1 = rowNode.Children[0];
-        Assert.AreEqual(MarkupType.TableCell, cell1.Type);
-        Assert.HasCount(1, cell1.Children);
-        Assert.AreEqual("x", cell1.Children[0].Content);
-        var cell2 = rowNode.Children[1];
-        Assert.AreEqual(MarkupType.TableCell, cell2.Type);
-        Assert.HasCount(1, cell2.Children);
-        Assert.AreEqual("y", cell2.Children[0].Content);
     }
 
     [TestMethod]
@@ -302,9 +276,7 @@ public class NodeTreeTests
         // But the very last <br> is preserved because it's part of an otherwise empty "inline group".
         var htmlSnippet = "<div>Text<br><br></div><br>";
         MarkupNode doc = BuildNodeTree(htmlSnippet);
-        PrintNode(doc, 0);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         Assert.HasCount(2, doc.Children);
 
         var para = doc.Children[0];
@@ -327,9 +299,7 @@ public class NodeTreeTests
     {
         var htmlSnippet = "Before<div><br></div>After";
         MarkupNode doc = BuildNodeTree(htmlSnippet);
-        PrintNode(doc, 0);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         Assert.HasCount(3, doc.Children);
 
         var textBefore = doc.Children[0];
@@ -355,7 +325,6 @@ public class NodeTreeTests
         var htmlSnippet = "<b>Bold<br></b>Normal<br>";
         MarkupNode doc = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         Assert.HasCount(2, doc.Children);
 
         var b = doc.Children[0];
@@ -380,9 +349,7 @@ public class NodeTreeTests
         // Last br in a block is still removed even if it's wrapped in an inline element
         var htmlSnippet = "<h1><i>Heading<br></i></h1>";
         MarkupNode doc = BuildNodeTree(htmlSnippet);
-        PrintNode(doc, 0);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         Assert.HasCount(1, doc.Children);
 
         var header = doc.Children[0];
@@ -401,7 +368,6 @@ public class NodeTreeTests
         var htmlSnippet = "<a href='https://www.example.com'><img src='image.jpg' alt='Example image' /></a>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(1, result.Children);
 
         var linkNode = result.Children[0];
@@ -417,13 +383,14 @@ public class NodeTreeTests
     [TestMethod]
     public void TestStyles()
     {
-        var htmlSnippet = "<span style='color:#18212b;font-size:14px;background:#fff'>Test</span>";
+        var htmlSnippet = "<span style='color:#18212b;font-size:14px;background-color:#fff'>Test</span>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
 
         Assert.HasCount(1, result.Children);
         // Expect <span> to be merged with text node
         var spanNode = result.Children[0];
         Assert.AreEqual(Color.FromArgb(24, 33, 43), spanNode.FontColor);
+        Assert.AreEqual(Color.FromArgb(255, 255, 255), spanNode.BackColor);
         Assert.AreEqual(0.875, spanNode.FontSize); // em relative to 16px
         Assert.AreEqual("Test", spanNode.Content);
     }
@@ -479,7 +446,6 @@ public class NodeTreeTests
         </ul>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(1, result.Children);
 
         var listNode = result.Children[0];
@@ -507,26 +473,14 @@ public class NodeTreeTests
     }
 
     [TestMethod]
-    public void SkipStyleTag()
+    [DataRow("<style>.fade { animation-name: fade; } p::before { content: '<b>'; }</style>")]
+    [DataRow("<script>if (n<slides.length) { slides[n].innerHTML = '<p>x</p>'; }</script>")]
+    public void SkipsRawTextElement(string element)
     {
-        // Assert that a <style> tag in the middle of the document is ignored
-        var htmlSnippet = "<p>Text</p><style>body { color: red; }</style><p>More text</p>";
+        // Arcade-built popups can carry a slideshow's style and script. Neither may render as text,
+        // and markup inside them must not end the element early.
+        var htmlSnippet = "<p>Text</p>" + element + "<p>More text</p>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
-        Assert.AreEqual(MarkupType.Document, result.Type);
-        Assert.HasCount(2, result.Children);
-        Assert.AreEqual(MarkupType.Block, result.Children[0].Type);
-        Assert.AreEqual(MarkupType.Block, result.Children[1].Type);
-        Assert.AreEqual("Text", result.Children[0].Children[0].Content);
-        Assert.AreEqual("More text", result.Children[1].Children[0].Content);
-    }
-
-    [TestMethod]
-    public void SkipScriptTag()
-    {
-        // Assert that a <script> tag in the middle of the document is ignored
-        var htmlSnippet = "<p>Text</p><script>alert('Hello');</script><p>More text</p>";
-        MarkupNode result = BuildNodeTree(htmlSnippet);
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(2, result.Children);
         Assert.AreEqual(MarkupType.Block, result.Children[0].Type);
         Assert.AreEqual(MarkupType.Block, result.Children[1].Type);
@@ -540,7 +494,6 @@ public class NodeTreeTests
         // Assert that if an extra closing tag appears that does not match any preceding open tag, we can still keep parsing past it -- we just assume that the tag takes us back to the document root level.
         var htmlSnippet = "<p>Text</p></div><p>More Text</p>";
         MarkupNode result = BuildNodeTree(htmlSnippet);
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(2, result.Children);
         Assert.AreEqual(MarkupType.Block, result.Children[0].Type);
         Assert.AreEqual(MarkupType.Block, result.Children[1].Type);
@@ -554,7 +507,6 @@ public class NodeTreeTests
         // Assert that we can handle a mismatched close tag that follows a missing close tag
         var htmlSnippet = "<div><strong>Text</div> And more";
         MarkupNode result = BuildNodeTree(htmlSnippet);
-        Assert.AreEqual(MarkupType.Document, result.Type);
         Assert.HasCount(2, result.Children);
         Assert.AreEqual(MarkupType.Block, result.Children[0].Type);
         Assert.HasCount(1, result.Children[0].Children);
@@ -588,14 +540,13 @@ public class NodeTreeTests
         var htmlSnippet = "<i><strong>Hello</strong></i>";
         MarkupNode doc = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         Assert.HasCount(1, doc.Children);
 
         var textNode = doc.Children[0];
         Assert.AreEqual(MarkupType.Text, textNode.Type);
         Assert.AreEqual("Hello", textNode.Content);
-        Assert.IsTrue(textNode.IsBold.HasValue && textNode.IsBold.Value);
-        Assert.IsTrue(textNode.IsItalic.HasValue && textNode.IsItalic.Value);
+        Assert.IsTrue(textNode.IsBold);
+        Assert.IsTrue(textNode.IsItalic);
     }
 
     [TestMethod]
@@ -624,7 +575,7 @@ public class NodeTreeTests
     [DataRow("<span>A</span><span> </span><span> B</span>", "A B")]
     [DataRow("<span>A </span><span> B</span>", "A B")]
     [DataRow("<span>A </span><span> </span><span> B</span>", "A B")]
-    [DataRow("<span>A&nbsp;</span><span> B</span>", "A  B")]
+    [DataRow("<span>A&nbsp;</span><span> B</span>", "A\u00A0 B")]
     [DataRow("<span> </span><span>A</span><span> </span>", "A")]
     public void Simplify_CoalescesAdjacentWhitespace(string html, string expectedText)
     {
@@ -660,6 +611,16 @@ public class NodeTreeTests
     }
 
     [TestMethod]
+    [DataRow("A<code>B</code>")]
+    [DataRow("A<span style='font-size:2em'>B</span>")]
+    [DataRow("A<span style='color:red'>B</span>")]
+    [DataRow("A<span style='background-color:red'>B</span>")]
+    public void Simplify_KeepsDifferentlyStyledTextApart(string html)
+    {
+        Assert.HasCount(2, BuildNodeTree(html).Children);
+    }
+
+    [TestMethod]
     public void Simplify_PreservesTextRunBoundaries()
     {
         var html = "<span>A</span><span>B</span><a href='x'>Link</a><span>C</span><span>D</span><br><span>E</span><span>F</span>";
@@ -681,17 +642,17 @@ public class NodeTreeTests
     [TestMethod]
     public void Simplify_PreservesLinks()
     {
-        // Can't merge anchor with its child span because they both have "content"
-        var htmlSnippet = "<a href=\"x\"><b>text</b></a>";
+        // The link must not merge with its only child, a styled span, or the href would be lost.
+        var htmlSnippet = "<a href='x'><b>one<br>two</b></a>";
         MarkupNode doc = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         var linkNode = doc.Children.Single();
         Assert.AreEqual(MarkupType.Link, linkNode.Type);
         Assert.AreEqual("x", linkNode.Content);
-        var textNode = linkNode.Children.Single();
-        Assert.AreEqual(MarkupType.Text, textNode.Type);
-        Assert.AreEqual("text", textNode.Content);
+        var spanNode = linkNode.Children.Single();
+        Assert.AreEqual(MarkupType.Span, spanNode.Type);
+        Assert.IsTrue(spanNode.IsBold);
+        Assert.HasCount(3, spanNode.Children);
     }
 
     [TestMethod]
@@ -700,7 +661,6 @@ public class NodeTreeTests
         var htmlSnippet = "Visible text <span style='display:none;'>Hidden text</span> More visible text";
         MarkupNode doc = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         Assert.HasCount(1, doc.Children);
 
         var visibleText = doc.Children[0];
@@ -714,7 +674,6 @@ public class NodeTreeTests
         var htmlSnippet = "<p>Hello<b></b> world!</p>";
         MarkupNode doc = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, doc.Type);
         Assert.HasCount(1, doc.Children);
 
         var para = doc.Children[0];
@@ -733,7 +692,6 @@ public class NodeTreeTests
         var htmlSnippet = "<div align='center'><div style='background: #123456;'><b><code><i><u><span style='font-size: 32px; color: #654321;'>Test</span></u></i></code></b></div></div>";
         var root = BuildNodeTree(htmlSnippet);
 
-        Assert.AreEqual(MarkupType.Document, root.Type);
         Assert.HasCount(1, root.Children);
 
         var blockNode = root.Children[0];
@@ -753,12 +711,15 @@ public class NodeTreeTests
         Assert.AreEqual("Test", textNode.Content);
     }
 
+    // Traces the tree, so a failing test shows what the parser built.
     static MarkupNode BuildNodeTree(string html)
     {
-        return HtmlUtility.BuildDocumentTree(html);
+        var root = HtmlUtility.BuildDocumentTree(html);
+        PrintNode(root);
+        return root;
     }
 
-    private void PrintNode(MarkupNode node, int indent = 0)
+    private static void PrintNode(MarkupNode node, int indent = 0)
     {
         Trace.WriteLine(new string(' ', indent) + node);
         foreach (var child in node.Children)

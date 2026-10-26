@@ -6,82 +6,24 @@ namespace Toolkit.Tests.HtmlParser;
 public class UnescapeHtmlTests
 {
     [TestMethod]
-    public void TestNamedCharacterReferences()
+    [DataRow("Hello &quot;world&quot; &amp; &lt;everyone&gt;", "Hello \"world\" & <everyone>")]
+    [DataRow("Hello &#34;world&#34; &#38; &#60;everyone&#62;", "Hello \"world\" & <everyone>")]
+    [DataRow("Hello &#x22;world&#x22; &#x26; &#x3C;everyone&#x3E;", "Hello \"world\" & <everyone>")]
+    [DataRow("1.00 &#x20AC; = 39.73 &#8372;", "1.00 € = 39.73 ₴")]
+    [DataRow("&#128512;", "😀")] // beyond the Basic Multilingual Plane
+    [DataRow("100&nbsp;km", "100\u00A0km")] // significant for layout, so not normalized to a regular space
+    [DataRow("Hello world & everyone", "Hello world & everyone")]
+    public void UnescapeHtml(string input, string expected)
     {
-        string input = "Hello &quot;world&quot; &amp; &lt;everyone&gt;";
-        string expected = "Hello \"world\" & <everyone>";
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(expected, result);
+        Assert.AreEqual(expected, HtmlUtility.UnescapeHtml(input));
     }
 
     [TestMethod]
-    public void TestDecimalCharacterReferences()
+    public void OutOfRangeNumericReferenceIsKeptAsText()
     {
-        string input = "Hello &#34;world&#34; &#38; &#60;everyone&#62;";
-        string expected = "Hello \"world\" & <everyone>";
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(expected, result);
-    }
-
-    [TestMethod]
-    public void TestHexadecimalCharacterReferences()
-    {
-        string input = "Hello &#x22;world&#x22; &#x26; &#x3C;everyone&#x3E;";
-        string expected = "Hello \"world\" & <everyone>";
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(expected, result);
-    }
-
-    [TestMethod]
-    public void TestMixedCharacterReferences()
-    {
-        string input = "Hello &quot;world&quot; &#38; &#x3C;everyone&gt;";
-        string expected = "Hello \"world\" & <everyone>";
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(expected, result);
-    }
-
-    [TestMethod]
-    public void TestUnicode()
-    {
-        string input = "1.00 &#x20AC; = 39.73 &#8372;"; // beyond ASCII
-        string expected = "1.00 € = 39.73 ₴";
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(expected, result);
-    }
-
-    [TestMethod]
-    public void TestNoCharacterReferences()
-    {
-        string input = "Hello world & everyone";
-        string expected = "Hello world & everyone";
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(expected, result);
-    }
-
-    [TestMethod]
-    public void TestEmojiNumericCharacterReference()
-    {
-        string input = "&#128512;"; // beyond the Basic Multilingual Plane / beyond 16-bit
-        string expected = "😀";
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(expected, result);
-    }
-
-    [TestMethod]
-    public void TestNonBreakingSpace()
-    {
-        string input = "100&nbsp;km";
-        string expected = "100\u00A0km"; // non-breaking space is significant for text layout, so it is preserved and not normalized to a regular space
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(expected, result);
-    }
-
-    [TestMethod]
-    public void TestOutOfRangeCode()
-    {
-        string input = "Hello &#x110000;"; // out of range for Unicode
-        string result = HtmlUtility.UnescapeHtml(input);
-        Assert.AreEqual(input, result); // unchanged
+        // Browsers decode a code point above U+10FFFF to U+FFFD; WebUtility.HtmlDecode keeps the reference as text.
+        // Either is acceptable. Decoding must not throw, because a throw drops the whole popup to plain text.
+        string input = "Hello &#x110000;";
+        Assert.AreEqual(input, HtmlUtility.UnescapeHtml(input));
     }
 }

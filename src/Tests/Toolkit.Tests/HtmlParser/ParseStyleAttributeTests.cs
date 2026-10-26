@@ -7,121 +7,18 @@ namespace Toolkit.Tests.HtmlParser;
 public class ParseStyleAttributeTests
 {
     [TestMethod]
-    public void ParseStyle_EmptyString()
+    [DataRow("")]
+    [DataRow("color: red; font-size: 16px; background-color: #fff;", "color=red", "font-size=16px", "background-color=#fff")]
+    [DataRow("color: red; color: blue; font-weight: bold;", "color=blue", "font-weight=bold")]
+    [DataRow("color: red; font-size; background-color: #fff;", "color=red", "background-color=#fff")]
+    [DataRow("Color: red; FONT-size: 16px", "color=red", "font-size=16px")]
+    [DataRow("color :   red ;  font-size :16px", "color=red", "font-size=16px")]
+    [DataRow("color:;font-size:4 ", "font-size=4")] // empty value, trailing space, no last semicolon
+    [DataRow("background-image: url(https://example.com/image.png); color:#333;", "background-image=url(https://example.com/image.png)", "color=#333")]
+    public void ParseStyleAttribute(string style, params string[] expected)
     {
-        var styleAttribute = "";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.IsEmpty(styles);
-    }
-
-    [TestMethod]
-    public void ParseStyle_SingleDeclaration()
-    {
-        var styleAttribute = "color: red;";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(1, styles);
-        Assert.IsTrue(styles.ContainsKey("color"));
-        Assert.AreEqual("red", styles["color"]);
-    }
-
-    [TestMethod]
-    public void ParseStyle_MultipleDeclarations()
-    {
-        var styleAttribute = "color: red; font-size: 16px; background-color: #fff;";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(3, styles);
-        Assert.IsTrue(styles.ContainsKey("color"));
-        Assert.AreEqual("red", styles["color"]);
-        Assert.IsTrue(styles.ContainsKey("font-size"));
-        Assert.AreEqual("16px", styles["font-size"]);
-        Assert.IsTrue(styles.ContainsKey("background-color"));
-        Assert.AreEqual("#fff", styles["background-color"]);
-    }
-
-    [TestMethod]
-    public void ParseStyle_DuplicateDeclarations()
-    {
-        var styleAttribute = "color: red; color: blue; font-weight: bold;";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(2, styles);
-        Assert.IsTrue(styles.ContainsKey("color"));
-        Assert.AreEqual("blue", styles["color"]);
-        Assert.IsTrue(styles.ContainsKey("font-weight"));
-        Assert.AreEqual("bold", styles["font-weight"]);
-    }
-
-    [TestMethod]
-    public void ParseStyle_MalformedDeclarations()
-    {
-        var styleAttribute = "color: red; font-size; background-color: #fff;";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(2, styles);
-        Assert.IsTrue(styles.ContainsKey("color"));
-        Assert.AreEqual("red", styles["color"]);
-        Assert.IsTrue(styles.ContainsKey("background-color"));
-        Assert.AreEqual("#fff", styles["background-color"]);
-    }
-
-    [TestMethod]
-    public void ParseStyle_CaseInsensitiveKeys()
-    {
-        var styleAttribute = "Color: red; FONT-size: 16px; BACKGROUND-color: #fff;";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(3, styles);
-        Assert.IsTrue(styles.ContainsKey("color"));
-        Assert.AreEqual("red", styles["color"]);
-        Assert.IsTrue(styles.ContainsKey("font-size"));
-        Assert.AreEqual("16px", styles["font-size"]);
-        Assert.IsTrue(styles.ContainsKey("background-color"));
-        Assert.AreEqual("#fff", styles["background-color"]);
-    }
-
-    [TestMethod]
-    public void ParseStyle_WhitespaceBeforeColon()
-    {
-        var styleAttribute = "color : red; font-size : 16px; background-color : #fff;";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(3, styles);
-        Assert.IsTrue(styles.ContainsKey("color"));
-        Assert.AreEqual("red", styles["color"]);
-        Assert.IsTrue(styles.ContainsKey("font-size"));
-        Assert.AreEqual("16px", styles["font-size"]);
-        Assert.IsTrue(styles.ContainsKey("background-color"));
-        Assert.AreEqual("#fff", styles["background-color"]);
-    }
-
-    [TestMethod]
-    public void ParseStyle_WhitespaceAfterColon()
-    {
-        var styleAttribute = "color:   red; font-size:   16px; background-color:   #fff;";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(3, styles);
-        Assert.IsTrue(styles.ContainsKey("color"));
-        Assert.AreEqual("red", styles["color"]);
-        Assert.IsTrue(styles.ContainsKey("font-size"));
-        Assert.AreEqual("16px", styles["font-size"]);
-        Assert.IsTrue(styles.ContainsKey("background-color"));
-        Assert.AreEqual("#fff", styles["background-color"]);
-    }
-
-    [TestMethod]
-    public void ParseStyle_SloppyValues()
-    {
-        var styleAttribute = "color:;font-size:4 "; // empty value, extra trailing space, missing last semicolon
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(1, styles);
-        // "color" should be ignored due to empty value
-        Assert.IsTrue(styles.ContainsKey("font-size"));
-        Assert.AreEqual("4", styles["font-size"]);
+        var actual = HtmlUtility.ParseStyleAttribute(style).Select(kv => $"{kv.Key}={kv.Value}").ToList();
+        CollectionAssert.AreEquivalent(expected, actual);
     }
 
     [TestMethod]
@@ -138,19 +35,6 @@ public class ParseStyleAttributeTests
         var result = HtmlUtility.TryParseCssFontSize(cssFontSize, out var parsedSizeEm);
         Assert.IsTrue(result);
         Assert.AreEqual(expectedSizeEm, parsedSizeEm);
-    }
-
-    [TestMethod]
-    public void ParseStyle_ColonInValue()
-    {
-        var styleAttribute = "background-image: url(https://example.com/image.png); color:#333;";
-        var styles = HtmlUtility.ParseStyleAttribute(styleAttribute);
-        Assert.IsNotNull(styles);
-        Assert.HasCount(2, styles);
-        Assert.IsTrue(styles.ContainsKey("background-image"));
-        Assert.AreEqual("url(https://example.com/image.png)", styles["background-image"]);
-        Assert.IsTrue(styles.ContainsKey("color"));
-        Assert.AreEqual("#333", styles["color"]);
     }
 
     [TestMethod]

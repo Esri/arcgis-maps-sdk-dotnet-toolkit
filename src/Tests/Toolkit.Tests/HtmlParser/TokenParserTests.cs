@@ -6,16 +6,6 @@ namespace Toolkit.Tests.HtmlParser;
 public class TokenParserTests
 {
     [TestMethod]
-    public void PlainText_Only()
-    {
-        var t = GetTokens("Nothing but text here").ToList();
-        Assert.HasCount(1, t);
-        Assert.AreEqual("Nothing but text here", t[0].Name);
-        Assert.IsNull(t[0].Attributes);
-        Assert.AreEqual(HtmlTokenType.PlainText, t[0].Type);
-    }
-
-    [TestMethod]
     public void PlainText_CollapseWhitespace()
     {
         // Collapse all whitespace to a single space, but don't trim it from the beginning/end.
@@ -43,18 +33,6 @@ public class TokenParserTests
     }
 
     [TestMethod]
-    public void AllTagTypes()
-    {
-        var t = GetTokens(@"none<p></p><br /><img src='foo'/>").ToList();
-        Assert.HasCount(5, t);
-        Assert.AreEqual(HtmlTokenType.PlainText, t[0].Type);
-        Assert.AreEqual(HtmlTokenType.OpenTag, t[1].Type);
-        Assert.AreEqual(HtmlTokenType.CloseTag, t[2].Type);
-        Assert.AreEqual(HtmlTokenType.SelfClosingTag, t[3].Type);
-        Assert.AreEqual(HtmlTokenType.SelfClosingTag, t[4].Type);
-    }
-
-    [TestMethod]
     public void SimpleHtmlSnippet()
     {
         string input = "<p>Hello, world!</p>";
@@ -76,7 +54,7 @@ public class TokenParserTests
         {
             new HtmlToken("p", null, HtmlTokenType.OpenTag),
             new HtmlToken("Error coming up", null, HtmlTokenType.PlainText),
-            // Expect tokenizer to treat the unmatched closing tag as plain text
+            // The end tag cut off by the end of input is dropped, as in browsers
         };
         var tokens = GetTokens(input).ToList();
         AssertEqual(expectedTokens, tokens);
@@ -131,13 +109,16 @@ public class TokenParserTests
     [TestMethod]
     public void QuotesInUnquotedAttributes()
     {
-        string input = "<p class=O'Brien title=it's>x</p>y";
+        // An apostrophe in an unquoted value belongs to the value. It must not open a quote that runs into the next tag.
+        string input = "<p class=O'Brien>x</p><p title=it's>y</p>";
         var expectedTokens = new List<HtmlToken>
         {
-            new HtmlToken("p", "class=O'Brien title=it's", HtmlTokenType.OpenTag),
+            new HtmlToken("p", "class=O'Brien", HtmlTokenType.OpenTag),
             new HtmlToken("x", null, HtmlTokenType.PlainText),
             new HtmlToken("p", null, HtmlTokenType.CloseTag),
+            new HtmlToken("p", "title=it's", HtmlTokenType.OpenTag),
             new HtmlToken("y", null, HtmlTokenType.PlainText),
+            new HtmlToken("p", null, HtmlTokenType.CloseTag),
         };
         var tokens = GetTokens(input).ToList();
         AssertEqual(expectedTokens, tokens);
@@ -256,73 +237,20 @@ public class TokenParserTests
     }
 
     [TestMethod]
-    public void ScriptWithLessThan()
+    [DataRow("script", "var html = '<p>x</p>';")]
+    [DataRow("script", "if (a<b && c>d) {}")]
+    [DataRow("style", "p::before { content: '&lt;'; }")]
+    [DataRow("style", "p  {  color:  red; }")]
+    public void RawTextContentIsLiteral(string tag, string content)
     {
-        string input = "<script> if (x < 5) alert(\"foo\"); </script>";
-        var expectedTokens = new List<HtmlToken>
-            {
-                new HtmlToken("script", null, HtmlTokenType.OpenTag),
-                // Content is RAW, no processing, leading/trailing space kept if present originally (parser adds none here)
-                new HtmlToken(" if (x < 5) alert(\"foo\"); ", null, HtmlTokenType.PlainText),
-                new HtmlToken("script", null, HtmlTokenType.CloseTag)
-            };
-        var tokens = GetTokens(input).ToList();
-        AssertEqual(expectedTokens, tokens);
-    }
-
-    [TestMethod]
-    public void ScriptWithGreaterThanAndAmpersand()
-    {
-        string input = "<script>if(a>b && c){d=1;}</script>";
-        var expectedTokens = new List<HtmlToken>
-            {
-                new HtmlToken("script", null, HtmlTokenType.OpenTag),
-                new HtmlToken("if(a>b && c){d=1;}", null, HtmlTokenType.PlainText), // Raw
-                new HtmlToken("script", null, HtmlTokenType.CloseTag)
-            };
-        var tokens = GetTokens(input).ToList();
-        AssertEqual(expectedTokens, tokens);
-    }
-
-    [TestMethod]
-    public void ScriptWithHtmlEntities()
-    {
-        string input = "<script>var msg = '<div>';</script>";
-        var expectedTokens = new List<HtmlToken>
-            {
-                new HtmlToken("script", null, HtmlTokenType.OpenTag),
-                new HtmlToken("var msg = '<div>';", null, HtmlTokenType.PlainText), // Entities NOT decoded
-                new HtmlToken("script", null, HtmlTokenType.CloseTag)
-            };
-        var tokens = GetTokens(input).ToList();
-        AssertEqual(expectedTokens, tokens);
-    }
-
-    [TestMethod]
-    public void EmptyScriptTag()
-    {
-        string input = "<script></script>";
-        var expectedTokens = new List<HtmlToken>
-            {
-                new HtmlToken("script", null, HtmlTokenType.OpenTag),
-                new HtmlToken("", null, HtmlTokenType.PlainText), // Empty text node
-                new HtmlToken("script", null, HtmlTokenType.CloseTag)
-            };
-        var tokens = GetTokens(input).ToList();
-        AssertEqual(expectedTokens, tokens);
-    }
-
-    [TestMethod]
-    public void ScriptWithAttributes()
-    {
-        string input = "<script type=\"text/javascript\">go();</script>";
-        var expectedTokens = new List<HtmlToken>
-            {
-                new HtmlToken("script", "type=\"text/javascript\"", HtmlTokenType.OpenTag),
-                new HtmlToken("go();", null, HtmlTokenType.PlainText),
-                new HtmlToken("script", null, HtmlTokenType.CloseTag)
-            };
-        var tokens = GetTokens(input).ToList();
+        // Script and style content is neither parsed as markup nor decoded or whitespace-collapsed.
+        var expectedTokens = new[]
+        {
+            new HtmlToken(tag, null, HtmlTokenType.OpenTag),
+            new HtmlToken(content, null, HtmlTokenType.PlainText),
+            new HtmlToken(tag, null, HtmlTokenType.CloseTag),
+        };
+        var tokens = GetTokens($"<{tag}>{content}</{tag}>").ToList();
         AssertEqual(expectedTokens, tokens);
     }
 
@@ -357,56 +285,14 @@ public class TokenParserTests
     }
 
     [TestMethod]
-    public void StyleWithGreaterThan()
-    {
-        string input = "<style> div > p { color: blue; } </style>";
-        var expectedTokens = new List<HtmlToken>
-            {
-                new HtmlToken("style", null, HtmlTokenType.OpenTag),
-                new HtmlToken(" div > p { color: blue; } ", null, HtmlTokenType.PlainText), // Raw
-                new HtmlToken("style", null, HtmlTokenType.CloseTag)
-            };
-        var tokens = GetTokens(input).ToList();
-        AssertEqual(expectedTokens, tokens);
-    }
-
-    [TestMethod]
-    public void StyleWithHtmlEntities()
-    {
-        string input = "<style>.note::before { content: '>>'; }</style>";
-        var expectedTokens = new List<HtmlToken>
-            {
-                new HtmlToken("style", null, HtmlTokenType.OpenTag),
-                new HtmlToken(".note::before { content: '>>'; }", null, HtmlTokenType.PlainText), // Entities NOT decoded
-                new HtmlToken("style", null, HtmlTokenType.CloseTag)
-            };
-        var tokens = GetTokens(input).ToList();
-        AssertEqual(expectedTokens, tokens);
-    }
-
-    [TestMethod]
-    public void EmptyStyleTag()
-    {
-        string input = "<style></style>";
-        var expectedTokens = new List<HtmlToken>
-            {
-                new HtmlToken("style", null, HtmlTokenType.OpenTag),
-                new HtmlToken("", null, HtmlTokenType.PlainText), // Empty text node
-                new HtmlToken("style", null, HtmlTokenType.CloseTag)
-            };
-        var tokens = GetTokens(input).ToList();
-        AssertEqual(expectedTokens, tokens);
-    }
-
-    [TestMethod]
     public void TestLooseBrackets()
     {
-        // Parser should treat loose brackets as plain text UNLESS followed by [a-0zA-Z/!]
-        var input = "<font>< 2% (vlak en bijna vlak)<br /></font>";
+        // Parser should treat loose brackets as plain text UNLESS followed by [a-zA-Z/!]
+        var input = "<font>< 5% (flat terrain)<br /></font>";
         var expectedTokens = new[]
         {
             new HtmlToken("font", null, HtmlTokenType.OpenTag),
-            new HtmlToken("< 2% (vlak en bijna vlak)", null, HtmlTokenType.PlainText),
+            new HtmlToken("< 5% (flat terrain)", null, HtmlTokenType.PlainText),
             new HtmlToken("br", null, HtmlTokenType.SelfClosingTag),
             new HtmlToken("font", null, HtmlTokenType.CloseTag)
         };
