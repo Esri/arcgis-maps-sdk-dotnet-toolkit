@@ -26,7 +26,10 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #if MAUI && WINDOWS
 using TextBlock = Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SelectableLabel;
 using ChildElement = Microsoft.Maui.Controls.View;
-#elif MAUI // iOS, Android, generic
+#elif MAUI && __IOS__
+using TextBlock = Esri.ArcGISRuntime.Toolkit.Maui.Internal.FieldsTableLabel;
+using ChildElement = Microsoft.Maui.Controls.View;
+#elif MAUI // Android, generic
 using TextBlock = Microsoft.Maui.Controls.Label;
 using ChildElement = Microsoft.Maui.Controls.View;
 #elif WPF
@@ -243,9 +246,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private ChildElement CreateHyperlinkCell(Uri uri)
         {
-#if MAUI && WINDOWS
+#if MAUI && (WINDOWS || __IOS__)
             var text = new FormattedString();
-            text.Spans.Add(new HtmlToView.HyperlinkSpan(_ => PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri))
+            text.Spans.Add(new HtmlToView.HyperlinkSpan(_ => PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri), uri)
             {
                 Text = Properties.Resources.GetString("PopupViewerViewHyperlinkText"),
                 TextDecorations = TextDecorations.Underline,
