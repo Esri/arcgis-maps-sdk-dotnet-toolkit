@@ -19,15 +19,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             builder.ConfigureMauiHandlers(handler =>
             {
                 handler.AddHandler<HyperlinkLabel, HyperlinkLabelHandler>();
+                handler.AddHandler<FieldsTableGrid, FieldsTableGridHandler>();
 #if WINDOWS || __IOS__
                 handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>();
                 handler.AddHandler<HyperlinkContentView, HyperlinkContentViewHandler>();
-                handler.AddHandler<FieldsTableGrid, FieldsTableGridHandler>();
 #endif
 #if WINDOWS
                 handler.AddHandler<FieldsTableCell, FieldsTableCellHandler>();
 #elif __IOS__
                 handler.AddHandler<PopupViewer, PopupViewerHandler>();
+#endif
+#if __IOS__ || __ANDROID__
                 handler.AddHandler<FieldsTableLabel, FieldsTableLabelHandler>();
                 handler.AddHandler<Primitives.LegacyCollectionView, Microsoft.Maui.Controls.Handlers.Items.CollectionViewHandler>();
 #endif
