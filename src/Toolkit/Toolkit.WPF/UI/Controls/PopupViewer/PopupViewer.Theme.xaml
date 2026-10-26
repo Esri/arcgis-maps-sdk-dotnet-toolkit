@@ -4,22 +4,25 @@
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
-
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/Themes/HighContrast.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <internal:VisibilityConverter x:Key="PopupViewerVisibilityConverter"/>
     <internal:EmptyStringToVisibilityConverter x:Key="PlaceholderVisibilityConverter" />
     <internal:EmptyStringToBooleanConverter x:Key="EmptyStringToBooleanConverter" />
     <internal:HtmlToPlainTextConverter x:Key="PopupViewerHtmlToPlainTextConverter"/>
     <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
-    <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
+    <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle" BasedOn="{StaticResource ToolkitHighContrastTextBlock}">
         <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=16}" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
-    <Style TargetType="TextBlock" x:Key="PopupViewerTitleStyle">
+    <Style TargetType="TextBlock" x:Key="PopupViewerTitleStyle" BasedOn="{StaticResource ToolkitHighContrastTextBlock}">
         <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=16}" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
-    <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
+    <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle" BasedOn="{StaticResource ToolkitHighContrastTextBlock}">
         <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=12}" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="Foreground" Value="Gray" />
@@ -40,6 +43,11 @@
         <!-- But previous versions of toolkit used TextBlock. Use generic style here to maximize compat with custom styles. -->
         <Setter Property="TextElement.FontSize" Value="12" />
         <Setter Property="TextElement.Foreground" Value="#FF323232" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="True">
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
     <Style TargetType="{x:Type primitives:FieldsPopupElementView}" >
         <Setter Property="RowOddBackground" Value="#FFEDEDED" />
@@ -60,6 +68,14 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <!-- Zebra striping is not meaningful in high contrast; use the system window color for both rows and a visible divider. -->
+            <DataTrigger Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="True">
+                <Setter Property="RowOddBackground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                <Setter Property="RowEvenBackground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                <Setter Property="DividerBrush" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type primitives:AttachmentThumbnailImage}">
@@ -137,9 +153,9 @@
                                                         AutomationHeadingLevel="Level2" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         <primitives:AccessibleTextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                                         AutomationHeadingLevel="Level3" IsAccessible="{Binding Description,Converter={StaticResource EmptyStringToBooleanConverter}}" />
-                        <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single" AutomationProperties.Name="{Binding Path=Title}" KeyboardNavigation.AcceptsReturn="True">
+                        <ListView x:Name="AttachmentList" Style="{StaticResource ToolkitHighContrastListViewStyle}" BorderThickness="0" SelectionMode="Single" AutomationProperties.Name="{Binding Path=Title}" KeyboardNavigation.AcceptsReturn="True">
                             <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
+                                <Style TargetType="ListViewItem" BasedOn="{StaticResource ToolkitHighContrastListBoxItemStyle}">
                                     <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
                                 </Style>
                             </ListView.ItemContainerStyle>
@@ -205,7 +221,7 @@
                             <primitives:AccessibleTextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" IsAccessible="{Binding Title,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                             <primitives:AccessibleTextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" IsAccessible="{Binding Caption,Converter={StaticResource EmptyStringToBooleanConverter}}" />
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="1" Background="Transparent" MinHeight="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}" Padding="0">
+                        <Button Grid.Column="0" Grid.Row="1" Style="{StaticResource ToolkitHighContrastButtonStyle}" Background="Transparent" MinHeight="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="PreviousButton" AutomationProperties.Name="{TemplateBinding PreviousMediaButtonText}" Padding="4,0">
                             <Button.Content>
                                 <primitives:AccessibleTextBlock Text="" FontFamily="Segoe MDL2 Assets" IsAccessible="False" FontSize="{internal:TextScaledFontSize FontSize=12}" />
                             </Button.Content>
@@ -213,7 +229,7 @@
                                 <ToolTip Content="{TemplateBinding PreviousMediaButtonText}" FontFamily="{x:Static SystemFonts.MessageFontFamily}" />
                             </Button.ToolTip>
                         </Button>
-                        <Button Grid.Column="2" Grid.Row="1" Background="Transparent" MinHeight="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}" Padding="0">
+                        <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource ToolkitHighContrastButtonStyle}" Background="Transparent" MinHeight="40" Cursor="Hand" BorderThickness="0" VerticalAlignment="Center" x:Name="NextButton" AutomationProperties.Name="{TemplateBinding NextMediaButtonText}" Padding="4,0">
                             <Button.Content>
                                 <primitives:AccessibleTextBlock Text="" FontFamily="Segoe MDL2 Assets" IsAccessible="False" FontSize="{internal:TextScaledFontSize FontSize=12}" />
                             </Button.Content>
@@ -451,11 +467,11 @@
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="NavigateBack" Background="Transparent" BorderThickness="0,0,1,0" VerticalAlignment="Center"
+                            <Button x:Name="NavigateBack" Style="{StaticResource ToolkitHighContrastButtonStyle}" Background="Transparent" BorderThickness="0,0,1,0" VerticalAlignment="Center"
                                     Height="40" Width="40" Visibility="Visible" Margin="0,0,10,0">
                                 <TextBlock Text="&#xE76B;" FontFamily="Segoe MDL2 Assets" />
                             </Button>
-                            <Button x:Name="NavigateUp" Grid.Column="1" Background="Transparent" Width="40" Height="40" BorderThickness="0" VerticalAlignment="Center" >
+                            <Button x:Name="NavigateUp" Style="{StaticResource ToolkitHighContrastButtonStyle}" Grid.Column="1" Background="Transparent" Width="40" Height="40" BorderThickness="0" VerticalAlignment="Center" >
                                 <TextBlock Text="&#xE74A;" FontFamily="Segoe MDL2 Assets" />
                             </Button>
                             <ContentControl Grid.Column="2" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Margin="{TemplateBinding Padding}"
@@ -578,5 +594,13 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <!-- Give the viewer an opaque system background in high contrast so system text colors always sit on their matching background. -->
+            <DataTrigger Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
