@@ -1335,7 +1335,6 @@ internal class HtmlTokenParser
         }
 
         HtmlTokenType type;
-        bool isSelfClosing = false;
         int nameEndIdx = endTagCloseIdx; // End boundary for name/attributes
 
         // Check for closing tag: </tag>
@@ -1354,7 +1353,6 @@ internal class HtmlTokenParser
         {
             nameEndIdx--; // Exclude the '/' from name/attribute processing
             type = HtmlTokenType.SelfClosingTag;
-            isSelfClosing = true;
             // Trim trailing whitespace before the '/' e.g. <br />
             while (nameEndIdx > startTagContentIdx && char.IsWhiteSpace(_html[nameEndIdx - 1]))
             {
@@ -1403,7 +1401,7 @@ internal class HtmlTokenParser
         string lowerName = name.ToLowerInvariant();
         token = new HtmlToken(lowerName, attributes, type);
 
-        if (type == HtmlTokenType.OpenTag && !isSelfClosing) // Only non-self-closing tags can contain content
+        if (type == HtmlTokenType.OpenTag)
         {
             if (lowerName is "script" or "style")
             {

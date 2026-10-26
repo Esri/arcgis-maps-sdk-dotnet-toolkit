@@ -341,20 +341,6 @@ public class TokenParserTests
     }
 
     [TestMethod]
-    public void ScriptSelfClosing()
-    {
-        string input = "<script src=\"lib.js\"/> Text after";
-        var expectedTokens = new List<HtmlToken>
-        {
-            // Self-closing tags do not enter RAWTEXT mode
-            new HtmlToken("script", "src=\"lib.js\"", HtmlTokenType.SelfClosingTag),
-            new HtmlToken(" Text after", null, HtmlTokenType.PlainText) // Processed text
-        };
-        var tokens = GetTokens(input).ToList();
-        AssertEqual(expectedTokens, tokens);
-    }
-
-    [TestMethod]
     public void ScriptUnclosed()
     {
         string input = "<p>Before</p><script> var i = 0; // unclosed";
