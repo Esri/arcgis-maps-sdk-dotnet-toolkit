@@ -410,6 +410,19 @@ public class NodeTreeTests
     }
 
     [TestMethod]
+    [DataRow("<p style='text-align:center'>x</p>", "Center")]
+    [DataRow("<p style='text-align: RIGHT'>x</p>", "Right")]
+    [DataRow("<p style='text-align:justify'>x</p>", "Justify")]
+    [DataRow("<p align=right style='text-align:center'>x</p>", "Center")] // CSS overrides the attribute
+    [DataRow("<div style='text-align:right'><p style='text-align:middle'>x</p></div>", "Right")] // an invalid value is ignored
+    public void TextAlignStyle(string html, string expected)
+    {
+        var block = BuildNodeTree(html).Children[0];
+        Assert.AreEqual(MarkupType.Block, block.Type);
+        Assert.AreEqual(expected, block.Alignment.ToString());
+    }
+
+    [TestMethod]
     [DataRow("<div style='font-size:32px'><span style='font-size:1em'>Test</span></div>", 2.0)]
     [DataRow("<div style='font-size:32px'><span style='font-size:50%'>Test</span></div>", 1.0)]
     [DataRow("<h2><span style='font-size:100%'>Test</span></h2>", 1.5)]

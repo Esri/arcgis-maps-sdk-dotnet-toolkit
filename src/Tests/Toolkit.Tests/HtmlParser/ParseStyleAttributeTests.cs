@@ -26,15 +26,33 @@ public class ParseStyleAttributeTests
     [DataRow("16px", 1.0)]
     [DataRow("12pt", 1.0)]
     [DataRow("24.0pt", 2.0)]
-    [DataRow("medium", 1.0)]
     [DataRow("1.5em", 1.5)]
     [DataRow("2rem", 2.0)]
     [DataRow("50%", 0.5)]
+    // Keywords give the sizes browsers render: 9, 10, 13, 16, 18, 24, 32, and 48 px.
+    [DataRow("xx-small", 0.56)]
+    [DataRow("x-small", 0.63)]
+    [DataRow("small", 0.82)]
+    [DataRow("medium", 1.0)]
+    [DataRow("large", 1.13)]
+    [DataRow("x-large", 1.5)]
+    [DataRow("xx-large", 2.0)]
+    [DataRow("xxx-large", 3.0)]
+    [DataRow(" Small ", 0.82)]
     public void TryParseCssFontSize(string cssFontSize, double expectedSizeEm)
     {
         var result = HtmlUtility.TryParseCssFontSize(cssFontSize, out var parsedSizeEm);
         Assert.IsTrue(result);
         Assert.AreEqual(expectedSizeEm, parsedSizeEm);
+    }
+
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("big")]
+    [DataRow("12")] // a unitless size is invalid
+    public void TryParseCssFontSize_Invalid(string cssFontSize)
+    {
+        Assert.IsFalse(HtmlUtility.TryParseCssFontSize(cssFontSize, out _));
     }
 
     [TestMethod]

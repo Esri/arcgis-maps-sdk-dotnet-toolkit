@@ -826,7 +826,7 @@ internal class HtmlUtility
 
         switch (s)
         {
-            case "xx-small": emValue = 0.5; return true;
+            case "xx-small": emValue = 0.56; return true; // 9px
             case "x-small": emValue = ParseHtmlFontSize(1); return true;
             case "small": emValue = ParseHtmlFontSize(2); return true;
             case "medium": emValue = ParseHtmlFontSize(3); return true;
