@@ -145,6 +145,20 @@ public class NodeTreeTests
     }
 
     [TestMethod]
+    public void LegacyColorAttributes()
+    {
+        // Browsers accept these values. If the parser threw on them, the heads would show the whole element as plain text.
+        var result = BuildNodeTree("<table><tr bgcolor='ff0000'><td><font color='##2F84B1'>x</font></td></tr></table>");
+
+        var row = result.Children[0].Children[0];
+        Assert.AreEqual(MarkupType.TableRow, row.Type);
+        Assert.AreEqual(Color.FromArgb(255, 0, 0), row.BackColor);
+        var text = row.Children[0].Children[0];
+        Assert.AreEqual("x", text.Content);
+        Assert.AreEqual(Color.FromArgb(2, 132, 16), text.FontColor);
+    }
+
+    [TestMethod]
     public void TestImplicitlyClosedPara()
     {
         var htmlSnippet = "<p>Para 1<p>Para 2";

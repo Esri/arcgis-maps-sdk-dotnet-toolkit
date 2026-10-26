@@ -337,11 +337,7 @@ internal class HtmlUtility
                     else if (name == "font")
                     {
                         if (attr.TryGetValue("color", out var fontColor))
-#if WINDOWS_UWP
-                            newNode.FontColor = ParseCssColor(fontColor);
-#else
-                            newNode.FontColor = ColorTranslator.FromHtml(fontColor);
-#endif
+                            newNode.FontColor = ParseLegacyColor(fontColor);
                         if (attr.TryGetValue("size", out var fontSizeStr) && Int32.TryParse(fontSizeStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var fontSize))
                             newNode.FontSize = ParseHtmlFontSize(fontSize);
                     }
@@ -366,11 +362,7 @@ internal class HtmlUtility
                 case "tr":
                     newNode.Type = MarkupType.TableRow;
                     if (attr.TryGetValue("bgcolor", out var backColor))
-#if WINDOWS_UWP
-                        newNode.BackColor = ParseCssColor(backColor);
-#else
-                        newNode.BackColor = ColorTranslator.FromHtml(backColor);
-#endif
+                        newNode.BackColor = ParseLegacyColor(backColor);
                     // TODO valign
                     break;
                 case "td":
@@ -911,6 +903,44 @@ internal class HtmlUtility
             return ParseRgbColor(cssColor);
         else
             return ParseNamedCssColor(cssColor);
+    }
+
+    /// <summary>
+    /// Parses the color attribute of font and the bgcolor attribute of tr as browsers do.
+    /// Unlike CSS, any value other than an empty string or "transparent" gives a color, so "ff0000" and the typo "##ff0000" are both red.
+    /// </summary>
+    /// <remarks>https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#rules-for-parsing-a-legacy-colour-value</remarks>
+    internal static Color? ParseLegacyColor(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return null;
+        var s = value.Trim();
+        if (s.Equals("transparent", StringComparison.OrdinalIgnoreCase))
+            return null;
+        if (ParseNamedCssColor(s) is Color named)
+            return named;
+        if (s.Length == 4 && s[0] == '#' && char.IsAsciiHexDigit(s[1]) && char.IsAsciiHexDigit(s[2]) && char.IsAsciiHexDigit(s[3]))
+            return ParseHexCssColor(s);
+
+        if (s.Length > 128)
+            s = s.Substring(0, 128);
+        if (s.StartsWith('#'))
+            s = s.Substring(1);
+
+        // Split the value into three equal components, reading every character that is not a hex digit as 0.
+        // A character outside the BMP is a surrogate pair, so it reads as 00, as the spec requires.
+        var digits = new char[Math.Max(3, (s.Length + 2) / 3 * 3)];
+        for (int i = 0; i < digits.Length; i++)
+            digits[i] = i < s.Length && char.IsAsciiHexDigit(s[i]) ? s[i] : '0';
+        int length = digits.Length / 3;
+
+        // Keep the last eight digits of each component, drop the leading zeros that all three share, and use the first two digits that remain.
+        int start = Math.Max(0, length - 8);
+        while (length - start > 2 && digits[start] == '0' && digits[length + start] == '0' && digits[2 * length + start] == '0')
+            start++;
+        int count = Math.Min(2, length - start);
+        int Component(int index) => int.Parse(digits.AsSpan(index * length + start, count), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        return Color.FromArgb(Component(0), Component(1), Component(2));
     }
 
     private static readonly Regex RgbRegex = new Regex(

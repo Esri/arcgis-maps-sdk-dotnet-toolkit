@@ -90,6 +90,32 @@ public class ParseStyleAttributeTests
         Assert.IsNull(parsedColor);
     }
 
+    // Expected values are what Edge renders for <font color>.
+    [TestMethod]
+    [DataRow("#ff0000", 255, 0, 0)]
+    [DataRow("ff0000", 255, 0, 0)]
+    [DataRow("##2F84B1", 2, 132, 16)]
+    [DataRow(" DarkGrey ", 169, 169, 169)]
+    [DataRow("#f00", 255, 0, 0)]
+    [DataRow("f00", 15, 0, 0)] // three digits expand only after '#'
+    [DataRow("#ff000080", 255, 0, 128)] // no alpha: the digits split as ff0, 000, 800
+    [DataRow("001002003", 1, 2, 3)] // leading zeros that all components share are dropped
+    [DataRow("#123456789abcdef0123456789", 35, 188, 69)] // components keep their last eight digits
+    [DataRow("rgb(1,2,3)", 0, 16, 48)] // CSS syntax does not apply
+    public void ParseLegacyColor(string value, int red, int green, int blue)
+    {
+        Assert.AreEqual(Color.FromArgb(red, green, blue).ToArgb(), HtmlUtility.ParseLegacyColor(value)?.ToArgb());
+    }
+
+    [TestMethod]
+    [DataRow(null)]
+    [DataRow("")]
+    [DataRow("Transparent")]
+    public void ParseLegacyColor_Invalid(string? value)
+    {
+        Assert.IsNull(HtmlUtility.ParseLegacyColor(value));
+    }
+
     [TestMethod]
     public void ParseColor_NamedColors()
     {
