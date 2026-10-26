@@ -99,6 +99,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             cv.HandlerChanged += AttachmentList_HandlerChanged;
             cv.HandlerChanging += AttachmentList_HandlerChanging;
 #endif
+#if __ANDROID__
+            Internal.PopupKeyboardNavigation.Attach(cv);
+#endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             root.Add(cv);
             INameScope nameScope = new NameScope();

@@ -277,7 +277,7 @@ internal static class HtmlToView
                 str.Spans.Add(span);
             }
         }
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
         if (useNativeHyperlinks && str.Spans.OfType<HyperlinkSpan>().Any())
             return new HyperlinkLabel(str) { LineBreakMode = LineBreakMode.WordWrap };
 #endif

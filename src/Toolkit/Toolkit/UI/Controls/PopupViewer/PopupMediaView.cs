@@ -173,6 +173,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #endif
                 }
+#if MAUI && __ANDROID__
+                else
+                {
+                    img.GestureRecognizers.Clear();
+                    if (img.Handler?.PlatformView is Android.Views.View platformView)
+                        platformView.Focusable = false;
+                }
+#endif
 #if MAUI && WINDOWS
                 UpdateImageAccessibility(img);
 #endif

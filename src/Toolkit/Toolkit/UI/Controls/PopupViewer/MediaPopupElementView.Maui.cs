@@ -70,6 +70,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #if __IOS__ // Workaround for https://github.com/dotnet/maui/issues/12911
             cv.HeightRequest = 300;
 #endif
+#if __ANDROID__
+            Internal.PopupKeyboardNavigation.Attach(cv);
+#endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             IndicatorView iv = new IndicatorView() { HorizontalOptions = LayoutOptions.Center };
 #if WINDOWS
