@@ -23,18 +23,6 @@ using Microsoft.UI.Xaml.Documents;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 
-internal sealed class HyperlinkLabel : Label
-{
-    internal HyperlinkLabel(FormattedString text)
-    {
-        InlineContent = text;
-        Text = text.ToString();
-    }
-
-    // Native hyperlinks replace MAUI's formatted-span hit testing, so don't assign Label.FormattedText.
-    internal FormattedString InlineContent { get; }
-}
-
 internal sealed class HyperlinkLabelHandler : LabelHandler
 {
     public override void SetVirtualView(IView view)
