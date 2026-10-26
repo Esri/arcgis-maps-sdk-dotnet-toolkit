@@ -116,6 +116,7 @@ public partial class OrientedImageryView
         }
 
         RewireViewModel();
+        UpdateErrorMessage();
         UpdatePaginatorSelection();
     }
 
