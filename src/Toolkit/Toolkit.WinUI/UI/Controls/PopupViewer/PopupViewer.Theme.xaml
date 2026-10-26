@@ -130,11 +130,11 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Grid Width="{TemplateBinding ThumbnailSize}" Height="{TemplateBinding ThumbnailSize}">
-                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Text="&#xE896;" AutomationProperties.AccessibilityView="Raw" />
-                            <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw" />
-                            <ProgressRing Visibility="Collapsed" x:Name="DownloadSpinner" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Text="&#xE896;" AutomationProperties.AccessibilityView="Raw" HighContrastAdjustment="None" />
+                            <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw" HighContrastAdjustment="None"/>
+                            <ProgressRing Visibility="Collapsed" x:Name="DownloadSpinner" HorizontalAlignment="Center" VerticalAlignment="Center" HighContrastAdjustment="None"/>
                         </Grid>
-                        <TextBlock Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Margin="5" AutomationProperties.AccessibilityView="Raw" />
+                        <TextBlock Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Margin="5" AutomationProperties.AccessibilityView="Raw" HighContrastAdjustment="None" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
