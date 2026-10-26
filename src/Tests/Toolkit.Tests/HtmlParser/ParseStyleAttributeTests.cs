@@ -91,6 +91,18 @@ public class ParseStyleAttributeTests
     }
 
     [TestMethod]
+    public void ParseColor_NamedColors()
+    {
+        // System.Drawing knows every CSS color name, but only the "gray" spelling of the grays.
+        foreach (var known in Enum.GetValues<KnownColor>().Select(Color.FromKnownColor).Where(c => !c.IsSystemColor))
+        {
+            var name = known.Name.ToLowerInvariant();
+            foreach (var spelling in new[] { name, name.Replace("gray", "grey") }.Distinct())
+                Assert.AreEqual(known.ToArgb(), HtmlUtility.ParseCssColor(spelling)?.ToArgb(), spelling);
+        }
+    }
+
+    [TestMethod]
     [DataRow("normal", false)]
     [DataRow("bold", true)]
     [DataRow("Bolder", true)]
