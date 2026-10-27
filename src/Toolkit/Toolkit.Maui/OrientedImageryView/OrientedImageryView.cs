@@ -192,6 +192,9 @@ public partial class OrientedImageryView : TemplatedView
         DetachBackNavigation();
         _connected = false;
         DismissPanel();
+#if ANDROID
+        DismissAndroidPopup();
+#endif
         _layerVersion++;
         CancelOperation();
         if (_connectedModel != null)

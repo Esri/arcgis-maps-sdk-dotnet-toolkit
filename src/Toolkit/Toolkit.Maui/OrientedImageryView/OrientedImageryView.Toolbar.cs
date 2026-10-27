@@ -359,7 +359,7 @@ public partial class OrientedImageryView
 
     private void ShowToolbarCategory(OrientedImageryToolbarCategory category, View anchor, string title)
     {
-        DismissPanel();
+        DismissPanel(preservePresentation: true);
         var panel = PanelContent(title);
         foreach (var item in category.ToolbarItems.Where(IsToolbarItemVisible))
         {
