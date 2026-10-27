@@ -1237,25 +1237,33 @@
     <value>No images found for the tapped location</value>
     <comment>Message shown when no images found for a tapped location.</comment>
   </data>
-  <data name="OrientedImageryViewImageSelectionUsing" xml:space="preserve">
-    <value>using</value>
-    <comment>Second instruction line, before the Search icon: using [Search icon] or [Examine icon] mode.</comment>
+  <data name="OrientedImageryViewEnableImageSelection" xml:space="preserve">
+    <value>Enable</value>
+    <comment>First word in "Enable [icon] or [icon] mode to search for images".</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
     <value>or</value>
-    <comment>Instruction between the Search and Examine icons in the no-image-selected message.</comment>
+    <comment>The "or" in "Enable [icon] or [icon] mode to search for images"</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>mode to search for images</value>
+    <comment>Final part of "Enable [icon] or [icon] mode to search for images"</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>Tap on the map to search for images</value>
+    <comment>Instructions for Find Images mode.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>Tap on a feature to view its image</value>
+    <comment>Instructions for Display Image mode.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>or switch to</value>
+    <comment>First part of "or switch to [icon] mode". Follows OrientedImageryViewImageSelectionDisplayImage/FindImages instructions. (e.g. "Tap on a feature to view its image or switch to [icon] mode")</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
     <value>mode</value>
-    <comment>Final word after the Examine icon: using [Search icon] or [Examine icon] mode.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionSearchMap" xml:space="preserve">
-    <value>Tap on the map to search</value>
-    <comment>First line of the no-image-selected instruction, followed by 'using [Search icon] or [Examine icon] mode'.</comment>
-  </data>
-  <data name="OrientedImageryViewEnableImageSelection" xml:space="preserve">
-    <value>Enable image selection in the toolbar</value>
-    <comment>Instruction below the no-image heading when image selection is disabled.</comment>
+    <comment>Last word in "or switch to [icon] mode"</comment>
   </data>
   <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
     <value>Connect a GeoView to view oriented imagery.</value>
