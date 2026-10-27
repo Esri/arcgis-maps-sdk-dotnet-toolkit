@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Windows.Automation;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 #elif WINDOWS_XAML
+using Microsoft.UI.Xaml.Automation.Peers;
 using Paginator = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryPaginator;
 #endif
 
@@ -94,6 +95,7 @@ public partial class OrientedImageryViewer
 
         RewireViewModel();
         UpdatePaginatorSelection();
+        UpdateErrorMessages();
 
 #if WPF
         UpdateErrorMessages();
@@ -164,10 +166,8 @@ public partial class OrientedImageryViewer
         }
 
         RewireViewModel();
-#if WPF
         UpdatePaginatorSelection();
         UpdateErrorMessages();
-#endif
     }
 
     private void RewireViewModel()
@@ -206,26 +206,26 @@ public partial class OrientedImageryViewer
             case nameof(OrientedImageryViewerModel.OrientedImageryLayer):
                 CancelGeoViewTappedHandler();
                 HasSearchedForImages = false;
-#if WPF
                 TransientErrorMessage = null;
                 UpdateErrorMessages();
-#endif
                 break;
             case nameof(OrientedImageryViewerModel.SequentialNavigationError):
                 if (ViewModel.SequentialNavigationError?.Message != null)
                     TransientErrorMessage = ViewModel.SequentialNavigationError?.Message;
                 break;
-#if WPF
             case nameof(OrientedImageryViewerModel.ImageDetailsPopup):
+#if WPF
                 UpdateDetailsFocus();
-                break;
+#elif WINDOWS_XAML
+                UpdateViewState_WinUI();
 #endif
+                break;
         }
     }
 
     private void ViewModel_SequenceBoundaryReached(object? sender, SequenceBoundaryReachedArgs e)
     {
-        if (!ReferenceEquals(sender, ViewModel) || !IsLoaded || !IsVisible || ErrorMessage != null)
+        if (!ReferenceEquals(sender, ViewModel) || !LoadedAndVisible() || ErrorMessage != null)
             return;
 
         string? resourceKey = (e.HasReachedStart, e.HasReachedEnd) switch
@@ -454,9 +454,7 @@ public partial class OrientedImageryViewer
             ViewModel.OrientedImageryLayer = null;
         }
 
-#if WPF
         UpdateErrorMessages();
-#endif
     }
 
     private async void GeoView_GeoViewTapped(object? _, GeoViewInputEventArgs e)
@@ -732,6 +730,10 @@ public partial class OrientedImageryViewer
         if (ErrorMessage == null || ErrorMessage == lastMessage)
             return false;
 
+#if WINDOWS_XAML
+        UpdateViewState_WinUI();
+#endif
+
         ScreenReaderHelpers.RaiseLiveRegionChanged(_mainErrorMessagePresenter);
         return true;
     }
@@ -767,7 +769,7 @@ public partial class OrientedImageryViewer
     private bool UpdateImageErrorAnnouncement()
     {
         string? announcement = _viewport?.Error?.Message;
-        if (!IsLoaded || !IsVisible || ErrorMessage != null || string.IsNullOrWhiteSpace(announcement))
+        if (!LoadedAndVisible() || ErrorMessage != null || string.IsNullOrWhiteSpace(announcement))
         {
             _lastImageErrorAnnouncement = null;
             return false;
@@ -799,7 +801,7 @@ public partial class OrientedImageryViewer
 
     private string? GetNoImagesAnnouncement()
     {
-        if (!IsLoaded || !IsVisible || ErrorMessage != null || _viewport?.IsImageLoading == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
+        if (!LoadedAndVisible() || ErrorMessage != null || _viewport?.IsImageLoading == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
             return null;
 
         string resourceKey;
@@ -828,6 +830,7 @@ public partial class OrientedImageryViewer
 
     private void RewireDismissTransientErrorButton()
     {
+#if WPF
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click -= DismissTransientErrorButton_Click;
 
@@ -835,6 +838,16 @@ public partial class OrientedImageryViewer
 
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click += DismissTransientErrorButton_Click;
+#endif
+    }
+
+    private bool LoadedAndVisible()
+    {
+#if WPF
+        return IsLoaded && IsVisible;
+#elif WINUI
+        return IsLoaded && Visibility == Visibility.Visible;
+#endif
     }
 #endregion Errors
 }

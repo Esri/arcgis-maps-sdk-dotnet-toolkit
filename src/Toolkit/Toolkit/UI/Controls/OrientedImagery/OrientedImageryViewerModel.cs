@@ -16,11 +16,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
-#if WPF
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 #elif MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
-#endif
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
