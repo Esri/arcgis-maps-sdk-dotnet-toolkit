@@ -1307,6 +1307,26 @@ navigation</value>
     <value>Select Explore images or Display image, then tap on the map to search.</value>
     <comment>Accessible text alternative to the icon-based no-image-selected instructions in MAUI.</comment>
   </data>
+  <data name="OrientedImageryViewImageSelectionFindMap" xml:space="preserve">
+    <value>Tap on the map to search for images</value>
+    <comment>First instruction line in the MAUI empty-image view when Find Images is enabled.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayFeature" xml:space="preserve">
+    <value>Tap on a feature to view its image</value>
+    <comment>First instruction line in the MAUI empty-image view when Display Image is enabled.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>or switch to</value>
+    <comment>Instruction before the alternate mode icon, followed by the localized word for mode, in the MAUI empty-image view.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindInstructions" xml:space="preserve">
+    <value>Tap on the map to search for images or switch to Display image mode.</value>
+    <comment>Complete accessible description of the MAUI empty-image instructions when Find Images is enabled.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayInstructions" xml:space="preserve">
+    <value>Tap on a feature to view its image or switch to Explore images mode.</value>
+    <comment>Complete accessible description of the MAUI empty-image instructions when Display Image is enabled. Explore images is the localized name of the Find Images mode.</comment>
+  </data>
   <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
     <value>Connect a GeoView to view oriented imagery.</value>
     <comment>Error shown by OrientedImageryView when no GeoView is connected.</comment>
