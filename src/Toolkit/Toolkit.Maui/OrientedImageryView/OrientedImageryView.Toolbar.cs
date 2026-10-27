@@ -268,6 +268,10 @@ public partial class OrientedImageryView
                     ViewModel.InteractionState is OrientedImageryViewInteractionState.FindImages or OrientedImageryViewInteractionState.DisplayImage) ||
                 (key == OrientedImageryToolbarCategory.MarkersCategoryName && IsAddingMarkers) ||
                 (key == OrientedImageryToolbarCategory.MoreCategoryName && ViewModel.IsSequentialNavigationEnabled);
+#if ANDROID || (__IOS__ && !MACCATALYST)
+            if (key == OrientedImageryToolbarCategory.OverlaysCategoryName)
+                active = ViewModel.ShowSelectedFootprint || ViewModel.ShowUnselectedFootprints || ViewModel.ShowCameraLocations;
+#endif
             pill.Opacity = button.IsEnabled ? 1 : 0.45;
             bool modeChanged = key == OrientedImageryToolbarCategory.ModeCategoryName && previousSearch != ImageSearchEnabled;
             if (modeChanged)
@@ -307,6 +311,10 @@ public partial class OrientedImageryView
                 SemanticProperties.SetHint(button, Text(IsAddingMarkers ? "On" : "Off"));
             else if (navigation)
                 SemanticProperties.SetHint(button, Text(ViewModel.IsSequentialNavigationEnabled ? "On" : "Off"));
+#if ANDROID || (__IOS__ && !MACCATALYST)
+            else if (key == OrientedImageryToolbarCategory.OverlaysCategoryName)
+                SemanticProperties.SetHint(button, Text(active ? "On" : "Off"));
+#endif
             previousActive = active;
             previousSearch = ImageSearchEnabled;
         });
