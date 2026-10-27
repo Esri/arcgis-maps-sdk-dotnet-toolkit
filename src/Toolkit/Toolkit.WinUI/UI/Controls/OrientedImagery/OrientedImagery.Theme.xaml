@@ -451,17 +451,6 @@
 
     <!-- Toolbar Data Templates -->
 
-    <Style x:Key="ToolbarContainerStyle" TargetType="ItemsControl">
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <DataTemplate x:Key="ToolbarCategoryTemplate" x:DataType="controls:OrientedImageryToolbarCategory">
         <ItemsControl
             ItemsSource="{x:Bind ToolbarItems, Mode=OneWay}"
@@ -736,16 +725,8 @@
     </Style>
 
     <!-- ToolbarContainer Style -->
-    <!--<Style x:Key="ToolbarContainerStyle" TargetType="ItemsControl">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ItemsControl">
-                    <ItemsPresenter HorizontalAlignment="Stretch" />
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="ToolbarContainerStyle" TargetType="ItemsControl">
+        <Setter Property="IsTabStop" Value="False" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -753,7 +734,7 @@
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
-    </Style>-->
+    </Style>
 
     <!-- OrientedImageryView Style -->
 
