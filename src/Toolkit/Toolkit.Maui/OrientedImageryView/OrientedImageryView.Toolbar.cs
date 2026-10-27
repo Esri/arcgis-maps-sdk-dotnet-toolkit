@@ -127,8 +127,7 @@ public partial class OrientedImageryView
             _renderedToolbarRevision = _toolbarRevision;
         }
         _customToolbar.IsVisible = HasValidLayer;
-        foreach (var update in _toolbarUpdates)
-            update();
+        UpdateToolHighlights();
     }
 
     private bool IsToolbarItemVisible(OrientedImageryToolbarItemBase item) =>

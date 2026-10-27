@@ -171,7 +171,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private Popup? _selectedImagePopup;
     private bool _isSequentialNavigationEnabled;
     private bool _isFetchingAdjacentImage;
-    private Task? _adjacentImagesFetchTask;
     private OrientedImage? _nextSequentialImage;
     private OrientedImage? _previousSequentialImage;
     private CancellationTokenSource? _adjacentImagesCancellation;
@@ -290,11 +289,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             ResetSequentialNavigationState();
             ChangeNavigationCommandsCanExecute();
 
-            if (!IsSequentialNavigationEnabled)
-            {
-                ChangeNavigationCommandsCanExecute();
-            }
-            else if (SelectedImage != null)
+            if (IsSequentialNavigationEnabled && SelectedImage != null)
             {
                 _ = PrefetchAdjacentImagesAsync();
                 SetImages([]);
@@ -357,7 +352,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             _deferMarkerSynchronization = false;
             UpdateCameraMarkers();
-            SynchronizeMarkers();
             UpdateVisibleFootprints();
             ChangeNavigationCommandsCanExecute();
         }
@@ -425,16 +419,14 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         SequentialNavigationError = null;
         try
         {
-            _adjacentImagesFetchTask = Task.WhenAll(
+            await Task.WhenAll(
                 PrefetchAdjacentImageAsync(OrientedImageryLayer, SelectedImage, SequenceStep.Next, navigationVersion, cancellation.Token),
                 PrefetchAdjacentImageAsync(OrientedImageryLayer, SelectedImage, SequenceStep.Previous, navigationVersion, cancellation.Token));
-            await _adjacentImagesFetchTask;
         }
         finally
         {
             if (navigationVersion == _sequentialNavigationVersion)
             {
-                _adjacentImagesFetchTask = null;
                 _adjacentImagesCancellation = null;
                 _isFetchingAdjacentImage = false;
             }
@@ -496,7 +488,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _sequentialNavigationVersion++;
         _adjacentImagesCancellation?.Cancel();
         _adjacentImagesCancellation = null;
-        _adjacentImagesFetchTask = null;
         _isFetchingAdjacentImage = false;
         _nextSequentialImage = null;
         _previousSequentialImage = null;
