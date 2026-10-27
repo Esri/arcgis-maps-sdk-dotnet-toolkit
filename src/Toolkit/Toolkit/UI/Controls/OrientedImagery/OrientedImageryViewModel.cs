@@ -43,6 +43,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         SearchPointMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 15) { Outline = symbolOutline };
         AllCamerasMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.FromArgb(200,0,0,255), 15) { Outline = symbolOutline };
         SelectedCameraMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 15) { Outline = symbolOutline };
+        NoImageMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.LightGray, 12)
+        {
+            Outline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Black, 1)
+        };
 
         _images = new List<OrientedImage>();
         _readOnlyImages = _images.AsReadOnly();
@@ -718,6 +722,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public MarkerSymbol SearchPointMarkerSymbol { get; set; }
 
     /// <summary>
+    /// Gets or sets the symbol to use when a location with no images is tapped while in <see cref="OrientedImageryViewInteractionState.DisplayImage"/>.
+    /// </summary>
+    public Symbol NoImageMarkerSymbol { get; set; }
+
+    /// <summary>
     /// Gets or sets the symbol to use for the current camera marker.
     /// </summary>
     public MarkerSymbol SelectedCameraMarkerSymbol { get; set; }
@@ -824,7 +833,10 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         if (location != null)
         {
-            _managedMarkers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), SearchPointMarkerSymbol) { Tag = SearchPointMarkerTag });
+            _managedMarkers.Add(new OrientedImageMarker(
+                OrientedImageMarkerPosition.FromLocation(location),
+                InteractionState != OrientedImageryViewInteractionState.DisplayImage ? SearchPointMarkerSymbol : NoImageMarkerSymbol
+                ) { Tag = SearchPointMarkerTag });
         }
         SynchronizeMarkers();
     }
