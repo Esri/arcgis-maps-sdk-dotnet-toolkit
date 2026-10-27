@@ -898,6 +898,8 @@
                                                 MaxWidth="400"
                                                 TextElement.FontSize="18"
                                                 TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
+
+                                        <!-- Prompt when no image selected, but a tap has been attempted -->
                                         <TextBlock TextAlignment="Center" TextWrapping="Wrap" Margin="0,0,0,6">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
@@ -910,34 +912,82 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
-                                            <TextBlock.Style>
-                                                <Style TargetType="{x:Type TextBlock}">
+
+                                        <!-- User prompts before the user has attempted to select any images -->
+                                        <ContentControl Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}"
+                                                        Focusable="False">
+                                            <ContentControl.Style>
+                                                <Style TargetType="{x:Type ContentControl}">
+                                                    <Setter Property="ContentTemplate">
+                                                        <Setter.Value>
+                                                            <!-- Default prompt: prompt user to enable one of the image searech interaction modes if currently in None state -->
+                                                            <DataTemplate>
+                                                                <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
+                                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewEnableImageSelection}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                        <Viewbox Width="24" Height="24" Margin="4,0">
+                                                                            <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
+                                                                                            ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                                        </Viewbox>
+                                                                    </InlineUIContainer><Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionOr}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                        <Viewbox Width="24" Height="24" Margin="4,0">
+                                                                            <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}"
+                                                                                            ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                                        </Viewbox>
+                                                                    </InlineUIContainer>
+                                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMode}" />
+                                                                </TextBlock>
+                                                            </DataTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
                                                     <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.FindImages}">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <!-- Prompt when in Find mode -->
+                                                                    <DataTemplate>
+                                                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionFindImages}" />
+                                                                            <LineBreak />
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSwitchMode}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                                <Viewbox Width="24" Height="24" Margin="4,0">
+                                                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}"
+                                                                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                                                </Viewbox>
+                                                                            </InlineUIContainer>
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
+                                                                        </TextBlock>
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <!-- Prompt when in Display mode -->
+                                                                    <DataTemplate>
+                                                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionDisplayImage}" />
+                                                                            <LineBreak />
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSwitchMode}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                                <Viewbox Width="24" Height="24" Margin="4,0">
+                                                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
+                                                                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                                                </Viewbox>
+                                                                            </InlineUIContainer>
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
+                                                                        </TextBlock>
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
                                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HasSearchedForImages}" Value="True">
                                                             <Setter Property="Visibility" Value="Collapsed" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </TextBlock.Style>
-                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMap}" />
-                                            <LineBreak />
-                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionUsing}" />
-                                            <InlineUIContainer BaselineAlignment="Center">
-                                                <Viewbox Width="24" Height="24" Margin="4,0">
-                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
-                                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
-                                                </Viewbox>
-                                            </InlineUIContainer>
-                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionOr}" />
-                                            <InlineUIContainer BaselineAlignment="Center">
-                                                <Viewbox Width="24" Height="24" Margin="4,0">
-                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}"
-                                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
-                                                </Viewbox>
-                                            </InlineUIContainer>
-                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
-                                        </TextBlock>
+                                            </ContentControl.Style>
+                                        </ContentControl>
                                     </StackPanel>
                                 </Border>
 
