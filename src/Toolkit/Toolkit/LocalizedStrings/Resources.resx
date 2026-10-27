@@ -1117,57 +1117,29 @@
     <value>Show unselected image footprints</value>
     <comment>Tooltip for the OrientedImageryView button that shows unselected image footprints.</comment>
   </data>
-  <data name="OrientedImageryViewSelectedFootprintAutomationName" xml:space="preserve">
-    <value>Selected image footprint</value>
-    <comment>Name for the footprint toggle. Assistive technology announces its on/off state separately.</comment>
-  </data>
-  <data name="OrientedImageryViewCameraLocationsAutomationName" xml:space="preserve">
-    <value>Camera locations on GeoView</value>
-    <comment>Name for the camera locations toggle. Assistive technology announces its on/off state separately.</comment>
-  </data>
-  <data name="OrientedImageryViewUnselectedFootprintsAutomationName" xml:space="preserve">
-    <value>Unselected image footprints</value>
-    <comment>Name for the footprints toggle. Assistive technology announces its on/off state separately.</comment>
-  </data>
-  <data name="OrientedImageryViewAddMarkersAutomationName" xml:space="preserve">
-    <value>Mark location</value>
-    <comment>Name for the marker-creation toggle. Assistive technology announces its on/off state separately.</comment>
-  </data>
-  <data name="OrientedImageryViewSwitchToFindImages" xml:space="preserve">
-    <value>Switch to find images mode</value>
-    <comment>Tooltip for the button that switches from image selection to image search mode.</comment>
-  </data>
-  <data name="OrientedImageryViewSwitchToDisplayImage" xml:space="preserve">
-    <value>Switch to display image mode</value>
-    <comment>Tooltip for the button that switches from image search to image selection mode.</comment>
-  </data>
   <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
     <value>Image search mode</value>
     <comment>Tooltip for the image search mode selector.</comment>
   </data>
   <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
     <value>Current Footprint</value>
+    <comment>Toolbar label and automation name for the selected image footprint toggle.</comment>
   </data>
   <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
     <value>Additional Footprints</value>
+    <comment>Toolbar label and automation name for the unselected image footprints toggle.</comment>
   </data>
   <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
     <value>Camera Locations</value>
+    <comment>Toolbar label and automation name for the camera locations toggle.</comment>
   </data>
-  <data name="OrientedImageryViewPopupLabel" xml:space="preserve">
-    <value>Image Details</value>
-  </data>
-  <data name="OrientedImageryViewAddMarkerLabel" xml:space="preserve">
-    <value>Mark location</value>
-  </data>
-  <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
-    <value>Select Symbol</value>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>Add markers</value>
+    <comment>Also serves as the control's automation name</comment>
   </data>
   <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
-    <value>Clear Markers</value>
-  </data>
-  <data name="EnterSequentialNavigationModeLabel" xml:space="preserve">
-    <value>Sequential navigation</value>
+    <value>Clear markers</value>
+    <comment>Toolbar label, tooltip, and automation name for the button that clears markers.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
     <value>Find images</value>
@@ -1193,17 +1165,9 @@
     <value>Image {0} of {1}, selected</value>
     <comment>Selected pagination button automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
   </data>
-  <data name="OrientedImageryViewShowCameraMarkersOnGeoView" xml:space="preserve">
-    <value>Show camera markers on GeoView</value>
-    <comment>Tooltip for the OrientedImageryView button when camera markers can be shown on the GeoView.</comment>
-  </data>
-  <data name="OrientedImageryViewHideCameraMarkers" xml:space="preserve">
-    <value>Hide camera markers on GeoView</value>
-    <comment>Tooltip for the OrientedImageryView button when camera markers are visible on the GeoView.</comment>
-  </data>
-  <data name="OrientedImageryViewClearMarkers" xml:space="preserve">
-    <value>Clear markers</value>
-    <comment>Tooltip for the OrientedImageryView button that clears markers.</comment>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>Toggle camera locations on GeoView</value>
+    <comment>Tooltip for the OrientedImageryView button that shows or hides camera locations.</comment>
   </data>
   <data name="OrientedImageryViewEnterSequentialNavigation" xml:space="preserve">
     <value>Enter sequential navigation</value>
@@ -1214,8 +1178,8 @@
     <comment>Tooltip for the OrientedImageryView button that returns from sequential navigation.</comment>
   </data>
   <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
-    <value>Seq.Navigation</value>
-    <comment>Underlined label between the previous and next image buttons in sequential navigation mode.</comment>
+    <value>Sequential navigation</value>
+    <comment>Toolbar label and automation name for the sequential navigation toggle. The automation name changes to Return to results while sequential navigation is active.</comment>
   </data>
   <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
     <value>Previous image</value>
