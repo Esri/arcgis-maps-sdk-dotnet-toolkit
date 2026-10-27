@@ -31,7 +31,10 @@ public partial class OrientedImageryView
         if (mode.IsImageSelectionEnabled && mode.SelectedInteractionState == state)
             mode.IsImageSelectionEnabled = false;
         else
+        {
             mode.SelectedInteractionState = state;
+            mode.IsImageSelectionEnabled = true;
+        }
     }
 
     internal void SetAddingMarkers(bool enabled)
@@ -378,6 +381,9 @@ public partial class OrientedImageryView
         switch (item)
         {
             case ImageSearchModeVM mode:
+#if ANDROID
+                AddAndroidModeSegments(content, mode, Enabled);
+#else
                 foreach (var state in mode.ImageSearchModes)
                 {
                     bool search = state == OrientedImageryViewInteractionState.FindImages;
@@ -385,6 +391,7 @@ public partial class OrientedImageryView
                         () => ToggleImageMode(mode, state), Icon: () => ImageModeIcon(search),
                         Checked: () => ViewModel.InteractionState == state, Enabled: Enabled));
                 }
+#endif
                 break;
             case ShowSelectedFootprintVM:
                 AddSwitch(content, "MobileCurrentFootprint", () => ViewModel.ShowSelectedFootprint, value => ViewModel.ShowSelectedFootprint = value, () => FootprintIcon(false), Enabled);
