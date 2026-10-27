@@ -8,8 +8,61 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = ImageViewportName, Type = typeof(OrientedImageViewport))]
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
 [TemplatePart(Name = PaginatorName, Type = typeof(OrientedImageryPaginator))]
+[TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
+    private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
+
+    private void FocusCloseDetailsButton()
+    {
+        if (ViewModel.SelectedImagePopup == null)
+            return;
+
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            if (ViewModel.SelectedImagePopup != null &&
+                GetTemplateChild(CloseDetailsButtonName) is Button { Visibility: Visibility.Visible, IsEnabled: true } button)
+            {
+                button.Focus(FocusState.Programmatic);
+            }
+        });
+    }
+
+    private void UpdateViewState_WinUI()
+    {
+        // WinUI x:Bind doesn't update when properties are set to null. This is a workaround until the following fix PR hits release: https://github.com/microsoft/microsoft-ui-xaml/pull/11732
+        HasViewError = ErrorMessage != null;
+        IsImageDetailsOpen = ViewModel.SelectedImagePopup != null;
+        HasSequentialNavigationError = ViewModel.SequentialNavigationError != null;
+    }
+
+    internal bool HasViewError
+    {
+        get => (bool)GetValue(HasViewErrorProperty);
+        private set => SetValue(HasViewErrorProperty, value);
+    }
+
+    internal static readonly DependencyProperty HasViewErrorProperty =
+        DependencyProperty.Register(nameof(HasViewError), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
+
+    internal bool IsImageDetailsOpen
+    {
+        get => (bool)GetValue(IsImageDetailsOpenProperty);
+        private set => SetValue(IsImageDetailsOpenProperty, value);
+    }
+
+    internal static readonly DependencyProperty IsImageDetailsOpenProperty =
+        DependencyProperty.Register(nameof(IsImageDetailsOpen), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
+
+    internal bool HasSequentialNavigationError
+    {
+        get => (bool)GetValue(HasSequentialNavigationErrorProperty);
+        private set => SetValue(HasSequentialNavigationErrorProperty, value);
+    }
+
+    internal static readonly DependencyProperty HasSequentialNavigationErrorProperty =
+        DependencyProperty.Register(nameof(HasSequentialNavigationError), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
+
     private long _isBusyCallbackToken;
     private long _isInteractiveCallbackToken;
     private long _errorCallbackToken;

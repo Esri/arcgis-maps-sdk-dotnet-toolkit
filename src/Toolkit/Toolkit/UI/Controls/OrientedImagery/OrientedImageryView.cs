@@ -33,9 +33,7 @@ public partial class OrientedImageryView
         _onImageTapped = OnImageTapped_Default;
         _onGeoViewTapped = GeoViewTapped_Default;
 
-#if WPF
         UpdateErrorMessage();
-#endif
 
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -74,9 +72,7 @@ public partial class OrientedImageryView
 
         RewireViewModel();
         UpdatePaginatorSelection();
-#if WPF
         FocusCloseDetailsButton();
-#endif
     }
 
 #region ViewModel
@@ -122,10 +118,8 @@ public partial class OrientedImageryView
         }
 
         RewireViewModel();
-#if WPF
         UpdateErrorMessage();
         UpdatePaginatorSelection();
-#endif
     }
 
     private void RewireViewModel()
@@ -159,13 +153,17 @@ public partial class OrientedImageryView
                 break;
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
                 HasSearchedForImages = false;
-#if WPF
                 UpdateErrorMessage();
-#endif
                 break;
-#if WPF
             case nameof(OrientedImageryViewModel.SelectedImagePopup):
+#if WINDOWS_XAML
+                UpdateViewState_WinUI();
+#endif
                 FocusCloseDetailsButton();
+                break;
+#if WINDOWS_XAML
+            case nameof(OrientedImageryViewModel.SequentialNavigationError):
+                UpdateViewState_WinUI();
                 break;
 #endif
         }
@@ -362,9 +360,7 @@ public partial class OrientedImageryView
             newGeoView.GeoViewTapped += GeoView_GeoViewTapped;
         }
 
-#if WPF
         UpdateErrorMessage();
-#endif
     }
 
     /// <summary>
@@ -546,6 +542,9 @@ public partial class OrientedImageryView
             ErrorMessage = Properties.Resources.GetString(NoLayerSelectedKey);
         else
             ErrorMessage = null;
+#if WINDOWS_XAML
+        UpdateViewState_WinUI();
+#endif
     }
 #endregion Error
 }
