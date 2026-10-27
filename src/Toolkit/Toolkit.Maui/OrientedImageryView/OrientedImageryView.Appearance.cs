@@ -38,8 +38,10 @@ public partial class OrientedImageryView
     private string? _lastNotice;
     private readonly List<Action> _panelUpdates = new();
     private readonly List<Action> _panelCleanup = new();
+#if !ANDROID
     private Border? _panel;
     private Grid? _panelBackdrop;
+#endif
     private bool _updatingPanel;
 #if !WINDOWS
     private bool _showingSymbols;
@@ -211,6 +213,9 @@ public partial class OrientedImageryView
         image.Add(open);
         Grid.SetColumnSpan(open, image.ColumnDefinitions.Count == 0 ? 1 : image.ColumnDefinitions.Count);
 
+#if ANDROID
+        scope.RegisterName("PART_Popup", new PopupViewer { AutomationId = "OrientedImageryPopupViewer" });
+#else
         var host = new Grid
         {
             IsVisible = false,
@@ -262,6 +267,7 @@ public partial class OrientedImageryView
         var border = new Border { Content = surface, StrokeThickness = 1 };
         border.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#444444"));
         host.Add(border, 1);
+#endif
     }
 
     private static void AddStatusPresentation(Grid image, INameScope scope)
@@ -450,10 +456,17 @@ public partial class OrientedImageryView
     {
         ObservePresentationPage();
         AttachBackNavigation();
+#if ANDROID
+        RefreshAndroidPopup();
+#endif
     }
 
     private void PresentationUnloaded(object? sender, EventArgs e)
     {
+#if ANDROID
+        DismissPanel();
+        DismissAndroidPopup();
+#endif
         SetPresentationPage(null);
         DetachBackNavigation();
     }
@@ -496,6 +509,9 @@ public partial class OrientedImageryView
         ReleaseDesktopTemplate();
 #endif
         DismissPanel();
+#if ANDROID
+        DismissAndroidPopup();
+#endif
         ReleaseToolbarPresentation();
         if (_panelHost != null) _panelHost.SizeChanged -= PanelHostSizeChanged;
         if (_toolbarScroll != null) _toolbarScroll.Scrolled -= ToolbarScrolled;
@@ -663,6 +679,9 @@ public partial class OrientedImageryView
             _popupOpenButton.Command = ViewModel.OpenSelectedImagePopupCommand;
             _popupOpenButton.IsVisible = ViewModel.SelectedImage != null && !showingPopup;
         }
+#if ANDROID
+        RefreshAndroidPopup();
+#endif
         if (_popupViewer != null)
         {
             _popupViewer.Popup = ViewModel.SelectedImagePopup;
@@ -997,7 +1016,7 @@ public partial class OrientedImageryView
 #if !WINDOWS
     private void ShowSymbols(View anchor, SelectNewMarkerSymbolVM picker, Action back)
     {
-        DismissPanel();
+        DismissPanel(preservePresentation: true);
         _showingSymbols = true;
         var actions = picker.SymbolOptions.Select((symbol, index) =>
             new MenuAction(MarkerOptionName(symbol, index), () => { picker.SelectedSymbol = symbol; back(); },
@@ -1007,7 +1026,13 @@ public partial class OrientedImageryView
         _symbolGrid = new Grid { ColumnSpacing = 4, RowSpacing = 0 };
         foreach (var action in actions)
         {
-            var guarded = GuardAction(action);
+            var guarded = GuardAction(action,
+#if ANDROID
+                dismiss: false
+#else
+                dismiss: true
+#endif
+            );
             var button = new Button
             {
                 BackgroundColor = Colors.Transparent, BorderWidth = 0, Padding = 0,
@@ -1086,6 +1111,10 @@ public partial class OrientedImageryView
         icon.InputTransparent = true;
         row.Add(FlyoutIcon(icon));
         var title = new Label { Text = action.Title, VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.WordWrap, InputTransparent = true };
+#if ANDROID
+        title.FontSize = 16;
+        row.MinimumHeightRequest = 56;
+#endif
         title.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
 #if __IOS__ && !MACCATALYST
         title.FontSize = 15;
@@ -1143,6 +1172,10 @@ public partial class OrientedImageryView
     {
         var row = new Grid { ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }, ColumnSpacing = 6 };
         var label = new Label { Text = Text(key), VerticalOptions = LayoutOptions.Center };
+#if ANDROID
+        label.FontSize = 16;
+        row.MinimumHeightRequest = 56;
+#endif
         label.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
         var toggle = new Switch { IsToggled = get(), MinimumHeightRequest = 44, AutomationId = "OrientedImagery" + key };
 #if __IOS__ && !MACCATALYST
@@ -1190,10 +1223,14 @@ public partial class OrientedImageryView
     private static void AddPanelItem(VerticalStackLayout content, View item)
     {
 #if ANDROID
-        if (content.Children.Count > 1)
-            content.Add(PanelDivider());
-#endif
-#if __IOS__ && !MACCATALYST
+        var group = new Border
+        {
+            Content = item, StrokeThickness = 0, Margin = new Thickness(0, 4),
+            StrokeShape = new RoundRectangle { CornerRadius = 16 }, Padding = new Thickness(12, 4),
+        };
+        group.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F0EAF4"), Color.FromArgb("#36313C"));
+        content.Add(group);
+#elif __IOS__ && !MACCATALYST
         var group = new Border
         {
             Content = item, StrokeThickness = 0,
@@ -1218,6 +1255,9 @@ public partial class OrientedImageryView
 
     private void PresentPanel(View anchor, VerticalStackLayout content, Action? back = null)
     {
+#if ANDROID
+        PresentAndroidPanel(anchor, content, back);
+#else
         if (_panelHost == null) return;
         _panelAnchor = anchor;
         UpdateToolHighlights();
@@ -1289,6 +1329,7 @@ public partial class OrientedImageryView
         _panelHost.IsVisible = true;
         UpdateOpenPanel();
         SemanticScreenReader.Default.Announce(heading.Text);
+#endif
     }
 #endif
 
@@ -1298,6 +1339,10 @@ public partial class OrientedImageryView
 
     private void UpdatePanelSize()
     {
+#if ANDROID
+        UpdateAndroidPanelSize();
+        return;
+#else
         if (_panelHost == null || _panelLayout == null || _panelScroll == null || _panel == null || _panelAnchor == null) return;
         double x = 0, y = _panelAnchor.Height;
         Element? element = _panelAnchor;
@@ -1331,6 +1376,7 @@ public partial class OrientedImageryView
         double headingHeight = _panelLayout.Children[0].Measure(width, double.PositiveInfinity).Height;
         _panelScroll.MaximumHeightRequest = Math.Max(0,
             _panelHost.Height - y - 4 - _panelLayout.Padding.VerticalThickness - headingHeight);
+#endif
     }
 
 #if !WINDOWS
@@ -1382,8 +1428,11 @@ public partial class OrientedImageryView
         return open;
     }
 
-    private void DismissPanel()
+    private void DismissPanel(bool preservePresentation = false)
     {
+#if ANDROID
+        DismissAndroidPanel(preservePresentation);
+#endif
 #if __IOS__ && !MACCATALYST
         if (_panel?.Content is Grid surface)
             surface.Children.OfType<IosPanelMaterial>().FirstOrDefault()?.Dispose();
@@ -1395,8 +1444,10 @@ public partial class OrientedImageryView
 #if !WINDOWS
         _showingSymbols = false;
 #endif
+#if !ANDROID
         _panel = null;
         _panelBackdrop = null;
+#endif
         _panelScroll = null;
         _panelLayout = null;
 #if !WINDOWS
@@ -1412,7 +1463,11 @@ public partial class OrientedImageryView
         _panelAnchor = null;
         UpdateToolHighlights();
         UpdateBackNavigation();
+#if ANDROID
+        if (!preservePresentation && anchor?.IsLoaded == true) anchor.Focus();
+#else
         anchor?.Focus();
+#endif
     }
 
     private void UpdateToolHighlights()
