@@ -472,8 +472,8 @@
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowSelectedFootprint}"
-                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}"
-                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectedFootprintAutomationName}">
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}">
             <ToggleButton.Style>
                 <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
                     <Style.Triggers>
@@ -499,8 +499,8 @@
     <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowUnselectedFootprints}"
                       Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
-                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}"
-                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewUnselectedFootprintsAutomationName}">
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAdditionalFootprintsLabel}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedImageFootprints}">
             <StackPanel>
                 <Viewbox SnapsToDevicePixels="true" Width="32" Height="32" Stretch="Uniform">
                     <Grid Width="32" Height="32">
@@ -518,8 +518,8 @@
     <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="controls:ShowCameraMarkersVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowCameraLocations, Mode=TwoWay}"
                       Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
-                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}"
-                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsAutomationName}">
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsLabel}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleCameraMarkers}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
                     <Grid Width="32" Height="32">
@@ -546,8 +546,8 @@
         <ToggleButton IsChecked="{Binding  IsAddingMarkersEnabled}"
                       MinWidth="0" Padding="0,4"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
-                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}"
-                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewAddMarkersAutomationName}">
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersLabel}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
                     <TextBlock Text="&#xe8ed;"
@@ -555,7 +555,7 @@
                                FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" />
                 </Viewbox>
-                <TextBlock Width="48" Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkerLabel}" />
+                <TextBlock Width="48" Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkersLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
@@ -705,8 +705,8 @@
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
         <Button Style="{StaticResource ToolbarLabeledButtonStyle}"
                 Command="{Binding ViewModel.ClearMarkersCommand}"
-                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}"
-                ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkers}">
+                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}"
+                ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}">
             <StackPanel>
                 <Viewbox Width="28" Height="28" Stretch="Uniform">
                     <TextBlock Text="&#xeb04;"
@@ -726,7 +726,7 @@
             <ToggleButton.Style>
                 <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
                     <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
-                    <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
+                    <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationLabel}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
                             <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
@@ -741,7 +741,7 @@
                       Stretch="Uniform"
                       Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
                       Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z" />
-                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=EnterSequentialNavigationModeLabel}" />
+                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
