@@ -9,7 +9,7 @@ internal sealed partial class OrientedImageryToolbarPanel : Panel
         double width = 0, height = 0, rowWidth = 0, rowHeight = 0;
         foreach (var child in Children)
         {
-            child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            child.Measure(new Size(availableSize.Width, double.PositiveInfinity));
             var size = child.DesiredSize;
             if (rowWidth > 0 && rowWidth + size.Width > availableSize.Width)
             {
@@ -20,7 +20,7 @@ internal sealed partial class OrientedImageryToolbarPanel : Panel
             rowWidth += size.Width;
             rowHeight = Math.Max(rowHeight, size.Height);
         }
-        return new Size(double.IsInfinity(availableSize.Width) ? Math.Max(width, rowWidth) : availableSize.Width, height + rowHeight);
+        return new Size(Math.Max(width, rowWidth), height + rowHeight);
     }
 
     protected override Size ArrangeOverride(Size finalSize)
