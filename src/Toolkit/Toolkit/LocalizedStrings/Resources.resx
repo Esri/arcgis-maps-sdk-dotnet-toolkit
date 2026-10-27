@@ -1226,27 +1226,23 @@ Image</value>
   </data>
   <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
     <value>Current Footprint</value>
+    <comment>Toolbar label and automation name for the selected image footprint toggle.</comment>
   </data>
   <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
     <value>Additional Footprints</value>
+    <comment>Toolbar label and automation name for the unselected image footprints toggle.</comment>
   </data>
   <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
     <value>Camera Locations</value>
+    <comment>Toolbar label and automation name for the camera locations toggle.</comment>
   </data>
-  <data name="OrientedImageryViewPopupLabel" xml:space="preserve">
-    <value>Image Details</value>
-  </data>
-  <data name="OrientedImageryViewAddMarkerLabel" xml:space="preserve">
-    <value>Mark location</value>
-  </data>
-  <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
-    <value>Select Symbol</value>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>Add markers</value>
+    <comment>Also serves as the control's automation name</comment>
   </data>
   <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
-    <value>Clear Markers</value>
-  </data>
-  <data name="EnterSequentialNavigationModeLabel" xml:space="preserve">
-    <value>Sequential navigation</value>
+    <value>Clear markers</value>
+    <comment>Toolbar label, tooltip, and automation name for the button that clears markers.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
     <value>Find images</value>
