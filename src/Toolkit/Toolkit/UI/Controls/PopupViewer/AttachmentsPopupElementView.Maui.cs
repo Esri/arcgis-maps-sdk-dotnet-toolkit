@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+#nullable enable
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Globalization;
@@ -59,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             rootcaption.SetBinding(Label.TextProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
             SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
 #endif
 #if WINDOWS
@@ -95,8 +96,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             };
 #endif
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (AttachmentsPopupElementView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
-#if WINDOWS
+#if WINDOWS || __ANDROID__
             cv.SetBinding(SemanticProperties.DescriptionProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
+#endif
+#if WINDOWS
             cv.HandlerChanged += AttachmentList_HandlerChanged;
             cv.HandlerChanging += AttachmentList_HandlerChanging;
 #endif
@@ -126,8 +129,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.SetBinding(Grid.BindingContextProperty, static (PopupAttachment attachment) => attachment, converter: AttachmentViewModelConverter.Instance);
+#if __ANDROID__
+            // Name the tappable grid without hiding its native collection ancestors.
+            layout.SetBinding(SemanticProperties.DescriptionProperty, static (AttachmentViewModel vm) => vm.AccessibilityDescription);
+#endif
             Image image = new Image() { WidthRequest = 24, HeightRequest = 24, HorizontalOptions = LayoutOptions.Start, Aspect = Aspect.Fill };
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
             AutomationProperties.SetIsInAccessibleTree(image, false);
 #endif
             layout.Add(image);
@@ -136,7 +143,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Label name = new Label() { VerticalOptions = LayoutOptions.End };
             name.SetBinding(Label.TextProperty, static (AttachmentViewModel vm) => vm.Name);
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
             AutomationProperties.SetIsInAccessibleTree(name, false);
 #endif
             Grid.SetColumn(name, 1);
@@ -144,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Label size = new Label() { VerticalOptions = LayoutOptions.Start, TextColor = Colors.Gray, FontSize = 12 };
             size.SetBinding(Label.TextProperty, static (AttachmentViewModel vm) => vm.Size);
-#if __IOS__
+#if __IOS__ || __ANDROID__
             AutomationProperties.SetIsInAccessibleTree(size, false);
 #endif
             Grid.SetColumn(size, 1);
@@ -152,7 +159,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(size);
 
             Image image2 = new Image() { WidthRequest = 18, HeightRequest = 18 };
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
             AutomationProperties.SetIsInAccessibleTree(image2, false);
 #endif
             image2.SetBinding(Image.IsVisibleProperty, static (AttachmentViewModel vm) => vm.IsDownloadButtonVisible);
@@ -164,7 +171,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             ActivityIndicator indicator = new ActivityIndicator() { WidthRequest = 24, HeightRequest = 24, IsRunning = true };
 #if WINDOWS
             SemanticProperties.SetDescription(indicator, Properties.Resources.GetString("PopupViewerAttachmentDownloading"));
-#elif __IOS__
+#elif __IOS__ || __ANDROID__
             AutomationProperties.SetIsInAccessibleTree(indicator, false);
 #endif
             indicator.SetBinding(ActivityIndicator.IsRunningProperty, static (AttachmentViewModel vm) => vm.IsDownloading);
@@ -259,7 +266,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             public string Name => Attachment.Name;
 
-#if __IOS__
+#if __IOS__ || __ANDROID__
             public string AccessibilityDescription => IsDownloading
                 ? $"{Name}, {Size}, {Properties.Resources.GetString("PopupViewerAttachmentDownloading")}"
                 : $"{Name}, {Size}";
@@ -285,7 +292,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     OnPropertyChanged(nameof(IsDownloadButtonVisible));
                     OnPropertyChanged(nameof(IsDownloading));
-#if __IOS__
+#if __IOS__ || __ANDROID__
                     OnPropertyChanged(nameof(AccessibilityDescription));
 #endif
                     if (Attachment.LoadStatus == LoadStatus.Loaded)
