@@ -57,6 +57,20 @@ public partial class OrientedImageryView
 
     private static string Text(string key) => Properties.Resources.GetString("OrientedImageryView" + key);
 
+    internal static string MarkerOptionName(MarkerSymbol symbol, int index)
+    {
+        string? key = symbol is SimpleMarkerSymbol simple ? simple.Style switch
+        {
+            SimpleMarkerSymbolStyle.Circle => "Circle",
+            SimpleMarkerSymbolStyle.Square => "Square",
+            SimpleMarkerSymbolStyle.Triangle => "Triangle",
+            SimpleMarkerSymbolStyle.Diamond => "Diamond",
+            SimpleMarkerSymbolStyle.X => "X",
+            _ => null,
+        } : null;
+        return key != null ? Text("Marker" + key) : string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), index + 1);
+    }
+
     private static readonly ControlTemplate DefaultControlTemplate =
 #if WINDOWS
         new(CreateDesktopTemplate);
@@ -312,6 +326,7 @@ public partial class OrientedImageryView
         Grid.SetColumnSpan(host, Math.Max(1, image.ColumnDefinitions.Count));
     }
 
+#if !WINDOWS
     private static Button MobileImageArrow(bool next)
     {
         var button = ToolButton(next ? "NextLabel" : "PreviousLabel", "",
@@ -330,6 +345,7 @@ public partial class OrientedImageryView
         button.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
         return button;
     }
+#endif
 
     private static Button ToolButton(string key, string glyph, string automationId)
     {
@@ -862,8 +878,10 @@ public partial class OrientedImageryView
         Refresh();
     }
 
+#if !WINDOWS
     private sealed record MenuAction(string Title, Action Execute, Func<bool> Enabled, Func<View> Icon,
         Func<bool>? Checked = null, bool IsSubmenu = false);
+#endif
 
     internal const string CurrentFootprintGeometry = "F1 M9.16358 0L7.67295 0L0 0L4.5818 7.6L11.4546 19H16.5455L28 0H9.16358Z M15.8314 17.7333H12.1686L2.26954 1.26667H25.7305L15.8314 17.7333Z";
 
@@ -906,13 +924,14 @@ public partial class OrientedImageryView
         };
     }
 
+    private static View ImageModeIcon(bool explore) =>
+        MenuIcon(null, explore ? ExploreImagesGeometry : DisplayImageGeometry);
+
+#if !WINDOWS
     private static View MarkerOptionIcon(MarkerSymbol symbol) =>
         new SymbolDisplay { Symbol = symbol, WidthRequest = 24, HeightRequest = 24, VerticalOptions = LayoutOptions.Center };
 
     private View FootprintIcon(bool additional) => MenuIcon(null, additional ? OverlayGeometry : CurrentFootprintGeometry);
-
-    private static View ImageModeIcon(bool explore) =>
-        MenuIcon(null, explore ? ExploreImagesGeometry : DisplayImageGeometry);
 
     private View CameraLocationsIcon()
     {
@@ -953,6 +972,7 @@ public partial class OrientedImageryView
         DismissPanel();
         return true;
     }
+#endif
 
     private void UpdateOpenPanel()
     {
@@ -980,21 +1000,9 @@ public partial class OrientedImageryView
         DismissPanel();
         _showingSymbols = true;
         var actions = picker.SymbolOptions.Select((symbol, index) =>
-        {
-            string? key = symbol is SimpleMarkerSymbol simple ? simple.Style switch
-            {
-                SimpleMarkerSymbolStyle.Circle => "Circle",
-                SimpleMarkerSymbolStyle.Square => "Square",
-                SimpleMarkerSymbolStyle.Triangle => "Triangle",
-                SimpleMarkerSymbolStyle.Diamond => "Diamond",
-                SimpleMarkerSymbolStyle.X => "X",
-                _ => null,
-            } : null;
-            string title = key != null ? Text("Marker" + key) : string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), index + 1);
-            return new MenuAction(title, () => { picker.SelectedSymbol = symbol; back(); },
+            new MenuAction(MarkerOptionName(symbol, index), () => { picker.SelectedSymbol = symbol; back(); },
                 Checked: () => symbol == picker.SelectedSymbol, Enabled: () => IsAddingMarkers,
-                Icon: () => MarkerOptionIcon(symbol));
-        }).ToArray();
+                Icon: () => MarkerOptionIcon(symbol))).ToArray();
         var content = PanelContent(Text("MarkerSelection"));
         _symbolGrid = new Grid { ColumnSpacing = 4, RowSpacing = 0 };
         foreach (var action in actions)
@@ -1042,7 +1050,6 @@ public partial class OrientedImageryView
         picker.SymbolOptions.CollectionChanged += optionsChanged;
         _panelCleanup.Add(() => picker.SymbolOptions.CollectionChanged -= optionsChanged);
     }
-#endif
 
     private MenuAction GuardAction(MenuAction action, bool dismiss = true)
     {
@@ -1068,11 +1075,8 @@ public partial class OrientedImageryView
         var row = new Grid
         {
             ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(28) },
-            ColumnSpacing = 6, Padding = new Thickness(4, 2), MinimumHeightRequest = 44,
+            ColumnSpacing = 6, Padding = new Thickness(4, 0), MinimumHeightRequest = 44,
         };
-#if !WINDOWS
-        row.Padding = new Thickness(4, 0);
-#endif
         var button = new Button { BackgroundColor = Colors.Transparent, Padding = 0 };
         SemanticProperties.SetDescription(button, action.Title);
         button.Clicked += (_, _) => action.Execute();
@@ -1123,10 +1127,7 @@ public partial class OrientedImageryView
 
     private static VerticalStackLayout PanelContent(string title)
     {
-        var content = new VerticalStackLayout { Spacing = 2, Padding = 8 };
-#if !WINDOWS
-        content.Spacing = 0;
-#endif
+        var content = new VerticalStackLayout { Spacing = 0, Padding = 8 };
         var heading = new Label { Text = title, FontSize = 16, FontAttributes = FontAttributes.Bold, Margin = new Thickness(0, 0, 0, 4) };
 #if __IOS__ && !MACCATALYST
         heading.FontSize = 15;
@@ -1233,11 +1234,8 @@ public partial class OrientedImageryView
         _panelLayout = new Grid
         {
             RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Auto) },
-            Padding = 8,
+            Padding = new Thickness(8, 4),
         };
-#if !WINDOWS
-        _panelLayout.Padding = new Thickness(8, 4);
-#endif
         _panelScroll = new ScrollView { Content = content, VerticalOptions = LayoutOptions.Start };
         var header = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) } };
         header.Add(heading, 1);
@@ -1250,7 +1248,6 @@ public partial class OrientedImageryView
             backButton.Clicked += (_, _) => back();
             header.Add(backButton);
         }
-#if !WINDOWS
         header.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
         var closeButton = ToolButton("ClosePanel", "", "OrientedImageryPanelClose");
         closeButton.Text = "X";
@@ -1264,7 +1261,6 @@ public partial class OrientedImageryView
         closeButton.BorderWidth = 0;
         closeButton.Clicked += (_, _) => DismissPanel();
         header.Add(closeButton, 2);
-#endif
         _panelLayout.Add(header);
         _panelLayout.Add(_panelScroll, 0, 1);
         var panel = new Border
@@ -1294,6 +1290,7 @@ public partial class OrientedImageryView
         UpdateOpenPanel();
         SemanticScreenReader.Default.Announce(heading.Text);
     }
+#endif
 
     private void PanelHostSizeChanged(object? sender, EventArgs e) => UpdatePanelSize();
 

@@ -240,6 +240,15 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
 
     public void Refresh()
     {
+        if (((IElementHandler)this).VirtualView is not DesktopImageryBar view) return;
+        if (view.Dispatcher.IsDispatchRequired)
+        {
+            view.Dispatcher.Dispatch(() =>
+            {
+                if (view.Handler == this) Refresh();
+            });
+            return;
+        }
         if (_rendering || VirtualView.Owner == null) return;
         _rendering = true;
         try
@@ -555,8 +564,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             foreach (var symbol in symbols)
             {
                 var image = new Microsoft.UI.Xaml.Controls.Image { Width = 32, Height = 32 };
-                string name = symbol is SimpleMarkerSymbol simple ? Text("Marker" + simple.Style) :
-                    string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), combo.Items.Count + 1);
+                string name = OrientedImageryView.MarkerOptionName(symbol, combo.Items.Count);
                 var item = new ComboBoxItem
                 {
                     Content = image, Padding = new NativeThickness(4),

@@ -1304,7 +1304,7 @@ navigation</value>
     <comment>First line of the no-image-selected instruction, followed by 'using [Search icon] or [Examine icon] mode'.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionInstructions" xml:space="preserve">
-    <value>Select Explore images or Display image, then tap on the map to search.</value>
+    <value>Select Find images or Display image, then tap on the map to search.</value>
     <comment>Accessible text alternative to the icon-based no-image-selected instructions in MAUI.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionFindMap" xml:space="preserve">
@@ -1324,8 +1324,8 @@ navigation</value>
     <comment>Complete accessible description of the MAUI empty-image instructions when Find Images is enabled.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionDisplayInstructions" xml:space="preserve">
-    <value>Tap on a feature to view its image or switch to Explore images mode.</value>
-    <comment>Complete accessible description of the MAUI empty-image instructions when Display Image is enabled. Explore images is the localized name of the Find Images mode.</comment>
+    <value>Tap on a feature to view its image or switch to Find images mode.</value>
+    <comment>Complete accessible description of the MAUI empty-image instructions when Display Image is enabled.</comment>
   </data>
   <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
     <value>Connect a GeoView to view oriented imagery.</value>
@@ -1374,9 +1374,6 @@ navigation</value>
     <value>Switch between 2D map and 3D scene</value>
     <comment>Accessible description for the oriented imagery sample view switch.</comment>
   </data>
-  <data name="OrientedImageryViewSelectMode" xml:space="preserve"><value>Select Image</value></data>
-  <data name="OrientedImageryViewSearchMode" xml:space="preserve"><value>Search Images</value></data>
-  <data name="OrientedImageryViewAddMarker" xml:space="preserve"><value>Add markers</value></data>
   <data name="OrientedImageryViewMarkerSelection" xml:space="preserve"><value>Marker selection</value></data>
   <data name="OrientedImageryViewMarkerOption" xml:space="preserve"><value>Marker {0}</value></data>
   <data name="OrientedImageryViewMarkerCircle" xml:space="preserve"><value>Circle marker</value></data>
