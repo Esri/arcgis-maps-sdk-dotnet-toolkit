@@ -103,6 +103,12 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
 
     public static bool HasMultipleImages(int imageCount) => imageCount > 1;
 
+    public static string? NoImageMessage(bool hasSearched)
+        => Properties.Resources.GetString(hasSearched ? "OrientedImageryViewNoImagesFound" : "OrientedImageryViewNoImageToDisplay");
+
+    public static Visibility VisibleWhenImageSelectionDisabled(OrientedImageryViewInteractionState state)
+        => VisibleWhen(state is not (OrientedImageryViewInteractionState.FindImages or OrientedImageryViewInteractionState.DisplayImage));
+
     public static Visibility VisibleWhenFindingImages(OrientedImageryViewInteractionState state)
         => state == OrientedImageryViewInteractionState.FindImages ? Visibility.Visible : Visibility.Collapsed;
 
