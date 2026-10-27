@@ -714,12 +714,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// <summary>
     /// Gets or sets the default symbology to use when adding new markers.
     /// </summary>
-    public MarkerSymbol NewMarkerSymbol { get; set; }
+    public Symbol NewMarkerSymbol { get; set; }
 
     /// <summary>
     /// Gets or sets the symbol to use for the search point marker.
     /// </summary>
-    public MarkerSymbol SearchPointMarkerSymbol { get; set; }
+    public Symbol SearchPointMarkerSymbol { get; set; }
 
     /// <summary>
     /// Gets or sets the symbol to use when a location with no images is tapped while in <see cref="OrientedImageryViewInteractionState.DisplayImage"/>.
@@ -729,12 +729,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// <summary>
     /// Gets or sets the symbol to use for the current camera marker.
     /// </summary>
-    public MarkerSymbol SelectedCameraMarkerSymbol { get; set; }
+    public Symbol SelectedCameraMarkerSymbol { get; set; }
 
     /// <summary>
     /// Gets or sets the symbol to use for all camera markers.
     /// </summary>
-    public MarkerSymbol AllCamerasMarkerSymbol { get; set; }
+    public Symbol AllCamerasMarkerSymbol { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether camera location markers are shown on the GeoView.
@@ -765,7 +765,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// </remarks>
     /// <param name="location">The geographic location of the marker.</param>
     /// <param name="symbol">The optional symbol to use for the marker.</param>
-    public void AddMarkerLocation(MapPoint location, MarkerSymbol? symbol = null)
+    public void AddMarkerLocation(MapPoint location, Symbol? symbol = null)
     {
         Markers.Add(new OrientedImageMarker(OrientedImageMarkerPosition.FromLocation(location), symbol ?? NewMarkerSymbol));
     }
