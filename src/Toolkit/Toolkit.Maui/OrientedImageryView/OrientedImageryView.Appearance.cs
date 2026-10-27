@@ -1096,7 +1096,12 @@ public partial class OrientedImageryView
 
     private void AddActionRow(VerticalStackLayout content, MenuAction action)
     {
-        action = GuardAction(action, dismiss: action.Checked != null);
+        action = GuardAction(action,
+#if ANDROID
+            dismiss: false);
+#else
+            dismiss: action.Checked != null);
+#endif
         var row = new Grid
         {
             ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(28) },
