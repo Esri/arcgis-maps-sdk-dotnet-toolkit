@@ -14,6 +14,11 @@ public partial class OrientedImageryView
     private Label? _status;
     private View? _statusHost;
     private View? _selectionGuidance;
+    private Label? _selectionInstruction;
+    private Label? _selectionPrefix;
+    private View? _selectionFindIcon;
+    private View? _selectionOr;
+    private View? _selectionDisplayIcon;
     private Label? _notice;
     private ActivityIndicator? _busy;
     private Button? _previousButton;
@@ -259,12 +264,13 @@ public partial class OrientedImageryView
             Direction = FlexDirection.Row, Wrap = FlexWrap.Wrap,
             JustifyContent = FlexJustify.Center, AlignItems = FlexAlignItems.Center,
         };
+        var prefix = new Label { Text = Text("ImageSelectionUsing"), FontSize = 18 };
+        var findIcon = ImageModeIcon(true);
+        var or = new Label { Text = Text("ImageSelectionOr"), FontSize = 18 };
+        var displayIcon = ImageModeIcon(false);
         foreach (var view in new View[]
         {
-            new Label { Text = Text("ImageSelectionUsing"), FontSize = 18 },
-            ImageModeIcon(true),
-            new Label { Text = Text("ImageSelectionOr"), FontSize = 18 },
-            ImageModeIcon(false),
+            prefix, findIcon, or, displayIcon,
             new Label { Text = Text("ImageSelectionMode"), FontSize = 18 },
         })
         {
@@ -296,6 +302,11 @@ public partial class OrientedImageryView
         host.Add(new ScrollView { Content = content, VerticalOptions = LayoutOptions.Center });
         scope.RegisterName("PART_Status", status);
         scope.RegisterName("PART_SelectionGuidance", guidance);
+        scope.RegisterName("PART_SelectionInstruction", searchMap);
+        scope.RegisterName("PART_SelectionPrefix", prefix);
+        scope.RegisterName("PART_SelectionFindIcon", findIcon);
+        scope.RegisterName("PART_SelectionOr", or);
+        scope.RegisterName("PART_SelectionDisplayIcon", displayIcon);
         scope.RegisterName("PART_StatusHost", host);
         image.Add(host);
         Grid.SetColumnSpan(host, Math.Max(1, image.ColumnDefinitions.Count));
@@ -360,6 +371,11 @@ public partial class OrientedImageryView
         _status = GetTemplateChild("PART_Status") as Label;
         _statusHost = GetTemplateChild("PART_StatusHost") as View;
         _selectionGuidance = GetTemplateChild("PART_SelectionGuidance") as View;
+        _selectionInstruction = GetTemplateChild("PART_SelectionInstruction") as Label;
+        _selectionPrefix = GetTemplateChild("PART_SelectionPrefix") as Label;
+        _selectionFindIcon = GetTemplateChild("PART_SelectionFindIcon") as View;
+        _selectionOr = GetTemplateChild("PART_SelectionOr") as View;
+        _selectionDisplayIcon = GetTemplateChild("PART_SelectionDisplayIcon") as View;
         _notice = GetTemplateChild("PART_Notice") as Label;
         _busy = GetTemplateChild("PART_Busy") as ActivityIndicator;
         _previousButton = GetTemplateChild("PART_Previous") as Button;
@@ -484,6 +500,11 @@ public partial class OrientedImageryView
         _status = null;
         _statusHost = null;
         _selectionGuidance = null;
+        _selectionInstruction = null;
+        _selectionPrefix = null;
+        _selectionFindIcon = null;
+        _selectionOr = null;
+        _selectionDisplayIcon = null;
         _notice = null;
         _busy = null;
         _previousButton = null;
@@ -510,6 +531,25 @@ public partial class OrientedImageryView
 
     private bool _refreshing;
     private bool _refreshPending;
+
+    private string RefreshSelectionGuidance()
+    {
+        bool find = ViewModel.InteractionState == OrientedImageryViewInteractionState.FindImages;
+        bool display = ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage;
+        if (_selectionInstruction != null)
+            _selectionInstruction.Text = Text(find ? "ImageSelectionFindMap" :
+                display ? "ImageSelectionDisplayFeature" : "ImageSelectionSearchMap");
+        if (_selectionPrefix != null)
+            _selectionPrefix.Text = Text(find || display ? "ImageSelectionSwitchMode" : "ImageSelectionUsing");
+        if (_selectionFindIcon != null) _selectionFindIcon.IsVisible = !find;
+        if (_selectionOr != null) _selectionOr.IsVisible = !find && !display;
+        if (_selectionDisplayIcon != null) _selectionDisplayIcon.IsVisible = !display;
+        string description = Text(find ? "ImageSelectionFindInstructions" :
+            display ? "ImageSelectionDisplayInstructions" : "ImageSelectionInstructions");
+        if (_selectionGuidance != null)
+            SemanticProperties.SetDescription(_selectionGuidance, description);
+        return description;
+    }
 
     private void Refresh()
     {
@@ -576,8 +616,9 @@ public partial class OrientedImageryView
                 showSelectionGuidance = !_hasSearchedForImages;
             }
         }
+        string selectionInstructions = RefreshSelectionGuidance();
         ErrorMessage = error ?? ViewModel.SequentialNavigationError?.Message ??
-            (showSelectionGuidance ? $"{message}. {Text("ImageSelectionInstructions")}" : message);
+            (showSelectionGuidance ? $"{message}. {selectionInstructions}" : message);
 
         if (_status != null)
         {
