@@ -299,7 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
             }
             UpdateAltText();
-#if MAUI && WINDOWS
+#if MAUI && (WINDOWS || __ANDROID__)
             UpdateChartTabStop();
 #endif
         }
