@@ -68,8 +68,8 @@
                 Text="https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0" />
             <Button
                 Grid.Column="1"
-                Click="ApplyLayerButton_Click"
-                Content="Apply Layer" />
+                Click="AddLayerButton_Click"
+                Content="Add layer to geoview" />
             <TextBlock
                 x:Name="StatusTextBlock"
                 Grid.Row="1"
@@ -121,10 +121,24 @@
             </primitives:Thumb>
         </local:PanelResizeHandle>
 
-        <toolkit:OrientedImageryView
+        <Grid
             Grid.Row="1" Grid.Column="2"
-            x:Name="MainOrientedImageryView"
-            GeoView="{x:Bind MainMapView}" />
+            RowSpacing="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <ComboBox
+                x:Name="SelectLayerDropdown"
+                HorizontalAlignment="Stretch"
+                PlaceholderText="Select Layer"
+                SelectionChanged="SelectLayerDropdown_SelectionChanged"
+                AutomationProperties.Name="Select Layer" />
+            <toolkit:OrientedImageryView
+                Grid.Row="1"
+                x:Name="MainOrientedImageryView"
+                GeoView="{x:Bind MainMapView}" />
+        </Grid>
 
         <Grid
             x:Name="SelectedImagePopupBackground"

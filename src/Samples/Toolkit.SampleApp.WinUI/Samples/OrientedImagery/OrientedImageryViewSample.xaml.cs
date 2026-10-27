@@ -8,6 +8,7 @@ using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,6 +27,13 @@ public sealed partial class OrientedImageryViewSample : Page
 {
     private const string BasemapUri = "https://runtime.maps.arcgis.com/home/item.html?id=d8c5e76fb2cc4bb6955a6783a5f577b7";
 
+    private readonly ObservableCollection<string> _exampleLayers =
+    [
+        "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/ArcGIS/rest/services/Oakwood_camori_corrected/FeatureServer/0",
+        "https://services3.arcgis.com/juvie9NFXORsK38U/ArcGIS/rest/services/WalkerOrientedImagery/FeatureServer/0",
+        "https://services5.arcgis.com/N82JbI5EYtAkuUKU/ArcGIS/rest/services/EsriCampus_sequenceTest_attachment/FeatureServer/1"
+    ];
+
     private OrientedImageryViewModel _orientedImageryViewModel;
 
     public OrientedImageryViewSample()
@@ -37,7 +45,8 @@ public sealed partial class OrientedImageryViewSample : Page
 
         MainOrientedImageryView.Loaded += (_, _) => ConfigureToolbarTemplates();
 
-        _ = InitializeAsync();
+        MainMapView.Map = new Map(new Uri(BasemapUri));
+        SelectLayerDropdown.ItemsSource = _exampleLayers;
     }
 
     private void ConfigureToolbarTemplates()
@@ -52,52 +61,49 @@ public sealed partial class OrientedImageryViewSample : Page
             selector.SelectionPairs.Add(new OrientedImageryToolbarItemSelectorPair() { ItemType = typeof(OrientedImageryPopupToolbarItem), Template = popupItemTemplate });
     }
 
-    private async Task InitializeAsync()
-    {
-        MainMapView.Map = new Map(new Uri(BasemapUri));
-        await ApplyLayerAsync(new Uri(LayerUriTextBox.Text));
-    }
-
     private async Task ApplyLayerAsync(Uri layerUri)
     {
         StatusTextBlock.Text = string.Empty;
+        var orientedImageryLayer = new OrientedImageryLayer(layerUri);
 
         try
         {
-            var orientedImageryLayer = new OrientedImageryLayer(layerUri);
-            await orientedImageryLayer.LoadAsync();
-
-            if (orientedImageryLayer.LoadStatus == LoadStatus.FailedToLoad)
-            {
-                StatusTextBlock.Text = orientedImageryLayer.LoadError?.Message ?? "The oriented imagery layer failed to load.";
-                return;
-            }
-
             MainMapView.Map ??= new Map(new Uri(BasemapUri));
             MainMapView.Map.OperationalLayers.Clear();
             MainMapView.Map.OperationalLayers.Add(orientedImageryLayer);
 
             _orientedImageryViewModel.OrientedImageryLayer = orientedImageryLayer;
-            if (orientedImageryLayer.FullExtent != null)
+            await orientedImageryLayer.LoadAsync();
+            if (ReferenceEquals(_orientedImageryViewModel.OrientedImageryLayer, orientedImageryLayer) &&
+                orientedImageryLayer.FullExtent != null)
             {
                 MainMapView.SetViewpoint(new Viewpoint(orientedImageryLayer.FullExtent));
             }
         }
         catch (Exception ex)
         {
-            StatusTextBlock.Text = ex.Message;
+            if (ReferenceEquals(_orientedImageryViewModel.OrientedImageryLayer, orientedImageryLayer))
+                StatusTextBlock.Text = ex.Message;
         }
     }
 
-    private async void ApplyLayerButton_Click(object sender, RoutedEventArgs e)
+    private async void SelectLayerDropdown_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (Uri.TryCreate(LayerUriTextBox.Text, UriKind.Absolute, out var layerUri))
+        if (SelectLayerDropdown.SelectedItem is string layerUrl)
+            await ApplyLayerAsync(new Uri(layerUrl));
+    }
+
+    private void AddLayerButton_Click(object sender, RoutedEventArgs e)
+    {
+        try
         {
-            await ApplyLayerAsync(layerUri);
+            _ = new OrientedImageryLayer(new Uri(LayerUriTextBox.Text));
+            _exampleLayers.Add(LayerUriTextBox.Text);
+            StatusTextBlock.Text = string.Empty;
         }
-        else
+        catch (Exception ex)
         {
-            StatusTextBlock.Text = "Enter a valid oriented imagery layer URL.";
+            StatusTextBlock.Text = ex.Message;
         }
     }
 
