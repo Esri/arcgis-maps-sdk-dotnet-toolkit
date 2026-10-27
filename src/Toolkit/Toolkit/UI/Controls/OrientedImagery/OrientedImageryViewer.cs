@@ -36,20 +36,11 @@ public partial class OrientedImageryViewer
         IsVisibleChanged += (_, _) => UpdateErrorMessages();
 #endif
 
-#if MAUI
-        // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
-        ControlTemplate = DefaultControlTemplate;
-#else
         DefaultStyleKey = typeof(OrientedImageryViewer);
-#endif
     }
 
     /// <inheritdoc/>
-#if WINDOWS_XAML || MAUI
-    protected override void OnApplyTemplate()
-#elif WPF
     public override void OnApplyTemplate()
-#endif
     {
         base.OnApplyTemplate();
 

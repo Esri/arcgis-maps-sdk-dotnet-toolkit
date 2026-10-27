@@ -169,7 +169,6 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
     private Popup? _imageDetailsPopup;
     private bool _isSequentialNavigationEnabled;
     private bool _isFetchingAdjacentImage;
-    private Task? _adjacentImagesFetchTask;
     private OrientedImage? _nextSequentialImage;
     private OrientedImage? _previousSequentialImage;
     private CancellationTokenSource? _adjacentImagesCancellation;
@@ -392,7 +391,6 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
         {
             _deferMarkerSynchronization = false;
             UpdateCameraMarkers();
-            SynchronizeMarkers();
             UpdateVisibleFootprints();
             UpdateNavigationState();
         }
@@ -473,16 +471,14 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
         SequentialNavigationError = null;
         try
         {
-            _adjacentImagesFetchTask = Task.WhenAll(
+            await Task.WhenAll(
                 PrefetchAdjacentImageAsync(OrientedImageryLayer, SelectedImage, SequenceStep.Next, navigationVersion, cancellation.Token),
                 PrefetchAdjacentImageAsync(OrientedImageryLayer, SelectedImage, SequenceStep.Previous, navigationVersion, cancellation.Token));
-            await _adjacentImagesFetchTask;
         }
         finally
         {
             if (navigationVersion == _sequentialNavigationVersion)
             {
-                _adjacentImagesFetchTask = null;
                 _adjacentImagesCancellation = null;
                 _isFetchingAdjacentImage = false;
                 UpdateNavigationState();
@@ -546,7 +542,6 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
         _sequentialNavigationVersion++;
         _adjacentImagesCancellation?.Cancel();
         _adjacentImagesCancellation = null;
-        _adjacentImagesFetchTask = null;
         _isFetchingAdjacentImage = false;
         _nextSequentialImage = null;
         _previousSequentialImage = null;
