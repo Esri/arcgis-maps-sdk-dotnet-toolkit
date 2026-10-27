@@ -16,6 +16,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
+#if WINDOWS_XAML
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
+#endif
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
