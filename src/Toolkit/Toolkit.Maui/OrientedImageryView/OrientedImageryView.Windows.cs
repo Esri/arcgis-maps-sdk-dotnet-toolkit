@@ -3,6 +3,7 @@ using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Layouts;
 using Microsoft.UI.Xaml.Input;
 using Windows.System;
+using Windows.UI.ViewManagement;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -12,6 +13,9 @@ public partial class OrientedImageryView
 
     private DesktopImageryBar? _desktopNavigation;
     private Microsoft.UI.Xaml.FrameworkElement? _nativeView;
+    private AccessibilitySettings? _desktopAccessibilitySettings;
+    private UISettings? _desktopUiSettings;
+    private Grid? _desktopRoot;
 
     private static Microsoft.Maui.Controls.Button DesktopImageArrow(bool next)
     {
@@ -40,6 +44,10 @@ public partial class OrientedImageryView
     {
         if (_nativeView != null) _nativeView.KeyDown -= NativeKeyDown;
         _nativeView = null;
+        if (_desktopUiSettings != null)
+            _desktopUiSettings.ColorValuesChanged -= DesktopColorsChanged;
+        _desktopUiSettings = null;
+        _desktopAccessibilitySettings = null;
         if (_desktopNavigation != null) _desktopNavigation.Owner = null;
     }
 
@@ -47,17 +55,24 @@ public partial class OrientedImageryView
     {
         _nativeView = Handler?.PlatformView as Microsoft.UI.Xaml.FrameworkElement;
         if (_nativeView != null) _nativeView.KeyDown += NativeKeyDown;
+        _desktopAccessibilitySettings = new AccessibilitySettings();
+        _desktopUiSettings = new UISettings();
+        _desktopUiSettings.ColorValuesChanged += DesktopColorsChanged;
+        UpdateDesktopColors();
     }
 
     private void ReleaseDesktopTemplate()
     {
         if (_desktopNavigation != null) _desktopNavigation.Owner = null;
         _desktopNavigation = null;
+        _desktopRoot = null;
     }
 
     private void InitializeDesktopTemplate()
     {
         _desktopNavigation = GetTemplateChild("PART_DesktopNavigation") as DesktopImageryBar;
+        _desktopRoot = ControlTemplate == DefaultControlTemplate ? _customToolbar?.Parent as Grid : null;
+        UpdateDesktopColors();
     }
 
     partial void RefreshDesktopPresentation()
@@ -79,6 +94,57 @@ public partial class OrientedImageryView
     internal bool DesktopIsSearching => _searching;
     internal bool DesktopHasLayer => SelectedLayer != null && _layers.Contains(SelectedLayer);
     internal static string DesktopText(string key) => Text(key);
+
+    #endregion
+
+    #region Theme colors
+
+    private void DesktopColorsChanged(UISettings sender, object args) => Dispatcher.Dispatch(UpdateDesktopColors);
+
+    private void UpdateDesktopColors()
+    {
+        bool highContrast = _desktopAccessibilitySettings?.HighContrast == true && _desktopUiSettings != null;
+        Color? SystemColor(UIColorType type)
+        {
+            if (!highContrast) return null;
+            var color = _desktopUiSettings!.GetColorValue(type);
+            return Color.FromRgba(color.R, color.G, color.B, color.A);
+        }
+
+        var background = SystemColor(UIColorType.Background);
+        var foreground = SystemColor(UIColorType.Foreground);
+        void SetBackground(BindableObject target, BindableProperty property)
+        {
+            if (background != null)
+                target.SetValue(property, background);
+            else
+                target.SetAppThemeColor(property, Colors.White, Color.FromArgb("#202020"));
+        }
+
+        SetBackground(this, ThemeImageBackgroundProperty);
+        if (_desktopRoot == null) return;
+
+        // Native high-contrast icons need the matching system surface behind them.
+        SetBackground(_desktopRoot, BackgroundColorProperty);
+        foreach (var button in new[] { _previousButton, _nextButton })
+        {
+            if (button == null) continue;
+            SetBackground(button, BackgroundColorProperty);
+            if (foreground != null)
+                button.TextColor = foreground;
+            else
+                button.SetAppThemeColor(Microsoft.Maui.Controls.Button.TextColorProperty, Colors.Black, Colors.White);
+        }
+
+        if (_popupOpenButton is { ImageSource: FontImageSource infoIcon } infoButton)
+        {
+            SetBackground(infoButton, BackgroundColorProperty);
+            if (foreground != null)
+                infoIcon.Color = foreground;
+            else
+                infoIcon.SetAppThemeColor(FontImageSource.ColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
+        }
+    }
 
     #endregion
 
