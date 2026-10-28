@@ -1,94 +1,192 @@
 #if __IOS__ && !MACCATALYST
-using Foundation;
+using Microsoft.Maui.Platform;
 using UIKit;
+using ContentView = Microsoft.Maui.Controls.ContentView;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
     private static readonly Color IosAccent = Color.FromArgb("#007AFF");
+    private UIViewController? _iosSheet;
+    private ContentView? _iosSheetContent;
+    private Action? _releaseIosSheetDelegate;
+    private bool _iosSheetIsInfo;
+    private bool _iosSheetPresenting;
+    private bool _iosSheetClosing;
+    private double _iosToolsHeight;
 
-    partial void DetachPlatformPresentation() => DismissPanel();
-
-    private sealed class IosPanelMaterial : ContentView, IDisposable
+    partial void DetachPlatformPresentation()
     {
-        private UIVisualEffectView? _material;
-        private NSObject? _transparencyObserver;
-        private bool _disposed;
+        DismissPanel();
+        DismissIosPopup();
+    }
 
-        internal IosPanelMaterial()
+    private void PresentIosPanel(View anchor, VerticalStackLayout content, Action? back)
+    {
+        _panelAnchor = anchor;
+        var heading = (Label)content.Children[0];
+        content.Remove(heading);
+        content.Padding = new Thickness(16, 0, 16, 16);
+        _panelScroll = new ScrollView { Content = content };
+        var surface = CreateMobileSheetContent(heading, _panelScroll, () => DismissPanel(), back,
+            out _panelLayout, "OrientedImageryToolsSheet");
+        PresentIosSheet(surface, info: false);
+        UpdateToolHighlights();
+        UpdateOpenPanel();
+        SemanticScreenReader.Default.Announce(heading.Text);
+    }
+
+    private void RefreshIosPopup()
+    {
+        if (_popupHost != null) return;
+        if (ViewModel.SelectedImagePopup == null)
         {
-            InputTransparent = true;
-            Loaded += MaterialLoaded;
-            Unloaded += MaterialUnloaded;
-            AutomationProperties.SetIsInAccessibleTree(this, false);
+            DismissIosPopup(closePopup: false);
+            return;
         }
+        if (_popupViewer == null || !IsLoaded || Handler?.MauiContext == null) return;
+        _popupViewer.Popup = ViewModel.SelectedImagePopup;
+        _popupViewer.IsVisible = true;
+        if (_iosSheetIsInfo) return;
+        DismissPanel(preservePresentation: true);
+        var heading = new Label { Text = Text("ImageDetails") };
+        var surface = CreateMobileSheetContent(heading, _popupViewer, () => DismissIosPopup(), null,
+            out _, "OrientedImageryInfoSheet");
+        PresentIosSheet(surface, info: true);
+        SemanticScreenReader.Default.Announce(heading.Text);
+    }
 
-        protected override void OnHandlerChanging(HandlerChangingEventArgs args)
+    private void PresentIosSheet(View content, bool info)
+    {
+        _iosSheetIsInfo = info;
+        if (_iosSheetContent == null)
         {
-            Release();
-            base.OnHandlerChanging(args);
+            _iosSheetContent = new ContentView();
+            _iosSheetContent.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F2F2F7"), Color.FromArgb("#1C1C1E"));
+            AddLogicalChild(_iosSheetContent);
+            _iosSheetContent.SizeChanged += IosSheetSizeChanged;
         }
+        _iosSheetContent.Content = content;
+        UpdateIosPanelSize();
+        if (_iosSheet?.SheetPresentationController is { } sheet)
+            ConfigureIosDetents(sheet);
+        ShowIosSheet();
+    }
 
-        protected override void OnHandlerChanged()
+    private void ShowIosSheet()
+    {
+        if (_iosSheet != null || _iosSheetClosing || _iosSheetContent == null) return;
+        var context = Handler?.MauiContext ??
+            throw new InvalidOperationException("The oriented imagery view must have a handler before opening its tools.");
+        UIResponder? responder = Handler?.PlatformView as UIView;
+        while (responder != null && responder is not UIViewController)
+            responder = responder.NextResponder;
+        var presenter = responder as UIViewController ??
+            throw new InvalidOperationException("The oriented imagery view must belong to a view controller before opening its tools.");
+        while (presenter.PresentedViewController is { } presented)
+            presenter = presented;
+        _iosSheet = _iosSheetContent.ToUIViewController(context);
+        _iosSheet.ModalPresentationStyle = UIModalPresentationStyle.PageSheet;
+        if (_iosSheet.SheetPresentationController is { } sheet)
         {
-            base.OnHandlerChanged();
-            if (IsLoaded) Attach();
+            ConfigureIosDetents(sheet);
+            sheet.PrefersEdgeAttachedInCompactHeight = true;
+            sheet.PrefersGrabberVisible = true;
+            var dismissal = new IosSheetDismissal(this);
+            // UIKit holds its delegate weakly; retain it until dismissal completes.
+            _releaseIosSheetDelegate = dismissal.Dispose;
+            sheet.Delegate = dismissal;
         }
-
-        private void MaterialLoaded(object? sender, EventArgs e) => Attach();
-
-        private void MaterialUnloaded(object? sender, EventArgs e) => Release();
-
-        private void Attach()
+        _iosSheetPresenting = true;
+        presenter.PresentViewController(_iosSheet, true, () =>
         {
-            if (_disposed || _material != null || Handler?.PlatformView is not UIView view) return;
-            _material = new UIVisualEffectView
+            _iosSheetPresenting = false;
+            if (_panelAnchor == null && !_iosSheetIsInfo)
+                DismissIosSheet();
+        });
+    }
+
+    private void IosSheetSizeChanged(object? sender, EventArgs e) => UpdateIosPanelSize();
+
+    private void UpdateIosPanelSize()
+    {
+        if (_iosSheetIsInfo || _iosSheetContent == null || _panelLayout == null || _panelScroll == null) return;
+        double width = _iosSheetContent.Width > 0 ? _iosSheetContent.Width :
+            (Handler?.PlatformView as UIView)?.Window?.Bounds.Width ?? 0;
+        if (width <= 0) return;
+        if (_symbolGrid != null)
+            LayoutSymbolGrid(Math.Max(0, width - 32));
+        double header = _panelLayout.Children.Where(child => child != _panelScroll)
+            .Sum(child => child.Measure(width, double.PositiveInfinity).Height);
+        double body = _panelScroll.Content?.Measure(width, double.PositiveInfinity).Height ?? 0;
+        double height = _panelLayout.Padding.VerticalThickness + header + body;
+        if (Math.Abs(_iosToolsHeight - height) < 1) return;
+        _iosToolsHeight = height;
+        _iosSheet?.SheetPresentationController?.InvalidateDetents();
+    }
+
+    private void ConfigureIosDetents(UISheetPresentationController sheet)
+    {
+        sheet.Detents = _iosSheetIsInfo
+            ? new[] { UISheetPresentationControllerDetent.CreateMediumDetent(), UISheetPresentationControllerDetent.CreateLargeDetent() }
+            : new[]
             {
-                Frame = view.Bounds,
-                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
-                UserInteractionEnabled = false,
-                IsAccessibilityElement = false,
-                ClipsToBounds = true,
+                UISheetPresentationControllerDetent.Create("tools", context =>
+                    (nfloat)Math.Min(context.MaximumDetentValue * 0.85, Math.Max(100, _iosToolsHeight))),
             };
-            _material.Layer.CornerRadius = 16;
-            view.InsertSubview(_material, 0);
-            UpdateMaterial();
-            _transparencyObserver = UIApplication.Notifications.ObserveReduceTransparencyStatusDidChange(
-                (_, _) => Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(UpdateMaterial));
-        }
+    }
 
-        private void UpdateMaterial()
-        {
-            if (_material == null) return;
-            if (UIAccessibility.IsReduceTransparencyEnabled)
-            {
-                _material.Effect = null;
-                _material.BackgroundColor = UIColor.SecondarySystemBackground;
-            }
-            else
-            {
-                using var effect = UIBlurEffect.FromStyle(UIBlurEffectStyle.SystemMaterial);
-                _material.BackgroundColor = UIColor.Clear;
-                _material.Effect = effect;
-            }
-        }
+    private void DismissIosPopup(bool closePopup = true)
+    {
+        if (!_iosSheetIsInfo) return;
+        _iosSheetIsInfo = false;
+        if (_popupViewer?.Parent is Grid layout) layout.Remove(_popupViewer);
+        DismissIosSheet();
+        if (closePopup && ViewModel.SelectedImagePopup != null)
+            ViewModel.CloseSelectedImagePopupCommand.Execute(null);
+    }
 
-        private void Release()
+    private void DismissIosSheet()
+    {
+        // Defer a close during the native opening animation to its completion.
+        if (_iosSheetPresenting) return;
+        var controller = _iosSheet;
+        var content = _iosSheetContent;
+        var releaseDelegate = _releaseIosSheetDelegate;
+        _iosSheet = null;
+        _iosSheetContent = null;
+        _iosToolsHeight = 0;
+        _releaseIosSheetDelegate = null;
+        if (content == null) return;
+        content.SizeChanged -= IosSheetSizeChanged;
+        void Release()
         {
-            _transparencyObserver?.Dispose();
-            _transparencyObserver = null;
-            _material?.RemoveFromSuperview();
-            _material?.Dispose();
-            _material = null;
+            content.Content = null;
+            content.Handler?.DisconnectHandler();
+            RemoveLogicalChild(content);
+            releaseDelegate?.Invoke();
+            controller?.Dispose();
+            _iosSheetClosing = false;
+            ShowIosSheet();
         }
-
-        public void Dispose()
+        if (controller?.PresentingViewController != null)
         {
-            _disposed = true;
-            Loaded -= MaterialLoaded;
-            Unloaded -= MaterialUnloaded;
+            _iosSheetClosing = true;
+            controller.DismissViewController(true, Release);
+        }
+        else
             Release();
+    }
+
+    private sealed class IosSheetDismissal(OrientedImageryView owner) : UISheetPresentationControllerDelegate
+    {
+        public override void DidDismiss(UIPresentationController presentationController)
+        {
+            if (owner._iosSheetIsInfo)
+                owner.DismissIosPopup();
+            else
+                owner.DismissPanel();
         }
     }
 }
