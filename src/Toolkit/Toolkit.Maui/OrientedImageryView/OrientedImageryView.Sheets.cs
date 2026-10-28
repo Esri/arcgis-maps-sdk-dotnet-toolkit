@@ -3,14 +3,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
+    #region Mode segments
+
     private void AddMobileModeSegments(VerticalStackLayout content, ImageSearchModeVM mode, Func<bool> enabled)
     {
         var segments = new Grid { ColumnSpacing = 1 };
         foreach (var state in mode.ImageSearchModes)
         {
-            string title = Text(state == OrientedImageryViewInteractionState.FindImages ? "ImageSearchModeFind" : "ImageSearchModeDisplay");
+            bool search = state == OrientedImageryViewInteractionState.FindImages;
+            string title = Text(search ? "ImageSearchModeFind" : "ImageSearchModeDisplay");
             var action = GuardAction(new MenuAction(title, () => ToggleImageMode(mode, state),
-                Icon: () => ImageModeIcon(state == OrientedImageryViewInteractionState.FindImages),
+                Icon: () => ImageModeIcon(search),
                 Checked: () => ViewModel.InteractionState == state, Enabled: enabled), dismiss: false);
             var button = new Button
             {
@@ -22,11 +25,16 @@ public partial class OrientedImageryView
             var icon = action.Icon();
             icon.WidthRequest = icon.HeightRequest = 24;
             var check = new Label { Text = "\u2713", VerticalOptions = LayoutOptions.Center };
-            var label = new Label { Text = title, VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.WordWrap };
+            var label = new Label
+            {
+                Text = title, VerticalOptions = LayoutOptions.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+            };
 #if __IOS__
             button.MinimumHeightRequest = 52;
             label.FontSize = check.FontSize = 17;
 #endif
+            // Keep the caption separate so large text can wrap above the native button.
             var caption = new Grid
             {
                 ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) },
@@ -77,6 +85,10 @@ public partial class OrientedImageryView
         content.Add(outline);
     }
 
+    #endregion
+
+    #region Shared sheet header and content
+
     private static ContentView CreateMobileSheetContent(Label heading, View body, Action dismiss, Action? back, out Grid layout, string automationId)
     {
         heading.FontSize = 22;
@@ -118,6 +130,7 @@ public partial class OrientedImageryView
         handle.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#79747E"), Color.FromArgb("#938F99"));
         layout.Add(handle);
 #else
+        // UIKit supplies the grabber; leave room for it above the MAUI header.
         close.Text = "\u00D7";
         close.FontAutoScalingEnabled = false;
         close.FontSize = 22;
@@ -142,5 +155,7 @@ public partial class OrientedImageryView
             Content = surface, AutomationId = automationId, BackgroundColor = Colors.Transparent,
         };
     }
+
+    #endregion
 }
 #endif

@@ -7,6 +7,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
+    #region Sheet state and lifecycle
+
     private WeakReference<ToolsBackCallback>? _backCallback;
     private BottomSheetDialog? _toolsSheet;
     private ContentView? _toolsSheetContent;
@@ -21,6 +23,10 @@ public partial class OrientedImageryView
         DismissAndroidPopup();
         DetachBackNavigation();
     }
+
+    #endregion
+
+    #region Native sheet presentation
 
     private void PresentAndroidPanel(ContentView content)
     {
@@ -68,6 +74,10 @@ public partial class OrientedImageryView
         dialog.Behavior.State = BottomSheetBehavior.StateExpanded;
         dialog.Behavior.SkipCollapsed = true;
     }
+
+    #endregion
+
+    #region Image information
 
     private void RefreshAndroidPopup()
     {
@@ -131,6 +141,10 @@ public partial class OrientedImageryView
         UpdateBackNavigation();
     }
 
+    #endregion
+
+    #region Toolbar sheet sizing and cleanup
+
     private void UpdateAndroidPanelSize(double? availableWidth = null)
     {
         if (_toolsSheetContent == null || _panelLayout == null || _panelScroll == null) return;
@@ -169,6 +183,10 @@ public partial class OrientedImageryView
         }
     }
 
+    #endregion
+
+    #region Back navigation
+
     partial void AttachBackNavigation()
     {
         DetachBackNavigation();
@@ -193,6 +211,7 @@ public partial class OrientedImageryView
 
     partial void UpdateBackNavigation()
     {
+        // Native dialogs handle Back while visible; this callback handles inline popups.
         if (_backCallback?.TryGetTarget(out var callback) == true)
             callback.Enabled = _toolsSheet == null && _infoSheet == null && _connected && (_panelAnchor != null || ViewModel.SelectedImagePopup != null);
     }
@@ -206,5 +225,7 @@ public partial class OrientedImageryView
             dispatcher.OnBackPressed();
         }
     }
+
+    #endregion
 }
 #endif
