@@ -173,6 +173,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #endif
                 }
+#if MAUI && __ANDROID__
+                else
+                {
+                    img.GestureRecognizers.Clear();
+                    if (img.Handler?.PlatformView is Android.Views.View platformView)
+                        platformView.Focusable = false;
+                }
+#endif
 #if MAUI && WINDOWS
                 UpdateImageAccessibility(img);
 #endif
@@ -291,7 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
             }
             UpdateAltText();
-#if MAUI && WINDOWS
+#if MAUI && (WINDOWS || __ANDROID__)
             UpdateChartTabStop();
 #endif
         }

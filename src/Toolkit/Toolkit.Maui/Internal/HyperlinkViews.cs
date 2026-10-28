@@ -14,7 +14,7 @@
 //  * limitations under the License.
 //  ******************************************************************************/
 
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 
 internal sealed class HyperlinkLabel : Label
@@ -22,13 +22,21 @@ internal sealed class HyperlinkLabel : Label
     internal HyperlinkLabel(FormattedString text)
     {
         InlineContent = text;
+#if __ANDROID__
+        // Android's native clickable spans handle touch as well as keyboard activation.
+        foreach (var span in text.Spans)
+            span.GestureRecognizers.Clear();
+        FormattedText = text;
+#else
+        // Native hyperlinks replace MAUI's formatted-span hit testing, so don't assign Label.FormattedText.
         Text = text.ToString();
+#endif
     }
 
-    // Native hyperlinks replace MAUI's formatted-span hit testing, so don't assign Label.FormattedText.
     internal FormattedString InlineContent { get; }
 }
 
+#if WINDOWS || __IOS__
 internal sealed class HyperlinkContentView : ContentView
 {
     private readonly EventHandler<Uri> _clickHandler;
@@ -50,4 +58,5 @@ internal sealed class HyperlinkContentView : ContentView
 
     internal void Activate() => _clickHandler(this, Uri);
 }
+#endif
 #endif
