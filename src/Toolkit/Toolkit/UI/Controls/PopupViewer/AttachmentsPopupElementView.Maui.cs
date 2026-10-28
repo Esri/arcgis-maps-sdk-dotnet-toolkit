@@ -67,9 +67,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #endif
             root.Add(rootcaption);
             root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0,5) });
-            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
 #if __IOS__
-            cv.SelectionMode = SelectionMode.Single;
+            CollectionView cv = new PopupAttachmentsCollectionView() { SelectionMode = SelectionMode.Single };
+#else
+            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
+#endif
+#if __IOS__
             void UpdateAttachmentList()
             {
                 if (cv.Handler?.PlatformView is UIKit.UIView nativeView)
@@ -368,5 +371,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
         }
     }
+
+#if __IOS__
+    // The optimized iOS handler can measure this nested, auto-sized list to zero height.
+    // Scope the legacy-handler opt-out to attachment lists so their rows measure naturally.
+    internal sealed class PopupAttachmentsCollectionView : CollectionView
+    {
+    }
+#endif
 }
 #endif

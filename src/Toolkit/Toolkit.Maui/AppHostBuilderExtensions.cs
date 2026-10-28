@@ -27,6 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #elif __IOS__
                 handler.AddHandler<PopupViewer, PopupViewerHandler>();
                 handler.AddHandler<FieldsTableLabel, FieldsTableLabelHandler>();
+                handler.AddHandler<Primitives.PopupAttachmentsCollectionView, Microsoft.Maui.Controls.Handlers.Items.CollectionViewHandler>();
 #endif
             });
 #endif
