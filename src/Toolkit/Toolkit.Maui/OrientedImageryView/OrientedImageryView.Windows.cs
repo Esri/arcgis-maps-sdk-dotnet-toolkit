@@ -4,6 +4,8 @@ using Microsoft.Maui.Layouts;
 using Microsoft.UI.Xaml.Input;
 using Windows.System;
 using Windows.UI.ViewManagement;
+using FocusState = Microsoft.UI.Xaml.FocusState;
+using NativeButton = Microsoft.UI.Xaml.Controls.Button;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -32,6 +34,11 @@ public partial class OrientedImageryView
         ToolTipProperties.SetText(button, Text(next ? "NextLabel" : "PreviousLabel"));
         button.SetAppThemeColor(Microsoft.Maui.Controls.Button.TextColorProperty, Colors.Black, Colors.White);
         button.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
+        button.HandlerChanged += (_, _) =>
+        {
+            if (button.Handler?.PlatformView is NativeButton native)
+                native.AllowFocusWhenDisabled = true;
+        };
         return button;
     }
 
@@ -94,6 +101,25 @@ public partial class OrientedImageryView
     internal bool DesktopIsSearching => _searching;
     internal bool DesktopHasLayer => SelectedLayer != null && _layers.Contains(SelectedLayer);
     internal static string DesktopText(string key) => Text(key);
+
+    #endregion
+
+    #region Keyboard focus
+
+    private void FocusDesktopPopup()
+    {
+        if (_popupCloseButton is not { } target || _nativeView?.XamlRoot is not { } root) return;
+        var popup = ViewModel.SelectedImagePopup;
+        var expectedFocus = FocusManager.GetFocusedElement(root);
+        Dispatcher.Dispatch(() =>
+        {
+            if (_connected && popup != null && popup == ViewModel.SelectedImagePopup &&
+                target == _popupCloseButton && _popupHost?.IsVisible == true &&
+                ReferenceEquals(FocusManager.GetFocusedElement(root), expectedFocus) &&
+                target.Handler?.PlatformView is NativeButton { IsLoaded: true } button)
+                button.Focus(FocusState.Keyboard);
+        });
+    }
 
     #endregion
 
