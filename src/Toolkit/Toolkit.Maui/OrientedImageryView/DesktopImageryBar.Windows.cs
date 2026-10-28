@@ -95,21 +95,23 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                         : disabled ? "TextFillColorDisabled" : "TextFillColorPrimary";
                     AddBrush(control + "Background" + state, background);
                     AddBrush(control + "Foreground" + state, foreground);
-                    if (state.StartsWith("Checked", StringComparison.Ordinal))
-                        AddBrush(control + "BorderBrush" + state, disabled ? "ControlFillColorTransparent" : foreground);
+                    AddBrush(control + "BorderBrush" + state, "Transparent");
                 }
+                AddBrush(control + "BorderBrush", "Transparent");
+                AddBrush(control + "BorderBrushDisabled", "Transparent");
             }
             AddBrush("ComboBoxBackgroundPointerOver", highContrast ? "SystemColorHighlightColor" : "SystemBaseMediumLowColor");
             AddBrush("ComboBoxForegroundPointerOver", highContrast ? "SystemColorHighlightTextColor" : "TextFillColorPrimary");
-            AddBrush("ComboBoxBorderBrushPointerOver", highContrast ? "SystemColorHighlightTextColor" : "ControlFillColorTransparent");
+            AddBrush("ComboBoxBorderBrushPointerOver", "Transparent");
             xaml.Append("</ResourceDictionary>");
         }
         xaml.Append("</ResourceDictionary.ThemeDictionaries></ResourceDictionary>");
         return (Microsoft.UI.Xaml.ResourceDictionary)XamlReader.Load(xaml.ToString());
 
+        // ControlFillColorTransparent is a red placeholder in WinUI's HighContrast dictionary.
         void AddBrush(string key, string color) =>
-            xaml.Append("<SolidColorBrush x:Key=\"").Append(key).Append("\" Color=\"{ThemeResource ")
-                .Append(color).Append("}\"/>");
+            xaml.Append("<SolidColorBrush x:Key=\"").Append(key).Append("\" Color=\"")
+                .Append(color == "Transparent" ? color : "{ThemeResource " + color + "}").Append("\"/>");
     }
 
     protected override void ConnectHandler(NativeGrid platformView)
@@ -210,6 +212,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         Glyph = glyph,
         FontFamily = IconFont,
         FontSize = 24,
+        // Use the button's state foreground instead of forced high-contrast text colors.
+        HighContrastAdjustment = ElementHighContrastAdjustment.None,
     };
 
     private static UIElement Geometry(string data)
@@ -360,7 +364,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         {
             Content = LabeledContent(icon, labelKey), MinWidth = 0, MinHeight = 84, Padding = new NativeThickness(4),
             BorderThickness = new NativeThickness(0), Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-            CornerRadius = new CornerRadius(0), HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
+            CornerRadius = new CornerRadius(4), Margin = new NativeThickness(3, 0, 3, 0),
+            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
         };
         Describe(button, key);
         button.Click += (_, _) => { if (!_updating && enabled()) execute(); };
@@ -376,7 +381,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             MinWidth = 0, MinHeight = 84, Padding = new NativeThickness(4),
             BorderThickness = new NativeThickness(1),
             BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-            Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), CornerRadius = new CornerRadius(0),
+            Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+            CornerRadius = new CornerRadius(4), Margin = new NativeThickness(3, 0, 3, 0),
         };
         Describe(toggle, key, automationId);
         toggle.Click += (_, _) => { if (!_updating) set(toggle.IsChecked == true); };
@@ -481,7 +487,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             MinWidth = 0, MinHeight = 84, Padding = new NativeThickness(4),
             BorderThickness = new NativeThickness(1), Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
             BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-            CornerRadius = new CornerRadius(0),
+            CornerRadius = new CornerRadius(4), Margin = new NativeThickness(3, 0, 3, 0),
         };
         button.Click += (_, _) =>
         {
