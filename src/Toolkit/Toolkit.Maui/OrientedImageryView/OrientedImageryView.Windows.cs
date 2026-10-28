@@ -13,7 +13,7 @@ public partial class OrientedImageryView
 {
     #region Native presentation and template lifecycle
 
-    private DesktopImageryBar? _desktopNavigation;
+    private OrientedImageryControlsView? _desktopPagination;
     private Microsoft.UI.Xaml.FrameworkElement? _nativeView;
     private AccessibilitySettings? _desktopAccessibilitySettings;
     private UISettings? _desktopUiSettings;
@@ -55,7 +55,7 @@ public partial class OrientedImageryView
             _desktopUiSettings.ColorValuesChanged -= DesktopColorsChanged;
         _desktopUiSettings = null;
         _desktopAccessibilitySettings = null;
-        if (_desktopNavigation != null) _desktopNavigation.Owner = null;
+        if (_desktopPagination != null) _desktopPagination.Owner = null;
     }
 
     partial void AttachPlatformPresentation()
@@ -70,25 +70,25 @@ public partial class OrientedImageryView
 
     private void ReleaseDesktopTemplate()
     {
-        if (_desktopNavigation != null) _desktopNavigation.Owner = null;
-        _desktopNavigation = null;
+        if (_desktopPagination != null) _desktopPagination.Owner = null;
+        _desktopPagination = null;
         _desktopRoot = null;
     }
 
     private void InitializeDesktopTemplate()
     {
-        _desktopNavigation = GetTemplateChild("PART_DesktopNavigation") as DesktopImageryBar;
+        _desktopPagination = GetTemplateChild("PART_DesktopNavigation") as OrientedImageryControlsView;
         _desktopRoot = ControlTemplate == DefaultControlTemplate ? _customToolbar?.Parent as Grid : null;
         UpdateDesktopColors();
     }
 
     partial void RefreshDesktopPresentation()
     {
-        if (_desktopNavigation != null)
+        if (_desktopPagination != null)
         {
-            _desktopNavigation.IsVisible = ViewModel.SelectedImage != null;
-            if (_desktopNavigation.Owner != this) _desktopNavigation.Owner = this;
-            else _desktopNavigation.Refresh();
+            _desktopPagination.IsVisible = ViewModel.SelectedImage != null;
+            if (_desktopPagination.Owner != this) _desktopPagination.Owner = this;
+            else _desktopPagination.Refresh();
         }
     }
 
@@ -190,7 +190,7 @@ public partial class OrientedImageryView
         private readonly Dictionary<IView, Microsoft.Maui.Graphics.Size> _sizes = new();
 
         private static bool IsDivider(IView child) =>
-            child is BoxView or DesktopImageryBar { ToolbarItem: ToolbarDividerVM };
+            child is BoxView or OrientedImageryControlsView { ToolbarItem: ToolbarDividerVM };
 
         public Microsoft.Maui.Graphics.Size Measure(double widthConstraint, double heightConstraint)
         {
