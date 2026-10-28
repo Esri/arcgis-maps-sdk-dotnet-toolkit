@@ -778,9 +778,9 @@ public partial class OrientedImageryView
 #if WINDOWS
         if (_desktopNavigation != null)
         {
-            bool show = ViewModel.SelectedImage != null && !ViewModel.IsSequentialNavigationEnabled;
-            SetToolState(_previousButton, !_searching, show && canGoPrevious);
-            SetToolState(_nextButton, !_searching, show && canGoNext);
+            bool show = ViewModel.SelectedImage != null;
+            SetToolState(_previousButton, !_searching && canGoPrevious, show);
+            SetToolState(_nextButton, !_searching && canGoNext, show);
             return;
         }
 #endif
