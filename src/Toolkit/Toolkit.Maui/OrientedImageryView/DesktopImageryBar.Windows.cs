@@ -48,7 +48,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     private OrientedImageryViewModel? _model;
     private OrientedImageryToolbarItemBase? _item;
     private readonly List<Action> _updates = [];
-    private readonly List<Action> _detachSymbols = [];
+    private readonly List<Action> _cleanup = [];
     private bool _updating;
     private NavigationState? _navigationState;
     private FontFamily? _iconFont;
@@ -270,8 +270,8 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         _model = null;
         _item = null;
         _navigationState = null;
-        foreach (var detach in _detachSymbols) detach();
-        _detachSymbols.Clear();
+        foreach (var cleanup in _cleanup) cleanup();
+        _cleanup.Clear();
         _updates.Clear();
         _captions.Clear();
         _toolbarSelectors.Clear();
@@ -455,7 +455,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         NativeGrid.SetColumn(dropdown, 1);
         host.Children.Add(button);
         host.Children.Add(dropdown);
-        _detachSymbols.Add(() => dropdown.IsDropDownOpen = false);
+        _cleanup.Add(() => dropdown.IsDropDownOpen = false);
         Describe(button, "ImageSearchMode", "OrientedImageryDesktopMode");
         Describe(dropdown, "ImageSearchMode", "OrientedImageryDesktopModeDropdown");
         foreach (var state in mode.ImageSearchModes)
@@ -532,7 +532,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 Refresh();
         };
         mode.PropertyChanged += changed;
-        _detachSymbols.Add(() => mode.PropertyChanged -= changed);
+        _cleanup.Add(() => mode.PropertyChanged -= changed);
         return host;
     }
 
@@ -548,7 +548,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     {
         var combo = CreateToolbarSelector(true);
         Describe(combo, "SelectMarkerSymbol", "OrientedImageryDesktopSelectMarkers");
-        _detachSymbols.Add(() => combo.IsDropDownOpen = false);
+        _cleanup.Add(() => combo.IsDropDownOpen = false);
         MarkerSymbol[] symbols = [];
         combo.SelectionChanged += (_, _) =>
         {
@@ -580,7 +580,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         System.Collections.Specialized.NotifyCollectionChangedEventHandler collectionChanged = (_, _) => Refresh();
         picker.PropertyChanged += changed;
         picker.SymbolOptions.CollectionChanged += collectionChanged;
-        _detachSymbols.Add(() =>
+        _cleanup.Add(() =>
         {
             picker.PropertyChanged -= changed;
             picker.SymbolOptions.CollectionChanged -= collectionChanged;
@@ -627,22 +627,31 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         bool restoreFocus = focused != null && PlatformView.Children.OfType<NavigationRow>().Any(panel => panel.Children.Contains(focused));
         string? focusedId = restoreFocus ? AutomationProperties.GetAutomationId(focused!) : null;
         var focusState = restoreFocus ? focused!.FocusState : FocusState.Unfocused;
+        NavigationRow row;
         if (_model == model && _navigationState is { } previous &&
             previous.Sequential == state.Sequential && (state.Sequential || previous.Count == state.Count) &&
             PlatformView.Children.FirstOrDefault() is NavigationRow existingRow)
         {
-            _navigationState = state;
-            UpdateNavigationRow(existingRow, state);
-            ((IView)VirtualView).InvalidateMeasure();
-            if (restoreFocus)
-                RestoreNavigationFocus(existingRow, focusedId, selected, focusState);
-            return;
+            row = existingRow;
         }
-        Clear();
+        else
+        {
+            Clear();
+            _model = model;
+            row = CreateNavigationRow(owner, state);
+            PlatformView.Children.Add(row);
+        }
         _navigationState = state;
-        _model = model;
+        UpdateNavigationRow(row, state);
+        ((IView)VirtualView).InvalidateMeasure();
+        if (restoreFocus)
+            RestoreNavigationFocus(row, focusedId, selected, focusState);
+    }
+
+    private NavigationRow CreateNavigationRow(OrientedImageryView owner, NavigationState state)
+    {
+        var model = owner.ViewModel;
         var row = new NavigationRow();
-        PlatformView.Children.Add(row);
         NativeButton NavigateButton(bool next, bool label)
         {
             var command = next ? model.SelectNextImageCommand : model.SelectPreviousImageCommand;
@@ -656,45 +665,43 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 MinHeight = 32, MinWidth = 0, Padding = new NativeThickness(label ? 4 : 0),
                 BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
                 Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-                IsEnabled = !owner.DesktopIsSearching && command.CanExecute(null),
             };
             if (!label) button.Width = 33;
-            Describe(button, next ? "NextLabel" : "PreviousLabel", next ? "OrientedImageryPaginatorNext" : "OrientedImageryPaginatorPrevious");
+            string key = next ? "NextLabel" : "PreviousLabel";
+            Describe(button, key, next ? "OrientedImageryPaginatorNext" : "OrientedImageryPaginatorPrevious");
             button.Click += (_, _) => { if (command.CanExecute(null)) command.Execute(null); };
             return button;
         }
         row.Children.Add(NavigateButton(false, false));
-        if (model.IsSequentialNavigationEnabled) row.Children.Add(NavigateButton(false, true));
-        if (model.IsSequentialNavigationEnabled)
+        if (state.Sequential)
+        {
+            row.Children.Add(NavigateButton(false, true));
             row.Children.Add(PageIndicator(".", true));
+        }
         else
         {
-            for (int i = start; i < start + count; i++)
+            for (int slot = 0; slot < state.Count; slot++)
             {
-                int slot = i - start;
+                int pageSlot = slot;
                 var button = new NativeButton
                 {
-                    Content = PageIndicator((i + 1).ToString(CultureInfo.CurrentCulture), i == selected),
+                    Content = PageIndicator("", false),
                     MinWidth = 35, MinHeight = 32, Padding = new NativeThickness(0),
                     BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
-                    Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), IsEnabled = !owner.DesktopIsSearching,
+                    Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
                 };
-                AutomationProperties.SetName(button, string.Format(CultureInfo.CurrentCulture, Text(i == selected ? "SelectedPageFormat" : "GoToPageFormat"), i + 1, model.Images.Count));
-                AutomationProperties.SetAutomationId(button, "OrientedImageryPage" + i.ToString(CultureInfo.InvariantCulture));
                 button.Click += (_, _) =>
                 {
-                    int index = (_navigationState?.Start ?? 0) + slot;
+                    int index = (_navigationState?.Start ?? 0) + pageSlot;
                     if (VirtualView.Owner?.ViewModel == model && !model.IsSequentialNavigationEnabled && index < model.Images.Count)
                         model.SelectedImage = model.Images[index];
                 };
                 row.Children.Add(button);
             }
         }
-        if (model.IsSequentialNavigationEnabled) row.Children.Add(NavigateButton(true, true));
+        if (state.Sequential) row.Children.Add(NavigateButton(true, true));
         row.Children.Add(NavigateButton(true, false));
-        ((IView)VirtualView).InvalidateMeasure();
-        if (restoreFocus)
-            RestoreNavigationFocus(row, focusedId, selected, focusState);
+        return row;
     }
 
     private static void RestoreNavigationFocus(NavigationRow row, string? focusedId, int selected, FocusState focusState)

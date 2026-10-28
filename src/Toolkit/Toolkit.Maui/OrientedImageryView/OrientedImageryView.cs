@@ -405,7 +405,7 @@ public partial class OrientedImageryView : TemplatedView
         DismissPanel();
         if (_observedLayer != null)
             _observedLayer.PropertyChanged -= LayerChanged;
-        _observedLayer = _connected ? SelectedLayer : null;
+        _observedLayer = SelectedLayer;
         if (_observedLayer != null)
             _observedLayer.PropertyChanged += LayerChanged;
         if (ViewModel.OrientedImageryLayer != SelectedLayer)
@@ -413,7 +413,7 @@ public partial class OrientedImageryView : TemplatedView
         if (SelectedLayer != null)
             SelectedLayer.IsVisible = true;
         Refresh();
-        if (_connected && SelectedLayer != null && _layers.Contains(SelectedLayer))
+        if (HasValidLayer)
             _ = LoadSelectedLayerAsync(SelectedLayer, _layerVersion, _operationVersion);
     }
 
@@ -527,7 +527,7 @@ public partial class OrientedImageryView : TemplatedView
         var geoView = GeoView;
         var layer = SelectedLayer;
         var model = ViewModel;
-        if (!_connected || geoView == null || layer == null || e.Location == null || !_layers.Contains(layer))
+        if (geoView == null || layer == null || e.Location == null || !_layers.Contains(layer))
             return;
         if (model.InteractionState == OrientedImageryViewInteractionState.AddMarkers)
         {
