@@ -10,6 +10,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
+    #region Presentation state
+
     private const double MinimumImageAreaHeight = 200;
     private Label? _status;
     private View? _statusHost;
@@ -45,8 +47,9 @@ public partial class OrientedImageryView
     private Grid? _panelBackdrop;
 #endif
     private bool _updatingPanel;
+    private bool _refreshing;
+    private bool _refreshPending;
 #if !WINDOWS
-    private bool _showingSymbols;
     private Page? _presentationPage;
     private bool? _pageLandscape;
 #endif
@@ -58,6 +61,10 @@ public partial class OrientedImageryView
     private Grid? _symbolGrid;
     private readonly List<Border> _symbolTiles = new();
 #endif
+
+    #endregion
+
+    #region Labels and template construction
 
     private static string Text(string key) => Properties.Resources.GetString("OrientedImageryView" + key);
 
@@ -394,6 +401,10 @@ public partial class OrientedImageryView
         return button;
     }
 
+    #endregion
+
+    #region Template and handler lifecycle
+
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
     {
@@ -583,8 +594,9 @@ public partial class OrientedImageryView
 
     private void ViewportChanged(object? sender, EventArgs e) => Refresh();
 
-    private bool _refreshing;
-    private bool _refreshPending;
+    #endregion
+
+    #region Status and presentation updates
 
     private string RefreshSelectionGuidance()
     {
@@ -607,6 +619,7 @@ public partial class OrientedImageryView
 
     private void Refresh()
     {
+        // Model changes during a refresh request another pass rather than nesting refreshes.
         _refreshPending = true;
         if (_refreshing) return;
         _refreshing = true;
@@ -647,10 +660,31 @@ public partial class OrientedImageryView
         if (ViewModel.AreFootprintsEnabled != footprintsEnabled)
             ViewModel.AreFootprintsEnabled = footprintsEnabled;
 
+        RefreshStatus();
+        RefreshToolbarPresentation();
+        if (_notice != null)
+        {
+            _notice.Text = ViewModel.SequentialNavigationError?.Message;
+            _notice.IsVisible = _notice.Text != null;
+            if (_connected && _notice.Text != null && _notice.Text != _lastNotice)
+                SemanticScreenReader.Default.Announce(_notice.Text);
+            _lastNotice = _notice.Text;
+        }
+
+        RefreshPages();
+        RefreshPopup();
+        UpdateOpenPanel();
+        RefreshDesktopPresentation();
+        UpdateBackNavigation();
+    }
+
+    private void RefreshStatus()
+    {
+        bool loading = _searching || _viewport?.IsBusy == true || SelectedLayer?.LoadStatus == LoadStatus.Loading;
         if (_busy != null)
         {
-            _busy.IsRunning = _searching || _viewport?.IsBusy == true || SelectedLayer?.LoadStatus == LoadStatus.Loading;
-            _busy.IsVisible = _busy.IsRunning;
+            _busy.IsRunning = loading;
+            _busy.IsVisible = loading;
         }
 
         string? error = _operationError?.Message ?? _viewport?.Error?.Message;
@@ -662,8 +696,7 @@ public partial class OrientedImageryView
             else if (_layers.Count == 0) message = Text("NoLayers");
             else if (SelectedLayer == null) message = Text("NoLayerSelected");
             else if (!_layers.Contains(SelectedLayer)) message = Text("InvalidLayer");
-            else if (_searching || _viewport?.IsBusy == true || SelectedLayer.LoadStatus == LoadStatus.Loading)
-                message = Text("Loading");
+            else if (loading) message = Text("Loading");
             else if (ViewModel.SelectedImage == null)
             {
                 message = Text(_hasSearchedForImages ? "NoImagesFound" : "NoImageToDisplay");
@@ -683,18 +716,14 @@ public partial class OrientedImageryView
             _statusHost.IsVisible = message != null;
         if (_selectionGuidance != null)
             _selectionGuidance.IsVisible = showSelectionGuidance;
+    }
 
-        RefreshToolbarPresentation();
-        if (_notice != null)
-        {
-            _notice.Text = ViewModel.SequentialNavigationError?.Message;
-            _notice.IsVisible = _notice.Text != null;
-            if (_connected && _notice.Text != null && _notice.Text != _lastNotice)
-                SemanticScreenReader.Default.Announce(_notice.Text);
-            _lastNotice = _notice.Text;
-        }
+    #endregion
 
-        RefreshPages();
+    #region Image information
+
+    private void RefreshPopup()
+    {
         bool showingPopup = ViewModel.SelectedImagePopup != null;
         if (_popupOpenButton != null)
         {
@@ -713,10 +742,11 @@ public partial class OrientedImageryView
         }
         if (_popupHost != null) _popupHost.IsVisible = showingPopup;
         if (_popupCloseButton != null) _popupCloseButton.Command = ViewModel.CloseSelectedImagePopupCommand;
-        UpdateOpenPanel();
-        RefreshDesktopPresentation();
-        UpdateBackNavigation();
     }
+
+    #endregion
+
+    #region Image navigation
 
     private static void SetToolState(Button? button, bool enabled, bool visible)
     {
@@ -743,28 +773,22 @@ public partial class OrientedImageryView
 
     private void RefreshPageItems()
     {
+        bool canGoPrevious = ViewModel.SelectPreviousImageCommand.CanExecute(null);
+        bool canGoNext = ViewModel.SelectNextImageCommand.CanExecute(null);
 #if WINDOWS
         if (_desktopNavigation != null)
         {
             bool show = ViewModel.SelectedImage != null && !ViewModel.IsSequentialNavigationEnabled;
-            if (_previousButton != null)
-            {
-                _previousButton.IsVisible = show && ViewModel.SelectPreviousImageCommand.CanExecute(null);
-                _previousButton.IsEnabled = !_searching;
-            }
-            if (_nextButton != null)
-            {
-                _nextButton.IsVisible = show && ViewModel.SelectNextImageCommand.CanExecute(null);
-                _nextButton.IsEnabled = !_searching;
-            }
+            SetToolState(_previousButton, !_searching, show && canGoPrevious);
+            SetToolState(_nextButton, !_searching, show && canGoNext);
             return;
         }
 #endif
         bool visible = ViewModel.SelectedImage != null;
-        SetToolState(_imagePreviousButton, !_searching && ViewModel.SelectPreviousImageCommand.CanExecute(null), visible);
-        SetToolState(_imageNextButton, !_searching && ViewModel.SelectNextImageCommand.CanExecute(null), visible);
-        SetToolState(_previousButton, !_searching && ViewModel.SelectPreviousImageCommand.CanExecute(null), visible);
-        SetToolState(_nextButton, !_searching && ViewModel.SelectNextImageCommand.CanExecute(null), visible);
+        SetToolState(_imagePreviousButton, !_searching && canGoPrevious, visible);
+        SetToolState(_imageNextButton, !_searching && canGoNext, visible);
+        SetToolState(_previousButton, !_searching && canGoPrevious, visible);
+        SetToolState(_nextButton, !_searching && canGoNext, visible);
         if (_pages == null) return;
         if (_previousButton != null)
         {
@@ -796,6 +820,7 @@ public partial class OrientedImageryView
         var (start, count) = ViewModel.IsSequentialNavigationEnabled ? (0, 0) :
             OrientedImageryPagination.GetRange(ViewModel.Images.Count, selected, Math.Min(available, 9 * pageWidth), pageWidth);
         var previousState = _pageState;
+        // Reuse page buttons as the visible range moves to avoid losing focus.
         bool rebuild = previousState == null || previousState.Value.Sequential != ViewModel.IsSequentialNavigationEnabled ||
             previousState.Value.Count != count;
         _pageState = (ViewModel.IsSequentialNavigationEnabled, start, count);
@@ -837,11 +862,11 @@ public partial class OrientedImageryView
             var previous = (Button)_pages.Children[0];
             previous.Text = Text("PreviousLabel");
             SemanticProperties.SetDescription(previous, previous.Text);
-            previous.IsEnabled = !_searching && ViewModel.SelectPreviousImageCommand.CanExecute(null);
+            previous.IsEnabled = !_searching && canGoPrevious;
             var next = (Button)_pages.Children[2];
             next.Text = Text("NextLabel");
             SemanticProperties.SetDescription(next, next.Text);
-            next.IsEnabled = !_searching && ViewModel.SelectNextImageCommand.CanExecute(null);
+            next.IsEnabled = !_searching && canGoNext;
             return;
         }
 
@@ -912,6 +937,10 @@ public partial class OrientedImageryView
         Refresh();
     }
 
+    #endregion
+
+    #region Icons and menu actions
+
 #if !WINDOWS
     private sealed record MenuAction(string Title, Action Execute, Func<bool> Enabled, Func<View> Icon,
         Func<bool>? Checked = null, bool IsSubmenu = false);
@@ -933,43 +962,37 @@ public partial class OrientedImageryView
         "M21.6003 15.3997L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3997Z";
     internal const string SequenceGeometry = "M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z";
 
-    private static View MenuIcon(string? glyph, string? geometry)
-    {
-        var accent = Color.FromArgb("#007AC2");
+    private static Color MenuAccent =>
 #if __IOS__ && !MACCATALYST
-        accent = IosAccent;
+        IosAccent;
+#else
+        Color.FromArgb("#007AC2");
 #endif
-        if (geometry != null)
+
+    private static Microsoft.Maui.Controls.Shapes.Path GeometryIcon(string geometry) => new()
+    {
+        Data = (Microsoft.Maui.Controls.Shapes.Geometry)new PathGeometryConverter().ConvertFromInvariantString(geometry),
+        Fill = MenuAccent, Stroke = Colors.Transparent,
+        StrokeThickness = 1.5, Aspect = Stretch.Uniform,
+        WidthRequest = 22, HeightRequest = 22, VerticalOptions = LayoutOptions.Center,
+    };
+
+    private static Image GlyphIcon(string glyph) => new()
+    {
+        Source = new FontImageSource
         {
-            var path = new Microsoft.Maui.Controls.Shapes.Path
-            {
-                Data = (Microsoft.Maui.Controls.Shapes.Geometry)new PathGeometryConverter().ConvertFromInvariantString(geometry),
-                Fill = accent,
-                Stroke = Colors.Transparent,
-                StrokeThickness = 1.5, Aspect = Stretch.Uniform,
-                WidthRequest = 22, HeightRequest = 22, VerticalOptions = LayoutOptions.Center,
-            };
-            return path;
-        }
-        return new Image
-        {
-            Source = new FontImageSource { Glyph = glyph ?? ToolkitIcons.Search, FontFamily = ToolkitIcons.FontFamilyName, Size = 22, Color = accent },
-            WidthRequest = 22, HeightRequest = 22, VerticalOptions = LayoutOptions.Center,
-        };
-    }
+            Glyph = glyph, FontFamily = ToolkitIcons.FontFamilyName, Size = 22, Color = MenuAccent,
+        },
+        WidthRequest = 22, HeightRequest = 22, VerticalOptions = LayoutOptions.Center,
+    };
 
     private static View ImageModeIcon(bool explore) =>
-        MenuIcon(null, explore ? ExploreImagesGeometry : DisplayImageGeometry);
+        GeometryIcon(explore ? ExploreImagesGeometry : DisplayImageGeometry);
 
 #if !WINDOWS
-    private static View MarkerOptionIcon(MarkerSymbol symbol) =>
-        new SymbolDisplay { Symbol = symbol, WidthRequest = 24, HeightRequest = 24, VerticalOptions = LayoutOptions.Center };
-
-    private View FootprintIcon(bool additional) => MenuIcon(null, additional ? OverlayGeometry : CurrentFootprintGeometry);
-
-    private View CameraLocationsIcon()
+    private static View CameraLocationsIcon()
     {
-        var icon = (Microsoft.Maui.Controls.Shapes.Path)MenuIcon(null,
+        var icon = GeometryIcon(
             "M5.5 23A3.5 3.5 0 1 0 12.5 23A3.5 3.5 0 1 0 5.5 23Z " +
             "M13.5 17A3.5 3.5 0 1 0 20.5 17A3.5 3.5 0 1 0 13.5 17Z " +
             "M5.5 5A3.5 3.5 0 1 0 12.5 5A3.5 3.5 0 1 0 5.5 5Z " +
@@ -1008,6 +1031,10 @@ public partial class OrientedImageryView
     }
 #endif
 
+    #endregion
+
+    #region Options and marker panels
+
     private void UpdateOpenPanel()
     {
         if (_panelAnchor == null || _updatingPanel) return;
@@ -1032,14 +1059,16 @@ public partial class OrientedImageryView
     private void ShowSymbols(View anchor, SelectNewMarkerSymbolVM picker, Action back)
     {
         DismissPanel(preservePresentation: true);
-        _showingSymbols = true;
         var content = PanelContent(Text("MarkerSelection"));
         _symbolGrid = new Grid { ColumnSpacing = 4, RowSpacing = 0 };
         foreach (var symbol in picker.SymbolOptions)
         {
             var action = new MenuAction(MarkerOptionName(symbol, _symbolTiles.Count), () => { picker.SelectedSymbol = symbol; back(); },
                 Checked: () => symbol == picker.SelectedSymbol, Enabled: () => IsAddingMarkers,
-                Icon: () => MarkerOptionIcon(symbol));
+                Icon: () => new SymbolDisplay
+                {
+                    Symbol = symbol, WidthRequest = 24, HeightRequest = 24, VerticalOptions = LayoutOptions.Center,
+                });
             var guarded = GuardAction(action,
 #if ANDROID || (__IOS__ && !MACCATALYST)
                 dismiss: false
@@ -1084,7 +1113,7 @@ public partial class OrientedImageryView
         _panelCleanup.Add(() => picker.PropertyChanged -= changed);
         System.Collections.Specialized.NotifyCollectionChangedEventHandler optionsChanged = (_, _) => DispatchUpdate(() =>
         {
-            if (_showingSymbols) ShowSymbols(anchor, picker, back);
+            if (_symbolGrid != null) ShowSymbols(anchor, picker, back);
         });
         picker.SymbolOptions.CollectionChanged += optionsChanged;
         _panelCleanup.Add(() => picker.SymbolOptions.CollectionChanged -= optionsChanged);
@@ -1092,6 +1121,7 @@ public partial class OrientedImageryView
 
     private MenuAction GuardAction(MenuAction action, bool dismiss = true)
     {
+        // A button from a replaced menu must not act on the current layer.
         int version = _menuVersion;
         var model = ViewModel;
         var layer = SelectedLayer;
@@ -1141,7 +1171,7 @@ public partial class OrientedImageryView
         if (action.Title == Text("ClearMarkers"))
         {
             title.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#FF3B30"), Color.FromArgb("#FF453A"));
-            if (row.Children.OfType<Border>().FirstOrDefault()?.Content is Image { Source: FontImageSource clearIcon })
+            if (icon is Image { Source: FontImageSource clearIcon })
                 clearIcon.Color = Color.FromArgb("#FF3B30");
         }
 #endif
@@ -1158,7 +1188,7 @@ public partial class OrientedImageryView
         if (action.Checked != null) row.Add(selection, 2);
         if (action.IsSubmenu)
         {
-            var chevron = MenuIcon(ToolkitIcons.ChevronRight, null);
+            var chevron = GlyphIcon(ToolkitIcons.ChevronRight);
             chevron.InputTransparent = true;
             row.Add(chevron, 2);
         }
@@ -1177,7 +1207,11 @@ public partial class OrientedImageryView
     private static VerticalStackLayout PanelContent(string title)
     {
         var content = new VerticalStackLayout { Spacing = 0, Padding = 8 };
-        var heading = new Label { Text = title, FontSize = 16, FontAttributes = FontAttributes.Bold, Margin = new Thickness(0, 0, 0, 4) };
+        var heading = new Label
+        {
+            Text = title, FontSize = 16, FontAttributes = FontAttributes.Bold,
+            Margin = new Thickness(0, 0, 0, 4),
+        };
 #if __IOS__ && !MACCATALYST
         heading.FontSize = 15;
         heading.VerticalTextAlignment = TextAlignment.Center;
@@ -1188,7 +1222,7 @@ public partial class OrientedImageryView
         return content;
     }
 
-    private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View>? icon = null, Func<bool>? enabled = null)
+    private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View> icon, Func<bool> enabled)
     {
         var row = new Grid { ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }, ColumnSpacing = 6 };
         var label = new Label { Text = Text(key), VerticalOptions = LayoutOptions.Center };
@@ -1206,7 +1240,7 @@ public partial class OrientedImageryView
         toggle.VerticalOptions = LayoutOptions.Center;
         toggle.OnColor = Color.FromArgb("#34C759");
 #endif
-        bool CanInteract() => !_updatingPanel && _connected && _panelAnchor != null && (enabled?.Invoke() ?? true);
+        bool CanInteract() => !_updatingPanel && _connected && _panelAnchor != null && enabled();
         SemanticProperties.SetDescription(toggle, Text(key));
         toggle.Toggled += (_, e) =>
         {
@@ -1224,17 +1258,13 @@ public partial class OrientedImageryView
         };
         label.GestureRecognizers.Add(labelTap);
 #endif
-        if (icon != null)
-        {
-            var view = FlyoutIcon(icon());
-            row.Add(view);
-        }
+        row.Add(FlyoutIcon(icon()));
         row.Add(label, 1);
         row.Add(toggle, 2);
         _panelUpdates.Add(() =>
         {
             toggle.IsToggled = get();
-            row.IsEnabled = enabled?.Invoke() ?? true;
+            row.IsEnabled = enabled();
             row.Opacity = row.IsEnabled ? 1 : 0.45;
         });
         AddPanelItem(content, row);
@@ -1351,6 +1381,10 @@ public partial class OrientedImageryView
     }
 #endif
 
+    #endregion
+
+    #region Panel sizing and dismissal
+
 #if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
     private void PanelHostSizeChanged(object? sender, EventArgs e) => UpdatePanelSize();
 
@@ -1460,9 +1494,6 @@ public partial class OrientedImageryView
         foreach (var cleanup in _panelCleanup) cleanup();
         _panelCleanup.Clear();
         _panelUpdates.Clear();
-#if !WINDOWS
-        _showingSymbols = false;
-#endif
 #if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
         _panel = null;
         _panelBackdrop = null;
@@ -1497,10 +1528,16 @@ public partial class OrientedImageryView
             update();
     }
 
+    #endregion
+
+    #region Platform presentation hooks
+
     partial void RefreshDesktopPresentation();
     partial void AttachPlatformPresentation();
     partial void DetachPlatformPresentation();
     partial void AttachBackNavigation();
     partial void DetachBackNavigation();
     partial void UpdateBackNavigation();
+
+    #endregion
 }
