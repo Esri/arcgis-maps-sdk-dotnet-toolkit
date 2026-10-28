@@ -7,6 +7,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
+    #region Sheet state and lifecycle
+
     private static readonly Color IosAccent = Color.FromArgb("#007AFF");
     private UIViewController? _iosSheet;
     private ContentView? _iosSheetContent;
@@ -21,6 +23,10 @@ public partial class OrientedImageryView
         DismissPanel();
         DismissIosPopup();
     }
+
+    #endregion
+
+    #region Image information
 
     private void RefreshIosPopup()
     {
@@ -42,6 +48,20 @@ public partial class OrientedImageryView
         SemanticScreenReader.Default.Announce(heading.Text);
     }
 
+    private void DismissIosPopup(bool closePopup = true)
+    {
+        if (!_iosSheetIsInfo) return;
+        _iosSheetIsInfo = false;
+        if (_popupViewer?.Parent is Grid layout) layout.Remove(_popupViewer);
+        DismissIosSheet();
+        if (closePopup && ViewModel.SelectedImagePopup != null)
+            ViewModel.CloseSelectedImagePopupCommand.Execute(null);
+    }
+
+    #endregion
+
+    #region Native sheet presentation
+
     private void PresentIosSheet(View content, bool info)
     {
         _iosSheetIsInfo = info;
@@ -52,6 +72,7 @@ public partial class OrientedImageryView
             AddLogicalChild(_iosSheetContent);
             _iosSheetContent.SizeChanged += IosSheetSizeChanged;
         }
+        // Swap menu content without replacing the native sheet.
         _iosSheetContent.Content = content;
         UpdateIosPanelSize();
         if (_iosSheet?.SheetPresentationController is { } sheet)
@@ -92,6 +113,10 @@ public partial class OrientedImageryView
         });
     }
 
+    #endregion
+
+    #region Sheet sizing
+
     private void IosSheetSizeChanged(object? sender, EventArgs e) => UpdateIosPanelSize();
 
     private void UpdateIosPanelSize()
@@ -122,15 +147,9 @@ public partial class OrientedImageryView
             };
     }
 
-    private void DismissIosPopup(bool closePopup = true)
-    {
-        if (!_iosSheetIsInfo) return;
-        _iosSheetIsInfo = false;
-        if (_popupViewer?.Parent is Grid layout) layout.Remove(_popupViewer);
-        DismissIosSheet();
-        if (closePopup && ViewModel.SelectedImagePopup != null)
-            ViewModel.CloseSelectedImagePopupCommand.Execute(null);
-    }
+    #endregion
+
+    #region Dismissal and cleanup
 
     private void DismissIosSheet()
     {
@@ -153,6 +172,7 @@ public partial class OrientedImageryView
             releaseDelegate?.Invoke();
             controller?.Dispose();
             _iosSheetClosing = false;
+            // A new menu may have been requested during the dismissal animation.
             ShowIosSheet();
         }
         if (controller?.PresentingViewController != null)
@@ -174,5 +194,7 @@ public partial class OrientedImageryView
                 owner.DismissPanel();
         }
     }
+
+    #endregion
 }
 #endif
