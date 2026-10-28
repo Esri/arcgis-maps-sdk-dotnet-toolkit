@@ -61,6 +61,8 @@ Displays an interactive inset map for a map or scene.
 
 Displays oriented imagery connected to a map or scene. The default .NET MAUI Android and iOS presentations use native modal bottom sheets for toolbar options, marker symbols, and image information. Options stay open after selection; choosing a marker symbol returns to the marker options. Use Close or swipe down to dismiss a sheet. On iOS, toolbar and marker-symbol sheets fit their content without a larger expansion height; content exceeding the height limit scrolls. Image information uses medium and large heights. Both use the native grabber and remain edge-attached in compact-height layouts, such as iPhone landscape, rather than adapting to a full-screen presentation.
 
+On Android and iOS, Mode options use a shared segmented selector with icons and wrapping labels. Selecting the active segment turns that mode off; it can be selected again immediately without closing the sheet.
+
 The Android and iOS **Oriented imagery bottom sheet** sample uses a shared, non-modal MAUI panel to host the entire control over an interactive map or scene. Tap or drag its header to resize between 50% and 75% of the available area. Custom control templates retain ownership of their own popup presentation.
 
 ### PopupViewer
