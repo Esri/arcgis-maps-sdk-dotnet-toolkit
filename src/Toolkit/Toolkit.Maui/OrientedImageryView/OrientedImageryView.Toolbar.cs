@@ -162,14 +162,14 @@ public partial class OrientedImageryView
             {
                 if (!IsBuiltInToolbarItem(item))
                     throw new InvalidOperationException($"Register a toolbar template for '{item.GetType().Name}'.");
-                var bar = new DesktopImageryBar
+                var controlsView = new OrientedImageryControlsView
                 {
                     Owner = this, ToolbarItem = item,
                     MinimumHeightRequest = 84,
                 };
-                view = bar;
-                _toolbarUpdates.Add(bar.Refresh);
-                _toolbarCleanup.Add(() => bar.Owner = null);
+                view = controlsView;
+                _toolbarUpdates.Add(controlsView.Refresh);
+                _toolbarCleanup.Add(() => controlsView.Owner = null);
             }
             group.Add(view);
             _toolbarUpdates.Add(() => view.IsVisible = IsToolbarItemVisible(item));

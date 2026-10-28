@@ -146,30 +146,30 @@ public partial class OrientedImageryView
         AddPopupPresentation(image, scope);
 
 #if WINDOWS
-        Add("PART_DesktopNavigation", new DesktopImageryBar(), root, 2);
+        Add("PART_DesktopNavigation", new OrientedImageryControlsView(), root, 2);
 #else
-        var navigation = new Grid
+        var pagination = new Grid
         {
             ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Auto) },
             HorizontalOptions = LayoutOptions.Center,
             ColumnSpacing = 0,
             Padding = new Thickness(8, 0),
         };
-        scope.RegisterName("PART_Navigation", navigation);
-        var navigationScroll = new ScrollView { Orientation = ScrollOrientation.Horizontal, Content = navigation };
-        Grid.SetRow(navigationScroll, 2);
-        root.Add(navigationScroll);
+        scope.RegisterName("PART_Navigation", pagination);
+        var paginationScroll = new ScrollView { Orientation = ScrollOrientation.Horizontal, Content = pagination };
+        Grid.SetRow(paginationScroll, 2);
+        root.Add(paginationScroll);
         var previous = ToolButton("PreviousLabel", ToolkitIcons.ChevronLeft, "OrientedImageryPrevious");
         previous.Text = null;
         previous.WidthRequest = 44;
         previous.BorderWidth = 0;
-        Add("PART_Previous", previous, navigation);
-        Add("PART_Pages", new HorizontalStackLayout { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, Spacing = 0 }, navigation, column: 1);
+        Add("PART_Previous", previous, pagination);
+        Add("PART_Pages", new HorizontalStackLayout { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, Spacing = 0 }, pagination, column: 1);
         var next = ToolButton("NextLabel", ToolkitIcons.ChevronRight, "OrientedImageryNext");
         next.Text = null;
         next.WidthRequest = 44;
         next.BorderWidth = 0;
-        Add("PART_Next", next, navigation, column: 2);
+        Add("PART_Next", next, pagination, column: 2);
 #endif
         var notice = new Label { HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(8, 4), AutomationId = "OrientedImageryNotice" };
         notice.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
@@ -754,7 +754,7 @@ public partial class OrientedImageryView
 
     #endregion
 
-    #region Image navigation
+    #region Image pagination
 
     private static void SetToolState(Button? button, bool enabled, bool visible)
     {
@@ -774,8 +774,8 @@ public partial class OrientedImageryView
 #if __IOS__ && !MACCATALYST
         // iOS stops child measure invalidation at ScrollViews, leaving the initially empty row at zero height.
         if ((previousState?.Sequential != _pageState?.Sequential || previousState?.Count != _pageState?.Count) &&
-            _pages?.Parent?.Parent is ScrollView navigationScroll)
-            ((IView)navigationScroll).InvalidateMeasure();
+            _pages?.Parent?.Parent is ScrollView paginationScroll)
+            ((IView)paginationScroll).InvalidateMeasure();
 #endif
     }
 
@@ -784,7 +784,7 @@ public partial class OrientedImageryView
         bool canGoPrevious = ViewModel.SelectPreviousImageCommand.CanExecute(null);
         bool canGoNext = ViewModel.SelectNextImageCommand.CanExecute(null);
 #if WINDOWS
-        if (_desktopNavigation != null)
+        if (_desktopPagination != null)
         {
             bool show = ViewModel.SelectedImage != null;
             SetToolState(_previousButton, !_searching && canGoPrevious, show);
@@ -845,7 +845,7 @@ public partial class OrientedImageryView
                 button.BorderWidth = 0;
                 button.Padding = new Thickness(4, 0);
                 button.MinimumWidthRequest = 44;
-                button.Clicked += (_, _) => Navigate(next);
+                button.Clicked += (_, _) => ChangePage(next);
                 return button;
             }
             _pages.Add(SequenceButton(false));
@@ -936,9 +936,9 @@ public partial class OrientedImageryView
         _selectedPage = selected;
     }
 
-    private void Previous(object? sender, EventArgs e) => Navigate(false);
-    private void Next(object? sender, EventArgs e) => Navigate(true);
-    private void Navigate(bool next)
+    private void Previous(object? sender, EventArgs e) => ChangePage(false);
+    private void Next(object? sender, EventArgs e) => ChangePage(true);
+    private void ChangePage(bool next)
     {
         var command = next ? ViewModel.SelectNextImageCommand : ViewModel.SelectPreviousImageCommand;
         if (!_searching && command.CanExecute(null)) command.Execute(null);
