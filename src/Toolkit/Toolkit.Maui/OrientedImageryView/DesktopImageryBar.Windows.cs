@@ -364,7 +364,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         };
         Describe(button, key);
         button.Click += (_, _) => { if (!_updating && enabled()) execute(); };
-        _updates.Add(() => button.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching && enabled());
+        _updates.Add(() => button.IsEnabled = owner.DesktopHasLayer && enabled());
         return button;
     }
 
@@ -384,7 +384,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         {
             bool selected = get();
             toggle.IsChecked = selected;
-            toggle.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching && (enabled?.Invoke() ?? true);
+            toggle.IsEnabled = owner.DesktopHasLayer && (enabled?.Invoke() ?? true);
         });
         return toggle;
     }
@@ -561,7 +561,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             }
             dropdown.SelectedItem = mode.IsImageSelectionEnabled ? dropdown.Items.OfType<ComboBoxItem>()
                 .FirstOrDefault(item => item.Tag is OrientedImageryViewInteractionState state && state == mode.SelectedInteractionState) : null;
-            button.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching;
+            button.IsEnabled = owner.DesktopHasLayer;
             dropdown.IsEnabled = button.IsEnabled;
             button.IsChecked = mode.IsImageSelectionEnabled;
         });
@@ -628,7 +628,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         {
             UpdateSymbols();
             combo.SelectedIndex = Array.IndexOf(symbols, picker.SelectedSymbol);
-            combo.IsEnabled = owner.DesktopHasLayer && !owner.DesktopIsSearching;
+            combo.IsEnabled = owner.DesktopHasLayer;
         });
         return combo;
     }
