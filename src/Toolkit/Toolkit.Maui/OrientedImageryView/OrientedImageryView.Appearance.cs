@@ -25,12 +25,12 @@ public partial class OrientedImageryView
     private Button? _nextButton;
     private Button? _imagePreviousButton;
     private Button? _imageNextButton;
-    private Grid? _panelHost;
+#if !WINDOWS
     private Grid? _panelLayout;
     private ScrollView? _panelScroll;
+#endif
     private HorizontalStackLayout? _pages;
     private Layout? _customToolbar;
-    private ScrollView? _toolbarScroll;
     private (bool Sequential, int Start, int Count)? _pageState;
     private int _selectedPage = -1;
     private View? _panelAnchor;
@@ -38,7 +38,9 @@ public partial class OrientedImageryView
     private string? _lastNotice;
     private readonly List<Action> _panelUpdates = new();
     private readonly List<Action> _panelCleanup = new();
-#if !ANDROID && (!__IOS__ || MACCATALYST)
+#if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
+    private Grid? _panelHost;
+    private ScrollView? _toolbarScroll;
     private Border? _panel;
     private Grid? _panelBackdrop;
 #endif
@@ -73,11 +75,7 @@ public partial class OrientedImageryView
         return key != null ? Text("Marker" + key) : string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), index + 1);
     }
 
-    private static readonly ControlTemplate DefaultControlTemplate =
-#if WINDOWS
-        new(CreateDesktopTemplate);
-#else
-        new(() =>
+    private static readonly ControlTemplate DefaultControlTemplate = new(() =>
     {
         var root = new Grid
         {
@@ -89,9 +87,10 @@ public partial class OrientedImageryView
             },
             RowSpacing = 0,
         };
-        root.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
 #if __IOS__ && !MACCATALYST
         root.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F2F2F7"), Color.FromArgb("#1C1C1E"));
+#else
+        root.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
 #endif
         INameScope scope = new NameScope();
         NameScope.SetNameScope(root, scope);
@@ -103,6 +102,9 @@ public partial class OrientedImageryView
             parent.Children.Add(view);
         }
 
+#if WINDOWS
+        Add("PART_CustomToolbar", new ToolbarWrapLayout { Margin = 8, CenterRows = true }, root);
+#else
         var custom = new ToolbarRowLayout();
         var toolbarScroll = new ScrollView
         {
@@ -113,6 +115,7 @@ public partial class OrientedImageryView
         toolbarScroll.SizeChanged += (_, _) => custom.MinimumWidthRequest = Math.Max(0, toolbarScroll.Width);
         scope.RegisterName("PART_CustomToolbar", custom);
         Add("PART_ToolbarScroll", toolbarScroll, root);
+#endif
 
         var image = new Grid
         {
@@ -124,11 +127,20 @@ public partial class OrientedImageryView
         root.Children.Add(image);
         Add("PART_Viewport", new OrientedImageViewport { AutomationId = "OrientedImageryViewport" }, image);
         AddStatusPresentation(image, scope);
+#if WINDOWS
+        Add("PART_Busy", new ActivityIndicator { VerticalOptions = LayoutOptions.Start, HeightRequest = 24, AutomationId = "OrientedImageryBusy" }, image);
+        Add("PART_Previous", DesktopImageArrow(false), image);
+        Add("PART_Next", DesktopImageArrow(true), image);
+#else
         Add("PART_Busy", new ActivityIndicator { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, AutomationId = "OrientedImageryBusy" }, image);
         Add("PART_ImagePrevious", MobileImageArrow(false), image);
         Add("PART_ImageNext", MobileImageArrow(true), image);
+#endif
         AddPopupPresentation(image, scope);
 
+#if WINDOWS
+        Add("PART_DesktopNavigation", new DesktopImageryBar(), root, 2);
+#else
         var navigation = new Grid
         {
             ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Auto) },
@@ -151,19 +163,21 @@ public partial class OrientedImageryView
         next.WidthRequest = 44;
         next.BorderWidth = 0;
         Add("PART_Next", next, navigation, column: 2);
+#endif
         var notice = new Label { HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(8, 4), AutomationId = "OrientedImageryNotice" };
         notice.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
         Add("PART_Notice", notice, root, 3);
+#if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
         var panels = new Grid { IsVisible = false, InputTransparent = true, CascadeInputTransparent = false };
         Add("PART_PanelHost", panels, root);
         Grid.SetRowSpan(panels, root.RowDefinitions.Count);
+#endif
 #if ANDROID
         return root;
 #else
         return ScrollablePresentation(root, image, scope);
 #endif
     });
-#endif
 
     private static View ScrollablePresentation(Grid root, Grid image, INameScope scope)
     {
@@ -405,11 +419,13 @@ public partial class OrientedImageryView
         _imagePreviousButton = GetTemplateChild("PART_ImagePrevious") as Button;
         _imageNextButton = GetTemplateChild("PART_ImageNext") as Button;
         _pages = GetTemplateChild("PART_Pages") as HorizontalStackLayout;
+#if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
         _panelHost = GetTemplateChild("PART_PanelHost") as Grid;
         if (_panelHost != null) _panelHost.SizeChanged += PanelHostSizeChanged;
-        _customToolbar = GetTemplateChild("PART_CustomToolbar") as Layout;
         _toolbarScroll = GetTemplateChild("PART_ToolbarScroll") as ScrollView;
         if (_toolbarScroll != null) _toolbarScroll.Scrolled += ToolbarScrolled;
+#endif
+        _customToolbar = GetTemplateChild("PART_CustomToolbar") as Layout;
 #if WINDOWS
         InitializeDesktopTemplate();
 #endif
@@ -465,15 +481,8 @@ public partial class OrientedImageryView
 
     private void PresentationUnloaded(object? sender, EventArgs e)
     {
-#if ANDROID
-        DismissPanel();
-        DismissAndroidPopup();
-#elif __IOS__ && !MACCATALYST
-        DismissPanel();
-        DismissIosPopup();
-#endif
+        DetachPlatformPresentation();
         SetPresentationPage(null);
-        DetachBackNavigation();
     }
 
     private void ObservePresentationPage()
@@ -524,8 +533,12 @@ public partial class OrientedImageryView
         DismissIosPopup();
 #endif
         ReleaseToolbarPresentation();
+#if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
         if (_panelHost != null) _panelHost.SizeChanged -= PanelHostSizeChanged;
         if (_toolbarScroll != null) _toolbarScroll.Scrolled -= ToolbarScrolled;
+        _toolbarScroll = null;
+        _panelHost = null;
+#endif
         if (_viewport != null)
         {
             _viewport.ImageTapped -= ImageTapped;
@@ -559,8 +572,6 @@ public partial class OrientedImageryView
         _pageState = null;
         _selectedPage = -1;
         _customToolbar = null;
-        _toolbarScroll = null;
-        _panelHost = null;
         if (_popupViewer != null) _popupViewer.Popup = null;
         if (_popupOpenButton != null) _popupOpenButton.Command = null;
         if (_popupCloseButton != null) _popupCloseButton.Command = null;
@@ -752,16 +763,8 @@ public partial class OrientedImageryView
         bool visible = ViewModel.SelectedImage != null;
         SetToolState(_imagePreviousButton, !_searching && ViewModel.SelectPreviousImageCommand.CanExecute(null), visible);
         SetToolState(_imageNextButton, !_searching && ViewModel.SelectNextImageCommand.CanExecute(null), visible);
-        if (_previousButton != null)
-        {
-            _previousButton.IsVisible = visible;
-            _previousButton.IsEnabled = !_searching && ViewModel.SelectPreviousImageCommand.CanExecute(null);
-        }
-        if (_nextButton != null)
-        {
-            _nextButton.IsVisible = visible;
-            _nextButton.IsEnabled = !_searching && ViewModel.SelectNextImageCommand.CanExecute(null);
-        }
+        SetToolState(_previousButton, !_searching && ViewModel.SelectPreviousImageCommand.CanExecute(null), visible);
+        SetToolState(_nextButton, !_searching && ViewModel.SelectNextImageCommand.CanExecute(null), visible);
         if (_pages == null) return;
         if (_previousButton != null)
         {
@@ -809,7 +812,6 @@ public partial class OrientedImageryView
                 button.BorderWidth = 0;
                 button.Padding = new Thickness(4, 0);
                 button.MinimumWidthRequest = 44;
-                button.IsEnabled = !_searching && (next ? ViewModel.SelectNextImageCommand : ViewModel.SelectPreviousImageCommand).CanExecute(null);
                 button.Clicked += (_, _) => Navigate(next);
                 return button;
             }
@@ -1031,14 +1033,13 @@ public partial class OrientedImageryView
     {
         DismissPanel(preservePresentation: true);
         _showingSymbols = true;
-        var actions = picker.SymbolOptions.Select((symbol, index) =>
-            new MenuAction(MarkerOptionName(symbol, index), () => { picker.SelectedSymbol = symbol; back(); },
-                Checked: () => symbol == picker.SelectedSymbol, Enabled: () => IsAddingMarkers,
-                Icon: () => MarkerOptionIcon(symbol))).ToArray();
         var content = PanelContent(Text("MarkerSelection"));
         _symbolGrid = new Grid { ColumnSpacing = 4, RowSpacing = 0 };
-        foreach (var action in actions)
+        foreach (var symbol in picker.SymbolOptions)
         {
+            var action = new MenuAction(MarkerOptionName(symbol, _symbolTiles.Count), () => { picker.SelectedSymbol = symbol; back(); },
+                Checked: () => symbol == picker.SelectedSymbol, Enabled: () => IsAddingMarkers,
+                Icon: () => MarkerOptionIcon(symbol));
             var guarded = GuardAction(action,
 #if ANDROID || (__IOS__ && !MACCATALYST)
                 dismiss: false
@@ -1241,22 +1242,20 @@ public partial class OrientedImageryView
 
     private static void AddPanelItem(VerticalStackLayout content, View item)
     {
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        var group = new Border
+        {
+            Content = item, StrokeThickness = 0, Padding = new Thickness(12, 4),
+        };
 #if ANDROID
-        var group = new Border
-        {
-            Content = item, StrokeThickness = 0, Margin = new Thickness(0, 4),
-            StrokeShape = new RoundRectangle { CornerRadius = 16 }, Padding = new Thickness(12, 4),
-        };
+        group.Margin = new Thickness(0, 4);
+        group.StrokeShape = new RoundRectangle { CornerRadius = 16 };
         group.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F0EAF4"), Color.FromArgb("#36313C"));
-        content.Add(group);
-#elif __IOS__ && !MACCATALYST
-        var group = new Border
-        {
-            Content = item, StrokeThickness = 0,
-            StrokeShape = new RoundRectangle { CornerRadius = 12 },
-            Padding = new Thickness(12, 4), MinimumHeightRequest = 52,
-        };
+#else
+        group.StrokeShape = new RoundRectangle { CornerRadius = 12 };
+        group.MinimumHeightRequest = 52;
         group.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#2C2C2E"));
+#endif
         content.Add(group);
 #else
         content.Add(item);
@@ -1274,10 +1273,23 @@ public partial class OrientedImageryView
 
     private void PresentPanel(View anchor, VerticalStackLayout content, Action? back = null)
     {
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        _panelAnchor = anchor;
+        var heading = (Label)content.Children[0];
+        content.Remove(heading);
+        content.Padding = new Thickness(16, 0, 16, 16);
+        _panelScroll = new ScrollView { Content = content };
+        var surface = CreateMobileSheetContent(heading, _panelScroll, () => DismissPanel(), back,
+            out _panelLayout, "OrientedImageryToolsSheet");
 #if ANDROID
-        PresentAndroidPanel(anchor, content, back);
-#elif __IOS__ && !MACCATALYST
-        PresentIosPanel(anchor, content, back);
+        PresentAndroidPanel(surface);
+#else
+        PresentIosSheet(surface, info: false);
+#endif
+        UpdateToolHighlights();
+        UpdateBackNavigation();
+        UpdateOpenPanel();
+        SemanticScreenReader.Default.Announce(heading.Text);
 #else
         if (_panelHost == null) return;
         _panelAnchor = anchor;
@@ -1339,19 +1351,19 @@ public partial class OrientedImageryView
     }
 #endif
 
+#if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
     private void PanelHostSizeChanged(object? sender, EventArgs e) => UpdatePanelSize();
 
     private void ToolbarScrolled(object? sender, ScrolledEventArgs e) => UpdatePanelSize();
+#endif
 
     private void UpdatePanelSize()
     {
 #if ANDROID
         UpdateAndroidPanelSize();
-        return;
 #elif __IOS__ && !MACCATALYST
         UpdateIosPanelSize();
-        return;
-#else
+#elif !WINDOWS
         if (_panelHost == null || _panelLayout == null || _panelScroll == null || _panel == null || _panelAnchor == null) return;
         double x = 0, y = _panelAnchor.Height;
         Element? element = _panelAnchor;
@@ -1367,10 +1379,8 @@ public partial class OrientedImageryView
             element = visual.Parent;
         }
         double maximumWidth = Math.Max(0, Math.Min(320, _panelHost.Width - 8));
-#if !WINDOWS
         if (_symbolGrid != null)
             LayoutSymbolGrid(Math.Max(0, maximumWidth - _panelLayout.Padding.HorizontalThickness - 2 * _panel.StrokeThickness));
-#endif
         double contentWidth = _panelLayout.Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
         double panelWidth = Math.Min(maximumWidth, contentWidth + 2 * _panel.StrokeThickness);
         _panel.WidthRequest = panelWidth;
@@ -1453,21 +1463,23 @@ public partial class OrientedImageryView
 #if !WINDOWS
         _showingSymbols = false;
 #endif
-#if !ANDROID && (!__IOS__ || MACCATALYST)
+#if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
         _panel = null;
         _panelBackdrop = null;
 #endif
+#if !WINDOWS
         _panelScroll = null;
         _panelLayout = null;
-#if !WINDOWS
         _symbolGrid = null;
         _symbolTiles.Clear();
 #endif
+#if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
         if (_panelHost != null)
         {
             _panelHost.IsVisible = false;
             _panelHost.Clear();
         }
+#endif
         var anchor = _panelAnchor;
         _panelAnchor = null;
         UpdateToolHighlights();

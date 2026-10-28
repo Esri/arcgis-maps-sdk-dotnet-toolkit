@@ -1,11 +1,8 @@
 #if WINDOWS
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
-using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Layouts;
 using Microsoft.UI.Xaml.Input;
 using Windows.System;
-using Grid = Microsoft.Maui.Controls.Grid;
-using View = Microsoft.Maui.Controls.View;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -13,54 +10,6 @@ public partial class OrientedImageryView
 {
     private DesktopImageryBar? _desktopNavigation;
     private Microsoft.UI.Xaml.FrameworkElement? _nativeView;
-
-    private static View CreateDesktopTemplate()
-    {
-        var root = new Grid
-        {
-            RowSpacing = 0,
-            RowDefinitions =
-            {
-                new RowDefinition(GridLength.Auto),
-                new RowDefinition(GridLength.Star), new RowDefinition(GridLength.Auto),
-                new RowDefinition(GridLength.Auto),
-            },
-        };
-        root.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
-        INameScope scope = new NameScope();
-        NameScope.SetNameScope(root, scope);
-        void Add(string name, View view, Grid parent, int row = 0, int column = 0)
-        {
-            scope.RegisterName(name, view);
-            Grid.SetRow(view, row);
-            Grid.SetColumn(view, column);
-            parent.Children.Add(view);
-        }
-        var custom = new ToolbarWrapLayout { Margin = 8, CenterRows = true };
-        Add("PART_CustomToolbar", custom, root);
-
-        var image = new Grid
-        {
-            MinimumHeightRequest = MinimumImageAreaHeight,
-        };
-        Grid.SetRow(image, 1);
-        root.Children.Add(image);
-        var viewport = new OrientedImageViewport { AutomationId = "OrientedImageryViewport" };
-        Add("PART_Viewport", viewport, image);
-        AddStatusPresentation(image, scope);
-        var busy = new ActivityIndicator { VerticalOptions = LayoutOptions.Start, HeightRequest = 24, AutomationId = "OrientedImageryBusy" };
-        Add("PART_Busy", busy, image);
-        Add("PART_Previous", DesktopImageArrow(false), image);
-        Add("PART_Next", DesktopImageArrow(true), image);
-        AddPopupPresentation(image, scope);
-        var panel = new Grid { IsVisible = false };
-        Add("PART_PanelHost", panel, image);
-        Add("PART_DesktopNavigation", new DesktopImageryBar(), root, 2);
-        var notice = new Label { HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(8, 4), AutomationId = "OrientedImageryNotice" };
-        notice.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-        Add("PART_Notice", notice, root, 3);
-        return ScrollablePresentation(root, image, scope);
-    }
 
     private static Microsoft.Maui.Controls.Button DesktopImageArrow(bool next)
     {

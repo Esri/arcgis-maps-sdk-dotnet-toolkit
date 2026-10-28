@@ -15,7 +15,6 @@ public partial class OrientedImageryView
     private int _renderedToolbarRevision = -1;
     private readonly List<Action> _toolbarUpdates = new();
     private readonly List<Action> _toolbarCleanup = new();
-    private INotifyCollectionChanged? _selectorEntries;
 
     internal bool ImageSearchEnabled => ViewModel.InteractionState switch
     {
@@ -86,9 +85,6 @@ public partial class OrientedImageryView
 
     private void ReleaseToolbarPresentation()
     {
-        if (_selectorEntries != null)
-            _selectorEntries.CollectionChanged -= SelectorEntriesChanged;
-        _selectorEntries = null;
         foreach (var cleanup in _toolbarCleanup)
             cleanup();
         _toolbarCleanup.Clear();
@@ -119,9 +115,11 @@ public partial class OrientedImageryView
         if (_renderedToolbarRevision != _toolbarRevision)
         {
             ReleaseToolbarPresentation();
-            _selectorEntries = (ToolbarItemTemplateSelector as OrientedImageryViewToolbarSelector)?.SelectionPairs as INotifyCollectionChanged;
-            if (_selectorEntries != null)
-                _selectorEntries.CollectionChanged += SelectorEntriesChanged;
+            if ((ToolbarItemTemplateSelector as OrientedImageryViewToolbarSelector)?.SelectionPairs is INotifyCollectionChanged entries)
+            {
+                entries.CollectionChanged += SelectorEntriesChanged;
+                _toolbarCleanup.Add(() => entries.CollectionChanged -= SelectorEntriesChanged);
+            }
             foreach (var category in ViewModel.ToolbarCategories)
             {
                 var view = CreateCustomToolbarView(category) ?? CreateToolbarCategory(category);
@@ -179,7 +177,12 @@ public partial class OrientedImageryView
         bool known = key is OrientedImageryToolbarCategory.ModeCategoryName or OrientedImageryToolbarCategory.OverlaysCategoryName or
             OrientedImageryToolbarCategory.MarkersCategoryName or OrientedImageryToolbarCategory.MoreCategoryName;
         var cell = new Grid { MinimumWidthRequest = 44, MinimumHeightRequest = 44 };
-        Layout content = new HorizontalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
+        Layout content =
+#if __IOS__ && !MACCATALYST
+            new VerticalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
+#else
+            new HorizontalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
+#endif
         var icon = MainMenuIcon(navigation ? MenuIcon(null, SequenceGeometry) : key switch
         {
             OrientedImageryToolbarCategory.ModeCategoryName => ImageModeIcon(ImageSearchEnabled),
@@ -222,12 +225,6 @@ public partial class OrientedImageryView
             StrokeShape = new RoundRectangle { CornerRadius = 13 }, InputTransparent = true,
         };
 #if __IOS__ && !MACCATALYST
-        var vertical = new VerticalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-        content.Remove(iconHost);
-        content.Remove(label);
-        vertical.Add(iconHost);
-        vertical.Add(label);
-        pill.Content = vertical;
         cell.MinimumHeightRequest = 60;
         icon.WidthRequest = icon.HeightRequest = 22;
         iconHost.WidthRequest = iconHost.HeightRequest = 22;

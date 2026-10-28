@@ -22,18 +22,13 @@ public partial class OrientedImageryView
         DetachBackNavigation();
     }
 
-    private void PresentAndroidPanel(View anchor, VerticalStackLayout content, Action? back)
+    private void PresentAndroidPanel(ContentView content)
     {
         var context = Handler?.MauiContext ??
             throw new InvalidOperationException("The oriented imagery view must have a handler before opening its tools.");
-        _panelAnchor = anchor;
-        var heading = (Label)content.Children[0];
-        content.Remove(heading);
-        content.Padding = new Thickness(16, 0, 16, 16);
-        _panelScroll = new ScrollView { Content = content };
-        _toolsSheetContent = CreateMobileSheetContent(heading, _panelScroll, () => DismissPanel(), back, out _panelLayout, "OrientedImageryToolsSheet");
-        AddLogicalChild(_toolsSheetContent);
-        var nativeContent = _toolsSheetContent.ToPlatform(context);
+        _toolsSheetContent = content;
+        AddLogicalChild(content);
+        var nativeContent = content.ToPlatform(context);
         if (_toolsSheet == null)
         {
             var dialog = new BottomSheetDialog(context.Context);
@@ -52,10 +47,6 @@ public partial class OrientedImageryView
             if (_toolsSheetContent != null)
                 UpdateAndroidPanelSize(width);
         });
-        UpdateToolHighlights();
-        UpdateBackNavigation();
-        UpdateOpenPanel();
-        SemanticScreenReader.Default.Announce(heading.Text);
     }
 
     private static void ShowAndroidSheet(BottomSheetDialog dialog, Android.Views.View nativeContent, Action<double> updateWidth)
