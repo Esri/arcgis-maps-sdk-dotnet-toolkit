@@ -1195,10 +1195,6 @@ image</value>
     <value>Image details</value>
     <comment>Heading of the selected oriented image information sheet.</comment>
   </data>
-  <data name="OrientedImageryViewResizeSheet" xml:space="preserve">
-    <value>Expand or collapse imagery sheet</value>
-    <comment>Accessible name for the draggable imagery sample sheet handle.</comment>
-  </data>
   <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
     <value>Close details</value>
     <comment>Tooltip for the button that closes the selected oriented image popup.</comment>
