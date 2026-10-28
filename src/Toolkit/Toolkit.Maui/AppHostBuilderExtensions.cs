@@ -55,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #endif
             });
 #if WINDOWS
-            builder.ConfigureMauiHandlers(handler => handler.AddHandler<DesktopImageryBar, DesktopImageryBarHandler>());
+            builder.ConfigureMauiHandlers(handler => handler.AddHandler<OrientedImageryControlsView, OrientedImageryControlsViewHandler>());
 #endif
             return builder;
         }
