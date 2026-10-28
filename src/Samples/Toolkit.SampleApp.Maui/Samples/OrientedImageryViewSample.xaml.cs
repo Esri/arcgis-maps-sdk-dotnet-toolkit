@@ -28,7 +28,6 @@ public partial class OrientedImageryViewSample : ContentPage
     private bool _active;
     private bool _layerReady;
     private int _loadVersion;
-    private bool? _sideBySide;
     private GeoView CurrentGeoView => _usingMapView ? _mapView : _sceneView;
     private GeoModel CurrentGeoModel => _usingMapView ? _mapView.Map! : _sceneView.Scene!;
 
@@ -145,12 +144,8 @@ public partial class OrientedImageryViewSample : ContentPage
 #else
         bool sideBySide = Width > Height;
 #endif
-        if (_sideBySide != sideBySide)
-        {
-            _sideBySide = sideBySide;
-            Grid.SetRow(ImageryView, sideBySide ? 0 : 1);
-            Grid.SetColumn(ImageryView, sideBySide ? 1 : 0);
-        }
+        Grid.SetRow(ImageryView, sideBySide ? 0 : 1);
+        Grid.SetColumn(ImageryView, sideBySide ? 1 : 0);
         bool open = ImageryView.IsVisible;
         LayoutRoot.RowDefinitions[1].Height = open && !sideBySide ? GridLength.Star : new GridLength(0);
         LayoutRoot.ColumnDefinitions[1].Width = open && sideBySide ? GridLength.Star : new GridLength(0);
