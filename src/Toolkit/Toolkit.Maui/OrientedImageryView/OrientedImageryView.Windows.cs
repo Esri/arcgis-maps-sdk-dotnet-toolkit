@@ -20,13 +20,14 @@ public partial class OrientedImageryView
             Text = next ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronLeft,
             FontFamily = ToolkitIcons.FontFamilyName, FontSize = 20,
             WidthRequest = 25, HeightRequest = 60, MinimumWidthRequest = 0, Padding = 4, BorderWidth = 0, CornerRadius = 0,
-            VerticalOptions = LayoutOptions.Center, BackgroundColor = Colors.Transparent,
+            VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = next ? LayoutOptions.End : LayoutOptions.Start,
             AutomationId = next ? "OrientedImageryNext" : "OrientedImageryPrevious",
         };
         SemanticProperties.SetDescription(button, Text(next ? "NextLabel" : "PreviousLabel"));
         ToolTipProperties.SetText(button, Text(next ? "NextLabel" : "PreviousLabel"));
         button.SetAppThemeColor(Microsoft.Maui.Controls.Button.TextColorProperty, Colors.Black, Colors.White);
+        button.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
         return button;
     }
 
