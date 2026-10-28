@@ -22,21 +22,6 @@ public partial class OrientedImageryView
         DismissIosPopup();
     }
 
-    private void PresentIosPanel(View anchor, VerticalStackLayout content, Action? back)
-    {
-        _panelAnchor = anchor;
-        var heading = (Label)content.Children[0];
-        content.Remove(heading);
-        content.Padding = new Thickness(16, 0, 16, 16);
-        _panelScroll = new ScrollView { Content = content };
-        var surface = CreateMobileSheetContent(heading, _panelScroll, () => DismissPanel(), back,
-            out _panelLayout, "OrientedImageryToolsSheet");
-        PresentIosSheet(surface, info: false);
-        UpdateToolHighlights();
-        UpdateOpenPanel();
-        SemanticScreenReader.Default.Announce(heading.Text);
-    }
-
     private void RefreshIosPopup()
     {
         if (_popupHost != null) return;
