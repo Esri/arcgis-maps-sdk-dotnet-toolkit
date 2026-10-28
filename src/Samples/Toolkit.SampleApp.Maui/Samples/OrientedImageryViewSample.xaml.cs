@@ -10,6 +10,8 @@ namespace Toolkit.SampleApp.Maui.Samples;
     Description = "Search and select oriented imagery, manage overlays and markers, and navigate image sequences.")]
 public partial class OrientedImageryViewSample : ContentPage
 {
+    #region Sample state and setup
+
     private readonly string[] _layerUrls =
     {
         "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/ArcGIS/rest/services/Oakwood_camori_corrected/FeatureServer/0",
@@ -41,11 +43,16 @@ public partial class OrientedImageryViewSample : ContentPage
         SizeChanged += (_, _) => UpdateViewerLayout();
     }
 
+    #endregion
+
+    #region Layer and map selection
+
     private async void LayerSelected(object? sender, EventArgs e) => await ApplySelectedLayerAsync();
 
     private async Task ApplySelectedLayerAsync()
     {
         int version = ++_loadVersion;
+        // A newer selection or navigation away makes this load's result obsolete.
         var view = CurrentGeoView;
         var model = CurrentGeoModel;
         _layerReady = false;
@@ -100,6 +107,10 @@ public partial class OrientedImageryViewSample : ContentPage
             ImageryView.GeoView = CurrentGeoView;
     }
 
+    #endregion
+
+    #region Page lifecycle
+
     /// <inheritdoc/>
     protected override async void OnAppearing()
     {
@@ -119,6 +130,10 @@ public partial class OrientedImageryViewSample : ContentPage
         ImageryView.GeoView = null;
         base.OnDisappearing();
     }
+
+    #endregion
+
+    #region Viewer visibility and layout
 
     private void OpenClicked(object? sender, EventArgs e) => SetViewerOpen(true);
 
@@ -150,4 +165,6 @@ public partial class OrientedImageryViewSample : ContentPage
         LayoutRoot.RowDefinitions[1].Height = open && !sideBySide ? GridLength.Star : new GridLength(0);
         LayoutRoot.ColumnDefinitions[1].Width = open && sideBySide ? GridLength.Star : new GridLength(0);
     }
+
+    #endregion
 }

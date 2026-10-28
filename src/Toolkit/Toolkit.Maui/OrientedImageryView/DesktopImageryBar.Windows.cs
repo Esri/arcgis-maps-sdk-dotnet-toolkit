@@ -45,6 +45,8 @@ internal sealed class DesktopImageryBar : Microsoft.Maui.Controls.View
 
 internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, NativeGrid>
 {
+    #region Handler state and lifecycle
+
     private OrientedImageryViewModel? _model;
     private OrientedImageryToolbarItemBase? _item;
     private readonly List<Action> _updates = [];
@@ -149,6 +151,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
 
     internal void Reset() => Clear();
 
+    #endregion
+
+    #region Native icons and captions
+
     private static string Text(string key) => OrientedImageryView.DesktopText(key);
 
     private static Microsoft.UI.Xaml.Controls.Border ThemeBorder(string key) =>
@@ -238,6 +244,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         ToolTipService.SetToolTip(control, text);
     }
 
+    #endregion
+
+    #region Refresh and cleanup
+
     public void Refresh()
     {
         if (((IElementHandler)this).VirtualView is not DesktopImageryBar view) return;
@@ -266,6 +276,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
 
     private void Clear(NativeGrid? platformView = null)
     {
+        // Discard pending swatches and detach subscriptions before rebuilding native content.
         _generation++;
         _model = null;
         _item = null;
@@ -284,6 +295,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         }
     }
 
+    #endregion
+
+    #region Toolbar controls
+
     private void RefreshToolbar(OrientedImageryView owner, OrientedImageryToolbarItemBase item)
     {
         var model = owner.ViewModel;
@@ -296,13 +311,25 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             {
                 ImageSearchModeVM mode => ModePicker(owner, mode),
                 ToolbarDividerVM => Divider(),
-                ShowSelectedFootprintVM => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintLabel", Geometry(OrientedImageryView.CurrentFootprintGeometry), () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value, automationId: "OrientedImageryDesktopCurrentFootprint"),
-                ShowUnselectedFootprintsVM => Toggle(owner, "ShowUnselectedImageFootprints", "AdditionalFootprintsLabel", Geometry(OrientedImageryView.OverlayGeometry), () => model.ShowUnselectedFootprints, value => model.ShowUnselectedFootprints = value, () => model.Images.Count > 1, "OrientedImageryDesktopAdditionalFootprints"),
-                ShowCameraMarkersVM => Toggle(owner, "ShowCameraMarkersOnGeoView", "CameraLocationsLabel", CameraLocationsIcon(), () => model.ShowCameraLocations, value => model.ShowCameraLocations = value, () => model.Images.Count > 1, "OrientedImageryDesktopCameraLocations"),
-                AllowAddingMarkersVM => Toggle(owner, "AddMarkersAutomationName", "AddMarkerLabel", Glyph("\uE8ED"), () => owner.IsAddingMarkers, owner.SetAddingMarkers, automationId: "OrientedImageryDesktopAddMarker"),
-                AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdate", Glyph(ToolkitIcons.Refresh), () => model.AutoUpdateFootprint, value => model.AutoUpdateFootprint = value),
+                ShowSelectedFootprintVM => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintLabel",
+                    Geometry(OrientedImageryView.CurrentFootprintGeometry),
+                    () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value,
+                    automationId: "OrientedImageryDesktopCurrentFootprint"),
+                ShowUnselectedFootprintsVM => Toggle(owner, "ShowUnselectedImageFootprints", "AdditionalFootprintsLabel",
+                    Geometry(OrientedImageryView.OverlayGeometry),
+                    () => model.ShowUnselectedFootprints, value => model.ShowUnselectedFootprints = value,
+                    () => model.Images.Count > 1, "OrientedImageryDesktopAdditionalFootprints"),
+                ShowCameraMarkersVM => Toggle(owner, "ShowCameraMarkersOnGeoView", "CameraLocationsLabel", CameraLocationsIcon(),
+                    () => model.ShowCameraLocations, value => model.ShowCameraLocations = value,
+                    () => model.Images.Count > 1, "OrientedImageryDesktopCameraLocations"),
+                AllowAddingMarkersVM => Toggle(owner, "AddMarkersAutomationName", "AddMarkerLabel", Glyph("\uE8ED"),
+                    () => owner.IsAddingMarkers, owner.SetAddingMarkers,
+                    automationId: "OrientedImageryDesktopAddMarker"),
+                AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdate", Glyph(ToolkitIcons.Refresh),
+                    () => model.AutoUpdateFootprint, value => model.AutoUpdateFootprint = value),
                 SelectNewMarkerSymbolVM picker => SymbolPicker(owner, picker),
-                ClearMarkersVM => ActionButton(owner, "ClearMarkers", "ClearMarkersLabel", Glyph("\uEB04"), () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
+                ClearMarkersVM => ActionButton(owner, "ClearMarkers", "ClearMarkersLabel", Glyph("\uEB04"),
+                    () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
                 SequentialNavigationVM => SequenceButton(owner),
                 _ => null,
             };
@@ -314,9 +341,17 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 ((IView)VirtualView).InvalidateMeasure();
             }
         }
+        // Setting native selections raises events; do not treat these updates as user input.
         _updating = true;
-        try { foreach (var update in _updates) update(); }
-        finally { _updating = false; }
+        try
+        {
+            foreach (var update in _updates)
+                update();
+        }
+        finally
+        {
+            _updating = false;
+        }
     }
 
     private NativeButton ActionButton(OrientedImageryView owner, string key, string labelKey, UIElement icon, Action execute, Func<bool> enabled)
@@ -353,6 +388,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         });
         return toggle;
     }
+
+    #endregion
+
+    #region Mode and symbol selectors
 
     private sealed class ToolbarComboBox : ComboBox
     {
@@ -612,6 +651,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         }
     }
 
+    #endregion
+
+    #region Image navigation
+
     private void RefreshNavigation(OrientedImageryView owner)
     {
         var model = owner.ViewModel;
@@ -623,8 +666,11 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         var state = new NavigationState(model.IsSequentialNavigationEnabled, selected, start, count, model.Images.Count,
             model.SelectPreviousImageCommand.CanExecute(null), model.SelectNextImageCommand.CanExecute(null), owner.DesktopIsSearching);
         if (_navigationState == state && _model == model) return;
-        var focused = PlatformView.XamlRoot == null ? null : FocusManager.GetFocusedElement(PlatformView.XamlRoot) as NativeButton;
-        bool restoreFocus = focused != null && PlatformView.Children.OfType<NavigationRow>().Any(panel => panel.Children.Contains(focused));
+        // Keep keyboard focus on the same action or image when the page range changes.
+        var focused = PlatformView.XamlRoot == null ? null :
+            FocusManager.GetFocusedElement(PlatformView.XamlRoot) as NativeButton;
+        bool restoreFocus = focused != null &&
+            PlatformView.Children.OfType<NavigationRow>().Any(panel => panel.Children.Contains(focused));
         string? focusedId = restoreFocus ? AutomationProperties.GetAutomationId(focused!) : null;
         var focusState = restoreFocus ? focused!.FocusState : FocusState.Unfocused;
         NavigationRow row;
@@ -741,7 +787,12 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
     private static NativeGrid PageIndicator(string text, bool selected)
     {
         var grid = new NativeGrid { MinWidth = 35, MinHeight = 32 };
-        grid.Children.Add(new TextBlock { Text = text, FontSize = 14, Margin = new NativeThickness(4, 2, 4, 4), HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center, VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center });
+        grid.Children.Add(new TextBlock
+        {
+            Text = text, FontSize = 14, Margin = new NativeThickness(4, 2, 4, 4),
+            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
+            VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center,
+        });
         var underline = ThemeBorder("SystemControlHighlightAccentBrush");
         underline.Height = 2;
         underline.Margin = new NativeThickness(1, 0, 1, 0);
@@ -750,6 +801,10 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         grid.Children.Add(underline);
         return grid;
     }
+
+    #endregion
+
+    #region Navigation row layout
 
     private sealed class NavigationRow : Panel
     {
@@ -801,5 +856,6 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         }
     }
 
+    #endregion
 }
 #endif

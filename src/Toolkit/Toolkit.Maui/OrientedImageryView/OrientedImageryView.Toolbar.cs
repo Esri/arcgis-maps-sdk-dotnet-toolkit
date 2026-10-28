@@ -8,6 +8,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
+    #region Toolbar state and interaction modes
+
     private readonly HashSet<OrientedImageryToolbarCategory> _toolbarCategories = new();
     // Keep the last image mode even if an app removes all ImageSearchModeVM items.
     private bool _imageSearchEnabled = true;
@@ -42,6 +44,10 @@ public partial class OrientedImageryView
         ViewModel.InteractionState = enabled ? OrientedImageryViewInteractionState.AddMarkers :
             OrientedImageryViewInteractionState.None;
     }
+
+    #endregion
+
+    #region Toolbar subscriptions and templates
 
     private void ToolbarChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
@@ -114,6 +120,7 @@ public partial class OrientedImageryView
             return;
         if (_renderedToolbarRevision != _toolbarRevision)
         {
+            // Rebuild only when toolbar items or templates change.
             ReleaseToolbarPresentation();
             if ((ToolbarItemTemplateSelector as OrientedImageryViewToolbarSelector)?.SelectionPairs is INotifyCollectionChanged entries)
             {
@@ -130,6 +137,10 @@ public partial class OrientedImageryView
         _customToolbar.IsVisible = HasValidLayer;
         UpdateToolHighlights();
     }
+
+    #endregion
+
+    #region Category presentation
 
     private bool IsToolbarItemVisible(OrientedImageryToolbarItemBase item) =>
         item is not SequentialNavigationVM || ViewModel.SupportsSequentialNavigation;
@@ -161,8 +172,7 @@ public partial class OrientedImageryView
                 _toolbarCleanup.Add(() => bar.Owner = null);
             }
             group.Add(view);
-            var itemView = view;
-            _toolbarUpdates.Add(() => itemView.IsVisible = IsToolbarItemVisible(item));
+            _toolbarUpdates.Add(() => view.IsVisible = IsToolbarItemVisible(item));
         }
         _toolbarUpdates.Add(() =>
         {
@@ -183,10 +193,10 @@ public partial class OrientedImageryView
 #else
             new HorizontalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
 #endif
-        var icon = MainMenuIcon(navigation ? MenuIcon(null, SequenceGeometry) : key switch
+        var icon = MainMenuIcon(navigation ? GeometryIcon(SequenceGeometry) : key switch
         {
             OrientedImageryToolbarCategory.ModeCategoryName => ImageModeIcon(ImageSearchEnabled),
-            OrientedImageryToolbarCategory.OverlaysCategoryName => MenuIcon(null, OverlayGeometry),
+            OrientedImageryToolbarCategory.OverlaysCategoryName => GeometryIcon(OverlayGeometry),
             OrientedImageryToolbarCategory.MarkersCategoryName => new Label
             {
                 Text = "\uE8ED", FontFamily = ToolkitIcons.FontFamilyName, FontSize = 16,
@@ -283,10 +293,7 @@ public partial class OrientedImageryView
             }
             if (previousActive != active || modeChanged)
             {
-                var accent = Color.FromArgb("#007AC2");
-#if __IOS__ && !MACCATALYST
-                accent = IosAccent;
-#endif
+                var accent = MenuAccent;
                 pill.BackgroundColor = active ? accent : Colors.Transparent;
                 if (active)
                     label.TextColor = Colors.White;
@@ -321,7 +328,11 @@ public partial class OrientedImageryView
 #endif
     }
 
+    #endregion
+
 #if !WINDOWS
+    #region Mobile toolbar layout
+
     private sealed class ToolbarRowLayout : HorizontalStackLayout
     {
         protected override ILayoutManager CreateLayoutManager() => new ToolbarRowLayoutManager(this);
@@ -357,6 +368,10 @@ public partial class OrientedImageryView
         return icon;
     }
 
+    #endregion
+
+    #region Mobile toolbar options
+
     private void ShowToolbarCategory(OrientedImageryToolbarCategory category, View anchor, string title)
     {
         DismissPanel(preservePresentation: true);
@@ -391,18 +406,22 @@ public partial class OrientedImageryView
 #endif
                 break;
             case ShowSelectedFootprintVM:
-                AddSwitch(content, "MobileCurrentFootprint", () => ViewModel.ShowSelectedFootprint, value => ViewModel.ShowSelectedFootprint = value, () => FootprintIcon(false), Enabled);
+                AddSwitch(content, "MobileCurrentFootprint",
+                    () => ViewModel.ShowSelectedFootprint, value => ViewModel.ShowSelectedFootprint = value,
+                    () => GeometryIcon(CurrentFootprintGeometry), Enabled);
                 break;
             case ShowUnselectedFootprintsVM:
-                AddSwitch(content, "MobileAdditionalFootprints", () => ViewModel.ShowUnselectedFootprints, value => ViewModel.ShowUnselectedFootprints = value,
-                    () => FootprintIcon(true), () => Enabled() && ViewModel.Images.Count > 1);
+                AddSwitch(content, "MobileAdditionalFootprints",
+                    () => ViewModel.ShowUnselectedFootprints, value => ViewModel.ShowUnselectedFootprints = value,
+                    () => GeometryIcon(OverlayGeometry), () => Enabled() && ViewModel.Images.Count > 1);
                 break;
             case ShowCameraMarkersVM:
-                AddSwitch(content, "MobileCameraLocations", () => ViewModel.ShowCameraLocations, value => ViewModel.ShowCameraLocations = value,
+                AddSwitch(content, "MobileCameraLocations",
+                    () => ViewModel.ShowCameraLocations, value => ViewModel.ShowCameraLocations = value,
                     CameraLocationsIcon, () => Enabled() && ViewModel.Images.Count > 1);
                 break;
             case AllowAddingMarkersVM:
-                AddSwitch(content, "AddMarkerLabel", () => IsAddingMarkers, SetAddingMarkers, () => MenuIcon("\uE8ED", null), Enabled);
+                AddSwitch(content, "AddMarkerLabel", () => IsAddingMarkers, SetAddingMarkers, () => GlyphIcon("\uE8ED"), Enabled);
                 break;
             case SelectNewMarkerSymbolVM picker:
                 var preview = new SymbolDisplay { Symbol = picker.SelectedSymbol, WidthRequest = 24, HeightRequest = 24 };
@@ -415,7 +434,7 @@ public partial class OrientedImageryView
                 break;
             case ClearMarkersVM:
                 AddActionRow(content, new MenuAction(Text("ClearMarkers"), () => ViewModel.ClearMarkersCommand.Execute(null),
-                    Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Icon: () => MenuIcon(ToolkitIcons.Trash, null)));
+                    Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Icon: () => GlyphIcon(ToolkitIcons.Trash)));
                 break;
             case SequentialNavigationVM:
                 AddSwitch(content, "SequentialMode", () => ViewModel.IsSequentialNavigationEnabled,
@@ -424,12 +443,13 @@ public partial class OrientedImageryView
                         if (value != ViewModel.IsSequentialNavigationEnabled && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null))
                             ViewModel.ToggleSequentialNavigationCommand.Execute(null);
                     },
-                    () => MenuIcon(null, SequenceGeometry),
+                    () => GeometryIcon(SequenceGeometry),
                     () => Enabled() && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null));
                 break;
             case AutoUpdateFootprintVM:
-                AddSwitch(content, "AutoUpdate", () => ViewModel.AutoUpdateFootprint, value => ViewModel.AutoUpdateFootprint = value,
-                    () => MenuIcon(ToolkitIcons.Refresh, null), Enabled);
+                AddSwitch(content, "AutoUpdate",
+                    () => ViewModel.AutoUpdateFootprint, value => ViewModel.AutoUpdateFootprint = value,
+                    () => GlyphIcon(ToolkitIcons.Refresh), Enabled);
                 break;
             case ToolbarDividerVM:
                 content.Add(new BoxView { HeightRequest = 1, Color = Color.FromArgb("#CCCCCC"), Margin = new Thickness(0, 4) });
@@ -438,5 +458,7 @@ public partial class OrientedImageryView
                 throw new InvalidOperationException($"Register a toolbar template for '{item.GetType().Name}'.");
         }
     }
+
+    #endregion
 #endif
 }
