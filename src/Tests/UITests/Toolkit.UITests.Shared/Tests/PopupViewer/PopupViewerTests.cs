@@ -133,10 +133,12 @@ public class PopupViewerTests : AppiumTestBase
         Assert.AreEqual("2", await WaitForAttributeAsync(currentItemHost, "PositionInSet", "2"), "Expected the Right arrow key to navigate to the next media item.");
 #else
         // WinUI's PipsPager moves focus between pips with the arrow keys and selects the focused pip with
-        // Space/Enter. Clicking the (already selected) first pip puts keyboard focus on the pager.
+        // Space/Enter. Tab to the pager the way a keyboard user would: on short windows it starts out scrolled below the
+        // popup's visible area, where clicking a pip would miss, and receiving focus should scroll it into view.
         const int VK_RETURN = 0x0D;
         const int VK_SPACE = 0x20;
-        Click(FindMediaPagerPips()[0]);
+        await TabToMediaPagerAsync();
+        Assert.AreEqual("False", await WaitForAttributeAsync(FindMediaPagerPips()[0], "IsOffscreen", "False"), "Expected focusing the media pager to scroll it into view.");
         Assert.IsTrue(ElementExistsByName(ImageMediaAlternativeText, DefaultTimeout), "Expected the first media item to be shown initially.");
 
         PressKey(VK_RIGHT);
@@ -156,6 +158,21 @@ public class PopupViewerTests : AppiumTestBase
     {
         var pager = FindElement("PipsPager", DefaultTimeout);
         return pager.FindElements(MobileBy.ClassName("Button"));
+    }
+
+    private async Task TabToMediaPagerAsync()
+    {
+        const int VK_TAB = 0x09;
+        for (int i = 0; i < 30; i++)
+        {
+            if (FindMediaPagerPips().Any(pip => pip.GetAttribute("HasKeyboardFocus") == "True"))
+            {
+                return;
+            }
+            PressKey(VK_TAB);
+            await Task.Delay(100);
+        }
+        Assert.Fail("Expected Tab to move keyboard focus onto the media pager.");
     }
 #endif
 

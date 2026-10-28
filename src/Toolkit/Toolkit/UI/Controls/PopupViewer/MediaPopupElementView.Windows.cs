@@ -86,6 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateContent();
 #elif WINUI
             UpdatePipsVisibility();
+            AttachPipsPager();
             AttachFlipView();
 #endif
             base.OnApplyTemplate();
@@ -196,6 +197,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 pager.Visibility = (Element?.Media?.Count ?? 0) > 1 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
+
+        private UIElement? _pipsPager;
+
+        private void AttachPipsPager()
+        {
+            if (_pipsPager != null)
+            {
+                _pipsPager.GotFocus -= OnPipsPagerGotFocus;
+            }
+            _pipsPager = GetTemplateChild("PipsPager") as UIElement;
+            if (_pipsPager != null)
+            {
+                _pipsPager.GotFocus += OnPipsPagerGotFocus;
+            }
+        }
+
+        // When a pip receives keyboard focus, the default bring-into-view stops the popup's ScrollViewer short of the
+        // pager (by about the pager's height), leaving it clipped at the bottom of the viewport on short windows, where
+        // arrow-key navigation between the pips then fails. Bring the whole pager into view explicitly.
+        private void OnPipsPagerGotFocus(object sender, RoutedEventArgs e) => _pipsPager?.StartBringIntoView();
 
         // FlipView doesn't size to its content: each FlipViewItem is stretched to the FlipView's viewport, so the
         // items can never report a desired height larger than the FlipView itself. To make the FlipView fit the
