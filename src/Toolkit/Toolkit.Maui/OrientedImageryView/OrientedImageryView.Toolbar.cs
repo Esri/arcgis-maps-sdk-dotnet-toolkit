@@ -381,8 +381,8 @@ public partial class OrientedImageryView
         switch (item)
         {
             case ImageSearchModeVM mode:
-#if ANDROID
-                AddAndroidModeSegments(content, mode, Enabled);
+#if ANDROID || (__IOS__ && !MACCATALYST)
+                AddMobileModeSegments(content, mode, Enabled);
 #else
                 foreach (var state in mode.ImageSearchModes)
                 {
