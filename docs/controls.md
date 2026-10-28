@@ -63,7 +63,7 @@ Displays oriented imagery connected to a map or scene. The default .NET MAUI And
 
 On Android and iOS, Mode options use a shared segmented selector with icons and wrapping labels. Selecting the active segment turns that mode off; it can be selected again immediately without closing the sheet.
 
-The Android and iOS **Oriented imagery bottom sheet** sample uses a shared, non-modal MAUI panel to host the entire control over an interactive map or scene. Tap or drag its header to resize between 50% and 75% of the available area. Custom control templates retain ownership of their own popup presentation.
+Custom control templates retain ownership of their own popup presentation.
 
 ### PopupViewer
 

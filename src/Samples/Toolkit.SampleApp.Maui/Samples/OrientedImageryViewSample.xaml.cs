@@ -28,6 +28,7 @@ public partial class OrientedImageryViewSample : ContentPage
     private bool _active;
     private bool _layerReady;
     private int _loadVersion;
+    private bool? _sideBySide;
     private GeoView CurrentGeoView => _usingMapView ? _mapView : _sceneView;
     private GeoModel CurrentGeoModel => _usingMapView ? _mapView.Map! : _sceneView.Scene!;
 
@@ -36,14 +37,9 @@ public partial class OrientedImageryViewSample : ContentPage
         InitializeComponent();
         LayerPicker.ItemsSource = _layerUrls;
         GeoViewContainer.Add(CurrentGeoView);
-#if WINDOWS
-        LayoutRoot.RowDefinitions.Clear();
-        LayoutRoot.RowDefinitions.Add(new RowDefinition(GridLength.Star));
         LayoutRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
         LayoutRoot.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(0)));
-        Grid.SetRow(ImageryView, 0);
-        Grid.SetColumn(ImageryView, 1);
-#endif
+        SizeChanged += (_, _) => UpdateViewerLayout();
     }
 
     private async void LayerSelected(object? sender, EventArgs e) => await ApplySelectedLayerAsync();
@@ -136,13 +132,27 @@ public partial class OrientedImageryViewSample : ContentPage
     private void SetViewerOpen(bool open)
     {
         ImageryView.IsVisible = open;
-#if WINDOWS
-        LayoutRoot.ColumnDefinitions[1].Width = open ? GridLength.Star : new GridLength(0);
-#else
-        LayoutRoot.RowDefinitions[1].Height = open ? GridLength.Star : new GridLength(0);
-#endif
+        UpdateViewerLayout();
         OpenButton.IsVisible = !open;
         CloseButton.IsVisible = open;
         ImageryView.GeoView = open && _active ? CurrentGeoView : null;
+    }
+
+    private void UpdateViewerLayout()
+    {
+#if WINDOWS
+        bool sideBySide = true;
+#else
+        bool sideBySide = Width > Height;
+#endif
+        if (_sideBySide != sideBySide)
+        {
+            _sideBySide = sideBySide;
+            Grid.SetRow(ImageryView, sideBySide ? 0 : 1);
+            Grid.SetColumn(ImageryView, sideBySide ? 1 : 0);
+        }
+        bool open = ImageryView.IsVisible;
+        LayoutRoot.RowDefinitions[1].Height = open && !sideBySide ? GridLength.Star : new GridLength(0);
+        LayoutRoot.ColumnDefinitions[1].Width = open && sideBySide ? GridLength.Star : new GridLength(0);
     }
 }
