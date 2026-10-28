@@ -12,6 +12,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// </summary>
 public partial class OrientedImageryView : TemplatedView
 {
+    #region State
+
     private readonly ObservableCollection<OrientedImageryLayer> _layers = new();
     private GeoView? _connectedGeoView;
     private GeoModel? _geoModel;
@@ -34,6 +36,10 @@ public partial class OrientedImageryView : TemplatedView
     private static readonly BindableProperty ThemeImageBackgroundProperty = BindableProperty.Create(
         "ThemeImageBackground", typeof(Color), typeof(OrientedImageryView), Colors.White,
         propertyChanged: (s, _, _) => ((OrientedImageryView)s).Refresh());
+
+    #endregion
+
+    #region Initialization and public API
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
@@ -179,8 +185,13 @@ public partial class OrientedImageryView : TemplatedView
     /// </summary>
     public Action<object?, GeoViewInputEventArgs>? OnGeoViewTappedOverride { get; set; }
 
+    #endregion
+
+    #region Connection lifecycle
+
     private void CancelOperation()
     {
+        // In-flight searches may finish, but their results no longer apply.
         _operationVersion++;
         _searching = false;
         _operationError = null;
@@ -274,6 +285,10 @@ public partial class OrientedImageryView : TemplatedView
         ChangeLayer();
     }
 
+    #endregion
+
+    #region Layer discovery
+
     private void UpdateLayers()
     {
         GeoModel? geoModel = GeoView is MapView map ? map.Map : GeoView is SceneView scene ? scene.Scene : null;
@@ -315,6 +330,7 @@ public partial class OrientedImageryView : TemplatedView
             CollectLayers(_operationalLayers);
         if (!_layers.SequenceEqual(discovered))
             CancelOperation();
+        // Keep collection identity and ordering for applications observing the layer list.
         int index = 0;
         foreach (var layer in discovered)
         {
@@ -383,12 +399,17 @@ public partial class OrientedImageryView : TemplatedView
 
     private void DispatchUpdate(Action action)
     {
+        // Ignore queued updates from a layer that has since been replaced.
         int version = _layerVersion;
         if (Dispatcher.IsDispatchRequired)
             Dispatcher.Dispatch(() => { if (version == _layerVersion) action(); });
         else
             action();
     }
+
+    #endregion
+
+    #region Layer selection and model updates
 
     private void ChangeLayer()
     {
@@ -514,6 +535,10 @@ public partial class OrientedImageryView : TemplatedView
 
     private void NavigationAvailabilityChanged(object? sender, EventArgs e) => DispatchUpdate(Refresh);
 
+    #endregion
+
+    #region Map and image interaction
+
     private async void GeoViewTapped(object? sender, GeoViewInputEventArgs e)
     {
         if (!_connected)
@@ -616,4 +641,5 @@ public partial class OrientedImageryView : TemplatedView
         }
     }
 
+    #endregion
 }

@@ -8,6 +8,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
 {
+    #region Native presentation and template lifecycle
+
     private DesktopImageryBar? _desktopNavigation;
     private Microsoft.UI.Xaml.FrameworkElement? _nativeView;
 
@@ -76,6 +78,10 @@ public partial class OrientedImageryView
     internal bool DesktopIsSearching => _searching;
     internal bool DesktopHasLayer => SelectedLayer != null && _layers.Contains(SelectedLayer);
     internal static string DesktopText(string key) => Text(key);
+
+    #endregion
+
+    #region Wrapping toolbar layout
 
     private sealed class ToolbarWrapLayout : Layout
     {
@@ -159,5 +165,7 @@ public partial class OrientedImageryView
             return bounds.Size;
         }
     }
+
+    #endregion
 }
 #endif
