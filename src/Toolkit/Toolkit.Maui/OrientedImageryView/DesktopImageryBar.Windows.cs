@@ -706,7 +706,6 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
         var row = new NavigationRow();
         NativeButton NavigateButton(bool next, bool label)
         {
-            var command = next ? model.SelectNextImageCommand : model.SelectPreviousImageCommand;
             var button = new NativeButton
             {
                 Content = label ? Text(next ? "NextLabel" : "PreviousLabel") : new FontIcon
@@ -717,11 +716,17 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                 MinHeight = 32, MinWidth = 0, Padding = new NativeThickness(label ? 4 : 0),
                 BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
                 Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+                AllowFocusWhenDisabled = true,
             };
             if (!label) button.Width = 33;
             string key = next ? "NextLabel" : "PreviousLabel";
-            Describe(button, key, next ? "OrientedImageryPaginatorNext" : "OrientedImageryPaginatorPrevious");
-            button.Click += (_, _) => { if (command.CanExecute(null)) command.Execute(null); };
+            string id = next ? "OrientedImageryPaginatorNext" : "OrientedImageryPaginatorPrevious";
+            Describe(button, key, label ? id + "Label" : id);
+            button.Click += (_, _) =>
+            {
+                var command = next ? model.SelectNextImageCommand : model.SelectPreviousImageCommand;
+                if (!owner.DesktopIsSearching && command.CanExecute(null)) command.Execute(null);
+            };
             return button;
         }
         row.Children.Add(NavigateButton(false, false));
@@ -748,6 +753,19 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
                     if (VirtualView.Owner?.ViewModel == model && !model.IsSequentialNavigationEnabled && index < model.Images.Count)
                         model.SelectedImage = model.Images[index];
                 };
+                button.PreviewKeyDown += (_, e) =>
+                {
+                    if (e.Key is not (Windows.System.VirtualKey.Left or Windows.System.VirtualKey.Right))
+                        return;
+                    if (VirtualView.Owner == owner && owner.ViewModel == model &&
+                        !owner.DesktopIsSearching && !model.IsSequentialNavigationEnabled)
+                    {
+                        var command = e.Key == Windows.System.VirtualKey.Right
+                            ? model.SelectNextImageCommand : model.SelectPreviousImageCommand;
+                        if (command.CanExecute(null)) command.Execute(null);
+                    }
+                    e.Handled = true;
+                };
                 row.Children.Add(button);
             }
         }
@@ -758,6 +776,9 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
 
     private static void RestoreNavigationFocus(NavigationRow row, string? focusedId, int selected, FocusState focusState)
     {
+        // Numbered navigation follows selection, including when the visible range shifts.
+        if (focusedId?.StartsWith("OrientedImageryPage", StringComparison.Ordinal) == true)
+            focusedId = "OrientedImageryPage" + selected.ToString(CultureInfo.InvariantCulture);
         var target = row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == focusedId);
         target ??= row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == "OrientedImageryPage" + selected.ToString(CultureInfo.InvariantCulture));
         target?.Focus(focusState);
@@ -784,6 +805,7 @@ internal sealed class DesktopImageryBarHandler : ViewHandler<DesktopImageryBar, 
             ((Microsoft.UI.Xaml.Controls.Border)indicator.Children[1]).Visibility =
                 index == state.Selected ? NativeVisibility.Visible : NativeVisibility.Collapsed;
             button.IsEnabled = !state.Searching;
+            button.IsTabStop = slot == Math.Clamp(state.Selected - state.Start, 0, state.Count - 1);
             AutomationProperties.SetName(button, string.Format(CultureInfo.CurrentCulture,
                 Text(index == state.Selected ? "SelectedPageFormat" : "GoToPageFormat"), index + 1, state.Total));
             AutomationProperties.SetAutomationId(button, "OrientedImageryPage" + index.ToString(CultureInfo.InvariantCulture));

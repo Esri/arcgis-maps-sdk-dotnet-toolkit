@@ -725,6 +725,11 @@ public partial class OrientedImageryView
     private void RefreshPopup()
     {
         bool showingPopup = ViewModel.SelectedImagePopup != null;
+#if WINDOWS
+        bool focusPopup = showingPopup && _popupHost?.IsVisible == false &&
+            _popupOpenButton?.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.Button
+            { FocusState: Microsoft.UI.Xaml.FocusState.Keyboard };
+#endif
         if (_popupOpenButton != null)
         {
             _popupOpenButton.Command = ViewModel.OpenSelectedImagePopupCommand;
@@ -742,6 +747,9 @@ public partial class OrientedImageryView
         }
         if (_popupHost != null) _popupHost.IsVisible = showingPopup;
         if (_popupCloseButton != null) _popupCloseButton.Command = ViewModel.CloseSelectedImagePopupCommand;
+#if WINDOWS
+        if (focusPopup) FocusDesktopPopup();
+#endif
     }
 
     #endregion
@@ -933,7 +941,7 @@ public partial class OrientedImageryView
     private void Navigate(bool next)
     {
         var command = next ? ViewModel.SelectNextImageCommand : ViewModel.SelectPreviousImageCommand;
-        if (command.CanExecute(null)) command.Execute(null);
+        if (!_searching && command.CanExecute(null)) command.Execute(null);
         Refresh();
     }
 
