@@ -25,12 +25,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 /// </remarks>
 internal sealed record HighContrastColors(Color Foreground, Color Background, Color Highlight, Color HighlightForeground, Color Disabled)
 {
-    public Color Get(HighContrastColor role) => role switch
+    public Color Get(HighContrastColorRole role) => role switch
     {
-        HighContrastColor.Background => Background,
-        HighContrastColor.Highlight => Highlight,
-        HighContrastColor.HighlightForeground => HighlightForeground,
-        HighContrastColor.Disabled => Disabled,
+        HighContrastColorRole.Background => Background,
+        HighContrastColorRole.Highlight => Highlight,
+        HighContrastColorRole.HighlightForeground => HighlightForeground,
+        HighContrastColorRole.Disabled => Disabled,
         _ => Foreground,
     };
 

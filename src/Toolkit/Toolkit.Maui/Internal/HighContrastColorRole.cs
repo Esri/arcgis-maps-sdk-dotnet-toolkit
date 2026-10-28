@@ -19,7 +19,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 /// <summary>
 /// Identifies which <see cref="HighContrastColors"/> color an element uses while a contrast setting is on.
 /// </summary>
-internal enum HighContrastColor
+internal enum HighContrastColorRole
 {
     Foreground,
     Background,
