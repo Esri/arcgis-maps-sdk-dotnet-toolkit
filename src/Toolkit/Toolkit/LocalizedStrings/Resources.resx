@@ -1301,13 +1301,17 @@ navigation</value>
     <value>Tap on a feature to view its image</value>
     <comment>Instructions for Display Image mode.</comment>
   </data>
-  <data name="OrientedImageryViewImageSelectionUsing" xml:space="preserve">
-    <value>using</value>
-    <comment>Second instruction line, before the Find images icon in MAUI.</comment>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>or switch to</value>
+    <comment>First part of "or switch to [icon] mode". Follows OrientedImageryViewImageSelectionDisplayImage/FindImages instructions. (e.g. "Tap on a feature to view its image or switch to [icon] mode")</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
     <value>mode</value>
     <comment>Last word in "or switch to [icon] mode"</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionUsing" xml:space="preserve">
+    <value>using</value>
+    <comment>Second instruction line, before the Find images icon in MAUI.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionSearchMap" xml:space="preserve">
     <value>Tap on the map to search</value>
@@ -1316,18 +1320,6 @@ navigation</value>
   <data name="OrientedImageryViewImageSelectionInstructions" xml:space="preserve">
     <value>Select Find images or Display image, then tap on the map to search.</value>
     <comment>Accessible text alternative to the icon-based no-image-selected instructions in MAUI.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionFindMap" xml:space="preserve">
-    <value>Tap on the map to search for images</value>
-    <comment>First instruction line in the MAUI empty-image view when Find Images is enabled.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionDisplayFeature" xml:space="preserve">
-    <value>Tap on a feature to view its image</value>
-    <comment>First instruction line in the MAUI empty-image view when Display Image is enabled.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
-    <value>or switch to</value>
-    <comment>Instruction before the alternate mode icon, followed by the localized word for mode, in the MAUI empty-image view.</comment>
   </data>
   <data name="OrientedImageryViewImageSelectionFindInstructions" xml:space="preserve">
     <value>Tap on the map to search for images or switch to Display image mode.</value>
