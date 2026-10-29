@@ -455,19 +455,19 @@
     <!-- Toolbar data templates -->
 
     <DataTemplate x:Key="ToolbarCategoryTemplate" DataType="controls:OrientedImageryToolbarCategory">
-        <ItemsControl ItemsSource="{Binding ToolbarItems}"
+        <local:AccessibleItemsControl ItemsSource="{Binding ToolbarItems}"
                       ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                       Style="{StaticResource OrientedImageryToolbarContainerStyle}"
                       Margin="0" IsTabStop="False" Focusable="False" />
     </DataTemplate>
 
     <DataTemplate x:Key="MoreCategoryTemplate" DataType="controls:OrientedImageryToolbarCategory">
-        <ItemsControl ItemsSource="{Binding ToolbarItems}"
+        <local:AccessibleItemsControl ItemsSource="{Binding ToolbarItems}"
                       ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                       Visibility="{Binding ViewModel.SupportsSequentialNavigation, Converter={StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource OrientedImageryToolbarContainerStyle}"
                       Margin="0" IsTabStop="False" Focusable="False">
-        </ItemsControl>
+        </local:AccessibleItemsControl>
     </DataTemplate>
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
@@ -543,7 +543,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
-        <ToggleButton IsChecked="{Binding  IsAddingMarkersEnabled}"
+        <ToggleButton IsChecked="{Binding IsAddingMarkersEnabled}"
                       MinWidth="0" Padding="0,4"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
                       AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersLabel}"
@@ -816,7 +816,7 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <ItemsControl x:Name="PART_ToolbarContainer" IsTabStop="False" Focusable="False"
+                            <local:AccessibleItemsControl x:Name="PART_ToolbarContainer" IsTabStop="False" Focusable="False"
                                           ItemTemplateSelector="{StaticResource DefaultOrientedImageryToolbarSelector}">
                                 <ItemsControl.Style>
                                     <Style TargetType="{x:Type ItemsControl}" BasedOn="{StaticResource OrientedImageryToolbarContainerStyle}">
@@ -828,7 +828,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </ItemsControl.Style>
-                            </ItemsControl>
+                            </local:AccessibleItemsControl>
 
                             <Grid Grid.Row="1" KeyboardNavigation.TabNavigation="Local">
                                 <Grid.ColumnDefinitions>
