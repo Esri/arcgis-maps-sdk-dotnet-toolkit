@@ -134,7 +134,7 @@ public partial class OrientedImageryView
             }
             _renderedToolbarRevision = _toolbarRevision;
         }
-        _customToolbar.IsVisible = HasValidLayer;
+        _customToolbar.IsVisible = HasLayer;
         UpdateToolHighlights();
     }
 
@@ -272,7 +272,7 @@ public partial class OrientedImageryView
         _toolbarUpdates.Add(() =>
         {
             cell.IsVisible = category.ToolbarItems.Any(item => item is not ToolbarDividerVM && IsToolbarItemVisible(item));
-            button.IsEnabled = HasValidLayer && !_searching;
+            button.IsEnabled = HasLayer && !_searching;
             bool active = (key == OrientedImageryToolbarCategory.ModeCategoryName &&
                     ViewModel.InteractionState is OrientedImageryViewInteractionState.FindImages or OrientedImageryViewInteractionState.DisplayImage) ||
                 (key == OrientedImageryToolbarCategory.MarkersCategoryName && IsAddingMarkers) ||
@@ -398,7 +398,7 @@ public partial class OrientedImageryView
 
     private void AddMobileToolbarItem(VerticalStackLayout content, OrientedImageryToolbarItemBase item, View anchor, Action back)
     {
-        bool Enabled() => HasValidLayer && !_searching;
+        bool Enabled() => HasLayer && !_searching;
         switch (item)
         {
             case ImageSearchModeVM mode:
