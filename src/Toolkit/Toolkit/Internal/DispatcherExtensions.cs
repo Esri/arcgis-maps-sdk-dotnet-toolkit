@@ -29,6 +29,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             else
                 action();
         }
+
+        // Queues the action for a later turn of the UI thread, even when called on it.
+        internal static void Post(this BindableObject bindable, Action action) => bindable.Dispatcher.Dispatch(action);
 #elif WPF
         internal static void Dispatch(this System.Windows.Threading.DispatcherObject dObject, Action action)
         {
@@ -38,6 +41,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 action();
             else
                 dObject.Dispatcher.Invoke(action);
+        }
+
+        // Queues the action for a later turn of the UI thread, even when called on it.
+        internal static void Post(this System.Windows.Threading.DispatcherObject dObject, Action action)
+        {
+            if (!dObject.Dispatcher.HasShutdownStarted && !dObject.Dispatcher.HasShutdownFinished)
+                dObject.Dispatcher.BeginInvoke(action);
         }
 #elif WINUI
         internal static void Dispatch(this DependencyObject dObject, Action action)
@@ -50,6 +60,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             else
                 queue.TryEnqueue(() => action());
         }
+
+        // Queues the action for a later turn of the UI thread, even when called on it.
+        internal static void Post(this DependencyObject dObject, Action action) => dObject.DispatcherQueue?.TryEnqueue(() => action());
 #elif WINDOWS_UWP
         internal static void Dispatch(this DependencyObject dObject, Action action)
         {
