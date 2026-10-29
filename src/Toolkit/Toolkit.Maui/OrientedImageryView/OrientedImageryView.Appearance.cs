@@ -712,22 +712,21 @@ public partial class OrientedImageryView
 
     private void RefreshStatus()
     {
-        bool loading = _searching || _viewport?.IsBusy == true || SelectedLayer?.LoadStatus == LoadStatus.Loading;
+        var layer = ViewModel.OrientedImageryLayer;
+        bool loading = _searching || _viewport?.IsBusy == true || layer?.LoadStatus == LoadStatus.Loading;
         if (_busy != null)
         {
             _busy.IsRunning = loading;
             _busy.IsVisible = loading;
         }
 
-        string? error = _operationError?.Message ?? _viewport?.Error?.Message;
+        string? error = _operationError?.Message ?? _viewport?.Error?.Message ?? layer?.LoadError?.Message;
         string? message = error;
         bool showSelectionGuidance = false;
         if (message == null)
         {
             if (GeoView == null) message = Text("NoGeoView");
-            else if (_layers.Count == 0) message = Text("NoLayers");
-            else if (SelectedLayer == null) message = Text("NoLayerSelected");
-            else if (!_layers.Contains(SelectedLayer)) message = Text("InvalidLayer");
+            else if (layer == null) message = Text("NoLayerSelected");
             else if (loading) message = Text("Loading");
             else if (ViewModel.SelectedImage == null)
             {
@@ -1249,12 +1248,12 @@ public partial class OrientedImageryView
         // A button from a replaced menu must not act on the current layer.
         int version = _menuVersion;
         var model = ViewModel;
-        var layer = SelectedLayer;
+        var layer = model.OrientedImageryLayer;
         return action with
         {
             Execute = () =>
             {
-                if (version != _menuVersion || !_connected || model != ViewModel || layer != SelectedLayer || !action.Enabled())
+                if (version != _menuVersion || !_connected || model != ViewModel || layer != model.OrientedImageryLayer || !action.Enabled())
                     return;
                 if (dismiss) DismissPanel();
                 action.Execute();
