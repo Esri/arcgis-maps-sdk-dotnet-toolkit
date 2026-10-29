@@ -67,9 +67,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #endif
             root.Add(rootcaption);
             root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0,5) });
+#if !__IOS__
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
-#if __IOS__
-            cv.SelectionMode = SelectionMode.Single;
+#else
+            CollectionView cv = new LegacyCollectionView() { SelectionMode = SelectionMode.Single };
             void UpdateAttachmentList()
             {
                 if (cv.Handler?.PlatformView is UIKit.UIView nativeView)
@@ -371,5 +372,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
         }
     }
+
+#if __IOS__
+    // The handler for this subclass is set to the legacy .NET 9 CollectionView handler
+    // to avoid zero-height attachment lists. https://github.com/dotnet/maui/issues/35591
+    internal sealed class LegacyCollectionView : CollectionView
+    {
+    }
+#endif
 }
 #endif
