@@ -115,3 +115,4 @@ Use named trace configurations defined in a web map to perform connected trace o
 |TableOfContents   | N/A | ✔ | N/A  | - |
 |[TimeSlider](time-slider.md)   | ✔ | ✔ | ❌ | ❌ |
 |[UtilityNetworkTraceTool](un-trace.md) | ✔ | ✔ | ✔ | ❌ |
+
