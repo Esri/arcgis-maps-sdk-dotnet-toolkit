@@ -51,6 +51,7 @@ public partial class OrientedImageryView : TemplatedView
         this.SetAppThemeColor(ThemeImageBackgroundProperty, Colors.White, Color.FromArgb("#202020"));
         ControlTemplate = DefaultControlTemplate;
         SizeChanged += (_, _) => Refresh();
+        Loaded += (_, _) => Refresh();
 #if !WINDOWS
         Loaded += PresentationLoaded;
         Unloaded += PresentationUnloaded;
@@ -202,6 +203,8 @@ public partial class OrientedImageryView : TemplatedView
         _lookAtVersion++;
         DetachBackNavigation();
         _connected = false;
+        _lastStatusAnnouncement = null;
+        _lastNotice = null;
         DismissPanel();
 #if ANDROID
         DismissAndroidPopup();
@@ -211,6 +214,7 @@ public partial class OrientedImageryView : TemplatedView
         if (_connectedModel != null)
         {
             _connectedModel.PropertyChanged -= ModelChanged;
+            _connectedModel.SequenceBoundaryReached -= SequenceBoundaryReached;
             _connectedModel.ToolbarCategories.CollectionChanged -= ToolbarChanged;
             _connectedModel.SelectNextImageCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedModel.SelectPreviousImageCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
@@ -263,6 +267,7 @@ public partial class OrientedImageryView : TemplatedView
         _connectedModel = ViewModel;
         _connectedModel.DispatchAction = DispatchUpdate;
         _connectedModel.PropertyChanged += ModelChanged;
+        _connectedModel.SequenceBoundaryReached += SequenceBoundaryReached;
         _connectedModel.ToolbarCategories.CollectionChanged += ToolbarChanged;
         ObserveToolbarCategories();
         _connectedModel.SelectNextImageCommand.CanExecuteChanged += NavigationAvailabilityChanged;
@@ -534,6 +539,14 @@ public partial class OrientedImageryView : TemplatedView
     }
 
     private void NavigationAvailabilityChanged(object? sender, EventArgs e) => DispatchUpdate(Refresh);
+
+    private void SequenceBoundaryReached(bool start, bool end)
+    {
+        if (CanAnnounce && ViewModel.IsSequentialNavigationEnabled && ViewModel.SelectedImage != null &&
+            ViewModel.SequentialNavigationError == null && _operationError == null && _viewport?.Error == null)
+            SemanticScreenReader.Default.Announce(Text(start && end ? "SequenceStartAndEndReached" :
+                start ? "SequenceStartReached" : "SequenceEndReached"));
+    }
 
     #endregion
 
