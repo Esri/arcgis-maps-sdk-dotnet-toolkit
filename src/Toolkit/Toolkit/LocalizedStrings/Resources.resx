@@ -1169,6 +1169,12 @@ Locations</value>
 Markers</value>
     <comment>Same as OrientedImageryViewerAddMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
+  <data name="OrientedImageryViewMobileAddMarkers" xml:space="preserve">
+    <value>Add Markers</value>
+  </data>
+  <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
+    <value>Select Symbol</value>
+  </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Clear Markers</value>
     <comment>Single-line label (mobile-only) and automation name for the button that clears markers.</comment>
