@@ -114,7 +114,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     protected override Exception? ResolveError()
     {
-        if (Footprint?.OrientedImage?.LoadError is Exception imageError)
+        if (!_isLoading && Footprint?.OrientedImage?.LoadError is Exception imageError)
             return imageError;
 
         if (_rasterLayer is RasterLayer layer)
