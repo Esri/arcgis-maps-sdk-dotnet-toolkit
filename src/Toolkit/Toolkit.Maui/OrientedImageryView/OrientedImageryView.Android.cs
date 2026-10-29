@@ -35,7 +35,8 @@ public partial class OrientedImageryView
         _toolsSheetContent = content;
         AddLogicalChild(content);
         var nativeContent = content.ToPlatform(context);
-        if (_toolsSheet == null)
+        bool newSheet = _toolsSheet == null;
+        if (newSheet)
         {
             var dialog = new BottomSheetDialog(context.Context);
             _toolsSheet = dialog;
@@ -52,10 +53,10 @@ public partial class OrientedImageryView
         {
             if (_toolsSheetContent != null)
                 UpdateAndroidPanelSize(width);
-        });
+        }, observeSizeChanges: newSheet);
     }
 
-    private static void ShowAndroidSheet(BottomSheetDialog dialog, Android.Views.View nativeContent, Action<double> updateWidth)
+    private static void ShowAndroidSheet(BottomSheetDialog dialog, Android.Views.View nativeContent, Action<double> updateWidth, bool observeSizeChanges = true)
     {
         dialog.Show();
         dialog.Window?.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
@@ -63,11 +64,15 @@ public partial class OrientedImageryView
         {
             sheet.SetBackgroundColor(Android.Graphics.Color.Transparent);
             double density = sheet.Resources!.DisplayMetrics!.Density;
-            sheet.LayoutChange += (_, args) =>
+            // Submenus replace content but reuse this native sheet and its width subscription.
+            if (observeSizeChanges)
             {
-                if (args.Right > args.Left && args.Right - args.Left != args.OldRight - args.OldLeft)
-                    updateWidth((args.Right - args.Left) / density);
-            };
+                sheet.LayoutChange += (_, args) =>
+                {
+                    if (args.Right > args.Left && args.Right - args.Left != args.OldRight - args.OldLeft)
+                        updateWidth((args.Right - args.Left) / density);
+                };
+            }
             if (sheet.Width > 0)
                 updateWidth(sheet.Width / density);
         }
