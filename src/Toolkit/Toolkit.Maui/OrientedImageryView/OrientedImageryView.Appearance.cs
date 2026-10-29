@@ -730,8 +730,8 @@ public partial class OrientedImageryView
             else if (loading) message = Text("Loading");
             else if (ViewModel.SelectedImage == null)
             {
-                message = Text(_hasSearchedForImages ? "NoImagesFound" : "NoImageToDisplay");
-                showSelectionGuidance = !_hasSearchedForImages;
+                message = Text(HasSearchedForImages ? "NoImagesFound" : "NoImageToDisplay");
+                showSelectionGuidance = !HasSearchedForImages;
             }
         }
         string selectionInstructions = RefreshSelectionGuidance();
