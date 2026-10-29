@@ -100,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 Label roottitle = new Label();
                 roottitle.Style = GetPopupViewerHeaderStyle();
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
                 SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
 #endif
                 roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup?.Title, converter: PopupTitleConverter);
