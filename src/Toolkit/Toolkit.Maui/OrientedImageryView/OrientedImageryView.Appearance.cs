@@ -136,11 +136,9 @@ public partial class OrientedImageryView
         Add("PART_Viewport", new OrientedImageViewport { AutomationId = "OrientedImageryViewport" }, image);
         AddStatusPresentation(image, scope);
 #if WINDOWS
-        Add("PART_Busy", new ActivityIndicator { VerticalOptions = LayoutOptions.Start, HeightRequest = 24, AutomationId = "OrientedImageryBusy" }, image);
         Add("PART_Previous", DesktopImageArrow(false), image);
         Add("PART_Next", DesktopImageArrow(true), image);
 #else
-        Add("PART_Busy", new ActivityIndicator { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, AutomationId = "OrientedImageryBusy" }, image);
         Add("PART_ImagePrevious", MobileImageArrow(false), image);
         Add("PART_ImageNext", MobileImageArrow(true), image);
 #endif
