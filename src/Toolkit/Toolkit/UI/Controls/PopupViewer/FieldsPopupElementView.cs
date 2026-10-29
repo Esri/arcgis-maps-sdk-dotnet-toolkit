@@ -26,10 +26,10 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #if MAUI && WINDOWS
 using TextBlock = Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SelectableLabel;
 using ChildElement = Microsoft.Maui.Controls.View;
-#elif MAUI && __IOS__
+#elif MAUI && (__IOS__ || __ANDROID__)
 using TextBlock = Esri.ArcGISRuntime.Toolkit.Maui.Internal.FieldsTableLabel;
 using ChildElement = Microsoft.Maui.Controls.View;
-#elif MAUI // Android, generic
+#elif MAUI // generic
 using TextBlock = Microsoft.Maui.Controls.Label;
 using ChildElement = Microsoft.Maui.Controls.View;
 #elif WPF
@@ -259,10 +259,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 LineBreakMode = LineBreakMode.WordWrap,
             };
 #else
-#if MAUI
-            // Don't use the SelectableLabel here since hyperlinks don't need to be selectable and it can cause issues with the tap gesture recognizer.
-            var t = new Microsoft.Maui.Controls.Label
-#elif WINUI
+#if WINUI
             var t = new FieldsTableCellTextBlock
 #else
             var t = new TextBlock
