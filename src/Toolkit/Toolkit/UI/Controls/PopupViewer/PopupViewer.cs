@@ -20,6 +20,8 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+
 
 
 #if MAUI
@@ -98,6 +100,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
+#if MAUI
+            this.SetHighContrastColor(BackgroundProperty, null, HighContrastColorRole.Background);
+#endif
             InvalidatePopup();
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {
