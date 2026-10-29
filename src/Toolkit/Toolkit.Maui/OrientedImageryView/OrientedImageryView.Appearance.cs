@@ -638,8 +638,8 @@ public partial class OrientedImageryView
         bool find = ViewModel.InteractionState == OrientedImageryViewInteractionState.FindImages;
         bool display = ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage;
         if (_selectionInstruction != null)
-            _selectionInstruction.Text = Text(find ? "ImageSelectionFindMap" :
-                display ? "ImageSelectionDisplayFeature" : "ImageSelectionSearchMap");
+            _selectionInstruction.Text = Text(find ? "ImageSelectionFindImages" :
+                display ? "ImageSelectionDisplayImage" : "ImageSelectionSearchMap");
         if (_selectionPrefix != null)
             _selectionPrefix.Text = Text(find || display ? "ImageSelectionSwitchMode" : "ImageSelectionUsing");
         if (_selectionFindIcon != null) _selectionFindIcon.IsVisible = !find;
@@ -886,18 +886,14 @@ public partial class OrientedImageryView
         SetImagePageButtonState(_previousButton, false, !_searching && canGoPrevious, visible);
         SetImagePageButtonState(_nextButton, true, !_searching && canGoNext, visible);
         if (_pages == null) return;
-        if (_previousButton != null)
+        foreach (var button in new[] { _previousButton, _nextButton })
         {
-            _previousButton.Text = null;
-            _previousButton.WidthRequest = 44;
+            if (button == null) continue;
+            button.Text = null;
+            button.WidthRequest = 44;
         }
-        if (_nextButton != null)
-        {
-            _nextButton.Text = null;
-            _nextButton.WidthRequest = 44;
-            if (_nextButton.ContentLayout?.Position != Button.ButtonContentLayout.ImagePosition.Right)
-                _nextButton.ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Right, 4);
-        }
+        if (_nextButton != null && _nextButton.ContentLayout?.Position != Button.ButtonContentLayout.ImagePosition.Right)
+            _nextButton.ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Right, 4);
         if (!visible)
         {
             if (_pages.Children.Count > 0) _pages.Clear();
@@ -1310,8 +1306,6 @@ public partial class OrientedImageryView
 #if ANDROID || (__IOS__ && !MACCATALYST)
         selection.Text = "\u2713";
         selection.FontSize = 17;
-#endif
-#if ANDROID || (__IOS__ && !MACCATALYST)
         selection.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#777680"), Color.FromArgb("#AEAEB2"));
 #endif
         if (action.Checked != null) row.Add(selection, 2);
