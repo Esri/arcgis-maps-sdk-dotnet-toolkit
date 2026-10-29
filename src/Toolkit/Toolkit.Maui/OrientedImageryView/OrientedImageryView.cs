@@ -414,7 +414,7 @@ public partial class OrientedImageryView : TemplatedView
             if (version == _operationVersion && layer == model.OrientedImageryLayer && geoView == GeoView && model == ViewModel)
             {
                 bool explore = model.InteractionState == OrientedImageryViewInteractionState.FindImages;
-                model.SetImages(explore ? images : [], explore || images.Count == 0 ? e.Location : null);
+                model.SetImages(images, explore || images.Count == 0 ? e.Location : null);
                 model.SelectedImage = images.FirstOrDefault();
                 if (explore)
                     model.IsSequentialNavigationEnabled = false;
