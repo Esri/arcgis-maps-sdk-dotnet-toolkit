@@ -56,8 +56,6 @@ public partial class OrientedImageryViewSample : ContentPage
         var view = CurrentGeoView;
         var model = CurrentGeoModel;
         _layerReady = false;
-        ImageryView.SelectedLayer = null;
-        // The closed viewer is disconnected, so clear its previous layer state explicitly.
         ImageryView.ViewModel.OrientedImageryLayer = null;
         model.OperationalLayers.Clear();
         LoadError.IsVisible = false;
@@ -75,7 +73,7 @@ public partial class OrientedImageryViewSample : ContentPage
             model.OperationalLayers.Add(layer);
             await layer.LoadAsync();
             if (version != _loadVersion || !_active) return;
-            ImageryView.SelectedLayer = layer;
+            ImageryView.ViewModel.OrientedImageryLayer = layer;
             if (layer.FullExtent is { } extent)
                 view.SetViewpoint(new Viewpoint(extent));
             _layerReady = true;
@@ -93,7 +91,6 @@ public partial class OrientedImageryViewSample : ContentPage
     {
         ++_loadVersion;
         LayerPicker.SelectedItem = null;
-        ImageryView.SelectedLayer = null;
         ImageryView.ViewModel.OrientedImageryLayer = null;
         ImageryView.GeoView = null;
         CurrentGeoModel.OperationalLayers.Clear();
