@@ -169,6 +169,7 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
     private Popup? _imageDetailsPopup;
     private bool _isSequentialNavigationEnabled;
     private bool _isFetchingAdjacentImage;
+    private Task? _adjacentImagesFetchTask;
     private OrientedImage? _nextSequentialImage;
     private OrientedImage? _previousSequentialImage;
     private CancellationTokenSource? _adjacentImagesCancellation;
@@ -313,7 +314,11 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
             ResetSequentialNavigationState();
             UpdateNavigationState();
 
-            if (IsSequentialNavigationEnabled && SelectedImage != null)
+            if (!IsSequentialNavigationEnabled)
+            {
+                ChangeNavigationCommandsCanExecute();
+            }
+            else if (SelectedImage != null)
             {
                 _ = PrefetchAdjacentImagesAsync();
                 SetImages([SelectedImage]);
@@ -391,6 +396,7 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
         {
             _deferMarkerSynchronization = false;
             UpdateCameraMarkers();
+            SynchronizeMarkers();
             UpdateVisibleFootprints();
             UpdateNavigationState();
         }
@@ -471,14 +477,16 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
         SequentialNavigationError = null;
         try
         {
-            await Task.WhenAll(
+            _adjacentImagesFetchTask = Task.WhenAll(
                 PrefetchAdjacentImageAsync(OrientedImageryLayer, SelectedImage, SequenceStep.Next, navigationVersion, cancellation.Token),
                 PrefetchAdjacentImageAsync(OrientedImageryLayer, SelectedImage, SequenceStep.Previous, navigationVersion, cancellation.Token));
+            await _adjacentImagesFetchTask;
         }
         finally
         {
             if (navigationVersion == _sequentialNavigationVersion)
             {
+                _adjacentImagesFetchTask = null;
                 _adjacentImagesCancellation = null;
                 _isFetchingAdjacentImage = false;
                 UpdateNavigationState();
@@ -542,6 +550,7 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
         _sequentialNavigationVersion++;
         _adjacentImagesCancellation?.Cancel();
         _adjacentImagesCancellation = null;
+        _adjacentImagesFetchTask = null;
         _isFetchingAdjacentImage = false;
         _nextSequentialImage = null;
         _previousSequentialImage = null;
@@ -811,7 +820,6 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
     /// </summary>
     /// <remarks>
     /// Applications may also add markers directly to <see cref="Markers"/>.
-    /// <see cref="InteractionState"/> does not restrict this method.
     /// </remarks>
     /// <param name="location">The geographic location of the marker.</param>
     /// <param name="symbol">The optional symbol to use for the marker.</param>
