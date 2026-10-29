@@ -14,6 +14,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -21,7 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-#if WPF
+#if WPF || WINDOWS_XAML
 /// <summary>
 /// Manages oriented imagery selection, footprints, and map markers for an oriented imagery view.
 /// </summary>
@@ -36,6 +38,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _managedMarkers = new List<OrientedImageMarker>();
         _displayMarkers = new ResettableObservableCollection<OrientedImageMarker>();
         _appMarkers.CollectionChanged += Markers_CollectionChanged;
+#if WINDOWS_XAML
+        _dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+#endif
 
         var symbolOutline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.White, 1);
         _markersOverlay = new GraphicsOverlay() { Id = "OrientedImageryView_Markers_Overlay" };
@@ -689,6 +694,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _showCameraLocations = true;
     private static readonly string SearchPointMarkerTag = "SearchPointMarker";
     private static readonly string CamerasMarkerTag = "CamerasMarker";
+#if WINDOWS_XAML
+    private readonly Microsoft.UI.Dispatching.DispatcherQueue? _dispatcherQueue;
+#endif
 
     /// <summary>
     /// Gets the application-owned markers displayed by this view model.
@@ -800,12 +808,21 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void Marker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+#if WPF
         System.Windows.Threading.Dispatcher? dispatcher = System.Windows.Application.Current?.Dispatcher;
         if (dispatcher is not null && !dispatcher.CheckAccess())
         {
             _ = dispatcher.BeginInvoke(SynchronizeMarkers);
             return;
         }
+#elif WINDOWS_XAML
+        if (_dispatcherQueue is { HasThreadAccess: false })
+        {
+            if (!_dispatcherQueue.TryEnqueue(SynchronizeMarkers))
+                throw new InvalidOperationException("Unable to update oriented imagery markers on the UI thread.");
+            return;
+        }
+#endif
 
         SynchronizeMarkers();
     }

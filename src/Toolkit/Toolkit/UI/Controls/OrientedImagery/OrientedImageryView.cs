@@ -1,13 +1,17 @@
-#if WPF
+#if WPF || WINDOWS_XAML
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 using System.ComponentModel;
 using System.Diagnostics;
+#if WPF
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#elif WINDOWS_XAML
+using Paginator = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryPaginator;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -68,9 +72,7 @@ public partial class OrientedImageryView
 
         RewireViewModel();
         UpdatePaginatorSelection();
-#if WPF
         FocusCloseDetailsButton();
-#endif
     }
 
 #region ViewModel
@@ -142,6 +144,7 @@ public partial class OrientedImageryView
                 UpdateViewportImage();
                 goto case nameof(OrientedImageryViewModel.Images);
             case nameof(OrientedImageryViewModel.Images):
+            case nameof(OrientedImageryViewModel.IsSequentialNavigationEnabled):
                 UpdatePaginatorSelection();
                 break;
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
@@ -152,9 +155,15 @@ public partial class OrientedImageryView
                 HasSearchedForImages = false;
                 UpdateErrorMessage();
                 break;
-#if WPF
             case nameof(OrientedImageryViewModel.SelectedImagePopup):
+#if WINDOWS_XAML
+                UpdateViewState_WinUI();
+#endif
                 FocusCloseDetailsButton();
+                break;
+#if WINDOWS_XAML
+            case nameof(OrientedImageryViewModel.SequentialNavigationError):
+                UpdateViewState_WinUI();
                 break;
 #endif
         }
@@ -205,6 +214,8 @@ public partial class OrientedImageryView
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
     /// </summary>
+    /// <remarks>On WinUI, the default <see cref="System.Drawing.Color.Empty"/> follows the active theme.
+    /// Set an explicit color to override it, or restore <see cref="System.Drawing.Color.Empty"/> to follow the theme again.</remarks>
     public System.Drawing.Color DisplayBackgroundColor
     {
         get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
@@ -215,11 +226,18 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="DisplayBackgroundColor" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
+#if WINDOWS_XAML
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#else
         PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#endif
 
     private void WireViewport(OrientedImageViewport viewport)
     {
         viewport.ImageTapped += Viewport_ImageTapped;
+#if WINDOWS_XAML
+        WireViewport_WinUI(viewport);
+#endif
     }
 
     private void UnwireViewport(OrientedImageViewport viewport)
@@ -229,10 +247,20 @@ public partial class OrientedImageryView
         viewport.ClearValue(OrientedImageViewport.MarkersProperty);
         viewport.ClearValue(OrientedImageViewport.FootprintProperty);
         viewport.ClearValue(OrientedImageViewport.DisplayBackgroundColorProperty);
+#if WINDOWS_XAML
+        UnwireViewport_WinUI(viewport);
+#endif
     }
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
+#if WINDOWS_XAML
+        if (displayBackgroundColor.IsEmpty)
+        {
+            var color = ThemeDisplayBackgroundBrush?.Color ?? default;
+            displayBackgroundColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+#endif
         if (_viewport != null)
             _viewport.DisplayBackgroundColor = displayBackgroundColor;
     }
@@ -444,12 +472,19 @@ public partial class OrientedImageryView
     {
         toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
         toolbarContainer.Items.Clear();
+        toolbarContainer.ItemsSource = ViewModel?.ToolbarCategories;
+#if WINDOWS_XAML
+        WireToolbarWinUI(toolbarContainer);
+#endif
     }
 
     private void UnwireToolbarContainer(ItemsControl toolbarContainer)
     {
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
+#if WINDOWS_XAML
+        UnwireToolbarWinUI(toolbarContainer);
+#endif
     }
 #endregion Toolbar
 
@@ -469,6 +504,10 @@ public partial class OrientedImageryView
         }
         _paginator.TotalPages = images.Count;
         _paginator.SelectedPageIndex = index;
+
+#if WINDOWS_XAML
+    UpdateNavigationVisibility_WinUI();
+#endif
     }
 
     private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
@@ -507,6 +546,9 @@ public partial class OrientedImageryView
             ErrorMessage = Properties.Resources.GetString(NoLayerSelectedKey);
         else
             ErrorMessage = null;
+#if WINDOWS_XAML
+        UpdateViewState_WinUI();
+#endif
     }
 #endregion Error
 }
