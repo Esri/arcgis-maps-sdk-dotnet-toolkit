@@ -99,7 +99,7 @@ public partial class OrientedImageryView
     }
 
     internal bool DesktopIsSearching => _searching;
-    internal bool DesktopHasLayer => SelectedLayer != null && _layers.Contains(SelectedLayer);
+    internal bool DesktopHasLayer => ViewModel.OrientedImageryLayer != null;
     internal static string DesktopText(string key) => Text(key);
 
     #endregion
