@@ -37,6 +37,7 @@ public partial class OrientedImageryView
     private int _selectedPage = -1;
     private View? _panelAnchor;
     private int _menuVersion;
+    private string? _lastStatusAnnouncement;
     private string? _lastNotice;
     private readonly List<Action> _panelUpdates = new();
     private readonly List<Action> _panelCleanup = new();
@@ -446,8 +447,16 @@ public partial class OrientedImageryView
             _viewport.StateChanged += ViewportChanged;
         }
 
-        if (_previousButton != null) _previousButton.Clicked += Previous;
-        if (_nextButton != null) _nextButton.Clicked += Next;
+        if (_previousButton != null)
+        {
+            _previousButton.Clicked += Previous;
+            _previousButton.HandlerChanged += PaginationButtonHandlerChanged;
+        }
+        if (_nextButton != null)
+        {
+            _nextButton.Clicked += Next;
+            _nextButton.HandlerChanged += PaginationButtonHandlerChanged;
+        }
         if (_imagePreviousButton != null) _imagePreviousButton.Clicked += Previous;
         if (_imageNextButton != null) _imageNextButton.Clicked += Next;
         if (_pages != null) _pages.SizeChanged += PageSizeChanged;
@@ -558,8 +567,16 @@ public partial class OrientedImageryView
             _viewport.Markers = null;
         }
 
-        if (_previousButton != null) _previousButton.Clicked -= Previous;
-        if (_nextButton != null) _nextButton.Clicked -= Next;
+        if (_previousButton != null)
+        {
+            _previousButton.Clicked -= Previous;
+            _previousButton.HandlerChanged -= PaginationButtonHandlerChanged;
+        }
+        if (_nextButton != null)
+        {
+            _nextButton.Clicked -= Next;
+            _nextButton.HandlerChanged -= PaginationButtonHandlerChanged;
+        }
         if (_imagePreviousButton != null) _imagePreviousButton.Clicked -= Previous;
         if (_imageNextButton != null) _imageNextButton.Clicked -= Next;
         if (_pages != null) _pages.SizeChanged -= PageSizeChanged;
@@ -666,9 +683,6 @@ public partial class OrientedImageryView
         {
             _notice.Text = ViewModel.SequentialNavigationError?.Message;
             _notice.IsVisible = _notice.Text != null;
-            if (_connected && _notice.Text != null && _notice.Text != _lastNotice)
-                SemanticScreenReader.Default.Announce(_notice.Text);
-            _lastNotice = _notice.Text;
         }
 
         RefreshPages();
@@ -716,6 +730,36 @@ public partial class OrientedImageryView
             _statusHost.IsVisible = message != null;
         if (_selectionGuidance != null)
             _selectionGuidance.IsVisible = showSelectionGuidance;
+        AnnounceStatusMessages(showSelectionGuidance ? $"{message}. {selectionInstructions}" : message,
+            ViewModel.SequentialNavigationError?.Message, error == null && message == Text("Loading"));
+    }
+
+    private bool CanAnnounce
+    {
+        get
+        {
+            if (!_connected || !IsLoaded) return false;
+            for (Element? element = this; element != null; element = element.Parent)
+                if (element is VisualElement { IsVisible: false }) return false;
+            return true;
+        }
+    }
+
+    private void AnnounceStatusMessages(string? status, string? notice, bool loading)
+    {
+        if (!CanAnnounce) return;
+        string? announcement = null;
+        if (!loading)
+        {
+            if (status != null && status != _lastStatusAnnouncement)
+                announcement = status;
+            _lastStatusAnnouncement = status;
+        }
+        if (notice != null && notice != _lastNotice && notice != status)
+            announcement = announcement == null ? notice : $"{announcement}. {notice}";
+        _lastNotice = notice;
+        if (announcement != null)
+            SemanticScreenReader.Default.Announce(announcement);
     }
 
     #endregion
@@ -756,11 +800,42 @@ public partial class OrientedImageryView
 
     #region Image pagination
 
-    private static void SetToolState(Button? button, bool enabled, bool visible)
+    internal string ImagePageActionKey(bool next) => ViewModel.IsSequentialNavigationEnabled
+        ? next ? "ShowNextImageInSequence" : "ShowPreviousImageInSequence"
+        : next ? "ShowNextImage" : "ShowPreviousImage";
+
+    internal bool HasImageOverlayArrow(bool next) =>
+#if WINDOWS
+        (next ? _nextButton : _previousButton) is { IsVisible: true };
+#else
+        (next ? _imageNextButton : _imagePreviousButton) is { IsVisible: true };
+#endif
+
+    private void SetImagePageButtonState(Button? button, bool next, bool enabled, bool visible)
     {
         if (button == null) return;
         button.IsEnabled = enabled;
         button.IsVisible = visible;
+        string name = Text(ImagePageActionKey(next));
+        SemanticProperties.SetDescription(button, name);
+        ToolTipProperties.SetText(button, name);
+    }
+
+    private void PaginationButtonHandlerChanged(object? sender, EventArgs e)
+    {
+        if (sender is Button button)
+            SetPaginationTabStop(button, button == _nextButton);
+    }
+
+    private void SetPaginationTabStop(Button button, bool next)
+    {
+#if ANDROID
+        // Keyboard focus is separate from TalkBack accessibility focus.
+        if (button.Handler?.PlatformView is Android.Views.View platformButton)
+            platformButton.Focusable = !HasImageOverlayArrow(next) &&
+                (button == (next ? _nextButton : _previousButton) ||
+                    (next ? _nextButton : _previousButton) is not { IsVisible: true });
+#endif
     }
 
     private void PageSizeChanged(object? sender, EventArgs e) => RefreshPages();
@@ -787,16 +862,18 @@ public partial class OrientedImageryView
         if (_desktopPagination != null)
         {
             bool show = ViewModel.SelectedImage != null;
-            SetToolState(_previousButton, !_searching && canGoPrevious, show);
-            SetToolState(_nextButton, !_searching && canGoNext, show);
+            SetImagePageButtonState(_previousButton, false, !_searching && canGoPrevious, show);
+            SetImagePageButtonState(_nextButton, true, !_searching && canGoNext, show);
             return;
         }
 #endif
         bool visible = ViewModel.SelectedImage != null;
-        SetToolState(_imagePreviousButton, !_searching && canGoPrevious, visible);
-        SetToolState(_imageNextButton, !_searching && canGoNext, visible);
-        SetToolState(_previousButton, !_searching && canGoPrevious, visible);
-        SetToolState(_nextButton, !_searching && canGoNext, visible);
+        SetImagePageButtonState(_imagePreviousButton, false, !_searching && canGoPrevious, visible);
+        SetImagePageButtonState(_imageNextButton, true, !_searching && canGoNext, visible);
+        SetImagePageButtonState(_previousButton, false, !_searching && canGoPrevious, visible);
+        SetImagePageButtonState(_nextButton, true, !_searching && canGoNext, visible);
+        if (_previousButton != null) SetPaginationTabStop(_previousButton, false);
+        if (_nextButton != null) SetPaginationTabStop(_nextButton, true);
         if (_pages == null) return;
         if (_previousButton != null)
         {
@@ -846,6 +923,7 @@ public partial class OrientedImageryView
                 button.Padding = new Thickness(4, 0);
                 button.MinimumWidthRequest = 44;
                 button.Clicked += (_, _) => ChangePage(next);
+                button.HandlerChanged += (_, _) => SetPaginationTabStop(button, next);
                 return button;
             }
             _pages.Add(SequenceButton(false));
@@ -869,12 +947,12 @@ public partial class OrientedImageryView
         {
             var previous = (Button)_pages.Children[0];
             previous.Text = Text("PreviousLabel");
-            SemanticProperties.SetDescription(previous, previous.Text);
-            previous.IsEnabled = !_searching && canGoPrevious;
+            SetImagePageButtonState(previous, false, !_searching && canGoPrevious, true);
+            SetPaginationTabStop(previous, false);
             var next = (Button)_pages.Children[2];
             next.Text = Text("NextLabel");
-            SemanticProperties.SetDescription(next, next.Text);
-            next.IsEnabled = !_searching && canGoNext;
+            SetImagePageButtonState(next, true, !_searching && canGoNext, true);
+            SetPaginationTabStop(next, true);
             return;
         }
 

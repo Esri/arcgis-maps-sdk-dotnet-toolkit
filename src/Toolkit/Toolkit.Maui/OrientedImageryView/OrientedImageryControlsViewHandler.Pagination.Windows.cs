@@ -21,7 +21,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
     private PaginationState? _paginationState;
 
     private readonly record struct PaginationState(bool Sequential, int Selected, int Start, int Count, int Total,
-        bool Previous, bool Next, bool Searching);
+        bool Previous, bool Next, bool Searching, bool PreviousTabStop, bool NextTabStop);
 
     private void RefreshPagination(OrientedImageryView owner)
     {
@@ -32,7 +32,8 @@ internal sealed partial class OrientedImageryControlsViewHandler
         double width = VirtualView.Width > 0 ? VirtualView.Width : owner.Width;
         var (start, count) = OrientedImageryPagination.GetRange(model.Images.Count, selected, Math.Max(35, width - 66), 35);
         var state = new PaginationState(model.IsSequentialNavigationEnabled, selected, start, count, model.Images.Count,
-            model.SelectPreviousImageCommand.CanExecute(null), model.SelectNextImageCommand.CanExecute(null), owner.DesktopIsSearching);
+            model.SelectPreviousImageCommand.CanExecute(null), model.SelectNextImageCommand.CanExecute(null), owner.DesktopIsSearching,
+            !owner.HasImageOverlayArrow(false), !owner.HasImageOverlayArrow(true));
         if (_paginationState == state && _model == model) return;
         // Keep keyboard focus on the same action or image when the page range changes.
         var focused = PlatformView.XamlRoot == null ? null :
@@ -79,11 +80,11 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
                 Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
                 AllowFocusWhenDisabled = true,
+                IsTabStop = false,
             };
             if (!label) button.Width = 33;
-            string key = next ? "NextLabel" : "PreviousLabel";
             string id = next ? "OrientedImageryPaginatorNext" : "OrientedImageryPaginatorPrevious";
-            Describe(button, key, label ? id + "Label" : id);
+            Describe(button, owner.ImagePageActionKey(next), label ? id + "Label" : id);
             button.Click += (_, _) =>
             {
                 var command = next ? model.SelectNextImageCommand : model.SelectPreviousImageCommand;
@@ -150,8 +151,10 @@ internal sealed partial class OrientedImageryControlsViewHandler
     {
         var previous = (NativeButton)row.Children[0];
         previous.IsEnabled = !state.Searching && state.Previous;
+        previous.IsTabStop = state.PreviousTabStop;
         var next = (NativeButton)row.Children[row.Children.Count - 1];
         next.IsEnabled = !state.Searching && state.Next;
+        next.IsTabStop = state.NextTabStop;
         if (state.Sequential)
         {
             ((NativeButton)row.Children[1]).IsEnabled = previous.IsEnabled;
