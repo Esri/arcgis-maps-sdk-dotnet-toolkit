@@ -78,7 +78,7 @@ public partial class OrientedImageryView
     private void InitializeDesktopTemplate()
     {
         _desktopPagination = GetTemplateChild("PART_DesktopNavigation") as OrientedImageryControlsView;
-        _desktopRoot = ControlTemplate == DefaultControlTemplate ? _customToolbar?.Parent as Grid : null;
+        _desktopRoot = GetTemplateChild("PART_LayoutRoot") as Grid;
         UpdateDesktopColors();
     }
 
@@ -99,6 +99,7 @@ public partial class OrientedImageryView
     }
 
     internal bool DesktopIsSearching => _searching;
+    internal bool DesktopHighContrast => _desktopAccessibilitySettings?.HighContrast == true;
     internal bool DesktopHasLayer => ViewModel.OrientedImageryLayer != null;
     internal static string DesktopText(string key) => Text(key);
 
@@ -170,6 +171,7 @@ public partial class OrientedImageryView
             else
                 infoIcon.SetAppThemeColor(FontImageSource.ColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
         }
+        ToolbarPresentationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     #endregion

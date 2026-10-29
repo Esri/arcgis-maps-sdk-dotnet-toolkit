@@ -5,7 +5,8 @@ public partial class OrientedImageryView
 {
     #region Mode buttons
 
-    private void AddMobileModeButtons(VerticalStackLayout content, ImageSearchModeVM mode, Func<bool> enabled)
+    private void AddMobileModeButtons(VerticalStackLayout content, ImageSearchModeVM mode, Func<bool> enabled,
+        OrientedImageryToolbarItemPresentation? presentation = null)
     {
         var buttons = new Grid { ColumnSpacing = 1 };
 #if ANDROID
@@ -18,7 +19,7 @@ public partial class OrientedImageryView
             string title = Text(search ? "ImageSearchModeFind" : "ImageSearchModeDisplay");
             var action = GuardAction(new MenuAction(title, () => ToggleImageMode(mode, state),
                 Icon: () => ImageModeIcon(search),
-                Checked: () => ViewModel.InteractionState == state, Enabled: enabled), dismiss: false);
+                Checked: () => ViewModel.InteractionState == state, Enabled: enabled), dismiss: false, presentation: presentation);
             var button = new Button
             {
                 CornerRadius = 0, BorderWidth = 0,
@@ -75,7 +76,7 @@ public partial class OrientedImageryView
 #else
             buttons.Add(segment, index);
 #endif
-            _panelUpdates.Add(() =>
+            (presentation?.Updates ?? _panelUpdates).Add(() =>
             {
                 bool selected = action.Checked?.Invoke() == true;
                 bool dark = Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark;
@@ -99,6 +100,7 @@ public partial class OrientedImageryView
                     path.Fill = new SolidColorBrush(Color.FromArgb(dark ? "#AEAEB2" : "#636366"));
 #endif
                 SemanticProperties.SetHint(button, Text(selected ? "Selected" : "NotSelected"));
+                ApplyItemStyle(presentation?.Host, caption, label);
             });
         }
 #if ANDROID

@@ -4,7 +4,16 @@
              xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              x:Class="Toolkit.SampleApp.Maui.Samples.OrientedImageryViewSample">
-    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
+    <ContentPage.Resources>
+        <Style x:Key="FootprintItemStyle" TargetType="toolkit:OrientedImageryToolbarItemView">
+            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImagerySampleFootprint}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#005E95, Dark=#6CB8EC}" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Spacing" Value="10" />
+            <Setter Property="Padding" Value="4" />
+        </Style>
+    </ContentPage.Resources>
+    <Grid RowDefinitions="Auto,Auto,Auto,*" RowSpacing="0">
         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" Padding="8">
             <Label Text="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
                    VerticalOptions="Center" />
@@ -19,9 +28,20 @@
                     AutomationId="SampleOrientedImageryToggleView"
                     Clicked="ToggleViewClicked" />
         </Grid>
-        <Label x:Name="LoadError" Grid.Row="1" Margin="8"
+        <Grid x:Name="CustomizationOptions" Grid.Row="1" IsVisible="False"
+              ColumnDefinitions="Auto,*,Auto,*" Padding="8,0" ColumnSpacing="4">
+            <CheckBox x:Name="CustomizeItem" AutomationId="CustomizeFootprintItem" CheckedChanged="CustomizationChanged"
+                      SemanticProperties.Description="{internal:LocalizedString Key=OrientedImagerySampleCustomizeFootprint}" />
+            <Label Grid.Column="1" VerticalOptions="Center"
+                   Text="{internal:LocalizedString Key=OrientedImagerySampleCustomizeFootprint}" />
+            <CheckBox x:Name="ToolbarBelow" Grid.Column="2" AutomationId="MoveImageryToolbar" CheckedChanged="CustomizationChanged"
+                      SemanticProperties.Description="{internal:LocalizedString Key=OrientedImagerySampleToolbarBelow}" />
+            <Label Grid.Column="3" VerticalOptions="Center"
+                   Text="{internal:LocalizedString Key=OrientedImagerySampleToolbarBelow}" />
+        </Grid>
+        <Label x:Name="LoadError" Grid.Row="2" Margin="8"
                TextColor="{AppThemeBinding Light=Black, Dark=White}" IsVisible="False" />
-        <Grid x:Name="LayoutRoot" Grid.Row="2" RowDefinitions="*,0" RowSpacing="0" ColumnSpacing="0">
+        <Grid x:Name="LayoutRoot" Grid.Row="3" RowDefinitions="*,0" RowSpacing="0" ColumnSpacing="0">
             <Grid>
                 <Grid x:Name="GeoViewContainer" />
                 <Button x:Name="OpenButton"

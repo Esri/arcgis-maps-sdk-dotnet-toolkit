@@ -1,5 +1,6 @@
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Maui;
+using Esri.ArcGISRuntime.Toolkit.Maui;
 
 namespace Toolkit.SampleApp.Maui.Samples;
 
@@ -34,13 +35,61 @@ public partial class OrientedImageryViewSample : ContentPage
     private GeoModel CurrentGeoModel => _usingMapView ? _mapView.Map! : _sceneView.Scene!;
 
     public OrientedImageryViewSample()
+        : this(false)
+    {
+    }
+
+    internal OrientedImageryViewSample(bool customization)
     {
         InitializeComponent();
+        CustomizationOptions.IsVisible = customization;
         LayerPicker.ItemsSource = _layerUrls;
         GeoViewContainer.Add(CurrentGeoView);
         LayoutRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
         LayoutRoot.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(0)));
         SizeChanged += (_, _) => UpdateViewerLayout();
+    }
+
+    #endregion
+
+    #region Presentation customization
+
+    private void CustomizationChanged(object? sender, CheckedChangedEventArgs e)
+    {
+        if (CustomizeItem.IsChecked)
+        {
+            var selector = new OrientedImageryViewToolbarSelector();
+            selector.SelectionPairs.Add(new OrientedImageryToolbarItemSelectorPair
+            {
+                ItemType = typeof(ShowSelectedFootprintVM),
+                Template = new DataTemplate(() => new OrientedImageryToolbarItemView
+                {
+                    Owner = ImageryView,
+                    Style = (Style)Resources["FootprintItemStyle"],
+                }),
+            });
+            ImageryView.ToolbarItemTemplateSelector = selector;
+        }
+        else
+        {
+            ImageryView.ToolbarItemTemplateSelector = null;
+        }
+
+        ImageryView.ControlTemplate = ToolbarBelow.IsChecked
+            ? new ControlTemplate(() =>
+            {
+                var content = (View)OrientedImageryView.DefaultControlTemplate.CreateContent();
+                var layout = content.FindByName<Grid>("PART_LayoutRoot");
+                var image = content.FindByName<Grid>("PART_ImageHost");
+                var toolbar = content.FindByName<View>("PART_ToolbarScroll") ??
+                    content.FindByName<Layout>("PART_CustomToolbar");
+                layout.RowDefinitions[0].Height = GridLength.Star;
+                layout.RowDefinitions[1].Height = GridLength.Auto;
+                Grid.SetRow(image, 0);
+                Grid.SetRow(toolbar, 1);
+                return content;
+            })
+            : OrientedImageryView.DefaultControlTemplate;
     }
 
     #endregion

@@ -86,7 +86,10 @@ public partial class OrientedImageryView
         return key != null ? Text("Marker" + key) : string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), index + 1);
     }
 
-    private static readonly ControlTemplate DefaultControlTemplate = new(() =>
+    /// <summary>
+    /// Gets the platform-adaptive default template. Create fresh content for each custom template instance.
+    /// </summary>
+    public static ControlTemplate DefaultControlTemplate { get; } = new(() =>
     {
         var root = new Grid
         {
@@ -105,6 +108,7 @@ public partial class OrientedImageryView
 #endif
         INameScope scope = new NameScope();
         NameScope.SetNameScope(root, scope);
+        scope.RegisterName("PART_LayoutRoot", root);
         void Add(string name, View view, Grid parent, int row = 0, int column = 0)
         {
             scope.RegisterName(name, view);
@@ -134,6 +138,7 @@ public partial class OrientedImageryView
             MinimumHeightRequest = MinimumImageAreaHeight,
 #endif
         };
+        scope.RegisterName("PART_ImageHost", image);
         Grid.SetRow(image, 1);
         root.Children.Add(image);
         Add("PART_Viewport", new OrientedImageViewport { AutomationId = "OrientedImageryViewport" }, image);
@@ -201,10 +206,10 @@ public partial class OrientedImageryView
         // Neither measures content with infinite width on Windows, allowing popup fields to expand the entire viewer.
         var scroll = new ScrollView { Content = root, Orientation = ScrollOrientation.Vertical };
         NameScope.SetNameScope(scroll, scope);
-        var chrome = root.Children.OfType<View>().Where(view => Grid.GetRow(view) != 1 && Grid.GetRowSpan(view) == 1).ToArray();
         void UpdateSize(object? sender, EventArgs e)
         {
             if (scroll.Width <= 0 || scroll.Height <= 0) return;
+            var chrome = root.Children.OfType<View>().Where(view => view != image && Grid.GetRowSpan(view) == 1);
             double chromeHeight = chrome.Where(view => view.IsVisible)
                 .Sum(view => view.Measure(scroll.Width, double.PositiveInfinity).Height);
             // Keep the image bounded even when a popup contains a long list of fields.
@@ -214,7 +219,7 @@ public partial class OrientedImageryView
 #endif
         }
         scroll.SizeChanged += UpdateSize;
-        foreach (var view in chrome)
+        foreach (var view in root.Children.OfType<View>().Where(view => view != image && Grid.GetRowSpan(view) == 1))
             view.SizeChanged += UpdateSize;
         return scroll;
     }
@@ -708,6 +713,7 @@ public partial class OrientedImageryView
         UpdateOpenPanel();
         RefreshDesktopPresentation();
         UpdateBackNavigation();
+        ToolbarPresentationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void RefreshStatus()
@@ -1243,7 +1249,7 @@ public partial class OrientedImageryView
         _panelCleanup.Add(() => picker.SymbolOptions.CollectionChanged -= optionsChanged);
     }
 
-    private MenuAction GuardAction(MenuAction action, bool dismiss = true)
+    private MenuAction GuardAction(MenuAction action, bool dismiss = true, OrientedImageryToolbarItemPresentation? presentation = null)
     {
         // A button from a replaced menu must not act on the current layer.
         int version = _menuVersion;
@@ -1253,7 +1259,8 @@ public partial class OrientedImageryView
         {
             Execute = () =>
             {
-                if (version != _menuVersion || !_connected || model != ViewModel || layer != model.OrientedImageryLayer || !action.Enabled())
+                if ((presentation == null ? version != _menuVersion : !presentation.CanInteract) ||
+                    !_connected || model != ViewModel || layer != model.OrientedImageryLayer || !action.Enabled())
                     return;
                 if (dismiss) DismissPanel();
                 action.Execute();
@@ -1262,13 +1269,20 @@ public partial class OrientedImageryView
         };
     }
 
-    private void AddActionRow(VerticalStackLayout content, MenuAction action)
+    private void AddActionRow(VerticalStackLayout content, MenuAction action,
+        OrientedImageryToolbarItemPresentation? presentation = null, bool replaceCaption = true)
     {
+        var appearance = presentation?.Host;
+#if __IOS__ && !MACCATALYST
+        bool isClearMarkers = action.Title == Text("ClearMarkers");
+#endif
+        if (replaceCaption && appearance?.Text != null)
+            action = action with { Title = appearance.Text };
         action = GuardAction(action,
 #if ANDROID || (__IOS__ && !MACCATALYST)
-            dismiss: false);
+            dismiss: false, presentation: presentation);
 #else
-            dismiss: action.Checked != null);
+            dismiss: action.Checked != null && presentation == null, presentation: presentation);
 #endif
         var row = new Grid
         {
@@ -1276,7 +1290,7 @@ public partial class OrientedImageryView
             ColumnSpacing = 6, Padding = new Thickness(4, 0), MinimumHeightRequest = 44,
         };
         var button = new Button { BackgroundColor = Colors.Transparent, Padding = 0 };
-        SemanticProperties.SetDescription(button, action.Title);
+        SemanticProperties.SetDescription(button, replaceCaption ? appearance?.AccessibilityText ?? action.Title : action.Title);
         button.Clicked += (_, _) => action.Execute();
         row.Add(button, 0, 0);
         Grid.SetColumnSpan(button, 3);
@@ -1292,7 +1306,7 @@ public partial class OrientedImageryView
 #if __IOS__ && !MACCATALYST
         title.FontSize = 17;
         row.MinimumHeightRequest = 52;
-        if (action.Title == Text("ClearMarkers"))
+        if (isClearMarkers)
         {
             title.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#FF3B30"), Color.FromArgb("#FF453A"));
             if (icon is Image { Source: FontImageSource clearIcon })
@@ -1317,7 +1331,8 @@ public partial class OrientedImageryView
             chevron.InputTransparent = true;
             row.Add(chevron, 2);
         }
-        _panelUpdates.Add(() =>
+        ApplyItemStyle(appearance, row, title);
+        (presentation?.Updates ?? _panelUpdates).Add(() =>
         {
             bool enabled = action.Enabled();
             row.IsEnabled = enabled;
@@ -1347,10 +1362,12 @@ public partial class OrientedImageryView
         return content;
     }
 
-    private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View> icon, Func<bool> enabled)
+    private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View> icon, Func<bool> enabled,
+        OrientedImageryToolbarItemPresentation? presentation = null)
     {
         var row = new Grid { ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }, ColumnSpacing = 6 };
-        string title = Text(key == "AddMarkerLabel" ? "MobileAddMarkers" : key);
+        var appearance = presentation?.Host;
+        string title = appearance?.Text ?? Text(key == "AddMarkerLabel" ? "MobileAddMarkers" : key);
         var label = new Label { Text = title, VerticalOptions = LayoutOptions.Center };
 #if ANDROID
         label.FontSize = 16;
@@ -1369,8 +1386,8 @@ public partial class OrientedImageryView
         toggle.VerticalOptions = LayoutOptions.Center;
         toggle.OnColor = Color.FromArgb("#34C759");
 #endif
-        bool CanInteract() => !_updatingPanel && _connected && _panelAnchor != null && enabled();
-        SemanticProperties.SetDescription(toggle, title);
+        bool CanInteract() => (presentation?.CanInteract ?? (!_updatingPanel && _connected && _panelAnchor != null)) && enabled();
+        SemanticProperties.SetDescription(toggle, appearance?.AccessibilityText ?? title);
         toggle.Toggled += (_, e) =>
         {
             if (CanInteract())
@@ -1390,13 +1407,21 @@ public partial class OrientedImageryView
         row.Add(FlyoutIcon(icon()));
         row.Add(label, 1);
         row.Add(toggle, 2);
-        _panelUpdates.Add(() =>
+        ApplyItemStyle(appearance, row, label);
+        (presentation?.Updates ?? _panelUpdates).Add(() =>
         {
             toggle.IsToggled = get();
             row.IsEnabled = enabled();
             row.Opacity = row.IsEnabled ? 1 : 0.45;
         });
         AddPanelItem(content, row);
+    }
+
+    private static void ApplyItemStyle(OrientedImageryToolbarItemView? appearance, Grid row, Label label)
+    {
+        if (appearance?.FontSize is double size) label.FontSize = size;
+        if (appearance?.TextColor is { } color) label.TextColor = color;
+        if (appearance?.Spacing is double spacing) row.ColumnSpacing = spacing;
     }
 
     private static void AddPanelItem(VerticalStackLayout content, View item)

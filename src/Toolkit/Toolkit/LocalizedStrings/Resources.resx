@@ -1394,4 +1394,16 @@ image</value>
   <data name="OrientedImageryViewImageNavigation" xml:space="preserve"><value>Image navigation</value></data>
   <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve"><value>Use Left Arrow for the previous image or Right Arrow for the next image.</value></data>
   <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve"><value>Sequential image navigation</value></data>
+  <data name="OrientedImagerySampleFootprint" xml:space="preserve">
+    <value>Footprint</value>
+    <comment>Custom caption for the current footprint toolbar item in the MAUI customization sample.</comment>
+  </data>
+  <data name="OrientedImagerySampleCustomizeFootprint" xml:space="preserve">
+    <value>Style footprint item</value>
+    <comment>Enables the reusable toolbar item customization example.</comment>
+  </data>
+  <data name="OrientedImagerySampleToolbarBelow" xml:space="preserve">
+    <value>Toolbar below image</value>
+    <comment>Enables the default control template rearrangement example.</comment>
+  </data>
 </root>

@@ -17,6 +17,8 @@ public partial class OrientedImageryView
     private int _renderedToolbarRevision = -1;
     private readonly List<Action> _toolbarUpdates = new();
     private readonly List<Action> _toolbarCleanup = new();
+    internal event EventHandler? ToolbarPresentationUpdated;
+    internal bool CanUseToolbarItem => _connected && HasLayer && !_searching;
 
     internal bool ImageSearchEnabled => ViewModel.InteractionState switch
     {
@@ -102,6 +104,45 @@ public partial class OrientedImageryView
     private static bool IsBuiltInToolbarItem(OrientedImageryToolbarItemBase item) =>
         item is ImageSearchModeVM or ShowSelectedFootprintVM or ShowUnselectedFootprintsVM or ShowCameraMarkersVM or
             AllowAddingMarkersVM or SelectNewMarkerSymbolVM or ClearMarkersVM or SequentialNavigationVM or AutoUpdateFootprintVM or ToolbarDividerVM;
+
+    internal OrientedImageryToolbarItemPresentation CreateToolbarItemPresentation(
+        OrientedImageryToolbarItemView host, OrientedImageryToolbarItemBase item)
+    {
+        if (!IsBuiltInToolbarItem(item))
+            throw new InvalidOperationException($"'{item.GetType().Name}' does not have a built-in oriented imagery presentation.");
+        var presentation = new OrientedImageryToolbarItemPresentation(host, ViewModel);
+#if WINDOWS
+        var native = new OrientedImageryControlsView { Owner = this, ToolbarItem = item, Appearance = host, MinimumHeightRequest = 84 };
+        presentation.Content = native;
+        presentation.Updates.Add(() =>
+        {
+            native.IsEnabled = CanUseToolbarItem && item.ViewModel == ViewModel;
+            native.IsVisible = IsToolbarItemVisible(item);
+            native.Refresh();
+        });
+        presentation.Cleanup.Add(() => native.Owner = null);
+#else
+        var content = new VerticalStackLayout { Spacing = 0 };
+        presentation.Content = content;
+        EventHandler sizeChanged = (_, _) => UpdatePanelSize();
+        host.SizeChanged += sizeChanged;
+        presentation.Cleanup.Add(() => host.SizeChanged -= sizeChanged);
+        AddMobileToolbarItem(content, item, host, () =>
+        {
+            var category = ViewModel.ToolbarCategories.FirstOrDefault(category => category.ToolbarItems.Contains(item));
+            if (category != null)
+                ShowToolbarCategory(category, _panelAnchor ?? host, category.Name);
+            else
+                DismissPanel();
+        }, presentation);
+        presentation.Updates.Add(() =>
+        {
+            content.IsVisible = IsToolbarItemVisible(item);
+            content.IsEnabled = CanUseToolbarItem && item.ViewModel == ViewModel;
+        });
+#endif
+        return presentation;
+    }
 
     private View? CreateCustomToolbarView(object item)
     {
@@ -396,54 +437,62 @@ public partial class OrientedImageryView
         PresentPanel(anchor, panel);
     }
 
-    private void AddMobileToolbarItem(VerticalStackLayout content, OrientedImageryToolbarItemBase item, View anchor, Action back)
+    private void AddMobileToolbarItem(VerticalStackLayout content, OrientedImageryToolbarItemBase item, View anchor, Action back,
+        OrientedImageryToolbarItemPresentation? presentation = null)
     {
-        bool Enabled() => HasLayer && !_searching;
+        bool Enabled() => HasLayer && !_searching &&
+            (presentation == null || !presentation.IsDisposed && presentation.Model == ViewModel && item.ViewModel == ViewModel);
+        var updates = presentation?.Updates ?? _panelUpdates;
+        var cleanup = presentation?.Cleanup ?? _panelCleanup;
         switch (item)
         {
             case ImageSearchModeVM mode:
 #if ANDROID || (__IOS__ && !MACCATALYST)
-                AddMobileModeButtons(content, mode, Enabled);
+                AddMobileModeButtons(content, mode, Enabled, presentation);
 #else
                 foreach (var state in mode.ImageSearchModes)
                 {
                     bool search = state == OrientedImageryViewInteractionState.FindImages;
                     AddActionRow(content, new MenuAction(Text(search ? "ImageSearchModeFind" : "ImageSearchModeDisplay"),
                         () => ToggleImageMode(mode, state), Icon: () => ImageModeIcon(search),
-                        Checked: () => ViewModel.InteractionState == state, Enabled: Enabled));
+                        Checked: () => ViewModel.InteractionState == state, Enabled: Enabled), presentation, replaceCaption: false);
                 }
 #endif
                 break;
             case ShowSelectedFootprintVM:
                 AddSwitch(content, "MobileCurrentFootprint",
                     () => ViewModel.ShowSelectedFootprint, value => ViewModel.ShowSelectedFootprint = value,
-                    () => GeometryIcon(CurrentFootprintGeometry), Enabled);
+                    () => GeometryIcon(CurrentFootprintGeometry), Enabled, presentation);
                 break;
             case ShowUnselectedFootprintsVM:
                 AddSwitch(content, "MobileAdditionalFootprints",
                     () => ViewModel.ShowUnselectedFootprints, value => ViewModel.ShowUnselectedFootprints = value,
-                    () => GeometryIcon(OverlayGeometry), () => Enabled() && ViewModel.Images.Count > 1);
+                    () => GeometryIcon(OverlayGeometry), () => Enabled() && ViewModel.Images.Count > 1, presentation);
                 break;
             case ShowCameraMarkersVM:
                 AddSwitch(content, "MobileCameraLocations",
                     () => ViewModel.ShowCameraLocations, value => ViewModel.ShowCameraLocations = value,
-                    CameraLocationsIcon, () => Enabled() && ViewModel.Images.Count > 1);
+                    CameraLocationsIcon, () => Enabled() && ViewModel.Images.Count > 1, presentation);
                 break;
             case AllowAddingMarkersVM:
-                AddSwitch(content, "AddMarkerLabel", () => IsAddingMarkers, SetAddingMarkers, () => GlyphIcon("\uE8ED"), Enabled);
+                AddSwitch(content, "AddMarkerLabel", () => IsAddingMarkers, SetAddingMarkers, () => GlyphIcon("\uE8ED"), Enabled, presentation);
                 break;
             case SelectNewMarkerSymbolVM picker:
                 var preview = new SymbolDisplay { Symbol = picker.SelectedSymbol, WidthRequest = 24, HeightRequest = 24 };
-                AddActionRow(content, new MenuAction(Text("SelectMarkerSymbol"), () => ShowSymbols(anchor, picker, back),
-                    Icon: () => preview, IsSubmenu: true, Enabled: () => Enabled() && IsAddingMarkers));
-                _panelUpdates.Add(() => preview.Symbol = picker.SelectedSymbol);
-                System.ComponentModel.PropertyChangedEventHandler changed = (_, _) => DispatchUpdate(UpdateOpenPanel);
+                AddActionRow(content, new MenuAction(Text("SelectMarkerSymbol"), () => ShowSymbols(_panelAnchor ?? anchor, picker, back),
+                    Icon: () => preview, IsSubmenu: true, Enabled: () => Enabled() && IsAddingMarkers), presentation);
+                updates.Add(() => preview.Symbol = picker.SelectedSymbol);
+                System.ComponentModel.PropertyChangedEventHandler changed = (_, _) => DispatchUpdate(() =>
+                {
+                    if (presentation == null) UpdateOpenPanel();
+                    else presentation.Update();
+                });
                 picker.PropertyChanged += changed;
-                _panelCleanup.Add(() => picker.PropertyChanged -= changed);
+                cleanup.Add(() => picker.PropertyChanged -= changed);
                 break;
             case ClearMarkersVM:
                 AddActionRow(content, new MenuAction(Text("ClearMarkers"), () => ViewModel.ClearMarkersCommand.Execute(null),
-                    Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Icon: () => GlyphIcon(ToolkitIcons.Trash)));
+                    Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Icon: () => GlyphIcon(ToolkitIcons.Trash)), presentation);
                 break;
             case SequentialNavigationVM:
                 AddSwitch(content, "SequentialMode", () => ViewModel.IsSequentialNavigationEnabled,
@@ -453,12 +502,12 @@ public partial class OrientedImageryView
                             ViewModel.ToggleSequentialNavigationCommand.Execute(null);
                     },
                     () => GeometryIcon(SequenceGeometry),
-                    () => Enabled() && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null));
+                    () => Enabled() && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null), presentation);
                 break;
             case AutoUpdateFootprintVM:
                 AddSwitch(content, "AutoUpdate",
                     () => ViewModel.AutoUpdateFootprint, value => ViewModel.AutoUpdateFootprint = value,
-                    () => GlyphIcon(ToolkitIcons.Refresh), Enabled);
+                    () => GlyphIcon(ToolkitIcons.Refresh), Enabled, presentation);
                 break;
             case ToolbarDividerVM:
 #if ANDROID

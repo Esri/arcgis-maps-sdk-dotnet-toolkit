@@ -30,6 +30,7 @@ internal sealed class OrientedImageryControlsView : Microsoft.Maui.Controls.View
     }
 
     public OrientedImageryToolbarItemBase? ToolbarItem { get; init; }
+    internal OrientedImageryToolbarItemView? Appearance { get; init; }
 
     public void Refresh() => (Handler as OrientedImageryControlsViewHandler)?.Refresh();
 }
@@ -164,11 +165,11 @@ internal sealed partial class OrientedImageryControlsViewHandler : ViewHandler<O
         });
         var label = new TextBlock
         {
-            Text = Text(key), FontSize = 12,
+            Text = VirtualView.Appearance?.Text ?? Text(key), FontSize = VirtualView.Appearance?.FontSize ?? 12,
             TextAlignment = Microsoft.UI.Xaml.TextAlignment.Center,
             TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
         };
-        label.Margin = new NativeThickness(0, 8, 0, 0);
+        label.Margin = new NativeThickness(0, VirtualView.Appearance?.Spacing ?? 8, 0, 0);
         SizeCaption(label);
         _captions.Add(label);
         panel.Children.Add(label);
@@ -227,9 +228,9 @@ internal sealed partial class OrientedImageryControlsViewHandler : ViewHandler<O
             "<PathIcon xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Data=\"" +
             (explore ? OrientedImageryView.ExploreImagesGeometry : OrientedImageryView.DisplayImageGeometry) + "\"/>");
 
-    private static void Describe(NativeView control, string key, string? id = null)
+    private void Describe(NativeView control, string key, string? id = null)
     {
-        string text = Text(key);
+        string text = VirtualView.Appearance?.AccessibilityText ?? VirtualView.Appearance?.Text ?? Text(key);
         AutomationProperties.SetName(control, text);
         AutomationProperties.SetAutomationId(control, id ?? "OrientedImageryDesktop" + key);
         ToolTipService.SetToolTip(control, text);
@@ -255,7 +256,17 @@ internal sealed partial class OrientedImageryControlsViewHandler : ViewHandler<O
         try
         {
             if (VirtualView.ToolbarItem is { } item)
+            {
                 RefreshToolbar(VirtualView.Owner, item);
+                foreach (var caption in _captions)
+                {
+                    if (VirtualView.Appearance?.TextColor is { } color && !VirtualView.Owner.DesktopHighContrast)
+                        caption.Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(
+                            (byte)(color.Alpha * 255), (byte)(color.Red * 255), (byte)(color.Green * 255), (byte)(color.Blue * 255)));
+                    else
+                        caption.ClearValue(TextBlock.ForegroundProperty);
+                }
+            }
             else
                 RefreshPagination(VirtualView.Owner);
         }
