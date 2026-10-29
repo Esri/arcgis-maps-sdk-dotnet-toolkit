@@ -62,6 +62,15 @@ public partial class OrientedImageryView
 
     #region Native sheet presentation
 
+    private static void SetIosOptionRowBackground(Border row)
+    {
+        using var light = UITraitCollection.FromUserInterfaceStyle(UIUserInterfaceStyle.Light);
+        using var dark = UITraitCollection.FromUserInterfaceStyle(UIUserInterfaceStyle.Dark);
+        row.SetAppThemeColor(BackgroundColorProperty,
+            UIColor.SystemGray5.GetResolvedColor(light).ToColor(),
+            UIColor.SystemGray5.GetResolvedColor(dark).ToColor());
+    }
+
     private void PresentIosSheet(View content, bool info)
     {
         _iosSheetIsInfo = info;

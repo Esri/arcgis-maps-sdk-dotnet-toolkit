@@ -375,6 +375,15 @@ public partial class OrientedImageryView
     private void ShowToolbarCategory(OrientedImageryToolbarCategory category, View anchor, string title)
     {
         DismissPanel(preservePresentation: true);
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        title = category.Name switch
+        {
+            OrientedImageryToolbarCategory.ModeCategoryName => Text("ModeSelection"),
+            OrientedImageryToolbarCategory.OverlaysCategoryName => Text("OverlaysSelection"),
+            OrientedImageryToolbarCategory.MarkersCategoryName => Text("MarkerTools"),
+            _ => title,
+        };
+#endif
         var panel = PanelContent(title);
         foreach (var item in category.ToolbarItems.Where(IsToolbarItemVisible))
         {
@@ -394,7 +403,7 @@ public partial class OrientedImageryView
         {
             case ImageSearchModeVM mode:
 #if ANDROID || (__IOS__ && !MACCATALYST)
-                AddMobileModeSegments(content, mode, Enabled);
+                AddMobileModeButtons(content, mode, Enabled);
 #else
                 foreach (var state in mode.ImageSearchModes)
                 {
@@ -452,7 +461,11 @@ public partial class OrientedImageryView
                     () => GlyphIcon(ToolkitIcons.Refresh), Enabled);
                 break;
             case ToolbarDividerVM:
+#if ANDROID
+                AddAndroidPanelDivider(content);
+#else
                 content.Add(new BoxView { HeightRequest = 1, Color = Color.FromArgb("#CCCCCC"), Margin = new Thickness(0, 4) });
+#endif
                 break;
             default:
                 throw new InvalidOperationException($"Register a toolbar template for '{item.GetType().Name}'.");
