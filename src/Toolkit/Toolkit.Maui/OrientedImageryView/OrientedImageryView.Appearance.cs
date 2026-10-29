@@ -321,7 +321,11 @@ public partial class OrientedImageryView
             if (view is Label label)
                 label.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
             else
+            {
                 view.WidthRequest = view.HeightRequest = 24;
+                if (view is Microsoft.Maui.Controls.Shapes.Path path)
+                    path.SetAppThemeColor(Microsoft.Maui.Controls.Shapes.Shape.FillProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
+            }
             choices.Add(view);
         }
         var searchMap = new Label
@@ -1092,6 +1096,9 @@ public partial class OrientedImageryView
 
     private static View FlyoutIcon(View icon)
     {
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        SetSheetIconColor(icon);
+#endif
         icon.HorizontalOptions = LayoutOptions.Center;
         icon.VerticalOptions = LayoutOptions.Center;
         var border = new Border
@@ -1102,12 +1109,35 @@ public partial class OrientedImageryView
         };
         border.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#EEEEEE"), Color.FromArgb("#444444"));
         border.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#666666"));
+#if ANDROID
+        border.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#CACACC"), Color.FromArgb("#444444"));
+        border.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#CACACC"), Color.FromArgb("#666666"));
+#endif
 #if __IOS__ && !MACCATALYST
         border.StrokeThickness = 0;
         border.BackgroundColor = Colors.Transparent;
 #endif
         return border;
     }
+
+#if ANDROID || (__IOS__ && !MACCATALYST)
+    private static void SetSheetIconColor(object? icon)
+    {
+        var light = Color.FromArgb("#777680");
+        var dark = Color.FromArgb("#AEAEB2");
+        if (icon is Microsoft.Maui.Controls.Shapes.Path path)
+        {
+            if (path.Fill is SolidColorBrush fill && fill.Color != Colors.Transparent)
+                path.SetAppThemeColor(Microsoft.Maui.Controls.Shapes.Shape.FillProperty, light, dark);
+            if (path.Stroke is SolidColorBrush stroke && stroke.Color != Colors.Transparent)
+                path.SetAppThemeColor(Microsoft.Maui.Controls.Shapes.Shape.StrokeProperty, light, dark);
+        }
+        else if (icon is Image image)
+            SetSheetIconColor(image.Source);
+        else if (icon is FontImageSource glyph)
+            glyph.SetAppThemeColor(FontImageSource.ColorProperty, light, dark);
+    }
+#endif
 
     private bool TogglePanel(View anchor)
     {
@@ -1185,7 +1215,11 @@ public partial class OrientedImageryView
             _panelUpdates.Add(() =>
             {
                 bool selected = action.Checked?.Invoke() == true;
+#if ANDROID
+                tile.Stroke = Color.FromArgb(selected ? "#454451" : "#A09DA4");
+#else
                 tile.Stroke = selected ? Color.FromArgb("#007AC2") : Color.FromArgb("#888888");
+#endif
                 tile.IsEnabled = action.Enabled();
                 tile.Opacity = tile.IsEnabled ? 1 : 0.45;
                 SemanticProperties.SetHint(button, Text(selected ? "Selected" : "NotSelected"));
@@ -1258,7 +1292,7 @@ public partial class OrientedImageryView
         {
             title.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#FF3B30"), Color.FromArgb("#FF453A"));
             if (icon is Image { Source: FontImageSource clearIcon })
-                clearIcon.Color = Color.FromArgb("#FF3B30");
+                clearIcon.SetAppThemeColor(FontImageSource.ColorProperty, Color.FromArgb("#FF3B30"), Color.FromArgb("#FF453A"));
         }
 #endif
         row.Add(title, 1);
@@ -1268,13 +1302,16 @@ public partial class OrientedImageryView
         selection.Text = "\u2713";
         selection.FontSize = 17;
 #endif
-#if __IOS__ && !MACCATALYST
-        selection.TextColor = IosAccent;
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        selection.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#777680"), Color.FromArgb("#AEAEB2"));
 #endif
         if (action.Checked != null) row.Add(selection, 2);
         if (action.IsSubmenu)
         {
             var chevron = GlyphIcon(ToolkitIcons.ChevronRight);
+#if ANDROID || (__IOS__ && !MACCATALYST)
+            SetSheetIconColor(chevron);
+#endif
             chevron.InputTransparent = true;
             row.Add(chevron, 2);
         }
@@ -1311,13 +1348,17 @@ public partial class OrientedImageryView
     private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View> icon, Func<bool> enabled)
     {
         var row = new Grid { ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }, ColumnSpacing = 6 };
-        var label = new Label { Text = Text(key), VerticalOptions = LayoutOptions.Center };
+        string title = Text(key == "AddMarkerLabel" ? "MobileAddMarkers" : key);
+        var label = new Label { Text = title, VerticalOptions = LayoutOptions.Center };
 #if ANDROID
         label.FontSize = 16;
         row.MinimumHeightRequest = 56;
 #endif
         label.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
         var toggle = new Switch { IsToggled = get(), MinimumHeightRequest = 44, AutomationId = "OrientedImagery" + key };
+#if ANDROID
+        toggle.SetAppThemeColor(Switch.OnColorProperty, Color.FromArgb("#585992"), Color.FromArgb("#C3BFFF"));
+#endif
 #if __IOS__ && !MACCATALYST
         row.MinimumHeightRequest = 52;
         label.FontSize = 17;
@@ -1327,7 +1368,7 @@ public partial class OrientedImageryView
         toggle.OnColor = Color.FromArgb("#34C759");
 #endif
         bool CanInteract() => !_updatingPanel && _connected && _panelAnchor != null && enabled();
-        SemanticProperties.SetDescription(toggle, Text(key));
+        SemanticProperties.SetDescription(toggle, title);
         toggle.Toggled += (_, e) =>
         {
             if (CanInteract())
@@ -1358,20 +1399,19 @@ public partial class OrientedImageryView
 
     private static void AddPanelItem(VerticalStackLayout content, View item)
     {
-#if ANDROID || (__IOS__ && !MACCATALYST)
+#if ANDROID
+        content.Add(item);
+        AddAndroidPanelDivider(content);
+#elif __IOS__ && !MACCATALYST
         var group = new Border
         {
             Content = item, StrokeThickness = 0, Padding = new Thickness(12, 4),
         };
-#if ANDROID
-        group.Margin = new Thickness(0, 4);
-        group.StrokeShape = new RoundRectangle { CornerRadius = 16 };
-        group.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F0EAF4"), Color.FromArgb("#36313C"));
-#else
-        group.StrokeShape = new RoundRectangle { CornerRadius = 12 };
+        var shape = new RoundRectangle { CornerRadius = 26 };
+        group.StrokeShape = shape;
+        group.SizeChanged += (_, _) => shape.CornerRadius = new CornerRadius(group.Height / 2);
         group.MinimumHeightRequest = 52;
-        group.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#2C2C2E"));
-#endif
+        SetIosOptionRowBackground(group);
         content.Add(group);
 #else
         content.Add(item);
@@ -1382,8 +1422,14 @@ public partial class OrientedImageryView
     private static BoxView PanelDivider()
     {
         var divider = new BoxView { HeightRequest = 1, InputTransparent = true, AutomationId = "OrientedImageryMenuDivider" };
-        divider.SetAppThemeColor(BoxView.ColorProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#555555"));
+        divider.SetAppThemeColor(BoxView.ColorProperty, Color.FromArgb("#DCD8E2"), Color.FromArgb("#55515B"));
         return divider;
+    }
+
+    private static void AddAndroidPanelDivider(VerticalStackLayout content)
+    {
+        if (content.Children.LastOrDefault() is not BoxView { AutomationId: "OrientedImageryMenuDivider" })
+            content.Add(PanelDivider());
     }
 #endif
 
