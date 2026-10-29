@@ -286,4 +286,3 @@ private void ShowImageDetails_Click(object sender, RoutedEventArgs e)
     // Show details for selectedImage.
 }
 ```
->>>>>>> bf053a5c (restore accidentally deleted doc)
