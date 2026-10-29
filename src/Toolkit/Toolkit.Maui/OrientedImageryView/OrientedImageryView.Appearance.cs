@@ -32,6 +32,9 @@ public partial class OrientedImageryView
     private ScrollView? _panelScroll;
 #endif
     private HorizontalStackLayout? _pages;
+#if ANDROID || (__IOS__ && !MACCATALYST)
+    private OrientedImageryPaginationView? _mobilePagination;
+#endif
     private Layout? _customToolbar;
     private (bool Sequential, int Start, int Count)? _pageState;
     private int _selectedPage = -1;
@@ -156,8 +159,16 @@ public partial class OrientedImageryView
         };
         scope.RegisterName("PART_Navigation", pagination);
         var paginationScroll = new ScrollView { Orientation = ScrollOrientation.Horizontal, Content = pagination };
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        var navigation = new OrientedImageryPaginationView
+        {
+            Content = paginationScroll, AutomationId = "OrientedImageryPagination", IsVisible = false,
+        };
+        Add("PART_MobilePagination", navigation, root, 2);
+#else
         Grid.SetRow(paginationScroll, 2);
         root.Add(paginationScroll);
+#endif
         var previous = ToolButton("PreviousLabel", ToolkitIcons.ChevronLeft, "OrientedImageryPrevious");
         previous.Text = null;
         previous.WidthRequest = 44;
@@ -433,6 +444,19 @@ public partial class OrientedImageryView
         _imagePreviousButton = GetTemplateChild("PART_ImagePrevious") as Button;
         _imageNextButton = GetTemplateChild("PART_ImageNext") as Button;
         _pages = GetTemplateChild("PART_Pages") as HorizontalStackLayout;
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        _mobilePagination = GetTemplateChild("PART_MobilePagination") as OrientedImageryPaginationView;
+        if (_mobilePagination != null) _mobilePagination.Navigate = ChangePage;
+        foreach (var arrow in new[] { _imagePreviousButton, _imageNextButton })
+        {
+            if (arrow == null || _mobilePagination == null) continue;
+            AutomationProperties.SetExcludedWithChildren(arrow, true);
+#if ANDROID
+            arrow.HandlerChanged += ExcludeImageArrow;
+            ExcludeImageArrow(arrow, EventArgs.Empty);
+#endif
+        }
+#endif
 #if !WINDOWS && !ANDROID && (!__IOS__ || MACCATALYST)
         _panelHost = GetTemplateChild("PART_PanelHost") as Grid;
         if (_panelHost != null) _panelHost.SizeChanged += PanelHostSizeChanged;
@@ -449,16 +473,8 @@ public partial class OrientedImageryView
             _viewport.StateChanged += ViewportChanged;
         }
 
-        if (_previousButton != null)
-        {
-            _previousButton.Clicked += Previous;
-            _previousButton.HandlerChanged += PaginationButtonHandlerChanged;
-        }
-        if (_nextButton != null)
-        {
-            _nextButton.Clicked += Next;
-            _nextButton.HandlerChanged += PaginationButtonHandlerChanged;
-        }
+        if (_previousButton != null) _previousButton.Clicked += Previous;
+        if (_nextButton != null) _nextButton.Clicked += Next;
         if (_imagePreviousButton != null) _imagePreviousButton.Clicked += Previous;
         if (_imageNextButton != null) _imageNextButton.Clicked += Next;
         if (_pages != null) _pages.SizeChanged += PageSizeChanged;
@@ -569,19 +585,19 @@ public partial class OrientedImageryView
             _viewport.Markers = null;
         }
 
-        if (_previousButton != null)
-        {
-            _previousButton.Clicked -= Previous;
-            _previousButton.HandlerChanged -= PaginationButtonHandlerChanged;
-        }
-        if (_nextButton != null)
-        {
-            _nextButton.Clicked -= Next;
-            _nextButton.HandlerChanged -= PaginationButtonHandlerChanged;
-        }
+        if (_previousButton != null) _previousButton.Clicked -= Previous;
+        if (_nextButton != null) _nextButton.Clicked -= Next;
         if (_imagePreviousButton != null) _imagePreviousButton.Clicked -= Previous;
         if (_imageNextButton != null) _imageNextButton.Clicked -= Next;
         if (_pages != null) _pages.SizeChanged -= PageSizeChanged;
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        if (_mobilePagination != null) _mobilePagination.Navigate = null;
+        _mobilePagination = null;
+#if ANDROID
+        foreach (var arrow in new[] { _imagePreviousButton, _imageNextButton })
+            if (arrow != null) arrow.HandlerChanged -= ExcludeImageArrow;
+#endif
+#endif
         _viewport = null;
         _status = null;
         _statusHost = null;
@@ -823,22 +839,14 @@ public partial class OrientedImageryView
         ToolTipProperties.SetText(button, name);
     }
 
-    private void PaginationButtonHandlerChanged(object? sender, EventArgs e)
-    {
-        if (sender is Button button)
-            SetPaginationTabStop(button, button == _nextButton);
-    }
-
-    private void SetPaginationTabStop(Button button, bool next)
-    {
 #if ANDROID
-        // Keyboard focus is separate from TalkBack accessibility focus.
-        if (button.Handler?.PlatformView is Android.Views.View platformButton)
-            platformButton.Focusable = !HasImageOverlayArrow(next) &&
-                (button == (next ? _nextButton : _previousButton) ||
-                    (next ? _nextButton : _previousButton) is not { IsVisible: true });
-#endif
+    private static void ExcludeImageArrow(object? sender, EventArgs e)
+    {
+        // ExcludedWithChildren handles TalkBack; Android keyboard focus is separate.
+        if (sender is Button { Handler.PlatformView: Android.Views.View platformButton })
+            platformButton.Focusable = false;
     }
+#endif
 
     private void PageSizeChanged(object? sender, EventArgs e) => RefreshPages();
 
@@ -870,12 +878,13 @@ public partial class OrientedImageryView
         }
 #endif
         bool visible = ViewModel.SelectedImage != null;
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        if (_mobilePagination != null) _mobilePagination.IsVisible = visible;
+#endif
         SetImagePageButtonState(_imagePreviousButton, false, !_searching && canGoPrevious, visible);
         SetImagePageButtonState(_imageNextButton, true, !_searching && canGoNext, visible);
         SetImagePageButtonState(_previousButton, false, !_searching && canGoPrevious, visible);
         SetImagePageButtonState(_nextButton, true, !_searching && canGoNext, visible);
-        if (_previousButton != null) SetPaginationTabStop(_previousButton, false);
-        if (_nextButton != null) SetPaginationTabStop(_nextButton, true);
         if (_pages == null) return;
         if (_previousButton != null)
         {
@@ -902,6 +911,11 @@ public partial class OrientedImageryView
             for (int i = 0; i < ViewModel.Images.Count; i++)
                 if (ViewModel.Images[i] == ViewModel.SelectedImage) selected = i;
         }
+#if ANDROID || (__IOS__ && !MACCATALYST)
+        string value = ViewModel.IsSequentialNavigationEnabled ? Text("SequenceNavigation") :
+            selected >= 0 ? string.Format(CultureInfo.CurrentCulture, Text("Page"), selected + 1, ViewModel.Images.Count) : Text("ImageNavigation");
+        _mobilePagination?.Update(value, !_searching && canGoPrevious, !_searching && canGoNext);
+#endif
         const double pageWidth = 22;
         double available = Width > 0 ? Math.Max(pageWidth, Width - 104) : 7 * pageWidth;
         var (start, count) = ViewModel.IsSequentialNavigationEnabled ? (0, 0) :
@@ -925,7 +939,6 @@ public partial class OrientedImageryView
                 button.Padding = new Thickness(4, 0);
                 button.MinimumWidthRequest = 44;
                 button.Clicked += (_, _) => ChangePage(next);
-                button.HandlerChanged += (_, _) => SetPaginationTabStop(button, next);
                 return button;
             }
             _pages.Add(SequenceButton(false));
@@ -950,11 +963,9 @@ public partial class OrientedImageryView
             var previous = (Button)_pages.Children[0];
             previous.Text = Text("PreviousLabel");
             SetImagePageButtonState(previous, false, !_searching && canGoPrevious, true);
-            SetPaginationTabStop(previous, false);
             var next = (Button)_pages.Children[2];
             next.Text = Text("NextLabel");
             SetImagePageButtonState(next, true, !_searching && canGoNext, true);
-            SetPaginationTabStop(next, true);
             return;
         }
 
