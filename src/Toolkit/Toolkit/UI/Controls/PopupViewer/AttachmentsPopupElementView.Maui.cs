@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Globalization;
@@ -64,7 +65,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             SemanticProperties.SetHeadingLevel(rootcaption, SemanticHeadingLevel.Level2);
 #endif
             root.Add(rootcaption);
-            root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0,5) });
+            var headerDivider = new Border() { StrokeThickness = 0, HeightRequest = 1, Margin = new Thickness(0,5) };
+            headerDivider.SetHighContrastColor(VisualElement.BackgroundColorProperty, Colors.Gray);
+            root.Add(headerDivider);
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
 #if __IOS__
             cv.SelectionMode = SelectionMode.Single;
@@ -127,7 +130,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(name, 1);
             layout.Add(name);
 
-            Label size = new Label() { VerticalOptions = LayoutOptions.Start, TextColor = Colors.Gray, FontSize = 12 };
+            Label size = new Label() { VerticalOptions = LayoutOptions.Start, FontSize = 12 };
+            size.SetHighContrastColor(Label.TextColorProperty, Colors.Gray);
             size.SetBinding(Label.TextProperty, static (AttachmentViewModel vm) => vm.Size);
 #if __IOS__
             AutomationProperties.SetIsInAccessibleTree(size, false);
@@ -141,7 +145,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             AutomationProperties.SetIsInAccessibleTree(image2, false);
 #endif
             image2.SetBinding(Image.IsVisibleProperty, static (AttachmentViewModel vm) => vm.IsDownloadButtonVisible);
-            image2.Source = new FontImageSource() { Glyph = ToolkitIcons.Inbox, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            var downloadGlyph = new FontImageSource() { Glyph = ToolkitIcons.Inbox, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            downloadGlyph.SetHighContrastColor(FontImageSource.ColorProperty, Colors.Gray);
+            image2.Source = downloadGlyph;
             Grid.SetColumn(image2, 2);
             Grid.SetRowSpan(image2, 2);
             layout.Add(image2);
@@ -156,7 +162,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(indicator, 2);
             Grid.SetRowSpan(indicator, 2);
             layout.Add(indicator);
-            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0,5) };
+            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, Margin = new Thickness(0,5) };
+            divider.SetHighContrastColor(VisualElement.BackgroundColorProperty, Colors.Gray);
             divider.VerticalOptions = LayoutOptions.End;
             Grid.SetRow(divider, 2);
             Grid.SetColumnSpan(divider, 3);
@@ -302,7 +309,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 }
                 else
                 {
-                    _thumbnail = new FontImageSource() { Glyph = ContentTypeToCalciteGlyph(Attachment.ContentType).ToString(), Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+                    var glyph = new FontImageSource() { Glyph = ContentTypeToCalciteGlyph(Attachment.ContentType).ToString(), FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+                    glyph.SetHighContrastColor(FontImageSource.ColorProperty, Colors.Gray);
+                    _thumbnail = glyph;
                 }
                 OnPropertyChanged(nameof(Thumbnail));
             }
