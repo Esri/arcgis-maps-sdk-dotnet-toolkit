@@ -1331,6 +1331,38 @@ image</value>
   <data name="OrientedImageryViewOverlays" xml:space="preserve"><value>Overlays</value></data>
   <data name="OrientedImageryViewMarkers" xml:space="preserve"><value>Markers</value></data>
   <data name="OrientedImageryViewMode" xml:space="preserve"><value>Mode</value></data>
+  <data name="OrientedImageryViewChangeMapInteraction" xml:space="preserve">
+    <value>Change map interaction</value>
+    <comment>MAUI accessibility name for the chooser that selects Find images or Display image when interacting with the map.</comment>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>Start of image sequence reached</value>
+    <comment>MAUI screen-reader announcement after confirming there is no previous image in the sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>End of image sequence reached</value>
+    <comment>MAUI screen-reader announcement after confirming there is no next image in the sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>Start and end of image sequence reached</value>
+    <comment>MAUI screen-reader announcement when the current image has neither a previous nor a next image in its sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImage" xml:space="preserve">
+    <value>Show previous image</value>
+    <comment>MAUI accessibility name and tooltip for an action that displays the previous image in the search results.</comment>
+  </data>
+  <data name="OrientedImageryViewShowNextImage" xml:space="preserve">
+    <value>Show next image</value>
+    <comment>MAUI accessibility name and tooltip for an action that displays the next image in the search results.</comment>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>Show previous image in sequence</value>
+    <comment>MAUI accessibility name and tooltip for an action that displays the previous image in a sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>Show next image in sequence</value>
+    <comment>MAUI accessibility name and tooltip for an action that displays the next image in a sequence.</comment>
+  </data>
   <data name="OrientedImageryViewMore" xml:space="preserve"><value>More</value></data>
   <data name="OrientedImageryViewPage" xml:space="preserve"><value>Image {0} of {1}</value></data>
   <data name="OrientedImageryViewSelectLayer" xml:space="preserve"><value>Select layer</value></data>

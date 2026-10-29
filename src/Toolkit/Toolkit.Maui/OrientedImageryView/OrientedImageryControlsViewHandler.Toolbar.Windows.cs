@@ -228,8 +228,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         host.Children.Add(button);
         host.Children.Add(dropdown);
         _cleanup.Add(() => dropdown.IsDropDownOpen = false);
-        Describe(button, "ImageSearchMode", "OrientedImageryDesktopMode");
-        Describe(dropdown, "ImageSearchMode", "OrientedImageryDesktopModeDropdown");
+        Describe(dropdown, "ChangeMapInteraction", "OrientedImageryDesktopModeDropdown");
         foreach (var state in mode.ImageSearchModes)
         {
             bool search = state == OrientedImageryViewInteractionState.FindImages;
@@ -284,6 +283,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
             bool search = mode.SelectedInteractionState == OrientedImageryViewInteractionState.FindImages;
             if (previous != search)
             {
+                Describe(button, search ? "ImageSearchModeFind" : "ImageSearchModeDisplay", "OrientedImageryDesktopMode");
                 if (button.Content is StackPanel previousContent)
                     foreach (var caption in previousContent.Children.OfType<TextBlock>())
                         _captions.Remove(caption);

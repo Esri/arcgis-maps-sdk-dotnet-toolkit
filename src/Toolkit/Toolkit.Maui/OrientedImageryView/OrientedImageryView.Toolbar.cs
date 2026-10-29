@@ -258,7 +258,7 @@ public partial class OrientedImageryView
             MinimumWidthRequest = 44, MinimumHeightRequest = cell.MinimumHeightRequest,
             AutomationId = "OrientedImagery" + (navigation ? "Navigation" : key),
         };
-        SemanticProperties.SetDescription(button, label.Text);
+        SemanticProperties.SetDescription(button, key == OrientedImageryToolbarCategory.ModeCategoryName ? Text("ChangeMapInteraction") : label.Text);
         cell.Add(pill);
         cell.Add(button);
         button.Clicked += (_, _) =>
