@@ -20,11 +20,10 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
-using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
-
 
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 #else
