@@ -15,6 +15,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// <returns>The host builder</returns>
         public static MauiAppBuilder UseArcGISToolkit(this MauiAppBuilder builder)
         {
+#if ANDROID || (__IOS__ && !MACCATALYST)
+            builder.ConfigureMauiHandlers(handler => handler.AddHandler<OrientedImageryPaginationView, OrientedImageryPaginationViewHandler>());
+#endif
 #if WINDOWS || __IOS__
             builder.ConfigureMauiHandlers(handler => handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>());
 #endif
