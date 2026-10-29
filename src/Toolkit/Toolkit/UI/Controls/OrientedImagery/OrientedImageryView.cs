@@ -168,14 +168,16 @@ public partial class OrientedImageryView
     public bool HasSearchedForImages
     {
         get => (bool)GetValue(HasSearchedForImagesProperty);
-        private set => SetValue(HasSearchedForImagesProperty, value);
+        private set => SetValue(HasSearchedForImagesPropertyKey, value);
     }
+
+    private static readonly DependencyPropertyKey HasSearchedForImagesPropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageryView>(nameof(HasSearchedForImages));
 
     /// <summary>
     /// Identifies the <see cref="HasSearchedForImages" /> dependency property.
     /// </summary>
-    public static readonly DependencyProperty HasSearchedForImagesProperty =
-        PropertyHelper.CreateProperty<bool, OrientedImageryView>(nameof(HasSearchedForImages), false);
+    public static readonly DependencyProperty HasSearchedForImagesProperty = PropertyHelper.GetProperty(HasSearchedForImagesPropertyKey);
 
     private OrientedImageViewport? _viewport;
     private Action<object?, OrientedImageTappedEventArgs>? _onImageTappedOverride;
@@ -486,14 +488,16 @@ public partial class OrientedImageryView
     public string? ErrorMessage
     {
         get => (string?)GetValue(ErrorMessageProperty);
-        private set => SetValue(ErrorMessageProperty, value);
+        private set => SetValue(ErrorMessagePropertyKey, value);
     }
+
+    private static readonly DependencyPropertyKey ErrorMessagePropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<string?, OrientedImageryView>(nameof(ErrorMessage));
 
     /// <summary>
     /// Identifies the <see cref="ErrorMessage" /> dependency property.
     /// </summary>
-    public static readonly DependencyProperty ErrorMessageProperty =
-        PropertyHelper.CreateProperty<string?, OrientedImageryView>(nameof(ErrorMessage), null);
+    public static readonly DependencyProperty ErrorMessageProperty = PropertyHelper.GetProperty(ErrorMessagePropertyKey);
 
     private void UpdateErrorMessage()
     {
