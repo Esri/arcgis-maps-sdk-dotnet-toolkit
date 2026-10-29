@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || WINDOWS_XAML || (MAUI && WINDOWS)
+#if WPF || WINDOWS_XAML || (MAUI && (WINDOWS || __IOS__))
 using System.Globalization;
 #if MAUI
 using IValueConverter = Microsoft.Maui.Controls.IValueConverter;

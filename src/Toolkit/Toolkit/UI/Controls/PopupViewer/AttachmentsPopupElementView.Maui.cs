@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,20 +60,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             rootcaption.SetBinding(Label.TextProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (AttachmentsPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
-#if WINDOWS
+#if WINDOWS || __IOS__
             SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
+#endif
+#if WINDOWS
             SemanticProperties.SetHeadingLevel(rootcaption, SemanticHeadingLevel.Level2);
 #endif
             root.Add(rootcaption);
             var headerDivider = new Border() { StrokeThickness = 0, HeightRequest = 1, Margin = new Thickness(0,5) };
             headerDivider.SetHighContrastColor(VisualElement.BackgroundColorProperty, Colors.Gray);
             root.Add(headerDivider);
+#if !__IOS__
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
-#if __IOS__
-            cv.SelectionMode = SelectionMode.Single;
-            cv.HandlerChanged += static (sender, _) =>
+#else
+            CollectionView cv = new LegacyCollectionView() { SelectionMode = SelectionMode.Single };
+            void UpdateAttachmentList()
             {
-                if (sender is CollectionView { Handler.PlatformView: UIKit.UIView nativeView })
+                if (cv.Handler?.PlatformView is UIKit.UIView nativeView)
                 {
                     // The optimized MAUI handler hosts the collection inside a container view.
                     var list = nativeView as UIKit.UICollectionView ?? nativeView.Subviews.OfType<UIKit.UICollectionView>().FirstOrDefault();
@@ -81,8 +84,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     {
                         list.AllowsFocus = true;
                         list.SelectionFollowsFocus = false;
+                        // Name the container without hiding its individually accessible rows.
+                        list.IsAccessibilityElement = false;
+                        list.AccessibilityLabel = roottitle.Text;
                     }
                 }
+            }
+            cv.HandlerChanged += (_, _) => UpdateAttachmentList();
+            roottitle.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(Label.Text))
+                    UpdateAttachmentList();
             };
 #endif
             cv.SetBinding(CollectionView.ItemsSourceProperty, static (AttachmentsPopupElementView view) => view.Element?.Attachments, source: RelativeBindingSource.TemplatedParent);
@@ -90,6 +102,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             cv.SetBinding(SemanticProperties.DescriptionProperty, static (AttachmentsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
             cv.HandlerChanged += AttachmentList_HandlerChanged;
             cv.HandlerChanging += AttachmentList_HandlerChanging;
+#endif
+#if __ANDROID__
+            Internal.PopupKeyboardNavigation.Attach(cv);
 #endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             root.Add(cv);
@@ -169,7 +184,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(divider, 3);
             layout.Add(divider);
             Border root = new Border() { StrokeThickness = 0, Content = layout };
-#if WINDOWS || __IOS__
+#if __IOS__
+            root.SetBinding(SemanticProperties.DescriptionProperty, static (Grid grid) => (grid.BindingContext as AttachmentViewModel)?.AccessibilityDescription, source: layout);
+#elif WINDOWS
             root.SetBinding(SemanticProperties.DescriptionProperty, static (PopupAttachment attachment) => attachment.Name);
 #endif
 #if WINDOWS
@@ -249,6 +266,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             public string Name => Attachment.Name;
 
+#if __IOS__
+            public string AccessibilityDescription => IsDownloading
+                ? $"{Name}, {Size}, {Properties.Resources.GetString("PopupViewerAttachmentDownloading")}"
+                : $"{Name}, {Size}";
+#endif
+
             public string Size
             {
                 get
@@ -269,6 +292,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     OnPropertyChanged(nameof(IsDownloadButtonVisible));
                     OnPropertyChanged(nameof(IsDownloading));
+#if __IOS__
+                    OnPropertyChanged(nameof(AccessibilityDescription));
+#endif
                     if (Attachment.LoadStatus == LoadStatus.Loaded)
                     {
                         CreateThumbnail();
@@ -355,5 +381,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
         }
     }
+
+#if __IOS__
+    // The handler for this subclass is set to the legacy .NET 9 CollectionView handler
+    // to avoid zero-height attachment lists. https://github.com/dotnet/maui/issues/35591
+    internal sealed class LegacyCollectionView : CollectionView
+    {
+    }
+#endif
 }
 #endif

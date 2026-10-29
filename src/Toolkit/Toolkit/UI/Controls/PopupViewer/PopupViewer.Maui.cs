@@ -39,6 +39,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #else
             null;
 #endif
+        private static readonly IValueConverter? PopupTitleConverter =
+#if __IOS__
+            new Toolkit.Internal.HtmlToPlainTextConverter();
+#else
+            HeaderTextConverter;
+#endif
 
         /// <summary>
         /// Template name of the <see cref="IBindableLayout"/> items layout view.
@@ -97,10 +103,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 Label roottitle = new Label();
                 roottitle.Style = GetPopupViewerHeaderStyle();
-#if WINDOWS
+#if WINDOWS || __IOS__
                 SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
 #endif
-                roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup?.Title, converter: HeaderTextConverter);
+                roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup?.Title, converter: PopupTitleConverter);
                 roottitle.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 return roottitle;
             });
@@ -111,6 +117,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
                 Label title = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 title.Style = GetPopupViewerHeaderStyle();
+#if __IOS__
+                SemanticProperties.SetHeadingLevel(title, SemanticHeadingLevel.Level1);
+#endif
                 title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: HeaderTextConverter);
                 root.Children.Add(title);
 
@@ -127,6 +136,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
                 roottitle.Style = GetPopupViewerHeaderStyle();
+#if __IOS__
+                SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
+#endif
                 roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
                 return roottitle;
             });

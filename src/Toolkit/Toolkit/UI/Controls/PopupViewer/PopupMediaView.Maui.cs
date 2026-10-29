@@ -180,6 +180,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
 #endif
 
+#if __ANDROID__
+        /// <inheritdoc />
+        protected override void OnHandlerChanged()
+        {
+            base.OnHandlerChanged();
+            UpdateChartTabStop();
+        }
+
+        private void UpdateChartTabStop()
+        {
+            if (Handler?.PlatformView is Android.Views.View platformView)
+            {
+                platformView.Focusable = PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image;
+                platformView.DefaultFocusHighlightEnabled = true;
+            }
+        }
+#endif
+
         /// <inheritdoc />
         protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
         {

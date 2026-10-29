@@ -20,7 +20,7 @@
                          ItemsSource="{x:Bind Samples}" >
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:Sample">
-                            <Grid Padding="0,8">
+                            <Grid Padding="0,8" HighContrastAdjustment="None">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>

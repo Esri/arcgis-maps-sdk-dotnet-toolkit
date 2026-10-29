@@ -277,7 +277,7 @@ internal static class HtmlToView
                 str.Spans.Add(span);
             }
         }
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
         if (useNativeHyperlinks && str.Spans.OfType<HyperlinkSpan>().Any())
             return new HyperlinkLabel(str) { LineBreakMode = LineBreakMode.WordWrap };
 #endif
@@ -485,6 +485,20 @@ internal static class HtmlToView
 
     private static void ApplyStyle(Label el, MarkupNode node)
     {
+#if __IOS__
+        var headingLevel = node.Token?.Name switch
+        {
+            "h1" => SemanticHeadingLevel.Level1,
+            "h2" => SemanticHeadingLevel.Level2,
+            "h3" => SemanticHeadingLevel.Level3,
+            "h4" => SemanticHeadingLevel.Level4,
+            "h5" => SemanticHeadingLevel.Level5,
+            "h6" => SemanticHeadingLevel.Level6,
+            _ => SemanticHeadingLevel.None,
+        };
+        if (headingLevel != SemanticHeadingLevel.None)
+            SemanticProperties.SetHeadingLevel(el, headingLevel);
+#endif
         if (node.IsBold == true)
             el.FontAttributes |= FontAttributes.Bold;
         else if (node.IsBold == false)

@@ -11,12 +11,34 @@
             <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowEvenBrush">#FF040404</SolidColorBrush>
             <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush">#11FFFFFF</SolidColorBrush>
             <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush">#FFE5E5E5</SolidColorBrush>
+            <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+                <Setter Property="Foreground" Value="Gray"/>
+            </Style>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowOddBrush">#FFEDEDED</SolidColorBrush>
             <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowEvenBrush">#FFFBFBFB</SolidColorBrush>
             <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush">#11000000</SolidColorBrush>
             <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush">#FF2D2D2D</SolidColorBrush>
+            <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+                <Setter Property="Foreground" Value="Gray"/>
+            </Style>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="HighContrast">
+            <!-- Zebra striping is not meaningful in high contrast; use the system window color for both rows and a visible divider. -->
+            <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowOddBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="FieldsPopupElementViewBackgroundRowEvenBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="FieldsPopupElementViewDividerBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="FieldsPopupElementViewForegroundBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <!-- No hardcoded gray: let the caption take its parent's text color, so text inside a highlighted container (e.g. a hovered button) switches to the highlight text color with it. -->
+            <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
@@ -35,11 +57,6 @@
     <Style TargetType="TextBlock" x:Key="PopupViewerTitleStyle">
         <Setter Property="FontSize" Value="16" />
         <Setter Property="TextWrapping" Value="Wrap" />
-    </Style>
-    <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="Foreground" Value="Gray"/>
     </Style>
     <Style TargetType="primitives:TextPopupElementView">
         <Setter Property="IsTabStop" Value="False"/>
@@ -68,7 +85,7 @@
                 <ControlTemplate TargetType="primitives:FieldsPopupElementView">
                     <StackPanel>
                         <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" AutomationProperties.HeadingLevel="Level1" />
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" AutomationProperties.HeadingLevel="Level2"/>
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{ThemeResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" AutomationProperties.HeadingLevel="Level2"/>
                         <ContentPresenter x:Name="TableAreaContent" />
                     </StackPanel>
                 </ControlTemplate>
@@ -113,11 +130,11 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Grid Width="{TemplateBinding ThumbnailSize}" Height="{TemplateBinding ThumbnailSize}">
-                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Text="&#xE896;" AutomationProperties.AccessibilityView="Raw" />
-                            <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw" />
-                            <ProgressRing Visibility="Collapsed" x:Name="DownloadSpinner" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Text="&#xE896;" AutomationProperties.AccessibilityView="Raw" HighContrastAdjustment="None" />
+                            <Image x:Name="PART_Image" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw" HighContrastAdjustment="None"/>
+                            <ProgressRing Visibility="Collapsed" x:Name="DownloadSpinner" HorizontalAlignment="Center" VerticalAlignment="Center" HighContrastAdjustment="None"/>
                         </Grid>
-                        <TextBlock Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Margin="5" AutomationProperties.AccessibilityView="Raw" />
+                        <TextBlock Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Margin="5" AutomationProperties.AccessibilityView="Raw" HighContrastAdjustment="None" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -131,7 +148,7 @@
                     <StackPanel>
                         <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                    AutomationProperties.HeadingLevel="Level1"/>
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{ThemeResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                    AutomationProperties.HeadingLevel="Level2"/>
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single" AutomationProperties.Name="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}">
                             <ListView.ItemTemplate>
@@ -159,7 +176,7 @@
                         </Grid.RowDefinitions>
                         <primitives:PopupMediaView PopupMedia="{Binding}" Margin="0,5" VerticalAlignment="Center" />
                         <TextBlock Grid.Row="1" Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Grid.Row="2" Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Grid.Row="2" Text="{Binding Caption, Mode=OneWay}" Style="{ThemeResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -176,10 +193,11 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                    AutomationProperties.HeadingLevel="Level1"/>
-                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
+                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" Style="{ThemeResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" 
                                    AutomationProperties.HeadingLevel="Level2"/>
-                        <FlipView Background="Transparent" MaxHeight="470" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Media}" Grid.Row="2" IsTabStop="False" />
+                        <FlipView HighContrastAdjustment="None" Background="Transparent" MaxHeight="470" x:Name="FlipView" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Media}" Grid.Row="2" IsTabStop="False" />
                         <PipsPager x:Name="PipsPager"
+                            HighContrastAdjustment="None"
                             HorizontalAlignment="Center"
                             Grid.Row="3"
                             NumberOfPages="{Binding Media.Count}"
@@ -204,7 +222,7 @@
                 <ControlTemplate TargetType="primitives:UtilityAssociationsPopupElementView">
                     <StackPanel>
                         <TextBlock x:Name="Title" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Mode=OneWay, FallbackValue={internal:LocalizedString Key=PopupViewerUtilityAssociationsDefaultTitle}}" TextTrimming="CharacterEllipsis" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
+                        <TextBlock Grid.Row="1" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{ThemeResource PopupViewerCaptionStyle}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <ListView VerticalAlignment="Top" ItemTemplate="{TemplateBinding ItemTemplate}" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Element.AssociationsFilterResults, Mode=OneWay}"
                                   x:Name="AssociationsList" SelectionMode="None" IsItemClickEnabled="True">
                             <ListView.ItemContainerStyle>
@@ -255,7 +273,7 @@
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding Filter.Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" TextTrimming="CharacterEllipsis"
                                     Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
-                        <TextBlock Grid.Row="1" Text="{Binding Filter.Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" TextTrimming="CharacterEllipsis"
+                        <TextBlock Grid.Row="1" Text="{Binding Filter.Description, Mode=OneWay}" Style="{ThemeResource PopupViewerCaptionStyle}" TextTrimming="CharacterEllipsis"
                                     Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
                         <FontIcon Glyph="&#xE76C;" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
                         <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded, Converter={StaticResource PopupViewerVisibilityConverter}, ConverterParameter=Reverse}"/>
@@ -342,8 +360,8 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsShowAll}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" FontSize="12"/>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
-                                    <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsTotal}" Style="{StaticResource PopupViewerCaptionStyle}" VerticalAlignment="Top" Margin="0,0,2,0" />
-                                    <TextBlock Text="{Binding AssociationResults.Count}" VerticalAlignment="Top" Style="{StaticResource PopupViewerCaptionStyle}" />
+                                    <TextBlock Text="{internal:LocalizedString Key=PopupViewerUtilityAssociationsTotal}" Style="{ThemeResource PopupViewerCaptionStyle}" VerticalAlignment="Top" Margin="0,0,2,0" />
+                                    <TextBlock Text="{Binding AssociationResults.Count}" VerticalAlignment="Top" Style="{ThemeResource PopupViewerCaptionStyle}" />
                                 </StackPanel>
                                 <FontIcon Glyph="&#xE8FD;" VerticalAlignment="Stretch" FontSize="18" Grid.Column="1" Grid.RowSpan="2" Margin="2"/>
                                 <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.ColumnSpan="3" Grid.Row="2"/>
@@ -376,7 +394,7 @@
                         <TextBlock x:Name="Title" TextWrapping="NoWrap" Text="{Binding AssociationResult.Title, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource PopupViewerTitleStyle}"
                                    VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" />
                         <TextBlock x:Name="FractionAlong" Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=FractionAlong, Path=Text}" />
-                        <TextBlock x:Name="ConnectionInfo" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=ConnectionInfo, Path=Text}" Style="{StaticResource PopupViewerCaptionStyle}"/>
+                        <TextBlock x:Name="ConnectionInfo" Visibility="Collapsed" Grid.Column="1" Grid.Row="1" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{Binding ElementName=ConnectionInfo, Path=Text}" Style="{ThemeResource PopupViewerCaptionStyle}"/>
                         <FontIcon Glyph="&#xE76C;" Grid.Column="3" VerticalAlignment="Center" Margin="4,0" Grid.RowSpan="2" />
                         <Border BorderThickness="0" Height="1" Background="LightGray" Margin="2" Grid.Row="2" Grid.ColumnSpan="4"/>
                     </Grid>
@@ -510,7 +528,7 @@
                                                         </DataTemplate>
                                                     </primitives:PopupElementItemsControl.UtilityAssociationsPopupElementTemplate>
                                                 </primitives:PopupElementItemsControl>
-                                                <TextBlock Grid.Row="1" Text="{Binding EditSummary}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding PopupDefinition.ShowEditSummary, Converter={StaticResource PopupViewerVisibilityConverter}}" Margin="0,10,0,0" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Row="1" Text="{Binding EditSummary}" Style="{ThemeResource PopupViewerCaptionStyle}" Visibility="{Binding PopupDefinition.ShowEditSummary, Converter={StaticResource PopupViewerVisibilityConverter}}" Margin="0,10,0,0" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
                                             </Grid>
                                         </DataTemplate>
                                     </primitives:PopupContentTemplateSelector.PopupTemplate>
