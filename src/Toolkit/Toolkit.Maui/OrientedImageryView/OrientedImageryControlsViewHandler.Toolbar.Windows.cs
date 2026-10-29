@@ -53,7 +53,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 ShowCameraMarkersVM => Toggle(owner, "ShowCameraMarkersOnGeoView", "CameraLocationsLabel", CameraLocationsIcon(),
                     () => model.ShowCameraLocations, value => model.ShowCameraLocations = value,
                     () => model.Images.Count > 1, "OrientedImageryDesktopCameraLocations"),
-                AllowAddingMarkersVM => Toggle(owner, "AddMarkersAutomationName", "AddMarkerLabel", Glyph("\uE8ED"),
+                AllowAddingMarkersVM => Toggle(owner, "MobileAddMarkers", "MobileAddMarkers", Glyph("\uE8ED"),
                     () => owner.IsAddingMarkers, owner.SetAddingMarkers,
                     automationId: "OrientedImageryDesktopAddMarker"),
                 AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdate", Glyph(ToolkitIcons.Refresh),

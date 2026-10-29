@@ -1161,6 +1161,12 @@ Locations</value>
 markers</value>
     <comment>Same as OrientedImageryViewAddMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
+  <data name="OrientedImageryViewMobileAddMarkers" xml:space="preserve">
+    <value>Add Markers</value>
+  </data>
+  <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
+    <value>Select Symbol</value>
+  </data>
   <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
     <value>Clear markers</value>
     <comment>Single-line tooltip and automation name for the button that clears markers.</comment>
@@ -1419,6 +1425,9 @@ navigation</value>
   <data name="OrientedImageryViewMarkerX" xml:space="preserve"><value>Cross marker</value></data>
   <data name="OrientedImageryViewSequentialMode" xml:space="preserve"><value>Sequential</value></data>
   <data name="OrientedImageryViewNavigation" xml:space="preserve"><value>Explore</value></data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve"><value>Mode Selection</value></data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve"><value>Overlays Selection</value></data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve"><value>Marker Tools</value></data>
   <data name="OrientedImageryViewAutoUpdate" xml:space="preserve"><value>Automatically update footprint</value></data>
   <data name="OrientedImageryViewOpen" xml:space="preserve"><value>Open oriented imagery</value></data>
   <data name="OrientedImageryViewOn" xml:space="preserve"><value>On</value></data>
