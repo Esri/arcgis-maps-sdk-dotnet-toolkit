@@ -134,4 +134,7 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
 
     public static string? SequentialNavigationToolTip(bool isSequential)
         => Properties.Resources.GetString(isSequential ? "OrientedImageryViewReturnToResults" : "OrientedImageryViewEnterSequentialNavigation");
+
+    public static string? SequentialNavigationAutomationName(bool isSequential)
+        => Properties.Resources.GetString(isSequential ? "OrientedImageryViewReturnToResults" : "OrientedImageryViewSequentialNavigationLabel");
 }
