@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
@@ -75,12 +76,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             DefaultPopupViewerCaptionStyle = new Style(typeof(Label));
             DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12 });
             DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
-            DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.TextColorProperty, Value = Colors.Gray });
+            DefaultPopupViewerCaptionStyle.Setters.Add(HighContrastThemeExtensions.CreateHighContrastSetter(Label.TextColorProperty, Colors.Gray));
         }
 
         private static object BuildDefaultTemplate()
         {
             NavigationSubView root = new NavigationSubView();
+            // Give the content an opaque system background in high contrast so system text colors always sit on their matching background.
+            root.SetHighContrastColor(VisualElement.BackgroundColorProperty, null, HighContrastColorRole.Background);
 
             root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (PopupViewer viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             root.HeaderTemplateSelector = BuildHeaderTemplateSelector();
@@ -153,12 +156,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 {
                     Margin = new Thickness(0, 10),
                 };
+                rootLayout.SetHighContrastColor(VisualElement.BackgroundColorProperty, null, HighContrastColorRole.Background);
                 VerticalStackLayout itemsView = new VerticalStackLayout();
                 BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
+                itemsView.SetHighContrastColor(VisualElement.BackgroundColorProperty, null, HighContrastColorRole.Background);
                 itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (Popup popup) => popup?.EvaluatedElements);
                 rootLayout.Children.Add(itemsView);
 
                 Label editSummaryLabel = new Label() { LineBreakMode = LineBreakMode.WordWrap, Style = GetPopupViewerCaptionStyle(), Margin = new Thickness(0, 10, 0, 0)};
+                editSummaryLabel.SetHighContrastColor(VisualElement.BackgroundColorProperty, null, HighContrastColorRole.Background);
                 editSummaryLabel.SetBinding(Label.TextProperty, static (Popup popup) => popup?.EditSummary);
                 editSummaryLabel.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.PopupDefinition?.ShowEditSummary);
                 rootLayout.Children.Add(editSummaryLabel);

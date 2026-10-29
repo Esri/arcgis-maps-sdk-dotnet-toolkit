@@ -59,20 +59,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public FieldsPopupElementView()
         {
 #if MAUI
-            this.SetAppTheme<Brush>(
+            // Zebra striping is not meaningful in high contrast; use the system background for both rows and a visible divider.
+            Internal.HighContrastThemeExtensions.SetHighContrastColor(this,
                 RowEvenBackgroundProperty,
-                new SolidColorBrush(Color.FromArgb("#FBFBFB")),
-                new SolidColorBrush(Color.FromArgb("#1F1F1F")));
+                Color.FromArgb("#FBFBFB"),
+                Color.FromArgb("#1F1F1F"),
+                Internal.HighContrastColorRole.Background);
 
-            this.SetAppTheme<Brush>(
+            Internal.HighContrastThemeExtensions.SetHighContrastColor(this,
                 RowOddBackgroundProperty,
-                new SolidColorBrush(Color.FromArgb("#EDEDED")),
-                new SolidColorBrush(Color.FromArgb("#2B2B2B")));
+                Color.FromArgb("#EDEDED"),
+                Color.FromArgb("#2B2B2B"),
+                Internal.HighContrastColorRole.Background);
 
-            this.SetAppTheme<Brush>(
+            Internal.HighContrastThemeExtensions.SetHighContrastColor(this,
                 DividerBrushProperty,
-                new SolidColorBrush(Color.FromArgb("#11333333")),
-                new SolidColorBrush(Color.FromArgb("#22FFFFFF")));
+                Color.FromArgb("#11333333"),
+                Color.FromArgb("#22FFFFFF"));
 
             ControlTemplate = DefaultControlTemplate;
             FieldTextStyle = DefaultFieldTextStyle;

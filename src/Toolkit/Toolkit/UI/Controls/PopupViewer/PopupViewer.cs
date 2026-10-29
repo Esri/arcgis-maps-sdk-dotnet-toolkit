@@ -23,6 +23,7 @@ using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
 
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 #else
@@ -98,6 +99,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
+#if MAUI
+            this.SetHighContrastColor(BackgroundProperty, null, HighContrastColorRole.Background);
+#endif
             InvalidatePopup();
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {

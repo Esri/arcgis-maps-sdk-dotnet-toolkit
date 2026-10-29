@@ -917,7 +917,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         set => SetValue(SuggestionGroupHeaderTemplateProperty, value);
     }
 
-    private void SetHighContrastColors(Color? foreground, Color? background)
+    private void SetHighContrastColors(Color? foreground, Color? background, Color? highlightBackground, Color? highlightForeground)
     {
         if (foreground == null || background == null)
         {
@@ -925,7 +925,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             return;
         }
 
-        SetColorResources(foreground, background, foreground, background, background, foreground);
+        SetColorResources(foreground, background, foreground, background, highlightBackground, highlightForeground);
     }
 
     private void UpdateThemeColors()
