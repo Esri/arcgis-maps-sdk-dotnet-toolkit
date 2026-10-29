@@ -1365,15 +1365,23 @@ public partial class OrientedImageryView
         toggle.VerticalOptions = LayoutOptions.Center;
         toggle.OnColor = Color.FromArgb("#34C759");
 #endif
+        bool CanInteract() => !_updatingPanel && _connected && _panelAnchor != null && enabled();
         SemanticProperties.SetDescription(toggle, title);
         toggle.Toggled += (_, e) =>
         {
-            if (!_updatingPanel && _connected && _panelAnchor != null && enabled())
+            if (CanInteract())
                 set(e.Value);
         };
 #if ANDROID || (__IOS__ && !MACCATALYST)
         label.VerticalOptions = LayoutOptions.Fill;
         label.VerticalTextAlignment = TextAlignment.Center;
+        var labelTap = new TapGestureRecognizer();
+        labelTap.Tapped += (_, _) =>
+        {
+            if (toggle.IsEnabled && CanInteract())
+                toggle.IsToggled = !toggle.IsToggled;
+        };
+        label.GestureRecognizers.Add(labelTap);
 #endif
         row.Add(FlyoutIcon(icon()));
         row.Add(label, 1);
