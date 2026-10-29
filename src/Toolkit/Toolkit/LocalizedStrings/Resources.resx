@@ -1123,31 +1123,66 @@
   </data>
   <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
     <value>Current Footprint</value>
-    <comment>Toolbar label and automation name for the selected image footprint toggle.</comment>
+    <comment>Single-line automation name for the selected image footprint toggle.</comment>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>Current
+Footprint</value>
+    <comment>Same as OrientedImageryViewCurrentFootprintLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
     <value>Additional Footprints</value>
-    <comment>Toolbar label and automation name for the unselected image footprints toggle.</comment>
+    <comment>Single-line automation name for the unselected image footprints toggle.</comment>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>Additional
+Footprints</value>
+    <comment>Same as OrientedImageryViewAdditionalFootprintsLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
     <value>Camera Locations</value>
-    <comment>Toolbar label and automation name for the camera locations toggle.</comment>
+    <comment>Single-line automation name for the camera locations toggle.</comment>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>Camera
+Locations</value>
+    <comment>Same as OrientedImageryViewCameraLocationsLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
     <value>Add markers</value>
-    <comment>Also serves as the control's automation name</comment>
+    <comment>Single-line automation name for the marker-creation toggle.</comment>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>Add
+markers</value>
+    <comment>Same as OrientedImageryViewAddMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
     <value>Clear markers</value>
-    <comment>Toolbar label, tooltip, and automation name for the button that clears markers.</comment>
+    <comment>Single-line tooltip and automation name for the button that clears markers.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>Clear
+markers</value>
+    <comment>Same as OrientedImageryViewClearMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
     <value>Find images</value>
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
   </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>Find
+images</value>
+    <comment>Same as OrientedImageryViewImageSearchModeFind, but with manual line breaks for formatting.</comment>
+  </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
     <value>Display image</value>
     <comment>Label for the mode that displays individual tapped oriented images.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>Display
+image</value>
+    <comment>Same as OrientedImageryViewImageSearchModeDisplay, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
     <value>Open details for selected image</value>
@@ -1179,7 +1214,12 @@
   </data>
   <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
     <value>Sequential navigation</value>
-    <comment>Toolbar label and automation name for the sequential navigation toggle. The automation name changes to Return to results while sequential navigation is active.</comment>
+    <comment>Single-line automation name for the sequential navigation toggle. The automation name changes to Return to results while sequential navigation is active.</comment>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>Sequential
+navigation</value>
+    <comment>Same as OrientedImageryViewSequentialNavigationLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
     <value>Previous image</value>
