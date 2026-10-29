@@ -7,13 +7,13 @@
     <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
 
     <Style x:Key="PaginatorNavigationButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="33" />
-        <Setter Property="Height" Value="32" />
+        <Setter Property="MinWidth" Value="33" />
+        <Setter Property="MinHeight" Value="32" />
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="FontFamily" Value="{StaticResource ToolkitIconsFontFamily}" />
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=16}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -68,7 +68,7 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=14}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -147,7 +147,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Grid Height="32" Background="{TemplateBinding Background}" HorizontalAlignment="{Binding HorizontalAlignment, RelativeSource={RelativeSource TemplatedParent}}">
+                    <Grid MinHeight="32" Background="{TemplateBinding Background}" HorizontalAlignment="{Binding HorizontalAlignment, RelativeSource={RelativeSource TemplatedParent}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -158,6 +158,8 @@
                                 IsTabStop="False"
                                 AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                                FontSize="{internal:TextScaledFontSize FontSize=16}"
                                 Content="&#xe79f;"
                                 Style="{StaticResource PaginatorNavigationButtonStyle}"
                                 VerticalAlignment="Center" />
@@ -193,7 +195,7 @@
                                 AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                 FontFamily="{StaticResource ToolkitIconsFontFamily}"
-                                FontSize="16"
+                                FontSize="{internal:TextScaledFontSize FontSize=16}"
                                 Content="&#xe7a0;"
                                 Grid.Column="2"
                                 Style="{StaticResource PaginatorNavigationButtonStyle}"
