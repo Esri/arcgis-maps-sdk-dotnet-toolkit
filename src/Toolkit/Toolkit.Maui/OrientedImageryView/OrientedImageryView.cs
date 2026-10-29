@@ -19,7 +19,6 @@ public partial class OrientedImageryView : TemplatedView
     private int _layerVersion;
     private bool _connected;
     private bool _searching;
-    private bool _hasSearchedForImages;
     private Exception? _operationError;
     private OrientedImageViewport? _viewport;
     private int _lookAtVersion;
@@ -90,9 +89,24 @@ public partial class OrientedImageryView : TemplatedView
         propertyChanged: (s, _, _) =>
         {
             var view = (OrientedImageryView)s;
-            view._hasSearchedForImages = false;
+            view.HasSearchedForImages = false;
             view.Reconnect();
         });
+
+    /// <summary>
+    /// Gets a value indicating whether an image selection search has completed after a map tap.
+    /// </summary>
+    public bool HasSearchedForImages
+    {
+        get => (bool)GetValue(HasSearchedForImagesProperty);
+        private set => SetValue(HasSearchedForImagesProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="HasSearchedForImages"/> bindable property.
+    /// </summary>
+    public static readonly BindableProperty HasSearchedForImagesProperty = BindableProperty.Create(
+        nameof(HasSearchedForImages), typeof(bool), typeof(OrientedImageryView), false);
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -291,7 +305,7 @@ public partial class OrientedImageryView : TemplatedView
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
                 DispatchUpdate(() =>
                 {
-                    _hasSearchedForImages = false;
+                    HasSearchedForImages = false;
                     ChangeLayer();
                 });
                 break;
@@ -404,7 +418,7 @@ public partial class OrientedImageryView : TemplatedView
                 model.SelectedImage = images.FirstOrDefault();
                 if (explore)
                     model.IsSequentialNavigationEnabled = false;
-                _hasSearchedForImages = true;
+                HasSearchedForImages = true;
             }
         }
         catch (OperationCanceledException) when (version != _operationVersion)
