@@ -1399,4 +1399,7 @@ image</value>
   <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve"><value>Show Current Footprint</value></data>
   <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve"><value>Show Additional Footprints</value></data>
   <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve"><value>Show camera locations</value></data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve"><value>Image navigation</value></data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve"><value>Use Left Arrow for the previous image or Right Arrow for the next image.</value></data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve"><value>Sequential image navigation</value></data>
 </root>
