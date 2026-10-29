@@ -45,7 +45,7 @@ public class OrientedImageryToolbarCategory
     /// <summary>
     /// The category name. This value is used as an identifier for data template selection.
     /// </summary>
-    public string Name { get; }
+    public string Name { get; private set; }
 
     /// <summary>
     /// Gets or sets the linked <see cref="OrientedImageryViewModel"/>. This property will be set automatically when the category item
@@ -57,6 +57,7 @@ public class OrientedImageryToolbarCategory
         set
         {
             if (value == _mainViewModel) return;
+            var oldValue = _mainViewModel;
             _mainViewModel = value;
             SynchronizeToolbarItems();
         }
@@ -71,7 +72,7 @@ public class OrientedImageryToolbarCategory
     /// <see cref="ViewModel"/>. The list is initially populated with a set of default toolbar items for the base control. Items
     /// are disconnected from the view model when they are removed from the collection.
     /// </remarks>
-    public ObservableCollection<OrientedImageryToolbarItemBase> ToolbarItems { get; }
+    public ObservableCollection<OrientedImageryToolbarItemBase> ToolbarItems { get; private set; }
 
     private void ToolbarItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => SynchronizeToolbarItems();
 
