@@ -205,7 +205,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding CornerRadius}">
                             <StackPanel Spacing="8" VerticalAlignment="Center">
-                                <Viewbox Width="16" Height="32" Stretch="Uniform">
+                                <Viewbox MinWidth="16" MaxWidth="20" Height="32" Stretch="Uniform">
                                     <ContentPresenter
                                         Content="{TemplateBinding SelectedItem}"
                                         ContentTemplate="{TemplateBinding ItemTemplate}"
@@ -665,7 +665,7 @@
             </ComboBox.ItemContainerStyle>
             <ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="symbology:MarkerSymbol">
-                    <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind}" />
+                    <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind}" IsTabStop="False"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
@@ -905,6 +905,28 @@
                                 </Border>
 
                                 <Button
+                                    Grid.ColumnSpan="3"
+                                    Width="35"
+                                    Height="35"
+                                    MinWidth="0"
+                                    MinHeight="0"
+                                    Margin="16"
+                                    Padding="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                    Style="{StaticResource OrientedImageryToolbarButtonStyle}"
+                                    Command="{x:Bind ViewModel.OpenSelectedImagePopupCommand, Mode=OneWay}"
+                                    Visibility="{TemplateBinding ImageNavigationVisibility}"
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}">
+                                    <PathIcon
+                                        Width="31"
+                                        Height="31"
+                                        Data="F0 M16 3C8.8205 3 3 8.8205 3 16C3 23.1795 8.8205 29 16 29C23.1795 29 29 23.1795 29 16C29 8.8205 23.1795 3 16 3Z M16.0105 8C16.7775 8 17.5 8.673 17.5 9.4905C17.5 10.3635 16.7775 11 16.0105 11C15.1125 11 14.5 10.3635 14.5 9.4905C14.5 8.673 15.1125 8 16.0105 8Z M19.5 23.5H17H15H12.5V22L15 21.5V15H13V13.5L17 13V21.5L19.5 22V23.5Z" />
+                                </Button>
+
+                                <Button
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
@@ -929,29 +951,6 @@
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <PathIcon Data="M12 5.9 22.1 16 12 26.1z" />
                                     </Viewbox>
-                                </Button>
-
-                                <Button
-                                    Grid.ColumnSpan="3"
-                                    TabIndex="0"
-                                    Width="35"
-                                    Height="35"
-                                    MinWidth="0"
-                                    MinHeight="0"
-                                    Margin="16"
-                                    Padding="2"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                                    Style="{StaticResource OrientedImageryToolbarButtonStyle}"
-                                    Command="{x:Bind ViewModel.OpenSelectedImagePopupCommand, Mode=OneWay}"
-                                    Visibility="{TemplateBinding ImageNavigationVisibility}"
-                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}">
-                                    <PathIcon
-                                        Width="31"
-                                        Height="31"
-                                        Data="F0 M16 3C8.8205 3 3 8.8205 3 16C3 23.1795 8.8205 29 16 29C23.1795 29 29 23.1795 29 16C29 8.8205 23.1795 3 16 3Z M16.0105 8C16.7775 8 17.5 8.673 17.5 9.4905C17.5 10.3635 16.7775 11 16.0105 11C15.1125 11 14.5 10.3635 14.5 9.4905C14.5 8.673 15.1125 8 16.0105 8Z M19.5 23.5H17H15H12.5V22L15 21.5V15H13V13.5L17 13V21.5L19.5 22V23.5Z" />
                                 </Button>
                             </Grid>
 
