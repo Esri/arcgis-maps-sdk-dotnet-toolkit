@@ -490,10 +490,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _ = DispatcherQueue.TryEnqueue(() => FocusFirstVisibleItem(_resultList));
 
         private void ScheduleLiveRegionAnnouncement(FrameworkElement element) =>
-            _ = DispatcherQueue.TryEnqueue(() => RaiseLiveRegionChanged(element));
+            _ = DispatcherQueue.TryEnqueue(() => ScreenReaderHelpers.RaiseLiveRegionChanged(element));
 
         private void ScheduleNotificationAnnouncement(ListView listView, string announcement) =>
-            _ = DispatcherQueue.TryEnqueue(() => RaiseNotificationAnnouncement(listView, announcement));
+            _ = DispatcherQueue.TryEnqueue(() => ScreenReaderHelpers.RaiseNotificationAnnouncement(listView, announcement, "SearchViewAvailableItems"));
 
         private void SuggestionList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
@@ -752,10 +752,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _ = Dispatcher.BeginInvoke(new Action(() => FocusListItem(_resultList, 0)), System.Windows.Threading.DispatcherPriority.Loaded);
 
         private void ScheduleLiveRegionAnnouncement(FrameworkElement element) =>
-            _ = Dispatcher.BeginInvoke(new Action(() => RaiseLiveRegionChanged(element)), System.Windows.Threading.DispatcherPriority.Loaded);
+            _ = Dispatcher.BeginInvoke(new Action(() => ScreenReaderHelpers.RaiseLiveRegionChanged(element)), System.Windows.Threading.DispatcherPriority.Loaded);
 
         private void ScheduleNotificationAnnouncement(ListView listView, string announcement) =>
-            _ = Dispatcher.BeginInvoke(new Action(() => RaiseNotificationAnnouncement(listView, announcement)), System.Windows.Threading.DispatcherPriority.Loaded);
+            _ = Dispatcher.BeginInvoke(new Action(() => ScreenReaderHelpers.RaiseNotificationAnnouncement(listView, announcement, "SearchViewAvailableItems")), System.Windows.Threading.DispatcherPriority.Loaded);
 
         private bool MoveFocusPastSearchView()
         {
@@ -854,59 +854,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 ScheduleNotificationAnnouncement(listView, announcement);
             }
-        }
-
-        private void RaiseLiveRegionChanged(FrameworkElement element)
-        {
-            element.UpdateLayout();
-
-            if (element is ListView listView && listView.Items.Count == 0)
-            {
-                return;
-            }
-
-#if WPF
-            if (!element.IsVisible)
-            {
-                return;
-            }
-
-            var peer = UIElementAutomationPeer.FromElement(element) ?? UIElementAutomationPeer.CreatePeerForElement(element);
-#elif WINDOWS_XAML
-            if (element.Visibility != Visibility.Visible)
-            {
-                return;
-            }
-
-            var peer = FrameworkElementAutomationPeer.FromElement(element) ?? FrameworkElementAutomationPeer.CreatePeerForElement(element);
-#endif
-            peer?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
-        }
-
-        private void RaiseNotificationAnnouncement(ListView listView, string announcement)
-        {
-            listView.UpdateLayout();
-
-#if WPF
-            if (listView.Items.Count == 0 || !listView.IsVisible)
-            {
-                return;
-            }
-
-            var peer = UIElementAutomationPeer.FromElement(listView) ?? UIElementAutomationPeer.CreatePeerForElement(listView);
-#elif WINDOWS_XAML
-            if (listView.Items.Count == 0 || listView.Visibility != Visibility.Visible)
-            {
-                return;
-            }
-
-            var peer = FrameworkElementAutomationPeer.FromElement(listView) ?? FrameworkElementAutomationPeer.CreatePeerForElement(listView);
-#endif
-            peer?.RaiseNotificationEvent(
-                AutomationNotificationKind.Other,
-                AutomationNotificationProcessing.MostRecent,
-                announcement,
-                "SearchViewAvailableItems");
         }
 
         private async Task ConfigureViewModel()
