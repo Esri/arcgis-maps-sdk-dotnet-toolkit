@@ -1,4 +1,4 @@
-#if __IOS__ && !MACCATALYST
+#if __IOS__
 using Microsoft.Maui.Platform;
 using UIKit;
 using ContentView = Microsoft.Maui.Controls.ContentView;
