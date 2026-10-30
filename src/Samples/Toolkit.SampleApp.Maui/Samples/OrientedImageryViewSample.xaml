@@ -9,7 +9,7 @@
             <Label Text="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
                    VerticalOptions="Center" />
             <Picker x:Name="LayerPicker" Grid.Column="1"
-                    Title="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
+                    Title="{OnPlatform Default={internal:LocalizedString Key=OrientedImageryViewSelectLayer}, WinUI={x:Null}}"
                     SemanticProperties.Description="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
                     AutomationId="SampleOrientedImageryLayerPicker"
                     SelectedIndexChanged="LayerSelected" />
