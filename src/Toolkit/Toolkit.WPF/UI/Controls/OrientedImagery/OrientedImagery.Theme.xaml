@@ -463,7 +463,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal" />
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -832,19 +832,21 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <local:AccessibleItemsControl x:Name="PART_ToolbarContainer" IsTabStop="False" Focusable="False"
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                                <local:AccessibleItemsControl x:Name="PART_ToolbarContainer" IsTabStop="False" Focusable="False"
                                           ItemTemplateSelector="{StaticResource DefaultOrientedImageryToolbarSelector}">
-                                <ItemsControl.Style>
-                                    <Style TargetType="{x:Type ItemsControl}" BasedOn="{StaticResource OrientedImageryToolbarContainerStyle}">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ItemsControl.Style>
-                            </local:AccessibleItemsControl>
+                                    <ItemsControl.Style>
+                                        <Style TargetType="{x:Type ItemsControl}" BasedOn="{StaticResource OrientedImageryToolbarContainerStyle}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ItemsControl.Style>
+                                </local:AccessibleItemsControl>
+                            </ScrollViewer>
 
                             <Grid Grid.Row="1" KeyboardNavigation.TabNavigation="Local">
                                 <Grid.Style>
