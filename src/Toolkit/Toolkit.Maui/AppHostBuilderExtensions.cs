@@ -56,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             });
 #if WINDOWS
             builder.ConfigureMauiHandlers(handler => handler.AddHandler<OrientedImageryControlsView, OrientedImageryControlsViewHandler>());
-#elif ANDROID || (__IOS__ && !MACCATALYST)
+#elif ANDROID || __IOS__
             builder.ConfigureMauiHandlers(handler => handler.AddHandler<OrientedImageryPaginationView, OrientedImageryPaginationViewHandler>());
 #endif
             return builder;
