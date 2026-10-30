@@ -78,7 +78,8 @@ public partial class OrientedImageryView
     private void InitializeDesktopTemplate()
     {
         _desktopPagination = GetTemplateChild("PART_DesktopNavigation") as OrientedImageryControlsView;
-        _desktopRoot = ControlTemplate == DefaultControlTemplate ? _customToolbar?.Parent as Grid : null;
+        _desktopRoot = ControlTemplate == DefaultControlTemplate ?
+            (GetTemplateChild("PART_ToolbarScroll") as ScrollView)?.Parent as Grid : null;
         UpdateDesktopColors();
     }
 
@@ -174,87 +175,29 @@ public partial class OrientedImageryView
 
     #endregion
 
-    #region Wrapping toolbar layout
+    #region Single-row toolbar layout
 
-    private sealed class ToolbarWrapLayout : Layout
+    private sealed class ToolbarRowLayout : HorizontalStackLayout
     {
-        public bool CenterRows { get; init; }
-
-        protected override ILayoutManager CreateLayoutManager() => new ToolbarWrapLayoutManager(this);
+        protected override ILayoutManager CreateLayoutManager() => new ToolbarRowLayoutManager(this);
     }
 
-    private sealed class ToolbarWrapLayoutManager(ToolbarWrapLayout layout) : ILayoutManager
+    private sealed class ToolbarRowLayoutManager(ToolbarRowLayout layout) : HorizontalStackLayoutManager(layout)
     {
-        // WinUI can round the arranged width down by a fraction of a DIP.
-        private const double WrapTolerance = 1;
-        private readonly Dictionary<IView, Microsoft.Maui.Graphics.Size> _sizes = new();
-
-        private static bool IsDivider(IView child) =>
-            child is BoxView or OrientedImageryControlsView { ToolbarItem: ToolbarDividerVM };
-
-        public Microsoft.Maui.Graphics.Size Measure(double widthConstraint, double heightConstraint)
+        public override Microsoft.Maui.Graphics.Size ArrangeChildren(Microsoft.Maui.Graphics.Rect bounds)
         {
-            _sizes.Clear();
-            double availableWidth = Math.Max(0, widthConstraint - layout.Padding.HorizontalThickness);
-            double width = 0, height = 0, rowWidth = 0, rowHeight = 0;
-            bool onlyDividers = true;
-            foreach (var child in layout.Children)
-            {
-                if (child.Visibility == Visibility.Collapsed)
-                    continue;
-                var size = child.Measure(double.PositiveInfinity, heightConstraint);
-                double itemWidth = onlyDividers ? Math.Max(0, availableWidth - rowWidth) : availableWidth;
-                if (size.Width > itemWidth)
-                    size = child.Measure(itemWidth, heightConstraint);
-                _sizes.Add(child, size);
-                if (rowWidth > 0 && rowWidth + size.Width > availableWidth + WrapTolerance)
-                {
-                    width = Math.Max(width, rowWidth);
-                    height += rowHeight;
-                    rowWidth = rowHeight = 0;
-                    onlyDividers = true;
-                }
-                rowWidth += Math.Min(availableWidth, size.Width);
-                rowHeight = Math.Max(rowHeight, size.Height);
-                onlyDividers &= IsDivider(child);
-            }
-            return new Microsoft.Maui.Graphics.Size(
-                Math.Max(width, rowWidth) + layout.Padding.HorizontalThickness,
-                height + rowHeight + layout.Padding.VerticalThickness);
-        }
-
-        public Microsoft.Maui.Graphics.Size ArrangeChildren(Microsoft.Maui.Graphics.Rect bounds)
-        {
+            var children = layout.Children.Where(child => child.Visibility != Visibility.Collapsed).ToArray();
             double availableWidth = Math.Max(0, bounds.Width - layout.Padding.HorizontalThickness);
-            double y = bounds.Y + layout.Padding.Top, rowWidth = 0, rowHeight = 0;
-            var row = new List<IView>();
-            void ArrangeRow()
+            double contentWidth = children.Sum(child => child.DesiredSize.Width) +
+                Math.Max(0, children.Length - 1) * layout.Spacing;
+            double x = bounds.X + layout.Padding.Left + Math.Max(0, availableWidth - contentWidth) / 2;
+            foreach (var child in children)
             {
-                double x = bounds.X + layout.Padding.Left +
-                    (layout.CenterRows ? Math.Max(0, availableWidth - rowWidth) / 2 : 0);
-                foreach (var child in row)
-                {
-                    var size = _sizes[child];
-                    double width = Math.Min(availableWidth, size.Width);
-                    child.Arrange(new Microsoft.Maui.Graphics.Rect(x, y, width, rowHeight));
-                    x += width;
-                }
-                y += rowHeight;
-                row.Clear();
-                rowWidth = rowHeight = 0;
+                double width = child.DesiredSize.Width;
+                child.Arrange(new Microsoft.Maui.Graphics.Rect(x, bounds.Y + layout.Padding.Top,
+                    width, bounds.Height - layout.Padding.VerticalThickness));
+                x += width + layout.Spacing;
             }
-            foreach (var child in layout.Children)
-            {
-                if (child.Visibility == Visibility.Collapsed || !_sizes.TryGetValue(child, out var size))
-                    continue;
-                double width = Math.Min(availableWidth, size.Width);
-                if (row.Count > 0 && rowWidth + width > availableWidth + WrapTolerance)
-                    ArrangeRow();
-                row.Add(child);
-                rowWidth += width;
-                rowHeight = Math.Max(rowHeight, size.Height);
-            }
-            ArrangeRow();
             return bounds.Size;
         }
     }
