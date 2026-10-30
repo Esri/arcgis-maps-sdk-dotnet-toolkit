@@ -1,4 +1,4 @@
-#if ANDROID || (__IOS__ && !MACCATALYST)
+#if ANDROID || __IOS__
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryView
