@@ -185,7 +185,7 @@ public partial class OrientedImageryView
             OrientedImageryToolbarCategory.MarkersCategoryName or OrientedImageryToolbarCategory.MoreCategoryName;
         var cell = new Grid { MinimumWidthRequest = 44, MinimumHeightRequest = 44 };
         Layout content =
-#if __IOS__ && !MACCATALYST
+#if __IOS__
             new VerticalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
 #else
             new HorizontalStackLayout { Spacing = 4, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
@@ -231,7 +231,7 @@ public partial class OrientedImageryView
             Stroke = Color.FromArgb("#CCCCCC"), StrokeThickness = 1,
             StrokeShape = new RoundRectangle { CornerRadius = 13 }, InputTransparent = true,
         };
-#if __IOS__ && !MACCATALYST
+#if __IOS__
         cell.MinimumHeightRequest = 60;
         icon.WidthRequest = icon.HeightRequest = 22;
         iconHost.WidthRequest = iconHost.HeightRequest = 22;
@@ -274,7 +274,7 @@ public partial class OrientedImageryView
                     ViewModel.InteractionState is OrientedImageryViewInteractionState.FindImages or OrientedImageryViewInteractionState.DisplayImage) ||
                 (key == OrientedImageryToolbarCategory.MarkersCategoryName && IsAddingMarkers) ||
                 (key == OrientedImageryToolbarCategory.MoreCategoryName && ViewModel.IsSequentialNavigationEnabled);
-#if ANDROID || (__IOS__ && !MACCATALYST)
+#if ANDROID || __IOS__
             if (key == OrientedImageryToolbarCategory.OverlaysCategoryName)
                 active = ViewModel.ShowSelectedFootprint || ViewModel.ShowUnselectedFootprints || ViewModel.ShowCameraLocations;
 #endif
@@ -302,7 +302,7 @@ public partial class OrientedImageryView
                     path.Stroke = path.Fill = active ? Colors.White : accent;
                 if (icon is Label moreIcon)
                     moreIcon.TextColor = active ? Colors.White : accent;
-#if __IOS__ && !MACCATALYST
+#if __IOS__
                 label.TextColor = active ? Colors.White : IosAccent;
                 if (!active)
                     pill.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
@@ -314,7 +314,7 @@ public partial class OrientedImageryView
                 SemanticProperties.SetHint(button, Text(IsAddingMarkers ? "On" : "Off"));
             else if (navigation)
                 SemanticProperties.SetHint(button, Text(ViewModel.IsSequentialNavigationEnabled ? "On" : "Off"));
-#if ANDROID || (__IOS__ && !MACCATALYST)
+#if ANDROID || __IOS__
             else if (key == OrientedImageryToolbarCategory.OverlaysCategoryName)
                 SemanticProperties.SetHint(button, Text(active ? "On" : "Off"));
 #endif
@@ -372,7 +372,7 @@ public partial class OrientedImageryView
     private void ShowToolbarCategory(OrientedImageryToolbarCategory category, View anchor, string title)
     {
         DismissPanel(preservePresentation: true);
-#if ANDROID || (__IOS__ && !MACCATALYST)
+#if ANDROID || __IOS__
         title = category.Name switch
         {
             OrientedImageryToolbarCategory.ModeCategoryName => Text("ModeSelection"),
@@ -399,7 +399,7 @@ public partial class OrientedImageryView
         switch (item)
         {
             case ImageSearchModeVM mode:
-#if ANDROID || (__IOS__ && !MACCATALYST)
+#if ANDROID || __IOS__
                 AddMobileModeButtons(content, mode, Enabled);
 #else
                 foreach (var state in mode.ImageSearchModes)
