@@ -1302,4 +1302,16 @@ navigation</value>
   <data name="OrientedImageryViewNextLabel" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>Start of image sequence reached</value>
+    <comment>Screen-reader announcement after confirming there is no previous image in the sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>End of image sequence reached</value>
+    <comment>Screen-reader announcement after confirming there is no next image in the sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>Start and end of image sequence reached</value>
+    <comment>Screen-reader announcement when the current image has neither a previous nor a next image in its sequence.</comment>
+  </data>
 </root>
