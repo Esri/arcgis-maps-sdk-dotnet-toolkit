@@ -177,8 +177,7 @@ internal sealed partial class OrientedImageryControlsViewHandler : ViewHandler<O
 
     private void SizeCaption(TextBlock caption)
     {
-        // Prefer compact, two-line captions without fixing their height or limiting text scaling.
-        caption.MaxWidth = 68 * _uiSettings.TextScaleFactor;
+        // Reserve two lines while allowing localized line breaks and text scaling to determine the size.
         caption.MinHeight = 32 * _uiSettings.TextScaleFactor;
     }
 

@@ -148,7 +148,7 @@ public partial class OrientedImageryView
     private View CreateToolbarCategory(OrientedImageryToolbarCategory category)
     {
 #if WINDOWS
-        var group = new ToolbarWrapLayout();
+        var group = new HorizontalStackLayout();
         if (category != ViewModel.ToolbarCategories.FirstOrDefault() && category.ToolbarItems.FirstOrDefault() is not ToolbarDividerVM)
         {
             var divider = new BoxView { WidthRequest = 1, HeightRequest = 72, Margin = new Thickness(8, 6) };
@@ -175,10 +175,7 @@ public partial class OrientedImageryView
             _toolbarUpdates.Add(() => view.IsVisible = IsToolbarItemVisible(item));
         }
         _toolbarUpdates.Add(() =>
-        {
-            group.MaximumWidthRequest = Width > 16 ? Width - 16 : double.PositiveInfinity;
-            group.IsVisible = category.ToolbarItems.Any(item => item is not ToolbarDividerVM && IsToolbarItemVisible(item));
-        });
+            group.IsVisible = category.ToolbarItems.Any(item => item is not ToolbarDividerVM && IsToolbarItemVisible(item)));
         return group;
 #else
         var key = category.Name;
@@ -442,7 +439,7 @@ public partial class OrientedImageryView
                 _panelCleanup.Add(() => picker.PropertyChanged -= changed);
                 break;
             case ClearMarkersVM:
-                AddActionRow(content, new MenuAction(Text("ClearMarkers"), () => ViewModel.ClearMarkersCommand.Execute(null),
+                AddActionRow(content, new MenuAction(Text("ClearMarkersLabel"), () => ViewModel.ClearMarkersCommand.Execute(null),
                     Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Icon: () => GlyphIcon(ToolkitIcons.Trash)));
                 break;
             case SequentialNavigationVM:

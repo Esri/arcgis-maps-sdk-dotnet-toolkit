@@ -113,20 +113,24 @@ public partial class OrientedImageryView
             parent.Children.Add(view);
         }
 
-#if WINDOWS
-        Add("PART_CustomToolbar", new ToolbarWrapLayout { Margin = 8, CenterRows = true }, root);
-#else
         var custom = new ToolbarRowLayout();
         var toolbarScroll = new ScrollView
         {
             Orientation = ScrollOrientation.Horizontal, Content = custom,
-            Margin = new Thickness(8, 0), HorizontalScrollBarVisibility = ScrollBarVisibility.Default,
+#if WINDOWS
+            Margin = 8,
+#else
+            Margin = new Thickness(8, 0),
+#endif
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Default,
             AutomationId = "OrientedImageryToolbarScroll",
         };
+#if WINDOWS
+        toolbarScroll.SetBinding(IsVisibleProperty, static (Layout layout) => layout.IsVisible, source: custom);
+#endif
         toolbarScroll.SizeChanged += (_, _) => custom.MinimumWidthRequest = Math.Max(0, toolbarScroll.Width);
         scope.RegisterName("PART_CustomToolbar", custom);
         Add("PART_ToolbarScroll", toolbarScroll, root);
-#endif
 
         var image = new Grid
         {
@@ -1292,7 +1296,7 @@ public partial class OrientedImageryView
 #if __IOS__ && !MACCATALYST
         title.FontSize = 17;
         row.MinimumHeightRequest = 52;
-        if (action.Title == Text("ClearMarkers"))
+        if (action.Title == Text("ClearMarkersLabel"))
         {
             title.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#FF3B30"), Color.FromArgb("#FF453A"));
             if (icon is Image { Source: FontImageSource clearIcon })

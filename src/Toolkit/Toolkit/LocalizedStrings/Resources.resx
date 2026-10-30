@@ -1185,15 +1185,10 @@ markers</value>
 images</value>
     <comment>Same as OrientedImageryViewImageSearchModeFind, but with manual line breaks for formatting.</comment>
   </data>
-  <data name="OrientedImageryViewImageSearchModeFindToolbarLabel" xml:space="preserve">
-    <value>Find
-images</value>
-    <comment>Two-line MAUI Windows toolbar caption for Find images mode. Preserve a suitable line break between the action and its object.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSearchModeDisplayToolbarLabel" xml:space="preserve">
-    <value>Display
-image</value>
-    <comment>Two-line MAUI Windows toolbar caption for Display image mode. Preserve a suitable line break between the action and its object.</comment>
+  <data name="OrientedImageryViewAutoUpdateToolbarLabel" xml:space="preserve">
+    <value>Automatically
+update footprint</value>
+    <comment>Two-line MAUI Windows toolbar caption. Preserve a suitable line break between Automatically and update footprint.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
     <value>Display image</value>
