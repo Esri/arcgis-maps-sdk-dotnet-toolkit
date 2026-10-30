@@ -1,4 +1,4 @@
-#if __IOS__ && !MACCATALYST
+#if __IOS__
 using Foundation;
 using Microsoft.Maui.Handlers;
 using ObjCRuntime;
