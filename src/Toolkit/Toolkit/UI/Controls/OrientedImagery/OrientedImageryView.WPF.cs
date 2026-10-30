@@ -1,6 +1,7 @@
 #if WPF
 
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+using System.Windows.Automation.Peers;
 using System.Windows.Threading;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -8,10 +9,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = ImageViewportName, Type = typeof(OrientedImageViewport))]
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
 [TemplatePart(Name = PaginatorName, Type = typeof(Paginator))]
+[TemplatePart(Name = ErrorMessagePresenterName, Type = typeof(TextBlock))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
     private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
+
+    /// <inheritdoc/>
+    protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewAutomationPeer(this);
 
     private void FocusCloseDetailsButton()
     {
@@ -26,6 +31,15 @@ public partial class OrientedImageryView : Control
                 button.Focus();
             }
         }));
+    }
+
+    private sealed class OrientedImageryViewAutomationPeer : FrameworkElementAutomationPeer
+    {
+        public OrientedImageryViewAutomationPeer(OrientedImageryView owner) : base(owner)
+        {
+        }
+
+        protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("OrientedImageryViewAutomationTypeName")!;
     }
 }
 
