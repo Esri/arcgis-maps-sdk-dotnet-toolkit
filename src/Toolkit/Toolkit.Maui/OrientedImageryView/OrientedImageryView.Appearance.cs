@@ -825,13 +825,6 @@ public partial class OrientedImageryView
         ? next ? "ShowNextImageInSequence" : "ShowPreviousImageInSequence"
         : next ? "ShowNextImage" : "ShowPreviousImage";
 
-    internal bool HasImageOverlayArrow(bool next) =>
-#if WINDOWS
-        (next ? _nextButton : _previousButton) is { IsVisible: true };
-#else
-        (next ? _imageNextButton : _imagePreviousButton) is { IsVisible: true };
-#endif
-
     private void SetImagePageButtonState(Button? button, bool next, bool enabled, bool visible)
     {
         if (button == null) return;

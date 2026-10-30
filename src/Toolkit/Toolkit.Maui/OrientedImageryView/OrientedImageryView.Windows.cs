@@ -70,6 +70,8 @@ public partial class OrientedImageryView
 
     private void ReleaseDesktopTemplate()
     {
+        foreach (var arrow in new[] { _previousButton, _nextButton })
+            if (arrow != null) arrow.HandlerChanged -= DesktopArrowHandlerChanged;
         if (_desktopPagination != null) _desktopPagination.Owner = null;
         _desktopPagination = null;
         _desktopRoot = null;
@@ -80,7 +82,19 @@ public partial class OrientedImageryView
         _desktopPagination = GetTemplateChild("PART_DesktopNavigation") as OrientedImageryControlsView;
         _desktopRoot = ControlTemplate == DefaultControlTemplate ?
             (GetTemplateChild("PART_ToolbarScroll") as ScrollView)?.Parent as Grid : null;
+        foreach (var arrow in new[] { _previousButton, _nextButton })
+        {
+            if (arrow == null) continue;
+            arrow.HandlerChanged += DesktopArrowHandlerChanged;
+            DesktopArrowHandlerChanged(arrow, EventArgs.Empty);
+        }
         UpdateDesktopColors();
+    }
+
+    private void DesktopArrowHandlerChanged(object? sender, EventArgs e)
+    {
+        if (sender is Microsoft.Maui.Controls.Button { Handler.PlatformView: NativeButton button })
+            button.IsTabStop = _desktopPagination == null;
     }
 
     partial void RefreshDesktopPresentation()
