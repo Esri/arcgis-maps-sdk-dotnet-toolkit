@@ -98,7 +98,7 @@ public partial class OrientedImageryView
         _popupViewer.IsVisible = true;
         if (_infoSheet != null) return;
         DismissPanel();
-        var heading = new Label { Text = Text("ImageDetails") };
+        var heading = PanelHeading(Text("ImageDetails"));
         _infoSheetContent = CreateMobileSheetContent(heading, _popupViewer, () => DismissAndroidPopup(), null, out _, "OrientedImageryInfoSheet");
         AddLogicalChild(_infoSheetContent);
         var nativeContent = _infoSheetContent.ToPlatform(context);

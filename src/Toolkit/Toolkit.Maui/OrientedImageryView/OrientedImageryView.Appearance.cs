@@ -223,6 +223,17 @@ public partial class OrientedImageryView
         return scroll;
     }
 
+    private static Label PanelHeading(string title)
+    {
+        var heading = new Label
+        {
+            Text = title, FontSize = 16, FontAttributes = FontAttributes.Bold,
+            Margin = new Thickness(0, 0, 0, 4), LineBreakMode = LineBreakMode.WordWrap,
+        };
+        heading.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
+        return heading;
+    }
+
     private static void AddPopupPresentation(Grid image, INameScope scope)
     {
         var open = ToolButton("OpenSelectedImagePopup", ToolkitIcons.MoreInformation, "OrientedImageryPopupOpen");
@@ -266,9 +277,16 @@ public partial class OrientedImageryView
         var surface = new Grid
         {
             ColumnSpacing = 0,
+            RowSpacing = 0,
             ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
+            RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) },
         };
         surface.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
+        var heading = PanelHeading(Text("ImageDetails"));
+        heading.Margin = new Thickness(16, 4, 8, 4);
+        heading.VerticalOptions = LayoutOptions.Center;
+        SemanticProperties.SetHeadingLevel(heading, SemanticHeadingLevel.Level1);
+        surface.Add(heading);
         var close = ToolButton("CloseSelectedImagePopup", "\uEB49", "OrientedImageryPopupClose");
         close.Text = null;
         close.WidthRequest = 44;
@@ -298,7 +316,8 @@ public partial class OrientedImageryView
             Margin = new Thickness(16, 0, 8, 8),
         };
         scope.RegisterName("PART_Popup", popup);
-        surface.Add(popup);
+        surface.Add(popup, 0, 1);
+        Grid.SetColumnSpan(popup, 2);
         var border = new Border { Content = surface, StrokeThickness = 1 };
         border.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#DDDDDD"), Color.FromArgb("#444444"));
         host.Add(border, 1);
@@ -1329,18 +1348,10 @@ public partial class OrientedImageryView
     private static VerticalStackLayout PanelContent(string title)
     {
         var content = new VerticalStackLayout { Spacing = 0, Padding = 8 };
-        var heading = new Label
-        {
-            Text = title, FontSize = 16, FontAttributes = FontAttributes.Bold,
-            Margin = new Thickness(0, 0, 0, 4),
-        };
+        content.Add(PanelHeading(title));
 #if __IOS__ && !MACCATALYST
-        heading.FontSize = 15;
-        heading.VerticalTextAlignment = TextAlignment.Center;
         content.Spacing = 8;
 #endif
-        heading.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-        content.Add(heading);
         return content;
     }
 
