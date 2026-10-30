@@ -104,6 +104,7 @@ public partial class OrientedImageryView
         if (oldValue != null)
         {
             oldValue.PropertyChanged -= ViewModel_PropertyChanged;
+            oldValue.SequenceBoundaryReached -= ViewModel_SequenceBoundaryReached;
 
             if (GeoView?.GraphicsOverlays != null)
                 GeoView.GraphicsOverlays.Remove(oldValue.MarkersOverlay);
@@ -116,6 +117,7 @@ public partial class OrientedImageryView
         }
 
         newValue.PropertyChanged += ViewModel_PropertyChanged;
+        newValue.SequenceBoundaryReached += ViewModel_SequenceBoundaryReached;
 
         if (GeoView != null)
         {
@@ -170,6 +172,28 @@ public partial class OrientedImageryView
                 FocusCloseDetailsButton();
                 break;
 #endif
+        }
+    }
+
+    private void ViewModel_SequenceBoundaryReached(object? sender, SequenceBoundaryReachedArgs e)
+    {
+        if (!ReferenceEquals(sender, ViewModel) || !IsLoaded || !IsVisible || ErrorMessage != null)
+            return;
+
+        string? resourceKey = (e.HasReachedStart, e.HasReachedEnd) switch
+        {
+            (true, true) => "OrientedImageryViewSequenceStartAndEndReached",
+            (true, false) => "OrientedImageryViewSequenceStartReached",
+            (false, true) => "OrientedImageryViewSequenceEndReached",
+            _ => null,
+        };
+
+        if (resourceKey != null && Properties.Resources.GetString(resourceKey) is string announcement)
+        {
+            ScreenReaderHelpers.RaiseNotificationAnnouncement(
+                this,
+                announcement,
+                "OrientedImageryViewSequenceBoundary");
         }
     }
 #endregion ViewModel

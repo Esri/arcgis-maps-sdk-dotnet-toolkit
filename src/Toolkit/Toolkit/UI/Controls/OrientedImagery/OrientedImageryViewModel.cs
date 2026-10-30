@@ -178,6 +178,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private MapPoint? _searchPoint;
 
     /// <summary>
+    /// Raised when the start and/or end of a sequence has been reached when in sequential navigation mode.
+    /// </summary>
+    internal event EventHandler<SequenceBoundaryReachedArgs>? SequenceBoundaryReached;
+
+    /// <summary>
     /// Gets or sets the currently selected oriented image.
     /// </summary>
     public OrientedImage? SelectedImage
@@ -436,6 +441,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             }
             cancellation.Dispose();
         }
+
+        // Unavailable directions are only confirmed boundaries after both current requests finish.
+        if (navigationVersion == _sequentialNavigationVersion && IsSequentialNavigationEnabled &&
+            SequentialNavigationError == null && (!_hasPreviousImage || !_hasNextImage))
+            SequenceBoundaryReached?.Invoke(this, new SequenceBoundaryReachedArgs(!_hasPreviousImage, !_hasNextImage));
     }
 
     private async Task PrefetchAdjacentImageAsync(OrientedImageryLayer layer, OrientedImage image, SequenceStep step, int navigationVersion, CancellationToken cancellationToken)
@@ -1004,6 +1014,22 @@ public enum OrientedImageryViewInteractionState
 
     /// <summary>Taps on both the GeoView and viewport will add reference markers.</summary>
     AddMarkers
+}
+
+/// <summary>
+/// Args passed by <see cref="OrientedImageryViewModel.SequenceBoundaryReached"/>.
+/// </summary>
+internal readonly struct SequenceBoundaryReachedArgs(bool hasReachedStart, bool hasReachedEnd)
+{
+    /// <summary>
+    /// Whether or not the start of the sequence has been reached.
+    /// </summary>
+    public readonly bool HasReachedStart = hasReachedStart;
+
+    /// <summary>
+    /// Whether or not the end of the sequence has been reached.
+    /// </summary>
+    public readonly bool HasReachedEnd = hasReachedEnd;
 }
 
 #endif
