@@ -1172,7 +1172,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <toolkitPrimitives:AccessibleTextBlock x:Name="PART_ErrorMessagePresenter"
+                                <toolkitPrimitives:AccessibleTextBlock x:Name="PART_MainErrorMessagePresenter"
                                            Style="{StaticResource OrientedImageryMessageTextStyle}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"

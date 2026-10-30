@@ -20,7 +20,7 @@ public partial class OrientedImageryView
     private const string ImageViewportName = "PART_ImageViewport";
     private const string ToolbarContainerName = "PART_ToolbarContainer";
     private const string PaginatorName = "PART_Paginator";
-    private const string ErrorMessagePresenterName = "PART_ErrorMessagePresenter";
+    private const string MainErrorMessagePresenterName = "PART_MainErrorMessagePresenter";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
@@ -65,7 +65,7 @@ public partial class OrientedImageryView
         _viewport = GetTemplateChild(ImageViewportName) as OrientedImageViewport;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
         _paginator = GetTemplateChild(PaginatorName) as Paginator;
-        _errorMessagePresenter = GetTemplateChild(ErrorMessagePresenterName) as TextBlock;
+        _mainErrorMessagePresenter = GetTemplateChild(MainErrorMessagePresenterName) as TextBlock;
 
         if (_viewport != null)
             WireViewport(_viewport);
@@ -522,10 +522,11 @@ public partial class OrientedImageryView
     private string? _lastImageErrorAnnouncement;
     private bool _lastLoadingState = false;
     private bool _imageChangedSincePreviousLoadAnnouncement = true;
-    private TextBlock? _errorMessagePresenter;
+    private TextBlock? _mainErrorMessagePresenter;
 
     /// <summary>
-    /// The message shown when the <see cref="OrientedImageryView"/> is in an invalid state.
+    /// The message shown when the <see cref="OrientedImageryView"/> is in a state that prevents all use of the control.
+    /// This property does not cover image load errors or user prompts when no image is selected.
     /// </summary>
     public string? ErrorMessage
     {
@@ -568,7 +569,7 @@ public partial class OrientedImageryView
         if (ErrorMessage == null || ErrorMessage == lastMessage)
             return false;
 
-        ScreenReaderHelpers.RaiseLiveRegionChanged(_errorMessagePresenter);
+        ScreenReaderHelpers.RaiseLiveRegionChanged(_mainErrorMessagePresenter);
         return true;
     }
 
