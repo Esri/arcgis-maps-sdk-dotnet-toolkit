@@ -2,10 +2,13 @@
 using System.Globalization;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Automation.Peers;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using AutomationProperties = Microsoft.UI.Xaml.Automation.AutomationProperties;
 using CornerRadius = Microsoft.UI.Xaml.CornerRadius;
+using IValueProvider = Microsoft.UI.Xaml.Automation.Provider.IValueProvider;
 using NativeButton = Microsoft.UI.Xaml.Controls.Button;
 using NativeGrid = Microsoft.UI.Xaml.Controls.Grid;
 using NativeThickness = Microsoft.UI.Xaml.Thickness;
@@ -21,7 +24,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
     private PaginationState? _paginationState;
 
     private readonly record struct PaginationState(bool Sequential, int Selected, int Start, int Count, int Total,
-        bool Previous, bool Next, bool Searching, bool PreviousTabStop, bool NextTabStop);
+        bool Previous, bool Next, bool Searching);
 
     private void RefreshPagination(OrientedImageryView owner)
     {
@@ -32,63 +35,76 @@ internal sealed partial class OrientedImageryControlsViewHandler
         double width = VirtualView.Width > 0 ? VirtualView.Width : owner.Width;
         var (start, count) = OrientedImageryPagination.GetRange(model.Images.Count, selected, Math.Max(35, width - 66), 35);
         var state = new PaginationState(model.IsSequentialNavigationEnabled, selected, start, count, model.Images.Count,
-            model.SelectPreviousImageCommand.CanExecute(null), model.SelectNextImageCommand.CanExecute(null), owner.DesktopIsSearching,
-            !owner.HasImageOverlayArrow(false), !owner.HasImageOverlayArrow(true));
+            model.SelectPreviousImageCommand.CanExecute(null), model.SelectNextImageCommand.CanExecute(null), owner.DesktopIsSearching);
         if (_paginationState == state && _model == model) return;
-        // Keep keyboard focus on the same action or image when the page range changes.
-        var focused = PlatformView.XamlRoot == null ? null :
-            FocusManager.GetFocusedElement(PlatformView.XamlRoot) as NativeButton;
-        bool restoreFocus = focused != null &&
-            PlatformView.Children.OfType<PaginationRow>().Any(panel => panel.Children.Contains(focused));
-        string? focusedId = restoreFocus ? AutomationProperties.GetAutomationId(focused!) : null;
-        var focusState = restoreFocus ? focused!.FocusState : FocusState.Unfocused;
-        PaginationRow row;
-        if (_model == model && _paginationState is { } previous &&
-            previous.Sequential == state.Sequential && (state.Sequential || previous.Count == state.Count) &&
-            PlatformView.Children.FirstOrDefault() is PaginationRow existingRow)
-        {
-            row = existingRow;
-        }
-        else
+        var host = PlatformView.Children.FirstOrDefault() as PaginationHost;
+        var focused = _model != model || host == null || PlatformView.XamlRoot == null ? null :
+            FocusManager.GetFocusedElement(PlatformView.XamlRoot) as Control;
+        bool restoreFocus = focused != null && host != null &&
+            (focused == host || host.Content is PaginationRow focusedRow && focusedRow.Children.Contains(focused));
+        var focusState = focused?.FocusState ?? FocusState.Keyboard;
+        bool reuseRow = _model == model && _paginationState is { } previous &&
+            previous.Sequential == state.Sequential && (state.Sequential || previous.Count == state.Count);
+        if (_model != model || host == null)
         {
             Clear();
             _model = model;
-            row = CreatePaginationRow(owner, state);
-            PlatformView.Children.Add(row);
+            host = new PaginationHost();
+            Describe(host, "ImageNavigation", "OrientedImageryPagination");
+            AutomationProperties.SetHelpText(host, Text("ImageNavigationHint"));
+            host.PreviewKeyDown += (_, e) =>
+            {
+                if (e.Key is not (Windows.System.VirtualKey.Left or Windows.System.VirtualKey.Right))
+                    return;
+                if (CanUsePagination(owner, model) && PlatformView.Children.Contains(host))
+                {
+                    host.Focus(FocusState.Keyboard);
+                    var command = e.Key == Windows.System.VirtualKey.Right
+                        ? model.SelectNextImageCommand : model.SelectPreviousImageCommand;
+                    if (command.CanExecute(null)) command.Execute(null);
+                }
+                e.Handled = true;
+            };
+            PlatformView.Children.Add(host);
         }
+        if (!reuseRow || host.Content is not PaginationRow)
+            host.Content = CreatePaginationRow(owner, state);
+        var row = (PaginationRow)host.Content;
         _paginationState = state;
         UpdatePaginationRow(row, state);
+        host.UpdateValue(state.Sequential ? Text("SequenceNavigation") :
+            state.Selected >= 0 ? string.Format(CultureInfo.CurrentCulture, Text("Page"), state.Selected + 1, state.Total) :
+            Text("ImageNavigation"));
         ((IView)VirtualView).InvalidateMeasure();
-        if (restoreFocus)
-            RestorePaginationFocus(row, focusedId, selected, focusState);
+        if (restoreFocus && focused != host)
+            host.Focus(focusState);
     }
+
+    private bool CanUsePagination(OrientedImageryView owner, OrientedImageryViewModel model) =>
+        ((IElementHandler)this).VirtualView is OrientedImageryControlsView view && view.Handler == this &&
+        view.Owner == owner && owner.ViewModel == model && !owner.DesktopIsSearching && model.SelectedImage != null;
 
     private PaginationRow CreatePaginationRow(OrientedImageryView owner, PaginationState state)
     {
         var model = owner.ViewModel;
         var row = new PaginationRow();
+        bool CanInteract() => CanUsePagination(owner, model) &&
+            PlatformView.Children.FirstOrDefault() is PaginationHost { Content: var content } && ReferenceEquals(content, row);
         NativeButton PageButton(bool next, bool label)
         {
-            var button = new NativeButton
+            var button = PaginationButton(label ? Text(next ? "NextLabel" : "PreviousLabel") : new FontIcon
             {
-                Content = label ? Text(next ? "NextLabel" : "PreviousLabel") : new FontIcon
-                {
-                    Glyph = next ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronLeft,
-                    FontFamily = IconFont, FontSize = 16,
-                },
-                MinHeight = 32, MinWidth = 0, Padding = new NativeThickness(label ? 4 : 0),
-                BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
-                Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-                AllowFocusWhenDisabled = true,
-                IsTabStop = false,
-            };
-            if (!label) button.Width = 33;
+                Glyph = next ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronLeft,
+                FontFamily = IconFont, FontSize = 16,
+            });
+            if (label) button.Padding = new NativeThickness(4);
+            else button.Width = 33;
             string id = next ? "OrientedImageryPaginatorNext" : "OrientedImageryPaginatorPrevious";
             Describe(button, owner.ImagePageActionKey(next), label ? id + "Label" : id);
             button.Click += (_, _) =>
             {
                 var command = next ? model.SelectNextImageCommand : model.SelectPreviousImageCommand;
-                if (!owner.DesktopIsSearching && command.CanExecute(null)) command.Execute(null);
+                if (CanInteract() && command.CanExecute(null)) command.Execute(null);
             };
             return button;
         }
@@ -103,31 +119,12 @@ internal sealed partial class OrientedImageryControlsViewHandler
             for (int slot = 0; slot < state.Count; slot++)
             {
                 int pageSlot = slot;
-                var button = new NativeButton
-                {
-                    Content = PageIndicator("", false),
-                    MinWidth = 35, MinHeight = 32, Padding = new NativeThickness(0),
-                    BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
-                    Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-                };
+                var button = PaginationButton(PageIndicator("", false));
                 button.Click += (_, _) =>
                 {
                     int index = (_paginationState?.Start ?? 0) + pageSlot;
-                    if (VirtualView.Owner?.ViewModel == model && !model.IsSequentialNavigationEnabled && index < model.Images.Count)
+                    if (CanInteract() && !model.IsSequentialNavigationEnabled && index >= 0 && index < model.Images.Count)
                         model.SelectedImage = model.Images[index];
-                };
-                button.PreviewKeyDown += (_, e) =>
-                {
-                    if (e.Key is not (Windows.System.VirtualKey.Left or Windows.System.VirtualKey.Right))
-                        return;
-                    if (VirtualView.Owner == owner && owner.ViewModel == model &&
-                        !owner.DesktopIsSearching && !model.IsSequentialNavigationEnabled)
-                    {
-                        var command = e.Key == Windows.System.VirtualKey.Right
-                            ? model.SelectNextImageCommand : model.SelectPreviousImageCommand;
-                        if (command.CanExecute(null)) command.Execute(null);
-                    }
-                    e.Handled = true;
                 };
                 row.Children.Add(button);
             }
@@ -137,24 +134,20 @@ internal sealed partial class OrientedImageryControlsViewHandler
         return row;
     }
 
-    private static void RestorePaginationFocus(PaginationRow row, string? focusedId, int selected, FocusState focusState)
+    private static NativeButton PaginationButton(object content) => new()
     {
-        // Numbered pagination follows selection, including when the visible range shifts.
-        if (focusedId?.StartsWith("OrientedImageryPage", StringComparison.Ordinal) == true)
-            focusedId = "OrientedImageryPage" + selected.ToString(CultureInfo.InvariantCulture);
-        var target = row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == focusedId);
-        target ??= row.Children.OfType<NativeButton>().FirstOrDefault(button => AutomationProperties.GetAutomationId(button) == "OrientedImageryPage" + selected.ToString(CultureInfo.InvariantCulture));
-        target?.Focus(focusState);
-    }
+        Content = content, MinWidth = 0, MinHeight = 32, Padding = new NativeThickness(0),
+        BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
+        Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+        IsTabStop = false,
+    };
 
     private static void UpdatePaginationRow(PaginationRow row, PaginationState state)
     {
         var previous = (NativeButton)row.Children[0];
         previous.IsEnabled = !state.Searching && state.Previous;
-        previous.IsTabStop = state.PreviousTabStop;
         var next = (NativeButton)row.Children[row.Children.Count - 1];
         next.IsEnabled = !state.Searching && state.Next;
-        next.IsTabStop = state.NextTabStop;
         if (state.Sequential)
         {
             ((NativeButton)row.Children[1]).IsEnabled = previous.IsEnabled;
@@ -170,7 +163,6 @@ internal sealed partial class OrientedImageryControlsViewHandler
             ((Microsoft.UI.Xaml.Controls.Border)indicator.Children[1]).Visibility =
                 index == state.Selected ? NativeVisibility.Visible : NativeVisibility.Collapsed;
             button.IsEnabled = !state.Searching;
-            button.IsTabStop = slot == Math.Clamp(state.Selected - state.Start, 0, state.Count - 1);
             AutomationProperties.SetName(button, string.Format(CultureInfo.CurrentCulture,
                 Text(index == state.Selected ? "SelectedPageFormat" : "GoToPageFormat"), index + 1, state.Total));
             AutomationProperties.SetAutomationId(button, "OrientedImageryPage" + index.ToString(CultureInfo.InvariantCulture));
@@ -193,6 +185,48 @@ internal sealed partial class OrientedImageryControlsViewHandler
         underline.Visibility = selected ? NativeVisibility.Visible : NativeVisibility.Collapsed;
         grid.Children.Add(underline);
         return grid;
+    }
+
+    #endregion
+
+    #region Pagination focus and accessibility
+
+    private sealed class PaginationHost : UserControl
+    {
+        public PaginationHost()
+        {
+            IsTabStop = true;
+            UseSystemFocusVisuals = true;
+        }
+
+        public string Value { get; private set; } = string.Empty;
+
+        public void UpdateValue(string value)
+        {
+            if (Value == value) return;
+            string previous = Value;
+            Value = value;
+            if (FrameworkElementAutomationPeer.FromElement(this) is PaginationAutomationPeer peer)
+                peer.RaisePropertyChangedEvent(ValuePatternIdentifiers.ValueProperty, previous, value);
+        }
+
+        protected override AutomationPeer OnCreateAutomationPeer() => new PaginationAutomationPeer(this);
+    }
+
+    private sealed class PaginationAutomationPeer(PaginationHost owner) : FrameworkElementAutomationPeer(owner), IValueProvider
+    {
+        protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Group;
+
+        protected override string GetClassNameCore() => nameof(PaginationHost);
+
+        protected override object GetPatternCore(PatternInterface patternInterface) =>
+            patternInterface == PatternInterface.Value ? this : base.GetPatternCore(patternInterface);
+
+        public bool IsReadOnly => true;
+
+        public string Value => owner.Value;
+
+        public void SetValue(string value) => throw new NotSupportedException("Image navigation value is read-only.");
     }
 
     #endregion
