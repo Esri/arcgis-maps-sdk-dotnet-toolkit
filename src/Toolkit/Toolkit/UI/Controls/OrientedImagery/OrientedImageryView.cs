@@ -8,6 +8,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows.Automation;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -19,6 +20,7 @@ public partial class OrientedImageryView
     private const string ImageViewportName = "PART_ImageViewport";
     private const string ToolbarContainerName = "PART_ToolbarContainer";
     private const string PaginatorName = "PART_Paginator";
+    private const string ErrorMessagePresenterName = "PART_ErrorMessagePresenter";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
@@ -29,7 +31,12 @@ public partial class OrientedImageryView
         _onImageTapped = OnImageTapped_Default;
         _onGeoViewTapped = GeoViewTapped_Default;
 
-        UpdateErrorMessage();
+        UpdateErrorMessages();
+
+#if WPF
+        Loaded += (_, _) => UpdateErrorMessages();
+        IsVisibleChanged += (_, _) => UpdateErrorMessages();
+#endif
 
 #if MAUI
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
@@ -58,6 +65,7 @@ public partial class OrientedImageryView
         _viewport = GetTemplateChild(ImageViewportName) as OrientedImageViewport;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
         _paginator = GetTemplateChild(PaginatorName) as Paginator;
+        _errorMessagePresenter = GetTemplateChild(ErrorMessagePresenterName) as TextBlock;
 
         if (_viewport != null)
             WireViewport(_viewport);
@@ -68,6 +76,7 @@ public partial class OrientedImageryView
 
         RewireViewModel();
         UpdatePaginatorSelection();
+        UpdateErrorMessages();
 #if WPF
         FocusCloseDetailsButton();
 #endif
@@ -116,8 +125,8 @@ public partial class OrientedImageryView
         }
 
         RewireViewModel();
-        UpdateErrorMessage();
         UpdatePaginatorSelection();
+        UpdateErrorMessages();
     }
 
     private void RewireViewModel()
@@ -143,6 +152,10 @@ public partial class OrientedImageryView
                 goto case nameof(OrientedImageryViewModel.Images);
             case nameof(OrientedImageryViewModel.Images):
                 UpdatePaginatorSelection();
+                UpdateImageStateMessages();
+                break;
+            case nameof(OrientedImageryViewModel.InteractionState):
+                UpdateImageStateMessages();
                 break;
             case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
                 if (_viewport != null)
@@ -150,7 +163,7 @@ public partial class OrientedImageryView
                 break;
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
                 HasSearchedForImages = false;
-                UpdateErrorMessage();
+                UpdateErrorMessages();
                 break;
 #if WPF
             case nameof(OrientedImageryViewModel.SelectedImagePopup):
@@ -220,11 +233,13 @@ public partial class OrientedImageryView
     private void WireViewport(OrientedImageViewport viewport)
     {
         viewport.ImageTapped += Viewport_ImageTapped;
+        viewport.StateChanged += Viewport_StateChanged;
     }
 
     private void UnwireViewport(OrientedImageViewport viewport)
     {
         viewport.ImageTapped -= Viewport_ImageTapped;
+        viewport.StateChanged -= Viewport_StateChanged;
         viewport.ClearValue(OrientedImageViewport.AutoUpdateFootprintProperty);
         viewport.ClearValue(OrientedImageViewport.MarkersProperty);
         viewport.ClearValue(OrientedImageViewport.FootprintProperty);
@@ -238,6 +253,8 @@ public partial class OrientedImageryView
     }
 
     private void Viewport_ImageTapped(object? sender, OrientedImageTappedEventArgs e) => _onImageTapped(this, ViewModel.GetPublicImageTappedEventArgs(e));
+
+    private void Viewport_StateChanged(object? sender, EventArgs e) => UpdateErrorMessages();
 
     private async void OnImageTapped_Default(object? _, OrientedImageTappedEventArgs e)
     {
@@ -261,6 +278,8 @@ public partial class OrientedImageryView
         if (_viewport == null || ViewModel == null)
             return;
 
+        _imageChangedSincePreviousLoadAnnouncement = true;
+
         _viewport.Footprint = ViewModel.SelectedImageFootprint;
         if (_viewport.Footprint != null)
         {
@@ -272,23 +291,26 @@ public partial class OrientedImageryView
                 _viewport.LookAtAsync(searchPoint);
 
             ViewModel.AreFootprintsEnabled = false;
-            _viewport.StateChanged += Viewport_StateChanged;
+            _viewport.StateChanged += Viewport_StateChanged_UpdateFootprint;
         }
+
+        if (ViewModel.SelectedImage == null)
+            UpdateNoImagesErrorMessage();
     }
 
-    private void Viewport_StateChanged(object? sender, EventArgs e)
+    private void Viewport_StateChanged_UpdateFootprint(object? sender, EventArgs e)
     {
         if (sender is not OrientedImageViewport viewport)
             return;
 
         if (viewport != _viewport)
         {
-            viewport.StateChanged -= Viewport_StateChanged;
+            viewport.StateChanged -= Viewport_StateChanged_UpdateFootprint;
         }
         else if (viewport.IsInteractive == true)
         {
             ViewModel.AreFootprintsEnabled = true;
-            _viewport.StateChanged -= Viewport_StateChanged;
+            _viewport.StateChanged -= Viewport_StateChanged_UpdateFootprint;
         }
     }
 #endregion Display
@@ -334,7 +356,7 @@ public partial class OrientedImageryView
             newGeoView.GeoViewTapped += GeoView_GeoViewTapped;
         }
 
-        UpdateErrorMessage();
+        UpdateErrorMessages();
     }
 
     /// <summary>
@@ -371,14 +393,21 @@ public partial class OrientedImageryView
             case OrientedImageryViewInteractionState.FindImages:
                 var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
                 var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
+
+                _noImagesAnnouncementCanRepeat = true;
+                HasSearchedForImages = true;
+
                 ViewModel.SetImages(images.ToList(), e.Location);
                 ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
                 ViewModel.IsSequentialNavigationEnabled = false;
-                HasSearchedForImages = true;
                 break;
 
             case OrientedImageryViewInteractionState.DisplayImage:
                 var identifyResult = await GeoView.IdentifyLayerAsync(ViewModel.OrientedImageryLayer, e.Position, 0, false);
+
+                _noImagesAnnouncementCanRepeat = true;
+                HasSearchedForImages = true;
+
                 if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
                 {
                     var image = await ViewModel.OrientedImageryLayer.FetchImageForFeatureAsync(feature);
@@ -390,7 +419,7 @@ public partial class OrientedImageryView
                     ViewModel.SetImages([], e.Location);
                     ViewModel.SelectedImage = null;
                 }
-                HasSearchedForImages = true;
+                _noImagesAnnouncementCanRepeat = true;
                 break;
 
             default:
@@ -478,9 +507,22 @@ public partial class OrientedImageryView
     }
 #endregion Pagination
 
-#region Error
+#region Errors
     private const string NoGeoViewMessageKey = "OrientedImageryViewNoGeoView";
     private const string NoLayerSelectedKey = "OrientedImageryViewNoLayerSelected";
+    private const string NoImagesNoneKey = "OrientedImageryViewImageSelectionNoImagesNone";
+    private const string NoImagesFindKey = "OrientedImageryViewImageSelectionNoImagesFind";
+    private const string NoImagesDisplayKey = "OrientedImageryViewImageSelectionNoImagesDisplay";
+    private const string NoImagesForLocationKey = "OrientedImageryViewNoImagesFound";
+    private const string ImageLoadingKey = "OrientedImageryViewImageLoading";
+    private const string ImageLoadedKey = "OrientedImageryViewImageLoaded";
+    private const string ImageStateActivityId = "OrientedImageryViewImageState";
+    private bool _noImagesAnnouncementCanRepeat;
+    private string? _lastNoImagesAnnouncement;
+    private string? _lastImageErrorAnnouncement;
+    private bool _lastLoadingState = false;
+    private bool _imageChangedSincePreviousLoadAnnouncement = true;
+    private TextBlock? _errorMessagePresenter;
 
     /// <summary>
     /// The message shown when the <see cref="OrientedImageryView"/> is in an invalid state.
@@ -499,16 +541,127 @@ public partial class OrientedImageryView
     /// </summary>
     public static readonly DependencyProperty ErrorMessageProperty = PropertyHelper.GetProperty(ErrorMessagePropertyKey);
 
-    private void UpdateErrorMessage()
+    /// <summary>
+    /// Updates error messages and announces them if needed.
+    /// </summary>
+    private void UpdateErrorMessages()
     {
+        if (UpdateMainErrorMessage())
+        {
+            _noImagesAnnouncementCanRepeat = true;
+            return;
+        }
+        UpdateImageStateMessages();
+    }
+
+    private bool UpdateMainErrorMessage()
+    {
+        var lastMessage = ErrorMessage;
+
         if (GeoView == null)
             ErrorMessage = Properties.Resources.GetString(NoGeoViewMessageKey);
         else if (ViewModel.OrientedImageryLayer == null)
             ErrorMessage = Properties.Resources.GetString(NoLayerSelectedKey);
         else
             ErrorMessage = null;
+
+        if (ErrorMessage == null || ErrorMessage == lastMessage)
+            return false;
+
+        ScreenReaderHelpers.RaiseLiveRegionChanged(_errorMessagePresenter);
+        return true;
     }
-#endregion Error
+
+    private void UpdateImageStateMessages()
+    {
+        if (UpdateNoImagesErrorMessage()) return;
+        if (UpdateImageErrorAnnouncement()) return;
+        UpdateImageLoadingAnnouncement();
+    }
+
+    private bool UpdateNoImagesErrorMessage()
+    {
+        bool repeatAnnouncement = _noImagesAnnouncementCanRepeat;
+        _noImagesAnnouncementCanRepeat = false;
+
+        string? announcement = GetNoImagesAnnouncement();
+        if (announcement == null)
+        {
+            _lastNoImagesAnnouncement = null;
+            return false;
+        }
+
+        if (!repeatAnnouncement && announcement == _lastNoImagesAnnouncement)
+            return false;
+
+        _lastNoImagesAnnouncement = announcement;
+        RaiseImageStateNotification(announcement);
+
+        return true;
+    }
+
+    private bool UpdateImageErrorAnnouncement()
+    {
+        string? announcement = _viewport?.Error?.Message;
+        if (!IsLoaded || !IsVisible || ErrorMessage != null || string.IsNullOrWhiteSpace(announcement))
+        {
+            _lastImageErrorAnnouncement = null;
+            return false;
+        }
+
+        if (announcement == _lastImageErrorAnnouncement)
+            return false;
+
+        _lastImageErrorAnnouncement = announcement;
+        RaiseImageStateNotification(announcement);
+        return true;
+    }
+
+    private void UpdateImageLoadingAnnouncement()
+    {
+        if (_viewport?.Footprint == null)
+            return;
+
+        bool isLoading = _viewport.IsBusy;
+        bool imageHasChanged = _imageChangedSincePreviousLoadAnnouncement;
+        _imageChangedSincePreviousLoadAnnouncement = false;
+        if (isLoading == _lastLoadingState && !imageHasChanged)
+            return;
+
+        _lastLoadingState = isLoading;
+        if (Properties.Resources.GetString(isLoading ? ImageLoadingKey : ImageLoadedKey) is string announcement)
+            RaiseImageStateNotification(announcement);
+    }
+
+    private string? GetNoImagesAnnouncement()
+    {
+        if (!IsLoaded || !IsVisible || ErrorMessage != null || _viewport?.IsBusy == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
+            return null;
+
+        string resourceKey;
+        if (HasSearchedForImages)
+            resourceKey = NoImagesForLocationKey;
+        else if (ViewModel.InteractionState == OrientedImageryViewInteractionState.FindImages)
+            resourceKey = NoImagesFindKey;
+        else if (ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage)
+            resourceKey = NoImagesDisplayKey;
+        else
+            resourceKey = NoImagesNoneKey;
+
+        return Properties.Resources.GetString(resourceKey);
+    }
+
+    private void RaiseImageStateNotification(string announcement)
+    {
+#if WPF || WINUI
+        ScreenReaderHelpers.RaiseNotificationAnnouncement(
+            this,
+            announcement,
+            ImageStateActivityId,
+            AutomationNotificationProcessing.MostRecent);
+#endif
+    }
+#endregion Errors
 }
 
 #endif

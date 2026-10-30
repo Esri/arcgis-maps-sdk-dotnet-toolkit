@@ -1101,6 +1101,10 @@
     <value>Oriented image</value>
     <comment>UIA AutomationProperties.Name for the OrientedImageViewport control, used by screen readers to identify the control</comment>
   </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>Oriented imagery view</value>
+    <comment>The type of the OrientedImageryView control announced by screen readers if recieves focus.</comment>
+  </data>
   <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
     <value>Select marker symbol</value>
     <comment>Tooltip for the OrientedImageryView button that selects the marker symbol.</comment>
@@ -1229,9 +1233,13 @@ navigation</value>
     <value>Next image</value>
     <comment>Tooltip and accessibility name for the next image button.</comment>
   </data>
-  <data name="OrientedImageryViewLoading" xml:space="preserve">
-    <value>Loading...</value>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>Image loading...</value>
     <comment>Message shown by OrientedImageryView while an image is loading.</comment>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>Image loaded</value>
+    <comment>Message announced by screen reader when an image has loaded.</comment>
   </data>
   <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
     <value>No image to display</value>
@@ -1240,6 +1248,18 @@ navigation</value>
   <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
     <value>No images found for the tapped location</value>
     <comment>Message shown when no images found for a tapped location.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>No image to display. Enable find images or display image mode to search for images</value>
+    <comment>Full text for prompt when no images have been selected and interaction mode is set to none. A full text version is needed for screen readers.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>No image to display. Tap on the map to search for images or switch to display image mode.</value>
+    <comment>Full text for prompt when no images have been selected and interaction mode is set to display image. A full text version is needed for screen readers.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>No image to display. Tap on a feature to view its image or switch to find images mode.</value>
+    <comment>Full text for prompt when no images have been selected and interaction mode is set to display image. A full text version is needed for screen readers.</comment>
   </data>
   <data name="OrientedImageryViewEnableImageSelection" xml:space="preserve">
     <value>Enable</value>

@@ -304,6 +304,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 _orientedImageryVM.ShowUnselectedFootprints = !_orientedImageryVM.ShowUnselectedFootprints;
             });
         }
+
+        private void DetachReattachGeoViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainOrientedImageryView.GeoView = MainOrientedImageryView.GeoView == null ? _currentGeoView : null;
+        }
     }
 
     public class ShowSelectedImagePopupVM : OrientedImageryToolbarItemBase

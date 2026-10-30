@@ -74,6 +74,7 @@
                     <Button x:Name="ToggleButtonsBackgroundThread"  Content="Update some button states from a background thread" Click="ToggleButtonsBackgroundThread_Click" />
                     <Button x:Name="ToggleElevationSurfaceTransparencyAndNavigabilityButton"  Content="Toggle surface navigability" Click="ToggleElevationSurfaceTransparencyAndNavigabilityButton_Click" />
                     <Button x:Name="ToggleElevationSurfaceExaggerationButton"  Content="Toggle elevation exaggeration" Click="ToggleElevationSurfaceExaggerationButton_Click" />
+                    <Button x:Name="DetachReattachGeoViewButton" Content="Detach/Reattach GeoView attachment" Click="DetachReattachGeoViewButton_Click" />
                 </StackPanel>
             </ScrollViewer>
             <Button x:Name="OpenOrientedImageryButton"

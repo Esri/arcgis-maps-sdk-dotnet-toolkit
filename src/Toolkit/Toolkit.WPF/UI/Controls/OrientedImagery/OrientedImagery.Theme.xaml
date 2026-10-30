@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
+    xmlns:toolkitPrimitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives"
     xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
@@ -14,6 +15,12 @@
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     <!-- Helper styles -->
+    <Style x:Key="OrientedImageryMessageTextStyle" TargetType="{x:Type toolkitPrimitives:AccessibleTextBlock}">
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}" />
+    </Style>
+
     <Style x:Key="OrientedImageryToolbarButtonBaseStyle" TargetType="{x:Type primitives:ButtonBase}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="MinWidth" Value="40" />
@@ -317,13 +324,18 @@
         </Style.Triggers>
     </Style>
 
-    <DataTemplate x:Key="ImageSearchModeIconTemplate" DataType="controls:OrientedImageryViewInteractionState">
+    <DataTemplate x:Key="DisplayImageIconTemplate">
         <Grid Width="33" Height="34">
             <Path x:Name="DisplayIcon" Width="32" Height="32" Stretch="Uniform"
                   HorizontalAlignment="Center" VerticalAlignment="Center"
                   Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                   Data="M31.1864 15.1864H27.5786C27.1609 9.41668 22.5833 4.83905 16.8515 4.42359L16.8136 4.42142V0.813559C16.8136 0.364475 16.4491 0 16 0C15.5509 0 15.1864 0.364475 15.1864 0.813559V4.42142C9.41668 4.83905 4.83905 9.41668 4.42359 15.1485L4.42142 15.1864H0.813559C0.364475 15.1864 0 15.5509 0 16C0 16.4491 0.364475 16.8136 0.813559 16.8136H4.42142C4.83905 22.5833 9.41668 27.1609 15.1485 27.5764L15.1864 27.5786V31.1864C15.1864 31.6355 15.5509 32 16 32C16.4491 32 16.8136 31.6355 16.8136 31.1864V27.5786C22.5833 27.1609 27.1609 22.5833 27.5764 16.8515L27.5786 16.8136H31.1864C31.6355 16.8136 32 16.4491 32 16C32 15.5509 31.6355 15.1864 31.1864 15.1864ZM16.8136 25.9515V22.5085C16.8136 22.0594 16.4491 21.6949 16 21.6949C15.5509 21.6949 15.1864 22.0594 15.1864 22.5085V25.9515C10.3138 25.5414 6.45858 21.6862 6.05071 16.8504L6.04854 16.8136H9.49153C9.94061 16.8136 10.3051 16.4491 10.3051 16C10.3051 15.5509 9.94061 15.1864 9.49153 15.1864H6.04854C6.45858 10.3138 10.3138 6.45858 15.1496 6.05071L15.1864 6.04854V9.49153C15.1864 9.94061 15.5509 10.3051 16 10.3051C16.4491 10.3051 16.8136 9.94061 16.8136 9.49153V6.04854C21.6862 6.45858 25.5414 10.3138 25.9493 15.1496L25.9515 15.1864H22.5085C22.0594 15.1864 21.6949 15.5509 21.6949 16C21.6949 16.4491 22.0594 16.8136 22.5085 16.8136H25.9515C25.5403 21.6862 21.6862 25.5403 16.8504 25.9493L16.8136 25.9515Z" />
-            <Path x:Name="FindIcon" Visibility="Collapsed"
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FindImagesIconTemplate">
+        <Grid Width="33" Height="34">
+            <Path x:Name="FindIcon"
                   Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                 <Path.Data>
                     <GeometryGroup FillRule="Nonzero">
@@ -335,10 +347,14 @@
                 </Path.Data>
             </Path>
         </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ImageSearchModeIconTemplate" DataType="controls:OrientedImageryViewInteractionState">
+        <ContentPresenter x:Name="ModeIcon" Content="{Binding}"
+                          ContentTemplate="{StaticResource DisplayImageIconTemplate}" />
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.FindImages}">
-                <Setter TargetName="DisplayIcon" Property="Visibility" Value="Collapsed" />
-                <Setter TargetName="FindIcon" Property="Visibility" Value="Visible" />
+                <Setter TargetName="ModeIcon" Property="ContentTemplate" Value="{StaticResource FindImagesIconTemplate}" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -388,6 +404,7 @@
     </Style>
 
     <Style x:Key="ImageNavigationButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
         <Setter Property="Width" Value="25" />
         <Setter Property="MinHeight" Value="60" />
@@ -830,6 +847,16 @@
                             </local:AccessibleItemsControl>
 
                             <Grid Grid.Row="1" KeyboardNavigation.TabNavigation="Local">
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
@@ -855,9 +882,10 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-                                    <TextBlock HorizontalAlignment="Center"
+                                    <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                               HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
-                                               Text="{internal:LocalizedString Key=OrientedImageryViewLoading}" />
+                                               Text="{internal:LocalizedString Key=OrientedImageryViewImageLoading}" />
                                 </Border>
 
                                 <ProgressBar Grid.ColumnSpan="3"
@@ -898,90 +926,98 @@
                                                 TextElement.FontSize="{internal:TextScaledFontSize FontSize=18}"
                                                 TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
 
-                                        <!-- Prompt when no image selected, but a tap has been attempted -->
-                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" Margin="0,0,0,6">
-                                            <TextBlock.Style>
-                                                <Style TargetType="{x:Type TextBlock}">
-                                                    <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HasSearchedForImages}" Value="True">
-                                                            <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewNoImagesFound}" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-
-                                        <!-- User prompts before the user has attempted to select any images -->
-                                        <ContentControl Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}"
-                                                        Focusable="False">
+                                        <!-- User prompts when no image is selected -->
+                                        <ContentControl x:Name="PART_NoImagesPromptPresenter" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}"
+                                                        Focusable="False" IsTabStop="False">
                                             <ContentControl.Style>
                                                 <Style TargetType="{x:Type ContentControl}">
                                                     <Setter Property="ContentTemplate">
                                                         <Setter.Value>
-                                                            <!-- Default prompt: prompt user to enable one of the image searech interaction modes if currently in None state -->
+                                                            <!-- Prompt user to enable one of the image search interaction modes if currently in None state -->
                                                             <DataTemplate>
-                                                                <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
+                                                                <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                                                           TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                           AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesNone}">
+                                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
+                                                                    <LineBreak />
                                                                     <Run Text="{internal:LocalizedString Key=OrientedImageryViewEnableImageSelection}" /><InlineUIContainer BaselineAlignment="Center">
                                                                         <Viewbox Width="24" Height="24" Margin="4,0">
                                                                             <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
-                                                                                            ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                                                            ContentTemplate="{StaticResource FindImagesIconTemplate}" Focusable="False" />
                                                                         </Viewbox>
                                                                     </InlineUIContainer><Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionOr}" /><InlineUIContainer BaselineAlignment="Center">
                                                                         <Viewbox Width="24" Height="24" Margin="4,0">
                                                                             <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}"
-                                                                                            ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                                                            ContentTemplate="{StaticResource DisplayImageIconTemplate}" Focusable="False" />
                                                                         </Viewbox>
                                                                     </InlineUIContainer>
                                                                     <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMode}" />
-                                                                </TextBlock>
+                                                                </toolkitPrimitives:AccessibleTextBlock>
                                                             </DataTemplate>
                                                         </Setter.Value>
                                                     </Setter>
                                                     <Style.Triggers>
+                                                        <!-- Prompt when in Find mode -->
                                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.FindImages}">
                                                             <Setter Property="ContentTemplate">
                                                                 <Setter.Value>
-                                                                    <!-- Prompt when in Find mode -->
                                                                     <DataTemplate>
-                                                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
+                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                                   AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesFind}">
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
+                                                                            <LineBreak />
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionFindImages}" />
                                                                             <LineBreak />
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSwitchMode}" /><InlineUIContainer BaselineAlignment="Center">
                                                                                 <Viewbox Width="24" Height="24" Margin="4,0">
                                                                                     <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}"
-                                                                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                                                                    ContentTemplate="{StaticResource DisplayImageIconTemplate}" Focusable="False" />
                                                                                 </Viewbox>
                                                                             </InlineUIContainer>
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
-                                                                        </TextBlock>
+                                                                        </toolkitPrimitives:AccessibleTextBlock>
                                                                     </DataTemplate>
                                                                 </Setter.Value>
                                                             </Setter>
                                                         </DataTrigger>
 
+                                                        <!-- Prompt when in Display mode -->
                                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}">
                                                             <Setter Property="ContentTemplate">
                                                                 <Setter.Value>
-                                                                    <!-- Prompt when in Display mode -->
                                                                     <DataTemplate>
-                                                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30">
+                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                                   AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesDisplay}">
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
+                                                                            <LineBreak />
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionDisplayImage}" />
                                                                             <LineBreak />
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSwitchMode}" /><InlineUIContainer BaselineAlignment="Center">
                                                                                 <Viewbox Width="24" Height="24" Margin="4,0">
                                                                                     <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
-                                                                                                    ContentTemplate="{StaticResource ImageSearchModeIconTemplate}" Focusable="False" />
+                                                                                                    ContentTemplate="{StaticResource FindImagesIconTemplate}" Focusable="False" />
                                                                                 </Viewbox>
                                                                             </InlineUIContainer>
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
-                                                                        </TextBlock>
+                                                                        </toolkitPrimitives:AccessibleTextBlock>
                                                                     </DataTemplate>
                                                                 </Setter.Value>
                                                             </Setter>
                                                         </DataTrigger>
+
+                                                        <!-- Most common prompt: shown when user has attempted a search but not images were found for the tapped location -->
                                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HasSearchedForImages}" Value="True">
-                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                                   Text="{internal:LocalizedString Key=OrientedImageryViewNoImagesFound}" />
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -990,32 +1026,32 @@
                                     </StackPanel>
                                 </Border>
 
-                                <Popup PlacementTarget="{Binding ElementName=PART_ImageViewport}"
-                                       Placement="Center"
-                                       StaysOpen="True">
-                                    <Popup.Style>
-                                        <Style TargetType="{x:Type Popup}">
-                                            <Setter Property="IsOpen" Value="True" />
+                                <Border Grid.ColumnSpan="3"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                        TextElement.Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                        BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                        BorderThickness="1"
+                                        Padding="8">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=Error}" Value="{x:Null}">
-                                                    <Setter Property="IsOpen" Value="False" />
+                                                    <Setter Property="Visibility" Value="Collapsed" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </Popup.Style>
-                                    <Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
-                                            TextElement.Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
-                                            BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
-                                            BorderThickness="1"
-                                            Padding="8">
-                                        <TextBlock MaxWidth="300"
-                                                   Text="{Binding ElementName=PART_ImageViewport, Path=Error.Message}"
-                                                   TextWrapping="Wrap" />
-                                    </Border>
-                                </Popup>
+                                    </Border.Style>
+                                    <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                               MaxWidth="300"
+                                               Text="{Binding ElementName=PART_ImageViewport, Path=Error.Message}"
+                                               TextWrapping="Wrap"
+                                               AutomationProperties.LiveSetting="Assertive"/>
+                                </Border>
 
                                 <Button Style="{StaticResource ImageNavigationButtonStyle}"
-                                        TabIndex="1"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
@@ -1031,7 +1067,6 @@
                                     </Viewbox>
                                 </Button>
                                 <Button Style="{StaticResource ImageNavigationButtonStyle}"
-                                        TabIndex="2"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
@@ -1137,13 +1172,16 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <TextBlock HorizontalAlignment="Center"
+                                <toolkitPrimitives:AccessibleTextBlock x:Name="PART_ErrorMessagePresenter"
+                                           Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                           HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            MaxWidth="400"
                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}"
                                            TextAlignment="Center"
                                            LineHeight="30"
-                                           TextWrapping="Wrap" />
+                                           TextWrapping="Wrap"
+                                           AutomationProperties.LiveSetting="Assertive"/>
                             </Border>
 
                             <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="2">
@@ -1213,14 +1251,14 @@
                                     <TextBlock Text="&gt;" />
                                 </Button>
                             </StackPanel>
-                            <TextBlock Grid.Row="3"
+                            <toolkitPrimitives:AccessibleTextBlock Grid.Row="3"
                                        Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError.Message}"
                                        Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
                                        TextWrapping="Wrap"
                                        TextAlignment="Center"
                                        Margin="8,0,8,4">
-                                <TextBlock.Style>
-                                    <Style TargetType="{x:Type TextBlock}">
+                                <toolkitPrimitives:AccessibleTextBlock.Style>
+                                    <Style TargetType="{x:Type toolkitPrimitives:AccessibleTextBlock}" BasedOn="{StaticResource OrientedImageryMessageTextStyle}">
                                         <Setter Property="Visibility" Value="Visible" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError}" Value="{x:Null}">
@@ -1228,8 +1266,8 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                                </toolkitPrimitives:AccessibleTextBlock.Style>
+                            </toolkitPrimitives:AccessibleTextBlock>
                         </Grid>
                     </Border>
                 </ControlTemplate>
