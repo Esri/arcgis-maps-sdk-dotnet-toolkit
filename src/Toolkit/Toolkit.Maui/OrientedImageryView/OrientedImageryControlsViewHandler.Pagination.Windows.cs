@@ -53,8 +53,8 @@ internal sealed partial class OrientedImageryControlsViewHandler
         ((IView)VirtualView).InvalidateMeasure();
         if (restoreFocus && focused != null)
         {
-            var target = state.Sequential && row.Children.Contains(focused) && focused.IsTabStop && focused.IsEnabled
-                ? focused : row.Children.OfType<NativeButton>().FirstOrDefault(button => button.IsTabStop && button.IsEnabled);
+            var target = state.Sequential && row.Children.Contains(focused) && focused.IsTabStop
+                ? focused : row.Children.OfType<NativeButton>().FirstOrDefault(button => button.IsTabStop);
             if (target != focused) target?.Focus(focusState);
         }
     }
@@ -130,6 +130,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         Content = content, MinWidth = 0, MinHeight = 32, Padding = new NativeThickness(0),
         BorderThickness = new NativeThickness(0), CornerRadius = new CornerRadius(0),
         Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+        AllowFocusWhenDisabled = true,
         IsTabStop = false,
     };
 
