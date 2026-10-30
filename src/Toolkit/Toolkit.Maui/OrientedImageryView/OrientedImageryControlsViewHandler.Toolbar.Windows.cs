@@ -42,24 +42,24 @@ internal sealed partial class OrientedImageryControlsViewHandler
             {
                 ImageSearchModeVM mode => ModePicker(owner, mode),
                 ToolbarDividerVM => Divider(),
-                ShowSelectedFootprintVM => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintLabel",
+                ShowSelectedFootprintVM => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintStackedLabel",
                     Geometry(OrientedImageryView.CurrentFootprintGeometry),
                     () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value,
                     automationId: "OrientedImageryDesktopCurrentFootprint"),
-                ShowUnselectedFootprintsVM => Toggle(owner, "ShowUnselectedImageFootprints", "AdditionalFootprintsLabel",
+                ShowUnselectedFootprintsVM => Toggle(owner, "ShowUnselectedImageFootprints", "AdditionalFootprintsStackedLabel",
                     Geometry(OrientedImageryView.OverlayGeometry),
                     () => model.ShowUnselectedFootprints, value => model.ShowUnselectedFootprints = value,
                     () => model.Images.Count > 1, "OrientedImageryDesktopAdditionalFootprints"),
-                ShowCameraMarkersVM => Toggle(owner, "ShowCameraMarkersOnGeoView", "CameraLocationsLabel", CameraLocationsIcon(),
+                ShowCameraMarkersVM => Toggle(owner, "ToggleCameraMarkers", "CameraLocationsStackedLabel", CameraLocationsIcon(),
                     () => model.ShowCameraLocations, value => model.ShowCameraLocations = value,
                     () => model.Images.Count > 1, "OrientedImageryDesktopCameraLocations"),
-                AllowAddingMarkersVM => Toggle(owner, "MobileAddMarkers", "MobileAddMarkers", Glyph("\uE8ED"),
+                AllowAddingMarkersVM => Toggle(owner, "MobileAddMarkers", "AddMarkersStackedLabel", Glyph("\uE8ED"),
                     () => owner.IsAddingMarkers, owner.SetAddingMarkers,
                     automationId: "OrientedImageryDesktopAddMarker"),
-                AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdate", Glyph(ToolkitIcons.Refresh),
+                AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdateToolbarLabel", Glyph(ToolkitIcons.Refresh),
                     () => model.AutoUpdateFootprint, value => model.AutoUpdateFootprint = value),
                 SelectNewMarkerSymbolVM picker => SymbolPicker(owner, picker),
-                ClearMarkersVM => ActionButton(owner, "ClearMarkers", "ClearMarkersLabel", Glyph("\uEB04"),
+                ClearMarkersVM => ActionButton(owner, "ClearMarkersLabel", "ClearMarkersStackedLabel", Glyph("\uEB04"),
                     () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
                 SequentialNavigationVM => SequenceButton(owner),
                 _ => null,
@@ -288,7 +288,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
                     foreach (var caption in previousContent.Children.OfType<TextBlock>())
                         _captions.Remove(caption);
                 button.Content = LabeledContent(ImageModeIcon(search),
-                    search ? "ImageSearchModeFindToolbarLabel" : "ImageSearchModeDisplayToolbarLabel");
+                    search ? "ImageSearchModeFindStackedLabel" : "ImageSearchModeDisplayStackedLabel");
                 previous = search;
                 ((IView)VirtualView).InvalidateMeasure();
             }
