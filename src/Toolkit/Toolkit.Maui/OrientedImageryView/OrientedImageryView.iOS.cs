@@ -41,7 +41,7 @@ public partial class OrientedImageryView
         _popupViewer.IsVisible = true;
         if (_iosSheetIsInfo) return;
         DismissPanel(preservePresentation: true);
-        var heading = new Label { Text = Text("ImageDetails") };
+        var heading = PanelHeading(Text("ImageDetails"));
         var surface = CreateMobileSheetContent(heading, _popupViewer, () => DismissIosPopup(), null,
             out _, "OrientedImageryInfoSheet");
         PresentIosSheet(surface, info: true);
