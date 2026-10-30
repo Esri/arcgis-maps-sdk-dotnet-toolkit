@@ -750,7 +750,7 @@ public partial class OrientedImageryView
         {
             if (GeoView == null) message = Text("NoGeoView");
             else if (layer == null) message = Text("NoLayerSelected");
-            else if (loading) message = Text("Loading");
+            else if (loading) message = Text("ImageLoading");
             else if (ViewModel.SelectedImage == null)
             {
                 message = Text(HasSearchedForImages ? "NoImagesFound" : "NoImageToDisplay");
@@ -771,7 +771,7 @@ public partial class OrientedImageryView
         if (_selectionGuidance != null)
             _selectionGuidance.IsVisible = showSelectionGuidance;
         AnnounceStatusMessages(showSelectionGuidance ? $"{message}. {selectionInstructions}" : message,
-            ViewModel.SequentialNavigationError?.Message, error == null && message == Text("Loading"));
+            ViewModel.SequentialNavigationError?.Message, error == null && message == Text("ImageLoading"));
     }
 
     private bool CanAnnounce

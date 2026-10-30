@@ -355,12 +355,12 @@ public partial class OrientedImageryView : TemplatedView
 
     private void NavigationAvailabilityChanged(object? sender, EventArgs e) => DispatchUpdate(Refresh);
 
-    private void SequenceBoundaryReached(bool start, bool end)
+    private void SequenceBoundaryReached(object? sender, SequenceBoundaryReachedArgs e)
     {
-        if (CanAnnounce && ViewModel.IsSequentialNavigationEnabled && ViewModel.SelectedImage != null &&
+        if (ReferenceEquals(sender, ViewModel) && CanAnnounce && ViewModel.IsSequentialNavigationEnabled && ViewModel.SelectedImage != null &&
             ViewModel.SequentialNavigationError == null && _operationError == null && _viewport?.Error == null)
-            SemanticScreenReader.Default.Announce(Text(start && end ? "SequenceStartAndEndReached" :
-                start ? "SequenceStartReached" : "SequenceEndReached"));
+            SemanticScreenReader.Default.Announce(Text(e.HasReachedStart && e.HasReachedEnd ? "SequenceStartAndEndReached" :
+                e.HasReachedStart ? "SequenceStartReached" : "SequenceEndReached"));
     }
 
     #endregion
