@@ -9,7 +9,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = ImageViewportName, Type = typeof(OrientedImageViewport))]
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
 [TemplatePart(Name = PaginatorName, Type = typeof(Paginator))]
-[TemplatePart(Name = ErrorMessagePresenterName, Type = typeof(TextBlock))]
+[TemplatePart(Name = MainErrorMessagePresenterName, Type = typeof(TextBlock))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
