@@ -48,9 +48,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// A control that displays an oriented image and allows interaction with it.
 /// </summary>
 /// <remarks>
-/// Shows planar and panoramic still images; a video image sets <see cref="Error"/>. Planar images are displayed
-/// with a <see cref="Esri.ArcGISRuntime.Mapping.RasterLayer"/>, so they require the
-/// <see cref="Esri.ArcGISRuntime.LicenseLevel.Standard"/> license level or higher.
+/// Shows planar and panoramic still images.
+/// For a video image, <see cref="Error"/> holds a <see cref="NotSupportedException"/>.
 /// </remarks>
 public partial class OrientedImageViewport
 {

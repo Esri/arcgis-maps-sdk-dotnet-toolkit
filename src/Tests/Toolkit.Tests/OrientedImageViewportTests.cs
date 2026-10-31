@@ -454,7 +454,7 @@ public sealed class OrientedImageViewportTests
         Assert.AreEqual(new PointF(expectedX, expectedY), image);
         Assert.AreEqual(stored, orientation.ImageToStored(image, 400, 200));
 
-        // The planar viewport can rotate but not reflect, so a clockwise rotation by RotationDegrees followed by an
+        // The panoramic surfaces rotate, then reflect, so a clockwise rotation by RotationDegrees followed by an
         // optional horizontal mirror must reproduce the mapping.
         (PointF rotated, float rotatedWidth) = orientation.RotationDegrees switch
         {
@@ -483,49 +483,33 @@ public sealed class OrientedImageViewportTests
     }
 
     [TestMethod]
-    [DataRow(1, 400f, 200f)]
-    [DataRow(2, 400f, 200f)]
-    [DataRow(3, 400f, 200f)]
-    [DataRow(4, 400f, 200f)]
-    [DataRow(5, 200f, 400f)]
-    [DataRow(6, 200f, 400f)]
-    [DataRow(7, 200f, 400f)]
-    [DataRow(8, 200f, 400f)]
-    public void ExifFootprintUsesDecodedDimensionsAndClockwiseWinding(int exifOrientation, float expectedWidth, float expectedHeight)
+    public void FootprintClipsTheVisibleAreaToTheImageWithClockwiseWinding()
     {
-        // Reflection reverses winding, and the SDK requires clockwise rings.
-        var orientation = new ExifOrientationTransform(exifOrientation);
+        // The SDK requires clockwise rings.
         var builder = new PolygonBuilder((SpatialReference?)null);
         builder.AddPoint(0, 200);
         builder.AddPoint(400, 200);
         builder.AddPoint(400, 0);
         builder.AddPoint(0, 0);
         List<PointF> pixels = OrientedImageRasterViewport.ComputeVisibleAreaPixels(
-            builder.ToGeometry(), new Envelope(0, 0, 400, 200), 1, 1, orientation);
+            builder.ToGeometry(), new Envelope(0, 0, 400, 200), 1, 1);
 
-        PointF[] expectedCorners =
-        [
-            new(0, 0),
-            new(expectedWidth, 0),
-            new(expectedWidth, expectedHeight),
-            new(0, expectedHeight),
-        ];
-
+        PointF[] expectedCorners = [new(0, 0), new(400, 0), new(400, 200), new(0, 200)];
         CollectionAssert.AreEquivalent(expectedCorners, pixels.Distinct().ToArray());
         Assert.AreEqual(80000d, SignedRingArea(pixels), "the full image must be covered with clockwise winding");
 
         var partialExtent = new Envelope(100, 200, 900, 800);
         var partialView = new Polygon([new MapPoint(-300, 1100), new(500, 1100), new(500, 500), new(-300, 500)]);
-        List<PointF> partial = OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, partialExtent, -2, -3, orientation);
-        PointF[] storedCorners = [new(0, 0), new(200, 0), new(200, 100), new(0, 100)];
-        CollectionAssert.AreEquivalent(storedCorners.Select(point => orientation.StoredToImage(point, 400, 200)).ToArray(), partial.Distinct().ToArray());
+        List<PointF> partial = OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, partialExtent, -2, -3);
+        PointF[] expectedPartialCorners = [new(0, 0), new(200, 0), new(200, 100), new(0, 100)];
+        CollectionAssert.AreEquivalent(expectedPartialCorners, partial.Distinct().ToArray());
         Assert.AreEqual(20000d, SignedRingArea(partial), "partial clips keep clockwise image winding");
-        Assert.AreEqual(120000d, SignedRingArea(OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, partialExtent, 0, 0, orientation)), "zero cell sizes use one map unit per pixel");
+        Assert.AreEqual(120000d, SignedRingArea(OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, partialExtent, 0, 0)), "zero cell sizes use one map unit per pixel");
 
         var outsideView = new Polygon([new MapPoint(-300, 1100), new(0, 1100), new(0, 900), new(-300, 900)]);
         var multipart = new PolygonBuilder(outsideView);
         multipart.AddPart(partialView.Parts[0]);
-        Assert.IsEmpty(OrientedImageRasterViewport.ComputeVisibleAreaPixels(multipart.ToGeometry(), partialExtent, 0, 0, orientation), "only the first visible-area part counts");
+        Assert.IsEmpty(OrientedImageRasterViewport.ComputeVisibleAreaPixels(multipart.ToGeometry(), partialExtent, 0, 0), "only the first visible-area part counts");
     }
 
     [TestMethod]

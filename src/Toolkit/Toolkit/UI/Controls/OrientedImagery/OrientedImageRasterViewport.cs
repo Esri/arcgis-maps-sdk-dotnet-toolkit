@@ -54,8 +54,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-// Shows a planar image as a RasterLayer in a MapView. Georeferenced TIFFs are unsupported: RasterLayer honors their
-// georeferencing, but the pixel transforms here assume an unreferenced, axis-aligned grid.
+// Shows a planar image as a RasterLayer in a MapView. The raster from OrientedImage.CreateImageSpaceRasterAsync holds the
+// upright image in pixel space, so image pixels and map points differ only by an offset and a flipped y-axis.
 internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerViewport
 {
     private readonly MapView _mapView;
@@ -64,7 +64,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     private const double MarkerHitTolerance = 12d;
 
     private RasterLayer? _rasterLayer;
-    private ExifOrientationTransform _imageOrientation;
     private readonly Dictionary<OrientedImageMarker, Graphic> _markerGraphics = [];
     private readonly Dictionary<Graphic, OrientedImageMarker> _graphicMarkers = [];
     private bool _interactive;
@@ -139,7 +138,8 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         _rasterLayer?.CancelLoad();
         SetInteractive(false);
 
-        RasterLayer layer = new(new Raster(path));
+        RasterLayer layer = new(await image.CreateImageSpaceRasterAsync(token));
+        token.ThrowIfCancellationRequested();
         layer.ResamplingType = RasterResamplingType.BilinearInterpolation;
         Map map = new();
         map.OperationalLayers.Add(layer);
@@ -149,7 +149,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         SetViewVisible(true);
         await layer.LoadAsync();
         token.ThrowIfCancellationRequested();
-        _imageOrientation = ExifOrientationTransform.Read(path);
 
         LookAtTarget? lookAt = await ConvertHeldLookAtAsync(image);
         token.ThrowIfCancellationRequested();
@@ -204,7 +203,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         _rasterLayer = null;
         _hasDrawn = false;
         SetViewVisible(false);
-        _imageOrientation = default;
         foreach (Graphic graphic in _markerGraphics.Values)
             graphic.Geometry = null;
         SetInteractive(false);
@@ -318,9 +316,8 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     // An image-sized envelope fits at the same scale wherever centered. The view defers the fit until it has a size.
     private Viewpoint FitViewpoint(OrientedImage image, Envelope extent, MapPoint center)
     {
-        // RasterLayer draws the stored pixel grid, ignoring EXIF orientation, so the view applies its rotation too.
-        // Both rotations are clockwise, and MapView rotation is counter-clockwise.
-        double viewRotation = -(GetEffectiveRotationDegrees(image) + _imageOrientation.RotationDegrees);
+        // The image's rotation is clockwise, and MapView rotation is counter-clockwise.
+        double viewRotation = -GetEffectiveRotationDegrees(image);
         return new Viewpoint(new Envelope(center, extent.Width, extent.Height), viewRotation);
     }
 
@@ -343,8 +340,8 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     // Cell sizes can be negative for a flipped axis. An unknown size of zero counts as one unit.
     private static double CellSize(double size) => size == 0 ? 1 : Math.Abs(size);
 
-    // Maps a pixel in OrientedImage's oriented space to the stored raster's map space. Unless onImage is set, a pixel
-    // within a wide margin past the edge still maps, so a marker just off the image draws.
+    // Maps an image pixel to the raster's map space. Unless onImage is set, a pixel within a wide margin past the edge
+    // still maps, so a marker just off the image draws.
     private MapPoint? PixelToMap(PointF pixel, bool onImage = false)
     {
         if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
@@ -354,7 +351,6 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         double cellY = CellSize(info.CellSizeY);
         double width = extent.Width / cellX;
         double height = extent.Height / cellY;
-        pixel = _imageOrientation.ImageToStored(pixel, width, height);
 
         // Drop wildly off-image pixels, such as the camera's own location projected onto its image.
         bool placeable = onImage
@@ -392,7 +388,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         if (col < 0 || row < 0 || col > width || row > height)
             return null;
 
-        return _imageOrientation.StoredToImage(new PointF((float)col, (float)row), width, height);
+        return new PointF((float)col, (float)row);
     }
 
     public override PointF? ScreenToImage(double x, double y) =>
@@ -436,7 +432,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         if (_mapView.VisibleArea is not Polygon visibleArea || visibleArea.Parts.Count == 0)
             return null;
 
-        List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY, _imageOrientation);
+        List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY);
         if (pixels.Count < 3)
             return null;
 
@@ -445,14 +441,11 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     // Clips the visible area to the image as a polygon, because clamping each vertex collapses a rotated view that
     // encloses the whole image to a diamond. Internal for unit tests.
-    internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY, ExifOrientationTransform orientation = default)
+    internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
     {
         double cellX = CellSize(cellSizeX);
         double cellY = CellSize(cellSizeY);
-        double maxCol = extent.Width / cellX;
-        double maxRow = extent.Height / cellY;
 
-        // Clip in raster coordinates; EXIF can swap axes or reflect the pixel grid.
         // The raster extent has no spatial reference but the visible area does, and Intersection wants identical SRs.
         var firstRing = new Polygon(visibleArea.Parts[0].Points, visibleArea.SpatialReference);
         var bounds = new Envelope(extent.XMin, extent.YMin, extent.XMax, extent.YMax, visibleArea.SpatialReference);
@@ -463,12 +456,8 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         {
             double col = (point.X - extent.XMin) / cellX;
             double row = (extent.YMax - point.Y) / cellY;
-            pixels.Add(orientation.StoredToImage(new PointF((float)col, (float)row), maxCol, maxRow));
+            pixels.Add(new PointF((float)col, (float)row));
         }
-
-        // A reflection reverses the ring's winding; reverse it again to keep it clockwise.
-        if (orientation.IsMirrored)
-            pixels.Reverse();
 
         return pixels;
     }
