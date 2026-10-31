@@ -83,6 +83,9 @@ public partial class OrientedImageryView
     }
 
 #region ViewModel
+    private WeakEventListener<OrientedImageryView, OrientedImageryViewModel, object?, PropertyChangedEventArgs>? _viewModelPropertyChangedListener;
+    private WeakEventListener<OrientedImageryView, OrientedImageryViewModel, object?, SequenceBoundaryReachedArgs>? _viewModelSequenceBoundaryListener;
+
     /// <summary>
     /// Gets or sets the view model for the oriented imagery view.
     /// </summary>
@@ -103,12 +106,16 @@ public partial class OrientedImageryView
         HasSearchedForImages = false;
         if (oldValue != null)
         {
-            oldValue.PropertyChanged -= ViewModel_PropertyChanged;
-            oldValue.SequenceBoundaryReached -= ViewModel_SequenceBoundaryReached;
-
             if (GeoView?.GraphicsOverlays != null)
                 GeoView.GraphicsOverlays.Remove(oldValue.MarkersOverlay);
         }
+
+        _viewModelPropertyChangedListener?.Detach();
+        _viewModelPropertyChangedListener = null;
+        _viewModelSequenceBoundaryListener?.Detach();
+        _viewModelSequenceBoundaryListener = null;
+
+        CancelGeoViewTappedHandler();
 
         if (newValue == null)
         {
@@ -116,8 +123,19 @@ public partial class OrientedImageryView
             return;
         }
 
-        newValue.PropertyChanged += ViewModel_PropertyChanged;
-        newValue.SequenceBoundaryReached += ViewModel_SequenceBoundaryReached;
+        _viewModelPropertyChangedListener = new(this, newValue)
+        {
+            OnEventAction = static (instance, source, eventArgs) => instance.ViewModel_PropertyChanged(source, eventArgs),
+            OnDetachAction = static (instance, source, weakListener) => source.PropertyChanged -= weakListener.OnEvent
+        };
+        newValue.PropertyChanged += _viewModelPropertyChangedListener.OnEvent;
+
+        _viewModelSequenceBoundaryListener = new(this, newValue)
+        {
+            OnEventAction = static (instance, source, eventArgs) => instance.ViewModel_SequenceBoundaryReached(source, eventArgs),
+            OnDetachAction = static (instance, source, weakListener) => source.SequenceBoundaryReached -= weakListener.OnEvent
+        };
+        newValue.SequenceBoundaryReached += _viewModelSequenceBoundaryListener.OnEvent;
 
         if (GeoView != null)
         {
@@ -164,6 +182,7 @@ public partial class OrientedImageryView
                     _viewport.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
                 break;
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
+                CancelGeoViewTappedHandler();
                 HasSearchedForImages = false;
                 UpdateErrorMessages();
                 break;
@@ -217,14 +236,14 @@ public partial class OrientedImageryView
     public static readonly DependencyProperty HasSearchedForImagesProperty = PropertyHelper.GetProperty(HasSearchedForImagesPropertyKey);
 
     private OrientedImageViewport? _viewport;
-    private Action<object?, OrientedImageTappedEventArgs>? _onImageTappedOverride;
-    private Action<object?, OrientedImageTappedEventArgs> _onImageTapped;
+    private EventHandler<OrientedImageTappedEventArgs>? _onImageTappedOverride;
+    private EventHandler<OrientedImageTappedEventArgs> _onImageTapped;
 
     /// <summary>
     /// Set this function to override the default event handler when the image is tapped. A <c>null</c> value means the default behavior is active.
     /// </summary>
     /// <remarks>Toolkit-managed marker hits raise this event with <see cref="OrientedImageTappedEventArgs.Marker"/> set to <c>null</c>.</remarks>
-    public Action<object?, OrientedImageTappedEventArgs>? OnImageTappedOverride
+    public EventHandler<OrientedImageTappedEventArgs>? OnImageTappedOverride
     {
         get => _onImageTappedOverride;
 
@@ -314,8 +333,11 @@ public partial class OrientedImageryView
                 image.Type == OrientedImageType.Aerial360Video))
                 _viewport.LookAtAsync(searchPoint);
 
-            ViewModel.AreFootprintsEnabled = false;
-            _viewport.StateChanged += Viewport_StateChanged_UpdateFootprint;
+            if (!_viewport.IsInteractive)
+            {
+                ViewModel.AreFootprintsEnabled = false;
+                _viewport.StateChanged += Viewport_StateChanged_UpdateFootprint;
+            }
         }
 
         if (ViewModel.SelectedImage == null)
@@ -340,8 +362,9 @@ public partial class OrientedImageryView
 #endregion Display
 
 #region GeoView
-    private Action<object?, GeoViewInputEventArgs>? _onGeoViewTappedOverride;
-    private Action<object?, GeoViewInputEventArgs> _onGeoViewTapped;
+    private EventHandler<GeoViewInputEventArgs>? _onGeoViewTappedOverride;
+    private EventHandler<GeoViewInputEventArgs> _onGeoViewTapped;
+    private CancellationTokenSource? _geoViewTappedCTS;
 
     /// <summary>
     /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/> on which marker graphics are displayed.
@@ -372,6 +395,8 @@ public partial class OrientedImageryView
             oldGeoView.GeoViewTapped -= GeoView_GeoViewTapped;
         }
 
+        CancelGeoViewTappedHandler();
+
         if (newGeoView != null)
         {
             if (newGeoView.GraphicsOverlays == null)
@@ -386,7 +411,7 @@ public partial class OrientedImageryView
     /// <summary>
     /// Set this function to override the default event handler when the connected <see cref="GeoView"/> is tapped. A <c>null</c> value means the default behavior is active.
     /// </summary>
-    public Action<object?, GeoViewInputEventArgs>? OnGeoViewTappedOverride
+    public EventHandler<GeoViewInputEventArgs>? OnGeoViewTappedOverride
     {
         get => _onGeoViewTappedOverride;
 
@@ -408,46 +433,86 @@ public partial class OrientedImageryView
         if (e.Location == null || GeoView == null || ViewModel.OrientedImageryLayer == null)
             return;
 
-        switch (ViewModel.InteractionState)
+        using var currentCTS = new CancellationTokenSource();
+        if (_geoViewTappedCTS == null)
         {
-            case OrientedImageryViewInteractionState.AddMarkers:
-                ViewModel.AddMarkerLocation(e.Location);
-                break;
+            _geoViewTappedCTS = currentCTS;
+        }
+        else
+        {
+            var oldCTS = _geoViewTappedCTS;
+            _geoViewTappedCTS = currentCTS;
+            oldCTS.Cancel();
+        }
 
-            case OrientedImageryViewInteractionState.FindImages:
-                var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
-                var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters) ?? new List<OrientedImage>();
+        var token = currentCTS.Token;
+        try
+        {
+            switch (ViewModel.InteractionState)
+            {
+                case OrientedImageryViewInteractionState.AddMarkers:
+                    ViewModel.AddMarkerLocation(e.Location);
+                    break;
 
-                _noImagesAnnouncementCanRepeat = true;
-                HasSearchedForImages = true;
+                case OrientedImageryViewInteractionState.FindImages:
+                    var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
+                    var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters, token) ?? new List<OrientedImage>();
+                    if (token.IsCancellationRequested) return;
 
-                ViewModel.SetImages(images.ToList(), e.Location);
-                ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
-                ViewModel.IsSequentialNavigationEnabled = false;
-                break;
+                    _noImagesAnnouncementCanRepeat = true;
+                    HasSearchedForImages = true;
 
-            case OrientedImageryViewInteractionState.DisplayImage:
-                var identifyResult = await GeoView.IdentifyLayerAsync(ViewModel.OrientedImageryLayer, e.Position, 0, false);
+                    ViewModel.SetImages(images.ToList(), e.Location);
+                    ViewModel.SelectedImage = images.Count < 1 ? null : images[0];
+                    ViewModel.IsSequentialNavigationEnabled = false;
+                    break;
 
-                _noImagesAnnouncementCanRepeat = true;
-                HasSearchedForImages = true;
+                case OrientedImageryViewInteractionState.DisplayImage:
+                    var identifyResult = await GeoView.IdentifyLayerAsync(ViewModel.OrientedImageryLayer, e.Position, 0, false, token);
+                    if (token.IsCancellationRequested) return;
 
-                if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
-                {
-                    var image = await ViewModel.OrientedImageryLayer.FetchImageForFeatureAsync(feature);
-                    ViewModel.SetImages([image]);
-                    ViewModel.SelectedImage = image;
-                }
-                else
-                {
-                    ViewModel.SetImages([], e.Location);
-                    ViewModel.SelectedImage = null;
-                }
-                _noImagesAnnouncementCanRepeat = true;
-                break;
+                    if (identifyResult.GeoElements.Count > 0 && identifyResult.GeoElements[0] is Feature feature)
+                    {
+                        var image = await ViewModel.OrientedImageryLayer.FetchImageForFeatureAsync(feature, token);
+                        if (token.IsCancellationRequested) return;
 
-            default:
-                return;
+                        _noImagesAnnouncementCanRepeat = true;
+                        HasSearchedForImages = true;
+                        ViewModel.SetImages([image]);
+                        ViewModel.SelectedImage = image;
+                    }
+                    else
+                    {
+                        _noImagesAnnouncementCanRepeat = true;
+                        HasSearchedForImages = true;
+                        ViewModel.SetImages([], e.Location);
+                        ViewModel.SelectedImage = null;
+                    }
+                    _noImagesAnnouncementCanRepeat = true;
+                    break;
+
+                default:
+                    return;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"OrientedImageryView failed to handle tap: {ex.Message}");
+        }
+        finally
+        {
+            if (_geoViewTappedCTS == currentCTS)
+                _geoViewTappedCTS = null;
+        }
+    }
+
+    /// Only applies to the default handler
+    private void CancelGeoViewTappedHandler()
+    {
+        if (_geoViewTappedCTS != null)
+        {
+            _geoViewTappedCTS.Cancel();
+            _geoViewTappedCTS = null;
         }
     }
 #endregion GeoView
@@ -457,12 +522,12 @@ public partial class OrientedImageryView
     private OrientedImageryViewToolbarSelector? _defaultItemTemplateSelector;
 
     /// <summary>
-    /// Gets or sets the <see cref="DataTemplateSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar categories and
+    /// Gets or sets the <see cref="OrientedImageryViewToolbarSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar categories and
     /// items in <see cref="OrientedImageryViewModel.ToolbarCategories"/>.
     /// </summary>
-    public DataTemplateSelector? ToolbarItemTemplateSelector
+    public OrientedImageryViewToolbarSelector? ToolbarItemTemplateSelector
     {
-        get => (DataTemplateSelector)GetValue(ToolbarItemTemplateSelectorProperty);
+        get => (OrientedImageryViewToolbarSelector)GetValue(ToolbarItemTemplateSelectorProperty);
         set => SetValue(ToolbarItemTemplateSelectorProperty, value);
     }
 
@@ -470,15 +535,10 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="ToolbarItemTemplateSelector" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty ToolbarItemTemplateSelectorProperty =
-        PropertyHelper.CreateProperty<DataTemplateSelector?, OrientedImageryView>(nameof(ToolbarItemTemplateSelector), null, (s, oldValue, newValue) => s.OnItemTemplateSelectorChanged(oldValue, newValue));
+        PropertyHelper.CreateProperty<OrientedImageryViewToolbarSelector?, OrientedImageryView>(nameof(ToolbarItemTemplateSelector), null, (s, oldValue, newValue) => s.OnItemTemplateSelectorChanged(oldValue, newValue));
 
-    private void OnItemTemplateSelectorChanged(DataTemplateSelector? oldItemTemplateSelector, DataTemplateSelector? newItemTemplateSelector)
+    private void OnItemTemplateSelectorChanged(OrientedImageryViewToolbarSelector? oldSelector, OrientedImageryViewToolbarSelector? newSelector)
     {
-        if (newItemTemplateSelector is not OrientedImageryViewToolbarSelector newSelector)
-        {
-            return;
-        }
-
         // Save and in the future merge the default selector so the default styles are always available unless overridden.
         if (ReadLocalValue(ToolbarItemTemplateSelectorProperty) == DependencyProperty.UnsetValue)
         {
@@ -486,7 +546,7 @@ public partial class OrientedImageryView
         }
         else if (_defaultItemTemplateSelector is not null)
         {
-            newSelector.Merge(_defaultItemTemplateSelector);
+            newSelector?.Merge(_defaultItemTemplateSelector);
         }
 
         if (_toolbarContainer != null)
