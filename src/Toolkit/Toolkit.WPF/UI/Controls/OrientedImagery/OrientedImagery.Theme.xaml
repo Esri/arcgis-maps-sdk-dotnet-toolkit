@@ -1,7 +1,773 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
+    xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
+    xmlns:toolkitPrimitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives"
+    xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OrientedImagery/Paginator.Theme.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <FontFamily x:Key="ToolkitIconsFontFamily">pack://application:,,,/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/toolkit-icons.ttf#calcite-ui-icons-24</FontFamily>
+    <internal:ColorToColorConverter x:Key="ColorToColorConverter" />
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+    <!-- Helper styles -->
+    <Style x:Key="OrientedImageryMessageTextStyle" TargetType="{x:Type toolkitPrimitives:AccessibleTextBlock}">
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}" />
+    </Style>
+
+    <Style x:Key="OrientedImageryToolbarButtonBaseStyle" TargetType="{x:Type primitives:ButtonBase}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False">
+                <Setter Property="Background" Value="Transparent" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ToolbarButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource OrientedImageryToolbarButtonBaseStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFC0C0C0" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Root" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ToolbarToggleButtonStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource OrientedImageryToolbarButtonBaseStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFC0C0C0" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="False" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFD3D3D3" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="BorderBrush" Value="Black" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Root" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="Root" Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ImageInfoButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="26pt" />
+        <Setter Property="Height" Value="26pt" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="Transparent">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Source={x:Static SystemParameters.HighContrast}}" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ToolbarLabeledButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ToolbarButtonStyle}">
+        <Setter Property="MinWidth" Value="76" />
+        <Setter Property="MinHeight" Value="84" />
+    </Style>
+
+    <Style x:Key="ToolbarLabeledToggleButtonStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarToggleButtonStyle}">
+        <Setter Property="MinWidth" Value="76" />
+        <Setter Property="MinHeight" Value="84" />
+    </Style>
+
+    <Style x:Key="MultipleImagesToolbarToggleButtonStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ViewModel.Images.Count}" Value="0">
+                <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ViewModel.Images.Count}" Value="1">
+                <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ToolbarLabelStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="MinWidth" Value="68" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="Margin" Value="0,8,0,0" />
+        <Setter Property="FontSize" Value="{internal:TextScaledFontSize FontSize=12}" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="ToolbarComboBoxItemStyle" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsHighlighted" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ToolbarComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton Background="{TemplateBinding Background}"
+                                      AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      ClickMode="Press"
+                                      Focusable="False"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Padding="{TemplateBinding Padding}"
+                                      Style="{StaticResource ToolbarToggleButtonStyle}">
+                            <StackPanel>
+                                <ContentPresenter Height="32"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                  IsHitTestVisible="False" />
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{TemplateBinding Tag}" Style="{StaticResource ToolbarLabelStyle}" />
+                                    <Path Width="10" Height="6" Margin="4,8,0,0" VerticalAlignment="Top"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                          StrokeThickness="1.5" Data="M0 0L5 5L10 0" />
+                                </StackPanel>
+                            </StackPanel>
+                        </ToggleButton>
+                        <Popup x:Name="PART_Popup"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               Placement="Bottom"
+                               PopupAnimation="Slide">
+                            <Border MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                    BorderThickness="1">
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False">
+                <Setter Property="Background" Value="Transparent" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <DataTemplate x:Key="DisplayImageIconTemplate">
+        <Grid Width="33" Height="34">
+            <Path x:Name="DisplayIcon" Width="32" Height="32" Stretch="Uniform"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                  Data="M31.1864 15.1864H27.5786C27.1609 9.41668 22.5833 4.83905 16.8515 4.42359L16.8136 4.42142V0.813559C16.8136 0.364475 16.4491 0 16 0C15.5509 0 15.1864 0.364475 15.1864 0.813559V4.42142C9.41668 4.83905 4.83905 9.41668 4.42359 15.1485L4.42142 15.1864H0.813559C0.364475 15.1864 0 15.5509 0 16C0 16.4491 0.364475 16.8136 0.813559 16.8136H4.42142C4.83905 22.5833 9.41668 27.1609 15.1485 27.5764L15.1864 27.5786V31.1864C15.1864 31.6355 15.5509 32 16 32C16.4491 32 16.8136 31.6355 16.8136 31.1864V27.5786C22.5833 27.1609 27.1609 22.5833 27.5764 16.8515L27.5786 16.8136H31.1864C31.6355 16.8136 32 16.4491 32 16C32 15.5509 31.6355 15.1864 31.1864 15.1864ZM16.8136 25.9515V22.5085C16.8136 22.0594 16.4491 21.6949 16 21.6949C15.5509 21.6949 15.1864 22.0594 15.1864 22.5085V25.9515C10.3138 25.5414 6.45858 21.6862 6.05071 16.8504L6.04854 16.8136H9.49153C9.94061 16.8136 10.3051 16.4491 10.3051 16C10.3051 15.5509 9.94061 15.1864 9.49153 15.1864H6.04854C6.45858 10.3138 10.3138 6.45858 15.1496 6.05071L15.1864 6.04854V9.49153C15.1864 9.94061 15.5509 10.3051 16 10.3051C16.4491 10.3051 16.8136 9.94061 16.8136 9.49153V6.04854C21.6862 6.45858 25.5414 10.3138 25.9493 15.1496L25.9515 15.1864H22.5085C22.0594 15.1864 21.6949 15.5509 21.6949 16C21.6949 16.4491 22.0594 16.8136 22.5085 16.8136H25.9515C25.5403 21.6862 21.6862 25.5403 16.8504 25.9493L16.8136 25.9515Z" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FindImagesIconTemplate">
+        <Grid Width="33" Height="34">
+            <Path x:Name="FindIcon"
+                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                <Path.Data>
+                    <GeometryGroup FillRule="Nonzero">
+                        <PathGeometry FillRule="Nonzero" Figures="M26.7358 19.6048L27.7447 18.5074L32.9375 12.8586L24.2416 11.0883L11.1977 8.43274L7.75234 12.1806L13.9879 33.472L26.7358 19.6048ZM24.2416 11.0883L32.9375 12.8586L25.6458 11.3742L24.2416 11.0883ZM9.1681 12.5122L11.647 9.81565L30.469 13.6722L14.5913 30.944L9.1681 12.5122Z" />
+                        <PathGeometry FillRule="Nonzero" Figures="M6.59961 5.1366C7.92743 5.13681 8.99902 6.21199 8.99902 7.54382C8.99895 8.87559 7.92738 9.95084 6.59961 9.95105C5.27167 9.95104 4.1993 8.87572 4.19922 7.54382C4.19922 6.21186 5.27162 5.13661 6.59961 5.1366ZM6.59961 6.74109C6.15162 6.7411 5.79883 7.09449 5.79883 7.54382C5.7989 7.99309 6.15167 8.34655 6.59961 8.34656C7.04738 8.34635 7.39934 7.99296 7.39941 7.54382C7.39941 7.09462 7.04742 6.74129 6.59961 6.74109Z" />
+                        <PathGeometry FillRule="EvenOdd" Figures="M21.6003 19.6003L20.2007 21L14.6003 15.3996L16 14L21.6003 19.6003Z" />
+                        <PathGeometry FillRule="EvenOdd" Figures="M21.6003 15.3996L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3996Z" />
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ImageSearchModeIconTemplate" DataType="controls:OrientedImageryViewInteractionState">
+        <ContentPresenter x:Name="ModeIcon" Content="{Binding}"
+                          ContentTemplate="{StaticResource DisplayImageIconTemplate}" />
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.FindImages}">
+                <Setter TargetName="ModeIcon" Property="ContentTemplate" Value="{StaticResource FindImagesIconTemplate}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <Style x:Key="ImageSearchModeComboBoxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ToolbarComboBoxStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton MinWidth="0" MinHeight="84" Padding="0"
+                                      AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
+                                      ClickMode="Press" Focusable="False"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      Style="{StaticResource ToolbarToggleButtonStyle}"
+                                      ToolTip="{TemplateBinding ToolTip}">
+                            <StackPanel>
+                                <Grid Width="16" Height="32" />
+                                <Grid Height="32" Margin="0,8,0,0">
+                                    <Path Width="12" Height="8" VerticalAlignment="Center"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                          StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round" Data="M1 1L6 6L11 1" />
+                                </Grid>
+                            </StackPanel>
+                        </ToggleButton>
+                        <Popup x:Name="PART_Popup"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               Placement="Bottom"
+                               PopupAnimation="Slide">
+                            <Border MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                    BorderThickness="1">
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ImageNavigationButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="Width" Value="25" />
+        <Setter Property="MinHeight" Value="60" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFC0C0C0" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Root" Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Toolbar container style -->
+    <Style x:Key="OrientedImageryToolbarContainerStyle" TargetType="{x:Type ItemsControl}">
+        <Setter Property="Margin" Value="8" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Toolbar data templates -->
+
+    <DataTemplate x:Key="ToolbarCategoryTemplate" DataType="controls:OrientedImageryToolbarCategory">
+        <local:AccessibleItemsControl ItemsSource="{Binding ToolbarItems}"
+                      ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                      Style="{StaticResource OrientedImageryToolbarContainerStyle}"
+                      Margin="0" IsTabStop="False" Focusable="False" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="MoreCategoryTemplate" DataType="controls:OrientedImageryToolbarCategory">
+        <local:AccessibleItemsControl ItemsSource="{Binding ToolbarItems}"
+                      ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                      Visibility="{Binding ViewModel.SupportsSequentialNavigation, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Style="{StaticResource OrientedImageryToolbarContainerStyle}"
+                      Margin="0" IsTabStop="False" Focusable="False">
+        </local:AccessibleItemsControl>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
+        <ToggleButton IsChecked="{Binding ViewModel.ShowSelectedFootprint}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}">
+            <ToggleButton.Style>
+                <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewModel.SelectedImage}" Value="{x:Null}">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToggleButton.Style>
+            <StackPanel>
+                <Viewbox SnapsToDevicePixels="true" Width="32" Height="32" Stretch="Uniform">
+                    <Grid Width="32" Height="32">
+                        <Path SnapsToDevicePixels="true"
+                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                              Data="F1 M28.9874 20.3151L30.0344 26.5901C28.6644 26.3501 26.4444 26.0601 23.7144 26.0601C23.5454 26.0601 23.3904 26.0671 23.2284 26.0701L22.1884 27.1101C22.6654 27.0791 23.1704 27.0601 23.7144 27.0601C28.1644 27.0601 31.2544 27.8601 31.2544 27.8601L29.8564 19.4471L28.9874 20.3151ZM14.0534 27.9881C12.6334 28.3741 11.0464 28.6601 8.79441 28.6601C5.78441 28.6601 3.42441 27.7701 2.36441 27.2901L6.04441 5.08005C7.06441 5.38005 8.58441 5.73005 10.5944 5.73005C13.0944 5.73005 14.5944 5.30005 16.0344 4.88005C17.4844 4.46005 18.8544 4.07005 21.3244 4.07005C23.5144 4.07005 25.4344 4.40005 26.3744 4.59005L28.0724 14.7941L29.1324 15.1021L27.2544 3.76005C27.2544 3.76005 24.5844 3.07005 21.3244 3.07005C16.1844 3.07005 15.4044 4.73005 10.5944 4.73005C7.77441 4.73005 5.95441 3.99005 5.25441 3.76005L1.25441 27.8601C1.25441 27.8601 4.34441 29.6601 8.79441 29.6601C11.1674 29.6601 12.8534 29.3501 14.3314 28.9431L14.0534 27.9881ZM10.7544 9.86005C9.92441 9.86005 9.25441 10.5301 9.25441 11.3601C9.25441 12.1901 9.92441 12.8601 10.7544 12.8601C11.5844 12.8601 12.2544 12.1901 12.2544 11.3601C12.2544 10.5301 11.5844 9.86005 10.7544 9.86005ZM10.7544 11.8601C10.4744 11.8601 10.2544 11.6401 10.2544 11.3601C10.2544 11.0801 10.4744 10.8601 10.7544 10.8601C11.0344 10.8601 11.2544 11.0801 11.2544 11.3601C11.2544 11.6401 11.0344 11.8601 10.7544 11.8601ZM12.9704 12.4931C12.7414 12.9391 12.3836 13.306 11.9434 13.5461L13.0971 17.2201L15.3644 25.3401L16.6644 29.8001L29.2544 17.2201L12.9704 12.4931ZM14.0144 17.0701L12.9844 13.5301L27.3544 17.7001L17.1544 27.9001L14.0144 17.0701Z" />
+                    </Grid>
+                </Viewbox>
+                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintStackedLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowUnselectedFootprintsToolbarTemplate" DataType="controls:ShowUnselectedFootprintsVM">
+        <ToggleButton IsChecked="{Binding ViewModel.ShowUnselectedFootprints}"
+                      Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAdditionalFootprintsLabel}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedImageFootprints}">
+            <StackPanel>
+                <Viewbox SnapsToDevicePixels="true" Width="32" Height="32" Stretch="Uniform">
+                    <Grid Width="32" Height="32">
+                        <Path Opacity="0.25"
+                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                              Data="M10 13L13.0187 18.0311L12.439 19H9.56104L1.7832 6H20.2168L16.0287 13H10Z" />
+                        <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Data="F1 M17.1999 13L22 5H0L9 20H13L13.6 19L19 28H23L32 13H17.1999ZM12.439 19H9.56103L1.7832 6H20.2168L16.0287 13H9.99999L13.0187 18.0311L12.439 19ZM22.439 27H19.561L11.7832 14H30.2168L22.439 27Z" />
+                    </Grid>
+                </Viewbox>
+                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAdditionalFootprintsStackedLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowCameraMarkersToolbarTemplate" DataType="controls:ShowCameraMarkersVM">
+        <ToggleButton IsChecked="{Binding ViewModel.ShowCameraLocations, Mode=TwoWay}"
+                      Style="{StaticResource MultipleImagesToolbarToggleButtonStyle}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsLabel}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleCameraMarkers}">
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <Grid Width="32" Height="32">
+                        <Path Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                              StrokeThickness="1">
+                            <Path.Data>
+                                <GeometryGroup>
+                                    <EllipseGeometry Center="9,23" RadiusX="3.5" RadiusY="3.5" />
+                                    <EllipseGeometry Center="16,16" RadiusX="3.5" RadiusY="3.5" />
+                                    <EllipseGeometry Center="9,8" RadiusX="3.5" RadiusY="3.5" />
+                                    <EllipseGeometry Center="23,25" RadiusX="3.5" RadiusY="3.5" />
+                                    <EllipseGeometry Center="23,8" RadiusX="3.5" RadiusY="3.5" />
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsStackedLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="AllowAddingMarkersToolbarTemplate" DataType="controls:AllowAddingMarkersVM">
+        <ToggleButton IsChecked="{Binding IsAddingMarkersEnabled}"
+                      MinWidth="0" Padding="0,4"
+                      Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersLabel}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}">
+            <StackPanel>
+                <Viewbox Width="32" Height="32" Stretch="Uniform">
+                    <TextBlock Text="&#xe8ed;"
+                               FontSize="24"
+                               FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" />
+                </Viewbox>
+                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkersStackedLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ImageSearchModeToolbarTemplate" DataType="controls:ImageSearchModeVM">
+        <Grid KeyboardNavigation.TabNavigation="Local">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ToggleButton IsChecked="{Binding IsImageSelectionEnabled}"
+                          TabIndex="0" MinWidth="0" Padding="0,4"
+                          Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
+                          AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
+                          ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                <StackPanel>
+                    <Viewbox Width="32" Height="32" Stretch="Uniform">
+                        <ContentControl Content="{Binding SelectedInteractionState}"
+                                        ContentTemplate="{StaticResource ImageSearchModeIconTemplate}"
+                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                        Focusable="False" IsTabStop="False" />
+                    </Viewbox>
+                    <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ToolbarLabelStyle}">
+                                <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeDisplayStackedLabel}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedInteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.FindImages}">
+                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeFindStackedLabel}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </ToggleButton>
+            <ComboBox Grid.Column="1" TabIndex="1" MinWidth="0" Padding="0"
+                      ItemsSource="{Binding ImageSearchModes}"
+                      SelectedItem="{Binding SelectedInteractionState, Mode=TwoWay}"
+                      Style="{StaticResource ImageSearchModeComboBoxStyle}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ToolbarComboBoxItemStyle}">
+                        <Setter Property="controls:ImageSearchModeSelectionBehavior.RepeatSelection" Value="True" />
+                        <Setter Property="MinHeight" Value="40" />
+                        <Setter Property="Padding" Value="8,4" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Width="24" Height="24" Margin="0,0,8,0" Stretch="Uniform">
+                                <ContentControl Content="{Binding}"
+                                                ContentTemplate="{StaticResource ImageSearchModeIconTemplate}"
+                                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}"
+                                                Focusable="False" IsTabStop="False" />
+                            </Viewbox>
+                            <TextBlock VerticalAlignment="Center"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeDisplay}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding}" Value="{x:Static controls:OrientedImageryViewInteractionState.FindImages}">
+                                                <Setter Property="Text" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeFind}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
+        <ComboBox ItemsSource="{Binding SymbolOptions}"
+                  SelectedItem="{Binding SelectedSymbol, Mode=TwoWay}"
+                  MinWidth="0" Padding="0"
+                  Style="{StaticResource ToolbarComboBoxStyle}"
+                  AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
+                  ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
+            <ComboBox.Template>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton x:Name="MarkerSymbolDropdownButton"
+                                      AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
+                                      MinWidth="0" MinHeight="84" Padding="0"
+                                      ClickMode="Press" Focusable="False"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      Style="{StaticResource ToolbarToggleButtonStyle}"
+                                      ToolTip="{TemplateBinding ToolTip}">
+                            <StackPanel>
+                                <controls:SymbolDisplay Symbol="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                                                        Width="16" Height="32" Focusable="False" />
+                                <Grid Height="32" Margin="0,8,0,0">
+                                    <Path Width="12" Height="8" VerticalAlignment="Center"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                          StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round" Data="M1 1L6 6L11 1" />
+                                </Grid>
+                            </StackPanel>
+                        </ToggleButton>
+                        <Popup x:Name="PART_Popup"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               Placement="Bottom"
+                               PopupAnimation="Slide">
+                            <Border MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                    BorderThickness="1">
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </ComboBox.Template>
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ToolbarComboBoxItemStyle}">
+                    <Setter Property="MinWidth" Value="40" />
+                    <Setter Property="MinHeight" Value="40" />
+                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </ComboBox.ItemContainerStyle>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <controls:SymbolDisplay Symbol="{Binding}" Width="32" Height="32" Focusable="False" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="controls:ClearMarkersVM">
+        <Button Style="{StaticResource ToolbarLabeledButtonStyle}"
+                Command="{Binding ViewModel.ClearMarkersCommand}"
+                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}"
+                ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}">
+            <StackPanel>
+                <Viewbox Width="28" Height="28" Stretch="Uniform">
+                    <TextBlock Text="&#xeb04;"
+                               FontSize="24"
+                               FontFamily="{StaticResource ToolkitIconsFontFamily}"
+                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                </Viewbox>
+                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewClearMarkersStackedLabel}" />
+            </StackPanel>
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SequentialNavigationToolbarTemplate" DataType="controls:SequentialNavigationVM">
+        <ToggleButton Command="{Binding ViewModel.ToggleSequentialNavigationCommand}"
+                      IsChecked="{Binding ViewModel.IsSequentialNavigationEnabled, Mode=OneWay}"
+                      IsEnabled="{Binding ViewModel.SupportsSequentialNavigation}">
+            <ToggleButton.Style>
+                <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
+                    <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
+                    <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationLabel}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
+                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
+                            <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToggleButton.Style>
+            <StackPanel>
+                <Path Width="28"
+                      Height="28"
+                      Stretch="Uniform"
+                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                      Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z" />
+                <TextBlock Style="{StaticResource ToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationStackedLabel}" />
+            </StackPanel>
+        </ToggleButton>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ToolbarDividerTemplate" DataType="controls:ToolbarDividerVM">
+        <Border Width="1" Height="72" Margin="8,6" Focusable="False"
+                Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
+    </DataTemplate>
+
+    <!-- Image viewport style -->
     <Style TargetType="{x:Type controls:OrientedImageViewport}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
@@ -17,4 +783,498 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <controls:OrientedImageryViewToolbarSelector x:Key="DefaultOrientedImageryToolbarSelector">
+        <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.ModeCategoryName}"
+                                                             Template="{StaticResource ToolbarCategoryTemplate}" />
+        <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.OverlaysCategoryName}"
+                                                             Template="{StaticResource ToolbarCategoryTemplate}" />
+        <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.MarkersCategoryName}"
+                                                             Template="{StaticResource ToolbarCategoryTemplate}" />
+        <controls:OrientedImageryToolbarCategorySelectorPair CategoryName="{x:Static controls:OrientedImageryToolbarCategory.MoreCategoryName}"
+                                                             Template="{StaticResource MoreCategoryTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ToolbarDividerVM}" Template="{StaticResource ToolbarDividerTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:SelectNewMarkerSymbolVM}" Template="{StaticResource MarkerPickerToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:AllowAddingMarkersVM}" Template="{StaticResource AllowAddingMarkersToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ImageSearchModeVM}" Template="{StaticResource ImageSearchModeToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ShowSelectedFootprintVM}" Template="{StaticResource ShowSelectedFootprintToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ShowUnselectedFootprintsVM}" Template="{StaticResource ShowUnselectedFootprintsToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ShowCameraMarkersVM}" Template="{StaticResource ShowCameraMarkersToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:ClearMarkersVM}" Template="{StaticResource ClearMarkersToolbarTemplate}" />
+        <controls:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type controls:SequentialNavigationVM}" Template="{StaticResource SequentialNavigationToolbarTemplate}" />
+    </controls:OrientedImageryViewToolbarSelector>
+
+    <!-- Main view style -->
+    <Style TargetType="{x:Type controls:OrientedImageryView}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="DisplayBackgroundColor">
+            <Setter.Value>
+                <Binding Path="Background.Color" RelativeSource="{RelativeSource Self}" Converter="{StaticResource ColorToColorConverter}" />
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="ToolbarItemTemplateSelector" Value="{StaticResource DefaultOrientedImageryToolbarSelector}" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:OrientedImageryView}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                                <local:AccessibleItemsControl x:Name="PART_ToolbarContainer" IsTabStop="False" Focusable="False"
+                                          ItemTemplateSelector="{StaticResource DefaultOrientedImageryToolbarSelector}">
+                                    <ItemsControl.Style>
+                                        <Style TargetType="{x:Type ItemsControl}" BasedOn="{StaticResource OrientedImageryToolbarContainerStyle}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ItemsControl.Style>
+                                </local:AccessibleItemsControl>
+                            </ScrollViewer>
+
+                            <Grid Grid.Row="1" KeyboardNavigation.TabNavigation="Local">
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <controls:OrientedImageViewport Grid.ColumnSpan="3"
+                                                               x:Name="PART_ImageViewport"
+                                                               DisplayBackgroundColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayBackgroundColor}" />
+
+                                <Border Grid.ColumnSpan="3"
+                                        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=IsBusy}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Text="{internal:LocalizedString Key=OrientedImageryViewImageLoading}" />
+                                </Border>
+
+                                <ProgressBar Grid.ColumnSpan="3"
+                                             Height="2"
+                                             VerticalAlignment="Top"
+                                             IsIndeterminate="True">
+                                    <ProgressBar.Style>
+                                        <Style TargetType="{x:Type ProgressBar}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=IsBusy}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ProgressBar.Style>
+                                </ProgressBar>
+
+                                <Border Grid.ColumnSpan="3"
+                                        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Margin="16"
+                                                MaxWidth="400"
+                                                TextElement.FontSize="{internal:TextScaledFontSize FontSize=18}"
+                                                TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
+
+                                        <!-- User prompts when no image is selected -->
+                                        <ContentControl x:Name="PART_NoImagesPromptPresenter" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}"
+                                                        Focusable="False" IsTabStop="False">
+                                            <ContentControl.Style>
+                                                <Style TargetType="{x:Type ContentControl}">
+                                                    <Setter Property="ContentTemplate">
+                                                        <Setter.Value>
+                                                            <!-- Prompt user to enable one of the image search interaction modes if currently in None state -->
+                                                            <DataTemplate>
+                                                                <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                                                           TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                           AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesNone}">
+                                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
+                                                                    <LineBreak />
+                                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewEnableImageSelection}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                        <Viewbox Width="24" Height="24" Margin="4,0">
+                                                                            <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
+                                                                                            ContentTemplate="{StaticResource FindImagesIconTemplate}" Focusable="False" />
+                                                                        </Viewbox>
+                                                                    </InlineUIContainer><Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionOr}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                        <Viewbox Width="24" Height="24" Margin="4,0">
+                                                                            <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}"
+                                                                                            ContentTemplate="{StaticResource DisplayImageIconTemplate}" Focusable="False" />
+                                                                        </Viewbox>
+                                                                    </InlineUIContainer>
+                                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMode}" />
+                                                                </toolkitPrimitives:AccessibleTextBlock>
+                                                            </DataTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <!-- Prompt when in Find mode -->
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.FindImages}">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                                   AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesFind}">
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
+                                                                            <LineBreak />
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionFindImages}" />
+                                                                            <LineBreak />
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSwitchMode}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                                <Viewbox Width="24" Height="24" Margin="4,0">
+                                                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}"
+                                                                                                    ContentTemplate="{StaticResource DisplayImageIconTemplate}" Focusable="False" />
+                                                                                </Viewbox>
+                                                                            </InlineUIContainer>
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
+                                                                        </toolkitPrimitives:AccessibleTextBlock>
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+
+                                                        <!-- Prompt when in Display mode -->
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.DisplayImage}">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                                   AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesDisplay}">
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
+                                                                            <LineBreak />
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionDisplayImage}" />
+                                                                            <LineBreak />
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSwitchMode}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                                <Viewbox Width="24" Height="24" Margin="4,0">
+                                                                                    <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
+                                                                                                    ContentTemplate="{StaticResource FindImagesIconTemplate}" Focusable="False" />
+                                                                                </Viewbox>
+                                                                            </InlineUIContainer>
+                                                                            <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
+                                                                        </toolkitPrimitives:AccessibleTextBlock>
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+
+                                                        <!-- Most common prompt: shown when user has attempted a search but not images were found for the tapped location -->
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HasSearchedForImages}" Value="True">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                                   Text="{internal:LocalizedString Key=OrientedImageryViewNoImagesFound}" />
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.ColumnSpan="3"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                        TextElement.Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                        BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                        BorderThickness="1"
+                                        Padding="8">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=PART_ImageViewport, Path=Error}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                               MaxWidth="300"
+                                               Text="{Binding ElementName=PART_ImageViewport, Path=Error.Message}"
+                                               TextWrapping="Wrap"
+                                               AutomationProperties.LiveSetting="Assertive"/>
+                                </Border>
+
+                                <Button Style="{StaticResource ImageNavigationButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        VerticalAlignment="Center">
+                                    <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                        <Grid Width="32" Height="32">
+                                            <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Data="M20 26.1 9.9 16 20 5.9z">
+                                                <Path.RenderTransform>
+                                                    <TranslateTransform X="-3" Y="3" />
+                                                </Path.RenderTransform>
+                                            </Path>
+                                        </Grid>
+                                    </Viewbox>
+                                </Button>
+                                <Button Style="{StaticResource ImageNavigationButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        Grid.Column="2" VerticalAlignment="Center">
+                                    <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                        <Grid Width="32" Height="32">
+                                            <Path SnapsToDevicePixels="true" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Data="M12 5.9 22.1 16 12 26.1z">
+                                                <Path.RenderTransform>
+                                                    <TranslateTransform Y="2" />
+                                                </Path.RenderTransform>
+                                            </Path>
+                                        </Grid>
+                                    </Viewbox>
+                                </Button>
+                                <Button Grid.ColumnSpan="3"
+                                        TabIndex="0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Margin="16"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.OpenSelectedImagePopupCommand}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ImageInfoButtonStyle}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <Viewbox Width="23pt" Height="23pt" Stretch="Uniform">
+                                        <Grid Width="32" Height="32">
+                                            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                                  Stroke="Black" StrokeThickness="1"
+                                                  Data="M16 3C8.8205 3 3 8.8205 3 16C3 23.1795 8.8205 29 16 29C23.1795 29 29 23.1795 29 16C29 8.8205 23.1795 3 16 3Z" />
+                                            <Path Fill="{Binding Background, RelativeSource={RelativeSource AncestorType=Button}}"
+                                                  Data="M16.0105 8C16.7775 8 17.5 8.673 17.5 9.4905C17.5 10.3635 16.7775 11 16.0105 11C15.1125 11 14.5 10.3635 14.5 9.4905C14.5 8.673 15.1125 8 16.0105 8ZM19.5 23.5H17H15H12.5V22L15 21.5V15H13V13.5L17 13V21.5L19.5 22V23.5Z" />
+                                        </Grid>
+                                    </Viewbox>
+                                </Button>
+                            </Grid>
+
+                            <Grid Grid.Row="1" Panel.ZIndex="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.35*" />
+                                    <ColumnDefinition Width="0.65*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImagePopup}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <Border Grid.Column="1"
+                                        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                        BorderThickness="1,0,0,0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <controls:PopupViewer Grid.Row="1"
+                                                              Margin="16,0,8,8"
+                                                              Popup="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImagePopup}" />
+                                        <Button x:Name="PART_CloseDetailsButton" HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Margin="8"
+                                                Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.CloseSelectedImagePopupCommand}"
+                                                Style="{StaticResource ToolbarButtonStyle}"
+                                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}"
+                                                ToolTip="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock VerticalAlignment="Center" FontSize="{internal:TextScaledFontSize FontSize=14}"
+                                                           Text="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}" />
+                                                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center"
+                                                           Text="&#xeb49;" FontSize="{internal:TextScaledFontSize FontSize=16}"
+                                                           FontFamily="{StaticResource ToolkitIconsFontFamily}" />
+                                            </StackPanel>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+
+                            <Border Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Padding="16"
+                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                    TextElement.FontSize="{internal:TextScaledFontSize FontSize=18}"
+                                    TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <toolkitPrimitives:AccessibleTextBlock x:Name="PART_MainErrorMessagePresenter"
+                                           Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           MaxWidth="400"
+                                           Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}"
+                                           TextAlignment="Center"
+                                           LineHeight="30"
+                                           TextWrapping="Wrap"
+                                           AutomationProperties.LiveSetting="Assertive"/>
+                            </Border>
+
+                            <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="2">
+                                <local:Paginator.Style>
+                                    <Style TargetType="{x:Type local:Paginator}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.IsSequentialNavigationEnabled}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </local:Paginator.Style>
+                            </local:Paginator>
+                            <StackPanel Grid.Row="2"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center">
+                                <StackPanel.Style>
+                                    <Style TargetType="{x:Type StackPanel}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.IsSequentialNavigationEnabled}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <Button Style="{StaticResource PaginatorNavigationButtonStyle}"
+                                        IsTabStop="False"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                                    <TextBlock Text="&lt;" />
+                                </Button>
+                                <Button Content="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
+                                        Style="{StaticResource PaginatorPageButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}" />
+                                <Grid Width="35" Height="32">
+                                    <TextBlock Text="."
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                               FontSize="{internal:TextScaledFontSize FontSize=14}" />
+                                    <Border Height="2"
+                                            Margin="1,0"
+                                            VerticalAlignment="Bottom"
+                                            Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                </Grid>
+                                <Button Content="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
+                                        Style="{StaticResource PaginatorPageButtonStyle}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}" />
+                                <Button Style="{StaticResource PaginatorNavigationButtonStyle}"
+                                        IsTabStop="False"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                                    <TextBlock Text="&gt;" />
+                                </Button>
+                            </StackPanel>
+                            <toolkitPrimitives:AccessibleTextBlock Grid.Row="3"
+                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError.Message}"
+                                       Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       Margin="8,0,8,4">
+                                <toolkitPrimitives:AccessibleTextBlock.Style>
+                                    <Style TargetType="{x:Type toolkitPrimitives:AccessibleTextBlock}" BasedOn="{StaticResource OrientedImageryMessageTextStyle}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </toolkitPrimitives:AccessibleTextBlock.Style>
+                            </toolkitPrimitives:AccessibleTextBlock>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

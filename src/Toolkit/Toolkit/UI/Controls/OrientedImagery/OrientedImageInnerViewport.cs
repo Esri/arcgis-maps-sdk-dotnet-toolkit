@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The cancellation sources are cancel-only (no timer), so they need no disposal; canceling on supersede is the release.")]
 internal abstract class OrientedImageInnerViewport
 {
-    private static readonly TimeSpan FootprintUpdateInterval = TimeSpan.FromMilliseconds(250);
+    private static readonly TimeSpan FootprintUpdateInterval = TimeSpan.FromMilliseconds(500);
 
     private IEnumerable<OrientedImageMarker>? _markerSource;
     private List<OrientedImageMarker> _markers = [];

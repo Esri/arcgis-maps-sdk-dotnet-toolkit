@@ -1105,4 +1105,217 @@
     <value>Oriented image</value>
     <comment>UIA AutomationProperties.Name for the OrientedImageViewport control, used by screen readers to identify the control</comment>
   </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>Oriented imagery view</value>
+    <comment>The type of the OrientedImageryView control announced by screen readers if recieves focus.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>Select marker symbol</value>
+    <comment>Tooltip for the OrientedImageryView button that selects the marker symbol.</comment>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>Toggle add markers</value>
+    <comment>Tooltip for the OrientedImageryView button that enables or disables adding markers.</comment>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>Show selected image footprint</value>
+    <comment>Tooltip for the OrientedImageryView button that shows the selected image footprint.</comment>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Show unselected image footprints</value>
+    <comment>Tooltip for the OrientedImageryView button that shows unselected image footprints.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>Image search mode</value>
+    <comment>Tooltip for the image search mode selector.</comment>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>Current Footprint</value>
+    <comment>Single-line automation name for the selected image footprint toggle.</comment>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>Current
+Footprint</value>
+    <comment>Same as OrientedImageryViewCurrentFootprintLabel, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>Additional Footprints</value>
+    <comment>Single-line automation name for the unselected image footprints toggle.</comment>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>Additional
+Footprints</value>
+    <comment>Same as OrientedImageryViewAdditionalFootprintsLabel, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>Camera Locations</value>
+    <comment>Single-line automation name for the camera locations toggle.</comment>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>Camera
+Locations</value>
+    <comment>Same as OrientedImageryViewCameraLocationsLabel, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>Add markers</value>
+    <comment>Single-line automation name for the marker-creation toggle.</comment>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>Add
+markers</value>
+    <comment>Same as OrientedImageryViewAddMarkersLabel, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>Clear markers</value>
+    <comment>Single-line tooltip and automation name for the button that clears markers.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>Clear
+markers</value>
+    <comment>Same as OrientedImageryViewClearMarkersLabel, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>Find images</value>
+    <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>Find
+images</value>
+    <comment>Same as OrientedImageryViewImageSearchModeFind, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>Display image</value>
+    <comment>Label for the mode that displays individual tapped oriented images.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>Display
+image</value>
+    <comment>Same as OrientedImageryViewImageSearchModeDisplay, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>Open details for selected image</value>
+    <comment>Tooltip for the button that opens the popup for the selected oriented image.</comment>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>Close details</value>
+    <comment>Tooltip for the button that closes the selected oriented image popup.</comment>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>Go to image {0} of {1}</value>
+    <comment>Pagination automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>Image {0} of {1}, selected</value>
+    <comment>Selected pagination button automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>Toggle camera locations on GeoView</value>
+    <comment>Tooltip for the OrientedImageryView button that shows or hides camera locations.</comment>
+  </data>
+  <data name="OrientedImageryViewEnterSequentialNavigation" xml:space="preserve">
+    <value>Enter sequential navigation</value>
+    <comment>Tooltip for the OrientedImageryView button that enters sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewReturnToResults" xml:space="preserve">
+    <value>Return to results</value>
+    <comment>Tooltip for the OrientedImageryView button that returns from sequential navigation.</comment>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>Sequential navigation</value>
+    <comment>Single-line automation name for the sequential navigation toggle. The automation name changes to Return to results while sequential navigation is active.</comment>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>Sequential
+navigation</value>
+    <comment>Same as OrientedImageryViewSequentialNavigationLabel, but with manual line breaks for formatting.</comment>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>Previous image</value>
+    <comment>Tooltip and accessibility name for the previous image button.</comment>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>Next image</value>
+    <comment>Tooltip and accessibility name for the next image button.</comment>
+  </data>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>Image loading...</value>
+    <comment>Message shown by OrientedImageryView while an image is loading.</comment>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>Image loaded</value>
+    <comment>Message announced by screen reader when an image has loaded.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>No image to display</value>
+    <comment>Heading shown by OrientedImageryView when no image is selected.</comment>
+  </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>No images found for the tapped location</value>
+    <comment>Message shown when no images found for a tapped location.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>No image to display. Enable find images or display image mode to search for images</value>
+    <comment>Full text for prompt when no images have been selected and interaction mode is set to none. A full text version is needed for screen readers.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>No image to display. Tap on the map to search for images or switch to display image mode.</value>
+    <comment>Full text for prompt when no images have been selected and interaction mode is set to display image. A full text version is needed for screen readers.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>No image to display. Tap on a feature to view its image or switch to find images mode.</value>
+    <comment>Full text for prompt when no images have been selected and interaction mode is set to display image. A full text version is needed for screen readers.</comment>
+  </data>
+  <data name="OrientedImageryViewEnableImageSelection" xml:space="preserve">
+    <value>Enable</value>
+    <comment>First word in "Enable [icon] or [icon] mode to search for images".</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>or</value>
+    <comment>The "or" in "Enable [icon] or [icon] mode to search for images"</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>mode to search for images</value>
+    <comment>Final part of "Enable [icon] or [icon] mode to search for images"</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>Tap on the map to search for images</value>
+    <comment>Instructions for Find Images mode.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>Tap on a feature to view its image</value>
+    <comment>Instructions for Display Image mode.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>or switch to</value>
+    <comment>First part of "or switch to [icon] mode". Follows OrientedImageryViewImageSelectionDisplayImage/FindImages instructions. (e.g. "Tap on a feature to view its image or switch to [icon] mode")</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
+    <value>mode</value>
+    <comment>Last word in "or switch to [icon] mode"</comment>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>Connect a GeoView to view oriented imagery.</value>
+    <comment>Error shown by OrientedImageryView when no GeoView is connected.</comment>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>No layer selected.</value>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>Start of image sequence reached</value>
+    <comment>Screen-reader announcement after confirming there is no previous image in the sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>End of image sequence reached</value>
+    <comment>Screen-reader announcement after confirming there is no next image in the sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>Start and end of image sequence reached</value>
+    <comment>Screen-reader announcement when the current image has neither a previous nor a next image in its sequence.</comment>
+  </data>
 </root>
