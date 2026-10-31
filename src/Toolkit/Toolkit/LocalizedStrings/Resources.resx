@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1165,6 +1165,12 @@ Locations</value>
 markers</value>
     <comment>Same as OrientedImageryViewAddMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
+  <data name="OrientedImageryViewMobileAddMarkers" xml:space="preserve">
+    <value>Add Markers</value>
+  </data>
+  <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
+    <value>Select Symbol</value>
+  </data>
   <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
     <value>Clear markers</value>
     <comment>Single-line tooltip and automation name for the button that clears markers.</comment>
@@ -1183,6 +1189,11 @@ markers</value>
 images</value>
     <comment>Same as OrientedImageryViewImageSearchModeFind, but with manual line breaks for formatting.</comment>
   </data>
+  <data name="OrientedImageryViewAutoUpdateToolbarLabel" xml:space="preserve">
+    <value>Automatically
+update footprint</value>
+    <comment>Two-line MAUI Windows toolbar caption. Preserve a suitable line break between Automatically and update footprint.</comment>
+  </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
     <value>Display image</value>
     <comment>Label for the mode that displays individual tapped oriented images.</comment>
@@ -1195,6 +1206,10 @@ image</value>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
     <value>Open details for selected image</value>
     <comment>Tooltip for the button that opens the popup for the selected oriented image.</comment>
+  </data>
+  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
+    <value>Image details</value>
+    <comment>Heading of the selected oriented image information sheet.</comment>
   </data>
   <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
     <value>Close details</value>
@@ -1293,12 +1308,38 @@ navigation</value>
     <value>mode</value>
     <comment>Last word in "or switch to [icon] mode"</comment>
   </data>
+  <data name="OrientedImageryViewImageSelectionUsing" xml:space="preserve">
+    <value>using</value>
+    <comment>Second instruction line, before the Find images icon in MAUI.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMap" xml:space="preserve">
+    <value>Tap on the map to search</value>
+    <comment>First line of the no-image-selected instruction, followed by 'using [Search icon] or [Examine icon] mode'.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionInstructions" xml:space="preserve">
+    <value>Select Find images or Display image, then tap on the map to search.</value>
+    <comment>Accessible text alternative to the icon-based no-image-selected instructions in MAUI.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindInstructions" xml:space="preserve">
+    <value>Tap on the map to search for images or switch to Display image mode.</value>
+    <comment>Complete accessible description of the MAUI empty-image instructions when Find Images is enabled.</comment>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayInstructions" xml:space="preserve">
+    <value>Tap on a feature to view its image or switch to Find images mode.</value>
+    <comment>Complete accessible description of the MAUI empty-image instructions when Display Image is enabled.</comment>
+  </data>
   <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
     <value>Connect a GeoView to view oriented imagery.</value>
     <comment>Error shown by OrientedImageryView when no GeoView is connected.</comment>
   </data>
   <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
     <value>No layer selected.</value>
+  </data>
+  <data name="OrientedImageryViewNoLayers" xml:space="preserve">
+    <value>No oriented imagery layers are available in the connected map or scene.</value>
+  </data>
+  <data name="OrientedImageryViewInvalidLayer" xml:space="preserve">
+    <value>The selected oriented imagery layer does not belong to the connected map or scene.</value>
   </data>
   <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
     <value>Prev</value>
@@ -1318,4 +1359,65 @@ navigation</value>
     <value>Start and end of image sequence reached</value>
     <comment>Screen-reader announcement when the current image has neither a previous nor a next image in its sequence.</comment>
   </data>
+  <data name="OrientedImageryViewClose" xml:space="preserve"><value>Close oriented imagery</value></data>
+  <data name="OrientedImageryViewClosePanel" xml:space="preserve"><value>Close panel</value></data>
+  <data name="OrientedImageryViewOverlays" xml:space="preserve"><value>Overlays</value></data>
+  <data name="OrientedImageryViewMarkers" xml:space="preserve"><value>Markers</value></data>
+  <data name="OrientedImageryViewMode" xml:space="preserve"><value>Mode</value></data>
+  <data name="OrientedImageryViewChangeMapInteraction" xml:space="preserve">
+    <value>Change map interaction</value>
+    <comment>MAUI accessibility name for the chooser that selects Find images or Display image when interacting with the map.</comment>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImage" xml:space="preserve">
+    <value>Show previous image</value>
+    <comment>MAUI accessibility name and tooltip for an action that displays the previous image in the search results.</comment>
+  </data>
+  <data name="OrientedImageryViewShowNextImage" xml:space="preserve">
+    <value>Show next image</value>
+    <comment>MAUI accessibility name and tooltip for an action that displays the next image in the search results.</comment>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>Show previous image in sequence</value>
+    <comment>MAUI accessibility name and tooltip for an action that displays the previous image in a sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>Show next image in sequence</value>
+    <comment>MAUI accessibility name and tooltip for an action that displays the next image in a sequence.</comment>
+  </data>
+  <data name="OrientedImageryViewMore" xml:space="preserve"><value>More</value></data>
+  <data name="OrientedImageryViewPage" xml:space="preserve"><value>Image {0} of {1}</value></data>
+  <data name="OrientedImageryViewSelectLayer" xml:space="preserve"><value>Select layer</value></data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>2D/3D</value>
+    <comment>Button in the oriented imagery sample that switches between map and scene views.</comment>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>Switch between 2D map and 3D scene</value>
+    <comment>Accessible description for the oriented imagery sample view switch.</comment>
+  </data>
+  <data name="OrientedImageryViewMarkerSelection" xml:space="preserve"><value>Marker selection</value></data>
+  <data name="OrientedImageryViewMarkerOption" xml:space="preserve"><value>Marker {0}</value></data>
+  <data name="OrientedImageryViewMarkerCircle" xml:space="preserve"><value>Circle marker</value></data>
+  <data name="OrientedImageryViewMarkerSquare" xml:space="preserve"><value>Square marker</value></data>
+  <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve"><value>Triangle marker</value></data>
+  <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve"><value>Diamond marker</value></data>
+  <data name="OrientedImageryViewMarkerX" xml:space="preserve"><value>Cross marker</value></data>
+  <data name="OrientedImageryViewSequentialMode" xml:space="preserve"><value>Sequential</value></data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve"><value>Explore</value></data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve"><value>Mode Selection</value></data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve"><value>Overlays Selection</value></data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve"><value>Marker Tools</value></data>
+  <data name="OrientedImageryViewAutoUpdate" xml:space="preserve"><value>Automatically update footprint</value></data>
+  <data name="OrientedImageryViewOpen" xml:space="preserve"><value>Open oriented imagery</value></data>
+  <data name="OrientedImageryViewOn" xml:space="preserve"><value>On</value></data>
+  <data name="OrientedImageryViewOff" xml:space="preserve"><value>Off</value></data>
+  <data name="OrientedImageryViewSelected" xml:space="preserve"><value>Selected</value></data>
+  <data name="OrientedImageryViewNotSelected" xml:space="preserve"><value>Not selected</value></data>
+  <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve"><value>Back to Marker Tools</value></data>
+  <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve"><value>Show Current Footprint</value></data>
+  <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve"><value>Show Additional Footprints</value></data>
+  <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve"><value>Show camera locations</value></data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve"><value>Image navigation</value></data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve"><value>Use Left Arrow for the previous image or Right Arrow for the next image.</value></data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve"><value>Sequential image navigation</value></data>
 </root>
