@@ -124,10 +124,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             UpdateNavigationButtons();
 
             root.Add(carouselHost);
+#elif __ANDROID__
+            root.Add(new Internal.PopupMediaPager(cv, iv) { Spacing = root.Spacing });
 #else
             root.Add(cv);
 #endif
+#if !__ANDROID__
             root.Add(iv);
+#endif
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(CarouselName, cv);
