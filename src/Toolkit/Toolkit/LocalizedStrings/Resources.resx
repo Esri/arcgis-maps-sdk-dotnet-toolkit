@@ -533,6 +533,10 @@
     <value>Next media</value>
     <comment>Accessible name and tooltip for the button that shows the next item in a MediaPopupElement with multiple media</comment>
   </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>Media item {0} of {1}</value>
+    <comment>Accessible position of the current popup media item or an indicator; {0} is the one-based item position and {1} is the total number of media items.</comment>
+  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Associations</value>
     <comment>The default title used when UtilityAssociationsPopupElement's title is empty</comment>

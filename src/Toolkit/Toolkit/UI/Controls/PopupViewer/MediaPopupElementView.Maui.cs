@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             rootcaption.SetBinding(Label.TextProperty, static (MediaPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent);
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, static (MediaPopupElementView view) => view.Element?.Description, source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance);
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
             SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
 #endif
 #if WINDOWS
@@ -124,10 +124,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             UpdateNavigationButtons();
 
             root.Add(carouselHost);
+#elif __ANDROID__
+            root.Add(new Internal.PopupMediaPager(cv, iv) { Spacing = root.Spacing });
 #else
             root.Add(cv);
 #endif
+#if !__ANDROID__
             root.Add(iv);
+#endif
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(CarouselName, cv);

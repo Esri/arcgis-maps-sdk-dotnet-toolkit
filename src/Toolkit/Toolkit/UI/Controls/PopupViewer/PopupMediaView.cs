@@ -143,6 +143,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     var tapGesture = new TapGestureRecognizer();
 #if WINDOWS
                     tapGesture.Tapped += Image_Tapped;
+#elif __ANDROID__
+                    tapGesture.Tapped += (_, _) => OpenImageLink(PopupMedia);
 #else
                     tapGesture.Tapped += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
 #endif
@@ -183,6 +185,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #if MAUI && WINDOWS
                 UpdateImageAccessibility(img);
+#elif MAUI && __ANDROID__
+                SemanticProperties.SetDescription(img, GetAltText());
 #endif
                 Content = img;
 #endif
@@ -318,8 +322,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             SemanticProperties.SetDescription(this, PopupMedia?.Type == PopupMediaType.Image ? null : altText);
             // A recycled chart can leave an unnamed wrapper peer after its description is cleared.
             AutomationProperties.SetIsInAccessibleTree(this, PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image);
-#elif __IOS__
-            // Expose the native image link rather than hiding it behind the media wrapper's description.
+#elif __IOS__ || __ANDROID__
+            // Name the image or image link, not an additional media wrapper around it.
             bool isChart = PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image;
             SemanticProperties.SetDescription(this, isChart ? altText : null);
             AutomationProperties.SetIsInAccessibleTree(this, isChart);
@@ -339,6 +343,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return PopupMedia.Caption;
             return null;
         }
+
+#if MAUI && __ANDROID__
+        internal static Uri? GetImageLink(PopupMedia? media) =>
+            media?.Type == PopupMediaType.Image && Uri.TryCreate(media.Value?.LinkUrl, UriKind.Absolute, out var uri) ? uri : null;
+
+        internal static bool OpenImageLink(PopupMedia? media)
+        {
+            if (GetImageLink(media) is not { } uri)
+                return false;
+            _ = Launcher.LaunchUriAsync(uri);
+            return true;
+        }
+#endif
 
         // Also used for embedded images in TextPopupElement views
         internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source, bool ignoreImageCache = false)

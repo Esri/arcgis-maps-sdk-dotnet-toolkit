@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+#nullable enable
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 
@@ -46,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             var presenter = new ContentPresenter();
-#if WINDOWS || __IOS__
+#if WINDOWS || __IOS__ || __ANDROID__
             var root = new VerticalStackLayout();
             Label title = new Label();
             title.SetBinding(Label.TextProperty, static (FieldsPopupElementView view) => view.Element?.Title, source: RelativeBindingSource.TemplatedParent);
