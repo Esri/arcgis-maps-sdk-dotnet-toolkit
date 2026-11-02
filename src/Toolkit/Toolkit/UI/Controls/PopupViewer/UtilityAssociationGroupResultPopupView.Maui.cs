@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Microsoft.Maui.Controls.Internals;
 
@@ -46,7 +47,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(searchGrid, 2);
 
             Image searchIcon = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(5) };
-            searchIcon.Source = new FontImageSource() { Glyph = ToolkitIcons.Search, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            var searchGlyph = new FontImageSource() { Glyph = ToolkitIcons.Search, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            searchGlyph.SetHighContrastColor(FontImageSource.ColorProperty, Colors.Gray);
+            searchIcon.Source = searchGlyph;
             searchGrid.Add(searchIcon);
 
             Entry searchText = new Entry() { Placeholder = Properties.Resources.GetString("PopupViewerUtilityAssociationsFilterByTitle"), VerticalOptions = LayoutOptions.Center, Margin = new Thickness(2) };
@@ -54,7 +57,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             searchGrid.Add(searchText);
 
             ImageButton clearButton = new ImageButton() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(5) };
-            clearButton.Source = new FontImageSource() { Glyph = ToolkitIcons.X, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            var clearGlyph = new FontImageSource() { Glyph = ToolkitIcons.X, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            clearGlyph.SetHighContrastColor(FontImageSource.ColorProperty, Colors.Gray);
+            clearButton.Source = clearGlyph;
 #if WINDOWS
             SemanticProperties.SetDescription(clearButton, Properties.Resources.GetString("SearchViewClearSearchTooltip"));
 #endif

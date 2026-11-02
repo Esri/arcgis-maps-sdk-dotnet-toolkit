@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -31,6 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             var root = new Grid();
+            root.SetHighContrastColor(Grid.BackgroundColorProperty, null, HighContrastColorRole.Background);
             root.SetBinding(Grid.BackgroundProperty, static (NavigationSubView view) => view.Background, source: RelativeBindingSource.TemplatedParent);
             root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
@@ -40,9 +42,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             topheader.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             topheader.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             var navigateBack = new Button() { Text =  ToolkitIcons.ChevronLeft, FontFamily = ToolkitIcons.FontFamilyName, BackgroundColor = Colors.Transparent, BorderWidth = 0 };
-            navigateBack.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
+            navigateBack.SetHighContrastColor(Button.TextColorProperty, Colors.Black, Colors.White);
             var navigateUp = new Button() { Text = ToolkitIcons.ChevronUp, FontFamily = ToolkitIcons.FontFamilyName, BackgroundColor = Colors.Transparent, BorderWidth = 0 };
-            navigateUp.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
+            navigateUp.SetHighContrastColor(Button.TextColorProperty, Colors.Black, Colors.White);
             topheader.Children.Add(navigateBack);
             Grid.SetColumn(navigateUp, 1);
             topheader.Children.Add(navigateUp);
