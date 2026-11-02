@@ -59,6 +59,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             _orientedImageryVM = MainOrientedImageryView.ViewModel;
 
             SelectLayerDropdown.ItemsSource = _exampleLayers;
+
+            MainOrientedImageryView.GeoView ??= _currentGeoView;
         }
 
         private async Task ApplyLayer(string layerUrl)
@@ -106,30 +108,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             {
                 Debug.WriteLine(ex);
             }
-        }
-
-        private GridLength _orientedImageryPanelWidth = new GridLength(2, GridUnitType.Star);
-
-        private void OpenOrientedImageryButton_Click(object sender, RoutedEventArgs e)
-        {
-            OrientedImageryColumn.Width = _orientedImageryPanelWidth;
-            OrientedImageryPanel.Visibility = Visibility.Visible;
-            OrientedImagerySplitter.Visibility = Visibility.Visible;
-            OpenOrientedImageryButton.Visibility = Visibility.Collapsed;
-
-            MainOrientedImageryView.GeoView ??= _currentGeoView;
-        }
-
-        private void CloseOrientedImageryButton_Click(object sender, RoutedEventArgs e)
-        {
-            _orientedImageryPanelWidth = OrientedImageryColumn.Width;
-            OrientedImageryPanel.Visibility = Visibility.Collapsed;
-            OrientedImagerySplitter.Visibility = Visibility.Collapsed;
-            OrientedImageryColumn.Width = new GridLength(0);
-            OpenOrientedImageryButton.Visibility = Visibility.Visible;
-            OpenOrientedImageryButton.Focus();
-
-            MainOrientedImageryView.GeoView = null;
         }
 
         private void OpenSelectedImagePopupButton_Click(object sender, RoutedEventArgs e)
@@ -282,27 +260,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
             {
                 Debug.WriteLine($"Error converting image point to location: {ex.Message}");
             }
-        }
-
-        private async void BackgroundThreadUpdate_Click(object sender, RoutedEventArgs e)
-        {
-            await Task.Run(() =>
-            {
-                foreach (var marker in _orientedImageryVM.Markers)
-                {
-                    marker.IsVisible = !marker.IsVisible;
-                }
-            });
-        }
-
-        private async void ToggleButtonsBackgroundThread_Click(object sender, RoutedEventArgs e)
-        {
-            await Task.Run(() =>
-            {
-                _orientedImageryVM.InteractionState = OrientedImageryViewInteractionState.None;
-                _orientedImageryVM.ShowCameraLocations = !_orientedImageryVM.ShowCameraLocations;
-                _orientedImageryVM.ShowUnselectedFootprints = !_orientedImageryVM.ShowUnselectedFootprints;
-            });
         }
 
         private void DetachReattachGeoViewButton_Click(object sender, RoutedEventArgs e)
