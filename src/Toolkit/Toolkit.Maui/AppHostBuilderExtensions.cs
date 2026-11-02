@@ -28,12 +28,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 handler.AddHandler<FieldsTableCell, FieldsTableCellHandler>();
 #elif __IOS__
                 handler.AddHandler<PopupViewer, PopupViewerHandler>();
+                handler.AddHandler<Primitives.LegacyCollectionView, Microsoft.Maui.Controls.Handlers.Items.CollectionViewHandler>();
 #elif __ANDROID__
                 handler.AddHandler<PopupMediaPager, PopupMediaPagerHandler>();
 #endif
 #if __IOS__ || __ANDROID__
                 handler.AddHandler<FieldsTableLabel, FieldsTableLabelHandler>();
-                handler.AddHandler<Primitives.LegacyCollectionView, Microsoft.Maui.Controls.Handlers.Items.CollectionViewHandler>();
 #endif
             });
 #endif
