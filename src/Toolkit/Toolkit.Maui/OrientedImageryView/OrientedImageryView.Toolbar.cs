@@ -255,7 +255,7 @@ public partial class OrientedImageryView
             MinimumWidthRequest = 44, MinimumHeightRequest = cell.MinimumHeightRequest,
             AutomationId = "OrientedImagery" + (navigation ? "Navigation" : key),
         };
-        SemanticProperties.SetDescription(button, key == OrientedImageryToolbarCategory.ModeCategoryName ? Text("ChangeMapInteraction") : label.Text);
+        SemanticProperties.SetDescription(button, key == OrientedImageryToolbarCategory.ModeCategoryName ? Text("ImageSearchMode") : label.Text);
         cell.Add(pill);
         cell.Add(button);
         button.Clicked += (_, _) =>
@@ -427,11 +427,11 @@ public partial class OrientedImageryView
                     CameraLocationsIcon, () => Enabled() && ViewModel.Images.Count > 1);
                 break;
             case AllowAddingMarkersVM:
-                AddSwitch(content, "AddMarkerLabel", () => IsAddingMarkers, SetAddingMarkers, () => GlyphIcon("\uE8ED"), Enabled);
+                AddSwitch(content, "AddMarkersLabel", () => IsAddingMarkers, SetAddingMarkers, () => GlyphIcon("\uE8ED"), Enabled, "OrientedImageryAddMarkerLabel");
                 break;
             case SelectNewMarkerSymbolVM picker:
                 var preview = new SymbolDisplay { Symbol = picker.SelectedSymbol, WidthRequest = 24, HeightRequest = 24 };
-                AddActionRow(content, new MenuAction(Text("SelectMarkerSymbol"), () => ShowSymbols(anchor, picker, back),
+                AddActionRow(content, new MenuAction(Text("MobileSelectMarkerSymbol"), () => ShowSymbols(anchor, picker, back),
                     Icon: () => preview, IsSubmenu: true, Enabled: () => Enabled() && IsAddingMarkers));
                 _panelUpdates.Add(() => preview.Symbol = picker.SelectedSymbol);
                 System.ComponentModel.PropertyChangedEventHandler changed = (_, _) => DispatchUpdate(UpdateOpenPanel);
@@ -443,14 +443,14 @@ public partial class OrientedImageryView
                     Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Icon: () => GlyphIcon(ToolkitIcons.Trash)));
                 break;
             case SequentialNavigationVM:
-                AddSwitch(content, "SequentialMode", () => ViewModel.IsSequentialNavigationEnabled,
+                AddSwitch(content, "MobileSequentialMode", () => ViewModel.IsSequentialNavigationEnabled,
                     value =>
                     {
                         if (value != ViewModel.IsSequentialNavigationEnabled && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null))
                             ViewModel.ToggleSequentialNavigationCommand.Execute(null);
                     },
                     () => GeometryIcon(SequenceGeometry),
-                    () => Enabled() && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null));
+                    () => Enabled() && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null), "OrientedImagerySequentialMode");
                 break;
             case AutoUpdateFootprintVM:
                 AddSwitch(content, "AutoUpdate",
