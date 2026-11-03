@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 #endif
             });
 #endif
-#if WINDOWS
+#if __ANDROID__ || WINDOWS
             // Hosts the platform surface of OrientedImageViewport's panoramas.
             builder.ConfigureMauiHandlers(handler => handler.AddHandler<Primitives.PanoramicSurfaceView, Primitives.PanoramicSurfaceViewHandler>());
 #endif
