@@ -26,7 +26,10 @@ jobs:
       uses: actions/checkout@v7
       with:
         fetch-depth: 0
-        path: b
+
+    - name: Map to drive
+      shell: pwsh
+      run: New-PSDrive New-PSDrive -Name "R" -PSProvider "FileSystem" -Root "$env:GITHUB_WORKSPACE" -Description "Workaround for file path limitations"
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v3
@@ -37,13 +40,13 @@ jobs:
         winsdk-build-version: 19041
         
     - name: Install MAUI Workload
-      working-directory: b
+      working-directory: 'R:\'
       run: |
         dotnet workload install maui@10.0.100
         dotnet workload restore src/Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj --from-previous-sdk
        
     - name: Build
-      working-directory: b
+      working-directory: 'R:\'
       run: |
         msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release
 #       msbuild /restore /t:Build src/Esri.ArcGISRuntime.ARToolkit.sln /p:Configuration=Release
@@ -52,7 +55,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NuGet Packages
-        path: b/Output/NuGet/Release
+        path: Output/NuGet/Release
 
   publish:
     if: ${{ github.ref == 'refs/heads/main' }}
