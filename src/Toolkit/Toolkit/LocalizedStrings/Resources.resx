@@ -1191,11 +1191,6 @@ Markers</value>
 Images</value>
     <comment>Same as OrientedImageryViewImageSearchModeFind, but with manual line breaks for formatting.</comment>
   </data>
-  <data name="OrientedImageryViewAutoUpdateToolbarLabel" xml:space="preserve">
-    <value>Automatically
-update footprint</value>
-    <comment>Two-line MAUI Windows toolbar caption. Preserve a suitable line break between Automatically and update footprint.</comment>
-  </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
     <value>Display Image</value>
     <comment>Label for the mode that displays individual tapped oriented images.</comment>
@@ -1367,7 +1362,6 @@ Navigation</value>
   <data name="OrientedImageryViewModeSelection" xml:space="preserve"><value>Mode Selection</value></data>
   <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve"><value>Overlays Selection</value></data>
   <data name="OrientedImageryViewMarkerTools" xml:space="preserve"><value>Marker Tools</value></data>
-  <data name="OrientedImageryViewAutoUpdate" xml:space="preserve"><value>Automatically update footprint</value></data>
   <data name="OrientedImageryViewOpen" xml:space="preserve"><value>Open oriented imagery</value></data>
   <data name="OrientedImageryViewOn" xml:space="preserve"><value>On</value></data>
   <data name="OrientedImageryViewOff" xml:space="preserve"><value>Off</value></data>
