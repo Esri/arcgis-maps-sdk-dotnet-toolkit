@@ -933,7 +933,7 @@
                                                                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesNone}">
                                                                     <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
                                                                     <LineBreak />
-                                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewEnableImageSelection}" /><InlineUIContainer BaselineAlignment="Center">
+                                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionEnable}" /><InlineUIContainer BaselineAlignment="Center">
                                                                         <Viewbox Width="24" Height="24" Margin="4,0">
                                                                             <ContentControl Content="{x:Static controls:OrientedImageryViewInteractionState.FindImages}"
                                                                                             ContentTemplate="{StaticResource FindImagesIconTemplate}" Focusable="False" />
