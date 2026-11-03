@@ -53,7 +53,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 ShowCameraMarkersVM => Toggle(owner, "ToggleCameraMarkers", "CameraLocationsStackedLabel", CameraLocationsIcon(),
                     () => model.ShowCameraLocations, value => model.ShowCameraLocations = value,
                     () => model.Images.Count > 1, "OrientedImageryDesktopCameraLocations"),
-                AllowAddingMarkersVM => Toggle(owner, "MobileAddMarkers", "AddMarkersStackedLabel", Glyph("\uE8ED"),
+                AllowAddingMarkersVM => Toggle(owner, "AddMarkersLabel", "AddMarkersStackedLabel", Glyph("\uE8ED"),
                     () => owner.IsAddingMarkers, owner.SetAddingMarkers,
                     automationId: "OrientedImageryDesktopAddMarker"),
                 AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdateToolbarLabel", Glyph(ToolkitIcons.Refresh),
@@ -228,7 +228,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         host.Children.Add(button);
         host.Children.Add(dropdown);
         _cleanup.Add(() => dropdown.IsDropDownOpen = false);
-        Describe(dropdown, "ChangeMapInteraction", "OrientedImageryDesktopModeDropdown");
+        Describe(dropdown, "ImageSearchMode", "OrientedImageryDesktopModeDropdown");
         foreach (var state in mode.ImageSearchModes)
         {
             bool search = state == OrientedImageryViewInteractionState.FindImages;
@@ -311,7 +311,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
     private ToggleButton SequenceButton(OrientedImageryView owner)
     {
         var model = owner.ViewModel;
-        return Toggle(owner, "SequentialMode", "SequentialMode", Geometry(OrientedImageryView.SequenceGeometry),
+        return Toggle(owner, "MobileSequentialMode", "MobileSequentialMode", Geometry(OrientedImageryView.SequenceGeometry),
             () => model.IsSequentialNavigationEnabled, value => model.IsSequentialNavigationEnabled = value,
             () => model.ToggleSequentialNavigationCommand.CanExecute(null), "OrientedImageryDesktopSequentialMode");
     }
