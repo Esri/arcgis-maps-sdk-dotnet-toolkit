@@ -722,7 +722,7 @@
         <Button Style="{StaticResource ToolbarLabeledButtonStyle}"
                 Command="{Binding ViewModel.ClearMarkersCommand}"
                 AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}"
-                ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}">
+                ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkersTooltip}">
             <StackPanel>
                 <Viewbox Width="28" Height="28" Stretch="Uniform">
                     <TextBlock Text="&#xeb04;"
@@ -738,19 +738,10 @@
     <DataTemplate x:Key="SequentialNavigationToolbarTemplate" DataType="controls:SequentialNavigationVM">
         <ToggleButton Command="{Binding ViewModel.ToggleSequentialNavigationCommand}"
                       IsChecked="{Binding ViewModel.IsSequentialNavigationEnabled, Mode=OneWay}"
-                      IsEnabled="{Binding ViewModel.SupportsSequentialNavigation}">
-            <ToggleButton.Style>
-                <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
-                    <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewEnterSequentialNavigation}" />
-                    <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationLabel}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ViewModel.IsSequentialNavigationEnabled}" Value="True">
-                            <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
-                            <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewReturnToResults}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ToggleButton.Style>
+                      IsEnabled="{Binding ViewModel.SupportsSequentialNavigation}"
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationTooltip}"
+                      AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationLabel}"
+                      Style="{StaticResource ToolbarLabeledToggleButtonStyle}">
             <StackPanel>
                 <Path Width="28"
                       Height="28"

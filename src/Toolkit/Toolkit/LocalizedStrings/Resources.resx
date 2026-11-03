@@ -1114,11 +1114,11 @@
     <comment>Tooltip for the OrientedImageryView button that enables or disables adding markers.</comment>
   </data>
   <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
-    <value>Show selected image footprint</value>
+    <value>Show current footprint</value>
     <comment>Tooltip for the OrientedImageryView button that shows the selected image footprint.</comment>
   </data>
   <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
-    <value>Show unselected image footprints</value>
+    <value>Show additional footprints</value>
     <comment>Tooltip for the OrientedImageryView button that shows unselected image footprints.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
@@ -1153,39 +1153,43 @@ Locations</value>
     <comment>Same as OrientedImageryViewCameraLocationsLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
-    <value>Add markers</value>
+    <value>Add Markers</value>
     <comment>Single-line automation name for the marker-creation toggle.</comment>
   </data>
   <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
     <value>Add
-markers</value>
+Markers</value>
     <comment>Same as OrientedImageryViewAddMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>Clear Markers</value>
+    <comment>Single-line label (mobile-only) and automation name for the button that clears markers.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
     <value>Clear markers</value>
-    <comment>Single-line tooltip and automation name for the button that clears markers.</comment>
+    <comment>Single-line tooltip for desktop.</comment>
   </data>
   <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
     <value>Clear
-markers</value>
+Markers</value>
     <comment>Same as OrientedImageryViewClearMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
-    <value>Find images</value>
+    <value>Find Images</value>
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
     <value>Find
-images</value>
+Images</value>
     <comment>Same as OrientedImageryViewImageSearchModeFind, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
-    <value>Display image</value>
+    <value>Display Image</value>
     <comment>Label for the mode that displays individual tapped oriented images.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
     <value>Display
-image</value>
+Image</value>
     <comment>Same as OrientedImageryViewImageSearchModeDisplay, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
@@ -1205,24 +1209,20 @@ image</value>
     <comment>Selected pagination button automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
   </data>
   <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
-    <value>Toggle camera locations on GeoView</value>
+    <value>Show camera locations</value>
     <comment>Tooltip for the OrientedImageryView button that shows or hides camera locations.</comment>
   </data>
-  <data name="OrientedImageryViewEnterSequentialNavigation" xml:space="preserve">
-    <value>Enter sequential navigation</value>
+  <data name="OrientedImageryViewSequentialNavigationTooltip" xml:space="preserve">
+    <value>Sequential navigation</value>
     <comment>Tooltip for the OrientedImageryView button that enters sequential navigation.</comment>
   </data>
-  <data name="OrientedImageryViewReturnToResults" xml:space="preserve">
-    <value>Return to results</value>
-    <comment>Tooltip for the OrientedImageryView button that returns from sequential navigation.</comment>
-  </data>
   <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
-    <value>Sequential navigation</value>
-    <comment>Single-line automation name for the sequential navigation toggle. The automation name changes to Return to results while sequential navigation is active.</comment>
+    <value>Sequential Navigation</value>
+    <comment>Single-line automation name for the sequential navigation toggle.</comment>
   </data>
   <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
     <value>Sequential
-navigation</value>
+Navigation</value>
     <comment>Same as OrientedImageryViewSequentialNavigationLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
