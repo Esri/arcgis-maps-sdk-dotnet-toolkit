@@ -25,6 +25,7 @@ jobs:
     - name: Clone Toolkit
       uses: actions/checkout@v7
       with:
+        fetch-depth: 0
         path: b
     
     - name: Setup Visual Studio Command Prompt
