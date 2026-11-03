@@ -18,6 +18,7 @@ public partial class OrientedImageryView
     private View? _selectionGuidance;
     private Label? _selectionInstruction;
     private Label? _selectionPrefix;
+    private Label? _selectionMode;
     private View? _selectionFindIcon;
     private View? _selectionOr;
     private View? _selectionDisplayIcon;
@@ -333,19 +334,21 @@ public partial class OrientedImageryView
             AutomationId = "OrientedImageryStatus", FontSize = 18,
         };
         status.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
+        AutomationProperties.SetIsInAccessibleTree(status, true);
         var choices = new FlexLayout
         {
             Direction = FlexDirection.Row, Wrap = FlexWrap.Wrap,
             JustifyContent = FlexJustify.Center, AlignItems = FlexAlignItems.Center,
         };
-        var prefix = new Label { Text = Text("ImageSelectionUsing"), FontSize = 18 };
+        var prefix = new Label { Text = Text("ImageSelectionEnable"), FontSize = 18 };
         var findIcon = ImageModeIcon(true);
         var or = new Label { Text = Text("ImageSelectionOr"), FontSize = 18 };
         var displayIcon = ImageModeIcon(false);
+        var mode = new Label { Text = Text("ImageSelectionSearchMode"), FontSize = 18 };
         foreach (var view in new View[]
         {
             prefix, findIcon, or, displayIcon,
-            new Label { Text = Text("ImageSelectionMode"), FontSize = 18 },
+            mode, // This part of the message is on a separate line
         })
         {
             view.Margin = new Thickness(4, 0);
@@ -360,16 +363,16 @@ public partial class OrientedImageryView
             }
             choices.Add(view);
         }
-        var searchMap = new Label
+        var selectionInstruction = new Label
         {
-            Text = Text("ImageSelectionSearchMap"), FontSize = 18, HorizontalTextAlignment = TextAlignment.Center,
+            FontSize = 18, HorizontalTextAlignment = TextAlignment.Center, IsVisible = false,
         };
-        searchMap.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
-        var guidance = new VerticalStackLayout { Spacing = 6, Children = { searchMap, choices } };
-        SemanticProperties.SetDescription(guidance, Text("ImageSelectionInstructions"));
-        AutomationProperties.SetIsInAccessibleTree(guidance, true);
+        selectionInstruction.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#666666"), Color.FromArgb("#AAAAAA"));
+        var guidance = new VerticalStackLayout { Spacing = 6, Children = { selectionInstruction, choices } };
+        AutomationProperties.SetIsInAccessibleTree(guidance, false);
+        AutomationProperties.SetExcludedWithChildren(guidance, true);
         AutomationProperties.SetIsInAccessibleTree(choices, false);
-        AutomationProperties.SetIsInAccessibleTree(searchMap, false);
+        AutomationProperties.SetIsInAccessibleTree(selectionInstruction, false);
         var content = new VerticalStackLayout
         {
             VerticalOptions = LayoutOptions.Center,
@@ -380,8 +383,9 @@ public partial class OrientedImageryView
         host.Add(new ScrollView { Content = content, VerticalOptions = LayoutOptions.Center });
         scope.RegisterName("PART_Status", status);
         scope.RegisterName("PART_SelectionGuidance", guidance);
-        scope.RegisterName("PART_SelectionInstruction", searchMap);
+        scope.RegisterName("PART_SelectionInstruction", selectionInstruction);
         scope.RegisterName("PART_SelectionPrefix", prefix);
+        scope.RegisterName("PART_SelectionMode", mode);
         scope.RegisterName("PART_SelectionFindIcon", findIcon);
         scope.RegisterName("PART_SelectionOr", or);
         scope.RegisterName("PART_SelectionDisplayIcon", displayIcon);
@@ -457,6 +461,7 @@ public partial class OrientedImageryView
         _selectionGuidance = GetTemplateChild("PART_SelectionGuidance") as View;
         _selectionInstruction = GetTemplateChild("PART_SelectionInstruction") as Label;
         _selectionPrefix = GetTemplateChild("PART_SelectionPrefix") as Label;
+        _selectionMode = GetTemplateChild("PART_SelectionMode") as Label;
         _selectionFindIcon = GetTemplateChild("PART_SelectionFindIcon") as View;
         _selectionOr = GetTemplateChild("PART_SelectionOr") as View;
         _selectionDisplayIcon = GetTemplateChild("PART_SelectionDisplayIcon") as View;
@@ -627,6 +632,7 @@ public partial class OrientedImageryView
         _selectionGuidance = null;
         _selectionInstruction = null;
         _selectionPrefix = null;
+        _selectionMode = null;
         _selectionFindIcon = null;
         _selectionOr = null;
         _selectionDisplayIcon = null;
@@ -661,18 +667,20 @@ public partial class OrientedImageryView
         bool find = ViewModel.InteractionState == OrientedImageryViewInteractionState.FindImages;
         bool display = ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage;
         if (_selectionInstruction != null)
+        {
             _selectionInstruction.Text = Text(find ? "ImageSelectionFindImages" :
-                display ? "ImageSelectionDisplayImage" : "ImageSelectionSearchMap");
+                "ImageSelectionDisplayImage");
+            _selectionInstruction.IsVisible = find || display;
+        }
         if (_selectionPrefix != null)
-            _selectionPrefix.Text = Text(find || display ? "ImageSelectionSwitchMode" : "ImageSelectionUsing");
+            _selectionPrefix.Text = Text(find || display ? "ImageSelectionSwitchMode" : "ImageSelectionEnable");
+        if (_selectionMode != null)
+            _selectionMode.Text = Text(find || display ? "ImageSelectionMode" : "ImageSelectionSearchMode");
         if (_selectionFindIcon != null) _selectionFindIcon.IsVisible = !find;
         if (_selectionOr != null) _selectionOr.IsVisible = !find && !display;
         if (_selectionDisplayIcon != null) _selectionDisplayIcon.IsVisible = !display;
-        string description = Text(find ? "ImageSelectionFindInstructions" :
-            display ? "ImageSelectionDisplayInstructions" : "ImageSelectionInstructions");
-        if (_selectionGuidance != null)
-            SemanticProperties.SetDescription(_selectionGuidance, description);
-        return description;
+        return Text(find ? "ImageSelectionNoImagesFind" :
+            display ? "ImageSelectionNoImagesDisplay" : "ImageSelectionNoImagesNone");
     }
 
     private void Refresh()
@@ -759,18 +767,19 @@ public partial class OrientedImageryView
         }
         string selectionInstructions = RefreshSelectionGuidance();
         ErrorMessage = error ?? ViewModel.SequentialNavigationError?.Message ??
-            (showSelectionGuidance ? $"{message}. {selectionInstructions}" : message);
+            (showSelectionGuidance ? selectionInstructions : message);
 
         if (_status != null)
         {
             _status.Text = message;
             _status.IsVisible = message != null;
+            SemanticProperties.SetDescription(_status, showSelectionGuidance ? selectionInstructions : message ?? string.Empty);
         }
         if (_statusHost != null)
             _statusHost.IsVisible = message != null;
         if (_selectionGuidance != null)
             _selectionGuidance.IsVisible = showSelectionGuidance;
-        AnnounceStatusMessages(showSelectionGuidance ? $"{message}. {selectionInstructions}" : message,
+        AnnounceStatusMessages(showSelectionGuidance ? selectionInstructions : message,
             ViewModel.SequentialNavigationError?.Message, error == null && message == Text("ImageLoading"));
     }
 
@@ -842,7 +851,7 @@ public partial class OrientedImageryView
 
     internal string ImagePageActionKey(bool next) => ViewModel.IsSequentialNavigationEnabled
         ? next ? "ShowNextImageInSequence" : "ShowPreviousImageInSequence"
-        : next ? "ShowNextImage" : "ShowPreviousImage";
+        : next ? "NextImage" : "PreviousImage";
 
     private void SetImagePageButtonState(Button? button, bool next, bool enabled, bool visible)
     {
@@ -1355,17 +1364,17 @@ public partial class OrientedImageryView
         return content;
     }
 
-    private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View> icon, Func<bool> enabled)
+    private void AddSwitch(VerticalStackLayout content, string key, Func<bool> get, Action<bool> set, Func<View> icon, Func<bool> enabled, string? automationId = null)
     {
         var row = new Grid { ColumnDefinitions = { new ColumnDefinition(32), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }, ColumnSpacing = 6 };
-        string title = Text(key == "AddMarkerLabel" ? "MobileAddMarkers" : key);
+        string title = Text(key);
         var label = new Label { Text = title, VerticalOptions = LayoutOptions.Center };
 #if ANDROID
         label.FontSize = 16;
         row.MinimumHeightRequest = 56;
 #endif
         label.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-        var toggle = new Switch { IsToggled = get(), MinimumHeightRequest = 44, AutomationId = "OrientedImagery" + key };
+        var toggle = new Switch { IsToggled = get(), MinimumHeightRequest = 44, AutomationId = automationId ?? "OrientedImagery" + key };
 #if ANDROID
         toggle.SetAppThemeColor(Switch.OnColorProperty, Color.FromArgb("#585992"), Color.FromArgb("#C3BFFF"));
 #endif
