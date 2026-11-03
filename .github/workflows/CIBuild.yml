@@ -24,6 +24,8 @@ jobs:
     steps:
     - name: Clone Toolkit
       uses: actions/checkout@v1
+      with:
+        path: b
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v3
@@ -34,11 +36,13 @@ jobs:
         winsdk-build-version: 19041
         
     - name: Install MAUI Workload
+      working-directory: b
       run: |
         dotnet workload install maui@10.0.100
         dotnet workload restore src/Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj --from-previous-sdk
        
     - name: Build
+      working-directory: b
       run: |
         msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release
 #       msbuild /restore /t:Build src/Esri.ArcGISRuntime.ARToolkit.sln /p:Configuration=Release
@@ -47,7 +51,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NuGet Packages
-        path: Output/NuGet/Release
+        path: b/Output/NuGet/Release
 
   publish:
     if: ${{ github.ref == 'refs/heads/main' }}
