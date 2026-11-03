@@ -1169,12 +1169,6 @@ Locations</value>
 Markers</value>
     <comment>Same as OrientedImageryViewerAddMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
-  <data name="OrientedImageryViewMobileAddMarkers" xml:space="preserve">
-    <value>Add Markers</value>
-  </data>
-  <data name="OrientedImageryViewChooseMarkersLabel" xml:space="preserve">
-    <value>Select Symbol</value>
-  </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Clear Markers</value>
     <comment>Single-line label (mobile-only) and automation name for the button that clears markers.</comment>
@@ -1312,26 +1306,6 @@ Navigation</value>
     <value>mode</value>
     <comment>Last word in "or switch to [icon] mode"</comment>
   </data>
-  <data name="OrientedImageryViewImageSelectionUsing" xml:space="preserve">
-    <value>using</value>
-    <comment>Second instruction line, before the Find images icon in MAUI.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionSearchMap" xml:space="preserve">
-    <value>Tap on the map to search</value>
-    <comment>First line of the no-image-selected instruction, followed by 'using [Search icon] or [Examine icon] mode'.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionInstructions" xml:space="preserve">
-    <value>Select Find images or Display image, then tap on the map to search.</value>
-    <comment>Accessible text alternative to the icon-based no-image-selected instructions in MAUI.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionFindInstructions" xml:space="preserve">
-    <value>Tap on the map to search for images or switch to Display image mode.</value>
-    <comment>Complete accessible description of the MAUI empty-image instructions when Find Images is enabled.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionDisplayInstructions" xml:space="preserve">
-    <value>Tap on a feature to view its image or switch to Find images mode.</value>
-    <comment>Complete accessible description of the MAUI empty-image instructions when Display Image is enabled.</comment>
-  </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
     <value>Connect a GeoView to view oriented imagery.</value>
     <comment>Error shown by OrientedImageryViewer when no GeoView is connected.</comment>
@@ -1344,12 +1318,6 @@ Navigation</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
     <value>Dismiss error</value>
-  </data>
-  <data name="OrientedImageryViewNoLayers" xml:space="preserve">
-    <value>No oriented imagery layers are available in the connected map or scene.</value>
-  </data>
-  <data name="OrientedImageryViewInvalidLayer" xml:space="preserve">
-    <value>The selected oriented imagery layer does not belong to the connected map or scene.</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
     <value>Prev</value>
@@ -1374,18 +1342,6 @@ Navigation</value>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve"><value>Overlays</value></data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve"><value>Markers</value></data>
   <data name="OrientedImageryViewerMode" xml:space="preserve"><value>Mode</value></data>
-  <data name="OrientedImageryViewChangeMapInteraction" xml:space="preserve">
-    <value>Change map interaction</value>
-    <comment>MAUI accessibility name for the chooser that selects Find images or Display image when interacting with the map.</comment>
-  </data>
-  <data name="OrientedImageryViewShowPreviousImage" xml:space="preserve">
-    <value>Show previous image</value>
-    <comment>MAUI accessibility name and tooltip for an action that displays the previous image in the search results.</comment>
-  </data>
-  <data name="OrientedImageryViewShowNextImage" xml:space="preserve">
-    <value>Show next image</value>
-    <comment>MAUI accessibility name and tooltip for an action that displays the next image in the search results.</comment>
-  </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
     <value>Show previous image in sequence</value>
     <comment>MAUI accessibility name and tooltip for an action that displays the previous image in a sequence.</comment>
