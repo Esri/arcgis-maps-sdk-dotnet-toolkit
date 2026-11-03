@@ -1162,6 +1162,7 @@ Locations</value>
   </data>
   <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
     <value>Add Markers</value>
+<<<<<<< HEAD
     <comment>Single-line automation name for the marker-creation toggle.</comment>
   </data>
   <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
@@ -1248,38 +1249,46 @@ Locations</value>
   </data>
   <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
     <value>Add markers</value>
+||||||| parent of 281140355 (Standardize label capitalization)
+    <value>Add markers</value>
+=======
+>>>>>>> 281140355 (Standardize label capitalization)
     <comment>Single-line automation name for the marker-creation toggle.</comment>
   </data>
   <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
     <value>Add
-markers</value>
+Markers</value>
     <comment>Same as OrientedImageryViewAddMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>Clear Markers</value>
+    <comment>Single-line label (mobile-only) and automation name for the button that clears markers.</comment>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
     <value>Clear markers</value>
-    <comment>Single-line tooltip and automation name for the button that clears markers.</comment>
+    <comment>Single-line tooltip for desktop.</comment>
   </data>
   <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
     <value>Clear
-markers</value>
+Markers</value>
     <comment>Same as OrientedImageryViewClearMarkersLabel, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
-    <value>Find images</value>
+    <value>Find Images</value>
     <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
     <value>Find
-images</value>
+Images</value>
     <comment>Same as OrientedImageryViewImageSearchModeFind, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
-    <value>Display image</value>
+    <value>Display Image</value>
     <comment>Label for the mode that displays individual tapped oriented images.</comment>
   </data>
   <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
     <value>Display
-image</value>
+Image</value>
     <comment>Same as OrientedImageryViewImageSearchModeDisplay, but with manual line breaks for formatting.</comment>
   </data>
   <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
