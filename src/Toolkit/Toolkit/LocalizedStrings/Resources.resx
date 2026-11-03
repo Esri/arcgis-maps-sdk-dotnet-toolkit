@@ -1305,12 +1305,6 @@ Navigation</value>
   <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
     <value>No layer selected.</value>
   </data>
-  <data name="OrientedImageryViewNoLayers" xml:space="preserve">
-    <value>No oriented imagery layers are available in the connected map or scene.</value>
-  </data>
-  <data name="OrientedImageryViewInvalidLayer" xml:space="preserve">
-    <value>The selected oriented imagery layer does not belong to the connected map or scene.</value>
-  </data>
   <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
     <value>Prev</value>
   </data>
