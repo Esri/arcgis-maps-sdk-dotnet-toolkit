@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Windows.Automation.Peers;
 using System.Windows.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
@@ -84,6 +85,61 @@ internal class PaginatorPresenterPanel : Panel
                 KeyboardNavigation.SetTabNavigation(childPresenter, isTabStop ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
         }
 
+        if (ItemsControl.GetItemsOwner(this) is PaginatorPagesPresenter presenter)
+            presenter.UpdateVisibleRange(start, visibleCount);
+
         return finalSize;
+    }
+}
+
+/// <summary>
+/// Exposes only the visible page buttons to UI Automation.
+/// </summary>
+internal sealed class PaginatorPagesPresenter : ItemsControl
+{
+    private int _visibleStartIndex;
+    private int _visiblePageCount;
+
+    protected override AutomationPeer OnCreateAutomationPeer() => new PaginatorPagesPresenterAutomationPeer(this);
+
+    internal void UpdateVisibleRange(int startIndex, int pageCount)
+    {
+        if (_visibleStartIndex == startIndex && _visiblePageCount == pageCount)
+            return;
+
+        _visibleStartIndex = startIndex;
+        _visiblePageCount = pageCount;
+        UIElementAutomationPeer.FromElement(this)?.InvalidatePeer();
+    }
+
+    private sealed class PaginatorPagesPresenterAutomationPeer : FrameworkElementAutomationPeer
+    {
+        public PaginatorPagesPresenterAutomationPeer(PaginatorPagesPresenter owner)
+            : base(owner)
+        {
+        }
+
+        protected override bool IsControlElementCore() => false;
+
+        protected override bool IsContentElementCore() => false;
+
+        protected override List<AutomationPeer>? GetChildrenCore()
+        {
+            var children = base.GetChildrenCore();
+            if (children == null)
+                return null;
+
+            var presenter = (PaginatorPagesPresenter)Owner;
+            children.RemoveAll(peer =>
+            {
+                if (peer is not FrameworkElementAutomationPeer elementPeer)
+                    return true;
+
+                var container = ItemsControl.ContainerFromElement(presenter, elementPeer.Owner);
+                var index = container == null ? -1 : presenter.ItemContainerGenerator.IndexFromContainer(container);
+                return index < presenter._visibleStartIndex || index >= presenter._visibleStartIndex + presenter._visiblePageCount;
+            });
+            return children;
+        }
     }
 }
