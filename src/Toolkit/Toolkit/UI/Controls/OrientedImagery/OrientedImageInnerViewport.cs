@@ -90,8 +90,13 @@ internal abstract class OrientedImageInnerViewport
     public void SetFootprint(OrientedImageFootprint? footprint)
     {
         _sessionCts?.Cancel();
-        _sessionCts = new CancellationTokenSource();
-        _present = SetFootprintAsync(footprint, _sessionCts.Token);
+        var session = new CancellationTokenSource();
+        _sessionCts = session;
+        Task present = SetFootprintAsync(footprint, session.Token);
+
+        // A state handler can start another session before this one's first await, so only the newest task is kept.
+        if (ReferenceEquals(_sessionCts, session))
+            _present = present;
     }
 
     public void SetMarkers(IEnumerable<OrientedImageMarker>? markers)
@@ -425,16 +430,22 @@ internal abstract class OrientedImageInnerViewport
         if (imageChanged)
             ClearPresentation();
 
+        // UpdateState raises StateChanged, whose handlers can set another footprint and so supersede this session.
+        // The token is checked after each UpdateState call.
         if (image is null)
         {
             _isLoading = false;
             UpdateState();
-            OnPresentCompleted();
+            if (!token.IsCancellationRequested)
+                OnPresentCompleted();
             return;
         }
 
         _isLoading = true;
         UpdateState();
+        if (token.IsCancellationRequested)
+            return;
+
         try
         {
             await image.RetryLoadAsync();
@@ -470,7 +481,8 @@ internal abstract class OrientedImageInnerViewport
             {
                 _isLoading = false;
                 UpdateState();
-                OnPresentCompleted();
+                if (!token.IsCancellationRequested)
+                    OnPresentCompleted();
             }
         }
     }

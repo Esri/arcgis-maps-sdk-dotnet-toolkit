@@ -283,7 +283,8 @@ public partial class OrientedImageViewport
 
     private void UpdateViewport()
     {
-        OrientedImage? image = Footprint?.OrientedImage;
+        OrientedImageFootprint? footprint = Footprint;
+        OrientedImage? image = footprint?.OrientedImage;
         OrientedImageInnerViewport? viewport = SelectViewport(image);
 
         _unsupportedError = viewport is null && image is not null
@@ -296,7 +297,12 @@ public partial class OrientedImageViewport
 
         if (viewport is not null)
         {
-            viewport.SetFootprint(Footprint);
+            viewport.SetFootprint(footprint);
+
+            // Stop if a state handler set another footprint; the nested UpdateViewport may have switched viewports.
+            if (!ReferenceEquals(Footprint, footprint))
+                return;
+
             viewport.SetMarkers(Markers);
             viewport.SetAutoUpdateFootprint(AutoUpdateFootprint);
             viewport.SetBackgroundColor(DisplayBackgroundColor);
