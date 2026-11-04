@@ -16,6 +16,7 @@
 
 #if !MAUI
 using System.ComponentModel;
+using System.Globalization;
 using Esri.ArcGISRuntime.Geometry;
 #if __IOS__
 using Control = UIKit.UIView;
@@ -90,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_usValue != null)
             {
-                _usValue.Text = string.Format("{0}", roundedValue);
+                _usValue.Text = FormatDistance(roundedValue);
             }
 
             if (_usScaleLine != null)
@@ -115,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_metricValue != null)
             {
-                _metricValue.Text = string.Format("{0}", (int)roundedValue);
+                _metricValue.Text = FormatDistance(roundedValue);
             }
 
             if (_metricScaleLine != null)
@@ -191,6 +192,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 return value;
             }
+        }
+
+        /// <summary>
+        /// Formats a rounded distance for display.
+        /// </summary>
+        /// <remarks>
+        /// A scale line can be shorter than the smallest unit it is labelled with, for example when zoomed
+        /// in far. Truncating such a value to an integer made the scale line read "0 m", so values below one
+        /// unit keep their decimals instead.
+        /// </remarks>
+        /// <param name="value">The rounded distance, in the unit that is displayed.</param>
+        /// <returns>The distance formatted with the current culture.</returns>
+        internal static string FormatDistance(double value)
+        {
+            if (value >= 1)
+            {
+                return ((int)value).ToString(CultureInfo.CurrentCulture);
+            }
+
+            return Math.Round(value, 2).ToString(CultureInfo.CurrentCulture);
         }
 
         private void WireMapViewPropertyChanged(MapView? oldMapView, MapView? newMapView)
