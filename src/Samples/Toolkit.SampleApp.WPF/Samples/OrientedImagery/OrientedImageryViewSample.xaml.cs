@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private List<string> _exampleLayers =
         [
             "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/ArcGIS/rest/services/Oakwood_camori_corrected/FeatureServer/0",
-            "https://services3.arcgis.com/juvie9NFXORsK38U/ArcGIS/rest/services/WalkerOrientedImagery/FeatureServer/0",
+            "https://services8.arcgis.com/joda3ARQ9znLf0hf/arcgis/rest/services/AerialsphereScottsdale_360/FeatureServer/1",
             "https://services5.arcgis.com/N82JbI5EYtAkuUKU/ArcGIS/rest/services/EsriCampus_sequenceTest_attachment/FeatureServer/1"
         ];
 
@@ -72,15 +72,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
                 {
                     _mapView.Map!.OperationalLayers.Clear();
                     _mapView.Map!.OperationalLayers.Add(layer);
-                    _orientedImageryVM.OrientedImageryLayer = layer;
                 }
                 else
                 {
                     layer.SceneProperties.SurfacePlacement = SurfacePlacement.Absolute;
                     _sceneView.Scene!.OperationalLayers.Clear();
                     _sceneView.Scene!.OperationalLayers.Add(layer);
-                    _orientedImageryVM.OrientedImageryLayer = layer;
                 }
+                _orientedImageryVM.OrientedImageryLayer = layer;
                 await layer.LoadAsync();
                 _currentGeoView.SetViewpoint(new Viewpoint(layer.FullExtent!));
             }
