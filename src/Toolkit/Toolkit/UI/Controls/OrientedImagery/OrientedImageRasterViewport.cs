@@ -55,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 // Shows a planar image as a RasterLayer in a MapView. The raster from OrientedImage.CreateImageSpaceRasterAsync holds the
-// upright image in pixel space, so image pixels and map points differ only by an offset and a flipped y-axis.
+// upright image in pixel space, so map point (x, -y) shows image pixel (x, y).
 internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerViewport
 {
     private readonly MapView _mapView;
@@ -337,32 +337,23 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         return 0d;
     }
 
-    // Cell sizes can be negative for a flipped axis. An unknown size of zero counts as one unit.
-    private static double CellSize(double size) => size == 0 ? 1 : Math.Abs(size);
-
-    // Maps an image pixel to the raster's map space. Unless onImage is set, a pixel within a wide margin past the edge
-    // still maps, so a marker just off the image draws.
+    // Maps an image pixel to the raster's map space. In image coordinates, pixel centers are whole numbers, so the
+    // image's edges lie half a pixel beyond the outer pixel centers, as the raster's extent does. Unless onImage is
+    // set, a pixel within a wide margin past the edge maps too, so a marker just off the image is drawn.
     private MapPoint? PixelToMap(PointF pixel, bool onImage = false)
     {
-        if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
+        if (_rasterLayer?.Raster?.RasterInfo?.Extent is not Envelope extent)
             return null;
-
-        double cellX = CellSize(info.CellSizeX);
-        double cellY = CellSize(info.CellSizeY);
-        double width = extent.Width / cellX;
-        double height = extent.Height / cellY;
 
         // Drop wildly off-image pixels, such as the camera's own location projected onto its image.
         bool placeable = onImage
-            ? pixel.X >= 0 && pixel.X <= width && pixel.Y >= 0 && pixel.Y <= height
-            : IsPlaceablePixel(pixel.X, width) && IsPlaceablePixel(pixel.Y, height);
-        if (!placeable)
-            return null;
-
-        double x = extent.XMin + (pixel.X * cellX);
-        double y = extent.YMax - (pixel.Y * cellY);
-        return new MapPoint(x, y, extent.SpatialReference);
+            ? IsOnImage(pixel.X, -pixel.Y, extent)
+            : IsPlaceablePixel(pixel.X, extent.Width) && IsPlaceablePixel(pixel.Y, extent.Height);
+        return placeable ? new MapPoint(pixel.X, -pixel.Y, extent.SpatialReference) : null;
     }
+
+    private static bool IsOnImage(double x, double y, Envelope extent) =>
+        x >= extent.XMin && x <= extent.XMax && y >= extent.YMin && y <= extent.YMax;
 
     private static bool IsPlaceablePixel(double value, double max)
     {
@@ -374,22 +365,10 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         return value >= -margin && value <= max + margin;
     }
 
-    private PointF? MapToPixel(MapPoint mapPoint)
-    {
-        if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
-            return null;
-
-        double cellX = CellSize(info.CellSizeX);
-        double cellY = CellSize(info.CellSizeY);
-        double width = extent.Width / cellX;
-        double height = extent.Height / cellY;
-        double col = (mapPoint.X - extent.XMin) / cellX;
-        double row = (extent.YMax - mapPoint.Y) / cellY;
-        if (col < 0 || row < 0 || col > width || row > height)
-            return null;
-
-        return new PointF((float)col, (float)row);
-    }
+    private PointF? MapToPixel(MapPoint mapPoint) =>
+        _rasterLayer?.Raster?.RasterInfo?.Extent is Envelope extent && IsOnImage(mapPoint.X, mapPoint.Y, extent)
+            ? new PointF((float)mapPoint.X, (float)-mapPoint.Y)
+            : null;
 
     public override PointF? ScreenToImage(double x, double y) =>
         IsInteractive && _mapView.ScreenToLocation(new Point(x, y)) is MapPoint location ? MapToPixel(location) : null;
@@ -426,13 +405,13 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         if (!_hasDrawn)
             return null;
 
-        if (_rasterLayer?.Raster?.RasterInfo is not RasterInfo info || info.Extent is not Envelope extent)
+        if (_rasterLayer?.Raster?.RasterInfo?.Extent is not Envelope extent)
             return null;
 
         if (_mapView.VisibleArea is not Polygon visibleArea || visibleArea.Parts.Count == 0)
             return null;
 
-        List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent, info.CellSizeX, info.CellSizeY);
+        List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent);
         if (pixels.Count < 3)
             return null;
 
@@ -441,11 +420,8 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     // Clips the visible area to the image as a polygon, because clamping each vertex collapses a rotated view that
     // encloses the whole image to a diamond. Internal for unit tests.
-    internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent, double cellSizeX, double cellSizeY)
+    internal static List<PointF> ComputeVisibleAreaPixels(Polygon visibleArea, Envelope extent)
     {
-        double cellX = CellSize(cellSizeX);
-        double cellY = CellSize(cellSizeY);
-
         // The raster extent has no spatial reference but the visible area does, and Intersection wants identical SRs.
         var firstRing = new Polygon(visibleArea.Parts[0].Points, visibleArea.SpatialReference);
         var bounds = new Envelope(extent.XMin, extent.YMin, extent.XMax, extent.YMax, visibleArea.SpatialReference);
@@ -453,11 +429,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         IReadOnlyList<MapPoint> points = clipped.Parts.Count == 0 ? [] : clipped.Parts[0].Points;
         var pixels = new List<PointF>(points.Count);
         foreach (MapPoint point in points)
-        {
-            double col = (point.X - extent.XMin) / cellX;
-            double row = (extent.YMax - point.Y) / cellY;
-            pixels.Add(new PointF((float)col, (float)row));
-        }
+            pixels.Add(new PointF((float)point.X, (float)-point.Y));
 
         return pixels;
     }

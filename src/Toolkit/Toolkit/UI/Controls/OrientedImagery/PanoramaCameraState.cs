@@ -21,6 +21,8 @@ using System.Numerics;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 // Maps screen points to and from normalized equirectangular (u,v) in [0,1]; scale (u,v) by the image size for pixels.
+// Unlike planar image coordinates, where pixel centers are whole numbers, the SDK's 360 coordinates start at the
+// image's top-left corner, so this scaling needs no half-pixel term.
 // Every renderer's sphere mesh and camera matrices must match this convention, or taps and markers are mirrored:
 //   - Sphere: unit sphere around the camera, x = sin(phi)*cos(theta), y = cos(phi), z = sin(phi)*sin(theta);
 //     u = theta/2pi (wrap), v = phi/pi (clamp), so v = 0 is up and the horizon is v = 0.5.

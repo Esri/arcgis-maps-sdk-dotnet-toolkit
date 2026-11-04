@@ -414,7 +414,7 @@ public sealed class OrientedImageViewportTests
         var visibleArea = builder.ToGeometry();
         var extent = new Esri.ArcGISRuntime.Geometry.Envelope(0, 0, 100, 100, extentWkid == 0 ? null : SpatialReference.Create(extentWkid));
 
-        List<System.Drawing.PointF> ring = OrientedImageRasterViewport.ComputeVisibleAreaPixels(visibleArea, extent, 1, 1);
+        List<System.Drawing.PointF> ring = OrientedImageRasterViewport.ComputeVisibleAreaPixels(visibleArea, extent);
 
         Assert.IsGreaterThanOrEqualTo(4, ring.Count, $"expected a full ring, got {ring.Count} vertices");
         Assert.AreEqual(10000d, SignedRingArea(ring), 1e-3, "the clipped footprint must cover the whole image clockwise");
@@ -485,31 +485,30 @@ public sealed class OrientedImageViewportTests
     [TestMethod]
     public void FootprintClipsTheVisibleAreaToTheImageWithClockwiseWinding()
     {
-        // The SDK requires clockwise rings.
+        // The extent of a 400 by 200 image in an oriented image raster, where image (x, y) is raster (x, -y). Pixel
+        // centers are whole numbers, so the edges lie half a pixel past them. The SDK requires clockwise rings.
+        var extent = new Envelope(-0.5, -199.5, 399.5, 0.5);
         var builder = new PolygonBuilder((SpatialReference?)null);
-        builder.AddPoint(0, 200);
-        builder.AddPoint(400, 200);
-        builder.AddPoint(400, 0);
-        builder.AddPoint(0, 0);
-        List<PointF> pixels = OrientedImageRasterViewport.ComputeVisibleAreaPixels(
-            builder.ToGeometry(), new Envelope(0, 0, 400, 200), 1, 1);
+        builder.AddPoint(-0.5, 0.5);
+        builder.AddPoint(399.5, 0.5);
+        builder.AddPoint(399.5, -199.5);
+        builder.AddPoint(-0.5, -199.5);
+        List<PointF> pixels = OrientedImageRasterViewport.ComputeVisibleAreaPixels(builder.ToGeometry(), extent);
 
-        PointF[] expectedCorners = [new(0, 0), new(400, 0), new(400, 200), new(0, 200)];
+        PointF[] expectedCorners = [new(-0.5f, -0.5f), new(399.5f, -0.5f), new(399.5f, 199.5f), new(-0.5f, 199.5f)];
         CollectionAssert.AreEquivalent(expectedCorners, pixels.Distinct().ToArray());
         Assert.AreEqual(80000d, SignedRingArea(pixels), "the full image must be covered with clockwise winding");
 
-        var partialExtent = new Envelope(100, 200, 900, 800);
-        var partialView = new Polygon([new MapPoint(-300, 1100), new(500, 1100), new(500, 500), new(-300, 500)]);
-        List<PointF> partial = OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, partialExtent, -2, -3);
-        PointF[] expectedPartialCorners = [new(0, 0), new(200, 0), new(200, 100), new(0, 100)];
+        var partialView = new Polygon([new MapPoint(-300.5, 300.5), new(199.5, 300.5), new(199.5, -99.5), new(-300.5, -99.5)]);
+        List<PointF> partial = OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, extent);
+        PointF[] expectedPartialCorners = [new(-0.5f, -0.5f), new(199.5f, -0.5f), new(199.5f, 99.5f), new(-0.5f, 99.5f)];
         CollectionAssert.AreEquivalent(expectedPartialCorners, partial.Distinct().ToArray());
         Assert.AreEqual(20000d, SignedRingArea(partial), "partial clips keep clockwise image winding");
-        Assert.AreEqual(120000d, SignedRingArea(OrientedImageRasterViewport.ComputeVisibleAreaPixels(partialView, partialExtent, 0, 0)), "zero cell sizes use one map unit per pixel");
 
-        var outsideView = new Polygon([new MapPoint(-300, 1100), new(0, 1100), new(0, 900), new(-300, 900)]);
+        var outsideView = new Polygon([new MapPoint(-300.5, 300.5), new(-100.5, 300.5), new(-100.5, 200.5), new(-300.5, 200.5)]);
         var multipart = new PolygonBuilder(outsideView);
         multipart.AddPart(partialView.Parts[0]);
-        Assert.IsEmpty(OrientedImageRasterViewport.ComputeVisibleAreaPixels(multipart.ToGeometry(), partialExtent, 0, 0), "only the first visible-area part counts");
+        Assert.IsEmpty(OrientedImageRasterViewport.ComputeVisibleAreaPixels(multipart.ToGeometry(), extent), "only the first visible-area part counts");
     }
 
     [TestMethod]
