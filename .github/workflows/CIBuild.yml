@@ -29,7 +29,10 @@ jobs:
 
     - name: Map to drive
       shell: pwsh
-      run: New-PSDrive -Name "R" -PSProvider "FileSystem" -Root "$env:GITHUB_WORKSPACE" -Description "Workaround for file path limitations"
+      run: |
+        subst R: "$env:GITHUB_WORKSPACE"
+        if ($LASTEXITCODE -ne 0) { throw "Failed to map build drive" }
+        if (!(Test-Path 'R:\')) { throw "Build drive is not accessible" }
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v3
