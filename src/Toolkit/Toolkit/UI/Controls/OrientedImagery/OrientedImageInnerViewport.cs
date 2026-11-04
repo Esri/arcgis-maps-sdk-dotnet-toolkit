@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The cancellation sources are cancel-only (no timer), so they need no disposal; canceling on supersede is the release.")]
 internal abstract class OrientedImageInnerViewport
 {
-    private static readonly TimeSpan FootprintUpdateInterval = TimeSpan.FromMilliseconds(250);
+    private static readonly TimeSpan FootprintUpdateInterval = TimeSpan.FromMilliseconds(100);
 
     private IEnumerable<OrientedImageMarker>? _markerSource;
     private List<OrientedImageMarker> _markers = [];
@@ -364,7 +364,7 @@ internal abstract class OrientedImageInnerViewport
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    // Navigation raises a view change per frame, so runs are at most four per second, with a trailing run after the
+    // Navigation raises a view change per frame, so runs are at most ten per second, with a trailing run after the
     // last change. Latest wins: NextFootprintUpdateToken cancels the update in flight.
     protected async void UpdateFootprint()
     {
