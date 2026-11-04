@@ -446,10 +446,10 @@ internal abstract class OrientedImageInnerViewport
             await image.RetryLoadAsync();
             token.ThrowIfCancellationRequested();
 
-            // Loading downloads the image or its first attachment to a local file. An attachment without an image
-            // leaves nothing to display.
+            // Loading downloads the image or its first attachment to a local file, which PresentAsync displays.
             if (image.DataUri is not Uri uri)
             {
+                PresentationError = new InvalidOperationException("The oriented image has no image file to display.");
                 ClearPresentation();
                 return;
             }
