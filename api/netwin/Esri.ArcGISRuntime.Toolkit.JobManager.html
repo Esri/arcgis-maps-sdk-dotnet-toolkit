@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class JobManager </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class JobManager ">
+    
+    <meta name="description" content="An object that manages saving and loading jobs so that they can continue to run if the app is backgrounded or even terminated.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager">
+
+
+
+  <h1 id="Esri_ArcGISRuntime_Toolkit_JobManager" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager" class="text-break">Class JobManager</h1>
+  <div class="markdown level0 summary"><p>An object that manages saving and loading jobs so that they can continue to run if the
+app is backgrounded or even terminated.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">JobManager</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Esri.html">Esri</a>.<a class="xref" href="Esri.ArcGISRuntime.html">ArcGISRuntime</a>.<a class="xref" href="Esri.ArcGISRuntime.Toolkit.html">Toolkit</a></h6>
+  <h6><strong>Assembly</strong>: Esri.ArcGISRuntime.Toolkit.Maui.dll</h6>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_JobManager_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public sealed class JobManager</code></pre>
+  </div>
+  <h5 id="Esri_ArcGISRuntime_Toolkit_JobManager_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>
+ The job manager is instantiable, but the ``shared`` instance is suitable for most applications.
+</p>
+<p>
+  <b>Background</b>
+  <br>
+ Jobs are long running server operations. When a job instance is started on the client,
+ it makes a request to a service asking it to start work on the server. At that point, the client
+ polls the server intermittently to check the status of the work. Once the work is completed
+ the result is downloaded with a background `URLSession`. This allows the download to
+ complete out of process, and the download task can relaunch the app upon completion, even
+ in the case where the app was terminated.
+</p>
+<p>
+ We do not expect users to keep an application in the foreground and wait for a job to complete.
+ Once the job is started, if the app is backgrounded, we can use an app refresh
+ background task to check the status of the work on the server. If the server work is complete
+ we can start downloading the result in the background at that point. If the work on the server
+ is not complete, we can reschedule another background app refresh to recheck status.
+</p>
+<p>
+ There is some iOS behavior to be aware of as well. In iOS, if an application is backgrounded,
+ the operating system can terminate the app at its discretion. This means that jobs need to be
+ serialized when an app is backgrounded so that if the app is terminated the jobs can be
+ rehydrated upon relaunch of the app.
+</p>
+<p>
+ Also, in iOS, if the user of an app removes the app from the multitasking UI (aka force quits it),
+ the system interprets this as a strong indication that the app should
+ do no more work in the background. The consequences of this are two-fold for jobs.
+ One, any background fetch tasks are not given any time until the app is relaunched again.
+ And two, any background downloads that are in progress are canceled by the operating system.
+</p>
+<p>
+  <b>Features</b>
+  <br>
+ The job manager is an `ObservableObject` with a mutable ``jobs`` property. Adding a job to this
+ property will allow the job manager to do the work to make sure that we can rehydrate a job
+ if an app is terminated.
+</p>
+<p>
+ As such, the job manager will:
+ </p>
+<p>
+ The job manager will help with the lifetime of jobs in other ways as well.
+</p>
+<p>
+  <b>iOS specific behavior:</b>
+ The job manager will ask the system for some background processing time when an app
+ is backgrounded so that jobs that are not yet started on the server, can have some time to
+ allow them to start. This means if you kick off a job and it hasn't actually started on the server
+ when the app is backgrounded, the job should have enough time to start on the server which
+ will cause it to enter into a polling state. When the job reaches the polling state the
+ status of the work on the server can be checked intermittently.
+</p>
+<p>
+ To enable polling while an app is backgrounded, the job manager will request from the system a
+ background refresh task (if enabled via the <code>JobManager.PreferredBackgroundStatusCheckSchedule</code>
+ property). If the system later executes the background refresh task then the
+ job manager will check the status of any running jobs. At that point the jobs may start
+ downloading their result. Note, this does not work on the simulator, this behavior can only
+ be tested on an actual device.
+ </p>
+</div>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_JobManager_Jobs" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager.Jobs">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.JobManager.Jobs.html#Esri_ArcGISRuntime_Toolkit_JobManager_Jobs">Jobs</a>
+        </td>
+        <td class="markdown level1 summary"><p>The jobs being managed by the job manager.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_JobManager_Shared" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager.Shared">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.JobManager.Shared.html#Esri_ArcGISRuntime_Toolkit_JobManager_Shared">Shared</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the shared job manager.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_JobManager_Create_System_String_" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager.Create(System.String)">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.JobManager.Create.html#Esri_ArcGISRuntime_Toolkit_JobManager_Create_System_String_">Create(string)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Creates a job manager with a unique id.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_JobManager_PerformStatusChecks" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager.PerformStatusChecks">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.JobManager.PerformStatusChecks.html#Esri_ArcGISRuntime_Toolkit_JobManager_PerformStatusChecks">PerformStatusChecks()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Check the status of all managed jobs.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_JobManager_RegisterForBGTaskServer" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager.RegisterForBGTaskServer">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.JobManager.RegisterForBGTaskServer.html#Esri_ArcGISRuntime_Toolkit_JobManager_RegisterForBGTaskServer">RegisterForBGTaskServer()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Registers the background task COM server with the application. Only call this if the program startup arguments contains <code>-RegisterForBGTaskServer</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_JobManager_ResumeAllPausedJobsAsync" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager.ResumeAllPausedJobsAsync">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.JobManager.ResumeAllPausedJobsAsync.html#Esri_ArcGISRuntime_Toolkit_JobManager_ResumeAllPausedJobsAsync">ResumeAllPausedJobsAsync()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Resumes all paused jobs.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Esri_ArcGISRuntime_Toolkit_JobManager_SaveState" data-uid="Esri.ArcGISRuntime.Toolkit.JobManager.SaveState">
+          <a class="xref" href="Esri.ArcGISRuntime.Toolkit.JobManager.SaveState.html#Esri_ArcGISRuntime_Toolkit_JobManager_SaveState">SaveState()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Saves the current job state</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/new/main/docs/api/new?filename=Esri_ArcGISRuntime_Toolkit_JobManager.md&amp;value=---%0Auid%3A%20Esri.ArcGISRuntime.Toolkit.JobManager%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/src/Toolkit/Toolkit/JobManager/JobManager.net.cs/#L6" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
