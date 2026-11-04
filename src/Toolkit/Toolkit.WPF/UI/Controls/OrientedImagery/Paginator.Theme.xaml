@@ -164,7 +164,7 @@
                                 Style="{StaticResource PaginatorNavigationButtonStyle}"
                                 VerticalAlignment="Center" />
 
-                        <ItemsControl x:Name="PART_PagesPresenter" Grid.Column="1" IsTabStop="False"
+                        <local:PaginatorPagesPresenter x:Name="PART_PagesPresenter" Grid.Column="1" IsTabStop="False"
                                       KeyboardNavigation.TabNavigation="Continue"
                                       DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsControl.ItemsPanel>
@@ -188,7 +188,7 @@
                                     </Button>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        </local:PaginatorPagesPresenter>
 
                         <Button x:Name="PART_RightNavigate"
                                 IsTabStop="False"
