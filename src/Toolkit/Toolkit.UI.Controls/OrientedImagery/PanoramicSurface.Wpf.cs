@@ -280,14 +280,14 @@ internal sealed unsafe partial class PanoramicSurface : FrameworkElement
 
     private partial void HookRendering()
     {
-        if (!_renderHooked)
+        if (!_renderHooked && IsLoaded)
         {
             CompositionTarget.Rendering += OnRendering;
             _renderHooked = true;
         }
     }
 
-    private void UnhookRendering()
+    private partial void UnhookRendering()
     {
         if (_renderHooked)
         {

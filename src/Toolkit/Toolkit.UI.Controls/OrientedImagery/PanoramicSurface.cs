@@ -183,7 +183,10 @@ internal sealed unsafe partial class PanoramicSurface
 
     private partial void ReleasePresentResources();
 
+    // Hooking does nothing while the surface is unloaded, so the static rendering event never holds a removed surface.
     private partial void HookRendering();
+
+    private partial void UnhookRendering();
 
     private partial bool IsReadyToRender();
 
@@ -234,7 +237,11 @@ internal sealed unsafe partial class PanoramicSurface
         return keys;
     }
 
-    internal void RequestRender() => _needsRender = true;
+    internal void RequestRender()
+    {
+        _needsRender = true;
+        HookRendering();
+    }
 
     // Held keys are polled every tick, so they combine and move the view smoothly rather than at the key repeat rate.
     private void StartKeyboardNavigation()
@@ -244,6 +251,7 @@ internal sealed unsafe partial class PanoramicSurface
 
         _keyboardNavigating = true;
         _keyboardTimestamp = Stopwatch.GetTimestamp();
+        HookRendering();
     }
 
     // After focus leaves, key releases may never arrive, so the polled key state can go stale.
@@ -280,6 +288,7 @@ internal sealed unsafe partial class PanoramicSurface
         _recoveryStarted = Stopwatch.GetTimestamp();
         _lastRecoveryAttempt = 0; // the first attempt is immediate
         _recoveryReported = false;
+        HookRendering();
     }
 
     // Guards XAML lifecycle handlers, which run outside the render tick's error handling.
@@ -306,15 +315,20 @@ internal sealed unsafe partial class PanoramicSurface
         RequestRender();
     }
 
+    // The tick runs only while there is work. RequestRender, StartKeyboardNavigation, and NotifyDeviceLost hook it
+    // again, and each change that makes an unready surface ready calls RequestRender.
     private void RenderTick()
     {
         StepKeyboardNavigation();
-        if (_deviceLost && !TryRecoverDevice())
-            return;
+        if ((!_deviceLost || TryRecoverDevice()) && _needsRender && IsReadyToRender())
+            RenderPendingFrame();
 
-        if (!_needsRender || !IsReadyToRender())
-            return;
+        if (!_keyboardNavigating && !_deviceLost && (!_needsRender || !IsReadyToRender()))
+            UnhookRendering();
+    }
 
+    private void RenderPendingFrame()
+    {
         Exception? failure = null;
         try
         {
