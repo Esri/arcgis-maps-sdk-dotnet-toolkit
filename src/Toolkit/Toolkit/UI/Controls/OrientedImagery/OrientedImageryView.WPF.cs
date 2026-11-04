@@ -11,22 +11,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = PaginatorName, Type = typeof(Paginator))]
 [TemplatePart(Name = MainErrorMessagePresenterName, Type = typeof(TextBlock))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
+[TemplatePart(Name = ImageDetailsButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
     private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
+    private const string ImageDetailsButtonName = "PART_ImageDetailsButton";
 
     /// <inheritdoc/>
     protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewAutomationPeer(this);
 
-    private void FocusCloseDetailsButton()
+    private void UpdateDetailsFocus()
     {
-        if (ViewModel.SelectedImagePopup == null)
+        bool isPopupOpen = ViewModel.SelectedImagePopup != null;
+        if (!isPopupOpen &&
+            GetTemplateChild(CloseDetailsButtonName) is not Button { IsKeyboardFocusWithin: true })
             return;
 
         Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() =>
         {
-            if (ViewModel.SelectedImagePopup != null &&
-                GetTemplateChild(CloseDetailsButtonName) is Button { IsVisible: true, IsEnabled: true } button)
+            if ((ViewModel.SelectedImagePopup != null) == isPopupOpen &&
+                GetTemplateChild(isPopupOpen ? CloseDetailsButtonName : ImageDetailsButtonName) is Button { IsVisible: true, IsEnabled: true } button)
             {
                 button.Focus();
             }
