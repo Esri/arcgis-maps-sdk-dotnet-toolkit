@@ -69,7 +69,10 @@ public partial class OrientedImageViewport
     private bool _stateDirty;
 
     internal static readonly SimpleMarkerSymbol DefaultMarkerSymbol =
-        new(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(255, 0, 122, 194), 10);
+        new(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(255, 0, 122, 194), 10)
+        {
+            Outline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 1),
+        };
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageViewport"/> class.

@@ -74,7 +74,9 @@ public sealed class OrientedImageMarker : INotifyPropertyChanged
         set => SetProperty(ref _isVisible, value);
     }
 
-    /// <summary>Gets or sets an arbitrary value associated with the marker. The control does not use it.</summary>
+    /// <summary>
+    /// Gets or sets an arbitrary value associated with the marker. <see cref="OrientedImageViewport"/> does not use it.
+    /// </summary>
     public object? Tag
     {
         get => _tag;
