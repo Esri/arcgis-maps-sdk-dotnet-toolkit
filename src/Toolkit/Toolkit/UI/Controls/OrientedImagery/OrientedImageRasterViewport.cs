@@ -68,7 +68,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     private readonly Dictionary<Graphic, OrientedImageMarker> _graphicMarkers = [];
     private bool _interactive;
 
-    // The visible area reflects the fit only after the first draw, so footprint updates wait for it.
+    // The visible area reflects the fit only after the first draw.
     private bool _hasDrawn;
 
     internal OrientedImageRasterViewport()
@@ -93,7 +93,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
             if (e.Status != DrawStatus.Completed)
                 return;
 
-            // The initial ViewpointChanged came before the first draw and was rejected, so update here.
+            // Footprint updates before the first draw use the whole image, so update again from the drawn view.
             _hasDrawn = true;
             UpdateFootprint();
         };
@@ -402,13 +402,12 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
     protected override Task? BeginFootprintUpdate(OrientedImageFootprint footprint)
     {
-        if (!_hasDrawn)
-            return null;
-
         if (_rasterLayer?.Raster?.RasterInfo?.Extent is not Envelope extent)
             return null;
 
-        if (_mapView.VisibleArea is not Polygon visibleArea || visibleArea.Parts.Count == 0)
+        // Until the first draw, use the whole image, which the fit shows unless a held look-at moved it.
+        Polygon? visibleArea = _hasDrawn ? _mapView.VisibleArea : WholeImage(extent);
+        if (visibleArea is null || visibleArea.Parts.Count == 0)
             return null;
 
         List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent);
@@ -417,6 +416,9 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
 
         return footprint.UpdateFootprintAsync(pixels, NextFootprintUpdateToken());
     }
+
+    private static Polygon WholeImage(Envelope extent) =>
+        new([new MapPoint(extent.XMin, extent.YMax), new(extent.XMax, extent.YMax), new(extent.XMax, extent.YMin), new(extent.XMin, extent.YMin)]);
 
     // Clips the visible area to the image as a polygon, because clamping each vertex collapses a rotated view that
     // encloses the whole image to a diamond. Internal for unit tests.

@@ -301,9 +301,6 @@ internal sealed partial class OrientedImagePanoramicViewport : OrientedImageInne
             camera = LookAtCamera(camera, target);
         _surface.Camera = camera;
         _surface.RequestRender();
-
-        // Push explicitly: the earlier push had no image dimensions, and an unchanged camera raises no ViewChanged.
-        UpdateFootprint();
     }
 
     // The camera change raises ViewChanged, which updates the footprint.

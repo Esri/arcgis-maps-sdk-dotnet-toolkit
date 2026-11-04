@@ -379,9 +379,12 @@ internal abstract class OrientedImageInnerViewport
             _footprintUpdatePending = false;
         }
 
-        if (!_autoUpdate || Footprint is not OrientedImageFootprint footprint)
-            return;
+        if (_autoUpdate && Footprint is OrientedImageFootprint footprint)
+            await RunFootprintUpdateAsync(footprint);
+    }
 
+    private async Task RunFootprintUpdateAsync(OrientedImageFootprint footprint)
+    {
         _lastFootprintUpdate = DateTime.UtcNow;
         try
         {
@@ -456,6 +459,11 @@ internal abstract class OrientedImageInnerViewport
             }
 
             await PresentAsync(image, uri.LocalPath, token);
+
+            // The first footprint update finishes before the viewport reports interactive, so an app that hides the
+            // footprint while the image loads never shows the image's default footprint.
+            if (_autoUpdate && footprint is not null && !token.IsCancellationRequested)
+                await RunFootprintUpdateAsync(footprint);
         }
         catch (OperationCanceledException)
         {
