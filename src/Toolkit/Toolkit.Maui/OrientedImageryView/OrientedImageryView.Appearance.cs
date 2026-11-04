@@ -237,28 +237,40 @@ public partial class OrientedImageryView
 
     private static void AddPopupPresentation(Grid image, INameScope scope)
     {
-        var open = ToolButton("OpenSelectedImagePopup", ToolkitIcons.MoreInformation, "OrientedImageryPopupOpen");
+        var open = ToolButton("OpenSelectedImagePopup", "", "OrientedImageryPopupOpen");
         open.Text = null;
-        open.ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 0);
-        if (open.ImageSource is FontImageSource infoIcon)
-        {
-            infoIcon.Size = 30;
-            infoIcon.SetAppThemeColor(FontImageSource.ColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
-        }
-        open.WidthRequest = 44;
-        open.HeightRequest = 44;
-        open.BorderWidth = 0;
-        open.CornerRadius = 22;
+        open.WidthRequest = 32;
+        open.HeightRequest = 32;
+        open.MinimumHeightRequest = 32;
+        open.BorderWidth = 1;
+        open.CornerRadius = 16;
         open.Margin = 16;
         open.Padding = 0;
         open.HorizontalOptions = LayoutOptions.End;
         open.VerticalOptions = LayoutOptions.Start;
         open.IsVisible = false;
         open.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
+        open.SetAppThemeColor(Button.TextColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
+        open.SetAppThemeColor(Button.BorderColorProperty, Colors.Black, Colors.White);
         ToolTipProperties.SetText(open, Text("OpenSelectedImagePopup"));
         scope.RegisterName("PART_PopupOpen", open);
-        image.Add(open);
-        Grid.SetColumnSpan(open, image.ColumnDefinitions.Count == 0 ? 1 : image.ColumnDefinitions.Count);
+        var info = new Grid { Margin = open.Margin, HorizontalOptions = open.HorizontalOptions, VerticalOptions = open.VerticalOptions };
+        open.Margin = 0;
+        info.SetBinding(IsVisibleProperty, static (Button button) => button.IsVisible, source: open);
+        info.Add(open);
+        var glyph = GeometryIcon("M16.0105 8C16.7775 8 17.5 8.673 17.5 9.4905C17.5 10.3635 16.7775 11 16.0105 11C15.1125 11 14.5 10.3635 14.5 9.4905C14.5 8.673 15.1125 8 16.0105 8ZM19.5 23.5H17H15H12.5V22L15 21.5V15H13V13.5L17 13V21.5L19.5 22V23.5Z");
+        glyph.WidthRequest = glyph.HeightRequest = 32;
+        glyph.Aspect = Stretch.None;
+        glyph.HorizontalOptions = LayoutOptions.Center;
+        glyph.StrokeThickness = 0;
+        glyph.InputTransparent = true;
+        var glyphBrush = new SolidColorBrush();
+        glyphBrush.SetBinding(SolidColorBrush.ColorProperty, static (Button button) => button.TextColor, source: open);
+        glyph.Fill = glyphBrush;
+        AutomationProperties.SetIsInAccessibleTree(glyph, false);
+        info.Add(glyph);
+        image.Add(info);
+        Grid.SetColumnSpan(info, image.ColumnDefinitions.Count == 0 ? 1 : image.ColumnDefinitions.Count);
 
 #if ANDROID || __IOS__
         scope.RegisterName("PART_Popup", new PopupViewer { AutomationId = "OrientedImageryPopupViewer" });

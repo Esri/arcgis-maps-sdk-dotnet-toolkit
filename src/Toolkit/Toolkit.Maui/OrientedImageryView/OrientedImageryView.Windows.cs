@@ -177,13 +177,19 @@ public partial class OrientedImageryView
                 button.SetAppThemeColor(Microsoft.Maui.Controls.Button.TextColorProperty, Colors.Black, Colors.White);
         }
 
-        if (_popupOpenButton is { ImageSource: FontImageSource infoIcon } infoButton)
+        if (_popupOpenButton is { } infoButton)
         {
             SetBackground(infoButton, BackgroundColorProperty);
             if (foreground != null)
-                infoIcon.Color = foreground;
+            {
+                infoButton.TextColor = foreground;
+                infoButton.BorderColor = foreground;
+            }
             else
-                infoIcon.SetAppThemeColor(FontImageSource.ColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
+            {
+                infoButton.SetAppThemeColor(Microsoft.Maui.Controls.Button.TextColorProperty, Color.FromArgb("#007AC2"), Color.FromArgb("#6CB8EC"));
+                infoButton.SetAppThemeColor(Microsoft.Maui.Controls.Button.BorderColorProperty, Colors.Black, Colors.White);
+            }
         }
     }
 
