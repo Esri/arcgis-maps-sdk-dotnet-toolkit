@@ -119,6 +119,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 button.Clicked += BarcodeButton_Clicked;
             }
             ConfigureTextBox();
+            
+            //JH: Same issue as in FieldFormElement, the first time UpdateValidationState is called Element is null
+            Loaded += OnLoaded;
+            UpdateValidationState();
+        }
+
+        private void OnLoaded(object? sender, EventArgs e)
+        {
             UpdateValidationState();
         }
 
