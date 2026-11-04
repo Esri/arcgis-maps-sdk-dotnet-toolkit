@@ -321,7 +321,7 @@ public sealed class OrientedImageViewportTests
         control.SetActiveViewport(viewport);
 
         var log = new List<string>();
-        foreach (DependencyProperty property in new[] { OrientedImageViewport.IsBusyProperty, OrientedImageViewport.IsInteractiveProperty, OrientedImageViewport.ErrorProperty })
+        foreach (DependencyProperty property in new[] { OrientedImageViewport.IsImageLoadingProperty, OrientedImageViewport.IsInteractiveProperty, OrientedImageViewport.ErrorProperty })
             System.ComponentModel.DependencyPropertyDescriptor.FromProperty(property, typeof(OrientedImageViewport)).AddValueChanged(control, (_, _) => log.Add(property.Name));
         LogStateChanged(control, log);
 

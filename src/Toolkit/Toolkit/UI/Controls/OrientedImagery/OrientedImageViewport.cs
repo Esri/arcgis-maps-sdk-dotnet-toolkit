@@ -111,7 +111,7 @@ public partial class OrientedImageViewport
     public event EventHandler<OrientedImageTappedEventArgs>? ImageTapped;
 
     /// <summary>
-    /// Occurs when <see cref="IsBusy"/>, <see cref="IsInteractive"/>, or <see cref="Error"/> changes.
+    /// Occurs when <see cref="IsImageLoading"/>, <see cref="IsInteractive"/>, or <see cref="Error"/> changes.
     /// </summary>
     /// <remarks>Raised once per change, after all three properties hold their new values.</remarks>
     public event EventHandler? StateChanged;
@@ -154,10 +154,11 @@ public partial class OrientedImageViewport
     }
 
     /// <summary>
-    /// Gets a value indicating whether the control is loading or presenting its image.
+    /// Gets a value indicating whether the control is loading its image.
     /// </summary>
-    /// <remarks>Redraws of a shown image, such as during panning, do not count.</remarks>
-    public bool IsBusy => (bool)GetValue(IsBusyProperty);
+    /// <remarks>Loading ends once the image is shown and, if <see cref="AutoUpdateFootprint"/> is true, its footprint
+    /// follows the view. Redraws of a shown image, such as during panning, do not count.</remarks>
+    public bool IsImageLoading => (bool)GetValue(IsImageLoadingProperty);
 
     /// <summary>
     /// Gets a value indicating whether the image is loaded, can be panned and zoomed, and has no <see cref="Error"/>.
@@ -204,8 +205,8 @@ public partial class OrientedImageViewport
     public static readonly DependencyProperty AutoUpdateFootprintProperty =
         PropertyHelper.CreateProperty<bool, OrientedImageViewport>(nameof(AutoUpdateFootprint), true, (s, oldValue, newValue) => s._activeViewport?.SetAutoUpdateFootprint(newValue));
 
-    private static readonly DependencyPropertyKey IsBusyPropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageViewport>(nameof(IsBusy));
+    private static readonly DependencyPropertyKey IsImageLoadingPropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageViewport>(nameof(IsImageLoading));
 
     private static readonly DependencyPropertyKey IsInteractivePropertyKey =
         PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageViewport>(nameof(IsInteractive));
@@ -214,9 +215,9 @@ public partial class OrientedImageViewport
         PropertyHelper.CreateReadOnlyProperty<Exception, OrientedImageViewport>(nameof(Error));
 
     /// <summary>
-    /// Identifies the <see cref="IsBusy"/> dependency property.
+    /// Identifies the <see cref="IsImageLoading"/> dependency property.
     /// </summary>
-    public static readonly DependencyProperty IsBusyProperty = PropertyHelper.GetProperty(IsBusyPropertyKey);
+    public static readonly DependencyProperty IsImageLoadingProperty = PropertyHelper.GetProperty(IsImageLoadingPropertyKey);
 
     /// <summary>
     /// Identifies the <see cref="IsInteractive"/> dependency property.
@@ -421,20 +422,20 @@ public partial class OrientedImageViewport
             return;
         }
 
-        var oldState = (IsBusy, IsInteractive, Error);
+        var oldState = (IsImageLoading, IsInteractive, Error);
         _updatingState = true;
         try
         {
             do
             {
                 _stateDirty = false;
-                bool busy = _unsupportedError is null && (_activeViewport?.IsBusy ?? false);
+                bool loading = _unsupportedError is null && (_activeViewport?.IsImageLoading ?? false);
                 bool interactive = _unsupportedError is null && (_activeViewport?.IsInteractive ?? false);
                 Exception? error = _unsupportedError ?? _activeViewport?.Error;
-                if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
+                if (loading == IsImageLoading && interactive == IsInteractive && ReferenceEquals(error, Error))
                     break;
 
-                SetValue(IsBusyPropertyKey, busy);
+                SetValue(IsImageLoadingPropertyKey, loading);
                 if (!_stateDirty)
                     SetValue(IsInteractivePropertyKey, interactive);
                 if (!_stateDirty)
@@ -448,7 +449,7 @@ public partial class OrientedImageViewport
         }
 
         // Raised outside the guard, so a StateChanged handler that changes the footprint runs a full update of its own.
-        if ((IsBusy, IsInteractive, Error) != oldState)
+        if ((IsImageLoading, IsInteractive, Error) != oldState)
             StateChanged?.Invoke(this, EventArgs.Empty);
     }
 

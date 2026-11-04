@@ -47,6 +47,7 @@ internal abstract class OrientedImageInnerViewport
     private MapPoint? _heldLookAt;
     private Task _present = Task.CompletedTask; // the current session's SetFootprintAsync
     private bool _autoUpdate;
+    private bool _isLoading; // from the load through the first footprint update
     private DateTime _lastFootprintUpdate; // MinValue, so the first update runs at once
     private bool _footprintUpdatePending;
 
@@ -59,7 +60,7 @@ internal abstract class OrientedImageInnerViewport
     public abstract Microsoft.UI.Xaml.FrameworkElement View { get; }
 #endif
 
-    public bool IsBusy { get; private set; }
+    public bool IsImageLoading { get; private set; }
 
     // False while an image loads or after an error.
     public bool IsInteractive { get; private set; }
@@ -83,9 +84,6 @@ internal abstract class OrientedImageInnerViewport
     protected Exception? PresentationError { get; set; }
 
     protected abstract bool IsPresentationInteractive { get; }
-
-    // true through PresentAsync, not only while the image loads
-    protected bool _isLoading { get; private set; }
 
     public void SetFootprint(OrientedImageFootprint? footprint)
     {
@@ -341,24 +339,22 @@ internal abstract class OrientedImageInnerViewport
     {
     }
 
-    protected virtual Exception? ResolveError()
-    {
-        if (!_isLoading && Footprint?.OrientedImage?.LoadError is Exception)
-            return Footprint?.OrientedImage?.LoadError;
-        return PresentationError;
-    }
+    // UpdateState passes the session's loading flag and publishes it only after this returns. During a retry, the
+    // image's LoadError still holds the previous attempt's error.
+    protected virtual Exception? ResolveError(bool loading) =>
+        !loading && Footprint?.OrientedImage?.LoadError is Exception imageError ? imageError : PresentationError;
 
     protected void RaiseImageTapped(OrientedImageTappedEventArgs args) => ImageTapped?.Invoke(this, args);
 
     protected void UpdateState()
     {
-        Exception? error = ResolveError();
-        bool busy = _isLoading;
+        Exception? error = ResolveError(_isLoading);
+        bool loading = _isLoading;
         bool interactive = !_isLoading && error is null && IsPresentationInteractive;
-        if (busy == IsBusy && interactive == IsInteractive && ReferenceEquals(error, Error))
+        if (loading == IsImageLoading && interactive == IsInteractive && ReferenceEquals(error, Error))
             return;
 
-        IsBusy = busy;
+        IsImageLoading = loading;
         IsInteractive = interactive;
         Error = error;
         StateChanged?.Invoke(this, EventArgs.Empty);
