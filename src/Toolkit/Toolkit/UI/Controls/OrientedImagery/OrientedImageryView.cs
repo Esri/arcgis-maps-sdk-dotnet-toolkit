@@ -371,7 +371,7 @@ public partial class OrientedImageryView
     /// </summary>
     /// <remarks>
     /// Setting <see cref="GeoView"/> to <c>null</c> will clear all markers and footprints from the geo view and set
-    /// <see cref="OrientedImageryViewModel.OrientedImageryLayer"/>  on <see cref="ViewModel"/> to <c>null</c>.
+    /// <see cref="OrientedImageryViewModel.OrientedImageryLayer"/> to <c>null</c>.
     /// </remarks>
     public GeoView? GeoView
     {
@@ -403,6 +403,10 @@ public partial class OrientedImageryView
                 newGeoView.GraphicsOverlays = new GraphicsOverlayCollection();
             newGeoView.GraphicsOverlays.Add(ViewModel.MarkersOverlay);
             newGeoView.GeoViewTapped += GeoView_GeoViewTapped;
+        }
+        else if (ViewModel != null)
+        {
+            ViewModel.OrientedImageryLayer = null;
         }
 
         UpdateErrorMessages();
