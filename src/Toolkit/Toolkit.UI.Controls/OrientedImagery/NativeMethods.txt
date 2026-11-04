@@ -16,6 +16,9 @@ ID3D11VertexShader
 ID3D11PixelShader
 ID3D11InputLayout
 ID3D11Resource
+ID3D11Query
+D3D11_QUERY_DESC
+S_FALSE
 ID3DBlob
 IUnknown
 IDXGIDevice

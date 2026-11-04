@@ -41,6 +41,7 @@ internal sealed unsafe partial class PanoramicSurface : FrameworkElement
     private nint _surface9;    // IDirect3DSurface9*
     private ID3D11Texture2D* _sharedTexture;
     private ID3D11RenderTargetView* _sharedView;
+    private ID3D11Query* _frameQuery; // signals when the frame drawn into the shared surface is finished
 
     private bool _useSoftware;
     private ID3D11Texture2D* _renderTarget;
@@ -341,13 +342,30 @@ internal sealed unsafe partial class PanoramicSurface : FrameworkElement
         try
         {
             RenderScene(_sharedView, _surfaceWidth, _surfaceHeight);
-            Context->Flush(); // submit the D3D11 work before WPF reads the shared surface through D3D9
+            WaitForFrame();
             image.AddDirtyRect(new Int32Rect(0, 0, image.PixelWidth, image.PixelHeight));
         }
         finally
         {
             image.Unlock();
         }
+    }
+
+    // WPF reads the shared surface through Direct3D 9 without waiting for this context, so a frame that isn't finished
+    // when it's marked dirty can leave the previous one on screen until the next render. GetData flushes the context.
+    private void WaitForFrame()
+    {
+        if (_frameQuery is null)
+        {
+            var desc = new D3D11_QUERY_DESC { Query = D3D11_QUERY.D3D11_QUERY_EVENT };
+            ID3D11Query* query;
+            Device->CreateQuery(&desc, &query);
+            _frameQuery = query;
+        }
+
+        Context->End((ID3D11Asynchronous*)_frameQuery);
+        while (Context->GetData((ID3D11Asynchronous*)_frameQuery, null, 0, 0) == HRESULT.S_FALSE)
+            Thread.Yield();
     }
 
     private void RenderSoftware()
@@ -398,6 +416,7 @@ internal sealed unsafe partial class PanoramicSurface : FrameworkElement
 
         D3D9.Release(ref _surface9);
         D3D9.Release(ref _texture9);
+        Release(ref _frameQuery);
         Release(ref _sharedView);
         Release(ref _sharedTexture);
 

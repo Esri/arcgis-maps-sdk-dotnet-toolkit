@@ -1,4 +1,7 @@
 {
   "$schema": "https://aka.ms/CsWin32.schema.json",
-  "allowMarshaling": false
+  "allowMarshaling": false,
+  "comInterop": {
+    "preserveSigMethods": [ "ID3D11DeviceContext.GetData" ]
+  }
 }
