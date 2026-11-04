@@ -78,7 +78,7 @@ public partial class OrientedImageryView
         UpdatePaginatorSelection();
         UpdateErrorMessages();
 #if WPF
-        FocusCloseDetailsButton();
+        UpdateDetailsFocus();
 #endif
     }
 
@@ -188,7 +188,7 @@ public partial class OrientedImageryView
                 break;
 #if WPF
             case nameof(OrientedImageryViewModel.SelectedImagePopup):
-                FocusCloseDetailsButton();
+                UpdateDetailsFocus();
                 break;
 #endif
         }

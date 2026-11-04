@@ -1074,7 +1074,8 @@
                                         </Grid>
                                     </Viewbox>
                                 </Button>
-                                <Button Grid.ColumnSpan="3"
+                                <Button x:Name="PART_ImageDetailsButton"
+                                        Grid.ColumnSpan="3"
                                         TabIndex="0"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Top"
