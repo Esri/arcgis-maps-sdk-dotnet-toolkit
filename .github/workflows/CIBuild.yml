@@ -23,7 +23,16 @@ jobs:
     
     steps:
     - name: Clone Toolkit
-      uses: actions/checkout@v1
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+
+    - name: Map to drive
+      shell: pwsh
+      run: |
+        subst R: "$env:GITHUB_WORKSPACE"
+        if ($LASTEXITCODE -ne 0) { throw "Failed to map build drive" }
+        if (!(Test-Path 'R:\')) { throw "Build drive is not accessible" }
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v3
@@ -34,11 +43,13 @@ jobs:
         winsdk-build-version: 19041
         
     - name: Install MAUI Workload
+      working-directory: 'R:\'
       run: |
         dotnet workload install maui@10.0.100
         dotnet workload restore src/Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj --from-previous-sdk
        
     - name: Build
+      working-directory: 'R:\'
       run: |
         msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release
 #       msbuild /restore /t:Build src/Esri.ArcGISRuntime.ARToolkit.sln /p:Configuration=Release
