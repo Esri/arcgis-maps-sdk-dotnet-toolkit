@@ -410,6 +410,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         if (visibleArea is null || visibleArea.Parts.Count == 0)
             return null;
 
+        // A map without a basemap limits panning to its first layer's extent, so the view never leaves the image.
         List<PointF> pixels = ComputeVisibleAreaPixels(visibleArea, extent);
         if (pixels.Count < 3)
             return null;
