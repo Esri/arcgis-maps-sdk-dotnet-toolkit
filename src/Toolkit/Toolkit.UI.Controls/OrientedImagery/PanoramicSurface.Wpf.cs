@@ -548,10 +548,7 @@ internal readonly partial record struct PanoramaFrame
                 using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
                 BitmapFrame frame = decoder.Frames[0];
-                var orientation = decoder is JpegBitmapDecoder &&
-                    frame.Metadata is BitmapMetadata metadata &&
-                    metadata.GetQuery("/app1/ifd/{ushort=274}") is ushort value
-                    ? new ExifOrientationTransform(value) : default;
+                var orientation = decoder is JpegBitmapDecoder ? ReadExifOrientation(frame) : default;
                 BitmapSource source = frame;
                 if (orientation.IsMirrored || orientation.RotationDegrees != 0)
                 {
@@ -574,6 +571,21 @@ internal readonly partial record struct PanoramaFrame
                 return new PanoramaFrame(bytes, width, height);
             },
             token);
+    }
+
+    // Metadata that WIC can't read counts as orientation 1, so it can't fail a decode whose pixels are fine.
+    private static ExifOrientationTransform ReadExifOrientation(BitmapFrame frame)
+    {
+        try
+        {
+            return frame.Metadata is BitmapMetadata metadata && metadata.GetQuery("/app1/ifd/{ushort=274}") is ushort value
+                ? new ExifOrientationTransform(value)
+                : default;
+        }
+        catch (Exception ex) when (ex is NotSupportedException or COMException or FileFormatException)
+        {
+            return default;
+        }
     }
 }
 #endif
