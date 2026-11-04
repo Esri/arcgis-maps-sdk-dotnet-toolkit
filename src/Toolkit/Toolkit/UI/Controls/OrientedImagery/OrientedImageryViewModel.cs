@@ -112,6 +112,8 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             SelectedImage = null;
             _managedMarkers.Clear();
             Markers.Clear();
+            InteractionState = OrientedImageryViewInteractionState.FindImages;
+            SearchPoint = null;
 
             SetProperty(ref _oiLayer, value);
             if (_oiLayer != null)
@@ -298,7 +300,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             else if (SelectedImage != null)
             {
                 _ = PrefetchAdjacentImagesAsync();
-                SetImages([]);
+                SetImages([SelectedImage]);
             }
         }
     }
