@@ -271,6 +271,12 @@ public sealed class OrientedImageViewportTests
         var viewport = new OrientedImagePanoramicViewport();
         string name = System.Windows.Automation.AutomationProperties.GetName(viewport.View);
         Assert.IsFalse(string.IsNullOrEmpty(name), "the panoramic surface must have an automation name");
+
+        // Without a peer, UI Automation never exposes the surface or its name.
+        var peer = System.Windows.Automation.Peers.UIElementAutomationPeer.CreatePeerForElement(viewport.View);
+        Assert.IsNotNull(peer, "the panoramic surface must have an automation peer");
+        Assert.AreEqual(name, peer.GetName());
+        Assert.AreEqual(System.Windows.Automation.Peers.AutomationControlType.Image, peer.GetAutomationControlType());
     }
 
     [STATestMethod]

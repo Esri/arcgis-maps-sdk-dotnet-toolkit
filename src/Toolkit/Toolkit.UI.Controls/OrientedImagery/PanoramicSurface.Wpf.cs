@@ -66,6 +66,22 @@ internal sealed unsafe partial class PanoramicSurface : FrameworkElement
         SizeChanged += OnSizeChanged;
     }
 
+    // UI Automation exposes only elements with a peer, and a plain FrameworkElement has none.
+    protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer() => new SurfaceAutomationPeer(this);
+
+    private sealed class SurfaceAutomationPeer : System.Windows.Automation.Peers.FrameworkElementAutomationPeer
+    {
+        public SurfaceAutomationPeer(PanoramicSurface owner)
+            : base(owner)
+        {
+        }
+
+        protected override System.Windows.Automation.Peers.AutomationControlType GetAutomationControlTypeCore() =>
+            System.Windows.Automation.Peers.AutomationControlType.Image;
+
+        protected override string GetClassNameCore() => nameof(PanoramicSurface);
+    }
+
     // The transparent fill keeps the element hit-testable before the first frame.
     protected override void OnRender(DrawingContext drawingContext)
     {
