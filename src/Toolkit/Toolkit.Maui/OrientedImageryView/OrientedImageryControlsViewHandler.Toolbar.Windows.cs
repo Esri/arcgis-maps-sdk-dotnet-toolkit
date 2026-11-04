@@ -311,7 +311,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
     private ToggleButton SequenceButton(OrientedImageryView owner)
     {
         var model = owner.ViewModel;
-        return Toggle(owner, "MobileSequentialMode", "MobileSequentialMode", Geometry(OrientedImageryView.SequenceGeometry),
+        return Toggle(owner, "SequentialNavigationLabel", "SequentialNavigationStackedLabel", Geometry(OrientedImageryView.SequenceGeometry),
             () => model.IsSequentialNavigationEnabled, value => model.IsSequentialNavigationEnabled = value,
             () => model.ToggleSequentialNavigationCommand.CanExecute(null), "OrientedImageryDesktopSequentialMode");
     }
