@@ -412,10 +412,6 @@ internal abstract class OrientedImageInnerViewport
         OrientedImage? image = footprint?.OrientedImage;
         bool imageChanged = !ReferenceEquals(Footprint?.OrientedImage, image);
 
-        // Cancel an abandoned download when paging, which also cancels other callers loading the same image.
-        if (imageChanged)
-            Footprint?.OrientedImage?.CancelLoad();
-
         // An update in flight must not change a footprint that this viewport has stopped managing.
         if (!ReferenceEquals(Footprint, footprint))
             _updateCts?.Cancel();
