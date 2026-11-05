@@ -232,6 +232,21 @@ internal class Program
 #endregion
 
 #region PlatformDependencies
+    private static void InstallMauiWorkload(CommonDependencies dependencies)
+    {
+        Console.WriteLine("\nInstalling maui workload...");
+
+        Collection<string> arguments = ["workload", "install", "maui"];
+        var workloadVersion = Environment.GetEnvironmentVariable("MAUI_WORKLOAD_VERSION");
+        if (!string.IsNullOrWhiteSpace(workloadVersion))
+        {
+            arguments.Add("--version");
+            arguments.Add(workloadVersion);
+        }
+
+        RunBinary(dependencies.DotnetExe, arguments);
+    }
+
     private static BuildSettings SetupMac(CommonDependencies dependencies, string workspace, string apiKey, string[] consoleArgs)
     {
         // Define build settings
@@ -246,8 +261,7 @@ internal class Program
         AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
 
         // Install maui maccatalyst workload
-        Console.WriteLine("\nInstalling maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        InstallMauiWorkload(dependencies);
 
         // Install appium mac driver
         InstallAppiumDriver(dependencies, "mac2");
@@ -297,8 +311,7 @@ internal class Program
         buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
 
         // Install maui ios workload
-        Console.WriteLine("\nInstalling maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        InstallMauiWorkload(dependencies);
 
         // Install appium ios driver
         InstallAppiumDriver(dependencies, "xcuitest");
@@ -365,8 +378,7 @@ internal class Program
         AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
 
         // Install maui android
-        Console.WriteLine("\nInstalling maui maui workload...");
-        RunBinary(dependencies.DotnetExe, "workload install maui");
+        InstallMauiWorkload(dependencies);
 
         // Install appium android driver
         InstallAppiumDriver(dependencies, "uiautomator2");
@@ -380,6 +392,11 @@ internal class Program
         RunBinary(dependencies.DotnetExe, $"build {appPath} -t InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=true {string.Join(" ", buildSettings.BuildParamsApp)}");
         Environment.SetEnvironmentVariable("JAVA_HOME", jdkDirectory);
         Environment.SetEnvironmentVariable("ANDROID_HOME", androidSdkDirectory);
+
+        // Enforce vertical orientation since some tests can fail on phones in landscape mode
+        var adb = Path.Join(androidSdkDirectory, "platform-tools", "adb");
+        RunBinary(adb, "shell settings put system accelerometer_rotation 0");
+        RunBinary(adb, "shell settings put system user-rotation 0");
 
         return buildSettings;
     }

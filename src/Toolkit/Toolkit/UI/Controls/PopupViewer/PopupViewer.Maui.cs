@@ -15,9 +15,15 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
+#if __IOS__
+using Microsoft.Maui.Handlers;
+using UIKit;
+using NativeContentView = Microsoft.Maui.Platform.ContentView;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -27,6 +33,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private static readonly Style DefaultPopupViewerHeaderStyle;
         private static readonly Style DefaultPopupViewerTitleStyle;
         private static readonly Style DefaultPopupViewerCaptionStyle;
+        private static readonly IValueConverter? HeaderTextConverter =
+#if WINDOWS
+            new Toolkit.Internal.HtmlToPlainTextConverter();
+#else
+            null;
+#endif
+        private static readonly IValueConverter? PopupTitleConverter =
+#if __IOS__
+            new Toolkit.Internal.HtmlToPlainTextConverter();
+#else
+            HeaderTextConverter;
+#endif
 
         /// <summary>
         /// Template name of the <see cref="IBindableLayout"/> items layout view.
@@ -58,12 +76,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             DefaultPopupViewerCaptionStyle = new Style(typeof(Label));
             DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12 });
             DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
-            DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.TextColorProperty, Value = Colors.Gray });
+            DefaultPopupViewerCaptionStyle.Setters.Add(HighContrastThemeExtensions.CreateHighContrastSetter(Label.TextColorProperty, Colors.Gray));
         }
 
         private static object BuildDefaultTemplate()
         {
             NavigationSubView root = new NavigationSubView();
+            // Give the content an opaque system background in high contrast so system text colors always sit on their matching background.
+            root.SetHighContrastColor(VisualElement.BackgroundColorProperty, null, HighContrastColorRole.Background);
 
             root.SetBinding(NavigationSubView.VerticalScrollBarVisibilityProperty, static (PopupViewer viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             root.HeaderTemplateSelector = BuildHeaderTemplateSelector();
@@ -83,7 +103,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 Label roottitle = new Label();
                 roottitle.Style = GetPopupViewerHeaderStyle();
-                roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup?.Title);
+#if WINDOWS || __IOS__ || __ANDROID__
+                SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
+#endif
+                roottitle.SetBinding(Label.TextProperty, static (Popup popup) => popup?.Title, converter: PopupTitleConverter);
                 roottitle.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.Title, converter: Internal.EmptyToFalseConverter.Instance);
                 return roottitle;
             });
@@ -94,12 +117,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
                 Label title = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 title.Style = GetPopupViewerHeaderStyle();
-                title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title);
+#if __IOS__
+                SemanticProperties.SetHeadingLevel(title, SemanticHeadingLevel.Level1);
+#endif
+                title.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Title, converter: HeaderTextConverter);
                 root.Children.Add(title);
 
                 Label desc = new Label() { LineBreakMode = LineBreakMode.TailTruncation };
                 desc.Style = GetPopupViewerCaptionStyle();
-                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description);
+                desc.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: HeaderTextConverter);
                 desc.SetBinding(VisualElement.IsVisibleProperty, static (UtilityNetworks.UtilityAssociationsFilterResult result) => result?.Filter.Description, converter: Internal.EmptyToFalseConverter.Instance);
                 root.Children.Add(desc);
 
@@ -110,6 +136,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 Label roottitle = new Label() { VerticalOptions = LayoutOptions.Center, LineBreakMode = LineBreakMode.TailTruncation };
                 roottitle.Style = GetPopupViewerHeaderStyle();
+#if __IOS__
+                SemanticProperties.SetHeadingLevel(roottitle, SemanticHeadingLevel.Level1);
+#endif
                 roottitle.SetBinding(Label.TextProperty, static (UtilityNetworks.UtilityAssociationGroupResult result) => result?.Name);
                 return roottitle;
             });
@@ -127,12 +156,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 {
                     Margin = new Thickness(0, 10),
                 };
+                rootLayout.SetHighContrastColor(VisualElement.BackgroundColorProperty, null, HighContrastColorRole.Background);
                 VerticalStackLayout itemsView = new VerticalStackLayout();
                 BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
+                itemsView.SetHighContrastColor(VisualElement.BackgroundColorProperty, null, HighContrastColorRole.Background);
                 itemsView.SetBinding(BindableLayout.ItemsSourceProperty, static (Popup popup) => popup?.EvaluatedElements);
                 rootLayout.Children.Add(itemsView);
 
                 Label editSummaryLabel = new Label() { LineBreakMode = LineBreakMode.WordWrap, Style = GetPopupViewerCaptionStyle(), Margin = new Thickness(0, 10, 0, 0)};
+                editSummaryLabel.SetHighContrastColor(VisualElement.BackgroundColorProperty, null, HighContrastColorRole.Background);
                 editSummaryLabel.SetBinding(Label.TextProperty, static (Popup popup) => popup?.EditSummary);
                 editSummaryLabel.SetBinding(VisualElement.IsVisibleProperty, static (Popup popup) => popup?.PopupDefinition?.ShowEditSummary);
                 rootLayout.Children.Add(editSummaryLabel);
@@ -184,5 +216,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return parent as T;
         }
     }
+
+#if __IOS__
+    internal sealed class PopupViewerHandler : ContentViewHandler
+    {
+        protected override NativeContentView CreatePlatformView() => new PopupViewerContentView
+        {
+            CrossPlatformLayout = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} must be set before creating the popup view."),
+            FocusGroupIdentifier = $"{nameof(PopupViewer)}-{((PopupViewer)VirtualView).Id}",
+            ShouldGroupAccessibilityChildren = true,
+        };
+    }
+
+    internal sealed class PopupViewerContentView : NativeContentView
+    {
+        public override bool ShouldUpdateFocus(UIFocusUpdateContext context)
+        {
+            bool leavesPopup = context.FocusHeading is UIFocusHeading.Left or UIFocusHeading.Right &&
+                context.PreviouslyFocusedItem is { } previous && UIFocusSystem.Contains(this, previous) &&
+                context.NextFocusedItem is { } next && !UIFocusSystem.Contains(this, next);
+            return !leavesPopup && base.ShouldUpdateFocus(context);
+        }
+    }
+#endif
 }
 #endif

@@ -15,8 +15,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// <returns>The host builder</returns>
         public static MauiAppBuilder UseArcGISToolkit(this MauiAppBuilder builder)
         {
+#if WINDOWS || __IOS__ || __ANDROID__
+            builder.ConfigureMauiHandlers(handler =>
+            {
+                handler.AddHandler<HyperlinkLabel, HyperlinkLabelHandler>();
+                handler.AddHandler<FieldsTableGrid, FieldsTableGridHandler>();
 #if WINDOWS || __IOS__
-            builder.ConfigureMauiHandlers(handler => handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>());
+                handler.AddHandler<MauiMediaElement, MauiMediaElementHandler>();
+                handler.AddHandler<HyperlinkContentView, HyperlinkContentViewHandler>();
+#endif
+#if WINDOWS
+                handler.AddHandler<FieldsTableCell, FieldsTableCellHandler>();
+#elif __IOS__
+                handler.AddHandler<PopupViewer, PopupViewerHandler>();
+                handler.AddHandler<Primitives.LegacyCollectionView, Microsoft.Maui.Controls.Handlers.Items.CollectionViewHandler>();
+#elif __ANDROID__
+                handler.AddHandler<PopupMediaPager, PopupMediaPagerHandler>();
+#endif
+#if __IOS__ || __ANDROID__
+                handler.AddHandler<FieldsTableLabel, FieldsTableLabelHandler>();
+#endif
+            });
 #endif
             builder.ConfigureFonts(fonts => fonts
                 .AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "toolkit-icons.ttf", ToolkitIcons.FontFamilyName)

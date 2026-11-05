@@ -8,20 +8,17 @@
     <converter:CollectionIsSingletonToBoolConverter x:Key="CollectionIsSingletonToBoolConverter" />
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
-    <Color x:Key="ButtonHoverColor">#f3f3f3</Color>
-    <Color x:Key="ButtonPressColor">#e2f1fb</Color>
     <Color x:Key="BlueButtonColor">#007AC2</Color>
     <Color x:Key="BlueButtonHoverColor">#00619B</Color>
     <Color x:Key="BlueButtonPressColor">#004874</Color>
-    <Color x:Key="CommonGrayColor">#6e6e6e</Color>
-    <SolidColorBrush x:Key="CommonGrayBrush" Color="{StaticResource CommonGrayColor}" />
-    <SolidColorBrush x:Key="DefaultControlBackgroundBrush" Color="White" />
+    <SolidColorBrush x:Key="CommonGrayBrush" Color="{DynamicResource {x:Static SystemColors.ControlTextColorKey}}" />
+    <SolidColorBrush x:Key="DefaultControlBackgroundBrush" Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
     <SolidColorBrush x:Key="BlueButtonBrush" Color="{StaticResource BlueButtonColor}" />
     <SolidColorBrush x:Key="BlueButtonHoverBrush" Color="{StaticResource BlueButtonHoverColor}" />
     <SolidColorBrush x:Key="BlueButtonPressBrush" Color="{StaticResource BlueButtonPressColor}" />
-    <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource ButtonHoverColor}" />
-    <SolidColorBrush x:Key="ButtonPressBrush" Color="{StaticResource ButtonPressColor}" />
-    <SolidColorBrush x:Key="ItemSeparatorBrush" Color="#6e6e6e4e" />
+    <SolidColorBrush x:Key="HoverBrush" Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
+    <SolidColorBrush x:Key="ButtonPressBrush" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+    <SolidColorBrush x:Key="ItemSeparatorBrush" Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}" Opacity="0.3" />
     <ControlTemplate x:Key="BarActionButtonTemplate" TargetType="ButtonBase">
         <Border
             x:Name="Border"
@@ -50,14 +47,14 @@
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -144,14 +141,14 @@
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -175,8 +172,11 @@
         <Border
             x:Name="Border"
             Margin="0,0,0,0"
-            Background="{StaticResource DefaultControlBackgroundBrush}"
             SnapsToDevicePixels="true">
+            <Border.Background>
+                <!-- Storyboards cannot animate the shared frozen brush resource; each item needs its own brush. -->
+                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
+            </Border.Background>
             <ContentPresenter />
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
@@ -184,7 +184,7 @@
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -195,7 +195,7 @@
                     <VisualState x:Name="Selected">
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
+                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -204,7 +204,6 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="{StaticResource HoverBrush}" />
                 <Setter TargetName="Border" Property="BorderThickness" Value="2,0,0,0" />
                 <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BlueButtonBrush}" />
             </Trigger>
@@ -214,7 +213,7 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="Background" Value="{StaticResource DefaultControlBackgroundBrush}" />
         <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="32" />
+        <Setter Property="MinHeight" Value="32" />
         <Setter Property="BorderThickness" Value="0,0,0,0" />
         <Setter Property="BorderBrush" Value="{StaticResource CommonGrayBrush}" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -230,7 +229,7 @@
         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
             <TextBlock
                 Padding="8"
-                FontSize="12"
+                FontSize="{DynamicResource {x:Static SystemFonts.MessageFontSizeKey}}"
                 Text="{Binding DisplayName, Mode=OneWay}"
                 TextWrapping="Wrap" />
         </Border>
@@ -256,14 +255,14 @@
     </Style>
     <Style x:Key="QueryEntryStyle" TargetType="TextBox">
         <Setter Property="Padding" Value="8,0,0,0" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{converter:TextScaledFontSize FontSize=14}" />
         <Setter Property="MaxLines" Value="1" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
     <Style x:Key="QueryPlaceholderStyle" TargetType="TextBlock">
         <Setter Property="Padding" Value="8,4,4,4" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{converter:TextScaledFontSize FontSize=14}" />
         <Setter Property="Foreground" Value="{StaticResource CommonGrayBrush}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="IsHitTestVisible" Value="False" />
@@ -321,8 +320,8 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom"
                         Visibility="Hidden" />
-                    <ToggleButton
-                        x:Name="SourceSelectToggle"
+                    <controls:SourceSelectToggleButton
+                        x:Name="PART_SourceSelectToggle"
                         Grid.Column="0"
                         BorderThickness="0,0,1,0"
                         IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsSourceSelectOpen, Mode=TwoWay}"
@@ -337,8 +336,9 @@
                             Stretch="Uniform"
                             Stroke="{StaticResource CommonGrayBrush}"
                             StrokeThickness="1" />
-                    </ToggleButton>
+                    </controls:SourceSelectToggleButton>
                     <Popup
+                        x:Name="PART_SourcePopup"
                         Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
                         HorizontalOffset="-1"
                         IsOpen="{TemplateBinding IsSourceSelectOpen}"
@@ -346,26 +346,29 @@
                         PlacementTarget="{Binding ElementName=PopupTarget}"
                         StaysOpen="False">
                         <Border Style="{StaticResource ResultAreaBorderStyle}">
-                            <StackPanel>
-                                <ToggleButton
-                                    Width="{Binding ElementName=sourceList, Path=ActualWidth, Mode=OneWay}"
+                            <DockPanel LastChildFill="True">
+                                <controls:AllSourcesToggleButton
+                                    x:Name="PART_AllSourcesButton"
+                                    DockPanel.Dock="Top"
+                                    Width="{Binding ElementName=PART_SourceList, Path=ActualWidth, Mode=OneWay}"
                                     HorizontalContentAlignment="Left"
                                     BorderThickness="0"
                                     IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
                                     Style="{StaticResource ProminentButtonStyle}" AutomationProperties.AutomationId="AllSourcesButton">
                                     <TextBlock Text="{TemplateBinding AllSourceSelectText}" />
-                                </ToggleButton>
+                                </controls:AllSourcesToggleButton>
                                 <ListView
-                                    x:Name="sourceList"
+                                    x:Name="PART_SourceList"
                                     ItemContainerStyle="{StaticResource SearchSourcesStyle}"
                                     ItemTemplate="{StaticResource SourceTemplate}"
                                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Sources, Mode=OneWay}"
                                     SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActiveSource, Mode=TwoWay}"
                                     SelectionMode="Single"
+                                    KeyboardNavigation.AcceptsReturn="True"
                                     Style="{StaticResource ListStyle}" 
                                     AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSources}"
                                     AutomationProperties.AutomationId="SearchSourcesList"/>
-                            </StackPanel>
+                                    </DockPanel>
                         </Border>
                     </Popup>
                     <TextBox
@@ -379,6 +382,7 @@
                         Grid.Column="1"
                         Style="{StaticResource QueryPlaceholderStyle}"
                         Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.ActivePlaceholder, Mode=OneWay}"
+                        TextWrapping="Wrap"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
                     <Button
                         Grid.Column="2"
@@ -413,8 +417,10 @@
                         </Popup.Resources>
                         <Border BorderThickness="1,1,1,0" Style="{StaticResource ResultAreaBorderStyle}">
                             <ListView
+                                x:Name="PART_SuggestionList"
                                 ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding Source={StaticResource GroupedSuggestions}}"
+                                KeyboardNavigation.AcceptsReturn="True"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedSuggestion, Mode=OneWayToSource}"
                                 Style="{StaticResource ListStyle}"
                                 AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchSuggestions}"
@@ -474,9 +480,9 @@
                                                     Visibility="{Binding ElementName=Self, Path=DataContext.SourceSelectVisibility, Mode=OneWay}">
                                                     <TextBlock
                                                         Margin="8"
-                                                        FontSize="11"
+                                                        FontSize="{converter:TextScaledFontSize FontSize=11}"
                                                         FontWeight="SemiBold"
-                                                        Foreground="White"
+                                                        Foreground="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
                                                         Text="{Binding Name.DisplayName}"
                                                         TextWrapping="Wrap" />
                                                 </Border>
@@ -488,6 +494,7 @@
                         </Border>
                     </Popup>
                     <Button
+                        x:Name="PART_SearchButton"
                         Grid.Column="3"
                         BorderThickness="1,0,0,0"
                         Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.SearchCommand, Mode=OneTime}"
@@ -511,12 +518,14 @@
                         Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.ResultViewVisibility, Mode=OneWay}">
                         <Grid>
                             <ListView
+                                x:Name="PART_ResultList"
                                 MaxHeight="300"
                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
                                 ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.Results, Mode=OneWay}"
                                 SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SearchViewModel.SelectedResult, Mode=OneWayToSource}"
                                 SelectionMode="Single"
+                                KeyboardNavigation.AcceptsReturn="True"
                                 Style="{StaticResource ListStyle}"
                                 AutomationProperties.Name="{converter:LocalizedString Key=SearchViewSearchResults}"
                                 AutomationProperties.AutomationId="SearchResultsList">
@@ -538,9 +547,8 @@
                                                     Grid.Column="1"
                                                     Margin="4,0,0,0"
                                                     Orientation="Vertical">
-                                                    <TextBlock Text="{Binding Path=DisplayTitle}" TextWrapping="Wrap" />
+                                                    <TextBlock Foreground="{StaticResource CommonGrayBrush}" Text="{Binding Path=DisplayTitle}" TextWrapping="Wrap" />
                                                     <TextBlock
-                                                        Foreground="{StaticResource CommonGrayBrush}"
                                                         Text="{Binding Path=DisplaySubtitle}"
                                                         TextTrimming="CharacterEllipsis"
                                                         Visibility="{Binding Path=DisplaySubtitle, Mode=OneWay, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
@@ -555,11 +563,15 @@
                                 BorderThickness="0,1,0,0"
                                 Style="{StaticResource ResultAreaBorderStyle}"
                                 Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TemplateSettings.ResultMessageVisibility, Mode=OneWay}">
-                                <TextBlock
+                                <Label
+                                    x:Name="PART_ResultMessage"
                                     Margin="8"
+                                    Padding="0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Text="{TemplateBinding NoResultMessage}" />
+                                    AutomationProperties.LiveSetting="Polite"
+                                    Content="{TemplateBinding NoResultMessage}"
+                                    Focusable="False" />
                             </Border>
                         </Grid>
                     </Border>
@@ -594,5 +606,6 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Width" Value="256" />
         <Setter Property="Margin" Value="4" />
+        <Setter Property="IsTabStop" Value="False" />
     </Style>
 </ResourceDictionary>

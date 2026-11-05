@@ -7,6 +7,8 @@ Use named trace configurations defined in a web map to perform connected trace o
 ## Features
 
 - Load networks and named trace configurations from a web map
+- Load selected named trace configurations by name with `LoadNamedTracesAsync`
+- Add barriers interactively or programmatically with `AddBarrier`; barriers can also be configured as filter barriers
 - Support for templating
 - (WinUI, WPF) Identify starting point candidates, then use the inspection view to narrow the selection:
 
@@ -28,6 +30,7 @@ The following properties enable customization (WinUI, WPF only):
 
 - `ResultItemTemplate` - override the display of results
 - `StartingPointItemTemplate` - override the display of starting points
+- `BarrierItemTemplate` - override the display of barriers
 - `TraceTypeItemTemplate` - override the display of the trace configuration choices
 - `UtilityNetworkItemTemplate` - override the display of the Utility Network choices
 
@@ -35,9 +38,10 @@ All platforms:
 
 - `Template` - allows overriding the appearance of the entire control
 
-The following properties enable customizing symbology:
+The following properties enable customizing symbology on all platforms:
 
 - `StartingPointSymbol`
+- `BarrierSymbol`
 - `ResultFillSymbol`
 - `ResultLineSymbol`
 - `ResultPointSymbol`

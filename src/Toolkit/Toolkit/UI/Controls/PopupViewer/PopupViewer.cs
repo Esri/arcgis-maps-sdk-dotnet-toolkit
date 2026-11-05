@@ -18,10 +18,12 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
 
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 #else
@@ -72,6 +74,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
+        /// // PopupViewer's Windows templates bind to these runtime types and members through XAML.
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Popup))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(PopupDefinition))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(TextPopupElement))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(MediaPopupElement))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(FieldsPopupElement))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(AttachmentsPopupElement))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(UtilityAssociationsPopupElement))]
         public PopupViewer()
             : base()
         {
@@ -89,6 +99,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
+#if MAUI
+            this.SetHighContrastColor(BackgroundProperty, null, HighContrastColorRole.Background);
+#endif
             InvalidatePopup();
             if (GetTemplateChild("SubFrameView") is NavigationSubView subView)
             {

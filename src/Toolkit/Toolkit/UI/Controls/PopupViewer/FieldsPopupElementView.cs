@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Collections.Generic;
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
 #else
@@ -25,7 +26,10 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #if MAUI && WINDOWS
 using TextBlock = Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SelectableLabel;
 using ChildElement = Microsoft.Maui.Controls.View;
-#elif MAUI // iOS, Android, generic
+#elif MAUI && (__IOS__ || __ANDROID__)
+using TextBlock = Esri.ArcGISRuntime.Toolkit.Maui.Internal.FieldsTableLabel;
+using ChildElement = Microsoft.Maui.Controls.View;
+#elif MAUI // generic
 using TextBlock = Microsoft.Maui.Controls.Label;
 using ChildElement = Microsoft.Maui.Controls.View;
 #elif WPF
@@ -55,20 +59,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public FieldsPopupElementView()
         {
 #if MAUI
-            this.SetAppTheme<Brush>(
+            // Zebra striping is not meaningful in high contrast; use the system background for both rows and a visible divider.
+            Internal.HighContrastThemeExtensions.SetHighContrastColor(this,
                 RowEvenBackgroundProperty,
-                new SolidColorBrush(Color.FromArgb("#FBFBFB")),
-                new SolidColorBrush(Color.FromArgb("#1F1F1F")));
+                Color.FromArgb("#FBFBFB"),
+                Color.FromArgb("#1F1F1F"),
+                Internal.HighContrastColorRole.Background);
 
-            this.SetAppTheme<Brush>(
+            Internal.HighContrastThemeExtensions.SetHighContrastColor(this,
                 RowOddBackgroundProperty,
-                new SolidColorBrush(Color.FromArgb("#EDEDED")),
-                new SolidColorBrush(Color.FromArgb("#2B2B2B")));
+                Color.FromArgb("#EDEDED"),
+                Color.FromArgb("#2B2B2B"),
+                Internal.HighContrastColorRole.Background);
 
-            this.SetAppTheme<Brush>(
+            Internal.HighContrastThemeExtensions.SetHighContrastColor(this,
                 DividerBrushProperty,
-                new SolidColorBrush(Color.FromArgb("#11333333")),
-                new SolidColorBrush(Color.FromArgb("#22FFFFFF")));
+                Color.FromArgb("#11333333"),
+                Color.FromArgb("#22FFFFFF"));
 
             ControlTemplate = DefaultControlTemplate;
             FieldTextStyle = DefaultFieldTextStyle;
@@ -103,8 +110,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty ElementProperty =
             PropertyHelper.CreateProperty<FieldsPopupElement, FieldsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.RefreshTable());
 
+#if !MAUI
+        // The (label, value) cell pairs of the currently displayed table, in row order. Backs the
+        // Grid/Table UIA control pattern exposed via FieldsPopupElementViewAutomationPeer (see .Windows.cs).
+        internal IReadOnlyList<(ChildElement Label, ChildElement Value)> Cells => _cells;
+        private readonly List<(ChildElement Label, ChildElement Value)> _cells = new();
+#endif
+
         private void RefreshTable()
         {
+#if !MAUI
+            _cells.Clear();
+#endif
             var presenter = GetTemplateChild(TableAreaContentName) as ContentPresenter;
             if (presenter is null) return;
             if (Element is null || !Element.Fields.Any())
@@ -112,20 +129,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 presenter.Content = null;
                 return;
             }
-            Grid g = new Grid();
-            g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
+#if MAUI
+            var g = new Internal.FieldsTableGrid();
+#elif WPF || WINUI
+            var g = new AccessibleGrid();
+#else
+            var g = new Grid();
+#endif
+
+            g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
 #if MAUI
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Absolute) });
 #else
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Pixel) });
 #endif
-            g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(6, GridUnitType.Star) });
             int i = 0;
             var rowCount = Math.Min(Element.Labels.Count, Element.FormattedValues.Count);
             for (i = 0; i < rowCount; i++)
             {
-
+#if !MAUI
                 g.RowDefinitions.Add(new RowDefinition());
+#endif
                 Border b = new Border() { Background = i % 2 == 1 ? RowEvenBackground : RowOddBackground };
 #if MAUI
                 b.StrokeThickness = 0;
@@ -135,10 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Grid.SetRow(b, i);
                 g.Children.Add(b);
 
-                var label = CreateTextCell(Element.Labels[i], wrap: false);
-
-                Grid.SetRow(label, i);
-                g.Children.Add(label);
+                var label = CreateTextCell(Element.Labels[i], true);
 
                 ChildElement valueCell;
                 var strValue = Element.FormattedValues[i];
@@ -155,10 +177,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     valueCell = CreateTextCell(strValue, wrap: true);
                 }
 
+                AutomationProperties.SetLabeledBy(valueCell, label);
+#if MAUI
+                g.AddRow(label, valueCell, Element.Labels[i]);
+#else
+                Grid.SetRow(label, i);
+                g.Children.Add(label);
                 Grid.SetRow(valueCell, i);
                 Grid.SetColumn(valueCell, 2);
                 g.Children.Add(valueCell);
-                AutomationProperties.SetLabeledBy(valueCell, label);
+                _cells.Add((label, valueCell));
+#endif
+
+#if WPF || WINUI
+                // Gives each cell's own automation peer (FieldsTableCellAutomationPeer) enough info to report
+                // its row/column back to UIA, so Narrator's table navigation works cell-by-cell.
+                if (label is IFieldsTableCell labelCell)
+                {
+                    labelCell.Row = i;
+                    labelCell.Column = 0;
+                    labelCell.ContainingGridElement = g;
+                }
+                if (valueCell is IFieldsTableCell valueTableCell)
+                {
+                    valueTableCell.Row = i;
+                    valueTableCell.Column = 1;
+                    valueTableCell.ContainingGridElement = g;
+                    valueTableCell.RowHeaderElement = label;
+                }
+#endif
             }
 
             Border verticalDivider = new Border()
@@ -177,7 +224,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if !WPF // see FieldsPopupElementView.Windows.cs for WPF implementation
         private ChildElement CreateTextCell(string? text, bool wrap)
         {
+#if WINUI
+            var t = new FieldsTableCellTextBlock
+#else
             var t = new TextBlock
+#endif
             {
                 Text = text ?? "",
                 Style = FieldTextStyle,
@@ -190,14 +241,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 t.TextWrapping = TextWrapping.Wrap;
 #endif
             }
+
+            AutomationProperties.SetName(t, t.Text);
+
             return t;
         }
 
         private ChildElement CreateHyperlinkCell(Uri uri)
         {
-#if MAUI
-            // Don't use the SelectableLabel here since hyperlinks don't need to be selectable and it can cause issues with the tap gesture recognizer.
-            var t = new Microsoft.Maui.Controls.Label
+#if MAUI && (WINDOWS || __IOS__)
+            var text = new FormattedString();
+            text.Spans.Add(new HtmlToView.HyperlinkSpan(_ => PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri), uri)
+            {
+                Text = Properties.Resources.GetString("PopupViewerViewHyperlinkText"),
+                TextDecorations = TextDecorations.Underline,
+            });
+            return new Internal.HyperlinkLabel(text)
+            {
+                Style = FieldTextStyle,
+                LineBreakMode = LineBreakMode.WordWrap,
+            };
+#else
+#if WINUI
+            var t = new FieldsTableCellTextBlock
 #else
             var t = new TextBlock
 #endif
@@ -229,12 +295,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             };
 #if WINDOWS_XAML
             hl.Inlines.Add(new Run() { Text = Properties.Resources.GetString("PopupViewerViewHyperlinkText") });
-#else
+            AutomationProperties.SetName(t, Properties.Resources.GetString("PopupViewerViewHyperlinkText"));
+#else   
             hl.Inlines.Add(Properties.Resources.GetString("PopupViewerViewHyperlinkText"));
 #endif
             t.Inlines.Add(hl);
 #endif
             return t;
+#endif
         }
 #endif
 

@@ -9,7 +9,7 @@ function main {
   script_dir="$( realpath "$(dirname "${BASH_SOURCE[0]}")" )"
 
   yaml_config="${script_dir}/variables.yml"
-  dotnet_version=$(read_yaml_var "${yaml_config}" "dotnet-version")
+  dotnet_version="${DOTNET_VERSION:-$(read_yaml_var "${yaml_config}" "dotnet-version")}"
 
   install_dotnet "${WORKSPACE}" "${dotnet_version}" "${DOTNET_CACHE_FOLDER}"
 

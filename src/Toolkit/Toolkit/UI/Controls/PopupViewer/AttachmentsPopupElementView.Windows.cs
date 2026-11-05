@@ -18,9 +18,13 @@
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.UI;
 using System.IO;
+#if WPF
+using System.Windows.Automation.Peers;
+#endif
 
 #if NET6_0_OR_GREATER
 using System.Runtime.InteropServices.WindowsRuntime;
+
 
 #endif
 
@@ -35,6 +39,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private const string AttachmentListName = "AttachmentList";
 
+#if WPF
+        /// <summary>
+        /// Creates a new instance of the <see cref="AttachmentsPopupElementViewPeer"/> class.
+        /// </summary>
+        /// <returns></returns>
+        protected override AutomationPeer OnCreateAutomationPeer() => new AttachmentsPopupElementViewPeer(this);
+#endif
+
         private UI.Controls.PopupViewer? GetPopupViewerParent()
         {
             var parent = VisualTreeHelper.GetParent(this);
@@ -45,5 +57,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return parent as UI.Controls.PopupViewer;
         }
     }
+
+#if WPF
+    /// <summary>
+    /// Automation peer for the <see cref="AttachmentsPopupElementView"/> control.
+    /// </summary>
+    public class AttachmentsPopupElementViewPeer : FrameworkElementAutomationPeer
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AttachmentsPopupElementViewPeer"/> class.
+        /// </summary>
+        /// <param name="owner"></param>
+        public AttachmentsPopupElementViewPeer(AttachmentsPopupElementView owner) : base(owner)
+        {
+        }
+
+        /// <summary>
+        /// Indicates that this control is not a content element for accessibility purposes.
+        /// </summary>
+        /// <returns></returns>
+        protected override bool IsContentElementCore()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Indicates that this control is not a content element for accessibility purposes.
+        /// </summary>
+        /// <returns></returns>
+        protected override bool IsControlElementCore()
+        {
+            return false;
+        }
+    }
+#endif
 }
 #endif

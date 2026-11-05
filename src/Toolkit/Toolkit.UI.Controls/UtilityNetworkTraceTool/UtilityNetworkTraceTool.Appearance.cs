@@ -44,6 +44,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_ResetStartingPointsButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_AddStartingPointsButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_CancelAddStartingPointsButton", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = "PART_BarriersSectionContainer", Type = typeof(UIElement))]
+    [TemplatePart(Name = "PART_BarriersList", Type = typeof(ListView))]
+    [TemplatePart(Name = "PART_IsAddingBarriersIndicator", Type = typeof(UIElement))]
+    [TemplatePart(Name = "PART_AddRemoveBarrierButtonsContainer", Type = typeof(UIElement))]
+    [TemplatePart(Name = "PART_ResetBarriersButton", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = "PART_AddBarriersButton", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = "PART_CancelAddBarriersButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_AdvancedOptionsSectionContainer", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_ResultNameTextBox", Type = typeof(TextBox))]
     [TemplatePart(Name = "PART_ResultColorPalette", Type = typeof(UIElement))]
@@ -55,6 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_RunTraceButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_CancelTraceButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_IdentifyInProgressIndicator", Type = typeof(UIElement))]
+    [TemplatePart(Name = "PART_IdentifyInProgressText", Type = typeof(TextBlock))]
     [TemplatePart(Name = "PART_CancelIdentifyButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_ResultsTabItem", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_ResultsItemControl", Type = typeof(ItemsControl))]
@@ -81,6 +89,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ButtonBase? _part_resetStartingPointsButton;
         private ButtonBase? _part_addStartingPointsButton;
         private ButtonBase? _part_cancelAddStartingPointsButton;
+        private UIElement? _part_barriersSectionContainer;
+        private ListView? _part_barriersList;
+        private UIElement? _part_isAddingBarriersIndicator;
+        private UIElement? _part_addRemoveBarriersButtonContainer;
+        private ButtonBase? _part_resetBarriersButton;
+        private ButtonBase? _part_addBarriersButton;
+        private ButtonBase? _part_cancelAddBarriersButton;
         private UIElement? _part_advancedOptionsSectionContainer;
         private TextBox? _part_resultNamedTextBox;
         private ToolkitColorPalette? _part_resultColorPalette;
@@ -92,6 +107,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ButtonBase? _part_runTraceButton;
         private ButtonBase? _part_cancelTraceButton;
         private UIElement? _part_identifyInProgressIndicator;
+        private TextBlock? _part_identifyInProgressText;
         private ButtonBase? _part_cancelIdentifyButton;
         private UIElement? _part_resultsTabItem;
         private ItemsControl? _part_resultsItemControl;
@@ -189,6 +205,57 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _part_cancelAddStartingPointsButton.Click += Part_cancelAddStartingPointsButton_Click;
             }
 
+            if (GetTemplateChild("PART_BarriersSectionContainer") is UIElement barriersSectionContainer)
+            {
+                _part_barriersSectionContainer = barriersSectionContainer;
+                _part_barriersSectionContainer.Visibility = _controller.SelectedTraceType == null ? Visibility.Collapsed : Visibility.Visible;
+            }
+
+            if (GetTemplateChild("PART_BarriersList") is ListView barriersList)
+            {
+                _part_barriersList = barriersList;
+                _part_barriersList.ItemsSource = _controller.Barriers;
+                _part_barriersList.SelectedItem = _controller.SelectedBarrier;
+                _part_barriersList.Visibility = _controller.IsAddingBarriers ? Visibility.Collapsed : Visibility.Visible;
+                _part_barriersList.SelectionChanged += Part_barriersList_SelectionChanged;
+                if (_part_barriersList is StartingPointListView specialized)
+                {
+                    specialized.ZoomToCommand = new DelegateCommand((parameter) => HandleZoomToBarrierCommand(parameter));
+                }
+            }
+
+            if (GetTemplateChild("PART_IsAddingBarriersIndicator") is UIElement addingBarriersIndicator)
+            {
+                _part_isAddingBarriersIndicator = addingBarriersIndicator;
+                _part_isAddingBarriersIndicator.Visibility = _controller.IsAddingBarriers ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+            if (GetTemplateChild("PART_AddRemoveBarrierButtonsContainer") is UIElement addRemoveBarrierButtonsContainer)
+            {
+                _part_addRemoveBarriersButtonContainer = addRemoveBarrierButtonsContainer;
+                _part_addRemoveBarriersButtonContainer.Visibility = _controller.IsAddingBarriers ? Visibility.Collapsed : Visibility.Visible;
+            }
+
+            if (GetTemplateChild("PART_ResetBarriersButton") is ButtonBase resetBarriersButton)
+            {
+                _part_resetBarriersButton = resetBarriersButton;
+                _part_resetBarriersButton.Visibility = _controller.Barriers.Any() ? Visibility.Visible : Visibility.Collapsed;
+                _part_resetBarriersButton.Click += Part_resetBarriersButton_Click;
+            }
+
+            if (GetTemplateChild("PART_AddBarriersButton") is ButtonBase addBarriersButton)
+            {
+                _part_addBarriersButton = addBarriersButton;
+                _part_addBarriersButton.Click += Part_addBarriersButton_Click;
+            }
+
+            if (GetTemplateChild("PART_CancelAddBarriersButton") is ButtonBase cancelAddBarriersButton)
+            {
+                _part_cancelAddBarriersButton = cancelAddBarriersButton;
+                _part_cancelAddBarriersButton.Visibility = _controller.IsAddingBarriers ? Visibility.Visible : Visibility.Collapsed;
+                _part_cancelAddBarriersButton.Click += Part_cancelAddBarriersButton_Click;
+            }
+
             if (GetTemplateChild("PART_AdvancedOptionsSectionContainer") is UIElement advancedOptionsSectionContainer)
             {
                 _part_advancedOptionsSectionContainer = advancedOptionsSectionContainer;
@@ -256,6 +323,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _part_identifyInProgressIndicator = identifyInProgressIndicator;
                 _part_identifyInProgressIndicator.Visibility = Visibility.Collapsed;
+            }
+
+            if (GetTemplateChild("PART_IdentifyInProgressText") is TextBlock identifyInProgressText)
+            {
+                _part_identifyInProgressText = identifyInProgressText;
+                UpdateIdentifyInProgressText();
             }
 
             if (GetTemplateChild("PART_CancelIdentifyButton") is ButtonBase cancelIdentifyButton)
@@ -327,6 +400,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller.StartingPoints.Clear();
         }
 
+        private void Part_resetBarriersButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _controller.Barriers.Clear();
+        }
+
         private void Part_deleteAllResultsButton_Click(object? sender, RoutedEventArgs e)
         {
             foreach (var result in _controller.Results)
@@ -371,9 +449,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller.IsAddingStartingPoints = true;
         }
 
+        private void Part_cancelAddBarriersButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _controller.IsAddingBarriers = false;
+        }
+
+        private void Part_addBarriersButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _controller.IsAddingBarriers = true;
+        }
+
         private void Part_startingPointsList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             _controller.SelectedStartingPoint = (sender as Selector)?.SelectedItem as StartingPointModel;
+        }
+
+        private void Part_barriersList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            _controller.SelectedBarrier = (sender as Selector)?.SelectedItem as BarrierModel;
         }
 
         private void Part_traceConfigurationsSelector_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -439,6 +532,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty StartingPointItemTemplateProperty =
             DependencyProperty.Register(nameof(StartingPointItemTemplate), typeof(DataTemplate),
+                typeof(UtilityNetworkTraceTool), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Gets or sets the <see cref="DataTemplate"/> used to display a barrier, which is
+        /// a <see cref="UtilityElement"/> item.
+        /// </summary>
+        /// <value>
+        /// A <see cref="DataTemplate"/> for a <see cref="UtilityElement"/> item.
+        /// </value>
+        public DataTemplate? BarrierItemTemplate
+        {
+            get => GetValue(BarrierItemTemplateProperty) as DataTemplate;
+            set => SetValue(BarrierItemTemplateProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="BarrierItemTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty BarrierItemTemplateProperty =
+            DependencyProperty.Register(nameof(BarrierItemTemplate), typeof(DataTemplate),
                 typeof(UtilityNetworkTraceTool), new PropertyMetadata(null));
 
         /// <summary>

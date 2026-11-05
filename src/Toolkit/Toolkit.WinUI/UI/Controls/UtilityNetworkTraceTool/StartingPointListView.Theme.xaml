@@ -29,7 +29,7 @@
 						<TextBlock Margin="8,0,8,0" Text="{TemplateBinding InspectorViewSelectionLabelText}" />
 						<Button
                             Command="{TemplateBinding SelectNextItemCommand}"
-                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolSelectNext}"
+							Content="{internal:LocalizedString Key=UtilityNetworkTraceToolNext}"
                             Style="{StaticResource UNTraceIconButton}" />
 					</StackPanel>
 					<Button
@@ -53,7 +53,7 @@
                         Margin="8,4,0,4"
                         VerticalAlignment="Center"
                         Command="{TemplateBinding CloseInspectorCommand}"
-                        Content="{internal:LocalizedString Key=UtilityNetworkTraceToolNext}"
+						Content="{internal:LocalizedString Key=UtilityNetworkTraceToolClose}"
                         Style="{StaticResource UNTraceIconButton}" />
 				</Grid>
 				<ContentControl

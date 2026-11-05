@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
@@ -74,6 +74,24 @@ namespace Toolkit.SampleApp.Maui.Samples
 
             // Perform custom action when a link is clicked
             Debug.WriteLine(e.Uri);
+        }
+
+
+        protected override bool OnBackButtonPressed()
+        {
+            // In phone layout the side panel covers the map, so back closes it instead of leaving the page
+            if (IsInVisualState("PhoneState") && VM.IsSidePanelOpen)
+            {
+                VM.Popups = null;
+                return true; // Prevent default back button action
+            }
+            return base.OnBackButtonPressed();
+        }
+
+        private bool IsInVisualState(string stateName)
+        {
+            var group = VisualStateManager.GetVisualStateGroups(RootGrid).FirstOrDefault(g => g.Name == "WidthStates");
+            return group?.CurrentState?.Name == stateName;
         }
     }
 

@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,7 +91,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             else if (PopupMedia.Type == PopupMediaType.Image)
             {
                 _lastChartSize = 0;
+#if MAUI && __IOS__
+                Image img = Content as Image ?? (Content as Maui.Internal.HyperlinkContentView)?.Content as Image ?? new Image();
+#else
                 Image img = Content as Image ?? new Image();
+#endif
                 var sourceUrl = PopupMedia.Value?.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
@@ -119,18 +123,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                                     img.Height = double.NaN;
                                 };
                             }
+                            System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
+#endif
+#if WINUI
+                            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(img, GetAltText());
 #endif
                             img.Source = source;
                         }
                     }
                 }
 
+#if MAUI && __IOS__
+                UpdateImageContent(img);
+#else
                 if (!string.IsNullOrEmpty(PopupMedia.Value?.LinkUrl) && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out var linkUrl))
                 {
 #if MAUI
                     img.GestureRecognizers.Clear();
                     var tapGesture = new TapGestureRecognizer();
+#if WINDOWS
+                    tapGesture.Tapped += Image_Tapped;
+#elif __ANDROID__
+                    tapGesture.Tapped += (_, _) => OpenImageLink(PopupMedia);
+#else
                     tapGesture.Tapped += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
+#endif
                     img.GestureRecognizers.Add(tapGesture);
 #else
                     img.Tag = linkUrl;
@@ -140,12 +157,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         img.Cursor = Cursors.Hand;
                         img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
                     }
+                    img.Focusable = true;
+                    img.PreviewKeyUp += (s, e) =>
+                        {
+                            if (e.Key == Key.Enter || e.Key == Key.Space)
+                                Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                        };
+                    KeyboardNavigation.SetIsTabStop(img, true);
 #elif WINDOWS_XAML
                     img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    //img.PreviewKeyUp += (s, e) =>
+                    //{
+                    //    if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
+                    //        Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    //};
+                    img.IsTabStop = true;
 #endif
 #endif
                 }
+#if MAUI && __ANDROID__
+                else
+                {
+                    img.GestureRecognizers.Clear();
+                    if (img.Handler?.PlatformView is Android.Views.View platformView)
+                        platformView.Focusable = false;
+                }
+#endif
+#if MAUI && WINDOWS
+                UpdateImageAccessibility(img);
+#elif MAUI && __ANDROID__
+                SemanticProperties.SetDescription(img, GetAltText());
+#endif
                 Content = img;
+#endif
             }
         }
         private async void UpdateChart(Size desiredSize)
@@ -216,7 +260,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
                 var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi, Style = style });
                 var source = await chart.Image.ToImageSourceAsync();
-                return new Image() { Source = source };
+                var img = new Image() { Source = source };
+#if WPF
+                System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
+#endif
+                return img;
             }
             catch { return null; }
         }
@@ -249,9 +297,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             else
             {
+#if MAUI && __IOS__
+                Content = null;
+#endif
                 InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
             }
             UpdateAltText();
+#if MAUI && (WINDOWS || __ANDROID__)
+            UpdateChartTabStop();
+#endif
         }
 
         private void UpdateAltText()
@@ -259,13 +313,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             string? altText = GetAltText();
 #if WPF
             this.ToolTip = altText;
-            System.Windows.Automation.AutomationProperties.SetName(this, altText);
 #elif WINUI
             ToolTipService.SetToolTip(this, altText);
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(this, altText);
+            UpdateFlipViewItemAutomationName(altText);
 #elif MAUI
             ToolTipProperties.SetText(this, altText);
+#if WINDOWS
+            SemanticProperties.SetDescription(this, PopupMedia?.Type == PopupMediaType.Image ? null : altText);
+            // A recycled chart can leave an unnamed wrapper peer after its description is cleared.
+            AutomationProperties.SetIsInAccessibleTree(this, PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image);
+#elif __IOS__ || __ANDROID__
+            // Name the image or image link, not an additional media wrapper around it.
+            bool isChart = PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image;
+            SemanticProperties.SetDescription(this, isChart ? altText : null);
+            AutomationProperties.SetIsInAccessibleTree(this, isChart);
+#else
             SemanticProperties.SetDescription(this, altText);
+#endif
 #endif
         }
 
@@ -279,6 +343,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return PopupMedia.Caption;
             return null;
         }
+
+#if MAUI && __ANDROID__
+        internal static Uri? GetImageLink(PopupMedia? media) =>
+            media?.Type == PopupMediaType.Image && Uri.TryCreate(media.Value?.LinkUrl, UriKind.Absolute, out var uri) ? uri : null;
+
+        internal static bool OpenImageLink(PopupMedia? media)
+        {
+            if (GetImageLink(media) is not { } uri)
+                return false;
+            _ = Launcher.LaunchUriAsync(uri);
+            return true;
+        }
+#endif
 
         // Also used for embedded images in TextPopupElement views
         internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source, bool ignoreImageCache = false)
@@ -352,7 +429,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 StartRefreshTimer(PopupMedia.ImageRefreshInterval);
             }
+#if WINUI
+            UpdateFlipViewItemAutomationName(GetAltText());
+#elif MAUI && WINDOWS
+            if (PopupMedia?.Type == PopupMediaType.Image && Content is Image image)
+                UpdateImageAccessibility(image);
+#endif
         }
+
+#if WINUI
+        // When hosted inside the media FlipView, the FlipViewItem container is a separate automation element
+        // from this view, with its own default peer that falls back to the raw PopupMedia data item's
+        // ToString() when no explicit Name is set. Called both from UpdateAltText() (covers a recycled,
+        // already-loaded container getting a new PopupMedia) and from OnViewLoaded (covers first load, since
+        // the property-changed callback that drives UpdateAltText() fires before this view is actually attached
+        // to the visual tree - confirmed live: VisualTreeHelper.GetParent(this) is still null at that point,
+        // so the ancestor walk below only succeeds once this method also runs from Loaded).
+        private void UpdateFlipViewItemAutomationName(string? altText)
+        {
+            var ancestor = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(this);
+            while (ancestor != null && ancestor is not Microsoft.UI.Xaml.Controls.FlipViewItem)
+            {
+                ancestor = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(ancestor);
+            }
+            if (ancestor is Microsoft.UI.Xaml.Controls.FlipViewItem flipViewItem)
+            {
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAccessibilityView(flipViewItem, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+                var oldName = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(flipViewItem);
+                var newName = altText ?? string.Empty;
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(flipViewItem, newName);
+
+                //// FlipViewItem's own automation peer can cache its Name (from the raw data item's ToString())
+                //// before this ever runs, and won't re-query AutomationProperties.Name on its own - explicitly
+                //// notify UIA that it changed so Narrator picks up the new value instead of the stale cached one.
+                var peer = Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.FromElement(flipViewItem)
+                    ?? Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(flipViewItem);
+                peer?.RaisePropertyChangedEvent(Microsoft.UI.Xaml.Automation.AutomationElementIdentifiers.NameProperty, oldName, newName);
+            }
+        }
+#endif
 
         private void OnViewUnloaded(object? sender,
 #if WINDOWS_XAML
@@ -363,6 +478,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             e)
         {
             StopRefreshTimer();
+#if MAUI && WINDOWS
+            DisconnectImage();
+#endif
         }
 
         private void StartRefreshTimer(TimeSpan interval)

@@ -19,6 +19,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class SearchView : TemplatedView, INotifyPropertyChanged
 {
+    private const string ForegroundColorResourceKey = "SearchViewForegroundColor";
+    private const string BackgroundColorResourceKey = "SearchViewBackgroundColor";
+    private const string GroupHeaderForegroundColorResourceKey = "SearchViewGroupHeaderForegroundColor";
+    private const string GroupHeaderBackgroundColorResourceKey = "SearchViewGroupHeaderBackgroundColor";
+    private const string AccentColorResourceKey = "SearchViewAccentColor";
+    private const string AccentForegroundColorResourceKey = "SearchViewAccentForegroundColor";
+
 #pragma warning disable SA1306, SA1310, SX1309 // Field names should begin with lower-case letter
     private Entry? PART_Entry;
     private ImageButton? PART_CancelButton;
@@ -32,11 +39,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
     private Grid? PART_ResultContainer;
     private Grid? PART_RepeatButtonContainer;
 #pragma warning restore SA1306, SA1310, SX1309 // Field names should begin with lower-case letter
-    private const string FOREGROUND_LIGHT = "#151515";
-    private const string FOREGROUND_DARK = "#FFF";
-    private const string BACKGROUND_LIGHT = "#FFF";
-    private const string BACKGROUND_DARK = "#2B2B2B";
-
     private static readonly DataTemplate DefaultResultTemplate;
     private static readonly DataTemplate DefaultSuggestionTemplate;
     private static readonly DataTemplate DefaultSuggestionGroupHeaderTemplate;
@@ -53,12 +55,12 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         DefaultSuggestionGroupHeaderTemplate = new DataTemplate(() =>
         {
             Grid containingGrid = new Grid();
-            containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#4e4e4e"), Color.FromArgb("#151515"));
+            containingGrid.SetDynamicResource(Grid.BackgroundColorProperty, GroupHeaderBackgroundColorResourceKey);
 
             Label textLabel = new Label();
             textLabel.SetBinding(Label.TextProperty, static (IGrouping<ISearchSource, SearchSuggestion> group) => group.Key.DisplayName);
             textLabel.Margin = new Thickness(4);
-            textLabel.TextColor = Colors.White;
+            textLabel.SetDynamicResource(Label.TextColorProperty, GroupHeaderForegroundColorResourceKey);
             textLabel.FontSize = 14;
             textLabel.VerticalTextAlignment = TextAlignment.Center;
             containingGrid.Children.Add(textLabel);
@@ -68,7 +70,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         DefaultSuggestionTemplate = new DataTemplate(() =>
         {
             Grid containingGrid = new Grid();
-            containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb(BACKGROUND_LIGHT), Color.FromArgb(BACKGROUND_DARK));
             containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
             containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -91,14 +92,14 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             titleLabel.SetBinding(Label.TextProperty, static (SearchSuggestion suggestion) => suggestion.DisplayTitle);
             titleLabel.VerticalOptions = LayoutOptions.End;
             titleLabel.VerticalTextAlignment = TextAlignment.End;
-            titleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb(FOREGROUND_LIGHT), Color.FromArgb(FOREGROUND_DARK));
+            titleLabel.SetDynamicResource(Label.TextColorProperty, ForegroundColorResourceKey);
 
             Label subtitleLabel = new Label();
             subtitleLabel.SetBinding(Label.TextProperty, static (SearchSuggestion suggestion) => suggestion.DisplaySubtitle);
             subtitleLabel.SetBinding(Label.IsVisibleProperty, static (SearchSuggestion suggestion) => suggestion.DisplaySubtitle, converter: EmptyStringConverter);
             subtitleLabel.VerticalOptions = LayoutOptions.Start;
             subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
-            subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb(FOREGROUND_LIGHT), Color.FromArgb(FOREGROUND_DARK));
+            subtitleLabel.SetDynamicResource(Label.TextColorProperty, ForegroundColorResourceKey);
 
             textStack.Children.Add(titleLabel);
             textStack.Children.Add(subtitleLabel);
@@ -117,7 +118,6 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             Grid containingGrid = new Grid();
             containingGrid.Padding = new Thickness(2, 4, 2, 4);
-            containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb(BACKGROUND_LIGHT), Color.FromArgb(BACKGROUND_DARK));
             containingGrid.SetBinding(SemanticProperties.DescriptionProperty, static (SearchResult result) => result.AutomationName);
 
             containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
@@ -142,14 +142,14 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             titleLabel.FontAttributes = FontAttributes.Bold;
             titleLabel.VerticalOptions = LayoutOptions.End;
             titleLabel.VerticalTextAlignment = TextAlignment.End;
-            titleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb(FOREGROUND_LIGHT), Color.FromArgb(FOREGROUND_DARK));
+            titleLabel.SetDynamicResource(Label.TextColorProperty, ForegroundColorResourceKey);
 
             Label subtitleLabel = new Label();
             subtitleLabel.SetBinding(Label.TextProperty, static (SearchResult result) => result.DisplaySubtitle);
             subtitleLabel.SetBinding(Label.IsVisibleProperty, static (SearchResult result) => result.DisplaySubtitle, converter: EmptyStringConverter);
             subtitleLabel.VerticalOptions = LayoutOptions.Start;
             subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
-            subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb(FOREGROUND_LIGHT), Color.FromArgb(FOREGROUND_DARK));
+            subtitleLabel.SetDynamicResource(Label.TextColorProperty, ForegroundColorResourceKey);
 
             textStack.Children.Add(titleLabel);
             textStack.Children.Add(subtitleLabel);
@@ -180,13 +180,13 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
 <Grid RowSpacing=""0"" ColumnSpacing=""0"">
 <Grid.Resources>
         <Style TargetType=""Grid"" x:Key=""SVDefaultGridStyle"">
-            <Setter Property=""Background"" Value=""{{AppThemeBinding Dark={BACKGROUND_DARK},Light={BACKGROUND_LIGHT}}}"" />
+            <Setter Property=""Background"" Value=""{{DynamicResource {BackgroundColorResourceKey}}}"" />
         </Style>
         <Style TargetType=""CollectionView"">
-            <Setter Property=""Background"" Value=""{{AppThemeBinding Dark={BACKGROUND_DARK},Light={BACKGROUND_LIGHT}}}"" />
+            <Setter Property=""Background"" Value=""{{DynamicResource {BackgroundColorResourceKey}}}"" />
         </Style>
         <Style TargetType=""Entry"">
-            <Setter Property=""Background"" Value=""{{AppThemeBinding Dark={BACKGROUND_DARK},Light={BACKGROUND_LIGHT}}}"" />
+            <Setter Property=""Background"" Value=""{{DynamicResource {BackgroundColorResourceKey}}}"" />
         </Style>
 
 </Grid.Resources>
@@ -202,7 +202,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     </Grid.RowDefinitions>
     <Grid Grid.Row=""0"" Grid.ColumnSpan=""3"" Style=""{{StaticResource SVDefaultGridStyle}}""/>
     <ImageButton x:Name=""{nameof(PART_SourceSelectButton)}"" Grid.Column=""0"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" Margin=""0"" SemanticProperties.Description=""{selectSearchSourceDescription}"" AutomationProperties.AutomationId=""SourceSelectToggle""/>
-    <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" TextColor=""{{AppThemeBinding Light={FOREGROUND_LIGHT}, Dark={FOREGROUND_DARK}}}"" AutomationProperties.AutomationId=""QueryEntry""/>
+    <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" TextColor=""{{DynamicResource {ForegroundColorResourceKey}}}"" AutomationProperties.AutomationId=""QueryEntry""/>
     <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" SemanticProperties.Description=""{clearSearchDescription}"" AutomationProperties.AutomationId=""ClearSearchButton""/>
     <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" SemanticProperties.Description=""{searchDescription}"" AutomationProperties.AutomationId=""SearchButton"" />
     <Grid Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" >
@@ -212,7 +212,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""  Style=""{{StaticResource SVDefaultGridStyle}}""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
 </Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2""  Style=""{{StaticResource SVDefaultGridStyle}}"">
-        <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""{{AppThemeBinding Light=#007AC2, Dark=#00619B}}"" TextColor=""White"" CornerRadius=""0"" AutomationProperties.AutomationId=""RepeatSearchHereButton""/>
+        <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""{{DynamicResource {AccentColorResourceKey}}}"" TextColor=""{{DynamicResource {AccentForegroundColorResourceKey}}}"" CornerRadius=""0"" AutomationProperties.AutomationId=""RepeatSearchHereButton""/>
     </Grid>
 </Grid>
 </ControlTemplate>";
