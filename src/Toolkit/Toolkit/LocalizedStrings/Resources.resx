@@ -1162,7 +1162,6 @@ Locations</value>
   </data>
   <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
     <value>Add Markers</value>
-<<<<<<< HEAD
     <comment>Single-line automation name for the marker-creation toggle.</comment>
   </data>
   <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
@@ -1249,10 +1248,6 @@ Locations</value>
   </data>
   <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
     <value>Add markers</value>
-||||||| parent of 281140355 (Standardize label capitalization)
-    <value>Add markers</value>
-=======
->>>>>>> 281140355 (Standardize label capitalization)
     <comment>Single-line automation name for the marker-creation toggle.</comment>
   </data>
   <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
