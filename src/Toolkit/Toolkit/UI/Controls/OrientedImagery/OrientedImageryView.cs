@@ -40,6 +40,8 @@ public partial class OrientedImageryView
 #if WPF
         Loaded += (_, _) => UpdateErrorMessages();
         IsVisibleChanged += (_, _) => UpdateErrorMessages();
+#elif WINDOWS_XAML
+        InitializeAccessibility_WinUI();
 #endif
 
 #if MAUI
@@ -69,9 +71,7 @@ public partial class OrientedImageryView
         _viewport = GetTemplateChild(ImageViewportName) as OrientedImageViewport;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
         _paginator = GetTemplateChild(PaginatorName) as Paginator;
-#if WPF
         _mainErrorMessagePresenter = GetTemplateChild(MainErrorMessagePresenterName) as TextBlock;
-#endif
         RewireDismissTransientErrorButton();
 
         if (_viewport != null)
@@ -86,7 +86,6 @@ public partial class OrientedImageryView
         UpdateErrorMessages();
 
 #if WPF
-        UpdateErrorMessages();
         UpdateDetailsFocus();
 #endif
     }
@@ -708,12 +707,11 @@ public partial class OrientedImageryView
         else
             ErrorMessage = null;
 
-        if (ErrorMessage == null || ErrorMessage == lastMessage)
-            return false;
-
 #if WINDOWS_XAML
         UpdateViewState_WinUI();
 #endif
+        if (ErrorMessage == null || ErrorMessage == lastMessage)
+            return false;
 
         ScreenReaderHelpers.RaiseLiveRegionChanged(_mainErrorMessagePresenter);
         return true;
