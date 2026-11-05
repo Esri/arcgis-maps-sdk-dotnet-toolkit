@@ -167,7 +167,7 @@ public partial class OrientedImageryView
         switch (e.PropertyName)
         {
             case nameof(OrientedImageryViewModel.SearchPoint):
-            case nameof(OrientedImageryViewModel.SelectedImageFootprint):
+            case nameof(OrientedImageryViewModel.SelectedImage):
                 UpdateViewportImage();
                 goto case nameof(OrientedImageryViewModel.Images);
             case nameof(OrientedImageryViewModel.Images):
@@ -335,7 +335,7 @@ public partial class OrientedImageryView
 
             if (!_viewport.IsInteractive)
             {
-                ViewModel.AreFootprintsEnabled = false;
+                ViewModel.IsShowSelectedFootprintEnabled = false;
                 _viewport.StateChanged += Viewport_StateChanged_UpdateFootprint;
             }
         }
@@ -355,7 +355,7 @@ public partial class OrientedImageryView
         }
         else if (viewport.IsInteractive == true)
         {
-            ViewModel.AreFootprintsEnabled = true;
+            ViewModel.IsShowSelectedFootprintEnabled = true;
             _viewport.StateChanged -= Viewport_StateChanged_UpdateFootprint;
         }
     }

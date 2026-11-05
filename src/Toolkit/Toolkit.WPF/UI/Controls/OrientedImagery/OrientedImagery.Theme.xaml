@@ -489,17 +489,10 @@
 
     <DataTemplate x:Key="ShowSelectedFootprintToolbarTemplate" DataType="controls:ShowSelectedFootprintVM">
         <ToggleButton IsChecked="{Binding ViewModel.ShowSelectedFootprint}"
+                      IsEnabled="{Binding Enabled}"
                       AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}"
-                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}">
-            <ToggleButton.Style>
-                <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ViewModel.SelectedImage}" Value="{x:Null}">
-                            <Setter Property="IsEnabled" Value="False" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ToggleButton.Style>
+                      ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}"
+                      Style="{StaticResource ToolbarLabeledToggleButtonStyle}">
             <StackPanel>
                 <Viewbox SnapsToDevicePixels="true" Width="32" Height="32" Stretch="Uniform">
                     <Grid Width="32" Height="32">
