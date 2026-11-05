@@ -852,7 +852,6 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
@@ -1136,6 +1135,51 @@
                                         </Grid>
                                     </Viewbox>
                                 </Button>
+                                <Border Grid.ColumnSpan="3"
+                                        Margin="16,12,16,0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Top"
+                                        CornerRadius="24"
+                                        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                                        TextElement.Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                        BorderThickness="1"
+                                        Padding="16,4,8,8">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TransientErrorMessage}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ScrollViewer Margin="0,0,8,0" VerticalAlignment="Center"
+                                                      VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                                            <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}" Margin="0,4,0,4"
+                                                   FontSize="{internal:TextScaledFontSize FontSize=14}"
+                                                   Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TransientErrorMessage}"
+                                                   TextWrapping="NoWrap"
+                                                   AutomationProperties.LiveSetting="Assertive" />
+                                        </ScrollViewer>
+                                        <Button x:Name="PART_DismissTransientErrorButton"
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Style="{StaticResource ToolbarButtonStyle}"
+                                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewDismissError}"
+                                                ToolTip="{internal:LocalizedString Key=OrientedImageryViewDismissError}">
+                                            <TextBlock Text="&#xeb49;"
+                                                       FontSize="{internal:TextScaledFontSize FontSize=16}"
+                                                       FontFamily="{StaticResource ToolkitIconsFontFamily}" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
                             </Grid>
 
                             <Grid Grid.Row="1" Panel.ZIndex="2">
@@ -1279,23 +1323,6 @@
                                     <TextBlock Text="&gt;" />
                                 </Button>
                             </StackPanel>
-                            <toolkitPrimitives:AccessibleTextBlock Grid.Row="3"
-                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError.Message}"
-                                       Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center"
-                                       Margin="8,0,8,4">
-                                <toolkitPrimitives:AccessibleTextBlock.Style>
-                                    <Style TargetType="{x:Type toolkitPrimitives:AccessibleTextBlock}" BasedOn="{StaticResource OrientedImageryMessageTextStyle}">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SequentialNavigationError}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </toolkitPrimitives:AccessibleTextBlock.Style>
-                            </toolkitPrimitives:AccessibleTextBlock>
                         </Grid>
                     </Border>
                 </ControlTemplate>
