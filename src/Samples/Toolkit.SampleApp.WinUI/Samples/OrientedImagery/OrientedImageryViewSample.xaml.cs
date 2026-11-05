@@ -3,6 +3,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
@@ -26,6 +27,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OrientedImagery;
 public sealed partial class OrientedImageryViewSample : Page
 {
     private const string BasemapUri = "https://runtime.maps.arcgis.com/home/item.html?id=d8c5e76fb2cc4bb6955a6783a5f577b7";
+    private const string SceneBasemapUri = "https://runtime.maps.arcgis.com/home/item.html?id=0560e29930dc4d5ebeb58c635c0909c9";
+    private const string ElevationUrl = "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer";
 
     private readonly ObservableCollection<string> _exampleLayers =
     [
@@ -35,6 +38,10 @@ public sealed partial class OrientedImageryViewSample : Page
     ];
 
     private OrientedImageryViewModel _orientedImageryViewModel;
+    private readonly SceneView _sceneView;
+    private readonly ElevationSource _elevationSource;
+    private bool _usingMapView = true;
+    private GeoView CurrentGeoView => _usingMapView ? MainMapView : _sceneView;
 
     public OrientedImageryViewSample()
     {
@@ -46,6 +53,9 @@ public sealed partial class OrientedImageryViewSample : Page
         MainOrientedImageryView.Loaded += (_, _) => ConfigureToolbarTemplates();
 
         MainMapView.Map = new Map(new Uri(BasemapUri));
+        _sceneView = new SceneView { Scene = new Scene(new Uri(SceneBasemapUri)) };
+        _elevationSource = new ArcGISTiledElevationSource(new Uri(ElevationUrl));
+        MainOrientedImageryView.GeoView = CurrentGeoView;
         SelectLayerDropdown.ItemsSource = _exampleLayers;
     }
 
@@ -54,10 +64,8 @@ public sealed partial class OrientedImageryViewSample : Page
         if (MainOrientedImageryView.ToolbarItemTemplateSelector is not OrientedImageryViewToolbarSelector selector)
             return;
 
-        var popupTemplate = (DataTemplate)Resources["PopupToolbarItemTemplate"];
-        var overlays = _orientedImageryViewModel.ToolbarCategories.Single(static c => c.Name == OrientedImageryToolbarCategory.OverlaysCategoryName);
-        overlays.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
-        if (this.Resources.TryGetValue("PopupToolbarItemTemplate", out object popupItemTempalteObject) && popupItemTempalteObject is DataTemplate popupItemTemplate)
+        if (!selector.SelectionPairs.OfType<OrientedImageryToolbarItemSelectorPair>().Any(static pair => pair.ItemType == typeof(OrientedImageryPopupToolbarItem)) &&
+            Resources.TryGetValue("PopupToolbarItemTemplate", out object popupItemTemplateObject) && popupItemTemplateObject is DataTemplate popupItemTemplate)
             selector.SelectionPairs.Add(new OrientedImageryToolbarItemSelectorPair() { ItemType = typeof(OrientedImageryPopupToolbarItem), Template = popupItemTemplate });
     }
 
@@ -65,19 +73,29 @@ public sealed partial class OrientedImageryViewSample : Page
     {
         StatusTextBlock.Text = string.Empty;
         var orientedImageryLayer = new OrientedImageryLayer(layerUri);
+        var geoView = CurrentGeoView;
 
         try
         {
-            MainMapView.Map ??= new Map(new Uri(BasemapUri));
-            MainMapView.Map.OperationalLayers.Clear();
-            MainMapView.Map.OperationalLayers.Add(orientedImageryLayer);
+            if (_usingMapView)
+            {
+                MainMapView.Map ??= new Map(new Uri(BasemapUri));
+                MainMapView.Map.OperationalLayers.Clear();
+                MainMapView.Map.OperationalLayers.Add(orientedImageryLayer);
+            }
+            else
+            {
+                orientedImageryLayer.SceneProperties.SurfacePlacement = SurfacePlacement.Absolute;
+                _sceneView.Scene!.OperationalLayers.Clear();
+                _sceneView.Scene.OperationalLayers.Add(orientedImageryLayer);
+            }
 
             _orientedImageryViewModel.OrientedImageryLayer = orientedImageryLayer;
             await orientedImageryLayer.LoadAsync();
             if (ReferenceEquals(_orientedImageryViewModel.OrientedImageryLayer, orientedImageryLayer) &&
                 orientedImageryLayer.FullExtent != null)
             {
-                MainMapView.SetViewpoint(new Viewpoint(orientedImageryLayer.FullExtent));
+                geoView.SetViewpoint(new Viewpoint(orientedImageryLayer.FullExtent));
             }
         }
         catch (Exception ex)
@@ -134,6 +152,72 @@ public sealed partial class OrientedImageryViewSample : Page
     {
         SelectedImagePopupBackground.Visibility = Visibility.Collapsed;
         SelectedImagePopupViewer.Popup = null;
+    }
+
+    private void Toggle2DButton_Click(object sender, RoutedEventArgs e)
+    {
+        GeoViewContainer.Children.Clear();
+        _usingMapView = !_usingMapView;
+        MainOrientedImageryView.GeoView = CurrentGeoView;
+        GeoViewContainer.Children.Add(CurrentGeoView);
+        SelectLayerDropdown.SelectedItem = null;
+        _orientedImageryViewModel.OrientedImageryLayer = null;
+    }
+
+    private void ToggleElevationSurfaceButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_sceneView.Scene?.BaseSurface is not Surface surface)
+            return;
+
+        if (surface.ElevationSources.Count > 0)
+            surface.ElevationSources.Clear();
+        else
+            surface.ElevationSources.Add(_elevationSource);
+    }
+
+    private void UpdateToolbarButton_Click(object sender, RoutedEventArgs e)
+    {
+        ConfigureToolbarTemplates();
+        var overlays = _orientedImageryViewModel.ToolbarCategories.First(static c => c.Name == OrientedImageryToolbarCategory.OverlaysCategoryName);
+        var popupItem = overlays.ToolbarItems.OfType<OrientedImageryPopupToolbarItem>().FirstOrDefault();
+        if (popupItem == null)
+            overlays.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
+        else
+            overlays.ToolbarItems.Remove(popupItem);
+    }
+
+    private void OverrideClickHandlersButton_Click(object sender, RoutedEventArgs e)
+    {
+        MainOrientedImageryView.OnGeoViewTappedOverride = MainOrientedImageryView.OnGeoViewTappedOverride == null ? OnGeoViewTappedOverride : null;
+        MainOrientedImageryView.OnImageTappedOverride = MainOrientedImageryView.OnImageTappedOverride == null ? OnImageTappedOverride : null;
+    }
+
+    private void OnGeoViewTappedOverride(object? sender, GeoViewInputEventArgs e)
+    {
+        if (e.Location == null)
+            return;
+
+        var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Green, 20);
+        _orientedImageryViewModel.AddMarkerLocation(e.Location, symbol);
+    }
+
+    private async void OnImageTappedOverride(object? sender, OrientedImageTappedEventArgs e)
+    {
+        try
+        {
+            var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
+            var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Pink, 20);
+            _orientedImageryViewModel.AddMarkerLocation(location, symbol);
+        }
+        catch (Exception ex)
+        {
+            StatusTextBlock.Text = ex.Message;
+        }
+    }
+
+    private void DetachReattachGeoViewButton_Click(object sender, RoutedEventArgs e)
+    {
+        MainOrientedImageryView.GeoView = MainOrientedImageryView.GeoView == null ? CurrentGeoView : null;
     }
 
     private void PanelSplitter_DragDelta(object sender, DragDeltaEventArgs e)
