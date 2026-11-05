@@ -512,10 +512,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
         }
-        catch (ArcGISException exception) when (IsEndOfSequenceError(exception.Message))
+        catch (ArcGISException exception) when (exception.ErrorCode == 20)
         {
-            if (navigationVersion == _sequentialNavigationVersion && !cancellationToken.IsCancellationRequested)
-                SetHasAdjacentImage(step, false);
+            SetHasAdjacentImage(step, false);
         }
         catch (Exception exception)
         {
@@ -526,9 +525,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             }
         }
     }
-
-    internal static bool IsEndOfSequenceError(string message) =>
-        message.IndexOf("No adjacent image query result is available", StringComparison.OrdinalIgnoreCase) >= 0;
 
     private void SetHasAdjacentImage(SequenceStep step, bool hasAdjacentImage)
     {
