@@ -43,6 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private ElevationSource _elevationSource;
 
         private bool _usingAlternateToolbarStyling = false;
+        private bool _usingCustomTapHandlers = false;
 
         public OrientedImageryView()
         {
@@ -227,31 +228,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
 
         private void OverrideClickHandlersButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MainOrientedImageryView.OnGeoViewTappedOverride == null)
-                MainOrientedImageryView.OnGeoViewTappedOverride = OnGeoViewTappedOverride;
+            _usingCustomTapHandlers = !_usingCustomTapHandlers;
+            if (_usingCustomTapHandlers)
+            {
+                MainOrientedImageryView.GeoViewTapped += MainOrientedImageryView_GeoViewTapped;
+                MainOrientedImageryView.ImageTapped += MainOrientedImageryView_ImageTapped;
+            }
             else
-                MainOrientedImageryView.OnGeoViewTappedOverride = null;
-
-            if (MainOrientedImageryView.OnImageTappedOverride == null)
-                MainOrientedImageryView.OnImageTappedOverride = OnImageTappedOverride;
-            else
-                MainOrientedImageryView.OnImageTappedOverride = null;
+            {
+                MainOrientedImageryView.GeoViewTapped -= MainOrientedImageryView_GeoViewTapped;
+                MainOrientedImageryView.ImageTapped -= MainOrientedImageryView_ImageTapped;
+            }
         }
 
-        private async void OnGeoViewTappedOverride(object? sender, GeoViewInputEventArgs e)
+        private void MainOrientedImageryView_GeoViewTapped(object? sender, OrientedImageryViewGeoViewTappedArgs e)
         {
-            if (e.Location == null)
+            e.Handled = true;
+            if (e.GeoViewInputEventArgs.Location is not { } location)
                 return;
 
             var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Green, 20);
-            _orientedImageryVM.AddMarkerLocation(e.Location, symbol);
+            _orientedImageryVM.AddMarkerLocation(location, symbol);
         }
 
-        private async void OnImageTappedOverride(object? sender, OrientedImageTappedEventArgs e)
+        private async void MainOrientedImageryView_ImageTapped(object? sender, OrientedImageryViewImageTappedArgs e)
         {
+            e.Handled = true;
+            var tap = e.OrientedImageTappedEventArgs;
             try
             {
-                var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
+                var location = await tap.Image.ImageToLocationAsync(tap.ImagePoint);
                 var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Pink, 20);
                 _orientedImageryVM.AddMarkerLocation(location, symbol);
             }
