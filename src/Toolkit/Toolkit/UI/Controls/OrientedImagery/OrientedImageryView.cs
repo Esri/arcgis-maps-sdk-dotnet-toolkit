@@ -21,6 +21,7 @@ public partial class OrientedImageryView
     private const string ToolbarContainerName = "PART_ToolbarContainer";
     private const string PaginatorName = "PART_Paginator";
     private const string MainErrorMessagePresenterName = "PART_MainErrorMessagePresenter";
+    private const string DismissTransientErrorButtonName = "PART_DismissTransientErrorButton";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
@@ -64,6 +65,7 @@ public partial class OrientedImageryView
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
         _paginator = GetTemplateChild(PaginatorName) as Paginator;
         _mainErrorMessagePresenter = GetTemplateChild(MainErrorMessagePresenterName) as TextBlock;
+        RewireDismissTransientErrorButton();
 
         if (_viewport != null)
             WireViewport(_viewport);
@@ -184,6 +186,10 @@ public partial class OrientedImageryView
                 HasSearchedForImages = false;
                 UpdateErrorMessages();
                 break;
+            case nameof(OrientedImageryViewModel.SequentialNavigationError):
+                if (ViewModel.SequentialNavigationError?.Message != null)
+                    TransientErrorMessage = ViewModel.SequentialNavigationError?.Message;
+                break;
 #if WPF
             case nameof(OrientedImageryViewModel.SelectedImagePopup):
                 UpdateDetailsFocus();
@@ -297,9 +303,9 @@ public partial class OrientedImageryView
             var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
             ViewModel.AddMarkerLocation(location);
         }
-        catch (ArcGISRuntimeException ex)
+        catch (Exception ex)
         {
-            Debug.WriteLine($"Error converting image point to location: {ex.Message}");
+            TransientErrorMessage = ex.Message;
         }
     }
 
@@ -477,7 +483,7 @@ public partial class OrientedImageryView
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"OrientedImageryView failed to handle tap: {ex.Message}");
+            TransientErrorMessage = ex.Message;
         }
         finally
         {
@@ -587,6 +593,7 @@ public partial class OrientedImageryView
     private bool _lastLoadingState = false;
     private bool _imageChangedSincePreviousLoadAnnouncement = true;
     private TextBlock? _mainErrorMessagePresenter;
+    private Button? _dismissTransientErrorButton;
 
     /// <summary>
     /// The message shown when the <see cref="OrientedImageryView"/> is in a state that prevents all use of the control.
@@ -605,6 +612,23 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="ErrorMessage" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty ErrorMessageProperty = PropertyHelper.GetProperty(ErrorMessagePropertyKey);
+
+    /// <summary>
+    /// Holds temporary error messages that do not prevent normal control usage.
+    /// </summary>
+    public string? TransientErrorMessage
+    {
+        get => (string?)GetValue(TransientErrorMessageProperty);
+        private set => SetValue(TransientErrorMessagePropertyKey, value);
+    }
+
+    private static readonly DependencyPropertyKey TransientErrorMessagePropertyKey =
+        PropertyHelper.CreateReadOnlyProperty<string?, OrientedImageryView>(nameof(TransientErrorMessage));
+
+    /// <summary>
+    /// Identifies the <see cref="TransientErrorMessage" /> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty TransientErrorMessageProperty = PropertyHelper.GetProperty(TransientErrorMessagePropertyKey);
 
     /// <summary>
     /// Updates error messages and announces them if needed.
@@ -725,6 +749,17 @@ public partial class OrientedImageryView
             ImageStateActivityId,
             AutomationNotificationProcessing.MostRecent);
 #endif
+    }
+
+    private void RewireDismissTransientErrorButton()
+    {
+        if (_dismissTransientErrorButton != null)
+            _dismissTransientErrorButton.Click -= DismissTransientErrorButton_Click;
+
+        _dismissTransientErrorButton = GetTemplateChild(DismissTransientErrorButtonName) as Button;
+
+        if (_dismissTransientErrorButton != null)
+            _dismissTransientErrorButton.Click += DismissTransientErrorButton_Click;
     }
 #endregion Errors
 }

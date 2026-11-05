@@ -2,6 +2,7 @@
 
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using System.Windows.Automation.Peers;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -12,10 +13,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = MainErrorMessagePresenterName, Type = typeof(TextBlock))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = ImageDetailsButtonName, Type = typeof(Button))]
+[TemplatePart(Name = DismissTransientErrorButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
     private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
     private const string ImageDetailsButtonName = "PART_ImageDetailsButton";
+
+    private void DismissTransientErrorButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender == _dismissTransientErrorButton && _dismissTransientErrorButton.IsKeyboardFocusWithin == true)
+            _dismissTransientErrorButton.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+        TransientErrorMessage = null;
+    }
 
     /// <inheritdoc/>
     protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewAutomationPeer(this);
