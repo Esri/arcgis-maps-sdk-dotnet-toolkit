@@ -379,25 +379,27 @@ public class SequentialNavigationVM : OrientedImageryToolbarItemBase { }
 /// </summary>
 public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
 {
-    private static readonly MarkerSymbol DefaultSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 10);
+    private static readonly LabelledSymbol DefaultSymbol = new LabelledSymbol(
+        new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 10),
+        Properties.Resources.GetString("OrientedImageryViewMarkerX") ?? "Cross marker");
 
     /// <summary>
     /// Gets the collection of marker symbol options that can be used for selecting a new marker symbol.
     /// </summary>
-    public ObservableCollection<MarkerSymbol> SymbolOptions { get; private set; }
+    public ObservableCollection<LabelledSymbol> SymbolOptions { get; private set; }
 
     /// <summary>
     /// Creates a new instance of the <see cref="SelectNewMarkerSymbolVM"/> class.
     /// </summary>
-    public SelectNewMarkerSymbolVM(Collection<MarkerSymbol>? markers = null)
+    public SelectNewMarkerSymbolVM(Collection<LabelledSymbol>? markers = null)
     {
-        SymbolOptions = new ObservableCollection<MarkerSymbol>(markers ?? new Collection<MarkerSymbol>());
+        SymbolOptions = new ObservableCollection<LabelledSymbol>(markers ?? new Collection<LabelledSymbol>());
         SymbolOptions.CollectionChanged += MarkerSymbolOptions_CollectionChanged;
 
         _selectedSymbol = SymbolOptions.Count > 0 ? SymbolOptions[0] : DefaultSymbol;
     }
 
-    private void MarkerSymbolOptions_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void MarkerSymbolOptions_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (SymbolOptions.Count < 1)
         {
@@ -409,11 +411,11 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
         }
     }
 
-    private MarkerSymbol _selectedSymbol;
+    private LabelledSymbol _selectedSymbol;
     /// <summary>
     /// Gets or sets the currently-selected marker symbol.
     /// </summary>
-    public MarkerSymbol SelectedSymbol
+    public LabelledSymbol SelectedSymbol
     {
         get => _selectedSymbol;
         set
@@ -422,7 +424,7 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
             SetProperty(ref _selectedSymbol, value);
             if (ViewModel != null)
             {
-                ViewModel.NewMarkerSymbol = _selectedSymbol;
+                ViewModel.NewMarkerSymbol = _selectedSymbol.Symbol;
             }
         }
     }
@@ -432,7 +434,12 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
     {
         base.OnViewModelChanged(oldValue, newValue);
         if (ViewModel != null)
-            ViewModel.NewMarkerSymbol = _selectedSymbol;
+            ViewModel.NewMarkerSymbol = _selectedSymbol.Symbol;
     }
 }
+
+/// <summary>
+/// A <see cref="Symbol"/> and label.
+/// </summary>
+public record LabelledSymbol(Symbol Symbol, string Label);
 #endif

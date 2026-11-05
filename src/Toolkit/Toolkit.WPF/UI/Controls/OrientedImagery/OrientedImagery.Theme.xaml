@@ -682,6 +682,7 @@
     <DataTemplate x:Key="MarkerPickerToolbarTemplate" DataType="controls:SelectNewMarkerSymbolVM">
         <ComboBox ItemsSource="{Binding SymbolOptions}"
                   SelectedItem="{Binding SelectedSymbol, Mode=TwoWay}"
+                  TextSearch.TextPath="Label"
                   MinWidth="0" Padding="0"
                   Style="{StaticResource ToolbarComboBoxStyle}"
                   AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
@@ -698,7 +699,8 @@
                                       Style="{StaticResource ToolbarToggleButtonStyle}"
                                       ToolTip="{TemplateBinding ToolTip}">
                             <StackPanel>
-                                <controls:SymbolDisplay Symbol="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                                <controls:SymbolDisplay Symbol="{Binding SelectedItem.Symbol, RelativeSource={RelativeSource TemplatedParent}}"
+                                                        AutomationProperties.Name="{Binding SelectedItem.Label, RelativeSource={RelativeSource TemplatedParent}}"
                                                         Width="16" Height="32" Focusable="False" />
                                 <Grid Height="32" Margin="0,8,0,0">
                                     <Path Width="12" Height="8" VerticalAlignment="Center"
@@ -729,6 +731,7 @@
             </ComboBox.Template>
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ToolbarComboBoxItemStyle}">
+                    <Setter Property="AutomationProperties.Name" Value="{Binding Label}" />
                     <Setter Property="MinWidth" Value="40" />
                     <Setter Property="MinHeight" Value="40" />
                     <Setter Property="Padding" Value="4" />
@@ -738,7 +741,10 @@
             </ComboBox.ItemContainerStyle>
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <controls:SymbolDisplay Symbol="{Binding}" Width="32" Height="32" Focusable="False" />
+                    <controls:SymbolDisplay Symbol="{Binding Symbol}"
+                                            AutomationProperties.Name="{Binding Label}"
+                                            Width="32" Height="32"
+                                            Focusable="False"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
