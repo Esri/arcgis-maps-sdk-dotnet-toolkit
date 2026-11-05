@@ -25,6 +25,8 @@ internal class Command : System.Windows.Input.ICommand
     private Action _execute;
     private Func<bool> _canExecute;
 
+    public Command(Action execute) : this(execute, () => true) { }
+
     public Command(Action execute, Func<bool> canExecute)
     {
         _execute = execute;
