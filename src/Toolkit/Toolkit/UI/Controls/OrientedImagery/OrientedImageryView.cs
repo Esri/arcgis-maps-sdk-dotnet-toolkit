@@ -687,7 +687,7 @@ public partial class OrientedImageryView
         if (_viewport?.Footprint == null)
             return;
 
-        bool isLoading = _viewport.IsBusy;
+        bool isLoading = _viewport.IsImageLoading;
         bool imageHasChanged = _imageChangedSincePreviousLoadAnnouncement;
         _imageChangedSincePreviousLoadAnnouncement = false;
         if (isLoading == _lastLoadingState && !imageHasChanged)
@@ -700,7 +700,7 @@ public partial class OrientedImageryView
 
     private string? GetNoImagesAnnouncement()
     {
-        if (!IsLoaded || !IsVisible || ErrorMessage != null || _viewport?.IsBusy == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
+        if (!IsLoaded || !IsVisible || ErrorMessage != null || _viewport?.IsImageLoading == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
             return null;
 
         string resourceKey;
