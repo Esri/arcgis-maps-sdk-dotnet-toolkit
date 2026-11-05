@@ -457,6 +457,39 @@
         </Setter>
     </Style>
 
+    <!-- Some styles to make the sequential paginator next/previous buttons appear disabled without actually loosing keyboard focus -->
+    <Style x:Key="SequentialPreviousArrowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource PaginatorNavigationButtonStyle}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ViewModel.CanNavigatePrevious, RelativeSource={RelativeSource AncestorType={x:Type controls:OrientedImageryView}}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SequentialNextArrowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource PaginatorNavigationButtonStyle}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ViewModel.CanNavigateNext, RelativeSource={RelativeSource AncestorType={x:Type controls:OrientedImageryView}}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SequentialPreviousButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource PaginatorPageButtonBaseStyle}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ViewModel.CanNavigatePrevious, RelativeSource={RelativeSource AncestorType={x:Type controls:OrientedImageryView}}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SequentialNextButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource PaginatorPageButtonBaseStyle}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ViewModel.CanNavigateNext, RelativeSource={RelativeSource AncestorType={x:Type controls:OrientedImageryView}}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- Toolbar container style -->
     <Style x:Key="OrientedImageryToolbarContainerStyle" TargetType="{x:Type ItemsControl}">
         <Setter Property="Margin" Value="8" />
@@ -1039,6 +1072,7 @@
 
                                 <Button Style="{StaticResource ImageNavigationButtonStyle}"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
+                                        IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.CanNavigatePrevious}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                         VerticalAlignment="Center">
@@ -1054,6 +1088,7 @@
                                 </Button>
                                 <Button Style="{StaticResource ImageNavigationButtonStyle}"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
+                                        IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.CanNavigateNext}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                         Grid.Column="2" VerticalAlignment="Center">
@@ -1202,7 +1237,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Style>
-                                <Button Style="{StaticResource PaginatorNavigationButtonStyle}"
+                                <Button Style="{StaticResource SequentialPreviousArrowButtonStyle}"
                                         IsTabStop="False"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
@@ -1210,7 +1245,7 @@
                                     <TextBlock Text="&lt;" />
                                 </Button>
                                 <Button Content="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
-                                        Style="{StaticResource PaginatorPageButtonStyle}"
+                                        Style="{StaticResource SequentialPreviousButtonStyle}"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectPreviousImageCommand}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}" />
@@ -1226,11 +1261,11 @@
                                             Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                                 </Grid>
                                 <Button Content="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
-                                        Style="{StaticResource PaginatorPageButtonStyle}"
+                                        Style="{StaticResource SequentialNextButtonStyle}"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}" />
-                                <Button Style="{StaticResource PaginatorNavigationButtonStyle}"
+                                <Button Style="{StaticResource SequentialNextArrowButtonStyle}"
                                         IsTabStop="False"
                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectNextImageCommand}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
