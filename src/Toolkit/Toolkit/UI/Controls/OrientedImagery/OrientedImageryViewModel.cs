@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -165,7 +166,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private ReadOnlyCollection<OrientedImage> _readOnlyImages;
     private OrientedImage? _selectedImage;
     private OrientedImageFootprint? _selectedImageFootprint;
-    private bool _isSelectedFootprintVisible;
     private Popup? _selectedImagePopup;
     private bool _isSequentialNavigationEnabled;
     private bool _isFetchingAdjacentImage;
@@ -187,6 +187,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// <summary>
     /// Gets or sets the currently selected oriented image.
     /// </summary>
+    [NotNullIfNotNull(nameof(SelectedImageFootprint))]
     public OrientedImage? SelectedImage
     {
         get => _selectedImage;
@@ -194,20 +195,32 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             if (value == _selectedImage) return;
 
-            SelectedImagePopup = null;
-            SetProperty(ref _selectedImage, value);
-
-            if (_selectedImage != null)
+            // Reset the current selected footprint to it's default extent so we don't leave a trail of updated footprints
+            if (SelectedImageFootprint != null && SelectedImage != null)
             {
-                var footprint = _footprints.FirstOrDefault((fpt) => fpt.OrientedImage == _selectedImage);
-                SelectedImageFootprint = footprint ?? new OrientedImageFootprint(_selectedImage);
+                var i = _footprints.IndexOf(SelectedImageFootprint);
+                if (i > -1)
+                {
+                    _footprints[i] = new OrientedImageFootprint(SelectedImage);
+                }
+            }
+
+            if (value != null)
+            {
+                var footprint = _footprints.FirstOrDefault((fpt) => fpt.OrientedImage == value);
+                _selectedImageFootprint = footprint ?? new OrientedImageFootprint(value);
             }
             else
             {
-                SelectedImageFootprint = null;
+                _selectedImageFootprint = null;
             }
+
+            // Only set property (and raise property changed event) after updating _selectedImageFootprint
+            SetProperty(ref _selectedImage, value);
+
             UpdateVisibleFootprints();
             UpdateCameraMarkers();
+            SelectedImagePopup = null;
 
             ResetSequentialNavigationState();
             ChangeNavigationCommandsCanExecute();
@@ -527,12 +540,15 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _showSelectedFootprint = true;
 
     /// <summary>
-    /// Gets the footprint of the currently selected image. This is updated based on the <see cref="SelectedImage"/> property.
+    /// Gets the footprint of the current <see cref="SelectedImage"/> if it exists.
     /// </summary>
+    /// <remarks>
+    /// The <see cref="PropertyChanged"/> event is never raised for this property. Listen to <see cref="SelectedImage"/> instead.
+    /// </remarks>
+    [NotNullIfNotNull(nameof(SelectedImage))]
     public OrientedImageFootprint? SelectedImageFootprint
     {
         get => _selectedImageFootprint;
-        private set => SetProperty(ref _selectedImageFootprint, value);
     }
 
     /// <summary>
@@ -551,6 +567,23 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     }
 
     private bool _showUnselectedFootprints;
+
+    /// <summary>
+    /// Internal flag so the OrientedImageryView can temporarily disable showing the current footprint without
+    /// touching <see cref="ShowSelectedFootprint"/>. While <c>true</c> does not render the selected footprint.
+    /// </summary>
+    internal bool IsShowSelectedFootprintEnabled
+    {
+        get => _isShowSelectedFootprintEnabled;
+        set
+        {
+            if (_isShowSelectedFootprintEnabled == value) { return; }
+            SetProperty(ref _isShowSelectedFootprintEnabled, value);
+            UpdateVisibleFootprints();
+        }
+    }
+
+    private bool _isShowSelectedFootprintEnabled = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether to show footprints for non-selected oriented images.
@@ -646,30 +679,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         }
     }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether or not to display available footprints.
-    /// </summary>
-    public bool AreFootprintsEnabled
-    {
-        get => _isSelectedFootprintVisible;
-        set
-        {
-            _isSelectedFootprintVisible = value;
-            if (OrientedImageryLayer != null && SelectedImageFootprint != null)
-                UpdateVisibleFootprints();
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AreFootprintsEnabled)));
-        }
-    }
-
     private void UpdateVisibleFootprints()
     {
         if (OrientedImageryLayer == null) return;
 
         OrientedImageryLayer.VisibleFootprints.Clear();
-
-        if (!AreFootprintsEnabled)
-            return;
 
         foreach (var ftp in _footprints)
         {
@@ -681,7 +695,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             }
         }
 
-        if (ShowSelectedFootprint && SelectedImageFootprint != null)
+        if (IsShowSelectedFootprintEnabled && ShowSelectedFootprint && SelectedImageFootprint != null)
         {
             SelectedImageFootprint.FillColor = SelectedFootprintFillColor;
             SelectedImageFootprint.OutlineColor = SelectedFootprintOutlineColor;

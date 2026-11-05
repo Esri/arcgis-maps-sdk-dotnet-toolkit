@@ -300,7 +300,31 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 /// <summary>
 /// View model for the "Show Selected Footprint" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class ShowSelectedFootprintVM : OrientedImageryToolbarItemBase { }
+public class ShowSelectedFootprintVM : OrientedImageryToolbarItemBase
+{
+    /// <summary>
+    /// Whether or not the show selected image button is in a usable state.
+    /// </summary>
+    public bool Enabled => ViewModel?.SelectedImage != null && ViewModel.IsShowSelectedFootprintEnabled;
+
+    /// <inheritdoc/>
+    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    {
+        if (oldValue != null)
+            oldValue.PropertyChanged -= ViewModel_PropertyChanged;
+
+        if (newValue != null)
+            newValue.PropertyChanged += ViewModel_PropertyChanged;
+
+        OnPropertyChanged(nameof(Enabled));
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(OrientedImageryViewModel.SelectedImage) || e.PropertyName == nameof(OrientedImageryViewModel.IsShowSelectedFootprintEnabled))
+            OnPropertyChanged(nameof(Enabled));
+    }
+}
 
 /// <summary>
 /// View model for the "Show Unselected Footprints" toolbar control in the <see cref="OrientedImageryView"/>.
