@@ -1,6 +1,8 @@
 ﻿#if WINDOWS_XAML
 
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+using Microsoft.UI.Xaml.Automation.Peers;
 using System.Collections.ObjectModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -8,10 +10,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = ImageViewportName, Type = typeof(OrientedImageViewport))]
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
 [TemplatePart(Name = PaginatorName, Type = typeof(OrientedImageryPaginator))]
+[TemplatePart(Name = MainErrorMessagePresenterName, Type = typeof(TextBlock))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
     private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
+
+    /// <inheritdoc/>
+    protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewAutomationPeer(this);
+
+    private void InitializeAccessibility_WinUI()
+    {
+        Loaded += (_, _) => UpdateAccessibility_WinUI();
+        RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => UpdateAccessibility_WinUI());
+    }
+
+    private void UpdateAccessibility_WinUI()
+    {
+        if (!LoadedAndVisible())
+            return;
+
+        UpdateErrorMessages();
+        if (ErrorMessage != null)
+            ScreenReaderHelpers.RaiseLiveRegionChanged(_mainErrorMessagePresenter);
+    }
+
+    private sealed partial class OrientedImageryViewAutomationPeer : FrameworkElementAutomationPeer
+    {
+        public OrientedImageryViewAutomationPeer(OrientedImageryView owner) : base(owner)
+        {
+        }
+
+        protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("OrientedImageryViewAutomationTypeName")!;
+    }
 
     private void FocusCloseDetailsButton()
     {
@@ -184,7 +215,10 @@ public partial class OrientedImageryView : Control
     }
 
     private void OnViewportStateChanged(DependencyObject sender, DependencyProperty property)
-        => UpdateViewportState();
+    {
+        UpdateViewportState();
+        UpdateImageStateMessages();
+    }
 
     private void UpdateViewportState()
     {

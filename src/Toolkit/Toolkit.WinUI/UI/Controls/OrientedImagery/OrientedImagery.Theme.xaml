@@ -1004,6 +1004,8 @@
                                 Background="{ThemeResource OrientedImageryDisplayBackgroundBrush}"
                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(HasViewError), Mode=OneWay}">
                                 <TextBlock
+                                    x:Name="PART_MainErrorMessagePresenter"
+                                    AutomationProperties.LiveSetting="Assertive"
                                     MaxWidth="400"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
