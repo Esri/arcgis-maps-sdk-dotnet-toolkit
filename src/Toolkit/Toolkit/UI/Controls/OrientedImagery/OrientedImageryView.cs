@@ -28,8 +28,6 @@ public partial class OrientedImageryView
     public OrientedImageryView() : base()
     {
         ViewModel = new OrientedImageryViewModel();
-        _onImageTapped = OnImageTapped_Default;
-        _onGeoViewTapped = GeoViewTapped_Default;
 
         UpdateErrorMessages();
 
@@ -236,27 +234,15 @@ public partial class OrientedImageryView
     public static readonly DependencyProperty HasSearchedForImagesProperty = PropertyHelper.GetProperty(HasSearchedForImagesPropertyKey);
 
     private OrientedImageViewport? _viewport;
-    private EventHandler<OrientedImageTappedEventArgs>? _onImageTappedOverride;
-    private EventHandler<OrientedImageTappedEventArgs> _onImageTapped;
 
     /// <summary>
-    /// Set this function to override the default event handler when the image is tapped. A <c>null</c> value means the default behavior is active.
+    /// Raised when a tap is registered on the displayed image.
     /// </summary>
-    /// <remarks>Toolkit-managed marker hits raise this event with <see cref="OrientedImageTappedEventArgs.Marker"/> set to <c>null</c>.</remarks>
-    public EventHandler<OrientedImageTappedEventArgs>? OnImageTappedOverride
-    {
-        get => _onImageTappedOverride;
-
-        set
-        {
-            if (value == null)
-                _onImageTapped = OnImageTapped_Default;
-            else
-                _onImageTapped = value;
-
-            _onImageTappedOverride = value;
-        }
-    }
+    /// <remarks>
+    /// Set <see cref="OrientedImageryViewImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// Internally-managed marker hits (such as on the search point marker) are not registered on this event.
+    /// </remarks>
+    public event EventHandler<OrientedImageryViewImageTappedArgs>? ImageTapped;
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -295,14 +281,15 @@ public partial class OrientedImageryView
             _viewport.DisplayBackgroundColor = displayBackgroundColor;
     }
 
-    private void Viewport_ImageTapped(object? sender, OrientedImageTappedEventArgs e) => _onImageTapped(this, ViewModel.GetPublicImageTappedEventArgs(e));
-
     private void Viewport_StateChanged(object? sender, EventArgs e) => UpdateErrorMessages();
 
-    private async void OnImageTapped_Default(object? _, OrientedImageTappedEventArgs e)
+    private async void Viewport_ImageTapped(object? _, OrientedImageTappedEventArgs e)
     {
+        var eventArgs = new OrientedImageryViewImageTappedArgs(ViewModel.GetPublicImageTappedEventArgs(e));
+        ImageTapped?.Invoke(this, eventArgs);
+
         // Only adds a marker if sketch mode is enabled and there is not already a marker nearby
-        if (ViewModel.InteractionState != OrientedImageryViewInteractionState.AddMarkers || e.Marker != null)
+        if (eventArgs.Handled || ViewModel.InteractionState != OrientedImageryViewInteractionState.AddMarkers || e.Marker != null)
             return;
 
         try
@@ -362,9 +349,15 @@ public partial class OrientedImageryView
 #endregion Display
 
 #region GeoView
-    private EventHandler<GeoViewInputEventArgs>? _onGeoViewTappedOverride;
-    private EventHandler<GeoViewInputEventArgs> _onGeoViewTapped;
     private CancellationTokenSource? _geoViewTappedCTS;
+
+    /// <summary>
+    /// Raised when a tap is registered on the connected <see cref="GeoView"/>.
+    /// </summary>
+    /// <remarks>
+    /// Set <see cref="OrientedImageryViewGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// </remarks>
+    public event EventHandler<OrientedImageryViewGeoViewTappedArgs>? GeoViewTapped;
 
     /// <summary>
     /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/> on which marker graphics are displayed.
@@ -412,29 +405,12 @@ public partial class OrientedImageryView
         UpdateErrorMessages();
     }
 
-    /// <summary>
-    /// Set this function to override the default event handler when the connected <see cref="GeoView"/> is tapped. A <c>null</c> value means the default behavior is active.
-    /// </summary>
-    public EventHandler<GeoViewInputEventArgs>? OnGeoViewTappedOverride
+    private async void GeoView_GeoViewTapped(object? _, GeoViewInputEventArgs e)
     {
-        get => _onGeoViewTappedOverride;
+        var eventArgs = new OrientedImageryViewGeoViewTappedArgs(e);
+        GeoViewTapped?.Invoke(this, eventArgs);
 
-        set
-        {
-            if (value == null)
-                _onGeoViewTapped = GeoViewTapped_Default;
-            else
-                _onGeoViewTapped = value;
-
-            _onGeoViewTappedOverride = value;
-        }
-    }
-
-    private async void GeoView_GeoViewTapped(object? sender, GeoViewInputEventArgs e) => _onGeoViewTapped(this, e);
-
-    private async void GeoViewTapped_Default(object? _, GeoViewInputEventArgs e)
-    {
-        if (e.Location == null || GeoView == null || ViewModel.OrientedImageryLayer == null)
+        if (eventArgs.Handled || e.Location == null || GeoView == null || ViewModel.OrientedImageryLayer == null)
             return;
 
         using var currentCTS = new CancellationTokenSource();
@@ -751,6 +727,59 @@ public partial class OrientedImageryView
 #endif
     }
 #endregion Errors
+}
+
+/// <summary>
+/// Provides event data and an option to intercept default behavior for taps on the viewport of an <see cref="OrientedImageryView"/>.
+/// </summary>
+public sealed class OrientedImageryViewImageTappedArgs : EventArgs
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OrientedImageryViewImageTappedArgs"/> class.
+    /// </summary>
+    /// <param name="orientedImageTappedEventArgs">The event arguments supplied by the original <see cref="OrientedImageViewport.ImageTapped"/> event.</param>
+    public OrientedImageryViewImageTappedArgs(OrientedImageTappedEventArgs orientedImageTappedEventArgs)
+    {
+        OrientedImageTappedEventArgs = orientedImageTappedEventArgs;
+    }
+
+    /// <summary>
+    /// Gets the event arguments supplied by the original <see cref="OrientedImageViewport.ImageTapped"/> event.
+    /// </summary>
+    /// <remarks>
+    /// Internally-managed marker hits (such as on the search point marker) are not registered on this event.
+    /// </remarks>
+    public OrientedImageTappedEventArgs OrientedImageTappedEventArgs { get; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryView"/> image tap logic should be skipped for the current tap event.
+    /// </summary>
+    public bool Handled { get; set; }
+}
+
+/// <summary>
+/// Provides event data and an option to intercept default behavior for taps on the <see cref="GeoView"/> connected to an <see cref="OrientedImageryView"/>.
+/// </summary>
+public sealed class OrientedImageryViewGeoViewTappedArgs : EventArgs
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OrientedImageryViewGeoViewTappedArgs"/> class.
+    /// </summary>
+    /// <param name="geoViewInputEventArgs">The event arguments supplied by the original <see cref="GeoView.GeoViewTapped"/> event.</param>
+    public OrientedImageryViewGeoViewTappedArgs(GeoViewInputEventArgs geoViewInputEventArgs)
+    {
+        GeoViewInputEventArgs = geoViewInputEventArgs;
+    }
+
+    /// <summary>
+    /// Gets the event arguments supplied by the original <see cref="GeoView.GeoViewTapped"/> event.
+    /// </summary>
+    public GeoViewInputEventArgs GeoViewInputEventArgs { get; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryView"/> GeoView tap logic should be skipped for the current tap event.
+    /// </summary>
+    public bool Handled { get; set; }
 }
 
 #endif
