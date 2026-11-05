@@ -58,6 +58,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -70,18 +71,32 @@
                 Grid.Column="1"
                 Click="AddLayerButton_Click"
                 Content="Add layer to geoview" />
+            <Button
+                Grid.Column="2"
+                Click="Toggle2DButton_Click"
+                Content="2D/3D" />
             <TextBlock
                 x:Name="StatusTextBlock"
                 Grid.Row="1"
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="3"
                 Margin="4"
                 Foreground="{ThemeResource SystemFillColorCriticalBrush}"
                 TextWrapping="Wrap" />
         </Grid>
 
-        <esri:MapView
-            Grid.Row="1"
-            x:Name="MainMapView" />
+        <Grid Grid.Row="1">
+            <Grid x:Name="GeoViewContainer">
+                <esri:MapView x:Name="MainMapView" />
+            </Grid>
+            <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Top" MaxHeight="200">
+                <StackPanel Spacing="4">
+                    <Button Content="Toggle elevation surface (3D only)" Click="ToggleElevationSurfaceButton_Click" />
+                    <Button Content="Update toolbar" Click="UpdateToolbarButton_Click" />
+                    <Button Content="Override clicks" Click="OverrideClickHandlersButton_Click" />
+                    <Button Content="Detach/Reattach GeoView" Click="DetachReattachGeoViewButton_Click" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
 
         <local:PanelResizeHandle
             Grid.Row="1" Grid.Column="1"
@@ -136,8 +151,7 @@
                 AutomationProperties.Name="Select Layer" />
             <toolkit:OrientedImageryView
                 Grid.Row="1"
-                x:Name="MainOrientedImageryView"
-                GeoView="{x:Bind MainMapView}" />
+                x:Name="MainOrientedImageryView" />
         </Grid>
 
         <Grid
