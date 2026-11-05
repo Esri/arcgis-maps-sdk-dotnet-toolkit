@@ -15,7 +15,7 @@ public partial class OrientedImageryViewSample : ContentPage
     private readonly string[] _layerUrls =
     {
         "https://services.arcgis.com/2Pv4ow3pE6NFC9SW/ArcGIS/rest/services/Oakwood_camori_corrected/FeatureServer/0",
-        "https://services8.arcgis.com/joda3ARQ9znLf0hf/ArcGIS/rest/services/HopefulHeights_360/FeatureServer/1",
+        "https://services8.arcgis.com/joda3ARQ9znLf0hf/arcgis/rest/services/AerialsphereScottsdale_360/FeatureServer/1",
         "https://services5.arcgis.com/N82JbI5EYtAkuUKU/ArcGIS/rest/services/EsriCampus_sequenceTest_attachment/FeatureServer/1",
     };
     private readonly MapView _mapView = new()
