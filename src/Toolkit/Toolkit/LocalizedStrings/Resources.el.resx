@@ -123,6 +123,9 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>Εμφανίζει μια λίστα με τα διαθέσιμα υπόβαθρα. Επιλέξτε ένα υπόβαθρο για να το χρησιμοποιήσετε για τον τρέχοντα χάρτη ή την τρέχουσα 3D προβολή.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>π_Bookmarks___________________Ω</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Προσθήκη συνημμένου</value>
   </data>
@@ -417,6 +420,18 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Προβολή</value>
   </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>π_Downloading attachment_______________________Ω</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>π_Previous media_______________Ω</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>π_Next media_____________________Ω</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>π_Media item {0} of {1}______________________Ω</value>
+  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Συσχετίσεις</value>
   </data>
@@ -471,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>Δεν υπάρχουν αποτελέσματα</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>π_Results available__________________Ω</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>Επανάληψη Αναζήτησης Εδώ</value>
   </data>
@@ -483,14 +501,32 @@
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
     <value>Επιλέξτε πηγή αναζήτησης</value>
   </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>π_collapsed___________________Ω</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>π_expanded_________________Ω</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>π_{0}, selected______________Ω</value>
+  </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
     <value>Αναζητήστε πηγές</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>π_Sources available__________________Ω</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
     <value>Αναζητήστε προτάσεις</value>
   </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>π_Suggestions available______________________Ω</value>
+  </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
     <value>Αναζητήστε αποτελέσματα</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>π_Add barrier____________Ω</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Προσθήκη σημείου έναρξης</value>
@@ -500,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Λεπτομέρειες στοιχείου</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>π_Barriers_________________Ω</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Ακύρωση</value>
@@ -524,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Αποτελέσματα λειτουργίας</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>π_Identifying barriers________________________Ω...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Προσδιορισμός σημείων έναρξης...</value>
@@ -567,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>Προηγούμενο</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>π_Remove all_____________________Ω</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Κατάργηση όλων</value>
   </data>
@@ -597,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>Σημεία έναρξης</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>π_Tap on the map to identify barriers___________________Ω.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Πατήστε πάνω στον χάρτη για να αναγνωρίσετε σημεία έναρξης.</value>
   </data>
@@ -620,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Utility networks</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>π_Use as filter barrier______________________Ω</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Επιλογές οπτικοποίησης</value>
@@ -806,5 +857,286 @@
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
     <value>Παρουσιάστηκε σφάλμα. Πατήστε για αφαίρεση.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>π_Oriented image_______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>π_Oriented imagery view______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>π_Select marker symbol_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>π_Toggle add markers___________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>π_Show current footprint_______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>π_Show additional footprints___________________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>π_Image search mode__________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>π_Current Footprint__________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>π_Current_______________Ω
+π_Footprint___________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>π_Additional Footprints______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>π_Additional_____________________Ω
+π_Footprints_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>π_Camera Locations_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>π_Camera_____________Ω
+π_Locations___________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>π_Add Markers____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>π_Add_______Ω
+π_Markers_______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>π_Clear Markers______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
+    <value>π_Clear markers______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>π_Clear___________Ω
+π_Markers_______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>π_Find Images____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>π_Find_________Ω
+π_Images_____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>π_Display Image______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>π_Display_______________Ω
+π_Image___________Ω</value>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>π_Open details for selected image_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
+    <value>π_Image details______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>π_Close details______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>π_Go to image {0} of {1}_______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>π_Image {0} of {1}, selected___________________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>π_Show camera locations______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationTooltip" xml:space="preserve">
+    <value>π_Sequential navigation______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>π_Sequential Navigation______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>π_Sequential_____________________Ω
+π_Navigation_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>π_Previous image_______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>π_Next image_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>π_Image loading_________________Ω...</value>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>π_Image loaded_____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>π_No image to display____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>π_No images found for the tapped location_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>π_No image to display. Enable find images or display image mode to search for images__________________________________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>π_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________Ω.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>π_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________Ω.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionEnable" xml:space="preserve">
+    <value>π_Enable_____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>π_or_____Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>π_mode to search for images__________________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>π_Tap on the map to search for images___________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>π_Tap on a feature to view its image__________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>π_or switch to_____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
+    <value>π_mode_________Ω</value>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>π_Connect a GeoView to view oriented imagery_______________________Ω.</value>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>π_No layer selected___________________Ω.</value>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>π_Prev_________Ω</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>π_Next_________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>π_Start of image sequence reached_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>π_End of image sequence reached______________________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>π_Start and end of image sequence reached_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewClose" xml:space="preserve">
+    <value>π_Close oriented imagery_______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewClosePanel" xml:space="preserve">
+    <value>π_Close panel____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewOverlays" xml:space="preserve">
+    <value>π_Overlays_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkers" xml:space="preserve">
+    <value>π_Markers_______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMode" xml:space="preserve">
+    <value>π_Mode_________Ω</value>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>π_Show previous image in sequence_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>π_Show next image in sequence____________________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMore" xml:space="preserve">
+    <value>π_More_________Ω</value>
+  </data>
+  <data name="OrientedImageryViewPage" xml:space="preserve">
+    <value>π_Image {0} of {1}_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewSelectLayer" xml:space="preserve">
+    <value>π_Select layer_____________Ω</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>π_2D/3D___________Ω</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>π_Switch between 2D map and 3D scene__________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSelection" xml:space="preserve">
+    <value>π_Marker selection_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkerOption" xml:space="preserve">
+    <value>π_Marker {0}_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkerCircle" xml:space="preserve">
+    <value>π_Circle marker______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSquare" xml:space="preserve">
+    <value>π_Square marker______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve">
+    <value>π_Triangle marker________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve">
+    <value>π_Diamond marker_______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkerX" xml:space="preserve">
+    <value>π_Cross marker_____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMobileSequentialMode" xml:space="preserve">
+    <value>π_Sequential_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve">
+    <value>π_Explore_______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve">
+    <value>π_Mode Selection_______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve">
+    <value>π_Overlays Selection___________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve">
+    <value>π_Marker Tools_____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewOpen" xml:space="preserve">
+    <value>π_Open oriented imagery______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewOn" xml:space="preserve">
+    <value>π_On_____Ω</value>
+  </data>
+  <data name="OrientedImageryViewOff" xml:space="preserve">
+    <value>π_Off_______Ω</value>
+  </data>
+  <data name="OrientedImageryViewSelected" xml:space="preserve">
+    <value>π_Selected_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewNotSelected" xml:space="preserve">
+    <value>π_Not selected_____________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve">
+    <value>π_Back to Marker Tools_____________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>π_Select Symbol______________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve">
+    <value>π_Show Current Footprint_______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve">
+    <value>π_Show Additional Footprints___________________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve">
+    <value>π_Show Camera Locations______________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve">
+    <value>π_Image navigation_________________Ω</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve">
+    <value>π_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________Ω.</value>
+  </data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve">
+    <value>π_Sequential image navigation____________________________Ω</value>
   </data>
 </root>

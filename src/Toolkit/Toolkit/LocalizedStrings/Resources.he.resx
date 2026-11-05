@@ -123,6 +123,9 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>מציג הרשימה של מפות בסיס זמינות. בחר מפת בסיס אשר תשמש עבור המפה או הסצנה הנוכחיות</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>כן_Bookmarks___________________ש</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>הוסף צורפה</value>
   </data>
@@ -417,6 +420,18 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>הצג</value>
   </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>כן_Downloading attachment_______________________ש</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>כן_Previous media_______________ש</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>כן_Next media_____________________ש</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>כן_Media item {0} of {1}______________________ש</value>
+  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>אסוסיאציות</value>
   </data>
@@ -471,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>אין תוצאות</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>כן_Results available__________________ש</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>חזור על החיפוש כאן</value>
   </data>
@@ -483,14 +501,32 @@
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
     <value>בחר מקור חיפוש</value>
   </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>כן_collapsed___________________ש</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>כן_expanded_________________ש</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>כן_{0}, selected______________ש</value>
+  </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
     <value>מקורות חיפוש</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>כן_Sources available__________________ש</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
     <value>הצעות חיפוש</value>
   </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>כן_Suggestions available______________________ש</value>
+  </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
     <value>תוצאות חיפוש</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>כן_Add barrier____________ש</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>הוסף נקודת התחלה</value>
@@ -500,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>פרטי נכס</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>כן_Barriers_________________ש</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>ביטול</value>
@@ -524,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>תוצאות פונקציה</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>כן_Identifying barriers________________________ש...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>מזהה נקודות התחלה...</value>
@@ -567,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>הקודם</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>כן_Remove all_____________________ש</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>הסר הכול</value>
   </data>
@@ -597,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>נקודות התחלה</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>כן_Tap on the map to identify barriers___________________ש.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>הקש על המפה כדי לזהות נקודות התחלה.</value>
   </data>
@@ -620,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Utility Networks</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>כן_Use as filter barrier______________________ש</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>אפשרויות הצגה חזותית</value>
@@ -806,5 +857,286 @@
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
     <value>אירעה שגיאה. הקש כדי להסיר.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>כן_Oriented image_______________ש</value>
+  </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>כן_Oriented imagery view______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>כן_Select marker symbol_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>כן_Toggle add markers___________________ש</value>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>כן_Show current footprint_______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>כן_Show additional footprints___________________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>כן_Image search mode__________________ש</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>כן_Current Footprint__________________ש</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>כן_Current_______________ש
+כן_Footprint___________________ש</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>כן_Additional Footprints______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>כן_Additional_____________________ש
+כן_Footprints_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>כן_Camera Locations_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>כן_Camera_____________ש
+כן_Locations___________________ש</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>כן_Add Markers____________ש</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>כן_Add_______ש
+כן_Markers_______________ש</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>כן_Clear Markers______________ש</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
+    <value>כן_Clear markers______________ש</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>כן_Clear___________ש
+כן_Markers_______________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>כן_Find Images____________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>כן_Find_________ש
+כן_Images_____________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>כן_Display Image______________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>כן_Display_______________ש
+כן_Image___________ש</value>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>כן_Open details for selected image_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
+    <value>כן_Image details______________ש</value>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>כן_Close details______________ש</value>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>כן_Go to image {0} of {1}_______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>כן_Image {0} of {1}, selected___________________________ש</value>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>כן_Show camera locations______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationTooltip" xml:space="preserve">
+    <value>כן_Sequential navigation______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>כן_Sequential Navigation______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>כן_Sequential_____________________ש
+כן_Navigation_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>כן_Previous image_______________ש</value>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>כן_Next image_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>כן_Image loading_________________ש...</value>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>כן_Image loaded_____________ש</value>
+  </data>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>כן_No image to display____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>כן_No images found for the tapped location_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>כן_No image to display. Enable find images or display image mode to search for images__________________________________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>כן_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ש.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>כן_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ש.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionEnable" xml:space="preserve">
+    <value>כן_Enable_____________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>כן_or_____ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>כן_mode to search for images__________________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>כן_Tap on the map to search for images___________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>כן_Tap on a feature to view its image__________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>כן_or switch to_____________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
+    <value>כן_mode_________ש</value>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>כן_Connect a GeoView to view oriented imagery_______________________ש.</value>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>כן_No layer selected___________________ש.</value>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>כן_Prev_________ש</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>כן_Next_________ש</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>כן_Start of image sequence reached_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>כן_End of image sequence reached______________________________ש</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>כן_Start and end of image sequence reached_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewClose" xml:space="preserve">
+    <value>כן_Close oriented imagery_______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewClosePanel" xml:space="preserve">
+    <value>כן_Close panel____________ש</value>
+  </data>
+  <data name="OrientedImageryViewOverlays" xml:space="preserve">
+    <value>כן_Overlays_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkers" xml:space="preserve">
+    <value>כן_Markers_______________ש</value>
+  </data>
+  <data name="OrientedImageryViewMode" xml:space="preserve">
+    <value>כן_Mode_________ש</value>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>כן_Show previous image in sequence_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>כן_Show next image in sequence____________________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMore" xml:space="preserve">
+    <value>כן_More_________ש</value>
+  </data>
+  <data name="OrientedImageryViewPage" xml:space="preserve">
+    <value>כן_Image {0} of {1}_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewSelectLayer" xml:space="preserve">
+    <value>כן_Select layer_____________ש</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>כן_2D/3D___________ש</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>כן_Switch between 2D map and 3D scene__________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSelection" xml:space="preserve">
+    <value>כן_Marker selection_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkerOption" xml:space="preserve">
+    <value>כן_Marker {0}_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkerCircle" xml:space="preserve">
+    <value>כן_Circle marker______________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSquare" xml:space="preserve">
+    <value>כן_Square marker______________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve">
+    <value>כן_Triangle marker________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve">
+    <value>כן_Diamond marker_______________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkerX" xml:space="preserve">
+    <value>כן_Cross marker_____________ש</value>
+  </data>
+  <data name="OrientedImageryViewMobileSequentialMode" xml:space="preserve">
+    <value>כן_Sequential_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve">
+    <value>כן_Explore_______________ש</value>
+  </data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve">
+    <value>כן_Mode Selection_______________ש</value>
+  </data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve">
+    <value>כן_Overlays Selection___________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve">
+    <value>כן_Marker Tools_____________ש</value>
+  </data>
+  <data name="OrientedImageryViewOpen" xml:space="preserve">
+    <value>כן_Open oriented imagery______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewOn" xml:space="preserve">
+    <value>כן_On_____ש</value>
+  </data>
+  <data name="OrientedImageryViewOff" xml:space="preserve">
+    <value>כן_Off_______ש</value>
+  </data>
+  <data name="OrientedImageryViewSelected" xml:space="preserve">
+    <value>כן_Selected_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewNotSelected" xml:space="preserve">
+    <value>כן_Not selected_____________ש</value>
+  </data>
+  <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve">
+    <value>כן_Back to Marker Tools_____________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>כן_Select Symbol______________ש</value>
+  </data>
+  <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve">
+    <value>כן_Show Current Footprint_______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve">
+    <value>כן_Show Additional Footprints___________________________ש</value>
+  </data>
+  <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve">
+    <value>כן_Show Camera Locations______________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve">
+    <value>כן_Image navigation_________________ש</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve">
+    <value>כן_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ש.</value>
+  </data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve">
+    <value>כן_Sequential image navigation____________________________ש</value>
   </data>
 </root>

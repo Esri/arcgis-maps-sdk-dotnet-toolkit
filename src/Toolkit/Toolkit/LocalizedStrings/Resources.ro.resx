@@ -123,6 +123,9 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>Afișează o listă cu hărțile de bază disponibile. Selectați o hartă de bază pentru a o utiliza în harta sau scena curentă.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>Ă_Bookmarks___________________ș</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Adăugare fișier atașat</value>
   </data>
@@ -417,6 +420,18 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Vizualizează</value>
   </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>Ă_Downloading attachment_______________________ș</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>Ă_Previous media_______________ș</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>Ă_Next media_____________________ș</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>Ă_Media item {0} of {1}______________________ș</value>
+  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Asocieri</value>
   </data>
@@ -471,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>Niciun rezultat</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>Ă_Results available__________________ș</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>Repetați căutarea aici</value>
   </data>
@@ -483,14 +501,32 @@
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
     <value>Selectați sursa de căutare</value>
   </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>Ă_collapsed___________________ș</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>Ă_expanded_________________ș</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>Ă_{0}, selected______________ș</value>
+  </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
     <value>Surse de căutare</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>Ă_Sources available__________________ș</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
     <value>Sugestii de căutare</value>
   </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>Ă_Suggestions available______________________ș</value>
+  </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
     <value>Rezultate căutare</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>Ă_Add barrier____________ș</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Adăugare punct de pornire</value>
@@ -500,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Detalii activ</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>Ă_Barriers_________________ș</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Anulare</value>
@@ -524,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Rezultate funcție</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>Ă_Identifying barriers________________________ș...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Identificarea punctelor de pornire...</value>
@@ -567,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>Anterior</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>Ă_Remove all_____________________ș</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Eliminare toate</value>
   </data>
@@ -597,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>Puncte de pornire</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>Ă_Tap on the map to identify barriers___________________ș.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Atingeți harta pentru a identifica punctele de pornire.</value>
   </data>
@@ -620,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Rețele de utilități</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>Ă_Use as filter barrier______________________ș</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Opțiuni de vizualizare</value>
@@ -806,5 +857,286 @@
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
     <value>A survenit o eroare. Atingeți pentru a elimina.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>Ă_Oriented image_______________ș</value>
+  </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>Ă_Oriented imagery view______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>Ă_Select marker symbol_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>Ă_Toggle add markers___________________ș</value>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>Ă_Show current footprint_______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Ă_Show additional footprints___________________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>Ă_Image search mode__________________ș</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>Ă_Current Footprint__________________ș</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>Ă_Current_______________ș
+Ă_Footprint___________________ș</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>Ă_Additional Footprints______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>Ă_Additional_____________________ș
+Ă_Footprints_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>Ă_Camera Locations_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>Ă_Camera_____________ș
+Ă_Locations___________________ș</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>Ă_Add Markers____________ș</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>Ă_Add_______ș
+Ă_Markers_______________ș</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>Ă_Clear Markers______________ș</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
+    <value>Ă_Clear markers______________ș</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>Ă_Clear___________ș
+Ă_Markers_______________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>Ă_Find Images____________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>Ă_Find_________ș
+Ă_Images_____________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>Ă_Display Image______________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>Ă_Display_______________ș
+Ă_Image___________ș</value>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>Ă_Open details for selected image_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
+    <value>Ă_Image details______________ș</value>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>Ă_Close details______________ș</value>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>Ă_Go to image {0} of {1}_______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>Ă_Image {0} of {1}, selected___________________________ș</value>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>Ă_Show camera locations______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationTooltip" xml:space="preserve">
+    <value>Ă_Sequential navigation______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>Ă_Sequential Navigation______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>Ă_Sequential_____________________ș
+Ă_Navigation_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>Ă_Previous image_______________ș</value>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>Ă_Next image_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>Ă_Image loading_________________ș...</value>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>Ă_Image loaded_____________ș</value>
+  </data>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>Ă_No image to display____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>Ă_No images found for the tapped location_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>Ă_No image to display. Enable find images or display image mode to search for images__________________________________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>Ă_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ș.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>Ă_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ș.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionEnable" xml:space="preserve">
+    <value>Ă_Enable_____________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>Ă_or_____ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>Ă_mode to search for images__________________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>Ă_Tap on the map to search for images___________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>Ă_Tap on a feature to view its image__________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>Ă_or switch to_____________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
+    <value>Ă_mode_________ș</value>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>Ă_Connect a GeoView to view oriented imagery_______________________ș.</value>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>Ă_No layer selected___________________ș.</value>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>Ă_Prev_________ș</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>Ă_Next_________ș</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>Ă_Start of image sequence reached_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>Ă_End of image sequence reached______________________________ș</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>Ă_Start and end of image sequence reached_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewClose" xml:space="preserve">
+    <value>Ă_Close oriented imagery_______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewClosePanel" xml:space="preserve">
+    <value>Ă_Close panel____________ș</value>
+  </data>
+  <data name="OrientedImageryViewOverlays" xml:space="preserve">
+    <value>Ă_Overlays_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkers" xml:space="preserve">
+    <value>Ă_Markers_______________ș</value>
+  </data>
+  <data name="OrientedImageryViewMode" xml:space="preserve">
+    <value>Ă_Mode_________ș</value>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>Ă_Show previous image in sequence_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>Ă_Show next image in sequence____________________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMore" xml:space="preserve">
+    <value>Ă_More_________ș</value>
+  </data>
+  <data name="OrientedImageryViewPage" xml:space="preserve">
+    <value>Ă_Image {0} of {1}_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewSelectLayer" xml:space="preserve">
+    <value>Ă_Select layer_____________ș</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>Ă_2D/3D___________ș</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>Ă_Switch between 2D map and 3D scene__________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSelection" xml:space="preserve">
+    <value>Ă_Marker selection_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkerOption" xml:space="preserve">
+    <value>Ă_Marker {0}_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkerCircle" xml:space="preserve">
+    <value>Ă_Circle marker______________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSquare" xml:space="preserve">
+    <value>Ă_Square marker______________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve">
+    <value>Ă_Triangle marker________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve">
+    <value>Ă_Diamond marker_______________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkerX" xml:space="preserve">
+    <value>Ă_Cross marker_____________ș</value>
+  </data>
+  <data name="OrientedImageryViewMobileSequentialMode" xml:space="preserve">
+    <value>Ă_Sequential_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve">
+    <value>Ă_Explore_______________ș</value>
+  </data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve">
+    <value>Ă_Mode Selection_______________ș</value>
+  </data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve">
+    <value>Ă_Overlays Selection___________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve">
+    <value>Ă_Marker Tools_____________ș</value>
+  </data>
+  <data name="OrientedImageryViewOpen" xml:space="preserve">
+    <value>Ă_Open oriented imagery______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewOn" xml:space="preserve">
+    <value>Ă_On_____ș</value>
+  </data>
+  <data name="OrientedImageryViewOff" xml:space="preserve">
+    <value>Ă_Off_______ș</value>
+  </data>
+  <data name="OrientedImageryViewSelected" xml:space="preserve">
+    <value>Ă_Selected_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewNotSelected" xml:space="preserve">
+    <value>Ă_Not selected_____________ș</value>
+  </data>
+  <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve">
+    <value>Ă_Back to Marker Tools_____________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>Ă_Select Symbol______________ș</value>
+  </data>
+  <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve">
+    <value>Ă_Show Current Footprint_______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve">
+    <value>Ă_Show Additional Footprints___________________________ș</value>
+  </data>
+  <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve">
+    <value>Ă_Show Camera Locations______________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve">
+    <value>Ă_Image navigation_________________ș</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve">
+    <value>Ă_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ș.</value>
+  </data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve">
+    <value>Ă_Sequential image navigation____________________________ș</value>
   </data>
 </root>

@@ -123,6 +123,9 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>แสดงรายการแผนที่ฐานที่พร้อมใช้งาน เลือกแผนที่ฐานที่จะใช้สำหรับแผนที่หรือซีนปัจจุบัน</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>ก้_Bookmarks___________________ษฺ</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>เพิ่มไฟล์แนบ</value>
   </data>
@@ -417,6 +420,18 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>ดู</value>
   </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>ก้_Downloading attachment_______________________ษฺ</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>ก้_Previous media_______________ษฺ</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>ก้_Next media_____________________ษฺ</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>ก้_Media item {0} of {1}______________________ษฺ</value>
+  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>ความสัมพันธ์</value>
   </data>
@@ -471,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>ไม่มีผลลัพธ์</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>ก้_Results available__________________ษฺ</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>ทำซ้ำการค้นหาที่นี่</value>
   </data>
@@ -483,14 +501,32 @@
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
     <value>เลือกแหล่งการค้นหา</value>
   </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>ก้_collapsed___________________ษฺ</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>ก้_expanded_________________ษฺ</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>ก้_{0}, selected______________ษฺ</value>
+  </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
     <value>แหล่งการค้นหา</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>ก้_Sources available__________________ษฺ</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
     <value>คำแนะนำการค้นหา</value>
   </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>ก้_Suggestions available______________________ษฺ</value>
+  </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
     <value>ผลการค้นหา</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>ก้_Add barrier____________ษฺ</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>เพิ่มจุดเริ่มต้น</value>
@@ -500,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>รายละเอียดแอสเซ็ท</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>ก้_Barriers_________________ษฺ</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>ยกเลิก</value>
@@ -524,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>ผลลัพธ์ฟังก์ชัน</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>ก้_Identifying barriers________________________ษฺ...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>การระบุจุดเริ่มต้น...</value>
@@ -567,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>ก่อนหน้า</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>ก้_Remove all_____________________ษฺ</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>ลบทั้งหมด</value>
   </data>
@@ -597,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>จุดเริ่มต้น</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>ก้_Tap on the map to identify barriers___________________ษฺ.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>แตะบนแผนที่เพื่อระบุจุดเริ่มต้น</value>
   </data>
@@ -620,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>เครือข่ายสาธารณูปโภค</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>ก้_Use as filter barrier______________________ษฺ</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>ตัวเลือกการแสดงผล</value>
@@ -806,5 +857,286 @@
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
     <value>เกิดข้อผิดพลาดขึ้น แตะเพื่อลบออก</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>ก้_Oriented image_______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>ก้_Oriented imagery view______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>ก้_Select marker symbol_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>ก้_Toggle add markers___________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>ก้_Show current footprint_______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>ก้_Show additional footprints___________________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>ก้_Image search mode__________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>ก้_Current Footprint__________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>ก้_Current_______________ษฺ
+ก้_Footprint___________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>ก้_Additional Footprints______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>ก้_Additional_____________________ษฺ
+ก้_Footprints_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>ก้_Camera Locations_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>ก้_Camera_____________ษฺ
+ก้_Locations___________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>ก้_Add Markers____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>ก้_Add_______ษฺ
+ก้_Markers_______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>ก้_Clear Markers______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
+    <value>ก้_Clear markers______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>ก้_Clear___________ษฺ
+ก้_Markers_______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>ก้_Find Images____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>ก้_Find_________ษฺ
+ก้_Images_____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>ก้_Display Image______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>ก้_Display_______________ษฺ
+ก้_Image___________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>ก้_Open details for selected image_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
+    <value>ก้_Image details______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>ก้_Close details______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>ก้_Go to image {0} of {1}_______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>ก้_Image {0} of {1}, selected___________________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>ก้_Show camera locations______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationTooltip" xml:space="preserve">
+    <value>ก้_Sequential navigation______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>ก้_Sequential Navigation______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>ก้_Sequential_____________________ษฺ
+ก้_Navigation_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>ก้_Previous image_______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>ก้_Next image_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>ก้_Image loading_________________ษฺ...</value>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>ก้_Image loaded_____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>ก้_No image to display____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>ก้_No images found for the tapped location_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>ก้_No image to display. Enable find images or display image mode to search for images__________________________________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>ก้_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ษฺ.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>ก้_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ษฺ.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionEnable" xml:space="preserve">
+    <value>ก้_Enable_____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>ก้_or_____ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>ก้_mode to search for images__________________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>ก้_Tap on the map to search for images___________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>ก้_Tap on a feature to view its image__________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>ก้_or switch to_____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
+    <value>ก้_mode_________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>ก้_Connect a GeoView to view oriented imagery_______________________ษฺ.</value>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>ก้_No layer selected___________________ษฺ.</value>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>ก้_Prev_________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>ก้_Next_________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>ก้_Start of image sequence reached_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>ก้_End of image sequence reached______________________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>ก้_Start and end of image sequence reached_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewClose" xml:space="preserve">
+    <value>ก้_Close oriented imagery_______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewClosePanel" xml:space="preserve">
+    <value>ก้_Close panel____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewOverlays" xml:space="preserve">
+    <value>ก้_Overlays_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkers" xml:space="preserve">
+    <value>ก้_Markers_______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMode" xml:space="preserve">
+    <value>ก้_Mode_________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>ก้_Show previous image in sequence_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>ก้_Show next image in sequence____________________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMore" xml:space="preserve">
+    <value>ก้_More_________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewPage" xml:space="preserve">
+    <value>ก้_Image {0} of {1}_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSelectLayer" xml:space="preserve">
+    <value>ก้_Select layer_____________ษฺ</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>ก้_2D/3D___________ษฺ</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>ก้_Switch between 2D map and 3D scene__________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSelection" xml:space="preserve">
+    <value>ก้_Marker selection_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerOption" xml:space="preserve">
+    <value>ก้_Marker {0}_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerCircle" xml:space="preserve">
+    <value>ก้_Circle marker______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSquare" xml:space="preserve">
+    <value>ก้_Square marker______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve">
+    <value>ก้_Triangle marker________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve">
+    <value>ก้_Diamond marker_______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerX" xml:space="preserve">
+    <value>ก้_Cross marker_____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMobileSequentialMode" xml:space="preserve">
+    <value>ก้_Sequential_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve">
+    <value>ก้_Explore_______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve">
+    <value>ก้_Mode Selection_______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve">
+    <value>ก้_Overlays Selection___________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve">
+    <value>ก้_Marker Tools_____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewOpen" xml:space="preserve">
+    <value>ก้_Open oriented imagery______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewOn" xml:space="preserve">
+    <value>ก้_On_____ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewOff" xml:space="preserve">
+    <value>ก้_Off_______ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewSelected" xml:space="preserve">
+    <value>ก้_Selected_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewNotSelected" xml:space="preserve">
+    <value>ก้_Not selected_____________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve">
+    <value>ก้_Back to Marker Tools_____________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>ก้_Select Symbol______________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve">
+    <value>ก้_Show Current Footprint_______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve">
+    <value>ก้_Show Additional Footprints___________________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve">
+    <value>ก้_Show Camera Locations______________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve">
+    <value>ก้_Image navigation_________________ษฺ</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve">
+    <value>ก้_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ษฺ.</value>
+  </data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve">
+    <value>ก้_Sequential image navigation____________________________ษฺ</value>
   </data>
 </root>

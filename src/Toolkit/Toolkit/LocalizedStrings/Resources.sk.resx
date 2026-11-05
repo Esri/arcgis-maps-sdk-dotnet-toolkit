@@ -123,6 +123,9 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>Zobrazí zoznam dostupných podkladových máp Vyberte podkladovú mapu na použitie pre aktuálnu mapu alebo scénu.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>ĺ_Bookmarks___________________ľ</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Pridať prílohu</value>
   </data>
@@ -417,6 +420,18 @@
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Zobraziť</value>
   </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>ĺ_Downloading attachment_______________________ľ</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>ĺ_Previous media_______________ľ</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>ĺ_Next media_____________________ľ</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>ĺ_Media item {0} of {1}______________________ľ</value>
+  </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Asociácie</value>
   </data>
@@ -471,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>Žiadne výsledky</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>ĺ_Results available__________________ľ</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>Opakujte vyhľadávanie tu</value>
   </data>
@@ -483,14 +501,32 @@
   <data name="SearchViewSelectSearchSource" xml:space="preserve">
     <value>Vybrať zdroj vyhľadávania</value>
   </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>ĺ_collapsed___________________ľ</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>ĺ_expanded_________________ľ</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>ĺ_{0}, selected______________ľ</value>
+  </data>
   <data name="SearchViewSearchSources" xml:space="preserve">
     <value>Zdroje vyhľadávania</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>ĺ_Sources available__________________ľ</value>
   </data>
   <data name="SearchViewSearchSuggestions" xml:space="preserve">
     <value>Návrhy vyhľadávania</value>
   </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>ĺ_Suggestions available______________________ľ</value>
+  </data>
   <data name="SearchViewSearchResults" xml:space="preserve">
     <value>Výsledky vyhľadávania</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>ĺ_Add barrier____________ľ</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Pridať východiskový bod</value>
@@ -500,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Podrobnosti prostriedkov</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>ĺ_Barriers_________________ľ</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Zrušiť</value>
@@ -524,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Výsledky funkcie</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>ĺ_Identifying barriers________________________ľ...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Identifikácia východiskových bodov...</value>
@@ -567,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>Predchádzajúce</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>ĺ_Remove all_____________________ľ</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Odstrániť všetko</value>
   </data>
@@ -597,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>Východiskové body</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>ĺ_Tap on the map to identify barriers___________________ľ.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Ťuknutím do mapy identifikujte východiskové body.</value>
   </data>
@@ -620,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Utility siete</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>ĺ_Use as filter barrier______________________ľ</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Možnosti vizualizácie</value>
@@ -806,5 +857,286 @@
   </data>
   <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
     <value>Vyskytla sa chyba. Pre odstránenie ťuknite.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>ĺ_Oriented image_______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>ĺ_Oriented imagery view______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>ĺ_Select marker symbol_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>ĺ_Toggle add markers___________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>ĺ_Show current footprint_______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>ĺ_Show additional footprints___________________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>ĺ_Image search mode__________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>ĺ_Current Footprint__________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>ĺ_Current_______________ľ
+ĺ_Footprint___________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>ĺ_Additional Footprints______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>ĺ_Additional_____________________ľ
+ĺ_Footprints_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>ĺ_Camera Locations_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>ĺ_Camera_____________ľ
+ĺ_Locations___________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>ĺ_Add Markers____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>ĺ_Add_______ľ
+ĺ_Markers_______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>ĺ_Clear Markers______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
+    <value>ĺ_Clear markers______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>ĺ_Clear___________ľ
+ĺ_Markers_______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>ĺ_Find Images____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>ĺ_Find_________ľ
+ĺ_Images_____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>ĺ_Display Image______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>ĺ_Display_______________ľ
+ĺ_Image___________ľ</value>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>ĺ_Open details for selected image_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
+    <value>ĺ_Image details______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>ĺ_Close details______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>ĺ_Go to image {0} of {1}_______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>ĺ_Image {0} of {1}, selected___________________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>ĺ_Show camera locations______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationTooltip" xml:space="preserve">
+    <value>ĺ_Sequential navigation______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>ĺ_Sequential Navigation______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>ĺ_Sequential_____________________ľ
+ĺ_Navigation_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>ĺ_Previous image_______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>ĺ_Next image_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>ĺ_Image loading_________________ľ...</value>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>ĺ_Image loaded_____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>ĺ_No image to display____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>ĺ_No images found for the tapped location_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>ĺ_No image to display. Enable find images or display image mode to search for images__________________________________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>ĺ_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ľ.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>ĺ_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ľ.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionEnable" xml:space="preserve">
+    <value>ĺ_Enable_____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>ĺ_or_____ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>ĺ_mode to search for images__________________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>ĺ_Tap on the map to search for images___________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>ĺ_Tap on a feature to view its image__________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>ĺ_or switch to_____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
+    <value>ĺ_mode_________ľ</value>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>ĺ_Connect a GeoView to view oriented imagery_______________________ľ.</value>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>ĺ_No layer selected___________________ľ.</value>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>ĺ_Prev_________ľ</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>ĺ_Next_________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>ĺ_Start of image sequence reached_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>ĺ_End of image sequence reached______________________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>ĺ_Start and end of image sequence reached_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewClose" xml:space="preserve">
+    <value>ĺ_Close oriented imagery_______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewClosePanel" xml:space="preserve">
+    <value>ĺ_Close panel____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewOverlays" xml:space="preserve">
+    <value>ĺ_Overlays_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkers" xml:space="preserve">
+    <value>ĺ_Markers_______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMode" xml:space="preserve">
+    <value>ĺ_Mode_________ľ</value>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>ĺ_Show previous image in sequence_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>ĺ_Show next image in sequence____________________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMore" xml:space="preserve">
+    <value>ĺ_More_________ľ</value>
+  </data>
+  <data name="OrientedImageryViewPage" xml:space="preserve">
+    <value>ĺ_Image {0} of {1}_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewSelectLayer" xml:space="preserve">
+    <value>ĺ_Select layer_____________ľ</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>ĺ_2D/3D___________ľ</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>ĺ_Switch between 2D map and 3D scene__________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSelection" xml:space="preserve">
+    <value>ĺ_Marker selection_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerOption" xml:space="preserve">
+    <value>ĺ_Marker {0}_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerCircle" xml:space="preserve">
+    <value>ĺ_Circle marker______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSquare" xml:space="preserve">
+    <value>ĺ_Square marker______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve">
+    <value>ĺ_Triangle marker________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve">
+    <value>ĺ_Diamond marker_______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerX" xml:space="preserve">
+    <value>ĺ_Cross marker_____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMobileSequentialMode" xml:space="preserve">
+    <value>ĺ_Sequential_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve">
+    <value>ĺ_Explore_______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve">
+    <value>ĺ_Mode Selection_______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve">
+    <value>ĺ_Overlays Selection___________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve">
+    <value>ĺ_Marker Tools_____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewOpen" xml:space="preserve">
+    <value>ĺ_Open oriented imagery______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewOn" xml:space="preserve">
+    <value>ĺ_On_____ľ</value>
+  </data>
+  <data name="OrientedImageryViewOff" xml:space="preserve">
+    <value>ĺ_Off_______ľ</value>
+  </data>
+  <data name="OrientedImageryViewSelected" xml:space="preserve">
+    <value>ĺ_Selected_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewNotSelected" xml:space="preserve">
+    <value>ĺ_Not selected_____________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve">
+    <value>ĺ_Back to Marker Tools_____________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>ĺ_Select Symbol______________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve">
+    <value>ĺ_Show Current Footprint_______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve">
+    <value>ĺ_Show Additional Footprints___________________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve">
+    <value>ĺ_Show Camera Locations______________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve">
+    <value>ĺ_Image navigation_________________ľ</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve">
+    <value>ĺ_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ľ.</value>
+  </data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve">
+    <value>ĺ_Sequential image navigation____________________________ľ</value>
   </data>
 </root>
