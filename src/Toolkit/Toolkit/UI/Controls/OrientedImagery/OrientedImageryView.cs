@@ -27,6 +27,8 @@ public partial class OrientedImageryView
     private const string PaginatorName = "PART_Paginator";
     private const string MainErrorMessagePresenterName = "PART_MainErrorMessagePresenter";
     private const string DismissTransientErrorButtonName = "PART_DismissTransientErrorButton";
+    private const string ImageDetailsButtonName = "PART_ImageDetailsButton";
+    private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
@@ -84,10 +86,7 @@ public partial class OrientedImageryView
         RewireViewModel();
         UpdatePaginatorSelection();
         UpdateErrorMessages();
-
-#if WPF
         UpdateDetailsFocus();
-#endif
     }
 
 #region ViewModel
@@ -202,9 +201,8 @@ public partial class OrientedImageryView
 #endif
                 break;
             case nameof(OrientedImageryViewModel.ImageDetailsPopup):
-#if WPF
                 UpdateDetailsFocus();
-#elif WINDOWS_XAML
+#if WINDOWS_XAML
                 UpdateViewState_WinUI();
 #endif
                 break;
