@@ -164,17 +164,6 @@ public partial class OrientedImageryView : TemplatedView
         private set => SetValue(ErrorMessageProperty, value);
     }
 
-    /// <summary>
-    /// Gets or sets a handler that replaces the default image-tap behavior. Set to <c>null</c> to use the default behavior.
-    /// </summary>
-    /// <remarks>Toolkit-managed marker hits raise this event with <see cref="OrientedImageTappedEventArgs.Marker"/> set to <c>null</c>.</remarks>
-    public Action<object?, OrientedImageTappedEventArgs>? OnImageTappedOverride { get; set; }
-
-    /// <summary>
-    /// Gets or sets a handler that replaces the default map or scene tap behavior. Set to <c>null</c> to use the default behavior.
-    /// </summary>
-    public Action<object?, GeoViewInputEventArgs>? OnGeoViewTappedOverride { get; set; }
-
     #endregion
 
     #region Connection lifecycle
@@ -220,7 +209,7 @@ public partial class OrientedImageryView : TemplatedView
 
         if (_connectedGeoView != null)
         {
-            _connectedGeoView.GeoViewTapped -= GeoViewTapped;
+            _connectedGeoView.GeoViewTapped -= GeoView_GeoViewTapped;
             ((INotifyPropertyChanged)_connectedGeoView).PropertyChanged -= GeoViewChanged;
         }
 
@@ -257,7 +246,7 @@ public partial class OrientedImageryView : TemplatedView
             _connectedGeoView.GraphicsOverlays ??= new GraphicsOverlayCollection();
             if (!_connectedGeoView.GraphicsOverlays.Contains(ViewModel.MarkersOverlay))
                 _connectedGeoView.GraphicsOverlays.Add(ViewModel.MarkersOverlay);
-            _connectedGeoView.GeoViewTapped += GeoViewTapped;
+            _connectedGeoView.GeoViewTapped += GeoView_GeoViewTapped;
             ((INotifyPropertyChanged)_connectedGeoView).PropertyChanged += GeoViewChanged;
         }
 
@@ -374,15 +363,15 @@ public partial class OrientedImageryView : TemplatedView
 
     #region Map and image interaction
 
-    private async void GeoViewTapped(object? sender, GeoViewInputEventArgs e)
+    private async void GeoView_GeoViewTapped(object? sender, GeoViewInputEventArgs e)
     {
         if (!_connected)
             return;
-        if (OnGeoViewTappedOverride != null)
-        {
-            OnGeoViewTappedOverride(this, e);
+        int layerVersion = _layerVersion;
+        var eventArgs = new OrientedImageryViewGeoViewTappedArgs(e);
+        GeoViewTapped?.Invoke(this, eventArgs);
+        if (eventArgs.Handled || !_connected || layerVersion != _layerVersion)
             return;
-        }
 
         var geoView = GeoView;
         var model = ViewModel;
@@ -446,15 +435,15 @@ public partial class OrientedImageryView : TemplatedView
         }
     }
 
-    private async void ImageTapped(object? sender, OrientedImageTappedEventArgs e)
+    private async void Viewport_ImageTapped(object? sender, OrientedImageTappedEventArgs e)
     {
         if (!_connected)
             return;
-        if (OnImageTappedOverride != null)
-        {
-            OnImageTappedOverride(this, ViewModel.GetPublicImageTappedEventArgs(e));
+        int layerVersion = _layerVersion;
+        var eventArgs = new OrientedImageryViewImageTappedArgs(ViewModel.GetPublicImageTappedEventArgs(e));
+        ImageTapped?.Invoke(this, eventArgs);
+        if (eventArgs.Handled || !_connected || layerVersion != _layerVersion)
             return;
-        }
         var model = ViewModel;
         var layer = model.OrientedImageryLayer;
         int version = _operationVersion;
