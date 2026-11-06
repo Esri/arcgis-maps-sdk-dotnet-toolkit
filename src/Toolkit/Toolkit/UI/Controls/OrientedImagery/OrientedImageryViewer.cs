@@ -231,6 +231,15 @@ public partial class OrientedImageryViewer
 
 #region Display
     /// <summary>
+    /// Raised when a tap is registered on the displayed image.
+    /// </summary>
+    /// <remarks>
+    /// Set <see cref="OrientedImageryViewerImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// Toolkit-managed marker hits expose <see cref="OrientedImageTappedEventArgs.Marker"/> as <c>null</c>.
+    /// </remarks>
+    public event EventHandler<OrientedImageryViewerImageTappedArgs>? ImageTapped;
+
+    /// <summary>
     /// Gets a value indicating whether an image selection search has completed after a map tap.
     /// </summary>
     internal bool HasSearchedForImages
@@ -356,6 +365,14 @@ public partial class OrientedImageryViewer
 #endregion Display
 
 #region GeoView
+    /// <summary>
+    /// Raised when a tap is registered on the connected <see cref="GeoView"/>.
+    /// </summary>
+    /// <remarks>
+    /// Set <see cref="OrientedImageryViewerGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// </remarks>
+    public event EventHandler<OrientedImageryViewerGeoViewTappedArgs>? GeoViewTapped;
+
     private CancellationTokenSource? _geoViewTappedCTS;
 
     /// <summary>
@@ -773,30 +790,6 @@ public partial class OrientedImageryViewer
 #endregion Errors
 }
 #endif
-
-#if MAUI
-public partial class OrientedImageryView
-#else
-public partial class OrientedImageryViewer
-#endif
-{
-    /// <summary>
-    /// Raised when a tap is registered on the displayed image.
-    /// </summary>
-    /// <remarks>
-    /// Set <see cref="OrientedImageryViewerImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
-    /// Toolkit-managed marker hits expose <see cref="OrientedImageTappedEventArgs.Marker"/> as <c>null</c>.
-    /// </remarks>
-    public event EventHandler<OrientedImageryViewerImageTappedArgs>? ImageTapped;
-
-    /// <summary>
-    /// Raised when a tap is registered on the connected <see cref="GeoView"/>.
-    /// </summary>
-    /// <remarks>
-    /// Set <see cref="OrientedImageryViewerGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
-    /// </remarks>
-    public event EventHandler<OrientedImageryViewerGeoViewTappedArgs>? GeoViewTapped;
-}
 
 /// <summary>
 /// Provides event data and an option to intercept default behavior for taps on the viewport of an <see cref="OrientedImageryViewer"/>.
