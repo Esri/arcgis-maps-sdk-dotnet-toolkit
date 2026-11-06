@@ -121,7 +121,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
             if (layer.LoadError is Exception layerError)
                 return layerError;
 
-            // GetLayerViewState throws for a layer outside the current map, as during a map swap. A Warning still draws
+            // GetLayerViewState throws for a layer outside the current map, as during an image change. A Warning still draws
             // the image, so only Error counts.
             if (_mapView.Map?.OperationalLayers.Contains(layer) == true &&
                 _mapView.GetLayerViewState(layer) is LayerViewState viewState &&
@@ -141,9 +141,10 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
         RasterLayer layer = new(await image.CreateImageSpaceRasterAsync(token));
         token.ThrowIfCancellationRequested();
         layer.ResamplingType = RasterResamplingType.BilinearInterpolation;
-        Map map = new();
-        map.OperationalLayers.Add(layer);
-        _mapView.Map = map;
+        // Keep the map attached: replacing it during a draw can crash the WinUI native renderer.
+        _mapView.Map ??= new Map();
+        _mapView.Map.OperationalLayers.Clear();
+        _mapView.Map.OperationalLayers.Add(layer);
         _rasterLayer = layer;
         _hasDrawn = false;
         SetViewVisible(true);
@@ -199,7 +200,7 @@ internal sealed partial class OrientedImageRasterViewport : OrientedImageInnerVi
     protected override void ClearPresentation()
     {
         _rasterLayer?.CancelLoad();
-        _mapView.Map = null;
+        _mapView.Map?.OperationalLayers.Clear();
         _rasterLayer = null;
         _hasDrawn = false;
         SetViewVisible(false);
