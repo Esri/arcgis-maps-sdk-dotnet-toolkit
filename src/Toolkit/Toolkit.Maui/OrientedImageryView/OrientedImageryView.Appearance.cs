@@ -499,7 +499,7 @@ public partial class OrientedImageryView
 #endif
         if (_viewport != null)
         {
-            _viewport.ImageTapped += ImageTapped;
+            _viewport.ImageTapped += Viewport_ImageTapped;
             _viewport.StateChanged += ViewportChanged;
         }
 
@@ -609,7 +609,7 @@ public partial class OrientedImageryView
 #endif
         if (_viewport != null)
         {
-            _viewport.ImageTapped -= ImageTapped;
+            _viewport.ImageTapped -= Viewport_ImageTapped;
             _viewport.StateChanged -= ViewportChanged;
             _viewport.Footprint = null;
             _viewport.Markers = null;
