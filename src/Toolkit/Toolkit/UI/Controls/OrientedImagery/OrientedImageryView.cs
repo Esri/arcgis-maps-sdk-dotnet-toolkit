@@ -196,9 +196,6 @@ public partial class OrientedImageryView
             case nameof(OrientedImageryViewModel.SequentialNavigationError):
                 if (ViewModel.SequentialNavigationError?.Message != null)
                     TransientErrorMessage = ViewModel.SequentialNavigationError?.Message;
-#if WINDOWS_XAML
-                UpdateViewState_WinUI();
-#endif
                 break;
             case nameof(OrientedImageryViewModel.ImageDetailsPopup):
                 UpdateDetailsFocus();
@@ -807,7 +804,7 @@ public partial class OrientedImageryView
 
     private void RewireDismissTransientErrorButton()
     {
-#if WPF
+#if WPF || WINDOWS_XAML
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click -= DismissTransientErrorButton_Click;
 
