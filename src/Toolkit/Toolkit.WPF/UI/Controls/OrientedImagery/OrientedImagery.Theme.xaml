@@ -1101,7 +1101,7 @@
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Top"
                                         Margin="16"
-                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.OpenSelectedImagePopupCommand}"
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.OpenImageDetailsPopupCommand}"
                                         AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}"
                                         ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}">
                                     <Button.Style>
@@ -1179,7 +1179,7 @@
                                     <Style TargetType="{x:Type Grid}">
                                         <Setter Property="Visibility" Value="Visible" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImagePopup}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.ImageDetailsPopup}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -1196,11 +1196,11 @@
                                         </Grid.RowDefinitions>
                                         <controls:PopupViewer Grid.Row="1"
                                                               Margin="16,0,8,8"
-                                                              Popup="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.SelectedImagePopup}" />
+                                                              Popup="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.ImageDetailsPopup}" />
                                         <Button x:Name="PART_CloseDetailsButton" HorizontalAlignment="Right"
                                                 VerticalAlignment="Center"
                                                 Margin="8"
-                                                Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.CloseSelectedImagePopupCommand}"
+                                                Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.CloseImageDetailsPopupCommand}"
                                                 Style="{StaticResource ToolbarButtonStyle}"
                                                 AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}"
                                                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}">

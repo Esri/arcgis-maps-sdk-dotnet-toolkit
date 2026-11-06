@@ -32,14 +32,14 @@ public partial class OrientedImageryView : Control
 
     private void UpdateDetailsFocus()
     {
-        bool isPopupOpen = ViewModel.SelectedImagePopup != null;
+        bool isPopupOpen = ViewModel.ImageDetailsPopup != null;
         if (!isPopupOpen &&
             GetTemplateChild(CloseDetailsButtonName) is not Button { IsKeyboardFocusWithin: true })
             return;
 
         Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() =>
         {
-            if ((ViewModel.SelectedImagePopup != null) == isPopupOpen &&
+            if ((ViewModel.ImageDetailsPopup != null) == isPopupOpen &&
                 GetTemplateChild(isPopupOpen ? CloseDetailsButtonName : ImageDetailsButtonName) is Button { IsVisible: true, IsEnabled: true } button)
             {
                 button.Focus();
