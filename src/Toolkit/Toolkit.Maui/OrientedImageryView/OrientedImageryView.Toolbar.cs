@@ -101,7 +101,7 @@ public partial class OrientedImageryView
 
     private static bool IsBuiltInToolbarItem(OrientedImageryToolbarItemBase item) =>
         item is ImageSearchModeVM or ShowSelectedFootprintVM or ShowUnselectedFootprintsVM or ShowCameraMarkersVM or
-            AllowAddingMarkersVM or SelectNewMarkerSymbolVM or ClearMarkersVM or SequentialNavigationVM or AutoUpdateFootprintVM or ToolbarDividerVM;
+            AllowAddingMarkersVM or SelectNewMarkerSymbolVM or ClearMarkersVM or SequentialNavigationVM or ToolbarDividerVM;
 
     private View? CreateCustomToolbarView(object item)
     {
@@ -451,11 +451,6 @@ public partial class OrientedImageryView
                     },
                     () => GeometryIcon(SequenceGeometry),
                     () => Enabled() && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null), "OrientedImagerySequentialMode");
-                break;
-            case AutoUpdateFootprintVM:
-                AddSwitch(content, "AutoUpdate",
-                    () => ViewModel.AutoUpdateFootprint, value => ViewModel.AutoUpdateFootprint = value,
-                    () => GlyphIcon(ToolkitIcons.Refresh), Enabled);
                 break;
             case ToolbarDividerVM:
 #if ANDROID

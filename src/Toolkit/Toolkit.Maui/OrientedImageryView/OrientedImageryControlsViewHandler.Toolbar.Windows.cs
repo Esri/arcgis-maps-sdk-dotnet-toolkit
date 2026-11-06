@@ -56,8 +56,6 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 AllowAddingMarkersVM => Toggle(owner, "AddMarkersLabel", "AddMarkersStackedLabel", Glyph("\uE8ED"),
                     () => owner.IsAddingMarkers, owner.SetAddingMarkers,
                     automationId: "OrientedImageryDesktopAddMarker"),
-                AutoUpdateFootprintVM => Toggle(owner, "AutoUpdate", "AutoUpdateToolbarLabel", Glyph(ToolkitIcons.Refresh),
-                    () => model.AutoUpdateFootprint, value => model.AutoUpdateFootprint = value),
                 SelectNewMarkerSymbolVM picker => SymbolPicker(owner, picker),
                 ClearMarkersVM => ActionButton(owner, "ClearMarkersLabel", "ClearMarkersStackedLabel", Glyph("\uEB04"),
                     () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
