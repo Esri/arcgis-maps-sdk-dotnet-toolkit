@@ -28,7 +28,6 @@ public partial class OrientedImageryViewSample : ContentPage
     };
     private bool _usingMapView = true;
     private bool _active;
-    private bool _layerReady;
     private int _loadVersion;
     private GeoView CurrentGeoView => _usingMapView ? _mapView : _sceneView;
     private GeoModel CurrentGeoModel => _usingMapView ? _mapView.Map! : _sceneView.Scene!;
@@ -47,15 +46,12 @@ public partial class OrientedImageryViewSample : ContentPage
 
     #region Layer and map selection
 
-    private async void LayerSelected(object? sender, EventArgs e) => await ApplySelectedLayerAsync();
-
-    private async Task ApplySelectedLayerAsync()
+    private async void LayerSelected(object? sender, EventArgs e)
     {
         int version = ++_loadVersion;
         // A newer selection or navigation away makes this load's result obsolete.
         var view = CurrentGeoView;
         var model = CurrentGeoModel;
-        _layerReady = false;
         ImageryView.ViewModel.OrientedImageryLayer = null;
         model.OperationalLayers.Clear();
         LoadError.IsVisible = false;
@@ -76,7 +72,6 @@ public partial class OrientedImageryViewSample : ContentPage
             ImageryView.ViewModel.OrientedImageryLayer = layer;
             if (layer.FullExtent is { } extent)
                 view.SetViewpoint(new Viewpoint(extent));
-            _layerReady = true;
         }
         catch (Exception ex)
         {
@@ -91,7 +86,6 @@ public partial class OrientedImageryViewSample : ContentPage
     {
         ++_loadVersion;
         LayerPicker.SelectedItem = null;
-        ImageryView.ViewModel.OrientedImageryLayer = null;
         ImageryView.GeoView = null;
         CurrentGeoModel.OperationalLayers.Clear();
         _usingMapView = !_usingMapView;
@@ -99,7 +93,6 @@ public partial class OrientedImageryViewSample : ContentPage
         GeoViewContainer.Children.Clear();
         GeoViewContainer.Add(CurrentGeoView);
         LoadError.IsVisible = false;
-        _layerReady = false;
         if (_active && ImageryView.IsVisible)
             ImageryView.GeoView = CurrentGeoView;
     }
@@ -109,14 +102,12 @@ public partial class OrientedImageryViewSample : ContentPage
     #region Page lifecycle
 
     /// <inheritdoc/>
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
         _active = true;
         if (ImageryView.IsVisible)
             ImageryView.GeoView = CurrentGeoView;
-        if (!_layerReady && LayerPicker.SelectedItem != null)
-            await ApplySelectedLayerAsync();
     }
 
     /// <inheritdoc/>
@@ -124,6 +115,8 @@ public partial class OrientedImageryViewSample : ContentPage
     {
         _active = false;
         ++_loadVersion;
+        LayerPicker.SelectedItem = null;
+        LoadError.IsVisible = false;
         ImageryView.GeoView = null;
         base.OnDisappearing();
     }
@@ -142,6 +135,13 @@ public partial class OrientedImageryViewSample : ContentPage
 
     private void SetViewerOpen(bool open)
     {
+        if (!open)
+        {
+            ++_loadVersion;
+            LayerPicker.SelectedItem = null;
+            LoadError.IsVisible = false;
+        }
+
         ImageryView.IsVisible = open;
         UpdateViewerLayout();
         OpenButton.IsVisible = !open;
