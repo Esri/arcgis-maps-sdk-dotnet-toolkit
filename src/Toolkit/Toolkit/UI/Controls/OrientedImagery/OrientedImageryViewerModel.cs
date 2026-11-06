@@ -314,11 +314,7 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
             ResetSequentialNavigationState();
             UpdateNavigationState();
 
-            if (!IsSequentialNavigationEnabled)
-            {
-                ChangeNavigationCommandsCanExecute();
-            }
-            else if (SelectedImage != null)
+            if (IsSequentialNavigationEnabled && SelectedImage != null)
             {
                 _ = PrefetchAdjacentImagesAsync();
                 SetImages([SelectedImage]);

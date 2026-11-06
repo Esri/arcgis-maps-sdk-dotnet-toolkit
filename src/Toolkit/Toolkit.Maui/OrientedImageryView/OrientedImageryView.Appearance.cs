@@ -73,20 +73,6 @@ public partial class OrientedImageryView
 
     private static string Text(string key) => Properties.Resources.GetString("OrientedImageryView" + key);
 
-    internal static string MarkerOptionName(MarkerSymbol symbol, int index)
-    {
-        string? key = symbol is SimpleMarkerSymbol simple ? simple.Style switch
-        {
-            SimpleMarkerSymbolStyle.Circle => "Circle",
-            SimpleMarkerSymbolStyle.Square => "Square",
-            SimpleMarkerSymbolStyle.Triangle => "Triangle",
-            SimpleMarkerSymbolStyle.Diamond => "Diamond",
-            SimpleMarkerSymbolStyle.X => "X",
-            _ => null,
-        } : null;
-        return key != null ? Text("Marker" + key) : string.Format(CultureInfo.CurrentCulture, Text("MarkerOption"), index + 1);
-    }
-
     private static readonly ControlTemplate DefaultControlTemplate = new(() =>
     {
         var root = new Grid
@@ -735,8 +721,8 @@ public partial class OrientedImageryView
         }
 
         bool footprintsEnabled = _connected && _viewport?.Footprint != null && _viewport.IsInteractive;
-        if (ViewModel.AreFootprintsEnabled != footprintsEnabled)
-            ViewModel.AreFootprintsEnabled = footprintsEnabled;
+        if (ViewModel.IsShowSelectedFootprintEnabled != footprintsEnabled)
+            ViewModel.IsShowSelectedFootprintEnabled = footprintsEnabled;
 
         RefreshStatus();
         RefreshToolbarPresentation();
@@ -756,7 +742,7 @@ public partial class OrientedImageryView
     private void RefreshStatus()
     {
         var layer = ViewModel.OrientedImageryLayer;
-        bool loading = _searching || _viewport?.IsBusy == true || layer?.LoadStatus == LoadStatus.Loading;
+        bool loading = _searching || _viewport?.IsImageLoading == true || layer?.LoadStatus == LoadStatus.Loading;
         if (_busy != null)
         {
             _busy.IsRunning = loading;
@@ -1220,11 +1206,11 @@ public partial class OrientedImageryView
         _symbolGrid = new Grid { ColumnSpacing = 4, RowSpacing = 0 };
         foreach (var symbol in picker.SymbolOptions)
         {
-            var action = new MenuAction(MarkerOptionName(symbol, _symbolTiles.Count), () => { picker.SelectedSymbol = symbol; back(); },
+            var action = new MenuAction(symbol.Label, () => { picker.SelectedSymbol = symbol; back(); },
                 Checked: () => symbol == picker.SelectedSymbol, Enabled: () => IsAddingMarkers,
                 Icon: () => new SymbolDisplay
                 {
-                    Symbol = symbol, WidthRequest = 24, HeightRequest = 24, VerticalOptions = LayoutOptions.Center,
+                    Symbol = symbol.Symbol, WidthRequest = 24, HeightRequest = 24, VerticalOptions = LayoutOptions.Center,
                 });
             var guarded = GuardAction(action,
 #if ANDROID || __IOS__
