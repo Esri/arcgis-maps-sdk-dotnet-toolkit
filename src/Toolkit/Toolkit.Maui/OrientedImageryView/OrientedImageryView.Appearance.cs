@@ -5,6 +5,9 @@ using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
+#if WINDOWS
+using Microsoft.UI.Xaml.Input;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -454,6 +457,7 @@ public partial class OrientedImageryView
         _popupHost = GetTemplateChild("PART_PopupHost") as Grid;
         _popupOpenButton = GetTemplateChild("PART_PopupOpen") as Button;
         _popupCloseButton = GetTemplateChild("PART_PopupClose") as Button;
+        if (_popupCloseButton != null) _popupCloseButton.Command = new Command(CloseImageDetails);
         _status = GetTemplateChild("PART_Status") as Label;
         _statusHost = GetTemplateChild("PART_StatusHost") as View;
         _selectionGuidance = GetTemplateChild("PART_SelectionGuidance") as View;
@@ -615,6 +619,7 @@ public partial class OrientedImageryView
         if (_nextButton != null) _nextButton.Clicked -= Next;
         if (_imagePreviousButton != null) _imagePreviousButton.Clicked -= Previous;
         if (_imageNextButton != null) _imageNextButton.Clicked -= Next;
+        if (_popupCloseButton != null) _popupCloseButton.Command = null;
         if (_pages != null) _pages.SizeChanged -= PageSizeChanged;
 #if ANDROID || __IOS__
         if (_mobilePagination != null) _mobilePagination.Navigate = null;
@@ -837,10 +842,75 @@ public partial class OrientedImageryView
             _popupViewer.IsVisible = showingPopup;
         }
         if (_popupHost != null) _popupHost.IsVisible = showingPopup;
-        if (_popupCloseButton != null) _popupCloseButton.Command = ViewModel.CloseSelectedImagePopupCommand;
 #if WINDOWS
-        if (focusPopup) FocusDesktopPopup();
+        if (focusPopup) CreateDetailsFocusAction(opening: true)?.Invoke();
 #endif
+    }
+
+    private void CloseImageDetails()
+    {
+#if ANDROID
+        if (_popupHost == null)
+        {
+            DismissAndroidPopup(restoreFocus: true);
+            return;
+        }
+#elif __IOS__
+        if (_popupHost == null)
+        {
+            DismissIosPopup(restoreFocus: true);
+            return;
+        }
+#endif
+        var restoreFocus = CreateDetailsFocusAction();
+        ViewModel.CloseSelectedImagePopupCommand.Execute(null);
+        restoreFocus?.Invoke();
+    }
+
+    private Action? CreateDetailsFocusAction(bool opening = false)
+    {
+        var target = opening ? _popupCloseButton : _popupOpenButton;
+        if (target == null) return null;
+#if WINDOWS
+        if (!opening && _popupCloseButton?.IsFocused != true) return null;
+#endif
+        var model = ViewModel;
+        var image = model.SelectedImage;
+        var popup = opening ? model.SelectedImagePopup : null;
+        var handler = target.Handler;
+        int version = _layerVersion;
+        return () =>
+        {
+#if WINDOWS
+            var root = _nativeView?.XamlRoot;
+            var expectedFocus = root == null ? null : FocusManager.GetFocusedElement(root);
+#endif
+            Dispatcher.Dispatch(() =>
+            {
+                if (!CanAnnounce || version != _layerVersion || model != ViewModel || image != model.SelectedImage ||
+                    popup != model.SelectedImagePopup || _panelAnchor != null ||
+                    target != (opening ? _popupCloseButton : _popupOpenButton) || (handler != null && target.Handler != handler) ||
+                    !target.IsLoaded || !target.IsVisible || !target.IsEnabled)
+                    return;
+#if WINDOWS
+                if (root != null && ReferenceEquals(FocusManager.GetFocusedElement(root), expectedFocus) &&
+                    target.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.Button { IsLoaded: true } button)
+                    button.Focus(Microsoft.UI.Xaml.FocusState.Keyboard);
+#elif ANDROID
+                if (_infoSheet != null || _toolsSheet != null) return;
+                target.Focus();
+                if (Handler?.MauiContext?.Context?.GetSystemService(Android.Content.Context.AccessibilityService) is
+                    Android.Views.Accessibility.AccessibilityManager { IsTouchExplorationEnabled: true })
+                    target.SetSemanticFocus();
+#elif __IOS__
+                if (_iosSheet != null || _iosSheetClosing) return;
+                target.Focus();
+                if (UIKit.UIAccessibility.IsVoiceOverRunning) target.SetSemanticFocus();
+#else
+                target.Focus();
+#endif
+            });
+        };
     }
 
     #endregion
@@ -1624,7 +1694,7 @@ public partial class OrientedImageryView
         DismissPanel();
         if (!open && ViewModel.SelectedImagePopup != null)
         {
-            ViewModel.CloseSelectedImagePopupCommand.Execute(null);
+            CloseImageDetails();
             return true;
         }
         return open;

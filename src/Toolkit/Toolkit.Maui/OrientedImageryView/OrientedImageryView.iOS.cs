@@ -17,6 +17,7 @@ public partial class OrientedImageryView
     private bool _iosSheetPresenting;
     private bool _iosSheetClosing;
     private double _iosToolsHeight;
+    private Action? _iosDetailsFocusRestoration;
 
     partial void DetachPlatformPresentation()
     {
@@ -42,15 +43,16 @@ public partial class OrientedImageryView
         if (_iosSheetIsInfo) return;
         DismissPanel(preservePresentation: true);
         var heading = PanelHeading(Text("ImageDetails"));
-        var surface = CreateMobileSheetContent(heading, _popupViewer, () => DismissIosPopup(), null,
+        var surface = CreateMobileSheetContent(heading, _popupViewer, CloseImageDetails, null,
             out _, "OrientedImageryInfoSheet");
         PresentIosSheet(surface, info: true);
         SemanticScreenReader.Default.Announce(heading.Text);
     }
 
-    private void DismissIosPopup(bool closePopup = true)
+    private void DismissIosPopup(bool closePopup = true, bool restoreFocus = false)
     {
         if (!_iosSheetIsInfo) return;
+        _iosDetailsFocusRestoration = restoreFocus ? CreateDetailsFocusAction() : null;
         _iosSheetIsInfo = false;
         if (_popupViewer?.Parent is Grid layout) layout.Remove(_popupViewer);
         DismissIosSheet();
@@ -164,6 +166,8 @@ public partial class OrientedImageryView
     {
         // Defer a close during the native opening animation to its completion.
         if (_iosSheetPresenting) return;
+        var restoreFocus = _iosDetailsFocusRestoration;
+        _iosDetailsFocusRestoration = null;
         var controller = _iosSheet;
         var content = _iosSheetContent;
         var releaseDelegate = _releaseIosSheetDelegate;
@@ -183,6 +187,7 @@ public partial class OrientedImageryView
             _iosSheetClosing = false;
             // A new menu may have been requested during the dismissal animation.
             ShowIosSheet();
+            restoreFocus?.Invoke();
         }
         if (controller?.PresentingViewController != null)
         {
@@ -198,7 +203,7 @@ public partial class OrientedImageryView
         public override void DidDismiss(UIPresentationController presentationController)
         {
             if (owner._iosSheetIsInfo)
-                owner.DismissIosPopup();
+                owner.DismissIosPopup(restoreFocus: true);
             else
                 owner.DismissPanel();
         }
