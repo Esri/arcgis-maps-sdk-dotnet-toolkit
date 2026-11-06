@@ -1,6 +1,5 @@
 ﻿#if WINDOWS_XAML
 
-using Esri.ArcGISRuntime.Toolkit.Internal;
 using Microsoft.UI.Xaml.Automation.Peers;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
@@ -11,25 +10,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = MainErrorMessagePresenterName, Type = typeof(TextBlock))]
 [TemplatePart(Name = ImageDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
+[TemplatePart(Name = DismissTransientErrorButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
+    private void DismissTransientErrorButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { FocusState: not FocusState.Unfocused } button && ReferenceEquals(button, _dismissTransientErrorButton))
+            FocusManager.TryMoveFocus(FocusNavigationDirection.Next, new FindNextElementOptions { SearchRoot = XamlRoot.Content });
+
+        TransientErrorMessage = null;
+    }
+
     /// <inheritdoc/>
     protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewAutomationPeer(this);
 
     private void InitializeAccessibility_WinUI()
     {
-        Loaded += (_, _) => UpdateAccessibility_WinUI();
-        RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => UpdateAccessibility_WinUI());
+        Loaded += (_, _) => RefreshAccessibility_WinUI();
+        RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => RefreshAccessibility_WinUI());
+        RegisterPropertyChangedCallback(TransientErrorMessageProperty, (_, _) => UpdateTransientError_WinUI());
     }
 
-    private void UpdateAccessibility_WinUI()
+    private void RefreshAccessibility_WinUI()
     {
         if (!LoadedAndVisible())
             return;
 
         UpdateErrorMessages();
-        if (ErrorMessage != null)
-            ScreenReaderHelpers.RaiseLiveRegionChanged(_mainErrorMessagePresenter);
+        UpdateTransientError_WinUI();
+    }
+
+    private void UpdateTransientError_WinUI()
+    {
+        HasTransientError = TransientErrorMessage != null;
     }
 
     private sealed partial class OrientedImageryViewAutomationPeer : FrameworkElementAutomationPeer
@@ -54,12 +67,13 @@ public partial class OrientedImageryView : Control
         });
     }
 
+    // All these boolean properties we manually update are workarounds because WinUI x:Bind doesn't update when properties are set to null.
+    // The following PR should fix this, but it will need to hit release and that release will need to become our minimum version: https://github.com/microsoft/microsoft-ui-xaml/pull/11732
+    // Once this is fixed we can make VisibleWhenNotNull/VisibleWhenNull functions in the xaml code-behind directly without needing these properties
     private void UpdateViewState_WinUI()
     {
-        // WinUI x:Bind doesn't update when properties are set to null. This is a workaround until the following fix PR hits release: https://github.com/microsoft/microsoft-ui-xaml/pull/11732
         HasViewError = ErrorMessage != null;
         IsImageDetailsOpen = ViewModel.ImageDetailsPopup != null;
-        HasSequentialNavigationError = ViewModel.SequentialNavigationError != null;
     }
 
     internal bool HasViewError
@@ -80,14 +94,14 @@ public partial class OrientedImageryView : Control
     internal static readonly DependencyProperty IsImageDetailsOpenProperty =
         DependencyProperty.Register(nameof(IsImageDetailsOpen), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
 
-    internal bool HasSequentialNavigationError
+    internal bool HasTransientError
     {
-        get => (bool)GetValue(HasSequentialNavigationErrorProperty);
-        private set => SetValue(HasSequentialNavigationErrorProperty, value);
+        get => (bool)GetValue(HasTransientErrorProperty);
+        private set => SetValue(HasTransientErrorProperty, value);
     }
 
-    internal static readonly DependencyProperty HasSequentialNavigationErrorProperty =
-        DependencyProperty.Register(nameof(HasSequentialNavigationError), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
+    internal static readonly DependencyProperty HasTransientErrorProperty =
+        DependencyProperty.Register(nameof(HasTransientError), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
 
     private long _isBusyCallbackToken;
     private long _isInteractiveCallbackToken;

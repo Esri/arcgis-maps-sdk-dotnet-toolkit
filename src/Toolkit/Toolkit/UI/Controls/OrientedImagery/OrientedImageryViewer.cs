@@ -827,7 +827,7 @@ public partial class OrientedImageryViewer
 
     private void RewireDismissTransientErrorButton()
     {
-#if WPF
+#if WPF || WINDOWS_XAML
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click -= DismissTransientErrorButton_Click;
 
