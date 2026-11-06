@@ -32,6 +32,23 @@ public partial class OrientedImageryView : TemplatedView
     #region Initialization and public API
 
     /// <summary>
+    /// Raised when a tap is registered on the displayed image.
+    /// </summary>
+    /// <remarks>
+    /// Set <see cref="OrientedImageryViewImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// Toolkit-managed marker hits expose <see cref="OrientedImageTappedEventArgs.Marker"/> as <c>null</c>.
+    /// </remarks>
+    public event EventHandler<OrientedImageryViewImageTappedArgs>? ImageTapped;
+
+    /// <summary>
+    /// Raised when a tap is registered on the connected <see cref="GeoView"/>.
+    /// </summary>
+    /// <remarks>
+    /// Set <see cref="OrientedImageryViewGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// </remarks>
+    public event EventHandler<OrientedImageryViewGeoViewTappedArgs>? GeoViewTapped;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
     /// </summary>
     public OrientedImageryView()
