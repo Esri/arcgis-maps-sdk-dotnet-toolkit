@@ -4,7 +4,6 @@ using Microsoft.Maui.Layouts;
 using Microsoft.UI.Xaml.Input;
 using Windows.System;
 using Windows.UI.ViewManagement;
-using FocusState = Microsoft.UI.Xaml.FocusState;
 using NativeButton = Microsoft.UI.Xaml.Controls.Button;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -116,25 +115,6 @@ public partial class OrientedImageryView
     internal bool DesktopIsSearching => _searching;
     internal bool DesktopHasLayer => ViewModel.OrientedImageryLayer != null;
     internal static string DesktopText(string key) => Text(key);
-
-    #endregion
-
-    #region Keyboard focus
-
-    private void FocusDesktopPopup()
-    {
-        if (_popupCloseButton is not { } target || _nativeView?.XamlRoot is not { } root) return;
-        var popup = ViewModel.SelectedImagePopup;
-        var expectedFocus = FocusManager.GetFocusedElement(root);
-        Dispatcher.Dispatch(() =>
-        {
-            if (_connected && popup != null && popup == ViewModel.SelectedImagePopup &&
-                target == _popupCloseButton && _popupHost?.IsVisible == true &&
-                ReferenceEquals(FocusManager.GetFocusedElement(root), expectedFocus) &&
-                target.Handler?.PlatformView is NativeButton { IsLoaded: true } button)
-                button.Focus(FocusState.Keyboard);
-        });
-    }
 
     #endregion
 

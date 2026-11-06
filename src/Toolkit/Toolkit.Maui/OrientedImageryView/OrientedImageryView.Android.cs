@@ -99,7 +99,7 @@ public partial class OrientedImageryView
         if (_infoSheet != null) return;
         DismissPanel();
         var heading = PanelHeading(Text("ImageDetails"));
-        _infoSheetContent = CreateMobileSheetContent(heading, _popupViewer, () => DismissAndroidPopup(), null, out _, "OrientedImageryInfoSheet");
+        _infoSheetContent = CreateMobileSheetContent(heading, _popupViewer, CloseImageDetails, null, out _, "OrientedImageryInfoSheet");
         AddLogicalChild(_infoSheetContent);
         var nativeContent = _infoSheetContent.ToPlatform(context);
         using var frame = new Android.Graphics.Rect();
@@ -114,7 +114,7 @@ public partial class OrientedImageryView
         dialog.DismissEvent += (_, _) =>
         {
             if (_infoSheet == dialog)
-                DismissAndroidPopup();
+                DismissAndroidPopup(restoreFocus: true);
         };
         ShowAndroidSheet(dialog, nativeContent, width =>
         {
@@ -125,8 +125,9 @@ public partial class OrientedImageryView
         SemanticScreenReader.Default.Announce(heading.Text);
     }
 
-    private void DismissAndroidPopup(bool closePopup = true)
+    private void DismissAndroidPopup(bool closePopup = true, bool restoreFocus = false)
     {
+        var restore = restoreFocus ? CreateDetailsFocusAction() : null;
         var dialog = _infoSheet;
         _infoSheet = null;
         if (_infoSheetContent is { } content)
@@ -144,6 +145,7 @@ public partial class OrientedImageryView
         if (closePopup && ViewModel.SelectedImagePopup != null)
             ViewModel.CloseSelectedImagePopupCommand.Execute(null);
         UpdateBackNavigation();
+        restore?.Invoke();
     }
 
     #endregion
