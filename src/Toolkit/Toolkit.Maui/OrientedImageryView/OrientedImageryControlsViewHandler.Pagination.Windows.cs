@@ -4,6 +4,7 @@ using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Markup;
 using AutomationProperties = Microsoft.UI.Xaml.Automation.AutomationProperties;
 using CornerRadius = Microsoft.UI.Xaml.CornerRadius;
 using NativeButton = Microsoft.UI.Xaml.Controls.Button;
@@ -18,6 +19,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
 {
     #region Image pagination
 
+    private static Microsoft.UI.Xaml.Style? _unavailablePageStyle;
     private PaginationState? _paginationState;
 
     private readonly record struct PaginationState(bool Sequential, int Selected, int Start, int Count, int Total,
@@ -32,7 +34,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         double width = VirtualView.Width > 0 ? VirtualView.Width : owner.Width;
         var (start, count) = OrientedImageryPagination.GetRange(model.Images.Count, selected, Math.Max(35, width - 66), 35);
         var state = new PaginationState(model.IsSequentialNavigationEnabled, selected, start, count, model.Images.Count,
-            model.SelectPreviousImageCommand.CanExecute(null), model.SelectNextImageCommand.CanExecute(null), owner.DesktopIsSearching);
+            model.CanNavigatePrevious, model.CanNavigateNext, owner.DesktopIsSearching);
         if (_paginationState == state && _model == model) return;
         var row = PlatformView.Children.FirstOrDefault() as PaginationRow;
         var focused = _model != model || row == null || PlatformView.XamlRoot == null ? null :
@@ -82,13 +84,18 @@ internal sealed partial class OrientedImageryControlsViewHandler
         };
         NativeButton PageButton(bool next, bool label)
         {
-            var button = PaginationButton(label ? Text(next ? "NextLabel" : "PreviousLabel") : new FontIcon
+            var content = new TextBlock
             {
-                Glyph = next ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronLeft,
-                FontFamily = IconFont, FontSize = 16,
-            });
+                Text = label ? Text(next ? "NextLabel" : "PreviousLabel") : next ? ToolkitIcons.ChevronRight : ToolkitIcons.ChevronLeft,
+            };
+            var button = PaginationButton(content);
             if (label) button.Padding = new NativeThickness(4);
-            else button.Width = 33;
+            else
+            {
+                button.Width = 33;
+                content.FontFamily = IconFont;
+                content.FontSize = 16;
+            }
             button.IsTabStop = label;
             string id = next ? "OrientedImageryPaginatorNext" : "OrientedImageryPaginatorPrevious";
             Describe(button, owner.ImagePageActionKey(next), label ? id + "Label" : id);
@@ -136,14 +143,12 @@ internal sealed partial class OrientedImageryControlsViewHandler
 
     private static void UpdatePaginationRow(PaginationRow row, PaginationState state)
     {
-        var previous = (NativeButton)row.Children[0];
-        previous.IsEnabled = !state.Searching && state.Previous;
-        var next = (NativeButton)row.Children[row.Children.Count - 1];
-        next.IsEnabled = !state.Searching && state.Next;
+        UpdateDirectionButton((NativeButton)row.Children[0], state.Previous);
+        UpdateDirectionButton((NativeButton)row.Children[row.Children.Count - 1], state.Next);
         if (state.Sequential)
         {
-            ((NativeButton)row.Children[1]).IsEnabled = previous.IsEnabled;
-            ((NativeButton)row.Children[3]).IsEnabled = next.IsEnabled;
+            UpdateDirectionButton((NativeButton)row.Children[1], state.Previous);
+            UpdateDirectionButton((NativeButton)row.Children[3], state.Next);
             return;
         }
         for (int slot = 0; slot < state.Count; slot++)
@@ -159,6 +164,22 @@ internal sealed partial class OrientedImageryControlsViewHandler
             AutomationProperties.SetName(button, string.Format(CultureInfo.CurrentCulture,
                 Text(index == state.Selected ? "SelectedPageFormat" : "GoToPageFormat"), index + 1, state.Total));
             AutomationProperties.SetAutomationId(button, "OrientedImageryPage" + index.ToString(CultureInfo.InvariantCulture));
+        }
+
+        void UpdateDirectionButton(NativeButton button, bool available)
+        {
+            button.IsEnabled = !state.Searching && (state.Sequential || available);
+            var content = (TextBlock)button.Content;
+            // Style the content directly so hovering cannot make a boundary action look available.
+            if (state.Searching || !available)
+                content.Style = _unavailablePageStyle ??= (Microsoft.UI.Xaml.Style)XamlReader.Load(
+                    """
+                    <Style xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{ThemeResource ButtonForegroundDisabled}" />
+                    </Style>
+                    """);
+            else
+                content.ClearValue(FrameworkElement.StyleProperty);
         }
     }
 
