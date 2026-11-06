@@ -586,6 +586,7 @@ public partial class OrientedImageryView
     private const string NoImagesForLocationKey = "OrientedImageryViewNoImagesFound";
     private const string ImageLoadingKey = "OrientedImageryViewImageLoading";
     private const string ImageLoadedKey = "OrientedImageryViewImageLoaded";
+    private const string OrientedImageryViewAnnounceTransientErrorKey = "OrientedImageryViewAnnounceTransientError";
     private const string ImageStateActivityId = "OrientedImageryViewImageState";
     private bool _noImagesAnnouncementCanRepeat;
     private string? _lastNoImagesAnnouncement;
@@ -623,12 +624,21 @@ public partial class OrientedImageryView
     }
 
     private static readonly DependencyPropertyKey TransientErrorMessagePropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<string?, OrientedImageryView>(nameof(TransientErrorMessage));
+        PropertyHelper.CreateReadOnlyProperty<string?, OrientedImageryView>(nameof(TransientErrorMessage), null, OnTransientErrorMessageChanged);
 
     /// <summary>
     /// Identifies the <see cref="TransientErrorMessage" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty TransientErrorMessageProperty = PropertyHelper.GetProperty(TransientErrorMessagePropertyKey);
+
+    private static void OnTransientErrorMessageChanged(object? sender, string? _, string? newValue)
+    {
+        if (sender is OrientedImageryView oiView && newValue != null &&
+            Properties.Resources.GetString(OrientedImageryViewAnnounceTransientErrorKey) is string announcement)
+        {
+            oiView.RaiseImageStateNotification(announcement);
+        }
+    }
 
     /// <summary>
     /// Updates error messages and announces them if needed.

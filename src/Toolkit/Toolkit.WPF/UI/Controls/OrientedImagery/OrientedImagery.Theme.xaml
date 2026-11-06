@@ -1074,10 +1074,12 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-                                    <TextBlock MaxWidth="300"
-                                               Text="{Binding ElementName=PART_ImageViewport, Path=Error.Message}"
-                                               TextWrapping="Wrap"
-                                               AutomationProperties.LiveSetting="Assertive"/>
+                                    <toolkitPrimitives:AccessibleTextBlock MaxWidth="300"
+                                                                          Focusable="False"
+                                                                          KeyboardNavigation.IsTabStop="False"
+                                                                          Text="{Binding ElementName=PART_ImageViewport, Path=Error.Message}"
+                                                                          TextWrapping="Wrap"
+                                                                          AutomationProperties.LiveSetting="Assertive"/>
                                 </Border>
 
                                 <Button Style="{StaticResource ImageNavigationButtonStyle}"
@@ -1167,11 +1169,13 @@
                                         </Grid.ColumnDefinitions>
                                         <ScrollViewer Margin="0,0,8,0" VerticalAlignment="Center"
                                                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                                            <TextBlock Margin="0,4,0,4"
-                                                   FontSize="{internal:TextScaledFontSize FontSize=14}"
-                                                   Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TransientErrorMessage}"
-                                                   TextWrapping="NoWrap"
-                                                   AutomationProperties.LiveSetting="Assertive" />
+                                            <toolkitPrimitives:AccessibleTextBlock Margin="0,4,0,4"
+                                                                                  Focusable="False"
+                                                                                  KeyboardNavigation.IsTabStop="False"
+                                                                                  FontSize="{internal:TextScaledFontSize FontSize=14}"
+                                                                                  Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TransientErrorMessage}"
+                                                                                  TextWrapping="NoWrap"
+                                                                                  AutomationProperties.LiveSetting="Assertive" />
                                         </ScrollViewer>
                                         <Button x:Name="PART_DismissTransientErrorButton"
                                                 Grid.Column="1"
@@ -1249,15 +1253,17 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <TextBlock x:Name="PART_MainErrorMessagePresenter"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           MaxWidth="400"
-                                           Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}"
-                                           TextAlignment="Center"
-                                           LineHeight="30"
-                                           TextWrapping="Wrap"
-                                           AutomationProperties.LiveSetting="Assertive"/>
+                                <toolkitPrimitives:AccessibleTextBlock x:Name="PART_MainErrorMessagePresenter"
+                                                                      HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"
+                                                                      MaxWidth="400"
+                                                                      Focusable="False"
+                                                                      KeyboardNavigation.IsTabStop="False"
+                                                                      Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ErrorMessage}"
+                                                                      TextAlignment="Center"
+                                                                      LineHeight="30"
+                                                                      TextWrapping="Wrap"
+                                                                      AutomationProperties.LiveSetting="Assertive"/>
                             </Border>
 
                             <local:Paginator x:Name="PART_Paginator" HorizontalAlignment="Center" Grid.Row="2">

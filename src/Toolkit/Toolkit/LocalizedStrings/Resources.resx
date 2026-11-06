@@ -1212,92 +1212,6 @@ Image</value>
     <value>Close details</value>
     <comment>Tooltip for the button that closes the selected oriented image popup.</comment>
   </data>
-  <data name="OrientedImageryViewSwitchToFindImages" xml:space="preserve">
-    <value>Switch to find images mode</value>
-    <comment>Tooltip for the button that switches from image selection to image search mode.</comment>
-  </data>
-  <data name="OrientedImageryViewSwitchToDisplayImage" xml:space="preserve">
-    <value>Switch to display image mode</value>
-    <comment>Tooltip for the button that switches from image search to image selection mode.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
-    <value>Image search mode</value>
-    <comment>Tooltip for the image search mode selector.</comment>
-  </data>
-  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
-    <value>Current Footprint</value>
-    <comment>Toolbar label and automation name for the selected image footprint toggle.</comment>
-  </data>
-  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
-    <value>Additional Footprints</value>
-    <comment>Single-line automation name for the unselected image footprints toggle.</comment>
-  </data>
-  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Additional
-Footprints</value>
-    <comment>Same as OrientedImageryViewAdditionalFootprintsLabel, but with manual line breaks for formatting.</comment>
-  </data>
-  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
-    <value>Camera Locations</value>
-    <comment>Single-line automation name for the camera locations toggle.</comment>
-  </data>
-  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Camera
-Locations</value>
-    <comment>Same as OrientedImageryViewCameraLocationsLabel, but with manual line breaks for formatting.</comment>
-  </data>
-  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
-    <value>Add markers</value>
-    <comment>Single-line automation name for the marker-creation toggle.</comment>
-  </data>
-  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
-    <value>Add
-Markers</value>
-    <comment>Same as OrientedImageryViewAddMarkersLabel, but with manual line breaks for formatting.</comment>
-  </data>
-  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
-    <value>Clear Markers</value>
-    <comment>Single-line label (mobile-only) and automation name for the button that clears markers.</comment>
-  </data>
-  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
-    <value>Clear markers</value>
-    <comment>Single-line tooltip for desktop.</comment>
-  </data>
-  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
-    <value>Clear
-Markers</value>
-    <comment>Same as OrientedImageryViewClearMarkersLabel, but with manual line breaks for formatting.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
-    <value>Find Images</value>
-    <comment>Label for the mode that searches for oriented images that view a tapped location.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Find
-Images</value>
-    <comment>Same as OrientedImageryViewImageSearchModeFind, but with manual line breaks for formatting.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
-    <value>Display Image</value>
-    <comment>Label for the mode that displays individual tapped oriented images.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Display
-Image</value>
-    <comment>Same as OrientedImageryViewImageSearchModeDisplay, but with manual line breaks for formatting.</comment>
-  </data>
-  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
-    <value>Open details for selected image</value>
-    <comment>Tooltip for the button that opens the popup for the selected oriented image.</comment>
-  </data>
-  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
-    <value>Image details</value>
-    <comment>Heading of the selected oriented image information sheet.</comment>
-  </data>
-  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
-    <value>Close details</value>
-    <comment>Tooltip for the button that closes the selected oriented image popup.</comment>
-  </data>
   <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
     <value>Go to image {0} of {1}</value>
     <comment>Pagination automation name. {0} is the one-based image number; {1} is the total number of images.</comment>
@@ -1394,36 +1308,11 @@ Navigation</value>
   <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
     <value>No layer selected.</value>
   </data>
-  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
-    <value>or</value>
-    <comment>The "or" in "Enable [icon] or [icon] mode to search for images"</comment>
+  <data name="OrientedImageryViewAnnounceTransientError" xml:space="preserve">
+    <value>Error raised</value>
   </data>
-  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
-    <value>mode to search for images</value>
-    <comment>Final part of "Enable [icon] or [icon] mode to search for images"</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
-    <value>Tap on the map to search for images</value>
-    <comment>Instructions for Find Images mode.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
-    <value>Tap on a feature to view its image</value>
-    <comment>Instructions for Display Image mode.</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
-    <value>or switch to</value>
-    <comment>First part of "or switch to [icon] mode". Follows OrientedImageryViewImageSelectionDisplayImage/FindImages instructions. (e.g. "Tap on a feature to view its image or switch to [icon] mode")</comment>
-  </data>
-  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
-    <value>mode</value>
-    <comment>Last word in "or switch to [icon] mode"</comment>
-  </data>
-  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
-    <value>Connect a GeoView to view oriented imagery.</value>
-    <comment>Error shown by OrientedImageryView when no GeoView is connected.</comment>
-  </data>
-  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
-    <value>No layer selected.</value>
+  <data name="OrientedImageryViewDismissError" xml:space="preserve">
+    <value>Dismiss error</value>
   </data>
   <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
     <value>Prev</value>
