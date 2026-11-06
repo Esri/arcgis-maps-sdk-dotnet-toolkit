@@ -664,8 +664,8 @@
                 </Style>
             </ComboBox.ItemContainerStyle>
             <ComboBox.ItemTemplate>
-                <DataTemplate x:DataType="symbology:MarkerSymbol">
-                    <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind}" IsTabStop="False"/>
+                <DataTemplate x:DataType="controls:LabelledSymbol">
+                    <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind Symbol}" IsTabStop="False" AutomationProperties.Name="{Binding Label}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
@@ -795,7 +795,7 @@
                                         <Border
                                     Grid.ColumnSpan="3"
                                     Background="#80FFFFFF"
-                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenLoading(ViewModel.SelectedImage, IsImageViewportInteractive), Mode=OneWay}">
+                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(IsImageLoading), Mode=OneWay}">
                                             <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -807,7 +807,7 @@
                                     Height="2"
                                     VerticalAlignment="Top"
                                     IsIndeterminate="True"
-                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenBusy(ViewModel.SelectedImage, IsImageViewportBusy), Mode=OneWay}" />
+                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(IsImageLoading), Mode=OneWay}" />
 
                                 <Border
                                     Grid.ColumnSpan="3"
@@ -905,6 +905,7 @@
                                 </Border>
 
                                 <Button
+                                    x:Name="PART_ImageDetailsButton"
                                     Grid.ColumnSpan="3"
                                     Width="35"
                                     Height="35"
@@ -916,7 +917,7 @@
                                     VerticalAlignment="Top"
                                     Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
                                     Style="{StaticResource OrientedImageryToolbarButtonStyle}"
-                                    Command="{x:Bind ViewModel.OpenSelectedImagePopupCommand, Mode=OneWay}"
+                                    Command="{x:Bind ViewModel.OpenImageDetailsPopupCommand, Mode=OneWay}"
                                     Visibility="{TemplateBinding ImageNavigationVisibility}"
                                     AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}">
@@ -930,6 +931,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
+                                    IsEnabled="{x:Bind ViewModel.CanNavigatePrevious, Mode=OneWay}"
                                     Style="{StaticResource OrientedImageryNavigationButtonStyle}"
                                     Visibility="{TemplateBinding ImageNavigationVisibility}"
                                     AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
@@ -944,6 +946,7 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}"
+                                    IsEnabled="{x:Bind ViewModel.CanNavigateNext, Mode=OneWay}"
                                     Style="{StaticResource OrientedImageryNavigationButtonStyle}"
                                     Visibility="{TemplateBinding ImageNavigationVisibility}"
                                     AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
@@ -975,13 +978,13 @@
                                         <controls:PopupViewer
                                             Grid.Row="1"
                                             Margin="16,0,8,8"
-                                            Popup="{x:Bind ViewModel.SelectedImagePopup, Mode=OneWay}" />
+                                            Popup="{x:Bind ViewModel.ImageDetailsPopup, Mode=OneWay}" />
                                         <Button
                                             x:Name="PART_CloseDetailsButton"
                                             Margin="8"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Center"
-                                            Command="{x:Bind ViewModel.CloseSelectedImagePopupCommand, Mode=OneWay}"
+                                            Command="{x:Bind ViewModel.CloseImageDetailsPopupCommand, Mode=OneWay}"
                                             Style="{StaticResource OrientedImageryToolbarButtonStyle}"
                                             AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}"
                                             ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}">
@@ -1036,14 +1039,34 @@
                                     Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                     AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
-                                    <FontIcon Glyph="&#xe79f;" FontFamily="{StaticResource toolkit-icons}" FontSize="16" />
+                                    <Grid>
+                                        <!-- We never truly disable the sequential pagination buttons to make them keep keyboard focus, instead we just style them differently when CanNavigateX is false -->
+                                        <FontIcon
+                                            Glyph="&#xe79f;" FontFamily="{StaticResource toolkit-icons}" FontSize="16"
+                                            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.CanNavigatePrevious), Mode=OneWay}" />
+                                        <FontIcon
+                                            Glyph="&#xe79f;" FontFamily="{StaticResource toolkit-icons}" FontSize="16"
+                                            Foreground="{ThemeResource OrientedImageryDisabledForegroundBrush}"
+                                            Opacity="{ThemeResource OrientedImageryDisabledContentOpacity}"
+                                            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(ViewModel.CanNavigatePrevious), Mode=OneWay}" />
+                                    </Grid>
                                 </Button>
                                 <Button
-                                    Content="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
                                     AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
                                     Style="{StaticResource OrientedImageryPageButtonStyle}"
-                                    Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}" />
+                                    Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}">
+                                    <Grid>
+                                        <TextBlock
+                                            Text="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
+                                            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.CanNavigatePrevious), Mode=OneWay}" />
+                                        <TextBlock
+                                            Text="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
+                                            Foreground="{ThemeResource OrientedImageryDisabledForegroundBrush}"
+                                            Opacity="{ThemeResource OrientedImageryDisabledContentOpacity}"
+                                            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(ViewModel.CanNavigatePrevious), Mode=OneWay}" />
+                                    </Grid>
+                                </Button>
                                 <Grid Width="35" Height="32">
                                     <TextBlock Text="." HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     <Border
@@ -1053,11 +1076,21 @@
                                         Background="{ThemeResource OrientedImageryPageSelectedBrush}" />
                                 </Grid>
                                 <Button
-                                    Content="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
                                     AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                     Style="{StaticResource OrientedImageryPageButtonStyle}"
-                                    Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}" />
+                                    Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}">
+                                    <Grid>
+                                        <TextBlock
+                                            Text="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
+                                            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.CanNavigateNext), Mode=OneWay}" />
+                                        <TextBlock
+                                            Text="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
+                                            Foreground="{ThemeResource OrientedImageryDisabledForegroundBrush}"
+                                            Opacity="{ThemeResource OrientedImageryDisabledContentOpacity}"
+                                            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(ViewModel.CanNavigateNext), Mode=OneWay}" />
+                                    </Grid>
+                                </Button>
                                 <Button
                                     Style="{StaticResource OrientedImageryPageButtonStyle}"
                                     IsTabStop="False"
@@ -1065,7 +1098,16 @@
                                     Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}"
                                     ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
                                     AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
-                                    <FontIcon Glyph="&#xe7a0;" FontFamily="{StaticResource toolkit-icons}" FontSize="16" />
+                                    <Grid>
+                                        <FontIcon
+                                            Glyph="&#xe7a0;" FontFamily="{StaticResource toolkit-icons}" FontSize="16"
+                                            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.CanNavigateNext), Mode=OneWay}" />
+                                        <FontIcon
+                                            Glyph="&#xe7a0;" FontFamily="{StaticResource toolkit-icons}" FontSize="16"
+                                            Foreground="{ThemeResource OrientedImageryDisabledForegroundBrush}"
+                                            Opacity="{ThemeResource OrientedImageryDisabledContentOpacity}"
+                                            Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(ViewModel.CanNavigateNext), Mode=OneWay}" />
+                                    </Grid>
                                 </Button>
                             </StackPanel>
                             <TextBlock

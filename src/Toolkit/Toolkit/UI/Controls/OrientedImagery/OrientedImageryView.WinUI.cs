@@ -1,9 +1,7 @@
 ﻿#if WINDOWS_XAML
 
-using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Microsoft.UI.Xaml.Automation.Peers;
-using System.Collections.ObjectModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -11,11 +9,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
 [TemplatePart(Name = PaginatorName, Type = typeof(OrientedImageryPaginator))]
 [TemplatePart(Name = MainErrorMessagePresenterName, Type = typeof(TextBlock))]
+[TemplatePart(Name = ImageDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
-    private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
-
     /// <inheritdoc/>
     protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewAutomationPeer(this);
 
@@ -44,15 +41,13 @@ public partial class OrientedImageryView : Control
         protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("OrientedImageryViewAutomationTypeName")!;
     }
 
-    private void FocusCloseDetailsButton()
+    private void UpdateDetailsFocus()
     {
-        if (ViewModel.SelectedImagePopup == null)
-            return;
-
+        bool isPopupOpen = ViewModel.ImageDetailsPopup != null;
         DispatcherQueue.TryEnqueue(() =>
         {
-            if (ViewModel.SelectedImagePopup != null &&
-                GetTemplateChild(CloseDetailsButtonName) is Button { Visibility: Visibility.Visible, IsEnabled: true } button)
+            if ((ViewModel.ImageDetailsPopup != null) == isPopupOpen &&
+                GetTemplateChild(isPopupOpen ? CloseDetailsButtonName : ImageDetailsButtonName) is Button { Visibility: Visibility.Visible, IsEnabled: true } button)
             {
                 button.Focus(FocusState.Programmatic);
             }
@@ -63,7 +58,7 @@ public partial class OrientedImageryView : Control
     {
         // WinUI x:Bind doesn't update when properties are set to null. This is a workaround until the following fix PR hits release: https://github.com/microsoft/microsoft-ui-xaml/pull/11732
         HasViewError = ErrorMessage != null;
-        IsImageDetailsOpen = ViewModel.SelectedImagePopup != null;
+        IsImageDetailsOpen = ViewModel.ImageDetailsPopup != null;
         HasSequentialNavigationError = ViewModel.SequentialNavigationError != null;
     }
 
@@ -194,7 +189,7 @@ public partial class OrientedImageryView : Control
     {
         if (viewport != null)
         {
-            viewport.UnregisterPropertyChangedCallback(OrientedImageViewport.IsBusyProperty, _isBusyCallbackToken);
+            viewport.UnregisterPropertyChangedCallback(OrientedImageViewport.IsImageLoadingProperty, _isBusyCallbackToken);
             viewport.UnregisterPropertyChangedCallback(OrientedImageViewport.IsInteractiveProperty, _isInteractiveCallbackToken);
             viewport.UnregisterPropertyChangedCallback(OrientedImageViewport.ErrorProperty, _errorCallbackToken);
         }
@@ -206,7 +201,7 @@ public partial class OrientedImageryView : Control
     {
         if (viewport != null)
         {
-            _isBusyCallbackToken = viewport.RegisterPropertyChangedCallback(OrientedImageViewport.IsBusyProperty, OnViewportStateChanged);
+            _isBusyCallbackToken = viewport.RegisterPropertyChangedCallback(OrientedImageViewport.IsImageLoadingProperty, OnViewportStateChanged);
             _isInteractiveCallbackToken = viewport.RegisterPropertyChangedCallback(OrientedImageViewport.IsInteractiveProperty, OnViewportStateChanged);
             _errorCallbackToken = viewport.RegisterPropertyChangedCallback(OrientedImageViewport.ErrorProperty, OnViewportStateChanged);
         }
@@ -222,7 +217,7 @@ public partial class OrientedImageryView : Control
 
     private void UpdateViewportState()
     {
-        IsImageViewportBusy = _viewport?.IsBusy ?? false;
+        IsImageLoading = _viewport?.IsImageLoading ?? false;
         IsImageViewportInteractive = _viewport?.IsInteractive ?? false;
 
         var error = _viewport?.Error;
@@ -277,14 +272,14 @@ public partial class OrientedImageryView : Control
     internal static readonly DependencyProperty SequentialNavigationVisibilityProperty =
         DependencyProperty.Register(nameof(SequentialNavigationVisibility), typeof(Visibility), typeof(OrientedImageryView), new PropertyMetadata(Visibility.Collapsed));
         
-    internal bool IsImageViewportBusy
+    internal bool IsImageLoading
     {
         get => (bool)GetValue(IsImageViewportBusyProperty);
         private set => SetValue(IsImageViewportBusyProperty, value);
     }
 
     internal static readonly DependencyProperty IsImageViewportBusyProperty =
-        DependencyProperty.Register(nameof(IsImageViewportBusy), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
+        DependencyProperty.Register(nameof(IsImageLoading), typeof(bool), typeof(OrientedImageryView), new PropertyMetadata(false));
 
     internal bool IsImageViewportInteractive
     {
