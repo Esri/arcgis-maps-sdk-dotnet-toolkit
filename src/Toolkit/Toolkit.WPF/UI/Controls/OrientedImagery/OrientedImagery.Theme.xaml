@@ -15,12 +15,6 @@
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     <!-- Helper styles -->
-    <Style x:Key="OrientedImageryMessageTextStyle" TargetType="{x:Type toolkitPrimitives:AccessibleTextBlock}">
-        <Setter Property="Focusable" Value="True" />
-        <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />
-        <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}" />
-    </Style>
-
     <Style x:Key="OrientedImageryToolbarButtonBaseStyle" TargetType="{x:Type primitives:ButtonBase}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="MinWidth" Value="40" />
@@ -906,8 +900,7 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-                                    <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
-                                               HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Text="{internal:LocalizedString Key=OrientedImageryViewImageLoading}" />
                                 </Border>
@@ -959,8 +952,7 @@
                                                         <Setter.Value>
                                                             <!-- Prompt user to enable one of the image search interaction modes if currently in None state -->
                                                             <DataTemplate>
-                                                                <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
-                                                                           TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
                                                                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesNone}">
                                                                     <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
                                                                     <LineBreak />
@@ -976,7 +968,7 @@
                                                                         </Viewbox>
                                                                     </InlineUIContainer>
                                                                     <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMode}" />
-                                                                </toolkitPrimitives:AccessibleTextBlock>
+                                                                </TextBlock>
                                                             </DataTemplate>
                                                         </Setter.Value>
                                                     </Setter>
@@ -986,8 +978,7 @@
                                                             <Setter Property="ContentTemplate">
                                                                 <Setter.Value>
                                                                     <DataTemplate>
-                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
-                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
                                                                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesFind}">
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
                                                                             <LineBreak />
@@ -1000,7 +991,7 @@
                                                                                 </Viewbox>
                                                                             </InlineUIContainer>
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
-                                                                        </toolkitPrimitives:AccessibleTextBlock>
+                                                                        </TextBlock>
                                                                     </DataTemplate>
                                                                 </Setter.Value>
                                                             </Setter>
@@ -1011,8 +1002,7 @@
                                                             <Setter Property="ContentTemplate">
                                                                 <Setter.Value>
                                                                     <DataTemplate>
-                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
-                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
                                                                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSelectionNoImagesDisplay}">
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewNoImageToDisplay}" />
                                                                             <LineBreak />
@@ -1025,7 +1015,7 @@
                                                                                 </Viewbox>
                                                                             </InlineUIContainer>
                                                                             <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
-                                                                        </toolkitPrimitives:AccessibleTextBlock>
+                                                                        </TextBlock>
                                                                     </DataTemplate>
                                                                 </Setter.Value>
                                                             </Setter>
@@ -1036,8 +1026,7 @@
                                                             <Setter Property="ContentTemplate">
                                                                 <Setter.Value>
                                                                     <DataTemplate>
-                                                                        <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
-                                                                                   TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
+                                                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" LineHeight="30"
                                                                                    Text="{internal:LocalizedString Key=OrientedImageryViewNoImagesFound}" />
                                                                     </DataTemplate>
                                                                 </Setter.Value>
@@ -1068,8 +1057,7 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-                                    <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}"
-                                               MaxWidth="300"
+                                    <TextBlock MaxWidth="300"
                                                Text="{Binding ElementName=PART_ImageViewport, Path=Error.Message}"
                                                TextWrapping="Wrap"
                                                AutomationProperties.LiveSetting="Assertive"/>
@@ -1162,7 +1150,7 @@
                                         </Grid.ColumnDefinitions>
                                         <ScrollViewer Margin="0,0,8,0" VerticalAlignment="Center"
                                                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                                            <toolkitPrimitives:AccessibleTextBlock Style="{StaticResource OrientedImageryMessageTextStyle}" Margin="0,4,0,4"
+                                            <TextBlock Margin="0,4,0,4"
                                                    FontSize="{internal:TextScaledFontSize FontSize=14}"
                                                    Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TransientErrorMessage}"
                                                    TextWrapping="NoWrap"
@@ -1244,8 +1232,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <toolkitPrimitives:AccessibleTextBlock x:Name="PART_MainErrorMessagePresenter"
-                                           Style="{StaticResource OrientedImageryMessageTextStyle}"
+                                <TextBlock x:Name="PART_MainErrorMessagePresenter"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            MaxWidth="400"

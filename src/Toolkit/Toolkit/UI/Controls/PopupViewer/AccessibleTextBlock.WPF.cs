@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             get
             {
                 var tb = Owner as AccessibleTextBlock;
-                if (tb == null || (String.IsNullOrWhiteSpace(tb.Text) && String.IsNullOrWhiteSpace(AutomationProperties.GetName(tb))))
+                if (tb == null || String.IsNullOrWhiteSpace(tb.Text))
                     return false;
 
                 return tb.IsAccessible;
