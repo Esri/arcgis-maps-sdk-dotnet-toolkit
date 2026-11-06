@@ -931,6 +931,17 @@ public partial class OrientedImageryView
         ToolTipProperties.SetText(button, name);
     }
 
+    private void SetPaginatorButtonState(Button? button, bool next, bool available, bool visible)
+    {
+        if (button == null) return;
+        // Boundary actions stay enabled so repeated attempts can announce the boundary.
+        SetImagePageButtonState(button, next, !_searching && (ViewModel.IsSequentialNavigationEnabled || available), visible);
+        bool dimmed = _searching || !available;
+        button.SetAppThemeColor(Button.TextColorProperty, dimmed ? Colors.Gray : Colors.Black, dimmed ? Colors.Gray : Colors.White);
+        if (button.ImageSource is FontImageSource icon)
+            icon.Color = dimmed ? Colors.Gray : Color.FromArgb("#007AC2");
+    }
+
 #if ANDROID
     private static void ExcludeImageArrow(object? sender, EventArgs e)
     {
@@ -958,8 +969,8 @@ public partial class OrientedImageryView
 
     private void RefreshPageItems()
     {
-        bool canGoPrevious = ViewModel.SelectPreviousImageCommand.CanExecute(null);
-        bool canGoNext = ViewModel.SelectNextImageCommand.CanExecute(null);
+        bool canGoPrevious = ViewModel.CanNavigatePrevious;
+        bool canGoNext = ViewModel.CanNavigateNext;
 #if WINDOWS
         if (_desktopPagination != null)
         {
@@ -975,8 +986,8 @@ public partial class OrientedImageryView
 #endif
         SetImagePageButtonState(_imagePreviousButton, false, !_searching && canGoPrevious, visible);
         SetImagePageButtonState(_imageNextButton, true, !_searching && canGoNext, visible);
-        SetImagePageButtonState(_previousButton, false, !_searching && canGoPrevious, visible);
-        SetImagePageButtonState(_nextButton, true, !_searching && canGoNext, visible);
+        SetPaginatorButtonState(_previousButton, false, canGoPrevious, visible);
+        SetPaginatorButtonState(_nextButton, true, canGoNext, visible);
         if (_pages == null) return;
         foreach (var button in new[] { _previousButton, _nextButton })
         {
@@ -1002,7 +1013,9 @@ public partial class OrientedImageryView
 #if ANDROID || __IOS__
         string value = ViewModel.IsSequentialNavigationEnabled ? Text("SequenceNavigation") :
             selected >= 0 ? string.Format(CultureInfo.CurrentCulture, Text("Page"), selected + 1, ViewModel.Images.Count) : Text("ImageNavigation");
-        _mobilePagination?.Update(value, !_searching && canGoPrevious, !_searching && canGoNext);
+        _mobilePagination?.Update(value,
+            !_searching && (ViewModel.IsSequentialNavigationEnabled || canGoPrevious),
+            !_searching && (ViewModel.IsSequentialNavigationEnabled || canGoNext));
 #endif
         const double pageWidth = 22;
         double available = Width > 0 ? Math.Max(pageWidth, Width - 104) : 7 * pageWidth;
@@ -1050,10 +1063,10 @@ public partial class OrientedImageryView
         {
             var previous = (Button)_pages.Children[0];
             previous.Text = Text("PreviousLabel");
-            SetImagePageButtonState(previous, false, !_searching && canGoPrevious, true);
+            SetPaginatorButtonState(previous, false, canGoPrevious, true);
             var next = (Button)_pages.Children[2];
             next.Text = Text("NextLabel");
-            SetImagePageButtonState(next, true, !_searching && canGoNext, true);
+            SetPaginatorButtonState(next, true, canGoNext, true);
             return;
         }
 
