@@ -42,9 +42,10 @@ internal sealed partial class OrientedImageryControlsViewHandler
             {
                 ImageSearchModeVM mode => ModePicker(owner, mode),
                 ToolbarDividerVM => Divider(),
-                ShowSelectedFootprintVM => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintStackedLabel",
+                ShowSelectedFootprintVM footprint => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintStackedLabel",
                     Geometry(OrientedImageryView.CurrentFootprintGeometry),
                     () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value,
+                    () => footprint.Enabled,
                     automationId: "OrientedImageryDesktopCurrentFootprint"),
                 ShowUnselectedFootprintsVM => Toggle(owner, "ShowUnselectedImageFootprints", "AdditionalFootprintsStackedLabel",
                     Geometry(OrientedImageryView.OverlayGeometry),

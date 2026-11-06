@@ -411,10 +411,10 @@ public partial class OrientedImageryView
                 }
 #endif
                 break;
-            case ShowSelectedFootprintVM:
+            case ShowSelectedFootprintVM footprint:
                 AddSwitch(content, "MobileCurrentFootprint",
                     () => ViewModel.ShowSelectedFootprint, value => ViewModel.ShowSelectedFootprint = value,
-                    () => GeometryIcon(CurrentFootprintGeometry), Enabled);
+                    () => GeometryIcon(CurrentFootprintGeometry), () => Enabled() && footprint.Enabled);
                 break;
             case ShowUnselectedFootprintsVM:
                 AddSwitch(content, "MobileAdditionalFootprints",
