@@ -430,10 +430,10 @@ public partial class OrientedImageryView
                 AddSwitch(content, "AddMarkersLabel", () => IsAddingMarkers, SetAddingMarkers, () => GlyphIcon("\uE8ED"), Enabled, "OrientedImageryAddMarkerLabel");
                 break;
             case SelectNewMarkerSymbolVM picker:
-                var preview = new SymbolDisplay { Symbol = picker.SelectedSymbol, WidthRequest = 24, HeightRequest = 24 };
+                var preview = new SymbolDisplay { Symbol = picker.SelectedSymbol.Symbol, WidthRequest = 24, HeightRequest = 24 };
                 AddActionRow(content, new MenuAction(Text("MobileSelectMarkerSymbol"), () => ShowSymbols(anchor, picker, back),
                     Icon: () => preview, IsSubmenu: true, Enabled: () => Enabled() && IsAddingMarkers));
-                _panelUpdates.Add(() => preview.Symbol = picker.SelectedSymbol);
+                _panelUpdates.Add(() => preview.Symbol = picker.SelectedSymbol.Symbol);
                 System.ComponentModel.PropertyChangedEventHandler changed = (_, _) => DispatchUpdate(UpdateOpenPanel);
                 picker.PropertyChanged += changed;
                 _panelCleanup.Add(() => picker.PropertyChanged -= changed);

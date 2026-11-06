@@ -1,5 +1,4 @@
 #if WINDOWS
-using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -14,6 +13,7 @@ using NativeThickness = Microsoft.UI.Xaml.Thickness;
 using NativeVisibility = Microsoft.UI.Xaml.Visibility;
 using NativeView = Microsoft.UI.Xaml.FrameworkElement;
 using SolidColorBrush = Microsoft.UI.Xaml.Media.SolidColorBrush;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -321,7 +321,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         var combo = CreateToolbarSelector(true);
         Describe(combo, "SelectMarkerSymbol", "OrientedImageryDesktopSelectMarkers");
         _cleanup.Add(() => combo.IsDropDownOpen = false);
-        MarkerSymbol[] symbols = [];
+        LabelledSymbol[] symbols = [];
         combo.SelectionChanged += (_, _) =>
         {
             if (!_updating && combo.IsEnabled && combo.SelectedIndex >= 0 && combo.SelectedIndex < symbols.Length)
@@ -336,16 +336,15 @@ internal sealed partial class OrientedImageryControlsViewHandler
             foreach (var symbol in symbols)
             {
                 var image = new Microsoft.UI.Xaml.Controls.Image { Width = 32, Height = 32 };
-                string name = OrientedImageryView.MarkerOptionName(symbol, combo.Items.Count);
                 var item = new ComboBoxItem
                 {
                     Content = image, Padding = new NativeThickness(4),
                     MinWidth = 40, MinHeight = 40,
                     HorizontalContentAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
                 };
-                AutomationProperties.SetName(item, name);
+                AutomationProperties.SetName(item, symbol.Label);
                 combo.Items.Add(item);
-                _ = RenderSymbolAsync(owner, symbol, image, _generation);
+                _ = RenderSymbolAsync(owner, symbol.Symbol, image, _generation);
             }
         }
         System.ComponentModel.PropertyChangedEventHandler changed = (_, _) => Refresh();
@@ -366,7 +365,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         return combo;
     }
 
-    private async Task RenderSymbolAsync(OrientedImageryView owner, MarkerSymbol symbol, Microsoft.UI.Xaml.Controls.Image image, int generation)
+    private async Task RenderSymbolAsync(OrientedImageryView owner, Symbol symbol, Microsoft.UI.Xaml.Controls.Image image, int generation)
     {
         try
         {
