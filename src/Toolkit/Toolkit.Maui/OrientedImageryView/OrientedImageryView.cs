@@ -52,7 +52,8 @@ public partial class OrientedImageryView : TemplatedView
     /// </summary>
     /// <remarks>
     /// Setting <see cref="GeoView"/> to <c>null</c> detaches the marker overlay and viewer presentation
-    /// without clearing the layer, images, or markers on <see cref="ViewModel"/>.
+    /// and sets <see cref="OrientedImageryViewModel.OrientedImageryLayer"/> on <see cref="ViewModel"/> to <c>null</c>,
+    /// clearing its images, footprints, and markers.
     /// The application manages layer loading, map or scene membership, visibility, and viewpoint.
     /// </remarks>
     public GeoView? GeoView
@@ -66,7 +67,13 @@ public partial class OrientedImageryView : TemplatedView
     /// </summary>
     public static readonly BindableProperty GeoViewProperty = BindableProperty.Create(
         nameof(GeoView), typeof(GeoView), typeof(OrientedImageryView), null,
-        propertyChanged: (s, _, _) => ((OrientedImageryView)s).Reconnect());
+        propertyChanged: (s, _, newValue) =>
+        {
+            var view = (OrientedImageryView)s;
+            view.Reconnect();
+            if (newValue == null)
+                view.ViewModel.OrientedImageryLayer = null;
+        });
 
     /// <summary>
     /// Gets or sets the view model for the oriented imagery view.
