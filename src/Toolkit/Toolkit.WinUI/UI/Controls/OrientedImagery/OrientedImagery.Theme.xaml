@@ -730,7 +730,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <controls:OrientedImageryToolbarPanel />
+                    <StackPanel Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -773,11 +773,19 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <ItemsControl
-                                x:Name="PART_ToolbarContainer"
+                            <ScrollViewer
+                                HorizontalScrollBarVisibility="Auto"
+                                HorizontalScrollMode="Enabled"
                                 IsTabStop="False"
-                                Style="{StaticResource ToolbarContainerStyle}"
-                                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(HasViewError), Mode=OneWay}" />
+                                VerticalScrollBarVisibility="Disabled"
+                                VerticalScrollMode="Disabled"
+                                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(HasViewError), Mode=OneWay}">
+                                <ItemsControl
+                                    x:Name="PART_ToolbarContainer"
+                                    Margin="0,0,0,16"
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource ToolbarContainerStyle}" />
+                            </ScrollViewer>
 
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
