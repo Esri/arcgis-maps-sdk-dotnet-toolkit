@@ -191,7 +191,7 @@ public partial class OrientedImageryView
                     TransientErrorMessage = ViewModel.SequentialNavigationError?.Message;
                 break;
 #if WPF
-            case nameof(OrientedImageryViewModel.SelectedImagePopup):
+            case nameof(OrientedImageryViewModel.ImageDetailsPopup):
                 UpdateDetailsFocus();
                 break;
 #endif

@@ -72,11 +72,11 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         ClearMarkersCommand = new Command(
             execute: () => Markers.Clear(),
             canExecute: () => Markers.Count > 0);
-        OpenSelectedImagePopupCommand = new Command(
-            execute: SetSelectedImagePopup,
+        OpenImageDetailsPopupCommand = new Command(
+            execute: SetImageDetailsPopup,
             canExecute: () => SelectedImage != null );
-        CloseSelectedImagePopupCommand = new Command(
-            execute: () => SelectedImagePopup = null,
+        CloseImageDetailsPopupCommand = new Command(
+            execute: () => ImageDetailsPopup = null,
             canExecute: () => true);
     }
 
@@ -162,7 +162,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private ReadOnlyCollection<OrientedImage> _readOnlyImages;
     private OrientedImage? _selectedImage;
     private OrientedImageFootprint? _selectedImageFootprint;
-    private Popup? _selectedImagePopup;
+    private Popup? _imageDetailsPopup;
     private bool _isSequentialNavigationEnabled;
     private bool _isFetchingAdjacentImage;
     private Task? _adjacentImagesFetchTask;
@@ -218,41 +218,41 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
             UpdateVisibleFootprints();
             UpdateCameraMarkers();
-            SelectedImagePopup = null;
+            ImageDetailsPopup = null;
 
             ResetSequentialNavigationState();
             UpdateNavigationState();
             if (IsSequentialNavigationEnabled)
                 _ = PrefetchAdjacentImagesAsync();
 
-            ((Command)OpenSelectedImagePopupCommand).ChangeCanExecute();
+            ((Command)OpenImageDetailsPopupCommand).ChangeCanExecute();
         }
     }
 
     /// <summary>
-    /// Gets the popup for the currently selected image, or <see langword="null"/> when the popup is closed.
+    /// Gets a fields-only popup created from the selected <see cref="OrientedImage"/>, or <see langword="null"/> when the popup is closed.
     /// </summary>
-    public Popup? SelectedImagePopup
+    public Popup? ImageDetailsPopup
     {
-        get => _selectedImagePopup;
-        private set => SetProperty(ref _selectedImagePopup, value);
+        get => _imageDetailsPopup;
+        private set => SetProperty(ref _imageDetailsPopup, value);
     }
 
     /// <summary>
     /// Gets the command that opens the popup for the currently selected image.
     /// </summary>
-    public ICommand OpenSelectedImagePopupCommand { get; }
+    public ICommand OpenImageDetailsPopupCommand { get; }
 
     /// <summary>
     /// Gets the command that closes the selected image popup.
     /// </summary>
-    public ICommand CloseSelectedImagePopupCommand { get; }
+    public ICommand CloseImageDetailsPopupCommand { get; }
 
-    private void SetSelectedImagePopup()
+    private void SetImageDetailsPopup()
     {
         if (SelectedImage is null)
         {
-            SelectedImagePopup = null;
+            ImageDetailsPopup = null;
             return;
         }
 
@@ -262,7 +262,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             graphic.Attributes[attribute.Key] = attribute.Value;
         }
 
-        SelectedImagePopup = Popup.FromGeoElement(graphic);
+        ImageDetailsPopup = Popup.FromGeoElement(graphic);
     }
 
     /// <summary>
