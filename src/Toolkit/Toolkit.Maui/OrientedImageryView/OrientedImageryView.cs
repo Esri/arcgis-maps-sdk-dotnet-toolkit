@@ -317,7 +317,7 @@ public partial class OrientedImageryView : TemplatedView
                 });
                 break;
             case nameof(OrientedImageryViewModel.SearchPoint):
-            case nameof(OrientedImageryViewModel.SelectedImageFootprint):
+            case nameof(OrientedImageryViewModel.SelectedImage):
                 DispatchUpdate(() =>
                 {
                     Refresh();
