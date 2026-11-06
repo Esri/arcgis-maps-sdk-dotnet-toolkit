@@ -19,6 +19,8 @@ internal sealed partial class NotNullToBooleanConverter : IValueConverter
         => throw new NotSupportedException();
 }
 
+// By default comboboxes don't trigger an update when clicking on an already-selected dropdown item. In our case we do want it to trigger
+// so we can set the actual ViewModel.InteractionState if it got changed by another control in the meantime
 internal static class ImageSearchModeSelectionBehavior
 {
     private static readonly PointerEventHandler PointerPressedHandler = Item_PointerPressed;

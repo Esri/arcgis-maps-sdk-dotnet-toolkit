@@ -960,7 +960,7 @@
                                                 TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
 
                                         <!-- User prompts when no image is selected -->
-                                        <ContentControl x:Name="PART_NoImagesPromptPresenter" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}"
+                                        <ContentControl Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}"
                                                         Focusable="False" IsTabStop="False">
                                             <ContentControl.Style>
                                                 <Style TargetType="{x:Type ContentControl}">
