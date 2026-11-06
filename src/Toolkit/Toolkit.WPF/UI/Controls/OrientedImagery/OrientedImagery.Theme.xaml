@@ -243,6 +243,14 @@
                 <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
             </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsHighlighted, RelativeSource={RelativeSource Self}}" Value="True" />
+                    <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="False" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            </MultiDataTrigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
@@ -604,10 +612,19 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <ToggleButton IsChecked="{Binding IsImageSelectionEnabled}"
-                          TabIndex="0" MinWidth="0" Padding="0,4"
-                          Style="{StaticResource ToolbarLabeledToggleButtonStyle}"
-                          AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
-                          ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                          TabIndex="0" MinWidth="0" Padding="0,4">
+                <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToolbarLabeledToggleButtonStyle}">
+                        <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeDisplay}" />
+                        <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeDisplay}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedInteractionState}" Value="{x:Static controls:OrientedImageryViewInteractionState.FindImages}">
+                                <Setter Property="AutomationProperties.Name" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeFind}" />
+                                <Setter Property="ToolTip" Value="{internal:LocalizedString Key=OrientedImageryViewImageSearchModeFind}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
                 <StackPanel>
                     <Viewbox Width="32" Height="32" Stretch="Uniform">
                         <ContentControl Content="{Binding SelectedInteractionState}"
