@@ -771,7 +771,6 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <ItemsControl
@@ -834,7 +833,7 @@
                                                 LineHeight="30"
                                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenImageSelectionDisabled(ViewModel.InteractionState), Mode=OneWay}">
                                                 <Paragraph>
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewEnableImageSelection}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionEnable}" />
                                                     <InlineUIContainer>
                                                         <Viewbox Width="24" Height="24" Margin="4,0">
                                                             <ContentControl IsTabStop="False" ContentTemplate="{StaticResource FindImagesIconTemplate}" />
@@ -955,6 +954,50 @@
                                         <PathIcon Data="M12 5.9 22.1 16 12 26.1z" />
                                     </Viewbox>
                                 </Button>
+                                <Border
+                                    Grid.ColumnSpan="3"
+                                    Margin="16,12,16,0"
+                                    Padding="16,4,8,8"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Top"
+                                    Background="{ThemeResource OrientedImageryDisplayBackgroundBrush}"
+                                    BorderBrush="{ThemeResource OrientedImageryOverlayBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="24"
+                                    Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(HasTransientError), Mode=OneWay}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ScrollViewer
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            HorizontalScrollBarVisibility="Auto"
+                                            HorizontalScrollMode="Enabled"
+                                            IsTabStop="False"
+                                            VerticalScrollBarVisibility="Disabled"
+                                            VerticalScrollMode="Disabled">
+                                            <!-- Reserve space for the expanded overlay scrollbar. -->
+                                            <TextBlock
+                                                Margin="0,4,0,16"
+                                                AutomationProperties.LiveSetting="Assertive"
+                                                FontSize="14"
+                                                Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                                Text="{x:Bind TransientErrorMessage, Mode=OneWay}"
+                                                TextWrapping="NoWrap" />
+                                        </ScrollViewer>
+                                        <Button
+                                            x:Name="PART_DismissTransientErrorButton"
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource OrientedImageryToolbarButtonStyle}"
+                                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewDismissError}"
+                                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewDismissError}">
+                                            <FontIcon Glyph="&#xeb49;" FontSize="16" FontFamily="{StaticResource toolkit-icons}" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
                             </Grid>
 
                             <Grid
@@ -1110,13 +1153,6 @@
                                     </Grid>
                                 </Button>
                             </StackPanel>
-                            <TextBlock
-                                Grid.Row="3"
-                                Margin="8,0,8,4"
-                                Text="{x:Bind ViewModel.SequentialNavigationError.Message, Mode=OneWay}"
-                                TextAlignment="Center"
-                                TextWrapping="Wrap"
-                                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(HasSequentialNavigationError), Mode=OneWay}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
