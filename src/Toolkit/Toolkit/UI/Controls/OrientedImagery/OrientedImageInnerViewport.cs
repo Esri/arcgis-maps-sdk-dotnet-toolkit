@@ -45,7 +45,7 @@ internal abstract class OrientedImageInnerViewport
     private CancellationTokenSource? _updateCts;
     private int _lookAtCalls; // A LookAtAsync call that sees a newer count reports false
     private MapPoint? _heldLookAt;
-    private Task _present = Task.CompletedTask; // the current session's SetFootprintAsync
+    private Task _present = Task.CompletedTask; // completes when the current session ends
     private bool _autoUpdate;
     private bool _isLoading; // from the load through the first footprint update
     private DateTime _lastFootprintUpdate; // MinValue, so the first update runs at once
@@ -90,11 +90,23 @@ internal abstract class OrientedImageInnerViewport
         _sessionCts?.Cancel();
         var session = new CancellationTokenSource();
         _sessionCts = session;
-        Task present = SetFootprintAsync(footprint, session.Token);
 
-        // A state handler can start another session before this one's first await, so only the newest task is kept.
-        if (ReferenceEquals(_sessionCts, session))
-            _present = present;
+        // Set first, because a state handler can call LookAtAsync or SetFootprint before the session's first await.
+        var ended = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        _present = ended.Task;
+        _ = RunSessionAsync(footprint, session.Token, ended);
+    }
+
+    private async Task RunSessionAsync(OrientedImageFootprint? footprint, CancellationToken token, TaskCompletionSource ended)
+    {
+        try
+        {
+            await SetFootprintAsync(footprint, token);
+        }
+        finally
+        {
+            ended.TrySetResult();
+        }
     }
 
     public void SetMarkers(IEnumerable<OrientedImageMarker>? markers)
