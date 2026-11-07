@@ -2,90 +2,6 @@
 
 namespace Esri.ArcGISRuntime.Toolkit;
 
-internal sealed partial class ImageSearchModeLabelConverter : IValueConverter
-{
-    public object? Convert(object value, Type targetType, object parameter, string language)
-        => OrientedImageryResources.ImageSearchModeLabel((OrientedImageryViewInteractionState)value);
-
-    public object ConvertBack(object value, Type targetType, object parameter, string language)
-        => throw new NotSupportedException();
-}
-
-internal sealed partial class NotNullToBooleanConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object parameter, string language) => value is not null;
-
-    public object ConvertBack(object value, Type targetType, object parameter, string language)
-        => throw new NotSupportedException();
-}
-
-internal sealed partial class ImageSearchModeIconTemplateSelector : DataTemplateSelector
-{
-    public DataTemplate? DisplayImageTemplate { get; set; }
-
-    public DataTemplate? FindImagesTemplate { get; set; }
-
-    protected override DataTemplate SelectTemplateCore(object item)
-        => (item is OrientedImageryViewInteractionState.FindImages ? FindImagesTemplate : DisplayImageTemplate)
-            ?? base.SelectTemplateCore(item);
-
-    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
-        => SelectTemplateCore(item);
-}
-
-// By default comboboxes don't trigger an update when clicking on an already-selected dropdown item. In our case we do want it to trigger
-// so we can set the actual ViewModel.InteractionState if it got changed by another control in the meantime
-internal static class ImageSearchModeSelectionBehavior
-{
-    private static readonly PointerEventHandler PointerPressedHandler = Item_PointerPressed;
-    private static readonly KeyEventHandler KeyEventHandler = Item_KeyDown;
-
-    public static readonly DependencyProperty RepeatSelectionProperty = DependencyProperty.RegisterAttached(
-        "RepeatSelection", typeof(bool), typeof(ImageSearchModeSelectionBehavior), new PropertyMetadata(false, OnRepeatSelectionChanged));
-
-    public static bool GetRepeatSelection(DependencyObject element) => (bool)element.GetValue(RepeatSelectionProperty);
-
-    public static void SetRepeatSelection(DependencyObject element, bool value) => element.SetValue(RepeatSelectionProperty, value);
-
-    private static void OnRepeatSelectionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-    {
-        if (sender is ComboBoxItem item)
-        {
-            if ((bool)e.NewValue)
-            {
-                item.AddHandler(UIElement.PointerPressedEvent, PointerPressedHandler, true);
-                item.AddHandler(UIElement.KeyDownEvent, KeyEventHandler, true);
-            }
-            else
-            {
-                item.RemoveHandler(UIElement.PointerPressedEvent, PointerPressedHandler);
-                item.RemoveHandler(UIElement.KeyDownEvent, KeyEventHandler);
-            }
-        }
-    }
-
-    private static void Item_PointerPressed(object sender, PointerRoutedEventArgs e)
-    {
-        if (e.GetCurrentPoint((UIElement)sender).Properties.IsLeftButtonPressed)
-            RepeatSelection(sender);
-    }
-
-    private static void Item_KeyDown(object sender, KeyRoutedEventArgs e)
-    {
-        if (e.Key is Windows.System.VirtualKey.Enter or Windows.System.VirtualKey.Space)
-            RepeatSelection(sender);
-    }
-
-    private static void RepeatSelection(object sender)
-    {
-        if (sender is ComboBoxItem { IsSelected: true, Content: OrientedImageryViewInteractionState } item &&
-            ItemsControl.ItemsControlFromItemContainer(item) is ComboBox { DataContext: ImageSearchModeVM viewModel })
-        {
-            viewModel.IsImageSelectionEnabled = true;
-        }
-    }
-}
-
 internal sealed partial class OrientedImageryResources : ResourceDictionary
 {
     public OrientedImageryResources()
@@ -153,13 +69,42 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
 
     public static Visibility VisibleWhenFalse(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
 
-    public static string? SequentialNavigationToolTip(bool isSequential)
-        => Properties.Resources.GetString(isSequential ? "OrientedImageryViewReturnToResults" : "OrientedImageryViewEnterSequentialNavigation");
-
-    public static string? SequentialNavigationAutomationName(bool isSequential)
-        => Properties.Resources.GetString(isSequential ? "OrientedImageryViewReturnToResults" : "OrientedImageryViewSequentialNavigationLabel");
 }
 
+#region Converters
+internal sealed partial class ImageSearchModeLabelConverter : IValueConverter
+{
+    public object? Convert(object value, Type targetType, object parameter, string language)
+        => OrientedImageryResources.ImageSearchModeLabel((OrientedImageryViewInteractionState)value);
+
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+        => throw new NotSupportedException();
+}
+
+internal sealed partial class NotNullToBooleanConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object parameter, string language) => value is not null;
+
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+        => throw new NotSupportedException();
+}
+
+internal sealed partial class ImageSearchModeIconTemplateSelector : DataTemplateSelector
+{
+    public DataTemplate? DisplayImageTemplate { get; set; }
+
+    public DataTemplate? FindImagesTemplate { get; set; }
+
+    protected override DataTemplate SelectTemplateCore(object item)
+        => (item is OrientedImageryViewInteractionState.FindImages ? FindImagesTemplate : DisplayImageTemplate)
+            ?? base.SelectTemplateCore(item);
+
+    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+        => SelectTemplateCore(item);
+}
+#endregion Converters
+
+#region PseudoConverters
 /// <summary>
 /// The attached properties in this class are a workaround for a WinUI x:Bind behavior/bug where values aren't updated properly when set to null.
 /// If this wasn't the case we would be using all static methods as defined in the <see cref="OrientedImageryResources"/> code-behind as seen earlier in this file.
@@ -205,3 +150,59 @@ internal static class NullVisibility
         ((UIElement)element).Visibility = value ? Visibility.Visible : Visibility.Collapsed;
     }
 }
+#endregion PseudoConverters
+
+#region ImageSearchModeComboBox
+// By default comboboxes don't trigger an update when clicking on an already-selected dropdown item. In our case we do want it to trigger
+// so we can set the actual ViewModel.InteractionState if it got changed by another control in the meantime
+internal static class ImageSearchModeSelectionBehavior
+{
+    private static readonly PointerEventHandler PointerPressedHandler = Item_PointerPressed;
+    private static readonly KeyEventHandler KeyEventHandler = Item_KeyDown;
+
+    public static readonly DependencyProperty RepeatSelectionProperty = DependencyProperty.RegisterAttached(
+        "RepeatSelection", typeof(bool), typeof(ImageSearchModeSelectionBehavior), new PropertyMetadata(false, OnRepeatSelectionChanged));
+
+    public static bool GetRepeatSelection(DependencyObject element) => (bool)element.GetValue(RepeatSelectionProperty);
+
+    public static void SetRepeatSelection(DependencyObject element, bool value) => element.SetValue(RepeatSelectionProperty, value);
+
+    private static void OnRepeatSelectionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is ComboBoxItem item)
+        {
+            if ((bool)e.NewValue)
+            {
+                item.AddHandler(UIElement.PointerPressedEvent, PointerPressedHandler, true);
+                item.AddHandler(UIElement.KeyDownEvent, KeyEventHandler, true);
+            }
+            else
+            {
+                item.RemoveHandler(UIElement.PointerPressedEvent, PointerPressedHandler);
+                item.RemoveHandler(UIElement.KeyDownEvent, KeyEventHandler);
+            }
+        }
+    }
+
+    private static void Item_PointerPressed(object sender, PointerRoutedEventArgs e)
+    {
+        if (e.GetCurrentPoint((UIElement)sender).Properties.IsLeftButtonPressed)
+            RepeatSelection(sender);
+    }
+
+    private static void Item_KeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        if (e.Key is Windows.System.VirtualKey.Enter or Windows.System.VirtualKey.Space)
+            RepeatSelection(sender);
+    }
+
+    private static void RepeatSelection(object sender)
+    {
+        if (sender is ComboBoxItem { IsSelected: true, Content: OrientedImageryViewInteractionState } item &&
+            ItemsControl.ItemsControlFromItemContainer(item) is ComboBox { DataContext: ImageSearchModeVM viewModel })
+        {
+            viewModel.IsImageSelectionEnabled = true;
+        }
+    }
+}
+#endregion ImageSearchModeComboBox

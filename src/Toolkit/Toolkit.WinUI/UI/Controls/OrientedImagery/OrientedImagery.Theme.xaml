@@ -669,7 +669,7 @@
             </ComboBox.ItemContainerStyle>
             <ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="controls:LabelledSymbol">
-                    <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind Symbol}" IsTabStop="False" AutomationProperties.Name="{Binding Label}"/>
+                    <controls:SymbolDisplay Width="32" Height="32" Symbol="{x:Bind Symbol}" IsTabStop="False" AutomationProperties.Name="{x:Bind Label}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
@@ -699,8 +699,8 @@
             IsChecked="{x:Bind ViewModel.IsSequentialNavigationEnabled, Mode=OneWay}"
             IsEnabled="{x:Bind ViewModel.SupportsSequentialNavigation, Mode=OneWay}"
             Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
-            ToolTipService.ToolTip="{x:Bind local:OrientedImageryResources.SequentialNavigationToolTip(ViewModel.IsSequentialNavigationEnabled), Mode=OneWay}"
-            AutomationProperties.Name="{x:Bind local:OrientedImageryResources.SequentialNavigationAutomationName(ViewModel.IsSequentialNavigationEnabled), Mode=OneWay}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationTooltip}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationTooltip}">
             <StackPanel>
                 <Viewbox Width="28" Height="28" Stretch="Uniform">
                     <PathIcon Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z" />
