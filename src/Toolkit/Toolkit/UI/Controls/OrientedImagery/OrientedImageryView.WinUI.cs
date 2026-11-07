@@ -13,6 +13,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = DismissTransientErrorButtonName, Type = typeof(Button))]
 public partial class OrientedImageryView : Control
 {
+#region Accessibility
     private void DismissTransientErrorButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button { FocusState: not FocusState.Unfocused } button && ReferenceEquals(button, _dismissTransientErrorButton))
@@ -59,7 +60,9 @@ public partial class OrientedImageryView : Control
             }
         });
     }
+#endregion Accessibility
 
+#region BackgroundColor
     private long _backgroundColorCallbackToken;
 
     internal Microsoft.UI.Xaml.Media.SolidColorBrush? ThemeDisplayBackgroundBrush
@@ -89,7 +92,9 @@ public partial class OrientedImageryView : Control
 
         UpdateDisplayBackgroundColor(DisplayBackgroundColor);
     }
+#endregion BackgroundColor
 
+#region ToolbarTemplates
     internal DefaultWinUIToolbarTemplates? DefaultToolbarTemplates
     {
         get => (DefaultWinUIToolbarTemplates?)GetValue(DefaultToolbarTemplatesProperty);
@@ -149,8 +154,7 @@ public partial class OrientedImageryView : Control
 
         return selector;
     }
-
-    internal AllowAddingMarkersVM AllowAddingMarkers { get; private set; } = null!;
+#endregion ToolbarTemplates
 }
 
 internal sealed class DefaultWinUIToolbarTemplates
