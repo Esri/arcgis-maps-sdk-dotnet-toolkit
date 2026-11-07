@@ -6,7 +6,7 @@ The `OrientedImageryView` displays oriented imagery with a built-in toolbar for 
 
 ## Minimal implementation
 
-The following WPF example places a `MapView` next to an `OrientedImageryView`. Set `GeoView` so the control can display its managed marker overlay on the map, and set `ViewModel.OrientedImageryLayer` so the view model can manage footprints and image-to-map calculations.
+The following example places a `MapView` next to an `OrientedImageryView`. Set `GeoView` so the control can display its managed marker overlay on the map, and set `ViewModel.OrientedImageryLayer` so the view model can manage footprints and image-to-map calculations.
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
@@ -50,7 +50,7 @@ See the `OrientedImageryView` sample for a full example implementation.
 
 The `OrientedImageryView` toolbar is implemented an `ItemsControl` whose individual buttons and dropdowns are defined by the `OrientedImageryViewModel.ToolbarCategories` list. `ToolbarCategories` is a list of `OrientedImageryToolbarCategory`s that in turn contain lists of `OrientedImageryToolbarItem`s. Data templates for each toolbar item and category are selected using the `OrientedImageryView.ToolbarSelector`, which is a custom `DataTemplateSelector` containing a list of paired item types to data templates that can be modified as needed. See the below example.
 
-### Example
+### Example (WPF)
 
 Define a toolbar item class deriving from `OrientedImageryToolbarItemBase`.
 

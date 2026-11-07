@@ -1,4 +1,4 @@
-﻿#if WPF
+﻿#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Collections.ObjectModel;
@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 

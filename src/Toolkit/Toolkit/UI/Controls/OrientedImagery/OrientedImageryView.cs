@@ -1,14 +1,19 @@
-#if WPF
+#if WPF || WINDOWS_XAML
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 using System.ComponentModel;
 using System.Diagnostics;
+#if WPF
 using System.Windows.Automation;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#elif WINDOWS_XAML
+using Microsoft.UI.Xaml.Automation.Peers;
+using Paginator = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryPaginator;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -22,6 +27,8 @@ public partial class OrientedImageryView
     private const string PaginatorName = "PART_Paginator";
     private const string MainErrorMessagePresenterName = "PART_MainErrorMessagePresenter";
     private const string DismissTransientErrorButtonName = "PART_DismissTransientErrorButton";
+    private const string ImageDetailsButtonName = "PART_ImageDetailsButton";
+    private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
@@ -35,6 +42,8 @@ public partial class OrientedImageryView
 #if WPF
         Loaded += (_, _) => UpdateErrorMessages();
         IsVisibleChanged += (_, _) => UpdateErrorMessages();
+#elif WINDOWS_XAML
+        InitializeAccessibility_WinUI();
 #endif
 
 #if MAUI
@@ -77,9 +86,7 @@ public partial class OrientedImageryView
         RewireViewModel();
         UpdatePaginatorSelection();
         UpdateErrorMessages();
-#if WPF
         UpdateDetailsFocus();
-#endif
     }
 
 #region ViewModel
@@ -190,17 +197,15 @@ public partial class OrientedImageryView
                 if (ViewModel.SequentialNavigationError?.Message != null)
                     TransientErrorMessage = ViewModel.SequentialNavigationError?.Message;
                 break;
-#if WPF
             case nameof(OrientedImageryViewModel.ImageDetailsPopup):
                 UpdateDetailsFocus();
                 break;
-#endif
         }
     }
 
     private void ViewModel_SequenceBoundaryReached(object? sender, SequenceBoundaryReachedArgs e)
     {
-        if (!ReferenceEquals(sender, ViewModel) || !IsLoaded || !IsVisible || ErrorMessage != null)
+        if (!ReferenceEquals(sender, ViewModel) || !LoadedAndVisible() || ErrorMessage != null)
             return;
 
         string? resourceKey = (e.HasReachedStart, e.HasReachedEnd) switch
@@ -253,6 +258,8 @@ public partial class OrientedImageryView
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
     /// </summary>
+    /// <remarks>On WinUI, the default <see cref="System.Drawing.Color.Empty"/> follows the active theme.
+    /// Set an explicit color to override it, or restore <see cref="System.Drawing.Color.Empty"/> to follow the theme again.</remarks>
     public System.Drawing.Color DisplayBackgroundColor
     {
         get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
@@ -263,7 +270,11 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="DisplayBackgroundColor" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
+#if WINDOWS_XAML
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#else
         PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#endif
 
     private void WireViewport(OrientedImageViewport viewport)
     {
@@ -283,6 +294,13 @@ public partial class OrientedImageryView
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
+#if WINDOWS_XAML
+        if (displayBackgroundColor.IsEmpty)
+        {
+            var color = ThemeDisplayBackgroundBrush?.Color ?? default;
+            displayBackgroundColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+#endif
         if (_viewport != null)
             _viewport.DisplayBackgroundColor = displayBackgroundColor;
     }
@@ -543,12 +561,19 @@ public partial class OrientedImageryView
     {
         toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
         toolbarContainer.Items.Clear();
+        toolbarContainer.ItemsSource = ViewModel?.ToolbarCategories;
+#if WINDOWS_XAML
+        WireToolbarWinUI(toolbarContainer);
+#endif
     }
 
     private void UnwireToolbarContainer(ItemsControl toolbarContainer)
     {
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
+#if WINDOWS_XAML
+        UnwireToolbarWinUI(toolbarContainer);
+#endif
     }
 #endregion Toolbar
 
@@ -702,7 +727,7 @@ public partial class OrientedImageryView
     private bool UpdateImageErrorAnnouncement()
     {
         string? announcement = _viewport?.Error?.Message;
-        if (!IsLoaded || !IsVisible || ErrorMessage != null || string.IsNullOrWhiteSpace(announcement))
+        if (!LoadedAndVisible() || ErrorMessage != null || string.IsNullOrWhiteSpace(announcement))
         {
             _lastImageErrorAnnouncement = null;
             return false;
@@ -734,7 +759,7 @@ public partial class OrientedImageryView
 
     private string? GetNoImagesAnnouncement()
     {
-        if (!IsLoaded || !IsVisible || ErrorMessage != null || _viewport?.IsImageLoading == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
+        if (!LoadedAndVisible() || ErrorMessage != null || _viewport?.IsImageLoading == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
             return null;
 
         string resourceKey;
@@ -763,6 +788,7 @@ public partial class OrientedImageryView
 
     private void RewireDismissTransientErrorButton()
     {
+#if WPF || WINDOWS_XAML
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click -= DismissTransientErrorButton_Click;
 
@@ -770,6 +796,16 @@ public partial class OrientedImageryView
 
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click += DismissTransientErrorButton_Click;
+#endif
+    }
+
+    private bool LoadedAndVisible()
+    {
+#if WPF
+        return IsLoaded && IsVisible;
+#elif WINUI
+        return IsLoaded && Visibility == Visibility.Visible;
+#endif
     }
 #endregion Errors
 }
