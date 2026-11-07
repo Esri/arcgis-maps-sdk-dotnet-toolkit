@@ -91,7 +91,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             else if (PopupMedia.Type == PopupMediaType.Image)
             {
                 _lastChartSize = 0;
+#if MAUI && __IOS__
+                Image img = Content as Image ?? (Content as Maui.Internal.HyperlinkContentView)?.Content as Image ?? new Image();
+#else
                 Image img = Content as Image ?? new Image();
+#endif
                 var sourceUrl = PopupMedia.Value?.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
@@ -129,12 +133,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     }
                 }
 
+#if MAUI && __IOS__
+                UpdateImageContent(img);
+#else
                 if (!string.IsNullOrEmpty(PopupMedia.Value?.LinkUrl) && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out var linkUrl))
                 {
 #if MAUI
                     img.GestureRecognizers.Clear();
                     var tapGesture = new TapGestureRecognizer();
+#if WINDOWS
+                    tapGesture.Tapped += Image_Tapped;
+#elif __ANDROID__
+                    tapGesture.Tapped += (_, _) => OpenImageLink(PopupMedia);
+#else
                     tapGesture.Tapped += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
+#endif
                     img.GestureRecognizers.Add(tapGesture);
 #else
                     img.Tag = linkUrl;
@@ -162,7 +175,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 #endif
                 }
+#if MAUI && __ANDROID__
+                else
+                {
+                    img.GestureRecognizers.Clear();
+                    if (img.Handler?.PlatformView is Android.Views.View platformView)
+                        platformView.Focusable = false;
+                }
+#endif
+#if MAUI && WINDOWS
+                UpdateImageAccessibility(img);
+#elif MAUI && __ANDROID__
+                SemanticProperties.SetDescription(img, GetAltText());
+#endif
                 Content = img;
+#endif
             }
         }
         private async void UpdateChart(Size desiredSize)
@@ -270,9 +297,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             else
             {
+#if MAUI && __IOS__
+                Content = null;
+#endif
                 InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
             }
             UpdateAltText();
+#if MAUI && (WINDOWS || __ANDROID__)
+            UpdateChartTabStop();
+#endif
         }
 
         private void UpdateAltText()
@@ -285,7 +318,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateFlipViewItemAutomationName(altText);
 #elif MAUI
             ToolTipProperties.SetText(this, altText);
+#if WINDOWS
+            SemanticProperties.SetDescription(this, PopupMedia?.Type == PopupMediaType.Image ? null : altText);
+            // A recycled chart can leave an unnamed wrapper peer after its description is cleared.
+            AutomationProperties.SetIsInAccessibleTree(this, PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image);
+#elif __IOS__ || __ANDROID__
+            // Name the image or image link, not an additional media wrapper around it.
+            bool isChart = PopupMedia is not null && PopupMedia.Type != PopupMediaType.Image;
+            SemanticProperties.SetDescription(this, isChart ? altText : null);
+            AutomationProperties.SetIsInAccessibleTree(this, isChart);
+#else
             SemanticProperties.SetDescription(this, altText);
+#endif
 #endif
         }
 
@@ -299,6 +343,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return PopupMedia.Caption;
             return null;
         }
+
+#if MAUI && __ANDROID__
+        internal static Uri? GetImageLink(PopupMedia? media) =>
+            media?.Type == PopupMediaType.Image && Uri.TryCreate(media.Value?.LinkUrl, UriKind.Absolute, out var uri) ? uri : null;
+
+        internal static bool OpenImageLink(PopupMedia? media)
+        {
+            if (GetImageLink(media) is not { } uri)
+                return false;
+            _ = Launcher.LaunchUriAsync(uri);
+            return true;
+        }
+#endif
 
         // Also used for embedded images in TextPopupElement views
         internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source, bool ignoreImageCache = false)
@@ -374,6 +431,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
 #if WINUI
             UpdateFlipViewItemAutomationName(GetAltText());
+#elif MAUI && WINDOWS
+            if (PopupMedia?.Type == PopupMediaType.Image && Content is Image image)
+                UpdateImageAccessibility(image);
 #endif
         }
 
@@ -418,6 +478,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             e)
         {
             StopRefreshTimer();
+#if MAUI && WINDOWS
+            DisconnectImage();
+#endif
         }
 
         private void StartRefreshTimer(TimeSpan interval)

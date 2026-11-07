@@ -83,5 +83,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
                 throw new NotSupportedException();
         }
+
+        /// <summary>
+        /// Sets the font size of a dependency property to a value adjusted by the Windows text scale factor.
+        /// This is needed to be able to have this functionality in code-behind, since MarkupExtensions cannot be used to set values on dependency properties directly.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="property"></param>
+        /// <param name="fontSize"></param>
+        public static void SetFontSize(DependencyObject target, DependencyProperty property, double fontSize)
+        {
+            var binding = new Binding(nameof(TextScaleFactorSource.TextScaleFactor))
+            {
+                Source = TextScaleFactorSource.Instance,
+                Converter = new TextScaleFactorConverter(fontSize),
+                Mode = BindingMode.OneWay,
+            };
+
+            BindingOperations.SetBinding(target, property, binding);
+        }
     }
 }

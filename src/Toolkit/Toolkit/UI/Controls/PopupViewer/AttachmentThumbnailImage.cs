@@ -81,8 +81,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty AttachmentProperty =
             DependencyProperty.Register(nameof(Attachment), typeof(PopupAttachment), typeof(AttachmentThumbnailImage), new PropertyMetadata(null, (d, e) => ((AttachmentThumbnailImage)d).OnAttachmentChanged(e.OldValue as PopupAttachment, e.NewValue as PopupAttachment)));
 
+        /// <summary>
+        /// Gets the name of the attachment for use by UI Automation.
+        /// </summary>
+        public string? Text
+        {
+            get => (string?)GetValue(TextProperty);
+            private set => SetValue(TextProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="Text"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(AttachmentThumbnailImage), new PropertyMetadata(null));
+
         private void OnAttachmentChanged(PopupAttachment? oldAttachment, PopupAttachment? newAttachment)
         {
+            Text = newAttachment?.Name;
             var img = GetTemplateChild("PART_Image") as Image;
             if(img != null)
             {

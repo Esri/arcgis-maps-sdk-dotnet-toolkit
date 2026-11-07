@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Controls.Shapes;
 
@@ -60,7 +61,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             title.Style = PopupViewer.GetPopupViewerTitleStyle();
             layout.Add(title);
 
-            var border = new Border() { StrokeThickness = 0, WidthRequest = 30, HeightRequest = 20, BackgroundColor = Colors.LightGray, Margin = new Thickness(2) };
+            // The outline matches the fill outside high contrast, and keeps the badge visible on the system background in high contrast.
+            var border = new Border() { StrokeThickness = 1, WidthRequest = 30, HeightRequest = 20, Margin = new Thickness(2) };
+            border.SetHighContrastColor(VisualElement.BackgroundColorProperty, Colors.LightGray, HighContrastColorRole.Background);
+            border.SetHighContrastColor(Border.StrokeProperty, Colors.LightGray);
             border.StrokeShape = new RoundRectangle() { CornerRadius = new CornerRadius(10) };
 
             Label count = new Label() { VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center };
@@ -71,11 +75,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(border);
 
             Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(5) };
-            image.Source = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            var chevronGlyph = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            chevronGlyph.SetHighContrastColor(FontImageSource.ColorProperty, Colors.Gray);
+            image.Source = chevronGlyph;
             Grid.SetColumn(image, 2);
             layout.Add(image);
 
-            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.LightGray, Margin = new Thickness(2) };
+            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, Margin = new Thickness(2) };
+            divider.SetHighContrastColor(VisualElement.BackgroundColorProperty, Colors.LightGray);
             Grid.SetRow(divider, 1);
             Grid.SetColumnSpan(divider, 3);
             layout.Add(divider);

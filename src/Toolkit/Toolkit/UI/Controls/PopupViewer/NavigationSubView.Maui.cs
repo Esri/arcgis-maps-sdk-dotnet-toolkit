@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -31,21 +32,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             var root = new Grid();
+            root.SetHighContrastColor(Grid.BackgroundColorProperty, null, HighContrastColorRole.Background);
             root.SetBinding(Grid.BackgroundProperty, static (NavigationSubView view) => view.Background, source: RelativeBindingSource.TemplatedParent);
             root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
-            HorizontalStackLayout topheader = new HorizontalStackLayout();
+            // Use a Grid rather than a HorizontalStackLayout so the header is constrained to the remaining width and can wrap
+            Grid topheader = new Grid();
+            topheader.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            topheader.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            topheader.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             var navigateBack = new Button() { Text =  ToolkitIcons.ChevronLeft, FontFamily = ToolkitIcons.FontFamilyName, BackgroundColor = Colors.Transparent, BorderWidth = 0 };
-            navigateBack.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
+            navigateBack.SetHighContrastColor(Button.TextColorProperty, Colors.Black, Colors.White);
             var navigateUp = new Button() { Text = ToolkitIcons.ChevronUp, FontFamily = ToolkitIcons.FontFamilyName, BackgroundColor = Colors.Transparent, BorderWidth = 0 };
-            navigateUp.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
+            navigateUp.SetHighContrastColor(Button.TextColorProperty, Colors.Black, Colors.White);
             topheader.Children.Add(navigateBack);
+            Grid.SetColumn(navigateUp, 1);
             topheader.Children.Add(navigateUp);
             ContentControl header = new ContentControl() { VerticalOptions = new LayoutOptions(LayoutAlignment.Fill, true) };
+            Grid.SetColumn(header, 2);
             header.SetBinding(ContentControl.ContentTemplateProperty, static (NavigationSubView view) => view.HeaderTemplateSelector, source: RelativeBindingSource.TemplatedParent);
             topheader.Children.Add(header);
             root.Children.Add(topheader);
             ScrollView scrollview = new ScrollView();
+#if __IOS__
+            scrollview.HandlerChanged += static (sender, _) =>
+            {
+                if (sender is ScrollView { Handler.PlatformView: UIKit.UIScrollView nativeScrollView })
+                    nativeScrollView.AllowsKeyboardScrolling = true;
+            };
+#endif
             scrollview.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, static (NavigationSubView viewer) => viewer.VerticalScrollBarVisibility, source: RelativeBindingSource.TemplatedParent);
             Grid.SetRow(scrollview, 1);
             ContentControl content = new ContentControl() { VerticalOptions = new LayoutOptions(LayoutAlignment.Fill, true) };

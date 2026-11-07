@@ -6,12 +6,7 @@
              xmlns:popups="clr-namespace:Esri.ArcGISRuntime.Mapping.Popups;assembly=Esri.ArcGISRuntime"
              x:Class="Toolkit.SampleApp.Maui.Samples.PopupViewerSample" Title="PopupViewer">
     <ContentPage.Content>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="500" />
-            </Grid.ColumnDefinitions>
-
+        <Grid x:Name="RootGrid">
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="WidthStates">
                     <VisualState x:Name="PhoneState">
@@ -19,8 +14,8 @@
                             <AdaptiveTrigger MinWindowWidth="0" />
                         </VisualState.StateTriggers>
                         <VisualState.Setters>
-                            <Setter TargetName="SidePanel" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="SidePanel" Property="Grid.ColumnSpan" Value="2" />
+                            <Setter TargetName="SidePanel" Property="HorizontalOptions" Value="Fill" />
+                            <Setter TargetName="SidePanel" Property="WidthRequest" Value="-1" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="DesktopState">
@@ -28,18 +23,18 @@
                             <AdaptiveTrigger MinWindowWidth="800" />
                         </VisualState.StateTriggers>
                         <VisualState.Setters>
-                            <Setter TargetName="SidePanel" Property="Grid.Column" Value="1" />
-                            <Setter TargetName="SidePanel" Property="Grid.ColumnSpan" Value="1" />
+                            <Setter TargetName="SidePanel" Property="HorizontalOptions" Value="End" />
+                            <Setter TargetName="SidePanel" Property="WidthRequest" Value="500" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
 
-            <esriUI:MapView x:Name="mapView" Grid.ColumnSpan="2" />
+            <esriUI:MapView x:Name="mapView" />
 
 
             <!-- Side Panel -->
-            <Border Grid.Column="1" x:Name="SidePanel" Padding="8" Background="{AppThemeBinding Dark=Black, Light=White}" IsVisible="{Binding IsSidePanelOpen}">
+            <Border x:Name="SidePanel" Padding="8" HorizontalOptions="End" WidthRequest="500" Background="{AppThemeBinding Dark=Black, Light=White}" IsVisible="{Binding IsSidePanelOpen}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -54,7 +49,7 @@
                         IsVisible="{Binding HasMoreThanOneResult}">
                     </Picker>
 
-                    <esriTK:PopupViewer Grid.Row="1" Popup="{Binding SelectedPopup}" MinimumWidthRequest="400" HorizontalOptions="Fill"
+                    <esriTK:PopupViewer Grid.Row="1" Popup="{Binding SelectedPopup}" MinimumWidthRequest="300" HorizontalOptions="Fill"
                                   x:Name="PopupView"
                                   PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" HyperlinkClicked="popupViewer_HyperlinkClicked" 
                                   />

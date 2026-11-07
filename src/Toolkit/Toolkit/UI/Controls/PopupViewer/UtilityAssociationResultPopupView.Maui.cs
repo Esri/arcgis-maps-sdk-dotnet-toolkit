@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Controls.Internals;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -62,12 +63,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(connectionInfo);
 
             Image image = new Image() { WidthRequest = 18, HeightRequest = 18, VerticalOptions = LayoutOptions.Center };
-            image.Source = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, Color = Colors.Gray, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            var chevronGlyph = new FontImageSource() { Glyph = ToolkitIcons.ChevronRight, FontFamily = ToolkitIcons.FontFamilyName, Size = 18 };
+            chevronGlyph.SetHighContrastColor(FontImageSource.ColorProperty, Colors.Gray);
+            image.Source = chevronGlyph;
             Grid.SetColumn(image, 3);
             Grid.SetRowSpan(image, 2);
             layout.Add(image);
 
-            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.LightGray, Margin = new Thickness(2) };
+            var divider = new Border() { StrokeThickness = 0, HeightRequest = 1, Margin = new Thickness(2) };
+            divider.SetHighContrastColor(VisualElement.BackgroundColorProperty, Colors.LightGray);
             Grid.SetRow(divider, 2);
             Grid.SetColumnSpan(divider, 4);
             layout.Add(divider);

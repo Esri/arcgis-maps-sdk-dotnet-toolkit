@@ -6,7 +6,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Windows.System;
 using Windows.UI.Core;
-using Windows.UI.ViewManagement;
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using NativeAutomationProperties = Microsoft.UI.Xaml.Automation.AutomationProperties;
 using NativeButton = Microsoft.UI.Xaml.Controls.Button;
 using NativeControl = Microsoft.UI.Xaml.Controls.Control;
@@ -26,8 +26,6 @@ public partial class SearchView
     private KeyEventHandler? _suggestionsViewKeyDownHandler;
     private PointerEventHandler? _sourceSelectButtonPointerPressedHandler;
     private bool _sourceSelectOpenedByPointer;
-    private AccessibilitySettings? _accessibilitySettings;
-    private UISettings? _uiSettings;
 
     partial void ConnectKeyboardNavigation()
     {
@@ -48,44 +46,26 @@ public partial class SearchView
 
     private void ConnectHighContrastSettings()
     {
-        if (_accessibilitySettings != null)
-        {
-            return;
-        }
+        // We ensure that the we never connect twice to the same event, so we can safely call this method multiple times.
+        // MAUI doesn't promise strict pairing. Loaded can fire again in some situations, such as when the platform view is recreated
+        DisconnectHighContrastSettings();
 
-        _accessibilitySettings = new AccessibilitySettings();
-        _uiSettings = new UISettings();
-        _uiSettings.ColorValuesChanged += UISettings_ColorValuesChanged;
+        HighContrastTheme.Instance.PropertyChanged += HighContrastTheme_PropertyChanged;
         UpdateHighContrastColors();
     }
 
-    private void DisconnectHighContrastSettings()
-    {
-        if (_uiSettings != null)
-        {
-            _uiSettings.ColorValuesChanged -= UISettings_ColorValuesChanged;
-        }
+    private void DisconnectHighContrastSettings() =>
+        HighContrastTheme.Instance.PropertyChanged -= HighContrastTheme_PropertyChanged;
 
-        _uiSettings = null;
-        _accessibilitySettings = null;
-        UpdateHighContrastColors();
-    }
-
-    private void UISettings_ColorValuesChanged(UISettings sender, object args) =>
+    // Dispatched so that, on an app theme change, this runs after Application_RequestedThemeChanged has reset the theme colors.
+    private void HighContrastTheme_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) =>
         Dispatcher.Dispatch(UpdateHighContrastColors);
 
     private void UpdateHighContrastColors()
     {
-        var highContrast = _accessibilitySettings?.HighContrast == true && _uiSettings != null;
-        var foreground = highContrast ? _uiSettings!.GetColorValue(UIColorType.Foreground) : default;
-        var background = highContrast ? _uiSettings!.GetColorValue(UIColorType.Background) : default;
-        SetHighContrastColors(
-            highContrast ? ToMauiColor(foreground) : null,
-            highContrast ? ToMauiColor(background) : null);
+        var colors = HighContrastTheme.Instance.Colors;
+        SetHighContrastColors(colors?.Foreground, colors?.Background, colors?.Highlight, colors?.HighlightForeground);
     }
-
-    private static Color ToMauiColor(Windows.UI.Color color) =>
-        Color.FromRgba(color.R, color.G, color.B, color.A);
 
     partial void OnSourceListOpened()
     {
