@@ -79,6 +79,9 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
         InitializeComponent();
     }
 
+    /// <summary>
+    /// Inherits the OrientedImageryViewToolbarSelector from its parent ItemsControl.
+    /// </summary>
     private void ToolbarCategory_Loaded(object sender, RoutedEventArgs e)
     {
         var items = (ItemsControl)sender;
@@ -86,7 +89,7 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
         while (parent is not null && parent is not ItemsControl)
             parent = VisualTreeHelper.GetParent(parent);
 
-        if (parent is ItemsControl toolbar)
+        if (parent is ItemsControl toolbar && toolbar.ItemTemplateSelector is OrientedImageryViewToolbarSelector)
         {
             items.ItemTemplateSelector = toolbar.ItemTemplateSelector;
             var token = toolbar.RegisterPropertyChangedCallback(ItemsControl.ItemTemplateSelectorProperty,
@@ -103,7 +106,7 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
 
     public static Visibility VisibleWhen(bool value) => value ? Visibility.Visible : Visibility.Collapsed;
 
-    public static bool HasMultipleImages(int imageCount) => imageCount > 1;
+    public static bool IsGreaterThanOne(int imageCount) => imageCount > 1;
 
     public static string? NoImageMessage(bool hasSearched)
         => Properties.Resources.GetString(hasSearched ? "OrientedImageryViewNoImagesFound" : "OrientedImageryViewNoImageToDisplay");
@@ -121,19 +124,57 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
         => Properties.Resources.GetString(state == OrientedImageryViewInteractionState.FindImages
             ? "OrientedImageryViewImageSearchModeFind" : "OrientedImageryViewImageSearchModeDisplay");
 
-    public static Visibility VisibleWhenAddingMarkers(Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryViewInteractionState state)
-        => state == Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryViewInteractionState.AddMarkers ? Visibility.Visible : Visibility.Collapsed;
-
     public static Visibility VisibleWhenFalse(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
-
-    public static Visibility VisibleWhenNotNull(object? value) => value is null ? Visibility.Collapsed : Visibility.Visible;
-
-    public static Visibility VisibleWhenBusy(object? selectedImage, bool isBusy)
-        => selectedImage is not null && isBusy ? Visibility.Visible : Visibility.Collapsed;
 
     public static string? SequentialNavigationToolTip(bool isSequential)
         => Properties.Resources.GetString(isSequential ? "OrientedImageryViewReturnToResults" : "OrientedImageryViewEnterSequentialNavigation");
 
     public static string? SequentialNavigationAutomationName(bool isSequential)
         => Properties.Resources.GetString(isSequential ? "OrientedImageryViewReturnToResults" : "OrientedImageryViewSequentialNavigationLabel");
+}
+
+/// <summary>
+/// The attached properties in this class are a workaround for a WinUI x:Bind behavior/bug where values aren't updated properly when set to null.
+/// If this wasn't the case we would be using all static methods as defined in the <see cref="OrientedImageryResources"/> code-behind as seen earlier in this file.
+/// For now we'll need to wait until the following PR is a.) shipped in a released version, and b.) that version becomes our minimum: https://github.com/microsoft/microsoft-ui-xaml/pull/11732.
+/// The other workaround would have been to use IValueConverters, but they didn't seem to work within the ControlTemplate and would always crash at runtime.
+/// </summary>
+internal static class NullVisibility
+{
+    public static readonly DependencyProperty WhenNotNullProperty = DependencyProperty.RegisterAttached(
+        "WhenNotNull", typeof(object), typeof(NullVisibility),
+        new PropertyMetadata(null, (sender, args) => ((UIElement)sender).Visibility = args.NewValue is not null ? Visibility.Visible : Visibility.Collapsed));
+
+    public static object? GetWhenNotNull(DependencyObject element) => element.GetValue(WhenNotNullProperty);
+
+    public static void SetWhenNotNull(DependencyObject element, object? value)
+    {
+        element.SetValue(WhenNotNullProperty, value);
+        // An initial null value does not trigger the property-changed callback.
+        ((UIElement)element).Visibility = value is not null ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    public static readonly DependencyProperty WhenNullProperty = DependencyProperty.RegisterAttached(
+        "WhenNull", typeof(object), typeof(NullVisibility),
+        new PropertyMetadata(null, (sender, args) => ((UIElement)sender).Visibility = args.NewValue is null ? Visibility.Visible : Visibility.Collapsed));
+
+    public static object? GetWhenNull(DependencyObject element) => element.GetValue(WhenNullProperty);
+
+    public static void SetWhenNull(DependencyObject element, object? value)
+    {
+        element.SetValue(WhenNullProperty, value);
+        ((UIElement)element).Visibility = value is null ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    public static readonly DependencyProperty WhenTrueProperty = DependencyProperty.RegisterAttached(
+        "WhenTrue", typeof(bool), typeof(NullVisibility),
+        new PropertyMetadata(false, (sender, args) => ((UIElement)sender).Visibility = (bool)args.NewValue ? Visibility.Visible : Visibility.Collapsed));
+
+    public static bool GetWhenTrue(DependencyObject element) => (bool)element.GetValue(WhenTrueProperty);
+
+    public static void SetWhenTrue(DependencyObject element, bool value)
+    {
+        element.SetValue(WhenTrueProperty, value);
+        ((UIElement)element).Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+    }
 }
