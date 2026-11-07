@@ -199,9 +199,6 @@ public partial class OrientedImageryView
                 break;
             case nameof(OrientedImageryViewModel.ImageDetailsPopup):
                 UpdateDetailsFocus();
-#if WINDOWS_XAML
-                UpdateViewState_WinUI();
-#endif
                 break;
         }
     }
@@ -283,9 +280,6 @@ public partial class OrientedImageryView
     {
         viewport.ImageTapped += Viewport_ImageTapped;
         viewport.StateChanged += Viewport_StateChanged;
-#if WINDOWS_XAML
-        WireViewport_WinUI(viewport);
-#endif
     }
 
     private void UnwireViewport(OrientedImageViewport viewport)
@@ -296,9 +290,6 @@ public partial class OrientedImageryView
         viewport.ClearValue(OrientedImageViewport.MarkersProperty);
         viewport.ClearValue(OrientedImageViewport.FootprintProperty);
         viewport.ClearValue(OrientedImageViewport.DisplayBackgroundColorProperty);
-#if WINDOWS_XAML
-        UnwireViewport_WinUI(viewport);
-#endif
     }
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
@@ -602,10 +593,6 @@ public partial class OrientedImageryView
         }
         _paginator.TotalPages = images.Count;
         _paginator.SelectedPageIndex = index;
-
-#if WINDOWS_XAML
-    UpdateNavigationVisibility_WinUI();
-#endif
     }
 
     private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
@@ -702,9 +689,6 @@ public partial class OrientedImageryView
         else
             ErrorMessage = null;
 
-#if WINDOWS_XAML
-        UpdateViewState_WinUI();
-#endif
         if (ErrorMessage == null || ErrorMessage == lastMessage)
             return false;
 
