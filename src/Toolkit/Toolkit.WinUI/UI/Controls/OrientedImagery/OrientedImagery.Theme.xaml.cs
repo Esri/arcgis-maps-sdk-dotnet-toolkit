@@ -19,6 +19,20 @@ internal sealed partial class NotNullToBooleanConverter : IValueConverter
         => throw new NotSupportedException();
 }
 
+internal sealed partial class ImageSearchModeIconTemplateSelector : DataTemplateSelector
+{
+    public DataTemplate? DisplayImageTemplate { get; set; }
+
+    public DataTemplate? FindImagesTemplate { get; set; }
+
+    protected override DataTemplate SelectTemplateCore(object item)
+        => (item is OrientedImageryViewInteractionState.FindImages ? FindImagesTemplate : DisplayImageTemplate)
+            ?? base.SelectTemplateCore(item);
+
+    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+        => SelectTemplateCore(item);
+}
+
 // By default comboboxes don't trigger an update when clicking on an already-selected dropdown item. In our case we do want it to trigger
 // so we can set the actual ViewModel.InteractionState if it got changed by another control in the meantime
 internal static class ImageSearchModeSelectionBehavior
@@ -77,6 +91,19 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
     public OrientedImageryResources()
     {
         InitializeComponent();
+    }
+
+    private void ImageSearchModeOption_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { DataContext: OrientedImageryViewInteractionState state } element)
+        {
+            var parent = VisualTreeHelper.GetParent(element);
+            while (parent is not null && parent is not ComboBoxItem)
+                parent = VisualTreeHelper.GetParent(parent);
+
+            if (parent is ComboBoxItem item)
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(item, ImageSearchModeLabel(state));
+        }
     }
 
     /// <summary>
