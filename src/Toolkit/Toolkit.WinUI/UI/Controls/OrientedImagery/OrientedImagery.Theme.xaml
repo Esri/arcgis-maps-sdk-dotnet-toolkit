@@ -489,18 +489,10 @@
                 Data="F1 M26.7358 19.6048L27.7447 18.5074L32.9375 12.8586L24.2416 11.0883L11.1977 8.43274L7.75234 12.1806L13.9879 33.472L26.7358 19.6048ZM9.1681 12.5122L11.647 9.81565L30.469 13.6722L14.5913 30.944L9.1681 12.5122ZM6.59961 5.1366C7.92743 5.13681 8.99902 6.21199 8.99902 7.54382C8.99895 8.87559 7.92738 9.95084 6.59961 9.95105C5.27167 9.95104 4.1993 8.87572 4.19922 7.54382C4.19922 6.21186 5.27162 5.13661 6.59961 5.1366ZM6.59961 6.74109C6.15162 6.7411 5.79883 7.09449 5.79883 7.54382C5.7989 7.99309 6.15167 8.34655 6.59961 8.34656C7.04738 8.34635 7.39934 7.99296 7.39941 7.54382C7.39941 7.09462 7.04742 6.74129 6.59961 6.74109ZM21.6003 19.6003L20.2007 21L14.6003 15.3996L16 14L21.6003 19.6003ZM21.6003 15.3996L16 21L14.6003 19.6003L20.2007 14L21.6003 15.3996Z"
                 />
     </DataTemplate>
-    <DataTemplate x:Key="ImageSearchModeIconTemplate" x:DataType="controls:ImageSearchModeVM">
-        <Grid Width="33" Height="34">
-            <ContentControl
-                IsTabStop="False"
-                ContentTemplate="{StaticResource DisplayImageIconTemplate}"
-                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenDisplayingImage(SelectedInteractionState), Mode=OneWay}" />
-            <ContentControl
-                IsTabStop="False"
-                ContentTemplate="{StaticResource FindImagesIconTemplate}"
-                Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFindingImages(SelectedInteractionState), Mode=OneWay}" />
-        </Grid>
-    </DataTemplate>
+    <local:ImageSearchModeIconTemplateSelector
+        x:Key="ImageSearchModeIconTemplateSelector"
+        DisplayImageTemplate="{StaticResource DisplayImageIconTemplate}"
+        FindImagesTemplate="{StaticResource FindImagesIconTemplate}" />
 
     <DataTemplate x:Key="ImageSearchModeToolbarTemplate" x:DataType="controls:ImageSearchModeVM">
         <Grid>
@@ -512,13 +504,13 @@
                 IsChecked="{x:Bind IsImageSelectionEnabled, Mode=TwoWay}"
                 MinWidth="0" MinHeight="84" Padding="0,4"
                 Style="{StaticResource OrientedImageryToolbarToggleButtonStyle}"
-                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
-                ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                AutomationProperties.Name="{x:Bind local:OrientedImageryResources.ImageSearchModeLabel(SelectedInteractionState), Mode=OneWay}"
+                ToolTipService.ToolTip="{x:Bind local:OrientedImageryResources.ImageSearchModeLabel(SelectedInteractionState), Mode=OneWay}">
                 <StackPanel Spacing="8">
                     <Viewbox Width="32" Height="32" Stretch="Uniform">
                         <ContentControl
-                            Content="{x:Bind}"
-                            ContentTemplate="{StaticResource ImageSearchModeIconTemplate}"
+                            Content="{x:Bind SelectedInteractionState, Mode=OneWay}"
+                            ContentTemplateSelector="{StaticResource ImageSearchModeIconTemplateSelector}"
                             IsTabStop="False" />
                     </Viewbox>
                     <TextBlock
@@ -539,11 +531,23 @@
                         <Setter Property="local:ImageSearchModeSelectionBehavior.RepeatSelection" Value="True" />
                         <Setter Property="MinHeight" Value="40" />
                         <Setter Property="Padding" Value="8,4" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
                     </Style>
                 </ComboBox.ItemContainerStyle>
                 <ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="controls:OrientedImageryViewInteractionState">
-                        <TextBlock Text="{x:Bind Converter={StaticResource ImageSearchModeLabelConverter}}" />
+                        <StackPanel Orientation="Horizontal" Spacing="8" Loaded="ImageSearchModeOption_Loaded">
+                            <Viewbox Width="24" Height="24" Stretch="Uniform">
+                                <ContentControl
+                                    Content="{x:Bind}"
+                                    ContentTemplateSelector="{StaticResource ImageSearchModeIconTemplateSelector}"
+                                    IsTabStop="False" />
+                            </Viewbox>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{x:Bind Converter={StaticResource ImageSearchModeLabelConverter}}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
