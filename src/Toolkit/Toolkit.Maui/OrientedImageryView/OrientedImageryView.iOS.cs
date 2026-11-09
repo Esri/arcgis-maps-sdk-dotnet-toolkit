@@ -32,13 +32,13 @@ public partial class OrientedImageryView
     private void RefreshIosPopup()
     {
         if (_popupHost != null) return;
-        if (ViewModel.SelectedImagePopup == null)
+        if (ViewModel.ImageDetailsPopup == null)
         {
             DismissIosPopup(closePopup: false);
             return;
         }
         if (_popupViewer == null || !IsLoaded || Handler?.MauiContext == null) return;
-        _popupViewer.Popup = ViewModel.SelectedImagePopup;
+        _popupViewer.Popup = ViewModel.ImageDetailsPopup;
         _popupViewer.IsVisible = true;
         if (_iosSheetIsInfo) return;
         DismissPanel(preservePresentation: true);
@@ -56,8 +56,8 @@ public partial class OrientedImageryView
         _iosSheetIsInfo = false;
         if (_popupViewer?.Parent is Grid layout) layout.Remove(_popupViewer);
         DismissIosSheet();
-        if (closePopup && ViewModel.SelectedImagePopup != null)
-            ViewModel.CloseSelectedImagePopupCommand.Execute(null);
+        if (closePopup && ViewModel.ImageDetailsPopup != null)
+            ViewModel.CloseImageDetailsPopupCommand.Execute(null);
     }
 
     #endregion

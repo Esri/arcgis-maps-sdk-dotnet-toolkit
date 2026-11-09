@@ -892,7 +892,7 @@ public partial class OrientedImageryView
 
     private void RefreshPopup()
     {
-        bool showingPopup = ViewModel.SelectedImagePopup != null;
+        bool showingPopup = ViewModel.ImageDetailsPopup != null;
 #if WINDOWS
         bool focusPopup = showingPopup && _popupHost?.IsVisible == false &&
             _popupOpenButton?.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.Button
@@ -900,7 +900,7 @@ public partial class OrientedImageryView
 #endif
         if (_popupOpenButton != null)
         {
-            _popupOpenButton.Command = ViewModel.OpenSelectedImagePopupCommand;
+            _popupOpenButton.Command = ViewModel.OpenImageDetailsPopupCommand;
             _popupOpenButton.IsVisible = ViewModel.SelectedImage != null && !showingPopup;
         }
 #if ANDROID
@@ -910,7 +910,7 @@ public partial class OrientedImageryView
 #endif
         if (_popupViewer != null)
         {
-            _popupViewer.Popup = ViewModel.SelectedImagePopup;
+            _popupViewer.Popup = ViewModel.ImageDetailsPopup;
             _popupViewer.IsVisible = showingPopup;
         }
         if (_popupHost != null) _popupHost.IsVisible = showingPopup;
@@ -935,7 +935,7 @@ public partial class OrientedImageryView
         }
 #endif
         var restoreFocus = CreateDetailsFocusAction();
-        ViewModel.CloseSelectedImagePopupCommand.Execute(null);
+        ViewModel.CloseImageDetailsPopupCommand.Execute(null);
         restoreFocus?.Invoke();
     }
 
@@ -948,7 +948,7 @@ public partial class OrientedImageryView
 #endif
         var model = ViewModel;
         var image = model.SelectedImage;
-        var popup = opening ? model.SelectedImagePopup : null;
+        var popup = opening ? model.ImageDetailsPopup : null;
         var handler = target.Handler;
         int version = _layerVersion;
         return () =>
@@ -960,7 +960,7 @@ public partial class OrientedImageryView
             Dispatcher.Dispatch(() =>
             {
                 if (!CanAnnounce || version != _layerVersion || model != ViewModel || image != model.SelectedImage ||
-                    popup != model.SelectedImagePopup || _panelAnchor != null ||
+                    popup != model.ImageDetailsPopup || _panelAnchor != null ||
                     target != (opening ? _popupCloseButton : _popupOpenButton) || (handler != null && target.Handler != handler) ||
                     !target.IsLoaded || !target.IsVisible || !target.IsEnabled)
                     return;
@@ -1777,7 +1777,7 @@ public partial class OrientedImageryView
     {
         bool open = _panelAnchor != null;
         DismissPanel();
-        if (!open && ViewModel.SelectedImagePopup != null)
+        if (!open && ViewModel.ImageDetailsPopup != null)
         {
             CloseImageDetails();
             return true;

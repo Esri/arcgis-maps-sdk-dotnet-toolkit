@@ -88,13 +88,13 @@ public partial class OrientedImageryView
     {
         // A custom template with its own popup host retains ownership of its presentation.
         if (_popupHost != null) return;
-        if (ViewModel.SelectedImagePopup == null)
+        if (ViewModel.ImageDetailsPopup == null)
         {
             DismissAndroidPopup(closePopup: false);
             return;
         }
         if (_popupViewer == null || !IsLoaded || Handler?.MauiContext is not { } context) return;
-        _popupViewer.Popup = ViewModel.SelectedImagePopup;
+        _popupViewer.Popup = ViewModel.ImageDetailsPopup;
         _popupViewer.IsVisible = true;
         if (_infoSheet != null) return;
         DismissPanel();
@@ -142,8 +142,8 @@ public partial class OrientedImageryView
             dialog.Dismiss();
             dialog.Dispose();
         }
-        if (closePopup && ViewModel.SelectedImagePopup != null)
-            ViewModel.CloseSelectedImagePopupCommand.Execute(null);
+        if (closePopup && ViewModel.ImageDetailsPopup != null)
+            ViewModel.CloseImageDetailsPopupCommand.Execute(null);
         UpdateBackNavigation();
         restore?.Invoke();
     }
@@ -220,7 +220,7 @@ public partial class OrientedImageryView
     {
         // Native dialogs handle Back while visible; this callback handles inline popups.
         if (_backCallback?.TryGetTarget(out var callback) == true)
-            callback.Enabled = _toolsSheet == null && _infoSheet == null && _connected && (_panelAnchor != null || ViewModel.SelectedImagePopup != null);
+            callback.Enabled = _toolsSheet == null && _infoSheet == null && _connected && (_panelAnchor != null || ViewModel.ImageDetailsPopup != null);
     }
 
     private sealed class ToolsBackCallback(OrientedImageryView owner, OnBackPressedDispatcher dispatcher) : OnBackPressedCallback(false)
