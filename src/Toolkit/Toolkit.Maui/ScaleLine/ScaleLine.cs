@@ -18,6 +18,7 @@
 using Esri.ArcGISRuntime.Geometry;
 using Microsoft.Maui.Controls.Shapes;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -224,7 +225,7 @@ public class ScaleLine : TemplatedView
 
         if (_usValue != null)
         {
-            _usValue.Text = string.Format("{0}", roundedValue);
+            _usValue.Text = FormatDistance(roundedValue);
         }
 
         if (_usScaleLine != null)
@@ -249,7 +250,7 @@ public class ScaleLine : TemplatedView
 
         if (_metricValue != null)
         {
-            _metricValue.Text = string.Format("{0}", (int)roundedValue);
+            _metricValue.Text = FormatDistance(roundedValue);
         }
 
         if (_metricScaleLine != null)
@@ -324,6 +325,26 @@ public class ScaleLine : TemplatedView
         {
             return value;
         }
+    }
+
+    /// <summary>
+    /// Formats a rounded distance for display.
+    /// </summary>
+    /// <remarks>
+    /// A scale line can be shorter than the smallest unit it is labelled with, for example when zoomed
+    /// in far. Truncating such a value to an integer made the scale line read "0 m", so values below one
+    /// unit keep their decimals instead.
+    /// </remarks>
+    /// <param name="value">The rounded distance, in the unit that is displayed.</param>
+    /// <returns>The distance formatted with the current culture.</returns>
+    private static string FormatDistance(double value)
+    {
+        if (value >= 1)
+        {
+            return ((int)value).ToString(CultureInfo.CurrentCulture);
+        }
+
+        return Math.Round(value, 2).ToString(CultureInfo.CurrentCulture);
     }
 
     private void WireMapViewPropertyChanged(MapView? oldMapView, MapView? newMapView)
