@@ -147,6 +147,28 @@ public partial class OrientedImageryView
 
         // Native high-contrast icons need the matching system surface behind them.
         SetBackground(_desktopRoot, BackgroundColorProperty);
+        if (_transientErrorHost != null)
+        {
+            SetBackground(_transientErrorHost, BackgroundColorProperty);
+            if (foreground != null)
+                _transientErrorHost.Stroke = new SolidColorBrush(foreground);
+            else
+                _transientErrorHost.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#999999"), Color.FromArgb("#666666"));
+        }
+        if (_transientErrorText != null)
+        {
+            if (foreground != null)
+                _transientErrorText.TextColor = foreground;
+            else
+                _transientErrorText.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
+        }
+        if (_dismissTransientErrorButton != null)
+        {
+            if (foreground != null)
+                _dismissTransientErrorButton.TextColor = foreground;
+            else
+                _dismissTransientErrorButton.SetAppThemeColor(Microsoft.Maui.Controls.Button.TextColorProperty, Colors.Black, Colors.White);
+        }
         foreach (var button in new[] { _previousButton, _nextButton })
         {
             if (button == null) continue;

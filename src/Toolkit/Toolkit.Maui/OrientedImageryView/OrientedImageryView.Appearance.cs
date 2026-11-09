@@ -25,7 +25,9 @@ public partial class OrientedImageryView
     private View? _selectionFindIcon;
     private View? _selectionOr;
     private View? _selectionDisplayIcon;
-    private Label? _notice;
+    private Label? _transientErrorText;
+    private Border? _transientErrorHost;
+    private Button? _dismissTransientErrorButton;
     private ActivityIndicator? _busy;
     private Button? _previousButton;
     private Button? _nextButton;
@@ -84,7 +86,6 @@ public partial class OrientedImageryView
             {
                 new RowDefinition(GridLength.Auto),
                 new RowDefinition(GridLength.Star), new RowDefinition(GridLength.Auto),
-                new RowDefinition(GridLength.Auto),
             },
             RowSpacing = 0,
         };
@@ -139,6 +140,7 @@ public partial class OrientedImageryView
         Add("PART_ImagePrevious", MobileImageArrow(false), image);
         Add("PART_ImageNext", MobileImageArrow(true), image);
 #endif
+        AddTransientErrorPresentation(image, scope);
         AddPopupPresentation(image, scope);
 
 #if WINDOWS
@@ -175,9 +177,6 @@ public partial class OrientedImageryView
         next.BorderWidth = 0;
         Add("PART_Next", next, pagination, column: 2);
 #endif
-        var notice = new Label { HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(8, 4), AutomationId = "OrientedImageryNotice" };
-        notice.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
-        Add("PART_Notice", notice, root, 3);
 #if !WINDOWS && !ANDROID && !__IOS__
         var panels = new Grid { IsVisible = false, InputTransparent = true, CascadeInputTransparent = false };
         Add("PART_PanelHost", panels, root);
@@ -395,6 +394,52 @@ public partial class OrientedImageryView
         Grid.SetColumnSpan(host, Math.Max(1, image.ColumnDefinitions.Count));
     }
 
+    private static void AddTransientErrorPresentation(Grid image, INameScope scope)
+    {
+        var message = new Label
+        {
+            LineBreakMode = LineBreakMode.NoWrap, VerticalOptions = LayoutOptions.Center,
+            Margin = new Thickness(0, 4, 8, 4), AutomationId = "OrientedImageryTransientError",
+        };
+        message.SetAppThemeColor(Label.TextColorProperty, Colors.Black, Colors.White);
+        AutomationProperties.SetIsInAccessibleTree(message, true);
+        var dismiss = ToolButton("DismissError", "", "OrientedImageryDismissError");
+        dismiss.Text = ToolkitIcons.X;
+        dismiss.FontFamily = ToolkitIcons.FontFamilyName;
+        dismiss.FontSize = 16;
+        dismiss.WidthRequest = 44;
+        dismiss.Padding = 0;
+        dismiss.BorderWidth = 0;
+        dismiss.VerticalOptions = LayoutOptions.Center;
+        ToolTipProperties.SetText(dismiss, Text("DismissError"));
+        var content = new Grid
+        {
+            ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
+        };
+        content.Add(new ScrollView
+        {
+            Content = message, Orientation = ScrollOrientation.Horizontal,
+            VerticalOptions = LayoutOptions.Center,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Default,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Never,
+        });
+        content.Add(dismiss, 1);
+        var host = new Border
+        {
+            Content = content, StrokeShape = new RoundRectangle { CornerRadius = 24 },
+            StrokeThickness = 1, Padding = new Thickness(16, 4, 8, 8),
+            // Reserve space for the image-details button at the top right.
+            Margin = new Thickness(16, 12, 64, 0), VerticalOptions = LayoutOptions.Start, IsVisible = false,
+        };
+        host.SetAppThemeColor(BackgroundColorProperty, Colors.White, Color.FromArgb("#202020"));
+        host.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#999999"), Color.FromArgb("#666666"));
+        scope.RegisterName("PART_TransientErrorMessage", message);
+        scope.RegisterName("PART_TransientErrorHost", host);
+        scope.RegisterName("PART_DismissTransientErrorButton", dismiss);
+        image.Add(host);
+        Grid.SetColumnSpan(host, Math.Max(1, image.ColumnDefinitions.Count));
+    }
+
 #if !WINDOWS
     private static Button MobileImageArrow(bool next)
     {
@@ -467,7 +512,10 @@ public partial class OrientedImageryView
         _selectionFindIcon = GetTemplateChild("PART_SelectionFindIcon") as View;
         _selectionOr = GetTemplateChild("PART_SelectionOr") as View;
         _selectionDisplayIcon = GetTemplateChild("PART_SelectionDisplayIcon") as View;
-        _notice = GetTemplateChild("PART_Notice") as Label;
+        _transientErrorText = GetTemplateChild("PART_TransientErrorMessage") as Label;
+        _transientErrorHost = GetTemplateChild("PART_TransientErrorHost") as Border;
+        _dismissTransientErrorButton = GetTemplateChild("PART_DismissTransientErrorButton") as Button;
+        if (_dismissTransientErrorButton != null) _dismissTransientErrorButton.Clicked += DismissTransientError;
         _busy = GetTemplateChild("PART_Busy") as ActivityIndicator;
         _previousButton = GetTemplateChild("PART_Previous") as Button;
         _nextButton = GetTemplateChild("PART_Next") as Button;
@@ -620,6 +668,7 @@ public partial class OrientedImageryView
         if (_imagePreviousButton != null) _imagePreviousButton.Clicked -= Previous;
         if (_imageNextButton != null) _imageNextButton.Clicked -= Next;
         if (_popupCloseButton != null) _popupCloseButton.Command = null;
+        if (_dismissTransientErrorButton != null) _dismissTransientErrorButton.Clicked -= DismissTransientError;
         if (_pages != null) _pages.SizeChanged -= PageSizeChanged;
 #if ANDROID || __IOS__
         if (_mobilePagination != null) _mobilePagination.Navigate = null;
@@ -639,7 +688,9 @@ public partial class OrientedImageryView
         _selectionFindIcon = null;
         _selectionOr = null;
         _selectionDisplayIcon = null;
-        _notice = null;
+        _transientErrorText = null;
+        _transientErrorHost = null;
+        _dismissTransientErrorButton = null;
         _busy = null;
         _previousButton = null;
         _nextButton = null;
@@ -729,13 +780,12 @@ public partial class OrientedImageryView
         if (ViewModel.IsShowSelectedFootprintEnabled != footprintsEnabled)
             ViewModel.IsShowSelectedFootprintEnabled = footprintsEnabled;
 
+        if (_transientErrorText != null)
+            _transientErrorText.Text = TransientErrorMessage;
+        if (_transientErrorHost != null)
+            _transientErrorHost.IsVisible = TransientErrorMessage != null;
         RefreshStatus();
         RefreshToolbarPresentation();
-        if (_notice != null)
-        {
-            _notice.Text = ViewModel.SequentialNavigationError?.Message;
-            _notice.IsVisible = _notice.Text != null;
-        }
 
         RefreshPages();
         RefreshPopup();
@@ -769,7 +819,7 @@ public partial class OrientedImageryView
             }
         }
         string selectionInstructions = RefreshSelectionGuidance();
-        ErrorMessage = error ?? ViewModel.SequentialNavigationError?.Message ??
+        ErrorMessage = error ?? TransientErrorMessage ??
             (showSelectionGuidance ? selectionInstructions : message);
 
         if (_status != null)
@@ -783,7 +833,29 @@ public partial class OrientedImageryView
         if (_selectionGuidance != null)
             _selectionGuidance.IsVisible = showSelectionGuidance;
         AnnounceStatusMessages(showSelectionGuidance ? selectionInstructions : message,
-            ViewModel.SequentialNavigationError?.Message, error == null && message == Text("ImageLoading"));
+            TransientErrorMessage, error == null && message == Text("ImageLoading"));
+    }
+
+    private void DismissTransientError(object? sender, EventArgs e)
+    {
+#if WINDOWS
+        if (_dismissTransientErrorButton?.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.Button
+            { FocusState: not Microsoft.UI.Xaml.FocusState.Unfocused } button)
+            FocusManager.TryMoveFocus(Microsoft.UI.Xaml.Input.FocusNavigationDirection.Next,
+                new FindNextElementOptions { SearchRoot = button.XamlRoot.Content });
+#elif ANDROID
+        if (_dismissTransientErrorButton?.Handler?.PlatformView is Android.Views.View { HasFocus: true } button)
+            button.FocusSearch(Android.Views.FocusSearchDirection.Forward)?.RequestFocus();
+#else
+        if (_dismissTransientErrorButton?.IsFocused == true)
+        {
+            if (_popupOpenButton is { IsVisible: true, IsEnabled: true })
+                _popupOpenButton.Focus();
+            else
+                _viewport?.Focus();
+        }
+#endif
+        TransientErrorMessage = null;
     }
 
     private bool CanAnnounce

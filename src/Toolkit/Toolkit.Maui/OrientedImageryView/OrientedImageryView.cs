@@ -181,6 +181,24 @@ public partial class OrientedImageryView : TemplatedView
         private set => SetValue(ErrorMessageProperty, value);
     }
 
+    /// <summary>
+    /// Gets the temporary error message that does not prevent normal control usage.
+    /// </summary>
+    public string? TransientErrorMessage
+    {
+        get => (string?)GetValue(TransientErrorMessageProperty);
+        private set => SetValue(TransientErrorMessagePropertyKey, value);
+    }
+
+    private static readonly BindablePropertyKey TransientErrorMessagePropertyKey = BindableProperty.CreateReadOnly(
+        nameof(TransientErrorMessage), typeof(string), typeof(OrientedImageryView), null,
+        propertyChanged: (s, _, _) => ((OrientedImageryView)s).Refresh());
+
+    /// <summary>
+    /// Identifies the <see cref="TransientErrorMessage"/> bindable property.
+    /// </summary>
+    public static readonly BindableProperty TransientErrorMessageProperty = TransientErrorMessagePropertyKey.BindableProperty;
+
     #endregion
 
     #region Connection lifecycle
@@ -240,6 +258,7 @@ public partial class OrientedImageryView : TemplatedView
             _viewport.Footprint = null;
             _viewport.Markers = null;
         }
+        TransientErrorMessage = null;
     }
 
     private void Reconnect()
@@ -297,6 +316,7 @@ public partial class OrientedImageryView : TemplatedView
         _layerVersion++;
         CancelOperation();
         DismissPanel();
+        TransientErrorMessage = null;
         if (_observedLayer != null)
             _observedLayer.PropertyChanged -= LayerChanged;
         _observedLayer = ViewModel.OrientedImageryLayer;
@@ -334,6 +354,15 @@ public partial class OrientedImageryView : TemplatedView
                 DispatchUpdate(() =>
                 {
                     CancelOperation();
+                    Refresh();
+                });
+                break;
+            case nameof(OrientedImageryViewModel.SequentialNavigationError):
+                var message = ViewModel.SequentialNavigationError?.Message;
+                DispatchUpdate(() =>
+                {
+                    if (message != null)
+                        TransientErrorMessage = message;
                     Refresh();
                 });
                 break;
@@ -440,7 +469,7 @@ public partial class OrientedImageryView : TemplatedView
         catch (Exception ex)
         {
             if (version == _operationVersion)
-                _operationError = ex;
+                TransientErrorMessage = ex.Message;
         }
         finally
         {
@@ -476,8 +505,7 @@ public partial class OrientedImageryView : TemplatedView
         {
             if (_connected && version == _operationVersion && model == ViewModel && e.Image == model.SelectedImage)
             {
-                _operationError = ex;
-                Refresh();
+                TransientErrorMessage = ex.Message;
             }
         }
     }
