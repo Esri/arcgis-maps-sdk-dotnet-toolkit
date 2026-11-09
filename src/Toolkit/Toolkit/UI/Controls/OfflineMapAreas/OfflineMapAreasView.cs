@@ -139,7 +139,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             TemplateSettings = new OfflineMapAreasTemplateSettings();
             DefaultStyleKey = typeof(OfflineMapAreasView);
 #endif
-            _openMapCommand = new DelegateCommand((map) => SelectedMap = map as Map, (map) => map != SelectedMap);
+            _openMapCommand = new DelegateCommand((map) => SelectedMap = map as Map);
             _goOnlineCommand = new DelegateCommand((o) => SelectedMap = OnlineMap, () => SelectedMap != OnlineMap && OnlineMap != null);
         }
 
@@ -357,7 +357,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     onDemand.IsOpen = map is not null && onDemand.Map == map;
                 }
             }
-            _openMapCommand.NotifyCanExecuteChanged();
             _goOnlineCommand.NotifyCanExecuteChanged();
         }
 

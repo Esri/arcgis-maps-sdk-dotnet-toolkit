@@ -1308,6 +1308,12 @@ Navigation</value>
   <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
     <value>No layer selected.</value>
   </data>
+  <data name="OrientedImageryViewAnnounceTransientError" xml:space="preserve">
+    <value>Error raised</value>
+  </data>
+  <data name="OrientedImageryViewDismissError" xml:space="preserve">
+    <value>Dismiss error</value>
+  </data>
   <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
     <value>Prev</value>
   </data>
