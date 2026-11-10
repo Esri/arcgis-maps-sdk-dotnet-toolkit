@@ -154,11 +154,6 @@ public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
 }
 
 /// <summary>
-/// View model for the "Auto Update Footprint" toolbar control in the <see cref="OrientedImageryView"/>.
-/// </summary>
-public class AutoUpdateFootprintVM : OrientedImageryToolbarItemBase { }
-
-/// <summary>
 /// View model for the "Allow Adding Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
 public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase
@@ -334,29 +329,7 @@ public class ShowUnselectedFootprintsVM : OrientedImageryToolbarItemBase { }
 /// <summary>
 /// View model for the "Show Camera Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase
-{
-    /// <summary>
-    /// Toggles camera markers between visible on the GeoView and hidden.
-    /// </summary>
-    public ICommand ToggleCameraMarkerDisplayMode { get; }
-
-    /// <summary>
-    /// Creates a new instance of the <see cref="ShowCameraMarkersVM" /> class.
-    /// </summary>
-    public ShowCameraMarkersVM()
-    {
-        ToggleCameraMarkerDisplayMode = new Command(
-        execute: () =>
-        {
-            if (ViewModel == null)
-                return;
-
-            ViewModel.ShowCameraLocations = !ViewModel.ShowCameraLocations;
-        },
-        canExecute: () => true);
-    }
-}
+public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase { }
 
 /// <summary>
 /// View model for the "Clear Markers" toolbar control in the <see cref="OrientedImageryView"/>.
