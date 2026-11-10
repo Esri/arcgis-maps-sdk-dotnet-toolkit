@@ -777,24 +777,17 @@ public partial class OrientedImageryView
 /// <summary>
 /// Provides event data and an option to intercept default behavior for taps on the viewport of an <see cref="OrientedImageryView"/>.
 /// </summary>
-public sealed class OrientedImageryViewImageTappedArgs : EventArgs
+public sealed class OrientedImageryViewImageTappedArgs : OrientedImageTappedEventArgs
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryViewImageTappedArgs"/> class.
     /// </summary>
     /// <param name="orientedImageTappedEventArgs">The event arguments supplied by the original <see cref="OrientedImageViewport.ImageTapped"/> event.</param>
-    public OrientedImageryViewImageTappedArgs(OrientedImageTappedEventArgs orientedImageTappedEventArgs)
+    public OrientedImageryViewImageTappedArgs(OrientedImageTappedEventArgs orientedImageTappedEventArgs) :
+        base(orientedImageTappedEventArgs.ImagePoint, orientedImageTappedEventArgs.Image, orientedImageTappedEventArgs.Marker)
     {
-        OrientedImageTappedEventArgs = orientedImageTappedEventArgs;
+        Handled = false;
     }
-
-    /// <summary>
-    /// Gets the event arguments supplied by the original <see cref="OrientedImageViewport.ImageTapped"/> event.
-    /// </summary>
-    /// <remarks>
-    /// Internally-managed marker hits (such as on the search point marker) are not registered on this event.
-    /// </remarks>
-    public OrientedImageTappedEventArgs OrientedImageTappedEventArgs { get; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the default <see cref="OrientedImageryView"/> image tap logic should be skipped for the current tap event.

@@ -254,10 +254,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private async void MainOrientedImageryView_ImageTapped(object? sender, OrientedImageryViewImageTappedArgs e)
         {
             e.Handled = true;
-            var tap = e.OrientedImageTappedEventArgs;
             try
             {
-                var location = await tap.Image.ImageToLocationAsync(tap.ImagePoint);
+                var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
                 var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Pink, 20);
                 _orientedImageryVM.AddMarkerLocation(location, symbol);
             }
