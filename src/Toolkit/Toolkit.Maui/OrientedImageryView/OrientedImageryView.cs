@@ -422,6 +422,7 @@ public partial class OrientedImageryView : TemplatedView
         var layer = model.OrientedImageryLayer;
         if (geoView == null || layer == null || e.Location == null)
             return;
+        TransientErrorMessage = null;
         if (model.InteractionState == OrientedImageryViewInteractionState.AddMarkers)
         {
             model.AddMarkerLocation(e.Location);
@@ -493,6 +494,7 @@ public partial class OrientedImageryView : TemplatedView
         int version = _operationVersion;
         if (model.InteractionState != OrientedImageryViewInteractionState.AddMarkers || e.Marker != null || _viewport?.IsInteractive != true)
             return;
+        TransientErrorMessage = null;
         try
         {
             var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
