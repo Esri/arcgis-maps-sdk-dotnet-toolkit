@@ -66,9 +66,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
         SelectNextImageCommand = new Command(() => Navigate(SequenceStep.Next));
         SelectPreviousImageCommand = new Command(() => Navigate(SequenceStep.Previous));
-        ToggleSequentialNavigationCommand = new Command(
-            execute: () => ToggleSequentialNavigation(),
-            canExecute: () => IsSequentialNavigationEnabled || (SupportsSequentialNavigation && SelectedImage != null));
         ClearMarkersCommand = new Command(
             execute: () => Markers.Clear(),
             canExecute: () => Markers.Count > 0);
@@ -299,7 +296,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         get => _isSequentialNavigationEnabled;
         set
         {
+            if (!(SupportsSequentialNavigation && SelectedImage != null))
+            {
+                SetProperty(ref _isSequentialNavigationEnabled, false);
+                return;
+            }
             if (_isSequentialNavigationEnabled == value) return;
+
             SetProperty(ref _isSequentialNavigationEnabled, value);
             ResetSequentialNavigationState();
             UpdateNavigationState();
@@ -356,11 +359,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     /// This command is always enabled but does nothing when <see cref="CanNavigatePrevious"/> is <c>false</c>.
     /// </remarks>
     public ICommand SelectPreviousImageCommand { get; private set; }
-
-    /// <summary>
-    /// Enters sequential navigation or returns to the current search results.
-    /// </summary>
-    public ICommand ToggleSequentialNavigationCommand { get; private set; }
 
     /// <summary>
     /// Sets the images to display in the control.
@@ -554,7 +552,6 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     {
         CanNavigateNext = CanNavigate(SequenceStep.Next);
         CanNavigatePrevious = CanNavigate(SequenceStep.Previous);
-        ((Command)ToggleSequentialNavigationCommand).ChangeCanExecute();
     }
 #endregion Images
 

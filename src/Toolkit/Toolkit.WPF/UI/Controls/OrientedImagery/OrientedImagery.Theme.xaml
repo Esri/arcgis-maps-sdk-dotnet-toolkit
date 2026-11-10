@@ -779,9 +779,8 @@
     </DataTemplate>
 
     <DataTemplate x:Key="SequentialNavigationToolbarTemplate" DataType="controls:SequentialNavigationVM">
-        <ToggleButton Command="{Binding ViewModel.ToggleSequentialNavigationCommand}"
-                      IsChecked="{Binding ViewModel.IsSequentialNavigationEnabled, Mode=OneWay}"
-                      IsEnabled="{Binding ViewModel.SupportsSequentialNavigation}"
+        <ToggleButton IsChecked="{Binding ViewModel.IsSequentialNavigationEnabled}"
+                      IsEnabled="{Binding CanEnterSequentialNavigation}"
                       ToolTip="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationTooltip}"
                       AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationLabel}"
                       Style="{StaticResource ToolbarLabeledToggleButtonStyle}">

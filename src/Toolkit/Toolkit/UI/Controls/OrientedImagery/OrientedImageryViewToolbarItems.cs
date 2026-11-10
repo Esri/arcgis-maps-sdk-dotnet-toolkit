@@ -371,7 +371,36 @@ public class ToolbarDividerVM : OrientedImageryToolbarItemBase { }
 /// <summary>
 /// View model for the sequential navigation toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class SequentialNavigationVM : OrientedImageryToolbarItemBase { }
+public class SequentialNavigationVM : OrientedImageryToolbarItemBase
+{
+    /// <summary>
+    /// Whether or not sequential navigation is enabled.
+    /// </summary>
+    public bool CanEnterSequentialNavigation =>
+        ViewModel != null && (ViewModel.IsSequentialNavigationEnabled || (ViewModel.SupportsSequentialNavigation && ViewModel.SelectedImage != null));
+
+    /// <inheritdoc/>
+    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    {
+        if (oldValue != null)
+            oldValue.PropertyChanged -= ViewModel_PropertyChanged;
+
+        if (newValue != null)
+            newValue.PropertyChanged += ViewModel_PropertyChanged;
+
+        OnPropertyChanged(nameof(CanEnterSequentialNavigation));
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(OrientedImageryViewModel.IsSequentialNavigationEnabled) ||
+            e.PropertyName == nameof(OrientedImageryViewModel.SupportsSequentialNavigation) ||
+            e.PropertyName == nameof(OrientedImageryViewModel.SelectedImage))
+        {
+            OnPropertyChanged(nameof(CanEnterSequentialNavigation));
+        }
+    }
+}
 
 /// <summary>
 /// View model for the "Select New Marker Symbol" toolbar control in the <see cref="OrientedImageryView"/>.
