@@ -442,15 +442,15 @@ public partial class OrientedImageryView
                 AddActionRow(content, new MenuAction(Text("ClearMarkersLabel"), () => ViewModel.ClearMarkersCommand.Execute(null),
                     Enabled: () => Enabled() && ViewModel.ClearMarkersCommand.CanExecute(null), Icon: () => GlyphIcon(ToolkitIcons.Trash)));
                 break;
-            case SequentialNavigationVM:
+            case SequentialNavigationVM sequence:
                 AddSwitch(content, "MobileSequentialMode", () => ViewModel.IsSequentialNavigationEnabled,
                     value =>
                     {
-                        if (value != ViewModel.IsSequentialNavigationEnabled && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null))
-                            ViewModel.ToggleSequentialNavigationCommand.Execute(null);
+                        if (sequence.CanEnterSequentialNavigation)
+                            ViewModel.IsSequentialNavigationEnabled = value;
                     },
                     () => GeometryIcon(SequenceGeometry),
-                    () => Enabled() && ViewModel.ToggleSequentialNavigationCommand.CanExecute(null), "OrientedImagerySequentialMode");
+                    () => Enabled() && sequence.CanEnterSequentialNavigation, "OrientedImagerySequentialMode");
                 break;
             case ToolbarDividerVM:
 #if ANDROID

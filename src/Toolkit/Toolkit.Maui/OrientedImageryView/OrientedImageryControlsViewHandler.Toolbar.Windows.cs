@@ -60,7 +60,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 SelectNewMarkerSymbolVM picker => SymbolPicker(owner, picker),
                 ClearMarkersVM => ActionButton(owner, "ClearMarkersLabel", "ClearMarkersStackedLabel", Glyph("\uEB04"),
                     () => model.ClearMarkersCommand.Execute(null), () => model.ClearMarkersCommand.CanExecute(null)),
-                SequentialNavigationVM => SequenceButton(owner),
+                SequentialNavigationVM sequence => SequenceButton(owner, sequence),
                 _ => null,
             };
             if (control != null)
@@ -307,12 +307,12 @@ internal sealed partial class OrientedImageryControlsViewHandler
         return host;
     }
 
-    private ToggleButton SequenceButton(OrientedImageryView owner)
+    private ToggleButton SequenceButton(OrientedImageryView owner, SequentialNavigationVM sequence)
     {
         var model = owner.ViewModel;
         return Toggle(owner, "SequentialNavigationLabel", "SequentialNavigationStackedLabel", Geometry(OrientedImageryView.SequenceGeometry),
             () => model.IsSequentialNavigationEnabled, value => model.IsSequentialNavigationEnabled = value,
-            () => model.ToggleSequentialNavigationCommand.CanExecute(null), "OrientedImageryDesktopSequentialMode");
+            () => sequence.CanEnterSequentialNavigation, "OrientedImageryDesktopSequentialMode");
     }
 
     private ComboBox SymbolPicker(OrientedImageryView owner, SelectNewMarkerSymbolVM picker)
@@ -320,7 +320,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         var combo = CreateToolbarSelector(true);
         Describe(combo, "SelectMarkerSymbol", "OrientedImageryDesktopSelectMarkers");
         _cleanup.Add(() => combo.IsDropDownOpen = false);
-        LabelledSymbol[] symbols = [];
+        LabeledSymbol[] symbols = [];
         combo.SelectionChanged += (_, _) =>
         {
             if (!_updating && combo.IsEnabled && combo.SelectedIndex >= 0 && combo.SelectedIndex < symbols.Length)

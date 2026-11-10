@@ -231,7 +231,6 @@ public partial class OrientedImageryView : TemplatedView
             _connectedModel.ToolbarCategories.CollectionChanged -= ToolbarChanged;
             _connectedModel.SelectNextImageCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedModel.SelectPreviousImageCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
-            _connectedModel.ToggleSequentialNavigationCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedModel.ClearMarkersCommand.CanExecuteChanged -= NavigationAvailabilityChanged;
             _connectedGeoView?.GraphicsOverlays?.Remove(_connectedModel.MarkersOverlay);
             _connectedModel.DispatchAction = null;
@@ -272,7 +271,6 @@ public partial class OrientedImageryView : TemplatedView
         ObserveToolbarCategories();
         _connectedModel.SelectNextImageCommand.CanExecuteChanged += NavigationAvailabilityChanged;
         _connectedModel.SelectPreviousImageCommand.CanExecuteChanged += NavigationAvailabilityChanged;
-        _connectedModel.ToggleSequentialNavigationCommand.CanExecuteChanged += NavigationAvailabilityChanged;
         _connectedModel.ClearMarkersCommand.CanExecuteChanged += NavigationAvailabilityChanged;
         _connectedGeoView = GeoView;
         _connected = _connectedGeoView != null;
