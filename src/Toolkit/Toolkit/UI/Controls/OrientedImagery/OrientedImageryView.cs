@@ -184,6 +184,7 @@ public partial class OrientedImageryView
             case nameof(OrientedImageryViewModel.OrientedImageryLayer):
                 CancelGeoViewTappedHandler();
                 HasSearchedForImages = false;
+                TransientErrorMessage = null;
                 UpdateErrorMessages();
                 break;
             case nameof(OrientedImageryViewModel.SequentialNavigationError):
@@ -297,6 +298,8 @@ public partial class OrientedImageryView
         // Only adds a marker if sketch mode is enabled and there is not already a marker nearby
         if (eventArgs.Handled || ViewModel.InteractionState != OrientedImageryViewInteractionState.AddMarkers || e.Marker != null)
             return;
+
+        TransientErrorMessage = null;
 
         try
         {
@@ -419,6 +422,8 @@ public partial class OrientedImageryView
         if (eventArgs.Handled || e.Location == null || GeoView == null || ViewModel.OrientedImageryLayer == null)
             return;
 
+        TransientErrorMessage = null;
+
         using var currentCTS = new CancellationTokenSource();
         if (_geoViewTappedCTS == null)
         {
@@ -480,6 +485,10 @@ public partial class OrientedImageryView
                 default:
                     return;
             }
+        }
+        catch (OperationCanceledException) when (token.IsCancellationRequested)
+        {
+            // A newer tap or a layer change canceled this search.
         }
         catch (Exception ex)
         {
