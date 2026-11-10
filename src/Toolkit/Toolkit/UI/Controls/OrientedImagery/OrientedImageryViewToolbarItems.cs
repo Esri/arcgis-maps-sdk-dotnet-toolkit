@@ -1,11 +1,9 @@
 ﻿#if WPF
 using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -381,21 +379,21 @@ public class SequentialNavigationVM : OrientedImageryToolbarItemBase
 /// </summary>
 public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
 {
-    private static readonly LabelledSymbol DefaultSymbol = new LabelledSymbol(
+    private static readonly LabeledSymbol DefaultSymbol = new LabeledSymbol(
         new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 10),
         Properties.Resources.GetString("OrientedImageryViewMarkerX") ?? "Cross marker");
 
     /// <summary>
     /// Gets the collection of marker symbol options that can be used for selecting a new marker symbol.
     /// </summary>
-    public ObservableCollection<LabelledSymbol> SymbolOptions { get; private set; }
+    public ObservableCollection<LabeledSymbol> SymbolOptions { get; private set; }
 
     /// <summary>
     /// Creates a new instance of the <see cref="SelectNewMarkerSymbolVM"/> class.
     /// </summary>
-    public SelectNewMarkerSymbolVM(Collection<LabelledSymbol>? markers = null)
+    public SelectNewMarkerSymbolVM(Collection<LabeledSymbol>? markers = null)
     {
-        SymbolOptions = new ObservableCollection<LabelledSymbol>(markers ?? new Collection<LabelledSymbol>());
+        SymbolOptions = new ObservableCollection<LabeledSymbol>(markers ?? new Collection<LabeledSymbol>());
         SymbolOptions.CollectionChanged += MarkerSymbolOptions_CollectionChanged;
 
         _selectedSymbol = SymbolOptions.Count > 0 ? SymbolOptions[0] : DefaultSymbol;
@@ -413,11 +411,11 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
         }
     }
 
-    private LabelledSymbol _selectedSymbol;
+    private LabeledSymbol _selectedSymbol;
     /// <summary>
     /// Gets or sets the currently-selected marker symbol.
     /// </summary>
-    public LabelledSymbol SelectedSymbol
+    public LabeledSymbol SelectedSymbol
     {
         get => _selectedSymbol;
         set
@@ -441,7 +439,18 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
 }
 
 /// <summary>
-/// A <see cref="Symbol"/> and label.
+/// A <see cref="Symbology.Symbol"/> and label.
 /// </summary>
-public record LabelledSymbol(Symbol Symbol, string Label);
+public sealed class LabeledSymbol(Symbol Symbol, string Label)
+{
+    /// <summary>
+    /// Gets the symbol definition.
+    /// </summary>
+    public Symbol Symbol { get; private set; } = Symbol;
+
+    /// <summary>
+    /// Gets the symbol label.
+    /// </summary>
+    public string Label { get; private set; } = Label;
+}
 #endif

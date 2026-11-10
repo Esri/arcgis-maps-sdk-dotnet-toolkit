@@ -937,17 +937,17 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private ObservableCollection<OrientedImageryToolbarCategory> GetDefaultToolbarCategories()
     {
         var symbolOutline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Black, 1);
-        var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<LabelledSymbol>()
+        var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<LabeledSymbol>()
         {
-            new LabelledSymbol(
+            new LabeledSymbol(
                 new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Violet, 12) { Outline =  symbolOutline },
                 Properties.Resources.GetString("OrientedImageryViewMarkerSquare") ?? "Square marker"
             ),
-            new LabelledSymbol(
+            new LabeledSymbol(
                 new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Yellow, 12) { Outline =  symbolOutline },
                 Properties.Resources.GetString("OrientedImageryViewMarkerTriangle") ?? "Triangle marker"
             ),
-            new LabelledSymbol(
+            new LabeledSymbol(
                 new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 12) { Outline =  symbolOutline },
                 Properties.Resources.GetString("OrientedImageryViewMarkerDiamond") ?? "Diamond marker"
             )
