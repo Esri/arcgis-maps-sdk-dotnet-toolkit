@@ -48,19 +48,25 @@ See the `OrientedImageryView` sample for a full example implementation.
 
 ## Customizing the toolbar
 
-The `OrientedImageryView` toolbar is implemented an `ItemsControl` whose individual buttons and dropdowns are defined by the `OrientedImageryViewModel.ToolbarCategories` list. `ToolbarCategories` is a list of `OrientedImageryToolbarCategory`s that in turn contain lists of `OrientedImageryToolbarItem`s. Data templates for each toolbar item and category are selected using the `OrientedImageryView.ToolbarSelector`, which is a custom `DataTemplateSelector` containing a list of paired item types to data templates that can be modified as needed. See the below example.
+The `OrientedImageryView` toolbar is implemented as an `ItemsControl` whose individual buttons and dropdowns are defined by the `OrientedImageryViewModel.ToolbarCategories` collection. Each `ToolbarCategory` contains a collection of `ToolbarItemBase` objects. Data templates for each toolbar item and category are selected using `OrientedImageryView.ToolbarItemTemplateSelector`, a specialized `DataTemplateSelector` subclass containing configurable mappings from category names or item types to data templates. These toolbar customization types are in the `Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery` namespace.
 
 ### Example
 
-Define a toolbar item class deriving from `OrientedImageryToolbarItemBase`.
+Define a toolbar item class deriving from `ToolbarItemBase`.
 
 ```cs
-public sealed class ShowImageDetailsToolbarItem : OrientedImageryToolbarItemBase
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+
+public sealed class ShowImageDetailsToolbarItem : ToolbarItemBase
 {
 }
 ```
 
-Define a data template for the custom toolbar item, then create an `OrientedImageryViewToolbarSelector` that maps the item type to the template. As in the sample, import the default theme to reuse its toolbar button style. Here, `local` refers to your application's namespace and `esri` uses the namespace declaration from the minimal example.
+Define a data template for the custom toolbar item, then create a `ToolbarSelector` that maps the item type to the template. As in the sample, import the default theme to reuse its toolbar button style. Here, `local` refers to your application's namespace and `esri` uses the namespace declaration from the minimal example. Add an `oi` declaration as below to import the toolbar customization types:
+
+```xml
+xmlns:oi="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;assembly=Esri.ArcGISRuntime.Toolkit.WPF"
+```
 
 ```xml
 <UserControl.Resources>
@@ -86,10 +92,10 @@ Define a data template for the custom toolbar item, then create an `OrientedImag
             </Button>
         </DataTemplate>
 
-        <esri:OrientedImageryViewToolbarSelector x:Key="CustomToolbarSelector">
-            <esri:OrientedImageryToolbarItemSelectorPair ItemType="{x:Type local:ShowImageDetailsToolbarItem}"
-                                                        Template="{StaticResource ShowImageDetailsToolbarTemplate}" />
-        </esri:OrientedImageryViewToolbarSelector>
+        <oi:ToolbarSelector x:Key="CustomToolbarSelector">
+            <oi:ToolbarItemSelectorPair ItemType="{x:Type local:ShowImageDetailsToolbarItem}"
+                                        Template="{StaticResource ShowImageDetailsToolbarTemplate}" />
+        </oi:ToolbarSelector>
     </ResourceDictionary>
 </UserControl.Resources>
 ```
@@ -110,10 +116,10 @@ private void MainOrientedImageryView_Loaded(object sender, RoutedEventArgs e)
     MainOrientedImageryView.Loaded -= MainOrientedImageryView_Loaded;
 
     var overlaysCategory = MainOrientedImageryView.ViewModel.ToolbarCategories
-        .First(category => category.Name == OrientedImageryToolbarCategory.OverlaysCategoryName);
+        .First(category => category.Name == ToolbarCategory.OverlaysCategoryName);
     overlaysCategory.ToolbarItems.Add(new ShowImageDetailsToolbarItem());
     MainOrientedImageryView.ToolbarItemTemplateSelector =
-        (OrientedImageryViewToolbarSelector)FindResource("CustomToolbarSelector");
+        (ToolbarSelector)FindResource("CustomToolbarSelector");
 }
 
 private void ShowImageDetails_Click(object sender, RoutedEventArgs e)

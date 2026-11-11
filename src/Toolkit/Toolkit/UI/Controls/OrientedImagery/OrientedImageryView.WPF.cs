@@ -1,6 +1,5 @@
 #if WPF
 
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using System.Windows.Automation.Peers;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -9,7 +8,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 [TemplatePart(Name = ImageViewportName, Type = typeof(OrientedImageViewport))]
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
-[TemplatePart(Name = PaginatorName, Type = typeof(Paginator))]
+[TemplatePart(Name = PaginatorName, Type = typeof(OrientedImagery.Paginator))]
 [TemplatePart(Name = MainErrorMessagePresenterName, Type = typeof(TextBlock))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = ImageDetailsButtonName, Type = typeof(Button))]
@@ -84,7 +83,7 @@ internal static class ImageSearchModeSelectionBehavior
     private static void Item_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
         if (sender is ComboBoxItem { IsSelected: true, DataContext: OrientedImageryViewInteractionState } item &&
-            ItemsControl.ItemsControlFromItemContainer(item) is ComboBox { DataContext: ImageSearchModeVM viewModel })
+            ItemsControl.ItemsControlFromItemContainer(item) is ComboBox { DataContext: OrientedImagery.ImageSearchModeVM viewModel })
         {
             viewModel.IsImageSelectionEnabled = true;
         }

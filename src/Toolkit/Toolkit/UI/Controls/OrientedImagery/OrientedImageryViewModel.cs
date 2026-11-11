@@ -23,6 +23,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
 #if WPF
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+
 /// <summary>
 /// Manages oriented imagery selection, footprints, and map markers for an oriented imagery view.
 /// </summary>
@@ -919,22 +921,22 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 #endregion Markers
 
 #region ToolbarItems
-    private HashSet<OrientedImageryToolbarCategory> _attachedToolbarCategories = new(ReferenceEqualityComparer.Instance);
+    private HashSet<ToolbarCategory> _attachedToolbarCategories = new(ReferenceEqualityComparer.Instance);
 
     /// <summary>
     /// The collection of toolbar categories to be displayed on the containing <see cref="OrientedImageryView"/>.
     /// </summary>
     /// <remarks>
-    /// Each toolbar item is an <see cref="OrientedImageryToolbarCategory"/> object with a reference to the containing 
+    /// Each toolbar item is an <see cref="ToolbarCategory"/> object with a reference to the containing
     /// <see cref="OrientedImageryViewModel"/>. The list is initially populated with a set of default toolbar items for
     /// the base control. Items are disconnected from the view model when they are removed from the collection.
     /// </remarks>
-    public ObservableCollection<OrientedImageryToolbarCategory> ToolbarCategories { get; private set; }
+    public ObservableCollection<ToolbarCategory> ToolbarCategories { get; private set; }
 
     /// <summary>
     /// Gets the default toolbar categories for a <see cref="OrientedImageryViewModel"/>.
     /// </summary>
-    private ObservableCollection<OrientedImageryToolbarCategory> GetDefaultToolbarCategories()
+    private ObservableCollection<ToolbarCategory> GetDefaultToolbarCategories()
     {
         var symbolOutline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Black, 1);
         var markerSymbolPickerVM = new SelectNewMarkerSymbolVM(new Collection<LabeledSymbol>()
@@ -953,13 +955,13 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             )
         });
 
-        ObservableCollection<OrientedImageryToolbarCategory> categories =
+        ObservableCollection<ToolbarCategory> categories =
         [
-            new OrientedImageryToolbarCategory(OrientedImageryToolbarCategory.ModeCategoryName)
+            new ToolbarCategory(ToolbarCategory.ModeCategoryName)
             {
                 ToolbarItems = { new ImageSearchModeVM() }
             },
-            new OrientedImageryToolbarCategory(OrientedImageryToolbarCategory.OverlaysCategoryName)
+            new ToolbarCategory(ToolbarCategory.OverlaysCategoryName)
             {
                 ToolbarItems =
                 {
@@ -968,7 +970,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                     new ShowCameraMarkersVM()
                 }
             },
-            new OrientedImageryToolbarCategory(OrientedImageryToolbarCategory.MarkersCategoryName)
+            new ToolbarCategory(ToolbarCategory.MarkersCategoryName)
             {
                 ToolbarItems =
                 {
@@ -977,7 +979,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
                     new ClearMarkersVM()
                 }
             },
-            new OrientedImageryToolbarCategory(OrientedImageryToolbarCategory.MoreCategoryName)
+            new ToolbarCategory(ToolbarCategory.MoreCategoryName)
             {
                 ToolbarItems = { new SequentialNavigationVM() }
             }
@@ -997,7 +999,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
     private void SynchronizeToolbarCategories()
     {
-        var currentItems = new HashSet<OrientedImageryToolbarCategory>(ToolbarCategories, ReferenceEqualityComparer.Instance);
+        var currentItems = new HashSet<ToolbarCategory>(ToolbarCategories, ReferenceEqualityComparer.Instance);
         foreach (var item in _attachedToolbarCategories)
         {
             if (!currentItems.Contains(item))

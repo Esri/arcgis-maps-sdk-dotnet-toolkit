@@ -4,6 +4,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
@@ -211,18 +212,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         private void UpdateToolbarButton_Click(object sender, RoutedEventArgs e)
         {
             _usingAlternateToolbarStyling = !_usingAlternateToolbarStyling;
-            var overlaysCategory = _orientedImageryVM.ToolbarCategories.First(c => c.Name == OrientedImageryToolbarCategory.OverlaysCategoryName);
+            var overlaysCategory = _orientedImageryVM.ToolbarCategories.First(c => c.Name == ToolbarCategory.OverlaysCategoryName);
             if (_usingAlternateToolbarStyling)
             {
                 overlaysCategory.ToolbarItems.Add(new ShowSelectedImagePopupVM());
-                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewToolbarSelector)this.FindResource("AlternateToolbarSelector");
+                MainOrientedImageryView.ToolbarItemTemplateSelector = (ToolbarSelector)this.FindResource("AlternateToolbarSelector");
             }
             else
             {
                 var popupToolbarItem = overlaysCategory.ToolbarItems.OfType<ShowSelectedImagePopupVM>().FirstOrDefault();
                 if (popupToolbarItem != null)
                     overlaysCategory.ToolbarItems.Remove(popupToolbarItem);
-                MainOrientedImageryView.ToolbarItemTemplateSelector = (OrientedImageryViewToolbarSelector)this.FindResource("DefaultOrientedImageryToolbarSelector");
+                MainOrientedImageryView.ToolbarItemTemplateSelector = (ToolbarSelector)this.FindResource("DefaultOrientedImageryToolbarSelector");
             }
         }
 
@@ -272,6 +273,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery
         }
     }
 
-    public class ShowSelectedImagePopupVM : OrientedImageryToolbarItemBase
+    public class ShowSelectedImagePopupVM : ToolbarItemBase
     { }
 }

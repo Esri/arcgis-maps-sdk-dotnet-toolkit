@@ -5,12 +5,12 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 
 /// <summary>
 /// View model for a toolbar representing a category of items. Used for nested views.
 /// </summary>
-public class OrientedImageryToolbarCategory
+public class ToolbarCategory
 {
     /// <summary>The default <see cref="Name"/> of the Mode category.</summary>
     public const string ModeCategoryName = "Mode";
@@ -22,17 +22,17 @@ public class OrientedImageryToolbarCategory
     public const string MoreCategoryName = "More";
 
     private OrientedImageryViewModel? _mainViewModel;
-    private HashSet<OrientedImageryToolbarItemBase> _attachedToolbarItems;
+    private HashSet<ToolbarItemBase> _attachedToolbarItems;
 
     /// <summary>
-    /// Constructs an <see cref="OrientedImageryToolbarCategory"/> with the given name.
+    /// Constructs an <see cref="ToolbarCategory"/> with the given name.
     /// </summary>
     /// <param name="name"></param>
-    public OrientedImageryToolbarCategory(string name)
+    public ToolbarCategory(string name)
     {
         Name = name;
         _attachedToolbarItems = new(ReferenceEqualityComparer.Instance);
-        ToolbarItems = new ObservableCollection<OrientedImageryToolbarItemBase>();
+        ToolbarItems = new ObservableCollection<ToolbarItemBase>();
         ToolbarItems.CollectionChanged += ToolbarItems_CollectionChanged;
     }
 
@@ -62,17 +62,17 @@ public class OrientedImageryToolbarCategory
     /// <see cref="OrientedImageryViewModel"/>.
     /// </summary>
     /// <remarks>
-    /// Each toolbar item is an <see cref="OrientedImageryToolbarItemBase"/> object with a reference to the containing category's
+    /// Each toolbar item is an <see cref="ToolbarItemBase"/> object with a reference to the containing category's
     /// <see cref="ViewModel"/>. The list is initially populated with a set of default toolbar items for the base control. Items
     /// are disconnected from the view model when they are removed from the collection.
     /// </remarks>
-    public ObservableCollection<OrientedImageryToolbarItemBase> ToolbarItems { get; private set; }
+    public ObservableCollection<ToolbarItemBase> ToolbarItems { get; private set; }
 
     private void ToolbarItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => SynchronizeToolbarItems();
 
     private void SynchronizeToolbarItems()
     {
-        var currentItems = new HashSet<OrientedImageryToolbarItemBase>(ToolbarItems, ReferenceEqualityComparer.Instance);
+        var currentItems = new HashSet<ToolbarItemBase>(ToolbarItems, ReferenceEqualityComparer.Instance);
         foreach (var item in _attachedToolbarItems)
         {
             if (!currentItems.Contains(item))
@@ -92,22 +92,22 @@ public class OrientedImageryToolbarCategory
 /// </summary>
 /// <remarks>
 /// <para>
-///   <see cref="OrientedImageryToolbarItemBase"/> objects are meant to be held in <see cref="OrientedImageryToolbarCategory.ToolbarItems"/>.
+///   <see cref="ToolbarItemBase"/> objects are meant to be held in <see cref="ToolbarCategory.ToolbarItems"/>.
 ///   They supply a <see cref="ViewModel"/> property for convenient access to the containing <see cref="OrientedImageryViewModel"/>, and implement
 ///   <see cref="INotifyPropertyChanged"/>.
 /// </para>
 /// <para>
-///   <see cref="ViewModel"/> is populated when an <see cref="OrientedImageryToolbarItemBase"/> instance is added to <see cref="OrientedImageryToolbarCategory.ToolbarItems"/>.
-///   The same <see cref="OrientedImageryToolbarItemBase"/> instance should not be shared between multiple <see cref="OrientedImageryViewModel"/> instances, as only
+///   <see cref="ViewModel"/> is populated when an <see cref="ToolbarItemBase"/> instance is added to <see cref="ToolbarCategory.ToolbarItems"/>.
+///   The same <see cref="ToolbarItemBase"/> instance should not be shared between multiple <see cref="OrientedImageryViewModel"/> instances, as only
 ///   one view model can be referenced by the <see cref="ViewModel"/> property at a time.
 /// </para>
 /// </remarks>
-public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
+public abstract class ToolbarItemBase : INotifyPropertyChanged
 {
     private OrientedImageryViewModel? _mainViewModel;
 
     /// <summary>
-    /// Gets or sets the linked <see cref="OrientedImageryViewModel"/>. This property will be set automatically when the toolbar item is added to <see cref="OrientedImageryToolbarCategory.ToolbarItems"/>.
+    /// Gets or sets the linked <see cref="OrientedImageryViewModel"/>. This property will be set automatically when the toolbar item is added to <see cref="ToolbarCategory.ToolbarItems"/>.
     /// </summary>
     public OrientedImageryViewModel? ViewModel
     {
@@ -154,7 +154,7 @@ public abstract class OrientedImageryToolbarItemBase : INotifyPropertyChanged
 /// <summary>
 /// View model for the "Allow Adding Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase
+internal class AllowAddingMarkersVM : ToolbarItemBase
 {
     /// <summary>
     /// Gets or sets a value indicating whether adding markers is enabled. If set to <see langword="false"/>, the 
@@ -205,7 +205,7 @@ public class AllowAddingMarkersVM : OrientedImageryToolbarItemBase
 /// <summary>
 /// View model for the image search mode toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class ImageSearchModeVM : OrientedImageryToolbarItemBase
+internal class ImageSearchModeVM : ToolbarItemBase
 {
     private OrientedImageryViewInteractionState _selectedInteractionState = OrientedImageryViewInteractionState.FindImages;
 
@@ -293,7 +293,7 @@ public class ImageSearchModeVM : OrientedImageryToolbarItemBase
 /// <summary>
 /// View model for the "Show Selected Footprint" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class ShowSelectedFootprintVM : OrientedImageryToolbarItemBase
+internal class ShowSelectedFootprintVM : ToolbarItemBase
 {
     /// <summary>
     /// Whether or not the show selected image button is in a usable state.
@@ -322,27 +322,27 @@ public class ShowSelectedFootprintVM : OrientedImageryToolbarItemBase
 /// <summary>
 /// View model for the "Show Unselected Footprints" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class ShowUnselectedFootprintsVM : OrientedImageryToolbarItemBase { }
+internal class ShowUnselectedFootprintsVM : ToolbarItemBase { }
 
 /// <summary>
 /// View model for the "Show Camera Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class ShowCameraMarkersVM : OrientedImageryToolbarItemBase { }
+internal class ShowCameraMarkersVM : ToolbarItemBase { }
 
 /// <summary>
 /// View model for the "Clear Markers" toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class ClearMarkersVM : OrientedImageryToolbarItemBase { }
+internal class ClearMarkersVM : ToolbarItemBase { }
 
 /// <summary>
 /// View model for a divider between groups of oriented imagery toolbar controls.
 /// </summary>
-public class ToolbarDividerVM : OrientedImageryToolbarItemBase { }
+internal class ToolbarDividerVM : ToolbarItemBase { }
 
 /// <summary>
 /// View model for the sequential navigation toolbar control in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class SequentialNavigationVM : OrientedImageryToolbarItemBase
+internal class SequentialNavigationVM : ToolbarItemBase
 {
     /// <summary>
     /// Whether or not sequential navigation is enabled.
@@ -377,7 +377,7 @@ public class SequentialNavigationVM : OrientedImageryToolbarItemBase
 /// View model for the "Select New Marker Symbol" toolbar control in the <see cref="OrientedImageryView"/>.
 /// This control allows the user to select a marker symbol to be used for new markers in the <see cref="OrientedImageryView"/>.
 /// </summary>
-public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
+internal class SelectNewMarkerSymbolVM : ToolbarItemBase
 {
     private static readonly LabeledSymbol DefaultSymbol = new LabeledSymbol(
         new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 10),
@@ -441,7 +441,7 @@ public class SelectNewMarkerSymbolVM : OrientedImageryToolbarItemBase
 /// <summary>
 /// A <see cref="Symbology.Symbol"/> and label.
 /// </summary>
-public sealed class LabeledSymbol(Symbol Symbol, string Label)
+internal sealed class LabeledSymbol(Symbol Symbol, string Label)
 {
     /// <summary>
     /// Gets the symbol definition.

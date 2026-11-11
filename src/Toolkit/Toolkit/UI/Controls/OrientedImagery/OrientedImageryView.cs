@@ -4,11 +4,10 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Automation;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -63,7 +62,7 @@ public partial class OrientedImageryView
 
         _viewport = GetTemplateChild(ImageViewportName) as OrientedImageViewport;
         _toolbarContainer = GetTemplateChild(ToolbarContainerName) as ItemsControl;
-        _paginator = GetTemplateChild(PaginatorName) as Paginator;
+        _paginator = GetTemplateChild(PaginatorName) as OrientedImagery.Paginator;
         _mainErrorMessagePresenter = GetTemplateChild(MainErrorMessagePresenterName) as TextBlock;
         RewireDismissTransientErrorButton();
 
@@ -226,7 +225,7 @@ public partial class OrientedImageryView
     /// <summary>
     /// Gets a value indicating whether an image selection search has completed after a map tap.
     /// </summary>
-    public bool HasSearchedForImages
+    internal bool HasSearchedForImages
     {
         get => (bool)GetValue(HasSearchedForImagesProperty);
         private set => SetValue(HasSearchedForImagesPropertyKey, value);
@@ -238,7 +237,7 @@ public partial class OrientedImageryView
     /// <summary>
     /// Identifies the <see cref="HasSearchedForImages" /> dependency property.
     /// </summary>
-    public static readonly DependencyProperty HasSearchedForImagesProperty = PropertyHelper.GetProperty(HasSearchedForImagesPropertyKey);
+    internal static readonly DependencyProperty HasSearchedForImagesProperty = PropertyHelper.GetProperty(HasSearchedForImagesPropertyKey);
 
     private OrientedImageViewport? _viewport;
 
@@ -514,15 +513,15 @@ public partial class OrientedImageryView
 
 #region Toolbar
     private ItemsControl? _toolbarContainer;
-    private OrientedImageryViewToolbarSelector? _defaultItemTemplateSelector;
+    private ToolbarSelector? _defaultItemTemplateSelector;
 
     /// <summary>
-    /// Gets or sets the <see cref="OrientedImageryViewToolbarSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar categories and
+    /// Gets or sets the <see cref="ToolbarSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar categories and
     /// items in <see cref="OrientedImageryViewModel.ToolbarCategories"/>.
     /// </summary>
-    public OrientedImageryViewToolbarSelector? ToolbarItemTemplateSelector
+    public ToolbarSelector? ToolbarItemTemplateSelector
     {
-        get => (OrientedImageryViewToolbarSelector)GetValue(ToolbarItemTemplateSelectorProperty);
+        get => (ToolbarSelector)GetValue(ToolbarItemTemplateSelectorProperty);
         set => SetValue(ToolbarItemTemplateSelectorProperty, value);
     }
 
@@ -530,9 +529,9 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="ToolbarItemTemplateSelector" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty ToolbarItemTemplateSelectorProperty =
-        PropertyHelper.CreateProperty<OrientedImageryViewToolbarSelector?, OrientedImageryView>(nameof(ToolbarItemTemplateSelector), null, (s, oldValue, newValue) => s.OnItemTemplateSelectorChanged(oldValue, newValue));
+        PropertyHelper.CreateProperty<ToolbarSelector?, OrientedImageryView>(nameof(ToolbarItemTemplateSelector), null, (s, oldValue, newValue) => s.OnItemTemplateSelectorChanged(oldValue, newValue));
 
-    private void OnItemTemplateSelectorChanged(OrientedImageryViewToolbarSelector? oldSelector, OrientedImageryViewToolbarSelector? newSelector)
+    private void OnItemTemplateSelectorChanged(ToolbarSelector? oldSelector, ToolbarSelector? newSelector)
     {
         // Save and in the future merge the default selector so the default styles are always available unless overridden.
         if (ReadLocalValue(ToolbarItemTemplateSelectorProperty) == DependencyProperty.UnsetValue)
@@ -562,7 +561,7 @@ public partial class OrientedImageryView
 #endregion Toolbar
 
 #region Pagination
-    private Paginator? _paginator;
+    private OrientedImagery.Paginator? _paginator;
 
     private void UpdatePaginatorSelection()
     {
@@ -579,7 +578,7 @@ public partial class OrientedImageryView
         _paginator.SelectedPageIndex = index;
     }
 
-    private void Paginator_SelectedPageIndexChanged(Paginator sender, int newPageIndex)
+    private void Paginator_SelectedPageIndexChanged(OrientedImagery.Paginator sender, int newPageIndex)
     {
         if (newPageIndex >= 0 && newPageIndex < ViewModel.Images.Count)
             ViewModel.SelectedImage = ViewModel.Images[newPageIndex];

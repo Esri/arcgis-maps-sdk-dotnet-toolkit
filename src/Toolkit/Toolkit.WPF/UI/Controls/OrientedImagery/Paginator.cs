@@ -11,7 +11,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 [TemplatePart(Name = PagesPresenterName, Type = typeof(ItemsControl))]
 [TemplatePart(Name = LeftNavigateName, Type = typeof(Button))]
 [TemplatePart(Name = RightNavigateName, Type = typeof(Button))]
-public class Paginator : Control
+internal class Paginator : Control
 {
     const string PagesPresenterName = "PART_PagesPresenter";
     const string LeftNavigateName = "PART_LeftNavigate";
@@ -199,7 +199,7 @@ public class Paginator : Control
 /// Visibility converter for collapsing page button content unless currently on the selected page.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-public sealed class PaginatorCurrentPageVisibilityConverter : IMultiValueConverter
+internal sealed class PaginatorCurrentPageVisibilityConverter : IMultiValueConverter
 {
     /// <inheritdoc />
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -220,7 +220,7 @@ public sealed class PaginatorCurrentPageVisibilityConverter : IMultiValueConvert
 /// Creates a localized accessible name identifying a page and its selection state.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-public sealed class PaginatorPageNameConverter : IMultiValueConverter
+internal sealed class PaginatorPageNameConverter : IMultiValueConverter
 {
     /// <inheritdoc />
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
