@@ -566,15 +566,16 @@ public partial class OrientedImageryViewer
 
     private void OnItemTemplateSelectorChanged(ToolbarSelector? oldSelector, ToolbarSelector? newSelector)
     {
+#if WPF
         // Save and in the future merge the default selector so the default styles are always available unless overridden.
         if (ReadLocalValue(ToolbarItemTemplateSelectorProperty) == DependencyProperty.UnsetValue)
         {
             _defaultItemTemplateSelector = newSelector;
         }
-        else if (_defaultItemTemplateSelector is not null)
-        {
+#endif
+
+        if (_defaultItemTemplateSelector is not null && !ReferenceEquals(newSelector, _defaultItemTemplateSelector))
             newSelector?.Merge(_defaultItemTemplateSelector);
-        }
 
         if (_toolbarContainer != null)
             _toolbarContainer.ItemTemplateSelector = newSelector;
@@ -586,7 +587,7 @@ public partial class OrientedImageryViewer
         toolbarContainer.Items.Clear();
         toolbarContainer.ItemsSource = ViewModel?.ToolbarCategories;
 #if WINDOWS_XAML
-        WireToolbarWinUI(toolbarContainer);
+        WireToolbar_WinUI();
 #endif
     }
 
@@ -594,9 +595,6 @@ public partial class OrientedImageryViewer
     {
         toolbarContainer.ClearValue(ItemsControl.ItemTemplateSelectorProperty);
         toolbarContainer.ClearValue(ItemsControl.ItemsSourceProperty);
-#if WINDOWS_XAML
-        UnwireToolbarWinUI(toolbarContainer);
-#endif
     }
 #endregion Toolbar
 
