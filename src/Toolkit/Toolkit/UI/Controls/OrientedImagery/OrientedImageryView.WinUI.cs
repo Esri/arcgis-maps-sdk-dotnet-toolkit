@@ -104,19 +104,18 @@ public partial class OrientedImageryView : Control
     internal static readonly DependencyProperty DefaultToolbarTemplatesProperty =
         DependencyProperty.Register(nameof(DefaultToolbarTemplates), typeof(DefaultWinUIToolbarTemplates), typeof(OrientedImageryView), new PropertyMetadata(null));
 
-    private void WireToolbarWinUI(ItemsControl toolbarContainer)
+    private void WireToolbar_WinUI()
     {
+        if (_defaultItemTemplateSelector == null)
+            _defaultItemTemplateSelector = CreateDefaultSelector_WinUI();
+
         if (ToolbarItemTemplateSelector == null)
-            ToolbarItemTemplateSelector = CreateDefaultSelector();
-        toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
+            ToolbarItemTemplateSelector = _defaultItemTemplateSelector;
+        else if (!ReferenceEquals(ToolbarItemTemplateSelector, _defaultItemTemplateSelector))
+            ToolbarItemTemplateSelector?.Merge(_defaultItemTemplateSelector);
     }
 
-    private void UnwireToolbarWinUI(ItemsControl toolbarContainer)
-    {
-        toolbarContainer.ItemTemplateSelector = null;
-    }
-
-    private OrientedImageryViewToolbarSelector CreateDefaultSelector()
+    private OrientedImageryViewToolbarSelector CreateDefaultSelector_WinUI()
     {
         var selector = new OrientedImageryViewToolbarSelector();
         var pairs = selector.SelectionPairs;
