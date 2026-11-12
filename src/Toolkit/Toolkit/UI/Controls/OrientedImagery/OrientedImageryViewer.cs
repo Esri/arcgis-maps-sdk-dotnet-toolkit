@@ -1,12 +1,5 @@
-<<<<<<< HEAD
-#if WPF || MAUI
-||||||| parent of 91d1aa915 (Initial winui implementation - non-extensible toolbar)
-#if WPF
-=======
-#if WPF || WINDOWS_XAML
->>>>>>> 91d1aa915 (Initial winui implementation - non-extensible toolbar)
+if !MAUI
 
-#if WPF
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -23,13 +16,7 @@ using Paginator = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryPaginato
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
-#else
-using Esri.ArcGISRuntime.Maui;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui;
-#endif
-
-#if WPF
 /// <summary>
 /// Displays oriented imagery and provides controls for managing image selection, footprints, and markers.
 /// </summary>
@@ -59,12 +46,7 @@ public partial class OrientedImageryViewer
         InitializeAccessibility_WinUI();
 #endif
 
-#if MAUI
-        // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
-        ControlTemplate = DefaultControlTemplate;
-#else
         DefaultStyleKey = typeof(OrientedImageryViewer);
-#endif
     }
 
     /// <inheritdoc/>
@@ -295,6 +277,7 @@ public partial class OrientedImageryViewer
     {
         viewport.ImageTapped += Viewport_ImageTapped;
         viewport.StateChanged += Viewport_StateChanged;
+        UpdateDisplayBackgroundColor(DisplayBackgroundColor);
     }
 
     private void UnwireViewport(OrientedImageViewport viewport)
@@ -798,18 +781,15 @@ public partial class OrientedImageryViewer
 
     private void RaiseImageStateNotification(string announcement)
     {
-#if WPF || WINUI
         ScreenReaderHelpers.RaiseNotificationAnnouncement(
             this,
             announcement,
             ImageStateActivityId,
             AutomationNotificationProcessing.MostRecent);
-#endif
     }
 
     private void RewireDismissTransientErrorButton()
     {
-#if WPF || WINDOWS_XAML
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click -= DismissTransientErrorButton_Click;
 
@@ -817,7 +797,6 @@ public partial class OrientedImageryViewer
 
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click += DismissTransientErrorButton_Click;
-#endif
     }
 
     private bool LoadedAndVisible()
@@ -879,3 +858,4 @@ public sealed class OrientedImageryViewerGeoViewTappedArgs : EventArgs
 }
 
 #endif
+
