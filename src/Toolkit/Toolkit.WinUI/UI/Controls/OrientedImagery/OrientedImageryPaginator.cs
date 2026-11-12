@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Windows.Input;
 using Windows.System;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 
-internal sealed partial class OrientedImageryPaginator : Control
+internal sealed partial class Paginator : Control
 {
     private const string PagesPresenterName = "PART_PagesPresenter";
     private const string PreviousButtonName = "PART_PreviousPage";
@@ -18,13 +18,13 @@ internal sealed partial class OrientedImageryPaginator : Control
     private Button? _nextButton;
     private bool _updatingPages;
 
-    public OrientedImageryPaginator()
+    public Paginator()
     {
         SizeChanged += (_, _) => UpdatePages();
         PreviewKeyDown += OnPreviewKeyDown;
     }
 
-    public event EventHandler<OrientedImageryPaginator, int>? SelectedPageIndexChanged;
+    public event EventHandler<Paginator, int>? SelectedPageIndexChanged;
 
     public int SelectedPageIndex
     {
@@ -33,8 +33,8 @@ internal sealed partial class OrientedImageryPaginator : Control
     }
 
     public static readonly DependencyProperty SelectedPageIndexProperty =
-        DependencyProperty.Register(nameof(SelectedPageIndex), typeof(int), typeof(OrientedImageryPaginator),
-            new PropertyMetadata(-1, (sender, args) => ((OrientedImageryPaginator)sender).OnSelectedPageIndexChanged((int)args.NewValue)));
+        DependencyProperty.Register(nameof(SelectedPageIndex), typeof(int), typeof(Paginator),
+            new PropertyMetadata(-1, (sender, args) => ((Paginator)sender).OnSelectedPageIndexChanged((int)args.NewValue)));
 
     public int TotalPages
     {
@@ -43,8 +43,8 @@ internal sealed partial class OrientedImageryPaginator : Control
     }
 
     public static readonly DependencyProperty TotalPagesProperty =
-        DependencyProperty.Register(nameof(TotalPages), typeof(int), typeof(OrientedImageryPaginator),
-            new PropertyMetadata(0, (sender, args) => ((OrientedImageryPaginator)sender).UpdatePages()));
+        DependencyProperty.Register(nameof(TotalPages), typeof(int), typeof(Paginator),
+            new PropertyMetadata(0, (sender, args) => ((Paginator)sender).UpdatePages()));
 
     protected override void OnApplyTemplate()
     {

@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 
 namespace Esri.ArcGISRuntime.Toolkit;
 
@@ -32,7 +33,7 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
         while (parent is not null && parent is not ItemsControl)
             parent = VisualTreeHelper.GetParent(parent);
 
-        if (parent is ItemsControl toolbar && toolbar.ItemTemplateSelector is OrientedImageryViewToolbarSelector)
+        if (parent is ItemsControl toolbar && toolbar.ItemTemplateSelector is ToolbarSelector)
         {
             items.ItemTemplateSelector = toolbar.ItemTemplateSelector;
             var token = toolbar.RegisterPropertyChangedCallback(ItemsControl.ItemTemplateSelectorProperty,

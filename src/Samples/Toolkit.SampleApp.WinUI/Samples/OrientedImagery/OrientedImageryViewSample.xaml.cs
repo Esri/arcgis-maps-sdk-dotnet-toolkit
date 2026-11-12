@@ -5,6 +5,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
@@ -62,12 +63,12 @@ public sealed partial class OrientedImageryViewSample : Page
 
     private void ConfigureToolbarTemplates()
     {
-        if (MainOrientedImageryView.ToolbarItemTemplateSelector is not OrientedImageryViewToolbarSelector selector)
+        if (MainOrientedImageryView.ToolbarItemTemplateSelector is not ToolbarSelector selector)
             return;
 
-        if (!selector.SelectionPairs.OfType<OrientedImageryToolbarItemSelectorPair>().Any(static pair => pair.ItemType == typeof(OrientedImageryPopupToolbarItem)) &&
+        if (!selector.SelectionPairs.OfType<ToolbarItemSelectorPair>().Any(static pair => pair.ItemType == typeof(OrientedImageryPopupToolbarItem)) &&
             Resources.TryGetValue("PopupToolbarItemTemplate", out object popupItemTemplateObject) && popupItemTemplateObject is DataTemplate popupItemTemplate)
-            selector.SelectionPairs.Add(new OrientedImageryToolbarItemSelectorPair() { ItemType = typeof(OrientedImageryPopupToolbarItem), Template = popupItemTemplate });
+            selector.SelectionPairs.Add(new ToolbarItemSelectorPair() { ItemType = typeof(OrientedImageryPopupToolbarItem), Template = popupItemTemplate });
     }
 
     private async Task ApplyLayerAsync(Uri layerUri)
@@ -179,7 +180,7 @@ public sealed partial class OrientedImageryViewSample : Page
     private void UpdateToolbarButton_Click(object sender, RoutedEventArgs e)
     {
         ConfigureToolbarTemplates();
-        var overlays = _orientedImageryViewModel.ToolbarCategories.First(static c => c.Name == OrientedImageryToolbarCategory.OverlaysCategoryName);
+        var overlays = _orientedImageryViewModel.ToolbarCategories.First(static c => c.Name == ToolbarCategory.OverlaysCategoryName);
         var popupItem = overlays.ToolbarItems.OfType<OrientedImageryPopupToolbarItem>().FirstOrDefault();
         if (popupItem == null)
             overlays.ToolbarItems.Add(new OrientedImageryPopupToolbarItem());
@@ -219,7 +220,7 @@ public sealed partial class OrientedImageryViewSample : Page
 
         try
         {
-            var location = await e.OrientedImageTappedEventArgs.Image.ImageToLocationAsync(e.OrientedImageTappedEventArgs.ImagePoint);
+            var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
             var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Pink, 20);
             _orientedImageryViewModel.AddMarkerLocation(location, symbol);
         }

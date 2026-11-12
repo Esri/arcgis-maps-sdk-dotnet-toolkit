@@ -7,12 +7,11 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using System.ComponentModel;
 using System.Diagnostics;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 #if WPF
 using System.Windows.Automation;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 #elif WINDOWS_XAML
 using Microsoft.UI.Xaml.Automation.Peers;
-using Paginator = Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImageryPaginator;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
