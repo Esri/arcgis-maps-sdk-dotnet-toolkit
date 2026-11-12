@@ -51,6 +51,11 @@ public partial class OrientedImageryView : Control
     private void UpdateDetailsFocus()
     {
         bool isPopupOpen = ViewModel.ImageDetailsPopup != null;
+        // Don't mess with focus if we closed the popup but the close details button was not the original focus source
+        if (!isPopupOpen && GetTemplateChild(CloseDetailsButtonName) is Button button &&
+            button.FocusState == FocusState.Unfocused)
+            return;
+
         DispatcherQueue.TryEnqueue(() =>
         {
             if ((ViewModel.ImageDetailsPopup != null) == isPopupOpen &&
