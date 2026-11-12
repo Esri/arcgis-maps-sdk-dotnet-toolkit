@@ -121,9 +121,15 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         {
             PanoramaFrame frame = await PanoramaFrame.DecodeAsync(path, CancellationToken.None);
             if (ReferenceEquals(platform, _platform) && path == _texturePath)
+            {
+                // The Windows surface doesn't render after SetTexture on its own.
                 platform.SetTexture(frame, path);
+                platform.RequestRender();
+            }
             else
+            {
                 frame.Dispose();
+            }
         }
         catch (Exception ex)
         {
