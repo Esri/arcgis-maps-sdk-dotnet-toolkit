@@ -60,6 +60,7 @@ internal sealed partial class PanoramicSurface : TextureView
     // without the texture decodes the file again.
     private readonly object _pendingLock = new();
     private Bitmap? _pendingBitmap;
+    private int _textureGeneration; // incremented by SetTexture and ClearTexture, so a stale queued clear can be skipped
     private PanoramaMarker[] _markers = [];
     private bool _markersDirty;
     private string? _texturePath;
@@ -155,6 +156,7 @@ internal sealed partial class PanoramicSurface : TextureView
         {
             _pendingBitmap?.Recycle();
             _pendingBitmap = frame.Bitmap;
+            _textureGeneration++;
         }
 
         PostToRenderThread(ConsumePendingBitmap);
@@ -163,15 +165,24 @@ internal sealed partial class PanoramicSurface : TextureView
     public void ClearTexture()
     {
         _texturePath = null;
+        int generation;
         lock (_pendingLock)
         {
             _pendingBitmap?.Recycle();
             _pendingBitmap = null;
+            generation = ++_textureGeneration;
         }
 
         _hasTexture = false;
         PostToRenderThread(() =>
         {
+            // An earlier ConsumePendingBitmap may already have uploaded a texture from a later SetTexture call.
+            lock (_pendingLock)
+            {
+                if (generation != _textureGeneration)
+                    return;
+            }
+
             DeleteTexture();
             DrawCore();
         });
